@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -27,7 +25,7 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionRichTextBox))]
 public partial class RichTextBox : TextBoxBase
 {
-    private static TraceSwitch richTextDbg;
+    private static TraceSwitch? richTextDbg;
 
     private static TraceSwitch RichTextDbg
     {
@@ -73,8 +71,8 @@ public partial class RichTextBox : TextBoxBase
     //
     private int bulletIndent;
     private int rightMargin;
-    private string textRtf; // If not null, takes precedence over cached Text value
-    private string textPlain;
+    private string? textRtf; // If not null, takes precedence over cached Text value
+    private string? textPlain;
     private Color selectionBackColorToSetOnHandleCreated;
     private RichTextBoxLanguageOptions languageOption = RichTextBoxLanguageOptions.AutoFont | RichTextBoxLanguageOptions.DualFont;
 
@@ -82,16 +80,16 @@ public partial class RichTextBox : TextBoxBase
     //
     private static int logPixelsX;
     private static int logPixelsY;
-    private Stream editStream;
+    private Stream? editStream;
     private float zoomMultiplier = 1.0f;
 
     // used to decide when to fire the selectionChange event.
     private int curSelStart;
     private int curSelEnd;
     private short curSelType;
-    private object _oleCallback;
+    private object? _oleCallback;
 
-    private static int[] shortcutsToDisable;
+    private static int[]? shortcutsToDisable;
     private static int richEditMajorVersion = 3;
 
     private BitVector32 richTextBoxFlags;
@@ -200,7 +198,7 @@ public partial class RichTextBox : TextBoxBase
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Image BackgroundImage
+    public override Image? BackgroundImage
     {
         get => base.BackgroundImage;
         set => base.BackgroundImage = value;
@@ -208,7 +206,7 @@ public partial class RichTextBox : TextBoxBase
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageChanged
+    public new event EventHandler? BackgroundImageChanged
     {
         add => base.BackgroundImageChanged += value;
         remove => base.BackgroundImageChanged -= value;
@@ -224,7 +222,7 @@ public partial class RichTextBox : TextBoxBase
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageLayoutChanged
+    public new event EventHandler? BackgroundImageLayoutChanged
     {
         add => base.BackgroundImageLayoutChanged += value;
         remove => base.BackgroundImageLayoutChanged -= value;
@@ -427,6 +425,7 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
+    [AllowNull]
     public override Font Font
     {
         get => base.Font;
@@ -641,7 +640,7 @@ public partial class RichTextBox : TextBoxBase
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.RichTextBoxRTF))]
     [RefreshProperties(RefreshProperties.All)]
-    public string Rtf
+    public string? Rtf
     {
         get
         {
@@ -994,7 +993,8 @@ public partial class RichTextBox : TextBoxBase
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.RichTextBoxSelFont))]
-    public Font SelectionFont
+    [DisallowNull]
+    public Font? SelectionFont
     {
         get
         {
@@ -1158,6 +1158,7 @@ public partial class RichTextBox : TextBoxBase
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.RichTextBoxSelRTF))]
+    [AllowNull]
     public string SelectedRtf
     {
         get
@@ -1236,6 +1237,7 @@ public partial class RichTextBox : TextBoxBase
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.RichTextBoxSelTabs))]
+    [AllowNull]
     public unsafe int[] SelectionTabs
     {
         get
@@ -1285,14 +1287,14 @@ public partial class RichTextBox : TextBoxBase
             pf.dwMask = PFM.TABSTOPS;
             for (int x = 0; x < pf.cTabCount; x++)
             {
-                pf.rgxTabs[x] = Pixel2Twip(value[x], true);
+                pf.rgxTabs[x] = Pixel2Twip(value![x], true);
             }
 
             // Set the format for our current paragraph or selection.
             PInvoke.SendMessage(this, PInvoke.EM_SETPARAFORMAT, 0, ref pf);
         }
     }
-
+#nullable disable
     /// <summary>
     ///  The currently selected text of a RichTextBox control; consists of a
     ///  zero length string if no characters are selected.

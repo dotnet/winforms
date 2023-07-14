@@ -322,12 +322,12 @@ override System.Windows.Forms.HtmlDocument.Equals(object? obj) -> bool
 ~override System.Windows.Forms.PropertyGrid.Site.set -> void
 ~override System.Windows.Forms.PropertyGrid.Text.get -> string
 ~override System.Windows.Forms.PropertyGrid.Text.set -> void
-~override System.Windows.Forms.RichTextBox.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.RichTextBox.BackgroundImage.set -> void
+override System.Windows.Forms.RichTextBox.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.RichTextBox.BackgroundImage.set -> void
 ~override System.Windows.Forms.RichTextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.RichTextBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.RichTextBox.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.RichTextBox.Font.set -> void
+override System.Windows.Forms.RichTextBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.RichTextBox.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.RichTextBox.Font.set -> void
 ~override System.Windows.Forms.RichTextBox.OnBackColorChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.RichTextBox.OnGotFocus(System.EventArgs e) -> void
 ~override System.Windows.Forms.RichTextBox.OnHandleCreated(System.EventArgs e) -> void
@@ -781,18 +781,18 @@ System.Windows.Forms.HtmlElementEventArgs.ToElement.get -> System.Windows.Forms.
 ~System.Windows.Forms.RichTextBox.LoadFile(string path, System.Windows.Forms.RichTextBoxStreamType fileType) -> void
 ~System.Windows.Forms.RichTextBox.LoadFile(System.IO.Stream data, System.Windows.Forms.RichTextBoxStreamType fileType) -> void
 ~System.Windows.Forms.RichTextBox.Paste(System.Windows.Forms.DataFormats.Format clipFormat) -> void
-~System.Windows.Forms.RichTextBox.RedoActionName.get -> string
-~System.Windows.Forms.RichTextBox.Rtf.get -> string
-~System.Windows.Forms.RichTextBox.Rtf.set -> void
+System.Windows.Forms.RichTextBox.RedoActionName.get -> string!
+System.Windows.Forms.RichTextBox.Rtf.get -> string?
+System.Windows.Forms.RichTextBox.Rtf.set -> void
 ~System.Windows.Forms.RichTextBox.SaveFile(string path) -> void
 ~System.Windows.Forms.RichTextBox.SaveFile(string path, System.Windows.Forms.RichTextBoxStreamType fileType) -> void
 ~System.Windows.Forms.RichTextBox.SaveFile(System.IO.Stream data, System.Windows.Forms.RichTextBoxStreamType fileType) -> void
-~System.Windows.Forms.RichTextBox.SelectedRtf.get -> string
-~System.Windows.Forms.RichTextBox.SelectedRtf.set -> void
-~System.Windows.Forms.RichTextBox.SelectionFont.get -> System.Drawing.Font
-~System.Windows.Forms.RichTextBox.SelectionFont.set -> void
-~System.Windows.Forms.RichTextBox.SelectionTabs.get -> int[]
-~System.Windows.Forms.RichTextBox.SelectionTabs.set -> void
+System.Windows.Forms.RichTextBox.SelectedRtf.get -> string!
+System.Windows.Forms.RichTextBox.SelectedRtf.set -> void
+System.Windows.Forms.RichTextBox.SelectionFont.get -> System.Drawing.Font?
+System.Windows.Forms.RichTextBox.SelectionFont.set -> void
+System.Windows.Forms.RichTextBox.SelectionTabs.get -> int[]!
+System.Windows.Forms.RichTextBox.SelectionTabs.set -> void
 ~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
 System.Windows.Forms.ToolTip.GetToolTip(System.Windows.Forms.Control? control) -> string?
 ~System.Windows.Forms.TreeNode.FirstNode.get -> System.Windows.Forms.TreeNode
@@ -9320,8 +9320,8 @@ System.Windows.Forms.RetrieveVirtualItemEventHandler
 System.Windows.Forms.RichTextBox
 System.Windows.Forms.RichTextBox.AutoWordSelection.get -> bool
 System.Windows.Forms.RichTextBox.AutoWordSelection.set -> void
-System.Windows.Forms.RichTextBox.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.RichTextBox.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.RichTextBox.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.RichTextBox.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.RichTextBox.BulletIndent.get -> int
 System.Windows.Forms.RichTextBox.BulletIndent.set -> void
 System.Windows.Forms.RichTextBox.CanRedo.get -> bool
