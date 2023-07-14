@@ -31,7 +31,7 @@ internal abstract class HtmlShim : IDisposable
     ///  Support IHtml*3.AttachHandler
     public abstract void AttachEventHandler(string eventName, EventHandler eventHandler);
 
-    public void AddHandler(object key, Delegate value)
+    public void AddHandler(object key, Delegate? value)
     {
         _eventCount++;
         Events.AddHandler(key, value);
@@ -134,7 +134,7 @@ internal abstract class HtmlShim : IDisposable
         }
     }
 
-    public void RemoveHandler(object key, Delegate value)
+    public void RemoveHandler(object key, Delegate? value)
     {
         _eventCount--;
         Events.RemoveHandler(key, value);
