@@ -259,7 +259,7 @@ public class TreeNodeCollection : IList
 
     // END - NEW ADD OVERLOADS IN WHIDBEY -->
 
-    public virtual void AddRange(TreeNode[] nodes)
+    public virtual void AddRange(params TreeNode[] nodes)
     {
         ArgumentNullException.ThrowIfNull(nodes);
 

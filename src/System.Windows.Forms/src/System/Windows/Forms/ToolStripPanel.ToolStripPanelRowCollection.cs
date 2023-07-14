@@ -46,7 +46,7 @@ public partial class ToolStripPanel
             return retVal;
         }
 
-        public void AddRange(ToolStripPanelRow[] value)
+        public void AddRange(params ToolStripPanelRow[] value)
         {
             ArgumentNullException.ThrowIfNull(value);
 

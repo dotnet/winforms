@@ -113,7 +113,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
         return retVal;
     }
 
-    public void AddRange(ToolStripItem[] toolStripItems)
+    public void AddRange(params ToolStripItem[] toolStripItems)
     {
         ArgumentNullException.ThrowIfNull(toolStripItems);
 

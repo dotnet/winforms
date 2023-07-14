@@ -86,7 +86,7 @@ public partial class ToolStripPanelRow
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void AddRange(Control[] value)
+        public void AddRange(params Control[] value)
         {
             ArgumentNullException.ThrowIfNull(value);
 

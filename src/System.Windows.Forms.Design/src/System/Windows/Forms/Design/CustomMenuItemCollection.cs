@@ -29,7 +29,7 @@ internal class CustomMenuItemCollection : CollectionBase
     /// <summary>
     ///  Add range of values to the collection
     /// </summary>
-    public void AddRange(ToolStripItem[] value)
+    public void AddRange(params ToolStripItem[] value)
     {
         for (int i = 0; (i < value.Length); i++)
         {

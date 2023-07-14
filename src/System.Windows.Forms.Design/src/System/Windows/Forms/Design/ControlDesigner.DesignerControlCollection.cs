@@ -34,7 +34,7 @@ public partial class ControlDesigner
 
         public override void Add(Control c) => _realCollection.Add(c);
 
-        public override void AddRange(Control[] controls) => _realCollection.AddRange(controls);
+        public override void AddRange(params Control[] controls) => _realCollection.AddRange(controls);
 
         bool IList.Contains(object control) => ((IList)_realCollection).Contains(control);
 

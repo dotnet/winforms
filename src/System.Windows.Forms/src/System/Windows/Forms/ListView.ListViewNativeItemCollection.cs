@@ -122,7 +122,7 @@ public partial class ListView
             }
         }
 
-        public void AddRange(ListViewItem[] values)
+        public void AddRange(params ListViewItem[] values)
         {
             ArgumentNullException.ThrowIfNull(values);
 

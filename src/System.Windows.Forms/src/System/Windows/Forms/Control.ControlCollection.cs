@@ -149,7 +149,7 @@ public partial class Control
         }
 
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public virtual void AddRange(Control[] controls)
+        public virtual void AddRange(params Control[] controls)
         {
             ArgumentNullException.ThrowIfNull(controls);
 

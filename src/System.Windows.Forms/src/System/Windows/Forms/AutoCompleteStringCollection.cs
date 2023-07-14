@@ -68,7 +68,7 @@ public class AutoCompleteStringCollection : IList
     /// <summary>
     ///  Copies the elements of a string array to the end of the <see cref="AutoCompleteStringCollection"/>.
     /// </summary>
-    public void AddRange(string[] value)
+    public void AddRange(params string[] value)
     {
         ArgumentNullException.ThrowIfNull(value);
 

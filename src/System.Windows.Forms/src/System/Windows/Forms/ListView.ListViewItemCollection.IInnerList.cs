@@ -18,7 +18,7 @@ public partial class ListView
             ListViewItem this[int index] { get; set; }
 
             ListViewItem Add(ListViewItem item);
-            void AddRange(ListViewItem[] items);
+            void AddRange(params ListViewItem[] items);
             void Clear();
             bool Contains(ListViewItem item);
             void CopyTo(Array dest, int index);
