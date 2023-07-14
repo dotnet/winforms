@@ -281,7 +281,7 @@ public class ResXResourceWriterTests
         // Act and Assert
         Assert.Throws<ArgumentNullException>(() =>
         {
-            writer.AddAlias("MyAlias", null);
+            writer.AddAlias(aliasName: "MyAlias", assemblyName: null);
         });
     }
 }
