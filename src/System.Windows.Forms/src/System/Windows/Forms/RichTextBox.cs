@@ -425,7 +425,7 @@ public partial class RichTextBox : TextBoxBase
 
             try
             {
-                Font font = GetCharFormatFont(selectionOnly: false);
+                Font? font = GetCharFormatFont(selectionOnly: false);
                 if (font is null || !font.Equals(value))
                 {
                     SetCharFormatFont(selectionOnly: false, value);
@@ -1255,7 +1255,7 @@ public partial class RichTextBox : TextBoxBase
             PInvoke.SendMessage(this, PInvoke.EM_SETPARAFORMAT, 0, ref pf);
         }
     }
-#nullable disable
+
     /// <summary>
     ///  The currently selected text of a RichTextBox control; consists of a
     ///  zero length string if no characters are selected.
@@ -1264,6 +1264,7 @@ public partial class RichTextBox : TextBoxBase
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.RichTextBoxSelText))]
+    [AllowNull]
     public override string SelectedText
     {
         get
@@ -1274,6 +1275,7 @@ public partial class RichTextBox : TextBoxBase
         set
         {
             ForceHandleCreate();
+            value ??= string.Empty;
             StreamIn(value, SF.F_SELECTION | SF.TEXT | SF.UNICODE);
         }
     }
@@ -1332,6 +1334,7 @@ public partial class RichTextBox : TextBoxBase
 
     [Localizable(true)]
     [RefreshProperties(RefreshProperties.All)]
+    [AllowNull]
     public override string Text
     {
         get
@@ -1344,7 +1347,7 @@ public partial class RichTextBox : TextBoxBase
             if (RecreatingHandle || GetAnyDisposingInHierarchy())
             {
                 // We can return any old garbage if we're in the process of recreating the handle
-                return "";
+                return string.Empty;
             }
 
             if (!IsHandleCreated && _textRtf is null)
@@ -1438,7 +1441,7 @@ public partial class RichTextBox : TextBoxBase
         {
             if (!CanUndo)
             {
-                return "";
+                return string.Empty;
             }
 
             int n = (int)PInvoke.SendMessage(this, PInvoke.EM_GETUNDONAME);
@@ -1522,7 +1525,7 @@ public partial class RichTextBox : TextBoxBase
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.RichTextBoxContentsResized))]
-    public event ContentsResizedEventHandler ContentsResized
+    public event ContentsResizedEventHandler? ContentsResized
     {
         add => Events.AddHandler(EVENT_REQUESTRESIZE, value);
         remove => Events.RemoveHandler(EVENT_REQUESTRESIZE, value);
@@ -1533,7 +1536,7 @@ public partial class RichTextBox : TextBoxBase
     ///  may still be used: this should be hidden in the property grid, but not in code
     /// </summary>
     [Browsable(false)]
-    public new event DragEventHandler DragDrop
+    public new event DragEventHandler? DragDrop
     {
         add => base.DragDrop += value;
         remove => base.DragDrop -= value;
@@ -1544,7 +1547,7 @@ public partial class RichTextBox : TextBoxBase
     ///  may still be used: this should be hidden in the property grid, but not in code
     /// </summary>
     [Browsable(false)]
-    public new event DragEventHandler DragEnter
+    public new event DragEventHandler? DragEnter
     {
         add => base.DragEnter += value;
         remove => base.DragEnter -= value;
@@ -1552,7 +1555,7 @@ public partial class RichTextBox : TextBoxBase
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler DragLeave
+    public new event EventHandler? DragLeave
     {
         add => base.DragLeave += value;
         remove => base.DragLeave -= value;
@@ -1560,7 +1563,7 @@ public partial class RichTextBox : TextBoxBase
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event DragEventHandler DragOver
+    public new event DragEventHandler? DragOver
     {
         add => base.DragOver += value;
         remove => base.DragOver -= value;
@@ -1568,7 +1571,7 @@ public partial class RichTextBox : TextBoxBase
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event GiveFeedbackEventHandler GiveFeedback
+    public new event GiveFeedbackEventHandler? GiveFeedback
     {
         add => base.GiveFeedback += value;
         remove => base.GiveFeedback -= value;
@@ -1576,7 +1579,7 @@ public partial class RichTextBox : TextBoxBase
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event QueryContinueDragEventHandler QueryContinueDrag
+    public new event QueryContinueDragEventHandler? QueryContinueDrag
     {
         add => base.QueryContinueDrag += value;
         remove => base.QueryContinueDrag -= value;
@@ -1584,7 +1587,7 @@ public partial class RichTextBox : TextBoxBase
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.RichTextBoxHScroll))]
-    public event EventHandler HScroll
+    public event EventHandler? HScroll
     {
         add => Events.AddHandler(EVENT_HSCROLL, value);
         remove => Events.RemoveHandler(EVENT_HSCROLL, value);
@@ -1592,7 +1595,7 @@ public partial class RichTextBox : TextBoxBase
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.RichTextBoxLinkClick))]
-    public event LinkClickedEventHandler LinkClicked
+    public event LinkClickedEventHandler? LinkClicked
     {
         add => Events.AddHandler(EVENT_LINKACTIVATE, value);
         remove => Events.RemoveHandler(EVENT_LINKACTIVATE, value);
@@ -1600,7 +1603,7 @@ public partial class RichTextBox : TextBoxBase
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.RichTextBoxIMEChange))]
-    public event EventHandler ImeChange
+    public event EventHandler? ImeChange
     {
         add => Events.AddHandler(EVENT_IMECHANGE, value);
         remove => Events.RemoveHandler(EVENT_IMECHANGE, value);
@@ -1608,7 +1611,7 @@ public partial class RichTextBox : TextBoxBase
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.RichTextBoxProtected))]
-    public event EventHandler Protected
+    public event EventHandler? Protected
     {
         add => Events.AddHandler(EVENT_PROTECTED, value);
         remove => Events.RemoveHandler(EVENT_PROTECTED, value);
@@ -1616,7 +1619,7 @@ public partial class RichTextBox : TextBoxBase
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.RichTextBoxSelChange))]
-    public event EventHandler SelectionChanged
+    public event EventHandler? SelectionChanged
     {
         add => Events.AddHandler(EVENT_SELCHANGE, value);
         remove => Events.RemoveHandler(EVENT_SELCHANGE, value);
@@ -1624,7 +1627,7 @@ public partial class RichTextBox : TextBoxBase
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.RichTextBoxVScroll))]
-    public event EventHandler VScroll
+    public event EventHandler? VScroll
     {
         add => Events.AddHandler(EVENT_VSCROLL, value);
         remove => Events.RemoveHandler(EVENT_VSCROLL, value);
@@ -2184,7 +2187,7 @@ public partial class RichTextBox : TextBoxBase
         return charFormat;
     }
 
-    private Font GetCharFormatFont(bool selectionOnly)
+    private Font? GetCharFormatFont(bool selectionOnly)
     {
         ForceHandleCreate();
 
@@ -2420,7 +2423,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnContentsResized(ContentsResizedEventArgs e)
     {
-        ((ContentsResizedEventHandler)Events[EVENT_REQUESTRESIZE])?.Invoke(this, e);
+        ((ContentsResizedEventHandler?)Events[EVENT_REQUESTRESIZE])?.Invoke(this, e);
     }
 
     protected override void OnGotFocus(EventArgs e)
@@ -2543,7 +2546,7 @@ public partial class RichTextBox : TextBoxBase
         if (!InConstructor)
         {
             _textRtf = Rtf;
-            if (_textRtf.Length == 0)
+            if (_textRtf!.Length == 0)
             {
                 _textRtf = null;
             }
@@ -2559,7 +2562,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnHScroll(EventArgs e)
     {
-        ((EventHandler)Events[EVENT_HSCROLL])?.Invoke(this, e);
+        ((EventHandler?)Events[EVENT_HSCROLL])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2568,7 +2571,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnLinkClicked(LinkClickedEventArgs e)
     {
-        ((LinkClickedEventHandler)Events[EVENT_LINKACTIVATE])?.Invoke(this, e);
+        ((LinkClickedEventHandler?)Events[EVENT_LINKACTIVATE])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2576,7 +2579,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnImeChange(EventArgs e)
     {
-        ((EventHandler)Events[EVENT_IMECHANGE])?.Invoke(this, e);
+        ((EventHandler?)Events[EVENT_IMECHANGE])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2586,7 +2589,7 @@ public partial class RichTextBox : TextBoxBase
     protected virtual void OnProtected(EventArgs e)
     {
         ProtectedError = true;
-        ((EventHandler)Events[EVENT_PROTECTED])?.Invoke(this, e);
+        ((EventHandler?)Events[EVENT_PROTECTED])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2595,7 +2598,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnSelectionChanged(EventArgs e)
     {
-        ((EventHandler)Events[EVENT_SELCHANGE])?.Invoke(this, e);
+        ((EventHandler?)Events[EVENT_SELCHANGE])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2604,7 +2607,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     protected virtual void OnVScroll(EventArgs e)
     {
-        ((EventHandler)Events[EVENT_VSCROLL])?.Invoke(this, e);
+        ((EventHandler?)Events[EVENT_VSCROLL])?.Invoke(this, e);
     }
 
     /// <summary>
@@ -2619,7 +2622,7 @@ public partial class RichTextBox : TextBoxBase
     {
         if (RichTextShortcutsEnabled == false)
         {
-            foreach (int shortcutValue in s_shortcutsToDisable)
+            foreach (int shortcutValue in s_shortcutsToDisable!)
             {
                 if ((int)keyData == shortcutValue)
                 {

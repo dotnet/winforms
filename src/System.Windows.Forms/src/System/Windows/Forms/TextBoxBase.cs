@@ -1156,7 +1156,7 @@ public abstract partial class TextBoxBase : Control
     ///  Make this a method on <see cref="TextBoxBase"/> rather than <see cref="RichTextBox"/> (which is the only
     ///  control that needs this at this point), since we need to set <see cref="codeUpdateText"/>.
     /// </summary>
-    internal void ForceWindowText(string value)
+    internal void ForceWindowText(string? value)
     {
         value ??= string.Empty;
 
