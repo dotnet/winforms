@@ -14,7 +14,7 @@ internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
 {
     private readonly CodeDomLocalizationModel _model;
     private readonly MemberCodeDomSerializer _serializer;
-    private CultureInfo? localizationLanguage;
+    private CultureInfo? _localizationLanguage;
 
     internal ResourcePropertyMemberCodeDomSerializer(MemberCodeDomSerializer serializer, CodeDomLocalizationProvider.LanguageExtenders extender, CodeDomLocalizationModel model)
     {
@@ -47,24 +47,24 @@ internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
 
     private CultureInfo? GetLocalizationLanguage(IDesignerSerializationManager manager)
     {
-        if (localizationLanguage is null)
+        if (_localizationLanguage is null)
         {
             // Check to see if our base component's localizable prop is true
             if (manager.TryGetContext(out RootContext? rootCtx))
             {
                 object comp = rootCtx.Value;
                 PropertyDescriptor? prop = TypeDescriptor.GetProperties(comp)["LoadLanguage"];
-                localizationLanguage = prop?.GetValue<CultureInfo>(comp);
+                _localizationLanguage = prop?.GetValue<CultureInfo>(comp);
             }
         }
 
-        return localizationLanguage;
+        return _localizationLanguage;
     }
 
     private void OnSerializationComplete(object? sender, EventArgs e)
     {
         // we do the cleanup here and clear out the cache of the localizedlanguage
-        localizationLanguage = null;
+        _localizationLanguage = null;
 
         //unhook the event
         IDesignerSerializationManager? manager = sender as IDesignerSerializationManager;
@@ -92,7 +92,7 @@ internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
                     if (!shouldSerialize)
                     {
                         // hook up the event the first time to clear out our cache at the end of the serialization
-                        if (localizationLanguage is null)
+                        if (_localizationLanguage is null)
                         {
                             manager.SerializationComplete += new EventHandler(OnSerializationComplete);
                         }
