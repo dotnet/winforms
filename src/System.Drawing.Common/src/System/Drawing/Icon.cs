@@ -14,11 +14,11 @@ using static Interop;
 
 namespace System.Drawing;
 
-[Editor("System.Drawing.Design.IconEditor, System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
-        "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+[Editor($"System.Drawing.Design.IconEditor, {AssemblyRef.SystemDrawingDesign}",
+        $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [TypeConverter(typeof(IconConverter))]
 [Serializable]
-[TypeForwardedFrom("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+[TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, ISerializable
 {
 #if FINALIZATION_WATCH
