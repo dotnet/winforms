@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.InteropServices;
 using static Interop.Mshtml;
 
@@ -46,29 +44,27 @@ public sealed partial class HtmlElement
             typeof(DHTMLScriptEvents2)
         };
 
-        private readonly IHTMLWindow2 _associatedWindow;
-        private AxHost.ConnectionPointCookie _cookie;   // To hook up events from the native HtmlElement
+        private readonly IHTMLWindow2? _associatedWindow;
+        private AxHost.ConnectionPointCookie? _cookie;   // To hook up events from the native HtmlElement
         private HtmlElement _htmlElement;
+
         public HtmlElementShim(HtmlElement element)
         {
             _htmlElement = element;
 
-            // snap our associated window so we know when to disconnect.
-            if (_htmlElement is not null)
+            // Snap our associated window so we know when to disconnect.
+            HtmlDocument doc = _htmlElement.Document;
+            if (doc is not null)
             {
-                HtmlDocument doc = _htmlElement.Document;
-                if (doc is not null)
+                HtmlWindow? window = doc.Window;
+                if (window is not null)
                 {
-                    HtmlWindow window = doc.Window;
-                    if (window is not null)
-                    {
-                        _associatedWindow = window.NativeHtmlWindow;
-                    }
+                    _associatedWindow = window.NativeHtmlWindow;
                 }
             }
         }
 
-        public override IHTMLWindow2 AssociatedWindow
+        public override IHTMLWindow2? AssociatedWindow
         {
             get { return _associatedWindow; }
         }
@@ -115,7 +111,7 @@ public sealed partial class HtmlElement
         ///  Support IHTMLElement2.DetachHandler
         public override void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
-            HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
+            HtmlToClrEventProxy? proxy = RemoveEventProxy(eventHandler);
             if (proxy is not null)
             {
                 ((IHTMLElement2)NativeHtmlElement).DetachEvent(eventName, proxy);
@@ -141,7 +137,7 @@ public sealed partial class HtmlElement
                     Marshal.FinalReleaseComObject(_htmlElement.NativeHtmlElement);
                 }
 
-                _htmlElement = null;
+                _htmlElement = null!;
             }
         }
 
