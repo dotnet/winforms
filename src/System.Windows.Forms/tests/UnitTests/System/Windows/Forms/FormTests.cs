@@ -2625,6 +2625,17 @@ public class FormTests
         form.Show();
     }
 
+    [WinFormsFact]
+    public void Form_MdiContainer_WithChild_DoubleDispose()
+    {
+        using Form parent = new() { IsMdiContainer = true };
+        using Form mdiChild = new() { MdiParent = parent };
+        parent.Show();
+        mdiChild.Show();
+        parent.Dispose();
+        parent.Dispose();
+    }
+
     public partial class ParentedForm : Form
     {
         private ParentingForm _parentForm;
