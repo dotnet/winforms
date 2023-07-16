@@ -47,10 +47,7 @@ internal abstract class HtmlShim : IDisposable
         return proxy;
     }
 
-    public abstract IHTMLWindow2 AssociatedWindow
-    {
-        get;
-    }
+    public abstract IHTMLWindow2? AssociatedWindow { get; }
 
     ///  create connectionpoint cookie
     public abstract void ConnectToEvents();
