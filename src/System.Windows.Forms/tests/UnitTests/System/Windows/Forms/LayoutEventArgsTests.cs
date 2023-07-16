@@ -71,8 +71,6 @@ public class LayoutEventArgsTests
             // Force layout update
             tableLayoutPanel.PerformLayout();
 
-            var fieldInfo = typeof(Control).GetField("_cachedLayoutEventArgs", BindingFlags.NonPublic | BindingFlags.Instance);
-
             // Suspend layout
             tableLayoutPanel.SuspendLayout();
             using (Panel panel = (Panel)tableLayoutPanel.Controls.Find("Panel", false).First())
@@ -81,7 +79,9 @@ public class LayoutEventArgsTests
                 panel.Dispose();
             }
 
-            LayoutEventArgs layoutEventArgs = (LayoutEventArgs)fieldInfo.GetValue(tableLayoutPanel);
+            // Check the cachedLayoutEventArgs
+            ITestAccessor tableLayoutPanelTestAccessor = tableLayoutPanel.TestAccessor();
+            LayoutEventArgs layoutEventArgs = (LayoutEventArgs)tableLayoutPanelTestAccessor.Dynamic._cachedLayoutEventArgs;
 
             tableLayoutPanel.ResumeLayout();
             return layoutEventArgs;
