@@ -55,9 +55,9 @@ public sealed partial class Application
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public delegate bool MessageLoopCallback();
 
-        // Used to avoid recursive exit
-        private static bool s_exiting;
-        private static ThemedSystemColors s_systemColors;
+    // Used to avoid recursive exit
+    private static bool s_exiting;
+    private static ThemedSystemColors? s_systemColors;
 
     private static bool s_parkingWindowCreated;
 
@@ -240,120 +240,113 @@ public sealed partial class Application
     internal static bool CustomThreadExceptionHandlerAttached
         => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
-        public static DarkMode DefaultDarkMode
+    public static DarkMode DefaultDarkMode
+    {
+        get
         {
-            get
+            if (!s_darkMode.HasValue)
             {
-                if (!s_darkMode.HasValue)
+                if (EnvironmentDarkMode is DarkMode.NotSupported)
                 {
-                    if (EnvironmentDarkMode is DarkMode.NotSupported)
-                    {
-                        return DarkMode.NotSupported;
-                    }
-
-                    return DarkMode.Disabled;
+                    return DarkMode.NotSupported;
                 }
 
-                return s_darkMode.Value;
-            }
-        }
-
-        public static bool SetDefaultDarkMode(DarkMode darkMode) => darkMode switch
-        {
-            DarkMode.Enabled or
-            DarkMode.Disabled or
-            DarkMode.Inherits => SetDefaultDarkModeCore(darkMode),
-
-            _ => throw new ArgumentException($"{darkMode} is not supported in this context.")
-        };
-
-        private static bool SetDefaultDarkModeCore(DarkMode darkMode)
-        {
-            s_systemColors = null;
-            
-            if (EnvironmentDarkMode == DarkMode.NotSupported)
-            {
-                s_darkMode = DarkMode.NotSupported;
-                return false;
+                return DarkMode.Disabled;
             }
 
-            s_darkMode = darkMode;
-            return true;
+            return s_darkMode.Value;
+        }
+    }
+
+    public static bool SetDefaultDarkMode(DarkMode darkMode) => darkMode switch
+    {
+        DarkMode.Enabled or
+        DarkMode.Disabled or
+        DarkMode.Inherits => SetDefaultDarkModeCore(darkMode),
+
+        _ => throw new ArgumentException($"{darkMode} is not supported in this context.")
+    };
+
+    private static bool SetDefaultDarkModeCore(DarkMode darkMode)
+    {
+        s_systemColors = null;
+
+        if (EnvironmentDarkMode == DarkMode.NotSupported)
+        {
+            s_darkMode = DarkMode.NotSupported;
+            return false;
         }
 
-        internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont;
+        s_darkMode = darkMode;
+        return true;
+    }
 
-        public static DarkMode EnvironmentDarkMode
+    internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont;
+
+    public static DarkMode EnvironmentDarkMode
+    {
+        get
         {
-            get
-            {
-                int systemDarkMode = -1;
+            int systemDarkMode = -1;
 
-                // Darkmode is supported when we are >= W11/22000
-                // Technically, we could go earlier, but then the APIs we're using weren't officially public.
-                // For Windows 10 RS2 and above
-                if (OsVersion.IsWindows11_OrGreater)
+            // Dark mode is supported when we are >= W11/22000
+            // Technically, we could go earlier, but then the APIs we're using weren't officially public.
+            // For Windows 10 RS2 and above
+            if (OsVersion.IsWindows11_OrGreater())
+            {
+                try
                 {
-                    try
-                    {
-                        systemDarkMode = (int)Registry.GetValue(
-                            keyName: DarkModeKeyPath,
-                            valueName: DarkModeKey,
-                            defaultValue: -1);
-                    }
-                    catch
-                    {
-                    }
+                    systemDarkMode = (int)(Registry.GetValue(
+                        keyName: DarkModeKeyPath,
+                        valueName: DarkModeKey,
+                        defaultValue: -1) ?? 0);
                 }
-
-                return systemDarkMode switch
+                catch
                 {
-                    0 => DarkMode.Enabled,
-                    1 => DarkMode.Disabled,
-                    _ => DarkMode.NotSupported
-                };
+                }
             }
-        }
 
-        internal static bool IsDarkModeEnabled => DefaultDarkMode switch
+            return systemDarkMode switch
+            {
+                0 => DarkMode.Enabled,
+                1 => DarkMode.Disabled,
+                _ => DarkMode.NotSupported
+            };
+        }
+    }
+
+    internal static bool IsDarkModeEnabled => DefaultDarkMode switch
+    {
+        DarkMode.Enabled => true,
+        DarkMode.Disabled => false,
+        _ => EnvironmentDarkMode switch
         {
             DarkMode.Enabled => true,
             DarkMode.Disabled => false,
-            _ => EnvironmentDarkMode switch
-            {
-                DarkMode.Enabled => true,
-                DarkMode.Disabled => false,
-                _ => throw new InvalidOperationException("DefaultDarkMode is not set.")
-            }
-        };
-
-        internal static ThemedSystemColors SystemColors
-        {
-            get
-            {
-                if (s_systemColors is null)
-                {
-                    s_systemColors = IsDarkModeEnabled
-                        ? (ThemedSystemColors)new DarkThemedSystemColors()
-                        : new LightThemedSystemColors();
-                }
-
-                return s_systemColors;
-            }
+            _ => throw new InvalidOperationException("DefaultDarkMode is not set.")
         }
+    };
 
-        /// <summary>
-        ///  Gets the path for the executable file that started the application.
-        /// </summary>
-        public static string ExecutablePath
+    internal static ThemedSystemColors SystemColors
+    {
+        get
         {
-            get
+            if (s_systemColors is null)
             {
-                if (s_executablePath is null)
-                {
-                    StringBuilder sb = UnsafeNativeMethods.GetModuleFileNameLongPath(NativeMethods.NullHandleRef);
-                    s_executablePath = Path.GetFullPath(sb.ToString());
-                }
+                s_systemColors = IsDarkModeEnabled
+                    ? (ThemedSystemColors)new DarkThemedSystemColors()
+                    : new LightThemedSystemColors();
+            }
+
+            return s_systemColors;
+        }
+    }
+
+    /// <summary>
+    ///  Gets the path for the executable file that started the application.
+    /// </summary>
+    public static string ExecutablePath
+        => s_executablePath ??= PInvoke.GetModuleFileNameLongPath(HINSTANCE.Null);
 
     /// <summary>
     ///  Gets the current <see cref="HighDpiMode"/> mode for the process.
