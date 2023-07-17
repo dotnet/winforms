@@ -2126,6 +2126,7 @@ override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPage(System
 override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPrint(System.Drawing.Printing.PrintDocument! document, System.Drawing.Printing.PrintEventArgs! e) -> void
 override System.Windows.Forms.PrintDialog.Reset() -> void
 override System.Windows.Forms.PrintPreviewControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.PrintPreviewControl.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.PrintPreviewControl.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
 override System.Windows.Forms.PrintPreviewControl.OnResize(System.EventArgs! eventargs) -> void
 override System.Windows.Forms.PrintPreviewControl.ResetBackColor() -> void
@@ -8994,6 +8995,7 @@ System.Windows.Forms.PrintPreviewControl.StartPage.set -> void
 System.Windows.Forms.PrintPreviewControl.StartPageChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewControl.TabStop.get -> bool
 System.Windows.Forms.PrintPreviewControl.TabStop.set -> void
+System.Windows.Forms.PrintPreviewControl.TabStopChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewControl.TextChanged -> System.EventHandler?
 System.Windows.Forms.PrintPreviewControl.UseAntiAlias.get -> bool
 System.Windows.Forms.PrintPreviewControl.UseAntiAlias.set -> void

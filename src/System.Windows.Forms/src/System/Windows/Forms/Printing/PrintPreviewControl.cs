@@ -33,8 +33,8 @@ public partial class PrintPreviewControl : Control
 
     private readonly int _focusHOffset = SystemInformation.HorizontalFocusThickness;
     private readonly int _focusVOffset = SystemInformation.VerticalFocusThickness;
-    private HScrollBar _hScrollBar = new HScrollBar();
-    private VScrollBar _vScrollBar = new VScrollBar();
+    private HScrollBar _hScrollBar = new HorizontalScrollBar();
+    private VScrollBar _vScrollBar = new VerticalScrollBar();
     private bool _scrollLayoutPending;
 
     // The following are all computed by ComputeLayout
@@ -57,44 +57,26 @@ public partial class PrintPreviewControl : Control
         SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
         TabStop = false;
 
-        _hScrollBar.AccessibleName = SR.PrintPreviewControlAccHorizontalScrollBarAccName;
+        _hScrollBar.AccessibleName = SR.HScrollBarDefaultAccessibleName;
         _hScrollBar.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
         _hScrollBar.Left = _focusHOffset;
         _hScrollBar.SmallChange = ScrollSmallChange;
+        _hScrollBar.RightToLeft = RightToLeft.No;
         _hScrollBar.Visible = false;
         _hScrollBar.ValueChanged += scrollBar_ValueChanged;
         _hScrollBar.TabIndex = 0;
         _hScrollBar.TabStop = true;
         Controls.Add(_hScrollBar);
 
-        _vScrollBar.AccessibleName = SR.PrintPreviewControlAccVerticalScrollBarAccName;
+        _vScrollBar.AccessibleName = SR.VScrollBarDefaultAccessibleName;
         _vScrollBar.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
         _vScrollBar.SmallChange = ScrollSmallChange;
         _vScrollBar.Top = _focusVOffset;
         _vScrollBar.Visible = false;
-        _vScrollBar.Scroll += scrollBar_ValueChanged;
+        _vScrollBar.ValueChanged += scrollBar_ValueChanged;
         _vScrollBar.TabIndex = 1;
         _vScrollBar.TabStop = true;
         Controls.Add(_vScrollBar);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _hScrollBar.ValueChanged -= scrollBar_ValueChanged;
-            _hScrollBar.Dispose();
-
-            _vScrollBar.ValueChanged -= scrollBar_ValueChanged;
-            _vScrollBar.Dispose();
-
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
-            _hScrollBar = null;
-            _vScrollBar = null;
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
-        }
-
-        base.Dispose(disposing);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
@@ -469,8 +451,8 @@ public partial class PrintPreviewControl : Control
         {
             Rectangle rect = ClientRectangle;
             rect.Inflate(-_focusHOffset, -_focusVOffset);
-            rect.Width--;
-            rect.Height--;
+            rect.Width = Math.Max(0, rect.Width - 1);
+            rect.Height = Math.Max(0, rect.Height - 1);
 
             return rect;
         }
@@ -848,6 +830,8 @@ public partial class PrintPreviewControl : Control
 
         (bool horizontalScrollNeeded, bool verticalScrollNeeded) = IsScrollNeeded(availableRect.Size);
 
+        bool scrollBarsVisibilityChanged = (_vScrollBar.Visible ^ verticalScrollNeeded) || (_hScrollBar.Visible ^ horizontalScrollNeeded);
+
         _hScrollBar.Visible = horizontalScrollNeeded;
         if (horizontalScrollNeeded)
         {
@@ -894,6 +878,13 @@ public partial class PrintPreviewControl : Control
 
         ResumeLayout(true);
         _scrollLayoutPending = false;
+
+        if (scrollBarsVisibilityChanged &&
+            IsAccessibilityObjectCreated &&
+            AccessibilityObject is PrintPreviewControlAccessibleObject ao)
+        {
+            ao.RaiseStructureChangedEvent(Interop.UiaCore.StructureChangeType.ChildrenInvalidated, Array.Empty<int>());
+        }
 
         (bool horizontal, bool vertical) IsScrollNeeded(Size displaySize)
         {
@@ -1043,9 +1034,9 @@ public partial class PrintPreviewControl : Control
                 if (_vScrollBar.Visible)
                 {
                     pos = locPos.Y;
-                    if (pos > _vScrollBar.LargeChange)
+                    if (pos > _vScrollBar.SmallChange)
                     {
-                        pos -= _vScrollBar.LargeChange;
+                        pos -= _vScrollBar.SmallChange;
                     }
                     else
                     {
@@ -1061,11 +1052,11 @@ public partial class PrintPreviewControl : Control
                 if (_vScrollBar.Visible)
                 {
                     pos = locPos.Y;
-                    maxPos = _vScrollBar.Maximum - _vScrollBar.LargeChange;
+                    maxPos = _vScrollBar.Maximum - _vScrollBar.SmallChange;
 
-                    if (pos < maxPos - _vScrollBar.LargeChange)
+                    if (pos < maxPos - _vScrollBar.SmallChange)
                     {
-                        pos += _vScrollBar.LargeChange;
+                        pos += _vScrollBar.SmallChange;
                     }
                     else
                     {
@@ -1081,9 +1072,9 @@ public partial class PrintPreviewControl : Control
                 if (_hScrollBar.Visible)
                 {
                     pos = locPos.X;
-                    if (pos > _hScrollBar.LargeChange)
+                    if (pos > _hScrollBar.SmallChange)
                     {
-                        pos -= _hScrollBar.LargeChange;
+                        pos -= _hScrollBar.SmallChange;
                     }
                     else
                     {
@@ -1099,11 +1090,11 @@ public partial class PrintPreviewControl : Control
                 if (_hScrollBar.Visible)
                 {
                     pos = locPos.X;
-                    maxPos = _hScrollBar.Maximum - _hScrollBar.LargeChange;
+                    maxPos = _hScrollBar.Maximum - _hScrollBar.SmallChange;
 
-                    if (pos < maxPos - _hScrollBar.LargeChange)
+                    if (pos < maxPos - _hScrollBar.SmallChange)
                     {
-                        pos += _hScrollBar.LargeChange;
+                        pos += _hScrollBar.SmallChange;
                     }
                     else
                     {

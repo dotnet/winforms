@@ -7844,16 +7844,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Numero totale di pagine.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PrintPreviewControlAccHorizontalScrollBarAccName">
-        <source>Horizontal</source>
-        <target state="new">Horizontal</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewControlAccVerticalScrollBarAccName">
-        <source>Vertical</source>
-        <target state="new">Vertical</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PrintPreviewControlZoomNegative">
         <source>Zoom must be 0 or greater. Negative values are not permitted.</source>
         <target state="translated">Zoom deve essere maggiore o uguale a zero. I valori negativi non sono consentiti.</target>

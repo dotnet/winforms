@@ -7844,16 +7844,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">전체 페이지 수입니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PrintPreviewControlAccHorizontalScrollBarAccName">
-        <source>Horizontal</source>
-        <target state="new">Horizontal</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewControlAccVerticalScrollBarAccName">
-        <source>Vertical</source>
-        <target state="new">Vertical</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PrintPreviewControlZoomNegative">
         <source>Zoom must be 0 or greater. Negative values are not permitted.</source>
         <target state="translated">확대/축소는 0보다 커야 하며 음수일 수 없습니다.</target>

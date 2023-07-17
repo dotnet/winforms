@@ -7845,16 +7845,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Число страниц по горизонтали.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PrintPreviewControlAccHorizontalScrollBarAccName">
-        <source>Horizontal</source>
-        <target state="new">Horizontal</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewControlAccVerticalScrollBarAccName">
-        <source>Vertical</source>
-        <target state="new">Vertical</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PrintPreviewControlZoomNegative">
         <source>Zoom must be 0 or greater. Negative values are not permitted.</source>
         <target state="translated">Коэффициент увеличения должен быть 0 или больше. Отрицательные значения недопустимы.</target>

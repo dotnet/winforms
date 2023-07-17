@@ -7844,16 +7844,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Nombre de pages horizontalement.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PrintPreviewControlAccHorizontalScrollBarAccName">
-        <source>Horizontal</source>
-        <target state="new">Horizontal</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewControlAccVerticalScrollBarAccName">
-        <source>Vertical</source>
-        <target state="new">Vertical</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PrintPreviewControlZoomNegative">
         <source>Zoom must be 0 or greater. Negative values are not permitted.</source>
         <target state="translated">Zoom doit être supérieur ou égal à 0. Les valeurs négatives ne sont pas autorisées.</target>

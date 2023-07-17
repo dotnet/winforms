@@ -7844,16 +7844,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">横方向のページ数です。</target>
         <note />
       </trans-unit>
-      <trans-unit id="PrintPreviewControlAccHorizontalScrollBarAccName">
-        <source>Horizontal</source>
-        <target state="new">Horizontal</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewControlAccVerticalScrollBarAccName">
-        <source>Vertical</source>
-        <target state="new">Vertical</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PrintPreviewControlZoomNegative">
         <source>Zoom must be 0 or greater. Negative values are not permitted.</source>
         <target state="translated">ズームは 0 以上でなければなりません。負の値は許可されていません。</target>
