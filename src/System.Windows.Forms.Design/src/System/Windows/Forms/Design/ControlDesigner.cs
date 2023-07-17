@@ -2300,7 +2300,7 @@ public partial class ControlDesigner : ComponentDesigner
                 e.Graphics.DrawRectangle(pen, borderRectangle);
             }
 
-            Icon err = SystemIcons.Error;
+            using Icon err = SystemIcons.GetStockIcon(StockIconId.Error);
             e.Graphics.FillRectangle(Brushes.White, imageRect);
             e.Graphics.DrawIcon(err, imageRect.X, imageRect.Y);
             textRect.X++;
