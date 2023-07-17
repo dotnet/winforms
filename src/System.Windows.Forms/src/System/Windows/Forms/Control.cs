@@ -945,7 +945,7 @@ public unsafe partial class Control :
             Color c = BackColor;
             if (!value.IsEmpty || Properties.ContainsObject(s_backColorProperty))
             {
-                Properties.SetColor(s_backColorProperty, value);
+                Properties.SetValue(s_backColorProperty, value);
             }
 
             if (!c.Equals(BackColor))
@@ -2278,7 +2278,7 @@ public unsafe partial class Control :
     {
         get
         {
-            Color color = Properties.GetColor(s_foreColorProperty);
+            Color color = Properties.GetValue<Color>(s_foreColorProperty);
             if (!color.IsEmpty)
             {
                 return color;
@@ -2321,7 +2321,7 @@ public unsafe partial class Control :
             Color c = ForeColor;
             if (!value.IsEmpty || Properties.ContainsObject(s_foreColorProperty))
             {
-                Properties.SetColor(s_foreColorProperty, value);
+                Properties.SetValue(s_foreColorProperty, value);
             }
 
             if (!c.Equals(ForeColor))
@@ -3003,7 +3003,7 @@ public unsafe partial class Control :
     internal PropertyStore Properties { get; }
 
     // Returns the value of the backColor field -- no asking the parent with its color is, etc.
-    internal Color RawBackColor => Properties.GetColor(s_backColorProperty);
+    internal Color RawBackColor => Properties.GetValue<Color>(s_backColorProperty);
 
     /// <summary>
     ///  Indicates whether the control is currently recreating its handle. This
@@ -7400,7 +7400,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentBackColorChanged(EventArgs e)
     {
-        Color backColor = Properties.GetColor(s_backColorProperty);
+        Color backColor = Properties.GetValue<Color>(s_backColorProperty);
         if (backColor.IsEmpty)
         {
             OnBackColorChanged(e);
@@ -7534,7 +7534,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnParentForeColorChanged(EventArgs e)
     {
-        Color foreColor = Properties.GetColor(s_foreColorProperty);
+        Color foreColor = Properties.GetValue<Color>(s_foreColorProperty);
         if (foreColor.IsEmpty)
         {
             OnForeColorChanged(e);
@@ -11126,7 +11126,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeBackColor()
     {
-        Color backColor = Properties.GetColor(s_backColorProperty);
+        Color backColor = Properties.GetValue<Color>(s_backColorProperty);
         return !backColor.IsEmpty;
     }
 
@@ -11154,7 +11154,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal virtual bool ShouldSerializeForeColor()
     {
-        Color foreColor = Properties.GetColor(s_foreColorProperty);
+        Color foreColor = Properties.GetValue<Color>(s_foreColorProperty);
         return !foreColor.IsEmpty;
     }
 

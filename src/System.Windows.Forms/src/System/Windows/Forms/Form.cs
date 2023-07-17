@@ -1227,13 +1227,13 @@ public partial class Form : ContainerControl
     {
         get
         {
-            return Properties.GetRectangle(PropMaximizedBounds, out _);
+            return Properties.GetValue<Rectangle>(PropMaximizedBounds, out _);
         }
         set
         {
             if (!value.Equals(MaximizedBounds))
             {
-                Properties.SetRectangle(PropMaximizedBounds, value);
+                Properties.SetValue(PropMaximizedBounds, value);
                 OnMaximizedBoundsChanged(EventArgs.Empty);
             }
         }
@@ -3390,9 +3390,9 @@ public partial class Form : ContainerControl
             base.Dispose(disposing);
             _ctlClient = null;
 
-            if (Properties.TryGetObject(PropDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
+            if (Properties.TryGetValue(PropDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
             {
-                Properties.SetObject(PropDummyMdiMenu, null);
+                Properties.SetValue(PropDummyMdiMenu, HMENU.Null);
                 PInvoke.DestroyMenu(dummyMenu);
             }
         }
@@ -5681,7 +5681,7 @@ public partial class Form : ContainerControl
                 if (!Properties.TryGetObject(PropDummyMdiMenu, out HMENU dummyMenu) || dummyMenu.IsNull || recreateMenu)
                 {
                     dummyMenu = PInvoke.CreateMenu();
-                    Properties.SetObject(PropDummyMdiMenu, dummyMenu);
+                    Properties.SetValue(PropDummyMdiMenu, dummyMenu);
                 }
 
                 PInvoke.SendMessage(_ctlClient, PInvoke.WM_MDISETMENU, (WPARAM)dummyMenu.Value);

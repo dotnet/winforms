@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -50,87 +48,27 @@ internal partial class PropertyStore
     /// </summary>
     public static int CreateKey() => s_currentKey++;
 
-    public Color GetColor(int key) => GetColor(key, out _);
-
     /// <summary>
-    ///  A wrapper around GetObject designed to reduce the boxing hit
+    ///  A wrapper around <see cref="GetObject(int, out bool)"/> designed to reduce the boxing hit
     /// </summary>
-    public Color GetColor(int key, out bool found)
+    public T GetValue<T>(int key, out bool found, T? defaultValue = null) where T : struct
     {
         object? storedObject = GetObject(key, out found);
-        if (found)
+        if (found && storedObject is not null)
         {
-            if (storedObject is ColorWrapper wrapper)
+            if (storedObject is StructWrapper<T> wrapper)
             {
-                return wrapper.Color;
+                return wrapper.Value;
             }
 
-            Debug.Assert(storedObject is null, $"Have non-null object that isn't a color wrapper stored in a color entry!{Environment.NewLine}Did someone SetObject instead of SetColor?");
+            Debug.Assert(storedObject is null, $"Have non-null object that isn't a StructWrapper<{typeof(T)}> stored in a entry!{Environment.NewLine}Did someone SetObject instead of SetValue?");
         }
 
         found = false;
-        return Color.Empty;
+        return defaultValue ?? default;
     }
 
-    /// <summary>
-    ///  A wrapper around GetObject designed to reduce the boxing hit.
-    /// </summary>
-    public Padding GetPadding(int key, out bool found)
-    {
-        object? storedObject = GetObject(key, out found);
-        if (found)
-        {
-            if (storedObject is PaddingWrapper wrapper)
-            {
-                return wrapper.Padding;
-            }
-
-            Debug.Assert(storedObject is null, $"Have non-null object that isn't a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
-        }
-
-        found = false;
-        return Padding.Empty;
-    }
-
-    /// <summary>
-    ///  A wrapper around GetObject designed to reduce the boxing hit.
-    /// </summary>
-    public Size GetSize(int key, out bool found)
-    {
-        object? storedObject = GetObject(key, out found);
-        if (found)
-        {
-            if (storedObject is SizeWrapper wrapper)
-            {
-                return wrapper.Size;
-            }
-
-            Debug.Assert(storedObject is null, $"Have non-null object that isn't a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
-        }
-
-        found = false;
-        return Size.Empty;
-    }
-
-    /// <summary>
-    ///  A wrapper around GetObject designed to reduce the boxing hit.
-    /// </summary>
-    public Rectangle GetRectangle(int key, out bool found)
-    {
-        object? storedObject = GetObject(key, out found);
-        if (found)
-        {
-            if (storedObject is RectangleWrapper wrapper)
-            {
-                return wrapper.Rectangle;
-            }
-
-            Debug.Assert(storedObject is null, $"Have non-null object that isn't a Rectangle wrapper stored in a Rectangle entry!{Environment.NewLine}Did someone SetObject instead of SetRectangle?");
-        }
-
-        found = false;
-        return Rectangle.Empty;
-    }
+    public T GetValue<T>(int key, T? defaultValue = null) where T : struct => GetValue(key, out _, defaultValue);
 
     /// <summary>
     ///  Retrieves an integer value from our property list.
@@ -188,10 +126,15 @@ internal partial class PropertyStore
     public bool TryGetObject<T>(int key, [NotNullWhen(true)] out T? value)
     {
         object? entry = GetObject(key, out bool found);
-        bool isValid = entry is T || Nullable.GetUnderlyingType(typeof(T)) is not null;
         Debug.Assert(!found || entry is null || entry is T, $"Entry is not of type {typeof(T)}, but of type {entry?.GetType()}");
-        value = found && isValid ? (T?)entry : default;
-        return found && isValid;
+        value = found ? (T?)entry : default;
+        return found;
+    }
+
+    public bool TryGetValue<T>(int key, [NotNullWhen(true)] out T value) where T : struct
+    {
+        value = GetValue<T>(key, out bool found);
+        return found;
     }
 
     public bool ContainsObjectThatIsNotNull(int key)
@@ -614,90 +557,27 @@ internal partial class PropertyStore
         }
     }
 
-    public void SetColor(int key, Color value)
+    /// <summary>
+    ///  Stores the given struct value in the key.
+    /// </summary>
+    public void SetValue<T>(int key, T value) where T : struct
     {
         object? storedObject = GetObject(key, out bool found);
         if (!found)
         {
-            SetObject(key, new ColorWrapper(value));
+            SetObject(key, new StructWrapper<T>(value));
         }
         else
         {
-            if (storedObject is ColorWrapper wrapper)
+            if (storedObject is StructWrapper<T> wrapper)
             {
                 // re-using the wrapper reduces the boxing hit.
-                wrapper.Color = value;
+                wrapper.Value = value;
             }
             else
             {
-                Debug.Assert(storedObject is null, "object should either be null or ColorWrapper"); // could someone have SetObject to this key behind our backs?
-                SetObject(key, new ColorWrapper(value));
-            }
-        }
-    }
-
-    public void SetPadding(int key, Padding value)
-    {
-        object? storedObject = GetObject(key, out bool found);
-        if (!found)
-        {
-            SetObject(key, new PaddingWrapper(value));
-        }
-        else
-        {
-            if (storedObject is PaddingWrapper wrapper)
-            {
-                // re-using the wrapper reduces the boxing hit.
-                wrapper.Padding = value;
-            }
-            else
-            {
-                Debug.Assert(storedObject is null, "object should either be null or PaddingWrapper"); // could someone have SetObject to this key behind our backs?
-                SetObject(key, new PaddingWrapper(value));
-            }
-        }
-    }
-
-    public void SetRectangle(int key, Rectangle value)
-    {
-        object? storedObject = GetObject(key, out bool found);
-        if (!found)
-        {
-            SetObject(key, new RectangleWrapper(value));
-        }
-        else
-        {
-            if (storedObject is RectangleWrapper wrapper)
-            {
-                // re-using the wrapper reduces the boxing hit.
-                wrapper.Rectangle = value;
-            }
-            else
-            {
-                Debug.Assert(storedObject is null, "object should either be null or RectangleWrapper"); // could someone have SetObject to this key behind our backs?
-                SetObject(key, new RectangleWrapper(value));
-            }
-        }
-    }
-
-    public void SetSize(int key, Size value)
-    {
-        object? storedObject = GetObject(key, out bool found);
-        if (!found)
-        {
-            SetObject(key, new SizeWrapper(value));
-        }
-        else
-        {
-            if (storedObject is SizeWrapper wrapper)
-            {
-                // re-using the wrapper reduces the boxing hit.
-                wrapper.Size = value;
-            }
-            else
-            {
-                Debug.Assert(storedObject is null, "object should either be null or SizeWrapper"); // could someone have SetObject to this key behind our backs?
-                SetObject(key, new SizeWrapper(value));
+                Debug.Assert(storedObject is null, $"object should either be null or StructWrapper<{typeof(T)}>"); // could someone have SetObject to this key behind our backs?
+                SetObject(key, new StructWrapper<T>(value));
             }
         }
     }

@@ -2,19 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
-
 namespace System.Windows.Forms;
 
 internal partial class PropertyStore
 {
-    private sealed class RectangleWrapper
+    private sealed class StructWrapper<T> where T : struct
     {
-        public Rectangle Rectangle;
+        public T Value;
 
-        public RectangleWrapper(Rectangle rectangle)
+        public StructWrapper(T value)
         {
-            Rectangle = rectangle;
+            Value = value;
         }
     }
 }
