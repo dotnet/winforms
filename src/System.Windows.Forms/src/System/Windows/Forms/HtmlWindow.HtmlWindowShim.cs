@@ -32,15 +32,9 @@ public sealed partial class HtmlWindow
             _htmlWindow = window;
         }
 
-        public override IHTMLWindow2 AssociatedWindow
-        {
-            get { return _htmlWindow.NativeHtmlWindow; }
-        }
+        public override IHTMLWindow2 AssociatedWindow => _htmlWindow.NativeHtmlWindow;
 
-        public IHTMLWindow2 NativeHtmlWindow
-        {
-            get { return _htmlWindow.NativeHtmlWindow; }
-        }
+        public IHTMLWindow2 NativeHtmlWindow => _htmlWindow.NativeHtmlWindow;
 
         ///  Support IHtmlDocument3.AttachHandler
         public override void AttachEventHandler(string eventName, EventHandler eventHandler)
@@ -90,10 +84,7 @@ public sealed partial class HtmlWindow
             }
         }
 
-        public void OnWindowUnload()
-        {
-            _htmlWindow?.ShimManager.OnWindowUnloaded(_htmlWindow);
-        }
+        public void OnWindowUnload() => _htmlWindow?.ShimManager.OnWindowUnloaded(_htmlWindow);
 
         protected override void Dispose(bool disposing)
         {
@@ -109,9 +100,6 @@ public sealed partial class HtmlWindow
             }
         }
 
-        protected override object GetEventSender()
-        {
-            return _htmlWindow;
-        }
+        protected override object GetEventSender() => _htmlWindow;
     }
 }
