@@ -797,14 +797,7 @@ public unsafe partial class Control :
     {
         get
         {
-            object? customBackBrush = Properties.GetObject(s_backBrushProperty);
-            if (customBackBrush is not null)
-            {
-                // We already have a valid brush.  Unbox, and return.
-                return (HBRUSH)customBackBrush;
-            }
-
-            if (!Properties.ContainsObject(s_backColorProperty))
+            if (!Properties.TryGetValue(s_backBrushProperty, out HBRUSH customBackBrush))
             {
                 // No custom back color.  See if we can get to our parent.
                 // The color check here is to account for parents and children who
@@ -813,6 +806,12 @@ public unsafe partial class Control :
                 {
                     return _parent.BackColorBrush;
                 }
+            }
+
+            if (!customBackBrush.IsNull)
+            {
+                // We already have a valid brush.  Unbox, and return.
+                return customBackBrush;
             }
 
             // No parent, or we have a custom back color.  Either way, we need to
@@ -832,7 +831,7 @@ public unsafe partial class Control :
             }
 
             Debug.Assert(!backBrush.IsNull, "Failed to create brushHandle");
-            Properties.SetObject(s_backBrushProperty, backBrush);
+            Properties.SetValue(s_backBrushProperty, backBrush);
 
             return backBrush;
         }
@@ -5059,16 +5058,14 @@ public unsafe partial class Control :
     {
         if (GetState(States.OwnCtlBrush))
         {
-            object? backBrush = Properties.GetObject(s_backBrushProperty);
-            if (backBrush is not null)
+            if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH backBrush))
             {
-                HBRUSH p = (HBRUSH)backBrush;
-                if (!p.IsNull)
+                if (!backBrush.IsNull)
                 {
-                    PInvoke.DeleteObject(p);
+                    PInvoke.DeleteObject(backBrush);
                 }
 
-                Properties.SetObject(s_backBrushProperty, value: null);
+                Properties.RemoveObject(s_backBrushProperty);
             }
         }
 
@@ -7046,19 +7043,17 @@ public unsafe partial class Control :
             return;
         }
 
-        object? backBrush = Properties.GetObject(s_backBrushProperty);
-        if (backBrush is not null)
+        if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH backBrush))
         {
             if (GetState(States.OwnCtlBrush))
             {
-                HBRUSH p = (HBRUSH)backBrush;
-                if (!p.IsNull)
+                if (!backBrush.IsNull)
                 {
-                    PInvoke.DeleteObject(p);
+                    PInvoke.DeleteObject(backBrush);
                 }
             }
 
-            Properties.SetObject(s_backBrushProperty, value: null);
+            Properties.RemoveObject(s_backBrushProperty);
         }
 
         Invalidate();
@@ -7948,14 +7943,12 @@ public unsafe partial class Control :
         {
             if (GetState(States.OwnCtlBrush))
             {
-                object? backBrush = Properties.GetObject(s_backBrushProperty);
-                if (backBrush is not null)
+                if (Properties.TryGetValue(s_backBrushProperty, out HBRUSH backBrush))
                 {
-                    Properties.SetObject(s_backBrushProperty, value: null);
-                    HBRUSH p = (HBRUSH)backBrush;
-                    if (!p.IsNull)
+                    Properties.RemoveObject(s_backBrushProperty);
+                    if (!backBrush.IsNull)
                     {
-                        PInvoke.DeleteObject(p);
+                        PInvoke.DeleteObject(backBrush);
                     }
                 }
             }

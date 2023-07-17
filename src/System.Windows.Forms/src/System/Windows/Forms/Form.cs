@@ -2182,17 +2182,11 @@ public partial class Form : ContainerControl
     {
         get
         {
-            object? key = Properties.GetObject(PropTransparencyKey);
-            if (key is not null)
-            {
-                return (Color)key;
-            }
-
-            return Color.Empty;
+            return Properties.TryGetValue(PropTransparencyKey, out Color key) ? key : Color.Empty;
         }
         set
         {
-            Properties.SetObject(PropTransparencyKey, value);
+            Properties.SetValue(PropTransparencyKey, value);
             if (!IsMdiContainer)
             {
                 bool oldLayered = (_formState[FormStateLayered] == 1);
@@ -3392,7 +3386,7 @@ public partial class Form : ContainerControl
 
             if (Properties.TryGetValue(PropDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
             {
-                Properties.SetValue(PropDummyMdiMenu, HMENU.Null);
+                Properties.RemoveObject(PropDummyMdiMenu);
                 PInvoke.DestroyMenu(dummyMenu);
             }
         }

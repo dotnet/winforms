@@ -163,8 +163,7 @@ internal partial class CommonProperties
     ///  clears out the padding from the property store
     internal static void ResetPadding(IArrangedElement element)
     {
-        object? value = element.Properties.GetObject(_paddingProperty);
-        if (value is not null)
+        if (element.Properties.TryGetValue(_paddingProperty, out Padding value) || value != Padding.Empty)
         {
             element.Properties.RemoveObject(_paddingProperty);
         }

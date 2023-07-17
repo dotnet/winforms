@@ -566,20 +566,18 @@ internal partial class PropertyStore
         if (!found)
         {
             SetObject(key, new StructWrapper<T>(value));
+            return;
         }
-        else
+
+        if (storedObject is StructWrapper<T> wrapper)
         {
-            if (storedObject is StructWrapper<T> wrapper)
-            {
-                // re-using the wrapper reduces the boxing hit.
-                wrapper.Value = value;
-            }
-            else
-            {
-                Debug.Assert(storedObject is null, $"object should either be null or StructWrapper<{typeof(T)}>"); // could someone have SetObject to this key behind our backs?
-                SetObject(key, new StructWrapper<T>(value));
-            }
+            // re-using the wrapper reduces the boxing hit.
+            wrapper.Value = value;
+            return;
         }
+
+        Debug.Assert(storedObject is null, $"object should either be null or StructWrapper<{typeof(T)}>"); // could someone have SetObject to this key behind our backs?
+        SetObject(key, new StructWrapper<T>(value));
     }
 
     /// <summary>
