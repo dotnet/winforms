@@ -1,19 +1,19 @@
 #nullable enable
-~override System.Windows.Forms.AxHost.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.AxHost.BackgroundImage.set -> void
-~override System.Windows.Forms.AxHost.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.AxHost.Cursor.get -> System.Windows.Forms.Cursor
-~override System.Windows.Forms.AxHost.Cursor.set -> void
-~override System.Windows.Forms.AxHost.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.AxHost.Font.set -> void
-~override System.Windows.Forms.AxHost.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.AxHost.OnFontChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.AxHost.OnForeColorChanged(System.EventArgs e) -> void
+override System.Windows.Forms.AxHost.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.AxHost.BackgroundImage.set -> void
+override System.Windows.Forms.AxHost.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.AxHost.Cursor.get -> System.Windows.Forms.Cursor!
+override System.Windows.Forms.AxHost.Cursor.set -> void
+override System.Windows.Forms.AxHost.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.AxHost.Font.set -> void
+override System.Windows.Forms.AxHost.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.AxHost.OnFontChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.AxHost.OnForeColorChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.AxHost.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.AxHost.OnLostFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.AxHost.Site.set -> void
-~override System.Windows.Forms.AxHost.Text.get -> string
-~override System.Windows.Forms.AxHost.Text.set -> void
+override System.Windows.Forms.AxHost.OnLostFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.AxHost.Site.set -> void
+override System.Windows.Forms.AxHost.Text.get -> string!
+override System.Windows.Forms.AxHost.Text.set -> void
 override System.Windows.Forms.ComboBox.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.ComboBox.BackgroundImage.set -> void
 override System.Windows.Forms.ComboBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
@@ -402,11 +402,11 @@ static System.Windows.Forms.HtmlDocument.operator ==(System.Windows.Forms.HtmlDo
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm) -> void
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm, string key) -> void
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.AxHost.AxHost(string clsid) -> void
-~System.Windows.Forms.AxHost.AxHost(string clsid, int flags) -> void
+System.Windows.Forms.AxHost.AxHost(string! clsid) -> void
+System.Windows.Forms.AxHost.AxHost(string! clsid, int flags) -> void
 ~System.Windows.Forms.AxHost.ContainingControl.get -> System.Windows.Forms.ContainerControl
 ~System.Windows.Forms.AxHost.ContainingControl.set -> void
-~System.Windows.Forms.AxHost.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
+System.Windows.Forms.AxHost.DrawToBitmap(System.Drawing.Bitmap! bitmap, System.Drawing.Rectangle targetBounds) -> void
 ~System.Windows.Forms.AxHost.GetOcx() -> object
 ~System.Windows.Forms.AxHost.OcxState.get -> System.Windows.Forms.AxHost.State
 ~System.Windows.Forms.AxHost.OcxState.set -> void
@@ -4494,13 +4494,13 @@ System.Windows.Forms.AxHost.ActiveXInvokeKind.PropertyGet = 1 -> System.Windows.
 System.Windows.Forms.AxHost.ActiveXInvokeKind.PropertySet = 2 -> System.Windows.Forms.AxHost.ActiveXInvokeKind
 System.Windows.Forms.AxHost.AxComponentEditor
 System.Windows.Forms.AxHost.AxComponentEditor.AxComponentEditor() -> void
-System.Windows.Forms.AxHost.BackColorChanged -> System.EventHandler
-System.Windows.Forms.AxHost.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.AxHost.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.AxHost.BackColorChanged -> System.EventHandler?
+System.Windows.Forms.AxHost.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.AxHost.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.AxHost.BeginInit() -> void
-System.Windows.Forms.AxHost.BindingContextChanged -> System.EventHandler
-System.Windows.Forms.AxHost.ChangeUICues -> System.Windows.Forms.UICuesEventHandler
-System.Windows.Forms.AxHost.Click -> System.EventHandler
+System.Windows.Forms.AxHost.BindingContextChanged -> System.EventHandler?
+System.Windows.Forms.AxHost.ChangeUICues -> System.Windows.Forms.UICuesEventHandler?
+System.Windows.Forms.AxHost.Click -> System.EventHandler?
 System.Windows.Forms.AxHost.ClsidAttribute
 System.Windows.Forms.AxHost.ClsidAttribute.ClsidAttribute(string! clsid) -> void
 System.Windows.Forms.AxHost.ClsidAttribute.Value.get -> string!
@@ -4508,54 +4508,54 @@ System.Windows.Forms.AxHost.ConnectionPointCookie
 System.Windows.Forms.AxHost.ConnectionPointCookie.~ConnectionPointCookie() -> void
 System.Windows.Forms.AxHost.ConnectionPointCookie.ConnectionPointCookie(object! source, object! sink, System.Type! eventInterface) -> void
 System.Windows.Forms.AxHost.ConnectionPointCookie.Disconnect() -> void
-System.Windows.Forms.AxHost.CursorChanged -> System.EventHandler
-System.Windows.Forms.AxHost.DoubleClick -> System.EventHandler
+System.Windows.Forms.AxHost.CursorChanged -> System.EventHandler?
+System.Windows.Forms.AxHost.DoubleClick -> System.EventHandler?
 System.Windows.Forms.AxHost.DoVerb(int verb) -> void
-System.Windows.Forms.AxHost.DragDrop -> System.Windows.Forms.DragEventHandler
-System.Windows.Forms.AxHost.DragEnter -> System.Windows.Forms.DragEventHandler
-System.Windows.Forms.AxHost.DragLeave -> System.EventHandler
-System.Windows.Forms.AxHost.DragOver -> System.Windows.Forms.DragEventHandler
+System.Windows.Forms.AxHost.DragDrop -> System.Windows.Forms.DragEventHandler?
+System.Windows.Forms.AxHost.DragEnter -> System.Windows.Forms.DragEventHandler?
+System.Windows.Forms.AxHost.DragLeave -> System.EventHandler?
+System.Windows.Forms.AxHost.DragOver -> System.Windows.Forms.DragEventHandler?
 System.Windows.Forms.AxHost.EditMode.get -> bool
-System.Windows.Forms.AxHost.EnabledChanged -> System.EventHandler
+System.Windows.Forms.AxHost.EnabledChanged -> System.EventHandler?
 System.Windows.Forms.AxHost.EndInit() -> void
-System.Windows.Forms.AxHost.FontChanged -> System.EventHandler
-System.Windows.Forms.AxHost.ForeColorChanged -> System.EventHandler
-System.Windows.Forms.AxHost.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler
+System.Windows.Forms.AxHost.FontChanged -> System.EventHandler?
+System.Windows.Forms.AxHost.ForeColorChanged -> System.EventHandler?
+System.Windows.Forms.AxHost.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler?
 System.Windows.Forms.AxHost.HasAboutBox.get -> bool
 System.Windows.Forms.AxHost.HasPropertyPages() -> bool
-System.Windows.Forms.AxHost.HelpRequested -> System.Windows.Forms.HelpEventHandler
+System.Windows.Forms.AxHost.HelpRequested -> System.Windows.Forms.HelpEventHandler?
 System.Windows.Forms.AxHost.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.AxHost.ImeMode.set -> void
-System.Windows.Forms.AxHost.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.AxHost.ImeModeChanged -> System.EventHandler?
 System.Windows.Forms.AxHost.InvalidActiveXStateException
 System.Windows.Forms.AxHost.InvalidActiveXStateException.InvalidActiveXStateException() -> void
 System.Windows.Forms.AxHost.InvalidActiveXStateException.InvalidActiveXStateException(string? name, System.Windows.Forms.AxHost.ActiveXInvokeKind kind) -> void
 System.Windows.Forms.AxHost.InvokeEditMode() -> void
-System.Windows.Forms.AxHost.KeyDown -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.AxHost.KeyPress -> System.Windows.Forms.KeyPressEventHandler
-System.Windows.Forms.AxHost.KeyUp -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.AxHost.Layout -> System.Windows.Forms.LayoutEventHandler
+System.Windows.Forms.AxHost.KeyDown -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.AxHost.KeyPress -> System.Windows.Forms.KeyPressEventHandler?
+System.Windows.Forms.AxHost.KeyUp -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.AxHost.Layout -> System.Windows.Forms.LayoutEventHandler?
 System.Windows.Forms.AxHost.MakeDirty() -> void
-System.Windows.Forms.AxHost.MouseClick -> System.EventHandler
-System.Windows.Forms.AxHost.MouseDoubleClick -> System.EventHandler
-System.Windows.Forms.AxHost.MouseDown -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.AxHost.MouseEnter -> System.EventHandler
-System.Windows.Forms.AxHost.MouseHover -> System.EventHandler
-System.Windows.Forms.AxHost.MouseLeave -> System.EventHandler
-System.Windows.Forms.AxHost.MouseMove -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.AxHost.MouseUp -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.AxHost.MouseWheel -> System.Windows.Forms.MouseEventHandler
-System.Windows.Forms.AxHost.Paint -> System.Windows.Forms.PaintEventHandler
+System.Windows.Forms.AxHost.MouseClick -> System.EventHandler?
+System.Windows.Forms.AxHost.MouseDoubleClick -> System.EventHandler?
+System.Windows.Forms.AxHost.MouseDown -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.AxHost.MouseEnter -> System.EventHandler?
+System.Windows.Forms.AxHost.MouseHover -> System.EventHandler?
+System.Windows.Forms.AxHost.MouseLeave -> System.EventHandler?
+System.Windows.Forms.AxHost.MouseMove -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.AxHost.MouseUp -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.AxHost.MouseWheel -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.AxHost.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.AxHost.PropsValid() -> bool
-System.Windows.Forms.AxHost.QueryAccessibilityHelp -> System.Windows.Forms.QueryAccessibilityHelpEventHandler
-System.Windows.Forms.AxHost.QueryContinueDrag -> System.Windows.Forms.QueryContinueDragEventHandler
+System.Windows.Forms.AxHost.QueryAccessibilityHelp -> System.Windows.Forms.QueryAccessibilityHelpEventHandler?
+System.Windows.Forms.AxHost.QueryContinueDrag -> System.Windows.Forms.QueryContinueDragEventHandler?
 System.Windows.Forms.AxHost.RaiseOnMouseDown(short button, short shift, float x, float y) -> void
 System.Windows.Forms.AxHost.RaiseOnMouseDown(short button, short shift, int x, int y) -> void
 System.Windows.Forms.AxHost.RaiseOnMouseMove(short button, short shift, float x, float y) -> void
 System.Windows.Forms.AxHost.RaiseOnMouseMove(short button, short shift, int x, int y) -> void
 System.Windows.Forms.AxHost.RaiseOnMouseUp(short button, short shift, float x, float y) -> void
 System.Windows.Forms.AxHost.RaiseOnMouseUp(short button, short shift, int x, int y) -> void
-System.Windows.Forms.AxHost.RightToLeftChanged -> System.EventHandler
+System.Windows.Forms.AxHost.RightToLeftChanged -> System.EventHandler?
 System.Windows.Forms.AxHost.ShowAboutBox() -> void
 System.Windows.Forms.AxHost.ShowPropertyPages() -> void
 System.Windows.Forms.AxHost.State
@@ -4564,8 +4564,8 @@ System.Windows.Forms.AxHost.State.State(System.IO.Stream! ms, int storageType, b
 System.Windows.Forms.AxHost.State.State(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
 System.Windows.Forms.AxHost.StateConverter
 System.Windows.Forms.AxHost.StateConverter.StateConverter() -> void
-System.Windows.Forms.AxHost.StyleChanged -> System.EventHandler
-System.Windows.Forms.AxHost.TextChanged -> System.EventHandler
+System.Windows.Forms.AxHost.StyleChanged -> System.EventHandler?
+System.Windows.Forms.AxHost.TextChanged -> System.EventHandler?
 System.Windows.Forms.AxHost.TypeLibraryTimeStampAttribute
 System.Windows.Forms.AxHost.TypeLibraryTimeStampAttribute.TypeLibraryTimeStampAttribute(string! timestamp) -> void
 System.Windows.Forms.AxHost.TypeLibraryTimeStampAttribute.Value.get -> System.DateTime
