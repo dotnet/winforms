@@ -398,7 +398,7 @@ internal sealed class SelectionManager : IDisposable
         }
 
         using Graphics g = _behaviorService.AdornerWindowGraphics;
-        
+
         // If all that changed was the primary selection, then the refresh region was empty, but we do need to update the 2 controls.
         if (toRefresh.IsEmpty(g) && primarySelection is not null && !primarySelection.Equals(_prevPrimarySelection))
         {
