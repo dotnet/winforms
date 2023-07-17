@@ -5678,7 +5678,7 @@ public partial class Form : ContainerControl
                 // (set to null) so that duplicate control buttons are not placed on the menu bar when
                 // an ole menu is being removed.
                 // Make MDI forget the mdi item position.
-                if (!Properties.TryGetObject(PropDummyMdiMenu, out HMENU dummyMenu) || dummyMenu.IsNull || recreateMenu)
+                if (!Properties.TryGetValue(PropDummyMdiMenu, out HMENU dummyMenu) || dummyMenu.IsNull || recreateMenu)
                 {
                     dummyMenu = PInvoke.CreateMenu();
                     Properties.SetValue(PropDummyMdiMenu, dummyMenu);
