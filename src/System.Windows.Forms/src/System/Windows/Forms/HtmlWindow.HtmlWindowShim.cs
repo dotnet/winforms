@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.InteropServices;
 using static Interop.Mshtml;
 
@@ -26,7 +24,7 @@ public sealed partial class HtmlWindow
     /// </summary>
     internal class HtmlWindowShim : HtmlShim
     {
-        private AxHost.ConnectionPointCookie _cookie;
+        private AxHost.ConnectionPointCookie? _cookie;
         private HtmlWindow _htmlWindow;
 
         public HtmlWindowShim(HtmlWindow window)
@@ -34,15 +32,9 @@ public sealed partial class HtmlWindow
             _htmlWindow = window;
         }
 
-        public override IHTMLWindow2 AssociatedWindow
-        {
-            get { return _htmlWindow.NativeHtmlWindow; }
-        }
+        public override IHTMLWindow2 AssociatedWindow => _htmlWindow.NativeHtmlWindow;
 
-        public IHTMLWindow2 NativeHtmlWindow
-        {
-            get { return _htmlWindow.NativeHtmlWindow; }
-        }
+        public IHTMLWindow2 NativeHtmlWindow => _htmlWindow.NativeHtmlWindow;
 
         ///  Support IHtmlDocument3.AttachHandler
         public override void AttachEventHandler(string eventName, EventHandler eventHandler)
@@ -61,10 +53,11 @@ public sealed partial class HtmlWindow
         {
             if (_cookie is null || !_cookie.Connected)
             {
-                _cookie = new AxHost.ConnectionPointCookie(NativeHtmlWindow,
-                                                                          new HTMLWindowEvents2(_htmlWindow),
-                                                                          typeof(DHTMLWindowEvents2),
-                                                                          /*throwException*/ false);
+                _cookie = new AxHost.ConnectionPointCookie(
+                    NativeHtmlWindow,
+                    new HTMLWindowEvents2(_htmlWindow),
+                    typeof(DHTMLWindowEvents2),
+                    throwException: false);
                 if (!_cookie.Connected)
                 {
                     _cookie = null;
@@ -75,7 +68,7 @@ public sealed partial class HtmlWindow
         ///  Support IHTMLWindow3.DetachHandler
         public override void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
-            HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
+            HtmlToClrEventProxy? proxy = RemoveEventProxy(eventHandler);
             if (proxy is not null)
             {
                 ((IHTMLWindow3)NativeHtmlWindow).DetachEvent(eventName, proxy);
@@ -91,10 +84,7 @@ public sealed partial class HtmlWindow
             }
         }
 
-        public void OnWindowUnload()
-        {
-            _htmlWindow?.ShimManager.OnWindowUnloaded(_htmlWindow);
-        }
+        public void OnWindowUnload() => _htmlWindow?.ShimManager.OnWindowUnloaded(_htmlWindow);
 
         protected override void Dispose(bool disposing)
         {
@@ -106,13 +96,10 @@ public sealed partial class HtmlWindow
                     Marshal.FinalReleaseComObject(_htmlWindow.NativeHtmlWindow);
                 }
 
-                _htmlWindow = null;
+                _htmlWindow = null!;
             }
         }
 
-        protected override object GetEventSender()
-        {
-            return _htmlWindow;
-        }
+        protected override object GetEventSender() => _htmlWindow;
     }
 }
