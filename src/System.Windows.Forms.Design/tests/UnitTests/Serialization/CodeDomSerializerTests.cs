@@ -11,7 +11,7 @@ public class CodeDomSerializerTests
     [Fact]
     public void CodeDomSerializer_Constructor()
     {
-        var underTest = new CodeDomSerializer();
+        CodeDomSerializer underTest = new();
         Assert.NotNull(underTest);
     }
 }

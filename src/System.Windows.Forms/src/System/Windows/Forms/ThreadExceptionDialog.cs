@@ -256,14 +256,9 @@ public class ThreadExceptionDialog : Form
         _pictureBox.Location = new Point(_scaledPictureWidth / 8, _scaledPictureHeight / 8);
         _pictureBox.Size = new Size(_scaledPictureWidth * 3 / 4, _scaledPictureHeight * 3 / 4);
         _pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-        if (t is Security.SecurityException)
-        {
-            _pictureBox.Image = SystemIcons.Information.ToBitmap();
-        }
-        else
-        {
-            _pictureBox.Image = SystemIcons.Error.ToBitmap();
-        }
+        StockIconId stockIconId = (t is Security.SecurityException) ? StockIconId.Info : StockIconId.Error;
+        using Icon icon = SystemIcons.GetStockIcon(stockIconId, _scaledPictureWidth);
+        _pictureBox.Image = icon.ToBitmap();
 
         Controls.Add(_pictureBox);
         _message.SetBounds(_scaledPictureWidth,

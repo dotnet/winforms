@@ -11,14 +11,14 @@ public class DataGridViewCellStyleEditorTests
     [Fact]
     public void DataGridViewCellStyleEditor_Ctor_Default()
     {
-        var editor = new DataGridViewCellStyleEditor();
+        DataGridViewCellStyleEditor editor = new();
         Assert.False(editor.IsDropDownResizable);
     }
 
     [Fact]
     public void DataGridViewCellStyleEditor_GetEditStyle_ReturnsModal()
     {
-        var editor = new DataGridViewCellStyleEditor();
+        DataGridViewCellStyleEditor editor = new();
         Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(null));
     }
 }

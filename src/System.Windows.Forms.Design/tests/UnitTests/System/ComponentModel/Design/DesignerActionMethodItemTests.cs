@@ -21,7 +21,7 @@ public class DesignerActionMethodItemTests
     [MemberData(nameof(Ctor_DesignerActionList_String_String_String_String_Bool_TestData))]
     public void DesignerActionMethodItem_Ctor_DesignerActionList_String_String_String_String_Bool(DesignerActionList actionList, string memberName, string displayName, string category, string description, bool includeAsDesignerVerb, string expectedDisplayName)
     {
-        var item = new DesignerActionMethodItem(actionList, memberName, displayName, category, description, includeAsDesignerVerb);
+        DesignerActionMethodItem item = new(actionList, memberName, displayName, category, description, includeAsDesignerVerb);
         Assert.Equal(memberName, item.MemberName);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Equal(category, item.Category);
@@ -47,7 +47,7 @@ public class DesignerActionMethodItemTests
     [MemberData(nameof(Ctor_DesignerActionList_String_String_String_String_TestData))]
     public void DesignerActionMethodItem_Ctor_DesignerActionList_String_String_String_String(DesignerActionList actionList, string memberName, string displayName, string category, string description, string expectedDisplayName)
     {
-        var item = new DesignerActionMethodItem(actionList, memberName, displayName, category, description);
+        DesignerActionMethodItem item = new(actionList, memberName, displayName, category, description);
         Assert.Equal(memberName, item.MemberName);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Equal(category, item.Category);
@@ -73,7 +73,7 @@ public class DesignerActionMethodItemTests
     [MemberData(nameof(Ctor_DesignerActionList_String_String_String_Bool_TestData))]
     public void DesignerActionMethodItem_Ctor_DesignerActionList_String_String_String_Bool(DesignerActionList actionList, string memberName, string displayName, string category, bool includeAsDesignerVerb, string expectedDisplayName)
     {
-        var item = new DesignerActionMethodItem(actionList, memberName, displayName, category, includeAsDesignerVerb);
+        DesignerActionMethodItem item = new(actionList, memberName, displayName, category, includeAsDesignerVerb);
         Assert.Equal(memberName, item.MemberName);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Equal(category, item.Category);
@@ -99,7 +99,7 @@ public class DesignerActionMethodItemTests
     [MemberData(nameof(Ctor_DesignerActionList_String_String_String_TestData))]
     public void DesignerActionMethodItem_Ctor_DesignerActionList_String_String_String(DesignerActionList actionList, string memberName, string displayName, string category, string expectedDisplayName)
     {
-        var item = new DesignerActionMethodItem(actionList, memberName, displayName, category);
+        DesignerActionMethodItem item = new(actionList, memberName, displayName, category);
         Assert.Equal(memberName, item.MemberName);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Equal(category, item.Category);
@@ -125,7 +125,7 @@ public class DesignerActionMethodItemTests
     [MemberData(nameof(Ctor_DesignerActionList_String_String_Bool_TestData))]
     public void DesignerActionMethodItem_Ctor_DesignerActionList_String_String_Bool(DesignerActionList actionList, string memberName, string displayName, bool includeAsDesignerVerb, string expectedDisplayName)
     {
-        var item = new DesignerActionMethodItem(actionList, memberName, displayName, includeAsDesignerVerb);
+        DesignerActionMethodItem item = new(actionList, memberName, displayName, includeAsDesignerVerb);
         Assert.Equal(memberName, item.MemberName);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Null(item.Category);
@@ -151,7 +151,7 @@ public class DesignerActionMethodItemTests
     [MemberData(nameof(Ctor_DesignerActionList_String_String_TestData))]
     public void DesignerActionMethodItem_Ctor_DesignerActionList_String_String(DesignerActionList actionList, string memberName, string displayName, string expectedDisplayName)
     {
-        var item = new DesignerActionMethodItem(actionList, memberName, displayName);
+        DesignerActionMethodItem item = new(actionList, memberName, displayName);
         Assert.Equal(memberName, item.MemberName);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Null(item.Category);
@@ -175,7 +175,7 @@ public class DesignerActionMethodItemTests
     [MemberData(nameof(RelatedComponent_Set_TestData))]
     public void DesignerActionMethodItem_RelatedComponent_Set_GetReturnsExpected(IComponent value)
     {
-        var item = new DesignerActionMethodItem(null, "memberName", "displayName", "category", "description")
+        DesignerActionMethodItem item = new(null, "memberName", "displayName", "category", "description")
         {
             RelatedComponent = value
         };
@@ -191,8 +191,8 @@ public class DesignerActionMethodItemTests
     [InlineData("PrivateMethod")]
     public void Invoke_ValidMemberName_ReturnsExpected(string memberName)
     {
-        var list = new SubDesignerActionList();
-        var item = new DesignerActionMethodItem(list, memberName, "displayName", "category", "description");
+        SubDesignerActionList list = new();
+        DesignerActionMethodItem item = new(list, memberName, "displayName", "category", "description");
         item.Invoke();
         Assert.Equal(memberName, list.CalledMethod);
 
@@ -205,7 +205,7 @@ public class DesignerActionMethodItemTests
     [Fact]
     public void Invoke_NullActionList_ThrowsInvalidOperationException()
     {
-        var item = new DesignerActionMethodItem(null, "memberName", "displayName", "category", "description");
+        DesignerActionMethodItem item = new(null, "memberName", "displayName", "category", "description");
         Assert.Throws<InvalidOperationException>(() => item.Invoke());
     }
 
@@ -215,24 +215,24 @@ public class DesignerActionMethodItemTests
     [InlineData(nameof(SubDesignerActionList.StaticMethod))]
     public void Invoke_NoSuchMemberName_ThrowsInvalidOperationException(string memberName)
     {
-        var list = new SubDesignerActionList();
-        var item = new DesignerActionMethodItem(list, memberName, "displayName", "category", "description");
+        SubDesignerActionList list = new();
+        DesignerActionMethodItem item = new(list, memberName, "displayName", "category", "description");
         Assert.Throws<InvalidOperationException>(() => item.Invoke());
     }
 
     [Fact]
     public void Invoke_NullMemberName_ThrowsArgumentNullException()
     {
-        var list = new SubDesignerActionList();
-        var item = new DesignerActionMethodItem(list, null, "displayName", "category", "description");
+        SubDesignerActionList list = new();
+        DesignerActionMethodItem item = new(list, null, "displayName", "category", "description");
         Assert.Throws<ArgumentNullException>("name", () => item.Invoke());
     }
 
     [Fact]
     public void Invoke_MemberWithParameters_ThrowsTargetParameterCountException()
     {
-        var list = new SubDesignerActionList();
-        var item = new DesignerActionMethodItem(list, nameof(SubDesignerActionList.MethodWithParameters), "displayName", "category", "description");
+        SubDesignerActionList list = new();
+        DesignerActionMethodItem item = new(list, nameof(SubDesignerActionList.MethodWithParameters), "displayName", "category", "description");
         Assert.Throws<TargetParameterCountException>(() => item.Invoke());
     }
 

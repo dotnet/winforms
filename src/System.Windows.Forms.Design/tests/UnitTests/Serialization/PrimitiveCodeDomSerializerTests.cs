@@ -12,7 +12,7 @@ public class PrimitiveCodeDomSerializerTests
     [Fact]
     public void PrimitiveCodeDomSerializerTests_Constructor()
     {
-        var underTest = new PrimitiveCodeDomSerializer();
+        PrimitiveCodeDomSerializer underTest = new();
         Assert.NotNull(underTest);
     }
 
@@ -26,7 +26,7 @@ public class PrimitiveCodeDomSerializerTests
     [InlineData(42.123)]
     public void PrimitiveCodeDomSerializerTests_Serialize(object input)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         PrimitiveCodeDomSerializer underTest = PrimitiveCodeDomSerializer.Default;
         Assert.NotNull(underTest);
 
@@ -39,7 +39,7 @@ public class PrimitiveCodeDomSerializerTests
     [Fact]
     public void PrimitiveCodeDomSerializerTests_Serialize_Cast()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         PrimitiveCodeDomSerializer underTest = PrimitiveCodeDomSerializer.Default;
         Assert.NotNull(underTest);
 

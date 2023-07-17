@@ -188,7 +188,7 @@ public class ControlDesignerTests
     [WinFormsFact]
     public void ControlDesigner_WndProc_InvokePaint_Success()
     {
-        using var designer = new ControlDesigner();
+        using ControlDesigner designer = new();
         Message m = new Message
         {
             Msg = (int)PInvoke.WM_PAINT

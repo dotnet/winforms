@@ -337,6 +337,10 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <PackageReference Include="Microsoft.Win32.SystemEvents" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="AssemblyRef.cs" />
+  </ItemGroup>
+
   <Import Project="resources.targets" />
   <Import Project="packaging.targets" />
 </Project>

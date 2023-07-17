@@ -11,9 +11,9 @@ public class RootContextTests
     [Fact]
     public void RootContext_Ctor_CodeExpression_Object()
     {
-        var expression = new CodeExpression();
-        var value = new object();
-        var context = new RootContext(expression, value);
+        CodeExpression expression = new();
+        object value = new();
+        RootContext context = new(expression, value);
         Assert.Same(expression, context.Expression);
         Assert.Same(value, context.Value);
     }
@@ -27,7 +27,7 @@ public class RootContextTests
     [Fact]
     public void RootContext_Ctor_NullValue_ThrowsArgumentNullException()
     {
-        var expression = new CodeExpression();
+        CodeExpression expression = new();
         Assert.Throws<ArgumentNullException>("value", () => new RootContext(expression, null));
     }
 }

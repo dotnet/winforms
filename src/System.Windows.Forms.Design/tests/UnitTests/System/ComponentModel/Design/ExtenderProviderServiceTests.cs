@@ -11,7 +11,7 @@ public class ExtenderProviderServiceTests
     [Fact]
     public void ExtenderProviderService_GetExtenderProviders_Invoke_ReturnsEmpty()
     {
-        var surface = new DesignSurface();
+        DesignSurface surface = new();
         object service = surface.GetService(typeof(IExtenderListService));
         IExtenderListService listService = Assert.IsAssignableFrom<IExtenderListService>(service);
         Assert.Empty(listService.GetExtenderProviders());
@@ -20,12 +20,12 @@ public class ExtenderProviderServiceTests
     [Fact]
     public void ExtenderProviderService_AddExtenderProvider_Invoke_Success()
     {
-        var surface = new DesignSurface();
+        DesignSurface surface = new();
         object service = surface.GetService(typeof(IExtenderListService));
         IExtenderListService listService = Assert.IsAssignableFrom<IExtenderListService>(service);
         IExtenderProviderService providerService = Assert.IsAssignableFrom<IExtenderProviderService>(service);
-        var mockExtenderProvider1 = new Mock<IExtenderProvider>(MockBehavior.Strict);
-        var mockExtenderProvider2 = new Mock<IExtenderProvider>(MockBehavior.Strict);
+        Mock<IExtenderProvider> mockExtenderProvider1 = new(MockBehavior.Strict);
+        Mock<IExtenderProvider> mockExtenderProvider2 = new(MockBehavior.Strict);
 
         providerService.AddExtenderProvider(mockExtenderProvider1.Object);
         Assert.Equal(new IExtenderProvider[] { mockExtenderProvider1.Object }, listService.GetExtenderProviders());
@@ -38,7 +38,7 @@ public class ExtenderProviderServiceTests
     [Fact]
     public void ExtenderProviderService_AddExtenderProvider_NullProvider_ThrowsArgumentNullException()
     {
-        var surface = new DesignSurface();
+        DesignSurface surface = new();
         object service = surface.GetService(typeof(IExtenderListService));
         IExtenderProviderService providerService = Assert.IsAssignableFrom<IExtenderProviderService>(service);
         Assert.Throws<ArgumentNullException>("provider", () => providerService.AddExtenderProvider(null));
@@ -47,11 +47,11 @@ public class ExtenderProviderServiceTests
     [Fact]
     public void ExtenderProviderService_AddExtenderProvider_DuplicateProvider_ThrowsArgumentException()
     {
-        var surface = new DesignSurface();
+        DesignSurface surface = new();
         object service = surface.GetService(typeof(IExtenderListService));
         IExtenderListService listService = Assert.IsAssignableFrom<IExtenderListService>(service);
         IExtenderProviderService providerService = Assert.IsAssignableFrom<IExtenderProviderService>(service);
-        var mockExtenderProvider = new Mock<IExtenderProvider>(MockBehavior.Strict);
+        Mock<IExtenderProvider> mockExtenderProvider = new(MockBehavior.Strict);
 
         providerService.AddExtenderProvider(mockExtenderProvider.Object);
         Assert.Throws<ArgumentException>("provider", () => providerService.AddExtenderProvider(mockExtenderProvider.Object));
@@ -60,12 +60,12 @@ public class ExtenderProviderServiceTests
     [Fact]
     public void ExtenderProviderService_RemoveExtenderProvider_InvokeWithProviders_Success()
     {
-        var surface = new DesignSurface();
+        DesignSurface surface = new();
         object service = surface.GetService(typeof(IExtenderListService));
         IExtenderListService listService = Assert.IsAssignableFrom<IExtenderListService>(service);
         IExtenderProviderService providerService = Assert.IsAssignableFrom<IExtenderProviderService>(service);
-        var mockExtenderProvider1 = new Mock<IExtenderProvider>(MockBehavior.Strict);
-        var mockExtenderProvider2 = new Mock<IExtenderProvider>(MockBehavior.Strict);
+        Mock<IExtenderProvider> mockExtenderProvider1 = new(MockBehavior.Strict);
+        Mock<IExtenderProvider> mockExtenderProvider2 = new(MockBehavior.Strict);
 
         providerService.AddExtenderProvider(mockExtenderProvider1.Object);
         providerService.AddExtenderProvider(mockExtenderProvider2.Object);
@@ -85,11 +85,11 @@ public class ExtenderProviderServiceTests
     [Fact]
     public void ExtenderProviderService_RemoveExtenderProvider_InvokeWithoutProviders_Nop()
     {
-        var surface = new DesignSurface();
+        DesignSurface surface = new();
         object service = surface.GetService(typeof(IExtenderListService));
         IExtenderListService listService = Assert.IsAssignableFrom<IExtenderListService>(service);
         IExtenderProviderService providerService = Assert.IsAssignableFrom<IExtenderProviderService>(service);
-        var mockExtenderProvider = new Mock<IExtenderProvider>(MockBehavior.Strict);
+        Mock<IExtenderProvider> mockExtenderProvider = new(MockBehavior.Strict);
         providerService.RemoveExtenderProvider(mockExtenderProvider.Object);
         Assert.Empty(listService.GetExtenderProviders());
     }
@@ -97,7 +97,7 @@ public class ExtenderProviderServiceTests
     [Fact]
     public void ExtenderProviderService_RemoveExtenderProvider_NullProvider_ThrowsArgumentNullException()
     {
-        var surface = new DesignSurface();
+        DesignSurface surface = new();
         object service = surface.GetService(typeof(IExtenderListService));
         IExtenderProviderService providerService = Assert.IsAssignableFrom<IExtenderProviderService>(service);
         Assert.Throws<ArgumentNullException>("provider", () => providerService.RemoveExtenderProvider(null));

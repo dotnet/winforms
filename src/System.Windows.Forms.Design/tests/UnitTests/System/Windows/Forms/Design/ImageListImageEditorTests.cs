@@ -12,11 +12,11 @@ public class ImageListImageEditorTests
     [Fact]
     public void ImageListImageEditor_LoadImageFromStream_BitmapStream_ReturnsExpected()
     {
-        var editor = new ImageListImageEditor();
+        ImageListImageEditor editor = new();
         var editor_LoadImageFromStream = editor.TestAccessor().CreateDelegate<Func<Stream, bool, ImageListImage>>("LoadImageFromStream");
 
-        using var stream = new MemoryStream();
-        using var image = new Bitmap(10, 10);
+        using MemoryStream stream = new();
+        using Bitmap image = new(10, 10);
         image.Save(stream, ImageFormat.Bmp);
         stream.Position = 0;
 
@@ -25,7 +25,7 @@ public class ImageListImageEditorTests
         Assert.Equal(new Size(10, 10), result.Size);
         Assert.Equal(new Size(10, 10), resultImage.Size);
 
-        using var resultStream = new MemoryStream();
+        using MemoryStream resultStream = new();
         result.Image.Save(resultStream, ImageFormat.Bmp);
         Assert.Equal(stream.Length, resultStream.Length);
     }

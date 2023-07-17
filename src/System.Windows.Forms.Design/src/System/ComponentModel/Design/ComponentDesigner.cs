@@ -292,7 +292,6 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
                 }
 
                 // Save the new value... BEFORE navigating to it!
-                // s_codemarkers.CodeMarker(CodeMarkerEvent.perfFXBindEventDesignToCode);
                 if (eventChanged)
                 {
                     defaultPropEvent.SetValue(comp, handler);

@@ -14,7 +14,7 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_Ctor_Default()
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         Assert.Null(control.AccessibleDefaultActionDescription);
         Assert.Null(control.AccessibleDescription);
         Assert.Null(control.AccessibleName);
@@ -133,7 +133,7 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_CreateParams_GetDefault_ReturnsExpected()
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         CreateParams createParams = control.CreateParams;
         Assert.Null(createParams.Caption);
         Assert.Null(createParams.ClassName);
@@ -153,14 +153,14 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }
 
     [WinFormsFact]
     public void ByteViewer_GetBytes_Invoke_ReturnsExpected()
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         Assert.Null(control.GetBytes());
         Assert.False(control.IsHandleCreated);
     }
@@ -168,7 +168,7 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_GetDisplayMode_Invoke_ReturnsExpected()
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         Assert.Equal(DisplayMode.Hexdump, control.GetDisplayMode());
         Assert.False(control.IsHandleCreated);
     }
@@ -184,7 +184,7 @@ public class ByteViewerTests
     [InlineData((-1), false)]
     public void ByteViewer_GetScrollState_Invoke_ReturnsExpected(int bit, bool expected)
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         Assert.Equal(expected, control.GetScrollState(bit));
     }
 
@@ -211,7 +211,7 @@ public class ByteViewerTests
     [InlineData((ControlStyles)(-1), false)]
     public void ByteViewer_GetStyle_Invoke_ReturnsExpected(ControlStyles flag, bool expected)
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         Assert.Equal(expected, control.GetStyle(flag));
 
         // Call again to test caching.
@@ -221,7 +221,7 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_GetTopLevel_Invoke_ReturnsExpected()
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         Assert.False(control.GetTopLevel());
     }
 
@@ -229,7 +229,7 @@ public class ByteViewerTests
     [NewAndDefaultData<EventArgs>]
     public void ByteViewer_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -256,7 +256,7 @@ public class ByteViewerTests
     [NewAndDefaultData<EventArgs>]
     public void ByteViewer_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -282,7 +282,7 @@ public class ByteViewerTests
     [NewAndDefaultData<EventArgs>]
     public void ByteViewer_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -328,7 +328,7 @@ public class ByteViewerTests
     [MemberData(nameof(OnLayout_TestData))]
     public void ByteViewer_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         int callCount = 0;
         LayoutEventHandler handler = (sender, e) =>
         {
@@ -354,7 +354,7 @@ public class ByteViewerTests
     [MemberData(nameof(OnLayout_TestData))]
     public void ByteViewer_OnLayout_InvokeWithHandle_CallsLayout(LayoutEventArgs eventArgs)
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -392,7 +392,7 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_OnLayout_InvokeNullE_ThrowsNullReferenceException()
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         Assert.Throws<NullReferenceException>(() => control.OnLayout(null));
     }
 
@@ -400,7 +400,7 @@ public class ByteViewerTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
     public void ByteViewer_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         int callCount = 0;
         KeyEventHandler handler = (sender, e) =>
         {
@@ -423,11 +423,11 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_OnPaint_Invoke_CallsPaint()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
 
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         int callCount = 0;
         PaintEventHandler handler = (sender, e) =>
         {
@@ -464,11 +464,11 @@ public class ByteViewerTests
     [MemberData(nameof(OnPaint_WithBytes_TestData))]
     public void ByteViewer_OnPaint_InvokeWithBytes_CallsPaint(byte[] bytes, DisplayMode displayMode)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
 
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         control.SetBytes(bytes);
         control.SetDisplayMode(displayMode);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -509,11 +509,11 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_OnPaint_InvokeWithHandle_CallsPaint()
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
 
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         int callCount = 0;
         PaintEventHandler handler = (sender, e) =>
         {
@@ -539,11 +539,11 @@ public class ByteViewerTests
     [MemberData(nameof(OnPaint_WithBytes_TestData))]
     public void ByteViewer_OnPaint_InvokeWithBytesWithHandle_CallsPaint(byte[] bytes, DisplayMode displayMode)
     {
-        using var image = new Bitmap(10, 10);
+        using Bitmap image = new(10, 10);
         using Graphics graphics = Graphics.FromImage(image);
-        using var eventArgs = new PaintEventArgs(graphics, Rectangle.Empty);
+        using PaintEventArgs eventArgs = new(graphics, Rectangle.Empty);
 
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         control.SetBytes(bytes);
         control.SetDisplayMode(displayMode);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -584,7 +584,7 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_OnPaint_NullE_ThrowsNullReferenceException()
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         Assert.Throws<NullReferenceException>(() => control.OnPaint(null));
     }
 
@@ -593,14 +593,14 @@ public class ByteViewerTests
     [InlineData("*")] // Invalid path
     public void ByteViewer_SaveToFile_InvokeNoBytes_Nop(string path)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SaveToFile(path);
     }
 
     [WinFormsFact]
     public void ByteViewer_SaveToFile_InvokeWithBytes_Success()
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(new byte[] { 1, 2, 3 });
         string path = "ByteViewerContent";
         try
@@ -617,7 +617,7 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_SaveToFile_InvokeNullPath_ThrowsArgumentNullException()
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(Array.Empty<byte>());
         Assert.Throws<ArgumentNullException>("path", () => control.SaveToFile(null));
     }
@@ -627,7 +627,7 @@ public class ByteViewerTests
     [InlineData("\0")]
     public void ByteViewer_SaveToFile_InvokeInvalidPath_ThrowsArgumentException(string path)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(Array.Empty<byte>());
         Assert.Throws<ArgumentException>("path", () => control.SaveToFile(path));
     }
@@ -644,7 +644,7 @@ public class ByteViewerTests
     [MemberData(nameof(ScrollChanged_TestData))]
     public void ByteViewer_ScrollChanged_Invoke_Success(object source, EventArgs e)
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         control.ScrollChanged(source, e);
         Assert.False(control.IsHandleCreated);
 
@@ -657,7 +657,7 @@ public class ByteViewerTests
     [MemberData(nameof(ScrollChanged_TestData))]
     public void ByteViewer_ScrollChanged_InvokeWithHandle_Success(object source, EventArgs e)
     {
-        using var control = new SubByteViewer();
+        using SubByteViewer control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -692,7 +692,7 @@ public class ByteViewerTests
     [MemberData(nameof(SetBytes_TestData))]
     public void ByteViewer_SetBytes_Invoke_GetReturnExpected(byte[] bytes)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(bytes);
         Assert.Same(bytes, control.GetBytes());
         Assert.False(control.IsHandleCreated);
@@ -707,7 +707,7 @@ public class ByteViewerTests
     [MemberData(nameof(SetBytes_TestData))]
     public void ByteViewer_SetBytes_InvokeWithBytes_GetReturnExpected(byte[] bytes)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(new byte[] { 1 });
 
         control.SetBytes(bytes);
@@ -723,7 +723,7 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_SetBytes_NullBytes_ThrowsArgumentNullException()
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         Assert.Throws<ArgumentNullException>("bytes", () => control.SetBytes(null));
     }
 
@@ -732,7 +732,7 @@ public class ByteViewerTests
     [InlineData(DisplayMode.Hexdump)]
     public void ByteViewer_SetDisplayMode_InvokeNoBytes_GetReturnsExpected(DisplayMode value)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetDisplayMode(value);
         Assert.Equal(value, control.GetDisplayMode());
         Assert.False(control.IsHandleCreated);
@@ -747,7 +747,7 @@ public class ByteViewerTests
     [EnumData<DisplayMode>]
     public void ByteViewer_SetDisplayMode_InvokeWithBytes_GetReturnsExpected(DisplayMode value)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(new byte[] { 1, 2, 3 });
 
         control.SetDisplayMode(value);
@@ -767,7 +767,7 @@ public class ByteViewerTests
     [InlineData(DisplayMode.Unicode, 2, 3)]
     public void ByteViewer_SetDisplayMode_InvokeWithBytesWithHandle_GetReturnsExpected(DisplayMode value, int expectedInvalidatedCallCount1, int expectedInvalidatedCallCount2)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(new byte[] { 1, 2, 3 });
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -804,7 +804,7 @@ public class ByteViewerTests
     [MemberData(nameof(SetDisplayMode_AnsiWithBytes_TestData))]
     public void ByteViewer_SetDisplayMode_AnsiWithBytes_EditReturnsExpected(byte[] bytes, string expected)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(bytes);
         control.SetDisplayMode(DisplayMode.Ansi);
 
@@ -834,7 +834,7 @@ public class ByteViewerTests
     [MemberData(nameof(SetDisplayMode_UnicodeWithBytes_TestData))]
     public void ByteViewer_SetDisplayMode_UnicodeWithBytes_EditReturnsExpected(byte[] bytes, string expected)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(bytes);
         control.SetDisplayMode(DisplayMode.Unicode);
 
@@ -858,7 +858,7 @@ public class ByteViewerTests
     [InlineData(DisplayMode.Unicode)]
     public void ByteViewer_SetDisplayMode_InvokeNoBytes_ThrowsNullReferenceException(DisplayMode value)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         Assert.Throws<NullReferenceException>(() => control.SetDisplayMode(value));
         Assert.Equal(value, control.GetDisplayMode());
         Assert.False(control.IsHandleCreated);
@@ -873,14 +873,14 @@ public class ByteViewerTests
     [InvalidEnumData<DisplayMode>]
     public void ByteViewer_SetDisplayMode_InvokeInvalidMode_ThrowsInvalidEnumArgumentException(DisplayMode value)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         Assert.Throws<InvalidEnumArgumentException>("mode", () => control.SetDisplayMode(value));
     }
 
     [WinFormsFact]
     public void ByteViewer_SetFile_InvokeNoBytes_Success()
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         using TempFile file = TempFile.Create(new byte[] { 1, 2, 3 });
         control.SetFile(file.Path);
         Assert.Equal(new byte[] { 1, 2, 3, 0 }, control.GetBytes());
@@ -889,7 +889,7 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_SetFile_InvokeWithBytes_Success()
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(new byte[] { 4, 5, 6 });
 
         using TempFile file = TempFile.Create(new byte[] { 1, 2, 3 });
@@ -900,7 +900,7 @@ public class ByteViewerTests
     [WinFormsFact]
     public void ByteViewer_SetFile_InvokeNullPath_ThrowsArgumentNullException()
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(Array.Empty<byte>());
         Assert.Throws<ArgumentNullException>("path", () => control.SetFile(null));
     }
@@ -910,7 +910,7 @@ public class ByteViewerTests
     [InlineData("\0")]
     public void ByteViewer_SetFile_InvokeInvalidPath_ThrowsArgumentException(string path)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(Array.Empty<byte>());
         Assert.Throws<ArgumentException>("path", () => control.SetFile(path));
     }
@@ -921,7 +921,7 @@ public class ByteViewerTests
     [InlineData(1)]
     public void ByteViewer_SetStartLine_InvokeNoBytes_Success(int line)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetStartLine(line);
         Assert.False(control.IsHandleCreated);
 
@@ -950,7 +950,7 @@ public class ByteViewerTests
     [MemberData(nameof(SetStartLine_WithBytes_TestData))]
     public void ByteViewer_SetStartLine_InvokeWithBytes_Success(byte[] bytes, int line)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(bytes);
 
         control.SetStartLine(line);
@@ -968,7 +968,7 @@ public class ByteViewerTests
     [InlineData(int.MaxValue)]
     public void ByteViewer_SetStartLine_InvokeNoBytesWithHandle_Success(int line)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -995,7 +995,7 @@ public class ByteViewerTests
     [MemberData(nameof(SetStartLine_WithBytes_TestData))]
     public void ByteViewer_SetStartLine_InvokeWithBytesWithHandle_Success(byte[] bytes, int line)
     {
-        using var control = new ByteViewer();
+        using ByteViewer control = new();
         control.SetBytes(bytes);
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;

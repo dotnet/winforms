@@ -13,7 +13,7 @@ public class FileNameEditorTests
     [Fact]
     public void FileNameEditor_Ctor_Default()
     {
-        var editor = new FileNameEditor();
+        FileNameEditor editor = new();
         Assert.False(editor.IsDropDownResizable);
     }
 
@@ -21,7 +21,7 @@ public class FileNameEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
     public void FileNameEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
     {
-        var editor = new FileNameEditor();
+        FileNameEditor editor = new();
         Assert.Same(value, editor.EditValue(null, provider, value));
     }
 
@@ -29,7 +29,7 @@ public class FileNameEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void FileNameEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
     {
-        var editor = new FileNameEditor();
+        FileNameEditor editor = new();
         Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
     }
 
@@ -37,15 +37,15 @@ public class FileNameEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void FileNameEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
     {
-        var editor = new FileNameEditor();
+        FileNameEditor editor = new();
         Assert.False(editor.GetPaintValueSupported(context));
     }
 
     [Fact]
     public void FileNameEditor_InitializeDialog_Invoke_Success()
     {
-        var editor = new SubFileNameEditor();
-        using (var openFileDialog = new OpenFileDialog())
+        SubFileNameEditor editor = new();
+        using (OpenFileDialog openFileDialog = new())
         {
             editor.InitializeDialog(openFileDialog);
             Assert.Equal("All Files(*.*)|*.*", openFileDialog.Filter);
@@ -56,7 +56,7 @@ public class FileNameEditorTests
     [Fact]
     public void FileNameEditor_InitializeDialog_NullOpenFileDialog_ThrowsArgumentNullException()
     {
-        var editor = new SubFileNameEditor();
+        SubFileNameEditor editor = new();
         Assert.Throws<ArgumentNullException>("openFileDialog", () => editor.InitializeDialog(null));
     }
 

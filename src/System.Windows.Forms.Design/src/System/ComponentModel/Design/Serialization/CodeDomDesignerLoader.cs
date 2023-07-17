@@ -32,7 +32,6 @@ namespace System.ComponentModel.Design.Serialization;
 public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, INameCreationService, IDesignerSerializationService
 {
     private static readonly TraceSwitch s_traceCDLoader = new TraceSwitch("CodeDomDesignerLoader", "Trace CodeDomDesignerLoader");
-    private static readonly CodeMarkers s_codemarkers = CodeMarkers.Instance;
     private static readonly int s_stateCodeDomDirty = BitVector32.CreateMask();                                 // True if the code dom tree is dirty, meaning it must be integrated back with the code file.
     private static readonly int s_stateCodeParserChecked = BitVector32.CreateMask(s_stateCodeDomDirty);         // True if we have searched for a parser.
     private static readonly int s_stateOwnTypeResolution = BitVector32.CreateMask(s_stateCodeParserChecked);    // True if we have added our own type resolution service
@@ -373,8 +372,6 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                 LoaderHost.AddService(typeof(CodeTypeDeclaration), _documentType);
             }
         }
-
-        s_codemarkers.CodeMarker((int)CodeMarkerEvent.perfFXGetDocumentType);
     }
 
     /// <summary>
@@ -830,14 +827,12 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             DumpTypeDeclaration(_documentType);
         }
 #endif
-        s_codemarkers.CodeMarker((int)CodeMarkerEvent.perfFXGenerateCodeTreeEnd);
 
         // Now we must integrate the code DOM tree from the serializer with
         // our own tree.  If changes were made to the tree this will
         // return true.
         if (typeDecl is not null && IntegrateSerializedTree(manager, typeDecl))
         {
-            s_codemarkers.CodeMarker((int)CodeMarkerEvent.perfFXIntegrateSerializedTreeEnd);
 #if DEBUG
             if (s_traceCDLoader.TraceVerbose)
             {
@@ -872,9 +867,6 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         Debug.Assert(_documentNamespace is not null, "EnsureDocument didn't create a document namespace");
         Debug.Assert(_rootSerializer is not null || _typeSerializer is not null, "EnsureDocument didn't create a root serializer");
 
-        // StartTimingMark();
-        s_codemarkers.CodeMarker((int)CodeMarkerEvent.perfFXDeserializeStart);
-
         if (_rootSerializer is not null)
         {
             _rootSerializer.Deserialize(manager, _documentType);
@@ -884,9 +876,6 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             _typeSerializer.Deserialize(manager, _documentType);
         }
 
-        s_codemarkers.CodeMarker((int)CodeMarkerEvent.perfFXDeserializeEnd);
-
-        // EndTimingMark("Deserialize document");
         SetBaseComponentClassName($"{_documentNamespace.Name}.{_documentType.Name}");
     }
 

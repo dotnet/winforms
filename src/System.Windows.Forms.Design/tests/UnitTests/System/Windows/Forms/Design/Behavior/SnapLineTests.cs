@@ -16,7 +16,7 @@ public class SnapLineTests
     [Fact]
     public void SnapLine_Ctor_type_offset()
     {
-        var snapLine = new SnapLine(SnapLineType.Baseline, DefaultOffset);
+        SnapLine snapLine = new(SnapLineType.Baseline, DefaultOffset);
 
         Assert.Equal(SnapLineType.Baseline, snapLine.SnapLineType);
         Assert.Equal(DefaultOffset, snapLine.Offset);
@@ -27,7 +27,7 @@ public class SnapLineTests
     [Fact]
     public void SnapLine_Ctor_type_offset_filter()
     {
-        var snapLine = new SnapLine(SnapLineType.Baseline, DefaultOffset, DefaultFilter);
+        SnapLine snapLine = new(SnapLineType.Baseline, DefaultOffset, DefaultFilter);
 
         Assert.Equal(SnapLineType.Baseline, snapLine.SnapLineType);
         Assert.Equal(DefaultOffset, snapLine.Offset);
@@ -38,7 +38,7 @@ public class SnapLineTests
     [Fact]
     public void SnapLine_Ctor_type_offset_priority()
     {
-        var snapLine = new SnapLine(SnapLineType.Baseline, DefaultOffset, DefaultPriority);
+        SnapLine snapLine = new(SnapLineType.Baseline, DefaultOffset, DefaultPriority);
 
         Assert.Equal(SnapLineType.Baseline, snapLine.SnapLineType);
         Assert.Equal(DefaultOffset, snapLine.Offset);
@@ -49,7 +49,7 @@ public class SnapLineTests
     [Fact]
     public void SnapLine_Ctor_type_offset_filter_priority()
     {
-        var snapLine = new SnapLine(SnapLineType.Baseline, DefaultOffset, DefaultFilter, DefaultPriority);
+        SnapLine snapLine = new(SnapLineType.Baseline, DefaultOffset, DefaultFilter, DefaultPriority);
 
         Assert.Equal(SnapLineType.Baseline, snapLine.SnapLineType);
         Assert.Equal(DefaultOffset, snapLine.Offset);
@@ -67,7 +67,7 @@ public class SnapLineTests
     [InlineData(SnapLineType.Vertical, false)]
     public void SnapLine_IsHorizontal(SnapLineType type, bool expected)
     {
-        var snapLine = new SnapLine(type, DefaultOffset, DefaultFilter, DefaultPriority);
+        SnapLine snapLine = new(type, DefaultOffset, DefaultFilter, DefaultPriority);
 
         Assert.Equal(expected, snapLine.IsHorizontal);
     }
@@ -82,7 +82,7 @@ public class SnapLineTests
     [InlineData(SnapLineType.Vertical, true)]
     public void SnapLine_IsVertical(SnapLineType type, bool expected)
     {
-        var snapLine = new SnapLine(type, DefaultOffset, DefaultFilter, DefaultPriority);
+        SnapLine snapLine = new(type, DefaultOffset, DefaultFilter, DefaultPriority);
 
         Assert.Equal(expected, snapLine.IsVertical);
     }
@@ -99,7 +99,7 @@ public class SnapLineTests
     [MemberData(nameof(SnapLineType_Set_TestData))]
     public void SnapLine_ensure_IsHorizontal_IsVertical_do_not_overlap(SnapLineType type)
     {
-        var snapLine = new SnapLine(type, DefaultOffset, DefaultFilter, DefaultPriority);
+        SnapLine snapLine = new(type, DefaultOffset, DefaultFilter, DefaultPriority);
 
         Assert.NotEqual(snapLine.IsHorizontal, snapLine.IsVertical);
     }
@@ -111,7 +111,7 @@ public class SnapLineTests
     [InlineData(-DefaultOffset, int.MinValue, /* overflown */2147483525)]
     public void SnapLine_AdjustOffset(int offset, int adjustment, int expected)
     {
-        var snapLine = new SnapLine(SnapLineType.Baseline, offset, DefaultFilter, DefaultPriority);
+        SnapLine snapLine = new(SnapLineType.Baseline, offset, DefaultFilter, DefaultPriority);
 
         snapLine.AdjustOffset(adjustment);
         Assert.Equal(expected, snapLine.Offset);
@@ -120,8 +120,8 @@ public class SnapLineTests
     [Fact]
     public void SnapLine_ShouldSnap_should_return_false_if_types_differ()
     {
-        var snapLine1 = new SnapLine(SnapLineType.Top, DefaultOffset, DefaultFilter, DefaultPriority);
-        var snapLine2 = new SnapLine(SnapLineType.Baseline, DefaultOffset, DefaultFilter, DefaultPriority);
+        SnapLine snapLine1 = new(SnapLineType.Top, DefaultOffset, DefaultFilter, DefaultPriority);
+        SnapLine snapLine2 = new(SnapLineType.Baseline, DefaultOffset, DefaultFilter, DefaultPriority);
 
         Assert.False(SnapLine.ShouldSnap(snapLine1, snapLine2));
     }
@@ -129,8 +129,8 @@ public class SnapLineTests
     [Fact]
     public void SnapLine_ShouldSnap_should_return_true_if_types_equal_and_both_filters_null()
     {
-        var snapLine1 = new SnapLine(SnapLineType.Top, DefaultOffset, null, DefaultPriority);
-        var snapLine2 = new SnapLine(SnapLineType.Top, DefaultOffset, null, SnapLinePriority.Low);
+        SnapLine snapLine1 = new(SnapLineType.Top, DefaultOffset, null, DefaultPriority);
+        SnapLine snapLine2 = new(SnapLineType.Top, DefaultOffset, null, SnapLinePriority.Low);
 
         Assert.True(SnapLine.ShouldSnap(snapLine1, snapLine2));
     }
@@ -138,8 +138,8 @@ public class SnapLineTests
     [Fact]
     public void SnapLine_ShouldSnap_should_return_false_if_types_equal_and_one_of_filters_not_null()
     {
-        var snapLine1 = new SnapLine(SnapLineType.Top, DefaultOffset, null, DefaultPriority);
-        var snapLine2 = new SnapLine(SnapLineType.Top, DefaultOffset, DefaultFilter, SnapLinePriority.Low);
+        SnapLine snapLine1 = new(SnapLineType.Top, DefaultOffset, null, DefaultPriority);
+        SnapLine snapLine2 = new(SnapLineType.Top, DefaultOffset, DefaultFilter, SnapLinePriority.Low);
 
         Assert.False(SnapLine.ShouldSnap(snapLine1, snapLine2));
     }
@@ -174,8 +174,8 @@ public class SnapLineTests
     [MemberData(nameof(SnapLineFilter_Margin_TestData))]
     public void SnapLine_ShouldSnap_should_return_expected_if_types_equal_and_filter_contains_margin(string snapLine1Filter, string snapLine2Filter, bool expected)
     {
-        var snapLine1 = new SnapLine(SnapLineType.Top, DefaultOffset, snapLine1Filter, DefaultPriority);
-        var snapLine2 = new SnapLine(SnapLineType.Top, DefaultOffset, snapLine2Filter, SnapLinePriority.Low);
+        SnapLine snapLine1 = new(SnapLineType.Top, DefaultOffset, snapLine1Filter, DefaultPriority);
+        SnapLine snapLine2 = new(SnapLineType.Top, DefaultOffset, snapLine2Filter, SnapLinePriority.Low);
 
         Assert.Equal(expected, SnapLine.ShouldSnap(snapLine1, snapLine2));
     }
@@ -204,8 +204,8 @@ public class SnapLineTests
     [MemberData(nameof(SnapLineFilter_Padding_TestData))]
     public void SnapLine_ShouldSnap_should_return_expected_if_types_equal_and_filter_contains_padding(string snapLine1Filter, string snapLine2Filter, bool expected)
     {
-        var snapLine1 = new SnapLine(SnapLineType.Top, DefaultOffset, snapLine1Filter, DefaultPriority);
-        var snapLine2 = new SnapLine(SnapLineType.Top, DefaultOffset, snapLine2Filter, SnapLinePriority.Low);
+        SnapLine snapLine1 = new(SnapLineType.Top, DefaultOffset, snapLine1Filter, DefaultPriority);
+        SnapLine snapLine2 = new(SnapLineType.Top, DefaultOffset, snapLine2Filter, SnapLinePriority.Low);
 
         Assert.Equal(expected, SnapLine.ShouldSnap(snapLine1, snapLine2));
     }
@@ -213,8 +213,8 @@ public class SnapLineTests
     [Fact]
     public void SnapLine_ShouldSnap_should_return_true_if_types_equal_and_filters_match()
     {
-        var snapLine1 = new SnapLine(SnapLineType.Top, DefaultOffset, "custom filter", DefaultPriority);
-        var snapLine2 = new SnapLine(SnapLineType.Top, DefaultOffset, "custom filter", SnapLinePriority.Low);
+        SnapLine snapLine1 = new(SnapLineType.Top, DefaultOffset, "custom filter", DefaultPriority);
+        SnapLine snapLine2 = new(SnapLineType.Top, DefaultOffset, "custom filter", SnapLinePriority.Low);
 
         Assert.True(SnapLine.ShouldSnap(snapLine1, snapLine2));
     }
@@ -222,8 +222,8 @@ public class SnapLineTests
     [Fact]
     public void SnapLine_ShouldSnap_should_return_false_if_types_equal_and_filters_not_match()
     {
-        var snapLine1 = new SnapLine(SnapLineType.Top, DefaultOffset, "custom filter", DefaultPriority);
-        var snapLine2 = new SnapLine(SnapLineType.Top, DefaultOffset, "another filter", SnapLinePriority.Low);
+        SnapLine snapLine1 = new(SnapLineType.Top, DefaultOffset, "custom filter", DefaultPriority);
+        SnapLine snapLine2 = new(SnapLineType.Top, DefaultOffset, "another filter", SnapLinePriority.Low);
 
         Assert.False(SnapLine.ShouldSnap(snapLine1, snapLine2));
     }
@@ -233,7 +233,7 @@ public class SnapLineTests
     [InlineData(DefaultFilter, "SnapLine: {type = Baseline, offset = 123, priority = Medium, filter = filter}")]
     public void SnapLine_ToString(string filter, string expected)
     {
-        var snapLine = new SnapLine(SnapLineType.Baseline, DefaultOffset, filter, DefaultPriority);
+        SnapLine snapLine = new(SnapLineType.Baseline, DefaultOffset, filter, DefaultPriority);
 
         Assert.Equal(expected, snapLine.ToString());
     }

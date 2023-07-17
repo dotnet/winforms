@@ -14,7 +14,7 @@ public class ObjectSelectorEditorTests
     [Fact]
     public void ObjectSelectorEditor_Ctor_Default()
     {
-        var editor = new SubObjectSelectorEditor();
+        SubObjectSelectorEditor editor = new();
         Assert.False(editor.IsDropDownResizable);
         Assert.False(editor.SubObjectSelector);
     }
@@ -23,7 +23,7 @@ public class ObjectSelectorEditorTests
     [BoolData]
     public void ObjectSelectorEditor_Ctor_Bool(bool subObjectSelector)
     {
-        var editor = new SubObjectSelectorEditor(subObjectSelector);
+        SubObjectSelectorEditor editor = new(subObjectSelector);
         Assert.False(editor.IsDropDownResizable);
         Assert.Equal(subObjectSelector, editor.SubObjectSelector);
     }
@@ -39,9 +39,9 @@ public class ObjectSelectorEditorTests
     [MemberData(nameof(EditValue_TestData))]
     public void ObjectSelectorEditor_EditValue_ValidProvider_ReturnsValue(object value)
     {
-        var editor = new SubObjectSelectorEditor();
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        SubObjectSelectorEditor editor = new();
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object)
@@ -63,7 +63,7 @@ public class ObjectSelectorEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
     public void ObjectSelectorEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
     {
-        var editor = new SubObjectSelectorEditor();
+        SubObjectSelectorEditor editor = new();
         Assert.Same(value, editor.EditValue(null, provider, value));
     }
 
@@ -71,7 +71,7 @@ public class ObjectSelectorEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void ObjectSelectorEditor_GetEditStyle_Invoke_ReturnsDropDown(ITypeDescriptorContext context)
     {
-        var editor = new SubObjectSelectorEditor();
+        SubObjectSelectorEditor editor = new();
         Assert.Equal(UITypeEditorEditStyle.DropDown, editor.GetEditStyle(context));
     }
 
@@ -79,7 +79,7 @@ public class ObjectSelectorEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void ObjectSelectorEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
     {
-        var editor = new SubObjectSelectorEditor();
+        SubObjectSelectorEditor editor = new();
         Assert.False(editor.GetPaintValueSupported(context));
     }
 
@@ -88,14 +88,14 @@ public class ObjectSelectorEditorTests
     [InlineData("value", false)]
     public void ObjectSelectorEditor_EqualsToValue_InvokeWithoutValue_ReturnsExpected(object value, bool expected)
     {
-        var editor = new SubObjectSelectorEditor();
+        SubObjectSelectorEditor editor = new();
         Assert.Equal(expected, editor.EqualsToValue(value));
     }
 
     [Fact]
     public void ObjectSelectorEditor_EqualsToValue_InvokeWithValue_ReturnsExpected()
     {
-        var editor = new SubObjectSelectorEditor();
+        SubObjectSelectorEditor editor = new();
         editor.SetValue("value");
         Assert.True(editor.EqualsToValue("value"));
         Assert.False(editor.EqualsToValue("other value"));

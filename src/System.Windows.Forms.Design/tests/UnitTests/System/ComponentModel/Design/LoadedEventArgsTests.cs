@@ -19,7 +19,7 @@ public class LoadedEventArgsTests
     [MemberData(nameof(Ctor_Bool_ICollection_TestData))]
     public void Ctor_Bool_ICollection(bool succeeded, ICollection errors)
     {
-        var e = new LoadedEventArgs(succeeded, errors);
+        LoadedEventArgs e = new(succeeded, errors);
         Assert.Equal(succeeded, e.HasSucceeded);
         if (errors is null)
         {

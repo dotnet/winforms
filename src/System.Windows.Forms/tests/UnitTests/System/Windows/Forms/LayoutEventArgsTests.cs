@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms.Tests;
 
@@ -40,6 +41,50 @@ public class LayoutEventArgsTests
         Assert.Equal(affectedControl, e.AffectedComponent);
         Assert.Equal(affectedControl, e.AffectedControl);
         Assert.Equal(affectedProperty, e.AffectedProperty);
+    }
+
+    [WinFormsFact]
+    public void LayoutEventArgs_DoesNotRootControl()
+    {
+        LayoutEventArgs layoutEventArgs = CreateAndDisposeControl();
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, blocking: true);
+        Assert.Null(layoutEventArgs.AffectedComponent);
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        static LayoutEventArgs CreateAndDisposeControl()
+        {
+            // Setup TableLayoutPanel and Panel
+            using TableLayoutPanel tableLayoutPanel = new()
+            {
+                ColumnCount = 2,
+                RowCount = 2,
+                AutoScroll = true,
+            };
+
+            tableLayoutPanel.Controls.Add(new Panel()
+            {
+                Name = "Panel",
+                Dock = DockStyle.Fill
+            }, 0, 0); // Add the panel to the first cell
+
+            // Force layout update
+            tableLayoutPanel.PerformLayout();
+
+            // Suspend layout
+            tableLayoutPanel.SuspendLayout();
+            using (Panel panel = (Panel)tableLayoutPanel.Controls.Find("Panel", false).First())
+            {
+                tableLayoutPanel.Controls.Remove(panel);
+                panel.Dispose();
+            }
+
+            // Check the cachedLayoutEventArgs
+            ITestAccessor tableLayoutPanelTestAccessor = tableLayoutPanel.TestAccessor();
+            LayoutEventArgs layoutEventArgs = (LayoutEventArgs)tableLayoutPanelTestAccessor.Dynamic._cachedLayoutEventArgs;
+
+            tableLayoutPanel.ResumeLayout();
+            return layoutEventArgs;
+        }
     }
 
     private class SubComponent : IComponent
