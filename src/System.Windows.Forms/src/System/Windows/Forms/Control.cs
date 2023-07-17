@@ -229,10 +229,8 @@ public unsafe partial class Control :
     private static readonly int s_visualStylesModeProperty = PropertyStore.CreateKey();
 
     private static bool s_needToLoadComCtl = true;
-        private static readonly int s_darkModeProperty = PropertyStore.CreateKey();
-        private static readonly int s_isDarkModeEnabledProperty = PropertyStore.CreateKey();
-
-        private static bool s_needToLoadComCtl = true;
+    private static readonly int s_darkModeProperty = PropertyStore.CreateKey();
+    private static readonly int s_isDarkModeEnabledProperty = PropertyStore.CreateKey();
 
     // This switch determines the default text rendering engine to use by some controls that support switching rendering engine.
     // CheckedListBox, PropertyGrid, GroupBox, Label and LinkLabel, and ButtonBase controls.
@@ -10766,9 +10764,9 @@ public unsafe partial class Control :
                 CreateControl();
             }
 
-                UpdateRoot();
-            }
+            UpdateRoot();
         }
+    }
 
     protected virtual void SetVisibleCore(bool value)
     {
