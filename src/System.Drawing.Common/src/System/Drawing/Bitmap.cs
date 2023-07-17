@@ -138,9 +138,7 @@ public sealed class Bitmap : Image
     public Bitmap(Image original, int width, int height) : this(width, height, PixelFormat.Format32bppArgb)
     {
         ArgumentNullException.ThrowIfNull(original);
-
         using var g = Graphics.FromImage(this);
-
         g.Clear(Color.Transparent);
         g.DrawImage(original, 0, 0, width, height);
     }

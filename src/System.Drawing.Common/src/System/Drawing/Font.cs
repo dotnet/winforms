@@ -712,7 +712,6 @@ internal
     {
         using ScreenDC dc = ScreenDC.Create();
         using Graphics graphics = Graphics.FromHdcInternal(dc);
-
         ToLogFont(out LOGFONT lf, graphics);
         nint handle = Gdi32.CreateFontIndirectW(ref lf);
         return handle == 0 ? throw new Win32Exception() : handle;
