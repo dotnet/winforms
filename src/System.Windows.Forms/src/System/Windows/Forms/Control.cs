@@ -219,10 +219,8 @@ public unsafe partial class Control :
     private static readonly int s_dataContextProperty = PropertyStore.CreateKey();
 
     private static bool s_needToLoadComCtl = true;
-        private static readonly int s_darkModeProperty = PropertyStore.CreateKey();
-        private static readonly int s_isDarkModeEnabledProperty = PropertyStore.CreateKey();
-
-        private static bool s_needToLoadComCtl = true;
+    private static readonly int s_darkModeProperty = PropertyStore.CreateKey();
+    private static readonly int s_isDarkModeEnabledProperty = PropertyStore.CreateKey();
 
     // This switch determines the default text rendering engine to use by some controls that support switching rendering engine.
     // CheckedListBox, PropertyGrid, GroupBox, Label and LinkLabel, and ButtonBase controls.
@@ -1610,120 +1608,120 @@ public unsafe partial class Control :
                 Properties.SetObject(s_bindingsProperty, bindings);
             }
 
-                return bindings;
+            return bindings;
+        }
+    }
+
+    public DarkMode DarkMode
+    {
+        get
+        {
+            if (Properties.ContainsObject(s_darkModeProperty))
+            {
+                return (DarkMode)Properties.GetObject(s_darkModeProperty)!;
             }
+
+            return ParentInternal?.DarkMode ?? DarkMode.Inherits;
         }
 
-        public DarkMode DarkMode
-        {
-            get
-            {
-                if (Properties.ContainsObject(s_darkModeProperty))
-                {
-                    return (DarkMode)Properties.GetObject(s_darkModeProperty)!;
-                }
+        set => SetDarkMode(value);
+    }
 
-                return ParentInternal?.DarkMode ?? DarkMode.Inherits;
+    protected virtual bool IsDarkModeEnabled
+    {
+        get
+        {
+            if (Properties.ContainsObject(s_isDarkModeEnabledProperty))
+            {
+                return (bool)Properties.GetObject(s_isDarkModeEnabledProperty)!;
             }
-
-            set => SetDarkMode(value);
-        }
-
-        protected virtual bool IsDarkModeEnabled
-        {
-            get
+            else
             {
-                if (Properties.ContainsObject(s_isDarkModeEnabledProperty))
-                {
-                    return (bool)Properties.GetObject(s_isDarkModeEnabledProperty)!;
-                }
-                else
-                {
-                    return ParentInternal?.IsDarkModeEnabled ?? SetDarkModeCore(DarkMode.Inherits);
-                }
+                return ParentInternal?.IsDarkModeEnabled ?? SetDarkModeCore(DarkMode.Inherits);
             }
         }
+    }
 
-        private void SetDarkMode(DarkMode darkMode)
+    private void SetDarkMode(DarkMode darkMode)
+    {
+        if (Equals(darkMode, DarkMode))
         {
-            if (Equals(darkMode, DarkMode))
-            {
-                return;
-            }
-
-            if (darkMode switch
-            {
-                DarkMode.Inherits or
-                DarkMode.Enabled or
-                DarkMode.Disabled => Application.EnvironmentDarkMode == DarkMode.NotSupported || !DarkModeSupported
-                        ? throw new ArgumentException("${darkModeSetting} is not supported in this Environment.")
-                        : true,
-                _ => throw new ArgumentException("${darkModeSetting} is not supported in this context.")
-            })
-            {
-                // When DarkModeSetting was different than its parent before, but now it is about to become the same,
-                // we're removing it altogether, so it can inherit the value from its parent.
-                if (Properties.ContainsObject(s_darkModeProperty) && Equals(ParentInternal?.DarkMode, darkMode))
-                {
-                    Properties.RemoveObject(s_darkModeProperty);
-                }
-                else
-                {
-                    Properties.SetObject(s_darkModeProperty, darkMode);
-                }
-
-                SetDarkModeCore(darkMode);
-            }
+            return;
         }
 
-        protected virtual bool SetDarkModeCore(DarkMode darkModeSetting)
+        if (darkMode switch
         {
-            bool wasDarkModeEnabled = Properties.ContainsObject(s_isDarkModeEnabledProperty)
-                ? (bool)Properties.GetObject(s_isDarkModeEnabledProperty)!
-                : false;
+            DarkMode.Inherits or
+            DarkMode.Enabled or
+            DarkMode.Disabled => Application.EnvironmentDarkMode == DarkMode.NotSupported || !DarkModeSupported
+                    ? throw new ArgumentException("${darkModeSetting} is not supported in this Environment.")
+                    : true,
+            _ => throw new ArgumentException("${darkModeSetting} is not supported in this context.")
+        })
+        {
+            // When DarkModeSetting was different than its parent before, but now it is about to become the same,
+            // we're removing it altogether, so it can inherit the value from its parent.
+            if (Properties.ContainsObject(s_darkModeProperty) && Equals(ParentInternal?.DarkMode, darkMode))
+            {
+                Properties.RemoveObject(s_darkModeProperty);
+            }
+            else
+            {
+                Properties.SetObject(s_darkModeProperty, darkMode);
+            }
 
-            bool isDarkMode = darkModeSetting switch
+            SetDarkModeCore(darkMode);
+        }
+    }
+
+    protected virtual bool SetDarkModeCore(DarkMode darkModeSetting)
+    {
+        bool wasDarkModeEnabled = Properties.ContainsObject(s_isDarkModeEnabledProperty)
+            ? (bool)Properties.GetObject(s_isDarkModeEnabledProperty)!
+            : false;
+
+        bool isDarkMode = darkModeSetting switch
+        {
+            DarkMode.Enabled => true,
+            DarkMode.Disabled => false,
+
+            // Only DarkModeSettings.Inherits remains:
+            _ => Parent?.IsDarkModeEnabled ?? IsApplicationDarkmode()
+        };
+
+        // Has the darkmode changed?
+        if (wasDarkModeEnabled ^ isDarkMode)
+        {
+            Properties.SetObject(s_isDarkModeEnabledProperty, isDarkMode);
+            // TODO: We need to raise BackColor/FontColor changed, if the respective Colors are ambient.
+            // OnIsDarkModeEnabledChanged();
+        }
+
+        return isDarkMode;
+
+        bool IsApplicationDarkmode()
+        {
+            bool isDark = Application.DefaultDarkMode switch
             {
                 DarkMode.Enabled => true,
-                DarkMode.Disabled => false,
-
-                // Only DarkModeSettings.Inherits remains:
-                _ => Parent?.IsDarkModeEnabled ?? IsApplicationDarkmode()
+                DarkMode.Inherits => Application.EnvironmentDarkMode is DarkMode.Enabled ? true : false,
+                _ => false
             };
 
-            // Has the darkmode changed?
-            if (wasDarkModeEnabled ^ isDarkMode)
-            {
-                Properties.SetObject(s_isDarkModeEnabledProperty, isDarkMode);
-                // TODO: We need to raise BackColor/FontColor changed, if the respective Colors are ambient.
-                // OnIsDarkModeEnabledChanged();
-            }
-
-            return isDarkMode;
-
-            bool IsApplicationDarkmode()
-            {
-                bool isDark = Application.DefaultDarkMode switch
-                {
-                    DarkMode.Enabled => true,
-                    DarkMode.Inherits => Application.EnvironmentDarkMode is DarkMode.Enabled ? true : false,
-                    _ => false
-                };
-
-                return isDark;
-            }
+            return isDark;
         }
+    }
 
-        protected virtual bool DarkModeSupported
-            => Application.EnvironmentDarkMode != DarkMode.NotSupported;
-        
-        protected virtual DarkMode DefaultDarkMode => DarkMode.Inherits;
+    protected virtual bool DarkModeSupported
+        => Application.EnvironmentDarkMode != DarkMode.NotSupported;
 
-        /// <summary>
-        ///  The default BackColor of a generic top-level Control.  Subclasses may have
-        ///  different defaults.
-        /// </summary>
-        public static Color DefaultBackColor => Application.SystemColors.Control;
+    protected virtual DarkMode DefaultDarkMode => DarkMode.Inherits;
+
+    /// <summary>
+    ///  The default BackColor of a generic top-level Control.  Subclasses may have
+    ///  different defaults.
+    /// </summary>
+    public static Color DefaultBackColor => Application.SystemColors.Control;
 
     /// <summary>
     ///  Deriving classes can override this to configure a default cursor for their control.
@@ -1750,11 +1748,11 @@ public unsafe partial class Control :
         }
     }
 
-        /// <summary>
-        ///  The default ForeColor of a generic top-level Control.  Subclasses may have
-        ///  different defaults.
-        /// </summary>
-        public static Color DefaultForeColor => Application.SystemColors.ControlText;
+    /// <summary>
+    ///  The default ForeColor of a generic top-level Control.  Subclasses may have
+    ///  different defaults.
+    /// </summary>
+    public static Color DefaultForeColor => Application.SystemColors.ControlText;
 
     protected virtual Padding DefaultMargin => CommonProperties.DefaultMargin;
 
@@ -1798,6 +1796,7 @@ public unsafe partial class Control :
             }
 
             Control? control = ParentInternal;
+
             while (color.A == 0)
             {
                 if (control is null)
@@ -10669,20 +10668,20 @@ public unsafe partial class Control :
                 CreateControl();
             }
 
-                UpdateRoot();
-            }
+            UpdateRoot();
         }
+    }
 
-        private static unsafe void PrepareDarkMode(HWND hwnd, bool darkModeEnabled)
-        {
-            BOOL value = darkModeEnabled;
+    private static unsafe void PrepareDarkMode(HWND hwnd, bool darkModeEnabled)
+    {
+        BOOL value = darkModeEnabled;
 
-            PInvoke.DwmSetWindowAttribute(
-                hwnd,
-                DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
-                &value,
-                (uint)sizeof(BOOL));
-        }
+        PInvoke.DwmSetWindowAttribute(
+            hwnd,
+            DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE,
+            &value,
+            (uint)sizeof(BOOL));
+    }
 
     protected virtual void SetVisibleCore(bool value)
     {
@@ -10695,25 +10694,25 @@ public unsafe partial class Control :
 
             bool fireChange = false;
 
-                if (GetTopLevel())
+            if (GetTopLevel())
+            {
+                // The processing of WmShowWindow will set the visibility
+                // bit and call CreateControl()
+                if (IsHandleCreated || value)
                 {
-                    // The processing of WmShowWindow will set the visibility
-                    // bit and call CreateControl()
-                    if (IsHandleCreated || value)
+                    if (value)
                     {
-                        if (value)
-                        {
-                            PrepareDarkMode(HWND, IsDarkModeEnabled);
-                        }
-
-                        User32.ShowWindow(Handle, value ? ShowParams : User32.SW.HIDE);
+                        PrepareDarkMode(HWND, IsDarkModeEnabled);
                     }
+
+                    PInvoke.ShowWindow(HWND, value ? ShowParams : SHOW_WINDOW_CMD.SW_HIDE);
                 }
-                else if (IsHandleCreated || (value && _parent?.Created == true))
-                {
-                    // We want to mark the control as visible so that CreateControl
-                    // knows that we are going to be displayed... however in case
-                    // an exception is thrown, we need to back the change out.
+            }
+            else if (IsHandleCreated || (value && _parent?.Created == true))
+            {
+                // We want to mark the control as visible so that CreateControl
+                // knows that we are going to be displayed... however in case
+                // an exception is thrown, we need to back the change out.
 
                 SetState(States.Visible, value);
                 fireChange = true;
