@@ -385,7 +385,7 @@ public partial class Form : ContainerControl
 
                     if (Properties.ContainsObject(PropTransparencyKey))
                     {
-                        Properties.SetObject(PropTransparencyKey, Color.Empty);
+                        Properties.SetValue(PropTransparencyKey, Color.Empty);
                     }
 
                     UpdateLayered();
