@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Buffers.Binary;
@@ -62,21 +62,20 @@ public class ImageConverter : TypeConverter
             }
             else if (value is Image image)
             {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    ImageFormat dest = image.RawFormat;
-                    // Jpeg loses data, so we don't want to use it to serialize.
-                    if (dest == ImageFormat.Jpeg)
-                    {
-                        dest = ImageFormat.Png;
-                    }
+                using var ms = new MemoryStream();
 
-                    // If we don't find an Encoder (for things like Icon), we
-                    // just switch back to PNG.
-                    ImageCodecInfo codec = FindEncoder(dest) ?? FindEncoder(ImageFormat.Png)!;
-                    image.Save(ms, codec, null);
-                    return ms.ToArray();
+                ImageFormat dest = image.RawFormat;
+                // Jpeg loses data, so we don't want to use it to serialize.
+                if (dest == ImageFormat.Jpeg)
+                {
+                    dest = ImageFormat.Png;
                 }
+
+                // If we don't find an Encoder (for things like Icon), we
+                // just switch back to PNG.
+                ImageCodecInfo codec = FindEncoder(dest) ?? FindEncoder(ImageFormat.Png)!;
+                image.Save(ms, codec, null);
+                return ms.ToArray();
             }
         }
 

@@ -1611,10 +1611,8 @@ public class DesignerSerializationManagerTests
     {
         var manager = new DesignerSerializationManager(provider);
         IDesignerSerializationManager iManager = manager;
-        using (IDisposable session = manager.CreateSession())
-        {
-            Assert.Equal(typeof(int), iManager.GetType(typeof(int).FullName));
-        }
+        using IDisposable session = manager.CreateSession();
+        Assert.Equal(typeof(int), iManager.GetType(typeof(int).FullName));
     }
 
     [Theory]
@@ -1623,10 +1621,8 @@ public class DesignerSerializationManagerTests
     {
         var manager = new DesignerSerializationManager();
         IDesignerSerializationManager iManager = manager;
-        using (IDisposable session = manager.CreateSession())
-        {
-            Assert.Same(expected, iManager.GetType(typeName));
-        }
+        using IDisposable session = manager.CreateSession();
+        Assert.Same(expected, iManager.GetType(typeName));
     }
 
     [Theory]
@@ -1642,10 +1638,8 @@ public class DesignerSerializationManagerTests
     {
         var manager = new DesignerSerializationManager();
         IDesignerSerializationManager iManager = manager;
-        using (IDisposable session = manager.CreateSession())
-        {
-            Assert.Throws<ArgumentNullException>("typeName", () => iManager.GetType(null));
-        }
+        using IDisposable session = manager.CreateSession();
+        Assert.Throws<ArgumentNullException>("typeName", () => iManager.GetType(null));
     }
 
     public static IEnumerable<object[]> ResolveNameEventArgs_TestData()
@@ -1891,12 +1885,10 @@ public class DesignerSerializationManagerTests
     {
         var manager = new DesignerSerializationManager();
         IDesignerSerializationManager iManager = manager;
-        using (IDisposable session = manager.CreateSession())
-        {
-            var errorInformation = new object();
-            iManager.ReportError(errorInformation);
-            Assert.Same(errorInformation, Assert.Single(manager.Errors));
-        }
+        using IDisposable session = manager.CreateSession();
+        var errorInformation = new object();
+        iManager.ReportError(errorInformation);
+        Assert.Same(errorInformation, Assert.Single(manager.Errors));
     }
 
     [Fact]
@@ -1904,11 +1896,9 @@ public class DesignerSerializationManagerTests
     {
         var manager = new DesignerSerializationManager();
         IDesignerSerializationManager iManager = manager;
-        using (IDisposable session = manager.CreateSession())
-        {
-            iManager.ReportError(null);
-            Assert.Empty(manager.Errors);
-        }
+        using IDisposable session = manager.CreateSession();
+        iManager.ReportError(null);
+        Assert.Empty(manager.Errors);
     }
 
     [Fact]

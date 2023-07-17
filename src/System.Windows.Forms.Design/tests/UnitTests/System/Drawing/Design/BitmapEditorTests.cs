@@ -71,29 +71,25 @@ public class BitmapEditorTests
     public void BitmapEditor_LoadFromStream_BitmapStream_ReturnsExpected()
     {
         var editor = new SubBitmapEditor();
-        using (MemoryStream stream = new MemoryStream())
-        using (var image = new Bitmap(10, 10))
-        {
-            image.Save(stream, ImageFormat.Bmp);
-            stream.Position = 0;
-            Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
-            Assert.Equal(new Size(10, 10), result.Size);
+        using MemoryStream stream = new MemoryStream();
+        using var image = new Bitmap(10, 10);
+        image.Save(stream, ImageFormat.Bmp);
+        stream.Position = 0;
+        Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
+        Assert.Equal(new Size(10, 10), result.Size);
 
-            using var resultStream = new MemoryStream();
-            result.Save(resultStream, ImageFormat.Bmp);
-            Assert.Equal(stream.Length, resultStream.Length);
-        }
+        using var resultStream = new MemoryStream();
+        result.Save(resultStream, ImageFormat.Bmp);
+        Assert.Equal(stream.Length, resultStream.Length);
     }
 
     [Fact]
     public void BitmapEditor_LoadFromStream_MetafileStream_ReturnsExpected()
     {
         var editor = new SubBitmapEditor();
-        using (Stream stream = File.OpenRead("Resources/telescope_01.wmf"))
-        {
-            Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
-            Assert.Equal(new Size(490, 654), result.Size);
-        }
+        using Stream stream = File.OpenRead("Resources/telescope_01.wmf");
+        Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
+        Assert.Equal(new Size(490, 654), result.Size);
     }
 
     [Fact]

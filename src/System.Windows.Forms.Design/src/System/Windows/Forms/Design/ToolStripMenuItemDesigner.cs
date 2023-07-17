@@ -1889,12 +1889,10 @@ internal class ToolStripMenuItemDesigner : ToolStripDropDownItemDesigner
                     // Looks like we need to invalidate the entire
                     if (_toolStripAdornerWindowService is not null && boundsToInvalidateOnRemove != Rectangle.Empty)
                     {
-                        using (Region regionToInvalidate = new Region(boundsToInvalidateOnRemove))
-                        {
-                            regionToInvalidate.Exclude(MenuItem.DropDown.Bounds);
-                            _toolStripAdornerWindowService.Invalidate(regionToInvalidate);
-                            boundsToInvalidateOnRemove = Rectangle.Empty;
-                        }
+                        using Region regionToInvalidate = new Region(boundsToInvalidateOnRemove);
+                        regionToInvalidate.Exclude(MenuItem.DropDown.Bounds);
+                        _toolStripAdornerWindowService.Invalidate(regionToInvalidate);
+                        boundsToInvalidateOnRemove = Rectangle.Empty;
                     }
 
                     // Select the item only if Cut/Delete is pressed.

@@ -54,24 +54,20 @@ public class MetafileEditorTests
     public void MetafileEditor_LoadFromStream_BitmapStream_ThrowsExternalException()
     {
         var editor = new SubMetafileEditor();
-        using (MemoryStream stream = new MemoryStream())
-        using (var image = new Bitmap(10, 10))
-        {
-            image.Save(stream, ImageFormat.Bmp);
-            stream.Position = 0;
-            Assert.Throws<ExternalException>(() => editor.LoadFromStream(stream));
-        }
+        using MemoryStream stream = new MemoryStream();
+        using var image = new Bitmap(10, 10);
+        image.Save(stream, ImageFormat.Bmp);
+        stream.Position = 0;
+        Assert.Throws<ExternalException>(() => editor.LoadFromStream(stream));
     }
 
     [Fact]
     public void MetafileEditor_LoadFromStream_MetafileStream_ReturnsExpected()
     {
         var editor = new SubMetafileEditor();
-        using (Stream stream = File.OpenRead("Resources/telescope_01.wmf"))
-        {
-            Metafile result = Assert.IsType<Metafile>(editor.LoadFromStream(stream));
-            Assert.Equal(new Size(3096, 4127), result.Size);
-        }
+        using Stream stream = File.OpenRead("Resources/telescope_01.wmf");
+        Metafile result = Assert.IsType<Metafile>(editor.LoadFromStream(stream));
+        Assert.Equal(new Size(3096, 4127), result.Size);
     }
 
     [Fact]

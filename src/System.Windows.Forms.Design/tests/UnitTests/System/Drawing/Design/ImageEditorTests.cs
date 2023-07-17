@@ -127,28 +127,24 @@ public class ImageEditorTests
     public void ImageEditor_LoadFromStream_BitmapStream_ReturnsExpected()
     {
         var editor = new SubImageEditor();
-        using (MemoryStream stream = new MemoryStream())
-        using (var image = new Bitmap(10, 10))
-        {
-            image.Save(stream, ImageFormat.Bmp);
-            stream.Position = 0;
-            Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
-            Assert.Equal(new Size(10, 10), result.Size);
+        using MemoryStream stream = new MemoryStream();
+        using var image = new Bitmap(10, 10);
+        image.Save(stream, ImageFormat.Bmp);
+        stream.Position = 0;
+        Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
+        Assert.Equal(new Size(10, 10), result.Size);
 
-            using var resultStream = new MemoryStream();
-            result.Save(resultStream, ImageFormat.Bmp);
-            Assert.Equal(stream.Length, resultStream.Length);
-        }
+        using var resultStream = new MemoryStream();
+        result.Save(resultStream, ImageFormat.Bmp);
+        Assert.Equal(stream.Length, resultStream.Length);
     }
 
     [Fact]
     public void ImageEditor_LoadFromStream_MetafileStream_ThrowsArgumentException()
     {
         var editor = new SubImageEditor();
-        using (Stream stream = File.OpenRead("Resources/telescope_01.wmf"))
-        {
-            Assert.Throws<ArgumentException>(() => editor.LoadFromStream(stream));
-        }
+        using Stream stream = File.OpenRead("Resources/telescope_01.wmf");
+        Assert.Throws<ArgumentException>(() => editor.LoadFromStream(stream));
     }
 
     [Fact]
@@ -162,20 +158,18 @@ public class ImageEditorTests
     public void ImageEditor_PaintValue_Invoke_Success()
     {
         var editor = new ImageEditor();
-        using (var image = new Bitmap(10, 10))
-        using (var otherImage = new Bitmap(3, 2))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            otherImage.SetPixel(0, 0, Color.Red);
-            otherImage.SetPixel(1, 0, Color.Red);
-            otherImage.SetPixel(2, 0, Color.Red);
-            otherImage.SetPixel(0, 1, Color.Red);
-            otherImage.SetPixel(1, 1, Color.Red);
-            otherImage.SetPixel(2, 1, Color.Red);
+        using var image = new Bitmap(10, 10);
+        using var otherImage = new Bitmap(3, 2);
+        using Graphics graphics = Graphics.FromImage(image);
+        otherImage.SetPixel(0, 0, Color.Red);
+        otherImage.SetPixel(1, 0, Color.Red);
+        otherImage.SetPixel(2, 0, Color.Red);
+        otherImage.SetPixel(0, 1, Color.Red);
+        otherImage.SetPixel(1, 1, Color.Red);
+        otherImage.SetPixel(2, 1, Color.Red);
 
-            var e = new PaintValueEventArgs(null, otherImage, graphics, new Rectangle(1, 2, 3, 4));
-            editor.PaintValue(e);
-        }
+        var e = new PaintValueEventArgs(null, otherImage, graphics, new Rectangle(1, 2, 3, 4));
+        editor.PaintValue(e);
     }
 
     public static IEnumerable<object[]> PaintValue_InvalidArgsValue_TestData()
@@ -189,12 +183,10 @@ public class ImageEditorTests
     public void ImageEditor_PaintValue_InvalidArgsValue_Nop(object value)
     {
         var editor = new ImageEditor();
-        using (var image = new Bitmap(10, 10))
-        using (Graphics graphics = Graphics.FromImage(image))
-        {
-            var e = new PaintValueEventArgs(null, value, graphics, new Rectangle(1, 2, 3, 4));
-            editor.PaintValue(e);
-        }
+        using var image = new Bitmap(10, 10);
+        using Graphics graphics = Graphics.FromImage(image);
+        var e = new PaintValueEventArgs(null, value, graphics, new Rectangle(1, 2, 3, 4));
+        editor.PaintValue(e);
     }
 
     [Fact]

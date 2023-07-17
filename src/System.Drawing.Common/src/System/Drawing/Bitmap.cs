@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -139,11 +139,10 @@ public sealed class Bitmap : Image
     {
         ArgumentNullException.ThrowIfNull(original);
 
-        using (Graphics g = Graphics.FromImage(this))
-        {
-            g.Clear(Color.Transparent);
-            g.DrawImage(original, 0, 0, width, height);
-        }
+        using var g = Graphics.FromImage(this);
+
+        g.Clear(Color.Transparent);
+        g.DrawImage(original, 0, 0, width, height);
     }
 
     private Bitmap(SerializationInfo info, StreamingContext context) : base(info, context)
@@ -251,25 +250,24 @@ public sealed class Bitmap : Image
 
         // The new bitmap must be in 32bppARGB  format, because that's the only
         // thing that supports alpha.  (And that's what the image is initialized to -- transparent)
-        using (var result = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb))
-        using (Graphics graphics = Graphics.FromImage(result))
+        using var result = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb);
+        using var graphics = Graphics.FromImage(result);
+
+        graphics.Clear(Color.Transparent);
+        Rectangle rectangle = new Rectangle(0, 0, size.Width, size.Height);
+
+        using (var attributes = new ImageAttributes())
         {
-            graphics.Clear(Color.Transparent);
-            Rectangle rectangle = new Rectangle(0, 0, size.Width, size.Height);
-
-            using (var attributes = new ImageAttributes())
-            {
-                attributes.SetColorKey(transparentColor, transparentColor);
-                graphics.DrawImage(this, rectangle,
-                                    0, 0, size.Width, size.Height,
-                                    GraphicsUnit.Pixel, attributes, null, IntPtr.Zero);
-            }
-
-            // Swap nativeImage pointers to make it look like we modified the image in place
-            IntPtr temp = _nativeImage;
-            _nativeImage = result._nativeImage;
-            result._nativeImage = temp;
+            attributes.SetColorKey(transparentColor, transparentColor);
+            graphics.DrawImage(this, rectangle,
+                                0, 0, size.Width, size.Height,
+                                GraphicsUnit.Pixel, attributes, null, IntPtr.Zero);
         }
+
+        // Swap nativeImage pointers to make it look like we modified the image in place
+        IntPtr temp = _nativeImage;
+        _nativeImage = result._nativeImage;
+        result._nativeImage = temp;
     }
 
     public BitmapData LockBits(Rectangle rect, ImageLockMode flags, PixelFormat format)

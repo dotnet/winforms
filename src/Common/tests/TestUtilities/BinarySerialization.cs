@@ -75,10 +75,9 @@ public static class BinarySerialization
             };
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
 
-            using (var serializedStream = new MemoryStream(raw))
-            {
-                return binaryFormatter.Deserialize(serializedStream);
-            }
+            using var serializedStream = new MemoryStream(raw);
+            
+            return binaryFormatter.Deserialize(serializedStream);
         }
     }
 
@@ -98,11 +97,10 @@ public static class BinarySerialization
             };
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
 
-            using (MemoryStream ms = new MemoryStream())
-            {
-                binaryFormatter.Serialize(ms, obj);
-                return ms.ToArray();
-            }
+            using var ms = new MemoryStream();
+            
+            binaryFormatter.Serialize(ms, obj);
+            return ms.ToArray();
         }
     }
 #pragma warning restore SYSLIB0050 // Type or member is obsolete

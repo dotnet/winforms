@@ -540,10 +540,8 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
         LOGFONT logFont = default;
         Gdi32.GetObject(new HandleRef(null, hfont), ref logFont);
 
-        using (ScreenDC dc = ScreenDC.Create())
-        {
-            return FromLogFont(in logFont, dc);
-        }
+        using ScreenDC dc = ScreenDC.Create();
+        return FromLogFont(in logFont, dc);
     }
 
     /// <summary>
@@ -553,10 +551,8 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
     /// <returns>The newly created <see cref="Font"/>.</returns>
     public static Font FromLogFont(object lf)
     {
-        using (ScreenDC dc = ScreenDC.Create())
-        {
-            return FromLogFont(lf, dc);
-        }
+        using ScreenDC dc = ScreenDC.Create();
+        return FromLogFont(lf, dc);
     }
 
 #if NET8_0_OR_GREATER
@@ -566,10 +562,8 @@ internal
 #endif
     static Font FromLogFont(in LOGFONT logFont)
     {
-        using (ScreenDC dc = ScreenDC.Create())
-        {
-            return FromLogFont(logFont, dc);
-        }
+        using ScreenDC dc = ScreenDC.Create();
+        return FromLogFont(logFont, dc);
     }
 
 #if NET8_0_OR_GREATER
@@ -697,21 +691,17 @@ internal
 
     public void ToLogFont(object logFont)
     {
-        using (ScreenDC dc = ScreenDC.Create())
-        using (Graphics graphics = Graphics.FromHdcInternal(dc))
-        {
-            ToLogFont(logFont, graphics);
-        }
+        using ScreenDC dc = ScreenDC.Create();
+        using Graphics graphics = Graphics.FromHdcInternal(dc);
+        ToLogFont(logFont, graphics);
     }
 
 #if NET8_0_OR_GREATER
     public void ToLogFont(out LOGFONT logFont)
     {
-        using (ScreenDC dc = ScreenDC.Create())
-        using (Graphics graphics = Graphics.FromHdcInternal(dc))
-        {
-            ToLogFont(out logFont, graphics);
-        }
+        using ScreenDC dc = ScreenDC.Create();
+        using Graphics graphics = Graphics.FromHdcInternal(dc);
+        ToLogFont(out logFont, graphics);
     }
 #endif
 
@@ -720,22 +710,19 @@ internal
     /// </summary>
     public IntPtr ToHfont()
     {
-        using (ScreenDC dc = ScreenDC.Create())
-        using (Graphics graphics = Graphics.FromHdcInternal(dc))
-        {
-            ToLogFont(out LOGFONT lf, graphics);
-            nint handle = Gdi32.CreateFontIndirectW(ref lf);
-            return handle == 0 ? throw new Win32Exception() : handle;
-        }
+        using ScreenDC dc = ScreenDC.Create();
+        using Graphics graphics = Graphics.FromHdcInternal(dc);
+
+        ToLogFont(out LOGFONT lf, graphics);
+        nint handle = Gdi32.CreateFontIndirectW(ref lf);
+        return handle == 0 ? throw new Win32Exception() : handle;
     }
 
     public float GetHeight()
     {
-        using (ScreenDC dc = ScreenDC.Create())
-        using (Graphics graphics = Graphics.FromHdcInternal(dc))
-        {
-            return GetHeight(graphics);
-        }
+        using ScreenDC dc = ScreenDC.Create();
+        using Graphics graphics = Graphics.FromHdcInternal(dc);
+        return GetHeight(graphics);
     }
 
     /// <summary>
@@ -751,15 +738,14 @@ internal
                 return Size;
             }
 
-            using (ScreenDC dc = ScreenDC.Create())
-            using (Graphics graphics = Graphics.FromHdcInternal(dc))
-            {
-                float pixelsPerPoint = (float)(graphics.DpiY / 72.0);
-                float lineSpacingInPixels = GetHeight(graphics);
-                float emHeightInPixels = lineSpacingInPixels * FontFamily.GetEmHeight(Style) / FontFamily.GetLineSpacing(Style);
+            using ScreenDC dc = ScreenDC.Create();
+            using Graphics graphics = Graphics.FromHdcInternal(dc);
 
-                return emHeightInPixels / pixelsPerPoint;
-            }
+            float pixelsPerPoint = (float)(graphics.DpiY / 72.0);
+            float lineSpacingInPixels = GetHeight(graphics);
+            float emHeightInPixels = lineSpacingInPixels * FontFamily.GetEmHeight(Style) / FontFamily.GetLineSpacing(Style);
+
+            return emHeightInPixels / pixelsPerPoint;
         }
     }
 }
