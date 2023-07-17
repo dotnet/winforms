@@ -9,7 +9,7 @@ public class DesignerVerbCollectionTests
     [Fact]
     public void DesignerVerbCollection_Ctor_Default()
     {
-        var collection = new DesignerVerbCollection();
+        DesignerVerbCollection collection = new();
         Assert.Empty(collection);
     }
 
@@ -23,7 +23,7 @@ public class DesignerVerbCollectionTests
     [MemberData(nameof(Ctor_DesignerVerbArray_TestData))]
     public void DesignerVerbCollection_Ctor_DesignerVerbArray(DesignerVerb[] value)
     {
-        var collection = new DesignerVerbCollection(value);
+        DesignerVerbCollection collection = new(value);
         Assert.Equal(value, collection.Cast<object>());
     }
 
@@ -36,16 +36,16 @@ public class DesignerVerbCollectionTests
     [Fact]
     public void DesignerVerbCollection_Add_DesignerVerb_Success()
     {
-        var collection = new DesignerVerbCollection();
+        DesignerVerbCollection collection = new();
 
-        var value1 = new DesignerVerb(null, null);
+        DesignerVerb value1 = new(null, null);
         collection.Add(value1);
         Assert.Same(value1, Assert.Single(collection));
         Assert.Same(value1, collection[0]);
         Assert.True(collection.Contains(value1));
         Assert.Equal(0, collection.IndexOf(value1));
 
-        var value2 = new DesignerVerb(null, null);
+        DesignerVerb value2 = new(null, null);
         collection.Add(value2);
         Assert.Equal(new object[] { value1, value2 }, collection.Cast<object>());
         Assert.True(collection.Contains(value2));
@@ -61,7 +61,7 @@ public class DesignerVerbCollectionTests
     [MemberData(nameof(Ctor_DesignerVerbArray_TestData))]
     public void DesignerVerbCollection_AddRange_DesignerVerbArray_Success(DesignerVerb[] value)
     {
-        var collection = new DesignerVerbCollection();
+        DesignerVerbCollection collection = new();
         collection.AddRange(value);
         Assert.Equal(value, collection.Cast<object>());
 
@@ -74,7 +74,7 @@ public class DesignerVerbCollectionTests
     [MemberData(nameof(Ctor_DesignerVerbArray_TestData))]
     public void DesignerVerbCollection_AddRange_DesignerVerbCollection_Success(DesignerVerb[] value)
     {
-        var collection = new DesignerVerbCollection();
+        DesignerVerbCollection collection = new();
         collection.AddRange(new DesignerVerbCollection(value));
         Assert.Equal(value, collection.Cast<object>());
 
@@ -86,7 +86,7 @@ public class DesignerVerbCollectionTests
     [Fact]
     public void DesignerVerbCollection_AddRange_NullValue_ThrowsArgumentNullException()
     {
-        var collection = new DesignerVerbCollection();
+        DesignerVerbCollection collection = new();
         Assert.Throws<ArgumentNullException>("value", () => collection.AddRange((DesignerVerb[])null));
         Assert.Throws<ArgumentNullException>("value", () => collection.AddRange((DesignerVerbCollection)null));
     }
@@ -94,16 +94,16 @@ public class DesignerVerbCollectionTests
     [Fact]
     public void DesignerVerbCollection_Insert_DesignerVerb_Success()
     {
-        var collection = new DesignerVerbCollection();
+        DesignerVerbCollection collection = new();
 
-        var value1 = new DesignerVerb(null, null);
+        DesignerVerb value1 = new(null, null);
         collection.Insert(0, value1);
         Assert.Same(value1, Assert.Single(collection));
         Assert.Same(value1, collection[0]);
         Assert.True(collection.Contains(value1));
         Assert.Equal(0, collection.IndexOf(value1));
 
-        var value2 = new DesignerVerb(null, null);
+        DesignerVerb value2 = new(null, null);
         collection.Insert(0, value2);
         Assert.Equal(new object[] { value2, value1 }, collection.Cast<object>());
         Assert.True(collection.Contains(value2));
@@ -118,8 +118,8 @@ public class DesignerVerbCollectionTests
     [Fact]
     public void DesignerVerbCollection_Remove_Invoke_Success()
     {
-        var collection = new DesignerVerbCollection();
-        var value = new DesignerVerb(null, null);
+        DesignerVerbCollection collection = new();
+        DesignerVerb value = new(null, null);
         collection.Add(value);
         Assert.Same(value, Assert.Single(collection));
 
@@ -138,9 +138,9 @@ public class DesignerVerbCollectionTests
     [Fact]
     public void DesignerVerbCollection_Item_Set_GetReturnsExpected()
     {
-        var collection = new DesignerVerbCollection();
-        var value1 = new DesignerVerb(null, null);
-        var value2 = new DesignerVerb(null, null);
+        DesignerVerbCollection collection = new();
+        DesignerVerb value1 = new(null, null);
+        DesignerVerb value2 = new(null, null);
         collection.Add(value1);
         Assert.Same(value1, Assert.Single(collection));
 
@@ -164,8 +164,8 @@ public class DesignerVerbCollectionTests
     [Fact]
     public void DesignerVerbCollection_CopyTo_Invoke_Success()
     {
-        var collection = new DesignerVerbCollection();
-        var value = new DesignerVerb(null, null);
+        DesignerVerbCollection collection = new();
+        DesignerVerb value = new(null, null);
         collection.Add(value);
 
         var array = new DesignerVerb[3];
@@ -176,8 +176,8 @@ public class DesignerVerbCollectionTests
     [Fact]
     public void DesignerVerbCollection_Contains_NoSuchValue_ReturnsFalse()
     {
-        var collection = new DesignerVerbCollection();
-        var value = new DesignerVerb(null, null);
+        DesignerVerbCollection collection = new();
+        DesignerVerb value = new(null, null);
         collection.Add(value);
 
         Assert.False(collection.Contains(new DesignerVerb(null, null)));
@@ -187,8 +187,8 @@ public class DesignerVerbCollectionTests
     [Fact]
     public void DesignerVerbCollection_IndexOf_NoSuchValue_ReturnsNegativeOne()
     {
-        var collection = new DesignerVerbCollection();
-        var value = new DesignerVerb(null, null);
+        DesignerVerbCollection collection = new();
+        DesignerVerb value = new(null, null);
         collection.Add(value);
 
         Assert.Equal(-1, collection.IndexOf(new DesignerVerb(null, null)));
@@ -198,8 +198,8 @@ public class DesignerVerbCollectionTests
     [Fact]
     public void DesignerVerbCollection_Clear_Success()
     {
-        var collection = new DesignerVerbCollection();
-        var value = new DesignerVerb(null, null);
+        DesignerVerbCollection collection = new();
+        DesignerVerb value = new(null, null);
         collection.Add(value);
 
         collection.Clear();

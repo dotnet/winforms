@@ -13,7 +13,7 @@ public class SiteNestedContainerTests
     {
         static ISite CreateSite(string name)
         {
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            Mock<ISite> mockSite = new(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.Name)
                 .Returns(name);
@@ -64,14 +64,14 @@ public class SiteNestedContainerTests
     [MemberData(nameof(CreateNestedContainer_TestData))]
     public void SiteNestedContainer_Add_Component_Success(ISite ownerSite, string containerName, string componentName, string expectedFullName)
     {
-        using var surface = new SubDesignSurface();
-        using var ownerComponent = new Component
+        using SubDesignSurface surface = new();
+        using Component ownerComponent = new()
         {
             Site = ownerSite
         };
         IDesignerLoaderHost2 host = surface.Host;
         using INestedContainer container = surface.CreateNestedContainer(ownerComponent, containerName);
-        using var component1 = new RootDesignerComponent();
+        using RootDesignerComponent component1 = new();
         container.Add(component1, componentName);
         Assert.Same(container, component1.Container);
         INestedSite nestedSite = Assert.IsAssignableFrom<INestedSite>(component1.Site);
@@ -85,7 +85,7 @@ public class SiteNestedContainerTests
         Assert.Equal(componentName, host.RootComponentClassName);
 
         // Add another.
-        using var component2 = new RootDesignerComponent();
+        using RootDesignerComponent component2 = new();
         container.Add(component2, "otherComponent");
         Assert.Equal(new IComponent[] { component1, component2 }, container.Components.Cast<IComponent>());
         Assert.Empty(host.Container.Components);
@@ -105,7 +105,7 @@ public class SiteNestedContainerTests
     {
         yield return new object[] { null };
 
-        var nullMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> nullMockServiceProvider = new(MockBehavior.Strict);
         nullMockServiceProvider
             .Setup(p => p.GetService(typeof(INameCreationService)))
             .Returns(null);
@@ -120,7 +120,7 @@ public class SiteNestedContainerTests
             .Returns(null);
         yield return new object[] { nullMockServiceProvider.Object };
 
-        var invalidMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> invalidMockServiceProvider = new(MockBehavior.Strict);
         invalidMockServiceProvider
             .Setup(p => p.GetService(typeof(ITypeResolutionService)))
             .Returns(null);
@@ -145,11 +145,11 @@ public class SiteNestedContainerTests
 
         foreach (string name in new string[] { null, string.Empty, "name" })
         {
-            var mockNameCreationService = new Mock<INameCreationService>(MockBehavior.Strict);
+            Mock<INameCreationService> mockNameCreationService = new(MockBehavior.Strict);
             mockNameCreationService
                 .Setup(s => s.CreateName(It.IsAny<IContainer>(), It.IsAny<Type>()))
                 .Returns(name);
-            var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+            Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
             mockServiceProvider
                 .Setup(p => p.GetService(typeof(ITypeResolutionService)))
                 .Returns(null);
@@ -170,14 +170,14 @@ public class SiteNestedContainerTests
     [MemberData(nameof(Add_ComponentParentProvider_TestData))]
     public void SiteNestedContainer_Add_ComponentWithRootDesigner_Success(IServiceProvider parentProvider)
     {
-        using var surface = new SubDesignSurface(parentProvider);
+        using SubDesignSurface surface = new(parentProvider);
         IDesignerLoaderHost2 host = surface.Host;
-        using var owningComponent = new Component();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-        using var component1 = new RootDesignerComponent();
-        using var component2 = new RootDesignerComponent();
-        using var component3 = new DesignerComponent();
-        using var component4 = new Component();
+        using RootDesignerComponent component1 = new();
+        using RootDesignerComponent component2 = new();
+        using DesignerComponent component3 = new();
+        using Component component4 = new();
 
         container.Add(component1);
         Assert.Same(component1, Assert.Single(container.Components));
@@ -227,14 +227,14 @@ public class SiteNestedContainerTests
     [MemberData(nameof(Add_InvalidNameCreationServiceParentProvider_TestData))]
     public void SiteNestedContainer_Add_ComponentStringWithRootDesigner_Success(IServiceProvider parentProvider)
     {
-        using var surface = new SubDesignSurface(parentProvider);
+        using SubDesignSurface surface = new(parentProvider);
         IDesignerLoaderHost2 host = surface.Host;
-        using var owningComponent = new Component();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-        using var component1 = new RootDesignerComponent();
-        using var component2 = new RootDesignerComponent();
-        using var component3 = new DesignerComponent();
-        using var component4 = new Component();
+        using RootDesignerComponent component1 = new();
+        using RootDesignerComponent component2 = new();
+        using DesignerComponent component3 = new();
+        using Component component4 = new();
 
         container.Add(component1, "name1");
         Assert.Same(component1, Assert.Single(container.Components));
@@ -285,15 +285,15 @@ public class SiteNestedContainerTests
         yield return new object[] { new RootDesignerComponent(), 0 };
         yield return new object[] { new RootExtenderProviderDesignerComponent(), 1 };
 
-        var readOnlyComponent = new RootExtenderProviderDesignerComponent();
+        RootExtenderProviderDesignerComponent readOnlyComponent = new();
         TypeDescriptor.AddAttributes(readOnlyComponent, new InheritanceAttribute(InheritanceLevel.InheritedReadOnly));
         yield return new object[] { readOnlyComponent, 0 };
 
-        var inheritedComponent = new RootExtenderProviderDesignerComponent();
+        RootExtenderProviderDesignerComponent inheritedComponent = new();
         TypeDescriptor.AddAttributes(inheritedComponent, new InheritanceAttribute(InheritanceLevel.Inherited));
         yield return new object[] { inheritedComponent, 1 };
 
-        var notInheritedComponent = new RootExtenderProviderDesignerComponent();
+        RootExtenderProviderDesignerComponent notInheritedComponent = new();
         TypeDescriptor.AddAttributes(notInheritedComponent, new InheritanceAttribute(InheritanceLevel.NotInherited));
         yield return new object[] { notInheritedComponent, 1 };
     }
@@ -302,13 +302,13 @@ public class SiteNestedContainerTests
     [MemberData(nameof(Add_IExtenderProviderServiceWithoutDefault_TestData))]
     public void SiteNestedContainer_Add_IExtenderProviderServiceWithoutDefault_Success(Component component, int expectedCallCount)
     {
-        var mockExtenderProviderService = new Mock<IExtenderProviderService>(MockBehavior.Strict);
+        Mock<IExtenderProviderService> mockExtenderProviderService = new(MockBehavior.Strict);
         mockExtenderProviderService
             .Setup(s => s.AddExtenderProvider(component as IExtenderProvider))
             .Verifiable();
         mockExtenderProviderService
             .Setup(s => s.RemoveExtenderProvider(component as IExtenderProvider));
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(ITypeResolutionService)))
             .Returns(null);
@@ -329,10 +329,10 @@ public class SiteNestedContainerTests
             .Returns(mockExtenderProviderService.Object)
             .Verifiable();
 
-        using var surface = new SubDesignSurface(mockServiceProvider.Object);
+        using SubDesignSurface surface = new(mockServiceProvider.Object);
         surface.ServiceContainer.RemoveService(typeof(IExtenderProviderService));
         IDesignerLoaderHost2 host = surface.Host;
-        using var owningComponent = new Component();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
 
         container.Add(component);
@@ -361,15 +361,15 @@ public class SiteNestedContainerTests
         yield return new object[] { new RootDesignerComponent(), false };
         yield return new object[] { new RootExtenderProviderDesignerComponent(), true };
 
-        var readOnlyComponent = new RootExtenderProviderDesignerComponent();
+        RootExtenderProviderDesignerComponent readOnlyComponent = new();
         TypeDescriptor.AddAttributes(readOnlyComponent, new InheritanceAttribute(InheritanceLevel.InheritedReadOnly));
         yield return new object[] { readOnlyComponent, false };
 
-        var inheritedComponent = new RootExtenderProviderDesignerComponent();
+        RootExtenderProviderDesignerComponent inheritedComponent = new();
         TypeDescriptor.AddAttributes(inheritedComponent, new InheritanceAttribute(InheritanceLevel.Inherited));
         yield return new object[] { inheritedComponent, true };
 
-        var notInheritedComponent = new RootExtenderProviderDesignerComponent();
+        RootExtenderProviderDesignerComponent notInheritedComponent = new();
         TypeDescriptor.AddAttributes(notInheritedComponent, new InheritanceAttribute(InheritanceLevel.NotInherited));
         yield return new object[] { notInheritedComponent, true };
     }
@@ -378,13 +378,13 @@ public class SiteNestedContainerTests
     [MemberData(nameof(Add_IExtenderProviderServiceWithDefault_TestData))]
     public void SiteNestedContainer_Add_IExtenderProviderServiceWithDefault_DoesNotCallGetService(Component component, bool throws)
     {
-        var mockExtenderProviderService = new Mock<IExtenderProviderService>(MockBehavior.Strict);
+        Mock<IExtenderProviderService> mockExtenderProviderService = new(MockBehavior.Strict);
         mockExtenderProviderService
             .Setup(s => s.AddExtenderProvider(component as IExtenderProvider))
             .Verifiable();
         mockExtenderProviderService
             .Setup(s => s.RemoveExtenderProvider(component as IExtenderProvider));
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(ITypeResolutionService)))
             .Returns(null);
@@ -402,8 +402,8 @@ public class SiteNestedContainerTests
             .Returns(mockExtenderProviderService.Object)
             .Verifiable();
 
-        using var surface = new DesignSurface(mockServiceProvider.Object);
-        using var owningComponent = new Component();
+        using DesignSurface surface = new(mockServiceProvider.Object);
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
 
         container.Add(component);
@@ -449,7 +449,7 @@ public class SiteNestedContainerTests
     {
         yield return new object[] { null };
 
-        var nullMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> nullMockServiceProvider = new(MockBehavior.Strict);
         nullMockServiceProvider
             .Setup(p => p.GetService(typeof(ITypeResolutionService)))
             .Returns(null);
@@ -462,7 +462,7 @@ public class SiteNestedContainerTests
             .Verifiable();
         yield return new object[] { nullMockServiceProvider };
 
-        var invalidMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> invalidMockServiceProvider = new(MockBehavior.Strict);
         invalidMockServiceProvider
             .Setup(p => p.GetService(typeof(ITypeResolutionService)))
             .Returns(null);
@@ -480,11 +480,11 @@ public class SiteNestedContainerTests
     [MemberData(nameof(InvalidIExtenderProviderService_TestData))]
     public void SiteNestedContainer_Add_InvalidIExtenderProviderServiceWithoutDefault_CallsParentGetService(Mock<IServiceProvider> mockParentProvider)
     {
-        using var surface = new SubDesignSurface(mockParentProvider?.Object);
+        using SubDesignSurface surface = new(mockParentProvider?.Object);
         surface.ServiceContainer.RemoveService(typeof(IExtenderProviderService));
-        using var owningComponent = new Component();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-        using var component = new RootExtenderProviderDesignerComponent();
+        using RootExtenderProviderDesignerComponent component = new();
 
         container.Add(component);
         Assert.Same(component, Assert.Single(container.Components));
@@ -495,10 +495,10 @@ public class SiteNestedContainerTests
     [MemberData(nameof(InvalidIExtenderProviderService_TestData))]
     public void SiteNestedContainer_Add_InvalidIExtenderProviderServiceWithDefault_DoesNotCallParentGetService(Mock<IServiceProvider> mockParentProvider)
     {
-        using var surface = new SubDesignSurface(mockParentProvider?.Object);
-        using var owningComponent = new Component();
+        using SubDesignSurface surface = new(mockParentProvider?.Object);
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-        using var component = new RootExtenderProviderDesignerComponent();
+        using RootExtenderProviderDesignerComponent component = new();
 
         container.Add(component);
         Assert.Same(component, Assert.Single(container.Components));
@@ -508,13 +508,13 @@ public class SiteNestedContainerTests
     [WinFormsFact]
     public void SiteNestedContainer_Add_IComponentWithComponentAddingAndAdded_CallsHandler()
     {
-        using var surface = new SubDesignSurface();
+        using SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
-        using var owningComponent = new Component();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
         IComponentChangeService changeService = Assert.IsAssignableFrom<IComponentChangeService>(host);
 
-        using var component = new RootDesignerComponent();
+        using RootDesignerComponent component = new();
         int componentAddingCallCount = 0;
         ComponentEventHandler componentAddingHandler = (sender, e) =>
         {
@@ -564,8 +564,8 @@ public class SiteNestedContainerTests
     [MemberData(nameof(Add_NoRootDesigner_TestData))]
     public void SiteNestedContainer_Add_NoRootDesigner_ThrowsException(IComponent component)
     {
-        using var surface = new DesignSurface();
-        using var owningComponent = new Component();
+        using DesignSurface surface = new();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
 
         Assert.Throws<NotImplementedException>(() => container.Add(component));
@@ -576,11 +576,11 @@ public class SiteNestedContainerTests
     [WinFormsFact]
     public void SiteNestedContainer_Add_CyclicRootDesigner_ThrowsException()
     {
-        using var surface = new SubDesignSurface();
+        using SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
-        using var owningComponent = new Component();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-        using var component = new RootDesignerComponent();
+        using RootDesignerComponent component = new();
         container.Add(component, component.GetType().FullName);
         Assert.Equal(component.GetType().FullName, host.RootComponentClassName);
         Assert.Throws<Exception>(() => container.Add(component));
@@ -590,10 +590,10 @@ public class SiteNestedContainerTests
     [WinFormsFact]
     public void SiteNestedContainer_Add_NonInitializingRootDesigner_ThrowsInvalidOperationException()
     {
-        using var surface = new DesignSurface();
-        using var owningComponent = new Component();
+        using DesignSurface surface = new();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-        using var component = new NonInitializingDesignerComponent();
+        using NonInitializingDesignerComponent component = new();
         Assert.Throws<InvalidOperationException>(() => container.Add(component));
         Assert.Throws<InvalidOperationException>(() => container.Add(component, "name"));
     }
@@ -601,10 +601,10 @@ public class SiteNestedContainerTests
     [WinFormsFact]
     public void SiteNestedContainer_Add_ThrowingInitializingRootDesigner_RethrowsException()
     {
-        using var surface = new DesignSurface();
-        using var owningComponent = new Component();
+        using DesignSurface surface = new();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-        using var component = new ThrowingInitializingDesignerComponent();
+        using ThrowingInitializingDesignerComponent component = new();
         Assert.Throws<DivideByZeroException>(() => container.Add(component));
         Assert.Null(component.Container);
         Assert.Null(component.Site);
@@ -617,10 +617,10 @@ public class SiteNestedContainerTests
     [WinFormsFact]
     public void SiteNestedContainer_Add_CheckoutExceptionThrowingInitializingRootDesigner_RethrowsException()
     {
-        using var surface = new DesignSurface();
-        using var owningComponent = new Component();
+        using DesignSurface surface = new();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-        using var component = new CheckoutExceptionThrowingInitializingDesignerComponent();
+        using CheckoutExceptionThrowingInitializingDesignerComponent component = new();
         // CheckoutException does not bubble up in xunit.
         bool threwCheckoutException = false;
         try
@@ -644,13 +644,13 @@ public class SiteNestedContainerTests
     [Fact(Skip = "Unstable test. See https://github.com/dotnet/winforms/issues/1151")]
     public void SiteNestedContainer_Add_Unloading_Nop()
     {
-        using var surface = new SubDesignSurface();
+        using SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
         surface.BeginLoad(typeof(RootDesignerComponent));
-        using var owningComponent = new Component();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
 
-        var component = new DisposingDesignerComponent();
+        DisposingDesignerComponent component = new();
         container.Add(component);
         int callCount = 0;
         DisposingDesigner.Disposed += (sender, e) =>
@@ -664,13 +664,13 @@ public class SiteNestedContainerTests
     [WinFormsFact]
     public void SiteNestedContainer_Remove_Invoke_Success()
     {
-        using var surface = new SubDesignSurface();
+        using SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
-        using var owningComponent = new Component();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
 
-        using var rootComponent = new RootDesignerComponent();
-        using var component = new DesignerComponent();
+        using RootDesignerComponent rootComponent = new();
+        using DesignerComponent component = new();
         container.Add(rootComponent);
         container.Add(component);
         container.Remove(rootComponent);
@@ -708,15 +708,15 @@ public class SiteNestedContainerTests
         yield return new object[] { new RootDesignerComponent(), 0, 0 };
         yield return new object[] { new RootExtenderProviderDesignerComponent(), 1, 1 };
 
-        var readOnlyComponent = new RootExtenderProviderDesignerComponent();
+        RootExtenderProviderDesignerComponent readOnlyComponent = new();
         TypeDescriptor.AddAttributes(readOnlyComponent, new InheritanceAttribute(InheritanceLevel.InheritedReadOnly));
         yield return new object[] { readOnlyComponent, 0, 1 };
 
-        var inheritedComponent = new RootExtenderProviderDesignerComponent();
+        RootExtenderProviderDesignerComponent inheritedComponent = new();
         TypeDescriptor.AddAttributes(inheritedComponent, new InheritanceAttribute(InheritanceLevel.Inherited));
         yield return new object[] { inheritedComponent, 1, 1 };
 
-        var notInheritedComponent = new RootExtenderProviderDesignerComponent();
+        RootExtenderProviderDesignerComponent notInheritedComponent = new();
         TypeDescriptor.AddAttributes(notInheritedComponent, new InheritanceAttribute(InheritanceLevel.NotInherited));
         yield return new object[] { notInheritedComponent, 1, 1 };
     }
@@ -725,13 +725,13 @@ public class SiteNestedContainerTests
     [MemberData(nameof(Remove_IExtenderProviderServiceWithoutDefault_TestData))]
     public void SiteNestedContainer_Remove_IExtenderProviderServiceWithoutDefault_Success(Component component, int expectedAddCallCount, int expectedRemoveCallCount)
     {
-        var mockExtenderProviderService = new Mock<IExtenderProviderService>(MockBehavior.Strict);
+        Mock<IExtenderProviderService> mockExtenderProviderService = new(MockBehavior.Strict);
         mockExtenderProviderService
             .Setup(s => s.AddExtenderProvider(component as IExtenderProvider));
         mockExtenderProviderService
             .Setup(s => s.RemoveExtenderProvider(component as IExtenderProvider))
             .Verifiable();
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(ITypeResolutionService)))
             .Returns(null);
@@ -743,9 +743,9 @@ public class SiteNestedContainerTests
             .Returns(mockExtenderProviderService.Object)
             .Verifiable();
 
-        using var surface = new SubDesignSurface(mockServiceProvider.Object);
+        using SubDesignSurface surface = new(mockServiceProvider.Object);
         surface.ServiceContainer.RemoveService(typeof(IExtenderProviderService));
-        using var owningComponent = new Component();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
 
         container.Add(component);
@@ -773,15 +773,15 @@ public class SiteNestedContainerTests
         yield return new object[] { new RootDesignerComponent() };
         yield return new object[] { new RootExtenderProviderDesignerComponent() };
 
-        var readOnlyComponent = new RootExtenderProviderDesignerComponent();
+        RootExtenderProviderDesignerComponent readOnlyComponent = new();
         TypeDescriptor.AddAttributes(readOnlyComponent, new InheritanceAttribute(InheritanceLevel.InheritedReadOnly));
         yield return new object[] { readOnlyComponent };
 
-        var inheritedComponent = new RootExtenderProviderDesignerComponent();
+        RootExtenderProviderDesignerComponent inheritedComponent = new();
         TypeDescriptor.AddAttributes(inheritedComponent, new InheritanceAttribute(InheritanceLevel.Inherited));
         yield return new object[] { inheritedComponent };
 
-        var notInheritedComponent = new RootExtenderProviderDesignerComponent();
+        RootExtenderProviderDesignerComponent notInheritedComponent = new();
         TypeDescriptor.AddAttributes(notInheritedComponent, new InheritanceAttribute(InheritanceLevel.NotInherited));
         yield return new object[] { notInheritedComponent };
     }
@@ -790,13 +790,13 @@ public class SiteNestedContainerTests
     [MemberData(nameof(Remove_IExtenderProviderServiceWithDefault_TestData))]
     public void SiteNestedContainer_Remove_IExtenderProviderServiceWithDefault_Success(Component component)
     {
-        var mockExtenderProviderService = new Mock<IExtenderProviderService>(MockBehavior.Strict);
+        Mock<IExtenderProviderService> mockExtenderProviderService = new(MockBehavior.Strict);
         mockExtenderProviderService
             .Setup(s => s.AddExtenderProvider(component as IExtenderProvider))
             .Verifiable();
         mockExtenderProviderService
             .Setup(s => s.RemoveExtenderProvider(component as IExtenderProvider));
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(ITypeResolutionService)))
             .Returns(null);
@@ -808,8 +808,8 @@ public class SiteNestedContainerTests
             .Returns(mockExtenderProviderService.Object)
             .Verifiable();
 
-        using var surface = new DesignSurface(mockServiceProvider.Object);
-        using var owningComponent = new Component();
+        using DesignSurface surface = new(mockServiceProvider.Object);
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
 
         container.Add(component);
@@ -837,11 +837,11 @@ public class SiteNestedContainerTests
     [MemberData(nameof(InvalidIExtenderProviderService_TestData))]
     public void SiteNestedContainer_Remove_InvalidIExtenderProviderServiceWithoutDefault_CallsParentGetService(Mock<IServiceProvider> mockParentProvider)
     {
-        using var surface = new SubDesignSurface(mockParentProvider?.Object);
+        using SubDesignSurface surface = new(mockParentProvider?.Object);
         surface.ServiceContainer.RemoveService(typeof(IExtenderProviderService));
-        using var owningComponent = new Component();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-        using var component = new RootExtenderProviderDesignerComponent();
+        using RootExtenderProviderDesignerComponent component = new();
 
         container.Add(component);
         Assert.Same(component, Assert.Single(container.Components));
@@ -856,10 +856,10 @@ public class SiteNestedContainerTests
     [MemberData(nameof(InvalidIExtenderProviderService_TestData))]
     public void SiteNestedContainer_Remove_InvalidIExtenderProviderServiceWithDefault_DoesNotCallParentGetService(Mock<IServiceProvider> mockParentProvider)
     {
-        using var surface = new DesignSurface(mockParentProvider?.Object);
-        using var owningComponent = new Component();
+        using DesignSurface surface = new(mockParentProvider?.Object);
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
-        using var component = new RootExtenderProviderDesignerComponent();
+        using RootExtenderProviderDesignerComponent component = new();
 
         container.Add(component);
         Assert.Same(component, Assert.Single(container.Components));
@@ -873,14 +873,14 @@ public class SiteNestedContainerTests
     [WinFormsFact]
     public void SiteNestedContainer_Remove_ComponentNotInContainerNonEmpty_Nop()
     {
-        using var surface = new DesignSurface();
-        using var component1 = new Component();
+        using DesignSurface surface = new();
+        using Component component1 = new();
         using INestedContainer container1 = surface.CreateNestedContainer(component1, "containerName");
-        using var component2 = new Component();
+        using Component component2 = new();
         using INestedContainer container2 = surface.CreateNestedContainer(component2, "containerName");
 
-        using var otherComponent = new RootDesignerComponent();
-        using var component = new RootDesignerComponent();
+        using RootDesignerComponent otherComponent = new();
+        using RootDesignerComponent component = new();
         container1.Add(otherComponent);
         container2.Add(component);
         container2.Remove(otherComponent);
@@ -892,13 +892,13 @@ public class SiteNestedContainerTests
     [WinFormsFact]
     public void SiteNestedContainer_Remove_ComponentNotInContainerEmpty_Nop()
     {
-        using var surface = new DesignSurface();
-        using var component1 = new Component();
+        using DesignSurface surface = new();
+        using Component component1 = new();
         using INestedContainer container1 = surface.CreateNestedContainer(component1, "containerName");
-        using var component2 = new Component();
+        using Component component2 = new();
         using INestedContainer container2 = surface.CreateNestedContainer(component2, "containerName");
 
-        using var otherComponent = new RootDesignerComponent();
+        using RootDesignerComponent otherComponent = new();
         container1.Add(otherComponent);
         container2.Remove(otherComponent);
         container2.Remove(new Component());
@@ -909,14 +909,14 @@ public class SiteNestedContainerTests
     [WinFormsFact]
     public void SiteNestedContainer_Remove_InvokeWithComponentRemoved_CallsHandler()
     {
-        using var surface = new SubDesignSurface();
+        using SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
-        using var owningComponent = new Component();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
         IComponentChangeService changeService = Assert.IsAssignableFrom<IComponentChangeService>(host);
 
-        using var component1 = new RootDesignerComponent();
-        using var component2 = new DesignerComponent();
+        using RootDesignerComponent component1 = new();
+        using DesignerComponent component2 = new();
         int componentRemovingCallCount = 0;
         ComponentEventHandler componentRemovingHandler = (sender, e) =>
         {
@@ -977,13 +977,13 @@ public class SiteNestedContainerTests
     [WinFormsFact]
     public void SiteNestedContainer_Remove_SetSiteToNullInComponentRemoving_Success()
     {
-        using var surface = new SubDesignSurface();
+        using SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
-        using var owningComponent = new Component();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
         IComponentChangeService changeService = Assert.IsAssignableFrom<IComponentChangeService>(host);
 
-        using var component = new RootDesignerComponent();
+        using RootDesignerComponent component = new();
         int componentRemovingCallCount = 0;
         ComponentEventHandler componentRemovingHandler = (sender, e) =>
         {
@@ -1001,11 +1001,11 @@ public class SiteNestedContainerTests
     [WinFormsFact]
     public void SiteNestedContainer_Remove_SiteHasDictionary_DoesNotClearDictionary()
     {
-        using var surface = new SubDesignSurface();
-        using var owningComponent = new Component();
+        using SubDesignSurface surface = new();
+        using Component owningComponent = new();
         using INestedContainer container = surface.CreateNestedContainer(owningComponent, "containerName");
 
-        using var component = new RootDesignerComponent();
+        using RootDesignerComponent component = new();
         container.Add(component);
         IDictionaryService service = Assert.IsAssignableFrom<IDictionaryService>(component.Site);
         service.SetValue("key", "value");

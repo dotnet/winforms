@@ -10,7 +10,7 @@ public class ProjectTargetFrameworkAttributeTests
     [StringWithNullData]
     public void ProjectTargetFrameworkAttribute_Ctor_String(string targetFrameworkMoniker)
     {
-        var attribute = new ProjectTargetFrameworkAttribute(targetFrameworkMoniker);
+        ProjectTargetFrameworkAttribute attribute = new(targetFrameworkMoniker);
         Assert.Equal(targetFrameworkMoniker, attribute.TargetFrameworkMoniker);
     }
 }

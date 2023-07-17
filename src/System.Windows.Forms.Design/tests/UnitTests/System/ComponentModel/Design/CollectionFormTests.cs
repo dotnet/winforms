@@ -17,8 +17,8 @@ public class CollectionFormTests : CollectionEditor
     [Fact]
     public void CollectionForm_Ctor_CollectionEditor()
     {
-        var editor = new CollectionEditor(typeof(List<int>));
-        var form = new SubCollectionForm(editor);
+        CollectionEditor editor = new(typeof(List<int>));
+        SubCollectionForm form = new(editor);
         Assert.Equal(typeof(int), form.CollectionItemType);
         Assert.Same(form.CollectionItemType, form.CollectionItemType);
         Assert.Equal(typeof(List<int>), form.CollectionType);
@@ -38,8 +38,8 @@ public class CollectionFormTests : CollectionEditor
     [StringWithNullData]
     public void CollectionForm_EditValue_Set_GetReturnsExpected(object value)
     {
-        var editor = new CollectionEditor(typeof(int[]));
-        var form = new SubCollectionForm(editor)
+        CollectionEditor editor = new(typeof(int[]));
+        SubCollectionForm form = new(editor)
         {
             EditValue = value
         };
@@ -63,8 +63,8 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(Items_Set_TestData))]
     public void CollectionForm_Items_SetWithoutContext_GetReturnsExpected(object[] value)
     {
-        var editor = new CollectionEditor(typeof(int[]));
-        var form = new SubCollectionForm(editor)
+        CollectionEditor editor = new(typeof(int[]));
+        SubCollectionForm form = new(editor)
         {
             Items = value
         };
@@ -83,8 +83,8 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(Items_Set_TestData))]
     public void CollectionForm_Items_SetWithEditValue_GetReturnsExpected(object[] value)
     {
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var form = new SubCollectionForm(editor)
+        SubCollectionEditor editor = new(typeof(List<int>));
+        SubCollectionForm form = new(editor)
         {
             EditValue = new List<int> { 1, 2 }
         };
@@ -106,17 +106,17 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(Items_Set_TestData))]
     public void CollectionForm_Items_SetWithContext_GetReturnsExpected(object[] value)
     {
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(It.IsAny<Form>()))
             .Returns(DialogResult.OK);
 
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.GetService(typeof(IDesignerHost)))
             .Returns(null);
@@ -134,12 +134,12 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.OnComponentChanged())
             .Verifiable();
 
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var editValue = new object();
+        SubCollectionEditor editor = new(typeof(List<int>));
+        object editValue = new();
         Assert.Same(editValue, editor.EditValue(mockContext.Object, mockServiceProvider.Object, editValue));
         Assert.Same(mockContext.Object, editor.Context);
 
-        var form = new SubCollectionForm(editor)
+        SubCollectionForm form = new(editor)
         {
             Items = value
         };
@@ -162,17 +162,17 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(Items_Set_TestData))]
     public void CollectionForm_Items_SetWithContextWithEditValue_GetReturnsExpected(object[] value)
     {
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(It.IsAny<Form>()))
             .Returns(DialogResult.OK);
 
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.GetService(typeof(IDesignerHost)))
             .Returns(null);
@@ -190,12 +190,12 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.OnComponentChanged())
             .Verifiable();
 
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var editValue = new object();
+        SubCollectionEditor editor = new(typeof(List<int>));
+        object editValue = new();
         Assert.Same(editValue, editor.EditValue(mockContext.Object, mockServiceProvider.Object, editValue));
         Assert.Same(mockContext.Object, editor.Context);
 
-        var form = new SubCollectionForm(editor)
+        SubCollectionForm form = new(editor)
         {
             EditValue = new List<int> { 1, 2 }
         };
@@ -221,17 +221,17 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(Items_Set_TestData))]
     public void CollectionForm_Items_SetWithContextWithEditValueCustomSetItems_GetReturnsExpected(object[] value)
     {
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(It.IsAny<Form>()))
             .Returns(DialogResult.OK);
 
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.GetService(typeof(IDesignerHost)))
             .Returns(null);
@@ -249,12 +249,12 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.OnComponentChanged())
             .Verifiable();
 
-        var editor = new CustomSetItemsCollectionEditor(typeof(List<int>));
-        var editValue = new object();
+        CustomSetItemsCollectionEditor editor = new(typeof(List<int>));
+        object editValue = new();
         Assert.Same(editValue, editor.EditValue(mockContext.Object, mockServiceProvider.Object, editValue));
         Assert.Same(mockContext.Object, editor.Context);
 
-        var form = new SubCollectionForm(editor)
+        SubCollectionForm form = new(editor)
         {
             EditValue = new List<int> { 1, 2 }
         };
@@ -280,17 +280,17 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(Items_Set_TestData))]
     public void CollectionForm_Items_SetWithContextWithEditValueFalseOnChanging_GetReturnsExpected(object[] value)
     {
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(It.IsAny<Form>()))
             .Returns(DialogResult.OK);
 
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.GetService(typeof(IDesignerHost)))
             .Returns(null);
@@ -308,12 +308,12 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.OnComponentChanged())
             .Verifiable();
 
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var editValue = new object();
+        SubCollectionEditor editor = new(typeof(List<int>));
+        object editValue = new();
         Assert.Same(editValue, editor.EditValue(mockContext.Object, mockServiceProvider.Object, editValue));
         Assert.Same(mockContext.Object, editor.Context);
 
-        var form = new SubCollectionForm(editor)
+        SubCollectionForm form = new(editor)
         {
             EditValue = new List<int> { 1, 2 }
         };
@@ -339,17 +339,17 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(Items_Set_TestData))]
     public void CollectionForm_Items_SetWithContextWithEditValueThrowsCriticalExceptionOnChanging_Rethrows(object[] value)
     {
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(It.IsAny<Form>()))
             .Returns(DialogResult.OK);
 
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.GetService(typeof(IDesignerHost)))
             .Returns(null);
@@ -367,12 +367,12 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.OnComponentChanged())
             .Verifiable();
 
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var editValue = new object();
+        SubCollectionEditor editor = new(typeof(List<int>));
+        object editValue = new();
         Assert.Same(editValue, editor.EditValue(mockContext.Object, mockServiceProvider.Object, editValue));
         Assert.Same(mockContext.Object, editor.Context);
 
-        var form = new SubCollectionForm(editor)
+        SubCollectionForm form = new(editor)
         {
             EditValue = new List<int> { 1, 2 }
         };
@@ -385,23 +385,23 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(Items_Set_TestData))]
     public void CollectionForm_Items_SetWithContextWithEditValueThrowsCriticalExceptionOnChanging_CallsDisplayError(object[] value)
     {
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(It.IsAny<Form>()))
             .Returns(DialogResult.OK);
 
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        var exception = new DivideByZeroException();
-        var mockService = new Mock<IUIService>(MockBehavior.Strict);
+        DivideByZeroException exception = new();
+        Mock<IUIService> mockService = new(MockBehavior.Strict);
         mockService
             .Setup(s => s.ShowError(exception))
             .Verifiable();
 
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.GetService(typeof(IDesignerHost)))
             .Returns(null);
@@ -422,12 +422,12 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.GetService(typeof(IUIService)))
             .Returns(mockService.Object);
 
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var editValue = new object();
+        SubCollectionEditor editor = new(typeof(List<int>));
+        object editValue = new();
         Assert.Same(editValue, editor.EditValue(mockContext.Object, mockServiceProvider.Object, editValue));
         Assert.Same(mockContext.Object, editor.Context);
 
-        var form = new SubCollectionForm(editor)
+        SubCollectionForm form = new(editor)
         {
             EditValue = new List<int> { 1, 2 }
         };
@@ -454,8 +454,8 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(CanRemoveInstance_TestData))]
     public void CollectionForm_CanRemoveInstance_Invoke_ReturnsExpected(object value)
     {
-        var editor = new SubCollectionEditor(null);
-        var form = new SubCollectionForm(editor);
+        SubCollectionEditor editor = new(null);
+        SubCollectionForm form = new(editor);
         Assert.True(form.CanRemoveInstance(value));
     }
 
@@ -472,18 +472,18 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(CanRemoveInstance_InheritanceAttribute_TestData))]
     public void CollectionForm_CanRemoveInstance_InheritanceAttribute_ReturnsExpected(InheritanceAttribute attribute, bool expected)
     {
-        using var component = new Component();
+        using Component component = new();
         TypeDescriptor.AddAttributes(component, attribute);
-        var editor = new SubCollectionEditor(null);
-        var form = new SubCollectionForm(editor);
+        SubCollectionEditor editor = new(null);
+        SubCollectionForm form = new(editor);
         Assert.Equal(expected, form.CanRemoveInstance(component));
     }
 
     [Fact]
     public void CollectionForm_CanSelectMultipleInstances_Invoke_ReturnsFalse()
     {
-        var editor = new SubCollectionEditor(null);
-        var form = new SubCollectionForm(editor);
+        SubCollectionEditor editor = new(null);
+        SubCollectionForm form = new(editor);
         Assert.True(form.CanSelectMultipleInstances());
     }
 
@@ -497,17 +497,17 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(InvalidDesignerHost_TestData))]
     public void CollectionForm_CreateInstance_WithContextWithInvalidDesignerHost_ReturnsExpected(object host)
     {
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(It.IsAny<Form>()))
             .Returns(DialogResult.OK);
 
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.GetService(typeof(IDesignerHost)))
             .Returns(host);
@@ -518,12 +518,12 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.GetService(typeof(IComponentChangeService)))
             .Returns(null);
 
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var value = new object();
+        SubCollectionEditor editor = new(typeof(List<int>));
+        object value = new();
         Assert.Same(value, editor.EditValue(mockContext.Object, mockServiceProvider.Object, value));
         Assert.Same(mockContext.Object, editor.Context);
 
-        var form = new SubCollectionForm(editor);
+        SubCollectionForm form = new(editor);
         Assert.IsType<Component>(form.CreateInstance(typeof(Component)));
     }
 
@@ -531,7 +531,7 @@ public class CollectionFormTests : CollectionEditor
     {
         yield return new object[] { null };
 
-        var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
+        Mock<IDesigner> mockDesigner = new(MockBehavior.Strict);
         mockDesigner
             .Setup(d => d.Dispose());
         yield return new object[] { mockDesigner.Object };
@@ -541,18 +541,18 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(CreateInstance_HostDesigner_TestData))]
     public void CollectionForm_CreateInstance_WithContextWithHostReturningComponent_CallsCreateComponent(IDesigner designer)
     {
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(It.IsAny<Form>()))
             .Returns(DialogResult.OK);
 
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        using var result = new Component();
-        var mockHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        using Component result = new();
+        Mock<IDesignerHost> mockHost = new(MockBehavior.Strict);
         mockHost
             .Setup(h => h.CreateTransaction("Add or remove Int32 objects"))
             .Returns((DesignerTransaction)null);
@@ -566,7 +566,7 @@ public class CollectionFormTests : CollectionEditor
             .Setup(h => h.GetDesigner(result))
             .Returns(designer);
 
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.GetService(typeof(IDesignerHost)))
             .Returns(mockHost.Object);
@@ -577,12 +577,12 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.GetService(typeof(IComponentChangeService)))
             .Returns(null);
 
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var value = new object();
+        SubCollectionEditor editor = new(typeof(List<int>));
+        object value = new();
         Assert.Same(value, editor.EditValue(mockContext.Object, mockServiceProvider.Object, value));
         Assert.Same(mockContext.Object, editor.Context);
 
-        var form = new SubCollectionForm(editor);
+        SubCollectionForm form = new(editor);
         Assert.Same(result, form.CreateInstance(typeof(Component)));
     }
 
@@ -590,17 +590,17 @@ public class CollectionFormTests : CollectionEditor
     [MemberData(nameof(CreateInstance_HostDesigner_TestData))]
     public void CollectionForm_CreateInstance_WithContextWithHostReturningNullComponent_CallsCreateComponent(IDesigner designer)
     {
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(It.IsAny<Form>()))
             .Returns(DialogResult.OK);
 
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        var mockHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> mockHost = new(MockBehavior.Strict);
         mockHost
             .Setup(h => h.CreateTransaction("Add or remove Int32 objects"))
             .Returns((DesignerTransaction)null);
@@ -617,8 +617,8 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.GetService(typeof(TypeDescriptionProvider)))
             .Returns(null);
 
-        var result = new object();
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        object result = new();
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.GetService(typeof(IDesignerHost)))
             .Returns(mockHost.Object);
@@ -629,36 +629,36 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.GetService(typeof(IComponentChangeService)))
             .Returns(null);
 
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var value = new object();
+        SubCollectionEditor editor = new(typeof(List<int>));
+        object value = new();
         Assert.Same(value, editor.EditValue(mockContext.Object, mockServiceProvider.Object, value));
         Assert.Same(mockContext.Object, editor.Context);
 
-        var form = new SubCollectionForm(editor);
+        SubCollectionForm form = new(editor);
         Assert.IsType<Component>(form.CreateInstance(typeof(Component)));
     }
 
     [Fact]
     public void CollectionForm_CreateInstance_WithContextWithHostReturningComponentWithIComponentInitializerDesigner_CallsInitializeNewComponent()
     {
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(It.IsAny<Form>()))
             .Returns(DialogResult.OK);
 
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        using var result = new Component();
-        var mockDesigner = new Mock<IDesigner>(MockBehavior.Strict);
+        using Component result = new();
+        Mock<IDesigner> mockDesigner = new(MockBehavior.Strict);
         Mock<IComponentInitializer> mockComponentInitializer = mockDesigner.As<IComponentInitializer>();
         mockComponentInitializer
             .Setup(d => d.InitializeNewComponent(null))
             .Verifiable();
 
-        var mockHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> mockHost = new(MockBehavior.Strict);
         mockHost
             .Setup(h => h.CreateTransaction("Add or remove Int32 objects"))
             .Returns((DesignerTransaction)null);
@@ -672,7 +672,7 @@ public class CollectionFormTests : CollectionEditor
             .Setup(h => h.GetDesigner(result))
             .Returns(mockDesigner.Object);
 
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.GetService(typeof(IDesignerHost)))
             .Returns(mockHost.Object);
@@ -683,12 +683,12 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.GetService(typeof(IComponentChangeService)))
             .Returns(null);
 
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var value = new object();
+        SubCollectionEditor editor = new(typeof(List<int>));
+        object value = new();
         Assert.Same(value, editor.EditValue(mockContext.Object, mockServiceProvider.Object, value));
         Assert.Same(mockContext.Object, editor.Context);
 
-        var form = new SubCollectionForm(editor);
+        SubCollectionForm form = new(editor);
         Assert.Same(result, form.CreateInstance(typeof(Component)));
         mockComponentInitializer.Verify(d => d.InitializeNewComponent(null), Times.Once());
     }
@@ -696,39 +696,39 @@ public class CollectionFormTests : CollectionEditor
     [Fact]
     public void CollectionForm_CreateInstance_InvokeWithoutContext_ReturnsExpected()
     {
-        var editor = new SubCollectionEditor(null);
-        var form = new SubCollectionForm(editor);
+        SubCollectionEditor editor = new(null);
+        SubCollectionForm form = new(editor);
         Assert.Equal(0, form.CreateInstance(typeof(int)));
     }
 
     [Fact]
     public void CollectionForm_CreateInstance_NullItemType_ThrowsArgumentNullException()
     {
-        var editor = new SubCollectionEditor(null);
-        var form = new SubCollectionForm(editor);
+        SubCollectionEditor editor = new(null);
+        SubCollectionForm form = new(editor);
         Assert.Throws<ArgumentNullException>("objectType", () => form.CreateInstance(null));
     }
 
     [Fact]
     public void CollectionForm_DisplayError_InvokeWithContextWithIUIService_CallsShowError()
     {
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(It.IsAny<Form>()))
             .Returns(DialogResult.OK);
 
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        var exception = new Exception();
-        var mockService = new Mock<IUIService>(MockBehavior.Strict);
+        Exception exception = new();
+        Mock<IUIService> mockService = new(MockBehavior.Strict);
         mockService
             .Setup(s => s.ShowError(exception))
             .Verifiable();
 
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.GetService(typeof(IDesignerHost)))
             .Returns(null);
@@ -742,12 +742,12 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.GetService(typeof(IUIService)))
             .Returns(mockService.Object);
 
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var editValue = new object();
+        SubCollectionEditor editor = new(typeof(List<int>));
+        object editValue = new();
         Assert.Same(editValue, editor.EditValue(mockContext.Object, mockServiceProvider.Object, editValue));
         Assert.Same(mockContext.Object, editor.Context);
 
-        var form = new SubCollectionForm(editor);
+        SubCollectionForm form = new(editor);
         form.DisplayError(exception);
         mockService.Verify(s => s.ShowError(exception), Times.Once());
     }
@@ -756,18 +756,18 @@ public class CollectionFormTests : CollectionEditor
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
     public void CollectionForm_GetService_WithContext_CallsContextGetService(Type serviceType)
     {
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(It.IsAny<Form>()))
             .Returns(DialogResult.OK);
 
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object);
 
-        var result = new object();
-        var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+        object result = new();
+        Mock<ITypeDescriptorContext> mockContext = new(MockBehavior.Strict);
         mockContext
             .Setup(c => c.GetService(typeof(IDesignerHost)))
             .Returns(null);
@@ -781,12 +781,12 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.GetService(serviceType))
             .Returns(result);
 
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var value = new object();
+        SubCollectionEditor editor = new(typeof(List<int>));
+        object value = new();
         Assert.Same(value, editor.EditValue(mockContext.Object, mockServiceProvider.Object, value));
         Assert.Same(mockContext.Object, editor.Context);
 
-        var form = new SubCollectionForm(editor);
+        SubCollectionForm form = new(editor);
         Assert.Same(result, form.GetService(serviceType));
     }
 
@@ -794,18 +794,18 @@ public class CollectionFormTests : CollectionEditor
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
     public void CollectionForm_GetService_InvokeWithoutContext_ReturnsNull(Type serviceType)
     {
-        var editor = new SubCollectionEditor(serviceType);
-        var form = new SubCollectionForm(editor);
+        SubCollectionEditor editor = new(serviceType);
+        SubCollectionForm form = new(editor);
         Assert.Null(form.GetService(serviceType));
     }
 
     [Fact]
     public void CollectionForm_ShowEditorDialog_Invoke_Success()
     {
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var form = new SubCollectionForm(editor);
+        SubCollectionEditor editor = new(typeof(List<int>));
+        SubCollectionForm form = new(editor);
 
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
         mockEditorService
             .Setup(s => s.ShowDialog(form))
             .Returns(DialogResult.OK);
@@ -816,8 +816,8 @@ public class CollectionFormTests : CollectionEditor
     [Fact]
     public void CollectionForm_ShowEditorDialog_NullEdSvc_ThrowsArgumentNullException()
     {
-        var editor = new SubCollectionEditor(typeof(List<int>));
-        var form = new SubCollectionForm(editor);
+        SubCollectionEditor editor = new(typeof(List<int>));
+        SubCollectionForm form = new(editor);
         Assert.Throws<ArgumentNullException>("edSvc", () => form.ShowEditorDialog(null));
     }
 

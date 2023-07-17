@@ -15,7 +15,7 @@ public class DesignerActionPropertyItemTests
     [InlineData(null, null, null, null, null)]
     public void DesignerActionPropertyItem_Ctor_String_String_String_String(string memberName, string displayName, string category, string description, string expectedDisplayName)
     {
-        var item = new DesignerActionPropertyItem(memberName, displayName, category, description);
+        DesignerActionPropertyItem item = new(memberName, displayName, category, description);
         Assert.Equal(memberName, item.MemberName);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Equal(category, item.Category);
@@ -35,7 +35,7 @@ public class DesignerActionPropertyItemTests
     [InlineData(null, null, null, null)]
     public void DesignerActionPropertyItem_Ctor_String_String_String(string memberName, string displayName, string category, string expectedDisplayName)
     {
-        var item = new DesignerActionPropertyItem(memberName, displayName, category);
+        DesignerActionPropertyItem item = new(memberName, displayName, category);
         Assert.Equal(memberName, item.MemberName);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Equal(category, item.Category);
@@ -55,7 +55,7 @@ public class DesignerActionPropertyItemTests
     [InlineData(null, null, null)]
     public void DesignerActionPropertyItem_Ctor_String_String(string memberName, string displayName, string expectedDisplayName)
     {
-        var item = new DesignerActionPropertyItem(memberName, displayName);
+        DesignerActionPropertyItem item = new(memberName, displayName);
         Assert.Equal(memberName, item.MemberName);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Null(item.Category);
@@ -78,7 +78,7 @@ public class DesignerActionPropertyItemTests
     [MemberData(nameof(RelatedComponent_Set_TestData))]
     public void DesignerActionPropertyItem_RelatedComponent_Set_GetReturnsExpected(IComponent value)
     {
-        var item = new DesignerActionPropertyItem("memberName", "displayName", "category", "description")
+        DesignerActionPropertyItem item = new("memberName", "displayName", "category", "description")
         {
             RelatedComponent = value
         };

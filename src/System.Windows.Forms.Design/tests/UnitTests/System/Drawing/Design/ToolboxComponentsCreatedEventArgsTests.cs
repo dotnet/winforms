@@ -19,7 +19,7 @@ public class ToolboxComponentsCreatedEventArgsTests
     [MemberData(nameof(Ctor_IComponentArray_TestData))]
     public void Ctor_IComponentArray(IComponent[] components)
     {
-        var e = new ToolboxComponentsCreatedEventArgs(components);
+        ToolboxComponentsCreatedEventArgs e = new(components);
         if (components is null)
         {
             Assert.Null(e.Components);

@@ -11,7 +11,7 @@ public class DesignerCommandSetTests
     [Fact]
     public void DesignerCommandSet_Ctor_Default()
     {
-        var set = new DesignerCommandSet();
+        DesignerCommandSet set = new();
         Assert.Null(set.ActionLists);
         Assert.Null(set.Verbs);
     }
@@ -20,15 +20,15 @@ public class DesignerCommandSetTests
     [StringWithNullData]
     public void DesignerCommandSet_GetCommands_Invoke_ReturnsNull(string name)
     {
-        var set = new DesignerCommandSet();
+        DesignerCommandSet set = new();
         Assert.Null(set.GetCommands(name));
     }
 
     [Fact]
     public void DesignerCommandSet_Verbs_OverridenGetCommands_ReturnsExpected()
     {
-        var collection = new DesignerVerbCollection();
-        var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        DesignerVerbCollection collection = new();
+        Mock<DesignerCommandSet> mockSet = new(MockBehavior.Strict);
         mockSet
             .Setup(s => s.GetCommands("Verbs"))
             .Returns(collection);
@@ -38,7 +38,7 @@ public class DesignerCommandSetTests
     [Fact]
     public void DesignerCommandSet_Verbs_InvalidOverridenGetCommands_ThrowsInvalidCastException()
     {
-        var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        Mock<DesignerCommandSet> mockSet = new(MockBehavior.Strict);
         mockSet
             .Setup(s => s.GetCommands("Verbs"))
             .Returns(Array.Empty<object>());
@@ -48,8 +48,8 @@ public class DesignerCommandSetTests
     [Fact]
     public void DesignerCommandSet_ActionLists_OverridenGetCommands_ReturnsExpected()
     {
-        var collection = new DesignerActionListCollection();
-        var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        DesignerActionListCollection collection = new();
+        Mock<DesignerCommandSet> mockSet = new(MockBehavior.Strict);
         mockSet
             .Setup(s => s.GetCommands("ActionLists"))
             .Returns(collection);
@@ -59,7 +59,7 @@ public class DesignerCommandSetTests
     [Fact]
     public void DesignerCommandSet_ActionLists_InvalidOverridenGetCommands_ThrowsInvalidCastException()
     {
-        var mockSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        Mock<DesignerCommandSet> mockSet = new(MockBehavior.Strict);
         mockSet
             .Setup(s => s.GetCommands("ActionLists"))
             .Returns(Array.Empty<object>());

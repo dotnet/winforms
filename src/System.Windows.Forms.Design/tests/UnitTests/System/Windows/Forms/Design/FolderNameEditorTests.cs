@@ -13,7 +13,7 @@ public class FolderNameEditorTests
     [Fact]
     public void FolderNameEditor_Ctor_Default()
     {
-        var editor = new FileNameEditor();
+        FileNameEditor editor = new();
         Assert.False(editor.IsDropDownResizable);
     }
 
@@ -21,7 +21,7 @@ public class FolderNameEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void FolderNameEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
     {
-        var editor = new FolderNameEditor();
+        FolderNameEditor editor = new();
         Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
     }
 
@@ -29,14 +29,14 @@ public class FolderNameEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void FolderNameEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
     {
-        var editor = new FolderNameEditor();
+        FolderNameEditor editor = new();
         Assert.False(editor.GetPaintValueSupported(context));
     }
 
     [Fact]
     public void FolderNameEditor_InitializeDialog_Invoke_Nop()
     {
-        var editor = new SubFolderNameEditor();
+        SubFolderNameEditor editor = new();
         editor.InitializeDialog();
     }
 
@@ -45,7 +45,7 @@ public class FolderNameEditorTests
         [Fact]
         public void FolderBrowser_Ctor_Default()
         {
-            var browser = new FolderBrowser();
+            FolderBrowser browser = new();
             Assert.Empty(browser.DirectoryPath);
             Assert.Empty(browser.Description);
             Assert.Equal(FolderBrowserStyles.RestrictToFilesystem, browser.Style);
@@ -56,7 +56,7 @@ public class FolderNameEditorTests
         [NormalizedStringData]
         public void FolderBrowser_Description_Set_GetReturnsExpected(string value, string expected)
         {
-            var browser = new FolderBrowser
+            FolderBrowser browser = new()
             {
                 Description = value
             };
@@ -72,7 +72,7 @@ public class FolderNameEditorTests
         [InvalidEnumData<FolderBrowserFolder>]
         protected void FolderBrowser_StartLocation_Set_GetReturnsExpected(FolderBrowserFolder value)
         {
-            var browser = new FolderBrowser
+            FolderBrowser browser = new()
             {
                 StartLocation = value
             };
@@ -88,7 +88,7 @@ public class FolderNameEditorTests
         [InvalidEnumData<FolderBrowserStyles>]
         protected void FolderBrowser_Style_Set_GetReturnsExpected(FolderBrowserStyles value)
         {
-            var browser = new FolderBrowser
+            FolderBrowser browser = new()
             {
                 Style = value
             };

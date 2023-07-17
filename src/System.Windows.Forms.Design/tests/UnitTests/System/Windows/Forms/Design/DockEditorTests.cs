@@ -14,7 +14,7 @@ public class DockEditorTests
     [Fact]
     public void DockEditor_Ctor_Default()
     {
-        var editor = new DockEditor();
+        DockEditor editor = new();
         Assert.False(editor.IsDropDownResizable);
     }
 
@@ -30,9 +30,9 @@ public class DockEditorTests
     [MemberData(nameof(EditValue_TestData))]
     public void DockEditor_EditValue_ValidProvider_ReturnsValue(object value)
     {
-        var editor = new DockEditor();
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        DockEditor editor = new();
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object)
@@ -54,7 +54,7 @@ public class DockEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
     public void DockEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
     {
-        var editor = new DockEditor();
+        DockEditor editor = new();
         Assert.Same(value, editor.EditValue(null, provider, value));
     }
 
@@ -62,7 +62,7 @@ public class DockEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void DockEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
     {
-        var editor = new DockEditor();
+        DockEditor editor = new();
         Assert.Equal(UITypeEditorEditStyle.DropDown, editor.GetEditStyle(context));
     }
 
@@ -70,7 +70,7 @@ public class DockEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void DockEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
     {
-        var editor = new DockEditor();
+        DockEditor editor = new();
         Assert.False(editor.GetPaintValueSupported(context));
     }
 }

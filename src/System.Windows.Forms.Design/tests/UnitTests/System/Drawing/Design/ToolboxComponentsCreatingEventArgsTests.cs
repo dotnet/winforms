@@ -19,7 +19,7 @@ public class ToolboxComponentsCreatingEventArgsTests
     [MemberData(nameof(Ctor_IDesignerHost_TestData))]
     public void Ctor_IDesignerHost(IDesignerHost host)
     {
-        var e = new ToolboxComponentsCreatingEventArgs(host);
+        ToolboxComponentsCreatingEventArgs e = new(host);
         Assert.Equal(host, e.DesignerHost);
     }
 }

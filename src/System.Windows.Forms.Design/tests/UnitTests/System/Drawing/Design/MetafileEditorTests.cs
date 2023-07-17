@@ -14,7 +14,7 @@ public class MetafileEditorTests
     [Fact]
     public void MetafileEditor_Ctor_Default()
     {
-        var editor = new MetafileEditor();
+        MetafileEditor editor = new();
         Assert.False(editor.IsDropDownResizable);
     }
 
@@ -22,14 +22,14 @@ public class MetafileEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void MetafileEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
     {
-        var editor = new MetafileEditor();
+        MetafileEditor editor = new();
         Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
     }
 
     [Fact]
     public void MetafileEditor_GetExtensions_InvokeDefault_ReturnsExpected()
     {
-        var editor = new SubMetafileEditor();
+        SubMetafileEditor editor = new();
         string[] extensions = editor.GetExtensions();
         Assert.Equal(new string[] { "emf", "wmf" }, extensions);
         Assert.NotSame(extensions, editor.GetExtensions());
@@ -38,7 +38,7 @@ public class MetafileEditorTests
     [Fact]
     public void MetafileEditor_GetFileDialogDescription_Invoke_ReturnsExpected()
     {
-        var editor = new SubMetafileEditor();
+        SubMetafileEditor editor = new();
         Assert.Equal("Metafiles", editor.GetFileDialogDescription());
     }
 
@@ -46,16 +46,16 @@ public class MetafileEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void MetafileEditor_GetPaintValueSupported_Invoke_ReturnsTrue(ITypeDescriptorContext context)
     {
-        var editor = new MetafileEditor();
+        MetafileEditor editor = new();
         Assert.True(editor.GetPaintValueSupported(context));
     }
 
     [Fact]
     public void MetafileEditor_LoadFromStream_BitmapStream_ThrowsExternalException()
     {
-        var editor = new SubMetafileEditor();
+        SubMetafileEditor editor = new();
         using (MemoryStream stream = new MemoryStream())
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             image.Save(stream, ImageFormat.Bmp);
             stream.Position = 0;
@@ -66,7 +66,7 @@ public class MetafileEditorTests
     [Fact]
     public void MetafileEditor_LoadFromStream_MetafileStream_ReturnsExpected()
     {
-        var editor = new SubMetafileEditor();
+        SubMetafileEditor editor = new();
         using (Stream stream = File.OpenRead("Resources/telescope_01.wmf"))
         {
             Metafile result = Assert.IsType<Metafile>(editor.LoadFromStream(stream));
@@ -77,7 +77,7 @@ public class MetafileEditorTests
     [Fact]
     public void MetafileEditor_LoadFromStream_NullStream_ThrowsArgumentNullException()
     {
-        var editor = new SubMetafileEditor();
+        SubMetafileEditor editor = new();
         Assert.Throws<ArgumentNullException>("stream", () => editor.LoadFromStream(null));
     }
 

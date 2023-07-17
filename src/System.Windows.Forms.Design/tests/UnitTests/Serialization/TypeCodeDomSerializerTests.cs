@@ -11,37 +11,37 @@ public class TypeCodeDomSerializerTests
     [Fact]
     public void TypeCodeDomSerializer_Constructor()
     {
-        var underTest = new TypeCodeDomSerializer();
+        TypeCodeDomSerializer underTest = new();
         Assert.NotNull(underTest);
     }
 
     [Fact]
     public void TypeCodeDomSerializer_Serialize_Manager_Null()
     {
-        var underTest = new TypeCodeDomSerializer();
+        TypeCodeDomSerializer underTest = new();
         Assert.Throws<ArgumentNullException>(() => underTest.Serialize(null, null, null));
     }
 
     [Fact]
     public void TypeCodeDomSerializer_Serialize_Root_Null()
     {
-        var mockSerializationManager = new Mock<DesignerSerializationManager>(MockBehavior.Strict);
-        var underTest = new TypeCodeDomSerializer();
+        Mock<DesignerSerializationManager> mockSerializationManager = new(MockBehavior.Strict);
+        TypeCodeDomSerializer underTest = new();
         Assert.Throws<ArgumentNullException>(() => underTest.Serialize(mockSerializationManager.Object, null, null));
     }
 
     [Fact]
     public void TypeCodeDomSerializer_Deserialize_Manager_Null()
     {
-        var underTest = new TypeCodeDomSerializer();
+        TypeCodeDomSerializer underTest = new();
         Assert.Throws<ArgumentNullException>(() => underTest.Deserialize(null, null));
     }
 
     [Fact]
     public void TypeCodeDomSerializer_Deserialize_CodeTypeDec_Null()
     {
-        var mockSerializationManager = new Mock<DesignerSerializationManager>(MockBehavior.Strict);
-        var underTest = new TypeCodeDomSerializer();
+        Mock<DesignerSerializationManager> mockSerializationManager = new(MockBehavior.Strict);
+        TypeCodeDomSerializer underTest = new();
         Assert.Throws<ArgumentNullException>(() => underTest.Deserialize(mockSerializationManager.Object, null));
     }
 }

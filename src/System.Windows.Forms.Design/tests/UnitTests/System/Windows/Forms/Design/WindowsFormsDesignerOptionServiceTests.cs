@@ -13,7 +13,7 @@ public class WindowsFormsDesignerOptionServiceTests
     [Fact]
     public void WindowsFormsDesignerOptionService_Ctor_Default()
     {
-        var service = new WindowsFormsDesignerOptionService();
+        WindowsFormsDesignerOptionService service = new();
         DesignerOptions options = service.CompatibilityOptions;
         Assert.True(options.EnableInSituEditing);
         Assert.Equal(new Size(8, 8), options.GridSize);
@@ -29,7 +29,7 @@ public class WindowsFormsDesignerOptionServiceTests
     [Fact]
     public void WindowsFormsDesignerOptionService_Options_Get_ReturnsExpected()
     {
-        var service = new WindowsFormsDesignerOptionService();
+        WindowsFormsDesignerOptionService service = new();
         Assert.Empty(service.Options.Name);
         DesignerOptionService.DesignerOptionCollection childCollection = Assert.IsType<DesignerOptionService.DesignerOptionCollection>(Assert.Single(service.Options));
         Assert.Equal("DesignerOptions", childCollection.Name);
@@ -41,7 +41,7 @@ public class WindowsFormsDesignerOptionServiceTests
     [Fact]
     public void WindowsFormsDesignerOptionService_Options_GetNullDesignerOptions_ReturnsExpected()
     {
-        var service = new NullCompatibilityOptions();
+        NullCompatibilityOptions service = new();
         Assert.Empty(service.Options.Name);
         Assert.Empty(service.Options);
     }
@@ -49,7 +49,7 @@ public class WindowsFormsDesignerOptionServiceTests
     [Fact]
     public void WindowsFormsDesignerOptionService_PopulateOptionCollection_ValidOptionsFromSameClass_Success()
     {
-        var service = new SubWindowsFormsDesignerOptionService();
+        SubWindowsFormsDesignerOptionService service = new();
         service.PopulateOptionCollectionEntry(service.Options);
         Assert.Equal(1, service.PopulateOptionCollectionCallCount);
 
@@ -65,8 +65,8 @@ public class WindowsFormsDesignerOptionServiceTests
     [Fact]
     public void WindowsFormsDesignerOptionService_PopulateOptionCollection_ValidOptionsFromOtherClass_Success()
     {
-        var service = new SubWindowsFormsDesignerOptionService();
-        var otherService = new SubWindowsFormsDesignerOptionService();
+        SubWindowsFormsDesignerOptionService service = new();
+        SubWindowsFormsDesignerOptionService otherService = new();
         service.PopulateOptionCollectionEntry(otherService.Options);
         Assert.Equal(1, service.PopulateOptionCollectionCallCount);
 
@@ -89,7 +89,7 @@ public class WindowsFormsDesignerOptionServiceTests
     [Fact]
     public void WindowsFormsDesignerOptionService_PopulateOptionCollection_NullOptions_Success()
     {
-        var service = new SubWindowsFormsDesignerOptionService();
+        SubWindowsFormsDesignerOptionService service = new();
         service.PopulateOptionCollectionEntry(null);
         Assert.Equal(1, service.PopulateOptionCollectionCallCount);
 

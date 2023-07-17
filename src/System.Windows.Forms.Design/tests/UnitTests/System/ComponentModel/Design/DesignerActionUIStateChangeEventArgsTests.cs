@@ -16,7 +16,7 @@ public class DesignerActionUIStateChangeEventArgsTests
     [MemberData(nameof(Ctor_Object_DesignerActionUIStateChangeType_TestData))]
     public void Ctor_Object_DesignerActionUIStateChangeType(object relatedObject, DesignerActionUIStateChangeType changeType)
     {
-        var e = new DesignerActionUIStateChangeEventArgs(relatedObject, changeType);
+        DesignerActionUIStateChangeEventArgs e = new(relatedObject, changeType);
         Assert.Same(relatedObject, e.RelatedObject);
         Assert.Equal(changeType, e.ChangeType);
     }

@@ -15,7 +15,7 @@ public class AnchorEditorTests
     [Fact]
     public void AnchorEditor_Ctor_Default()
     {
-        var editor = new AnchorEditor();
+        AnchorEditor editor = new();
         Assert.False(editor.IsDropDownResizable);
     }
 
@@ -31,9 +31,9 @@ public class AnchorEditorTests
     [MemberData(nameof(EditValue_TestData))]
     public void AnchorEditor_EditValue_ValidProvider_ReturnsValue(object value)
     {
-        var editor = new AnchorEditor();
-        var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        AnchorEditor editor = new();
+        Mock<IWindowsFormsEditorService> mockEditorService = new(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
             .Returns(mockEditorService.Object)
@@ -55,7 +55,7 @@ public class AnchorEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
     public void AnchorEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
     {
-        var editor = new AnchorEditor();
+        AnchorEditor editor = new();
         Assert.Same(value, editor.EditValue(null, provider, value));
     }
 
@@ -63,7 +63,7 @@ public class AnchorEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void AnchorEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
     {
-        var editor = new AnchorEditor();
+        AnchorEditor editor = new();
         Assert.Equal(UITypeEditorEditStyle.DropDown, editor.GetEditStyle(context));
     }
 
@@ -71,7 +71,7 @@ public class AnchorEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void AnchorEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
     {
-        var editor = new AnchorEditor();
+        AnchorEditor editor = new();
         Assert.False(editor.GetPaintValueSupported(context));
     }
 

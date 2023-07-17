@@ -9,7 +9,7 @@ public class DesignerActionListCollectionTests
     [Fact]
     public void DesignerActionListCollection_Ctor_Default()
     {
-        var collection = new DesignerActionListCollection();
+        DesignerActionListCollection collection = new();
         Assert.Empty(collection);
     }
 
@@ -23,7 +23,7 @@ public class DesignerActionListCollectionTests
     [MemberData(nameof(Ctor_DesignerActionListArray_TestData))]
     public void DesignerActionListCollection_Ctor_DesignerActionListArray(DesignerActionList[] value)
     {
-        var collection = new DesignerActionListCollection(value);
+        DesignerActionListCollection collection = new(value);
         Assert.Equal(value, collection.Cast<object>());
     }
 
@@ -36,16 +36,16 @@ public class DesignerActionListCollectionTests
     [Fact]
     public void DesignerActionListCollection_Add_DesignerActionList_Success()
     {
-        var collection = new DesignerActionListCollection();
+        DesignerActionListCollection collection = new();
 
-        var value1 = new DesignerActionList(null);
+        DesignerActionList value1 = new(null);
         collection.Add(value1);
         Assert.Same(value1, Assert.Single(collection));
         Assert.Same(value1, collection[0]);
         Assert.True(collection.Contains(value1));
         Assert.Equal(0, collection.IndexOf(value1));
 
-        var value2 = new DesignerActionList(null);
+        DesignerActionList value2 = new(null);
         collection.Add(value2);
         Assert.Equal(new object[] { value1, value2 }, collection.Cast<object>());
         Assert.True(collection.Contains(value2));
@@ -61,7 +61,7 @@ public class DesignerActionListCollectionTests
     [MemberData(nameof(Ctor_DesignerActionListArray_TestData))]
     public void DesignerActionListCollection_AddRange_DesignerActionListArray_Success(DesignerActionList[] value)
     {
-        var collection = new DesignerActionListCollection();
+        DesignerActionListCollection collection = new();
         collection.AddRange(value);
         Assert.Equal(value, collection.Cast<object>());
 
@@ -74,7 +74,7 @@ public class DesignerActionListCollectionTests
     [MemberData(nameof(Ctor_DesignerActionListArray_TestData))]
     public void DesignerActionListCollection_AddRange_DesignerActionListCollection_Success(DesignerActionList[] value)
     {
-        var collection = new DesignerActionListCollection();
+        DesignerActionListCollection collection = new();
         collection.AddRange(new DesignerActionListCollection(value));
         Assert.Equal(value, collection.Cast<object>());
 
@@ -86,7 +86,7 @@ public class DesignerActionListCollectionTests
     [Fact]
     public void DesignerActionListCollection_AddRange_NullValue_ThrowsArgumentNullException()
     {
-        var collection = new DesignerActionListCollection();
+        DesignerActionListCollection collection = new();
         Assert.Throws<ArgumentNullException>("value", () => collection.AddRange((DesignerActionList[])null));
         Assert.Throws<ArgumentNullException>("value", () => collection.AddRange((DesignerActionListCollection)null));
     }
@@ -94,16 +94,16 @@ public class DesignerActionListCollectionTests
     [Fact]
     public void DesignerActionListCollection_Insert_DesignerActionList_Success()
     {
-        var collection = new DesignerActionListCollection();
+        DesignerActionListCollection collection = new();
 
-        var value1 = new DesignerActionList(null);
+        DesignerActionList value1 = new(null);
         collection.Insert(0, value1);
         Assert.Same(value1, Assert.Single(collection));
         Assert.Same(value1, collection[0]);
         Assert.True(collection.Contains(value1));
         Assert.Equal(0, collection.IndexOf(value1));
 
-        var value2 = new DesignerActionList(null);
+        DesignerActionList value2 = new(null);
         collection.Insert(0, value2);
         Assert.Equal(new object[] { value2, value1 }, collection.Cast<object>());
         Assert.True(collection.Contains(value2));
@@ -118,8 +118,8 @@ public class DesignerActionListCollectionTests
     [Fact]
     public void DesignerActionListCollection_Remove_Invoke_Success()
     {
-        var collection = new DesignerActionListCollection();
-        var value = new DesignerActionList(null);
+        DesignerActionListCollection collection = new();
+        DesignerActionList value = new(null);
         collection.Add(value);
         Assert.Same(value, Assert.Single(collection));
 
@@ -138,9 +138,9 @@ public class DesignerActionListCollectionTests
     [Fact]
     public void DesignerActionListCollection_Item_Set_GetReturnsExpected()
     {
-        var collection = new DesignerActionListCollection();
-        var value1 = new DesignerActionList(null);
-        var value2 = new DesignerActionList(null);
+        DesignerActionListCollection collection = new();
+        DesignerActionList value1 = new(null);
+        DesignerActionList value2 = new(null);
         collection.Add(value1);
         Assert.Same(value1, Assert.Single(collection));
 
@@ -164,8 +164,8 @@ public class DesignerActionListCollectionTests
     [Fact]
     public void DesignerActionListCollection_CopyTo_Invoke_Success()
     {
-        var collection = new DesignerActionListCollection();
-        var value = new DesignerActionList(null);
+        DesignerActionListCollection collection = new();
+        DesignerActionList value = new(null);
         collection.Add(value);
 
         var array = new DesignerActionList[3];
@@ -176,8 +176,8 @@ public class DesignerActionListCollectionTests
     [Fact]
     public void DesignerActionListCollection_Contains_NoSuchValue_ReturnsFalse()
     {
-        var collection = new DesignerActionListCollection();
-        var value = new DesignerActionList(null);
+        DesignerActionListCollection collection = new();
+        DesignerActionList value = new(null);
         collection.Add(value);
 
         Assert.False(collection.Contains(new DesignerActionList(null)));
@@ -187,8 +187,8 @@ public class DesignerActionListCollectionTests
     [Fact]
     public void DesignerActionListCollection_IndexOf_NoSuchValue_ReturnsNegativeOne()
     {
-        var collection = new DesignerActionListCollection();
-        var value = new DesignerActionList(null);
+        DesignerActionListCollection collection = new();
+        DesignerActionList value = new(null);
         collection.Add(value);
 
         Assert.Equal(-1, collection.IndexOf(new DesignerActionList(null)));
@@ -198,8 +198,8 @@ public class DesignerActionListCollectionTests
     [Fact]
     public void DesignerActionListCollection_Clear_Success()
     {
-        var collection = new DesignerActionListCollection();
-        var value = new DesignerActionList(null);
+        DesignerActionListCollection collection = new();
+        DesignerActionList value = new(null);
         collection.Add(value);
 
         collection.Clear();

@@ -14,13 +14,13 @@ public class DesignerActionServiceTests
     [Fact]
     public void Ctor_IServiceProvider()
     {
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.AddService(typeof(DesignerActionService), It.IsAny<DesignerActionService>()))
             .Verifiable();
-        var mockComponentChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
-        var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IComponentChangeService> mockComponentChangeService = new(MockBehavior.Strict);
+        Mock<ISelectionService> mockSelectionService = new(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns(mockDesignerHost.Object)
@@ -33,7 +33,7 @@ public class DesignerActionServiceTests
             .Setup(p => p.GetService(typeof(ISelectionService)))
             .Returns(mockSelectionService.Object)
             .Verifiable();
-        var service = new DesignerActionService(mockServiceProvider.Object);
+        DesignerActionService service = new(mockServiceProvider.Object);
         mockServiceProvider.Verify(p => p.GetService(typeof(IDesignerHost)), Times.Once());
         mockServiceProvider.Verify(p => p.GetService(typeof(IComponentChangeService)), Times.Once());
         mockServiceProvider.Verify(p => p.GetService(typeof(ISelectionService)), Times.Once());
@@ -42,7 +42,7 @@ public class DesignerActionServiceTests
 
     public static IEnumerable<object[]> Add_ComponentDesignerActionList_TestData()
     {
-        var actionList = new CustomDesignerActionList(null);
+        CustomDesignerActionList actionList = new(null);
         yield return new object[] { null, new DesignerActionListCollection() };
         yield return new object[] { new DesignerActionList(null), new DesignerActionListCollection() };
         yield return new object[] { new NullCustomDesignerActionList(null), new DesignerActionListCollection() };
@@ -53,8 +53,8 @@ public class DesignerActionServiceTests
     [MemberData(nameof(Add_ComponentDesignerActionList_TestData))]
     public void Add_ComponentDesignerActionList_Success(DesignerActionList actionList, DesignerActionListCollection expected)
     {
-        var service = new SubDesignerActionService(null);
-        using var component = new Component();
+        SubDesignerActionService service = new(null);
+        using Component component = new();
         service.Add(component, actionList);
         Assert.True(service.Contains(component));
         Assert.Equal(expected, service.GetComponentActions(component));
@@ -62,11 +62,11 @@ public class DesignerActionServiceTests
         Assert.Equal(expected, service.GetComponentActions(component, ComponentActionsType.Service));
         Assert.Empty(service.GetComponentActions(component, ComponentActionsType.Component));
 
-        var actionListBuffer1 = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer1 = new();
         service.GetComponentDesignerActions(component, actionListBuffer1);
         Assert.Empty(actionListBuffer1);
 
-        var actionListBuffer2 = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer2 = new();
         service.GetComponentServiceActions(component, actionListBuffer2);
         Assert.Equal(expected, actionListBuffer2);
     }
@@ -74,10 +74,10 @@ public class DesignerActionServiceTests
     [Fact]
     public void Add_ComponentDesignerActionListExisting_Success()
     {
-        var service = new SubDesignerActionService(null);
-        var component = new Component();
-        var actionList1 = new CustomDesignerActionList(null);
-        var actionList2 = new CustomDesignerActionList(null);
+        SubDesignerActionService service = new(null);
+        Component component = new();
+        CustomDesignerActionList actionList1 = new(null);
+        CustomDesignerActionList actionList2 = new(null);
         service.Add(component, actionList1);
         service.Add(component, actionList2);
         service.Add(component, (DesignerActionList)null);
@@ -88,11 +88,11 @@ public class DesignerActionServiceTests
         Assert.Equal(new DesignerActionListCollection { actionList1, actionList2 }, service.GetComponentActions(component, ComponentActionsType.Service));
         Assert.Empty(service.GetComponentActions(component, ComponentActionsType.Component));
 
-        var actionListBuffer1 = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer1 = new();
         service.GetComponentDesignerActions(component, actionListBuffer1);
         Assert.Empty(actionListBuffer1);
 
-        var actionListBuffer2 = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer2 = new();
         service.GetComponentServiceActions(component, actionListBuffer2);
         Assert.Equal(new DesignerActionListCollection { actionList1, actionList2 }, actionListBuffer2);
     }
@@ -100,7 +100,7 @@ public class DesignerActionServiceTests
     [Fact]
     public void Add_NullComponent_ThrowsArgumentNullException()
     {
-        var service = new DesignerActionService(null);
+        DesignerActionService service = new(null);
         Assert.Throws<ArgumentNullException>("comp", () => service.Add((IComponent)null, (DesignerActionListCollection)null));
         Assert.Throws<ArgumentNullException>("comp", () => service.Add((IComponent)null, (DesignerActionList)null));
     }
@@ -109,8 +109,8 @@ public class DesignerActionServiceTests
     [MemberData(nameof(Add_ComponentDesignerActionList_TestData))]
     public void Add_ComponentDesignerActionListCollection_Success(DesignerActionList actionList, DesignerActionListCollection expected)
     {
-        var service = new SubDesignerActionService(null);
-        using var component = new Component();
+        SubDesignerActionService service = new(null);
+        using Component component = new();
         service.Add(component, new DesignerActionListCollection { actionList });
         Assert.True(service.Contains(component));
         Assert.Equal(expected, service.GetComponentActions(component));
@@ -118,11 +118,11 @@ public class DesignerActionServiceTests
         Assert.Equal(expected, service.GetComponentActions(component, ComponentActionsType.Service));
         Assert.Empty(service.GetComponentActions(component, ComponentActionsType.Component));
 
-        var actionListBuffer1 = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer1 = new();
         service.GetComponentDesignerActions(component, actionListBuffer1);
         Assert.Empty(actionListBuffer1);
 
-        var actionListBuffer2 = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer2 = new();
         service.GetComponentServiceActions(component, actionListBuffer2);
         Assert.Equal(expected, actionListBuffer2);
     }
@@ -130,10 +130,10 @@ public class DesignerActionServiceTests
     [Fact]
     public void Add_ComponentDesignerActionListCollectionExisting_Success()
     {
-        var service = new SubDesignerActionService(null);
-        using var component = new Component();
-        var actionList1 = new CustomDesignerActionList(null);
-        var actionList2 = new CustomDesignerActionList(null);
+        SubDesignerActionService service = new(null);
+        using Component component = new();
+        CustomDesignerActionList actionList1 = new(null);
+        CustomDesignerActionList actionList2 = new(null);
         service.Add(component, new DesignerActionListCollection { actionList1 });
         service.Add(component, new DesignerActionListCollection { actionList2 });
         service.Add(component, new DesignerActionListCollection { (DesignerActionList)null });
@@ -144,11 +144,11 @@ public class DesignerActionServiceTests
         Assert.Equal(new DesignerActionListCollection { actionList1, actionList2 }, service.GetComponentActions(component, ComponentActionsType.Service));
         Assert.Empty(service.GetComponentActions(component, ComponentActionsType.Component));
 
-        var actionListBuffer1 = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer1 = new();
         service.GetComponentDesignerActions(component, actionListBuffer1);
         Assert.Empty(actionListBuffer1);
 
-        var actionListBuffer2 = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer2 = new();
         service.GetComponentServiceActions(component, actionListBuffer2);
         Assert.Equal(new DesignerActionListCollection { actionList1, actionList2 }, actionListBuffer2);
     }
@@ -156,15 +156,15 @@ public class DesignerActionServiceTests
     [Fact]
     public void Add_NullDesignerActionListCollection_ThrowsArgumentNullException()
     {
-        var service = new DesignerActionService(null);
+        DesignerActionService service = new(null);
         Assert.Throws<ArgumentNullException>("designerActionListCollection", () => service.Add(new Component(), (DesignerActionListCollection)null));
     }
 
     [Fact]
     public void Clear_NotEmpty_Success()
     {
-        var service = new SubDesignerActionService(null);
-        var component = new Component();
+        SubDesignerActionService service = new(null);
+        Component component = new();
         service.Add(component, new CustomDesignerActionList(null));
         Assert.NotEmpty(service.GetComponentActions(component));
         Assert.True(service.Contains(component));
@@ -182,7 +182,7 @@ public class DesignerActionServiceTests
     [Fact]
     public void Clear_Empty_Success()
     {
-        var service = new SubDesignerActionService(null);
+        SubDesignerActionService service = new(null);
         service.Clear();
 
         // Clear again.
@@ -192,10 +192,10 @@ public class DesignerActionServiceTests
     [Fact]
     public void Clear_InvokeWithDesignerActionListsChanged_CallsHandler()
     {
-        var service = new SubDesignerActionService(null);
-        using var component1 = new Component();
-        using var component2 = new Component();
-        var actionList = new CustomDesignerActionList(null);
+        SubDesignerActionService service = new(null);
+        using Component component1 = new();
+        using Component component2 = new();
+        CustomDesignerActionList actionList = new(null);
         service.Add(component1, actionList);
         service.Add(component2, new DesignerActionListCollection());
 
@@ -228,14 +228,14 @@ public class DesignerActionServiceTests
     [Fact]
     public void Contains_NoSuchComponentEmpty_ReturnsFalse()
     {
-        var service = new DesignerActionService(null);
+        DesignerActionService service = new(null);
         Assert.False(service.Contains(new Component()));
     }
 
     [Fact]
     public void Contains_NoSuchComponentNotEmpty_ReturnsFalse()
     {
-        var service = new DesignerActionService(null);
+        DesignerActionService service = new(null);
         service.Add(new Component(), new DesignerActionListCollection());
         Assert.False(service.Contains(new Component()));
     }
@@ -243,21 +243,21 @@ public class DesignerActionServiceTests
     [Fact]
     public void Contains_NullComponent_ThrowsArgumentNullException()
     {
-        var service = new DesignerActionService(null);
+        DesignerActionService service = new(null);
         Assert.Throws<ArgumentNullException>("comp", () => service.Contains(null));
     }
 
     [Fact]
     public void Dispose_Invoke_Success()
     {
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.AddService(typeof(DesignerActionService), It.IsAny<DesignerActionService>()));
         mockDesignerHost
             .Setup(h => h.RemoveService(typeof(DesignerActionService)));
-        var mockComponentChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
-        var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IComponentChangeService> mockComponentChangeService = new(MockBehavior.Strict);
+        Mock<ISelectionService> mockSelectionService = new(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns(mockDesignerHost.Object);
@@ -267,7 +267,7 @@ public class DesignerActionServiceTests
         mockServiceProvider
             .Setup(p => p.GetService(typeof(ISelectionService)))
             .Returns(mockSelectionService.Object);
-        var service = new DesignerActionService(mockServiceProvider.Object);
+        DesignerActionService service = new(mockServiceProvider.Object);
         service.Dispose();
         mockDesignerHost.Verify(h => h.RemoveService(typeof(DesignerActionService)), Times.Once());
 
@@ -281,14 +281,14 @@ public class DesignerActionServiceTests
     [InlineData(false, 0)]
     public void Dispose_InvokeDisposing_Success(bool disposing, int expectedRemoveCallCount)
     {
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.AddService(typeof(DesignerActionService), It.IsAny<DesignerActionService>()));
         mockDesignerHost
             .Setup(h => h.RemoveService(typeof(DesignerActionService)));
-        var mockComponentChangeService = new Mock<IComponentChangeService>(MockBehavior.Strict);
-        var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IComponentChangeService> mockComponentChangeService = new(MockBehavior.Strict);
+        Mock<ISelectionService> mockSelectionService = new(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns(mockDesignerHost.Object);
@@ -298,7 +298,7 @@ public class DesignerActionServiceTests
         mockServiceProvider
             .Setup(p => p.GetService(typeof(ISelectionService)))
             .Returns(mockSelectionService.Object);
-        var service = new SubDesignerActionService(mockServiceProvider.Object);
+        SubDesignerActionService service = new(mockServiceProvider.Object);
         service.Dispose(disposing);
         mockDesignerHost.Verify(h => h.RemoveService(typeof(DesignerActionService)), Times.Exactly(expectedRemoveCallCount));
 
@@ -311,7 +311,7 @@ public class DesignerActionServiceTests
     {
         yield return new object[] { null };
 
-        var nullMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> nullMockServiceProvider = new(MockBehavior.Strict);
         nullMockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns((IDesignerHost)null);
@@ -323,7 +323,7 @@ public class DesignerActionServiceTests
             .Returns((IComponentChangeService)null);
         yield return new object[] { nullMockServiceProvider.Object };
 
-        var invalidMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> invalidMockServiceProvider = new(MockBehavior.Strict);
         invalidMockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns(new object());
@@ -340,7 +340,7 @@ public class DesignerActionServiceTests
     [MemberData(nameof(Dispose_InvalidServiceProvider_TestData))]
     public void Dispose_InvalidServiceProvider_Success(IServiceProvider serviceProvider)
     {
-        var service = new DesignerActionService(serviceProvider);
+        DesignerActionService service = new(serviceProvider);
         service.Dispose();
 
         // Dispose again.
@@ -352,9 +352,9 @@ public class DesignerActionServiceTests
     [InvalidEnumData<ComponentActionsType>]
     public void GetComponentActions_NoSuchComponentNotEmpty_ReturnsEmpty(ComponentActionsType type)
     {
-        var service = new SubDesignerActionService(null);
-        using var component = new Component();
-        var actionList = new CustomDesignerActionList(null);
+        SubDesignerActionService service = new(null);
+        using Component component = new();
+        CustomDesignerActionList actionList = new(null);
         service.Add(component, actionList);
         Assert.Empty(service.GetComponentActions(new Component(), type));
         Assert.Empty(service.GetComponentActions(new Component(), type));
@@ -365,7 +365,7 @@ public class DesignerActionServiceTests
     [InvalidEnumData<ComponentActionsType>]
     public void GetComponentActions_NoSuchComponentEmpty_ReturnsEmpty(ComponentActionsType type)
     {
-        var service = new SubDesignerActionService(null);
+        SubDesignerActionService service = new(null);
         Assert.Empty(service.GetComponentActions(new Component(), type));
     }
 
@@ -373,9 +373,9 @@ public class DesignerActionServiceTests
     [InvalidEnumData<ComponentActionsType>]
     public void GetComponentActions_NoSuchAction_ReturnsEmpty(ComponentActionsType type)
     {
-        var service = new SubDesignerActionService(null);
-        using var component = new Component();
-        var actionList = new CustomDesignerActionList(null);
+        SubDesignerActionService service = new(null);
+        using Component component = new();
+        CustomDesignerActionList actionList = new(null);
         service.Add(component, actionList);
         Assert.Empty(service.GetComponentActions(component, type));
     }
@@ -383,7 +383,7 @@ public class DesignerActionServiceTests
     [Fact]
     public void GetComponentActions_NullComponent_ThrowsArgumentNullException()
     {
-        var service = new DesignerActionService(null);
+        DesignerActionService service = new(null);
         Assert.Throws<ArgumentNullException>("component", () => service.GetComponentActions(null));
         Assert.Throws<ArgumentNullException>("component", () => service.GetComponentActions(null, ComponentActionsType.All));
     }
@@ -392,64 +392,64 @@ public class DesignerActionServiceTests
     {
         yield return new object[] { null, new DesignerActionListCollection() };
 
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         yield return new object[] { mockSite.Object, new DesignerActionListCollection() };
 
-        var nullMockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> nullMockSite = new(MockBehavior.Strict);
         nullMockSite
             .As<IServiceContainer>()
             .Setup(s => s.GetService(typeof(DesignerCommandSet)))
             .Returns(null);
         yield return new object[] { nullMockSite.Object, new DesignerActionListCollection() };
 
-        var invalidMockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> invalidMockSite = new(MockBehavior.Strict);
         invalidMockSite
             .As<IServiceContainer>()
             .Setup(s => s.GetService(typeof(DesignerCommandSet)))
             .Returns(new object());
         yield return new object[] { invalidMockSite.Object, new DesignerActionListCollection() };
 
-        var nullMockDesignerCommandSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        Mock<DesignerCommandSet> nullMockDesignerCommandSet = new(MockBehavior.Strict);
         nullMockDesignerCommandSet
             .Setup(c => c.GetCommands("ActionLists"))
             .Returns((ICollection)null);
         nullMockDesignerCommandSet
             .Setup(c => c.GetCommands("Verbs"))
             .Returns((ICollection)null);
-        var nullCommandSetMockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> nullCommandSetMockSite = new(MockBehavior.Strict);
         nullCommandSetMockSite
             .As<IServiceContainer>()
             .Setup(s => s.GetService(typeof(DesignerCommandSet)))
             .Returns(nullMockDesignerCommandSet.Object);
         yield return new object[] { nullCommandSetMockSite.Object, new DesignerActionListCollection() };
 
-        var emptyMockDesignerCommandSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        Mock<DesignerCommandSet> emptyMockDesignerCommandSet = new(MockBehavior.Strict);
         emptyMockDesignerCommandSet
             .Setup(c => c.GetCommands("ActionLists"))
             .Returns(new DesignerActionListCollection());
         emptyMockDesignerCommandSet
             .Setup(c => c.GetCommands("Verbs"))
             .Returns(new DesignerVerbCollection());
-        var emptyCommandSetMockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> emptyCommandSetMockSite = new(MockBehavior.Strict);
         emptyCommandSetMockSite
             .As<IServiceContainer>()
             .Setup(s => s.GetService(typeof(DesignerCommandSet)))
             .Returns(emptyMockDesignerCommandSet.Object);
         yield return new object[] { emptyCommandSetMockSite.Object, new DesignerActionListCollection() };
 
-        var verb = new DesignerVerb(null, null);
-        var verbs = new DesignerVerbCollection { null, verb };
-        var actionList = new CustomDesignerActionList(null);
-        var actionLists = new DesignerActionListCollection { null, new DesignerActionList(null), new NullCustomDesignerActionList(null), actionList };
+        DesignerVerb verb = new(null, null);
+        DesignerVerbCollection verbs = new() { null, verb };
+        CustomDesignerActionList actionList = new(null);
+        DesignerActionListCollection actionLists = new() { null, new DesignerActionList(null), new NullCustomDesignerActionList(null), actionList };
 
-        var actionListsMockDesignerCommandSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        Mock<DesignerCommandSet> actionListsMockDesignerCommandSet = new(MockBehavior.Strict);
         actionListsMockDesignerCommandSet
             .Setup(c => c.GetCommands("ActionLists"))
             .Returns(actionLists);
         actionListsMockDesignerCommandSet
             .Setup(c => c.GetCommands("Verbs"))
             .Returns(verbs);
-        var actionListsCommandSetMockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> actionListsCommandSetMockSite = new(MockBehavior.Strict);
         actionListsCommandSetMockSite
             .As<IServiceContainer>()
             .Setup(s => s.GetService(typeof(DesignerCommandSet)))
@@ -461,13 +461,13 @@ public class DesignerActionServiceTests
     [MemberData(nameof(GetComponentDesignerActions_TestData))]
     public void GetComponentDesignerActions_Invoke_ReturnsExpected(ISite site, DesignerActionListCollection expected)
     {
-        var service = new SubDesignerActionService(null);
-        var component = new Component
+        SubDesignerActionService service = new(null);
+        Component component = new()
         {
             Site = site
         };
 
-        var actionListBuffer = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer = new();
         service.GetComponentDesignerActions(component, actionListBuffer);
         Assert.Equal(expected, actionListBuffer);
     }
@@ -475,27 +475,27 @@ public class DesignerActionServiceTests
     [Fact]
     public void GetComponentDesignerActions_InvokeVerbs_ReturnsExpected()
     {
-        var verb = new DesignerVerb(null, null);
-        var verbs = new DesignerVerbCollection { null, new DesignerVerb(null, null) { Enabled = false }, new DesignerVerb(null, null) { Visible = false }, verb };
-        var verbsMockDesignerCommandSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        DesignerVerb verb = new(null, null);
+        DesignerVerbCollection verbs = new() { null, new DesignerVerb(null, null) { Enabled = false }, new DesignerVerb(null, null) { Visible = false }, verb };
+        Mock<DesignerCommandSet> verbsMockDesignerCommandSet = new(MockBehavior.Strict);
         verbsMockDesignerCommandSet
             .Setup(c => c.GetCommands("ActionLists"))
             .Returns(new DesignerActionListCollection());
         verbsMockDesignerCommandSet
             .Setup(c => c.GetCommands("Verbs"))
             .Returns(verbs);
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .As<IServiceContainer>()
             .Setup(s => s.GetService(typeof(DesignerCommandSet)))
             .Returns(verbsMockDesignerCommandSet.Object);
-        var service = new SubDesignerActionService(null);
-        var component = new Component
+        SubDesignerActionService service = new(null);
+        Component component = new()
         {
             Site = mockSite.Object
         };
 
-        var actionListBuffer = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer = new();
         service.GetComponentDesignerActions(component, actionListBuffer);
         DesignerActionList actionList = Assert.IsAssignableFrom<DesignerActionList>(Assert.Single(actionListBuffer));
         Assert.False(actionList.AutoShow);
@@ -519,27 +519,27 @@ public class DesignerActionServiceTests
     [Fact]
     public void GetComponentDesignerActionsVerbs_GetSortedActionItems_ReturnsExpected()
     {
-        var verb = new DesignerVerb(null, null);
-        var verbs = new DesignerVerbCollection { null, new DesignerVerb(null, null) { Enabled = false }, new DesignerVerb(null, null) { Visible = false }, verb };
-        var verbsMockDesignerCommandSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        DesignerVerb verb = new(null, null);
+        DesignerVerbCollection verbs = new() { null, new DesignerVerb(null, null) { Enabled = false }, new DesignerVerb(null, null) { Visible = false }, verb };
+        Mock<DesignerCommandSet> verbsMockDesignerCommandSet = new(MockBehavior.Strict);
         verbsMockDesignerCommandSet
             .Setup(c => c.GetCommands("ActionLists"))
             .Returns(new DesignerActionListCollection());
         verbsMockDesignerCommandSet
             .Setup(c => c.GetCommands("Verbs"))
             .Returns(verbs);
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .As<IServiceContainer>()
             .Setup(s => s.GetService(typeof(DesignerCommandSet)))
             .Returns(verbsMockDesignerCommandSet.Object);
-        var service = new SubDesignerActionService(null);
-        var component = new Component
+        SubDesignerActionService service = new(null);
+        Component component = new()
         {
             Site = mockSite.Object
         };
 
-        var actionListBuffer = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer = new();
         service.GetComponentDesignerActions(component, actionListBuffer);
         DesignerActionList actionList = Assert.IsAssignableFrom<DesignerActionList>(Assert.Single(actionListBuffer));
         Assert.Single(actionList.GetSortedActionItems());
@@ -576,26 +576,26 @@ public class DesignerActionServiceTests
         };
         verb = new DesignerVerb("text", handler);
 
-        var verbs = new DesignerVerbCollection { null, new DesignerVerb(null, null) { Enabled = false }, new DesignerVerb(null, null) { Visible = false }, verb };
-        var verbsMockDesignerCommandSet = new Mock<DesignerCommandSet>(MockBehavior.Strict);
+        DesignerVerbCollection verbs = new() { null, new DesignerVerb(null, null) { Enabled = false }, new DesignerVerb(null, null) { Visible = false }, verb };
+        Mock<DesignerCommandSet> verbsMockDesignerCommandSet = new(MockBehavior.Strict);
         verbsMockDesignerCommandSet
             .Setup(c => c.GetCommands("ActionLists"))
             .Returns(new DesignerActionListCollection());
         verbsMockDesignerCommandSet
             .Setup(c => c.GetCommands("Verbs"))
             .Returns(verbs);
-        var mockSite = new Mock<ISite>(MockBehavior.Strict);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .As<IServiceContainer>()
             .Setup(s => s.GetService(typeof(DesignerCommandSet)))
             .Returns(verbsMockDesignerCommandSet.Object);
-        var service = new SubDesignerActionService(null);
-        var component = new Component
+        SubDesignerActionService service = new(null);
+        Component component = new()
         {
             Site = mockSite.Object
         };
 
-        var actionListBuffer = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer = new();
         service.GetComponentDesignerActions(component, actionListBuffer);
         DesignerActionList actionList = Assert.IsAssignableFrom<DesignerActionList>(Assert.Single(actionListBuffer));
         DesignerActionItemCollection verbActionActionItems = actionList.GetSortedActionItems();
@@ -609,25 +609,25 @@ public class DesignerActionServiceTests
     [Fact]
     public void GetComponentDesignerActions_NullComponent_ThrowsArgumentNullException()
     {
-        var service = new SubDesignerActionService(null);
+        SubDesignerActionService service = new(null);
         Assert.Throws<ArgumentNullException>("component", () => service.GetComponentDesignerActions(null, null));
     }
 
     [Fact]
     public void GetComponentDesignerActions_NullActionLists_ThrowsArgumentNullException()
     {
-        var service = new SubDesignerActionService(null);
+        SubDesignerActionService service = new(null);
         Assert.Throws<ArgumentNullException>("actionLists", () => service.GetComponentDesignerActions(new Component(), null));
     }
 
     [Fact]
     public void GetComponentServiceActions_NoSuchComponentNotEmpty_ReturnsEmpty()
     {
-        var service = new SubDesignerActionService(null);
-        var component = new Component();
-        var actionList = new CustomDesignerActionList(null);
+        SubDesignerActionService service = new(null);
+        Component component = new();
+        CustomDesignerActionList actionList = new(null);
         service.Add(component, actionList);
-        var actionListBuffer = new DesignerActionListCollection();
+        DesignerActionListCollection actionListBuffer = new();
         service.GetComponentServiceActions(new Component(), actionListBuffer);
         Assert.Empty(actionListBuffer);
     }
@@ -635,8 +635,8 @@ public class DesignerActionServiceTests
     [Fact]
     public void GetComponentServiceActions_NoSuchComponentEmpty_ReturnsEmpty()
     {
-        var service = new SubDesignerActionService(null);
-        var actionListBuffer = new DesignerActionListCollection();
+        SubDesignerActionService service = new(null);
+        DesignerActionListCollection actionListBuffer = new();
         service.GetComponentServiceActions(new Component(), actionListBuffer);
         Assert.Empty(actionListBuffer);
     }
@@ -644,22 +644,22 @@ public class DesignerActionServiceTests
     [Fact]
     public void GetComponentServiceActions_NullComponent_ThrowsArgumentNullException()
     {
-        var service = new SubDesignerActionService(null);
+        SubDesignerActionService service = new(null);
         Assert.Throws<ArgumentNullException>("component", () => service.GetComponentServiceActions(null, null));
     }
 
     [Fact]
     public void GetComponentServiceActions_NullActionLists_ThrowsArgumentNullException()
     {
-        var service = new SubDesignerActionService(null);
+        SubDesignerActionService service = new(null);
         Assert.Throws<ArgumentNullException>("actionLists", () => service.GetComponentServiceActions(new Component(), null));
     }
 
     [Fact]
     public void Remove_InvokeComponent_Success()
     {
-        var service = new DesignerActionService(null);
-        using var component = new Component();
+        DesignerActionService service = new(null);
+        using Component component = new();
         service.Add(component, new CustomDesignerActionList(null));
         Assert.NotEmpty(service.GetComponentActions(component));
         Assert.True(service.Contains(component));
@@ -677,10 +677,10 @@ public class DesignerActionServiceTests
     [Fact]
     public void Remove_InvokeComponentWithDesignerActionListsChanged_CallsHandler()
     {
-        var service = new DesignerActionService(null);
-        using var component1 = new Component();
-        using var component2 = new Component();
-        var actionList = new CustomDesignerActionList(null);
+        DesignerActionService service = new(null);
+        using Component component1 = new();
+        using Component component2 = new();
+        CustomDesignerActionList actionList = new(null);
         service.Add(component1, actionList);
         service.Add(component2, new DesignerActionListCollection());
 
@@ -714,7 +714,7 @@ public class DesignerActionServiceTests
     [Fact]
     public void Remove_NoSuchComponentNotEmpty_Nop()
     {
-        var service = new DesignerActionService(null);
+        DesignerActionService service = new(null);
         service.Add(new Component(), new DesignerActionListCollection());
         service.Remove(new Component());
     }
@@ -722,22 +722,22 @@ public class DesignerActionServiceTests
     [Fact]
     public void Remove_NoSuchComponentEmpty_Nop()
     {
-        var service = new DesignerActionService(null);
+        DesignerActionService service = new(null);
         service.Remove(new Component());
     }
 
     [Fact]
     public void Remove_InvokeDesignerActionList_Success()
     {
-        var service = new DesignerActionService(null);
-        using var component1 = new Component();
-        using var component2 = new Component();
-        using var component3 = new Component();
-        using var component4 = new Component();
-        var actionList1 = new CustomDesignerActionList(null);
-        var actionList2 = new CustomDesignerActionList(null);
-        var actionList3 = new CustomDesignerActionList(null);
-        var actionList4 = new CustomDesignerActionList(null);
+        DesignerActionService service = new(null);
+        using Component component1 = new();
+        using Component component2 = new();
+        using Component component3 = new();
+        using Component component4 = new();
+        CustomDesignerActionList actionList1 = new(null);
+        CustomDesignerActionList actionList2 = new(null);
+        CustomDesignerActionList actionList3 = new(null);
+        CustomDesignerActionList actionList4 = new(null);
         service.Add(component1, actionList1);
         service.Add(component2, actionList2);
         service.Add(component2, actionList3);
@@ -841,8 +841,8 @@ public class DesignerActionServiceTests
     [Fact]
     public void Remove_NoSuchActionListNotEmpty_Nop()
     {
-        var service = new DesignerActionService(null);
-        var component = new Component();
+        DesignerActionService service = new(null);
+        Component component = new();
         service.Add(component, new CustomDesignerActionList(null));
         service.Remove(new CustomDesignerActionList(null));
         Assert.Single(service.GetComponentActions(component));
@@ -851,18 +851,18 @@ public class DesignerActionServiceTests
     [Fact]
     public void Remove_NoSuchActionListEmpty_Nop()
     {
-        var service = new DesignerActionService(null);
+        DesignerActionService service = new(null);
         service.Remove(new CustomDesignerActionList(null));
     }
 
     [Fact]
     public void Remove_InvokeDesignerActionListWithDesignerActionListsChanged_CallsHandler()
     {
-        var service = new DesignerActionService(null);
-        using var component1 = new Component();
-        using var component2 = new Component();
-        var actionList1 = new CustomDesignerActionList(null);
-        var actionList2 = new CustomDesignerActionList(null);
+        DesignerActionService service = new(null);
+        using Component component1 = new();
+        using Component component2 = new();
+        CustomDesignerActionList actionList1 = new(null);
+        CustomDesignerActionList actionList2 = new(null);
         service.Add(component1, actionList1);
         service.Add(component2, actionList2);
 
@@ -896,15 +896,15 @@ public class DesignerActionServiceTests
     [Fact]
     public void Remove_InvokeComponentDesignerActionList_Success()
     {
-        var service = new DesignerActionService(null);
-        using var component1 = new Component();
-        using var component2 = new Component();
-        using var component3 = new Component();
-        using var component4 = new Component();
-        var actionList1 = new CustomDesignerActionList(null);
-        var actionList2 = new CustomDesignerActionList(null);
-        var actionList3 = new CustomDesignerActionList(null);
-        var actionList4 = new CustomDesignerActionList(null);
+        DesignerActionService service = new(null);
+        using Component component1 = new();
+        using Component component2 = new();
+        using Component component3 = new();
+        using Component component4 = new();
+        CustomDesignerActionList actionList1 = new(null);
+        CustomDesignerActionList actionList2 = new(null);
+        CustomDesignerActionList actionList3 = new(null);
+        CustomDesignerActionList actionList4 = new(null);
         service.Add(component1, actionList1);
         service.Add(component2, actionList2);
         service.Add(component2, actionList3);
@@ -970,8 +970,8 @@ public class DesignerActionServiceTests
     [Fact]
     public void Remove_NoSuchComponentActionListNotEmpty_Nop()
     {
-        var service = new DesignerActionService(null);
-        using var component = new Component();
+        DesignerActionService service = new(null);
+        using Component component = new();
         service.Add(component, new CustomDesignerActionList(null));
         service.Remove(new Component(), new CustomDesignerActionList(null));
         service.Remove(component, new CustomDesignerActionList(null));
@@ -981,18 +981,18 @@ public class DesignerActionServiceTests
     [Fact]
     public void Remove_NoSuchComponentActionListEmpty_Nop()
     {
-        var service = new DesignerActionService(null);
+        DesignerActionService service = new(null);
         service.Remove(new Component(), new CustomDesignerActionList(null));
     }
 
     [Fact]
     public void Remove_InvokeComponentDesignerActionListWithDesignerActionListsChanged_CallsHandler()
     {
-        var service = new DesignerActionService(null);
-        using var component1 = new Component();
-        using var component2 = new Component();
-        var actionList1 = new CustomDesignerActionList(null);
-        var actionList2 = new CustomDesignerActionList(null);
+        DesignerActionService service = new(null);
+        using Component component1 = new();
+        using Component component2 = new();
+        CustomDesignerActionList actionList1 = new(null);
+        CustomDesignerActionList actionList2 = new(null);
         service.Add(component1, actionList1);
         service.Add(component2, actionList2);
 
@@ -1026,7 +1026,7 @@ public class DesignerActionServiceTests
     [Fact]
     public void Remove_NullComponent_ThrowsArgumentNullException()
     {
-        var service = new DesignerActionService(null);
+        DesignerActionService service = new(null);
         Assert.Throws<ArgumentNullException>("comp", () => service.Remove((IComponent)null));
         Assert.Throws<ArgumentNullException>("comp", () => service.Remove((IComponent)null, null));
     }
@@ -1034,7 +1034,7 @@ public class DesignerActionServiceTests
     [Fact]
     public void Remove_NullActionList_ThrowsArgumentNullException()
     {
-        var service = new DesignerActionService(null);
+        DesignerActionService service = new(null);
         Assert.Throws<ArgumentNullException>("actionList", () => service.Remove((DesignerActionList)null));
         Assert.Throws<ArgumentNullException>("actionList", () => service.Remove(new Component(), (DesignerActionList)null));
     }

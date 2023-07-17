@@ -25,7 +25,7 @@ public class ArrayEditorTests
     [InlineData(typeof(ClassWithStaticItems), null)]
     public void ArrayEditor_Ctor_Type(Type type, Type expectedItemType)
     {
-        var editor = new SubArrayEditor(type);
+        SubArrayEditor editor = new(type);
         Assert.Equal(expectedItemType, editor.CollectionItemType);
         Assert.Same(editor.CollectionItemType, editor.CollectionItemType);
         Assert.Equal(type, editor.CollectionType);
@@ -38,7 +38,7 @@ public class ArrayEditorTests
     [Fact]
     public void ArrayEditor_Ctor_NullType()
     {
-        var editor = new SubArrayEditor(null);
+        SubArrayEditor editor = new(null);
         Assert.Null(editor.CollectionItemType);
         Assert.Null(editor.CollectionType);
         Assert.Null(editor.Context);
@@ -59,7 +59,7 @@ public class ArrayEditorTests
     [MemberData(nameof(CanRemoveInstance_TestData))]
     public void ArrayEditor_CanRemoveInstance_Invoke_ReturnsExpected(object value)
     {
-        var editor = new SubArrayEditor(null);
+        SubArrayEditor editor = new(null);
         Assert.True(editor.CanRemoveInstance(value));
     }
 
@@ -76,16 +76,16 @@ public class ArrayEditorTests
     [MemberData(nameof(CanRemoveInstance_InheritanceAttribute_TestData))]
     public void ArrayEditor_CanRemoveInstance_InheritanceAttribute_ReturnsExpected(InheritanceAttribute attribute, bool expected)
     {
-        using var component = new Component();
+        using Component component = new();
         TypeDescriptor.AddAttributes(component, attribute);
-        var editor = new SubArrayEditor(null);
+        SubArrayEditor editor = new(null);
         Assert.Equal(expected, editor.CanRemoveInstance(component));
     }
 
     [Fact]
     public void ArrayEditor_CanSelectMultipleInstances_Invoke_ReturnsFalse()
     {
-        var editor = new SubArrayEditor(null);
+        SubArrayEditor editor = new(null);
         Assert.True(editor.CanSelectMultipleInstances());
     }
 
@@ -120,14 +120,14 @@ public class ArrayEditorTests
     [MemberData(nameof(GetDisplayText_TestData))]
     public void ArrayEditor_GetDisplayText_Invoke_ReturnsExpected(Type type, object value, string expected)
     {
-        var editor = new SubArrayEditor(type);
+        SubArrayEditor editor = new(type);
         Assert.Equal(expected, editor.GetDisplayText(value));
     }
 
     [Fact]
     public void ArrayEditor_GetDisplayText_ValueDoesntMatchCollectionType_ThrowsTargetException()
     {
-        var editor = new SubArrayEditor(typeof(ClassWithStringDefaultProperty));
+        SubArrayEditor editor = new(typeof(ClassWithStringDefaultProperty));
         TargetInvocationException ex = Assert.Throws<TargetInvocationException>(() => editor.GetDisplayText(new ClassWithNonStringDefaultProperty()));
         Assert.IsType<TargetException>(ex.InnerException);
     }
@@ -136,7 +136,7 @@ public class ArrayEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void ArrayEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
     {
-        var editor = new ArrayEditor(null);
+        ArrayEditor editor = new(null);
         Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
     }
 
@@ -152,7 +152,7 @@ public class ArrayEditorTests
     [MemberData(nameof(GetItems_TestData))]
     public void ArrayEditor_GetItems_Invoke_ReturnsExpected(object editValue, object[] expected)
     {
-        var editor = new SubArrayEditor(null);
+        SubArrayEditor editor = new(null);
         object[] items = editor.GetItems(editValue);
         Assert.Equal(expected, items);
         Assert.IsType(expected.GetType(), items);
@@ -163,7 +163,7 @@ public class ArrayEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void ArrayEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
     {
-        var editor = new ArrayEditor(null);
+        ArrayEditor editor = new(null);
         Assert.False(editor.GetPaintValueSupported(context));
     }
 
@@ -180,7 +180,7 @@ public class ArrayEditorTests
     [MemberData(nameof(SetItems_Array_TestData))]
     public void ArrayEditor_SetItems_InvokeArray_ReturnsCopy(object editValue, object[] value, int[] expected)
     {
-        var editor = new SubArrayEditor(typeof(int[]));
+        SubArrayEditor editor = new(typeof(int[]));
         int[] result = Assert.IsType<int[]>(editor.SetItems(editValue, value));
         Assert.NotSame(value, expected);
         Assert.Equal(expected, result);
@@ -188,7 +188,7 @@ public class ArrayEditorTests
 
     public static IEnumerable<object[]> SetItems_NonArray_TestData()
     {
-        var editValue = new object();
+        object editValue = new();
         yield return new object[] { editValue, null, editValue };
         yield return new object[] { editValue, Array.Empty<object>(), editValue };
         yield return new object[] { Array.Empty<object>(), null, null };
@@ -199,7 +199,7 @@ public class ArrayEditorTests
     [MemberData(nameof(SetItems_NonArray_TestData))]
     public void ArrayEditor_SetItems_InvokeNonArrayValue_ReturnsExpected(object editValue, object[] value, object expected)
     {
-        var editor = new SubArrayEditor(typeof(int[]));
+        SubArrayEditor editor = new(typeof(int[]));
         Assert.Same(expected, editor.SetItems(editValue, value));
     }
 
@@ -208,7 +208,7 @@ public class ArrayEditorTests
     [InlineData(null)]
     public void ArrayEditor_SetItems_NullCollectionItemType_ThrowsArgumentNullException(Type type)
     {
-        var editor = new SubArrayEditor(type);
+        SubArrayEditor editor = new(type);
         Assert.Null(editor.CollectionItemType);
         Assert.Throws<ArgumentNullException>("elementType", () => editor.SetItems(null, Array.Empty<object>()));
         Assert.Throws<ArgumentNullException>("elementType", () => editor.SetItems(Array.Empty<object>(), Array.Empty<object>()));

@@ -13,14 +13,14 @@ public class BitmapEditorTests
     [Fact]
     public void BitmapEditor_Ctor_Default()
     {
-        var editor = new BitmapEditor();
+        BitmapEditor editor = new();
         Assert.False(editor.IsDropDownResizable);
     }
 
     [Fact]
     public void BitmapEditor_BitmapExtensions_Get_ReturnsExpected()
     {
-        var editor = new SubBitmapEditor();
+        SubBitmapEditor editor = new();
         List<string> extensions = SubBitmapEditor.BitmapExtensions;
         Assert.Equal(new string[] { "bmp", "gif", "jpg", "jpeg", "png", "ico" }, extensions);
         Assert.Same(extensions, SubBitmapEditor.BitmapExtensions);
@@ -30,14 +30,14 @@ public class BitmapEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void BitmapEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
     {
-        var editor = new BitmapEditor();
+        BitmapEditor editor = new();
         Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
     }
 
     [Fact]
     public void BitmapEditor_GetExtensions_InvokeDefault_ReturnsExpected()
     {
-        var editor = new SubBitmapEditor();
+        SubBitmapEditor editor = new();
         string[] extensions = editor.GetExtensions();
         Assert.Equal(new string[] { "bmp", "gif", "jpg", "jpeg", "png", "ico" }, extensions);
         Assert.NotSame(extensions, editor.GetExtensions());
@@ -46,7 +46,7 @@ public class BitmapEditorTests
     [Fact]
     public void BitmapEditor_GetExtensions_InvokeCustomExtenders_ReturnsExpected()
     {
-        var editor = new CustomGetImageExtendersEditor();
+        CustomGetImageExtendersEditor editor = new();
         string[] extensions = editor.GetExtensions();
         Assert.Equal(new string[] { "bmp", "gif", "jpg", "jpeg", "png", "ico" }, extensions);
         Assert.NotSame(extensions, editor.GetExtensions());
@@ -55,7 +55,7 @@ public class BitmapEditorTests
     [Fact]
     public void BitmapEditor_GetFileDialogDescription_Invoke_ReturnsExpected()
     {
-        var editor = new SubBitmapEditor();
+        SubBitmapEditor editor = new();
         Assert.Equal("Bitmap files", editor.GetFileDialogDescription());
     }
 
@@ -63,23 +63,23 @@ public class BitmapEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void BitmapEditor_GetPaintValueSupported_Invoke_ReturnsTrue(ITypeDescriptorContext context)
     {
-        var editor = new BitmapEditor();
+        BitmapEditor editor = new();
         Assert.True(editor.GetPaintValueSupported(context));
     }
 
     [Fact]
     public void BitmapEditor_LoadFromStream_BitmapStream_ReturnsExpected()
     {
-        var editor = new SubBitmapEditor();
+        SubBitmapEditor editor = new();
         using (MemoryStream stream = new MemoryStream())
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             image.Save(stream, ImageFormat.Bmp);
             stream.Position = 0;
             Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
             Assert.Equal(new Size(10, 10), result.Size);
 
-            using var resultStream = new MemoryStream();
+            using MemoryStream resultStream = new();
             result.Save(resultStream, ImageFormat.Bmp);
             Assert.Equal(stream.Length, resultStream.Length);
         }
@@ -88,7 +88,7 @@ public class BitmapEditorTests
     [Fact]
     public void BitmapEditor_LoadFromStream_MetafileStream_ReturnsExpected()
     {
-        var editor = new SubBitmapEditor();
+        SubBitmapEditor editor = new();
         using (Stream stream = File.OpenRead("Resources/telescope_01.wmf"))
         {
             Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
@@ -99,7 +99,7 @@ public class BitmapEditorTests
     [Fact]
     public void BitmapEditor_LoadFromStream_NullStream_ThrowsArgumentNullException()
     {
-        var editor = new SubBitmapEditor();
+        SubBitmapEditor editor = new();
         Assert.Throws<ArgumentNullException>("stream", () => editor.LoadFromStream(null));
     }
 
