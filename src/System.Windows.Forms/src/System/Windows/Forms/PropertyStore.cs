@@ -21,22 +21,14 @@ internal partial class PropertyStore
     ///  This will set value to zero and return false if the
     ///  list does not contain the given key.
     /// </summary>
-    public bool ContainsInteger(int key)
-    {
-        GetInteger(key, out bool found);
-        return found;
-    }
+    public bool ContainsInteger(int key) => IntegerEntryExists(key, out _, out _);
 
     /// <summary>
     ///  Retrieves an integer value from our property list.
     ///  This will set value to zero and return false if the
     ///  list does not contain the given key.
     /// </summary>
-    public bool ContainsObject(int key)
-    {
-        GetObject(key, out bool found);
-        return found;
-    }
+    public bool ContainsObject(int key) => ObjectEntryExists(key, out _, out _);
 
     /// <summary>
     ///  Creates a new key for this property store. This is NOT
@@ -84,22 +76,14 @@ internal partial class PropertyStore
     /// </summary>
     public int GetInteger(int key, out bool found)
     {
-        short keyIndex = SplitKey(key, out short element);
-        if (!LocateIntegerEntry(keyIndex, out int index))
-        {
-            found = false;
-            return default;
-        }
-
-        // We have found the relevant entry. See if
-        // the bitmask indicates the value is used.
-        if (((1 << element) & _intEntries![index].Mask) == 0)
+        if (_intEntries is null || !IntegerEntryExists(key, out int index, out short element))
         {
             found = false;
             return default;
         }
 
         found = true;
+
         switch (element)
         {
             case 0:
@@ -114,6 +98,18 @@ internal partial class PropertyStore
                 Debug.Fail("Invalid element obtained from LocateIntegerEntry");
                 return default;
         }
+    }
+
+    private bool IntegerEntryExists(int key, out int index, out short element)
+    {
+        short keyIndex = SplitKey(key, out element);
+        if (!LocateIntegerEntry(keyIndex, out index))
+        {
+            return false;
+        }
+
+        // Return true if the bitmask indicates the value is used, false otherwise.
+        return ((1 << element) & _intEntries![index].Mask) != 0;
     }
 
     /// <summary>
@@ -143,6 +139,18 @@ internal partial class PropertyStore
         return found && entry is not null;
     }
 
+    private bool ObjectEntryExists(int key, out int index, out short element)
+    {
+        short keyIndex = SplitKey(key, out element);
+        if (!LocateObjectEntry(keyIndex, out index))
+        {
+            return false;
+        }
+
+        // Return true if the bitmask indicates the value is used, false otherwise.
+        return ((1 << element) & _objEntries![index].Mask) != 0;
+    }
+
     /// <summary>
     ///  Retrieves an object value from our property list.
     ///  This will set value to null and return false if the
@@ -150,22 +158,14 @@ internal partial class PropertyStore
     /// </summary>
     public object? GetObject(int key, out bool found)
     {
-        short keyIndex = SplitKey(key, out short element);
-        if (!LocateObjectEntry(keyIndex, out int index))
-        {
-            found = false;
-            return null;
-        }
-
-        // We have found the relevant entry. See if
-        // the bitmask indicates the value is used.
-        if (((1 << element) & _objEntries![index].Mask) == 0)
+        if (_objEntries is null || !ObjectEntryExists(key, out int index, out short element))
         {
             found = false;
             return null;
         }
 
         found = true;
+
         switch (element)
         {
             case 0:
