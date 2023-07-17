@@ -123,7 +123,6 @@ public partial class Form : ContainerControl
     private static readonly int PropFormerlyActiveMdiChild = PropertyStore.CreateKey();
     private static readonly int PropMdiChildFocusable = PropertyStore.CreateKey();
 
-    private static readonly int PropDummyMdiMenu = PropertyStore.CreateKey();
     private static readonly int PropMainMenuStrip = PropertyStore.CreateKey();
     private static readonly int PropMdiWindowListStrip = PropertyStore.CreateKey();
     private static readonly int PropMdiControlStrip = PropertyStore.CreateKey();
@@ -159,6 +158,8 @@ public partial class Form : ContainerControl
     private Dictionary<int, Size>? _dpiFormSizes;
     private bool _processingDpiChanged;
     private bool _inRecreateHandle;
+
+    private HMENU _DummyMdiMenu = HMENU.Null;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Form"/> class.
@@ -3389,10 +3390,10 @@ public partial class Form : ContainerControl
             base.Dispose(disposing);
             _ctlClient = null;
 
-            if (Properties.TryGetObject(PropDummyMdiMenu, out HMENU dummyMenu) && !dummyMenu.IsNull)
+            if (!_DummyMdiMenu.IsNull)
             {
-                Properties.SetObject(PropDummyMdiMenu, null);
-                PInvoke.DestroyMenu(dummyMenu);
+                PInvoke.DestroyMenu(_DummyMdiMenu);
+                _DummyMdiMenu = HMENU.Null;
             }
         }
         else
@@ -5677,13 +5678,12 @@ public partial class Form : ContainerControl
                 // (set to null) so that duplicate control buttons are not placed on the menu bar when
                 // an ole menu is being removed.
                 // Make MDI forget the mdi item position.
-                if (!Properties.TryGetObject(PropDummyMdiMenu, out HMENU dummyMenu) || dummyMenu.IsNull || recreateMenu)
+                if (_DummyMdiMenu.IsNull || recreateMenu)
                 {
-                    dummyMenu = PInvoke.CreateMenu();
-                    Properties.SetObject(PropDummyMdiMenu, dummyMenu);
+                    _DummyMdiMenu = PInvoke.CreateMenu();
                 }
 
-                PInvoke.SendMessage(_ctlClient, PInvoke.WM_MDISETMENU, (WPARAM)dummyMenu.Value);
+                PInvoke.SendMessage(_ctlClient, PInvoke.WM_MDISETMENU, (WPARAM)_DummyMdiMenu.Value);
             }
 
             // (New fix: Only destroy Win32 Menu if using a MenuStrip)
