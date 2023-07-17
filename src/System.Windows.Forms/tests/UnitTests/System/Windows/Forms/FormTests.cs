@@ -2627,6 +2627,7 @@ public class FormTests
     [WinFormsFact]
     public void Form_MdiContainer_WithChild_DoubleDispose()
     {
+        // Regression test for https://github.com/dotnet/winforms/issues/8990
         using Form parent = new() { IsMdiContainer = true };
         using Form mdiChild = new() { MdiParent = parent };
         parent.Show();
