@@ -14,11 +14,11 @@ namespace System.Drawing;
 /// <summary>
 /// Defines a particular format for text, including font face, size, and style attributes.
 /// </summary>
-[Editor("System.Drawing.Design.FontEditor, System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
-        "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+[Editor($"System.Drawing.Design.FontEditor, {AssemblyRef.SystemDrawingDesign}",
+        $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
 [TypeConverter(typeof(FontConverter))]
 [Serializable]
-[System.Runtime.CompilerServices.TypeForwardedFrom("System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+[System.Runtime.CompilerServices.TypeForwardedFrom(AssemblyRef.SystemDrawing)]
 public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISerializable
 {
     private IntPtr _nativeFont;
@@ -77,8 +77,8 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
     /// Gets the face name of this <see cref='Font'/> .
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [Editor("System.Drawing.Design.FontNameEditor, System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
-            "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+    [Editor($"System.Drawing.Design.FontNameEditor, {AssemblyRef.SystemDrawingDesign}",
+            $"System.Drawing.Design.UITypeEditor, {AssemblyRef.SystemDrawing}")]
     [TypeConverter(typeof(FontConverter.FontNameConverter))]
     public string Name => FontFamily.Name;
 
