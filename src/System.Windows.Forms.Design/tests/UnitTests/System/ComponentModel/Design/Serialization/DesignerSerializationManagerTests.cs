@@ -14,7 +14,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_Ctor_Default()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         Assert.Null(manager.Container);
         Assert.True(manager.PreserveNames);
@@ -28,24 +28,24 @@ public class DesignerSerializationManagerTests
 
     public static IEnumerable<object[]> Ctor_IServiceProvider_TestData()
     {
-        var nullMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> nullMockServiceProvider = new(MockBehavior.Strict);
         nullMockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns((IDesignerHost)null);
         yield return new object[] { nullMockServiceProvider.Object, null };
 
-        var invalidMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> invalidMockServiceProvider = new(MockBehavior.Strict);
         invalidMockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns(new object());
         yield return new object[] { invalidMockServiceProvider.Object, null };
 
-        var container = new Container();
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Container container = new();
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.Container)
             .Returns(container);
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns(mockDesignerHost.Object);
@@ -56,7 +56,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(Ctor_IServiceProvider_TestData))]
     public void DesignerSerializationManager_Ctor_IServiceProvider(IServiceProvider provider, IContainer expectedContainer)
     {
-        var manager = new DesignerSerializationManager(provider);
+        DesignerSerializationManager manager = new(provider);
         IDesignerSerializationManager iManager = manager;
         Assert.Same(expectedContainer, manager.Container);
         Assert.Same(manager.Container, manager.Container);
@@ -85,7 +85,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(Container_Set_TestData))]
     public void DesignerSerializationManager_Container_Set_GetReturnsExpected(IContainer value)
     {
-        var manager = new SubDesignerSerializationManager
+        SubDesignerSerializationManager manager = new()
         {
             Container = value
         };
@@ -101,7 +101,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_Container_SetWithSession_ThrowsInvalidOperationException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         manager.CreateSession();
         Assert.Throws<InvalidOperationException>(() => manager.Container = null);
     }
@@ -109,7 +109,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_Context_GetWithSession_ReturnsExpected()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         IDisposable session = manager.CreateSession();
         ContextStack context = iManager.Context;
@@ -120,7 +120,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_Context_GetNoSessionAfterGetting_ThrowsInvalidOperationException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         IDisposable session = manager.CreateSession();
         ContextStack context = iManager.Context;
@@ -133,7 +133,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_Context_GetNoSession_ThrowsInvalidOperationException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         Assert.Throws<InvalidOperationException>(() => iManager.Context);
     }
@@ -141,7 +141,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_Errors_GetWithSession_ReturnsExpected()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDisposable session = manager.CreateSession();
         IList errors = manager.Errors;
         Assert.Empty(errors);
@@ -152,7 +152,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_Errors_NoSessionWithPreviousSession_ThrowsInvalidOperationException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDisposable session = manager.CreateSession();
         Assert.Empty(manager.Errors);
         session.Dispose();
@@ -162,7 +162,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_Errors_NoSession_ThrowsInvalidOperationException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         Assert.Throws<InvalidOperationException>(() => manager.Errors);
     }
 
@@ -170,7 +170,7 @@ public class DesignerSerializationManagerTests
     [BoolData]
     public void DesignerSerializationManager_PreserveNames_Set_GetReturnsExpected(bool value)
     {
-        var manager = new DesignerSerializationManager
+        DesignerSerializationManager manager = new()
         {
             PreserveNames = value
         };
@@ -189,7 +189,7 @@ public class DesignerSerializationManagerTests
     [BoolData]
     public void DesignerSerializationManager_PreserveNames_SetWithSession_ThrowsInvalidOperationException(bool value)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         manager.CreateSession();
         Assert.Throws<InvalidOperationException>(() => manager.PreserveNames = value);
         Assert.True(manager.PreserveNames);
@@ -198,8 +198,8 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_Properties_GetWithPropertyProvider_ReturnExpected()
     {
-        var provider = new PropertyProvider();
-        var manager = new DesignerSerializationManager
+        PropertyProvider provider = new();
+        DesignerSerializationManager manager = new()
         {
             PropertyProvider = provider
         };
@@ -235,17 +235,17 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_Properties_GetWithNullPropertyInPropertyProvider_ThrowsArgumentNullException()
     {
-        var provider = new object();
-        var manager = new DesignerSerializationManager
+        object provider = new();
+        DesignerSerializationManager manager = new()
         {
             PropertyProvider = provider
         };
         IDesignerSerializationManager iManager = manager;
-        var mockCustomTypeDescriptor = new Mock<CustomTypeDescriptor>(MockBehavior.Strict);
+        Mock<CustomTypeDescriptor> mockCustomTypeDescriptor = new(MockBehavior.Strict);
         mockCustomTypeDescriptor
             .Setup(d => d.GetProperties())
             .Returns(new PropertyDescriptorCollection(new PropertyDescriptor[] { null }));
-        var mockProvider = new Mock<TypeDescriptionProvider>(MockBehavior.Strict);
+        Mock<TypeDescriptionProvider> mockProvider = new(MockBehavior.Strict);
         mockProvider
             .Setup(p => p.GetCache(provider))
             .CallBase();
@@ -268,7 +268,7 @@ public class DesignerSerializationManagerTests
     [StringWithNullData]
     public void DesignerSerializationManager_PropertyProvider_Set_GetReturnsExpected(string value)
     {
-        var manager = new DesignerSerializationManager
+        DesignerSerializationManager manager = new()
         {
             PropertyProvider = value
         };
@@ -283,7 +283,7 @@ public class DesignerSerializationManagerTests
     [StringWithNullData]
     public void DesignerSerializationManager_PropertyProvider_SetWithSession_GetReturnsExpected(string value)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         manager.CreateSession();
 
         manager.PropertyProvider = value;
@@ -297,7 +297,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_Properties_SetWithExistingProperties_Resets()
     {
-        var manager = new DesignerSerializationManager
+        DesignerSerializationManager manager = new()
         {
             PropertyProvider = new PropertyProvider()
         };
@@ -307,7 +307,7 @@ public class DesignerSerializationManagerTests
         Assert.Equal(nameof(PropertyProvider.Value), property.Name);
         Assert.Same(properties, iManager.Properties);
 
-        var provider = new OtherPropertyProvider();
+        OtherPropertyProvider provider = new();
         manager.PropertyProvider = provider;
         Assert.Same(provider, manager.PropertyProvider);
         PropertyDescriptorCollection otherProperties = iManager.Properties;
@@ -325,7 +325,7 @@ public class DesignerSerializationManagerTests
     [BoolData]
     public void DesignerSerializationManager_RecycleInstances_Set_GetReturnsExpected(bool value)
     {
-        var manager = new DesignerSerializationManager
+        DesignerSerializationManager manager = new()
         {
             RecycleInstances = value
         };
@@ -344,7 +344,7 @@ public class DesignerSerializationManagerTests
     [BoolData]
     public void DesignerSerializationManager_RecycleInstances_SetWithSession_ThrowsInvalidOperationException(bool value)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         manager.CreateSession();
         Assert.Throws<InvalidOperationException>(() => manager.RecycleInstances = value);
         Assert.False(manager.RecycleInstances);
@@ -354,7 +354,7 @@ public class DesignerSerializationManagerTests
     [BoolData]
     public void DesignerSerializationManager_ValidateRecycledTypes_Set_GetReturnsExpected(bool value)
     {
-        var manager = new DesignerSerializationManager
+        DesignerSerializationManager manager = new()
         {
             ValidateRecycledTypes = value
         };
@@ -373,7 +373,7 @@ public class DesignerSerializationManagerTests
     [BoolData]
     public void DesignerSerializationManager_ValidateRecycledTypes_SetWithSession_ThrowsInvalidOperationException(bool value)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         manager.CreateSession();
         Assert.Throws<InvalidOperationException>(() => manager.ValidateRecycledTypes = value);
         Assert.True(manager.ValidateRecycledTypes);
@@ -382,7 +382,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_ResolveName_AddNoSession_ThrowsInvalidOperationException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         int callCount = 0;
         ResolveNameEventHandler handler = (sender, e) => callCount++;
@@ -394,7 +394,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_SerializationComplete_AddNoSession_ThrowsInvalidOperationException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         int callCount = 0;
         EventHandler handler = (sender, e) => callCount++;
@@ -415,9 +415,9 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(AddSerializationProvider_TestData))]
     public void DesignerSerializationManager_AddSerializationProvider_NonNullProvider_GetSerializerReturnsExpected(Type objectType, object expected)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
-        var mockDesignerSerializationProvider = new Mock<IDesignerSerializationProvider>(MockBehavior.Strict);
+        Mock<IDesignerSerializationProvider> mockDesignerSerializationProvider = new(MockBehavior.Strict);
         mockDesignerSerializationProvider
             .Setup(p => p.GetSerializer(manager, null, objectType, mockDesignerSerializationProvider.Object.GetType()))
             .Returns(expected)
@@ -434,7 +434,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_AddSerializationProvider_NullProvider_Nop()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         iManager.AddSerializationProvider(null);
     }
@@ -442,7 +442,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_CreateSession_Invoke_Success()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDisposable session = manager.CreateSession();
         Assert.NotNull(session);
         session.Dispose();
@@ -457,7 +457,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_CreateSession_DisposeMultipleTimes_Success()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         IDisposable session1 = manager.CreateSession();
         session1.Dispose();
@@ -476,7 +476,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_CreateSession_Invoke_CallsOnSessionCreated()
     {
-        var mockManager = new Mock<DesignerSerializationManager>(MockBehavior.Strict);
+        Mock<DesignerSerializationManager> mockManager = new(MockBehavior.Strict);
         mockManager
             .Protected()
             .Setup("OnSessionCreated", EventArgs.Empty)
@@ -488,7 +488,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_CreateSession_InvokeWithSessionCreated_CallsHandler()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -513,7 +513,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_CreateSession_Dispose_CallsOnSessionDisposed()
     {
-        var mockManager = new Mock<DesignerSerializationManager>(MockBehavior.Strict);
+        Mock<DesignerSerializationManager> mockManager = new(MockBehavior.Strict);
         mockManager
             .Protected()
             .Setup("OnSessionCreated", EventArgs.Empty);
@@ -533,14 +533,14 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_CreateSession_Dispose_ClearsErrors()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
 
         IDisposable session1 = manager.CreateSession();
         IList errors1 = manager.Errors;
         Assert.Empty(errors1);
         Assert.Same(errors1, manager.Errors);
-        var errorInformation = new object();
+        object errorInformation = new();
         iManager.ReportError(errorInformation);
         Assert.Same(errorInformation, Assert.Single(errors1));
 
@@ -556,7 +556,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_CreateSession_Dispose_ClearsContext()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
 
         IDisposable session1 = manager.CreateSession();
@@ -576,7 +576,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_CreateSession_Dispose_ClearsSerializers()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
 
         IDisposable session1 = manager.CreateSession();
         object serializer1 = manager.GetSerializer(typeof(ClassWithPublicDesignerSerializer), typeof(BaseClass));
@@ -595,7 +595,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(ResolveNameEventArgs_TestData))]
     public void DesignerSerializationManager_CreateSession_Dispose_ClearsResolveNameEventHandler(ResolveNameEventArgs eventArgs)
     {
-        var manager = new SubDesignerSerializationManager();
+        SubDesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         int callCount = 0;
         ResolveNameEventHandler handler = (sender, e) =>
@@ -621,7 +621,7 @@ public class DesignerSerializationManagerTests
     [NewAndDefaultData<EventArgs>]
     public void DesignerSerializationManager_CreateSession_Dispose_ClearsSerializationCompleteEventHandler(EventArgs eventArgs)
     {
-        var manager = new SubDesignerSerializationManager();
+        SubDesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -645,7 +645,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_CreateSessionDispose_InvokeWithSessionDisposed_CallsHandler()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -674,7 +674,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_CreateSessionDispose_InvokeWithSerializationComplete_CallsHandler()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -704,26 +704,26 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_CreateSession_InvokeWithSession_ThrowsInvalidOperationException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         manager.CreateSession();
         Assert.Throws<InvalidOperationException>(() => manager.CreateSession());
     }
 
     public static IEnumerable<object[]> GetInstance_NoSuchInstance_TestData()
     {
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns(null);
 
-        var component = new Component();
-        var container = new Container();
+        Component component = new();
+        Container container = new();
         container.Add(component, "name");
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.Container)
             .Returns(container);
-        var mockContainerServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockContainerServiceProvider = new(MockBehavior.Strict);
         mockContainerServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns(mockDesignerHost.Object);
@@ -747,7 +747,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetInstance_NoSuchInstance_TestData))]
     public void DesignerSerializationManager_GetInstance_NoNamedInstances_ReturnsNull(IServiceProvider provider, bool preserveNames, string name, object expected)
     {
-        var manager = new DesignerSerializationManager(provider)
+        DesignerSerializationManager manager = new(provider)
         {
             PreserveNames = preserveNames
         };
@@ -763,11 +763,11 @@ public class DesignerSerializationManagerTests
     [StringData]
     public void DesignerSerializationManager_GetInstance_HasNameInstancesNameExists_ReturnsExpected(string name)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
 
-        var instance = new object();
+        object instance = new();
         iManager.SetName(instance, name);
         Assert.Same(instance, iManager.GetInstance(name));
 
@@ -781,11 +781,11 @@ public class DesignerSerializationManagerTests
     [InlineData("NoSuchName")]
     public void DesignerSerializationManager_GetInstance_HasNameInstancesNoSuchName_ReturnsExpected(string name)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
 
-        var instance = new object();
+        object instance = new();
         iManager.SetName(instance, "name");
         Assert.Null(iManager.GetInstance(name));
 
@@ -805,17 +805,17 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetInstance_InvokeWithResolveName_TestData))]
     public void DesignerSerializationManager_GetInstance_InvokeWithResolveName_CallsHandler(string name, object value)
     {
-        var component = new Component();
-        var container = new Container();
-        var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
+        Component component = new();
+        Container container = new();
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.Container)
             .Returns(container);
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns(mockDesignerHost.Object);
-        var manager = new DesignerSerializationManager(mockServiceProvider.Object);
+        DesignerSerializationManager manager = new(mockServiceProvider.Object);
         IDesignerSerializationManager iManager = manager;
         int callCount = 0;
         ResolveNameEventHandler handler = (sender, e) =>
@@ -856,7 +856,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_GetInstance_NullName_ThrowsArgumentNullException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         Assert.Throws<ArgumentNullException>("name", () => iManager.GetInstance(null));
     }
@@ -865,7 +865,7 @@ public class DesignerSerializationManagerTests
     [StringData]
     public void DesignerSerializationManager_GetInstance_NoSession_ThrowsInvalidOperationException(string name)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         Assert.Throws<InvalidOperationException>(() => iManager.GetInstance(name));
     }
@@ -875,7 +875,7 @@ public class DesignerSerializationManagerTests
         yield return new object[] { new object(), null };
         yield return new object[] { new Component(), null };
 
-        var mockNoSiteComponent = new Mock<IComponent>(MockBehavior.Strict);
+        Mock<IComponent> mockNoSiteComponent = new(MockBehavior.Strict);
         mockNoSiteComponent
             .Setup(c => c.Site)
             .Returns((ISite)null);
@@ -885,11 +885,11 @@ public class DesignerSerializationManagerTests
 
         foreach (string name in new string[] { null, string.Empty, "name" })
         {
-            var mockSite = new Mock<ISite>(MockBehavior.Strict);
+            Mock<ISite> mockSite = new(MockBehavior.Strict);
             mockSite
                 .Setup(s => s.Name)
                 .Returns(name);
-            var mockSiteComponent = new Mock<IComponent>(MockBehavior.Strict);
+            Mock<IComponent> mockSiteComponent = new(MockBehavior.Strict);
             mockSiteComponent
                 .Setup(c => c.Site)
                 .Returns(mockSite.Object);
@@ -897,11 +897,11 @@ public class DesignerSerializationManagerTests
                 .Setup(c => c.Dispose());
             yield return new object[] { mockSiteComponent.Object, name };
 
-            var mockNestedSite = new Mock<INestedSite>(MockBehavior.Strict);
+            Mock<INestedSite> mockNestedSite = new(MockBehavior.Strict);
             mockNestedSite
                 .Setup(s => s.FullName)
                 .Returns(name);
-            var mockNestedSiteComponent = new Mock<IComponent>(MockBehavior.Strict);
+            Mock<IComponent> mockNestedSiteComponent = new(MockBehavior.Strict);
             mockNestedSiteComponent
                 .Setup(c => c.Site)
                 .Returns(mockNestedSite.Object);
@@ -915,7 +915,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetName_NoNamedInstance_TestData))]
     public void DesignerSerializationManager_GetName_NoNamedInstance_ReturnsExpected(object instance, string expected)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
 
@@ -926,11 +926,11 @@ public class DesignerSerializationManagerTests
     [StringData]
     public void DesignerSerializationManager_GetName_HasNamedInstance_ReturnsExpected(string name)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
 
-        var instance = new object();
+        object instance = new();
         iManager.SetName(instance, name);
         Assert.Same(name, iManager.GetName(instance));
     }
@@ -939,11 +939,11 @@ public class DesignerSerializationManagerTests
     [StringData]
     public void DesignerSerializationManager_GetName_HasNamedComponent_ReturnsExpected(string name)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
 
-        var mockInstance = new Mock<IComponent>(MockBehavior.Strict);
+        Mock<IComponent> mockInstance = new(MockBehavior.Strict);
         mockInstance
             .Setup(i => i.Site)
             .Verifiable();
@@ -955,7 +955,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_GetName_NullValue_ThrowsArgumentNullException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         Assert.Throws<ArgumentNullException>("value", () => iManager.GetName(null));
     }
@@ -963,7 +963,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_GetName_InvokeNoSession_ThrowsInvalidOperationException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         Assert.Throws<InvalidOperationException>(() => iManager.GetName("value"));
     }
@@ -972,13 +972,13 @@ public class DesignerSerializationManagerTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
     public void DesignerSerializationManager_GetService_WithProvider_ReturnsExpected(Type serviceType)
     {
-        var service = new object();
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        object service = new();
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(serviceType))
             .Returns(service)
             .Verifiable();
-        var manager = new SubDesignerSerializationManager(mockServiceProvider.Object);
+        SubDesignerSerializationManager manager = new(mockServiceProvider.Object);
         Assert.Same(service, manager.GetService(serviceType));
         mockServiceProvider.Verify(p => p.GetService(serviceType), Times.Once());
 
@@ -990,7 +990,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(Ctor_IServiceProvider_TestData))]
     public void DesignerSerializationManager_GetService_IContainer_ReturnsExpected(IServiceProvider provider, object expected)
     {
-        var manager = new SubDesignerSerializationManager(provider);
+        SubDesignerSerializationManager manager = new(provider);
         Assert.Same(expected, manager.GetService(typeof(IContainer)));
         Assert.Same(expected, ((IServiceProvider)manager).GetService(typeof(IContainer)));
     }
@@ -1001,7 +1001,7 @@ public class DesignerSerializationManagerTests
     [InlineData(typeof(IContainer))]
     public void DesignerSerializationManager_GetService_NoProvider_ReturnsNull(Type serviceType)
     {
-        var manager = new SubDesignerSerializationManager();
+        SubDesignerSerializationManager manager = new();
         Assert.Null(manager.GetService(serviceType));
         Assert.Null(((IServiceProvider)manager).GetService(serviceType));
     }
@@ -1009,8 +1009,8 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_IDesignerSerializationManagerGetService_Invoke_CallsProtectedGetService()
     {
-        var service = new object();
-        var mockManager = new Mock<DesignerSerializationManager>(MockBehavior.Strict);
+        object service = new();
+        Mock<DesignerSerializationManager> mockManager = new(MockBehavior.Strict);
         mockManager
             .Protected()
             .Setup<object>("GetService", typeof(int))
@@ -1025,8 +1025,8 @@ public class DesignerSerializationManagerTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
     public void DesignerSerializationManager_IDesignerSerializationManagerGetService_WithProvider_ReturnsExpected(Type serviceType)
     {
-        var service = new object();
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        object service = new();
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(serviceType))
             .Returns(service)
@@ -1072,12 +1072,12 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetRuntimeType_ValidProvider_TestData))]
     public void DesignerSerializationManager_GetRuntimeType_ValidProvider_ReturnsExpected(string typeName, Type resolvedType)
     {
-        var mockTypeResolutionService = new Mock<ITypeResolutionService>(MockBehavior.Strict);
+        Mock<ITypeResolutionService> mockTypeResolutionService = new(MockBehavior.Strict);
         mockTypeResolutionService
             .Setup(s => s.GetType(typeName))
             .Returns(resolvedType)
             .Verifiable();
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns((IDesignerHost)null);
@@ -1085,7 +1085,7 @@ public class DesignerSerializationManagerTests
             .Setup(p => p.GetService(typeof(ITypeResolutionService)))
             .Returns(mockTypeResolutionService.Object)
             .Verifiable();
-        var manager = new DesignerSerializationManager(mockServiceProvider.Object);
+        DesignerSerializationManager manager = new(mockServiceProvider.Object);
         Assert.Same(resolvedType, manager.GetRuntimeType(typeName));
         mockServiceProvider.Verify(p => p.GetService(typeof(ITypeResolutionService)), Times.Once());
         mockTypeResolutionService.Verify(s => s.GetType(typeName), Times.Once());
@@ -1098,7 +1098,7 @@ public class DesignerSerializationManagerTests
 
     public static IEnumerable<object[]> GetRuntimeType_InvalidProvider_TestData()
     {
-        var nullMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> nullMockServiceProvider = new(MockBehavior.Strict);
         nullMockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns((IDesignerHost)null);
@@ -1110,7 +1110,7 @@ public class DesignerSerializationManagerTests
             .Returns((TypeDescriptionProviderService)null);
         yield return new object[] { nullMockServiceProvider.Object };
 
-        var invalidMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> invalidMockServiceProvider = new(MockBehavior.Strict);
         invalidMockServiceProvider
             .Setup(p => p.GetService(typeof(ITypeResolutionService)))
             .Returns(new object());
@@ -1127,7 +1127,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetRuntimeType_InvalidProvider_TestData))]
     public void DesignerSerializationManager_GetRuntimeType_InvalidProvider_ReturnsExpected(IServiceProvider provider)
     {
-        var manager = new DesignerSerializationManager(provider);
+        DesignerSerializationManager manager = new(provider);
         Assert.Equal(typeof(int), manager.GetRuntimeType(typeof(int).FullName));
     }
 
@@ -1138,14 +1138,14 @@ public class DesignerSerializationManagerTests
     [InlineData("", null)]
     public void DesignerSerializationManager_GetRuntimeType_NoProvider_ReturnsExpected(string typeName, Type expected)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         Assert.Same(expected, manager.GetRuntimeType(typeName));
     }
 
     [Fact]
     public void DesignerSerializationManager_GetRuntimeType_NullTypeName_ThrowsArgumentNullException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         Assert.Throws<ArgumentNullException>("typeName", () => manager.GetRuntimeType(null));
     }
 
@@ -1180,7 +1180,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetSerializer_TestData))]
     public void DesignerSerializationManager_GetSerializer_CustomIDesignerSerializationProvider_ReturnsExpected(Type objectType, Type serializerType, object expected)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         Assert.Same(expected, manager.GetSerializer(objectType, serializerType));
 
         // Call again.
@@ -1191,7 +1191,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetSerializer_TestData))]
     public void DesignerSerializationManager_GetSerializerWithSession_CustomIDesignerSerializationProvider_ReturnsExpected(Type objectType, Type serializerType, object expected)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         manager.CreateSession();
 
         Assert.Same(expected, manager.GetSerializer(objectType, serializerType));
@@ -1210,7 +1210,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetSerializer_CustomDesignerSerializer_TestData))]
     public void DesignerSerializationManager_GetSerializer_CustomDesignerSerializerNoSession_ReturnsExpected(Type objectType, Type expectedSerializerType)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         object serializer1 = manager.GetSerializer(objectType, typeof(BaseClass));
         Assert.IsType(expectedSerializerType, serializer1);
 
@@ -1242,7 +1242,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetSerializer_CustomDesignerSerializer_TestData))]
     public void DesignerSerializationManager_GetSerializer_CustomDesignerSerializerWithSession_ReturnsExpected(Type objectType, Type expectedSerializerType)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         manager.CreateSession();
         object serializer1 = manager.GetSerializer(objectType, typeof(BaseClass));
         Assert.IsType(expectedSerializerType, serializer1);
@@ -1282,7 +1282,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_GetSerializer_IDesignerSerializationProvider_ThrowsMissingMethodException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         Assert.Throws<MissingMethodException>(() => manager.GetSerializer(null, typeof(ClassWithInterfaceDefaultSerializationProvider)));
     }
 
@@ -1290,7 +1290,7 @@ public class DesignerSerializationManagerTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
     public void DesignerSerializationManager_GetSerializer_NullSerializerType_ThrowsArgumentNullException(Type objectType)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         Assert.Throws<ArgumentNullException>("serializerType", () => manager.GetSerializer(objectType, null));
     }
 
@@ -1298,7 +1298,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetSerializer_TestData))]
     public void DesignerSerializationManager_IDesignerSerializationManagerGetSerializer_CustomIDesignerSerializationProvider_ReturnsExpected(Type objectType, Type serializerType, object expected)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         Assert.Same(expected, iManager.GetSerializer(objectType, serializerType));
 
@@ -1310,7 +1310,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetSerializer_TestData))]
     public void DesignerSerializationManager_IDesignerSerializationManagerGetSerializerWithSession_CustomIDesignerSerializationProvider_ReturnsExpected(Type objectType, Type serializerType, object expected)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
 
@@ -1324,7 +1324,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetSerializer_CustomDesignerSerializer_TestData))]
     public void DesignerSerializationManager_IDesignerSerializationManagerGetSerializer_CustomDesignerSerializerNoSession_ReturnsExpected(Type objectType, Type expectedSerializerType)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         object serializer1 = iManager.GetSerializer(objectType, typeof(BaseClass));
         Assert.IsType(expectedSerializerType, serializer1);
@@ -1357,7 +1357,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetSerializer_CustomDesignerSerializer_TestData))]
     public void DesignerSerializationManager_IDesignerSerializationManagerGetSerializer_CustomDesignerSerializerWithSession_ReturnsExpected(Type objectType, Type expectedSerializerType)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
         object serializer1 = iManager.GetSerializer(objectType, typeof(BaseClass));
@@ -1401,7 +1401,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_IDesignerSerializationManagerGetSerializer_IDesignerSerializationProvider_ThrowsMissingMethodException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         Assert.Throws<MissingMethodException>(() => iManager.GetSerializer(null, typeof(ClassWithInterfaceDefaultSerializationProvider)));
     }
@@ -1410,7 +1410,7 @@ public class DesignerSerializationManagerTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
     public void DesignerSerializationManager_IDesignerSerializationManagerGetSerializer_NullSerializerType_ThrowsArgumentNullException(Type objectType)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         Assert.Throws<ArgumentNullException>("serializerType", () => iManager.GetSerializer(objectType, null));
     }
@@ -1430,22 +1430,22 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetType_ValidProvider_TestData))]
     public void DesignerSerializationManager_GetType_ValidProvider_ReturnsExpected(string typeName, Type resolvedType, int typeDescriptionProviderServiceCount, bool supportedType, Type expected)
     {
-        var mockTypeResolutionService = new Mock<ITypeResolutionService>(MockBehavior.Strict);
+        Mock<ITypeResolutionService> mockTypeResolutionService = new(MockBehavior.Strict);
         mockTypeResolutionService
             .Setup(s => s.GetType(typeName))
             .Returns(resolvedType)
             .Verifiable();
-        var mockTypeDescriptionProvider = new Mock<TypeDescriptionProvider>(MockBehavior.Strict);
+        Mock<TypeDescriptionProvider> mockTypeDescriptionProvider = new(MockBehavior.Strict);
         mockTypeDescriptionProvider
             .Setup(p => p.IsSupportedType(resolvedType))
             .Returns(supportedType)
             .Verifiable();
-        var mockTypeDescriptionProviderService = new Mock<TypeDescriptionProviderService>(MockBehavior.Strict);
+        Mock<TypeDescriptionProviderService> mockTypeDescriptionProviderService = new(MockBehavior.Strict);
         mockTypeDescriptionProviderService
             .Setup(s => s.GetProvider(resolvedType))
             .Returns(mockTypeDescriptionProvider.Object)
             .Verifiable();
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns((IDesignerHost)null);
@@ -1457,7 +1457,7 @@ public class DesignerSerializationManagerTests
             .Setup(p => p.GetService(typeof(TypeDescriptionProviderService)))
             .Returns(mockTypeDescriptionProviderService.Object)
             .Verifiable();
-        var manager = new SubDesignerSerializationManager(mockServiceProvider.Object);
+        SubDesignerSerializationManager manager = new(mockServiceProvider.Object);
         Assert.Same(expected, manager.GetType(typeName));
         mockServiceProvider.Verify(p => p.GetService(typeof(ITypeResolutionService)), Times.Once());
         mockTypeResolutionService.Verify(s => s.GetType(typeName), Times.Once());
@@ -1476,7 +1476,7 @@ public class DesignerSerializationManagerTests
 
     public static IEnumerable<object[]> GetType_InvalidProvider_TestData()
     {
-        var nullMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> nullMockServiceProvider = new(MockBehavior.Strict);
         nullMockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns((IDesignerHost)null);
@@ -1488,7 +1488,7 @@ public class DesignerSerializationManagerTests
             .Returns((TypeDescriptionProviderService)null);
         yield return new object[] { nullMockServiceProvider.Object };
 
-        var invalidMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> invalidMockServiceProvider = new(MockBehavior.Strict);
         invalidMockServiceProvider
             .Setup(p => p.GetService(typeof(ITypeResolutionService)))
             .Returns(new object());
@@ -1500,11 +1500,11 @@ public class DesignerSerializationManagerTests
             .Returns(new object());
         yield return new object[] { invalidMockServiceProvider.Object };
 
-        var invalidMockTypeDescriptionProviderService = new Mock<TypeDescriptionProviderService>(MockBehavior.Strict);
+        Mock<TypeDescriptionProviderService> invalidMockTypeDescriptionProviderService = new(MockBehavior.Strict);
         invalidMockTypeDescriptionProviderService
             .Setup(p => p.GetProvider(typeof(int)))
             .Returns((TypeDescriptionProvider)null);
-        var invalidTypeDescriptionProviderServiceMockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> invalidTypeDescriptionProviderServiceMockServiceProvider = new(MockBehavior.Strict);
         invalidTypeDescriptionProviderServiceMockServiceProvider
             .Setup(p => p.GetService(typeof(ITypeResolutionService)))
             .Returns(null);
@@ -1521,7 +1521,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetType_InvalidProvider_TestData))]
     public void DesignerSerializationManager_GetType_InvalidProvider_ReturnsExpected(IServiceProvider provider)
     {
-        var manager = new SubDesignerSerializationManager(provider);
+        SubDesignerSerializationManager manager = new(provider);
         Assert.Equal(typeof(int), manager.GetType(typeof(int).FullName));
     }
 
@@ -1543,14 +1543,14 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetType_NoProvider_TestData))]
     public void DesignerSerializationManager_GetType_NoProvider_ReturnsExpected(string typeName, Type expected)
     {
-        var manager = new SubDesignerSerializationManager();
+        SubDesignerSerializationManager manager = new();
         Assert.Same(expected, manager.GetType(typeName));
     }
 
     [Fact]
     public void DesignerSerializationManager_GetType_NullTypeName_ThrowsArgumentNullException()
     {
-        var manager = new SubDesignerSerializationManager();
+        SubDesignerSerializationManager manager = new();
         Assert.Throws<ArgumentNullException>("typeName", () => manager.GetType(null));
     }
 
@@ -1558,22 +1558,22 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetType_ValidProvider_TestData))]
     public void DesignerSerializationManager_IDesignerSerializationManagerGetType_ValidProvider_ReturnsExpected(string typeName, Type resolvedType, int typeDescriptionProviderServiceCount, bool supportedType, Type expected)
     {
-        var mockTypeResolutionService = new Mock<ITypeResolutionService>(MockBehavior.Strict);
+        Mock<ITypeResolutionService> mockTypeResolutionService = new(MockBehavior.Strict);
         mockTypeResolutionService
             .Setup(s => s.GetType(typeName))
             .Returns(resolvedType)
             .Verifiable();
-        var mockTypeDescriptionProvider = new Mock<TypeDescriptionProvider>(MockBehavior.Strict);
+        Mock<TypeDescriptionProvider> mockTypeDescriptionProvider = new(MockBehavior.Strict);
         mockTypeDescriptionProvider
             .Setup(p => p.IsSupportedType(resolvedType))
             .Returns(supportedType)
             .Verifiable();
-        var mockTypeDescriptionProviderService = new Mock<TypeDescriptionProviderService>(MockBehavior.Strict);
+        Mock<TypeDescriptionProviderService> mockTypeDescriptionProviderService = new(MockBehavior.Strict);
         mockTypeDescriptionProviderService
             .Setup(s => s.GetProvider(resolvedType))
             .Returns(mockTypeDescriptionProvider.Object)
             .Verifiable();
-        var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
+        Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(IDesignerHost)))
             .Returns((IDesignerHost)null);
@@ -1585,7 +1585,7 @@ public class DesignerSerializationManagerTests
             .Setup(p => p.GetService(typeof(TypeDescriptionProviderService)))
             .Returns(mockTypeDescriptionProviderService.Object)
             .Verifiable();
-        var manager = new DesignerSerializationManager(mockServiceProvider.Object);
+        DesignerSerializationManager manager = new(mockServiceProvider.Object);
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
 
@@ -1609,7 +1609,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetType_InvalidProvider_TestData))]
     public void DesignerSerializationManager_IDesignerSerializationManagerGetType_InvalidProvider_ReturnsExpected(IServiceProvider provider)
     {
-        var manager = new DesignerSerializationManager(provider);
+        DesignerSerializationManager manager = new(provider);
         IDesignerSerializationManager iManager = manager;
         using (IDisposable session = manager.CreateSession())
         {
@@ -1621,7 +1621,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(GetType_NoProvider_TestData))]
     public void DesignerSerializationManager_IDesignerSerializationManagerGetType_NoProvider_ReturnsExpected(string typeName, Type expected)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         using (IDisposable session = manager.CreateSession())
         {
@@ -1640,7 +1640,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_IDesignerSerializationManagerGetType_NullTypeName_ThrowsArgumentNullException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         using (IDisposable session = manager.CreateSession())
         {
@@ -1658,7 +1658,7 @@ public class DesignerSerializationManagerTests
     [MemberData(nameof(ResolveNameEventArgs_TestData))]
     public void DesignerSerializationManager_OnResolveName_InvokeWithResolveName_CallsHandler(ResolveNameEventArgs eventArgs)
     {
-        var manager = new SubDesignerSerializationManager();
+        SubDesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         int callCount = 0;
         ResolveNameEventHandler handler = (sender, e) =>
@@ -1694,7 +1694,7 @@ public class DesignerSerializationManagerTests
     [NewAndDefaultData<EventArgs>]
     public void DesignerSerializationManager_OnSessionCreated_InvokeWithSessionCreated_CallsHandler(EventArgs eventArgs)
     {
-        var manager = new SubDesignerSerializationManager();
+        SubDesignerSerializationManager manager = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1720,14 +1720,14 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_OnSessionDisposed_Invoke_ClearsErrors()
     {
-        var manager = new SubDesignerSerializationManager();
+        SubDesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
 
         IDisposable session1 = manager.CreateSession();
         IList errors1 = manager.Errors;
         Assert.Empty(errors1);
         Assert.Same(errors1, manager.Errors);
-        var errorInformation = new object();
+        object errorInformation = new();
         iManager.ReportError(errorInformation);
         Assert.Same(errorInformation, Assert.Single(errors1));
 
@@ -1743,7 +1743,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_OnSessionDisposed_Invoke_ClearsContext()
     {
-        var manager = new SubDesignerSerializationManager();
+        SubDesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
 
         IDisposable session1 = manager.CreateSession();
@@ -1763,7 +1763,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_OnSessionDisposed_Invoke_ClearsSerializers()
     {
-        var manager = new SubDesignerSerializationManager();
+        SubDesignerSerializationManager manager = new();
 
         IDisposable session1 = manager.CreateSession();
         object serializer1 = manager.GetSerializer(typeof(ClassWithPublicDesignerSerializer), typeof(BaseClass));
@@ -1782,7 +1782,7 @@ public class DesignerSerializationManagerTests
     [NewAndDefaultData<EventArgs>]
     public void DesignerSerializationManager_OnSessionDisposed_InvokeWithSessionDisposed_CallsHandler(EventArgs eventArgs)
     {
-        var manager = new SubDesignerSerializationManager();
+        SubDesignerSerializationManager manager = new();
         int callCount = 0;
         EventHandler handler = (sender, e) =>
         {
@@ -1810,7 +1810,7 @@ public class DesignerSerializationManagerTests
     [NewAndDefaultData<EventArgs>]
     public void DesignerSerializationManager_OnSessionDisposed_InvokeWithSerializationComplete_CallsHandler(EventArgs eventArgs)
     {
-        var manager = new SubDesignerSerializationManager();
+        SubDesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         int callCount = 0;
         EventHandler handler = (sender, e) =>
@@ -1842,10 +1842,10 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_RemoveSerializationProvider_Invoke_GetSerializerReturnsNull()
     {
-        var serializer = new object();
-        var manager = new DesignerSerializationManager();
+        object serializer = new();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
-        var mockDesignerSerializationProvider = new Mock<IDesignerSerializationProvider>(MockBehavior.Strict);
+        Mock<IDesignerSerializationProvider> mockDesignerSerializationProvider = new(MockBehavior.Strict);
         mockDesignerSerializationProvider
             .Setup(p => p.GetSerializer(manager, null, typeof(int), mockDesignerSerializationProvider.Object.GetType()))
             .Returns(serializer)
@@ -1867,10 +1867,10 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_RemoveSerializationProvider_NoSuchProviderNotEmpty_Nop()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
-        var mockDesignerSerializationProvider1 = new Mock<IDesignerSerializationProvider>(MockBehavior.Strict);
-        var mockDesignerSerializationProvider2 = new Mock<IDesignerSerializationProvider>(MockBehavior.Strict);
+        Mock<IDesignerSerializationProvider> mockDesignerSerializationProvider1 = new(MockBehavior.Strict);
+        Mock<IDesignerSerializationProvider> mockDesignerSerializationProvider2 = new(MockBehavior.Strict);
         iManager.AddSerializationProvider(mockDesignerSerializationProvider1.Object);
         iManager.RemoveSerializationProvider(null);
         iManager.RemoveSerializationProvider(mockDesignerSerializationProvider2.Object);
@@ -1879,9 +1879,9 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_RemoveSerializationProvider_NoSuchProviderEmpty_Nop()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
-        var mockDesignerSerializationProvider = new Mock<IDesignerSerializationProvider>(MockBehavior.Strict);
+        Mock<IDesignerSerializationProvider> mockDesignerSerializationProvider = new(MockBehavior.Strict);
         iManager.RemoveSerializationProvider(null);
         iManager.RemoveSerializationProvider(mockDesignerSerializationProvider.Object);
     }
@@ -1889,11 +1889,11 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_ReportError_NonNullErrorInformation_AddsToErrors()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         using (IDisposable session = manager.CreateSession())
         {
-            var errorInformation = new object();
+            object errorInformation = new();
             iManager.ReportError(errorInformation);
             Assert.Same(errorInformation, Assert.Single(manager.Errors));
         }
@@ -1902,7 +1902,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_ReportError_NullErrorInformation_Nop()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         using (IDisposable session = manager.CreateSession())
         {
@@ -1914,7 +1914,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_ReportError_NoSession_ThrowsInvalidOperationException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         Assert.Throws<InvalidOperationException>(() => iManager.ReportError(null));
     }
@@ -1923,16 +1923,16 @@ public class DesignerSerializationManagerTests
     [StringData]
     public void DesignerSerializationManager_SetName_Invoke_GetNameReturnsExpected(string name)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
 
-        var instance1 = new object();
+        object instance1 = new();
         iManager.SetName(instance1, name);
         Assert.Same(instance1, iManager.GetInstance(name));
         Assert.Same(name, iManager.GetName(instance1));
 
-        var instance2 = new object();
+        object instance2 = new();
         iManager.SetName(instance2, "OtherName");
         Assert.Same(instance2, iManager.GetInstance("OtherName"));
         Assert.Equal("OtherName", iManager.GetName(instance2));
@@ -1941,7 +1941,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_SetName_NullInstance_ThrowsArgumentNullException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
         Assert.Throws<ArgumentNullException>("instance", () => iManager.SetName(null, "name"));
@@ -1950,7 +1950,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_SetName_NullName_ThrowsArgumentNullException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
         Assert.Throws<ArgumentNullException>("name", () => iManager.SetName(new object(), null));
@@ -1960,10 +1960,10 @@ public class DesignerSerializationManagerTests
     [StringData]
     public void DesignerSerializationManager_SetName_OtherInstanceHasName_ThrowsArgumentException(string name)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
-        var instance = new object();
+        object instance = new();
         iManager.SetName(instance, name);
         Assert.Throws<ArgumentException>("name", () => iManager.SetName(new object(), name));
         Assert.Equal(name, iManager.GetName(instance));
@@ -1973,10 +1973,10 @@ public class DesignerSerializationManagerTests
     [StringData]
     public void DesignerSerializationManager_SetName_SameInstanceHasName_ThrowsArgumentException(string name)
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         manager.CreateSession();
-        var instance = new object();
+        object instance = new();
         iManager.SetName(instance, name);
         Assert.Throws<ArgumentException>("name", () => iManager.SetName(instance, name));
         Assert.Throws<ArgumentException>("instance", () => iManager.SetName(instance, "OtherName"));
@@ -1986,7 +1986,7 @@ public class DesignerSerializationManagerTests
     [Fact]
     public void DesignerSerializationManager_SetName_InvokeNoSession_ThrowsInvalidOperationException()
     {
-        var manager = new DesignerSerializationManager();
+        DesignerSerializationManager manager = new();
         IDesignerSerializationManager iManager = manager;
         Assert.Throws<InvalidOperationException>(() => iManager.SetName(null, null));
     }

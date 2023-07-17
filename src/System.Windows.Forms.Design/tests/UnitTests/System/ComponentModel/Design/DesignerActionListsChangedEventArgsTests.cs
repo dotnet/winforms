@@ -16,7 +16,7 @@ public class DesignerActionListsChangedEventArgsTests
     [MemberData(nameof(Ctor_Object_DesignerActionListsChangedType_DesignerActionListCollection_TestData))]
     public void Ctor_Object_DesignerActionListsChangedType_DesignerActionListCollection(object relatedObject, DesignerActionListsChangedType changeType, DesignerActionListCollection actionLists)
     {
-        var e = new DesignerActionListsChangedEventArgs(relatedObject, changeType, actionLists);
+        DesignerActionListsChangedEventArgs e = new(relatedObject, changeType, actionLists);
         Assert.Same(relatedObject, e.RelatedObject);
         Assert.Equal(changeType, e.ChangeType);
         Assert.Same(actionLists, e.ActionLists);

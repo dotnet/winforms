@@ -4,48 +4,48 @@
 
 namespace System.ComponentModel.Design.Tests;
 
-public class DesignerActionListCollectionTests
+public class DesignerVerbCollectionTests
 {
     [Fact]
-    public void DesignerActionListCollection_Ctor_Default()
+    public void DesignerVerbCollection_Ctor_Default()
     {
-        DesignerActionListCollection collection = new();
+        DesignerVerbCollection collection = new();
         Assert.Empty(collection);
     }
 
-    public static IEnumerable<object[]> Ctor_DesignerActionListArray_TestData()
+    public static IEnumerable<object[]> Ctor_DesignerVerbArray_TestData()
     {
-        yield return new object[] { Array.Empty<DesignerActionList>() };
-        yield return new object[] { new DesignerActionList[] { new DesignerActionList(null), null } };
+        yield return new object[] { Array.Empty<DesignerVerb>() };
+        yield return new object[] { new DesignerVerb[] { new DesignerVerb(null, null), null } };
     }
 
     [Theory]
-    [MemberData(nameof(Ctor_DesignerActionListArray_TestData))]
-    public void DesignerActionListCollection_Ctor_DesignerActionListArray(DesignerActionList[] value)
+    [MemberData(nameof(Ctor_DesignerVerbArray_TestData))]
+    public void DesignerVerbCollection_Ctor_DesignerVerbArray(DesignerVerb[] value)
     {
-        DesignerActionListCollection collection = new(value);
+        DesignerVerbCollection collection = new(value);
         Assert.Equal(value, collection.Cast<object>());
     }
 
     [Fact]
-    public void DesignerActionListCollection_Ctor_NullValue_ThrowsArgumentNullException()
+    public void DesignerVerbCollection_Ctor_NullValue_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>("value", () => new DesignerActionListCollection(null));
+        Assert.Throws<ArgumentNullException>("value", () => new DesignerVerbCollection(null));
     }
 
     [Fact]
-    public void DesignerActionListCollection_Add_DesignerActionList_Success()
+    public void DesignerVerbCollection_Add_DesignerVerb_Success()
     {
-        DesignerActionListCollection collection = new();
+        DesignerVerbCollection collection = new();
 
-        DesignerActionList value1 = new(null);
+        DesignerVerb value1 = new(null, null);
         collection.Add(value1);
         Assert.Same(value1, Assert.Single(collection));
         Assert.Same(value1, collection[0]);
         Assert.True(collection.Contains(value1));
         Assert.Equal(0, collection.IndexOf(value1));
 
-        DesignerActionList value2 = new(null);
+        DesignerVerb value2 = new(null, null);
         collection.Add(value2);
         Assert.Equal(new object[] { value1, value2 }, collection.Cast<object>());
         Assert.True(collection.Contains(value2));
@@ -58,10 +58,10 @@ public class DesignerActionListCollectionTests
     }
 
     [Theory]
-    [MemberData(nameof(Ctor_DesignerActionListArray_TestData))]
-    public void DesignerActionListCollection_AddRange_DesignerActionListArray_Success(DesignerActionList[] value)
+    [MemberData(nameof(Ctor_DesignerVerbArray_TestData))]
+    public void DesignerVerbCollection_AddRange_DesignerVerbArray_Success(DesignerVerb[] value)
     {
-        DesignerActionListCollection collection = new();
+        DesignerVerbCollection collection = new();
         collection.AddRange(value);
         Assert.Equal(value, collection.Cast<object>());
 
@@ -71,39 +71,39 @@ public class DesignerActionListCollectionTests
     }
 
     [Theory]
-    [MemberData(nameof(Ctor_DesignerActionListArray_TestData))]
-    public void DesignerActionListCollection_AddRange_DesignerActionListCollection_Success(DesignerActionList[] value)
+    [MemberData(nameof(Ctor_DesignerVerbArray_TestData))]
+    public void DesignerVerbCollection_AddRange_DesignerVerbCollection_Success(DesignerVerb[] value)
     {
-        DesignerActionListCollection collection = new();
-        collection.AddRange(new DesignerActionListCollection(value));
+        DesignerVerbCollection collection = new();
+        collection.AddRange(new DesignerVerbCollection(value));
         Assert.Equal(value, collection.Cast<object>());
 
         // Add again.
-        collection.AddRange(new DesignerActionListCollection(value));
+        collection.AddRange(new DesignerVerbCollection(value));
         Assert.Equal(value.Concat(value), collection.Cast<object>());
     }
 
     [Fact]
-    public void DesignerActionListCollection_AddRange_NullValue_ThrowsArgumentNullException()
+    public void DesignerVerbCollection_AddRange_NullValue_ThrowsArgumentNullException()
     {
-        DesignerActionListCollection collection = new();
-        Assert.Throws<ArgumentNullException>("value", () => collection.AddRange((DesignerActionList[])null));
-        Assert.Throws<ArgumentNullException>("value", () => collection.AddRange((DesignerActionListCollection)null));
+        DesignerVerbCollection collection = new();
+        Assert.Throws<ArgumentNullException>("value", () => collection.AddRange((DesignerVerb[])null));
+        Assert.Throws<ArgumentNullException>("value", () => collection.AddRange((DesignerVerbCollection)null));
     }
 
     [Fact]
-    public void DesignerActionListCollection_Insert_DesignerActionList_Success()
+    public void DesignerVerbCollection_Insert_DesignerVerb_Success()
     {
-        DesignerActionListCollection collection = new();
+        DesignerVerbCollection collection = new();
 
-        DesignerActionList value1 = new(null);
+        DesignerVerb value1 = new(null, null);
         collection.Insert(0, value1);
         Assert.Same(value1, Assert.Single(collection));
         Assert.Same(value1, collection[0]);
         Assert.True(collection.Contains(value1));
         Assert.Equal(0, collection.IndexOf(value1));
 
-        DesignerActionList value2 = new(null);
+        DesignerVerb value2 = new(null, null);
         collection.Insert(0, value2);
         Assert.Equal(new object[] { value2, value1 }, collection.Cast<object>());
         Assert.True(collection.Contains(value2));
@@ -116,10 +116,10 @@ public class DesignerActionListCollectionTests
     }
 
     [Fact]
-    public void DesignerActionListCollection_Remove_Invoke_Success()
+    public void DesignerVerbCollection_Remove_Invoke_Success()
     {
-        DesignerActionListCollection collection = new();
-        DesignerActionList value = new(null);
+        DesignerVerbCollection collection = new();
+        DesignerVerb value = new(null, null);
         collection.Add(value);
         Assert.Same(value, Assert.Single(collection));
 
@@ -136,11 +136,11 @@ public class DesignerActionListCollectionTests
     }
 
     [Fact]
-    public void DesignerActionListCollection_Item_Set_GetReturnsExpected()
+    public void DesignerVerbCollection_Item_Set_GetReturnsExpected()
     {
-        DesignerActionListCollection collection = new();
-        DesignerActionList value1 = new(null);
-        DesignerActionList value2 = new(null);
+        DesignerVerbCollection collection = new();
+        DesignerVerb value1 = new(null, null);
+        DesignerVerb value2 = new(null, null);
         collection.Add(value1);
         Assert.Same(value1, Assert.Single(collection));
 
@@ -162,44 +162,44 @@ public class DesignerActionListCollectionTests
     }
 
     [Fact]
-    public void DesignerActionListCollection_CopyTo_Invoke_Success()
+    public void DesignerVerbCollection_CopyTo_Invoke_Success()
     {
-        DesignerActionListCollection collection = new();
-        DesignerActionList value = new(null);
+        DesignerVerbCollection collection = new();
+        DesignerVerb value = new(null, null);
         collection.Add(value);
 
-        var array = new DesignerActionList[3];
+        var array = new DesignerVerb[3];
         collection.CopyTo(array, 1);
-        Assert.Equal(new DesignerActionList[] { null, value, null }, array);
+        Assert.Equal(new DesignerVerb[] { null, value, null }, array);
     }
 
     [Fact]
-    public void DesignerActionListCollection_Contains_NoSuchValue_ReturnsFalse()
+    public void DesignerVerbCollection_Contains_NoSuchValue_ReturnsFalse()
     {
-        DesignerActionListCollection collection = new();
-        DesignerActionList value = new(null);
+        DesignerVerbCollection collection = new();
+        DesignerVerb value = new(null, null);
         collection.Add(value);
 
-        Assert.False(collection.Contains(new DesignerActionList(null)));
+        Assert.False(collection.Contains(new DesignerVerb(null, null)));
         Assert.False(collection.Contains(null));
     }
 
     [Fact]
-    public void DesignerActionListCollection_IndexOf_NoSuchValue_ReturnsNegativeOne()
+    public void DesignerVerbCollection_IndexOf_NoSuchValue_ReturnsNegativeOne()
     {
-        DesignerActionListCollection collection = new();
-        DesignerActionList value = new(null);
+        DesignerVerbCollection collection = new();
+        DesignerVerb value = new(null, null);
         collection.Add(value);
 
-        Assert.Equal(-1, collection.IndexOf(new DesignerActionList(null)));
+        Assert.Equal(-1, collection.IndexOf(new DesignerVerb(null, null)));
         Assert.Equal(-1, collection.IndexOf(null));
     }
 
     [Fact]
-    public void DesignerActionListCollection_Clear_Success()
+    public void DesignerVerbCollection_Clear_Success()
     {
-        DesignerActionListCollection collection = new();
-        DesignerActionList value = new(null);
+        DesignerVerbCollection collection = new();
+        DesignerVerb value = new(null, null);
         collection.Add(value);
 
         collection.Clear();

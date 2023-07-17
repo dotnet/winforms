@@ -9,14 +9,14 @@ public class ColumnHeaderCollectionEditorTests
     [Fact]
     public void ColumnHeaderCollectionEditor_Ctor_Default()
     {
-        var editor = new ColumnHeaderCollectionEditor(typeof(string));
+        ColumnHeaderCollectionEditor editor = new(typeof(string));
         Assert.False(editor.IsDropDownResizable);
     }
 
     [Fact]
     public void ColumnHeaderCollectionEditor_EditValue_ReturnsValue()
     {
-        var editor = new ColumnHeaderCollectionEditor(typeof(string));
+        ColumnHeaderCollectionEditor editor = new(typeof(string));
         string[] value = new string[] { "asdf", "qwer", "zxcv" };
 
         Assert.Same(value, editor.EditValue(null, value));

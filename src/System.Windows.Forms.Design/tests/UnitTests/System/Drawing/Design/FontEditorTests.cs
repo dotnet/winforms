@@ -12,7 +12,7 @@ public class FontEditorTests
     [Fact]
     public void FontEditor_Ctor_Default()
     {
-        var editor = new FontEditor();
+        FontEditor editor = new();
         Assert.False(editor.IsDropDownResizable);
     }
 
@@ -20,7 +20,7 @@ public class FontEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
     public void FontEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
     {
-        var editor = new FontEditor();
+        FontEditor editor = new();
         Assert.Same(value, editor.EditValue(null, provider, value));
     }
 
@@ -28,7 +28,7 @@ public class FontEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void FontEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
     {
-        var editor = new FontEditor();
+        FontEditor editor = new();
         Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
     }
 
@@ -36,7 +36,7 @@ public class FontEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void FontEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
     {
-        var editor = new FontEditor();
+        FontEditor editor = new();
         Assert.False(editor.GetPaintValueSupported(context));
     }
 }

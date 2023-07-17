@@ -15,7 +15,7 @@ public class DesignerActionHeaderItemTests
     [InlineData(null, null, null)]
     public void DesignerActionItem_Ctor_String_String(string displayName, string category, string expectedDisplayName)
     {
-        var item = new DesignerActionHeaderItem(displayName, category);
+        DesignerActionHeaderItem item = new(displayName, category);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Equal(category, item.Category);
         Assert.Null(item.Description);
@@ -33,7 +33,7 @@ public class DesignerActionHeaderItemTests
     [InlineData(null, null)]
     public void DesignerActionItem_Ctor_String(string displayName, string expectedDisplayName)
     {
-        var item = new DesignerActionHeaderItem(displayName);
+        DesignerActionHeaderItem item = new(displayName);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Equal(displayName, item.Category);
         Assert.Null(item.Description);

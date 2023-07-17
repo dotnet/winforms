@@ -9,10 +9,10 @@ public class EventHandlerServiceTests
     [Fact]
     public void ctor_should_set_FocusWindow()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
         Assert.Null(service.FocusWindow);
 
-        using var focusWnd = new Control();
+        using Control focusWnd = new();
         service = new EventHandlerService(focusWnd);
         Assert.Same(focusWnd, service.FocusWindow);
     }
@@ -20,7 +20,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void GetHandler_should_throw_if_handlerType_null()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
 
         Assert.Throws<ArgumentNullException>(() => service.GetHandler(null));
     }
@@ -28,7 +28,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void GetHandler_should_return_null_if_no_handlers()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
 
         Assert.Null(service.GetHandler(typeof(object)));
     }
@@ -36,7 +36,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void GetHandler_should_return_last_inserted_handler_of_type()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
         service.PushHandler(new A());
 
         object second = new A();
@@ -48,7 +48,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void GetHandler_should_not_remove_from_handlers()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
         A a = new A();
         service.PushHandler(a);
 
@@ -61,7 +61,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void GetHandler_should_return_derived_handler_if_found()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
         A a = new A();
         service.PushHandler(a);
         B b = new B();
@@ -75,7 +75,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void GetHandler_should_return_null_if_handler_type_not_found()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
         service.PushHandler("Handler");
 
         // PopHandler asserts when an item isn't found
@@ -88,7 +88,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void PopHandler_should_throw_if_handler_null()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
 
         Assert.Throws<ArgumentNullException>(() => service.PopHandler(null));
     }
@@ -96,7 +96,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void PopHandler_should_not_throw_if_stack_empty()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
 
         service.PopHandler(typeof(ComboBox));
     }
@@ -104,7 +104,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void PopHandler_should_not_pop_if_handler_not_found_on_stack()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
         A a = new A();
         service.PushHandler(a);
 
@@ -120,7 +120,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void PopHandler_should_pop_if_handler_found_on_stack()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
         A a = new A();
         service.PushHandler(a);
         service.PopHandler(a);
@@ -130,7 +130,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void PopHandler_should_raise_changedEvent_if_handler_found_on_stack()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
 
         A a = new A();
         service.PushHandler(a);
@@ -146,7 +146,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void PushHandler_should_throw_if_handler_null()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
 
         Assert.Throws<ArgumentNullException>(() => service.PushHandler(null));
     }
@@ -154,7 +154,7 @@ public class EventHandlerServiceTests
     [Fact]
     public void PushHandler_should_set_handlerHead_to_new_handler()
     {
-        var service = new EventHandlerService(null);
+        EventHandlerService service = new(null);
 
         A a1 = new A();
         service.PushHandler(a1);
@@ -167,8 +167,8 @@ public class EventHandlerServiceTests
     [Fact]
     public void PushHandler_should_raise_changedEvent_for_new_handler()
     {
-        var service = new EventHandlerService(null);
-        var a = new A();
+        EventHandlerService service = new(null);
+        A a = new();
         int callCount = 0;
         service.EventHandlerChanged += (s, e) => { callCount++; };
 

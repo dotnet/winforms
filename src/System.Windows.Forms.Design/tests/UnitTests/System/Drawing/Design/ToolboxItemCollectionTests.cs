@@ -9,8 +9,8 @@ public class ToolboxItemCollectionTests
     [Fact]
     public void ToolboxItemCollection_Ctor_ToolboxItemArray()
     {
-        var item = new ToolboxItem();
-        var collection = new ToolboxItemCollection(new ToolboxItem[] { item });
+        ToolboxItem item = new();
+        ToolboxItemCollection collection = new(new ToolboxItem[] { item });
         Assert.Same(item, Assert.Single(collection));
         Assert.Same(item, collection[0]);
         Assert.True(collection.Contains(item));
@@ -26,9 +26,9 @@ public class ToolboxItemCollectionTests
     [Fact]
     public void ToolboxItemCollection_Ctor_ToolboxItemCollection()
     {
-        var item = new ToolboxItem();
-        var value = new ToolboxItemCollection(new ToolboxItem[] { item });
-        var collection = new ToolboxItemCollection(value);
+        ToolboxItem item = new();
+        ToolboxItemCollection value = new(new ToolboxItem[] { item });
+        ToolboxItemCollection collection = new(value);
         Assert.Same(item, Assert.Single(collection));
         Assert.Same(item, collection[0]);
         Assert.True(collection.Contains(item));
@@ -44,8 +44,8 @@ public class ToolboxItemCollectionTests
     [Fact]
     public void ToolboxItemCollection_Contains_NoSuchValue_ReturnsFalse()
     {
-        var item = new ToolboxItem();
-        var collection = new ToolboxItemCollection(new ToolboxItem[] { item });
+        ToolboxItem item = new();
+        ToolboxItemCollection collection = new(new ToolboxItem[] { item });
         Assert.False(collection.Contains(new ToolboxItem { DisplayName = "Other" }));
         Assert.False(collection.Contains(null));
     }
@@ -53,8 +53,8 @@ public class ToolboxItemCollectionTests
     [Fact]
     public void ToolboxItemCollection_IndexOf_NoSuchValue_ReturnsNegativeOne()
     {
-        var item = new ToolboxItem();
-        var collection = new ToolboxItemCollection(new ToolboxItem[] { item });
+        ToolboxItem item = new();
+        ToolboxItemCollection collection = new(new ToolboxItem[] { item });
         Assert.Equal(-1, collection.IndexOf(new ToolboxItem { DisplayName = "Other" }));
         Assert.Equal(-1, collection.IndexOf(null));
     }
@@ -62,8 +62,8 @@ public class ToolboxItemCollectionTests
     [Fact]
     public void ToolboxItemCollection_CopyTo_Invoke_Success()
     {
-        var item = new ToolboxItem();
-        var collection = new ToolboxItemCollection(new ToolboxItem[] { item });
+        ToolboxItem item = new();
+        ToolboxItemCollection collection = new(new ToolboxItem[] { item });
 
         var array = new ToolboxItem[3];
         collection.CopyTo(array, 1);

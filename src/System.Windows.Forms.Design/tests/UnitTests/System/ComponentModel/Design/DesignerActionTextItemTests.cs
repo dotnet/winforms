@@ -15,7 +15,7 @@ public class DesignerActionTextItemTests
     [InlineData(null, null, null)]
     public void DesignerActionItem_Ctor_String_String(string displayName, string category, string expectedDisplayName)
     {
-        var item = new DesignerActionTextItem(displayName, category);
+        DesignerActionTextItem item = new(displayName, category);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Equal(category, item.Category);
         Assert.Null(item.Description);

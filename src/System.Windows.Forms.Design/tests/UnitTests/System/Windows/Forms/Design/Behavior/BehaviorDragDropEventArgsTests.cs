@@ -19,7 +19,7 @@ public class BehaviorDragDropEventArgsTests
     [MemberData(nameof(Ctor_ICollection_TestData))]
     public void Ctor_ICollection(ICollection components)
     {
-        var e = new BehaviorDragDropEventArgs(components);
+        BehaviorDragDropEventArgs e = new(components);
         Assert.Same(components, e.DragComponents);
     }
 }

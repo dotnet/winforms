@@ -13,7 +13,7 @@ public class ImageEditorTests
     [Fact]
     public void ImageEditor_Ctor_Default()
     {
-        var editor = new ImageEditor();
+        ImageEditor editor = new();
         Assert.False(editor.IsDropDownResizable);
     }
 
@@ -38,7 +38,7 @@ public class ImageEditorTests
     [Fact]
     public void ImageEditor_CreateFilterEntry_Invoke_CallsGetExtensionsOnce()
     {
-        var editor = new CustomGetImageExtendersEditor
+        CustomGetImageExtendersEditor editor = new()
         {
             GetImageExtendersResult = new Type[] { typeof(PublicImageEditor), typeof(PrivateImageEditor) }
         };
@@ -56,7 +56,7 @@ public class ImageEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
     public void ImageEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
     {
-        var editor = new ImageEditor();
+        ImageEditor editor = new();
         Assert.Same(value, editor.EditValue(null, provider, value));
     }
 
@@ -64,14 +64,14 @@ public class ImageEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void ImageEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
     {
-        var editor = new ImageEditor();
+        ImageEditor editor = new();
         Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
     }
 
     [Fact]
     public void ImageEditor_GetExtensions_InvokeDefault_ReturnsExpected()
     {
-        var editor = new SubImageEditor();
+        SubImageEditor editor = new();
         string[] extensions = editor.GetExtensions();
         Assert.Equal(new string[] { "bmp", "gif", "jpg", "jpeg", "png", "ico", "emf", "wmf" }, extensions);
         Assert.NotSame(extensions, editor.GetExtensions());
@@ -80,7 +80,7 @@ public class ImageEditorTests
     [Fact]
     public void ImageEditor_GetExtensions_InvokeCustom_CallsGetImageExtendersOnce()
     {
-        var editor = new CustomGetImageExtendersEditor
+        CustomGetImageExtendersEditor editor = new()
         {
             GetImageExtendersResult = new Type[] { typeof(PublicImageEditor), typeof(PrivateImageEditor), typeof(ImageEditor), typeof(NullExtensionsImageEditor) }
         };
@@ -91,7 +91,7 @@ public class ImageEditorTests
     [Fact]
     public void ImageEditor_GetExtensions_InvokeInvalid_ReturnsExpected()
     {
-        var editor = new CustomGetImageExtendersEditor
+        CustomGetImageExtendersEditor editor = new()
         {
             GetImageExtendersResult = new Type[] { typeof(object), null }
         };
@@ -102,14 +102,14 @@ public class ImageEditorTests
     [Fact]
     public void ImageEditor_GetFileDialogDescription_Invoke_ReturnsExpected()
     {
-        var editor = new SubImageEditor();
+        SubImageEditor editor = new();
         Assert.Equal("All image files", editor.GetFileDialogDescription());
     }
 
     [Fact]
     public void ImageEditor_GetImageExtenders_Invoke_ReturnsExpected()
     {
-        var editor = new SubImageEditor();
+        SubImageEditor editor = new();
         Type[] extenders = editor.GetImageExtenders();
         Assert.Equal(new Type[] { typeof(BitmapEditor), typeof(MetafileEditor) }, extenders);
         Assert.Same(extenders, editor.GetImageExtenders());
@@ -119,23 +119,23 @@ public class ImageEditorTests
     [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
     public void ImageEditor_GetPaintValueSupported_Invoke_ReturnsTrue(ITypeDescriptorContext context)
     {
-        var editor = new ImageEditor();
+        ImageEditor editor = new();
         Assert.True(editor.GetPaintValueSupported(context));
     }
 
     [Fact]
     public void ImageEditor_LoadFromStream_BitmapStream_ReturnsExpected()
     {
-        var editor = new SubImageEditor();
+        SubImageEditor editor = new();
         using (MemoryStream stream = new MemoryStream())
-        using (var image = new Bitmap(10, 10))
+        using (Bitmap image = new(10, 10))
         {
             image.Save(stream, ImageFormat.Bmp);
             stream.Position = 0;
             Bitmap result = Assert.IsType<Bitmap>(editor.LoadFromStream(stream));
             Assert.Equal(new Size(10, 10), result.Size);
 
-            using var resultStream = new MemoryStream();
+            using MemoryStream resultStream = new();
             result.Save(resultStream, ImageFormat.Bmp);
             Assert.Equal(stream.Length, resultStream.Length);
         }
@@ -144,7 +144,7 @@ public class ImageEditorTests
     [Fact]
     public void ImageEditor_LoadFromStream_MetafileStream_ThrowsArgumentException()
     {
-        var editor = new SubImageEditor();
+        SubImageEditor editor = new();
         using (Stream stream = File.OpenRead("Resources/telescope_01.wmf"))
         {
             Assert.Throws<ArgumentException>(() => editor.LoadFromStream(stream));
@@ -154,16 +154,16 @@ public class ImageEditorTests
     [Fact]
     public void ImageEditor_LoadFromStream_NullStream_ThrowsArgumentNullException()
     {
-        var editor = new SubImageEditor();
+        SubImageEditor editor = new();
         Assert.Throws<ArgumentNullException>("stream", () => editor.LoadFromStream(null));
     }
 
     [Fact]
     public void ImageEditor_PaintValue_Invoke_Success()
     {
-        var editor = new ImageEditor();
-        using (var image = new Bitmap(10, 10))
-        using (var otherImage = new Bitmap(3, 2))
+        ImageEditor editor = new();
+        using (Bitmap image = new(10, 10))
+        using (Bitmap otherImage = new(3, 2))
         using (Graphics graphics = Graphics.FromImage(image))
         {
             otherImage.SetPixel(0, 0, Color.Red);
@@ -173,7 +173,7 @@ public class ImageEditorTests
             otherImage.SetPixel(1, 1, Color.Red);
             otherImage.SetPixel(2, 1, Color.Red);
 
-            var e = new PaintValueEventArgs(null, otherImage, graphics, new Rectangle(1, 2, 3, 4));
+            PaintValueEventArgs e = new(null, otherImage, graphics, new Rectangle(1, 2, 3, 4));
             editor.PaintValue(e);
         }
     }
@@ -188,11 +188,11 @@ public class ImageEditorTests
     [MemberData(nameof(PaintValue_InvalidArgsValue_TestData))]
     public void ImageEditor_PaintValue_InvalidArgsValue_Nop(object value)
     {
-        var editor = new ImageEditor();
-        using (var image = new Bitmap(10, 10))
+        ImageEditor editor = new();
+        using (Bitmap image = new(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            var e = new PaintValueEventArgs(null, value, graphics, new Rectangle(1, 2, 3, 4));
+            PaintValueEventArgs e = new(null, value, graphics, new Rectangle(1, 2, 3, 4));
             editor.PaintValue(e);
         }
     }
@@ -200,7 +200,7 @@ public class ImageEditorTests
     [Fact]
     public void ImageEditor_PaintValue_NullE_Nop()
     {
-        var editor = new ImageEditor();
+        ImageEditor editor = new();
         editor.PaintValue(null);
     }
 

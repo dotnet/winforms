@@ -9,7 +9,7 @@ public class InheritanceServicerTests
     [Fact]
     public void InheritanceService_Constructor()
     {
-        var underTest = new InheritanceService();
+        InheritanceService underTest = new();
         Assert.NotNull(underTest);
     }
 }

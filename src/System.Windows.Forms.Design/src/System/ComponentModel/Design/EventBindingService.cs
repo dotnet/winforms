@@ -20,7 +20,6 @@ public abstract partial class EventBindingService : IEventBindingService
     private IComponent _showCodeComponent;
     private EventDescriptor _showCodeEventDescriptor;
     private string _showCodeMethodName;
-    private static readonly CodeMarkers s_codemarker = CodeMarkers.Instance;
 
     /// <summary>
     ///  You must provide a service provider to the binding
@@ -273,7 +272,6 @@ public abstract partial class EventBindingService : IEventBindingService
             _showCodeComponent = null;
             _showCodeEventDescriptor = null;
             _showCodeMethodName = null;
-            s_codemarker.CodeMarker((int)(CodeMarkerEvent.perfFXDesignShowCode));
         }
     }
 }

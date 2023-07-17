@@ -21,7 +21,7 @@ public class ExceptionCollectionTests
     [MemberData(nameof(Ctor_ArrayList_TestData))]
     public void ExceptionCollection_Ctor_ArrayList(ArrayList exceptions)
     {
-        var collection = new ExceptionCollection(exceptions);
+        ExceptionCollection collection = new(exceptions);
         if (exceptions is null)
         {
             Assert.Null(collection.Exceptions);
@@ -38,7 +38,7 @@ public class ExceptionCollectionTests
     [Fact]
     public void ExceptionCollection_Ctor_ArguementException()
     {
-        var exceptions = new ArrayList { 1, 2, 3 };
+        ArrayList exceptions = new() { 1, 2, 3 };
         Assert.Throws<ArgumentException>(() => new ExceptionCollection(exceptions));
     }
 
@@ -46,10 +46,10 @@ public class ExceptionCollectionTests
     [BoolData]
     public void ExceptionCollection_Serialize_ThrowsSerializationException(bool formatterEnabled)
     {
-        using var formatterScope = new BinaryFormatterScope(enable: formatterEnabled);
-        using var stream = new MemoryStream();
-        var formatter = new BinaryFormatter();
-        var collection = new ExceptionCollection(new ArrayList());
+        using BinaryFormatterScope formatterScope = new(enable: formatterEnabled);
+        using MemoryStream stream = new();
+        BinaryFormatter formatter = new();
+        ExceptionCollection collection = new(new ArrayList());
         if (formatterEnabled)
         {
             Assert.Throws<SerializationException>(() => formatter.Serialize(stream, collection));
@@ -63,7 +63,7 @@ public class ExceptionCollectionTests
     [Fact]
     public void ExceptionCollection_GetObjectData_ThrowsPlatformNotSupportedException()
     {
-        var collection = new ExceptionCollection(new ArrayList());
+        ExceptionCollection collection = new(new ArrayList());
         Assert.Throws<PlatformNotSupportedException>(() => collection.GetObjectData(null, new StreamingContext()));
     }
 }

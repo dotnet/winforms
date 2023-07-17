@@ -15,7 +15,7 @@ public class DesignerActionItemTests
     [InlineData(null, null, null, null)]
     public void DesignerActionItem_Ctor_String_String_String(string displayName, string category, string description, string expectedDisplayName)
     {
-        var item = new SubDesignerActionItem(displayName, category, description);
+        SubDesignerActionItem item = new(displayName, category, description);
         Assert.Equal(expectedDisplayName, item.DisplayName);
         Assert.Equal(category, item.Category);
         Assert.Equal(description, item.Description);
@@ -30,7 +30,7 @@ public class DesignerActionItemTests
     [BoolData]
     public void DesignerActionItem_AllowAssociate_Set_GetReturnsExpected(bool value)
     {
-        var item = new SubDesignerActionItem("displayName", "category", "description")
+        SubDesignerActionItem item = new("displayName", "category", "description")
         {
             AllowAssociate = value
         };
@@ -45,7 +45,7 @@ public class DesignerActionItemTests
     [BoolData]
     public void DesignerActionItem_ShowInSourceView_Set_GetReturnsExpected(bool value)
     {
-        var item = new SubDesignerActionItem("displayName", "category", "description")
+        SubDesignerActionItem item = new("displayName", "category", "description")
         {
             ShowInSourceView = value
         };

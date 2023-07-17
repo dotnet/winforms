@@ -22,7 +22,7 @@ public class CodeDomSerializerExceptionTests
     [MemberData(nameof(Ctor_String_CodeLinePragma_TestData))]
     public void CodeDomSerializerException_Ctor_String_CodeLinePragma(string message, CodeLinePragma linePragma)
     {
-        var exception = new CodeDomSerializerException(message, linePragma);
+        CodeDomSerializerException exception = new(message, linePragma);
         Assert.NotEmpty(exception.Message);
         Assert.Null(exception.InnerException);
         Assert.Same(linePragma, exception.LinePragma);
@@ -38,7 +38,7 @@ public class CodeDomSerializerExceptionTests
     [MemberData(nameof(Ctor_Exception_CodeLinePragma_TestData))]
     public void CodeDomSerializerException_Ctor_Exception_CodeLinePragma(Exception innerException, CodeLinePragma linePragma)
     {
-        var exception = new CodeDomSerializerException(innerException, linePragma);
+        CodeDomSerializerException exception = new(innerException, linePragma);
         Assert.NotEmpty(exception.Message);
         Assert.Same(innerException, exception.InnerException);
         Assert.Same(linePragma, exception.LinePragma);
@@ -46,7 +46,7 @@ public class CodeDomSerializerExceptionTests
 
     public static IEnumerable<object[]> Ctor_String_IDesignerSerializationManager_TestData()
     {
-        var mockDesignerSerializationManager = new Mock<IDesignerSerializationManager>(MockBehavior.Strict);
+        Mock<IDesignerSerializationManager> mockDesignerSerializationManager = new(MockBehavior.Strict);
         yield return new object[] { "message", mockDesignerSerializationManager.Object };
         yield return new object[] { null, mockDesignerSerializationManager.Object };
     }
@@ -55,7 +55,7 @@ public class CodeDomSerializerExceptionTests
     [MemberData(nameof(Ctor_String_IDesignerSerializationManager_TestData))]
     public void CodeDomSerializerException_Ctor_String_IDesignerSerializationManager(string message, IDesignerSerializationManager manager)
     {
-        var exception = new CodeDomSerializerException(message, manager);
+        CodeDomSerializerException exception = new(message, manager);
         Assert.NotEmpty(exception.Message);
         Assert.Null(exception.InnerException);
         Assert.Null(exception.LinePragma);
@@ -63,7 +63,7 @@ public class CodeDomSerializerExceptionTests
 
     public static IEnumerable<object[]> Ctor_Exception_IDesignerSerializationManager_TestData()
     {
-        var mockDesignerSerializationManager = new Mock<IDesignerSerializationManager>(MockBehavior.Strict);
+        Mock<IDesignerSerializationManager> mockDesignerSerializationManager = new(MockBehavior.Strict);
         yield return new object[] { new Exception(), mockDesignerSerializationManager.Object };
         yield return new object[] { null, mockDesignerSerializationManager.Object };
     }
@@ -72,7 +72,7 @@ public class CodeDomSerializerExceptionTests
     [MemberData(nameof(Ctor_Exception_IDesignerSerializationManager_TestData))]
     public void CodeDomSerializerException_Ctor_Exception_IDesignerSerializationManager(Exception innerException, IDesignerSerializationManager manager)
     {
-        var exception = new CodeDomSerializerException(innerException, manager);
+        CodeDomSerializerException exception = new(innerException, manager);
         Assert.NotEmpty(exception.Message);
         Assert.Same(innerException, exception.InnerException);
         Assert.Null(exception.LinePragma);
@@ -89,10 +89,10 @@ public class CodeDomSerializerExceptionTests
     [BoolData]
     public void CodeDomSerializerException_Serialize_ThrowsSerializationException(bool formatterEnabled)
     {
-        using var formatterScope = new BinaryFormatterScope(enable: formatterEnabled);
-        using var stream = new MemoryStream();
-        var formatter = new BinaryFormatter();
-        var exception = new CodeDomSerializerException("message", new CodeLinePragma("fileName.cs", 11));
+        using BinaryFormatterScope formatterScope = new(enable: formatterEnabled);
+        using MemoryStream stream = new();
+        BinaryFormatter formatter = new();
+        CodeDomSerializerException exception = new("message", new CodeLinePragma("fileName.cs", 11));
         if (formatterEnabled)
         {
             Assert.Throws<SerializationException>(() => formatter.Serialize(stream, exception));
@@ -107,7 +107,7 @@ public class CodeDomSerializerExceptionTests
     [Fact]
     public void CodeDomSerializerException_GetObjectData_ThrowsPlatformNotSupportedException()
     {
-        var exception = new CodeDomSerializerException("message", new CodeLinePragma("fileName.cs", 11));
+        CodeDomSerializerException exception = new("message", new CodeLinePragma("fileName.cs", 11));
         Assert.Throws<PlatformNotSupportedException>(() => exception.GetObjectData(null, new StreamingContext()));
     }
 }
