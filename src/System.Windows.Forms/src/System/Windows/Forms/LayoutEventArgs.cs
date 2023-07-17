@@ -8,9 +8,11 @@ namespace System.Windows.Forms;
 
 public sealed class LayoutEventArgs : EventArgs
 {
+    private readonly WeakReference<IComponent>? _affectedComponent;
+
     public LayoutEventArgs(IComponent? affectedComponent, string? affectedProperty)
     {
-        AffectedComponent = affectedComponent;
+        _affectedComponent = affectedComponent is not null ? new(affectedComponent) : null;
         AffectedProperty = affectedProperty;
     }
 
@@ -19,7 +21,15 @@ public sealed class LayoutEventArgs : EventArgs
     {
     }
 
-    public IComponent? AffectedComponent { get; }
+    public IComponent? AffectedComponent
+    {
+        get
+        {
+            IComponent? target = null;
+            _affectedComponent?.TryGetTarget(out target);
+            return target;
+        }
+    }
 
     public Control? AffectedControl => AffectedComponent as Control;
 
