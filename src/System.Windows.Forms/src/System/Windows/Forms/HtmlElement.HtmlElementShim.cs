@@ -64,20 +64,11 @@ public sealed partial class HtmlElement
             }
         }
 
-        public override IHTMLWindow2? AssociatedWindow
-        {
-            get { return _associatedWindow; }
-        }
+        public override IHTMLWindow2? AssociatedWindow => _associatedWindow;
 
-        public IHTMLElement NativeHtmlElement
-        {
-            get { return _htmlElement.NativeHtmlElement; }
-        }
+        public IHTMLElement NativeHtmlElement => _htmlElement.NativeHtmlElement;
 
-        internal HtmlElement Element
-        {
-            get { return _htmlElement; }
-        }
+        internal HtmlElement Element => _htmlElement;
 
         ///  Support IHTMLElement2.AttachEventHandler
         public override void AttachEventHandler(string eventName, EventHandler eventHandler)
@@ -96,10 +87,11 @@ public sealed partial class HtmlElement
             {
                 for (int i = 0; i < s_dispInterfaceTypes.Length && _cookie is null; i++)
                 {
-                    _cookie = new AxHost.ConnectionPointCookie(NativeHtmlElement,
-                                                                              new HTMLElementEvents2(_htmlElement),
-                                                                              s_dispInterfaceTypes[i],
-                                                                              /*throwException*/ false);
+                    _cookie = new AxHost.ConnectionPointCookie(
+                        NativeHtmlElement,
+                        new HTMLElementEvents2(_htmlElement),
+                        s_dispInterfaceTypes[i],
+                        throwException: false);
                     if (!_cookie.Connected)
                     {
                         _cookie = null;
@@ -141,9 +133,6 @@ public sealed partial class HtmlElement
             }
         }
 
-        protected override object GetEventSender()
-        {
-            return _htmlElement;
-        }
+        protected override object GetEventSender() => _htmlElement;
     }
 }
