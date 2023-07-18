@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -73,7 +71,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private static readonly Guid s_maskEdit_Clsid = new("{c932ba85-4374-101b-a56c-00aa003668dc}");
 
     // Static state for perf optimization
-    private static ConditionalWeakTable<Font, object> s_fontTable;
+    private static ConditionalWeakTable<Font, object>? s_fontTable;
 
     // BitVector32 masks for various internal state flags.
     private static readonly int s_ocxStateSet = BitVector32.CreateMask();
@@ -122,34 +120,34 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private readonly Guid _clsid;
     private string _text = string.Empty;
-    private string _licenseKey;
+    private string? _licenseKey;
 
     private readonly OleInterfaces _oleSite;
-    private AxComponentEditor _editor;
-    private AxContainer _container;
-    private ContainerControl _containingControl;
-    private ContainerControl _newParent;
-    private AxContainer _axContainer;
-    private State _ocxState;
+    private AxComponentEditor? _editor;
+    private AxContainer? _container;
+    private ContainerControl? _containingControl;
+    private ContainerControl? _newParent;
+    private AxContainer? _axContainer;
+    private State? _ocxState;
     private HWND _hwndFocus;
 
     // CustomTypeDescriptor related state
 
-    private Dictionary<string, PropertyDescriptor> _properties;
-    private Dictionary<string, PropertyInfo> _propertyInfos;
-    private PropertyDescriptorCollection _propsStash;
-    private Attribute[] _attribsStash;
+    private Dictionary<string, PropertyDescriptor>? _properties;
+    private Dictionary<string, PropertyInfo>? _propertyInfos;
+    private PropertyDescriptorCollection? _propsStash;
+    private Attribute[]? _attribsStash;
 
     // Interface pointers to the ocx
 
-    private object _instance;
-    private AgileComPointer<IOleInPlaceActiveObject> _iOleInPlaceActiveObjectExternal;
-    private IPersistPropertyBag.Interface _iPersistPropBag;
-    private IPersistStream.Interface _iPersistStream;
-    private IPersistStreamInit.Interface _iPersistStreamInit;
-    private IPersistStorage.Interface _iPersistStorage;
+    private object? _instance;
+    private AgileComPointer<IOleInPlaceActiveObject>? _iOleInPlaceActiveObjectExternal;
+    private IPersistPropertyBag.Interface? _iPersistPropBag;
+    private IPersistStream.Interface? _iPersistStream;
+    private IPersistStreamInit.Interface? _iPersistStreamInit;
+    private IPersistStorage.Interface? _iPersistStorage;
 
-    private AboutBoxDelegate _aboutBoxDelegate;
+    private AboutBoxDelegate? _aboutBoxDelegate;
     private readonly EventHandler _selectionChangeHandler;
 
     private readonly bool _isMaskEdit;
@@ -160,7 +158,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     // These should be in the order given by the PROPCAT_X values
     // Also, note that they are not to be localized...
 
-    private static readonly CategoryAttribute[] s_categoryNames = new CategoryAttribute[]
+    private static readonly CategoryAttribute?[] s_categoryNames = new CategoryAttribute?[]
     {
         null,
         new WinCategoryAttribute("Default"),
@@ -176,7 +174,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         new WinCategoryAttribute("DDE")
     };
 
-    private Dictionary<PROPCAT, CategoryAttribute> _objectDefinedCategoryNames;
+    private Dictionary<PROPCAT, CategoryAttribute>? _objectDefinedCategoryNames;
 
 #if DEBUG
     static AxHost()
@@ -199,7 +197,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  Creates a new instance of a control which wraps an activeX control given by the
     ///  clsid parameter and flags of 0.
     /// </summary>
-    protected AxHost(string clsid) : this(clsid, 0)
+    protected AxHost(string clsid)
+        : this(clsid, 0)
     {
     }
 
@@ -207,7 +206,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  Creates a new instance of a control which wraps an activeX control given by the
     ///  clsid and flags parameters.
     /// </summary>
-    protected AxHost(string clsid, int flags) : base()
+    protected AxHost(string clsid, int flags)
+        : base()
     {
         if (Application.OleRequired() != ApartmentState.STA)
         {
@@ -291,7 +291,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public override Image BackgroundImage
+    public override Image? BackgroundImage
     {
         get => base.BackgroundImage;
         set => base.BackgroundImage = value;
@@ -320,7 +320,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler MouseClick
+    public new event EventHandler? MouseClick
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseClick"));
         remove { }
@@ -328,7 +328,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler MouseDoubleClick
+    public new event EventHandler? MouseDoubleClick
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDoubleClick"));
         remove { }
@@ -336,6 +336,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [AllowNull]
     public override Cursor Cursor
     {
         get => base.Cursor;
@@ -364,6 +365,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [AllowNull]
     public override Font Font
     {
         get => base.Font;
@@ -393,10 +395,11 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
+    [AllowNull]
     public override string Text
     {
         get => _text;
-        set => _text = value;
+        set => _text = value ?? string.Empty;
     }
 
     internal override bool CanAccessProperties
@@ -442,7 +445,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
     }
 
-    private void OnContainerVisibleChanged(object sender, EventArgs e)
+    private void OnContainerVisibleChanged(object? sender, EventArgs e)
     {
         ContainerControl f = ContainingControl;
         if (f is not null)
@@ -494,7 +497,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackColorChanged
+    public new event EventHandler? BackColorChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
         remove { }
@@ -502,7 +505,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageChanged
+    public new event EventHandler? BackgroundImageChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
         remove { }
@@ -510,7 +513,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageLayoutChanged
+    public new event EventHandler? BackgroundImageLayoutChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
         remove { }
@@ -518,7 +521,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BindingContextChanged
+    public new event EventHandler? BindingContextChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
         remove { }
@@ -526,7 +529,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler CursorChanged
+    public new event EventHandler? CursorChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "CursorChanged"));
         remove { }
@@ -537,7 +540,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler EnabledChanged
+    public new event EventHandler? EnabledChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "EnabledChanged"));
         remove { }
@@ -545,7 +548,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler FontChanged
+    public new event EventHandler? FontChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "FontChanged"));
         remove { }
@@ -553,7 +556,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler ForeColorChanged
+    public new event EventHandler? ForeColorChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ForeColorChanged"));
         remove { }
@@ -561,7 +564,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler RightToLeftChanged
+    public new event EventHandler? RightToLeftChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
         remove { }
@@ -569,7 +572,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler TextChanged
+    public new event EventHandler? TextChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
         remove { }
@@ -580,7 +583,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler Click
+    public new event EventHandler? Click
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Click"));
         remove { }
@@ -588,7 +591,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event DragEventHandler DragDrop
+    public new event DragEventHandler? DragDrop
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragDrop"));
         remove { }
@@ -596,7 +599,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event DragEventHandler DragEnter
+    public new event DragEventHandler? DragEnter
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragEnter"));
         remove { }
@@ -604,7 +607,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event DragEventHandler DragOver
+    public new event DragEventHandler? DragOver
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
         remove { }
@@ -612,7 +615,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler DragLeave
+    public new event EventHandler? DragLeave
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragLeave"));
         remove { }
@@ -620,7 +623,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event GiveFeedbackEventHandler GiveFeedback
+    public new event GiveFeedbackEventHandler? GiveFeedback
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "GiveFeedback"));
         remove { }
@@ -628,7 +631,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event HelpEventHandler HelpRequested
+    public new event HelpEventHandler? HelpRequested
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
         remove { }
@@ -636,7 +639,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event PaintEventHandler Paint
+    public new event PaintEventHandler? Paint
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Paint"));
         remove { }
@@ -644,7 +647,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event QueryContinueDragEventHandler QueryContinueDrag
+    public new event QueryContinueDragEventHandler? QueryContinueDrag
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryContinueDrag"));
         remove { }
@@ -652,7 +655,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp
+    public new event QueryAccessibilityHelpEventHandler? QueryAccessibilityHelp
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
         remove { }
@@ -663,7 +666,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler DoubleClick
+    public new event EventHandler? DoubleClick
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
         remove { }
@@ -671,7 +674,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler ImeModeChanged
+    public new event EventHandler? ImeModeChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
         remove { }
@@ -682,7 +685,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event KeyEventHandler KeyDown
+    public new event KeyEventHandler? KeyDown
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyDown"));
         remove { }
@@ -693,7 +696,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event KeyPressEventHandler KeyPress
+    public new event KeyPressEventHandler? KeyPress
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyPress"));
         remove { }
@@ -704,7 +707,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event KeyEventHandler KeyUp
+    public new event KeyEventHandler? KeyUp
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyUp"));
         remove { }
@@ -712,7 +715,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event LayoutEventHandler Layout
+    public new event LayoutEventHandler? Layout
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Layout"));
         remove { }
@@ -723,7 +726,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event MouseEventHandler MouseDown
+    public new event MouseEventHandler? MouseDown
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDown"));
         remove { }
@@ -734,7 +737,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler MouseEnter
+    public new event EventHandler? MouseEnter
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseEnter"));
         remove { }
@@ -745,7 +748,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler MouseLeave
+    public new event EventHandler? MouseLeave
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseLeave"));
         remove { }
@@ -756,7 +759,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler MouseHover
+    public new event EventHandler? MouseHover
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseHover"));
         remove { }
@@ -767,7 +770,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event MouseEventHandler MouseMove
+    public new event MouseEventHandler? MouseMove
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseMove"));
         remove { }
@@ -778,7 +781,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event MouseEventHandler MouseUp
+    public new event MouseEventHandler? MouseUp
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseUp"));
         remove { }
@@ -789,7 +792,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event MouseEventHandler MouseWheel
+    public new event MouseEventHandler? MouseWheel
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseWheel"));
         remove { }
@@ -797,7 +800,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event UICuesEventHandler ChangeUICues
+    public new event UICuesEventHandler? ChangeUICues
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
         remove { }
@@ -805,7 +808,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler StyleChanged
+    public new event EventHandler? StyleChanged
     {
         add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
         remove { }
@@ -850,7 +853,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return;
         }
 
-        if (Site.TryGetService(out ISelectionService selectionService))
+        if (Site.TryGetService(out ISelectionService? selectionService))
         {
             selectionService.SelectionChanging += _selectionChangeHandler;
         }
@@ -858,7 +861,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         _axState[s_addedSelectionHandler] = true;
     }
 
-    private void OnComponentRename(object sender, ComponentRenameEventArgs e)
+    private void OnComponentRename(object? sender, ComponentRenameEventArgs e)
     {
         // When we're notified of a rename, see if this is the component that is being renamed.
         if (e.Component == this)
@@ -878,7 +881,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return false;
         }
 
-        if (Site.TryGetService(out ISelectionService selectionService))
+        if (Site.TryGetService(out ISelectionService? selectionService))
         {
             selectionService.SelectionChanging -= _selectionChangeHandler;
         }
@@ -892,7 +895,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         if (DesignMode && hook != _axState[s_renameEventHooked])
         {
             // If we're in design mode, listen to the following events from the component change service.
-            IComponentChangeService changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+            IComponentChangeService? changeService = (IComponentChangeService?)GetService(typeof(IComponentChangeService));
 
             if (changeService is not null)
             {
@@ -910,7 +913,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
     }
 
-    public override ISite Site
+    public override ISite? Site
     {
         set
         {
@@ -991,9 +994,9 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
     }
 
-    private void OnNewSelection(object sender, EventArgs e)
+    private void OnNewSelection(object? sender, EventArgs e)
     {
-        if (IsUserMode() || !Site.TryGetService(out ISelectionService selectionService))
+        if (IsUserMode() || !Site.TryGetService(out ISelectionService? selectionService))
         {
             return;
         }
@@ -1024,7 +1027,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             // The AX Host designer will offer an extender property called "SelectionStyle".
             if (TypeDescriptor.GetProperties(this)["SelectionStyle"] is { } property && property.PropertyType == typeof(int))
             {
-                if ((int)property.GetValue(this) != _selectionStyle)
+                if ((int)property.GetValue(this)! != _selectionStyle)
                 {
                     property.SetValue(this, _selectionStyle);
                 }
@@ -1300,7 +1303,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         _axState[s_manualUpdate] = true;
         return false;
     }
-
+#nullable disable
     /// <summary>
     ///  Destroys the handle associated with this control.
     ///  User code should in general not call this function.
