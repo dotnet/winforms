@@ -187,8 +187,15 @@ internal partial class PropertyStore
     public bool TryGetObject<T>(int key, [NotNullWhen(true)] out T? value)
     {
         object? entry = GetObject(key, out bool found);
-        value = !found || entry is null ? default : (T?)entry;
-        return found && entry is not null;
+        Debug.Assert(!found || entry is null || entry is T, $"Entry is not of type {typeof(T)}, but of type {entry?.GetType()}");
+        if (typeof(T).IsValueType && !typeof(T).IsPrimitive && !typeof(T).IsEnum)
+        {
+            value = found && entry is not null ? (T?)entry : default;
+            return found;
+        }
+
+        value = found ? (T?)entry : default;
+        return found;
     }
 
     public bool ContainsObjectThatIsNotNull(int key)
