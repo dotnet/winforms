@@ -1,5 +1,0 @@
-override System.Windows.Forms.ButtonBase.ButtonBaseAccessibleObject.KeyboardShortcut.get -> string?
-override System.Windows.Forms.ButtonBase.ButtonBaseAccessibleObject.Name.get -> string?
-override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.KeyboardShortcut.get -> string?
-override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.Name.get -> string?
-override System.Windows.Forms.ToolStripButton.ProcessDialogKey(System.Windows.Forms.Keys keyData) -> bool
