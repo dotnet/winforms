@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using Windows.Win32;
 
 namespace System.Windows.Forms.Design.Tests;
@@ -194,5 +195,38 @@ public class ControlDesignerTests
             Msg = (int)PInvoke.WM_PAINT
         };
         designer.TestAccessor().Dynamic.WndProc(ref m);
+    }
+
+    [Fact]
+    public void ControlDesigner_AssociatedComponents_NullSite_Test()
+    {
+        using ControlDesigner controlDesigner = new();
+        using Control control = new();
+
+        using Control subControl = new();
+        controlDesigner.Initialize(control);
+
+        Assert.Empty(controlDesigner.AssociatedComponents);
+
+        control.Controls.Add(subControl);
+
+        Assert.Empty(controlDesigner.AssociatedComponents);
+    }
+
+    [WinFormsFact]
+    public void ControlDesigner_AssociatedComponentsTest()
+    {
+        DesignSurfaceExt.DesignSurfaceExt surface = new();
+        surface.CreateRootComponent<Form>(Size.Empty);
+        using Control control = surface.CreateControl<Control>(Size.Empty, Point.Empty);
+        using ControlDesigner controlDesigner = (ControlDesigner)surface.CreateDesigner(control, false);
+        controlDesigner.Initialize(control);
+
+        Assert.Empty(controlDesigner.AssociatedComponents);
+
+        using Control subControl = surface.CreateControl<Control>(Size.Empty, Point.Empty);
+        control.Controls.Add(subControl);
+
+        Assert.Equal(1, controlDesigner.AssociatedComponents.Count);
     }
 }

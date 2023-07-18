@@ -1442,7 +1442,7 @@ internal class ToolStripDesigner : ControlDesigner
     /// </summary>
     public override void InitializeNewComponent(IDictionary defaultValues)
     {
-        Control parent = defaultValues["Parent"] as Control;
+        Control parent = defaultValues is not null ? defaultValues["Parent"] as Control : null;
         Form parentForm = _host.RootComponent as Form;
         FormDocumentDesigner parentFormDesigner = null;
         if (parentForm is not null)
