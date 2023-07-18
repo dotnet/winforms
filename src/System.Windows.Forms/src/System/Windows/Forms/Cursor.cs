@@ -476,14 +476,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
     /// <summary>
     ///  Retrieves a human readable string representing this <see cref="Cursor"/>.
     /// </summary>
-    public override string ToString()
-    {
-        string? s = !_ownHandle
-            ? TypeDescriptor.GetConverter(typeof(Cursor)).ConvertToString(this)
-            : base.ToString();
-
-        return $"[Cursor: {s}]";
-    }
+    public override string ToString() => $"[Cursor: {TypeDescriptor.GetConverter(typeof(Cursor)).ConvertToString(this)}]";
 
     public static bool operator ==(Cursor? left, Cursor? right)
     {
