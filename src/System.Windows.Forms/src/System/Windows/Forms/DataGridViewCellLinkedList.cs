@@ -16,10 +16,7 @@ internal class DataGridViewCellLinkedList : IEnumerable
     private int _count;
     private int _lastAccessedIndex;
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return new DataGridViewCellLinkedListEnumerator(_headElement);
-    }
+    IEnumerator IEnumerable.GetEnumerator() => new DataGridViewCellLinkedListEnumerator(_headElement);
 
     public DataGridViewCellLinkedList()
     {
@@ -59,13 +56,7 @@ internal class DataGridViewCellLinkedList : IEnumerable
         }
     }
 
-    public int Count
-    {
-        get
-        {
-            return _count;
-        }
-    }
+    public int Count => _count;
 
     public DataGridViewCell HeadCell
     {
