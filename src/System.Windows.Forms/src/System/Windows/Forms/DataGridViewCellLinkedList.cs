@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms;
@@ -13,8 +11,8 @@ namespace System.Windows.Forms;
 /// </summary>
 internal class DataGridViewCellLinkedList : IEnumerable
 {
-    private DataGridViewCellLinkedListElement lastAccessedElement;
-    private DataGridViewCellLinkedListElement headElement;
+    private DataGridViewCellLinkedListElement? lastAccessedElement;
+    private DataGridViewCellLinkedListElement? headElement;
     private int count, lastAccessedIndex;
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -35,27 +33,27 @@ internal class DataGridViewCellLinkedList : IEnumerable
             Debug.Assert(index < count);
             if (lastAccessedIndex == -1 || index < lastAccessedIndex)
             {
-                DataGridViewCellLinkedListElement tmp = headElement;
+                DataGridViewCellLinkedListElement? tmp = headElement;
                 int tmpIndex = index;
                 while (tmpIndex > 0)
                 {
-                    tmp = tmp.Next;
+                    tmp = tmp!.Next;
                     tmpIndex--;
                 }
 
                 lastAccessedElement = tmp;
                 lastAccessedIndex = index;
-                return tmp.DataGridViewCell;
+                return tmp!.DataGridViewCell;
             }
             else
             {
                 while (lastAccessedIndex < index)
                 {
-                    lastAccessedElement = lastAccessedElement.Next;
+                    lastAccessedElement = lastAccessedElement!.Next;
                     lastAccessedIndex++;
                 }
 
-                return lastAccessedElement.DataGridViewCell;
+                return lastAccessedElement!.DataGridViewCell;
             }
         }
     }
@@ -80,7 +78,7 @@ internal class DataGridViewCellLinkedList : IEnumerable
     public void Add(DataGridViewCell dataGridViewCell)
     {
         Debug.Assert(dataGridViewCell is not null);
-        Debug.Assert(dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.CellSelect ||
+        Debug.Assert(dataGridViewCell.DataGridView!.SelectionMode == DataGridViewSelectionMode.CellSelect ||
                      dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect ||
                      dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect);
         DataGridViewCellLinkedListElement newHead = new DataGridViewCellLinkedListElement(dataGridViewCell);
@@ -107,7 +105,7 @@ internal class DataGridViewCellLinkedList : IEnumerable
     {
         Debug.Assert(dataGridViewCell is not null);
         int index = 0;
-        DataGridViewCellLinkedListElement tmp = headElement;
+        DataGridViewCellLinkedListElement? tmp = headElement;
         while (tmp is not null)
         {
             if (tmp.DataGridViewCell == dataGridViewCell)
@@ -127,7 +125,8 @@ internal class DataGridViewCellLinkedList : IEnumerable
     public bool Remove(DataGridViewCell dataGridViewCell)
     {
         Debug.Assert(dataGridViewCell is not null);
-        DataGridViewCellLinkedListElement tmp1 = null, tmp2 = headElement;
+        DataGridViewCellLinkedListElement? tmp1 = null;
+        DataGridViewCellLinkedListElement? tmp2 = headElement;
         while (tmp2 is not null)
         {
             if (tmp2.DataGridViewCell == dataGridViewCell)
@@ -139,9 +138,9 @@ internal class DataGridViewCellLinkedList : IEnumerable
             tmp2 = tmp2.Next;
         }
 
-        if (tmp2.DataGridViewCell == dataGridViewCell)
+        if (tmp2!.DataGridViewCell == dataGridViewCell)
         {
-            DataGridViewCellLinkedListElement tmp3 = tmp2.Next;
+            DataGridViewCellLinkedListElement? tmp3 = tmp2.Next;
             if (tmp1 is null)
             {
                 headElement = tmp3;
@@ -163,13 +162,14 @@ internal class DataGridViewCellLinkedList : IEnumerable
     public int RemoveAllCellsAtBand(bool column, int bandIndex)
     {
         int removedCount = 0;
-        DataGridViewCellLinkedListElement tmp1 = null, tmp2 = headElement;
+        DataGridViewCellLinkedListElement? tmp1 = null;
+        DataGridViewCellLinkedListElement? tmp2 = headElement;
         while (tmp2 is not null)
         {
             if ((column && tmp2.DataGridViewCell.ColumnIndex == bandIndex) ||
                 (!column && tmp2.DataGridViewCell.RowIndex == bandIndex))
             {
-                DataGridViewCellLinkedListElement tmp3 = tmp2.Next;
+                DataGridViewCellLinkedListElement? tmp3 = tmp2.Next;
                 if (tmp1 is null)
                 {
                     headElement = tmp3;
