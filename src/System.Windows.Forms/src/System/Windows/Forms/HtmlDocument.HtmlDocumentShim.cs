@@ -40,20 +40,11 @@ public sealed partial class HtmlDocument
             }
         }
 
-        public override IHTMLWindow2? AssociatedWindow
-        {
-            get { return _associatedWindow; }
-        }
+        public override IHTMLWindow2? AssociatedWindow => _associatedWindow;
 
-        public IHTMLDocument2 NativeHtmlDocument2
-        {
-            get { return _htmlDocument.NativeHtmlDocument2; }
-        }
+        public IHTMLDocument2 NativeHtmlDocument2 => _htmlDocument.NativeHtmlDocument2;
 
-        internal HtmlDocument Document
-        {
-            get { return _htmlDocument; }
-        }
+        internal HtmlDocument Document => _htmlDocument;
 
         ///  Support IHtmlDocument3.AttachHandler
         public override void AttachEventHandler(string eventName, EventHandler eventHandler)
@@ -122,9 +113,6 @@ public sealed partial class HtmlDocument
             }
         }
 
-        protected override object GetEventSender()
-        {
-            return _htmlDocument;
-        }
+        protected override object GetEventSender() => _htmlDocument;
     }
 }
