@@ -84,10 +84,8 @@ public class FontNameEditorTests
         PaintValueEventArgs e;
         using (Bitmap bitmap = new(1, 1))
         {
-            using (var g = Graphics.FromImage(bitmap))
-            {
-                e = new PaintValueEventArgs(_typeDescriptorContext, fontName, g, Rectangle.Empty);
-            }
+            using var g = Graphics.FromImage(bitmap);
+            e = new PaintValueEventArgs(_typeDescriptorContext, fontName, g, Rectangle.Empty);
         }
 
         // assert by the virtue of calling the method

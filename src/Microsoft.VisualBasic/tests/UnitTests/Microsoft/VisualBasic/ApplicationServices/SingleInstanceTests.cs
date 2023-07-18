@@ -307,9 +307,7 @@ public class SingleInstanceTests
 
         static void closeAfterConnect(string pipeName)
         {
-            using (var pipeClient = CreateClientConnection(pipeName, SendTimeout))
-            {
-            }
+            using var pipeClient = CreateClientConnection(pipeName, SendTimeout);
         }
 
         static void sendUnexpectedArgs(string pipeName)
@@ -356,9 +354,7 @@ public class SingleInstanceTests
     // server by creating an extra client connection that closes after connecting.
     private static void FlushLastConnection(string pipeName)
     {
-        using (CreateClientConnection(pipeName, SendTimeout))
-        {
-        }
+        using var _ = CreateClientConnection(pipeName, SendTimeout);
     }
 
     private static NamedPipeClientStream CreateClientConnection(string pipeName, int timeout)

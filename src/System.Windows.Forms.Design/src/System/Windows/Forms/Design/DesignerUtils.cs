@@ -119,11 +119,9 @@ internal static class DesignerUtils
             if (s_boxImage is null)
             {
                 s_boxImage = new Bitmap(BOXIMAGESIZE, BOXIMAGESIZE, PixelFormat.Format32bppPArgb);
-                using (Graphics g = Graphics.FromImage(s_boxImage))
-                {
-                    g.FillRectangle(new SolidBrush(SystemColors.InactiveBorder), 0, 0, BOXIMAGESIZE, BOXIMAGESIZE);
-                    g.DrawRectangle(new Pen(SystemColors.ControlDarkDark), 0, 0, BOXIMAGESIZE - 1, BOXIMAGESIZE - 1);
-                }
+                using Graphics g = Graphics.FromImage(s_boxImage);
+                g.FillRectangle(new SolidBrush(SystemColors.InactiveBorder), 0, 0, BOXIMAGESIZE, BOXIMAGESIZE);
+                g.DrawRectangle(new Pen(SystemColors.ControlDarkDark), 0, 0, BOXIMAGESIZE - 1, BOXIMAGESIZE - 1);
             }
 
             return s_boxImage;
@@ -342,10 +340,8 @@ internal static class DesignerUtils
         // draw a drag border around this thing
         if (borderSize > 0)
         {
-            using (Graphics g = Graphics.FromImage(image))
-            {
-                DrawDragBorder(g, image.Size, borderSize, backColor);
-            }
+            using Graphics g = Graphics.FromImage(image);
+            DrawDragBorder(g, image.Size, borderSize, backColor);
         }
     }
 

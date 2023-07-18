@@ -551,14 +551,12 @@ internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IC
                 {
                     Rectangle overlayControlScreenBounds = overlayControl.Bounds;
                     overlayControlScreenBounds.Location = overlayControl.PointToScreen(overlayControl.Location);
-                    using (Region intersectionRegion = screenRegion.Clone())
-                    {
-                        // get the intersection of everything on the screen that's invalidating and the overlaycontrol
-                        intersectionRegion.Intersect(overlayControlScreenBounds);
-                        // translate this down to overlay control coordinates.
-                        intersectionRegion.Translate(-overlayControlScreenBounds.X, -overlayControlScreenBounds.Y);
-                        overlayControl.Invalidate(intersectionRegion);
-                    }
+                    using Region intersectionRegion = screenRegion.Clone();
+                    // get the intersection of everything on the screen that's invalidating and the overlaycontrol
+                    intersectionRegion.Intersect(overlayControlScreenBounds);
+                    // translate this down to overlay control coordinates.
+                    intersectionRegion.Translate(-overlayControlScreenBounds.X, -overlayControlScreenBounds.Y);
+                    overlayControl.Invalidate(intersectionRegion);
                 }
             }
         }

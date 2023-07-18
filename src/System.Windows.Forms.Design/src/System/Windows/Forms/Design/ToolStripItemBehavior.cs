@@ -901,11 +901,9 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                     Graphics g = bSvc.AdornerWindowGraphics;
                     try
                     {
-                        using (Pen p = new Pen(new SolidBrush(Color.Black)))
-                        {
-                            p.DashStyle = DashStyle.Dot;
-                            g.DrawRectangle(p, bounds);
-                        }
+                        using Pen p = new Pen(new SolidBrush(Color.Black));
+                        p.DashStyle = DashStyle.Dot;
+                        g.DrawRectangle(p, bounds);
                     }
                     finally
                     {

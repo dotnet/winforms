@@ -128,11 +128,10 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
 
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
     {
-        using (MemoryStream stream = new MemoryStream())
-        {
-            Save(stream);
-            si.AddValue("Data", stream.ToArray(), typeof(byte[])); // Do not rename (binary serialization)
-        }
+        using var stream = new MemoryStream();
+
+        Save(stream);
+        si.AddValue("Data", stream.ToArray(), typeof(byte[])); // Do not rename (binary serialization)
     }
 
     /// <summary>
@@ -329,11 +328,9 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
 
             if (_rawData is not null && RawFormat.FindEncoder() is { } rawEncoder && rawEncoder.Clsid == guid)
             {
-                using (FileStream fs = File.OpenWrite(filename))
-                {
-                    fs.Write(_rawData, 0, _rawData.Length);
-                    saved = true;
-                }
+                using var fs = File.OpenWrite(filename);
+                fs.Write(_rawData, 0, _rawData.Length);
+                saved = true;
             }
 
             if (!saved)
