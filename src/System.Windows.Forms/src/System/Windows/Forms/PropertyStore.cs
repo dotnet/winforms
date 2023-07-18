@@ -187,8 +187,8 @@ internal partial class PropertyStore
     public bool TryGetObject<T>(int key, [NotNullWhen(true)] out T? value)
     {
         object? entry = GetObject(key, out bool found);
-        value = !found ? default : (T?)entry;
-        return found;
+        value = !found || entry is null ? default : (T?)entry;
+        return found && entry is not null;
     }
 
     public bool ContainsObjectThatIsNotNull(int key)
