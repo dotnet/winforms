@@ -324,19 +324,19 @@ override System.Windows.Forms.HtmlDocument.Equals(object? obj) -> bool
 ~override System.Windows.Forms.PropertyGrid.Text.set -> void
 override System.Windows.Forms.RichTextBox.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.RichTextBox.BackgroundImage.set -> void
-~override System.Windows.Forms.RichTextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.RichTextBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.RichTextBox.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.RichTextBox.Font.get -> System.Drawing.Font!
 override System.Windows.Forms.RichTextBox.Font.set -> void
-~override System.Windows.Forms.RichTextBox.OnBackColorChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.RichTextBox.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.RichTextBox.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.RichTextBox.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.RichTextBox.OnRightToLeftChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.RichTextBox.SelectedText.get -> string
-~override System.Windows.Forms.RichTextBox.SelectedText.set -> void
-~override System.Windows.Forms.RichTextBox.Text.get -> string
-~override System.Windows.Forms.RichTextBox.Text.set -> void
+override System.Windows.Forms.RichTextBox.OnBackColorChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.RichTextBox.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.RichTextBox.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.RichTextBox.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.RichTextBox.OnRightToLeftChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.RichTextBox.SelectedText.get -> string!
+override System.Windows.Forms.RichTextBox.SelectedText.set -> void
+override System.Windows.Forms.RichTextBox.Text.get -> string!
+override System.Windows.Forms.RichTextBox.Text.set -> void
 ~override System.Windows.Forms.TreeNode.ToString() -> string
 ~override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TreeView.BackgroundImage.set -> void
@@ -768,32 +768,32 @@ System.Windows.Forms.HtmlElementEventArgs.ToElement.get -> System.Windows.Forms.
 ~System.Windows.Forms.PropertyGrid.SelectedTab.get -> System.Windows.Forms.Design.PropertyTab
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.get -> System.Windows.Forms.ToolStripRenderer
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.set -> void
-~System.Windows.Forms.RichTextBox.CanPaste(System.Windows.Forms.DataFormats.Format clipFormat) -> bool
-~System.Windows.Forms.RichTextBox.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
-~System.Windows.Forms.RichTextBox.Find(char[] characterSet) -> int
-~System.Windows.Forms.RichTextBox.Find(char[] characterSet, int start) -> int
-~System.Windows.Forms.RichTextBox.Find(char[] characterSet, int start, int end) -> int
-~System.Windows.Forms.RichTextBox.Find(string str) -> int
-~System.Windows.Forms.RichTextBox.Find(string str, int start, int end, System.Windows.Forms.RichTextBoxFinds options) -> int
-~System.Windows.Forms.RichTextBox.Find(string str, int start, System.Windows.Forms.RichTextBoxFinds options) -> int
-~System.Windows.Forms.RichTextBox.Find(string str, System.Windows.Forms.RichTextBoxFinds options) -> int
-~System.Windows.Forms.RichTextBox.LoadFile(string path) -> void
-~System.Windows.Forms.RichTextBox.LoadFile(string path, System.Windows.Forms.RichTextBoxStreamType fileType) -> void
-~System.Windows.Forms.RichTextBox.LoadFile(System.IO.Stream data, System.Windows.Forms.RichTextBoxStreamType fileType) -> void
-~System.Windows.Forms.RichTextBox.Paste(System.Windows.Forms.DataFormats.Format clipFormat) -> void
+System.Windows.Forms.RichTextBox.CanPaste(System.Windows.Forms.DataFormats.Format! clipFormat) -> bool
+System.Windows.Forms.RichTextBox.DrawToBitmap(System.Drawing.Bitmap! bitmap, System.Drawing.Rectangle targetBounds) -> void
+System.Windows.Forms.RichTextBox.Find(char[]! characterSet) -> int
+System.Windows.Forms.RichTextBox.Find(char[]! characterSet, int start) -> int
+System.Windows.Forms.RichTextBox.Find(char[]! characterSet, int start, int end) -> int
+System.Windows.Forms.RichTextBox.Find(string! str) -> int
+System.Windows.Forms.RichTextBox.Find(string! str, int start, int end, System.Windows.Forms.RichTextBoxFinds options) -> int
+System.Windows.Forms.RichTextBox.Find(string! str, int start, System.Windows.Forms.RichTextBoxFinds options) -> int
+System.Windows.Forms.RichTextBox.Find(string! str, System.Windows.Forms.RichTextBoxFinds options) -> int
+System.Windows.Forms.RichTextBox.LoadFile(string! path) -> void
+System.Windows.Forms.RichTextBox.LoadFile(string! path, System.Windows.Forms.RichTextBoxStreamType fileType) -> void
+System.Windows.Forms.RichTextBox.LoadFile(System.IO.Stream! data, System.Windows.Forms.RichTextBoxStreamType fileType) -> void
+System.Windows.Forms.RichTextBox.Paste(System.Windows.Forms.DataFormats.Format! clipFormat) -> void
 System.Windows.Forms.RichTextBox.RedoActionName.get -> string!
 System.Windows.Forms.RichTextBox.Rtf.get -> string?
 System.Windows.Forms.RichTextBox.Rtf.set -> void
-~System.Windows.Forms.RichTextBox.SaveFile(string path) -> void
-~System.Windows.Forms.RichTextBox.SaveFile(string path, System.Windows.Forms.RichTextBoxStreamType fileType) -> void
-~System.Windows.Forms.RichTextBox.SaveFile(System.IO.Stream data, System.Windows.Forms.RichTextBoxStreamType fileType) -> void
+System.Windows.Forms.RichTextBox.SaveFile(string! path) -> void
+System.Windows.Forms.RichTextBox.SaveFile(string! path, System.Windows.Forms.RichTextBoxStreamType fileType) -> void
+System.Windows.Forms.RichTextBox.SaveFile(System.IO.Stream! data, System.Windows.Forms.RichTextBoxStreamType fileType) -> void
 System.Windows.Forms.RichTextBox.SelectedRtf.get -> string!
 System.Windows.Forms.RichTextBox.SelectedRtf.set -> void
 System.Windows.Forms.RichTextBox.SelectionFont.get -> System.Drawing.Font?
 System.Windows.Forms.RichTextBox.SelectionFont.set -> void
 System.Windows.Forms.RichTextBox.SelectionTabs.get -> int[]!
 System.Windows.Forms.RichTextBox.SelectionTabs.set -> void
-~System.Windows.Forms.RichTextBox.UndoActionName.get -> string
+System.Windows.Forms.RichTextBox.UndoActionName.get -> string!
 System.Windows.Forms.ToolTip.GetToolTip(System.Windows.Forms.Control? control) -> string?
 ~System.Windows.Forms.TreeNode.FirstNode.get -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeNode.FullPath.get -> string
@@ -1167,14 +1167,14 @@ virtual System.Windows.Forms.ComboBox.OnTextUpdate(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.PropertyGrid.ShowPropertyPageImage.get -> System.Drawing.Bitmap
 ~virtual System.Windows.Forms.PropertyGrid.SortByCategoryImage.get -> System.Drawing.Bitmap
 ~virtual System.Windows.Forms.PropertyGrid.SortByPropertyImage.get -> System.Drawing.Bitmap
-~virtual System.Windows.Forms.RichTextBox.CreateRichEditOleCallback() -> object
-~virtual System.Windows.Forms.RichTextBox.OnContentsResized(System.Windows.Forms.ContentsResizedEventArgs e) -> void
-~virtual System.Windows.Forms.RichTextBox.OnHScroll(System.EventArgs e) -> void
-~virtual System.Windows.Forms.RichTextBox.OnImeChange(System.EventArgs e) -> void
-~virtual System.Windows.Forms.RichTextBox.OnLinkClicked(System.Windows.Forms.LinkClickedEventArgs e) -> void
-~virtual System.Windows.Forms.RichTextBox.OnProtected(System.EventArgs e) -> void
-~virtual System.Windows.Forms.RichTextBox.OnSelectionChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.RichTextBox.OnVScroll(System.EventArgs e) -> void
+virtual System.Windows.Forms.RichTextBox.CreateRichEditOleCallback() -> object!
+virtual System.Windows.Forms.RichTextBox.OnContentsResized(System.Windows.Forms.ContentsResizedEventArgs! e) -> void
+virtual System.Windows.Forms.RichTextBox.OnHScroll(System.EventArgs! e) -> void
+virtual System.Windows.Forms.RichTextBox.OnImeChange(System.EventArgs! e) -> void
+virtual System.Windows.Forms.RichTextBox.OnLinkClicked(System.Windows.Forms.LinkClickedEventArgs! e) -> void
+virtual System.Windows.Forms.RichTextBox.OnProtected(System.EventArgs! e) -> void
+virtual System.Windows.Forms.RichTextBox.OnSelectionChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.RichTextBox.OnVScroll(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.TreeNode.Clone() -> object
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.set -> void
@@ -9325,23 +9325,23 @@ System.Windows.Forms.RichTextBox.BackgroundImageLayoutChanged -> System.EventHan
 System.Windows.Forms.RichTextBox.BulletIndent.get -> int
 System.Windows.Forms.RichTextBox.BulletIndent.set -> void
 System.Windows.Forms.RichTextBox.CanRedo.get -> bool
-System.Windows.Forms.RichTextBox.ContentsResized -> System.Windows.Forms.ContentsResizedEventHandler
+System.Windows.Forms.RichTextBox.ContentsResized -> System.Windows.Forms.ContentsResizedEventHandler?
 System.Windows.Forms.RichTextBox.DetectUrls.get -> bool
 System.Windows.Forms.RichTextBox.DetectUrls.set -> void
-System.Windows.Forms.RichTextBox.DragDrop -> System.Windows.Forms.DragEventHandler
-System.Windows.Forms.RichTextBox.DragEnter -> System.Windows.Forms.DragEventHandler
-System.Windows.Forms.RichTextBox.DragLeave -> System.EventHandler
-System.Windows.Forms.RichTextBox.DragOver -> System.Windows.Forms.DragEventHandler
+System.Windows.Forms.RichTextBox.DragDrop -> System.Windows.Forms.DragEventHandler?
+System.Windows.Forms.RichTextBox.DragEnter -> System.Windows.Forms.DragEventHandler?
+System.Windows.Forms.RichTextBox.DragLeave -> System.EventHandler?
+System.Windows.Forms.RichTextBox.DragOver -> System.Windows.Forms.DragEventHandler?
 System.Windows.Forms.RichTextBox.EnableAutoDragDrop.get -> bool
 System.Windows.Forms.RichTextBox.EnableAutoDragDrop.set -> void
-System.Windows.Forms.RichTextBox.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler
-System.Windows.Forms.RichTextBox.HScroll -> System.EventHandler
-System.Windows.Forms.RichTextBox.ImeChange -> System.EventHandler
+System.Windows.Forms.RichTextBox.GiveFeedback -> System.Windows.Forms.GiveFeedbackEventHandler?
+System.Windows.Forms.RichTextBox.HScroll -> System.EventHandler?
+System.Windows.Forms.RichTextBox.ImeChange -> System.EventHandler?
 System.Windows.Forms.RichTextBox.LanguageOption.get -> System.Windows.Forms.RichTextBoxLanguageOptions
 System.Windows.Forms.RichTextBox.LanguageOption.set -> void
-System.Windows.Forms.RichTextBox.LinkClicked -> System.Windows.Forms.LinkClickedEventHandler
-System.Windows.Forms.RichTextBox.Protected -> System.EventHandler
-System.Windows.Forms.RichTextBox.QueryContinueDrag -> System.Windows.Forms.QueryContinueDragEventHandler
+System.Windows.Forms.RichTextBox.LinkClicked -> System.Windows.Forms.LinkClickedEventHandler?
+System.Windows.Forms.RichTextBox.Protected -> System.EventHandler?
+System.Windows.Forms.RichTextBox.QueryContinueDrag -> System.Windows.Forms.QueryContinueDragEventHandler?
 System.Windows.Forms.RichTextBox.Redo() -> void
 System.Windows.Forms.RichTextBox.RichTextBox() -> void
 System.Windows.Forms.RichTextBox.RichTextShortcutsEnabled.get -> bool
@@ -9356,7 +9356,7 @@ System.Windows.Forms.RichTextBox.SelectionBackColor.get -> System.Drawing.Color
 System.Windows.Forms.RichTextBox.SelectionBackColor.set -> void
 System.Windows.Forms.RichTextBox.SelectionBullet.get -> bool
 System.Windows.Forms.RichTextBox.SelectionBullet.set -> void
-System.Windows.Forms.RichTextBox.SelectionChanged -> System.EventHandler
+System.Windows.Forms.RichTextBox.SelectionChanged -> System.EventHandler?
 System.Windows.Forms.RichTextBox.SelectionCharOffset.get -> int
 System.Windows.Forms.RichTextBox.SelectionCharOffset.set -> void
 System.Windows.Forms.RichTextBox.SelectionColor.get -> System.Drawing.Color
@@ -9372,7 +9372,7 @@ System.Windows.Forms.RichTextBox.SelectionRightIndent.set -> void
 System.Windows.Forms.RichTextBox.SelectionType.get -> System.Windows.Forms.RichTextBoxSelectionTypes
 System.Windows.Forms.RichTextBox.ShowSelectionMargin.get -> bool
 System.Windows.Forms.RichTextBox.ShowSelectionMargin.set -> void
-System.Windows.Forms.RichTextBox.VScroll -> System.EventHandler
+System.Windows.Forms.RichTextBox.VScroll -> System.EventHandler?
 System.Windows.Forms.RichTextBox.ZoomFactor.get -> float
 System.Windows.Forms.RichTextBox.ZoomFactor.set -> void
 System.Windows.Forms.RichTextBoxFinds
