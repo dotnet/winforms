@@ -27,6 +27,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
     private HCURSOR _handle;
     private bool _ownHandle = true;
     private readonly PCWSTR _resourceId;
+    private bool _isCursorsValue;
 
     /// <summary>
     ///  Private constructor. If you want a standard system cursor, use one of the
@@ -36,12 +37,22 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
     {
         // We don't delete stock cursors.
         _ownHandle = false;
+        _isCursorsValue = true;
         _resourceId = nResourceId;
         _handle = PInvoke.LoadCursor((HINSTANCE)0, nResourceId);
         if (_handle.IsNull)
         {
             throw new Win32Exception(string.Format(SR.FailedToLoadCursor, Marshal.GetLastWin32Error()));
         }
+    }
+
+    /// <summary>
+    ///  Initializes a new instance of the <see cref="Cursor"/> class from the specified cursorResource.
+    /// </summary>
+    internal Cursor(string cursorResource, bool isCursorsValue)
+        : this((typeof(Cursor).OrThrowIfNull()).Module.Assembly.GetManifestResourceStream(typeof(Cursor), cursorResource)!)
+    {
+        _isCursorsValue = isCursorsValue;
     }
 
     /// <summary>
@@ -476,7 +487,11 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
     /// <summary>
     ///  Retrieves a human readable string representing this <see cref="Cursor"/>.
     /// </summary>
-    public override string ToString() => $"[Cursor: {TypeDescriptor.GetConverter(typeof(Cursor)).ConvertToString(this)}]";
+    public override string ToString()
+    {
+        string? s = _isCursorsValue || !_ownHandle ? TypeDescriptor.GetConverter(typeof(Cursor)).ConvertToString(this) : base.ToString();
+        return $"[Cursor: {s}]";
+    }
 
     public static bool operator ==(Cursor? left, Cursor? right)
     {

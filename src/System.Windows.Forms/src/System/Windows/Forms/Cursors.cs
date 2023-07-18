@@ -96,5 +96,5 @@ public static class Cursors
     private static Cursor GetCursor(ref Cursor? cursor, string resource)
         => cursor is not null && cursor.IsValid()
             ? cursor
-            : cursor = new Cursor(typeof(Cursor), resource);
+            : cursor = new Cursor(resource, true);
 }
