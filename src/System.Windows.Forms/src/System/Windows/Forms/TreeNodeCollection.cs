@@ -30,14 +30,8 @@ public class TreeNodeCollection : IList
 
     internal int FixedIndex
     {
-        get
-        {
-            return _fixedIndex;
-        }
-        set
-        {
-            _fixedIndex = value;
-        }
+        get => _fixedIndex;
+        set => _fixedIndex = value;
     }
 
     public virtual TreeNode this[int index]
@@ -87,10 +81,7 @@ public class TreeNodeCollection : IList
 
     object? IList.this[int index]
     {
-        get
-        {
-            return this[index];
-        }
+        get => this[index];
         set
         {
             if (value is TreeNode treeNode)
@@ -132,45 +123,15 @@ public class TreeNodeCollection : IList
 
     // Make this property available to Intellisense. (Removed the EditorBrowsable attribute.)
     [Browsable(false)]
-    public int Count
-    {
-        get
-        {
-            return _owner.childNodes.Count;
-        }
-    }
+    public int Count => _owner.childNodes.Count;
 
-    object ICollection.SyncRoot
-    {
-        get
-        {
-            return this;
-        }
-    }
+    object ICollection.SyncRoot => this;
 
-    bool ICollection.IsSynchronized
-    {
-        get
-        {
-            return false;
-        }
-    }
+    bool ICollection.IsSynchronized => false;
 
-    bool IList.IsFixedSize
-    {
-        get
-        {
-            return false;
-        }
-    }
+    bool IList.IsFixedSize => false;
 
-    public bool IsReadOnly
-    {
-        get
-        {
-            return false;
-        }
-    }
+    public bool IsReadOnly => false;
 
     /// <summary>
     ///  Creates a new child node under this node.  Child node is positioned after siblings.
@@ -338,10 +299,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Adds a new child node to this node.  Child node is positioned after siblings.
     /// </summary>
-    public virtual int Add(TreeNode node)
-    {
-        return AddInternal(node, 0);
-    }
+    public virtual int Add(TreeNode node) => AddInternal(node, 0);
 
     private int AddInternal(TreeNode node, int delta)
     {
@@ -414,30 +372,17 @@ public class TreeNodeCollection : IList
         }
     }
 
-    public bool Contains(TreeNode node)
-    {
-        return IndexOf(node) != -1;
-    }
+    public bool Contains(TreeNode node) => IndexOf(node) != -1;
 
     /// <summary>
     ///  Returns true if the collection contains an item with the specified key, false otherwise.
     /// </summary>
-    public virtual bool ContainsKey(string? key)
-    {
-        return IsValidIndex(IndexOfKey(key));
-    }
+    public virtual bool ContainsKey(string? key) => IsValidIndex(IndexOfKey(key));
 
-    bool IList.Contains(object? node)
-    {
-        if (node is TreeNode treeNode)
-        {
-            return Contains(treeNode);
-        }
-        else
-        {
-            return false;
-        }
-    }
+    bool IList.Contains(object? node) =>
+        node is TreeNode treeNode
+            ? Contains(treeNode)
+            : false;
 
     public int IndexOf(TreeNode node)
     {
@@ -452,17 +397,10 @@ public class TreeNodeCollection : IList
         return -1;
     }
 
-    int IList.IndexOf(object? node)
-    {
-        if (node is TreeNode treeNode)
-        {
-            return IndexOf(treeNode);
-        }
-        else
-        {
-            return -1;
-        }
-    }
+    int IList.IndexOf(object? node) =>
+        node is TreeNode treeNode
+            ? IndexOf(treeNode)
+            : -1;
 
     /// <summary>
     ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
@@ -640,10 +578,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Determines if the index is valid for the collection.
     /// </summary>
-    private bool IsValidIndex(int index)
-    {
-        return ((index >= 0) && (index < Count));
-    }
+    private bool IsValidIndex(int index) => (index >= 0) && (index < Count);
 
     /// <summary>
     ///  Remove all nodes from the tree view.
@@ -691,8 +626,5 @@ public class TreeNodeCollection : IList
         }
     }
 
-    public IEnumerator GetEnumerator()
-    {
-        return _owner.childNodes.GetEnumerator();
-    }
+    public IEnumerator GetEnumerator() => _owner.childNodes.GetEnumerator();
 }
