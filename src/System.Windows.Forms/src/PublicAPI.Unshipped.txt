@@ -1,11 +1,6 @@
-override System.Windows.Forms.ButtonBase.ButtonBaseAccessibleObject.KeyboardShortcut.get -> string?
-override System.Windows.Forms.ButtonBase.ButtonBaseAccessibleObject.Name.get -> string?
-override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.KeyboardShortcut.get -> string?
-override System.Windows.Forms.RadioButton.RadioButtonAccessibleObject.Name.get -> string?
 override System.Windows.Forms.PrintPreviewControl.OnGotFocus(System.EventArgs! e) -> void
 override System.Windows.Forms.PrintPreviewControl.OnLostFocus(System.EventArgs! e) -> void
 override System.Windows.Forms.PrintPreviewControl.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
 override System.Windows.Forms.PrintPreviewControl.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 *REMOVED*override System.Windows.Forms.PrintPreviewControl.CreateParams.get -> System.Windows.Forms.CreateParams!
 *REMOVED*System.Windows.Forms.PrintPreviewControl.TabStopChanged -> System.EventHandler?
-override System.Windows.Forms.ToolStripButton.ProcessDialogKey(System.Windows.Forms.Keys keyData) -> bool

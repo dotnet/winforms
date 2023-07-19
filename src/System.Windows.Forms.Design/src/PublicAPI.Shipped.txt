@@ -11,8 +11,6 @@
 ~abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value, System.ComponentModel.MemberDescriptor descriptor, System.CodeDom.CodeStatementCollection statements) -> void
 ~abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.ShouldSerialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value, System.ComponentModel.MemberDescriptor descriptor) -> bool
 ~abstract System.ComponentModel.Design.UndoEngine.AddUndoUnit(System.ComponentModel.Design.UndoEngine.UndoUnit unit) -> void
-abstract System.Windows.Forms.Design.Behavior.Glyph.GetHitTest(System.Drawing.Point p) -> System.Windows.Forms.Cursor?
-abstract System.Windows.Forms.Design.Behavior.Glyph.Paint(System.Windows.Forms.PaintEventArgs! pe) -> void
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Mask.get -> string
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Name.get -> string
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Sample.get -> string
@@ -25,7 +23,6 @@ abstract System.Windows.Forms.Design.Behavior.Glyph.Paint(System.Windows.Forms.P
 ~override System.ComponentModel.Design.ByteViewer.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
 ~override System.ComponentModel.Design.ByteViewer.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
 ~override System.ComponentModel.Design.ByteViewer.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
-override System.ComponentModel.Design.CollectionEditor.CollectionForm.GetService(System.Type! serviceType) -> object!
 ~override System.ComponentModel.Design.CollectionEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
 ~override System.ComponentModel.Design.CollectionEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.ComponentModel.Design.DateTimeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
@@ -160,18 +157,6 @@ override System.ComponentModel.Design.CollectionEditor.CollectionForm.GetService
 ~static System.Windows.Forms.Design.ParentControlDesigner.InvokeCreateTool(System.Windows.Forms.Design.ParentControlDesigner toInvoke, System.Drawing.Design.ToolboxItem tool) -> void
 ~System.ComponentModel.Design.ArrayEditor.ArrayEditor(System.Type type) -> void
 ~System.ComponentModel.Design.CollectionEditor.CollectionEditor(System.Type type) -> void
-System.ComponentModel.Design.CollectionEditor.CollectionForm.CanRemoveInstance(object! value) -> bool
-System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionForm(System.ComponentModel.Design.CollectionEditor! editor) -> void
-System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionItemType.get -> System.Type!
-System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionType.get -> System.Type!
-System.ComponentModel.Design.CollectionEditor.CollectionForm.Context.get -> System.ComponentModel.ITypeDescriptorContext!
-System.ComponentModel.Design.CollectionEditor.CollectionForm.CreateInstance(System.Type! itemType) -> object!
-System.ComponentModel.Design.CollectionEditor.CollectionForm.DestroyInstance(object! instance) -> void
-System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.get -> object?
-System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.set -> void
-System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.get -> object![]!
-System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.set -> void
-System.ComponentModel.Design.CollectionEditor.CollectionForm.NewItemTypes.get -> System.Type![]!
 ~System.ComponentModel.Design.CollectionEditor.CollectionItemType.get -> System.Type
 ~System.ComponentModel.Design.CollectionEditor.CollectionType.get -> System.Type
 ~System.ComponentModel.Design.CollectionEditor.Context.get -> System.ComponentModel.ITypeDescriptorContext
@@ -323,18 +308,6 @@ System.ComponentModel.Design.CollectionEditor.CollectionForm.NewItemTypes.get ->
 ~System.Windows.Forms.Design.AxImporter.Options.outputName -> string
 ~System.Windows.Forms.Design.AxImporter.Options.publicKey -> byte[]
 ~System.Windows.Forms.Design.AxImporter.Options.references -> System.Windows.Forms.Design.AxImporter.IReferenceResolver
-System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.BehaviorDragDropEventArgs(System.Collections.ICollection! dragComponents) -> void
-System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.DragComponents.get -> System.Collections.ICollection!
-System.Windows.Forms.Design.Behavior.BehaviorService.Adorners.get -> System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection!
-System.Windows.Forms.Design.Behavior.BehaviorService.AdornerWindowGraphics.get -> System.Drawing.Graphics!
-System.Windows.Forms.Design.Behavior.BehaviorService.ControlRectInAdornerWindow(System.Windows.Forms.Control! c) -> System.Drawing.Rectangle
-System.Windows.Forms.Design.Behavior.BehaviorService.ControlToAdornerWindow(System.Windows.Forms.Control! c) -> System.Drawing.Point
-System.Windows.Forms.Design.Behavior.BehaviorService.CurrentBehavior.get -> System.Windows.Forms.Design.Behavior.Behavior?
-System.Windows.Forms.Design.Behavior.BehaviorService.GetNextBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> System.Windows.Forms.Design.Behavior.Behavior?
-System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate(System.Drawing.Region! r) -> void
-System.Windows.Forms.Design.Behavior.BehaviorService.PopBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> System.Windows.Forms.Design.Behavior.Behavior?
-System.Windows.Forms.Design.Behavior.BehaviorService.PushBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> void
-System.Windows.Forms.Design.Behavior.BehaviorService.PushCaptureBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Add(System.Windows.Forms.Design.Behavior.Adorner value) -> int
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.Adorner[] value) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection value) -> void
@@ -349,10 +322,7 @@ System.Windows.Forms.Design.Behavior.BehaviorService.PushCaptureBehavior(System.
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Remove(System.Windows.Forms.Design.Behavior.Adorner value) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.this[int index].get -> System.Windows.Forms.Design.Behavior.Adorner
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.this[int index].set -> void
-System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.BehaviorServiceAdornerCollectionEnumerator(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection! mappings) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.Current.get -> System.Windows.Forms.Design.Behavior.Adorner
-System.Windows.Forms.Design.Behavior.Glyph.Glyph(System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
-System.Windows.Forms.Design.Behavior.Glyph.SetBehavior(System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.Add(System.Windows.Forms.Design.Behavior.Glyph value) -> int
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(System.Windows.Forms.Design.Behavior.Glyph[] value) -> void
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(System.Windows.Forms.Design.Behavior.GlyphCollection value) -> void
@@ -402,8 +372,6 @@ System.Windows.Forms.Design.Behavior.Glyph.SetBehavior(System.Windows.Forms.Desi
 ~virtual System.ComponentModel.Design.ByteViewer.SetBytes(byte[] bytes) -> void
 ~virtual System.ComponentModel.Design.ByteViewer.SetFile(string path) -> void
 ~virtual System.ComponentModel.Design.CollectionEditor.CanRemoveInstance(object value) -> bool
-virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.DisplayError(System.Exception! e) -> void
-virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.ShowEditorDialog(System.Windows.Forms.Design.IWindowsFormsEditorService! edSvc) -> System.Windows.Forms.DialogResult
 ~virtual System.ComponentModel.Design.CollectionEditor.CreateCollectionForm() -> System.ComponentModel.Design.CollectionEditor.CollectionForm
 ~virtual System.ComponentModel.Design.CollectionEditor.CreateCollectionItemType() -> System.Type
 ~virtual System.ComponentModel.Design.CollectionEditor.CreateInstance(System.Type itemType) -> object
@@ -486,7 +454,6 @@ virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.ShowEditorD
 ~virtual System.Drawing.Design.ToolboxItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Drawing.Design.ToolboxItem.ValidatePropertyValue(string propertyName, object value) -> object
 ~virtual System.Drawing.Design.ToolboxItem.Version.get -> string
-virtual System.Windows.Forms.Design.Behavior.Glyph.Behavior.get -> System.Windows.Forms.Design.Behavior.Behavior?
 ~virtual System.Windows.Forms.Design.ComponentDocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
 ~virtual System.Windows.Forms.Design.ComponentTray.AddComponent(System.ComponentModel.IComponent component) -> void
 ~virtual System.Windows.Forms.Design.ComponentTray.CanCreateComponentFromTool(System.Drawing.Design.ToolboxItem tool) -> bool
@@ -520,6 +487,9 @@ virtual System.Windows.Forms.Design.Behavior.Glyph.Behavior.get -> System.Window
 abstract System.ComponentModel.Design.CollectionEditor.CollectionForm.OnEditValueChanged() -> void
 abstract System.ComponentModel.Design.EventBindingService.ShowCode() -> bool
 abstract System.ComponentModel.Design.EventBindingService.ShowCode(int lineNumber) -> bool
+abstract System.Windows.Forms.Design.Behavior.Glyph.GetHitTest(System.Drawing.Point p) -> System.Windows.Forms.Cursor?
+abstract System.Windows.Forms.Design.Behavior.Glyph.Paint(System.Windows.Forms.PaintEventArgs! pe) -> void
+override System.ComponentModel.Design.CollectionEditor.CollectionForm.GetService(System.Type! serviceType) -> object!
 override System.ComponentModel.Design.DesignerActionListCollection.OnValidate(object! value) -> void
 override System.ComponentModel.Design.ExceptionCollection.GetObjectData(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
 override System.ComponentModel.Design.MultilineStringEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
@@ -614,6 +584,18 @@ System.ComponentModel.Design.ByteViewer
 System.ComponentModel.Design.ByteViewer.ByteViewer() -> void
 System.ComponentModel.Design.CollectionEditor
 System.ComponentModel.Design.CollectionEditor.CollectionForm
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CanRemoveInstance(object! value) -> bool
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionForm(System.ComponentModel.Design.CollectionEditor! editor) -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionItemType.get -> System.Type!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CollectionType.get -> System.Type!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.Context.get -> System.ComponentModel.ITypeDescriptorContext!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.CreateInstance(System.Type! itemType) -> object!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.DestroyInstance(object! instance) -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.get -> object?
+System.ComponentModel.Design.CollectionEditor.CollectionForm.EditValue.set -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.get -> object![]!
+System.ComponentModel.Design.CollectionEditor.CollectionForm.Items.set -> void
+System.ComponentModel.Design.CollectionEditor.CollectionForm.NewItemTypes.get -> System.Type![]!
 System.ComponentModel.Design.ComponentDesigner
 System.ComponentModel.Design.ComponentDesigner.ComponentDesigner() -> void
 System.ComponentModel.Design.ComponentDesigner.Dispose() -> void
@@ -951,21 +933,34 @@ System.Windows.Forms.Design.Behavior.Behavior
 System.Windows.Forms.Design.Behavior.Behavior.Behavior() -> void
 System.Windows.Forms.Design.Behavior.Behavior.Behavior(bool callParentBehavior, System.Windows.Forms.Design.Behavior.BehaviorService? behaviorService) -> void
 System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs
+System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.BehaviorDragDropEventArgs(System.Collections.ICollection! dragComponents) -> void
+System.Windows.Forms.Design.Behavior.BehaviorDragDropEventArgs.DragComponents.get -> System.Collections.ICollection!
 System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler
 System.Windows.Forms.Design.Behavior.BehaviorService
+System.Windows.Forms.Design.Behavior.BehaviorService.Adorners.get -> System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection!
+System.Windows.Forms.Design.Behavior.BehaviorService.AdornerWindowGraphics.get -> System.Drawing.Graphics!
 System.Windows.Forms.Design.Behavior.BehaviorService.AdornerWindowPointToScreen(System.Drawing.Point p) -> System.Drawing.Point
 System.Windows.Forms.Design.Behavior.BehaviorService.AdornerWindowToScreen() -> System.Drawing.Point
 System.Windows.Forms.Design.Behavior.BehaviorService.BeginDrag -> System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler?
+System.Windows.Forms.Design.Behavior.BehaviorService.ControlRectInAdornerWindow(System.Windows.Forms.Control! c) -> System.Drawing.Rectangle
+System.Windows.Forms.Design.Behavior.BehaviorService.ControlToAdornerWindow(System.Windows.Forms.Control! c) -> System.Drawing.Point
+System.Windows.Forms.Design.Behavior.BehaviorService.CurrentBehavior.get -> System.Windows.Forms.Design.Behavior.Behavior?
 System.Windows.Forms.Design.Behavior.BehaviorService.Dispose() -> void
 System.Windows.Forms.Design.Behavior.BehaviorService.EndDrag -> System.Windows.Forms.Design.Behavior.BehaviorDragDropEventHandler?
+System.Windows.Forms.Design.Behavior.BehaviorService.GetNextBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> System.Windows.Forms.Design.Behavior.Behavior?
 System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate() -> void
 System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate(System.Drawing.Rectangle rect) -> void
+System.Windows.Forms.Design.Behavior.BehaviorService.Invalidate(System.Drawing.Region! r) -> void
 System.Windows.Forms.Design.Behavior.BehaviorService.MapAdornerWindowPoint(nint handle, System.Drawing.Point pt) -> System.Drawing.Point
+System.Windows.Forms.Design.Behavior.BehaviorService.PopBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> System.Windows.Forms.Design.Behavior.Behavior?
+System.Windows.Forms.Design.Behavior.BehaviorService.PushBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> void
+System.Windows.Forms.Design.Behavior.BehaviorService.PushCaptureBehavior(System.Windows.Forms.Design.Behavior.Behavior! behavior) -> void
 System.Windows.Forms.Design.Behavior.BehaviorService.ScreenToAdornerWindow(System.Drawing.Point p) -> System.Drawing.Point
 System.Windows.Forms.Design.Behavior.BehaviorService.Synchronize -> System.EventHandler?
 System.Windows.Forms.Design.Behavior.BehaviorService.SyncSelection() -> void
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.BehaviorServiceAdornerCollectionEnumerator(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection! mappings) -> void
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.MoveNext() -> bool
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.Reset() -> void
 System.Windows.Forms.Design.Behavior.ComponentGlyph
@@ -976,6 +971,8 @@ System.Windows.Forms.Design.Behavior.ControlBodyGlyph
 System.Windows.Forms.Design.Behavior.ControlBodyGlyph.ControlBodyGlyph(System.Drawing.Rectangle bounds, System.Windows.Forms.Cursor? cursor, System.ComponentModel.IComponent? relatedComponent, System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
 System.Windows.Forms.Design.Behavior.ControlBodyGlyph.ControlBodyGlyph(System.Drawing.Rectangle bounds, System.Windows.Forms.Cursor? cursor, System.ComponentModel.IComponent? relatedComponent, System.Windows.Forms.Design.ControlDesigner? designer) -> void
 System.Windows.Forms.Design.Behavior.Glyph
+System.Windows.Forms.Design.Behavior.Glyph.Glyph(System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
+System.Windows.Forms.Design.Behavior.Glyph.SetBehavior(System.Windows.Forms.Design.Behavior.Behavior? behavior) -> void
 System.Windows.Forms.Design.Behavior.GlyphCollection
 System.Windows.Forms.Design.Behavior.GlyphCollection.GlyphCollection() -> void
 System.Windows.Forms.Design.Behavior.GlyphSelectionType
@@ -1119,6 +1116,8 @@ virtual System.ComponentModel.Design.ByteViewer.SetStartLine(int line) -> void
 virtual System.ComponentModel.Design.CollectionEditor.CancelChanges() -> void
 virtual System.ComponentModel.Design.CollectionEditor.CanSelectMultipleInstances() -> bool
 virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.CanSelectMultipleInstances() -> bool
+virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.DisplayError(System.Exception! e) -> void
+virtual System.ComponentModel.Design.CollectionEditor.CollectionForm.ShowEditorDialog(System.Windows.Forms.Design.IWindowsFormsEditorService! edSvc) -> System.Windows.Forms.DialogResult
 virtual System.ComponentModel.Design.CollectionEditor.ShowHelp() -> void
 virtual System.ComponentModel.Design.ComponentDesigner.Dispose(bool disposing) -> void
 virtual System.ComponentModel.Design.ComponentDesigner.DoDefaultAction() -> void
@@ -1193,6 +1192,7 @@ virtual System.Windows.Forms.Design.Behavior.Behavior.OnMouseLeave(System.Window
 virtual System.Windows.Forms.Design.Behavior.Behavior.OnMouseMove(System.Windows.Forms.Design.Behavior.Glyph? g, System.Windows.Forms.MouseButtons button, System.Drawing.Point mouseLoc) -> bool
 virtual System.Windows.Forms.Design.Behavior.Behavior.OnMouseUp(System.Windows.Forms.Design.Behavior.Glyph? g, System.Windows.Forms.MouseButtons button) -> bool
 virtual System.Windows.Forms.Design.Behavior.Behavior.OnQueryContinueDrag(System.Windows.Forms.Design.Behavior.Glyph? g, System.Windows.Forms.QueryContinueDragEventArgs! e) -> void
+virtual System.Windows.Forms.Design.Behavior.Glyph.Behavior.get -> System.Windows.Forms.Design.Behavior.Behavior?
 virtual System.Windows.Forms.Design.Behavior.Glyph.Bounds.get -> System.Drawing.Rectangle
 virtual System.Windows.Forms.Design.ComponentTray.OnLostCapture() -> void
 virtual System.Windows.Forms.Design.ComponentTray.OnSetCursor() -> void
