@@ -51,7 +51,7 @@ public abstract partial class AxHost
                 }
 
                 // Use the CategoryAttribute provided by the OCX.
-                CategoryAttribute cat = owner.GetCategoryForDispid(_dispid.Value);
+                CategoryAttribute? cat = owner.GetCategoryForDispid(_dispid.Value);
                 if (cat is not null)
                 {
                     AddAttribute(cat);

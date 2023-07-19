@@ -34,7 +34,7 @@ public abstract partial class AxHost
         private const string DataSerializationName = "Data";
 
         // Create on save from IPersistStream.
-        internal State(MemoryStream memoryStream, int storageType, AxHost control, PropertyBagStream propertyBag)
+        internal State(MemoryStream memoryStream, int storageType, AxHost control, PropertyBagStream? propertyBag)
         {
             Type = storageType;
             _propertyBag = propertyBag;

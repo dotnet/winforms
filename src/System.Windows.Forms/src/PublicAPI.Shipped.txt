@@ -318,15 +318,15 @@
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm) -> void
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm, string key) -> void
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.AxHost.ContainingControl.get -> System.Windows.Forms.ContainerControl
-~System.Windows.Forms.AxHost.ContainingControl.set -> void
+System.Windows.Forms.AxHost.ContainingControl.get -> System.Windows.Forms.ContainerControl?
+System.Windows.Forms.AxHost.ContainingControl.set -> void
 ~System.Windows.Forms.AxHost.GetOcx() -> object
-~System.Windows.Forms.AxHost.OcxState.get -> System.Windows.Forms.AxHost.State
-~System.Windows.Forms.AxHost.OcxState.set -> void
+System.Windows.Forms.AxHost.OcxState.get -> System.Windows.Forms.AxHost.State?
+System.Windows.Forms.AxHost.OcxState.set -> void
 ~System.Windows.Forms.AxHost.RaiseOnMouseDown(object o1, object o2, object o3, object o4) -> void
 ~System.Windows.Forms.AxHost.RaiseOnMouseMove(object o1, object o2, object o3, object o4) -> void
 ~System.Windows.Forms.AxHost.RaiseOnMouseUp(object o1, object o2, object o3, object o4) -> void
-~System.Windows.Forms.AxHost.SetAboutBoxDelegate(System.Windows.Forms.AxHost.AboutBoxDelegate d) -> void
+System.Windows.Forms.AxHost.SetAboutBoxDelegate(System.Windows.Forms.AxHost.AboutBoxDelegate! d) -> void
 ~System.Windows.Forms.AxHost.ShowPropertyPages(System.Windows.Forms.Control control) -> void
 ~System.Windows.Forms.Binding.BindableComponent.get -> System.Windows.Forms.IBindableComponent
 ~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember) -> void
@@ -690,7 +690,7 @@
 ~System.Windows.Forms.TreeView.TopNode.set -> void
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
-~virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object
+virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object?
 ~virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void
 ~virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs cevent) -> void
 ~virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs cevent) -> void
