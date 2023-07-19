@@ -142,9 +142,9 @@
 ~override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.set -> void
 ~override System.Windows.Forms.DataGridViewComboBoxColumn.Clone() -> object
 ~override System.Windows.Forms.DataGridViewComboBoxColumn.ToString() -> string
-~override System.Windows.Forms.DataGridViewComboBoxEditingControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnSelectedIndexChanged(System.EventArgs e) -> void
+override System.Windows.Forms.DataGridViewComboBoxEditingControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnSelectedIndexChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.DataGridViewHeaderCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewHeaderCell.FormattedValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewHeaderCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip
@@ -935,13 +935,13 @@
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.ValueMember.get -> string
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.ValueMember.set -> void
-~virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle) -> void
-~virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlDataGridView.get -> System.Windows.Forms.DataGridView
-~virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlDataGridView.set -> void
-~virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlFormattedValue.get -> object
-~virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlFormattedValue.set -> void
-~virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor
-~virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlDataGridView.get -> System.Windows.Forms.DataGridView?
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlDataGridView.set -> void
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlFormattedValue.get -> object!
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlFormattedValue.set -> void
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor!
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object!
 ~virtual System.Windows.Forms.DataGridViewRow.AdjustRowHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedRow, bool isLastVisibleRow) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~virtual System.Windows.Forms.DataGridViewRow.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~virtual System.Windows.Forms.DataGridViewRow.CreateCellsInstance() -> System.Windows.Forms.DataGridViewCellCollection

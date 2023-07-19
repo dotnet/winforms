@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Globalization;
 
@@ -11,7 +9,7 @@ namespace System.Windows.Forms;
 
 public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridViewEditingControl
 {
-    private DataGridView _dataGridView;
+    private DataGridView? _dataGridView;
     private bool _valueChanged;
     private int _rowIndex;
 
@@ -27,7 +25,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
 
     // IDataGridViewEditingControl interface implementation
 
-    public virtual DataGridView EditingControlDataGridView
+    public virtual DataGridView? EditingControlDataGridView
     {
         get
         {
@@ -106,7 +104,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
             // Our ComboBox does not support transparent back colors
             Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
             BackColor = opaqueBackColor;
-            _dataGridView.EditingPanel.BackColor = opaqueBackColor;
+            _dataGridView!.EditingPanel.BackColor = opaqueBackColor;
         }
         else
         {
@@ -146,7 +144,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
     private void NotifyDataGridViewOfValueChange()
     {
         _valueChanged = true;
-        _dataGridView.NotifyCurrentCellDirty(true);
+        _dataGridView!.NotifyCurrentCellDirty(true);
     }
 
     protected override void OnSelectedIndexChanged(EventArgs e)
@@ -171,7 +169,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
 
     internal override void ReleaseUiaProvider(HWND handle)
     {
-        if (TryGetAccessibilityObject(out AccessibleObject accessibleObject))
+        if (TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
         {
             ((DataGridViewComboBoxEditingControlAccessibleObject)accessibleObject).ClearParent();
         }
