@@ -18,10 +18,8 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
         TabStop = false;
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewComboBoxEditingControlAccessibleObject(this);
-    }
+    protected override AccessibleObject CreateAccessibilityInstance() =>
+        new DataGridViewComboBoxEditingControlAccessibleObject(this);
 
     // IDataGridViewEditingControl interface implementation
 
@@ -39,10 +37,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
 
     public virtual object EditingControlFormattedValue
     {
-        get
-        {
-            return GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
-        }
+        get => GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
         set
         {
             if (value is string valueStr)
@@ -58,43 +53,19 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
 
     public virtual int EditingControlRowIndex
     {
-        get
-        {
-            return _rowIndex;
-        }
-        set
-        {
-            _rowIndex = value;
-        }
+        get => _rowIndex;
+        set => _rowIndex = value;
     }
 
     public virtual bool EditingControlValueChanged
     {
-        get
-        {
-            return _valueChanged;
-        }
-        set
-        {
-            _valueChanged = value;
-        }
+        get => _valueChanged;
+        set => _valueChanged = value;
     }
 
-    public virtual Cursor EditingPanelCursor
-    {
-        get
-        {
-            return Cursors.Default;
-        }
-    }
+    public virtual Cursor EditingPanelCursor => Cursors.Default;
 
-    public virtual bool RepositionEditingControlOnValueChange
-    {
-        get
-        {
-            return false;
-        }
-    }
+    public virtual bool RepositionEditingControlOnValueChange => false;
 
     public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
     {
@@ -128,10 +99,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
         return !dataGridViewWantsInputKey;
     }
 
-    public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
-    {
-        return Text;
-    }
+    public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context) => Text;
 
     public virtual void PrepareEditingControlForEdit(bool selectAll)
     {
