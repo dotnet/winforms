@@ -11,32 +11,32 @@ namespace System.Windows.Forms;
 [Editor($"System.Windows.Forms.Design.TreeNodeCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
 public class TreeNodeCollection : IList
 {
-    private readonly TreeNode owner;
+    private readonly TreeNode _owner;
 
     ///  A caching mechanism for key accessor
     ///  We use an index here rather than control so that we don't have lifetime
     ///  issues by holding on to extra references.
-    private int lastAccessedIndex = -1;
+    private int _lastAccessedIndex = -1;
 
     //this index is used to optimize performance of AddRange
     //items are added from last to first after this index
     //(to work around TV_INSertItem comctl32 perf issue with consecutive adds in the end of the list)
-    private int fixedIndex = -1;
+    private int _fixedIndex = -1;
 
     internal TreeNodeCollection(TreeNode owner)
     {
-        this.owner = owner;
+        _owner = owner;
     }
 
     internal int FixedIndex
     {
         get
         {
-            return fixedIndex;
+            return _fixedIndex;
         }
         set
         {
-            fixedIndex = value;
+            _fixedIndex = value;
         }
     }
 
@@ -44,24 +44,24 @@ public class TreeNodeCollection : IList
     {
         get
         {
-            if (index < 0 || index >= owner.childNodes.Count)
+            if (index < 0 || index >= _owner.childNodes.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
 
-            return owner.childNodes[index];
+            return _owner.childNodes[index];
         }
         set
         {
-            if (index < 0 || index >= owner.childNodes.Count)
+            if (index < 0 || index >= _owner.childNodes.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
             ArgumentNullException.ThrowIfNull(value);
 
-            TreeView tv = owner.treeView;
-            TreeNode actual = owner.childNodes[index];
+            TreeView tv = _owner.treeView;
+            TreeNode actual = _owner.childNodes[index];
 
             if (value.treeView is not null && value.treeView.Handle != tv.Handle)
             {
@@ -136,7 +136,7 @@ public class TreeNodeCollection : IList
     {
         get
         {
-            return owner.childNodes.Count;
+            return _owner.childNodes.Count;
         }
     }
 
@@ -264,20 +264,20 @@ public class TreeNodeCollection : IList
             return;
         }
 
-        TreeView tv = owner.TreeView;
+        TreeView tv = _owner.TreeView;
         if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
         {
             tv.BeginUpdate();
         }
 
-        owner.Nodes.FixedIndex = owner.childNodes.Count;
-        owner.childNodes.EnsureCapacity(nodes.Length);
+        _owner.Nodes.FixedIndex = _owner.childNodes.Count;
+        _owner.childNodes.EnsureCapacity(nodes.Length);
         for (int i = 0; i < nodes.Length; i++)
         {
             AddInternal(nodes[i], i);
         }
 
-        owner.Nodes.FixedIndex = -1;
+        _owner.Nodes.FixedIndex = -1;
         if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
         {
             tv.EndUpdate();
@@ -353,10 +353,10 @@ public class TreeNodeCollection : IList
         }
 
         // Check for ParentingCycle
-        owner.CheckParentingCycle(node);
+        _owner.CheckParentingCycle(node);
 
         // If the TreeView is sorted, index is ignored
-        TreeView tv = owner.TreeView;
+        TreeView tv = _owner.TreeView;
 
         if (tv is not null)
         {
@@ -368,11 +368,11 @@ public class TreeNodeCollection : IList
 
         if (tv is not null && tv.Sorted)
         {
-            return owner.AddSorted(node);
+            return _owner.AddSorted(node);
         }
 
-        node.parent = owner;
-        int fixedIndex = owner.Nodes.FixedIndex;
+        node.parent = _owner;
+        int fixedIndex = _owner.Nodes.FixedIndex;
         if (fixedIndex != -1)
         {
             node.index = fixedIndex + delta;
@@ -381,10 +381,10 @@ public class TreeNodeCollection : IList
         {
             //if fixedIndex != -1 capacity was ensured by AddRange
             Debug.Assert(delta == 0, "delta should be 0");
-            node.index = owner.childNodes.Count;
+            node.index = _owner.childNodes.Count;
         }
 
-        owner.childNodes.Add(node);
+        _owner.childNodes.Add(node);
         node.Realize(false);
 
         if (tv is not null && node == tv.selectedNode)
@@ -476,11 +476,11 @@ public class TreeNodeCollection : IList
         }
 
         // step 1 - check the last cached item
-        if (IsValidIndex(lastAccessedIndex))
+        if (IsValidIndex(_lastAccessedIndex))
         {
-            if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+            if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, /* ignoreCase = */ true))
             {
-                return lastAccessedIndex;
+                return _lastAccessedIndex;
             }
         }
 
@@ -489,13 +489,13 @@ public class TreeNodeCollection : IList
         {
             if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
             {
-                lastAccessedIndex = i;
+                _lastAccessedIndex = i;
                 return i;
             }
         }
 
         // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
-        lastAccessedIndex = -1;
+        _lastAccessedIndex = -1;
         return -1;
     }
 
@@ -510,10 +510,10 @@ public class TreeNodeCollection : IList
         }
 
         // Check for ParentingCycle
-        owner.CheckParentingCycle(node);
+        _owner.CheckParentingCycle(node);
 
         // If the TreeView is sorted, index is ignored
-        TreeView tv = owner.TreeView;
+        TreeView tv = _owner.TreeView;
 
         if (tv is not null)
         {
@@ -525,7 +525,7 @@ public class TreeNodeCollection : IList
 
         if (tv is not null && tv.Sorted)
         {
-            owner.AddSorted(node);
+            _owner.AddSorted(node);
             return;
         }
 
@@ -534,12 +534,12 @@ public class TreeNodeCollection : IList
             index = 0;
         }
 
-        if (index > owner.childNodes.Count)
+        if (index > _owner.childNodes.Count)
         {
-            index = owner.childNodes.Count;
+            index = _owner.childNodes.Count;
         }
 
-        owner.InsertNodeAt(index, node);
+        _owner.InsertNodeAt(index, node);
     }
 
     void IList.Insert(int index, object? node)
@@ -650,14 +650,14 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual void Clear()
     {
-        owner.Clear();
+        _owner.Clear();
     }
 
     public void CopyTo(Array dest, int index)
     {
-        if (owner.childNodes.Count > 0)
+        if (_owner.childNodes.Count > 0)
         {
-            ((ICollection)owner.childNodes).CopyTo(dest, index);
+            ((ICollection)_owner.childNodes).CopyTo(dest, index);
         }
     }
 
@@ -693,6 +693,6 @@ public class TreeNodeCollection : IList
 
     public IEnumerator GetEnumerator()
     {
-        return owner.childNodes.GetEnumerator();
+        return _owner.childNodes.GetEnumerator();
     }
 }
