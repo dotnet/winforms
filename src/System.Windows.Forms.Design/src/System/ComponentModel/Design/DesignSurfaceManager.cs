@@ -272,7 +272,7 @@ public class DesignSurfaceManager : IServiceProvider, IDisposable
     ///  Creates an instance of a design surface.  This can be
     ///  overridden to provide a derived version of DesignSurface.
     /// </summary>
-    protected virtual DesignSurface CreateDesignSurfaceCore(IServiceProvider parentProvider) => new DesignSurface(parentProvider);
+    protected virtual DesignSurface CreateDesignSurfaceCore(IServiceProvider parentProvider) => new(parentProvider);
 
     /// <summary>
     ///  Disposes the designer application.

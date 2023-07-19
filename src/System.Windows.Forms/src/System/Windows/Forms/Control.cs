@@ -126,76 +126,76 @@ public unsafe partial class Control :
     private static readonly uint WM_GETCONTROLNAME = PInvoke.RegisterWindowMessage("WM_GETCONTROLNAME");
     private static readonly uint WM_GETCONTROLTYPE = PInvoke.RegisterWindowMessage("WM_GETCONTROLTYPE");
 
-    private static readonly object s_autoSizeChangedEvent = new object();
-    private static readonly object s_keyDownEvent = new object();
-    private static readonly object s_keyPressEvent = new object();
-    private static readonly object s_keyUpEvent = new object();
-    private static readonly object s_mouseDownEvent = new object();
-    private static readonly object s_mouseEnterEvent = new object();
-    private static readonly object s_mouseLeaveEvent = new object();
-    private static readonly object s_dpiChangedBeforeParentEvent = new object();
-    private static readonly object s_dpiChangedAfterParentEvent = new object();
-    private static readonly object s_mouseHoverEvent = new object();
-    private static readonly object s_mouseMoveEvent = new object();
-    private static readonly object s_mouseUpEvent = new object();
-    private static readonly object s_mouseWheelEvent = new object();
-    private static readonly object s_clickEvent = new object();
-    private static readonly object s_clientSizeEvent = new object();
-    private static readonly object s_doubleClickEvent = new object();
-    private static readonly object s_mouseClickEvent = new object();
-    private static readonly object s_mouseDoubleClickEvent = new object();
-    private static readonly object s_mouseCaptureChangedEvent = new object();
-    private static readonly object s_moveEvent = new object();
-    private static readonly object s_resizeEvent = new object();
-    private static readonly object s_layoutEvent = new object();
-    private static readonly object s_gotFocusEvent = new object();
-    private static readonly object s_lostFocusEvent = new object();
-    private static readonly object s_enterEvent = new object();
-    private static readonly object s_leaveEvent = new object();
-    private static readonly object s_handleCreatedEvent = new object();
-    private static readonly object s_handleDestroyedEvent = new object();
-    private static readonly object s_controlAddedEvent = new object();
-    private static readonly object s_controlRemovedEvent = new object();
-    private static readonly object s_changeUICuesEvent = new object();
-    private static readonly object s_systemColorsChangedEvent = new object();
-    private static readonly object s_validatingEvent = new object();
-    private static readonly object s_validatedEvent = new object();
-    private static readonly object s_styleChangedEvent = new object();
-    private static readonly object s_imeModeChangedEvent = new object();
-    private static readonly object s_helpRequestedEvent = new object();
-    private static readonly object s_paintEvent = new object();
-    private static readonly object s_invalidatedEvent = new object();
-    private static readonly object s_queryContinueDragEvent = new object();
-    private static readonly object s_giveFeedbackEvent = new object();
-    private static readonly object s_dragEnterEvent = new object();
-    private static readonly object s_dragLeaveEvent = new object();
-    private static readonly object s_dragOverEvent = new object();
-    private static readonly object s_dragDropEvent = new object();
-    private static readonly object s_queryAccessibilityHelpEvent = new object();
-    private static readonly object s_backgroundImageEvent = new object();
-    private static readonly object s_backgroundImageLayoutEvent = new object();
-    private static readonly object s_bindingContextEvent = new object();
-    private static readonly object s_backColorEvent = new object();
-    private static readonly object s_parentEvent = new object();
-    private static readonly object s_visibleEvent = new object();
-    private static readonly object s_textEvent = new object();
-    private static readonly object s_tabStopEvent = new object();
-    private static readonly object s_tabIndexEvent = new object();
-    private static readonly object s_sizeEvent = new object();
-    private static readonly object s_rightToLeftEvent = new object();
-    private static readonly object s_locationEvent = new object();
-    private static readonly object s_foreColorEvent = new object();
-    private static readonly object s_fontEvent = new object();
-    private static readonly object s_enabledEvent = new object();
-    private static readonly object s_dockEvent = new object();
-    private static readonly object s_cursorEvent = new object();
-    private static readonly object s_contextMenuStripEvent = new object();
-    private static readonly object s_causesValidationEvent = new object();
-    private static readonly object s_regionChangedEvent = new object();
-    private static readonly object s_marginChangedEvent = new object();
-    private protected static readonly object s_paddingChangedEvent = new object();
-    private static readonly object s_previewKeyDownEvent = new object();
-    private static readonly object s_dataContextEvent = new object();
+    private static readonly object s_autoSizeChangedEvent = new();
+    private static readonly object s_keyDownEvent = new();
+    private static readonly object s_keyPressEvent = new();
+    private static readonly object s_keyUpEvent = new();
+    private static readonly object s_mouseDownEvent = new();
+    private static readonly object s_mouseEnterEvent = new();
+    private static readonly object s_mouseLeaveEvent = new();
+    private static readonly object s_dpiChangedBeforeParentEvent = new();
+    private static readonly object s_dpiChangedAfterParentEvent = new();
+    private static readonly object s_mouseHoverEvent = new();
+    private static readonly object s_mouseMoveEvent = new();
+    private static readonly object s_mouseUpEvent = new();
+    private static readonly object s_mouseWheelEvent = new();
+    private static readonly object s_clickEvent = new();
+    private static readonly object s_clientSizeEvent = new();
+    private static readonly object s_doubleClickEvent = new();
+    private static readonly object s_mouseClickEvent = new();
+    private static readonly object s_mouseDoubleClickEvent = new();
+    private static readonly object s_mouseCaptureChangedEvent = new();
+    private static readonly object s_moveEvent = new();
+    private static readonly object s_resizeEvent = new();
+    private static readonly object s_layoutEvent = new();
+    private static readonly object s_gotFocusEvent = new();
+    private static readonly object s_lostFocusEvent = new();
+    private static readonly object s_enterEvent = new();
+    private static readonly object s_leaveEvent = new();
+    private static readonly object s_handleCreatedEvent = new();
+    private static readonly object s_handleDestroyedEvent = new();
+    private static readonly object s_controlAddedEvent = new();
+    private static readonly object s_controlRemovedEvent = new();
+    private static readonly object s_changeUICuesEvent = new();
+    private static readonly object s_systemColorsChangedEvent = new();
+    private static readonly object s_validatingEvent = new();
+    private static readonly object s_validatedEvent = new();
+    private static readonly object s_styleChangedEvent = new();
+    private static readonly object s_imeModeChangedEvent = new();
+    private static readonly object s_helpRequestedEvent = new();
+    private static readonly object s_paintEvent = new();
+    private static readonly object s_invalidatedEvent = new();
+    private static readonly object s_queryContinueDragEvent = new();
+    private static readonly object s_giveFeedbackEvent = new();
+    private static readonly object s_dragEnterEvent = new();
+    private static readonly object s_dragLeaveEvent = new();
+    private static readonly object s_dragOverEvent = new();
+    private static readonly object s_dragDropEvent = new();
+    private static readonly object s_queryAccessibilityHelpEvent = new();
+    private static readonly object s_backgroundImageEvent = new();
+    private static readonly object s_backgroundImageLayoutEvent = new();
+    private static readonly object s_bindingContextEvent = new();
+    private static readonly object s_backColorEvent = new();
+    private static readonly object s_parentEvent = new();
+    private static readonly object s_visibleEvent = new();
+    private static readonly object s_textEvent = new();
+    private static readonly object s_tabStopEvent = new();
+    private static readonly object s_tabIndexEvent = new();
+    private static readonly object s_sizeEvent = new();
+    private static readonly object s_rightToLeftEvent = new();
+    private static readonly object s_locationEvent = new();
+    private static readonly object s_foreColorEvent = new();
+    private static readonly object s_fontEvent = new();
+    private static readonly object s_enabledEvent = new();
+    private static readonly object s_dockEvent = new();
+    private static readonly object s_cursorEvent = new();
+    private static readonly object s_contextMenuStripEvent = new();
+    private static readonly object s_causesValidationEvent = new();
+    private static readonly object s_regionChangedEvent = new();
+    private static readonly object s_marginChangedEvent = new();
+    private protected static readonly object s_paddingChangedEvent = new();
+    private static readonly object s_previewKeyDownEvent = new();
+    private static readonly object s_dataContextEvent = new();
 
     private static MessageId s_threadCallbackMessage;
     private static ContextCallback? s_invokeMarshaledCallbackHelperDelegate;
@@ -5267,7 +5267,7 @@ public unsafe partial class Control :
 
         using Bitmap image = new Bitmap(width, height, bitmap.PixelFormat);
         using Graphics g = Graphics.FromImage(image);
-        using var hDc = new DeviceContextHdcScope(g, applyGraphicsState: false);
+        using DeviceContextHdcScope hDc = new(g, applyGraphicsState: false);
 
         // Send the WM_PRINT message.
         PInvoke.SendMessage(
@@ -5278,7 +5278,7 @@ public unsafe partial class Control :
 
         // Now BLT the result to the destination bitmap.
         using Graphics destGraphics = Graphics.FromImage(bitmap);
-        using var desthDC = new DeviceContextHdcScope(destGraphics, applyGraphicsState: false);
+        using DeviceContextHdcScope desthDC = new(destGraphics, applyGraphicsState: false);
         PInvoke.BitBlt(
             desthDC,
             targetBounds.X,
@@ -6241,7 +6241,7 @@ public unsafe partial class Control :
         else if (IsHandleCreated)
         {
             using Graphics graphics = CreateGraphicsInternal();
-            using var regionHandle = new PInvoke.RegionScope(region, graphics);
+            using PInvoke.RegionScope regionHandle = new(region, graphics);
 
             if (invalidateChildren)
             {
@@ -7597,8 +7597,8 @@ public unsafe partial class Control :
             {
                 uint flags = PInvoke.PRF_CHILDREN | PInvoke.PRF_CLIENT | PInvoke.PRF_ERASEBKGND | PInvoke.PRF_NONCLIENT;
 
-                using var hdc = new DeviceContextHdcScope(e);
-                Message m = Message.Create(HWND, (uint)PInvoke.WM_PRINTCLIENT, (WPARAM)hdc, (LPARAM)flags);
+                using DeviceContextHdcScope hdc = new DeviceContextHdcScope(e);
+                Message m = Message.Create(HWND, PInvoke.WM_PRINTCLIENT, (WPARAM)hdc, (LPARAM)flags);
                 DefWndProc(ref m);
             }
             else
@@ -8725,7 +8725,7 @@ public unsafe partial class Control :
             if (transparentRegion is not null)
             {
                 Graphics g = e.GraphicsInternal;
-                using var saveState = new GraphicsStateScope(g);
+                using GraphicsStateScope saveState = new(g);
                 g.Clip = transparentRegion;
                 ButtonRenderer.DrawParentBackground(g, rectangle, this);
             }
@@ -8756,7 +8756,7 @@ public unsafe partial class Control :
 
         if (transparentRegion is not null)
         {
-            using var saveState = new GraphicsStateScope(newArgs.Graphics);
+            using GraphicsStateScope saveState = new GraphicsStateScope(newArgs.Graphics);
 
             // Is this clipping something we can apply directly to the HDC?
             newArgs.Graphics.Clip = transparentRegion;
@@ -11428,7 +11428,7 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected internal void UpdateBounds()
     {
-        RECT rect = default(RECT);
+        RECT rect = default;
         int clientWidth = 0;
         int clientHeight = 0;
 
@@ -12605,7 +12605,7 @@ public unsafe partial class Control :
     {
         s_paletteTracing.TraceVerbose($"{Handle}: WM_QUERYNEWPALETTE");
 
-        using var dc = new GetDcScope(HWND);
+        using GetDcScope dc = new(HWND);
 
         // We don't want to unset the palette in this case so we don't do this in a using
         var paletteScope = PInvoke.SelectPaletteScope.HalftonePalette(

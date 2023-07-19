@@ -19,11 +19,11 @@ public abstract class ToolStripDropDownItem : ToolStripItem
     private ToolStripDropDown? _dropDown;
     private ToolStripDropDownDirection _toolStripDropDownDirection = ToolStripDropDownDirection.Default;
     private ToolTip? _hookedKeyboardTooltip;
-    private static readonly object EventDropDownShow = new object();
-    private static readonly object EventDropDownHide = new object();
-    private static readonly object EventDropDownOpened = new object();
-    private static readonly object EventDropDownClosed = new object();
-    private static readonly object EventDropDownItemClicked = new object();
+    private static readonly object EventDropDownShow = new();
+    private static readonly object EventDropDownHide = new();
+    private static readonly object EventDropDownOpened = new();
+    private static readonly object EventDropDownClosed = new();
+    private static readonly object EventDropDownItemClicked = new();
 
     /// <summary>
     ///  Protected ctor so you can't create one of these without deriving from it.
@@ -775,7 +775,7 @@ public abstract class ToolStripDropDownItem : ToolStripItem
 
         // Traversing the tree of DropDownMenuItems non-recursively to set new
         // Font (where necessary because not inherited from parent), DeviceDpi and reset the scaling.
-        var itemsStack = new Stack<ToolStripDropDownItem>();
+        Stack<ToolStripDropDownItem> itemsStack = new();
 
         itemsStack.Push(this);
 

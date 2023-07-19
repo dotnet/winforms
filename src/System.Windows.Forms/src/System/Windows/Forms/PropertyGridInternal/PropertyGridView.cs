@@ -605,7 +605,7 @@ internal sealed partial class PropertyGridView :
         Rectangle rect = GetRectangle(row, RowValue | RowLabel);
 
         // Translate rect to screen coordinates
-        var pt = new Point(rect.X, rect.Y);
+        Point pt = new(rect.X, rect.Y);
         PInvoke.ClientToScreen(this, ref pt);
 
         Rectangle parent = gridEntry.OwnerGrid.GridViewAccessibleObject.Bounds;
@@ -1154,7 +1154,7 @@ internal sealed partial class PropertyGridView :
 
         s_gridViewDebugPaint.TraceVerbose($"Drawing label for property {gridEntry.PropertyLabel}");
 
-        var newOrigin = new Point(rect.X, rect.Y);
+        Point newOrigin = new(rect.X, rect.Y);
         clipRect = Rectangle.Intersect(rect, clipRect);
 
         if (clipRect.IsEmpty)
@@ -1206,7 +1206,7 @@ internal sealed partial class PropertyGridView :
         s_gridViewDebugPaint.TraceVerbose($"Drawing value for property {gridEntry.PropertyLabel}");
 
         Rectangle rect = GetRectangle(row, RowValue);
-        var newOrigin = new Point(rect.X, rect.Y);
+        Point newOrigin = new(rect.X, rect.Y);
         clipRect = Rectangle.Intersect(clipRect, rect);
 
         if (clipRect.IsEmpty)
@@ -1711,7 +1711,7 @@ internal sealed partial class PropertyGridView :
             return InvalidPosition;
         }
 
-        var pt = new Point(RowLabel, 0);
+        Point pt = new(RowLabel, 0);
         if (x > LabelWidth + _location.X)
         {
             pt.X = RowValue;
@@ -1934,7 +1934,7 @@ internal sealed partial class PropertyGridView :
 
     public Rectangle GetRectangle(int row, int flRow)
     {
-        var rect = new Rectangle(0, 0, 0, 0);
+        Rectangle rect = new(0, 0, 0, 0);
         Size size = GetOurSize();
 
         rect.X = _location.X;
@@ -2021,7 +2021,7 @@ internal sealed partial class PropertyGridView :
     private void LayoutWindow(bool invalidate)
     {
         Rectangle rect = ClientRectangle;
-        var sizeWindow = new Size(rect.Width, rect.Height);
+        Size sizeWindow = new(rect.Width, rect.Height);
 
         if (_scrollBar is not null)
         {
@@ -2424,7 +2424,7 @@ internal sealed partial class PropertyGridView :
         // For empty GridView, clear the focus indicator that was painted in OnGotFocus()
         if (TotalProperties <= 0)
         {
-            var clearRect = new Rectangle(1, 1, Size.Width - 2, Size.Height - 2);
+            Rectangle clearRect = new(1, 1, Size.Width - 2, Size.Height - 2);
             s_gridViewDebugPaint.TraceVerbose($"Filling empty gridview rect={clearRect}");
 
             Color color = BackColor;
@@ -3447,7 +3447,7 @@ internal sealed partial class PropertyGridView :
             if (yPosition < Size.Height)
             {
                 yPosition++;
-                var clearRect = new Rectangle(1, yPosition, Size.Width - 2, Size.Height - yPosition - 1);
+                Rectangle clearRect = new(1, yPosition, Size.Width - 2, Size.Height - yPosition - 1);
                 s_gridViewDebugPaint.TraceVerbose($"Filling remaining area rect={clearRect}");
 
                 using var backBrush = BackColor.GetCachedSolidBrushScope();
@@ -3683,13 +3683,13 @@ internal sealed partial class PropertyGridView :
 
         if (!_lastClientRect.IsEmpty && newRect.Width > _lastClientRect.Width)
         {
-            var rectInvalidate = new Rectangle(_lastClientRect.Width - 1, 0, newRect.Width - _lastClientRect.Width + 1, _lastClientRect.Height);
+            Rectangle rectInvalidate = new(_lastClientRect.Width - 1, 0, newRect.Width - _lastClientRect.Width + 1, _lastClientRect.Height);
             Invalidate(rectInvalidate);
         }
 
         if (!_lastClientRect.IsEmpty && yDelta > 0)
         {
-            var rectInvalidate = new Rectangle(0, _lastClientRect.Height - 1, _lastClientRect.Width, newRect.Height - _lastClientRect.Height + 1);
+            Rectangle rectInvalidate = new(0, _lastClientRect.Height - 1, _lastClientRect.Width, newRect.Height - _lastClientRect.Height + 1);
             Invalidate(rectInvalidate);
         }
 
@@ -3793,7 +3793,7 @@ internal sealed partial class PropertyGridView :
 
             // The listbox draws with GDI, not GDI+.  So we use a normal DC here.
 
-            using var hdc = new GetDcScope(DropDownListBox.HWND);
+            using GetDcScope hdc = new(DropDownListBox.HWND);
 
             TEXTMETRICW tm = default;
             int selectionIndex = -1;
@@ -4447,7 +4447,7 @@ internal sealed partial class PropertyGridView :
                 ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight)
                 : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
 
-            var rectTarget = new Rectangle(
+            Rectangle rectTarget = new(
                 rect.X + rect.Width - sizeBtn.Width, rect.Y,
                 sizeBtn.Width, rect.Height);
 

@@ -49,17 +49,17 @@ public sealed class HtmlElementEventArgs : EventArgs
 
     public Point ClientMousePosition
     {
-        get => new Point(NativeHTMLEventObj.GetClientX(), NativeHTMLEventObj.GetClientY());
+        get => new(NativeHTMLEventObj.GetClientX(), NativeHTMLEventObj.GetClientY());
     }
 
     public Point OffsetMousePosition
     {
-        get => new Point(NativeHTMLEventObj.GetOffsetX(), NativeHTMLEventObj.GetOffsetY());
+        get => new(NativeHTMLEventObj.GetOffsetX(), NativeHTMLEventObj.GetOffsetY());
     }
 
     public Point MousePosition
     {
-        get => new Point(NativeHTMLEventObj.GetX(), NativeHTMLEventObj.GetY());
+        get => new(NativeHTMLEventObj.GetX(), NativeHTMLEventObj.GetY());
     }
 
     public bool BubbleEvent

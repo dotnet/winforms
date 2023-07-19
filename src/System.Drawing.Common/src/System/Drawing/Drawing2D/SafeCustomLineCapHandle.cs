@@ -55,5 +55,5 @@ internal sealed class SafeCustomLineCapHandle : SafeHandle
 
     public static implicit operator IntPtr(SafeCustomLineCapHandle handle) => handle?.handle ?? IntPtr.Zero;
 
-    public static explicit operator SafeCustomLineCapHandle(IntPtr handle) => new SafeCustomLineCapHandle(handle);
+    public static explicit operator SafeCustomLineCapHandle(IntPtr handle) => new(handle);
 }

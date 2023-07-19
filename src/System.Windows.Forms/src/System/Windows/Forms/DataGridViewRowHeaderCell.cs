@@ -202,7 +202,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             if (val is not null)
             {
                 sb.Append("<B>");
-                using var sw = new StringWriter(sb, CultureInfo.CurrentCulture);
+                using StringWriter sw = new(sb, CultureInfo.CurrentCulture);
                 FormatPlainTextAsHtml(val.ToString(), sw);
                 sb.Append("</B>");
             }
@@ -234,7 +234,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                 {
                     bool escapeApplied = false;
                     int insertionPoint = sb.Length;
-                    using var sw = new StringWriter(sb, CultureInfo.CurrentCulture);
+                    using StringWriter sw = new(sb, CultureInfo.CurrentCulture);
                     FormatPlainText(val.ToString(), csv, sw, ref escapeApplied);
                     if (escapeApplied)
                     {
@@ -597,7 +597,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
 
         ArgumentNullException.ThrowIfNull(cellStyle);
 
-        DataGridViewAdvancedBorderStyle dgvabsPlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
+        DataGridViewAdvancedBorderStyle dgvabsPlaceholder = new(), dgvabsEffective;
         dgvabsEffective = OwningRow.AdjustRowHeaderBorderStyle(DataGridView.AdvancedRowHeadersBorderStyle,
             dgvabsPlaceholder,
             false /*singleVerticalBorderAdded*/,

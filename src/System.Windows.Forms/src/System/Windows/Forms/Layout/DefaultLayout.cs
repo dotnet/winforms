@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Layout;
 
 internal partial class DefaultLayout : LayoutEngine
 {
-    internal static readonly DefaultLayout Instance = new DefaultLayout();
+    internal static readonly DefaultLayout Instance = new();
 
     private static readonly int s_layoutInfoProperty = PropertyStore.CreateKey();
     private static readonly int s_cachedBoundsProperty = PropertyStore.CreateKey();

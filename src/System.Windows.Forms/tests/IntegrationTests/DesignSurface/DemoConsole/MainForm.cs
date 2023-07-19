@@ -11,7 +11,7 @@ public partial class MainForm : Form
 {
     ISelectionService _selectionService;
 
-    private List<IDesignSurfaceExt> _listOfDesignSurface = new List<IDesignSurfaceExt>();
+    private List<IDesignSurfaceExt> _listOfDesignSurface = new();
 
     public MainForm()
     {

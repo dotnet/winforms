@@ -33,7 +33,7 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
     private static readonly int s_propControlsCollection = PropertyStore.CreateKey();
 
 #if DEBUG
-    internal static TraceSwitch s_toolStripPanelRowCreationDebug = new TraceSwitch("ToolStripPanelRowCreationDebug", "Debug code for rafting row creation");
+    internal static TraceSwitch s_toolStripPanelRowCreationDebug = new("ToolStripPanelRowCreationDebug", "Debug code for rafting row creation");
 #else
     internal static TraceSwitch? s_toolStripPanelRowCreationDebug;
 #endif
@@ -730,7 +730,7 @@ public partial class ToolStripPanelRow : Component, IArrangedElement
 #region MouseStuff
 
 #if DEBUG
-    internal static readonly TraceSwitch ToolStripPanelMouseDebug = new TraceSwitch("ToolStripPanelMouse", "Debug ToolStrip WM_MOUSEACTIVATE code");
+    internal static readonly TraceSwitch ToolStripPanelMouseDebug = new("ToolStripPanelMouse", "Debug ToolStrip WM_MOUSEACTIVATE code");
 #else
     internal static readonly TraceSwitch? ToolStripPanelMouseDebug;
 #endif

@@ -118,7 +118,7 @@ public partial class NativeWindow
         /// </summary>
         private unsafe void RegisterClass()
         {
-            WNDCLASSW windowClass = default(WNDCLASSW);
+            WNDCLASSW windowClass = default;
 
             string? localClassName = _className;
 

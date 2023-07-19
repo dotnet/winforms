@@ -32,7 +32,7 @@ public partial class ListViewItem : ICloneable, ISerializable
     private static readonly BitVector32.Section s_subItemCountSection = BitVector32.CreateSection(MaxSubItems, s_savedStateImageIndexSection);
 
     private int _indentCount;
-    private Point _position = new Point(-1, -1);
+    private Point _position = new(-1, -1);
 
     internal ListView? _listView;
 
@@ -315,7 +315,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             }
             else
             {
-                return default(Rectangle);
+                return default;
             }
         }
     }
@@ -979,7 +979,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             return _listView.GetItemRect(Index, portion);
         }
 
-        return default(Rectangle);
+        return default;
     }
 
     public ListViewSubItem? GetSubItemAt(int x, int y)
@@ -1058,8 +1058,8 @@ public partial class ListViewItem : ICloneable, ISerializable
 
     internal void UpdateStateToListView(int index)
     {
-        var lvItem = default(LVITEMW);
-        UpdateStateToListView(index, ref lvItem, true);
+        LVITEMW item = default;
+        UpdateStateToListView(index, ref item, updateOwner: true);
     }
 
     /// <summary>
@@ -1122,7 +1122,7 @@ public partial class ListViewItem : ICloneable, ISerializable
         if (_listView is not null && _listView.IsHandleCreated && displayIndex != -1)
         {
             // Get information from comctl control
-            var lvItem = new LVITEMW
+            LVITEMW lvItem = new()
             {
                 mask = LIST_VIEW_ITEM_FLAGS.LVIF_PARAM | LIST_VIEW_ITEM_FLAGS.LVIF_STATE | LIST_VIEW_ITEM_FLAGS.LVIF_GROUPID
             };

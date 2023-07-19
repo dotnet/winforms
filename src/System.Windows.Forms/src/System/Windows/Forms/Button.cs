@@ -30,7 +30,7 @@ public partial class Button : ButtonBase, IButtonControl
     ///  For buttons whose FlatStyle = FlatStyle.Flat, this property specifies the size, in pixels
     ///  of the border around the button.
     /// </summary>
-    private Size _systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
+    private Size _systemSize = new(InvalidDimensionValue, InvalidDimensionValue);
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Button"/>

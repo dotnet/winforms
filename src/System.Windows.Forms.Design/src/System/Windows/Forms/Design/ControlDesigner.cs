@@ -309,7 +309,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     internal Point GetOffsetToClientArea()
     {
-        var nativeOffset = default(Point);
+        Point nativeOffset = default;
         PInvoke.MapWindowPoints(Control, Control.Parent, ref nativeOffset);
         Point offset = Control.Location;
 
@@ -319,7 +319,7 @@ public partial class ControlDesigner : ComponentDesigner
             offset.Offset(Control.Width, 0);
         }
 
-        return (new Point(Math.Abs(nativeOffset.X - offset.X), nativeOffset.Y - offset.Y));
+        return new Point(Math.Abs(nativeOffset.X - offset.X), nativeOffset.Y - offset.Y);
     }
 
     /// <summary>
@@ -2067,7 +2067,7 @@ public partial class ControlDesigner : ComponentDesigner
 
                     // First, save off the update region and call our base class.
 
-                    RECT clip = default(RECT);
+                    RECT clip = default;
                     using var hrgn = new PInvoke.RegionScope(0, 0, 0, 0);
                     PInvoke.GetUpdateRgn(m.HWND, hrgn, false);
                     PInvoke.GetUpdateRect(m.HWND, &clip, false);

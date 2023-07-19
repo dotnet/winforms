@@ -258,7 +258,7 @@ public abstract partial class UpDownBase
             // Draw the up and down buttons
             if (Application.RenderWithVisualStyles)
             {
-                var vsr = new VisualStyleRenderer(_mouseOver == ButtonID.Up
+                VisualStyleRenderer vsr = new(_mouseOver == ButtonID.Up
                     ? VisualStyleElement.Spin.Up.Hot
                     : VisualStyleElement.Spin.Up.Normal);
 
@@ -271,7 +271,7 @@ public abstract partial class UpDownBase
                     vsr.SetParameters(VisualStyleElement.Spin.Up.Pressed);
                 }
 
-                using var hdc = new DeviceContextHdcScope(e);
+                using DeviceContextHdcScope hdc = new(e);
                 vsr.DrawBackground(
                     hdc,
                     new Rectangle(0, 0, _parent._defaultButtonsWidth, half_height),

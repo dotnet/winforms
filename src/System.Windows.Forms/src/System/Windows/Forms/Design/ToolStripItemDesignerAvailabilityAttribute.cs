@@ -7,7 +7,7 @@ namespace System.Windows.Forms.Design;
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class ToolStripItemDesignerAvailabilityAttribute : Attribute
 {
-    public static readonly ToolStripItemDesignerAvailabilityAttribute Default = new ToolStripItemDesignerAvailabilityAttribute();
+    public static readonly ToolStripItemDesignerAvailabilityAttribute Default = new();
 
     /// <summary>
     ///  Specifies which ToolStrip types the Item can appear in - ToolStrip,MenuStrip,StatusStrip,ContextMenuStrip

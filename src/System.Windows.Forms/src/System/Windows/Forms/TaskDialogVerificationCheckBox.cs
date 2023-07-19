@@ -40,7 +40,7 @@ public sealed class TaskDialogVerificationCheckBox : TaskDialogControl
     }
 
     public static implicit operator TaskDialogVerificationCheckBox(string verificationText)
-        => new TaskDialogVerificationCheckBox(verificationText);
+        => new(verificationText);
 
     /// <summary>
     ///   Gets or sets the text associated with this control.

@@ -21,16 +21,16 @@ public sealed class NoAssertContext : IDisposable
     // We do, however need to lock around hooking/unhooking our custom listener to make sure that we
     // are rerouting correctly if multiple threads are creating/disposing this class concurrently.
 
-    private static readonly object s_lock = new object();
+    private static readonly object s_lock = new();
     private static bool s_hooked;
     private static bool s_hasDefaultListener;
     private static bool s_hasThrowingListener;
 
-    private static readonly ConcurrentDictionary<int, int> s_suppressedThreads = new ConcurrentDictionary<int, int>();
+    private static readonly ConcurrentDictionary<int, int> s_suppressedThreads = new();
 
     // "Default" is the listener that terminates the process when debug assertions fail.
     private static readonly TraceListener? s_defaultListener = Trace.Listeners["Default"];
-    private static readonly NoAssertListener s_noAssertListener = new NoAssertListener();
+    private static readonly NoAssertListener s_noAssertListener = new();
 
     public NoAssertContext()
     {

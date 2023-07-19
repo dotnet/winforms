@@ -15,7 +15,7 @@ internal partial class ToolStripGrip : ToolStripButton
     private Point _lastEndLocation = ToolStrip.s_invalidMouseEnter;
     private static Size s_dragSize = LayoutUtils.s_maxSize;
 
-    private static readonly Padding _defaultPadding = new Padding(2);
+    private static readonly Padding _defaultPadding = new(2);
     private const int GripThicknessDefault = 3;
     private const int GripThicknessVisualStylesEnabled = 5;
     private Padding _scaledDefaultPadding = _defaultPadding;

@@ -29,12 +29,12 @@ namespace System.Drawing.Imaging.Tests;
 
 public class ImageAttributesTests
 {
-    private readonly Rectangle _rectangle = new Rectangle(0, 0, 64, 64);
+    private readonly Rectangle _rectangle = new(0, 0, 64, 64);
     private readonly Color _actualYellow = Color.FromArgb(255, 255, 255, 0);
     private readonly Color _actualGreen = Color.FromArgb(255, 0, 255, 0);
     private readonly Color _expectedRed = Color.FromArgb(255, 255, 0, 0);
     private readonly Color _expectedBlack = Color.FromArgb(255, 0, 0, 0);
-    private readonly ColorMatrix _greenComponentToZeroColorMatrix = new ColorMatrix(new float[][]
+    private readonly ColorMatrix _greenComponentToZeroColorMatrix = new(new float[][]
     {
         new float[] {1, 0, 0, 0, 0},
         new float[] {0, 0, 0, 0, 0},
@@ -43,7 +43,7 @@ public class ImageAttributesTests
         new float[] {0, 0, 0, 0, 0},
     });
 
-    private readonly ColorMatrix _grayMatrix = new ColorMatrix(new float[][] {
+    private readonly ColorMatrix _grayMatrix = new(new float[][] {
         new float[] {1, 0, 0, 0, 0},
         new float[] {0, 2, 0, 0, 0},
         new float[] {0, 0, 3, 0, 0},
@@ -1215,7 +1215,7 @@ public class ImageAttributesTests
     [Fact]
     public void SetOutputChannelColorProfile_InvalidPath_ThrowsPathTooLongException()
     {
-        string fileNameTooLong = new string('a', short.MaxValue);
+        string fileNameTooLong = new('a', short.MaxValue);
         using (var imageAttr = new ImageAttributes())
         {
             Assert.Throws<PathTooLongException>(() => imageAttr.SetOutputChannelColorProfile(fileNameTooLong));

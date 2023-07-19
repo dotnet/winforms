@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Layout;
 
 public class ArrangedElementCollection : IList
 {
-    internal static ArrangedElementCollection Empty = new ArrangedElementCollection(0);
+    internal static ArrangedElementCollection Empty = new(0);
 
     internal ArrangedElementCollection()
         : this(4)
@@ -49,7 +49,7 @@ public class ArrangedElementCollection : IList
 
     public override int GetHashCode()
     {
-        var hash = default(HashCode);
+        HashCode hash = default;
         foreach (object o in InnerList)
         {
             hash.Add(o);

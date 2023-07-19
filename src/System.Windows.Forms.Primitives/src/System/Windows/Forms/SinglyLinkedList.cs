@@ -55,7 +55,7 @@ internal class SinglyLinkedList<T>
         return node;
     }
 
-    public Enumerator GetEnumerator() => new Enumerator(this);
+    public Enumerator GetEnumerator() => new(this);
 
     public class Node
     {

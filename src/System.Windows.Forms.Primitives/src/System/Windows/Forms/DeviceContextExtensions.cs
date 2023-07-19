@@ -89,7 +89,7 @@ internal static class DeviceContextExtensions
         using PInvoke.SetBkModeScope bkScope = new(hdc, BACKGROUND_MODE.TRANSPARENT);
         using PInvoke.SelectObjectScope selection = new(hdc, (HGDIOBJ)hpen.Value);
 
-        Point oldPoint = default(Point);
+        Point oldPoint = default;
 
         for (int i = 0; i < lines.Length; i += 4)
         {

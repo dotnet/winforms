@@ -13,7 +13,7 @@ public partial class PropertyGridViewTests
     [WinFormsFact]
     public void PropertyGridView_Render_Labels_Values_Correctly()
     {
-        Point pt = default(Point);
+        Point pt = default;
         using PropertyGrid propertyGrid = new()
         {
             SelectedObject = pt,

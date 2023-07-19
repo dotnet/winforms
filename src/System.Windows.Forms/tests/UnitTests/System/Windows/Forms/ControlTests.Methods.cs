@@ -4973,7 +4973,7 @@ public partial class ControlTests
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
-            string longString = new string('a', 65536);
+            string longString = new('a', 65536);
             control.Text = longString;
             Assert.Equal(longString, control.Text);
             layoutCallCount++;
@@ -5247,7 +5247,7 @@ public partial class ControlTests
         int layoutCallCount = 0;
         control.Layout += (sender, e) =>
         {
-            string longString = new string('a', 65536);
+            string longString = new('a', 65536);
             control.Text = longString;
             Assert.Equal(longString, control.Text);
             layoutCallCount++;

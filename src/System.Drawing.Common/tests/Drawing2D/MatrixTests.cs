@@ -78,7 +78,7 @@ public partial class MatrixTests
     }
 
     public static TheoryData<float, float, float, float, float, float, bool, bool> MatrixElements_TestData
-        => new TheoryData<float, float, float, float, float, float, bool, bool>
+        => new()
         {
             { 1, 0, 0, 1, 0, 0, true, true },
             { 0, 1, 2, 1, 3, 4, false, true },

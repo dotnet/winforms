@@ -18,7 +18,7 @@ public sealed class FontFamily : MarshalByRefObject, IDisposable
     private readonly bool _createDefaultOnFail;
 
 #if DEBUG
-    private static readonly object s_lockObj = new object();
+    private static readonly object s_lockObj = new();
     private static int s_idCount;
     private int _id;
 #endif
@@ -216,7 +216,7 @@ public sealed class FontFamily : MarshalByRefObject, IDisposable
     /// <summary>
     /// Gets a generic SansSerif <see cref='FontFamily'/>.
     /// </summary>
-    public static FontFamily GenericSansSerif => new FontFamily(GetGdipGenericSansSerif());
+    public static FontFamily GenericSansSerif => new(GetGdipGenericSansSerif());
 
     private static IntPtr GetGdipGenericSansSerif()
     {
@@ -230,12 +230,12 @@ public sealed class FontFamily : MarshalByRefObject, IDisposable
     /// <summary>
     /// Gets a generic Serif <see cref='FontFamily'/>.
     /// </summary>
-    public static FontFamily GenericSerif => new FontFamily(GenericFontFamilies.Serif);
+    public static FontFamily GenericSerif => new(GenericFontFamilies.Serif);
 
     /// <summary>
     /// Gets a generic monospace <see cref='FontFamily'/>.
     /// </summary>
-    public static FontFamily GenericMonospace => new FontFamily(GenericFontFamilies.Monospace);
+    public static FontFamily GenericMonospace => new(GenericFontFamilies.Monospace);
 
     /// <summary>
     /// Returns an array that contains all of the <see cref='FontFamily'/> objects associated with the specified

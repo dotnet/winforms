@@ -79,8 +79,8 @@ internal class Program
 
     private static void WindowsFormsApplicationBase_Run(bool isSingleInstance, bool isFirstInstance)
     {
-        var mainForm = new Form();
-        var application = new WindowsApplication(mainForm, isSingleInstance);
+        Form mainForm = new();
+        WindowsApplication application = new(mainForm, isSingleInstance);
 
         bool valid = false;
         bool loaded = false;
@@ -131,7 +131,7 @@ internal class Program
         Type dialogType = typeof(ApplicationBase).Assembly.GetType("Microsoft.VisualBasic.MyServices.Internal.ProgressDialog");
         var dialog = (Form)Activator.CreateInstance(dialogType, nonPublic: true);
 
-        var resources = new ResourceManager(dialogType);
+        ResourceManager resources = new(dialogType);
         var expectedValue = (Point)resources.GetObject("ProgressBarWork.Location");
         if (expectedValue == new Point(0, 0))
         {
@@ -155,7 +155,7 @@ internal class Program
         Type formType = typeof(ApplicationBase).Assembly.GetType("Microsoft.VisualBasic.CompilerServices.VBInputBox");
         var form = (Form)Activator.CreateInstance(formType, nonPublic: true);
 
-        var resources = new ResourceManager(formType);
+        ResourceManager resources = new(formType);
         var expectedValue = (Point)resources.GetObject("TextBox.Location");
         if (expectedValue == new Point(0, 0))
         {

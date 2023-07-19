@@ -118,7 +118,7 @@ internal class ListViewGroupConverter : TypeConverter
     {
         if (context is not null && context.Instance is ListViewItem item && item.ListView is not null)
         {
-            var list = new ArrayList();
+            ArrayList list = new();
             foreach (ListViewGroup group in item.ListView.Groups)
             {
                 list.Add(group);

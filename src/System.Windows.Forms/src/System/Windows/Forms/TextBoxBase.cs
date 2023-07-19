@@ -39,12 +39,12 @@ public abstract partial class TextBoxBase : Control
     private static readonly int scrollToCaretOnHandleCreated = BitVector32.CreateMask(shortcutsEnabled);
     private static readonly int setSelectionOnHandleCreated = BitVector32.CreateMask(scrollToCaretOnHandleCreated);
 
-    private static readonly object EVENT_ACCEPTSTABCHANGED = new object();
-    private static readonly object EVENT_BORDERSTYLECHANGED = new object();
-    private static readonly object EVENT_HIDESELECTIONCHANGED = new object();
-    private static readonly object EVENT_MODIFIEDCHANGED = new object();
-    private static readonly object EVENT_MULTILINECHANGED = new object();
-    private static readonly object EVENT_READONLYCHANGED = new object();
+    private static readonly object EVENT_ACCEPTSTABCHANGED = new();
+    private static readonly object EVENT_BORDERSTYLECHANGED = new();
+    private static readonly object EVENT_HIDESELECTIONCHANGED = new();
+    private static readonly object EVENT_MODIFIEDCHANGED = new();
+    private static readonly object EVENT_MULTILINECHANGED = new();
+    private static readonly object EVENT_READONLYCHANGED = new();
 
     /// <summary>
     ///  The current border for this edit control.

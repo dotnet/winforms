@@ -14,7 +14,7 @@ namespace System.Windows.Forms;
 public static class Help
 {
 #if DEBUG
-    internal static readonly TraceSwitch WindowsFormsHelpTrace = new TraceSwitch("WindowsFormsHelpTrace", "Debug help system");
+    internal static readonly TraceSwitch WindowsFormsHelpTrace = new("WindowsFormsHelpTrace", "Debug help system");
 #else
     internal static readonly TraceSwitch? WindowsFormsHelpTrace;
 #endif
@@ -96,7 +96,7 @@ public static class Help
     {
         WindowsFormsHelpTrace.TraceVerbose("Help:: ShowPopup");
 
-        var pop = new HH_POPUPW
+        HH_POPUPW pop = new()
         {
             cbStruct = sizeof(HH_POPUPW),
             pt = location,
@@ -370,7 +370,7 @@ public static class Help
 
             case HelpNavigator.Find:
                 {
-                    var ftsQuery = new HH_FTS_QUERYW
+                    HH_FTS_QUERYW ftsQuery = new()
                     {
                         cbStruct = sizeof(HH_FTS_QUERYW),
                         iProximity = HH_FTS_QUERYW.DEFAULT_PROXIMITY,
@@ -396,7 +396,7 @@ public static class Help
             case HelpNavigator.KeywordIndex:
             case HelpNavigator.AssociateIndex:
                 {
-                    var alink = new HH_ALINKW
+                    HH_ALINKW alink = new()
                     {
                         cbStruct = sizeof(HH_ALINKW),
                         fIndexOnFail = true,

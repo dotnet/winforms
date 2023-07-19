@@ -25,15 +25,15 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionComboBox))]
 public partial class ComboBox : ListControl
 {
-    private static readonly object EVENT_DROPDOWN = new object();
-    private static readonly object EVENT_DRAWITEM = new object();
-    private static readonly object EVENT_MEASUREITEM = new object();
-    private static readonly object EVENT_SELECTEDINDEXCHANGED = new object();
-    private static readonly object EVENT_SELECTIONCHANGECOMMITTED = new object();
-    private static readonly object EVENT_SELECTEDITEMCHANGED = new object();
-    private static readonly object EVENT_DROPDOWNSTYLE = new object();
-    private static readonly object EVENT_TEXTUPDATE = new object();
-    private static readonly object EVENT_DROPDOWNCLOSED = new object();
+    private static readonly object EVENT_DROPDOWN = new();
+    private static readonly object EVENT_DRAWITEM = new();
+    private static readonly object EVENT_MEASUREITEM = new();
+    private static readonly object EVENT_SELECTEDINDEXCHANGED = new();
+    private static readonly object EVENT_SELECTIONCHANGECOMMITTED = new();
+    private static readonly object EVENT_SELECTEDITEMCHANGED = new();
+    private static readonly object EVENT_DROPDOWNSTYLE = new();
+    private static readonly object EVENT_TEXTUPDATE = new();
+    private static readonly object EVENT_DROPDOWNCLOSED = new();
 
     private static readonly int PropMaxLength = PropertyStore.CreateKey();
     private static readonly int PropItemHeight = PropertyStore.CreateKey();
@@ -88,7 +88,7 @@ public partial class ComboBox : ListControl
     private string _currentText = string.Empty;
     private string? _lastTextChangedValue;
     private bool _dropDown;
-    private readonly AutoCompleteDropDownFinder _finder = new AutoCompleteDropDownFinder();
+    private readonly AutoCompleteDropDownFinder _finder = new();
 
     private bool _selectedValueChangedFired;
     private AutoCompleteMode _autoCompleteMode = AutoCompleteMode.None;
@@ -3740,7 +3740,7 @@ public partial class ComboBox : ListControl
     {
         DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)(nint)m.LParamInternal;
 
-        using var e = new DrawItemEventArgs(
+        using DrawItemEventArgs e = new(
             dis->hDC,
             Font,
             dis->rcItem,
@@ -4005,5 +4005,5 @@ public partial class ComboBox : ListControl
     }
 
     internal virtual FlatComboAdapter CreateFlatComboAdapterInstance()
-        => new FlatComboAdapter(this, smallButton: false);
+        => new(this, smallButton: false);
 }

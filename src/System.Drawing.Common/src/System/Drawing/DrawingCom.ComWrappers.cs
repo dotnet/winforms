@@ -17,7 +17,7 @@ namespace System.Drawing;
 internal unsafe partial class DrawingCom : ComWrappers
 {
     private const int S_OK = (int)HRESULT.S_OK;
-    private static readonly Guid IID_IStream = new Guid(0x0000000C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
+    private static readonly Guid IID_IStream = new(0x0000000C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
 
     private static readonly ComInterfaceEntry* s_wrapperEntry = InitializeComInterfaceEntry();
 
@@ -283,7 +283,7 @@ internal unsafe partial class DrawingCom : ComWrappers
 
     internal interface IPicture : IDisposable
     {
-        static readonly Guid IID = new Guid(0x7BF80980, 0xBF32, 0x101A, 0x8B, 0xBB, 0, 0xAA, 0x00, 0x30, 0x0C, 0xAB);
+        static readonly Guid IID = new(0x7BF80980, 0xBF32, 0x101A, 0x8B, 0xBB, 0, 0xAA, 0x00, 0x30, 0x0C, 0xAB);
 
         // NOTE: Only SaveAsFile is invoked. The other methods on IPicture are not necessary
 

@@ -23,8 +23,8 @@ public class ToolboxBitmapAttribute : Attribute
 
     private readonly string? _imageName;
 
-    private static readonly Size s_largeSize = new Size(32, 32);
-    private static readonly Size s_smallSize = new Size(16, 16);
+    private static readonly Size s_largeSize = new(32, 32);
+    private static readonly Size s_smallSize = new(16, 16);
 
     public ToolboxBitmapAttribute(string imageFile) : this(GetImageFromFile(imageFile, false), GetImageFromFile(imageFile, true))
     {
@@ -306,7 +306,7 @@ public class ToolboxBitmapAttribute : Attribute
         img.SetPixel(0, img.Height - 1, newBottomLeft);
     }
 
-    public static readonly ToolboxBitmapAttribute Default = new ToolboxBitmapAttribute(null, (Image?)null);
+    public static readonly ToolboxBitmapAttribute Default = new(null, (Image?)null);
 
     private static readonly ToolboxBitmapAttribute s_defaultComponent;
 

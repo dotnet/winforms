@@ -8,7 +8,7 @@ internal partial class TableLayout
 {
     private class ColumnSpanComparer : SpanComparer
     {
-        private static readonly ColumnSpanComparer instance = new ColumnSpanComparer();
+        private static readonly ColumnSpanComparer instance = new();
 
         public override int GetSpan(LayoutInfo layoutInfo)
         {

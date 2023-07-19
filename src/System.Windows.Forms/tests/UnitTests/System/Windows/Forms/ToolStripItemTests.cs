@@ -5883,7 +5883,7 @@ public class ToolStripItemTests
 
     private class CustomDefaultMarginToolStripItem : ToolStripItem
     {
-        protected internal override Padding DefaultMargin => new Padding(1, 2, 3, 4);
+        protected internal override Padding DefaultMargin => new(1, 2, 3, 4);
     }
 
     [WinFormsTheory]
@@ -6704,7 +6704,7 @@ public class ToolStripItemTests
 
     private class CustomDefaultPaddingToolStripItem : ToolStripItem
     {
-        protected override Padding DefaultPadding => new Padding(2, 3, 4, 5);
+        protected override Padding DefaultPadding => new(2, 3, 4, 5);
     }
 
     [WinFormsTheory]
@@ -7811,7 +7811,7 @@ public class ToolStripItemTests
 
     private class CustomDefaultSizeToolStripItem : ToolStripItem
     {
-        protected override Size DefaultSize => new Size(10, 11);
+        protected override Size DefaultSize => new(10, 11);
     }
 
     public static IEnumerable<object[]> Size_Set_TestData()

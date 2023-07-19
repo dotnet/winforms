@@ -13,7 +13,7 @@ public sealed partial class TableLayoutSettings
 {
     private class TableLayoutSettingsStub
     {
-        private static ControlInformation s_defaultControlInfo = new ControlInformation(null, -1, -1, 1, 1);
+        private static ControlInformation s_defaultControlInfo = new(null, -1, -1, 1, 1);
         private TableLayoutColumnStyleCollection _columnStyles;
         private TableLayoutRowStyleCollection _rowStyles;
         private Dictionary<object, ControlInformation> _controlsInfo;

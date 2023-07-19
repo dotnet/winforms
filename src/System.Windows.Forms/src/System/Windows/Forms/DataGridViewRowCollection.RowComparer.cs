@@ -18,7 +18,7 @@ public partial class DataGridViewRowCollection
         private readonly int sortedColumnIndex;
         private readonly IComparer customComparer;
         private readonly bool ascending;
-        private static readonly ComparedObjectMax max = new ComparedObjectMax();
+        private static readonly ComparedObjectMax max = new();
 
         public RowComparer(DataGridViewRowCollection dataGridViewRows, IComparer customComparer, bool ascending)
         {

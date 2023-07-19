@@ -23,7 +23,7 @@ public partial class ComponentEditorForm : Form
     private bool _dirty;
     private bool _firstActivate;
 
-    private readonly Panel _pageHost = new Panel();
+    private readonly Panel _pageHost = new();
     private PageSelector _selector;
     private ImageList _selectorImageList;
     private Button _okButton;

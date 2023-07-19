@@ -88,6 +88,6 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         }
 
         public static PICTDESC CreateIconPICTDESC(IntPtr hicon) =>
-            new PICTDESC(Ole.PICTYPE_ICON, hicon);
+            new(Ole.PICTYPE_ICON, hicon);
     }
 }

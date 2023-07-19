@@ -12,27 +12,27 @@ namespace System.Windows.Forms;
 
 public abstract class ToolStripRenderer
 {
-    private static readonly object EventRenderSplitButtonBackground = new object();
-    private static readonly object EventRenderItemBackground = new object();
-    private static readonly object EventRenderItemImage = new object();
-    private static readonly object EventRenderItemText = new object();
-    private static readonly object EventRenderToolStripBackground = new object();
-    private static readonly object EventRenderGrip = new object();
-    private static readonly object EventRenderButtonBackground = new object();
-    private static readonly object EventRenderLabelBackground = new object();
-    private static readonly object EventRenderMenuItemBackground = new object();
-    private static readonly object EventRenderDropDownButtonBackground = new object();
-    private static readonly object EventRenderOverflowButtonBackground = new object();
-    private static readonly object EventRenderImageMargin = new object();
-    private static readonly object EventRenderBorder = new object();
-    private static readonly object EventRenderArrow = new object();
-    private static readonly object EventRenderToolStripStatusLabelBackground = new object();
-    private static readonly object EventRenderSeparator = new object();
-    private static readonly object EventRenderItemCheck = new object();
-    private static readonly object EventRenderToolStripPanelBackground = new object();
-    private static readonly object EventRenderToolStripContentPanelBackground = new object();
+    private static readonly object EventRenderSplitButtonBackground = new();
+    private static readonly object EventRenderItemBackground = new();
+    private static readonly object EventRenderItemImage = new();
+    private static readonly object EventRenderItemText = new();
+    private static readonly object EventRenderToolStripBackground = new();
+    private static readonly object EventRenderGrip = new();
+    private static readonly object EventRenderButtonBackground = new();
+    private static readonly object EventRenderLabelBackground = new();
+    private static readonly object EventRenderMenuItemBackground = new();
+    private static readonly object EventRenderDropDownButtonBackground = new();
+    private static readonly object EventRenderOverflowButtonBackground = new();
+    private static readonly object EventRenderImageMargin = new();
+    private static readonly object EventRenderBorder = new();
+    private static readonly object EventRenderArrow = new();
+    private static readonly object EventRenderToolStripStatusLabelBackground = new();
+    private static readonly object EventRenderSeparator = new();
+    private static readonly object EventRenderItemCheck = new();
+    private static readonly object EventRenderToolStripPanelBackground = new();
+    private static readonly object EventRenderToolStripContentPanelBackground = new();
 
-    private static readonly object EventRenderStatusStripSizingGrip = new object();
+    private static readonly object EventRenderStatusStripSizingGrip = new();
 
     private static ColorMatrix? s_disabledImageColorMatrix;
 

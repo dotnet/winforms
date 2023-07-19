@@ -20,10 +20,10 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionLinkLabel))]
 public partial class LinkLabel : Label, IButtonControl
 {
-    private static readonly object s_eventLinkClicked = new object();
+    private static readonly object s_eventLinkClicked = new();
     private static Color s_iedisabledLinkColor = Color.Empty;
 
-    private static readonly LinkComparer s_linkComparer = new LinkComparer();
+    private static readonly LinkComparer s_linkComparer = new();
 
     private DialogResult _dialogResult;
 
@@ -37,7 +37,7 @@ public partial class LinkLabel : Label, IButtonControl
 
     private bool _textLayoutValid;
     private bool _receivedDoubleClick;
-    private readonly List<Link> _links = new List<Link>(2);
+    private readonly List<Link> _links = new(2);
 
     private Link? _focusLink;
     private LinkCollection? _linkCollection;
@@ -1120,7 +1120,7 @@ public partial class LinkLabel : Label, IButtonControl
                     else
                     {
                         Color foreColor;
-                        using (var scope = new DeviceContextHdcScope(e, applyGraphicsState: false))
+                        using (DeviceContextHdcScope scope = new(e, applyGraphicsState: false))
                         {
                             foreColor = scope.HDC.FindNearestColor(DisabledColor);
                         }
@@ -1370,7 +1370,7 @@ public partial class LinkLabel : Label, IButtonControl
         else
         {
             Color color;
-            using (var hdc = new DeviceContextHdcScope(g, applyGraphicsState: false))
+            using (DeviceContextHdcScope hdc = new(g, applyGraphicsState: false))
             {
                 color = ColorTranslator.FromWin32(
                     (int)PInvoke.GetNearestColor(hdc, (COLORREF)(uint)ColorTranslator.ToWin32(foreBrush.Color)).Value);

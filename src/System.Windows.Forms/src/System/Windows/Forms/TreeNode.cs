@@ -112,7 +112,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     public TreeNode()
     {
-        treeNodeState = default(Collections.Specialized.BitVector32);
+        treeNodeState = default;
     }
 
     internal TreeNode(TreeView treeView) : this()
@@ -228,7 +228,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return Rectangle.Empty;
             }
 
-            RECT rc = default(RECT);
+            RECT rc = default;
             unsafe
             { *((IntPtr*)&rc.left) = Handle; }
             // wparam: 1=include only text, 0=include entire line
@@ -251,7 +251,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         get
         {
             TreeView tv = TreeView;
-            RECT rc = default(RECT);
+            RECT rc = default;
             unsafe
             { *((IntPtr*)&rc.left) = Handle; }
 
@@ -305,7 +305,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return;
             }
 
-            var item = new TVITEMW
+            TVITEMW item = new()
             {
                 mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                 hItem = _handle,
@@ -331,7 +331,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             if (_handle != IntPtr.Zero && !treeView.IsDisposed)
             {
                 TreeView tv = TreeView;
-                var item = new TVITEMW
+                TVITEMW item = new()
                 {
                     mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                     hItem = _handle,
@@ -643,7 +643,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return false;
             }
 
-            RECT rc = default(RECT);
+            RECT rc = default;
             unsafe
             { *((IntPtr*)&rc.left) = Handle; }
 
@@ -998,7 +998,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return 0;
             }
 
-            var item = new TVITEMW
+            TVITEMW item = new()
             {
                 hItem = Handle,
                 mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
@@ -1810,10 +1810,11 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 throw new InvalidOperationException(SR.InvalidCrossThreadControlCall);
             }
 
-            var tvis = new TVINSERTSTRUCTW
+            TVINSERTSTRUCTW tvis = new()
             {
                 hParent = parent._handle
             };
+
             tvis.item.mask = InsertMask;
 
             TreeNode prev = PrevNode;
@@ -2009,7 +2010,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         Debug.Assert(tv.IsHandleCreated, "nonexistent handle");
 
-        var item = new TVITEMW
+        TVITEMW item = new()
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
             hItem = _handle,
@@ -2125,11 +2126,12 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             return;
         }
 
-        var item = new TVITEMW
+        TVITEMW item = new()
         {
             mask = TVITEM_MASK.TVIF_HANDLE | mask,
             hItem = _handle
         };
+
         if ((mask & TVITEM_MASK.TVIF_TEXT) != 0)
         {
             item.pszText = Marshal.StringToHGlobalAuto(text);
@@ -2138,15 +2140,15 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         if ((mask & TVITEM_MASK.TVIF_IMAGE) != 0)
         {
             item.iImage = IsSpecialImageIndex(ImageIndexer.ActualIndex)
-                            ? tv.ImageIndexer.ActualIndex
-                            : ImageIndexer.ActualIndex;
+                ? tv.ImageIndexer.ActualIndex
+                : ImageIndexer.ActualIndex;
         }
 
         if ((mask & TVITEM_MASK.TVIF_SELECTEDIMAGE) != 0)
         {
             item.iSelectedImage = IsSpecialImageIndex(SelectedImageIndexer.ActualIndex)
-                            ? tv.SelectedImageIndexer.ActualIndex
-                            : SelectedImageIndexer.ActualIndex;
+                ? tv.SelectedImageIndexer.ActualIndex
+                : SelectedImageIndexer.ActualIndex;
         }
 
         if ((mask & TVITEM_MASK.TVIF_STATE) != 0)
@@ -2191,7 +2193,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             return;
         }
 
-        var item = new TVITEMW
+        TVITEMW item = new()
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
             hItem = Handle,

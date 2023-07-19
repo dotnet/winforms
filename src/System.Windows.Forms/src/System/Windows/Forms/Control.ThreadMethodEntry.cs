@@ -19,7 +19,7 @@ public partial class Control
         internal Exception? _exception;
         internal bool _synchronous;
         private ManualResetEvent? _resetEvent;
-        private readonly object _invokeSyncObject = new object();
+        private readonly object _invokeSyncObject = new();
 
         // Store the execution context associated with the caller thread, and
         // information about which thread actually got the stack applied to it.

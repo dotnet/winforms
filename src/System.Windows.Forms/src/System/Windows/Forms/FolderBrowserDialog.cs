@@ -421,7 +421,7 @@ public sealed class FolderBrowserDialog : CommonDialog
             fixed (char* pDisplayName = displayName)
             fixed (char* title = _descriptionText)
             {
-                var bi = new BROWSEINFOW
+                BROWSEINFOW bi = new()
                 {
                     pidlRoot = listHandle,
                     hwndOwner = hWndOwner,

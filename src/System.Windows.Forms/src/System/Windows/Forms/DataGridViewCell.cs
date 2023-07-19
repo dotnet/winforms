@@ -697,7 +697,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         {
             if (DataGridView is not null)
             {
-                DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
+                DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new(), dgvabsEffective;
                 dgvabsEffective = AdjustCellBorderStyle(
                     DataGridView.AdvancedCellBorderStyle,
                     dataGridViewAdvancedBorderStylePlaceholder,
@@ -1502,7 +1502,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             sb.Append("<TD>");
             if (formattedValue is not null)
             {
-                using var sw = new StringWriter(sb, CultureInfo.CurrentCulture);
+                using StringWriter sw = new(sb, CultureInfo.CurrentCulture);
                 FormatPlainTextAsHtml(formattedValue.ToString(), sw);
             }
             else
@@ -1539,7 +1539,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                     {
                         bool escapeApplied = false;
                         int insertionPoint = sb.Length;
-                        using var sw = new StringWriter(sb, CultureInfo.CurrentCulture);
+                        using StringWriter sw = new(sb, CultureInfo.CurrentCulture);
                         FormatPlainText(formattedValue.ToString(), csv, sw, ref escapeApplied);
                         if (escapeApplied)
                         {
@@ -1571,12 +1571,13 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         }
     }
 
-    internal object GetClipboardContentInternal(int rowIndex,
-                                                bool firstCell,
-                                                bool lastCell,
-                                                bool inFirstRow,
-                                                bool inLastRow,
-                                                string format)
+    internal object GetClipboardContentInternal(
+        int rowIndex,
+        bool firstCell,
+        bool lastCell,
+        bool inFirstRow,
+        bool inLastRow,
+        string format)
     {
         return GetClipboardContent(rowIndex, firstCell, lastCell, inFirstRow, inLastRow, format);
     }
@@ -3966,7 +3967,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             throw new InvalidOperationException();
         }
 
-        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
+        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new(), dgvabsEffective;
 
         dgvabsEffective = AdjustCellBorderStyle(DataGridView.AdvancedCellBorderStyle,
                                                 dataGridViewAdvancedBorderStylePlaceholder,

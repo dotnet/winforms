@@ -190,7 +190,7 @@ public partial class ListView
             if (_owner.IsHandleCreated && !_owner.ListViewHandleDestroyed)
             {
                 // Obtain internal index of the item
-                var lvItem = new LVITEMW
+                LVITEMW lvItem = new()
                 {
                     mask = LIST_VIEW_ITEM_FLAGS.LVIF_PARAM,
                     iItem = displayIndex

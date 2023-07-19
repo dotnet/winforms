@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Design.Tests;
 
 public class DataMemberFieldConverterTests
 {
-    private static DataMemberFieldConverter s_converter = new DataMemberFieldConverter();
+    private static DataMemberFieldConverter s_converter = new();
     private static ITypeDescriptorContext s_context = new MyTypeDescriptorContext();
 
     [Fact]

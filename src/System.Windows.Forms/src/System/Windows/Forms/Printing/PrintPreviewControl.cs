@@ -18,8 +18,8 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionPrintPreviewControl))]
 public partial class PrintPreviewControl : Control
 {
-    private Size virtualSize = new Size(1, 1);
-    private Point position = new Point(0, 0);
+    private Size virtualSize = new(1, 1);
+    private Point position = new(0, 0);
     private Point lastOffset;
     private bool antiAlias;
 
@@ -260,7 +260,7 @@ public partial class PrintPreviewControl : Control
         }
     }
 
-    private static readonly object EVENT_STARTPAGECHANGED = new object();
+    private static readonly object EVENT_STARTPAGECHANGED = new();
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
@@ -581,7 +581,7 @@ public partial class PrintPreviewControl : Control
             Point lastImageSize = Point.Empty;
             int maxImageHeight = 0;
 
-            using (var clipScope = new GraphicsClipScope(pevent.GraphicsInternal))
+            using (GraphicsClipScope clipScope = new(pevent.GraphicsInternal))
             {
                 for (int row = 0; row < rows; row++)
                 {
@@ -611,7 +611,8 @@ public partial class PrintPreviewControl : Control
                             int y = offset.Y + borderPixelsY * (row + 1) + lastImageSize.Y;
 
                             lastImageSize.X += imagePixels.X;
-                            //The Height is the Max of any PageHeight..
+
+                            // The Height is the Max of any PageHeight.
                             maxImageHeight = Math.Max(maxImageHeight, imagePixels.Y);
 
                             pageRenderArea[imageIndex - StartPage] = new Rectangle(x, y, imagePixels.X, imagePixels.Y);

@@ -24,8 +24,8 @@ namespace System.Windows.Forms;
 [DefaultEvent(nameof(ItemClicked))]
 public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportToolStripPanel
 {
-    private static Size s_onePixel = new Size(1, 1);
-    internal static Point s_invalidMouseEnter = new Point(int.MaxValue, int.MaxValue);
+    private static Size s_onePixel = new(1, 1);
+    internal static Point s_invalidMouseEnter = new(int.MaxValue, int.MaxValue);
 
     private ToolStripItemCollection? _toolStripItemCollection;
     private ToolStripOverflowButton? _toolStripOverflowButton;
@@ -63,8 +63,8 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     private Font? _defaultFont;
     private RestoreFocusMessageFilter? _restoreFocusFilter;
-    private static readonly Padding s_defaultPadding = new Padding(0, 0, 1, 0);
-    private static readonly Padding s_defaultGripMargin = new Padding(2);
+    private static readonly Padding s_defaultPadding = new(0, 0, 1, 0);
+    private static readonly Padding s_defaultGripMargin = new(2);
     private Padding _scaledDefaultPadding = s_defaultPadding;
     private Padding _scaledDefaultGripMargin = s_defaultGripMargin;
 
@@ -74,16 +74,16 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
 
     internal static int s_insertionBeamWidth = InsertionBeamWidth;
 
-    private static readonly object s_eventPaintGrip = new object();
-    private static readonly object s_eventLayoutCompleted = new object();
-    private static readonly object s_eventItemAdded = new object();
-    private static readonly object s_eventItemRemoved = new object();
-    private static readonly object s_eventLayoutStyleChanged = new object();
-    private static readonly object s_eventRendererChanged = new object();
-    private static readonly object s_eventItemClicked = new object();
-    private static readonly object s_eventLocationChanging = new object();
-    private static readonly object s_eventBeginDrag = new object();
-    private static readonly object s_eventEndDrag = new object();
+    private static readonly object s_eventPaintGrip = new();
+    private static readonly object s_eventLayoutCompleted = new();
+    private static readonly object s_eventItemAdded = new();
+    private static readonly object s_eventItemRemoved = new();
+    private static readonly object s_eventLayoutStyleChanged = new();
+    private static readonly object s_eventRendererChanged = new();
+    private static readonly object s_eventItemClicked = new();
+    private static readonly object s_eventLocationChanging = new();
+    private static readonly object s_eventBeginDrag = new();
+    private static readonly object s_eventEndDrag = new();
 
     private static readonly int s_propBindingContext = PropertyStore.CreateKey();
     private static readonly int s_propTextDirection = PropertyStore.CreateKey();
@@ -108,17 +108,17 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     internal const int STATE_MENUACTIVE = 0x00008000;
 
 #if DEBUG
-    internal static readonly TraceSwitch s_selectionDebug = new TraceSwitch("SelectionDebug", "Debug ToolStrip Selection code");
-    internal static readonly TraceSwitch s_dropTargetDebug = new TraceSwitch("DropTargetDebug", "Debug ToolStrip Drop code");
-    internal static readonly TraceSwitch s_layoutDebugSwitch = new TraceSwitch("Layout debug", "Debug ToolStrip layout code");
-    internal static readonly TraceSwitch s_mouseActivateDebug = new TraceSwitch("ToolStripMouseActivate", "Debug ToolStrip WM_MOUSEACTIVATE code");
-    internal static readonly TraceSwitch s_mergeDebug = new TraceSwitch("ToolStripMergeDebug", "Debug toolstrip merging");
-    internal static readonly TraceSwitch s_snapFocusDebug = new TraceSwitch("SnapFocus", "Debug snapping/restoration of focus");
-    internal static readonly TraceSwitch s_flickerDebug = new TraceSwitch("FlickerDebug", "Debug excessive calls to Invalidate()");
-    internal static readonly TraceSwitch s_itemReorderDebug = new TraceSwitch("ItemReorderDebug", "Debug excessive calls to Invalidate()");
-    internal static readonly TraceSwitch s_mdiMergeDebug = new TraceSwitch("MDIMergeDebug", "Debug toolstrip MDI merging");
-    internal static readonly TraceSwitch s_menuAutoExpandDebug = new TraceSwitch("MenuAutoExpand", "Debug menu auto expand");
-    internal static readonly TraceSwitch s_controlTabDebug = new TraceSwitch("ControlTab", "Debug ToolStrip Control+Tab selection");
+    internal static readonly TraceSwitch s_selectionDebug = new("SelectionDebug", "Debug ToolStrip Selection code");
+    internal static readonly TraceSwitch s_dropTargetDebug = new("DropTargetDebug", "Debug ToolStrip Drop code");
+    internal static readonly TraceSwitch s_layoutDebugSwitch = new("Layout debug", "Debug ToolStrip layout code");
+    internal static readonly TraceSwitch s_mouseActivateDebug = new("ToolStripMouseActivate", "Debug ToolStrip WM_MOUSEACTIVATE code");
+    internal static readonly TraceSwitch s_mergeDebug = new("ToolStripMergeDebug", "Debug toolstrip merging");
+    internal static readonly TraceSwitch s_snapFocusDebug = new("SnapFocus", "Debug snapping/restoration of focus");
+    internal static readonly TraceSwitch s_flickerDebug = new("FlickerDebug", "Debug excessive calls to Invalidate()");
+    internal static readonly TraceSwitch s_itemReorderDebug = new("ItemReorderDebug", "Debug excessive calls to Invalidate()");
+    internal static readonly TraceSwitch s_mdiMergeDebug = new("MDIMergeDebug", "Debug toolstrip MDI merging");
+    internal static readonly TraceSwitch s_menuAutoExpandDebug = new("MenuAutoExpand", "Debug menu auto expand");
+    internal static readonly TraceSwitch s_controlTabDebug = new("ControlTab", "Debug ToolStrip Control+Tab selection");
 #else
     internal static readonly TraceSwitch? s_selectionDebug;
     internal static readonly TraceSwitch? s_dropTargetDebug;
@@ -2790,7 +2790,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         using Bitmap image = new Bitmap(bounds.Width, bounds.Height);
         using Graphics g = Graphics.FromImage(image);
-        using var imageHdc = new DeviceContextHdcScope(g, applyGraphicsState: false);
+        using DeviceContextHdcScope imageHdc = new(g, applyGraphicsState: false);
 
         // Send the actual wm_print message
         PInvoke.SendMessage(
@@ -3690,7 +3690,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
             // using WindowsGraphics here because we want to preserve the clipping information.
 
             // calling GetHdc by itself does not set up the clipping info.
-            using (var toolStripHDC = new DeviceContextHdcScope(toolstripGraphics, ApplyGraphicsProperties.Clipping))
+            using (DeviceContextHdcScope toolStripHDC = new(toolstripGraphics, ApplyGraphicsProperties.Clipping))
             {
                 // Get the cached item HDC.
                 HDC itemHDC = ItemHdcInfo.GetCachedItemDC(toolStripHDC, bitmapSize);

@@ -151,7 +151,7 @@ public sealed class SplitterPanel : Panel
     /// <value>
     ///  A new instance of the <see cref="Padding" /> struct with the padding set to 0 for all edges.
     /// </value>
-    protected override Padding DefaultMargin => new Padding(0, 0, 0, 0);
+    protected override Padding DefaultMargin => new(0, 0, 0, 0);
 
     /// <summary>
     ///  Override AutoSize to make it hidden from the user in the designer

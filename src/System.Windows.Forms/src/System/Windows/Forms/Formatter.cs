@@ -13,7 +13,7 @@ internal static class Formatter
     private static readonly Type stringType = typeof(string);
     private static readonly Type booleanType = typeof(bool);
     private static readonly Type checkStateType = typeof(CheckState);
-    private static readonly object parseMethodNotFound = new object();
+    private static readonly object parseMethodNotFound = new();
     private static readonly object defaultDataSourceNullValue = DBNull.Value;
 
     /// <summary>

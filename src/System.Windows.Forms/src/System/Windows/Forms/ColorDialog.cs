@@ -162,7 +162,7 @@ public class ColorDialog : CommonDialog
     {
         WNDPROC hookProc = HookProcInternal;
         void* hookProcPtr = (void*)Marshal.GetFunctionPointerForDelegate(hookProc);
-        var cc = new Comdlg32.CHOOSECOLORW
+        Comdlg32.CHOOSECOLORW cc = new()
         {
             lStructSize = (uint)Marshal.SizeOf<Comdlg32.CHOOSECOLORW>()
         };

@@ -120,7 +120,7 @@ public partial class MonthCalendar
                 flags |= MOUSE_EVENT_FLAGS.MOUSEEVENTF_VIRTUALDESK;
             }
 
-            INPUT mouseInput = default(INPUT);
+            INPUT mouseInput = default;
             mouseInput.type = INPUT_TYPE.INPUT_MOUSE;
             mouseInput.Anonymous.mi.dx = x;
             mouseInput.Anonymous.mi.dy = y;

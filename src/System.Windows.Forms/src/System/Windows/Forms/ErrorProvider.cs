@@ -555,8 +555,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
                     // Error provider uses small Icon.
                     int width = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CXSMICON);
                     int height = PInvoke.GetSystemMetrics(SYSTEM_METRICS_INDEX.SM_CYSMICON);
-                    using var defaultIcon = new Icon(typeof(ErrorProvider), "Error");
-
+                    using Icon defaultIcon = new(typeof(ErrorProvider), "Error");
                     t_defaultIcon = new Icon(defaultIcon, width, height);
                 }
             }

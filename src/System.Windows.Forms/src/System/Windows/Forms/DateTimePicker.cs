@@ -338,9 +338,9 @@ public partial class DateTimePicker : Control
             // The information from win32 DateTimePicker is reliable only when ShowCheckBoxes is True
             if (ShowCheckBox && IsHandleCreated)
             {
-                var sys = default(SYSTEMTIME);
-                NMDATETIMECHANGE_FLAGS gdt = (NMDATETIMECHANGE_FLAGS)PInvoke.SendMessage(this, PInvoke.DTM_GETSYSTEMTIME, 0, ref sys);
-                return gdt == NMDATETIMECHANGE_FLAGS.GDT_VALID;
+                SYSTEMTIME systemTime = default;
+                nint result = PInvoke.SendMessage(this, PInvoke.DTM_GETSYSTEMTIME, 0, ref systemTime);
+                return result == (nint)NMDATETIMECHANGE_FLAGS.GDT_VALID;
             }
             else
             {

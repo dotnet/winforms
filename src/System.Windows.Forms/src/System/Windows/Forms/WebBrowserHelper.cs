@@ -37,9 +37,9 @@ internal static partial class WebBrowserHelper
     private const int HMperInch = 2540;
 
     // Special guids
-    internal static Guid windowsMediaPlayer_Clsid = new Guid("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
-    internal static Guid comctlImageCombo_Clsid = new Guid("{a98a24c0-b06f-3684-8c12-c52ae341e0bc}");
-    internal static Guid maskEdit_Clsid = new Guid("{c932ba85-4374-101b-a56c-00aa003668dc}");
+    internal static Guid windowsMediaPlayer_Clsid = new("{22d6f312-b0f6-11d0-94ab-0080c74c7e95}");
+    internal static Guid comctlImageCombo_Clsid = new("{a98a24c0-b06f-3684-8c12-c52ae341e0bc}");
+    internal static Guid maskEdit_Clsid = new("{c932ba85-4374-101b-a56c-00aa003668dc}");
 
     // Window message to check if we have already sub-classed
     internal static readonly MessageId REGMSG_MSG = PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}_subclassCheck");

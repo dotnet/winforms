@@ -35,7 +35,7 @@ public sealed class TaskDialogFootnote : TaskDialogControl
     }
 
     public static implicit operator TaskDialogFootnote(string footnoteText)
-        => new TaskDialogFootnote(footnoteText);
+        => new(footnoteText);
 
     /// <summary>
     ///   Gets or sets the text to be displayed in the dialog's footnote area.

@@ -106,7 +106,7 @@ internal class WeakRefCollection : IList
 
     public override int GetHashCode()
     {
-        var hash = default(HashCode);
+        HashCode hash = default;
         foreach (WeakRefObject? o in InnerList)
         {
             hash.Add(o);

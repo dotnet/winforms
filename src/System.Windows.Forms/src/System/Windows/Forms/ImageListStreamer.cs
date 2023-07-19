@@ -12,7 +12,7 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
 {
     // Compressed magic header. If we see this, the image stream is compressed.
     private static ReadOnlySpan<byte> HeaderMagic => "MSFt"u8;
-    private static readonly object s_syncObject = new object();
+    private static readonly object s_syncObject = new();
 
     private readonly ImageList? _imageList;
     private ImageList.NativeImageList? _nativeImageList;

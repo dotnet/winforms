@@ -36,9 +36,9 @@ public partial class ListBox : ListControl
     /// </summary>
     public const int DefaultItemHeight = 13;
 
-    private static readonly object EVENT_SELECTEDINDEXCHANGED = new object();
-    private static readonly object EVENT_DRAWITEM = new object();
-    private static readonly object EVENT_MEASUREITEM = new object();
+    private static readonly object EVENT_SELECTEDINDEXCHANGED = new();
+    private static readonly object EVENT_DRAWITEM = new();
+    private static readonly object EVENT_MEASUREITEM = new();
 
     private SelectedObjectCollection? _selectedItems;
     private SelectedIndexCollection? _selectedIndices;
@@ -1459,7 +1459,7 @@ public partial class ListBox : ListControl
     public Rectangle GetItemRectangle(int index)
     {
         CheckIndex(index);
-        var rect = default(RECT);
+        RECT rect = default;
         if (PInvoke.SendMessage(this, PInvoke.LB_GETITEMRECT, (uint)index, ref rect) == 0)
         {
             return Rectangle.Empty;
@@ -2382,7 +2382,7 @@ public partial class ListBox : ListControl
             bounds.Width = MultiColumn ? Math.Max(ColumnWidth, bounds.Width) : Math.Max(MaxItemWidth, bounds.Width);
         }
 
-        using var e = new DrawItemEventArgs(
+        using DrawItemEventArgs e = new(
             dis->hDC,
             Font,
             bounds,

@@ -16,7 +16,7 @@ public partial class WindowsFormsSynchronizationContextTests
         Assert.NotSame(context, copy);
 
         // Send something.
-        object state = new object();
+        object state = new();
         int callCount = 0;
         SendOrPostCallback callback = (actualState) =>
         {

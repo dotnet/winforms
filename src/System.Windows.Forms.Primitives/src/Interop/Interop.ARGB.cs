@@ -40,6 +40,6 @@ internal readonly struct ARGB
         Value = value;
     }
 
-    public static implicit operator ARGB(Color color) => new ARGB(color.ToArgb());
+    public static implicit operator ARGB(Color color) => new(color.ToArgb());
     public static implicit operator Color(ARGB argb) => Color.FromArgb(argb.Value);
 }

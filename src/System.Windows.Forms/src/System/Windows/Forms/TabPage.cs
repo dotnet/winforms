@@ -28,7 +28,7 @@ public partial class TabPage : Panel
     private bool _useVisualStyleBackColor;
     private List<ToolTip>? _associatedToolTips;
     private ToolTip? _externalToolTip;
-    private readonly ToolTip _internalToolTip = new ToolTip();
+    private readonly ToolTip _internalToolTip = new();
     private TabAccessibleObject? _tabAccessibilityObject;
 
     /// <summary>

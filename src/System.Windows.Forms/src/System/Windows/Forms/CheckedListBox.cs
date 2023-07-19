@@ -394,7 +394,7 @@ public partial class CheckedListBox : ListBox
     {
         if (IsHandleCreated)
         {
-            var rect = default(RECT);
+            RECT rect = default;
             PInvoke.SendMessage(this, PInvoke.LB_GETITEMRECT, (WPARAM)index, ref rect);
             PInvoke.InvalidateRect(this, &rect, bErase: false);
         }

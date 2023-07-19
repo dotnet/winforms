@@ -58,13 +58,13 @@ public class ThreadExceptionDialog : Form
     private readonly int _scaledPictureHeight = PICTUREHEIGHT;
     private readonly int _scaledExceptionMessageVerticalPadding = EXCEPTIONMESSAGEVERTICALPADDING;
 
-    private readonly PictureBox _pictureBox = new PictureBox();
-    private readonly Label _message = new Label();
-    private readonly Button _continueButton = new Button();
-    private readonly Button _quitButton = new Button();
-    private readonly Button _detailsButton = new Button();
-    private readonly Button _helpButton = new Button();
-    private readonly TextBox _details = new TextBox();
+    private readonly PictureBox _pictureBox = new();
+    private readonly Label _message = new();
+    private readonly Button _continueButton = new();
+    private readonly Button _quitButton = new();
+    private readonly Button _detailsButton = new();
+    private readonly Button _helpButton = new();
+    private readonly TextBox _details = new();
     private Bitmap? _expandImage;
     private Bitmap? _collapseImage;
     private bool _detailsVisible;

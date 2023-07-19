@@ -31,7 +31,7 @@ internal class MaskDesignerDialog : Form
     private Button _btnCancel;
     private ErrorProvider _errorProvider;
 
-    private readonly List<MaskDescriptor> _maskDescriptors = new List<MaskDescriptor>();
+    private readonly List<MaskDescriptor> _maskDescriptors = new();
     private MaskDescriptor _customMaskDescriptor;
     private SortOrder _listViewSortOrder = SortOrder.Ascending;
     private IContainer _components;

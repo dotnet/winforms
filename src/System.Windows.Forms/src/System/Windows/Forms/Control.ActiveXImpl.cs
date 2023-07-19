@@ -346,11 +346,7 @@ public partial class Control
                     {
                         // Must translate message coordinates over to our HWND.
                         HWND hwndMap = hwnd.IsNull ? hwndParent : hwnd;
-                        var pt = new Point
-                        {
-                            X = PARAM.LOWORD(lpmsg->lParam),
-                            Y = PARAM.HIWORD(lpmsg->lParam)
-                        };
+                        Point pt = new(PARAM.LOWORD(lpmsg->lParam), PARAM.HIWORD(lpmsg->lParam));
 
                         PInvoke.MapWindowPoints(hwndMap, _control, ref pt);
 

@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 /// </summary>
 public class FormCollection : ReadOnlyCollectionBase
 {
-    internal static object CollectionSyncRoot = new object();
+    internal static object CollectionSyncRoot = new();
 
     /// <summary>
     ///  Gets a form specified by name, if present, else returns null. If there are multiple

@@ -9,8 +9,8 @@ namespace Accessibility_Core_App;
 
 public partial class DataBindingExample : Form
 {
-    private readonly List<Student> _studentA = new List<Student>();
-    private readonly List<Student> _studentB = new List<Student>();
+    private readonly List<Student> _studentA = new();
+    private readonly List<Student> _studentB = new();
 
     public DataBindingExample()
     {

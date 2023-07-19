@@ -88,7 +88,7 @@ public class FontMetrics
     }
 
     public static TheoryData<string, float, Size, uint, Size> MeasureTextData =>
-        new TheoryData<string, float, Size, uint, Size>
+        new()
         {
             { "Arial", 9.0f, new Size(-1, -1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(173, 15) },
             { "Arial", 12.0f, new Size(-1, -1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Size(215, 18) },
@@ -152,7 +152,7 @@ public class FontMetrics
     }
 
     public static TheoryData<string, float, Rectangle, uint, Rectangle> AdjustData =>
-        new TheoryData<string, float, Rectangle, uint, Rectangle>
+        new()
         {
             { "Arial", 9.0f, new Rectangle(1, 1, 1, 1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Rectangle(1, 1, 1, 1) },
             { "Arial", 12.0f, new Rectangle(1, 1, 1, 1), (uint)DRAW_TEXT_FORMAT.DT_BOTTOM, new Rectangle(1, 1, 1, 1) },

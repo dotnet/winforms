@@ -21,7 +21,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
     private IDictionary _nameTable;
     private Dictionary<string, OrderedCodeStatementCollection> _statementTable;
     private static readonly Attribute[] s_designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
-    private static readonly object s_initMethodKey = new object();
+    private static readonly object s_initMethodKey = new();
     private static TypeCodeDomSerializer s_default;
 
     internal static TypeCodeDomSerializer Default
@@ -582,7 +582,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
     #region OrderedStatementsCollection Class
     private class StatementOrderComparer : IComparer
     {
-        public static readonly StatementOrderComparer s_default = new StatementOrderComparer();
+        public static readonly StatementOrderComparer s_default = new();
 
         private StatementOrderComparer()
         {

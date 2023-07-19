@@ -19,7 +19,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
     private const int ICON_WELL_GRADIENT_WIDTH = 12;
     private int iconWellGradientWidth = ICON_WELL_GRADIENT_WIDTH;
 
-    private static readonly Size onePix = new Size(1, 1);
+    private static readonly Size onePix = new(1, 1);
 
     private bool isScalingInitialized;
     private const int OVERFLOW_BUTTON_WIDTH = 12;
@@ -32,7 +32,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
     private int overflowArrowOffsetY = OVERFLOW_ARROW_OFFSETY;
 
     private const int DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE = 1;
-    private Padding scaledDropDownMenuItemPaintPadding = new Padding(DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE + 1, 0, DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE, 0);
+    private Padding scaledDropDownMenuItemPaintPadding = new(DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE + 1, 0, DROP_DOWN_MENU_ITEM_PAINT_PADDING_SIZE, 0);
     private readonly ProfessionalColorTable? professionalColorTable;
     private bool roundedEdges = true;
     private ToolStripRenderer? toolStripHighContrastRenderer;

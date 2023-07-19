@@ -1104,7 +1104,7 @@ public unsafe partial class WebBrowserBase : Control
 
     private unsafe Size SetExtent(int width, int height)
     {
-        var sz = new Size(width, height);
+        Size sz = new(width, height);
         bool resetExtents = DesignMode;
         Pixel2hiMetric(ref sz);
         HRESULT hr = _axOleObject!.SetExtent(DVASPECT.DVASPECT_CONTENT, (SIZE*)&sz);
@@ -1219,7 +1219,7 @@ public unsafe partial class WebBrowserBase : Control
     // Overridden properties:
     //
 
-    protected override Size DefaultSize => new Size(75, 23);
+    protected override Size DefaultSize => new(75, 23);
 
     //
     // Overridden methods:
