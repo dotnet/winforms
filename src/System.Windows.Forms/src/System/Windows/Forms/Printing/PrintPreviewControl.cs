@@ -64,8 +64,7 @@ public partial class PrintPreviewControl : Control
         _hScrollBar.RightToLeft = RightToLeft.No;
         _hScrollBar.Visible = false;
         _hScrollBar.ValueChanged += scrollBar_ValueChanged;
-        _hScrollBar.TabIndex = 0;
-        _hScrollBar.TabStop = true;
+        _hScrollBar.TabStop = false;
         Controls.Add(_hScrollBar);
 
         _vScrollBar.AccessibleName = SR.VScrollBarDefaultAccessibleName;
@@ -74,8 +73,7 @@ public partial class PrintPreviewControl : Control
         _vScrollBar.Top = _focusVOffset;
         _vScrollBar.Visible = false;
         _vScrollBar.ValueChanged += scrollBar_ValueChanged;
-        _vScrollBar.TabIndex = 1;
-        _vScrollBar.TabStop = true;
+        _vScrollBar.TabStop = false;
         Controls.Add(_vScrollBar);
     }
 
