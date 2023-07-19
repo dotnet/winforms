@@ -195,7 +195,7 @@ internal partial class PropertyStore
         }
 
         value = found ? (T?)entry : default;
-        return found;
+        return found && entry is not null;
     }
 
     public bool ContainsObjectThatIsNotNull(int key)
