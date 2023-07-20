@@ -29,7 +29,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
     private readonly PCWSTR _resourceId;
 
     private bool OwnHandle => (_flags & Flags.OwnHandle) != 0;
-    private bool IsCursorsValue => (_flags & Flags.InternalCursor) != 0;
+    private bool IsWellKnown => (_flags & Flags.InternalCursor) != 0;
 
     /// <summary>
     ///  Private constructor. If you want a standard system cursor, use one of the
@@ -488,7 +488,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
     /// </summary>
     public override string ToString()
     {
-        string? cursorName = IsCursorsValue || !OwnHandle ? TypeDescriptor.GetConverter(typeof(Cursor)).ConvertToString(this) : base.ToString();
+        string? cursorName = IsWellKnown || !OwnHandle ? TypeDescriptor.GetConverter(typeof(Cursor)).ConvertToString(this) : base.ToString();
         return $"[Cursor: {cursorName}]";
     }
 
