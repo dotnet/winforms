@@ -117,11 +117,7 @@ internal sealed partial class DesignerActionPanel
                 _label!.Location = new Point(LineLeftMargin, top);
                 int labelPreferredWidth = _label.GetPreferredSize(new Size(int.MaxValue, int.MaxValue)).Width;
                 _label.Size = new Size(labelPreferredWidth, height);
-                int specialPadding = 0;
-                if (EditControl is TextBox)
-                {
-                    specialPadding = 2;
-                }
+                int specialPadding = EditControl is TextBox ? 2 : 0;
 
                 EditControl!.Location = new Point(_editRegionLocation.X + GetTextBoxLeftPadding(textBoxPreferredHeight) + 1 + specialPadding, _editRegionLocation.Y + TextBoxLineInnerPadding + 1);
                 EditControl.Width = _editRegionSize.Width - GetTextBoxRightPadding(textBoxPreferredHeight) - GetTextBoxLeftPadding(textBoxPreferredHeight) - specialPadding;
