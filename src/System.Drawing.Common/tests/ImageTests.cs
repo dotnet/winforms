@@ -519,7 +519,7 @@ public class ImageTests
         // Throws PathTooLongException on Desktop and FileNotFoundException elsewhere.
         if (PlatformDetection.IsNetFramework)
         {
-            string fileName = new string('a', 261);
+            string fileName = new('a', 261);
 
             Assert.Throws<PathTooLongException>(() => Image.FromFile(fileName));
             Assert.Throws<PathTooLongException>(() => Image.FromFile(fileName,
@@ -527,7 +527,7 @@ public class ImageTests
         }
         else
         {
-            string fileName = new string('a', 261);
+            string fileName = new('a', 261);
 
             Assert.Throws<FileNotFoundException>(() => Image.FromFile(fileName));
             Assert.Throws<FileNotFoundException>(() => Image.FromFile(fileName,

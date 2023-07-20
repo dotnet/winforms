@@ -52,7 +52,7 @@ public partial class ToolStripSeparator : ToolStripItem
     ///  Deriving classes can override this to configure a default size for their control.
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
-    protected override Size DefaultSize => new Size(SeparatorThickness, SeparatorThickness);
+    protected override Size DefaultSize => new(SeparatorThickness, SeparatorThickness);
 
     protected internal override Padding DefaultMargin => Padding.Empty;
 

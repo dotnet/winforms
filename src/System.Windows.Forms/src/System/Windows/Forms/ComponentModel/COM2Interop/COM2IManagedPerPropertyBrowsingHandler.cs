@@ -221,7 +221,7 @@ internal sealed unsafe class Com2IManagedPerPropertyBrowsingHandler : Com2Extend
 
     private static unsafe object?[] GetVariantsFromPtr(VARIANT* values, uint count)
     {
-        var objects = new object?[count];
+        object?[] objects = new object?[count];
         for (int i = 0; i < count; i++)
         {
             try

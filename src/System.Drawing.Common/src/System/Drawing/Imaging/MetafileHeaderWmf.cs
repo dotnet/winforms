@@ -34,7 +34,7 @@ internal sealed class MetafileHeaderWmf
 #pragma warning disable CS0618 // Legacy code: We don't care about using obsolete API's.
     [MarshalAs(UnmanagedType.Struct)]
 #pragma warning restore CS0618
-    public MetaHeader WmfHeader = new MetaHeader();
+    public MetaHeader WmfHeader = new();
     public int dummy1;
     public int dummy2;
     public int dummy3;

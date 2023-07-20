@@ -1093,7 +1093,7 @@ public class BitmapTests : FileCleanupTestBase
 
     public static IEnumerable<object[]> LockBits_TestData()
     {
-        Bitmap bitmap() => new Bitmap(2, 2, PixelFormat.Format32bppArgb);
+        Bitmap bitmap() => new(2, 2, PixelFormat.Format32bppArgb);
         yield return new object[] { bitmap(), new Rectangle(0, 0, 2, 2), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb, 8, 1 };
         yield return new object[] { bitmap(), new Rectangle(0, 0, 2, 2), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb, 8, 3 };
         yield return new object[] { bitmap(), new Rectangle(0, 0, 2, 2), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb, 8, 2 };

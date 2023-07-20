@@ -31,8 +31,8 @@ public class MetafileTests
 {
     private const string WmfFile = "telescope_01.wmf";
     private const string BmpFile = "bitmap_173x183_indexed_8bit.bmp";
-    private readonly Rectangle _rectangle = new Rectangle(0, 0, 64, 64);
-    private readonly RectangleF _rectangleF = new RectangleF(0, 0, 64, 64);
+    private readonly Rectangle _rectangle = new(0, 0, 64, 64);
+    private readonly RectangleF _rectangleF = new(0, 0, 64, 64);
 
     [Fact]
     public void Ctor_IntPtrZero_ThrowsArgumentException()

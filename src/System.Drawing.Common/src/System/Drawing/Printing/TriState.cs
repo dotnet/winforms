@@ -7,9 +7,9 @@ internal readonly partial struct TriState : IEquatable<TriState>
 {
     private readonly byte _value; // 0 is "default", not false
 
-    public static readonly TriState Default = new TriState(0);
-    public static readonly TriState False = new TriState(1);
-    public static readonly TriState True = new TriState(2);
+    public static readonly TriState Default = new(0);
+    public static readonly TriState False = new(1);
+    public static readonly TriState True = new(2);
 
     private TriState(byte value) => _value = value;
 

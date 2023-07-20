@@ -44,7 +44,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     /// </summary>
     private GraphicsContext? _previousContext;
 
-    private static readonly object s_syncObject = new object();
+    private static readonly object s_syncObject = new();
 
     // Object reference used for printing; it could point to a PrintPreviewGraphics to obtain the VisibleClipBounds, or
     // a DeviceContext holding a printer DC.

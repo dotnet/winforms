@@ -23,7 +23,7 @@ namespace System.Windows.Forms;
 public class TableLayoutPanel : Panel, IExtenderProvider
 {
     private readonly TableLayoutSettings _tableLayoutSettings;
-    private static readonly object s_eventCellPaint = new object();
+    private static readonly object s_eventCellPaint = new();
 
     public TableLayoutPanel()
     {
@@ -441,7 +441,7 @@ public class TableLayoutPanel : Panel, IExtenderProvider
                 if (clipRect.IntersectsWith(insideCellBounds))
                 {
                     // First, call user's painting code
-                    using (var pcea = new TableLayoutCellPaintEventArgs(e, clipRect, insideCellBounds, i, j))
+                    using (TableLayoutCellPaintEventArgs pcea = new(e, clipRect, insideCellBounds, i, j))
                     {
                         OnCellPaint(pcea);
                         if (!((IGraphicsHdcProvider)pcea).IsGraphicsStateClean)

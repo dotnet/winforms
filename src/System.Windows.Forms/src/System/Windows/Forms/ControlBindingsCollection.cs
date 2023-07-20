@@ -89,7 +89,7 @@ public class ControlBindingsCollection : BindingsCollection
     {
         ArgumentNullException.ThrowIfNull(dataSource);
 
-        var binding = new Binding(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, formatString, formatInfo);
+        Binding binding = new(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, formatString, formatInfo);
         Add(binding);
         return binding;
     }

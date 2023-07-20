@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Design;
 [ProvideProperty("TrayLocation", typeof(IComponent))]
 public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIHandler, IOleDragClient
 {
-    private static readonly Point InvalidPoint = new Point(int.MinValue, int.MinValue);
+    private static readonly Point InvalidPoint = new(int.MinValue, int.MinValue);
     private IServiceProvider serviceProvider; // Where services come from.
     private Point whiteSpace = Point.Empty; // space to leave between components.
     private Size grabHandle = Size.Empty; // Size of the grab handles.
@@ -978,7 +978,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         if (c is null)
         {
             Debug.Fail("Anything we're extending should have a component view.");
-            return default(Point);
+            return default;
         }
 
         Point loc = c.Location;
@@ -2527,12 +2527,13 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
                 case PInvoke.WM_NCHITTEST:
                     if (_tray.glyphManager is not null)
                     {
-                        // Make sure tha we send our glyphs hit test messages over the TrayControls too
+                        // Make sure that we send our glyphs hit test messages over the TrayControls too.
                         Point pt = PARAM.ToPoint(m.LParamInternal);
-                        var pt1 = default(Point);
-                        pt1 = PointToClient(pt1);
+                        Point pt1 = PointToClient(default);
                         pt.Offset(pt1.X, pt1.Y);
-                        pt.Offset(Location.X, Location.Y); //offset the loc of the traycontrol -so now we're in comptray coords
+
+                        // Offset the location of the traycontrol so we're in component tray coordinates.
+                        pt.Offset(Location.X, Location.Y);
                         _tray.glyphManager.GetHitTest(pt);
                     }
 
@@ -2781,7 +2782,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
         public TraySelectionUIHandler(ComponentTray tray)
         {
             _tray = tray;
-            _snapSize = default(Size);
+            _snapSize = default;
         }
 
         /// <summary>

@@ -13,7 +13,7 @@ internal sealed class DesignerActionKeyboardBehavior : Behavior
     private readonly DesignerActionPanel _panel;
     private readonly IMenuCommandService _menuService;
     private readonly DesignerActionUIService _daUISvc;
-    private static readonly Guid s_vSStandardCommandSet97 = new Guid("{5efc7975-14bc-11cf-9b2b-00aa00573819}");
+    private static readonly Guid s_vSStandardCommandSet97 = new("{5efc7975-14bc-11cf-9b2b-00aa00573819}");
 
     public DesignerActionKeyboardBehavior(DesignerActionPanel panel, IServiceProvider serviceProvider, BehaviorService behaviorService) : base(true, behaviorService)
     {

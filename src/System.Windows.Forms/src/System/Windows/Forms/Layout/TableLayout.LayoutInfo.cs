@@ -45,7 +45,7 @@ internal partial class TableLayout
         public int RowSpan { get; set; } = 1;
 
         #if DEBUG
-        public LayoutInfo Clone() => new LayoutInfo(Element)
+        public LayoutInfo Clone() => new(Element)
         {
             RowStart = RowStart,
             ColumnStart = ColumnStart,
@@ -69,7 +69,7 @@ internal partial class TableLayout
 
         public override int GetHashCode()
         {
-            var hash = default(HashCode);
+            HashCode hash = default;
             hash.Add(RowStart);
             hash.Add(ColumnStart);
             hash.Add(RowSpan);

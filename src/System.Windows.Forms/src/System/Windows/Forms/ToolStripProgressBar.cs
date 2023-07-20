@@ -10,10 +10,10 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(Value))]
 public partial class ToolStripProgressBar : ToolStripControlHost
 {
-    internal static readonly object EventRightToLeftLayoutChanged = new object();
+    internal static readonly object EventRightToLeftLayoutChanged = new();
 
-    private static readonly Padding defaultMargin = new Padding(1, 2, 1, 1);
-    private static readonly Padding defaultStatusStripMargin = new Padding(1, 3, 1, 3);
+    private static readonly Padding defaultMargin = new(1, 2, 1, 1);
+    private static readonly Padding defaultStatusStripMargin = new(1, 3, 1, 3);
     private Padding scaledDefaultMargin = defaultMargin;
     private Padding scaledDefaultStatusStripMargin = defaultStatusStripMargin;
 

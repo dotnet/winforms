@@ -37,7 +37,7 @@ public class ARGBTests
     }
 
     public static TheoryData<Color> Colors =>
-        new TheoryData<Color>
+        new()
         {
             Color.CornflowerBlue,
             Color.Transparent,

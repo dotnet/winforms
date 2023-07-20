@@ -508,8 +508,8 @@ internal static unsafe partial class Com2TypeInfoProcessor
         VARFLAGS flags)
     {
         // Get the name and the helpstring.
-        using var nameBstr = default(BSTR);
-        using var helpStringBstr = default(BSTR);
+        using BSTR nameBstr = default;
+        using BSTR helpStringBstr = default;
         HRESULT hr = typeInfo->GetDocumentation(dispid, &nameBstr, &helpStringBstr, null, null);
         if (!hr.Succeeded)
         {
@@ -738,8 +738,8 @@ internal static unsafe partial class Com2TypeInfoProcessor
 
                 object? varValue = null;
 
-                using var enumNameBstr = default(BSTR);
-                using var enumHelpStringBstr = default(BSTR);
+                using BSTR enumNameBstr = default;
+                using BSTR enumHelpStringBstr = default;
                 enumTypeInfo->GetDocumentation(PInvoke.MEMBERID_NIL, &enumNameBstr, &enumHelpStringBstr, null, null);
 
                 // For each item in the enum type info, we just need it's name and value and

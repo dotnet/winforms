@@ -9,7 +9,7 @@ namespace System.Windows.Forms.UITests;
 
 internal static class ScreenshotService
 {
-    private static readonly object Gate = new object();
+    private static readonly object Gate = new();
 
     /// <summary>
     /// Takes a picture of the screen and saves it to the location specified by

@@ -9,7 +9,7 @@ namespace WinformsControlsTest;
 public partial class MessageBoxes : Form
 {
     private readonly ToolStripButton _btnOpen;
-    private readonly MessageBoxProxy _messgageBoxProxy = new MessageBoxProxy();
+    private readonly MessageBoxProxy _messgageBoxProxy = new();
 
     public MessageBoxes()
     {

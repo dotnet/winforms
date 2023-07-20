@@ -19,7 +19,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
     private static readonly Type s_defaultFormattedValueType = typeof(string);
     private static readonly Type s_defaultValueType = typeof(object);
     private static readonly Type s_cellType = typeof(DataGridViewHeaderCell);
-    private static Rectangle s_rectThemeMargins = new Rectangle(-1, -1, 0, 0);
+    private static Rectangle s_rectThemeMargins = new(-1, -1, 0, 0);
     private static readonly int s_propValueType = PropertyStore.CreateKey();
     private static readonly int s_propButtonState = PropertyStore.CreateKey();
     private static readonly int s_propFlipXPThemesBitmap = PropertyStore.CreateKey();

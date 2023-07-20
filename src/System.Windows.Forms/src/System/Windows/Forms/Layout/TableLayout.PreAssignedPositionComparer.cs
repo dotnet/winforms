@@ -8,7 +8,7 @@ internal partial class TableLayout
 {
     private class PreAssignedPositionComparer : IComparer<LayoutInfo>
     {
-        private static readonly PreAssignedPositionComparer instance = new PreAssignedPositionComparer();
+        private static readonly PreAssignedPositionComparer instance = new();
 
         public static PreAssignedPositionComparer GetInstance
         {

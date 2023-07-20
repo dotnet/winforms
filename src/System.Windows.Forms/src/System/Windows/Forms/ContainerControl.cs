@@ -726,7 +726,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         {
             // Get window's client rectangle (i.e. without chrome) expressed in screen coordinates
             PInvoke.GetClientRect(this, out RECT clientRectangle);
-            var topLeftPoint = default(Point);
+            Point topLeftPoint = default;
             PInvoke.ClientToScreen(this, ref topLeftPoint);
             return new Rectangle(topLeftPoint.X, topLeftPoint.Y, clientRectangle.right, clientRectangle.bottom);
         }
@@ -744,7 +744,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         // Windows uses CreateCompatibleDC(NULL) to get a memory DC for
         // the monitor the application is currently on.
 
-        using var dc = new PInvoke.CreateDcScope(default);
+        using PInvoke.CreateDcScope dc = new(default);
         if (dc.IsNull)
         {
             throw new Win32Exception();

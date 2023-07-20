@@ -10,5 +10,5 @@ internal unsafe struct PropertyItemInternal
     public short type;
     public byte* value;
 
-    public Span<byte> Value => new Span<byte>(value, len);
+    public Span<byte> Value => new(value, len);
 }

@@ -24,7 +24,7 @@ namespace System.Windows.Forms;
 public partial class TabControl : Control
 {
     private static readonly Size DefaultItemSize = Size.Empty;
-    private static readonly Point DefaultPaddingPoint = new Point(6, 3);
+    private static readonly Point DefaultPaddingPoint = new(6, 3);
 
     // Properties
     private readonly TabPageCollection _tabCollection;
@@ -45,11 +45,11 @@ public partial class TabControl : Control
     private EventHandler? _onSelectedIndexChanged;
     private DrawItemEventHandler? _onDrawItem;
 
-    private static readonly object s_deselectingEvent = new object();
-    private static readonly object s_deselectedEvent = new object();
-    private static readonly object s_selectingEvent = new object();
-    private static readonly object s_selectedEvent = new object();
-    private static readonly object s_rightToLeftLayoutChangedEvent = new object();
+    private static readonly object s_deselectingEvent = new();
+    private static readonly object s_deselectedEvent = new();
+    private static readonly object s_selectingEvent = new();
+    private static readonly object s_selectedEvent = new();
+    private static readonly object s_rightToLeftLayoutChangedEvent = new();
 
     // Perf: take all the bools and put them into a state variable: see TabControlState consts above
     private BitVector32 _tabControlState;
@@ -1111,7 +1111,7 @@ public partial class TabControl : Control
         }
 
         SetState(State.GetTabRectfromItemSize, false);
-        RECT rect = default(RECT);
+        RECT rect = default;
 
         // normally, we would not want to create the handle for this, but since
         // it is dependent on the actual physical display, we simply must.
@@ -1945,7 +1945,7 @@ public partial class TabControl : Control
     {
         DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)(nint)m.LParamInternal;
 
-        using var e = new DrawItemEventArgs(
+        using DrawItemEventArgs e = new(
             dis->hDC.CreateGraphics(),
             Font,
             dis->rcItem,
@@ -2158,7 +2158,7 @@ public partial class TabControl : Control
         }
 
         // Insert extra ampersands
-        var newString = new StringBuilder();
+        StringBuilder newString = new();
         newString.Append(value.AsSpan(0, firstAmpersand));
         for (int i = firstAmpersand; i < value.Length; ++i)
         {

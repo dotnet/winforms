@@ -14,7 +14,7 @@ namespace System.ComponentModel.Design.Serialization;
 /// </summary>
 internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer
 {
-    private static readonly CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
+    private static readonly CodeThisReferenceExpression _thisRef = new();
     private static EventMemberCodeDomSerializer s_default;
 
     internal static EventMemberCodeDomSerializer Default

@@ -14,6 +14,6 @@ internal sealed partial class DesignerActionPanel
         {
         }
 
-        protected override Font GetFont() => new Font(ActionPanel.Font, FontStyle.Bold);
+        protected override Font GetFont() => new(ActionPanel.Font, FontStyle.Bold);
     }
 }

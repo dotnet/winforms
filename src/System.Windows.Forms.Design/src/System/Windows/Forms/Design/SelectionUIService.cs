@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal sealed partial class SelectionUIService : Control, ISelectionUIService
 {
-    private static readonly Point s_invalidPoint = new Point(int.MinValue, int.MinValue);
+    private static readonly Point s_invalidPoint = new(int.MinValue, int.MinValue);
     private const int HITTEST_CONTAINER_SELECTOR = 0x0001;
     private const int HITTEST_NORMAL_SELECTION = 0x0002;
     private const int HITTEST_DEFAULT = HITTEST_CONTAINER_SELECTOR | HITTEST_NORMAL_SELECTION;
@@ -106,7 +106,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         _mouseDragAnchor = anchor;
         _mouseDragging = true;
         _mouseDragHitTest = hitTest;
-        _mouseDragOffset = default(Rectangle);
+        _mouseDragOffset = default;
         _savedVisible = Visible;
     }
 

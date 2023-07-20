@@ -22,7 +22,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     private ContentAlignment _imageAlign = ContentAlignment.MiddleCenter;
     private ContentAlignment _textAlign = ContentAlignment.MiddleCenter;
     private TextImageRelation _textImageRelation = TextImageRelation.Overlay;
-    private readonly ImageList.Indexer _imageIndex = new ImageList.Indexer();
+    private readonly ImageList.Indexer _imageIndex = new();
     private FlatButtonAppearance? _flatAppearance;
     private ImageList? _imageList;
     private Image? _image;
@@ -254,7 +254,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
         remove => Events.RemoveHandler(s_commandParameterChangedEvent, value);
     }
 
-    protected override Size DefaultSize => new Size(75, 23);
+    protected override Size DefaultSize => new(75, 23);
 
     protected override CreateParams CreateParams
     {

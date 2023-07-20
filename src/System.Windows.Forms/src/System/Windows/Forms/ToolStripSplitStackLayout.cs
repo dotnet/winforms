@@ -15,7 +15,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
     private Rectangle displayRectangle = Rectangle.Empty;
 
 #if DEBUG
-    internal static readonly TraceSwitch DebugLayoutTraceSwitch = new TraceSwitch("DebugLayout", "Debug ToolStrip Layout code");
+    internal static readonly TraceSwitch DebugLayoutTraceSwitch = new("DebugLayout", "Debug ToolStrip Layout code");
 #else
     internal static readonly TraceSwitch DebugLayoutTraceSwitch;
 #endif

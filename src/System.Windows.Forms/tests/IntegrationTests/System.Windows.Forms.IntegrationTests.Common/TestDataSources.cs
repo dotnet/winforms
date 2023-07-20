@@ -7,7 +7,7 @@ namespace System.Windows.Forms.IntegrationTests.Common;
 public static class TestDataSources
 {
     public static List<Person> GetPersons()
-        => new List<Person>()
+        => new()
         {
             new Person(1, "Name 1"),
             new Person(2, "Name 2"),

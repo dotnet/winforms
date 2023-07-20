@@ -48,7 +48,7 @@ internal static partial class PInvoke
 #if DEBUG
                 return new SelectPaletteScope();
 #else
-                return default(SelectPaletteScope);
+                return default;
 #endif
             }
 

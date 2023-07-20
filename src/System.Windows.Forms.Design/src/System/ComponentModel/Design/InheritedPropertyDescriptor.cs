@@ -18,7 +18,7 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
 {
     private PropertyDescriptor propertyDescriptor;
     private object _defaultValue;
-    private static readonly object s_noDefault = new object();
+    private static readonly object s_noDefault = new();
     private bool _initShouldSerialize;
     private object _originalValue;
 

@@ -17,7 +17,7 @@ internal partial class FormatControl : UserControl
     private const int ScientificIndex = 4;
     private const int CustomIndex = 5;
 
-    private TextBox customStringTextBox = new TextBox();
+    private TextBox customStringTextBox = new();
 
     // static because we want this value to be the same across a
     // VS session

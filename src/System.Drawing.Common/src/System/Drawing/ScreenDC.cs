@@ -12,7 +12,7 @@ internal struct ScreenDC : IDisposable
 {
     private IntPtr _handle;
 
-    public static ScreenDC Create() => new ScreenDC
+    public static ScreenDC Create() => new()
     {
         _handle = User32.GetDC(IntPtr.Zero)
     };

@@ -158,7 +158,7 @@ public partial class ProgressBar : Control
 
     protected override ImeMode DefaultImeMode => ImeMode.Disable;
 
-    protected override Size DefaultSize => new Size(100, 23);
+    protected override Size DefaultSize => new(100, 23);
 
     [EditorBrowsable(EditorBrowsableState.Never)]
     protected override bool DoubleBuffered

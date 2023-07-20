@@ -1253,7 +1253,7 @@ public partial class StatusStripTests
 
     private class NonReadOnlyControlsStatusStrip : StatusStrip
     {
-        protected override ControlCollection CreateControlsInstance() => new ControlCollection(this);
+        protected override ControlCollection CreateControlsInstance() => new(this);
     }
 
     private class SubStatusStrip : StatusStrip

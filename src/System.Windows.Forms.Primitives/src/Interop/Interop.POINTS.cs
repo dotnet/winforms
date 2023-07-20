@@ -13,6 +13,6 @@ internal static partial class Interop
 
         public override string ToString() => $"{{X={x} Y={y}}}";
 
-        public static implicit operator Point(POINTS point) => new Point(point.x, point.y);
+        public static implicit operator Point(POINTS point) => new(point.x, point.y);
     }
 }

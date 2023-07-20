@@ -5,19 +5,19 @@ namespace System.Drawing.Imaging.Tests;
 
 public class ImageFormatTests
 {
-    private static ImageFormat BmpImageFormat = new ImageFormat(new Guid("b96b3cab-0728-11d3-9d7b-0000f81ef32e"));
-    private static ImageFormat EmfImageFormat = new ImageFormat(new Guid("b96b3cac-0728-11d3-9d7b-0000f81ef32e"));
-    private static ImageFormat ExifImageFormat = new ImageFormat(new Guid("b96b3cb2-0728-11d3-9d7b-0000f81ef32e"));
-    private static ImageFormat GifImageFormat = new ImageFormat(new Guid("b96b3cb0-0728-11d3-9d7b-0000f81ef32e"));
-    private static ImageFormat TiffImageFormat = new ImageFormat(new Guid("b96b3cb1-0728-11d3-9d7b-0000f81ef32e"));
-    private static ImageFormat PngImageFormat = new ImageFormat(new Guid("b96b3caf-0728-11d3-9d7b-0000f81ef32e"));
-    private static ImageFormat MemoryBmpImageFormat = new ImageFormat(new Guid("b96b3caa-0728-11d3-9d7b-0000f81ef32e"));
-    private static ImageFormat IconImageFormat = new ImageFormat(new Guid("b96b3cb5-0728-11d3-9d7b-0000f81ef32e"));
-    private static ImageFormat JpegImageFormat = new ImageFormat(new Guid("b96b3cae-0728-11d3-9d7b-0000f81ef32e"));
-    private static ImageFormat WmfImageFormat = new ImageFormat(new Guid("b96b3cad-0728-11d3-9d7b-0000f81ef32e"));
-    private static ImageFormat HeifImageFormat = new ImageFormat(new Guid("{b96b3cb6-0728-11d3-9d7b-0000f81ef32e}"));
-    private static ImageFormat WebpImageFormat = new ImageFormat(new Guid("{b96b3cb7-0728-11d3-9d7b-0000f81ef32e}"));
-    private static ImageFormat CustomImageFormat = new ImageFormat(new Guid("48749428-316f-496a-ab30-c819a92b3137"));
+    private static ImageFormat BmpImageFormat = new(new Guid("b96b3cab-0728-11d3-9d7b-0000f81ef32e"));
+    private static ImageFormat EmfImageFormat = new(new Guid("b96b3cac-0728-11d3-9d7b-0000f81ef32e"));
+    private static ImageFormat ExifImageFormat = new(new Guid("b96b3cb2-0728-11d3-9d7b-0000f81ef32e"));
+    private static ImageFormat GifImageFormat = new(new Guid("b96b3cb0-0728-11d3-9d7b-0000f81ef32e"));
+    private static ImageFormat TiffImageFormat = new(new Guid("b96b3cb1-0728-11d3-9d7b-0000f81ef32e"));
+    private static ImageFormat PngImageFormat = new(new Guid("b96b3caf-0728-11d3-9d7b-0000f81ef32e"));
+    private static ImageFormat MemoryBmpImageFormat = new(new Guid("b96b3caa-0728-11d3-9d7b-0000f81ef32e"));
+    private static ImageFormat IconImageFormat = new(new Guid("b96b3cb5-0728-11d3-9d7b-0000f81ef32e"));
+    private static ImageFormat JpegImageFormat = new(new Guid("b96b3cae-0728-11d3-9d7b-0000f81ef32e"));
+    private static ImageFormat WmfImageFormat = new(new Guid("b96b3cad-0728-11d3-9d7b-0000f81ef32e"));
+    private static ImageFormat HeifImageFormat = new(new Guid("{b96b3cb6-0728-11d3-9d7b-0000f81ef32e}"));
+    private static ImageFormat WebpImageFormat = new(new Guid("{b96b3cb7-0728-11d3-9d7b-0000f81ef32e}"));
+    private static ImageFormat CustomImageFormat = new(new Guid("48749428-316f-496a-ab30-c819a92b3137"));
 
     public static IEnumerable<object[]> ImageFormatGuidTestData
     {

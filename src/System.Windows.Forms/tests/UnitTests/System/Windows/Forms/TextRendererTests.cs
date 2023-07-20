@@ -586,8 +586,8 @@ public class TextRendererTests
     }
 
     public static TheoryData<Func<IDeviceContext, Action>> TextRenderer_DrawText_DefaultBackground_RendersTransparent_TestData
-        => new TheoryData<Func<IDeviceContext, Action>>
-            {
+        => new()
+        {
                 (IDeviceContext context) => () =>
                     TextRenderer.DrawText(context, "Acrylic", SystemFonts.DefaultFont,
                         pt: default, Color.Blue),
@@ -611,7 +611,7 @@ public class TextRendererTests
 
 #pragma warning disable CS0618 // Type or member is obsolete
     public static TheoryData<Action> TextRenderer_Span_ModifyString_ThrowsArgumentOutOfRange_TestData()
-        => new TheoryData<Action>
+        => new()
         {
             () => TextRenderer.DrawText(
                 MockDC.Instance,
@@ -712,7 +712,7 @@ public class TextRendererTests
     }
 
     public static TheoryData<TextFormatFlags, Rectangle> TextRenderer_DrawText_Padding_TestData
-        => new TheoryData<TextFormatFlags, Rectangle>
+        => new()
         {
             { TextFormatFlags.GlyphOverhangPadding, new Rectangle(3, 0, 70, 12) },
             { TextFormatFlags.LeftAndRightPadding, new Rectangle(5, 0, 70, 12) },
@@ -736,7 +736,7 @@ public class TextRendererTests
     }
 
     public static TheoryData<TextFormatFlags, Size> TextRenderer_MeasureText_Padding_TestData
-        => new TheoryData<TextFormatFlags, Size>
+        => new()
         {
             { TextFormatFlags.GlyphOverhangPadding, new Size(78, 13) },
             { TextFormatFlags.LeftAndRightPadding, new Size(82, 13) },
@@ -823,7 +823,7 @@ public class TextRendererTests
     }
 
     public static TheoryData<TextFormatFlags, Size> TextRenderer_MeasureText_ApplyState_TestData
-        => new TheoryData<TextFormatFlags, Size>
+        => new()
         {
             // State application doesn't practically impact size measurements, but we still want to have a regression test
             // here in case something sneaks in.

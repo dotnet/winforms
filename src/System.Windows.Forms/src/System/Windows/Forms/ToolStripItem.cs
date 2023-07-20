@@ -29,7 +29,7 @@ public abstract partial class ToolStripItem : BindableComponent,
                           IKeyboardToolTip
 {
 #if DEBUG
-    internal static readonly TraceSwitch s_mouseDebugging = new TraceSwitch("MouseDebugging", "Debug ToolStripItem mouse debugging code");
+    internal static readonly TraceSwitch s_mouseDebugging = new("MouseDebugging", "Debug ToolStripItem mouse debugging code");
 #else
     internal static readonly TraceSwitch? s_mouseDebugging;
 #endif
@@ -52,8 +52,8 @@ public abstract partial class ToolStripItem : BindableComponent,
     private ToolStripItemImageScaling _imageScaling = ToolStripItemImageScaling.SizeToFit;
     private Size _cachedTextSize;
 
-    private static readonly Padding s_defaultMargin = new Padding(0, 1, 0, 2);
-    private static readonly Padding s_defaultStatusStripMargin = new Padding(0, 2, 0, 0);
+    private static readonly Padding s_defaultMargin = new(0, 1, 0, 2);
+    private static readonly Padding s_defaultStatusStripMargin = new(0, 2, 0, 0);
     private Padding _scaledDefaultMargin = s_defaultMargin;
     private Padding _scaledDefaultStatusStripMargin = s_defaultStatusStripMargin;
 
@@ -63,36 +63,36 @@ public abstract partial class ToolStripItem : BindableComponent,
     private Input.ICommand? _command;
     private object? _commandParameter;
 
-    private static readonly ArrangedElementCollection s_emptyChildCollection = new ArrangedElementCollection();
+    private static readonly ArrangedElementCollection s_emptyChildCollection = new();
 
-    internal static readonly object s_mouseDownEvent = new object();
-    internal static readonly object s_mouseEnterEvent = new object();
-    internal static readonly object s_mouseLeaveEvent = new object();
-    internal static readonly object s_mouseHoverEvent = new object();
-    internal static readonly object s_mouseMoveEvent = new object();
-    internal static readonly object s_mouseUpEvent = new object();
-    internal static readonly object s_clickEvent = new object();
-    internal static readonly object s_doubleClickEvent = new object();
-    internal static readonly object s_dragDropEvent = new object();
-    internal static readonly object s_dragEnterEvent = new object();
-    internal static readonly object s_dragLeaveEvent = new object();
-    internal static readonly object s_dragOverEvent = new object();
-    internal static readonly object s_displayStyleChangedEvent = new object();
-    internal static readonly object s_enabledChangedEvent = new object();
-    internal static readonly object s_internalEnabledChangedEvent = new object();
-    internal static readonly object s_fontChangedEvent = new object();
-    internal static readonly object s_foreColorChangedEvent = new object();
-    internal static readonly object s_backColorChangedEvent = new object();
-    internal static readonly object s_giveFeedbackEvent = new object();
-    internal static readonly object s_queryContinueDragEvent = new object();
-    internal static readonly object s_queryAccessibilityHelpEvent = new object();
-    internal static readonly object s_locationChangedEvent = new object();
-    internal static readonly object s_rightToLeftChangedEvent = new object();
-    internal static readonly object s_visibleChangedEvent = new object();
-    internal static readonly object s_availableChangedEvent = new object();
-    internal static readonly object s_ownerChangedEvent = new object();
-    internal static readonly object s_paintEvent = new object();
-    internal static readonly object s_textChangedEvent = new object();
+    internal static readonly object s_mouseDownEvent = new();
+    internal static readonly object s_mouseEnterEvent = new();
+    internal static readonly object s_mouseLeaveEvent = new();
+    internal static readonly object s_mouseHoverEvent = new();
+    internal static readonly object s_mouseMoveEvent = new();
+    internal static readonly object s_mouseUpEvent = new();
+    internal static readonly object s_clickEvent = new();
+    internal static readonly object s_doubleClickEvent = new();
+    internal static readonly object s_dragDropEvent = new();
+    internal static readonly object s_dragEnterEvent = new();
+    internal static readonly object s_dragLeaveEvent = new();
+    internal static readonly object s_dragOverEvent = new();
+    internal static readonly object s_displayStyleChangedEvent = new();
+    internal static readonly object s_enabledChangedEvent = new();
+    internal static readonly object s_internalEnabledChangedEvent = new();
+    internal static readonly object s_fontChangedEvent = new();
+    internal static readonly object s_foreColorChangedEvent = new();
+    internal static readonly object s_backColorChangedEvent = new();
+    internal static readonly object s_giveFeedbackEvent = new();
+    internal static readonly object s_queryContinueDragEvent = new();
+    internal static readonly object s_queryAccessibilityHelpEvent = new();
+    internal static readonly object s_locationChangedEvent = new();
+    internal static readonly object s_rightToLeftChangedEvent = new();
+    internal static readonly object s_visibleChangedEvent = new();
+    internal static readonly object s_availableChangedEvent = new();
+    internal static readonly object s_ownerChangedEvent = new();
+    internal static readonly object s_paintEvent = new();
+    internal static readonly object s_textChangedEvent = new();
 
     internal static readonly object s_commandChangedEvent = new();
     internal static readonly object s_commandParameterChangedEvent = new();
@@ -2131,7 +2131,7 @@ public abstract partial class ToolStripItem : BindableComponent,
     ///  gets laid out in the ToolStripItem
     /// </summary>
     private protected virtual ToolStripItemInternalLayout CreateInternalLayout()
-        => new ToolStripItemInternalLayout(this);
+        => new(this);
 
     /// <summary>
     ///  Disposes this ToolStrip item.

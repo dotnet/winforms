@@ -59,13 +59,13 @@ public partial class RichTextBox : TextBoxBase
 
     // Event objects
     //
-    private static readonly object EVENT_HSCROLL = new object();
-    private static readonly object EVENT_LINKACTIVATE = new object();
-    private static readonly object EVENT_IMECHANGE = new object();
-    private static readonly object EVENT_PROTECTED = new object();
-    private static readonly object EVENT_REQUESTRESIZE = new object();
-    private static readonly object EVENT_SELCHANGE = new object();
-    private static readonly object EVENT_VSCROLL = new object();
+    private static readonly object EVENT_HSCROLL = new();
+    private static readonly object EVENT_LINKACTIVATE = new();
+    private static readonly object EVENT_IMECHANGE = new();
+    private static readonly object EVENT_PROTECTED = new();
+    private static readonly object EVENT_REQUESTRESIZE = new();
+    private static readonly object EVENT_SELCHANGE = new();
+    private static readonly object EVENT_VSCROLL = new();
 
     // Persistent state
     //
@@ -366,7 +366,7 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
-    protected override Size DefaultSize => new Size(100, 96);
+    protected override Size DefaultSize => new(100, 96);
 
     /// <summary>
     ///  We can't just enable drag/drop of text by default: it's a breaking change.
@@ -687,7 +687,7 @@ public partial class RichTextBox : TextBoxBase
             HorizontalAlignment selectionAlignment = HorizontalAlignment.Left;
 
             ForceHandleCreate();
-            var pf = new PARAFORMAT
+            PARAFORMAT pf = new()
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
@@ -722,7 +722,7 @@ public partial class RichTextBox : TextBoxBase
             SourceGenerated.EnumValidator.Validate(value);
 
             ForceHandleCreate();
-            var pf = new PARAFORMAT
+            PARAFORMAT pf = new()
             {
                 cbSize = (uint)sizeof(PARAFORMAT),
                 dwMask = PFM.ALIGNMENT
@@ -763,7 +763,7 @@ public partial class RichTextBox : TextBoxBase
             RichTextBoxSelectionAttribute selectionBullet = RichTextBoxSelectionAttribute.None;
 
             ForceHandleCreate();
-            var pf = new PARAFORMAT
+            PARAFORMAT pf = new()
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
@@ -791,7 +791,7 @@ public partial class RichTextBox : TextBoxBase
         {
             ForceHandleCreate();
 
-            var pf = new PARAFORMAT
+            PARAFORMAT pf = new()
             {
                 cbSize = (uint)sizeof(PARAFORMAT),
                 dwMask = PFM.NUMBERING | PFM.OFFSET
@@ -841,7 +841,7 @@ public partial class RichTextBox : TextBoxBase
             }
 
             ForceHandleCreate();
-            var cf = new CHARFORMAT2W
+            CHARFORMAT2W cf = new()
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W),
                 dwMask = CFM.OFFSET,
@@ -933,10 +933,11 @@ public partial class RichTextBox : TextBoxBase
             _selectionBackColorToSetOnHandleCreated = value;
             if (IsHandleCreated)
             {
-                var cf2 = new CHARFORMAT2W
+                CHARFORMAT2W cf2 = new()
                 {
                     cbSize = (uint)sizeof(CHARFORMAT2W)
                 };
+
                 if (value == Color.Empty)
                 {
                     cf2.dwEffects = CFE.AUTOBACKCOLOR;
@@ -983,7 +984,7 @@ public partial class RichTextBox : TextBoxBase
             int selHangingIndent = 0;
 
             ForceHandleCreate();
-            var pf = new PARAFORMAT
+            PARAFORMAT pf = new()
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
@@ -1003,7 +1004,7 @@ public partial class RichTextBox : TextBoxBase
         {
             ForceHandleCreate();
 
-            var pf = new PARAFORMAT
+            PARAFORMAT pf = new()
             {
                 cbSize = (uint)sizeof(PARAFORMAT),
                 dwMask = PFM.OFFSET,
@@ -1031,7 +1032,7 @@ public partial class RichTextBox : TextBoxBase
             int selIndent = 0;
 
             ForceHandleCreate();
-            var pf = new PARAFORMAT
+            PARAFORMAT pf = new()
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
@@ -1051,7 +1052,7 @@ public partial class RichTextBox : TextBoxBase
         {
             ForceHandleCreate();
 
-            var pf = new PARAFORMAT
+            PARAFORMAT pf = new()
             {
                 cbSize = (uint)sizeof(PARAFORMAT),
                 dwMask = PFM.STARTINDENT,
@@ -1153,7 +1154,7 @@ public partial class RichTextBox : TextBoxBase
 
             ForceHandleCreate();
 
-            var pf = new PARAFORMAT
+            PARAFORMAT pf = new()
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
@@ -1180,7 +1181,7 @@ public partial class RichTextBox : TextBoxBase
             }
 
             ForceHandleCreate();
-            var pf = new PARAFORMAT
+            PARAFORMAT pf = new()
             {
                 cbSize = (uint)sizeof(PARAFORMAT),
                 dwMask = PFM.RIGHTINDENT,
@@ -1206,7 +1207,7 @@ public partial class RichTextBox : TextBoxBase
             int[] selTabs = Array.Empty<int>();
 
             ForceHandleCreate();
-            var pf = new PARAFORMAT
+            PARAFORMAT pf = new()
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
@@ -1235,7 +1236,7 @@ public partial class RichTextBox : TextBoxBase
             }
 
             ForceHandleCreate();
-            var pf = new PARAFORMAT
+            PARAFORMAT pf = new()
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
@@ -1414,7 +1415,7 @@ public partial class RichTextBox : TextBoxBase
     {
         get
         {
-            var gtl = new GETTEXTLENGTHEX
+            GETTEXTLENGTHEX gtl = new()
             {
                 flags = GTL.NUMCHARS,
                 codepage = 1200u /* CP_UNICODE */
@@ -1844,7 +1845,7 @@ public partial class RichTextBox : TextBoxBase
             throw new ArgumentException(string.Format(SR.RichTextFindEndInvalid, end));
         }
 
-        var ft = default(FINDTEXTW);
+        FINDTEXTW ft = default;
         if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse)
         {
             // normal
@@ -2156,7 +2157,7 @@ public partial class RichTextBox : TextBoxBase
 
     private unsafe CHARFORMAT2W GetCharFormat(bool fSelection)
     {
-        var cf = new CHARFORMAT2W
+        CHARFORMAT2W cf = new()
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
@@ -2244,7 +2245,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     public override int GetCharIndexFromPosition(Point pt)
     {
-        var wpt = new Point(pt.X, pt.Y);
+        Point wpt = new(pt.X, pt.Y);
         int index = (int)PInvoke.SendMessage(this, PInvoke.EM_CHARFROMPOS, 0, ref wpt);
 
         string t = Text;
@@ -2299,9 +2300,9 @@ public partial class RichTextBox : TextBoxBase
             return Point.Empty;
         }
 
-        var pt = default(Point);
-        PInvoke.SendMessage(this, PInvoke.EM_POSFROMCHAR, (WPARAM)(&pt), index);
-        return pt;
+        Point position = default;
+        PInvoke.SendMessage(this, PInvoke.EM_POSFROMCHAR, (WPARAM)(&position), index);
+        return position;
     }
 
     private bool GetProtectedError()
@@ -2742,7 +2743,7 @@ public partial class RichTextBox : TextBoxBase
         // check to see if the control has been created
         if (IsHandleCreated)
         {
-            var cf = new CHARFORMAT2W
+            CHARFORMAT2W cf = new()
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W),
                 dwMask = mask
@@ -2760,7 +2761,7 @@ public partial class RichTextBox : TextBoxBase
                     throw new ArgumentException(SR.UnknownAttr);
             }
 
-            // set the format information
+            // Set the format information.
             return PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref cf) != 0;
         }
 
@@ -2886,11 +2887,11 @@ public partial class RichTextBox : TextBoxBase
 
     private void StreamIn(Stream data, SF flags)
     {
-        // clear out the selection only if we are replacing all the text
+        // Clear out the selection only if we are replacing all the text.
         if ((flags & SF.F_SELECTION) == 0)
         {
-            var cr = default(CHARRANGE);
-            PInvoke.SendMessage(this, PInvoke.EM_EXSETSEL, 0, ref cr);
+            CHARRANGE range = default;
+            PInvoke.SendMessage(this, PInvoke.EM_EXSETSEL, 0, ref range);
         }
 
         try
@@ -2921,7 +2922,7 @@ public partial class RichTextBox : TextBoxBase
             int cookieVal = 0;
 
             // set up structure to do stream operation
-            var es = default(EDITSTREAM);
+            EDITSTREAM es = default;
 
             if ((flags & SF.UNICODE) != 0)
             {
@@ -2942,7 +2943,7 @@ public partial class RichTextBox : TextBoxBase
             }
 
             es.dwCookie = (UIntPtr)cookieVal;
-            var callback = new EDITSTREAMCALLBACK(EditStreamProc);
+            EDITSTREAMCALLBACK callback = EditStreamProc;
             es.pfnCallback = Marshal.GetFunctionPointerForDelegate(callback);
 
             // gives us TextBox compatible behavior, programatic text change shouldn't
@@ -3025,15 +3026,9 @@ public partial class RichTextBox : TextBoxBase
         try
         {
             int cookieVal = 0;
-            var es = default(EDITSTREAM);
-            if ((flags & SF.UNICODE) != 0)
-            {
-                cookieVal = OUTPUT | UNICODE;
-            }
-            else
-            {
-                cookieVal = OUTPUT | ANSI;
-            }
+            EDITSTREAM es = default;
+
+            cookieVal = (flags & SF.UNICODE) != 0 ? OUTPUT | UNICODE : OUTPUT | ANSI;
 
             if ((flags & SF.RTF) != 0)
             {
@@ -3052,7 +3047,7 @@ public partial class RichTextBox : TextBoxBase
             }
 
             es.dwCookie = (UIntPtr)cookieVal;
-            var callback = new EDITSTREAMCALLBACK(EditStreamProc);
+            EDITSTREAMCALLBACK callback = EditStreamProc;
             es.pfnCallback = Marshal.GetFunctionPointerForDelegate(callback);
 
             // Get Text
@@ -3225,7 +3220,7 @@ public partial class RichTextBox : TextBoxBase
     /// </remarks>
     private string CharRangeToString(CHARRANGE c)
     {
-        var txrg = new Richedit.TEXTRANGE
+        Richedit.TEXTRANGE txrg = new()
         {
             chrg = c
         };
@@ -3237,7 +3232,7 @@ public partial class RichTextBox : TextBoxBase
         }
 
         int characters = (c.cpMax - c.cpMin) + 1; // +1 for null termination
-        var charBuffer = new UnicodeCharBuffer(characters);
+        UnicodeCharBuffer charBuffer = new(characters);
         IntPtr unmanagedBuffer = charBuffer.AllocCoTaskMem();
         if (unmanagedBuffer == IntPtr.Zero)
         {

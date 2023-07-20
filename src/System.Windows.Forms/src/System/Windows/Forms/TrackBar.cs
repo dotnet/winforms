@@ -24,9 +24,9 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionTrackBar))]
 public partial class TrackBar : Control, ISupportInitialize
 {
-    private static readonly object s_scrollEvent = new object();
-    private static readonly object s_valueChangedEvent = new object();
-    private static readonly object s_rightToLeftChangedEvent = new object();
+    private static readonly object s_scrollEvent = new();
+    private static readonly object s_valueChangedEvent = new();
+    private static readonly object s_rightToLeftChangedEvent = new();
     private bool _autoSize = true;
     private int _largeChange = 5;
     private int _maximum = 10;
@@ -195,7 +195,7 @@ public partial class TrackBar : Control, ISupportInitialize
 
     protected override ImeMode DefaultImeMode => ImeMode.Disable;
 
-    protected override Size DefaultSize => new Size(104, PreferredDimension);
+    protected override Size DefaultSize => new(104, PreferredDimension);
 
     /// <summary>
     ///  This property is overridden and hidden from statement completion

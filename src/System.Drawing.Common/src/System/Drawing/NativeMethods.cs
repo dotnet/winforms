@@ -7,7 +7,7 @@ namespace System.Drawing;
 
 internal static class NativeMethods
 {
-    internal static HandleRef NullHandleRef => new HandleRef(null, IntPtr.Zero);
+    internal static HandleRef NullHandleRef => new(null, IntPtr.Zero);
 
     public const int MAX_PATH = 260;
     internal const int SM_REMOTESESSION = 0x1000;

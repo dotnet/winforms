@@ -15,8 +15,8 @@ namespace System.Windows.Forms;
 [DefaultEvent(nameof(Scroll))]
 public abstract partial class ScrollBar : Control
 {
-    private static readonly object s_scrollEvent = new object();
-    private static readonly object s_valueChangedEvent = new object();
+    private static readonly object s_scrollEvent = new();
+    private static readonly object s_valueChangedEvent = new();
 
     private int _minimum;
     private int _maximum = 100;
@@ -719,7 +719,7 @@ public abstract partial class ScrollBar : Control
                 break;
         }
 
-        var se = new ScrollEventArgs(type, oldValue, newValue, _scrollOrientation);
+        ScrollEventArgs se = new(type, oldValue, newValue, _scrollOrientation);
         OnScroll(se);
         Value = se.NewValue;
     }

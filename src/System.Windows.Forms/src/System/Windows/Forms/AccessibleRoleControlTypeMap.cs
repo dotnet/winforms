@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 /// </summary>
 internal static class AccessibleRoleControlTypeMap
 {
-    private static readonly Dictionary<AccessibleRole, UIA> s_map = new Dictionary<AccessibleRole, UIA>
+    private static readonly Dictionary<AccessibleRole, UIA> s_map = new()
     {
         { AccessibleRole.Alert, UIA.PaneControlTypeId },
         { AccessibleRole.Animation, UIA.PaneControlTypeId },

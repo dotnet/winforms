@@ -16,8 +16,8 @@ public sealed partial class AnchorEditor
     private class AnchorUI : Control
     {
         private readonly SpringControl bottom;
-        private readonly ContainerPlaceholder container = new ContainerPlaceholder();
-        private readonly ControlPlaceholder control = new ControlPlaceholder();
+        private readonly ContainerPlaceholder container = new();
+        private readonly ControlPlaceholder control = new();
         private readonly SpringControl left;
         private readonly SpringControl right;
         private readonly SpringControl[] tabOrder;

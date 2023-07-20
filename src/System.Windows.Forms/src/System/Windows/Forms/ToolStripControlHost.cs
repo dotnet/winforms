@@ -19,15 +19,15 @@ public partial class ToolStripControlHost : ToolStripItem
     private ContentAlignment _controlAlign = ContentAlignment.MiddleCenter;
     private bool _inSetVisibleCore;
 
-    internal static readonly object s_gotFocusEvent = new object();
-    internal static readonly object s_lostFocusEvent = new object();
-    internal static readonly object s_keyDownEvent = new object();
-    internal static readonly object s_keyPressEvent = new object();
-    internal static readonly object s_keyUpEvent = new object();
-    internal static readonly object s_enterEvent = new object();
-    internal static readonly object s_leaveEvent = new object();
-    internal static readonly object s_validatedEvent = new object();
-    internal static readonly object s_validatingEvent = new object();
+    internal static readonly object s_gotFocusEvent = new();
+    internal static readonly object s_lostFocusEvent = new();
+    internal static readonly object s_keyDownEvent = new();
+    internal static readonly object s_keyPressEvent = new();
+    internal static readonly object s_keyUpEvent = new();
+    internal static readonly object s_enterEvent = new();
+    internal static readonly object s_leaveEvent = new();
+    internal static readonly object s_validatedEvent = new();
+    internal static readonly object s_validatingEvent = new();
 
     /// <summary>
     ///  Constructs a ToolStripControlHost

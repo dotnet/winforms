@@ -27,7 +27,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     private const byte DATAGRIDVIEWBUTTONCELL_verticalTextMargin = 1;
     private const byte DATAGRIDVIEWBUTTONCELL_textPadding = 5;
 
-    private static Rectangle rectThemeMargins = new Rectangle(-1, -1, 0, 0);
+    private static Rectangle rectThemeMargins = new(-1, -1, 0, 0);
     private static bool mouseInContentBounds;
 
     private static readonly Type defaultFormattedValueType = typeof(string);

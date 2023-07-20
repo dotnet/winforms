@@ -16,8 +16,8 @@ public partial class ToolStripButton : ToolStripItem
     private const int StandardButtonWidth = 23;
     private int _standardButtonWidth = StandardButtonWidth;
 
-    private static readonly object s_checkedChangedEvent = new object();
-    private static readonly object s_checkStateChangedEvent = new object();
+    private static readonly object s_checkedChangedEvent = new();
+    private static readonly object s_checkStateChangedEvent = new();
 
     public ToolStripButton()
     {
@@ -211,7 +211,7 @@ public partial class ToolStripButton : ToolStripItem
 
         if ((DisplayStyle & ToolStripItemDisplayStyle.Image) == ToolStripItemDisplayStyle.Image)
         {
-            var rea = new ToolStripItemImageRenderEventArgs(e.Graphics, this, InternalLayout.ImageRectangle)
+            ToolStripItemImageRenderEventArgs rea = new(e.Graphics, this, InternalLayout.ImageRectangle)
             {
                 ShiftOnPress = true
             };

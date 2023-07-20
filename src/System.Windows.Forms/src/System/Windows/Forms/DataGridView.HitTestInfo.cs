@@ -21,7 +21,7 @@ public partial class DataGridView
         /// <summary>
         ///  Allows the <see cref="HitTestInfo"/> object to inform you the extent of the grid.
         /// </summary>
-        public static readonly HitTestInfo Nowhere = new HitTestInfo();
+        public static readonly HitTestInfo Nowhere = new();
 
         internal HitTestInfo()
         {

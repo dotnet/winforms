@@ -36,8 +36,8 @@ public partial class Splitter : Control
     private int _initTargetSize;
     private int _lastDrawSplit = -1;
     private int _maxSize;
-    private static readonly object EVENT_MOVING = new object();
-    private static readonly object EVENT_MOVED = new object();
+    private static readonly object EVENT_MOVING = new();
+    private static readonly object EVENT_MOVED = new();
 
     // Cannot expose IMessageFilter.PreFilterMessage through this unsealed class
     private SplitterMessageFilter? _splitterMessageFilter;

@@ -13,12 +13,12 @@ public class OSFeature : FeatureSupport
     ///  Represents the layered, top-level windows feature. This <see langword="static"/> field
     ///  is read-only.
     /// </summary>
-    public static readonly object LayeredWindows = new object();
+    public static readonly object LayeredWindows = new();
 
     /// <summary>
     ///  Determines if the OS supports themes
     /// </summary>
-    public static readonly object Themes = new object();
+    public static readonly object Themes = new();
 
     private static OSFeature? _feature;
 

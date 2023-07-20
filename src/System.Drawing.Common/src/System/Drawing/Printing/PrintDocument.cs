@@ -18,7 +18,7 @@ public class PrintDocument : Component
     private PrintPageEventHandler? _printPageHandler;
     private QueryPageSettingsEventHandler? _queryHandler;
 
-    private PrinterSettings _printerSettings = new PrinterSettings();
+    private PrinterSettings _printerSettings = new();
     private PageSettings _defaultPageSettings;
 
     private PrintController? _printController;

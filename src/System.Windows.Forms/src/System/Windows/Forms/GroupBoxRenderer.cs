@@ -315,7 +315,7 @@ public static class GroupBoxRenderer
             boxTop += font.Height / 2;
         }
 
-        using var hdc = new DeviceContextHdcScope(deviceContext);
+        using DeviceContextHdcScope hdc = new(deviceContext);
 
         ReadOnlySpan<int> darkLines = stackalloc int[]
         {

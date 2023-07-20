@@ -20,7 +20,7 @@ public sealed class DockingAttribute : Attribute
         DockingBehavior = dockingBehavior;
     }
 
-    public static readonly DockingAttribute Default = new DockingAttribute();
+    public static readonly DockingAttribute Default = new();
 
     public DockingBehavior DockingBehavior { get; }
 

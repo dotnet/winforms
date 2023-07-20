@@ -117,7 +117,7 @@ internal static class SystemDrawingExtensions
     ///  Not strictly needed (yet), but allows using the same pattern for all pens.
     /// </summary>
     internal static Pen CreateStaticPen(this Brush brush, float width = 1.0f)
-        => new Pen(brush, width);
+        => new(brush, width);
 
     /// <summary>
     ///  Creates a <see cref="SolidBrush"/>. If <paramref name="color"/> is a system color, makes a static copy of

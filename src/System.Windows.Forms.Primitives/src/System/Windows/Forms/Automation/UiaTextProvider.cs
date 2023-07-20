@@ -106,7 +106,7 @@ internal abstract class UiaTextProvider : ITextProvider
 
     public unsafe int SendKeyboardInputVK(VIRTUAL_KEY vk, bool press)
     {
-        INPUT keyboardInput = default(INPUT);
+        INPUT keyboardInput = default;
 
         keyboardInput.type = INPUT_TYPE.INPUT_KEYBOARD;
         keyboardInput.Anonymous.ki.wVk = vk;

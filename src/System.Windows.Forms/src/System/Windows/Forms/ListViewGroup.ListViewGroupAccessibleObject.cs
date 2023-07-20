@@ -56,7 +56,7 @@ public partial class ListViewGroup
                     : PInvoke.LVGGR_GROUP;
 
                 // Get the native rectangle
-                RECT groupRect = default(RECT);
+                RECT groupRect = default;
 
                 // Using the "top" property, we set which rectangle type of the group we want to get
                 // This is described in more detail in https://docs.microsoft.com/windows/win32/controls/lvm-getgrouprect

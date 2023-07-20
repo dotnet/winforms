@@ -52,7 +52,7 @@ internal abstract partial class ButtonBaseAdapter
     {
         LayoutOptions? options = default;
         using (var screen = GdiCache.GetScreenHdc())
-        using (PaintEventArgs pe = new PaintEventArgs(screen, default(Rectangle)))
+        using (PaintEventArgs pe = new PaintEventArgs(screen, default))
         {
             options = Layout(pe);
         }
@@ -138,7 +138,7 @@ internal abstract partial class ButtonBaseAdapter
         bool stockColor = colors.ButtonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
         bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
-        using var hdc = new DeviceContextHdcScope(deviceContext);
+        using DeviceContextHdcScope hdc = new(deviceContext);
 
         // Draw counter-clock-wise
         Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);                        // Upper inner right
@@ -193,7 +193,7 @@ internal abstract partial class ButtonBaseAdapter
 
     private static void Draw3DBorderNormal(IDeviceContext deviceContext, ref Rectangle bounds, ColorData colors)
     {
-        using var hdc = new DeviceContextHdcScope(deviceContext);
+        using DeviceContextHdcScope hdc = new(deviceContext);
 
         // Draw counter-clock-wise
         Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);                        // Upper inner right
@@ -241,7 +241,7 @@ internal abstract partial class ButtonBaseAdapter
         bool stockColor = colors.ButtonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
         bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
-        using var hdc = new DeviceContextHdcScope(deviceContext);
+        using DeviceContextHdcScope hdc = new(deviceContext);
 
         // Draw counter-clock-wise.
         Point p1 = new Point(bounds.X + bounds.Width - 1, bounds.Y);                        // Upper inner right
@@ -300,13 +300,13 @@ internal abstract partial class ButtonBaseAdapter
     /// </summary>
     protected internal static void Draw3DLiteBorder(IDeviceContext deviceContext, Rectangle r, ColorData colors, bool up)
     {
-        using var hdc = new DeviceContextHdcScope(deviceContext);
+        using DeviceContextHdcScope hdc = new(deviceContext);
 
         // Draw counter-clock-wise.
-        Point p1 = new Point(r.Right - 1, r.Top);           // Upper inner right
-        Point p2 = new Point(r.Left, r.Top);                // Upper left
-        Point p3 = new Point(r.Left, r.Bottom - 1);         // Bottom inner left
-        Point p4 = new Point(r.Right - 1, r.Bottom - 1);    // Inner bottom right
+        Point p1 = new(r.Right - 1, r.Top);           // Upper inner right
+        Point p2 = new(r.Left, r.Top);                // Upper left
+        Point p3 = new(r.Left, r.Bottom - 1);         // Bottom inner left
+        Point p4 = new(r.Right - 1, r.Bottom - 1);    // Inner bottom right
         Color color = GetContrastingBorderColor(colors.ButtonShadow);
 
         // Top, left
@@ -326,21 +326,20 @@ internal abstract partial class ButtonBaseAdapter
     /// <summary>
     ///  Draws the flat border with specified bordersize.
     /// </summary>
-    /// <remarks>
-    ///  This function gets called only for Flatstyle == Flatstyle.Flat.
-    /// </remarks>
     internal static void DrawFlatBorderWithSize(
         PaintEventArgs e,
         Rectangle bounds,
         Color color,
         int size)
     {
+        // This function gets called only for Flatstyle == Flatstyle.Flat.
+
         size = Math.Min(size, Math.Min(bounds.Width, bounds.Height));
 
-        var left = new Rectangle(bounds.X, bounds.Y, size, bounds.Height);
-        var right = new Rectangle(bounds.X + bounds.Width - size, bounds.Y, size, bounds.Height);
-        var top = new Rectangle(bounds.X + size, bounds.Y, bounds.Width - size * 2, size);
-        var bottom = new Rectangle(bounds.X + size, bounds.Y + bounds.Height - size, bounds.Width - size * 2, size);
+        Rectangle left = new(bounds.X, bounds.Y, size, bounds.Height);
+        Rectangle right = new(bounds.X + bounds.Width - size, bounds.Y, size, bounds.Height);
+        Rectangle top = new(bounds.X + size, bounds.Y, bounds.Width - size * 2, size);
+        Rectangle bottom = new(bounds.X + size, bounds.Y + bounds.Height - size, bounds.Width - size * 2, size);
 
         if (color.HasTransparency())
         {

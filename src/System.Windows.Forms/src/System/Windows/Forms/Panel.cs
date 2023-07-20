@@ -143,7 +143,7 @@ public partial class Panel : ScrollableControl
     ///  Deriving classes can override this to configure a default size for their control.
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
-    protected override Size DefaultSize => new Size(200, 100);
+    protected override Size DefaultSize => new(200, 100);
 
     internal override Size GetPreferredSizeCore(Size proposedSize)
     {
@@ -226,7 +226,7 @@ public partial class Panel : ScrollableControl
     {
         base.PrintToMetaFileRecursive(hDC, lParam, bounds);
 
-        using var mapping = new DCMapping(hDC, bounds);
+        using DCMapping mapping = new(hDC, bounds);
         using Graphics g = hDC.CreateGraphics();
         ControlPaint.PrintBorder(g, new Rectangle(Point.Empty, Size), BorderStyle, Border3DStyle.Sunken);
     }

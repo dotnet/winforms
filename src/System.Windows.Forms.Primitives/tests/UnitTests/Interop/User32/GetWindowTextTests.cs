@@ -23,7 +23,7 @@ public class GetWindowTextTests
         const string shortText = "A";
 
         // Use a long string that exceeds the initial buffer size (16).
-        string longText = new string('X', 50);
+        string longText = new('X', 50);
 
         var windowClass = new ChangeWindowTextClass();
         windowClass.Register();

@@ -13,7 +13,7 @@ public class WindowsFormsApplicationBaseTests
     public void Run()
     {
         string exePath = TestHelpers.GetExePath("VisualBasicRuntimeTest");
-        var startInfo = new ProcessStartInfo { FileName = exePath, Arguments = "WindowsFormsApplicationBase.Run" };
+        ProcessStartInfo startInfo = new() { FileName = exePath, Arguments = "WindowsFormsApplicationBase.Run" };
         Process process = TestHelpers.StartProcess(startInfo);
         TestHelpers.EndProcess(process, timeout: 1000);
         Assert.True(process.HasExited);
@@ -34,7 +34,7 @@ public class WindowsFormsApplicationBaseTests
     [Fact]
     public void Run_NoStartupFormException()
     {
-        var application = new WindowsFormsApplicationBase();
+        WindowsFormsApplicationBase application = new();
         // Exception.ToString() called to verify message is constructed successfully.
         _ = Assert.Throws<NoStartupFormException>(() => application.Run(Array.Empty<string>())).ToString();
     }

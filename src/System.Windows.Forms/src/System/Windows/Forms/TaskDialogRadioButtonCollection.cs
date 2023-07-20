@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 public class TaskDialogRadioButtonCollection : Collection<TaskDialogRadioButton>
 {
     // HashSet to detect duplicate items.
-    private readonly HashSet<TaskDialogRadioButton> _itemSet = new HashSet<TaskDialogRadioButton>();
+    private readonly HashSet<TaskDialogRadioButton> _itemSet = new();
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="TaskDialogRadioButtonCollection"/> class.
@@ -33,7 +33,7 @@ public class TaskDialogRadioButtonCollection : Collection<TaskDialogRadioButton>
     /// </exception>
     public TaskDialogRadioButton Add(string? text)
     {
-        var button = new TaskDialogRadioButton()
+        TaskDialogRadioButton button = new()
         {
             Text = text
         };

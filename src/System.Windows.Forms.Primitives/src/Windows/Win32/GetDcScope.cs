@@ -53,7 +53,7 @@ internal readonly ref struct GetDcScope
     ///    API to get the DC for the entire desktop.
     ///    </para>
     /// </remarks>
-    public static GetDcScope ScreenDC => new GetDcScope(HWND.Null);
+    public static GetDcScope ScreenDC => new(HWND.Null);
 
     public bool IsNull => HDC.IsNull;
 

@@ -18,7 +18,7 @@ internal unsafe class DeviceContextState
     // Not all state is handled yet. Backfilling in as we write specific tests. Of special note is that we don't
     // have tracking for Save/RestoreDC yet.
 
-    private readonly List<State> _savedStates = new List<State>();
+    private readonly List<State> _savedStates = new();
     private State _currentState;
 
     /// <summary>

@@ -140,7 +140,7 @@ internal static class DebuggerAttributes
             throw new InvalidOperationException($"The DebuggerDisplayAttribute for {objType} doesn't reference any expressions.");
         }
 
-        var sb = new StringBuilder();
+        StringBuilder sb = new();
 
         for (int i = 0; i < segments.Length; i += 2)
         {

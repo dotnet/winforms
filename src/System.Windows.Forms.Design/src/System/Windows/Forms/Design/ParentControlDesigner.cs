@@ -526,7 +526,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         if (host is not null && newChild is not null && !Control.Contains(newChild)
             && (host.GetDesigner(newChild) as ControlDesigner) is not null && !(newChild is Form && ((Form)newChild).TopLevel))
         {
-            Rectangle bounds = default(Rectangle);
+            Rectangle bounds = default;
 
             // If we were provided with a location, convert it to parent control coordinates.
             // Otherwise, get the control's size and put the location in the middle of it

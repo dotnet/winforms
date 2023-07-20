@@ -695,7 +695,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     private void CheckDropDownList(int x, int y, int rowIndex)
     {
         Debug.Assert(EditingComboBox is not null);
-        DataGridViewAdvancedBorderStyle dgvabsPlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
+        DataGridViewAdvancedBorderStyle dgvabsPlaceholder = new(), dgvabsEffective;
         dgvabsEffective = AdjustCellBorderStyle(DataGridView.AdvancedCellBorderStyle,
             dgvabsPlaceholder,
             false /*singleVerticalBorderAdded*/,
