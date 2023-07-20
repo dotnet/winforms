@@ -34,6 +34,7 @@ pr:
       - internal/release/*
       - internal/experimental/*
       - feature/win32
+      - Net9.0-Test
   paths:
     include:
       - '*'
