@@ -384,11 +384,13 @@ public partial class PrintPreviewControl : Control
 
         if (_pageInfo is null || _pageInfo.Length == 0)
         {
-            pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
+            Rectangle rect = InsideRectangle;
+
+            pevent.Graphics.FillRectangle(backBrush, rect);
 
             if (_pageInfo is not null || _exceptionPrinting)
             {
-                DrawMessage(pevent.Graphics, InsideRectangle, _exceptionPrinting, isHighContrast);
+                DrawMessage(pevent.Graphics, rect, _exceptionPrinting, isHighContrast);
             }
             else
             {
