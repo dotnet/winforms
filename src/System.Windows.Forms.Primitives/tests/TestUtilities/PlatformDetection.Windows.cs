@@ -33,7 +33,7 @@ public static partial class PlatformDetection
     public static bool IsWindowsServerCore => GetInstallationType().Equals("Server Core", StringComparison.OrdinalIgnoreCase);
     public static int WindowsVersion => GetWindowsVersion();
     public static bool IsMacOsHighSierraOrHigher { get; }
-    public static Version ICUVersion => new Version(0, 0, 0, 0);
+    public static Version ICUVersion => new(0, 0, 0, 0);
     public static bool IsRedHatFamily => false;
     public static bool IsNotRedHatFamily => true;
     public static bool IsRedHatFamily6 => false;

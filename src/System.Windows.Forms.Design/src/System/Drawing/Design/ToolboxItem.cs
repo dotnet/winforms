@@ -18,7 +18,7 @@ namespace System.Drawing.Design;
 /// </summary>
 public class ToolboxItem : ISerializable
 {
-    private static readonly TraceSwitch s_toolboxItemPersist = new TraceSwitch("ToolboxPersisting", "ToolboxItem: write data");
+    private static readonly TraceSwitch s_toolboxItemPersist = new("ToolboxPersisting", "ToolboxItem: write data");
 
     private static bool s_isScalingInitialized;
     private const int ICON_DIMENSION = 16;

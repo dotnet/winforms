@@ -608,11 +608,11 @@ public class Binding
         if (_formattingEnabled)
         {
             // Fire the Parse event so that user code gets a chance to supply the parsed value for us
-            var e = new ConvertEventArgs(value, type);
+            ConvertEventArgs e = new(value, type);
             OnParse(e);
 
             object newValue = e.Value;
-            if (!object.Equals(value, newValue))
+            if (!Equals(value, newValue))
             {
                 // If event handler replaced formatted value with parsed value, use that
                 return newValue;
@@ -626,27 +626,36 @@ public class Binding
                     fieldInfoConverter = _bindToObject.FieldInfo.Converter;
                 }
 
-                return Formatter.ParseObject(value, type, (value is null ? _propInfo.PropertyType : value.GetType()), fieldInfoConverter, _propInfoConverter, _formatInfo, _nullValue, GetDataSourceNullValue(type));
+                return Formatter.ParseObject(
+                    value,
+                    type,
+                    (value is null ? _propInfo.PropertyType : value.GetType()),
+                    fieldInfoConverter,
+                    _propInfoConverter,
+                    _formatInfo,
+                    _nullValue,
+                    GetDataSourceNullValue(type));
             }
         }
         else
         {
-            var e = new ConvertEventArgs(value, type);
-            // first try: use the OnParse event
+            ConvertEventArgs e = new(value, type);
+
+            // First try: use the OnParse event
             OnParse(e);
             if (e.Value is not null && (e.Value.GetType().IsSubclassOf(type) || e.Value.GetType() == type || e.Value is DBNull))
             {
                 return e.Value;
             }
 
-            // second try: use the TypeConverter
+            // Second try: use the TypeConverter
             TypeConverter typeConverter = TypeDescriptor.GetConverter(value is not null ? value.GetType() : typeof(object));
             if (typeConverter is not null && typeConverter.CanConvertTo(type))
             {
                 return typeConverter.ConvertTo(value, type);
             }
 
-            // last try: use Convert.ToType
+            // Last try: use Convert.ToType
             if (value is IConvertible)
             {
                 object ret = Convert.ChangeType(value, type, CultureInfo.CurrentCulture);
@@ -674,7 +683,7 @@ public class Binding
         if (_formattingEnabled)
         {
             // Fire the Format event so that user code gets a chance to supply the formatted value for us
-            var e = new ConvertEventArgs(value, type);
+            ConvertEventArgs e = new(value, type);
             OnFormat(e);
 
             if (e.Value != value)
@@ -697,7 +706,7 @@ public class Binding
         else
         {
             // first try: use the Format event
-            var e = new ConvertEventArgs(value, type);
+            ConvertEventArgs e = new(value, type);
             OnFormat(e);
             object ret = e.Value;
 

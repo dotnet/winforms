@@ -30,21 +30,21 @@ public partial class ListView : Control
 {
     private const int MASK_HITTESTFLAG = 0x00F7;
 
-    private static readonly object EVENT_CACHEVIRTUALITEMS = new object();
-    private static readonly object EVENT_COLUMNREORDERED = new object();
-    private static readonly object EVENT_COLUMNWIDTHCHANGED = new object();
-    private static readonly object EVENT_COLUMNWIDTHCHANGING = new object();
-    private static readonly object EVENT_DRAWCOLUMNHEADER = new object();
-    private static readonly object EVENT_DRAWITEM = new object();
-    private static readonly object EVENT_DRAWSUBITEM = new object();
-    private static readonly object EVENT_ITEMSELECTIONCHANGED = new object();
-    private static readonly object EVENT_RETRIEVEVIRTUALITEM = new object();
-    private static readonly object EVENT_SEARCHFORVIRTUALITEM = new object();
-    private static readonly object EVENT_SELECTEDINDEXCHANGED = new object();
-    private static readonly object EVENT_VIRTUALITEMSSELECTIONRANGECHANGED = new object();
-    private static readonly object EVENT_RIGHTTOLEFTLAYOUTCHANGED = new object();
-    private static readonly object EVENT_GROUPCOLLAPSEDSTATECHANGED = new object();
-    private static readonly object EVENT_GROUPTASKLINKCLICK = new object();
+    private static readonly object EVENT_CACHEVIRTUALITEMS = new();
+    private static readonly object EVENT_COLUMNREORDERED = new();
+    private static readonly object EVENT_COLUMNWIDTHCHANGED = new();
+    private static readonly object EVENT_COLUMNWIDTHCHANGING = new();
+    private static readonly object EVENT_DRAWCOLUMNHEADER = new();
+    private static readonly object EVENT_DRAWITEM = new();
+    private static readonly object EVENT_DRAWSUBITEM = new();
+    private static readonly object EVENT_ITEMSELECTIONCHANGED = new();
+    private static readonly object EVENT_RETRIEVEVIRTUALITEM = new();
+    private static readonly object EVENT_SEARCHFORVIRTUALITEM = new();
+    private static readonly object EVENT_SELECTEDINDEXCHANGED = new();
+    private static readonly object EVENT_VIRTUALITEMSSELECTIONRANGECHANGED = new();
+    private static readonly object EVENT_RIGHTTOLEFTLAYOUTCHANGED = new();
+    private static readonly object EVENT_GROUPCOLLAPSEDSTATECHANGED = new();
+    private static readonly object EVENT_GROUPTASKLINKCLICK = new();
 
     private ItemActivation _activation = ItemActivation.Standard;
     private ListViewAlignment _alignStyle = ListViewAlignment.Top;
@@ -398,7 +398,7 @@ public partial class ListView : Control
                     // We don't need to delete it and this causes BAD problems w/ the Win32 list view control.
                     fixed (char* pBackgroundImageFileName = _backgroundImageFileName)
                     {
-                        var lvbkImage = default(LVBKIMAGEW);
+                        LVBKIMAGEW lvbkImage = default;
                         if (BackgroundImageTiled)
                         {
                             lvbkImage.ulFlags = LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_STYLE_TILE;
@@ -1679,7 +1679,7 @@ public partial class ListView : Control
                 return Size.Empty;
             }
 
-            var tileViewInfo = new LVTILEVIEWINFO
+            LVTILEVIEWINFO tileViewInfo = new()
             {
                 cbSize = (uint)sizeof(LVTILEVIEWINFO),
                 dwMask = LVTILEVIEWINFO_MASK.LVTVIM_TILESIZE
@@ -1707,7 +1707,7 @@ public partial class ListView : Control
                 return;
             }
 
-            var tileViewInfo = new LVTILEVIEWINFO
+            LVTILEVIEWINFO tileViewInfo = new()
             {
                 cbSize = (uint)sizeof(LVTILEVIEWINFO),
                 dwMask = LVTILEVIEWINFO_MASK.LVTVIM_TILESIZE,
@@ -3362,7 +3362,7 @@ public partial class ListView : Control
         {
             fixed (char* pText = text)
             {
-                var lvFindInfo = default(LVFINDINFOW);
+                LVFINDINFOW lvFindInfo = default;
                 if (isTextSearch)
                 {
                     lvFindInfo.flags = LVFINDINFOW_FLAGS.LVFI_STRING;
@@ -3475,9 +3475,9 @@ public partial class ListView : Control
         ApplyUpdateCachedItems();
         if (IsHandleCreated && !ListViewHandleDestroyed)
         {
-            var info = new LVFINDINFOW
+            LVFINDINFOW info = new()
             {
-                lParam = (IntPtr)item.ID,
+                lParam = item.ID,
                 flags = LVFINDINFOW_FLAGS.LVFI_PARAM
             };
 
@@ -3545,7 +3545,7 @@ public partial class ListView : Control
     /// </summary>
     public ListViewItem? GetItemAt(int x, int y)
     {
-        var lvhi = new LVHITTESTINFO
+        LVHITTESTINFO lvhi = new()
         {
             pt = new Point(x, y)
         };
@@ -3585,7 +3585,7 @@ public partial class ListView : Control
         // The second condition is necessary for the correct display of the keyboard tooltip,
         // since the logic of the external tooltip blocks its display
         bool isExternalTooltip = ShowItemToolTips && tooltip != KeyboardToolTip;
-        var wrapper = new ComCtl32.ToolInfoWrapper<Control>(this, flags, isExternalTooltip ? null : caption);
+        ComCtl32.ToolInfoWrapper<Control> wrapper = new(this, flags, isExternalTooltip ? null : caption);
         if (isExternalTooltip)
             wrapper.Info.lpszText = (char*)(-1);
 
@@ -3594,7 +3594,7 @@ public partial class ListView : Control
 
     internal void GetSubItemAt(int x, int y, out int iItem, out int iSubItem)
     {
-        var lvhi = new LVHITTESTINFO
+        LVHITTESTINFO lvhi = new()
         {
             pt = new Point(x, y)
         };
@@ -3614,9 +3614,9 @@ public partial class ListView : Control
 
     internal Point GetItemPosition(int index)
     {
-        var pt = default(Point);
-        PInvoke.SendMessage(this, PInvoke.LVM_GETITEMPOSITION, (WPARAM)index, ref pt);
-        return pt;
+        Point position = default;
+        PInvoke.SendMessage(this, PInvoke.LVM_GETITEMPOSITION, (WPARAM)index, ref position);
+        return position;
     }
 
     internal LIST_VIEW_ITEM_STATE_FLAGS GetItemState(int index)
@@ -3660,7 +3660,7 @@ public partial class ListView : Control
             return Rectangle.Empty;
         }
 
-        var itemrect = new RECT
+        RECT itemrect = new()
         {
             left = (int)portion
         };
@@ -3692,7 +3692,7 @@ public partial class ListView : Control
             return Rectangle.Empty;
         }
 
-        var itemrect = new RECT
+        RECT itemrect = new()
         {
             left = 0
         };
@@ -3742,7 +3742,7 @@ public partial class ListView : Control
             return Rectangle.Empty;
         }
 
-        var itemrect = new RECT
+        RECT itemrect = new()
         {
             left = (int)portion,
             top = subItemIndex
@@ -3791,7 +3791,7 @@ public partial class ListView : Control
             return new ListViewHitTestInfo(hitItem: null, hitSubItem: null, hitLocation: ListViewHitTestLocations.None);
         }
 
-        var lvhi = new LVHITTESTINFO
+        LVHITTESTINFO lvhi = new()
         {
             pt = new Point(x, y)
         };
@@ -3984,7 +3984,7 @@ public partial class ListView : Control
 
     private unsafe int InsertColumnNative(int index, ColumnHeader ch)
     {
-        var lvColumn = new LVCOLUMNW
+        LVCOLUMNW lvColumn = new()
         {
             mask = LVCOLUMNW_MASK.LVCF_FMT | LVCOLUMNW_MASK.LVCF_TEXT | LVCOLUMNW_MASK.LVCF_WIDTH
         };
@@ -4041,7 +4041,7 @@ public partial class ListView : Control
             for (int i = 0; i < Items.Count; i++)
             {
                 ListViewItem item = Items[i];
-                var lvItem = new LVITEMW
+                LVITEMW lvItem = new()
                 {
                     iItem = item.Index,
                     mask = LIST_VIEW_ITEM_FLAGS.LVIF_GROUPID
@@ -4199,7 +4199,7 @@ public partial class ListView : Control
 
                 Debug.Assert(Items.Contains(li), "Make sure ListView.Items contains this item before adding the native LVITEM. Otherwise, custom-drawing may break.");
 
-                var lvItem = new LVITEMW
+                LVITEMW lvItem = new()
                 {
                     mask = LIST_VIEW_ITEM_FLAGS.LVIF_TEXT | LIST_VIEW_ITEM_FLAGS.LVIF_IMAGE |
                             LIST_VIEW_ITEM_FLAGS.LVIF_PARAM | LIST_VIEW_ITEM_FLAGS.LVIF_INDENT |
@@ -4207,7 +4207,7 @@ public partial class ListView : Control
                     iItem = index + i,
                     iImage = li.ImageIndexer.ActualIndex,
                     iIndent = li.IndentCount,
-                    lParam = (IntPtr)li.ID,
+                    lParam = li.ID,
                     cColumns = _columnHeaders is not null ? Math.Min(MAXTILECOLUMNS, _columnHeaders.Length) : 0,
                 };
 
@@ -4989,13 +4989,13 @@ public partial class ListView : Control
 
     private void RealizeAllSubItems()
     {
-        var lvItem = default(LVITEMW);
+        LVITEMW item = default;
         for (int i = 0; i < _itemCount; i++)
         {
             int subItemCount = Items[i].SubItems.Count;
             for (int j = 0; j < subItemCount; j++)
             {
-                SetItemText(i, j, Items[i].SubItems[j].Text, ref lvItem);
+                SetItemText(i, j, Items[i].SubItems[j].Text, ref item);
             }
         }
     }
@@ -5197,7 +5197,7 @@ public partial class ListView : Control
         // needed for OleInitialize
         Application.OleRequired();
 
-        var lvbkImage = default(LVBKIMAGEW);
+        LVBKIMAGEW backgroundImage = default;
 
         // first, is there an existing temporary file to delete, remember its name
         // so that we can delete it if the list control doesn't...
@@ -5210,27 +5210,27 @@ public partial class ListView : Control
 
             BackgroundImage.Save(_backgroundImageFileName, System.Drawing.Imaging.ImageFormat.Bmp);
 
-            lvbkImage.cchImageMax = (uint)(_backgroundImageFileName.Length + 1);
-            lvbkImage.ulFlags = LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_SOURCE_URL;
+            backgroundImage.cchImageMax = (uint)(_backgroundImageFileName.Length + 1);
+            backgroundImage.ulFlags = LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_SOURCE_URL;
             if (BackgroundImageTiled)
             {
-                lvbkImage.ulFlags |= LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_STYLE_TILE;
+                backgroundImage.ulFlags |= LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_STYLE_TILE;
             }
             else
             {
-                lvbkImage.ulFlags |= LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_STYLE_NORMAL;
+                backgroundImage.ulFlags |= LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_STYLE_NORMAL;
             }
         }
         else
         {
-            lvbkImage.ulFlags = LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_SOURCE_NONE;
+            backgroundImage.ulFlags = LIST_VIEW_BACKGROUND_IMAGE_FLAGS.LVBKIF_SOURCE_NONE;
             _backgroundImageFileName = string.Empty;
         }
 
         fixed (char* pBackgroundImageFileName = _backgroundImageFileName)
         {
-            lvbkImage.pszImage = pBackgroundImageFileName;
-            PInvoke.SendMessage(this, PInvoke.LVM_SETBKIMAGEW, (WPARAM)0, ref lvbkImage);
+            backgroundImage.pszImage = pBackgroundImageFileName;
+            PInvoke.SendMessage(this, PInvoke.LVM_SETBKIMAGEW, (WPARAM)0, ref backgroundImage);
         }
 
         if (string.IsNullOrEmpty(fileNameToDelete))
@@ -5470,7 +5470,7 @@ public partial class ListView : Control
             return;
         }
 
-        var lvItem = new LVITEMW
+        LVITEMW lvItem = new()
         {
             mask = LIST_VIEW_ITEM_FLAGS.LVIF_IMAGE,
             iItem = itemIndex,
@@ -5492,7 +5492,7 @@ public partial class ListView : Control
             return;
         }
 
-        var lvItem = new LVITEMW
+        LVITEMW lvItem = new()
         {
             mask = LIST_VIEW_ITEM_FLAGS.LVIF_INDENT,
             iItem = index,
@@ -5516,7 +5516,7 @@ public partial class ListView : Control
 
         Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
-        var pt = new Point(x, y);
+        Point pt = new(x, y);
         PInvoke.SendMessage(this, PInvoke.LVM_SETITEMPOSITION32, (WPARAM)index, ref pt);
     }
 
@@ -5532,7 +5532,7 @@ public partial class ListView : Control
             return;
         }
 
-        var lvItem = new LVITEMW
+        LVITEMW lvItem = new()
         {
             mask = LIST_VIEW_ITEM_FLAGS.LVIF_STATE,
             state = state,
@@ -5544,7 +5544,7 @@ public partial class ListView : Control
 
     internal void SetItemText(int itemIndex, int subItemIndex, string text)
     {
-        var lvItem = default(LVITEMW);
+        LVITEMW lvItem = default;
         SetItemText(itemIndex, subItemIndex, text, ref lvItem);
     }
 
@@ -5778,7 +5778,7 @@ public partial class ListView : Control
         string footer = group.Footer;
         string subtitle = group.Subtitle;
         string task = group.TaskLink;
-        var lvgroup = new LVGROUPW
+        LVGROUPW lvgroup = new()
         {
             cbSize = (uint)sizeof(LVGROUPW),
             mask = LVGF.HEADER | LVGF.ALIGN | LVGF.STATE | LVGF.TITLEIMAGE | additionalMask,
@@ -5885,7 +5885,7 @@ public partial class ListView : Control
         Debug.Assert(Application.ComCtlSupportsVisualStyles, "this function works only when ComCtl 6.0 and higher is loaded");
         Debug.Assert(_viewStyle == View.Tile, "this function should be called only in Tile view");
 
-        var tileViewInfo = new LVTILEVIEWINFO
+        LVTILEVIEWINFO tileViewInfo = new()
         {
             cbSize = (uint)sizeof(LVTILEVIEWINFO),
 
@@ -5909,7 +5909,7 @@ public partial class ListView : Control
             return;
         }
 
-        var lvhi = new LVHITTESTINFO
+        LVHITTESTINFO lvhi = new()
         {
             pt = PointToClient(Cursor.Position)
         };
@@ -5951,7 +5951,7 @@ public partial class ListView : Control
             return;
         }
 
-        var lvhi = new LVHITTESTINFO
+        LVHITTESTINFO lvhi = new()
         {
             pt = PointToClient(Cursor.Position)
         };
@@ -6057,7 +6057,7 @@ public partial class ListView : Control
                             Color foreColor = Color.FromArgb((int)PInvoke.GetTextColor(nmcd->hdc).Value);
                             Color backColor = Color.FromArgb((int)PInvoke.GetBkColor(nmcd->hdc).Value);
                             Font font = GetListHeaderFont();
-                            var e = new DrawListViewColumnHeaderEventArgs(
+                            DrawListViewColumnHeaderEventArgs e = new(
                                 g,
                                 nmcd->rc,
                                 (int)nmcd->dwItemSpec,
@@ -6389,7 +6389,7 @@ public partial class ListView : Control
 
     private LVHITTESTINFO SetupHitTestInfo()
     {
-        var lvhi = new LVHITTESTINFO
+        LVHITTESTINFO lvhi = new()
         {
             pt = PointToClient(Cursor.Position)
         };
@@ -6937,10 +6937,10 @@ public partial class ListView : Control
                             startIndex = 0;
                         }
 
-                        var sviEvent = new SearchForVirtualItemEventArgs(
+                        SearchForVirtualItemEventArgs sviEvent = new(
                             isTextSearch,
                             isPrefixSearch,
-                            false, /* includeSubItemsInSearch */
+                            includeSubItemsInSearch: false,
                             text,
                             startingPoint,
                             dir,

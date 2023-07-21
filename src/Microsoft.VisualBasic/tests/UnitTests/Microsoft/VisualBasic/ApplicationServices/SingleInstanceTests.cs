@@ -15,7 +15,7 @@ public class SingleInstanceTests
 
     private sealed class ReceivedArgs
     {
-        private List<string[]> _received = new List<string[]>();
+        private List<string[]> _received = new();
 
         internal void Add(string[] args)
         {

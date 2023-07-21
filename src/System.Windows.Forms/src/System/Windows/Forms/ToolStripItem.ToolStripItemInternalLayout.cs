@@ -18,7 +18,7 @@ public partial class ToolStripItem
         private readonly ToolStripItem _ownerItem;
         private ButtonBaseAdapter.LayoutData? _layoutData;
         private const int BorderWidth = 2;
-        private static readonly Size s_invalidSize = new Size(int.MinValue, int.MinValue);
+        private static readonly Size s_invalidSize = new(int.MinValue, int.MinValue);
 
         private Size _lastPreferredSize = s_invalidSize;
         private ToolStripLayoutData? _parentLayoutData;

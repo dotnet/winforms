@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Layout;
 
 internal partial class FlowLayout : LayoutEngine
 {
-    internal static readonly FlowLayout Instance = new FlowLayout();
+    internal static readonly FlowLayout Instance = new();
 
     private static readonly int s_wrapContentsProperty = PropertyStore.CreateKey();
     private static readonly int s_flowDirectionProperty = PropertyStore.CreateKey();

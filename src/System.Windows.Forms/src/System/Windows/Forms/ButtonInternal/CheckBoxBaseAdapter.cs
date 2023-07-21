@@ -98,7 +98,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
         Color checkBackground,
         bool disabledColors)
     {
-        using var hdc = new DeviceContextHdcScope(deviceContext);
+        using DeviceContextHdcScope hdc = new(deviceContext);
 
         Color color;
 
@@ -212,13 +212,13 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
 
     internal static Rectangle DrawPopupBorder(Graphics g, Rectangle r, ColorData colors)
     {
-        using var hdc = new DeviceContextHdcScope(g);
+        using DeviceContextHdcScope hdc = new(g);
         return DrawPopupBorder(hdc, r, colors);
     }
 
     internal static Rectangle DrawPopupBorder(PaintEventArgs e, Rectangle r, ColorData colors)
     {
-        using var hdc = new DeviceContextHdcScope(e);
+        using DeviceContextHdcScope hdc = new(e);
         return DrawPopupBorder(hdc, r, colors);
     }
 
@@ -324,7 +324,7 @@ internal abstract class CheckBoxBaseAdapter : CheckableControlBaseAdapter
         using (Graphics offscreen = Graphics.FromImage(bitmap))
         {
             offscreen.Clear(Color.Transparent);
-            using var hdc = new DeviceContextHdcScope(offscreen, applyGraphicsState: false);
+            using DeviceContextHdcScope hdc = new(offscreen, applyGraphicsState: false);
             PInvoke.DrawFrameControl(
                 hdc,
                 ref rcCheck,

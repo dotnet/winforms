@@ -10,7 +10,7 @@ namespace System;
 internal class InvariantComparer : IComparer
 {
     private readonly CompareInfo m_compareInfo;
-    internal static readonly InvariantComparer Default = new InvariantComparer();
+    internal static readonly InvariantComparer Default = new();
 
     internal InvariantComparer()
     {

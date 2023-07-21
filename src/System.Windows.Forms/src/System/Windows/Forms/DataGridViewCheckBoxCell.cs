@@ -1443,7 +1443,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                                 using (Graphics offscreen = Graphics.FromImage(bitmap))
                                 {
                                     offscreen.Clear(Color.Transparent);
-                                    using var hdc = new DeviceContextHdcScope(offscreen);
+                                    using DeviceContextHdcScope hdc = new(offscreen);
                                     PInvoke.DrawFrameControl(
                                         hdc,
                                         ref rcCheck,

@@ -1727,7 +1727,7 @@ public class DesignerHostTests
         SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
 
-        object service = new object();
+        object service = new();
         host.AddService(typeof(object), service);
         Assert.Same(service, surface.ServiceContainer.GetService(typeof(object)));
         Assert.Same(service, surface.GetService(typeof(object)));
@@ -1741,7 +1741,7 @@ public class DesignerHostTests
         SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
 
-        object service = new object();
+        object service = new();
         host.AddService(typeof(object), service, promote);
         Assert.Same(service, surface.ServiceContainer.GetService(typeof(object)));
         Assert.Same(service, surface.GetService(typeof(object)));
@@ -1754,7 +1754,7 @@ public class DesignerHostTests
         SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
 
-        object service = new object();
+        object service = new();
         ServiceCreatorCallback callback = (container, serviceType) => service;
         host.AddService(typeof(object), callback);
         Assert.Same(service, surface.ServiceContainer.GetService(typeof(object)));
@@ -1769,7 +1769,7 @@ public class DesignerHostTests
         SubDesignSurface surface = new();
         IDesignerLoaderHost2 host = surface.Host;
 
-        object service = new object();
+        object service = new();
         ServiceCreatorCallback callback = (container, serviceType) => service;
         host.AddService(typeof(object), callback, promote);
         Assert.Same(service, surface.ServiceContainer.GetService(typeof(object)));

@@ -28,8 +28,8 @@ public partial class PrintPreviewControl : Control
     private int _rows = 1;
     private int _columns = 1;
     private bool _autoZoom = true;
-    private Size _virtualSize = new Size(1, 1);
-    private Point _position = new Point(0, 0);
+    private Size _virtualSize = new(1, 1);
+    private Point _position = new(0, 0);
 
     private readonly int _focusHOffset = SystemInformation.HorizontalFocusThickness;
     private readonly int _focusVOffset = SystemInformation.VerticalFocusThickness;
@@ -224,7 +224,7 @@ public partial class PrintPreviewControl : Control
         }
     }
 
-    private static readonly object EVENT_STARTPAGECHANGED = new object();
+    private static readonly object EVENT_STARTPAGECHANGED = new();
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
@@ -685,7 +685,8 @@ public partial class PrintPreviewControl : Control
                         int y = offset.Y + borderPixelsY * (row + 1) + lastImageSize.Y;
 
                         lastImageSize.X += imagePixels.Width;
-                        //The Height is the Max of any PageHeight..
+
+                        // The Height is the Max of any PageHeight..
                         maxImageHeight = Math.Max(maxImageHeight, imagePixels.Height);
 
                         pageRenderArea[imageIndex - StartPage] = new Rectangle(x, y, imagePixels.Width, imagePixels.Height);
@@ -769,15 +770,15 @@ public partial class PrintPreviewControl : Control
             => (int)(pixels * 100.0 / dpi);
 
     private static Size PixelsToPhysical(Size pixels, Point dpi)
-        => new Size(PixelsToPhysical(pixels.Width, dpi.X),
-                    PixelsToPhysical(pixels.Height, dpi.Y));
+        => new (PixelsToPhysical(pixels.Width, dpi.X),
+                PixelsToPhysical(pixels.Height, dpi.Y));
 
     private static int PhysicalToPixels(int physicalSize, int dpi)
         => (int)(physicalSize * dpi / 100.0);
 
     private static Size PhysicalToPixels(Size physical, Point dpi)
-        => new Size(PhysicalToPixels(physical.Width, dpi.X),
-                    PhysicalToPixels(physical.Height, dpi.Y));
+        => new (PhysicalToPixels(physical.Width, dpi.X),
+                PhysicalToPixels(physical.Height, dpi.Y));
 
     private void SetPositionNoInvalidate(Point value)
     {

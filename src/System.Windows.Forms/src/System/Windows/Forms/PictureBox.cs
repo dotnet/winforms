@@ -62,7 +62,7 @@ public partial class PictureBox : Control, ISupportInitialize
     private SendOrPostCallback _loadCompletedDelegate;
     private SendOrPostCallback _loadProgressDelegate;
     private bool _handleValid;
-    private readonly object _internalSyncObject = new object();
+    private readonly object _internalSyncObject = new();
 
     // These default images will be demand loaded.
     private Image _defaultInitialImage;
@@ -74,8 +74,8 @@ public partial class PictureBox : Control, ISupportInitialize
     [ThreadStatic]
     private static Image t_defaultErrorImageForThread;
 
-    private static readonly object s_loadCompletedKey = new object();
-    private static readonly object s_loadProgressChangedKey = new object();
+    private static readonly object s_loadCompletedKey = new();
+    private static readonly object s_loadProgressChangedKey = new();
 
     private const int AsyncOperationInProgressState = 0x00000001;
     private const int CancellationPendingState = 0x00000002;
@@ -214,7 +214,7 @@ public partial class PictureBox : Control, ISupportInitialize
     ///  Deriving classes can override this to configure a default size for their control.
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
-    protected override Size DefaultSize => new Size(100, 50);
+    protected override Size DefaultSize => new(100, 50);
 
     [SRCategory(nameof(SR.CatAsynchronous))]
     [Localizable(true)]
@@ -876,7 +876,7 @@ public partial class PictureBox : Control, ISupportInitialize
         }
     }
 
-    private static readonly object EVENT_SIZEMODECHANGED = new object();
+    private static readonly object EVENT_SIZEMODECHANGED = new();
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.PictureBoxOnSizeModeChangedDescr))]

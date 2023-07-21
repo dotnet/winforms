@@ -13,15 +13,15 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(Items))]
 public partial class ToolStripComboBox : ToolStripControlHost
 {
-    internal static readonly object s_eventDropDown = new object();
-    internal static readonly object s_eventDropDownClosed = new object();
-    internal static readonly object s_eventDropDownStyleChanged = new object();
-    internal static readonly object s_eventSelectedIndexChanged = new object();
-    internal static readonly object s_eventSelectionChangeCommitted = new object();
-    internal static readonly object s_eventTextUpdate = new object();
+    internal static readonly object s_eventDropDown = new();
+    internal static readonly object s_eventDropDownClosed = new();
+    internal static readonly object s_eventDropDownStyleChanged = new();
+    internal static readonly object s_eventSelectedIndexChanged = new();
+    internal static readonly object s_eventSelectionChangeCommitted = new();
+    internal static readonly object s_eventTextUpdate = new();
 
-    private static readonly Padding s_dropDownPadding = new Padding(2);
-    private static readonly Padding s_padding = new Padding(1, 0, 1, 0);
+    private static readonly Padding s_dropDownPadding = new(2);
+    private static readonly Padding s_padding = new(1, 0, 1, 0);
 
     private Padding _scaledDropDownPadding = s_dropDownPadding;
     private Padding _scaledPadding = s_padding;

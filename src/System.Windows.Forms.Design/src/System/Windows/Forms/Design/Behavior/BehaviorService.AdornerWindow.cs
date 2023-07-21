@@ -17,7 +17,7 @@ public sealed partial class BehaviorService
     {
         private readonly BehaviorService _behaviorService;
         private static MouseHook? s_mouseHook;
-        private static readonly List<AdornerWindow> s_adornerWindowList = new List<AdornerWindow>();
+        private static readonly List<AdornerWindow> s_adornerWindowList = new();
 
         /// <summary>
         ///  Constructor that parents itself to the Designer Frame and hooks all
@@ -318,19 +318,12 @@ public sealed partial class BehaviorService
 
                 case PInvoke.WM_NCHITTEST:
                     Point pt = PARAM.ToPoint(m.LParamInternal);
-
-                    var pt1 = default(Point);
-                    pt1 = PointToClient(pt1);
+                    Point pt1 = PointToClient(default);
                     pt.Offset(pt1.X, pt1.Y);
 
-                    if (_behaviorService.PropagateHitTest(pt) && !ProcessingDrag)
-                    {
-                        m.ResultInternal = (LRESULT)PInvoke.HTTRANSPARENT;
-                    }
-                    else
-                    {
-                        m.ResultInternal = (LRESULT)(int)PInvoke.HTCLIENT;
-                    }
+                    m.ResultInternal = _behaviorService.PropagateHitTest(pt) && !ProcessingDrag
+                        ? (LRESULT)PInvoke.HTTRANSPARENT
+                        : (LRESULT)(int)PInvoke.HTCLIENT;
 
                     break;
 

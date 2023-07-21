@@ -182,21 +182,21 @@ public class FeatureSupportTests
             return new Version(1, 2, 3, 4);
         }
 
-        public object _field = new object();
-        public static object s_field = new object();
+        public object _field = new();
+        public static object s_field = new();
 
-        public static object s_zeroVersionField = new object();
-        public static object s_nonZeroVersionField = new object();
+        public static object s_zeroVersionField = new();
+        public static object s_nonZeroVersionField = new();
 
 #pragma warning disable CA1823 // Unused field
-        private readonly object _privateField = new object();
-        private static readonly object s_privateField = new object();
+        private readonly object _privateField = new();
+        private static readonly object s_privateField = new();
 #pragma warning restore CA1823 // Unused field
     }
 
     private class NonIFeatureSupportClass
     {
-        public object _field = new object();
-        public static object s_field = new object();
+        public object _field = new();
+        public static object s_field = new();
     }
 }

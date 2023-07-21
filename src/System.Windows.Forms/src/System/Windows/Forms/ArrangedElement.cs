@@ -14,7 +14,7 @@ internal abstract class ArrangedElement : Component, IArrangedElement
     private Rectangle _bounds = Rectangle.Empty;
     private IArrangedElement? _parent;
     private BitVector32 _state;
-    private readonly PropertyStore _propertyStore = new PropertyStore();  // Contains all properties that are not always set.
+    private readonly PropertyStore _propertyStore = new();  // Contains all properties that are not always set.
 
     private static readonly int s_stateVisible = BitVector32.CreateMask();
 

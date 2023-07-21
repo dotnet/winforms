@@ -95,7 +95,7 @@ public class TaskDialogButton : TaskDialogControl
     /// <summary>
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>OK</c> button.
     /// </summary>
-    public static TaskDialogButton OK => new TaskDialogButton(TaskDialogResult.OK);
+    public static TaskDialogButton OK => new(TaskDialogResult.OK);
 
     /// <summary>
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Cancel</c> button.
@@ -108,37 +108,37 @@ public class TaskDialogButton : TaskDialogControl
     ///   <see cref="TaskDialogPage.AllowCancel"/>).
     /// </para>
     /// </remarks>
-    public static TaskDialogButton Cancel => new TaskDialogButton(TaskDialogResult.Cancel);
+    public static TaskDialogButton Cancel => new(TaskDialogResult.Cancel);
 
     /// <summary>
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Abort</c> button.
     /// </summary>
-    public static TaskDialogButton Abort => new TaskDialogButton(TaskDialogResult.Abort);
+    public static TaskDialogButton Abort => new(TaskDialogResult.Abort);
 
     /// <summary>
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Retry</c> button.
     /// </summary>
-    public static TaskDialogButton Retry => new TaskDialogButton(TaskDialogResult.Retry);
+    public static TaskDialogButton Retry => new(TaskDialogResult.Retry);
 
     /// <summary>
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Ignore</c> button.
     /// </summary>
-    public static TaskDialogButton Ignore => new TaskDialogButton(TaskDialogResult.Ignore);
+    public static TaskDialogButton Ignore => new(TaskDialogResult.Ignore);
 
     /// <summary>
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Yes</c> button.
     /// </summary>
-    public static TaskDialogButton Yes => new TaskDialogButton(TaskDialogResult.Yes);
+    public static TaskDialogButton Yes => new(TaskDialogResult.Yes);
 
     /// <summary>
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>No</c> button.
     /// </summary>
-    public static TaskDialogButton No => new TaskDialogButton(TaskDialogResult.No);
+    public static TaskDialogButton No => new(TaskDialogResult.No);
 
     /// <summary>
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Close</c> button.
     /// </summary>
-    public static TaskDialogButton Close => new TaskDialogButton(TaskDialogResult.Close);
+    public static TaskDialogButton Close => new(TaskDialogResult.Close);
 
     /// <summary>
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Help</c> button.
@@ -149,17 +149,17 @@ public class TaskDialogButton : TaskDialogControl
     ///   <see cref="TaskDialogPage.HelpRequest"/> event.
     /// </para>
     /// </remarks>
-    public static TaskDialogButton Help => new TaskDialogButton(TaskDialogResult.Help);
+    public static TaskDialogButton Help => new(TaskDialogResult.Help);
 
     /// <summary>
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Try Again</c> button.
     /// </summary>
-    public static TaskDialogButton TryAgain => new TaskDialogButton(TaskDialogResult.TryAgain);
+    public static TaskDialogButton TryAgain => new(TaskDialogResult.TryAgain);
 
     /// <summary>
     ///  Gets a standard <see cref="TaskDialogButton"/> instance representing the <c>Continue</c> button.
     /// </summary>
-    public static TaskDialogButton Continue => new TaskDialogButton(TaskDialogResult.Continue);
+    public static TaskDialogButton Continue => new(TaskDialogResult.Continue);
 
     /// <summary>
     ///   Gets or sets a value that indicates whether the task dialog should close

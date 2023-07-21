@@ -909,7 +909,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         get => _selectedObjects is null ? Array.Empty<object>() : (object[])_selectedObjects.Clone();
         set
         {
-            using var _ = new FreezePaintScope(this);
+            using FreezePaintScope _ = new(this);
 
             SetFlag(Flags.FullRefreshAfterBatch, false);
             if (GetFlag(Flags.BatchMode))
@@ -2572,7 +2572,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             return;
         }
 
-        using var _ = new FreezePaintScope(this);
+        using FreezePaintScope _ = new(this);
 
         if (!dividerOnly)
         {
@@ -3030,7 +3030,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private void OnViewSortButtonClick(object sender, EventArgs e)
     {
-        using (var _ = new FreezePaintScope(this))
+        using (FreezePaintScope _ = new(this))
         {
             // Is this tab selected? If so, do nothing.
             if (sender == _viewSortButtons[_selectedViewSort])
@@ -3079,7 +3079,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
 
     private void OnViewTabButtonClick(object sender, EventArgs e)
     {
-        using (var _ = new FreezePaintScope(this))
+        using (FreezePaintScope _ = new(this))
         {
             SelectViewTabButton((ToolStripButton)sender, true);
             OnLayoutInternal(dividerOnly: false);
@@ -3792,7 +3792,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
             return;
         }
 
-        using var _ = new FreezePaintScope(this);
+        using FreezePaintScope _ = new(this);
 
         if (_normalButtonImages is null || fullRebuild)
         {
@@ -4060,7 +4060,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         if (e.Y <= 1 || (size.Height - e.Y) <= 1)
         {
             // Convert the coordinates.
-            var temp = new Point(e.X, e.Y);
+            Point temp = new(e.X, e.Y);
             temp = WindowsFormsUtils.TranslatePoint(temp, child, this);
 
             // Forward the message.

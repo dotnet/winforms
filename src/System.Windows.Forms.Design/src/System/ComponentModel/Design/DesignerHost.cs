@@ -23,22 +23,22 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     private static readonly Type[] s_defaultServices = new Type[] { typeof(IDesignerHost), typeof(IContainer), typeof(IComponentChangeService), typeof(IDesignerLoaderHost2) };
 
     // IDesignerHost events
-    private static readonly object s_eventActivated = new object(); // Designer has been activated
-    private static readonly object s_eventDeactivated = new object(); // Designer has been deactivated
-    private static readonly object s_eventLoadComplete = new object(); // Loading has been completed
-    private static readonly object s_eventTransactionClosed = new object(); // The last transaction has been closed
-    private static readonly object s_eventTransactionClosing = new object(); // The last transaction is about to be closed
-    private static readonly object s_eventTransactionOpened = new object(); // The first transaction has been opened
-    private static readonly object s_eventTransactionOpening = new object(); // The first transaction is about to be opened
+    private static readonly object s_eventActivated = new(); // Designer has been activated
+    private static readonly object s_eventDeactivated = new(); // Designer has been deactivated
+    private static readonly object s_eventLoadComplete = new(); // Loading has been completed
+    private static readonly object s_eventTransactionClosed = new(); // The last transaction has been closed
+    private static readonly object s_eventTransactionClosing = new(); // The last transaction is about to be closed
+    private static readonly object s_eventTransactionOpened = new(); // The first transaction has been opened
+    private static readonly object s_eventTransactionOpening = new(); // The first transaction is about to be opened
 
     // IComponentChangeService events
-    private static readonly object s_eventComponentAdding = new object(); // A component is about to be added to the container
-    private static readonly object s_eventComponentAdded = new object(); // A component was just added to the container
-    private static readonly object s_eventComponentChanging = new object(); // A component is about to be changed
-    private static readonly object s_eventComponentChanged = new object(); // A component has changed
-    private static readonly object s_eventComponentRemoving = new object(); // A component is about to be removed from the container
-    private static readonly object s_eventComponentRemoved = new object(); // A component has been removed from the container
-    private static readonly object s_eventComponentRename = new object(); // A component has been renamed
+    private static readonly object s_eventComponentAdding = new(); // A component is about to be added to the container
+    private static readonly object s_eventComponentAdded = new(); // A component was just added to the container
+    private static readonly object s_eventComponentChanging = new(); // A component is about to be changed
+    private static readonly object s_eventComponentChanged = new(); // A component has changed
+    private static readonly object s_eventComponentRemoving = new(); // A component is about to be removed from the container
+    private static readonly object s_eventComponentRemoved = new(); // A component has been removed from the container
+    private static readonly object s_eventComponentRename = new(); // A component has been renamed
 
     // Member variables
     private BitVector32 _state; // state for this host
@@ -53,7 +53,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     private List<string>? _savedSelection; // set of selected components names saved across reloads
     private HostDesigntimeLicenseContext? _licenseCtx;
     private IDesignerEventService? _designerEventService;
-    private static readonly object s_selfLock = new object();
+    private static readonly object s_selfLock = new();
     private bool _ignoreErrorsDuringReload;
     private TypeDescriptionProviderService? _typeService;
     private bool _typeServiceChecked;
@@ -61,7 +61,7 @@ internal sealed partial class DesignerHost : Container, IDesignerLoaderHost2, ID
     public DesignerHost(DesignSurface surface)
     {
         _surface = surface;
-        _state = default(BitVector32);
+        _state = default;
         _designers = new();
         _events = new EventHandlerList();
 

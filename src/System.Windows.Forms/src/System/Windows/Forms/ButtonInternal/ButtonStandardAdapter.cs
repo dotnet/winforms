@@ -89,7 +89,7 @@ internal class ButtonStandardAdapter : ButtonBaseAdapter
             }
             else
             {
-                using var hdc = new DeviceContextHdcScope(e);
+                using DeviceContextHdcScope hdc = new(e);
                 hdc.FillRectangle(
                     bounds,
                     isHighContrastHighlighted

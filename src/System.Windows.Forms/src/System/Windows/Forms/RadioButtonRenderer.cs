@@ -80,7 +80,7 @@ public static class RadioButtonRenderer
         HWND hwnd)
     {
         InitializeRenderer((int)state);
-        Rectangle glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hwnd));
+        Rectangle glyphBounds = new(glyphLocation, GetGlyphSize(hdc, state, hwnd));
         t_visualStyleRenderer.DrawBackground(hdc, glyphBounds, hwnd);
     }
 
@@ -93,12 +93,12 @@ public static class RadioButtonRenderer
         Rectangle glyphBounds;
         if (RenderWithVisualStyles)
         {
-            using var hdc = new DeviceContextHdcScope(graphics);
+            using DeviceContextHdcScope hdc = new(graphics);
             DrawRadioButtonWithVisualStyles(hdc, glyphLocation, state, hwnd);
         }
         else
         {
-            using (var hdc = new DeviceContextHdcScope(graphics))
+            using (DeviceContextHdcScope hdc = new(graphics))
             {
                 glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hwnd));
             }
@@ -152,7 +152,7 @@ public static class RadioButtonRenderer
         HWND hwnd)
     {
         Rectangle glyphBounds;
-        using (var hdc = new DeviceContextHdcScope(g))
+        using (DeviceContextHdcScope hdc = new(g))
         {
             glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hwnd));
         }
@@ -244,7 +244,7 @@ public static class RadioButtonRenderer
         HWND hwnd)
     {
         Rectangle glyphBounds;
-        using (var hdc = new DeviceContextHdcScope(g))
+        using (DeviceContextHdcScope hdc = new(g))
         {
             glyphBounds = new Rectangle(glyphLocation, GetGlyphSize(hdc, state, hwnd));
         }
@@ -280,7 +280,7 @@ public static class RadioButtonRenderer
     /// </summary>
     public static Size GetGlyphSize(Graphics g, RadioButtonState state)
     {
-        using var hdc = new DeviceContextHdcScope(g);
+        using DeviceContextHdcScope hdc = new(g);
         return GetGlyphSize(hdc, state, HWND.Null);
     }
 

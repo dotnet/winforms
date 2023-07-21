@@ -26,16 +26,16 @@ public class BindingSource : Component,
                              ICurrencyManagerProvider
 {
     // Public events
-    private static readonly object s_eventAddingNew = new object();
-    private static readonly object s_eventBindingComplete = new object();
-    private static readonly object s_eventCurrentChanged = new object();
-    private static readonly object s_eventCurrentItemChanged = new object();
-    private static readonly object s_eventDataError = new object();
-    private static readonly object s_eventDataMemberChanged = new object();
-    private static readonly object s_eventDataSourceChanged = new object();
-    private static readonly object s_eventListChanged = new object();
-    private static readonly object s_eventPositionChanged = new object();
-    private static readonly object s_eventInitialized = new object();
+    private static readonly object s_eventAddingNew = new();
+    private static readonly object s_eventBindingComplete = new();
+    private static readonly object s_eventCurrentChanged = new();
+    private static readonly object s_eventCurrentItemChanged = new();
+    private static readonly object s_eventDataError = new();
+    private static readonly object s_eventDataMemberChanged = new();
+    private static readonly object s_eventDataSourceChanged = new();
+    private static readonly object s_eventListChanged = new();
+    private static readonly object s_eventPositionChanged = new();
+    private static readonly object s_eventInitialized = new();
 
     // Public property values
     private object _dataSource;

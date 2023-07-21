@@ -18,7 +18,7 @@ public class CodeDomSerializer : CodeDomSerializerBase
     private static CodeDomSerializer s_default;
     private static readonly Attribute[] _runTimeFilter = new Attribute[] { DesignOnlyAttribute.No };
     private static readonly Attribute[] _designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
-    private static readonly CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
+    private static readonly CodeThisReferenceExpression _thisRef = new();
 
     internal static CodeDomSerializer Default
     {

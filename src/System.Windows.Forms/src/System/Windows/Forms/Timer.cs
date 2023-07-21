@@ -28,7 +28,7 @@ public class Timer : Component
     // Holder for the HWND that handles our Timer messages.
     private TimerNativeWindow? _timerWindow;
 
-    private readonly object _syncObj = new object();
+    private readonly object _syncObj = new();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Timer"/> class.
@@ -207,7 +207,7 @@ public class Timer : Component
             if (HWND.IsNull)
             {
                 // Create a totally vanilla invisible window just for WM_TIMER messages
-                var cp = new CreateParams
+                CreateParams cp = new()
                 {
                     Style = 0,
                     ExStyle = 0,

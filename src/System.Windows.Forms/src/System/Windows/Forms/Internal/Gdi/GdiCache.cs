@@ -14,7 +14,7 @@ internal static partial class GdiCache
     [ThreadStatic]
     private static ScreenDcCache? s_dcCache;
 
-    private static readonly FontCache s_fontCache = new FontCache();
+    private static readonly FontCache s_fontCache = new();
 
     /// <summary>
     ///  Gets an <see cref="HDC"/> based off of the primary display.

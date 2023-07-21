@@ -176,7 +176,7 @@ internal abstract partial class ButtonBaseAdapter
 
         private Composition GetHorizontalComposition()
         {
-            BitVector32 action = default(BitVector32);
+            BitVector32 action = default;
 
             // Checks reserve space horizontally if possible, so only AnyLeft/AnyRight prevents combination.
             action[s_combineCheck] =
@@ -239,7 +239,7 @@ internal abstract partial class ButtonBaseAdapter
 
         private Composition GetVerticalComposition()
         {
-            BitVector32 action = default(BitVector32);
+            BitVector32 action = default;
 
             // Checks reserve space horizontally if possible, so only Top/Bottom prevents combination.
             action[s_combineCheck] = CheckAlign == ContentAlignment.MiddleCenter || !LayoutUtils.IsVerticalAlignment(CheckAlign);

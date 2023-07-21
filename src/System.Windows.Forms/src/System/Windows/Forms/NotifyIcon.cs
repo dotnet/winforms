@@ -21,21 +21,21 @@ namespace System.Windows.Forms;
 public sealed partial class NotifyIcon : Component
 {
     internal const int MaxTextSize = 127;
-    private static readonly object EVENT_MOUSEDOWN = new object();
-    private static readonly object EVENT_MOUSEMOVE = new object();
-    private static readonly object EVENT_MOUSEUP = new object();
-    private static readonly object EVENT_CLICK = new object();
-    private static readonly object EVENT_DOUBLECLICK = new object();
-    private static readonly object EVENT_MOUSECLICK = new object();
-    private static readonly object EVENT_MOUSEDOUBLECLICK = new object();
-    private static readonly object EVENT_BALLOONTIPSHOWN = new object();
-    private static readonly object EVENT_BALLOONTIPCLICKED = new object();
-    private static readonly object EVENT_BALLOONTIPCLOSED = new object();
+    private static readonly object EVENT_MOUSEDOWN = new();
+    private static readonly object EVENT_MOUSEMOVE = new();
+    private static readonly object EVENT_MOUSEUP = new();
+    private static readonly object EVENT_CLICK = new();
+    private static readonly object EVENT_DOUBLECLICK = new();
+    private static readonly object EVENT_MOUSECLICK = new();
+    private static readonly object EVENT_MOUSEDOUBLECLICK = new();
+    private static readonly object EVENT_BALLOONTIPSHOWN = new();
+    private static readonly object EVENT_BALLOONTIPCLICKED = new();
+    private static readonly object EVENT_BALLOONTIPCLOSED = new();
 
     private const int WM_TRAYMOUSEMESSAGE = (int)PInvoke.WM_USER + 1024;
     private static readonly MessageId WM_TASKBARCREATED = PInvoke.RegisterWindowMessage("TaskbarCreated");
 
-    private readonly object _syncObj = new object();
+    private readonly object _syncObj = new();
 
     private Icon? _icon;
     private string _text = string.Empty;
@@ -569,13 +569,14 @@ public sealed partial class NotifyIcon : Component
                 return;
             }
 
-            var data = new NOTIFYICONDATAW
+            NOTIFYICONDATAW data = new()
             {
                 cbSize = (uint)sizeof(NOTIFYICONDATAW),
                 uFlags = NIF.INFO,
                 uID = _id,
                 uTimeoutOrVersion = (uint)timeout
             };
+
             if (_window.Handle == IntPtr.Zero)
             {
                 _window.CreateHandle(new CreateParams());
@@ -639,13 +640,14 @@ public sealed partial class NotifyIcon : Component
 
             _window.LockReference(showIconInTray);
 
-            var data = new NOTIFYICONDATAW
+            NOTIFYICONDATAW data = new()
             {
                 cbSize = (uint)sizeof(NOTIFYICONDATAW),
                 uCallbackMessage = WM_TRAYMOUSEMESSAGE,
                 uFlags = NIF.MESSAGE,
                 uID = _id
             };
+
             if (showIconInTray)
             {
                 if (_window.Handle == IntPtr.Zero)

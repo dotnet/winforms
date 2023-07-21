@@ -2307,7 +2307,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return null;
         }
 
-        var licInfo = new LICINFO
+        LICINFO licInfo = new()
         {
             cbLicInfo = sizeof(LICINFO)
         };
@@ -3784,7 +3784,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
 
         LOGFONTW logfont = LOGFONTW.FromFont(font);
-        var fdesc = new FONTDESC
+        FONTDESC fdesc = new()
         {
             cbSizeofstruct = (uint)sizeof(FONTDESC),
             cySize = (CY)font.SizeInPoints,

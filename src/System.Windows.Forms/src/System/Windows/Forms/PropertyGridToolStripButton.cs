@@ -43,16 +43,16 @@ internal partial class PropertyGridToolStripButton : ToolStripButton
 
     private void DrawHightContrastDashedBorer(Graphics graphics)
     {
-        var bounds = ClientBounds;
+        Rectangle bounds = ClientBounds;
         float[] dashValues = { 2, 2 };
         int penWidth = 2;
 
-        var focusPen1 = new Pen(SystemColors.ControlText, penWidth)
+        Pen focusPen1 = new(SystemColors.ControlText, penWidth)
         {
             DashPattern = dashValues
         };
 
-        var focusPen2 = new Pen(SystemColors.Control, penWidth)
+        Pen focusPen2 = new(SystemColors.Control, penWidth)
         {
             DashPattern = dashValues,
             DashOffset = 2

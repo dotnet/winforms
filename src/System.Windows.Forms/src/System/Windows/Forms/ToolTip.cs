@@ -1829,7 +1829,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         Control? tool = window as Control;
         if (tool is not null && _tools.ContainsKey(tool))
         {
-            var toolInfo = new ToolInfoWrapper<Control>(tool);
+            ToolInfoWrapper<Control> toolInfo = new(tool);
             if (toolInfo.SendMessage(this, PInvoke.TTM_GETTOOLINFOW) != IntPtr.Zero)
             {
                 TOOLTIP_FLAGS flags = TOOLTIP_FLAGS.TTF_TRACK;
@@ -1990,7 +1990,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
 
     private HWND GetCurrentToolHwnd()
     {
-        var toolInfo = default(ToolInfoWrapper<Control>);
+        ToolInfoWrapper<Control> toolInfo = default;
         if (toolInfo.SendMessage(this, PInvoke.TTM_GETCURRENTTOOLW) != 0)
         {
             return (HWND)toolInfo.Info.hwnd;
@@ -2348,7 +2348,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
             case (int)PInvoke.WM_PAINT:
                 if (OwnerDraw && !_isBalloon && !_trackPosition)
                 {
-                    using var paintScope = new PInvoke.BeginPaintScope((HWND)Handle);
+                    using PInvoke.BeginPaintScope paintScope = new((HWND)Handle);
                     Rectangle bounds = paintScope.PaintRectangle;
                     if (bounds == Rectangle.Empty)
                     {

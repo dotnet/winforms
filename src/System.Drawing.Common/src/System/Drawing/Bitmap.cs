@@ -248,13 +248,13 @@ public sealed class Bitmap : Image
 
         // The new bitmap must be in 32bppARGB  format, because that's the only
         // thing that supports alpha.  (And that's what the image is initialized to -- transparent)
-        using var result = new Bitmap(size.Width, size.Height, PixelFormat.Format32bppArgb);
+        using Bitmap result = new(size.Width, size.Height, PixelFormat.Format32bppArgb);
         using var graphics = Graphics.FromImage(result);
 
         graphics.Clear(Color.Transparent);
         Rectangle rectangle = new Rectangle(0, 0, size.Width, size.Height);
 
-        using (var attributes = new ImageAttributes())
+        using (ImageAttributes attributes = new())
         {
             attributes.SetColorKey(transparentColor, transparentColor);
             graphics.DrawImage(this, rectangle,

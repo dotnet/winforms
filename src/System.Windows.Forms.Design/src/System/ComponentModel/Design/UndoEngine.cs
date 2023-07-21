@@ -21,7 +21,7 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public abstract class UndoEngine : IDisposable
 {
-    private static readonly TraceSwitch s_traceUndo = new TraceSwitch("UndoEngine", "Trace UndoRedo");
+    private static readonly TraceSwitch s_traceUndo = new("UndoEngine", "Trace UndoRedo");
 
     private IServiceProvider _provider;
     private readonly Stack<UndoUnit> _unitStack; // the stack of active (non-committed) units.
@@ -1168,7 +1168,7 @@ public abstract class UndoEngine : IDisposable
 
             public ComponentChangingEventArgs ComponentChangingEventArgs
             {
-                get => new ComponentChangingEventArgs(_openComponent, _member);
+                get => new(_openComponent, _member);
             }
 
             /// <summary>

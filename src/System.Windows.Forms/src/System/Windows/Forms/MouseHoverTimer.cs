@@ -6,7 +6,7 @@ namespace System.Windows.Forms;
 
 internal class MouseHoverTimer : IDisposable
 {
-    private Timer _mouseHoverTimer = new Timer();
+    private Timer _mouseHoverTimer = new();
 
     // Consider - weak reference?
     private ToolStripItem? _currentItem;

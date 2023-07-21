@@ -13,8 +13,8 @@ public partial class MenuStrip : ToolStrip
 {
     private ToolStripMenuItem? _mdiWindowListItem;
 
-    private static readonly object EventMenuActivate = new object();
-    private static readonly object EventMenuDeactivate = new object();
+    private static readonly object EventMenuActivate = new();
+    private static readonly object EventMenuDeactivate = new();
 
     public MenuStrip()
     {

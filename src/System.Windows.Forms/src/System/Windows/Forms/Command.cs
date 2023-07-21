@@ -8,7 +8,7 @@ internal class Command : WeakReference
 {
     private static Command?[]? s_cmds;
     private static int s_icmdTry;
-    private static readonly object s_internalSyncObject = new object();
+    private static readonly object s_internalSyncObject = new();
     private const int IdMin = 0x00100;
     private const int IdLim = 0x10000;
 

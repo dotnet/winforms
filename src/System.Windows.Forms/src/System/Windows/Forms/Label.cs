@@ -305,13 +305,13 @@ public partial class Label : Control, IAutomationLiveRegion
 
     protected override ImeMode DefaultImeMode => ImeMode.Disable;
 
-    protected override Padding DefaultMargin => new Padding(3, 0, 3, 0);
+    protected override Padding DefaultMargin => new(3, 0, 3, 0);
 
     /// <summary>
     ///  Deriving classes can override this to configure a default size for their control.
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
-    protected override Size DefaultSize => new Size(100, AutoSize ? PreferredHeight : 23);
+    protected override Size DefaultSize => new(100, AutoSize ? PreferredHeight : 23);
 
     [SRCategory(nameof(SR.CatAppearance))]
     [DefaultValue(FlatStyle.Standard)]
@@ -1280,7 +1280,7 @@ public partial class Label : Control, IAutomationLiveRegion
         }
 
         Color color;
-        using (var hdc = new DeviceContextHdcScope(e))
+        using (DeviceContextHdcScope hdc = new(e))
         {
             color = hdc.FindNearestColor(Enabled ? ForeColor : DisabledColor);
         }
@@ -1373,7 +1373,7 @@ public partial class Label : Control, IAutomationLiveRegion
     {
         base.PrintToMetaFileRecursive(hDC, lParam, bounds);
 
-        using var mapping = new DCMapping(hDC, bounds);
+        using DCMapping mapping = new(hDC, bounds);
         using Graphics g = hDC.CreateGraphics();
         ControlPaint.PrintBorder(g, new Rectangle(Point.Empty, Size), BorderStyle, Border3DStyle.SunkenOuter);
     }

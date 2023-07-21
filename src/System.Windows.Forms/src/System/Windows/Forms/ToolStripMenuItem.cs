@@ -19,7 +19,7 @@ namespace System.Windows.Forms;
     $"System.ComponentModel.Design.Serialization.CodeDomSerializer, {AssemblyRef.SystemDesign}")]
 public partial class ToolStripMenuItem : ToolStripDropDownItem
 {
-    private static readonly MenuTimer s_menuTimer = new MenuTimer();
+    private static readonly MenuTimer s_menuTimer = new();
 
     private static readonly int s_propShortcutKeys = PropertyStore.CreateKey();
     private static readonly int s_propCheckState = PropertyStore.CreateKey();
@@ -48,17 +48,17 @@ public partial class ToolStripMenuItem : ToolStripDropDownItem
     private string? _cachedShortcutText;
     private Size _cachedShortcutSize = Size.Empty;
 
-    private static readonly Padding s_defaultPadding = new Padding(4, 0, 4, 0);
-    private static readonly Padding s_defaultDropDownPadding = new Padding(0, 1, 0, 1);
-    private static readonly Size s_checkMarkBitmapSize = new Size(16, 16);
+    private static readonly Padding s_defaultPadding = new(4, 0, 4, 0);
+    private static readonly Padding s_defaultDropDownPadding = new(0, 1, 0, 1);
+    private static readonly Size s_checkMarkBitmapSize = new(16, 16);
     private Padding _scaledDefaultPadding = s_defaultPadding;
     private Padding _scaledDefaultDropDownPadding = s_defaultDropDownPadding;
     private Size _scaledCheckMarkBitmapSize = s_checkMarkBitmapSize;
 
     private byte _openMouseId;
 
-    private static readonly object s_eventCheckedChanged = new object();
-    private static readonly object s_eventCheckStateChanged = new object();
+    private static readonly object s_eventCheckedChanged = new();
+    private static readonly object s_eventCheckStateChanged = new();
 
     public ToolStripMenuItem()
         : base()

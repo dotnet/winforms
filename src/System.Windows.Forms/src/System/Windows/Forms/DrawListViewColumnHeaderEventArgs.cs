@@ -88,7 +88,7 @@ public class DrawListViewColumnHeaderEventArgs : EventArgs
     {
         if (Application.RenderWithVisualStyles)
         {
-            var vsr = new VisualStyleRenderer(VisualStyleElement.Header.Item.Normal);
+            VisualStyleRenderer vsr = new(VisualStyleElement.Header.Item.Normal);
             vsr.DrawBackground(Graphics, Bounds);
         }
         else

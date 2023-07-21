@@ -10,7 +10,7 @@ internal partial class SpecialFolderEnumConverter
 {
     private class SpecialFolderEnumComparer : IComparer
     {
-        public static readonly SpecialFolderEnumComparer Default = new SpecialFolderEnumComparer();
+        public static readonly SpecialFolderEnumComparer Default = new();
 
         public int Compare(object? a, object? b)
         {

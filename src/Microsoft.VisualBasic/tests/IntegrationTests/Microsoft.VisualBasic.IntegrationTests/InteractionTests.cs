@@ -114,7 +114,7 @@ public class InteractionTests
 
     private static Process StartTestProcess(string arguments)
     {
-        var startInfo = new ProcessStartInfo { FileName = _exePath, Arguments = arguments };
+        ProcessStartInfo startInfo = new() { FileName = _exePath, Arguments = arguments };
         return TestHelpers.StartProcess(startInfo);
     }
 

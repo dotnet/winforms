@@ -73,7 +73,7 @@ public partial class TaskDialog : IWin32Window
     ///   <see cref="TASKDIALOG_NOTIFICATIONS.TDN_NAVIGATED"/> notification was
     ///   not yet received.
     /// </summary>
-    private readonly Queue<TaskDialogPage> _waitingNavigationPages = new Queue<TaskDialogPage>();
+    private readonly Queue<TaskDialogPage> _waitingNavigationPages = new();
 
     /// <summary>
     ///   The <see cref="IntPtr"/> of a <see cref="GCHandle"/> that represents this

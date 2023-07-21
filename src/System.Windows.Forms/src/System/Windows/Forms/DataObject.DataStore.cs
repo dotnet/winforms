@@ -25,7 +25,7 @@ public partial class DataObject
             }
         }
 
-        private readonly Dictionary<string, DataStoreEntry> _data = new Dictionary<string, DataStoreEntry>(BackCompatibleStringComparer.Default);
+        private readonly Dictionary<string, DataStoreEntry> _data = new(BackCompatibleStringComparer.Default);
 
         public DataStore()
         {

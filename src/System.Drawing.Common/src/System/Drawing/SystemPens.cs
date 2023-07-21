@@ -7,7 +7,7 @@ namespace System.Drawing;
 
 public static class SystemPens
 {
-    private static readonly object s_systemPensKey = new object();
+    private static readonly object s_systemPensKey = new();
 
     public static Pen ActiveBorder => FromSystemColor(SystemColors.ActiveBorder);
     public static Pen ActiveCaption => FromSystemColor(SystemColors.ActiveCaption);

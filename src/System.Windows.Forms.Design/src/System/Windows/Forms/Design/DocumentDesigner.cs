@@ -54,10 +54,10 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
     // ActiveX support
     //
-    private static readonly Guid htmlDesignTime = new Guid("73CEF3DD-AE85-11CF-A406-00AA00C00940");
+    private static readonly Guid htmlDesignTime = new("73CEF3DD-AE85-11CF-A406-00AA00C00940");
 
     private Dictionary<string, AxToolboxItem> axTools;
-    private static readonly TraceSwitch AxToolSwitch = new TraceSwitch("AxTool", "ActiveX Toolbox Tracing");
+    private static readonly TraceSwitch AxToolSwitch = new("AxTool", "ActiveX Toolbox Tracing");
     private const string AxClipFormat = "CLSID";
     private ToolboxItemCreatorCallback toolboxCreator;
 

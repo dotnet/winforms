@@ -4748,7 +4748,7 @@ public partial class ControlTests
         int printCallCount = 0;
         control.Paint += (sender, e) =>
         {
-            string longString = new string('a', 65536);
+            string longString = new('a', 65536);
             control.Text = longString;
             Assert.Equal(longString, control.Text);
             printCallCount++;

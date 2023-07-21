@@ -19,7 +19,7 @@ internal partial class ResourceCodeDomSerializer
     /// </summary>
     internal class SerializationResourceManager : ComponentResourceManager
     {
-        private static readonly Dictionary<string, object> s_resourceSetSentinel = new Dictionary<string, object>();
+        private static readonly Dictionary<string, object> s_resourceSetSentinel = new();
         private readonly IDesignerSerializationManager _manager;
         private bool _checkedLocalizationLanguage;
         private CultureInfo _localizationLanguage;

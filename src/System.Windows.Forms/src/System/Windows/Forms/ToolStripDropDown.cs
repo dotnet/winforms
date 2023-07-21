@@ -20,7 +20,7 @@ public partial class ToolStripDropDown : ToolStrip
     private bool autoSize = true;
     private int countDropDownItemsAssignedTo; // the number of dropdown items using this as their dropdown..
     private BitVector32 state;
-    private Point displayLocation = new Point(0, 0);
+    private Point displayLocation = new(0, 0);
     private bool saveSourceControl;
 
     private ToolStripDropDownDirection childDropDownDirection = ToolStripDropDownDirection.Default;
@@ -29,17 +29,17 @@ public partial class ToolStripDropDown : ToolStrip
     private static readonly int PropOpacity = PropertyStore.CreateKey();
     private static readonly int PropSourceControl = PropertyStore.CreateKey();
 
-    private static readonly object EventOpening = new object();
-    private static readonly object EventOpened = new object();
-    private static readonly object EventClosed = new object();
-    private static readonly object EventClosing = new object();
+    private static readonly object EventOpening = new();
+    private static readonly object EventOpened = new();
+    private static readonly object EventClosed = new();
+    private static readonly object EventClosing = new();
 
-    private static readonly Padding defaultPadding = new Padding(1, 2, 1, 2);
+    private static readonly Padding defaultPadding = new(1, 2, 1, 2);
     private Padding scaledDefaultPadding = defaultPadding;
 
 #if DEBUG
-    internal static TraceSwitch DropDownActivateDebug = new TraceSwitch("DropDownActivateDebug", "Debug activation code for dropDown controls");
-    internal static TraceSwitch DropDownDebugBounds = new TraceSwitch("DropDownDebugBounds", "Debug GetDropDownBounds");
+    internal static TraceSwitch DropDownActivateDebug = new("DropDownActivateDebug", "Debug activation code for dropDown controls");
+    internal static TraceSwitch DropDownDebugBounds = new("DropDownDebugBounds", "Debug GetDropDownBounds");
 #else
     internal static TraceSwitch? DropDownActivateDebug;
     internal static TraceSwitch? DropDownDebugBounds;
@@ -1816,7 +1816,7 @@ public partial class ToolStripDropDown : ToolStrip
                     ToolStripDropDownCloseReason reason = closeReason;
                     ResetCloseReason();
 
-                    var e = new ToolStripDropDownClosingEventArgs(reason);
+                    ToolStripDropDownClosingEventArgs e = new(reason);
 
                     // Fire Closing Event
                     // Cancel is prepopulated based on AutoClose feature.

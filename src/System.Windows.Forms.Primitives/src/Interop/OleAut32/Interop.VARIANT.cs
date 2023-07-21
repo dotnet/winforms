@@ -940,7 +940,7 @@ internal unsafe partial struct VARIANT : IDisposable
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator VARIANT(IUnknown* value)
-        => new VARIANT()
+        => new()
         {
             vt = VT_UNKNOWN,
             data = new() { punkVal = value }

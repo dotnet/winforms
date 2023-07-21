@@ -24,7 +24,7 @@ public static partial class ToolStripManager
     private static bool t_initialized;
 
     private static Font s_defaultFont;
-    private static ConcurrentDictionary<int, Font> s_defaultFontCache = new ConcurrentDictionary<int, Font>();
+    private static ConcurrentDictionary<int, Font> s_defaultFontCache = new();
 
     // WARNING: When subscribing to static event handlers - make sure you unhook from them
     // otherwise you can leak USER objects on process shutdown.
@@ -34,7 +34,7 @@ public static partial class ToolStripManager
     private const int StaticEventDefaultRendererChanged = 0;
     private const int StaticEventCount = 1;
 
-    private static readonly object s_internalSyncObject = new object();
+    private static readonly object s_internalSyncObject = new();
 
     private static void InitializeThread()
     {
@@ -697,7 +697,7 @@ public static partial class ToolStripManager
         ArgumentNullException.ThrowIfNull(sourceForm);
         ArgumentNullException.ThrowIfNull(key);
 
-        var settingsManager = new ToolStripSettingsManager(sourceForm, key);
+        ToolStripSettingsManager settingsManager = new(sourceForm, key);
         settingsManager.Save();
     }
 

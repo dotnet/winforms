@@ -12,14 +12,14 @@ namespace System.Windows.Forms;
 [LookupBindingProperties(nameof(DataSource), nameof(DisplayMember), nameof(ValueMember), nameof(SelectedValue))]
 public abstract class ListControl : Control
 {
-    private static readonly object s_dataSourceChangedEvent = new object();
-    private static readonly object s_displayMemberChangedEvent = new object();
-    private static readonly object s_valueMemberChangedEvent = new object();
-    private static readonly object s_selectedValueChangedEvent = new object();
-    private static readonly object s_formatInfoChangedEvent = new object();
-    private static readonly object s_formatStringChangedEvent = new object();
-    private static readonly object s_formattingEnabledChangedEvent = new object();
-    private static readonly object s_formatEvent = new object();
+    private static readonly object s_dataSourceChangedEvent = new();
+    private static readonly object s_displayMemberChangedEvent = new();
+    private static readonly object s_valueMemberChangedEvent = new();
+    private static readonly object s_selectedValueChangedEvent = new();
+    private static readonly object s_formatInfoChangedEvent = new();
+    private static readonly object s_formatStringChangedEvent = new();
+    private static readonly object s_formattingEnabledChangedEvent = new();
+    private static readonly object s_formatEvent = new();
 
     private object? _dataSource;
     private CurrencyManager? _dataManager;
@@ -519,7 +519,7 @@ public abstract class ListControl : Control
         object? filteredItem = FilterItemOnProperty(item, _displayMember.BindingField);
 
         // First try the OnFormat event
-        var e = new ListControlConvertEventArgs(filteredItem, typeof(string), item);
+        ListControlConvertEventArgs e = new(filteredItem, typeof(string), item);
         OnFormat(e);
         if (e.Value != item && e.Value is string stringValue)
         {

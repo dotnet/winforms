@@ -513,7 +513,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
     /// <summary>
     /// Gets the width and height of this <see cref='Image'/>.
     /// </summary>
-    public Size Size => new Size(Width, Height);
+    public Size Size => new(Width, Height);
 
     /// <summary>
     /// Gets the width of this <see cref='Image'/>.

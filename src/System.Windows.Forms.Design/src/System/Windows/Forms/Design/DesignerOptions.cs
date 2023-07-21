@@ -14,7 +14,7 @@ public class DesignerOptions
 {
     private const int MinGridSize = 2;
     private const int MaxGridSize = 200;
-    private Size _gridSize = new Size(8, 8);
+    private Size _gridSize = new(8, 8);
 
     /// <summary>
     ///  Public GridSize property.

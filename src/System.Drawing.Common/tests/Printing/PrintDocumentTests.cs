@@ -27,7 +27,7 @@ namespace System.Drawing.Printing.Tests;
 
 public class PrintDocumentTests : FileCleanupTestBase
 {
-    private readonly PageSettings _pageSettings = new PageSettings()
+    private readonly PageSettings _pageSettings = new()
     {
         PaperSize = new PaperSize()
         {

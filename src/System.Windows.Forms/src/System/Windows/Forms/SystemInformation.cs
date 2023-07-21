@@ -196,9 +196,9 @@ public static class SystemInformation
     {
         get
         {
-            var rect = default(RECT);
-            PInvoke.SystemParametersInfo(SPI_GETWORKAREA, ref rect);
-            return rect;
+            RECT workingArea = default;
+            PInvoke.SystemParametersInfo(SPI_GETWORKAREA, ref workingArea);
+            return workingArea;
         }
     }
 

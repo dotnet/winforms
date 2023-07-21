@@ -27,7 +27,7 @@ public sealed unsafe class EncoderParameter : IDisposable
     /// </summary>
     public Encoder Encoder
     {
-        get => new Encoder(_parameterGuid);
+        get => new(_parameterGuid);
         set => _parameterGuid = value.Guid;
     }
 

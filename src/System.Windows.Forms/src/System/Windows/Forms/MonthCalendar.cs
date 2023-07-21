@@ -322,7 +322,7 @@ public partial class MonthCalendar : Control
 
     protected override ImeMode DefaultImeMode => ImeMode.Disable;
 
-    protected override Padding DefaultMargin => new Padding(9);
+    protected override Padding DefaultMargin => new(9);
 
     protected override Size DefaultSize => GetMinReqRect();
 
@@ -767,7 +767,7 @@ public partial class MonthCalendar : Control
     [Bindable(true)]
     public SelectionRange SelectionRange
     {
-        get => new SelectionRange(SelectionStart, SelectionEnd);
+        get => new(SelectionStart, SelectionEnd);
         set => SetSelectionRange(value.Start, value.End);
     }
 
@@ -857,7 +857,7 @@ public partial class MonthCalendar : Control
         {
             if (IsHandleCreated)
             {
-                RECT rect = default(RECT);
+                RECT rect = default;
                 if (PInvoke.SendMessage(this, PInvoke.MCM_GETMINREQRECT, 0, ref rect) == 0)
                 {
                     throw new InvalidOperationException(SR.InvalidSingleMonthSize);
@@ -921,7 +921,7 @@ public partial class MonthCalendar : Control
 
             if (IsHandleCreated)
             {
-                SYSTEMTIME systemTime = default(SYSTEMTIME);
+                SYSTEMTIME systemTime = default;
                 int result = (int)PInvoke.SendMessage(this, PInvoke.MCM_GETTODAY, 0, ref systemTime);
                 Debug.Assert(result != 0, "MCM_GETTODAY failed");
                 return ((DateTime)systemTime).Date;
@@ -1384,7 +1384,7 @@ public partial class MonthCalendar : Control
         {
             cbSize = (uint)sizeof(MCHITTESTINFO),
             pt = new Point(x, y),
-            st = default(SYSTEMTIME)
+            st = default
         };
 
         PInvoke.SendMessage(this, PInvoke.MCM_HITTEST, 0, ref mchi);

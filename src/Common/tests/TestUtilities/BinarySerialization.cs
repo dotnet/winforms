@@ -69,13 +69,13 @@ public static class BinarySerialization
             FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
         {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-            var binaryFormatter = new BinaryFormatter
+            BinaryFormatter binaryFormatter = new()
             {
                 AssemblyFormat = assemblyStyle
             };
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
 
-            using var serializedStream = new MemoryStream(raw);
+            using MemoryStream serializedStream = new(raw);
             return binaryFormatter.Deserialize(serializedStream);
         }
     }
@@ -90,15 +90,15 @@ public static class BinarySerialization
             FormatterAssemblyStyle assemblyStyle = FormatterAssemblyStyle.Simple)
         {
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-            var binaryFormatter = new BinaryFormatter
+            BinaryFormatter binaryFormatter = new()
             {
                 AssemblyFormat = assemblyStyle
             };
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
 
-            using var ms = new MemoryStream();
-            binaryFormatter.Serialize(ms, obj);
-            return ms.ToArray();
+            using MemoryStream stream = new();
+            binaryFormatter.Serialize(stream, obj);
+            return stream.ToArray();
         }
     }
 #pragma warning restore SYSLIB0050 // Type or member is obsolete

@@ -85,9 +85,9 @@ public partial class SendKeys
     /// <summary>
     ///  Vector of events that we have yet to post to the journaling hook.
     /// </summary>
-    private static readonly Queue<SKEvent> s_events = new Queue<SKEvent>();
+    private static readonly Queue<SKEvent> s_events = new();
 
-    private static object s_lock = new object();
+    private static object s_lock = new();
     private static bool s_startNewChar;
     private static readonly SKWindow s_messageWindow;
 

@@ -642,7 +642,7 @@ public class DataGridViewCellStyle : ICloneable
 
     public override int GetHashCode()
     {
-        var hash = default(HashCode);
+        HashCode hash = default;
         hash.Add(Alignment);
         hash.Add(WrapMode);
         hash.Add(Padding);

@@ -34,7 +34,7 @@ internal sealed partial class DesignerActionPanel
 
         public sealed override void Focus() => Debug.Fail("Should never try to focus a SeparatorLine");
 
-        public override Size LayoutControls(int top, int width, bool measureOnly) => new Size(MinimumWidth, 1);
+        public override Size LayoutControls(int top, int width, bool measureOnly) => new(MinimumWidth, 1);
 
         public override void PaintLine(Graphics g, int lineWidth, int lineHeight)
         {

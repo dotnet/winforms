@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -202,7 +202,7 @@ public sealed class LinearGradientBrush : Brush
                 Gdip.CheckStatus(Gdip.GdipGetLineBlend(new HandleRef(this, NativeBrush), factors, positions, count));
 
                 // Return the result in a managed array.
-                var blend = new Blend(count);
+                Blend blend = new(count);
 
                 Marshal.Copy(factors, blend.Factors, 0, count);
                 Marshal.Copy(positions, blend.Positions, 0, count);
@@ -335,7 +335,7 @@ public sealed class LinearGradientBrush : Brush
                 Gdip.CheckStatus(Gdip.GdipGetLinePresetBlend(new HandleRef(this, NativeBrush), colors, positions, count));
 
                 // Return the result in a managed array.
-                var blend = new ColorBlend(count);
+                ColorBlend blend = new(count);
 
                 int[] argb = new int[count];
                 Marshal.Copy(colors, argb, 0, count);
@@ -455,7 +455,7 @@ public sealed class LinearGradientBrush : Brush
     {
         get
         {
-            var matrix = new Matrix();
+            Matrix matrix = new();
             Gdip.CheckStatus(Gdip.GdipGetLineTransform(new HandleRef(this, NativeBrush), new HandleRef(matrix, matrix.NativeMatrix)));
             return matrix;
         }

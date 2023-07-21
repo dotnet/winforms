@@ -31,7 +31,7 @@ namespace System.ComponentModel.Design.Serialization;
 /// </summary>
 public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, INameCreationService, IDesignerSerializationService
 {
-    private static readonly TraceSwitch s_traceCDLoader = new TraceSwitch("CodeDomDesignerLoader", "Trace CodeDomDesignerLoader");
+    private static readonly TraceSwitch s_traceCDLoader = new("CodeDomDesignerLoader", "Trace CodeDomDesignerLoader");
     private static readonly int s_stateCodeDomDirty = BitVector32.CreateMask();                                 // True if the code dom tree is dirty, meaning it must be integrated back with the code file.
     private static readonly int s_stateCodeParserChecked = BitVector32.CreateMask(s_stateCodeDomDirty);         // True if we have searched for a parser.
     private static readonly int s_stateOwnTypeResolution = BitVector32.CreateMask(s_stateCodeParserChecked);    // True if we have added our own type resolution service

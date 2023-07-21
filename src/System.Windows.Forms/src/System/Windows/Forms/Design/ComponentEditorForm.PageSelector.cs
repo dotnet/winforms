@@ -94,8 +94,8 @@ public partial class ComponentEditorForm
             COLORREF backColor,
             COLORREF textColor)
         {
-            Size size = default(Size);
-            RECT rc2 = default(RECT);
+            Size size = default;
+            RECT rc2 = default;
             RECT rc = rcIn;
             ImageList imagelist = ImageList;
 

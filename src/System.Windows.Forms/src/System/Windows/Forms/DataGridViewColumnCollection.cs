@@ -24,7 +24,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
     private int _lastAccessedSortedIndex = -1;
     private int _columnCountsVisible, _columnCountsVisibleSelected;
     private int _columnsWidthVisible, _columnsWidthVisibleFrozen;
-    private static readonly ColumnOrderComparer s_columnOrderComparer = new ColumnOrderComparer();
+    private static readonly ColumnOrderComparer s_columnOrderComparer = new();
 
     /* IList interface implementation */
 

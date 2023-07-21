@@ -35,61 +35,61 @@ public class TaskDialogIcon : IDisposable
     ///   Gets a standard <see cref="TaskDialogIcon"/> instance where the task dialog
     ///   does not display an icon.
     /// </summary>
-    public static readonly TaskDialogIcon None = new TaskDialogIcon(TaskDialogStandardIcon.None);
+    public static readonly TaskDialogIcon None = new(TaskDialogStandardIcon.None);
 
     /// <summary>
     ///   Gets a standard <see cref="TaskDialogIcon"/> instance where the task dialog
     ///   contains a symbol consisting of a lowercase letter i in a circle.
     /// </summary>
-    public static readonly TaskDialogIcon Information = new TaskDialogIcon(TaskDialogStandardIcon.Information);
+    public static readonly TaskDialogIcon Information = new(TaskDialogStandardIcon.Information);
 
     /// <summary>
     ///   Gets a standard <see cref="TaskDialogIcon"/> instance where the task dialog
     ///   contains an icon consisting of an exclamation point in a triangle with a yellow background.
     /// </summary>
-    public static readonly TaskDialogIcon Warning = new TaskDialogIcon(TaskDialogStandardIcon.Warning);
+    public static readonly TaskDialogIcon Warning = new(TaskDialogStandardIcon.Warning);
 
     /// <summary>
     ///   Gets a standard <see cref="TaskDialogIcon"/> instance where the task dialog
     ///   contains an icon consisting of white X in a circle with a red background.
     /// </summary>
-    public static readonly TaskDialogIcon Error = new TaskDialogIcon(TaskDialogStandardIcon.Error);
+    public static readonly TaskDialogIcon Error = new(TaskDialogStandardIcon.Error);
 
     /// <summary>
     ///   Gets a standard <see cref="TaskDialogIcon"/> instance where the task dialog
     ///   contains an icon consisting of an user account control (UAC) shield.
     /// </summary>
-    public static readonly TaskDialogIcon Shield = new TaskDialogIcon(TaskDialogStandardIcon.Shield);
+    public static readonly TaskDialogIcon Shield = new(TaskDialogStandardIcon.Shield);
 
     /// <summary>
     ///   Gets a standard <see cref="TaskDialogIcon"/> instance where the task dialog
     ///   contains an icon consisting of an user account control (UAC) shield and shows a blue bar around the icon.
     /// </summary>
-    public static readonly TaskDialogIcon ShieldBlueBar = new TaskDialogIcon(TaskDialogStandardIcon.ShieldBlueBar);
+    public static readonly TaskDialogIcon ShieldBlueBar = new(TaskDialogStandardIcon.ShieldBlueBar);
 
     /// <summary>
     ///   Gets a standard <see cref="TaskDialogIcon"/> instance where the task dialog
     ///   contains an icon consisting of an user account control (UAC) shield and shows a gray bar around the icon.
     /// </summary>
-    public static readonly TaskDialogIcon ShieldGrayBar = new TaskDialogIcon(TaskDialogStandardIcon.ShieldGrayBar);
+    public static readonly TaskDialogIcon ShieldGrayBar = new(TaskDialogStandardIcon.ShieldGrayBar);
 
     /// <summary>
     ///   Gets a standard <see cref="TaskDialogIcon"/> instance where the task dialog
     ///   contains an icon consisting of an exclamation point in a yellow shield and shows a yellow bar around the icon.
     /// </summary>
-    public static readonly TaskDialogIcon ShieldWarningYellowBar = new TaskDialogIcon(TaskDialogStandardIcon.ShieldWarningYellowBar);
+    public static readonly TaskDialogIcon ShieldWarningYellowBar = new(TaskDialogStandardIcon.ShieldWarningYellowBar);
 
     /// <summary>
     ///   Gets a standard <see cref="TaskDialogIcon"/> instance where the task dialog
     ///   contains an icon consisting of white X in a red shield and shows a red bar around the icon.
     /// </summary>
-    public static readonly TaskDialogIcon ShieldErrorRedBar = new TaskDialogIcon(TaskDialogStandardIcon.ShieldErrorRedBar);
+    public static readonly TaskDialogIcon ShieldErrorRedBar = new(TaskDialogStandardIcon.ShieldErrorRedBar);
 
     /// <summary>
     ///   Gets a standard <see cref="TaskDialogIcon"/> instance where the task dialog
     ///   contains an icon consisting of white tick in a green shield and shows a green bar around the icon.
     /// </summary>
-    public static readonly TaskDialogIcon ShieldSuccessGreenBar = new TaskDialogIcon(TaskDialogStandardIcon.ShieldSuccessGreenBar);
+    public static readonly TaskDialogIcon ShieldSuccessGreenBar = new(TaskDialogStandardIcon.ShieldSuccessGreenBar);
 #pragma warning restore IDE1006 // Naming Styles
 
     private readonly TaskDialogStandardIcon? _standardIcon;

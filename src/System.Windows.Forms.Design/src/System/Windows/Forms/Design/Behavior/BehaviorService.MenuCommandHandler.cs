@@ -11,7 +11,7 @@ public sealed partial class BehaviorService
     private class MenuCommandHandler : IMenuCommandService
     {
         private readonly BehaviorService _owner;
-        private readonly Stack<CommandID> _currentCommands = new Stack<CommandID>();
+        private readonly Stack<CommandID> _currentCommands = new();
 
         public MenuCommandHandler(BehaviorService owner, IMenuCommandService menuService)
         {

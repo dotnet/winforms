@@ -15,5 +15,5 @@ public static partial class TestAccessors
     }
 
     internal static KeyboardToolTipStateMachineTestAccessor TestAccessor(this KeyboardToolTipStateMachine instance)
-        => new KeyboardToolTipStateMachineTestAccessor(instance);
+        => new(instance);
 }

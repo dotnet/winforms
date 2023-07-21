@@ -28,7 +28,7 @@ internal class DesignerToolStripControlHost : ToolStripControlHost, IComponent
     /// </summary>
     protected override Size DefaultSize
     {
-        get => new Size(92, 22);
+        get => new(92, 22);
     }
 
     internal GlyphCollection GetGlyphs(ToolStrip parent, GlyphCollection glyphs, Behavior.Behavior standardBehavior)

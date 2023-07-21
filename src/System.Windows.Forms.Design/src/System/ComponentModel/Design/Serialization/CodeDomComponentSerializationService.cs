@@ -176,7 +176,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
     private sealed class CodeDomSerializationStore : SerializationStore, ISerializable
     {
 #if DEBUG
-        private static readonly TraceSwitch s_trace = new TraceSwitch("ComponentSerializationService", "Trace component serialization");
+        private static readonly TraceSwitch s_trace = new("ComponentSerializationService", "Trace component serialization");
 #else
 #pragma warning disable CS0649
         private static readonly TraceSwitch s_trace;
@@ -607,12 +607,12 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         /// </summary>
         private class ComponentListCodeDomSerializer : CodeDomSerializer
         {
-            internal static ComponentListCodeDomSerializer s_instance = new ComponentListCodeDomSerializer();
+            internal static ComponentListCodeDomSerializer s_instance = new();
             private Hashtable _statementsTable;
             private Dictionary<string, List<CodeExpression>> _expressions;
             private Hashtable _objectState; // only used during deserialization
             private bool _applyDefaults = true;
-            private readonly Hashtable _nameResolveGuard = new Hashtable();
+            private readonly Hashtable _nameResolveGuard = new();
 
             public override object Deserialize(IDesignerSerializationManager manager, object state)
             {
@@ -1464,7 +1464,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
 
         private class PassThroughSerializationManager : IDesignerSerializationManager
         {
-            private readonly Hashtable _resolved = new Hashtable();
+            private readonly Hashtable _resolved = new();
             private readonly DesignerSerializationManager _manager;
             private ResolveNameEventHandler _resolveNameEventHandler;
 

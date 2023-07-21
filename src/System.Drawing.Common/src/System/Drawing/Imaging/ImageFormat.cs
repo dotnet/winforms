@@ -14,18 +14,18 @@ public sealed class ImageFormat
 {
     // Format IDs
     // private static ImageFormat undefined = new ImageFormat(new Guid("{b96b3ca9-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_memoryBMP = new ImageFormat(new Guid("{b96b3caa-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_bmp = new ImageFormat(new Guid("{b96b3cab-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_emf = new ImageFormat(new Guid("{b96b3cac-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_wmf = new ImageFormat(new Guid("{b96b3cad-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_jpeg = new ImageFormat(new Guid("{b96b3cae-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_png = new ImageFormat(new Guid("{b96b3caf-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_gif = new ImageFormat(new Guid("{b96b3cb0-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_tiff = new ImageFormat(new Guid("{b96b3cb1-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_exif = new ImageFormat(new Guid("{b96b3cb2-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_icon = new ImageFormat(new Guid("{b96b3cb5-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_heif = new ImageFormat(new Guid("{b96b3cb6-0728-11d3-9d7b-0000f81ef32e}"));
-    private static readonly ImageFormat s_webp = new ImageFormat(new Guid("{b96b3cb7-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_memoryBMP = new(new Guid("{b96b3caa-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_bmp = new(new Guid("{b96b3cab-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_emf = new(new Guid("{b96b3cac-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_wmf = new(new Guid("{b96b3cad-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_jpeg = new(new Guid("{b96b3cae-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_png = new(new Guid("{b96b3caf-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_gif = new(new Guid("{b96b3cb0-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_tiff = new(new Guid("{b96b3cb1-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_exif = new(new Guid("{b96b3cb2-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_icon = new(new Guid("{b96b3cb5-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_heif = new(new Guid("{b96b3cb6-0728-11d3-9d7b-0000f81ef32e}"));
+    private static readonly ImageFormat s_webp = new(new Guid("{b96b3cb7-0728-11d3-9d7b-0000f81ef32e}"));
 
     private Guid _guid;
 

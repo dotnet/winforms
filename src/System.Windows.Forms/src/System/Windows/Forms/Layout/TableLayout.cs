@@ -38,7 +38,7 @@ internal partial class TableLayout : LayoutEngine
     // End of sorting code
 
     // Singleton instance shared by all containers.
-    internal static readonly TableLayout Instance = new TableLayout();
+    internal static readonly TableLayout Instance = new();
 
     private static readonly int _containerInfoProperty = PropertyStore.CreateKey();
     private static readonly int _layoutInfoProperty = PropertyStore.CreateKey();

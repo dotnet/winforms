@@ -20,5 +20,5 @@ public static partial class TestAccessors
     }
 
     public static PropertyGridTestAccessor TestAccessor(this Windows.Forms.PropertyGrid propertyGrid)
-        => new PropertyGridTestAccessor(propertyGrid);
+        => new(propertyGrid);
 }

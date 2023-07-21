@@ -1741,7 +1741,7 @@ public partial class TreeView : Control
     /// </summary>
     public TreeViewHitTestInfo HitTest(int x, int y)
     {
-        var tvhi = new TVHITTESTINFO
+        TVHITTESTINFO tvhi = new()
         {
             pt = new Point(x, y)
         };
@@ -1788,7 +1788,7 @@ public partial class TreeView : Control
     /// </summary>
     public TreeNode GetNodeAt(int x, int y)
     {
-        var tvhi = new TVHITTESTINFO
+        TVHITTESTINFO tvhi = new()
         {
             pt = new Point(x, y)
         };
@@ -2164,7 +2164,7 @@ public partial class TreeView : Control
     {
         // Hover events need to be caught for each node within the TreeView so
         // the appropriate NodeHovered event can be raised.
-        var tvhip = new TVHITTESTINFO
+        TVHITTESTINFO tvhip = new()
         {
             pt = PointToClient(Cursor.Position)
         };
@@ -2661,7 +2661,7 @@ public partial class TreeView : Control
         }
 
         // TreeView doesn't properly revert back to the unselected image if the unselected image is blank.
-        var rc = default(RECT);
+        RECT rc = default;
         *((IntPtr*)&rc.left) = nmtv->itemOld.hItem;
         if (nmtv->itemOld.hItem != IntPtr.Zero)
         {
@@ -3008,7 +3008,7 @@ public partial class TreeView : Control
         // The second condition is necessary for the correct display of the keyboard tooltip,
         // since the logic of the external tooltip blocks its display
         bool isExternalTooltip = ShowNodeToolTips && tooltip != KeyboardToolTip;
-        var wrapper = new ComCtl32.ToolInfoWrapper<Control>(this, flags, isExternalTooltip ? null : caption);
+        ComCtl32.ToolInfoWrapper<Control> wrapper = new(this, flags, isExternalTooltip ? null : caption);
         if (isExternalTooltip)
             wrapper.Info.lpszText = (char*)(-1);
 
@@ -3020,7 +3020,7 @@ public partial class TreeView : Control
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
         HWND tooltipHandle = nmhdr->hwndFrom;
 
-        var tvhip = new TVHITTESTINFO
+        TVHITTESTINFO tvhip = new()
         {
             pt = PointToClient(Cursor.Position)
         };
@@ -3051,7 +3051,7 @@ public partial class TreeView : Control
         NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)(nint)m.LParamInternal;
         string tipText = controlToolTipText;
 
-        var tvhip = new TVHITTESTINFO
+        TVHITTESTINFO tvhip = new()
         {
             pt = PointToClient(Cursor.Position)
         };
@@ -3128,7 +3128,7 @@ public partial class TreeView : Control
                 case (int)NM.RCLICK:
                     MouseButtons button = MouseButtons.Left;
                     Point pos = PointToClient(Cursor.Position);
-                    var tvhip = new TVHITTESTINFO
+                    TVHITTESTINFO tvhip = new()
                     {
                         pt = pos
                     };
@@ -3297,7 +3297,7 @@ public partial class TreeView : Control
                     // Check for invalid node handle
                     if (item->hItem != IntPtr.Zero)
                     {
-                        var item1 = new TVITEMW
+                        TVITEMW item1 = new()
                         {
                             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                             hItem = item->hItem,
@@ -3368,7 +3368,7 @@ public partial class TreeView : Control
 
                 // Always reset the MouseupFired.
                 treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
-                var tvhip = new TVHITTESTINFO
+                TVHITTESTINFO tvhip = new()
                 {
                     pt = PARAM.ToPoint(m.LParamInternal)
                 };
@@ -3405,7 +3405,7 @@ public partial class TreeView : Control
             case PInvoke.WM_RBUTTONUP:
                 Point point = PARAM.ToPoint(m.LParamInternal);
 
-                var tvhi = new TVHITTESTINFO
+                TVHITTESTINFO tvhi = new()
                 {
                     pt = point
                 };
@@ -3486,7 +3486,7 @@ public partial class TreeView : Control
                 treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
 
                 //Cache the hit-tested node for verification when mouse up is fired
-                var tvhit = new TVHITTESTINFO
+                TVHITTESTINFO tvhit = new()
                 {
                     pt = PARAM.ToPoint(m.LParamInternal)
                 };

@@ -19,7 +19,7 @@ public partial class PageSettings : ICloneable
     private PaperSource? _paperSource;
     private PrinterResolution? _printerResolution;
     private TriState _landscape = TriState.Default;
-    private Margins _margins = new Margins();
+    private Margins _margins = new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref='PageSettings'/> class using the default printer.
