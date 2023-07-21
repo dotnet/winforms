@@ -592,7 +592,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  Allows a designer to filter the set of member attributes the component it is designing will expose
     ///  through the TypeDescriptor object.
     /// </summary>
-    protected virtual void PostFilterAttributes(IDictionary? attributes)
+    protected virtual void PostFilterAttributes(IDictionary attributes)
     {
         // If this component is being inherited, mark it as such in the class attributes.
         // Also, set our member variable to ensure that what you get by querying through the TypeDescriptor and
@@ -618,7 +618,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Allows a designer to filter the set of events the component it is designing will expose through the TypeDescriptor object.
     /// </summary>
-    protected virtual void PostFilterEvents(IDictionary? events)
+    protected virtual void PostFilterEvents(IDictionary events)
     {
         // If this component is being privately inherited, we need to filter the events to make them read-only.
         if (events is null)
@@ -648,9 +648,9 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.
     /// </summary>
-    protected virtual void PostFilterProperties(IDictionary? properties)
+    protected virtual void PostFilterProperties(IDictionary properties)
     {
-        if (properties is null || _inheritedProps is null)
+        if (_inheritedProps is null)
         {
             return;
         }
@@ -691,7 +691,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  Allows a designer to filter the set of member attributes the component it is designing will expose
     ///  through the TypeDescriptor object.
     /// </summary>
-    protected virtual void PreFilterAttributes(IDictionary? attributes)
+    protected virtual void PreFilterAttributes(IDictionary attributes)
     {
     }
 
@@ -699,7 +699,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  Allows a designer to filter the set of events the component it is designing will expose through the
     ///  TypeDescriptor object.
     /// </summary>
-    protected virtual void PreFilterEvents(IDictionary? events)
+    protected virtual void PreFilterEvents(IDictionary events)
     {
     }
 
@@ -707,7 +707,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  Allows a designer to filter the set of properties the component it is designing will expose through
     ///  the TypeDescriptor object.
     /// </summary>
-    protected virtual void PreFilterProperties(IDictionary? properties)
+    protected virtual void PreFilterProperties(IDictionary properties)
     {
         if (Component is IPersistComponentSettings
             && properties?[SettingsKeyName] is PropertyDescriptor prop)
