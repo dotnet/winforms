@@ -437,28 +437,28 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         {
             ParentInternal.CreateControl(true);
 
-            ContainerControl f = ContainingControl;
-            if (f is not null)
+            ContainerControl? containingControl = ContainingControl;
+            if (containingControl is not null)
             {
-                f.VisibleChanged += _onContainerVisibleChanged;
+                containingControl.VisibleChanged += _onContainerVisibleChanged;
             }
         }
     }
 
     private void OnContainerVisibleChanged(object? sender, EventArgs e)
     {
-        ContainerControl f = ContainingControl;
-        if (f is not null)
+        ContainerControl? containingControl = ContainingControl;
+        if (containingControl is not null)
         {
-            if (f.Visible && Visible && !_axState[s_fOwnWindow])
+            if (containingControl.Visible && Visible && !_axState[s_fOwnWindow])
             {
                 MakeVisibleWithShow();
             }
-            else if (!f.Visible && Visible && IsHandleCreated && GetOcState() >= OC_INPLACE)
+            else if (!containingControl.Visible && Visible && IsHandleCreated && GetOcState() >= OC_INPLACE)
             {
                 HideAxControl();
             }
-            else if (f.Visible && !GetState(States.Visible) && IsHandleCreated && GetOcState() >= OC_INPLACE)
+            else if (containingControl.Visible && !GetState(States.Visible) && IsHandleCreated && GetOcState() >= OC_INPLACE)
             {
                 HideAxControl();
             }
@@ -951,8 +951,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             {
                 TransitionDownTo(OC_LOADED);
                 TransitionUpTo(OC_INPLACE);
-                ContainerControl f = ContainingControl;
-                if (f is not null && f.Visible && Visible)
+                ContainerControl? containingControl = ContainingControl;
+                if (containingControl is not null && containingControl.Visible && Visible)
                 {
                     MakeVisibleWithShow();
                 }
@@ -1303,7 +1303,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         _axState[s_manualUpdate] = true;
         return false;
     }
-#nullable disable
+
     /// <summary>
     ///  Destroys the handle associated with this control.
     ///  User code should in general not call this function.
@@ -1508,12 +1508,12 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private HRESULT InPlaceDeactivate()
     {
         _axState[s_ownDisposing] = true;
-        ContainerControl f = ContainingControl;
-        if (f is not null)
+        ContainerControl? containingControl = ContainingControl;
+        if (containingControl is not null)
         {
-            if (f.ActiveControl == this)
+            if (containingControl.ActiveControl == this)
             {
-                f.ActiveControl = null;
+                containingControl.ActiveControl = null;
             }
         }
 
@@ -1640,8 +1640,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private void MakeVisibleWithShow()
     {
-        ContainerControl container = ContainingControl;
-        Control control = container?.ActiveControl;
+        ContainerControl? container = ContainingControl;
+        Control? control = container?.ActiveControl;
         try
         {
             DoVerb((int)OLEIVERB.OLEIVERB_SHOW);
@@ -1872,7 +1872,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     [RefreshProperties(RefreshProperties.All)]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public State OcxState
+    public State? OcxState
     {
         get
         {
@@ -1924,7 +1924,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
     }
 
-    private State CreateNewOcxState(State oldOcxState)
+    private State? CreateNewOcxState(State? oldOcxState)
     {
         NoComponentChangeEvents++;
 
@@ -1935,7 +1935,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 return null;
             }
 
-            PropertyBagStream propBag = null;
+            PropertyBagStream? propBag = null;
 
             if (_iPersistPropBag is not null)
             {
@@ -1944,7 +1944,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 _iPersistPropBag.Save(propertyBag, fClearDirty: true, fSaveAllProperties: true);
             }
 
-            MemoryStream ms = null;
+            MemoryStream? ms = null;
             switch (_storageType)
             {
                 case STG_STREAM:
@@ -1954,11 +1954,11 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                     {
                         if (_storageType == STG_STREAM)
                         {
-                            _iPersistStream.Save(stream, true);
+                            _iPersistStream!.Save(stream, true);
                         }
                         else
                         {
-                            _iPersistStreamInit.Save(stream, true);
+                            _iPersistStreamInit!.Save(stream, true);
                         }
                     }
 
@@ -1967,7 +1967,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                     Debug.Assert(oldOcxState is not null, "we got to have an old state which holds out scribble storage...");
                     if (oldOcxState is not null)
                     {
-                        return oldOcxState.RefreshStorage(_iPersistStorage);
+                        return oldOcxState.RefreshStorage(_iPersistStorage!);
                     }
 
                     return null;
@@ -2024,7 +2024,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public ContainerControl ContainingControl
+    public ContainerControl? ContainingControl
     {
         get => _containingControl ??= FindContainerControlInternal();
         set => _containingControl = value;
@@ -2053,14 +2053,14 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     [EditorBrowsable(EditorBrowsableState.Never)]
     private bool ShouldSerializeContainingControl() => ContainingControl != ParentInternal;
 
-    private ContainerControl FindContainerControlInternal()
+    private ContainerControl? FindContainerControlInternal()
     {
-        if (Site.TryGetService(out IDesignerHost host) && host.RootComponent is ContainerControl rootControl)
+        if (Site.TryGetService(out IDesignerHost? host) && host.RootComponent is ContainerControl rootControl)
         {
             return rootControl;
         }
 
-        Control control = this;
+        Control? control = this;
         while (control is not null)
         {
             if (control is ContainerControl containerControl)
@@ -2099,13 +2099,13 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         switch (_storageType)
         {
             case STG_STREAM:
-                hr = _iPersistStream.IsDirty();
+                hr = _iPersistStream!.IsDirty();
                 break;
             case STG_STREAMINIT:
-                hr = _iPersistStreamInit.IsDirty();
+                hr = _iPersistStreamInit!.IsDirty();
                 break;
             case STG_STORAGE:
-                hr = _iPersistStorage.IsDirty();
+                hr = _iPersistStorage!.IsDirty();
                 break;
             default:
                 Debug.Fail("unknown storage type");
@@ -2125,13 +2125,13 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     internal bool IsUserMode()
     {
-        ISite site = Site;
+        ISite? site = Site;
         return site is null || !site.DesignMode;
     }
 
-    private object GetAmbientProperty(int dispid)
+    private object? GetAmbientProperty(int dispid)
     {
-        Control richParent = ParentInternal;
+        Control? richParent = ParentInternal;
 
         switch (dispid)
         {
@@ -2185,7 +2185,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 return PInvoke.GetThreadLocale();
             case PInvoke.DISPID_AMBIENT_RIGHTTOLEFT:
                 s_axHTraceSwitch.TraceVerbose("asked for right to left");
-                Control control = this;
+                Control? control = this;
                 while (control is not null)
                 {
                     if (control.RightToLeft == Forms.RightToLeft.No)
@@ -2213,7 +2213,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     public unsafe void DoVerb(int verb)
     {
-        Control parent = ParentInternal;
+        Control? parent = ParentInternal;
         RECT posRect = Bounds;
         using var pClientSite = ComHelpers.TryGetComScope<IOleClientSite>(_oleSite, out HRESULT hr);
         Debug.Assert(hr.Succeeded);
@@ -2275,12 +2275,12 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         _ocState = nv;
     }
 
-    private string GetLicenseKey()
+    private string? GetLicenseKey()
     {
         return GetLicenseKey(_clsid);
     }
 
-    private unsafe string GetLicenseKey(Guid clsid)
+    private unsafe string? GetLicenseKey(Guid clsid)
     {
         if (_licenseKey is not null || !_axState[s_needLicenseKey])
         {
@@ -2340,7 +2340,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         s_axHTraceSwitch.TraceVerbose($"\t{(_instance is not null)}");
     }
 
-    private void CreateWithLicense(string license, Guid clsid)
+    private void CreateWithLicense(string? license, Guid clsid)
     {
         if (license is not null)
         {
@@ -2399,7 +2399,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  Called to create the ActiveX control.  Override this member to perform your own creation logic
     ///  or call base to do the default creation logic.
     /// </summary>
-    protected virtual object CreateInstanceCore(Guid clsid)
+    protected virtual object? CreateInstanceCore(Guid clsid)
     {
         if (IsUserMode())
         {
@@ -2413,7 +2413,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         return _instance;
     }
 
-    private unsafe CategoryAttribute GetCategoryForDispid(int dispid)
+    private unsafe CategoryAttribute? GetCategoryForDispid(int dispid)
     {
         using var categorizeProperties = ComHelpers.TryGetComScope<ICategorizeProperties>(_instance, out HRESULT hr);
         if (hr.Failed)
@@ -2434,7 +2434,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return s_categoryNames[index];
         }
 
-        if (_objectDefinedCategoryNames?.TryGetValue(propcat, out CategoryAttribute category) ?? false
+        if (_objectDefinedCategoryNames?.TryGetValue(propcat, out CategoryAttribute? category) ?? false
             && category is not null)
         {
             return category;
@@ -2464,7 +2464,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         Debug.Assert(selectionStyle is >= 0 and <= 2, "Invalid selection style");
         _selectionStyle = selectionStyle;
 
-        if (Site.TryGetService(out ISelectionService selectionService) && selectionService.GetComponentSelected(this))
+        if (Site.TryGetService(out ISelectionService? selectionService) && selectionService.GetComponentSelected(this))
         {
             // The AX Host designer will offer an extender property called "SelectionStyle"
             if (TypeDescriptor.GetProperties(this)["SelectionStyle"] is { } property && property.PropertyType == typeof(int))
@@ -2496,7 +2496,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         {
         }
     }
-
+#nullable disable
     //
     // ICustomTypeDescriptor implementation.
     //
