@@ -10,11 +10,11 @@ namespace System.Windows.Forms;
 /// </summary>
 internal class DataGridViewIntLinkedListEnumerator : IEnumerator
 {
-    private readonly DataGridViewIntLinkedListElement _headElement;
+    private readonly DataGridViewIntLinkedListElement? _headElement;
     private DataGridViewIntLinkedListElement? _current;
     private bool _reset;
 
-    public DataGridViewIntLinkedListEnumerator(DataGridViewIntLinkedListElement headElement)
+    public DataGridViewIntLinkedListEnumerator(DataGridViewIntLinkedListElement? headElement)
     {
         _headElement = headElement;
         _reset = true;
