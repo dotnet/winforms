@@ -416,7 +416,7 @@ public class TreeNodeCollection : IList
         // step 1 - check the last cached item
         if (IsValidIndex(_lastAccessedIndex))
         {
-            if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+            if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, ignoreCase: true))
             {
                 return _lastAccessedIndex;
             }
@@ -425,7 +425,7 @@ public class TreeNodeCollection : IList
         // step 2 - search for the item
         for (int i = 0; i < Count; i++)
         {
-            if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
+            if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, ignoreCase: true))
             {
                 _lastAccessedIndex = i;
                 return i;
