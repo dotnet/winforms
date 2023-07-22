@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Globalization;
 
@@ -11,7 +9,7 @@ namespace System.Windows.Forms;
 
 public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridViewEditingControl
 {
-    private DataGridView _dataGridView;
+    private DataGridView? _dataGridView;
     private bool _valueChanged;
     private int _rowIndex;
 
@@ -20,14 +18,12 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
         TabStop = false;
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewComboBoxEditingControlAccessibleObject(this);
-    }
+    protected override AccessibleObject CreateAccessibilityInstance() =>
+        new DataGridViewComboBoxEditingControlAccessibleObject(this);
 
     // IDataGridViewEditingControl interface implementation
 
-    public virtual DataGridView EditingControlDataGridView
+    public virtual DataGridView? EditingControlDataGridView
     {
         get
         {
@@ -41,10 +37,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
 
     public virtual object EditingControlFormattedValue
     {
-        get
-        {
-            return GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
-        }
+        get => GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
         set
         {
             if (value is string valueStr)
@@ -60,43 +53,19 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
 
     public virtual int EditingControlRowIndex
     {
-        get
-        {
-            return _rowIndex;
-        }
-        set
-        {
-            _rowIndex = value;
-        }
+        get => _rowIndex;
+        set => _rowIndex = value;
     }
 
     public virtual bool EditingControlValueChanged
     {
-        get
-        {
-            return _valueChanged;
-        }
-        set
-        {
-            _valueChanged = value;
-        }
+        get => _valueChanged;
+        set => _valueChanged = value;
     }
 
-    public virtual Cursor EditingPanelCursor
-    {
-        get
-        {
-            return Cursors.Default;
-        }
-    }
+    public virtual Cursor EditingPanelCursor => Cursors.Default;
 
-    public virtual bool RepositionEditingControlOnValueChange
-    {
-        get
-        {
-            return false;
-        }
-    }
+    public virtual bool RepositionEditingControlOnValueChange => false;
 
     public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
     {
@@ -106,7 +75,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
             // Our ComboBox does not support transparent back colors
             Color opaqueBackColor = Color.FromArgb(255, dataGridViewCellStyle.BackColor);
             BackColor = opaqueBackColor;
-            _dataGridView.EditingPanel.BackColor = opaqueBackColor;
+            _dataGridView!.EditingPanel.BackColor = opaqueBackColor;
         }
         else
         {
@@ -130,10 +99,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
         return !dataGridViewWantsInputKey;
     }
 
-    public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context)
-    {
-        return Text;
-    }
+    public virtual object GetEditingControlFormattedValue(DataGridViewDataErrorContexts context) => Text;
 
     public virtual void PrepareEditingControlForEdit(bool selectAll)
     {
@@ -146,7 +112,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
     private void NotifyDataGridViewOfValueChange()
     {
         _valueChanged = true;
-        _dataGridView.NotifyCurrentCellDirty(true);
+        _dataGridView!.NotifyCurrentCellDirty(true);
     }
 
     protected override void OnSelectedIndexChanged(EventArgs e)
@@ -171,7 +137,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
 
     internal override void ReleaseUiaProvider(HWND handle)
     {
-        if (TryGetAccessibilityObject(out AccessibleObject accessibleObject))
+        if (TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
         {
             ((DataGridViewComboBoxEditingControlAccessibleObject)accessibleObject).ClearParent();
         }
