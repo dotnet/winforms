@@ -184,10 +184,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         return dataGridViewCell;
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewButtonCellAccessibleObject(this);
-    }
+    protected override AccessibleObject CreateAccessibilityInstance() => new DataGridViewButtonCellAccessibleObject(this);
 
     protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
     {
@@ -468,35 +465,23 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         return base.GetValue(rowIndex);
     }
 
-    protected override bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex)
-    {
-        return e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift;
-    }
+    protected override bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex) =>
+        e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift;
 
-    protected override bool KeyUpUnsharesRow(KeyEventArgs e, int rowIndex)
-    {
-        return e.KeyCode == Keys.Space;
-    }
+    protected override bool KeyUpUnsharesRow(KeyEventArgs e, int rowIndex) =>
+        e.KeyCode == Keys.Space;
 
-    protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
-    {
-        return e.Button == MouseButtons.Left;
-    }
+    protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e) =>
+        e.Button == MouseButtons.Left;
 
-    protected override bool MouseEnterUnsharesRow(int rowIndex)
-    {
-        return ColumnIndex == DataGridView!.MouseDownCellAddress.X && rowIndex == DataGridView.MouseDownCellAddress.Y;
-    }
+    protected override bool MouseEnterUnsharesRow(int rowIndex) =>
+        ColumnIndex == DataGridView!.MouseDownCellAddress.X && rowIndex == DataGridView.MouseDownCellAddress.Y;
 
-    protected override bool MouseLeaveUnsharesRow(int rowIndex)
-    {
-        return (ButtonState & ButtonState.Pushed) != 0;
-    }
+    protected override bool MouseLeaveUnsharesRow(int rowIndex) =>
+        (ButtonState & ButtonState.Pushed) != 0;
 
-    protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
-    {
-        return e.Button == MouseButtons.Left;
-    }
+    protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e) =>
+        e.Button == MouseButtons.Left;
 
     protected override void OnKeyDown(KeyEventArgs e, int rowIndex)
     {
@@ -1051,10 +1036,8 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         return resultBounds;
     }
 
-    public override string ToString()
-    {
-        return $"DataGridViewButtonCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewButtonCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
 
     private void UpdateButtonState(ButtonState newButtonState, int rowIndex)
     {
