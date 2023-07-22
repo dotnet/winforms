@@ -368,29 +368,33 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (value != (_formState[FormStateAllowTransparency] != 0))
+            if (value == (_formState[FormStateAllowTransparency] != 0))
             {
-                _formState[FormStateAllowTransparency] = (value ? 1 : 0);
-
-                _formState[FormStateLayered] = _formState[FormStateAllowTransparency];
-
-                UpdateStyles();
-
-                if (!value)
-                {
-                    if (Properties.ContainsObject(PropOpacity))
-                    {
-                        Properties.SetObject(PropOpacity, 1.0f);
-                    }
-
-                    if (Properties.ContainsObject(PropTransparencyKey))
-                    {
-                        Properties.SetObject(PropTransparencyKey, Color.Empty);
-                    }
-
-                    UpdateLayered();
-                }
+                return;
             }
+
+            _formState[FormStateAllowTransparency] = (value ? 1 : 0);
+
+            _formState[FormStateLayered] = _formState[FormStateAllowTransparency];
+
+            UpdateStyles();
+
+            if (value)
+            {
+                return;
+            }
+
+            if (Properties.ContainsObject(PropOpacity))
+            {
+                Properties.SetObject(PropOpacity, 1.0f);
+            }
+
+            if (Properties.ContainsObject(PropTransparencyKey))
+            {
+                Properties.SetObject(PropTransparencyKey, Color.Empty);
+            }
+
+            UpdateLayered();
         }
     }
 
@@ -553,24 +557,28 @@ public partial class Form : ContainerControl
         {
             SourceGenerated.EnumValidator.Validate(value);
 
-            if (GetAutoSizeMode() != value)
+            if (GetAutoSizeMode() == value)
             {
-                SetAutoSizeMode(value);
-                Control toLayout = DesignMode || ParentInternal is null ? this : ParentInternal;
-
-                if (toLayout is not null)
-                {
-                    // DefaultLayout does not keep anchor information until it needs to.  When
-                    // AutoSize became a common property, we could no longer blindly call into
-                    // DefaultLayout, so now we do a special InitLayout just for DefaultLayout.
-                    if (toLayout.LayoutEngine == DefaultLayout.Instance)
-                    {
-                        toLayout.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
-                    }
-
-                    LayoutTransaction.DoLayout(toLayout, this, PropertyNames.AutoSize);
-                }
+                return;
             }
+
+            SetAutoSizeMode(value);
+            Control toLayout = DesignMode || ParentInternal is null ? this : ParentInternal;
+
+            if (toLayout is null)
+            {
+                return;
+            }
+
+            // DefaultLayout does not keep anchor information until it needs to.  When
+            // AutoSize became a common property, we could no longer blindly call into
+            // DefaultLayout, so now we do a special InitLayout just for DefaultLayout.
+            if (toLayout.LayoutEngine == DefaultLayout.Instance)
+            {
+                toLayout.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
+            }
+
+            LayoutTransaction.DoLayout(toLayout, this, PropertyNames.AutoSize);
         }
     }
 
@@ -1054,27 +1062,29 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (_icon != value)
+            if (_icon == value)
             {
-                // If the user is setting the default back in, treat this
-                // as a reset.
-                if (value == defaultIcon)
-                {
-                    value = null;
-                }
-
-                // If null is passed, reset the icon.
-                _formState[FormStateIconSet] = value is null ? 0 : 1;
-                _icon = value;
-
-                if (_smallIcon is not null)
-                {
-                    _smallIcon.Dispose();
-                    _smallIcon = null;
-                }
-
-                UpdateWindowIcon(true);
+                return;
             }
+
+            // If the user is setting the default back in, treat this
+            // as a reset.
+            if (value == defaultIcon)
+            {
+                value = null;
+            }
+
+            // If null is passed, reset the icon.
+            _formState[FormStateIconSet] = value is null ? 0 : 1;
+            _icon = value;
+
+            if (_smallIcon is not null)
+            {
+                _smallIcon.Dispose();
+                _smallIcon = null;
+            }
+
+            UpdateWindowIcon(true);
         }
     }
 
@@ -1231,11 +1241,13 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (!value.Equals(MaximizedBounds))
+            if (value.Equals(MaximizedBounds))
             {
-                Properties.SetRectangle(PropMaximizedBounds, value);
-                OnMaximizedBoundsChanged(EventArgs.Empty);
+                return;
             }
+
+            Properties.SetRectangle(PropMaximizedBounds, value);
+            OnMaximizedBoundsChanged(EventArgs.Empty);
         }
     }
 
@@ -1271,15 +1283,17 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (!value.Equals(MaximumSize))
+            if (value.Equals(MaximumSize))
             {
-                if (value.Width < 0 || value.Height < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(MaximumSize));
-                }
-
-                UpdateMaximumSize(value);
+                return;
             }
+
+            if (value.Width < 0 || value.Height < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(MaximumSize));
+            }
+
+            UpdateMaximumSize(value);
         }
     }
 
@@ -1388,19 +1402,21 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (!value.Equals(MinimumSize))
+            if (value.Equals(MinimumSize))
             {
-                if (value.Width < 0 || value.Height < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(MinimumSize));
-                }
-
-                Rectangle bounds = Bounds;
-                bounds.Size = value;
-                value = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(bounds).Size;
-
-                UpdateMinimumSize(value);
+                return;
             }
+
+            if (value.Width < 0 || value.Height < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(MinimumSize));
+            }
+
+            Rectangle bounds = Bounds;
+            bounds.Size = value;
+            value = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(bounds).Size;
+
+            UpdateMinimumSize(value);
         }
     }
 
@@ -1871,13 +1887,15 @@ public partial class Form : ContainerControl
 
         set
         {
-            if (value != _rightToLeftLayout)
+            if (value == _rightToLeftLayout)
             {
-                _rightToLeftLayout = value;
-                using (new LayoutTransaction(this, this, PropertyNames.RightToLeftLayout))
-                {
-                    OnRightToLeftLayoutChanged(EventArgs.Empty);
-                }
+                return;
+            }
+
+            _rightToLeftLayout = value;
+            using (new LayoutTransaction(this, this, PropertyNames.RightToLeftLayout))
+            {
+                OnRightToLeftLayoutChanged(EventArgs.Empty);
             }
         }
     }
@@ -2018,16 +2036,18 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (SizeGripStyle != value)
+            if (SizeGripStyle == value)
             {
-                //do some bounds checking here
-                //
-                //valid values are 0x0 to 0x2
-                SourceGenerated.EnumValidator.Validate(value);
-
-                _formState[FormStateSizeGripStyle] = (int)value;
-                UpdateRenderSizeGrip();
+                return;
             }
+
+            //do some bounds checking here
+            //
+            //valid values are 0x0 to 0x2
+            SourceGenerated.EnumValidator.Validate(value);
+
+            _formState[FormStateSizeGripStyle] = (int)value;
+            UpdateRenderSizeGrip();
         }
     }
 
@@ -2193,26 +2213,29 @@ public partial class Form : ContainerControl
         set
         {
             Properties.SetObject(PropTransparencyKey, value);
-            if (!IsMdiContainer)
+
+            if (IsMdiContainer)
             {
-                bool oldLayered = (_formState[FormStateLayered] == 1);
-                if (value != Color.Empty)
-                {
-                    AllowTransparency = true;
-                    _formState[FormStateLayered] = 1;
-                }
-                else
-                {
-                    _formState[FormStateLayered] = (OpacityAsByte < 255) ? 1 : 0;
-                }
-
-                if (oldLayered != (_formState[FormStateLayered] != 0))
-                {
-                    UpdateStyles();
-                }
-
-                UpdateLayered();
+                return;
             }
+
+            bool oldLayered = (_formState[FormStateLayered] == 1);
+            if (value != Color.Empty)
+            {
+                AllowTransparency = true;
+                _formState[FormStateLayered] = 1;
+            }
+            else
+            {
+                _formState[FormStateLayered] = (OpacityAsByte < 255) ? 1 : 0;
+            }
+
+            if (oldLayered != (_formState[FormStateLayered] != 0))
+            {
+                UpdateStyles();
+            }
+
+            UpdateLayered();
         }
     }
 
@@ -4672,14 +4695,17 @@ public partial class Form : ContainerControl
                 FormClosingEventArgs fce = new FormClosingEventArgs(CloseReason.FormOwnerClosing, false);
                 for (int i = ownedFormsCount - 1; i >= 0; i--)
                 {
-                    if (ownedForms[i] is not null && !Application.OpenForms.Contains(ownedForms[i]))
+                    if (ownedForms[i] is null || Application.OpenForms.Contains(ownedForms[i]))
                     {
-                        ownedForms[i].OnFormClosing(fce);
-                        if (fce.Cancel)
-                        {
-                            e.Cancel = true;
-                            break;
-                        }
+                        continue;
+                    }
+
+                    ownedForms[i].OnFormClosing(fce);
+
+                    if (fce.Cancel)
+                    {
+                        e.Cancel = true;
+                        break;
                     }
                 }
             }
@@ -4769,28 +4795,32 @@ public partial class Form : ContainerControl
         Form?[]? ownedForms = (Form?[]?)Properties.GetObject(PropOwnedForms);
         int ownedFormsCount = Properties.GetInteger(PropOwnedFormsCount);
 
-        if (ownedForms is not null)
+        if (ownedForms is null)
         {
-            for (int i = 0; i < ownedFormsCount; i++)
+            return;
+        }
+
+        for (int i = 0; i < ownedFormsCount; i++)
+        {
+            if (!ownedForm.Equals(ownedForms[i]))
             {
-                if (ownedForm.Equals(ownedForms[i]))
-                {
-                    // clear out the reference.
-                    ownedForms[i] = null;
-
-                    // compact the array.
-                    if (i + 1 < ownedFormsCount)
-                    {
-                        Array.Copy(ownedForms, i + 1, ownedForms, i, ownedFormsCount - i - 1);
-                        ownedForms[ownedFormsCount - 1] = null;
-                    }
-
-                    ownedFormsCount--;
-                }
+                continue;
             }
 
-            Properties.SetInteger(PropOwnedFormsCount, ownedFormsCount);
+            // clear out the reference.
+            ownedForms[i] = null;
+
+            // compact the array.
+            if (i + 1 < ownedFormsCount)
+            {
+                Array.Copy(ownedForms, i + 1, ownedForms, i, ownedFormsCount - i - 1);
+                ownedForms[ownedFormsCount - 1] = null;
+            }
+
+            ownedFormsCount--;
         }
+
+        Properties.SetInteger(PropOwnedFormsCount, ownedFormsCount);
     }
 
     /// <summary>
@@ -5625,30 +5655,32 @@ public partial class Form : ContainerControl
     /// </summary>
     private void UpdateLayered()
     {
-        if ((_formState[FormStateLayered] != 0) && IsHandleCreated && TopLevel)
+        if (_formState[FormStateLayered] == 0 || !IsHandleCreated || !TopLevel)
         {
-            BOOL result;
+            return;
+        }
 
-            Color transparencyKey = TransparencyKey;
+        BOOL result;
 
-            if (transparencyKey.IsEmpty)
-            {
-                result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)0, OpacityAsByte, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA);
-            }
-            else if (OpacityAsByte == 255)
-            {
-                // Windows doesn't do so well setting colorkey and alpha, so avoid it if we can
-                result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)transparencyKey, 0, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_COLORKEY);
-            }
-            else
-            {
-                result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)transparencyKey, OpacityAsByte, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA | LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_COLORKEY);
-            }
+        Color transparencyKey = TransparencyKey;
 
-            if (!result)
-            {
-                throw new Win32Exception();
-            }
+        if (transparencyKey.IsEmpty)
+        {
+            result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)0, OpacityAsByte, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA);
+        }
+        else if (OpacityAsByte == 255)
+        {
+            // Windows doesn't do so well setting colorkey and alpha, so avoid it if we can
+            result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)transparencyKey, 0, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_COLORKEY);
+        }
+        else
+        {
+            result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)transparencyKey, OpacityAsByte, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA | LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_COLORKEY);
+        }
+
+        if (!result)
+        {
+            throw new Win32Exception();
         }
     }
 
@@ -5863,25 +5895,27 @@ public partial class Form : ContainerControl
 
     internal void UpdateMdiWindowListStrip()
     {
-        if (IsMdiContainer)
+        if (!IsMdiContainer)
         {
-            if (MdiWindowListStrip is not null && MdiWindowListStrip.MergedMenu is not null)
-            {
-                ToolStripManager.RevertMergeInternal(MdiWindowListStrip.MergedMenu, MdiWindowListStrip, /*revertMdiStuff*/true);
-            }
+            return;
+        }
 
-            MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
-            if (sourceMenuStrip is not null && sourceMenuStrip.MdiWindowListItem is not null)
-            {
-                MdiWindowListStrip ??= new MdiWindowListStrip();
+        if (MdiWindowListStrip is not null && MdiWindowListStrip.MergedMenu is not null)
+        {
+            ToolStripManager.RevertMergeInternal(MdiWindowListStrip.MergedMenu, MdiWindowListStrip, /*revertMdiStuff*/true);
+        }
 
-                int nSubItems = sourceMenuStrip.MdiWindowListItem.DropDownItems.Count;
-                bool shouldIncludeSeparator = (nSubItems > 0 &&
-                    !(sourceMenuStrip.MdiWindowListItem.DropDownItems[nSubItems - 1] is ToolStripSeparator));
-                MdiWindowListStrip.PopulateItems(this, sourceMenuStrip.MdiWindowListItem, shouldIncludeSeparator);
-                ToolStripManager.Merge(MdiWindowListStrip, sourceMenuStrip);
-                MdiWindowListStrip.MergedMenu = sourceMenuStrip;
-            }
+        MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
+        if (sourceMenuStrip is not null && sourceMenuStrip.MdiWindowListItem is not null)
+        {
+            MdiWindowListStrip ??= new MdiWindowListStrip();
+
+            int nSubItems = sourceMenuStrip.MdiWindowListItem.DropDownItems.Count;
+            bool shouldIncludeSeparator = (nSubItems > 0 &&
+                !(sourceMenuStrip.MdiWindowListItem.DropDownItems[nSubItems - 1] is ToolStripSeparator));
+            MdiWindowListStrip.PopulateItems(this, sourceMenuStrip.MdiWindowListItem, shouldIncludeSeparator);
+            ToolStripManager.Merge(MdiWindowListStrip, sourceMenuStrip);
+            MdiWindowListStrip.MergedMenu = sourceMenuStrip;
         }
     }
 
@@ -5923,56 +5957,58 @@ public partial class Form : ContainerControl
     /// </summary>
     private unsafe void UpdateWindowIcon(bool redrawFrame)
     {
-        if (IsHandleCreated)
+        if (!IsHandleCreated)
         {
-            Icon? icon;
+            return;
+        }
 
-            // Preserve Win32 behavior by keeping the icon we set NULL if
-            // the user hasn't specified an icon and we are a dialog frame.
-            if ((FormBorderStyle == FormBorderStyle.FixedDialog && _formState[FormStateIconSet] == 0) || !ShowIcon)
-            {
-                icon = null;
-            }
-            else
-            {
-                icon = Icon;
-            }
+        Icon? icon;
 
-            if (icon is not null)
+        // Preserve Win32 behavior by keeping the icon we set NULL if
+        // the user hasn't specified an icon and we are a dialog frame.
+        if ((FormBorderStyle == FormBorderStyle.FixedDialog && _formState[FormStateIconSet] == 0) || !ShowIcon)
+        {
+            icon = null;
+        }
+        else
+        {
+            icon = Icon;
+        }
+
+        if (icon is not null)
+        {
+            if (_smallIcon is null)
             {
-                if (_smallIcon is null)
+                try
                 {
-                    try
-                    {
-                        _smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
-                    }
-                    catch
-                    {
-                    }
+                    _smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
                 }
-
-                if (_smallIcon is not null)
+                catch
                 {
-                    PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL, (LPARAM)_smallIcon.Handle);
                 }
-
-                PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
-            }
-            else
-            {
-                PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL);
-                PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_BIG);
             }
 
-            if (WindowState == FormWindowState.Maximized && MdiParent?.MdiControlStrip is not null)
+            if (_smallIcon is not null)
             {
-                MdiParent.MdiControlStrip.updateIcon();
+                PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL, (LPARAM)_smallIcon.Handle);
             }
 
-            if (redrawFrame)
-            {
-                PInvoke.RedrawWindow(this, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_INVALIDATE | REDRAW_WINDOW_FLAGS.RDW_FRAME);
-            }
+            PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_BIG, (LPARAM)icon.Handle);
+        }
+        else
+        {
+            PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_SMALL);
+            PInvoke.SendMessage(this, PInvoke.WM_SETICON, (WPARAM)PInvoke.ICON_BIG);
+        }
+
+        if (WindowState == FormWindowState.Maximized && MdiParent?.MdiControlStrip is not null)
+        {
+            MdiParent.MdiControlStrip.updateIcon();
+        }
+
+        if (redrawFrame)
+        {
+            PInvoke.RedrawWindow(this, lprcUpdate: null, HRGN.Null, REDRAW_WINDOW_FLAGS.RDW_INVALIDATE | REDRAW_WINDOW_FLAGS.RDW_FRAME);
         }
     }
 
