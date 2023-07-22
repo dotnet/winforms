@@ -368,7 +368,10 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (value == (_formState[FormStateAllowTransparency] != 0)) return;
+            if (value == (_formState[FormStateAllowTransparency] != 0))
+            {
+                return;
+            }
 
             _formState[FormStateAllowTransparency] = (value ? 1 : 0);
 
@@ -376,7 +379,10 @@ public partial class Form : ContainerControl
 
             UpdateStyles();
 
-            if (value) return;
+            if (value)
+            {
+                return;
+            }
 
             if (Properties.ContainsObject(PropOpacity))
             {
@@ -551,12 +557,18 @@ public partial class Form : ContainerControl
         {
             SourceGenerated.EnumValidator.Validate(value);
 
-            if (GetAutoSizeMode() == value) return;
+            if (GetAutoSizeMode() == value)
+            {
+                return;
+            }
 
             SetAutoSizeMode(value);
             Control toLayout = DesignMode || ParentInternal is null ? this : ParentInternal;
 
-            if (toLayout is null) return;
+            if (toLayout is null)
+            {
+                return;
+            }
 
             // DefaultLayout does not keep anchor information until it needs to.  When
             // AutoSize became a common property, we could no longer blindly call into
@@ -1050,7 +1062,10 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (_icon == value) return;
+            if (_icon == value)
+            {
+                return;
+            }
 
             // If the user is setting the default back in, treat this
             // as a reset.
@@ -1226,7 +1241,10 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (value.Equals(MaximizedBounds)) return;
+            if (value.Equals(MaximizedBounds))
+            {
+                return;
+            }
 
             Properties.SetRectangle(PropMaximizedBounds, value);
             OnMaximizedBoundsChanged(EventArgs.Empty);
@@ -1265,7 +1283,10 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (value.Equals(MaximumSize)) return;
+            if (value.Equals(MaximumSize))
+            {
+                return;
+            }
 
             if (value.Width < 0 || value.Height < 0)
             {
@@ -1381,7 +1402,10 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (value.Equals(MinimumSize)) return;
+            if (value.Equals(MinimumSize))
+            {
+                return;
+            }
 
             if (value.Width < 0 || value.Height < 0)
             {
@@ -1863,7 +1887,10 @@ public partial class Form : ContainerControl
 
         set
         {
-            if (value == _rightToLeftLayout) return;
+            if (value == _rightToLeftLayout)
+            {
+                return;
+            }
 
             _rightToLeftLayout = value;
             using (new LayoutTransaction(this, this, PropertyNames.RightToLeftLayout))
@@ -1898,7 +1925,10 @@ public partial class Form : ContainerControl
         get => _formState[FormStateTaskBar] != 0;
         set
         {
-            if (ShowInTaskbar == value) return;
+            if (ShowInTaskbar == value)
+            {
+                return;
+            }
             _formState[FormStateTaskBar] = value ? 1 : 0;
             if (IsHandleCreated)
             {
@@ -2007,7 +2037,10 @@ public partial class Form : ContainerControl
         }
         set
         {
-            if (SizeGripStyle == value) return;
+            if (SizeGripStyle == value)
+            {
+                return;
+            }
 
             //do some bounds checking here
             //
@@ -2182,7 +2215,10 @@ public partial class Form : ContainerControl
         {
             Properties.SetObject(PropTransparencyKey, value);
 
-            if (IsMdiContainer) return;
+            if (IsMdiContainer)
+            {
+                return;
+            }
 
             bool oldLayered = (_formState[FormStateLayered] == 1);
             if (value != Color.Empty)
@@ -4660,14 +4696,17 @@ public partial class Form : ContainerControl
                 FormClosingEventArgs fce = new FormClosingEventArgs(CloseReason.FormOwnerClosing, false);
                 for (int i = ownedFormsCount - 1; i >= 0; i--)
                 {
-                    if (ownedForms[i] is not null && !Application.OpenForms.Contains(ownedForms[i]))
+                    if (ownedForms[i] is null || Application.OpenForms.Contains(ownedForms[i]))
                     {
-                        ownedForms[i].OnFormClosing(fce);
-                        if (fce.Cancel)
-                        {
-                            e.Cancel = true;
-                            break;
-                        }
+                        continue;
+                    }
+
+                    ownedForms[i].OnFormClosing(fce);
+
+                    if (fce.Cancel)
+                    {
+                        e.Cancel = true;
+                        break;
                     }
                 }
             }
@@ -4761,20 +4800,22 @@ public partial class Form : ContainerControl
         {
             for (int i = 0; i < ownedFormsCount; i++)
             {
-                if (ownedForm.Equals(ownedForms[i]))
+                if (!ownedForm.Equals(ownedForms[i]))
                 {
-                    // clear out the reference.
-                    ownedForms[i] = null;
-
-                    // compact the array.
-                    if (i + 1 < ownedFormsCount)
-                    {
-                        Array.Copy(ownedForms, i + 1, ownedForms, i, ownedFormsCount - i - 1);
-                        ownedForms[ownedFormsCount - 1] = null;
-                    }
-
-                    ownedFormsCount--;
+                    continue;
                 }
+
+                // clear out the reference.
+                ownedForms[i] = null;
+
+                // compact the array.
+                if (i + 1 < ownedFormsCount)
+                {
+                    Array.Copy(ownedForms, i + 1, ownedForms, i, ownedFormsCount - i - 1);
+                    ownedForms[ownedFormsCount - 1] = null;
+                }
+
+                ownedFormsCount--;
             }
 
             Properties.SetInteger(PropOwnedFormsCount, ownedFormsCount);
@@ -4959,19 +5000,22 @@ public partial class Form : ContainerControl
     protected override void ScaleMinMaxSize(float xScaleFactor, float yScaleFactor, bool updateContainerSize = true)
     {
         base.ScaleMinMaxSize(xScaleFactor, yScaleFactor, updateContainerSize);
-        if (WindowState == FormWindowState.Normal)
+        if (WindowState != FormWindowState.Normal)
         {
-            Size minSize = MinimumSize;
-            Size maxSize = MaximumSize;
-            if (!minSize.IsEmpty)
-            {
-                UpdateMinimumSize(ScaleSize(minSize, xScaleFactor, yScaleFactor), updateContainerSize);
-            }
+            return;
+        }
 
-            if (!maxSize.IsEmpty)
-            {
-                UpdateMaximumSize(ScaleSize(maxSize, xScaleFactor, yScaleFactor), updateContainerSize);
-            }
+        Size minSize = MinimumSize;
+        Size maxSize = MaximumSize;
+
+        if (!minSize.IsEmpty)
+        {
+            UpdateMinimumSize(ScaleSize(minSize, xScaleFactor, yScaleFactor), updateContainerSize);
+        }
+
+        if (!maxSize.IsEmpty)
+        {
+            UpdateMaximumSize(ScaleSize(maxSize, xScaleFactor, yScaleFactor), updateContainerSize);
         }
     }
 
@@ -5613,30 +5657,32 @@ public partial class Form : ContainerControl
     /// </summary>
     private void UpdateLayered()
     {
-        if ((_formState[FormStateLayered] != 0) && IsHandleCreated && TopLevel)
+        if (_formState[FormStateLayered] == 0 || !IsHandleCreated || !TopLevel)
         {
-            BOOL result;
+            return;
+        }
 
-            Color transparencyKey = TransparencyKey;
+        BOOL result;
 
-            if (transparencyKey.IsEmpty)
-            {
-                result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)0, OpacityAsByte, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA);
-            }
-            else if (OpacityAsByte == 255)
-            {
-                // Windows doesn't do so well setting colorkey and alpha, so avoid it if we can
-                result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)transparencyKey, 0, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_COLORKEY);
-            }
-            else
-            {
-                result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)transparencyKey, OpacityAsByte, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA | LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_COLORKEY);
-            }
+        Color transparencyKey = TransparencyKey;
 
-            if (!result)
-            {
-                throw new Win32Exception();
-            }
+        if (transparencyKey.IsEmpty)
+        {
+            result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)0, OpacityAsByte, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA);
+        }
+        else if (OpacityAsByte == 255)
+        {
+            // Windows doesn't do so well setting colorkey and alpha, so avoid it if we can
+            result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)transparencyKey, 0, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_COLORKEY);
+        }
+        else
+        {
+            result = PInvoke.SetLayeredWindowAttributes(this, (COLORREF)transparencyKey, OpacityAsByte, LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_ALPHA | LAYERED_WINDOW_ATTRIBUTES_FLAGS.LWA_COLORKEY);
+        }
+
+        if (!result)
+        {
+            throw new Win32Exception();
         }
     }
 
@@ -5851,25 +5897,27 @@ public partial class Form : ContainerControl
 
     internal void UpdateMdiWindowListStrip()
     {
-        if (IsMdiContainer)
+        if (!IsMdiContainer)
         {
-            if (MdiWindowListStrip is not null && MdiWindowListStrip.MergedMenu is not null)
-            {
-                ToolStripManager.RevertMergeInternal(MdiWindowListStrip.MergedMenu, MdiWindowListStrip, /*revertMdiStuff*/true);
-            }
+            return;
+        }
 
-            MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
-            if (sourceMenuStrip is not null && sourceMenuStrip.MdiWindowListItem is not null)
-            {
-                MdiWindowListStrip ??= new MdiWindowListStrip();
+        if (MdiWindowListStrip is not null && MdiWindowListStrip.MergedMenu is not null)
+        {
+            ToolStripManager.RevertMergeInternal(MdiWindowListStrip.MergedMenu, MdiWindowListStrip, /*revertMdiStuff*/true);
+        }
 
-                int nSubItems = sourceMenuStrip.MdiWindowListItem.DropDownItems.Count;
-                bool shouldIncludeSeparator = (nSubItems > 0 &&
-                    !(sourceMenuStrip.MdiWindowListItem.DropDownItems[nSubItems - 1] is ToolStripSeparator));
-                MdiWindowListStrip.PopulateItems(this, sourceMenuStrip.MdiWindowListItem, shouldIncludeSeparator);
-                ToolStripManager.Merge(MdiWindowListStrip, sourceMenuStrip);
-                MdiWindowListStrip.MergedMenu = sourceMenuStrip;
-            }
+        MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
+        if (sourceMenuStrip is not null && sourceMenuStrip.MdiWindowListItem is not null)
+        {
+            MdiWindowListStrip ??= new MdiWindowListStrip();
+
+            int nSubItems = sourceMenuStrip.MdiWindowListItem.DropDownItems.Count;
+            bool shouldIncludeSeparator = (nSubItems > 0 &&
+                !(sourceMenuStrip.MdiWindowListItem.DropDownItems[nSubItems - 1] is ToolStripSeparator));
+            MdiWindowListStrip.PopulateItems(this, sourceMenuStrip.MdiWindowListItem, shouldIncludeSeparator);
+            ToolStripManager.Merge(MdiWindowListStrip, sourceMenuStrip);
+            MdiWindowListStrip.MergedMenu = sourceMenuStrip;
         }
     }
 
@@ -5911,7 +5959,10 @@ public partial class Form : ContainerControl
     /// </summary>
     private unsafe void UpdateWindowIcon(bool redrawFrame)
     {
-        if (!IsHandleCreated) return;
+        if (!IsHandleCreated)
+        {
+            return;
+        }
 
         Icon? icon;
 
