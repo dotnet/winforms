@@ -1049,7 +1049,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
     private void MoveOutsideContainer(ToolStrip toolStripToDrag, Point screenLocation)
     {
         // look for another rafting container.
-        ToolStripPanel panel = ToolStripManager.ToolStripPanelFromPoint(toolStripToDrag, screenLocation);
+        ToolStripPanel? panel = ToolStripManager.ToolStripPanelFromPoint(toolStripToDrag, screenLocation);
         if (panel is not null)
         {
             using (new LayoutTransaction(panel, panel, null))
