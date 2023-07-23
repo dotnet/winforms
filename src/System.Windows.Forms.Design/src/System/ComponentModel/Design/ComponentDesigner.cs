@@ -441,7 +441,6 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// <summary>
     ///  Invokes the get inheritance attribute of the specified ComponentDesigner.
     /// </summary>
-    [return: NotNullIfNotNull(nameof(toInvoke))]
     protected InheritanceAttribute? InvokeGetInheritanceAttribute(ComponentDesigner? toInvoke)
         => toInvoke?.InheritanceAttribute;
 
@@ -496,13 +495,14 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
                 {
                     if (string.IsNullOrEmpty(persistableComponent.SettingsKey))
                     {
+                        Debug.Assert(Component.Site is not null);
                         if (rootComponent != persistableComponent)
                         {
-                            settingsKeyName = $"{rootComponent.Site!.Name}.{Component.Site!.Name}";
+                            settingsKeyName = $"{rootComponent.Site!.Name}.{Component.Site.Name}";
                         }
                         else
                         {
-                            settingsKeyName = Component.Site!.Name;
+                            settingsKeyName = Component.Site.Name;
                         }
 
                         ShadowProperties[SettingsKeyName] = settingsKeyName;
