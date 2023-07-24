@@ -11366,8 +11366,8 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="toStringAlt">
         <source>Alt</source>
-        <target state="translated">Alt</target>
-        <note />
+        <target state="needs-review-translation">Alt</target>
+        <note>{Locked="Alt"}</note>
       </trans-unit>
       <trans-unit id="toStringBack">
         <source>Back</source>
@@ -11376,8 +11376,8 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="toStringControl">
         <source>Ctrl</source>
-        <target state="translated">Ctrl</target>
-        <note />
+        <target state="needs-review-translation">Ctrl</target>
+        <note>{Locked=!de-DE; "Ctrl"}</note>
       </trans-unit>
       <trans-unit id="toStringDefault">
         <source>(default)</source>
@@ -11386,23 +11386,23 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">Suprimir</target>
-        <note />
+        <target state="needs-review-translation">Suprimir</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Del"}</note>
       </trans-unit>
       <trans-unit id="toStringEnd">
         <source>End</source>
-        <target state="translated">Fin</target>
-        <note />
+        <target state="needs-review-translation">Fin</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "End"}</note>
       </trans-unit>
       <trans-unit id="toStringEnter">
         <source>Enter</source>
-        <target state="translated">Entrar</target>
-        <note />
+        <target state="needs-review-translation">Entrar</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Enter"}</note>
       </trans-unit>
       <trans-unit id="toStringHome">
         <source>Home</source>
-        <target state="translated">Inicio</target>
-        <note />
+        <target state="needs-review-translation">Inicio</target>
+        <note>{Locked=!fr-FR,!de-DE,!es-ES; "Home"}</note>
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Ins</source>
@@ -11416,18 +11416,18 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">Avanzar página</target>
-        <note />
+        <target state="needs-review-translation">Avanzar página</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "PgDn"}</note>
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">Retroceder página</target>
-        <note />
+        <target state="needs-review-translation">Retroceder página</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "PgUp"}</note>
       </trans-unit>
       <trans-unit id="toStringShift">
         <source>Shift</source>
-        <target state="translated">Mayúsculas</target>
-        <note />
+        <target state="needs-review-translation">Mayúsculas</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Shift"}</note>
       </trans-unit>
       <trans-unit id="valueChangedEventDescr">
         <source>Occurs when the value of the control changes.</source>

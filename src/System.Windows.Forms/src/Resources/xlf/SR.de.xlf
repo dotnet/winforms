@@ -11366,8 +11366,8 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="toStringAlt">
         <source>Alt</source>
-        <target state="translated">Alt</target>
-        <note />
+        <target state="needs-review-translation">Alt</target>
+        <note>{Locked="Alt"}</note>
       </trans-unit>
       <trans-unit id="toStringBack">
         <source>Back</source>
@@ -11376,8 +11376,8 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="toStringControl">
         <source>Ctrl</source>
-        <target state="translated">Strg</target>
-        <note />
+        <target state="needs-review-translation">Strg</target>
+        <note>{Locked=!de-DE; "Ctrl"}</note>
       </trans-unit>
       <trans-unit id="toStringDefault">
         <source>(default)</source>
@@ -11386,23 +11386,23 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">Entf</target>
-        <note />
+        <target state="needs-review-translation">Entf</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Del"}</note>
       </trans-unit>
       <trans-unit id="toStringEnd">
         <source>End</source>
-        <target state="translated">Beenden</target>
-        <note />
+        <target state="needs-review-translation">Beenden</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "End"}</note>
       </trans-unit>
       <trans-unit id="toStringEnter">
         <source>Enter</source>
-        <target state="translated">EINGABE</target>
-        <note />
+        <target state="needs-review-translation">EINGABE</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Enter"}</note>
       </trans-unit>
       <trans-unit id="toStringHome">
         <source>Home</source>
-        <target state="translated">Startseite</target>
-        <note />
+        <target state="needs-review-translation">Startseite</target>
+        <note>{Locked=!fr-FR,!de-DE,!es-ES; "Home"}</note>
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Ins</source>
@@ -11416,18 +11416,18 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">Bild ab</target>
-        <note />
+        <target state="needs-review-translation">Bild ab</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "PgDn"}</note>
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">Bild auf</target>
-        <note />
+        <target state="needs-review-translation">Bild auf</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "PgUp"}</note>
       </trans-unit>
       <trans-unit id="toStringShift">
         <source>Shift</source>
-        <target state="translated">Umschalttaste</target>
-        <note />
+        <target state="needs-review-translation">Umschalttaste</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Shift"}</note>
       </trans-unit>
       <trans-unit id="valueChangedEventDescr">
         <source>Occurs when the value of the control changes.</source>
