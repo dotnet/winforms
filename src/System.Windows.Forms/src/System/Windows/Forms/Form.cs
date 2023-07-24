@@ -5814,7 +5814,7 @@ public partial class Form : ContainerControl
                     }
 #endif
 
-                    ToolStripManager.RevertMergeInternal(mdiControlStrip.MergedMenu, mdiControlStrip, /*revertMDIStuff*/true);
+                    ToolStripManager.RevertMergeInternal(mdiControlStrip.MergedMenu, mdiControlStrip, revertMDIControls: true);
 
 #if DEBUG
                     // double check that RevertMerge doesnt accidentally revert more than it should.
@@ -5841,7 +5841,7 @@ public partial class Form : ContainerControl
                     HMENU hMenu = PInvoke.GetMenu(this);
                     if (hMenu == HMENU.Null)
                     {
-                        MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
+                        MenuStrip? sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
                         if (sourceMenuStrip is not null)
                         {
                             MdiControlStrip = new MdiControlStrip(ActiveMdiChildInternal);
@@ -5867,10 +5867,10 @@ public partial class Form : ContainerControl
         {
             if (MdiWindowListStrip is not null && MdiWindowListStrip.MergedMenu is not null)
             {
-                ToolStripManager.RevertMergeInternal(MdiWindowListStrip.MergedMenu, MdiWindowListStrip, /*revertMdiStuff*/true);
+                ToolStripManager.RevertMergeInternal(MdiWindowListStrip.MergedMenu, MdiWindowListStrip, revertMDIControls: true);
             }
 
-            MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
+            MenuStrip? sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
             if (sourceMenuStrip is not null && sourceMenuStrip.MdiWindowListItem is not null)
             {
                 MdiWindowListStrip ??= new MdiWindowListStrip();

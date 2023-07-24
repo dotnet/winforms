@@ -308,13 +308,13 @@ override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnSelectedIndex
 static System.Windows.Forms.ToolStripManager.FindToolStrip(string! toolStripName) -> System.Windows.Forms.ToolStrip?
 static System.Windows.Forms.ToolStripManager.LoadSettings(System.Windows.Forms.Form! targetForm) -> void
 static System.Windows.Forms.ToolStripManager.LoadSettings(System.Windows.Forms.Form! targetForm, string! key) -> void
-~static System.Windows.Forms.ToolStripManager.Merge(System.Windows.Forms.ToolStrip sourceToolStrip, string targetName) -> bool
-~static System.Windows.Forms.ToolStripManager.Merge(System.Windows.Forms.ToolStrip sourceToolStrip, System.Windows.Forms.ToolStrip targetToolStrip) -> bool
+static System.Windows.Forms.ToolStripManager.Merge(System.Windows.Forms.ToolStrip! sourceToolStrip, string! targetName) -> bool
+static System.Windows.Forms.ToolStripManager.Merge(System.Windows.Forms.ToolStrip! sourceToolStrip, System.Windows.Forms.ToolStrip! targetToolStrip) -> bool
 static System.Windows.Forms.ToolStripManager.Renderer.get -> System.Windows.Forms.ToolStripRenderer!
 static System.Windows.Forms.ToolStripManager.Renderer.set -> void
-~static System.Windows.Forms.ToolStripManager.RevertMerge(string targetName) -> bool
-~static System.Windows.Forms.ToolStripManager.RevertMerge(System.Windows.Forms.ToolStrip targetToolStrip) -> bool
-~static System.Windows.Forms.ToolStripManager.RevertMerge(System.Windows.Forms.ToolStrip targetToolStrip, System.Windows.Forms.ToolStrip sourceToolStrip) -> bool
+static System.Windows.Forms.ToolStripManager.RevertMerge(string! targetName) -> bool
+static System.Windows.Forms.ToolStripManager.RevertMerge(System.Windows.Forms.ToolStrip! targetToolStrip) -> bool
+static System.Windows.Forms.ToolStripManager.RevertMerge(System.Windows.Forms.ToolStrip! targetToolStrip, System.Windows.Forms.ToolStrip! sourceToolStrip) -> bool
 static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form! sourceForm) -> void
 static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form! sourceForm, string! key) -> void
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
