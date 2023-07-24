@@ -6131,42 +6131,52 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="toStringAlt" xml:space="preserve">
     <value>Alt</value>
+	<comment>{Locked="Alt"}</comment>
   </data>
   <data name="toStringBack" xml:space="preserve">
     <value>Back</value>
   </data>
   <data name="toStringControl" xml:space="preserve">
     <value>Ctrl</value>
+	<comment>{Locked=!de-DE; "Ctrl"}</comment>
   </data>
   <data name="toStringDefault" xml:space="preserve">
     <value>(default)</value>
   </data>
   <data name="toStringDelete" xml:space="preserve">
     <value>Del</value>
+	<comment>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Del"}</comment>
   </data>
   <data name="toStringEnd" xml:space="preserve">
     <value>End</value>
+	<comment>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "End"}</comment>
   </data>
   <data name="toStringEnter" xml:space="preserve">
     <value>Enter</value>
+	<comment>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Enter"}</comment>
   </data>
   <data name="toStringHome" xml:space="preserve">
     <value>Home</value>
+	<comment>{Locked=!fr-FR,!de-DE,!es-ES; "Home"}</comment>
   </data>
   <data name="toStringInsert" xml:space="preserve">
-    <value>Ins</value>
+    <value>Insert</value>
+	<comment>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES,!zh-Hant; "Insert"}</comment>
   </data>
   <data name="toStringNone" xml:space="preserve">
     <value>(none)</value>
   </data>
   <data name="toStringPageDown" xml:space="preserve">
     <value>PgDn</value>
+	<comment>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "PgDn"}</comment>
   </data>
   <data name="toStringPageUp" xml:space="preserve">
     <value>PgUp</value>
+	<comment>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "PgUp"}</comment>
   </data>
   <data name="toStringShift" xml:space="preserve">
     <value>Shift</value>
+	<comment>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Shift"}</comment>
   </data>
   <data name="TrackBarAutoSizeDescr" xml:space="preserve">
     <value>Indicates whether the control will resize itself automatically based on a computation of the default scroll bar dimensions.</value>
