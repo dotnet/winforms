@@ -18,13 +18,12 @@ namespace System.Windows.Forms.Design
             {
                 SelectionRules rules = base.SelectionRules;
 
-                if (Control.Parent is null || (Control.Parent is not null && !Control.Parent.IsMirrored))
+                if (Control.Parent is null || !Control.Parent.IsMirrored)
                 {
                     rules &= ~(SelectionRules.TopSizeable | SelectionRules.LeftSizeable);
                 }
                 else
                 {
-                    Debug.Assert(Control.Parent is not null && Control.Parent.IsMirrored);
                     rules &= ~(SelectionRules.TopSizeable | SelectionRules.RightSizeable);
                 }
 
