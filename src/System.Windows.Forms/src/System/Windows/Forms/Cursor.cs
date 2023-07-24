@@ -38,7 +38,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
     internal unsafe Cursor(PCWSTR nResourceId)
     {
         // We don't delete stock cursors.
-        _flags &= Flags.OwnHandle;
+        _flags &= ~Flags.OwnHandle;
         _flags |= Flags.InternalCursor;
         _resourceId = nResourceId;
         _handle = PInvoke.LoadCursor((HINSTANCE)0, nResourceId);
@@ -59,7 +59,7 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
         }
 
         _handle = (HCURSOR)handle;
-        _flags &= Flags.OwnHandle;
+        _flags &= ~Flags.OwnHandle;
     }
 
     /// <summary>
