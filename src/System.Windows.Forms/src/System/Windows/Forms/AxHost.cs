@@ -2639,7 +2639,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                     continue;
                 }
 
-                if (!_properties.ContainsKey(propName))
+                if (!_properties.TryGetValue(propName, out PropertyDescriptor? propDesc))
                 {
                     if (propInfo is not null)
                     {
@@ -2656,7 +2656,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 }
                 else
                 {
-                    _properties.TryGetValue(propName, out PropertyDescriptor? propDesc);
                     Debug.Assert(propDesc is not null, $"Cannot find cached entry for: {propName}");
                     AxPropertyDescriptor? axPropDesc = propDesc as AxPropertyDescriptor;
                     if ((propInfo is null && axPropDesc is not null) || (propInfo is not null && axPropDesc is null))
