@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms;
@@ -12,12 +10,12 @@ public partial class Binding
 {
     private class BindToObject
     {
-        private BindingManagerBase _bindingManager;
+        private BindingManagerBase? _bindingManager;
         private readonly Binding _owner;
         private bool _dataSourceInitialized;
         private bool _waitingOnDataSource;
 
-        private void PropValueChanged(object sender, EventArgs e)
+        private void PropValueChanged(object? sender, EventArgs e)
         {
             _bindingManager?.OnCurrentChanged(EventArgs.Empty);
         }
@@ -59,7 +57,7 @@ public partial class Binding
             CheckBinding();
         }
 
-        private void DataSource_Initialized(object sender, EventArgs e)
+        private void DataSource_Initialized(object? sender, EventArgs e)
         {
             Debug.Assert(sender == _owner.DataSource, "data source should not change");
             Debug.Assert(_owner.DataSource is ISupportInitializeNotification, "data source should not change on the BindToObject");
@@ -87,9 +85,12 @@ public partial class Binding
             }
 
             // remove notification from the backEnd
-            if (_bindingManager is not null && FieldInfo is not null && _bindingManager.IsBinding && !(_bindingManager is CurrencyManager))
+            if (_bindingManager is not null &&
+                FieldInfo is not null &&
+                _bindingManager.IsBinding &&
+                _bindingManager is not CurrencyManager)
             {
-                FieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
+                FieldInfo.RemoveValueChanged(_bindingManager.Current!, new EventHandler(PropValueChanged));
                 FieldInfo = null;
             }
 
@@ -103,7 +104,7 @@ public partial class Binding
         ///  Returns any data error info on the data source for the bound data field
         ///  in the current row
         /// </summary>
-        private string GetErrorText(object value)
+        private string GetErrorText(object? value)
         {
             string text = string.Empty;
 
@@ -129,9 +130,9 @@ public partial class Binding
             return text ?? string.Empty;
         }
 
-        internal object GetValue()
+        internal object? GetValue()
         {
-            object obj = _bindingManager.Current;
+            object? obj = _bindingManager?.Current;
 
             // Update IDataErrorInfo text: it's ok to get this now because we're going to need
             // this as part of the BindingCompleteEventArgs anyway.
@@ -145,7 +146,7 @@ public partial class Binding
             return obj;
         }
 
-        internal Type BindToType
+        internal Type? BindToType
         {
             get
             {
@@ -153,7 +154,7 @@ public partial class Binding
                 {
                     // if we are bound to a list w/o any properties, then
                     // take the type from the BindingManager
-                    Type type = _bindingManager.BindType;
+                    Type? type = _bindingManager?.BindType;
                     if (typeof(Array).IsAssignableFrom(type))
                     {
                         type = type.GetElementType();
@@ -168,11 +169,11 @@ public partial class Binding
 
         internal void SetValue(object value)
         {
-            object obj = null;
+            object? obj = null;
 
             if (FieldInfo is not null)
             {
-                obj = _bindingManager.Current;
+                obj = _bindingManager?.Current;
                 if (obj is IEditableObject editableObject)
                 {
                     editableObject.BeginEdit();
@@ -196,7 +197,7 @@ public partial class Binding
             DataErrorText = GetErrorText(obj);
         }
 
-        internal PropertyDescriptor FieldInfo { get; private set; }
+        internal PropertyDescriptor? FieldInfo { get; private set; }
 
         internal void CheckBinding()
         {
@@ -210,9 +211,9 @@ public partial class Binding
             if (_bindingManager is not null &&
                 FieldInfo is not null &&
                 _bindingManager.IsBinding &&
-                !(_bindingManager is CurrencyManager))
+                _bindingManager is not CurrencyManager)
             {
-                FieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
+                FieldInfo.RemoveValueChanged(_bindingManager.Current!, new EventHandler(PropValueChanged));
             }
 
             if (_bindingManager is not null &&
@@ -234,10 +235,11 @@ public partial class Binding
                 // if the binding is of the form (Control, ControlProperty, DataSource, Property1.Property2.Property3)
                 // then we want to get notification from Current.Property1.Property2 and not from DataSource
                 // when we get the backEnd notification we push the new value into the Control's property
-                if (FieldInfo is not null && _bindingManager.IsBinding &&
-                    !(_bindingManager is CurrencyManager))
+                if (FieldInfo is not null &&
+                    _bindingManager.IsBinding &&
+                    _bindingManager is not CurrencyManager)
                 {
-                    FieldInfo.AddValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
+                    FieldInfo.AddValueChanged(_bindingManager.Current!, new EventHandler(PropValueChanged));
                 }
             }
             else
