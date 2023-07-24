@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Concurrent;
 using System.Drawing;
 using Microsoft.Win32;
@@ -15,22 +13,22 @@ public static partial class ToolStripManager
     // WARNING: ThreadStatic initialization happens only on the first thread at class CTOR time.
     // use InitializeThread mechanism to initialize ThreadStatic members
     [ThreadStatic]
-    private static WeakRefCollection t_toolStripWeakArrayList;
+    private static WeakRefCollection? t_toolStripWeakArrayList;
 
     [ThreadStatic]
-    private static WeakRefCollection t_toolStripPanelWeakArrayList;
+    private static WeakRefCollection? t_toolStripPanelWeakArrayList;
 
     [ThreadStatic]
     private static bool t_initialized;
 
-    private static Font s_defaultFont;
+    private static Font? s_defaultFont;
     private static ConcurrentDictionary<int, Font> s_defaultFontCache = new();
 
     // WARNING: When subscribing to static event handlers - make sure you unhook from them
     // otherwise you can leak USER objects on process shutdown.
     // Consider: use WeakRefCollection
     [ThreadStatic]
-    private static Delegate[] t_staticEventHandlers;
+    private static Delegate?[]? t_staticEventHandlers;
     private const int StaticEventDefaultRendererChanged = 0;
     private const int StaticEventCount = 1;
 
@@ -54,33 +52,30 @@ public static partial class ToolStripManager
     {
         get
         {
-            Font sysFont = null;
+            Font? sysFont = null;
 
             // We need to cache the default fonts for the different DPIs.
             if (DpiHelper.IsPerMonitorV2Awareness)
             {
                 int dpi = CurrentDpi;
 
-                Font retFont = null;
-                if (s_defaultFontCache.TryGetValue(dpi, out retFont) == false || retFont is null)
+                if (!s_defaultFontCache.TryGetValue(dpi, out Font? retFont))
                 {
                     // Default to menu font
                     sysFont = SystemInformation.GetMenuFontForDpi(dpi);
-                    if (sysFont is not null)
-                    {
-                        // Ensure font is in pixels so it displays properly in the property grid at design time.
-                        if (sysFont.Unit != GraphicsUnit.Point)
-                        {
-                            retFont = ControlPaint.FontInPoints(sysFont);
-                            sysFont.Dispose();
-                        }
-                        else
-                        {
-                            retFont = sysFont;
-                        }
 
-                        s_defaultFontCache[dpi] = retFont;
+                    // Ensure font is in pixels so it displays properly in the property grid at design time.
+                    if (sysFont.Unit != GraphicsUnit.Point)
+                    {
+                        retFont = ControlPaint.FontInPoints(sysFont);
+                        sysFont.Dispose();
                     }
+                    else
+                    {
+                        retFont = sysFont;
+                    }
+
+                    s_defaultFontCache[dpi] = retFont;
                 }
 
                 return retFont;
@@ -88,7 +83,7 @@ public static partial class ToolStripManager
             else
             {
                 // Threadsafe local reference
-                Font retFont = s_defaultFont;
+                Font? retFont = s_defaultFont;
 
                 if (retFont is null)
                 {
@@ -101,23 +96,21 @@ public static partial class ToolStripManager
                         {
                             // Default to menu font
                             sysFont = SystemFonts.MenuFont;
+
                             // ...or to control font if menu font unavailable
                             sysFont ??= Control.DefaultFont;
 
-                            if (sysFont is not null)
+                            // Ensure font is in pixels so it displays properly in the property grid at design time.
+                            if (sysFont.Unit != GraphicsUnit.Point)
                             {
-                                // Ensure font is in pixels so it displays properly in the property grid at design time.
-                                if (sysFont.Unit != GraphicsUnit.Point)
-                                {
-                                    s_defaultFont = ControlPaint.FontInPoints(sysFont);
-                                    retFont = s_defaultFont;
-                                    sysFont.Dispose();
-                                }
-                                else
-                                {
-                                    s_defaultFont = sysFont;
-                                    retFont = s_defaultFont;
-                                }
+                                s_defaultFont = ControlPaint.FontInPoints(sysFont);
+                                retFont = s_defaultFont;
+                                sysFont.Dispose();
+                            }
+                            else
+                            {
+                                s_defaultFont = sysFont;
+                                retFont = s_defaultFont;
                             }
 
                             return retFont;
@@ -136,7 +129,7 @@ public static partial class ToolStripManager
         => t_toolStripWeakArrayList ??= new WeakRefCollection();
 
     /// <summary>Static events only!!!</summary>
-    private static void AddEventHandler(int key, Delegate value)
+    private static void AddEventHandler(int key, Delegate? value)
     {
         lock (s_internalSyncObject)
         {
@@ -148,14 +141,14 @@ public static partial class ToolStripManager
     /// <summary>
     ///  Find a toolstrip in the weak ref ArrayList, return null if nothing was found
     /// </summary>
-    public static ToolStrip FindToolStrip(string toolStripName)
+    public static ToolStrip? FindToolStrip(string toolStripName)
     {
-        ToolStrip result = null;
+        ToolStrip? result = null;
         for (int i = 0; i < ToolStrips.Count; i++)
         {
-            if (ToolStrips[i] is not null && string.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal))
+            if (ToolStrips[i] is ToolStrip toolStrip && string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
             {
-                result = (ToolStrip)ToolStrips[i];
+                result = toolStrip;
                 break;
             }
         }
@@ -166,14 +159,14 @@ public static partial class ToolStripManager
     /// <summary>
     ///  Find a toolstrip in the weak ref ArrayList, return null if nothing was found
     /// </summary>
-    internal static ToolStrip FindToolStrip(Form owningForm, string toolStripName)
+    internal static ToolStrip? FindToolStrip(Form owningForm, string toolStripName)
     {
-        ToolStrip result = null;
+        ToolStrip? result = null;
         for (int i = 0; i < ToolStrips.Count; i++)
         {
-            if (ToolStrips[i] is not null && string.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal))
+            if (ToolStrips[i] is ToolStrip toolStrip && string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
             {
-                result = (ToolStrip)ToolStrips[i];
+                result = toolStrip;
                 if (result.FindForm() == owningForm)
                 {
                     break;
@@ -249,7 +242,7 @@ public static partial class ToolStripManager
         return true;
     }
 
-    private static Delegate GetEventHandler(int key)
+    private static Delegate? GetEventHandler(int key)
     {
         lock (s_internalSyncObject)
         {
@@ -300,7 +293,7 @@ public static partial class ToolStripManager
         // If we've toggled the ShowUnderlines value, we'll need to invalidate
         for (int i = 0; i < ToolStrips.Count; i++)
         {
-            if (!(ToolStrips[i] is ToolStrip toolStrip))
+            if (ToolStrips[i] is not ToolStrip toolStrip)
             {
                 toolStripPruneNeeded = true;
                 continue;
@@ -342,7 +335,7 @@ public static partial class ToolStripManager
         }
     }
 
-    private static void RemoveEventHandler(int key, Delegate value)
+    private static void RemoveEventHandler(int key, Delegate? value)
     {
         lock (s_internalSyncObject)
         {
@@ -366,8 +359,8 @@ public static partial class ToolStripManager
             return false;
         }
 
-        ToolStrip wrappedControl = null;
-        ToolStrip nextControl = null;
+        ToolStrip? wrappedControl = null;
+        ToolStrip? nextControl = null;
 
         int startTabIndex = start.TabIndex;
         int index = ToolStrips.IndexOf(start);
@@ -473,7 +466,7 @@ public static partial class ToolStripManager
     ///  locks in painting code.
     /// </remarks>
     [ThreadStatic]
-    private static ToolStripRenderer t_defaultRenderer;
+    private static ToolStripRenderer? t_defaultRenderer;
 
     // types cached for perf.
     internal static Type s_systemRendererType = typeof(ToolStripSystemRenderer);
@@ -481,14 +474,14 @@ public static partial class ToolStripManager
     private static bool s_visualStylesEnabledIfPossible = true;
 
     [ThreadStatic]
-    private static Type t_currentRendererType;
+    private static Type? t_currentRendererType;
 
     private static Type CurrentRendererType
     {
         get
         {
             InitializeThread();
-            return t_currentRendererType;
+            return t_currentRendererType!;
         }
         set => t_currentRendererType = value;
     }
@@ -499,6 +492,7 @@ public static partial class ToolStripManager
     ///  The default renderer for the thread. When ToolStrip.RenderMode is set
     ///  to manager - this is the property used.
     /// </summary>
+    [AllowNull]
     public static ToolStripRenderer Renderer
     {
         get
@@ -514,7 +508,7 @@ public static partial class ToolStripManager
                 CurrentRendererType = (value is null) ? s_defaultRendererType : value.GetType();
                 t_defaultRenderer = value;
 
-                ((EventHandler)GetEventHandler(StaticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
+                ((EventHandler?)GetEventHandler(StaticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
             }
         }
     }
@@ -524,7 +518,7 @@ public static partial class ToolStripManager
     ///  Warning: When subscribing to static event handlers - make sure you unhook from them
     ///  otherwise you can leak user objects on process shutdown.
     /// </summary>
-    public static event EventHandler RendererChanged
+    public static event EventHandler? RendererChanged
     {
         add => AddEventHandler(StaticEventDefaultRendererChanged, value);
         remove => RemoveEventHandler(StaticEventDefaultRendererChanged, value);
@@ -589,7 +583,7 @@ public static partial class ToolStripManager
 
             if (oldVis != VisualStylesEnabled)
             {
-                ((EventHandler)GetEventHandler(StaticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
+                ((EventHandler?)GetEventHandler(StaticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
             }
         }
     }
@@ -625,11 +619,11 @@ public static partial class ToolStripManager
     internal static WeakRefCollection ToolStripPanels
         => t_toolStripPanelWeakArrayList ??= new WeakRefCollection();
 
-    internal static ToolStripPanel ToolStripPanelFromPoint(Control draggedControl, Point screenLocation)
+    internal static ToolStripPanel? ToolStripPanelFromPoint(Control draggedControl, Point screenLocation)
     {
         if (t_toolStripPanelWeakArrayList is not null)
         {
-            ISupportToolStripPanel draggedItem = draggedControl as ISupportToolStripPanel;
+            ISupportToolStripPanel draggedItem = (ISupportToolStripPanel)draggedControl;
             bool rootWindowCheck = draggedItem.IsCurrentlyDragging;
 
             for (int i = 0; i < t_toolStripPanelWeakArrayList.Count; i++)
@@ -663,7 +657,7 @@ public static partial class ToolStripManager
     {
         ArgumentNullException.ThrowIfNull(targetForm);
 
-        LoadSettings(targetForm, targetForm.GetType().FullName);
+        LoadSettings(targetForm, targetForm.GetType().FullName!);
     }
 
     /// <summary>
@@ -686,7 +680,7 @@ public static partial class ToolStripManager
     {
         ArgumentNullException.ThrowIfNull(sourceForm);
 
-        SaveSettings(sourceForm, sourceForm.GetType().FullName);
+        SaveSettings(sourceForm, sourceForm.GetType().FullName!);
     }
 
     /// <summary>
@@ -713,7 +707,7 @@ public static partial class ToolStripManager
             return true;
         }
     }
-
+#nullable disable
     /// <summary>
     ///  Determines if the key combination is valid for a shortcut.
     ///  Must have a modifier key + a regular key.
