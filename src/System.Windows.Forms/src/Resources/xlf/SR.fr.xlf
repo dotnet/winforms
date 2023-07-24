@@ -11405,9 +11405,9 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <note>{Locked=!fr-FR,!de-DE,!es-ES; "Home"}</note>
       </trans-unit>
       <trans-unit id="toStringInsert">
-        <source>Ins</source>
-        <target state="translated">Insertion</target>
-        <note />
+        <source>Insert</source>
+        <target state="needs-review-translation">Insertion</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES,!zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
         <source>(none)</source>

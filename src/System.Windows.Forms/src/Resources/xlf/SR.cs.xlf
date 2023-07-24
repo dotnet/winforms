@@ -11405,9 +11405,9 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <note>{Locked=!fr-FR,!de-DE,!es-ES; "Home"}</note>
       </trans-unit>
       <trans-unit id="toStringInsert">
-        <source>Ins</source>
-        <target state="translated">Vložit</target>
-        <note />
+        <source>Insert</source>
+        <target state="needs-review-translation">Vložit</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES,!zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
         <source>(none)</source>

@@ -11405,9 +11405,9 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <note>{Locked=!fr-FR,!de-DE,!es-ES; "Home"}</note>
       </trans-unit>
       <trans-unit id="toStringInsert">
-        <source>Ins</source>
-        <target state="translated">INS</target>
-        <note />
+        <source>Insert</source>
+        <target state="needs-review-translation">INS</target>
+        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES,!zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
         <source>(none)</source>
