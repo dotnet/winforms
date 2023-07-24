@@ -370,7 +370,7 @@ public static partial class ToolStripManager
             index = (forward) ? (index + 1) % totalCount
                               : (index + totalCount - 1) % totalCount;
 
-            if (!(ToolStrips[index] is ToolStrip toolStrip) ||
+            if (ToolStrips[index] is not ToolStrip toolStrip ||
                 toolStrip == start)
             {
                 continue;
@@ -707,7 +707,7 @@ public static partial class ToolStripManager
             return true;
         }
     }
-#nullable disable
+
     /// <summary>
     ///  Determines if the key combination is valid for a shortcut.
     ///  Must have a modifier key + a regular key.
@@ -814,8 +814,8 @@ public static partial class ToolStripManager
             return false;
         }
 
-        Control activeControl = Control.FromChildHandle(m.HWnd);
-        Control activeControlInChain = activeControl;
+        Control? activeControl = Control.FromChildHandle(m.HWnd);
+        Control? activeControlInChain = activeControl;
 
         if (activeControlInChain is not null && IsValidShortcut(shortcut))
         {
@@ -827,7 +827,7 @@ public static partial class ToolStripManager
                 // Check the context menu strip first.
                 if (activeControlInChain.ContextMenuStrip is not null)
                 {
-                    if (activeControlInChain.ContextMenuStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem item))
+                    if (activeControlInChain.ContextMenuStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item))
                     {
                         if (item.ProcessCmdKey(ref m, shortcut))
                         {
@@ -858,7 +858,7 @@ public static partial class ToolStripManager
                 bool isAssociatedContextMenu = false;
                 bool isDoublyAssignedContextMenuStrip = false;
 
-                if (!(ToolStrips[i] is ToolStrip toolStrip))
+                if (ToolStrips[i] is not ToolStrip toolStrip)
                 {
                     // Consider prune tree.
                     needsPrune = true;
@@ -875,17 +875,17 @@ public static partial class ToolStripManager
                         // We don't want to process someone else's context menu (e.g. button1 and button2 have context menus)
                         // button2's context menu should not be processed if button1 is the one we're processing.
 
-                        ToolStripDropDown dropDown = toolStrip as ToolStripDropDown;
+                        ToolStripDropDown dropDown = (ToolStripDropDown)toolStrip;
 
                         // If a context menu is re-used between the main menu and the
                         // and some other control's context menu, we should go ahead and evaluate it.
 
-                        if (dropDown.GetFirstDropDown() is ContextMenuStrip toplevelContextMenu)
+                        if (dropDown.GetFirstDropDown() is ContextMenuStrip topLevelContextMenu)
                         {
-                            isDoublyAssignedContextMenuStrip = toplevelContextMenu.IsAssignedToDropDownItem;
+                            isDoublyAssignedContextMenuStrip = topLevelContextMenu.IsAssignedToDropDownItem;
                             if (!isDoublyAssignedContextMenuStrip)
                             {
-                                if (toplevelContextMenu != activeControl.ContextMenuStrip)
+                                if (topLevelContextMenu != activeControl!.ContextMenuStrip)
                                 {
                                     // The toplevel context menu is NOT the same as the active control's context menu.
                                     continue;
@@ -907,7 +907,7 @@ public static partial class ToolStripManager
                         // Make sure that were processing shortcuts for the correct window.
                         // since the shortcut lookup is faster than this check we've postponed this to the last
                         // possible moment.
-                        ToolStrip topMostToolStrip = toolStrip.GetToplevelOwnerToolStrip();
+                        ToolStrip? topMostToolStrip = toolStrip.GetToplevelOwnerToolStrip();
                         if (topMostToolStrip is not null && activeControl is not null)
                         {
                             HWND rootWindowOfToolStrip = PInvoke.GetAncestor(topMostToolStrip, GET_ANCESTOR_FLAGS.GA_ROOT);
@@ -919,7 +919,7 @@ public static partial class ToolStripManager
                                 // Double check this is not an MDIContainer type situation...
                                 if (Control.FromHandle(rootWindowOfControl) is Form mainForm && mainForm.IsMdiContainer)
                                 {
-                                    Form toolStripForm = topMostToolStrip.FindForm();
+                                    Form? toolStripForm = topMostToolStrip.FindForm();
                                     if (toolStripForm != mainForm && toolStripForm is not null)
                                     {
                                         // We should only process shortcuts of the ActiveMDIChild or the Main Form.
@@ -932,7 +932,7 @@ public static partial class ToolStripManager
 
                     if (isAssociatedContextMenu || rootWindowsMatch || isDoublyAssignedContextMenuStrip)
                     {
-                        if (toolStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem item))
+                        if (toolStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item))
                         {
                             if (item.ProcessCmdKey(ref m, shortcut))
                             {
@@ -976,10 +976,10 @@ public static partial class ToolStripManager
         Keys keyData = (Keys)(nint)m.LParamInternal;
 
         // Search for our menu to work with
-        Control intendedControl = Control.FromHandle(m.HWnd);
-        Control toplevelControl = null;
+        Control? intendedControl = Control.FromHandle(m.HWnd);
+        Control? toplevelControl = null;
 
-        MenuStrip menuStripToActivate = null;
+        MenuStrip? menuStripToActivate = null;
         if (intendedControl is not null)
         {
             // Search for a menustrip to select.
@@ -1053,7 +1053,7 @@ public static partial class ToolStripManager
         return false;
     }
 
-    internal static MenuStrip GetMainMenuStrip(Control control)
+    internal static MenuStrip? GetMainMenuStrip(Control control)
     {
         if (control is null)
         {
@@ -1062,7 +1062,7 @@ public static partial class ToolStripManager
         }
 
         // Look for a particular main menu strip to be set.
-        Form mainForm = control.FindForm();
+        Form? mainForm = control.FindForm();
         if (mainForm is not null && mainForm.MainMenuStrip is not null)
         {
             return mainForm.MainMenuStrip;
@@ -1072,7 +1072,7 @@ public static partial class ToolStripManager
         return GetFirstMenuStripRecursive(control.Controls);
     }
 
-    private static MenuStrip GetFirstMenuStripRecursive(Control.ControlCollection controlsToLookIn)
+    private static MenuStrip? GetFirstMenuStripRecursive(Control.ControlCollection controlsToLookIn)
     {
         try
         {
@@ -1085,9 +1085,9 @@ public static partial class ToolStripManager
                     continue;
                 }
 
-                if (controlsToLookIn[i] is MenuStrip)
+                if (controlsToLookIn[i] is MenuStrip menuStrip)
                 {
-                    return controlsToLookIn[i] as MenuStrip;
+                    return menuStrip;
                 }
             }
 
@@ -1102,7 +1102,7 @@ public static partial class ToolStripManager
                 if ((controlsToLookIn[i].Controls is not null) && controlsToLookIn[i].Controls.Count > 0)
                 {
                     // If it has a valid child collection, append those results to our collection
-                    MenuStrip menuStrip = GetFirstMenuStripRecursive(controlsToLookIn[i].Controls);
+                    MenuStrip? menuStrip = GetFirstMenuStripRecursive(controlsToLookIn[i].Controls);
                     if (menuStrip is not null)
                     {
                         return menuStrip;
@@ -1117,11 +1117,11 @@ public static partial class ToolStripManager
         return null;
     }
 
-    private static ToolStripItem FindMatch(ToolStripItem source, ToolStripItemCollection destinationItems)
+    private static ToolStripItem? FindMatch(ToolStripItem source, ToolStripItemCollection destinationItems)
     {
         // Based on MergeAction:
         // Append, return the last sibling
-        ToolStripItem result = null;
+        ToolStripItem? result = null;
         if (source is not null)
         {
             for (int i = 0; i < destinationItems.Count; i++)
@@ -1145,14 +1145,14 @@ public static partial class ToolStripManager
         return result;
     }
 
-    internal static List<ToolStrip> FindMergeableToolStrips(ContainerControl container)
+    internal static List<ToolStrip> FindMergeableToolStrips(ContainerControl? container)
     {
         List<ToolStrip> result = new();
         if (container is not null)
         {
             for (int i = 0; i < ToolStrips.Count; i++)
             {
-                ToolStrip candidateTS = (ToolStrip)ToolStrips[i];
+                ToolStrip? candidateTS = (ToolStrip?)ToolStrips[i];
                 if (candidateTS is not null && candidateTS.AllowMerge && container == candidateTS.FindForm())
                 {
                     result.Add(candidateTS);
@@ -1186,7 +1186,7 @@ public static partial class ToolStripManager
         canMerge = (canMerge || (sourceToolStrip.AllowMerge &&
                                   targetToolStrip.AllowMerge &&
                                   (sourceToolStrip.GetType().IsAssignableFrom(targetToolStrip.GetType()) || targetToolStrip.GetType().IsAssignableFrom(sourceToolStrip.GetType()))));
-        MergeHistory mergeHistory = null;
+        MergeHistory? mergeHistory = null;
         if (canMerge)
         {
             Debug.Indent();
@@ -1240,7 +1240,7 @@ public static partial class ToolStripManager
             case MergeAction.MatchOnly:
             case MergeAction.Replace:
             case MergeAction.Remove:
-                ToolStripItem item = FindMatch(source, destinationItems);
+                ToolStripItem? item = FindMatch(source, destinationItems);
                 if (item is not null)
                 {
                     switch (source.MergeAction)
@@ -1292,7 +1292,7 @@ public static partial class ToolStripManager
                             {
                                 maction = new MergeHistoryItem(MergeAction.Remove)
                                 {
-                                    PreviousIndexCollection = source.Owner.Items
+                                    PreviousIndexCollection = source.Owner!.Items
                                 };
                                 maction.PreviousIndex = maction.PreviousIndexCollection.IndexOf(source);
                                 maction.TargetItem = source;
@@ -1312,7 +1312,7 @@ public static partial class ToolStripManager
                 {
                     maction = new MergeHistoryItem(MergeAction.Remove)
                     {
-                        PreviousIndexCollection = source.Owner.Items
+                        PreviousIndexCollection = source.Owner!.Items
                     };
                     maction.PreviousIndex = maction.PreviousIndexCollection.IndexOf(source);
                     maction.TargetItem = source;
@@ -1327,7 +1327,7 @@ public static partial class ToolStripManager
             case MergeAction.Append:
                 maction = new MergeHistoryItem(MergeAction.Remove)
                 {
-                    PreviousIndexCollection = source.Owner.Items
+                    PreviousIndexCollection = source.Owner!.Items
                 };
                 maction.PreviousIndex = maction.PreviousIndexCollection.IndexOf(source);
                 maction.TargetItem = source;
@@ -1349,7 +1349,7 @@ public static partial class ToolStripManager
         ArgumentNullException.ThrowIfNull(sourceToolStrip);
         ArgumentNullException.ThrowIfNull(targetName);
 
-        ToolStrip target = FindToolStrip(targetName);
+        ToolStrip? target = FindToolStrip(targetName);
         if (target is null)
         {
             return false;
@@ -1363,7 +1363,7 @@ public static partial class ToolStripManager
     /// <remarks>
     ///  Doesn't do a null check on source - if it's null we unmerge everything
     /// </remarks>
-    internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip sourceToolStrip, bool revertMDIControls)
+    internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip? sourceToolStrip, bool revertMDIControls)
     {
         bool result = false;
         ArgumentNullException.ThrowIfNull(targetToolStrip);
@@ -1430,12 +1430,12 @@ public static partial class ToolStripManager
                     switch (historyItem.MergeAction)
                     {
                         case MergeAction.Remove:
-                            historyItem.IndexCollection.Remove(historyItem.TargetItem);
+                            historyItem.IndexCollection!.Remove(historyItem.TargetItem!);
                             // Put it back
-                            historyItem.PreviousIndexCollection.Insert(Math.Min(historyItem.PreviousIndex, historyItem.PreviousIndexCollection.Count), historyItem.TargetItem);
+                            historyItem.PreviousIndexCollection!.Insert(Math.Min(historyItem.PreviousIndex, historyItem.PreviousIndexCollection.Count), historyItem.TargetItem!);
                             break;
                         case MergeAction.Insert:
-                            historyItem.IndexCollection.Insert(Math.Min(historyItem.Index, historyItem.IndexCollection.Count), historyItem.TargetItem);
+                            historyItem.IndexCollection!.Insert(Math.Min(historyItem.Index, historyItem.IndexCollection.Count), historyItem.TargetItem!);
                             // No need to put it back, inserting it in a new collection, moved it at the correct location
                             break;
                     }
@@ -1464,7 +1464,7 @@ public static partial class ToolStripManager
     ///  Unmerge two toolstrips
     /// </summary>
     public static bool RevertMerge(ToolStrip targetToolStrip)
-        => RevertMergeInternal(targetToolStrip, null, revertMDIControls: false);
+        => RevertMergeInternal(targetToolStrip, sourceToolStrip: null, revertMDIControls: false);
 
     /// <summary>
     ///  Unmerge two toolstrips
@@ -1481,7 +1481,7 @@ public static partial class ToolStripManager
     /// </summary>
     public static bool RevertMerge(string targetName)
     {
-        ToolStrip target = FindToolStrip(targetName);
+        ToolStrip? target = FindToolStrip(targetName);
         if (target is null)
         {
             return false;
