@@ -6160,7 +6160,8 @@ Stack trace where the illegal operation occurred was:
 	<comment>{Locked=!fr-FR,!de-DE,!es-ES; "Home"}</comment>
   </data>
   <data name="toStringInsert" xml:space="preserve">
-    <value>Ins</value>
+    <value>Insert</value>
+	<comment>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES,!zh-Hant; "Insert"}</comment>
   </data>
   <data name="toStringNone" xml:space="preserve">
     <value>(none)</value>
