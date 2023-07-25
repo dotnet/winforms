@@ -30,7 +30,7 @@ public partial class Binding
                     return true;
                 }
 
-                if (!(_owner.DataSource is ISupportInitializeNotification ds) || ds.IsInitialized)
+                if (_owner.DataSource is not ISupportInitializeNotification ds || ds.IsInitialized)
                 {
                     _dataSourceInitialized = true;
                     return true;
