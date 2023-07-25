@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using Moq;
 using Windows.Win32;
 
 namespace System.Windows.Forms.Design.Tests;
@@ -213,18 +215,59 @@ public class ControlDesignerTests
         Assert.Empty(controlDesigner.AssociatedComponents);
     }
 
+    internal static Mock<ISite> CreateMockSiteWithDesignerHost(object designerHost)
+    {
+        Mock<ISite> mockSite = new(MockBehavior.Loose);
+        mockSite
+            .Setup(s => s.GetService(typeof(IDesignerHost)))
+            .Returns(designerHost);
+        mockSite
+            .Setup(s => s.GetService(typeof(IComponentChangeService)))
+            .Returns(null);
+        mockSite
+            .Setup(s => s.GetService(typeof(IInheritanceService)))
+            .Returns(null);
+        mockSite
+            .Setup(s => s.GetService(typeof(IDictionaryService)))
+            .Returns(null);
+        mockSite
+            .Setup(s => s.GetService(typeof(IExtenderListService)))
+            .Returns(null);
+        mockSite
+            .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
+            .Returns(null);
+        mockSite
+            .Setup(s => s.GetService(typeof(AmbientProperties)))
+            .Returns(null);
+        mockSite
+            .Setup(s => s.GetService(typeof(Control)))
+            .Returns(null);
+        mockSite
+            .SetupGet(s => s.Container)
+            .Returns((IContainer)null);
+
+        return mockSite;
+    }
+
     [WinFormsFact]
     public void ControlDesigner_AssociatedComponentsTest()
     {
-        DesignSurfaceExt.DesignSurfaceExt surface = new();
-        surface.CreateRootComponent<Form>(Size.Empty);
-        using Control control = surface.CreateControl<Control>(Size.Empty, Point.Empty);
-        using ControlDesigner controlDesigner = (ControlDesigner)surface.CreateDesigner(control, false);
+        using Control control = new();
+        using ControlDesigner controlDesigner = new();
+
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Loose);
+        mockDesignerHost
+            .Setup(h => h.RootComponent)
+            .Returns(control);
+        var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        control.Site = mockSite.Object;
+
         controlDesigner.Initialize(control);
 
         Assert.Empty(controlDesigner.AssociatedComponents);
 
-        using Control subControl = surface.CreateControl<Control>(Size.Empty, Point.Empty);
+        using Control subControl = new();
+        subControl.Site = mockSite.Object;
         control.Controls.Add(subControl);
 
         Assert.Equal(1, controlDesigner.AssociatedComponents.Count);
