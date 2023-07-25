@@ -49,6 +49,8 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.SplitContainerDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.SplitterPanelDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.SplitterDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabControlDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TableLayoutPanelDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TextBoxBaseDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TextBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripDesigner))]
