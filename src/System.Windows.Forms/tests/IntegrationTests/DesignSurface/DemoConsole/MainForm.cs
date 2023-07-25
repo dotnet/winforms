@@ -232,8 +232,7 @@ public partial class MainForm : Form
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.5";
 
                         surface.CreateControl<TabControl>(new Size(400, 100), new Point(12, 21));
-
-                        surface.CreateControl<TableLayoutPanel>(new Size(290, 160), new Point(20, 220));
+                        surface.CreateControl<TableLayoutPanel>(new Size(290, 160), new Point(20, 150));
                     }
 
                     break;

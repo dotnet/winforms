@@ -32,7 +32,9 @@ internal class TableLayoutPanelBehavior : Behavior
 #if DEBUG
     private static readonly TraceSwitch tlpResizeSwitch = new("TLPRESIZE", "Behavior service drag & drop messages");
 #else
-        private static readonly TraceSwitch          tlpResizeSwitch;
+#pragma warning disable CS0649
+    private static readonly TraceSwitch tlpResizeSwitch;
+#pragma warning restore CS0649
 #endif
 
     internal TableLayoutPanelBehavior(TableLayoutPanel panel, TableLayoutPanelDesigner designer, IServiceProvider serviceProvider)
