@@ -106,28 +106,23 @@ public partial class Binding
         /// </summary>
         private string GetErrorText(object? value)
         {
-            string text = string.Empty;
-
-            if (value is IDataErrorInfo errorInfo)
+            if (value is not IDataErrorInfo errorInfo)
             {
-                // Get the row error if there is no DataMember
-                if (FieldInfo is null)
-                {
-                    text = errorInfo.Error;
-                }
-
-                // Get the column error if there is a DataMember.
-                // The DataTable uses its own Locale to lookup column names <sigh>.
-                // So passing the DataMember from the BindingField could cause problems.
-                // Pass the name from the PropertyDescriptor that the DataTable gave us.
-                // (If there is no fieldInfo, data binding would have failed already )
-                else
-                {
-                    text = errorInfo[FieldInfo.Name];
-                }
+                return string.Empty;
             }
 
-            return text ?? string.Empty;
+            // Get the row error if there is no DataMember
+            if (FieldInfo is null)
+            {
+                return errorInfo.Error ?? string.Empty;
+            }
+
+            // Get the column error if there is a DataMember.
+            // The DataTable uses its own Locale to lookup column names <sigh>.
+            // So passing the DataMember from the BindingField could cause problems.
+            // Pass the name from the PropertyDescriptor that the DataTable gave us.
+            // (If there is no fieldInfo, data binding would have failed already )
+            return errorInfo[FieldInfo.Name] ?? string.Empty;
         }
 
         internal object? GetValue()
