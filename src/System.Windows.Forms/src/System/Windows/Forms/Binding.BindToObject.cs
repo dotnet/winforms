@@ -77,7 +77,7 @@ public partial class Binding
             CheckBinding();
         }
 
-        internal void SetBindingManagerBase(BindingManagerBase lManager)
+        internal void SetBindingManagerBase(BindingManagerBase? lManager)
         {
             if (_bindingManager == lManager)
             {
