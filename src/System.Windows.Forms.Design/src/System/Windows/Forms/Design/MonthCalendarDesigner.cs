@@ -1,34 +1,33 @@
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+internal class MonthCalendarDesigner : ControlDesigner
 {
-    internal class MonthCalendarDesigner : ControlDesigner
+    public MonthCalendarDesigner()
     {
-        public MonthCalendarDesigner()
-        {
-            AutoResizeHandles = true;
-        }
+        AutoResizeHandles = true;
+    }
 
-        /// <summary>
-        /// Retrieves a set of rules concerning the movement capabilities of a component.
-        /// This should be one or more flags from the SelectionRules class.  If no designer
-        /// provides rules for a component, the component will not get any UI services.
-        /// </summary>
-        public override SelectionRules SelectionRules
+    /// <summary>
+    /// Retrieves a set of rules concerning the movement capabilities of a component.
+    /// This should be one or more flags from the SelectionRules class.  If no designer
+    /// provides rules for a component, the component will not get any UI services.
+    /// </summary>
+    public override SelectionRules SelectionRules
+    {
+        get
         {
-            get
+            SelectionRules rules = base.SelectionRules;
+
+            if (Control.Parent is null || !Control.Parent.IsMirrored)
             {
-                SelectionRules rules = base.SelectionRules;
-
-                if (Control.Parent is null || !Control.Parent.IsMirrored)
-                {
-                    rules &= ~(SelectionRules.TopSizeable | SelectionRules.LeftSizeable);
-                }
-                else
-                {
-                    rules &= ~(SelectionRules.TopSizeable | SelectionRules.RightSizeable);
-                }
-
-                return rules;
+                rules &= ~(SelectionRules.TopSizeable | SelectionRules.LeftSizeable);
             }
+            else
+            {
+                rules &= ~(SelectionRules.TopSizeable | SelectionRules.RightSizeable);
+            }
+
+            return rules;
         }
     }
 }
