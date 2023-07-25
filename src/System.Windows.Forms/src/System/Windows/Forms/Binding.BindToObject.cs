@@ -167,7 +167,7 @@ public partial class Binding
             }
         }
 
-        internal void SetValue(object value)
+        internal void SetValue(object? value)
         {
             object? obj = null;
 
