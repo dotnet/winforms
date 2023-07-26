@@ -11366,7 +11366,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="toStringAlt">
         <source>Alt</source>
-        <target state="needs-review-translation">ALT</target>
+        <target state="translated">Alt</target>
         <note>{Locked="Alt"}</note>
       </trans-unit>
       <trans-unit id="toStringBack">
@@ -11376,7 +11376,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="toStringControl">
         <source>Ctrl</source>
-        <target state="needs-review-translation">CTRL</target>
+        <target state="translated">Ctrl</target>
         <note>{Locked=!de-DE; "Ctrl"}</note>
       </trans-unit>
       <trans-unit id="toStringDefault">
@@ -11386,27 +11386,27 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="needs-review-translation">CANC</target>
+        <target state="new">Del</target>
         <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Del"}</note>
       </trans-unit>
       <trans-unit id="toStringEnd">
         <source>End</source>
-        <target state="needs-review-translation">FINE</target>
+        <target state="new">End</target>
         <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "End"}</note>
       </trans-unit>
       <trans-unit id="toStringEnter">
         <source>Enter</source>
-        <target state="needs-review-translation">INVIO</target>
+        <target state="new">Enter</target>
         <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Enter"}</note>
       </trans-unit>
       <trans-unit id="toStringHome">
         <source>Home</source>
-        <target state="needs-review-translation">Home</target>
+        <target state="translated">Home</target>
         <note>{Locked=!fr-FR,de-DE,es-ES; "Home"}</note>
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Insert</source>
-        <target state="needs-review-translation">INS</target>
+        <target state="translated">Insert</target>
         <note>{Locked=!fr-FR,de-DE,it-IT,es-ES,zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
@@ -11416,17 +11416,17 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="needs-review-translation">PGGIÙ</target>
+        <target state="new">PgDn</target>
         <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "PgDn"}</note>
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="needs-review-translation">PGSU</target>
+        <target state="new">PgUp</target>
         <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "PgUp"}</note>
       </trans-unit>
       <trans-unit id="toStringShift">
         <source>Shift</source>
-        <target state="needs-review-translation">MAIUSC</target>
+        <target state="new">Shift</target>
         <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Shift"}</note>
       </trans-unit>
       <trans-unit id="valueChangedEventDescr">
