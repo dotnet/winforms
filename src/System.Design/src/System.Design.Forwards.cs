@@ -43,6 +43,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ListBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ListViewDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.MaskedTextBoxDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.MonthCalendarDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.PanelDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.PictureBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.RadioButtonDesigner))]
