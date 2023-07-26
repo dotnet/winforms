@@ -38,6 +38,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DateTimePickerDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FormDocumentDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.GroupBoxDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ImageListDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.LabelDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ListBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ListViewDesigner))]
