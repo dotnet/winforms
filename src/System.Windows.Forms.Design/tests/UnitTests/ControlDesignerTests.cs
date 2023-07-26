@@ -217,7 +217,7 @@ public class ControlDesignerTests
 
     internal static Mock<ISite> CreateMockSiteWithDesignerHost(object designerHost)
     {
-        Mock<ISite> mockSite = new(MockBehavior.Loose);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
             .Returns(designerHost);
@@ -255,10 +255,13 @@ public class ControlDesignerTests
         using Control control = new();
         using ControlDesigner controlDesigner = new();
 
-        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Loose);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(control);
+        mockDesignerHost
+            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
+            .Returns(() => null);
         var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         control.Site = mockSite.Object;
 

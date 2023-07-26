@@ -12,7 +12,7 @@ public class SplitContainerDesignerTests
 {
     private static Mock<ISite> CreateMockSiteWithDesignerHost(object designerHost)
     {
-        Mock<ISite> mockSite = new(MockBehavior.Loose);
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
         mockSite
             .Setup(s => s.GetService(typeof(IDesignerHost)))
             .Returns(designerHost);
@@ -37,6 +37,14 @@ public class SplitContainerDesignerTests
         mockSite
             .Setup(s => s.GetService(typeof(INestedContainer)))
             .Returns(null);
+        Mock<ISelectionService> mockSelectionService = new(MockBehavior.Strict);
+        mockSite
+            .Setup(s => s.GetService(typeof(ISelectionService)))
+            .Returns(mockSelectionService.Object);
+        Mock<IComponentChangeService> mockComponentChangeService = new(MockBehavior.Strict);
+        mockSite
+            .Setup(s => s.GetService(typeof(IComponentChangeService)))
+            .Returns(mockComponentChangeService.Object);
         mockSite
             .SetupGet(s => s.Container)
             .Returns((IContainer)null);
@@ -50,15 +58,14 @@ public class SplitContainerDesignerTests
         using SplitContainer splitContainer = new();
         using SplitContainerDesigner splitContainerDesigner = new();
 
-        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Loose);
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(splitContainer);
         mockDesignerHost
-            .Setup(s => s.GetDesigner(splitContainer))
+            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
             .Returns(splitContainerDesigner);
-
-        Mock<IComponentChangeService> mockComponentChangeService = new(MockBehavior.Loose);
+        Mock<IComponentChangeService> mockComponentChangeService = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(s => s.GetService(typeof(IComponentChangeService)))
             .Returns(mockComponentChangeService.Object);
