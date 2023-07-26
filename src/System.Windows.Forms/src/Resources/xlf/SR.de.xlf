@@ -11387,27 +11387,27 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="toStringDelete">
         <source>Del</source>
         <target state="needs-review-translation">Entf</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Del"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Del"}</note>
       </trans-unit>
       <trans-unit id="toStringEnd">
         <source>End</source>
         <target state="needs-review-translation">Beenden</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "End"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "End"}</note>
       </trans-unit>
       <trans-unit id="toStringEnter">
         <source>Enter</source>
         <target state="needs-review-translation">EINGABE</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Enter"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Enter"}</note>
       </trans-unit>
       <trans-unit id="toStringHome">
         <source>Home</source>
         <target state="needs-review-translation">Startseite</target>
-        <note>{Locked=!fr-FR,!de-DE,!es-ES; "Home"}</note>
+        <note>{Locked=!fr-FR,de-DE,es-ES; "Home"}</note>
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Insert</source>
         <target state="needs-review-translation">Einfg</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES,!zh-Hant; "Insert"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES,zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
         <source>(none)</source>
@@ -11417,17 +11417,17 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
         <target state="needs-review-translation">Bild ab</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "PgDn"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "PgDn"}</note>
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
         <target state="needs-review-translation">Bild auf</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "PgUp"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "PgUp"}</note>
       </trans-unit>
       <trans-unit id="toStringShift">
         <source>Shift</source>
         <target state="needs-review-translation">Umschalttaste</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Shift"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Shift"}</note>
       </trans-unit>
       <trans-unit id="valueChangedEventDescr">
         <source>Occurs when the value of the control changes.</source>

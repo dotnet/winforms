@@ -11387,27 +11387,27 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="toStringDelete">
         <source>Del</source>
         <target state="needs-review-translation">Supprimer</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Del"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Del"}</note>
       </trans-unit>
       <trans-unit id="toStringEnd">
         <source>End</source>
         <target state="needs-review-translation">Fin</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "End"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "End"}</note>
       </trans-unit>
       <trans-unit id="toStringEnter">
         <source>Enter</source>
         <target state="needs-review-translation">Entrée</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Enter"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Enter"}</note>
       </trans-unit>
       <trans-unit id="toStringHome">
         <source>Home</source>
         <target state="needs-review-translation">Début</target>
-        <note>{Locked=!fr-FR,!de-DE,!es-ES; "Home"}</note>
+        <note>{Locked=!fr-FR,de-DE,es-ES; "Home"}</note>
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Insert</source>
         <target state="needs-review-translation">Insertion</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES,!zh-Hant; "Insert"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES,zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
         <source>(none)</source>
@@ -11417,17 +11417,17 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
         <target state="needs-review-translation">Page suivante</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "PgDn"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "PgDn"}</note>
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
         <target state="needs-review-translation">Page précédente</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "PgUp"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "PgUp"}</note>
       </trans-unit>
       <trans-unit id="toStringShift">
         <source>Shift</source>
         <target state="needs-review-translation">Majuscule</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Shift"}</note>
+        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Shift"}</note>
       </trans-unit>
       <trans-unit id="valueChangedEventDescr">
         <source>Occurs when the value of the control changes.</source>
