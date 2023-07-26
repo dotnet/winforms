@@ -30,17 +30,17 @@ internal class DataGridViewCellLinkedList : IEnumerable
             Debug.Assert(index < _count);
             if (_lastAccessedIndex == -1 || index < _lastAccessedIndex)
             {
-                DataGridViewCellLinkedListElement? tmp = _headElement;
+                DataGridViewCellLinkedListElement tmp = _headElement!;
                 int tmpIndex = index;
                 while (tmpIndex > 0)
                 {
-                    tmp = tmp!.Next;
+                    tmp = tmp.Next!;
                     tmpIndex--;
                 }
 
                 _lastAccessedElement = tmp;
                 _lastAccessedIndex = index;
-                return tmp!.DataGridViewCell;
+                return tmp.DataGridViewCell;
             }
             else
             {
