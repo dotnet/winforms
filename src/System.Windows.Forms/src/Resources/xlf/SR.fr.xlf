@@ -11377,7 +11377,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="toStringControl">
         <source>Ctrl</source>
         <target state="translated">Ctrl</target>
-        <note>{Locked=!de-DE; "Ctrl"}</note>
+        <note>{Locked=!de; "Ctrl"}</note>
       </trans-unit>
       <trans-unit id="toStringDefault">
         <source>(default)</source>
@@ -11386,18 +11386,18 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="new">Del</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Del"}</note>
+        <target state="translated">Supprimer</target>
+        <note>{Locked=!fr,de,it,es; "Del"}</note>
       </trans-unit>
       <trans-unit id="toStringEnd">
         <source>End</source>
-        <target state="new">End</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "End"}</note>
+        <target state="translated">Fin</target>
+        <note>{Locked=!fr,de,it,es; "End"}</note>
       </trans-unit>
       <trans-unit id="toStringEnter">
         <source>Enter</source>
-        <target state="new">Enter</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Enter"}</note>
+        <target state="translated">Entrée</target>
+        <note>{Locked=!fr,de,it,es; "Enter"}</note>
       </trans-unit>
       <trans-unit id="toStringHome">
         <source>Home</source>
@@ -11406,8 +11406,8 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Insert</source>
-        <target state="new">Insert</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES,zh-Hant; "Insert"}</note>
+        <target state="translated">Insérer</target>
+        <note>{Locked=!fr,de,it,es,zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
         <source>(none)</source>
@@ -11416,18 +11416,18 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="new">PgDn</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "PgDn"}</note>
+        <target state="translated">Page suivante</target>
+        <note>{Locked=!fr,de,it,es; "PgDn"}</note>
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="new">PgUp</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "PgUp"}</note>
+        <target state="translated">Page précédente</target>
+        <note>{Locked=!fr,de,it,es; "PgUp"}</note>
       </trans-unit>
       <trans-unit id="toStringShift">
         <source>Shift</source>
-        <target state="new">Shift</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Shift"}</note>
+        <target state="translated">Majuscule</target>
+        <note>{Locked=!fr,de,it,es; "Shift"}</note>
       </trans-unit>
       <trans-unit id="valueChangedEventDescr">
         <source>Occurs when the value of the control changes.</source>

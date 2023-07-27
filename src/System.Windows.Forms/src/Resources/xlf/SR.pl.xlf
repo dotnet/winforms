@@ -11377,7 +11377,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="toStringControl">
         <source>Ctrl</source>
         <target state="translated">Ctrl</target>
-        <note>{Locked=!de-DE; "Ctrl"}</note>
+        <note>{Locked=!de; "Ctrl"}</note>
       </trans-unit>
       <trans-unit id="toStringDefault">
         <source>(default)</source>
@@ -11387,17 +11387,17 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="toStringDelete">
         <source>Del</source>
         <target state="translated">Delete</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Del"}</note>
+        <note>{Locked=!fr,de,it,es; "Del"}</note>
       </trans-unit>
       <trans-unit id="toStringEnd">
         <source>End</source>
         <target state="translated">End</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "End"}</note>
+        <note>{Locked=!fr,de,it,es; "End"}</note>
       </trans-unit>
       <trans-unit id="toStringEnter">
         <source>Enter</source>
         <target state="translated">Enter</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Enter"}</note>
+        <note>{Locked=!fr,de,it,es; "Enter"}</note>
       </trans-unit>
       <trans-unit id="toStringHome">
         <source>Home</source>
@@ -11407,7 +11407,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="toStringInsert">
         <source>Insert</source>
         <target state="translated">Insert</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES,zh-Hant; "Insert"}</note>
+        <note>{Locked=!fr,de,it,es,zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
         <source>(none)</source>
@@ -11417,17 +11417,17 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
         <target state="translated">PgDn</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "PgDn"}</note>
+        <note>{Locked=!fr,de,it,es; "PgDn"}</note>
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
         <target state="translated">PgUp</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "PgUp"}</note>
+        <note>{Locked=!fr,de,it,es; "PgUp"}</note>
       </trans-unit>
       <trans-unit id="toStringShift">
         <source>Shift</source>
         <target state="translated">Shift</target>
-        <note>{Locked=!fr-FR,de-DE,it-IT,es-ES; "Shift"}</note>
+        <note>{Locked=!fr,de,it,es; "Shift"}</note>
       </trans-unit>
       <trans-unit id="valueChangedEventDescr">
         <source>Occurs when the value of the control changes.</source>
