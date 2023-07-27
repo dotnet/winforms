@@ -100,8 +100,11 @@ internal unsafe class AgileComPointer<TInterface> :
             return;
         }
 
-        HRESULT hr = GlobalInterfaceTable.RevokeInterface(_cookie);
+        // Clear the cookie before revoking the interface to guard against re-entry.
+        uint cookie = _cookie;
         _cookie = 0;
+
+        HRESULT hr = GlobalInterfaceTable.RevokeInterface(cookie);
 
         if (disposing)
         {

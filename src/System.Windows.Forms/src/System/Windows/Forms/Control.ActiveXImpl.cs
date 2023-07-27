@@ -2261,8 +2261,12 @@ public partial class Control
             _inPlaceFrame = null;
             _inPlaceUiWindow?.Dispose();
             _inPlaceUiWindow = null;
-            _clientSite?.Dispose();
+
+            // Disposing the client site handle can get us called back with SetClientSite(null). We need to
+            // make sure that we clear the field before disposing it.
+            var clientSite = _clientSite;
             _clientSite = null;
+            clientSite?.Dispose();
         }
     }
 }
