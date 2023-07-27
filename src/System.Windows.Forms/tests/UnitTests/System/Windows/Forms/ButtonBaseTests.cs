@@ -762,7 +762,6 @@ public class ButtonBaseTests
     }
 
     [WinFormsFact]
-    [RequiresPreviewFeatures]
     public void ButtonBase_BasicCommandBinding()
     {
         const string CommandParameter = nameof(CommandParameter);

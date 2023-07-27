@@ -566,7 +566,6 @@ public partial class ToolStripButtonTests
     }
 
     [WinFormsFact]
-    [RequiresPreviewFeatures]
     public void ToolStripButton_BasicCommandBinding()
     {
         const string CommandParameter = nameof(CommandParameter);
