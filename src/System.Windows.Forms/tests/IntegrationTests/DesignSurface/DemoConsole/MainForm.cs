@@ -208,13 +208,13 @@ public partial class MainForm : Form
                     break;
                 case 4:
                     {
-                        rootComponent = surface.CreateRootComponent<Form>(new Size(320, 200));
+                        rootComponent = surface.CreateRootComponent<Form>(new Size(800, 600));
                         rootComponent.BackColor = Color.Orange;
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.4";       //- step.1
                                                                                                      //- step.3
                                                                                                      //- create some Controls at DesignTime
                         Button b1 = surface.CreateControl<Button>(new Size(200, 40), new Point(10, 10));
-                        Button b2 = surface.CreateControl<Button>(new Size(200, 40), new Point(100, 100));
+                        Button b2 = surface.CreateControl<Button>(new Size(200, 40), new Point(10, 60));
                         b1.Text = "I'm the first Button";
                         b2.Text = "I'm the second Button";
                         b1.BackColor = Color.Gold;
@@ -222,6 +222,8 @@ public partial class MainForm : Form
 
                         Timer tm11 = surface.CreateComponent<Timer>();
                         FontDialog fd1 = surface.CreateComponent<FontDialog>();
+
+                        surface.CreateControl<MonthCalendar>(new Size(230, 170), new Point(10,110));
                     }
 
                     break;

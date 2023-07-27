@@ -441,13 +441,13 @@ System.Windows.Forms.AxHost.SetAboutBoxDelegate(System.Windows.Forms.AxHost.Abou
 ~System.Windows.Forms.DataGridViewCellCollection.this[int index].set -> void
 ~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].get -> System.Windows.Forms.DataGridViewCell
 ~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].set -> void
-~System.Windows.Forms.DataGridViewCellPaintingEventArgs.AdvancedBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
-~System.Windows.Forms.DataGridViewCellPaintingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridViewCellPaintingEventArgs.DataGridViewCellPaintingEventArgs(System.Windows.Forms.DataGridView dataGridView, System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, int columnIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
-~System.Windows.Forms.DataGridViewCellPaintingEventArgs.ErrorText.get -> string
-~System.Windows.Forms.DataGridViewCellPaintingEventArgs.FormattedValue.get -> object
-~System.Windows.Forms.DataGridViewCellPaintingEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.DataGridViewCellPaintingEventArgs.Value.get -> object
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.AdvancedBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle?
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle?
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.DataGridViewCellPaintingEventArgs(System.Windows.Forms.DataGridView! dataGridView, System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, int columnIndex, System.Windows.Forms.DataGridViewElementStates cellState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle? advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.ErrorText.get -> string?
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.FormattedValue.get -> object?
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.Graphics.get -> System.Drawing.Graphics?
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.Value.get -> object?
 ~System.Windows.Forms.DataGridViewCellStyle.DataGridViewCellStyle(System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle) -> void
 ~System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.get -> object
 ~System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.set -> void
