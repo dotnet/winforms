@@ -26,7 +26,7 @@ internal partial class FlowLayout : LayoutEngine
 
         // ScrollableControl will first try to get the layoutbounds from the derived control when
         // trying to figure out if ScrollBars should be added.
-        CommonProperties.SetLayoutBounds(container, TryCalculatePreferredSize(container, container.DisplayRectangle, /* measureOnly = */ false));
+        CommonProperties.SetLayoutBounds(container, TryCalculatePreferredSize(container, container.DisplayRectangle, measureOnly: false));
 
         Debug.Unindent();
 
@@ -43,7 +43,7 @@ internal partial class FlowLayout : LayoutEngine
         }
 #endif
         Rectangle measureBounds = new Rectangle(new Point(0, 0), proposedConstraints);
-        Size prefSize = TryCalculatePreferredSize(container, measureBounds, /* measureOnly = */ true);
+        Size prefSize = TryCalculatePreferredSize(container, measureBounds, measureOnly: true);
 
         if (prefSize.Width > proposedConstraints.Width || prefSize.Height > proposedConstraints.Height)
         {
@@ -51,7 +51,7 @@ internal partial class FlowLayout : LayoutEngine
             // shift around with the new bounds. We need to make a 2nd pass through the
             // controls using these bounds which are guaranteed to fit.
             measureBounds.Size = prefSize;
-            prefSize = TryCalculatePreferredSize(container, measureBounds, /* measureOnly = */ true);
+            prefSize = TryCalculatePreferredSize(container, measureBounds, measureOnly: true);
         }
 
 #if DEBUG
@@ -145,7 +145,14 @@ internal partial class FlowLayout : LayoutEngine
         int endIndex,
         Rectangle rowBounds)
     {
-        Size outSize = TryCalculatePreferredSizeRow(containerProxy, elementProxy, startIndex, endIndex, rowBounds, /* breakIndex = */ out int dummy, /* measureOnly = */ false);
+        Size outSize = TryCalculatePreferredSizeRow(
+            containerProxy,
+            elementProxy,
+            startIndex,
+            endIndex,
+            rowBounds,
+            breakIndex: out int dummy,
+            measureOnly: false);
         Debug.Assert(dummy == endIndex, "EndIndex / BreakIndex mismatch.");
     }
 
