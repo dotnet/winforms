@@ -11366,7 +11366,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="toStringAlt">
         <source>Alt</source>
-        <target state="needs-review-translation">Alt</target>
+        <target state="translated">Alt</target>
         <note>{Locked="Alt"}</note>
       </trans-unit>
       <trans-unit id="toStringBack">
@@ -11376,7 +11376,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="toStringControl">
         <source>Ctrl</source>
-        <target state="needs-review-translation">Ctrl</target>
+        <target state="translated">Ctrl</target>
         <note>{Locked=!de; "Ctrl"}</note>
       </trans-unit>
       <trans-unit id="toStringDefault">
@@ -11386,27 +11386,27 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="needs-review-translation">Delete</target>
+        <target state="translated">Delete</target>
         <note>{Locked=!fr,de,it,es; "Del"}</note>
       </trans-unit>
       <trans-unit id="toStringEnd">
         <source>End</source>
-        <target state="needs-review-translation">End</target>
+        <target state="translated">End</target>
         <note>{Locked=!fr,de,it,es; "End"}</note>
       </trans-unit>
       <trans-unit id="toStringEnter">
         <source>Enter</source>
-        <target state="needs-review-translation">Enter</target>
+        <target state="translated">Enter</target>
         <note>{Locked=!fr,de,it,es; "Enter"}</note>
       </trans-unit>
       <trans-unit id="toStringHome">
         <source>Home</source>
-        <target state="needs-review-translation">Giriş</target>
+        <target state="translated">Home</target>
         <note>{Locked=!fr,de,es; "Home"}</note>
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Insert</source>
-        <target state="needs-review-translation">Insert</target>
+        <target state="translated">Insert</target>
         <note>{Locked=!fr,de,it,es,zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
@@ -11416,17 +11416,17 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="needs-review-translation">Page Down</target>
+        <target state="translated">PgDn</target>
         <note>{Locked=!fr,de,it,es; "PgDn"}</note>
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="needs-review-translation">Page Up</target>
+        <target state="translated">PgUp</target>
         <note>{Locked=!fr,de,it,es; "PgUp"}</note>
       </trans-unit>
       <trans-unit id="toStringShift">
         <source>Shift</source>
-        <target state="needs-review-translation">Shift</target>
+        <target state="translated">Shift</target>
         <note>{Locked=!fr,de,it,es; "Shift"}</note>
       </trans-unit>
       <trans-unit id="valueChangedEventDescr">
