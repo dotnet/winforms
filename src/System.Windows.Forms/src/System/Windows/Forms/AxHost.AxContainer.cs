@@ -682,6 +682,8 @@ public abstract partial class AxHost
                 && activeHost._iOleInPlaceActiveObjectExternal is { } existing
                 && existing.OriginalHandle != pActiveObject)
             {
+                // Release the field before disposing to avoid accessing it during disposal on callbacks.
+                activeHost._iOleInPlaceActiveObjectExternal = null;
                 existing.Dispose();
                 activeHost._iOleInPlaceActiveObjectExternal = new(pActiveObject, takeOwnership: true);
             }

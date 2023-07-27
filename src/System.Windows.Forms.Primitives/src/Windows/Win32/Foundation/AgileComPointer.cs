@@ -15,6 +15,11 @@ namespace Windows.Win32.Foundation;
 ///   safely finalized when needed. Finalization should be avoided whenever possible for performance and timely
 ///   resource release (that is, this class should be disposed).
 ///  </para>
+///  <para>
+///   Fields should be nulled out before calling <see cref="Dispose()"/>. Releasing the COM pointer during disposal
+///   can result in callbacks to containing classes. Rather than evaluate the risk of this for every class, always
+///   follow this pattern. <see cref="DisposeHelper.NullAndDispose"/> facilitates doing this safely.
+///  </para>
 /// </remarks>
 internal unsafe class AgileComPointer<TInterface> :
 #if DEBUG
