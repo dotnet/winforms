@@ -14,38 +14,29 @@ namespace System.Windows.Forms.Design.Behavior;
 
 internal class TableLayoutPanelBehavior : Behavior
 {
-    private TableLayoutPanelDesigner designer;//pointer back to our designer.
-    private Point lastMouseLoc;//used to track mouse movement deltas
-    private bool pushedBehavior;//tracks if we've pushed ourself onto the stack
-    private BehaviorService behaviorService;//used for bounds translation
-    private IServiceProvider serviceProvider;//cached to allow our behavior to get services
-    private TableLayoutPanelResizeGlyph tableGlyph;//the glyph being resized
-    private DesignerTransaction resizeTransaction;//used to make size adjustements within transaction
-    private PropertyDescriptor resizeProp;//cached property descriptor representing either the row or column styles
-    private PropertyDescriptor changedProp; //cached property descriptor that refers to the RowSTyles or ColumnStyles collection.
+    private TableLayoutPanelDesigner designer; //pointer back to our designer.
+    private Point lastMouseLoc; //used to track mouse movement deltas
+    private bool pushedBehavior; //tracks if we've pushed ourself onto the stack
+    private BehaviorService behaviorService; //used for bounds translation
+    private IServiceProvider serviceProvider; //cached to allow our behavior to get services
+    private TableLayoutPanelResizeGlyph tableGlyph; //the glyph being resized
+    private DesignerTransaction resizeTransaction; //used to make size adjustements within transaction
+    private PropertyDescriptor resizeProp; //cached property descriptor representing either the row or column styles
+    private PropertyDescriptor changedProp;  //cached property descriptor that refers to the RowSTyles or ColumnStyles collection.
     private TableLayoutPanel table;
     private StyleHelper rightStyle;
     private StyleHelper leftStyle;
     private ArrayList styles; //List of the styles
     private bool currentColumnStyles; // is Styles for Columns or Rows
-
-#if DEBUG
     private static readonly TraceSwitch tlpResizeSwitch = new("TLPRESIZE", "Behavior service drag & drop messages");
-#else
-#pragma warning disable CS0649
-    private static readonly TraceSwitch tlpResizeSwitch;
-#pragma warning restore CS0649
-#endif
 
     internal TableLayoutPanelBehavior(TableLayoutPanel panel, TableLayoutPanelDesigner designer, IServiceProvider serviceProvider)
-    {//: base(designer) {
-        this.table = panel;
+    {
+        table = panel;
         this.designer = designer;
         this.serviceProvider = serviceProvider;
 
-#pragma warning disable VSSDK006
         behaviorService = serviceProvider.GetService(typeof(BehaviorService)) as BehaviorService;
-#pragma warning restore VSSDK006
 
         if (behaviorService is null)
         {
@@ -85,7 +76,6 @@ internal class TableLayoutPanelBehavior : Behavior
             FinishResize();
 
             // If we still have a transaction, roll it back.
-            //
             if (resizeTransaction is not null)
             {
                 DesignerTransaction t = resizeTransaction;
@@ -96,13 +86,6 @@ internal class TableLayoutPanelBehavior : Behavior
                 }
             }
         }
-    }
-
-    internal struct StyleHelper
-    {
-        public int index;
-        public PropertyDescriptor styleProp;
-        public TableLayoutStyle style;
     }
 
     public override bool OnMouseDown(Glyph g, MouseButtons button, Point mouseLoc)
@@ -261,8 +244,6 @@ internal class TableLayoutPanelBehavior : Behavior
         return stealIndex;
     }
 
-    [SuppressMessage("Microsoft.Portability", "CA1902:AvoidTestingForFloatingPointEquality")]
-    [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     public override bool OnMouseMove(Glyph g, MouseButtons button, Point mouseLoc)
     {
         if (pushedBehavior)
@@ -451,5 +432,12 @@ internal class TableLayoutPanelBehavior : Behavior
         }
 
         return false;
+    }
+
+    internal struct StyleHelper
+    {
+        public int index;
+        public PropertyDescriptor styleProp;
+        public TableLayoutStyle style;
     }
 }

@@ -115,7 +115,6 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private bool IsLocalizable()
     {
         IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
@@ -182,13 +181,13 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 ToolStripDropDownMenu rowMenu = BuildMenu(true);
                 ToolStripDropDownMenu colMenu = BuildMenu(false);
 
-                this.contextMenuRow = new ToolStripMenuItem();
-                this.contextMenuRow.DropDown = rowMenu;
-                this.contextMenuRow.Text = SR.TableLayoutPanelDesignerRowMenu;
+                contextMenuRow = new ToolStripMenuItem();
+                contextMenuRow.DropDown = rowMenu;
+                contextMenuRow.Text = SR.TableLayoutPanelDesignerRowMenu;
 
-                this.contextMenuCol = new ToolStripMenuItem();
-                this.contextMenuCol.DropDown = colMenu;
-                this.contextMenuCol.Text = SR.TableLayoutPanelDesignerColMenu;
+                contextMenuCol = new ToolStripMenuItem();
+                contextMenuCol.DropDown = colMenu;
+                contextMenuCol.Text = SR.TableLayoutPanelDesignerColMenu;
 
                 group.Items.Insert(0, contextMenuCol);
                 group.Items.Insert(0, contextMenuRow);
@@ -213,8 +212,8 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
             bool onValidCell = IsOverValidCell(false);
 
-            this.contextMenuRow.Enabled = onValidCell;
-            this.contextMenuCol.Enabled = onValidCell;
+            contextMenuRow.Enabled = onValidCell;
+            contextMenuCol.Enabled = onValidCell;
 
             return designerContextMenuStrip;
         }
@@ -252,11 +251,11 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
                 if (undoEngine is not null)
                 {
-                    undoEngine.Undoing += new EventHandler(this.OnUndoing);
+                    undoEngine.Undoing += new EventHandler(OnUndoing);
                     if (undoEngine.UndoInProgress)
                     {
                         undoing = true;
-                        undoEngine.Undone += new EventHandler(this.OnUndone);
+                        undoEngine.Undone += new EventHandler(OnUndone);
                     }
                 }
             }
@@ -276,16 +275,16 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         {
             if (verbs is null)
             {
-                removeColVerb = new DesignerVerb(SR.TableLayoutPanelDesignerRemoveColumn, new EventHandler(this.OnVerbRemove));
-                removeRowVerb = new DesignerVerb(SR.TableLayoutPanelDesignerRemoveRow, new EventHandler(this.OnVerbRemove));
+                removeColVerb = new DesignerVerb(SR.TableLayoutPanelDesignerRemoveColumn, new EventHandler(OnVerbRemove));
+                removeRowVerb = new DesignerVerb(SR.TableLayoutPanelDesignerRemoveRow, new EventHandler(OnVerbRemove));
 
                 verbs = new DesignerVerbCollection();
 
-                verbs.Add(new DesignerVerb(SR.TableLayoutPanelDesignerAddColumn, new EventHandler(this.OnVerbAdd)));
-                verbs.Add(new DesignerVerb(SR.TableLayoutPanelDesignerAddRow, new EventHandler(this.OnVerbAdd)));
+                verbs.Add(new DesignerVerb(SR.TableLayoutPanelDesignerAddColumn, new EventHandler(OnVerbAdd)));
+                verbs.Add(new DesignerVerb(SR.TableLayoutPanelDesignerAddRow, new EventHandler(OnVerbAdd)));
                 verbs.Add(removeColVerb);
                 verbs.Add(removeRowVerb);
-                verbs.Add(new DesignerVerb(SR.TableLayoutPanelDesignerEditRowAndCol, new EventHandler(this.OnVerbEdit)));
+                verbs.Add(new DesignerVerb(SR.TableLayoutPanelDesignerEditRowAndCol, new EventHandler(OnVerbEdit)));
 
                 CheckVerbStatus();
             }
@@ -353,17 +352,17 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         add.Text = SR.TableLayoutPanelDesignerAddMenu;
         add.Tag = isRow;
         add.Name = "add";
-        add.Click += new System.EventHandler(this.OnAddClick);
+        add.Click += new System.EventHandler(OnAddClick);
 
         insert.Text = SR.TableLayoutPanelDesignerInsertMenu;
         insert.Tag = isRow;
         insert.Name = "insert";
-        insert.Click += new System.EventHandler(this.OnInsertClick);
+        insert.Click += new System.EventHandler(OnInsertClick);
 
         delete.Text = SR.TableLayoutPanelDesignerDeleteMenu;
         delete.Tag = isRow;
         delete.Name = "delete";
-        delete.Click += new System.EventHandler(this.OnDeleteClick);
+        delete.Click += new System.EventHandler(OnDeleteClick);
 
         label.Text = SR.TableLayoutPanelDesignerLabelMenu;
         if (SR.TableLayoutPanelDesignerDontBoldLabel == "0")
@@ -376,22 +375,22 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         absolute.Text = SR.TableLayoutPanelDesignerAbsoluteMenu;
         absolute.Tag = isRow;
         absolute.Name = "absolute";
-        absolute.Click += new System.EventHandler(this.OnAbsoluteClick);
+        absolute.Click += new System.EventHandler(OnAbsoluteClick);
 
         percent.Text = SR.TableLayoutPanelDesignerPercentageMenu;
         percent.Tag = isRow;
         percent.Name = "percent";
-        percent.Click += new System.EventHandler(this.OnPercentClick);
+        percent.Click += new System.EventHandler(OnPercentClick);
 
         autosize.Text = SR.TableLayoutPanelDesignerAutoSizeMenu;
         autosize.Tag = isRow;
         autosize.Name = "autosize";
-        autosize.Click += new System.EventHandler(this.OnAutoSizeClick);
+        autosize.Click += new System.EventHandler(OnAutoSizeClick);
 
         ToolStripDropDownMenu menu = new ToolStripDropDownMenu();
         menu.Items.AddRange(new ToolStripItem[] { add, insert, delete, separator, label, absolute, percent, autosize });
         menu.Tag = isRow;
-        menu.Opening += new System.ComponentModel.CancelEventHandler(this.OnRowColMenuOpening);
+        menu.Opening += new System.ComponentModel.CancelEventHandler(OnRowColMenuOpening);
 
         IUIService uis = GetService(typeof(IUIService)) as IUIService;
         if (uis is not null)
@@ -415,8 +414,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
         // if one actionList has AutoShow == true then the chrome panel will popup when the user DnD the DataGridView onto the form
         // It would make sense to promote AutoShow to DesignerActionListCollection.
-        // But we don't own the DesignerActionListCollection so we just set AutoShow on the first ActionList
-        //
+        // But we don't own the DesignerActionListCollection so we just set AutoShow on the first ActionList.
         actionLists[0].AutoShow = true;
     }
 
@@ -439,18 +437,18 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             items.Add(new DesignerActionMethodItem(this,
                                                      "AddColumn", // method name
                                                       SR.TableLayoutPanelDesignerAddColumn, // display name
-                                                      false));                                             // promoteToDesignerVerb
+                                                      false)); // promoteToDesignerVerb
             items.Add(new DesignerActionMethodItem(this,
                                                      "AddRow", // method name
                                                       SR.TableLayoutPanelDesignerAddRow,  // display name
-                                                      false));                                           // promoteToDesignerVerb
+                                                      false)); // promoteToDesignerVerb
 
             if (owner.Table.ColumnCount > 1)
             {
                 items.Add(new DesignerActionMethodItem(this,
                                                      "RemoveColumn", // method name
                                                       SR.TableLayoutPanelDesignerRemoveColumn, // display name
-                                                      false));                                                // promoteToDesignerVerb
+                                                      false)); // promoteToDesignerVerb
             }
 
             if (owner.Table.RowCount > 1)
@@ -458,64 +456,57 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 items.Add(new DesignerActionMethodItem(this,
                                                      "RemoveRow", // method name
                                                       SR.TableLayoutPanelDesignerRemoveRow,  // display name
-                                                      false));                                                // promoteToDesignerVerb
+                                                      false)); // promoteToDesignerVerb
             }
 
             items.Add(new DesignerActionMethodItem(this,
                                                      "EditRowAndCol", // method name
                                                       SR.TableLayoutPanelDesignerEditRowAndCol,  // display name
-                                                      false));                                                // promoteToDesignerVerb
+                                                      false)); // promoteToDesignerVerb
 
             return items;
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public void AddColumn()
         {
-            this.owner.OnAdd(false);
+            owner.OnAdd(false);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public void AddRow()
         {
-            this.owner.OnAdd(true);
+            owner.OnAdd(true);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public void RemoveColumn()
         {
-            this.owner.OnRemove(false);
+            owner.OnRemove(false);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public void RemoveRow()
         {
-            this.owner.OnRemove(true);
+            owner.OnRemove(true);
         }
 
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public void EditRowAndCol()
         {
-            this.owner.OnEdit();
+            owner.OnEdit();
         }
     }
 
     private void RemoveControlInternal(Control c)
     {
-        Table.ControlRemoved -= new ControlEventHandler(this.OnControlRemoved);
+        Table.ControlRemoved -= new ControlEventHandler(OnControlRemoved);
         Table.Controls.Remove(c);
-        Table.ControlRemoved += new ControlEventHandler(this.OnControlRemoved);
+        Table.ControlRemoved += new ControlEventHandler(OnControlRemoved);
     }
 
     private void AddControlInternal(Control c, int col, int row)
     {
-        Table.ControlAdded -= new ControlEventHandler(this.OnControlAdded);
+        Table.ControlAdded -= new ControlEventHandler(OnControlAdded);
         Table.Controls.Add(c, col, row);
-        Table.ControlAdded += new ControlEventHandler(this.OnControlAdded);
+        Table.ControlAdded += new ControlEventHandler(OnControlAdded);
     }
 
-    [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-    [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
     private void ControlAddedInternal(Control control, Point newControlPosition, bool localReposition, bool fullTable, DragEventArgs de)
     {
         //If the table is full - we'll want to 'autogrow' either the row or column based on the grow style property
@@ -863,29 +854,29 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
             if (host is not null)
             {
-                host.TransactionClosing -= new DesignerTransactionCloseEventHandler(this.OnTransactionClosing);
+                host.TransactionClosing -= new DesignerTransactionCloseEventHandler(OnTransactionClosing);
             }
 
             if (undoEngine is not null)
             {
                 if (Undoing)
                 {
-                    undoEngine.Undone -= new EventHandler(this.OnUndone);
+                    undoEngine.Undone -= new EventHandler(OnUndone);
                 }
 
-                undoEngine.Undoing -= new EventHandler(this.OnUndoing);
+                undoEngine.Undoing -= new EventHandler(OnUndoing);
             }
 
             if (compSvc is not null)
             {
-                compSvc.ComponentChanged -= new ComponentChangedEventHandler(this.OnComponentChanged);
-                compSvc.ComponentChanging -= new ComponentChangingEventHandler(this.OnComponentChanging);
+                compSvc.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                compSvc.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
             }
 
             if (Table is not null)
             {
-                Table.ControlAdded -= new ControlEventHandler(this.OnControlAdded);
-                Table.ControlRemoved -= new ControlEventHandler(this.OnControlRemoved);
+                Table.ControlAdded -= new ControlEventHandler(OnControlAdded);
+                Table.ControlRemoved -= new ControlEventHandler(OnControlRemoved);
             }
 
             contextMenuRow?.Dispose();
@@ -1139,7 +1130,6 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         if (selectionType != GlyphSelectionType.NotSelected && !locked && InheritanceAttribute != InheritanceAttribute.InheritedReadOnly)
         {
             //get the correctly translated bounds
-
             //By using DisplayRectangle here we handle the case where we are scrolled. VSWhidbey #399689
             Point loc = BehaviorService.MapAdornerWindowPoint(Table.Handle, Table.DisplayRectangle.Location);
             Rectangle bounds = new Rectangle(loc, Table.DisplayRectangle.Size);
@@ -1228,7 +1218,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
         if (host is not null)
         {
-            host.TransactionClosing += new DesignerTransactionCloseEventHandler(this.OnTransactionClosing);
+            host.TransactionClosing += new DesignerTransactionCloseEventHandler(OnTransactionClosing);
 #pragma warning disable VSSDK006
             compSvc = host.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
 #pragma warning restore VSSDK006
@@ -1236,12 +1226,12 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
         if (compSvc is not null)
         {
-            compSvc.ComponentChanging += new ComponentChangingEventHandler(this.OnComponentChanging);
-            compSvc.ComponentChanged += new ComponentChangedEventHandler(this.OnComponentChanged);
+            compSvc.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
+            compSvc.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
         }
 
-        Control.ControlAdded += new ControlEventHandler(this.OnControlAdded);
-        Control.ControlRemoved += new ControlEventHandler(this.OnControlRemoved);
+        Control.ControlAdded += new ControlEventHandler(OnControlAdded);
+        Control.ControlRemoved += new ControlEventHandler(OnControlRemoved);
 
         rowStyleProp = TypeDescriptor.GetProperties(Table)["RowStyles"];
         colStyleProp = TypeDescriptor.GetProperties(Table)["ColumnStyles"];
@@ -1434,7 +1424,6 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             // span after the Add is too late, because the runtime had already thrown an exception.
             // Unfortunally cancelling the transaction throws as well, so we need a way to undo the Add
             // or access internal properties of the control.
-
             // dragComps is null when dragging off the toolbox
             if (dragComps is not null)
             {
@@ -1510,7 +1499,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         Control changingControl = e.Component as Control;
 
-        if (changingControl is not null && changingControl.Parent == this.Component &&
+        if (changingControl is not null && changingControl.Parent == Component &&
             e.Member is not null && DoesPropertyAffectPosition(e.Member))
         {
             PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(Component)["Controls"];
@@ -1521,7 +1510,6 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
     {
         //VSWhidbey 233871
-        //
         //When the Row or Column property is being set on a control in the TLP, a Row/Col Style is not being added.
         //After the property is being set, the SelectionManager::OnSelectionChanged gets called. It in turn calls
         //GetGlyphs, and the TLP designer's GetGlyphs calls EnsureAvaiableStyles. Since no style was added, we will add
@@ -1537,7 +1525,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 EnsureAvailableStyles();
             }
 
-            if (c is not null && c.Parent == this.Component &&
+            if (c is not null && c.Parent == Component &&
                 e.Member is not null && DoesPropertyAffectPosition(e.Member))
             {
                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(Component)["Controls"];
@@ -1582,7 +1570,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         {
             if (undoEngine is not null)
             {
-                undoEngine.Undone += new EventHandler(this.OnUndone);
+                undoEngine.Undone += new EventHandler(OnUndone);
             }
 
             Undoing = true;
@@ -1595,7 +1583,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         {
             if (undoEngine is not null)
             {
-                undoEngine.Undone -= new EventHandler(this.OnUndone);
+                undoEngine.Undone -= new EventHandler(OnUndone);
             }
 
             Undoing = false;
@@ -2260,7 +2248,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
         public DesignerTableLayoutControlCollection(TableLayoutPanel owner) : base(owner)
         {
-            this.realCollection = owner.Controls;
+            realCollection = owner.Controls;
         }
 
         public override int Count

@@ -15,9 +15,12 @@ internal class TableLayoutPanelResizeGlyph : Glyph
     private TableLayoutStyle style;
     private TableLayoutResizeType type;
 
+    /// <summary>
+    /// This constructor caches our necessary state and determine what 'type' it is.
+    /// </summary>
     internal TableLayoutPanelResizeGlyph(Rectangle controlBounds, TableLayoutStyle style, Cursor hitTestCursor, Behavior behavior) : base(behavior)
     {
-        this.bounds = controlBounds;
+        bounds = controlBounds;
         this.hitTestCursor = hitTestCursor;
         this.style = style;
 
@@ -31,6 +34,9 @@ internal class TableLayoutPanelResizeGlyph : Glyph
         }
     }
 
+    /// <summary>
+    /// Represents the bounds of the row or column line being rendered by the TableLayoutPanelDesigner.
+    /// </summary>
     public override Rectangle Bounds
     {
         get
@@ -39,6 +45,10 @@ internal class TableLayoutPanelResizeGlyph : Glyph
         }
     }
 
+    /// <summary>
+    /// Represents the Style associated with this glyph: Row or Column.
+    /// This is used by the behaviors resize methods to set the values.
+    /// </summary>
     public TableLayoutStyle Style
     {
         get
@@ -47,6 +57,9 @@ internal class TableLayoutPanelResizeGlyph : Glyph
         }
     }
 
+    /// <summary>
+    /// Used as quick check by our behavior when dragging/resizing.
+    /// </summary>
     public TableLayoutResizeType Type
     {
         get
@@ -55,6 +68,9 @@ internal class TableLayoutPanelResizeGlyph : Glyph
         }
     }
 
+    /// <summary>
+    /// Simply returns the proper cursor if the mouse pointer is within our cached bounds.
+    /// </summary>
     public override Cursor GetHitTest(Point p)
     {
         if (bounds.Contains(p))
@@ -65,10 +81,16 @@ internal class TableLayoutPanelResizeGlyph : Glyph
         return null;
     }
 
+    /// <summary>
+    /// No painting necessary - this glyph is more of a 'hot spot'
+    /// </summary>
     public override void Paint(PaintEventArgs pe)
     {
     }
 
+    /// <summary>
+    /// Internal Enum defining the two different types of glyphs a TableLayoutPanel can have: column or row.
+    /// </summary>
     public enum TableLayoutResizeType
     {
         Column,

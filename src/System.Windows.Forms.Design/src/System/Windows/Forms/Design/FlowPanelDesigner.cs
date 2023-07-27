@@ -48,11 +48,10 @@ internal class FlowPanelDesigner : PanelDesigner
     internal override void AddChildControl(Control newChild)
     {
         // Skip location adjustment because FlowPanel is going to position this control.
-
         // Also, Skip z-order adjustment because SendToFront will put the new control at the
         // beginning of the flow instead of the end, plus FlowLayout is already preventing
         // overlap.
-        this.Control.Controls.Add(newChild);
+        Control.Controls.Add(newChild);
     }
 
     protected override void OnDragDrop(DragEventArgs de)

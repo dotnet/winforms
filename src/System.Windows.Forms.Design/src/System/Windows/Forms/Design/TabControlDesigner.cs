@@ -84,10 +84,10 @@ internal class TabControlDesigner : ParentControlDesigner
         {
             if (verbs is null)
             {
-                removeVerb = new DesignerVerb(SR.TabControlRemove, new EventHandler(this.OnRemove));
+                removeVerb = new DesignerVerb(SR.TabControlRemove, new EventHandler(OnRemove));
 
                 verbs = new DesignerVerbCollection();
-                verbs.Add(new DesignerVerb(SR.TabControlAdd, new EventHandler(this.OnAdd)));
+                verbs.Add(new DesignerVerb(SR.TabControlAdd, new EventHandler(OnAdd)));
                 verbs.Add(removeVerb);
             }
 
@@ -109,8 +109,8 @@ internal class TabControlDesigner : ParentControlDesigner
         try
         {
             addingOnInitialize = true;
-            this.OnAdd(this, EventArgs.Empty);
-            this.OnAdd(this, EventArgs.Empty);
+            OnAdd(this, EventArgs.Empty);
+            OnAdd(this, EventArgs.Empty);
         }
         finally
         {
@@ -132,7 +132,7 @@ internal class TabControlDesigner : ParentControlDesigner
     {
         // If the tabcontrol already contains the control we are dropping then don't allow the drop.
         // I.e. we don't want to allow local drag-drop for tabcontrols.
-        return (control is TabPage && !this.Control.Contains(control));
+        return (control is TabPage && !Control.Contains(control));
     }
 
     private void CheckVerbStatus()
@@ -170,22 +170,22 @@ internal class TabControlDesigner : ParentControlDesigner
             ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
             if (svc is not null)
             {
-                svc.SelectionChanged -= new EventHandler(this.OnSelectionChanged);
+                svc.SelectionChanged -= new EventHandler(OnSelectionChanged);
             }
 
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (cs is not null)
             {
-                cs.ComponentChanged -= new ComponentChangedEventHandler(this.OnComponentChanged);
+                cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
             }
 
             TabControl tabControl = Control as TabControl;
             if (tabControl is not null)
             {
-                tabControl.SelectedIndexChanged -= new EventHandler(this.OnTabSelectedIndexChanged);
-                tabControl.GotFocus -= new EventHandler(this.OnGotFocus);
-                tabControl.RightToLeftLayoutChanged -= new EventHandler(this.OnRightToLeftLayoutChanged);
-                tabControl.ControlAdded -= new ControlEventHandler(this.OnControlAdded);
+                tabControl.SelectedIndexChanged -= new EventHandler(OnTabSelectedIndexChanged);
+                tabControl.GotFocus -= new EventHandler(OnGotFocus);
+                tabControl.RightToLeftLayoutChanged -= new EventHandler(OnRightToLeftLayoutChanged);
+                tabControl.ControlAdded -= new ControlEventHandler(OnControlAdded);
             }
         }
 
@@ -242,21 +242,21 @@ internal class TabControlDesigner : ParentControlDesigner
         ISelectionService svc = (ISelectionService)GetService(typeof(ISelectionService));
         if (svc is not null)
         {
-            svc.SelectionChanged += new EventHandler(this.OnSelectionChanged);
+            svc.SelectionChanged += new EventHandler(OnSelectionChanged);
         }
 
         IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
         if (cs is not null)
         {
-            cs.ComponentChanged += new ComponentChangedEventHandler(this.OnComponentChanged);
+            cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
         }
 
         if (control is not null)
         {
-            control.SelectedIndexChanged += new EventHandler(this.OnTabSelectedIndexChanged);
-            control.GotFocus += new EventHandler(this.OnGotFocus);
-            control.RightToLeftLayoutChanged += new EventHandler(this.OnRightToLeftLayoutChanged);
-            control.ControlAdded += new ControlEventHandler(this.OnControlAdded);
+            control.SelectedIndexChanged += new EventHandler(OnTabSelectedIndexChanged);
+            control.GotFocus += new EventHandler(OnGotFocus);
+            control.RightToLeftLayoutChanged += new EventHandler(OnRightToLeftLayoutChanged);
+            control.ControlAdded += new ControlEventHandler(OnControlAdded);
         }
     }
 
@@ -292,7 +292,7 @@ internal class TabControlDesigner : ParentControlDesigner
                 }
 
                 // NOTE:  We also modify padding of TabPages added through the TabPageCollectionEditor.
-                //        If you need to change the default Padding, change it there as well.
+                // If you need to change the default Padding, change it there as well.
                 page.Padding = new Padding(3);
 
                 string pageText = null;
@@ -383,7 +383,7 @@ internal class TabControlDesigner : ParentControlDesigner
                     throw new CheckoutException("Checkout Error", ex);
                 }
 
-                if(tp is not null)
+                if (tp is not null)
                 {
                     host.DestroyComponent(tp);
                 }
@@ -401,14 +401,14 @@ internal class TabControlDesigner : ParentControlDesigner
     {
         try
         {
-            this.disableDrawGrid = true;
+            disableDrawGrid = true;
             // we don't want to do this for the tab control designer because you can't drag anything onto it anyway.
             // so we will always return false for draw grid.
             base.OnPaintAdornments(pe);
         }
         finally
         {
-            this.disableDrawGrid = false;
+            disableDrawGrid = false;
         }
     }
 
