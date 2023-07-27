@@ -10,6 +10,7 @@ using System.ComponentModel.Design;
 using System.Drawing.Design;
 using System.Drawing;
 using System.Windows.Forms.Design.Behavior;
+using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -646,7 +647,21 @@ internal class TabControlDesigner : ParentControlDesigner
 
                 break;
             case PInvoke.WM_CONTEXTMENU:
-                base.WndProc(ref m);
+                // We handle this in addition to a right mouse button.
+                // Why?  Because we often eat the right mouse button, so
+                // it may never generate a WM_CONTEXTMENU.  However, the
+                // system may generate one in response to an F-10.
+                int x = PARAM.SignedLOWORD(m.LParamInternal);
+                int y = PARAM.SignedHIWORD(m.LParamInternal);
+                if (x == -1 && y == -1)
+                {
+                    // for shift-F10
+                    Point p = Cursor.Position;
+                    x = p.X;
+                    y = p.Y;
+                }
+
+                OnContextMenu(x, y);
                 break;
             case PInvoke.WM_HSCROLL:
             case PInvoke.WM_VSCROLL:
