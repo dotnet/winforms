@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms;
@@ -14,7 +12,7 @@ public partial class DataGridViewRowCollection
     {
         private readonly DataGridView dataGridView;
         private readonly DataGridViewRowCollection dataGridViewRows;
-        private readonly DataGridViewColumn dataGridViewSortedColumn;
+        private readonly DataGridViewColumn? dataGridViewSortedColumn;
         private readonly int sortedColumnIndex;
         private readonly IComparer customComparer;
         private readonly bool ascending;
@@ -125,7 +123,6 @@ public partial class DataGridViewRowCollection
                 Debug.Assert(value2 is DataGridViewRow);
                 Debug.Assert(value1 is not null);
                 Debug.Assert(value2 is not null);
-                //
 
                 result = customComparer.Compare(value1, value2);
             }
