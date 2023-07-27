@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms.Layout;
 
@@ -16,7 +14,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 #if DEBUG
     internal static readonly TraceSwitch DebugLayoutTraceSwitch = new("DebugLayout", "Debug ToolStrip Layout code");
 #else
-    internal static readonly TraceSwitch DebugLayoutTraceSwitch;
+    internal static readonly TraceSwitch? DebugLayoutTraceSwitch;
 #endif
     internal ToolStripSplitStackLayout(ToolStrip owner)
     {
@@ -256,7 +254,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
         for (int j = -1; j < toolStrip.Items.Count; j++)
         {
-            ToolStripItem item = null;
+            ToolStripItem? item = null;
 
             if (j == -1)
             {
@@ -363,7 +361,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             }
             else
             {
-                item.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
+                item!.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
             }
 
             DebugLayoutTraceSwitch.TraceVerbose($"Item {item} Placement {item.Placement} Bounds {item.Bounds} Parent {(item.ParentInternal is null ? "null" : item.ParentInternal.ToString())}");
@@ -406,7 +404,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
         for (int j = -1; j < ToolStrip.Items.Count; j++)
         {
-            ToolStripItem item = null;
+            ToolStripItem? item = null;
 
             if (j == -1)
             {
@@ -504,7 +502,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             }
             else
             {
-                item.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
+                item!.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
             }
 
             DebugLayoutTraceSwitch.TraceVerbose($"Item {item} Placement {item.Placement} Bounds {item.Bounds} Parent {(item.ParentInternal is null ? "null" : item.ParentInternal.ToString())}");
