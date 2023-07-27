@@ -277,8 +277,7 @@ internal abstract unsafe class StandardDispatch : IDispatch.Interface, IDispatch
     {
         if (disposing)
         {
-            _standardDispatch?.Dispose();
-            _standardDispatch = null;
+            DisposeHelper.NullAndDispose(ref _standardDispatch);
         }
     }
 
