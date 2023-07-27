@@ -205,12 +205,12 @@ public class ControlDesignerTests
         using ControlDesigner controlDesigner = new();
         using Control control = new();
 
-        using Control subControl = new();
+        using Control childControl = new();
         controlDesigner.Initialize(control);
 
         Assert.Empty(controlDesigner.AssociatedComponents);
 
-        control.Controls.Add(subControl);
+        control.Controls.Add(childControl);
 
         Assert.Empty(controlDesigner.AssociatedComponents);
     }
@@ -269,9 +269,9 @@ public class ControlDesignerTests
 
         Assert.Empty(controlDesigner.AssociatedComponents);
 
-        using Control subControl = new();
-        subControl.Site = mockSite.Object;
-        control.Controls.Add(subControl);
+        using Control childControl = new();
+        childControl.Site = mockSite.Object;
+        control.Controls.Add(childControl);
 
         Assert.Equal(1, controlDesigner.AssociatedComponents.Count);
     }
