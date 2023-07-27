@@ -70,4 +70,13 @@ public class CursorsTests
             Assert.NotNull((Cursor)property.GetValue(null, tempIndex));
         }
     }
+
+    [Theory]
+    [MemberData(nameof(Cursors_TestData))]
+    public void Cursors_ToString_KnownCursor_ReturnsExpected(Func<Cursor> getCursor)
+    {
+        // Regression test for https://github.com/dotnet/winforms/issues/9464
+        Cursor cursor = getCursor();
+        Assert.NotEqual("[Cursor: System.Windows.Forms.Cursor]", cursor.ToString());
+    }
 }
