@@ -44,6 +44,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.MaskedTextBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.PanelDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.PictureBoxDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.PrintDialogDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.RadioButtonDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.RichTextBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.SplitContainerDesigner))]

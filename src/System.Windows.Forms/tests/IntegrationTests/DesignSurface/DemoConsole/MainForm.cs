@@ -218,8 +218,6 @@ public partial class MainForm : Form
                         Timer tm11 = surface.CreateComponent<Timer>();
                         FontDialog fd1 = surface.CreateComponent<FontDialog>();
                         PrintDialog pd1 = surface.CreateComponent<PrintDialog>();
-
-                        surface.CreateControl<PrintPreviewControl>(new Size(230, 170), new Point(10, 110));
                     }
 
                     break;
