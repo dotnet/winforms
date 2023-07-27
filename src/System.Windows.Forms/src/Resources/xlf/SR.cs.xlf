@@ -11377,7 +11377,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="toStringControl">
         <source>Ctrl</source>
         <target state="needs-review-translation">Ctrl</target>
-        <note>{Locked=!de-DE; "Ctrl"}</note>
+        <note>{Locked=!de; "Ctrl"}</note>
       </trans-unit>
       <trans-unit id="toStringDefault">
         <source>(default)</source>

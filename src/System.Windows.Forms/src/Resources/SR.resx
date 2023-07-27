@@ -6138,7 +6138,7 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="toStringControl" xml:space="preserve">
     <value>Ctrl</value>
-	<comment>{Locked=!de-DE; "Ctrl"}</comment>
+	<comment>{Locked=!de; "Ctrl"}</comment>
   </data>
   <data name="toStringDefault" xml:space="preserve">
     <value>(default)</value>
