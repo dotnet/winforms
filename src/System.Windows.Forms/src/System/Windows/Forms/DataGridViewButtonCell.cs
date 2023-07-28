@@ -456,7 +456,6 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         if (UseColumnTextForButtonValue &&
             DataGridView is not null &&
             DataGridView.NewRowIndex != rowIndex &&
-            OwningColumn is not null &&
             OwningColumn is DataGridViewButtonColumn dataGridViewButtonColumn)
         {
             return dataGridViewButtonColumn.Text;
