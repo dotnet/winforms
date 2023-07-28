@@ -18,21 +18,15 @@ public class TreeNodeCollection : IList
     ///  issues by holding on to extra references.
     private int _lastAccessedIndex = -1;
 
-    //this index is used to optimize performance of AddRange
-    //items are added from last to first after this index
-    //(to work around TV_INSertItem comctl32 perf issue with consecutive adds in the end of the list)
-    private int _fixedIndex = -1;
-
     internal TreeNodeCollection(TreeNode owner)
     {
         _owner = owner;
     }
 
-    internal int FixedIndex
-    {
-        get => _fixedIndex;
-        set => _fixedIndex = value;
-    }
+    // This index is used to optimize performance of AddRange
+    // items are added from last to first after this index
+    // (to work around TV_INSertItem comctl32 perf issue with consecutive adds in the end of the list)
+    internal int FixedIndex { get; set; } = -1;
 
     public virtual TreeNode this[int index]
     {
