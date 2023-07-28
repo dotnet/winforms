@@ -107,14 +107,9 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         }
     }
 
-    public override Type FormattedValueType
-    {
-        get
-        {
-            // we return string for the formatted type
-            return s_defaultFormattedValueType;
-        }
-    }
+    public override Type FormattedValueType =>
+            // We return string for the formatted type.
+            s_defaultFormattedValueType;
 
     [DefaultValue(false)]
     public bool UseColumnTextForButtonValue

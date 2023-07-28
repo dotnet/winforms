@@ -112,13 +112,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         }
     }
 
-    public override Type FormattedValueType
-    {
-        get
-        {
-            return s_defaultFormattedValueType;
-        }
-    }
+    public override Type FormattedValueType => s_defaultFormattedValueType;
 
     [DefaultValue(LinkBehavior.SystemDefault)]
     public LinkBehavior LinkBehavior
