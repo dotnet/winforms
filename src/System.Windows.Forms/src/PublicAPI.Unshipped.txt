@@ -1,0 +1,6 @@
+override System.Windows.Forms.PrintPreviewControl.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.PrintPreviewControl.OnLostFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.PrintPreviewControl.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
+override System.Windows.Forms.PrintPreviewControl.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
+*REMOVED*override System.Windows.Forms.PrintPreviewControl.CreateParams.get -> System.Windows.Forms.CreateParams!
+*REMOVED*System.Windows.Forms.PrintPreviewControl.TabStopChanged -> System.EventHandler?

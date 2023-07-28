@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms;
@@ -12,54 +10,54 @@ public partial class DataGridViewRowCollection
 {
     private partial class RowComparer
     {
-        private readonly DataGridView dataGridView;
-        private readonly DataGridViewRowCollection dataGridViewRows;
-        private readonly DataGridViewColumn dataGridViewSortedColumn;
-        private readonly int sortedColumnIndex;
-        private readonly IComparer customComparer;
-        private readonly bool ascending;
-        private static readonly ComparedObjectMax max = new();
+        private readonly DataGridView _dataGridView;
+        private readonly DataGridViewRowCollection _dataGridViewRows;
+        private readonly DataGridViewColumn? _dataGridViewSortedColumn;
+        private readonly int _sortedColumnIndex;
+        private readonly IComparer _customComparer;
+        private readonly bool _ascending;
+        private static readonly ComparedObjectMax s_max = new();
 
         public RowComparer(DataGridViewRowCollection dataGridViewRows, IComparer customComparer, bool ascending)
         {
-            dataGridView = dataGridViewRows.DataGridView;
-            this.dataGridViewRows = dataGridViewRows;
-            dataGridViewSortedColumn = dataGridView.SortedColumn;
-            if (dataGridViewSortedColumn is null)
+            _dataGridView = dataGridViewRows.DataGridView;
+            _dataGridViewRows = dataGridViewRows;
+            _dataGridViewSortedColumn = _dataGridView.SortedColumn;
+            if (_dataGridViewSortedColumn is null)
             {
                 Debug.Assert(customComparer is not null);
-                sortedColumnIndex = -1;
+                _sortedColumnIndex = -1;
             }
             else
             {
-                sortedColumnIndex = dataGridViewSortedColumn.Index;
+                _sortedColumnIndex = _dataGridViewSortedColumn.Index;
             }
 
-            this.customComparer = customComparer;
-            this.ascending = ascending;
+            _customComparer = customComparer;
+            _ascending = ascending;
         }
 
         internal object GetComparedObject(int rowIndex)
         {
-            if (dataGridView.NewRowIndex != -1)
+            if (_dataGridView.NewRowIndex != -1)
             {
-                Debug.Assert(dataGridView.AllowUserToAddRowsInternal);
-                if (rowIndex == dataGridView.NewRowIndex)
+                Debug.Assert(_dataGridView.AllowUserToAddRowsInternal);
+                if (rowIndex == _dataGridView.NewRowIndex)
                 {
-                    return max;
+                    return s_max;
                 }
             }
 
-            if (customComparer is null)
+            if (_customComparer is null)
             {
-                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                DataGridViewRow dataGridViewRow = _dataGridViewRows.SharedRow(rowIndex);
                 Debug.Assert(dataGridViewRow is not null);
-                Debug.Assert(sortedColumnIndex >= 0);
-                return dataGridViewRow.Cells[sortedColumnIndex].GetValueInternal(rowIndex);
+                Debug.Assert(_sortedColumnIndex >= 0);
+                return dataGridViewRow.Cells[_sortedColumnIndex].GetValueInternal(rowIndex);
             }
             else
             {
-                return dataGridViewRows[rowIndex]; // Unsharing compared rows!
+                return _dataGridViewRows[rowIndex]; // Unsharing compared rows!
             }
         }
 
@@ -75,9 +73,9 @@ public partial class DataGridViewRowCollection
             }
 
             int result = 0;
-            if (customComparer is null)
+            if (_customComparer is null)
             {
-                if (!dataGridView.OnSortCompare(dataGridViewSortedColumn, value1, value2, rowIndex1, rowIndex2, out result))
+                if (!_dataGridView.OnSortCompare(_dataGridViewSortedColumn, value1, value2, rowIndex1, rowIndex2, out result))
                 {
                     if (!(value1 is IComparable) && !(value2 is IComparable))
                     {
@@ -108,7 +106,7 @@ public partial class DataGridViewRowCollection
 
                     if (result == 0)
                     {
-                        if (ascending)
+                        if (_ascending)
                         {
                             result = rowIndex1 - rowIndex2;
                         }
@@ -125,12 +123,11 @@ public partial class DataGridViewRowCollection
                 Debug.Assert(value2 is DataGridViewRow);
                 Debug.Assert(value1 is not null);
                 Debug.Assert(value2 is not null);
-                //
 
-                result = customComparer.Compare(value1, value2);
+                result = _customComparer.Compare(value1, value2);
             }
 
-            if (ascending)
+            if (_ascending)
             {
                 return result;
             }

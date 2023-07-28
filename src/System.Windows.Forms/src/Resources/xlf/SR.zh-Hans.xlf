@@ -11366,7 +11366,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringAlt">
         <source>Alt</source>
-        <target state="needs-review-translation">Alt</target>
+        <target state="translated">Alt</target>
         <note>{Locked="Alt"}</note>
       </trans-unit>
       <trans-unit id="toStringBack">
@@ -11376,8 +11376,8 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringControl">
         <source>Ctrl</source>
-        <target state="needs-review-translation">Ctrl</target>
-        <note>{Locked=!de-DE; "Ctrl"}</note>
+        <target state="translated">Ctrl</target>
+        <note>{Locked=!de; "Ctrl"}</note>
       </trans-unit>
       <trans-unit id="toStringDefault">
         <source>(default)</source>
@@ -11386,28 +11386,28 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="needs-review-translation">Delete</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Del"}</note>
+        <target state="translated">Delete</target>
+        <note>{Locked=!fr,de,it,es; "Del"}</note>
       </trans-unit>
       <trans-unit id="toStringEnd">
         <source>End</source>
-        <target state="needs-review-translation">End</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "End"}</note>
+        <target state="translated">End</target>
+        <note>{Locked=!fr,de,it,es; "End"}</note>
       </trans-unit>
       <trans-unit id="toStringEnter">
         <source>Enter</source>
-        <target state="needs-review-translation">Enter</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Enter"}</note>
+        <target state="translated">Enter</target>
+        <note>{Locked=!fr,de,it,es; "Enter"}</note>
       </trans-unit>
       <trans-unit id="toStringHome">
         <source>Home</source>
-        <target state="needs-review-translation">主页</target>
-        <note>{Locked=!fr-FR,!de-DE,!es-ES; "Home"}</note>
+        <target state="translated">Home</target>
+        <note>{Locked=!fr,de,es; "Home"}</note>
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Insert</source>
-        <target state="needs-review-translation">Insert</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES,!zh-Hant; "Insert"}</note>
+        <target state="translated">Insert</target>
+        <note>{Locked=!fr,de,it,es,zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
         <source>(none)</source>
@@ -11416,18 +11416,18 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="needs-review-translation">Page Down</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "PgDn"}</note>
+        <target state="translated">PgDn</target>
+        <note>{Locked=!fr,de,it,es; "PgDn"}</note>
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="needs-review-translation">Page Up</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "PgUp"}</note>
+        <target state="translated">PgUp</target>
+        <note>{Locked=!fr,de,it,es; "PgUp"}</note>
       </trans-unit>
       <trans-unit id="toStringShift">
         <source>Shift</source>
-        <target state="needs-review-translation">Shift</target>
-        <note>{Locked=!fr-FR,!de-DE,!it-IT,!es-ES; "Shift"}</note>
+        <target state="translated">Shift</target>
+        <note>{Locked=!fr,de,it,es; "Shift"}</note>
       </trans-unit>
       <trans-unit id="valueChangedEventDescr">
         <source>Occurs when the value of the control changes.</source>

@@ -865,11 +865,8 @@ public partial class Control
                 RECT posRect = default;
                 RECT clipRect = default;
 
-                _inPlaceUiWindow?.Dispose();
-                _inPlaceUiWindow = null;
-
-                _inPlaceFrame?.Dispose();
-                _inPlaceFrame = null;
+                DisposeHelper.NullAndDispose(ref _inPlaceUiWindow);
+                DisposeHelper.NullAndDispose(ref _inPlaceFrame);
 
                 IOleInPlaceFrame* pFrame;
                 IOleInPlaceUIWindow* pWindow;
@@ -1002,11 +999,8 @@ public partial class Control
             _control.Visible = false;
             HWNDParent = default;
 
-            _inPlaceUiWindow?.Dispose();
-            _inPlaceUiWindow = null;
-
-            _inPlaceFrame?.Dispose();
-            _inPlaceFrame = null;
+            DisposeHelper.NullAndDispose(ref _inPlaceUiWindow);
+            DisposeHelper.NullAndDispose(ref _inPlaceFrame);
 
             return HRESULT.S_OK;
         }
@@ -1702,7 +1696,7 @@ public partial class Control
         /// </summary>
         internal void SetClientSite(IOleClientSite* value)
         {
-            _clientSite?.Dispose();
+            DisposeHelper.NullAndDispose(ref _clientSite);
             _clientSite = value is null ? null : new(value, takeOwnership: true);
 
             _control.Site = _clientSite is not null
@@ -2257,12 +2251,13 @@ public partial class Control
 
         public void Dispose()
         {
-            _inPlaceFrame?.Dispose();
-            _inPlaceFrame = null;
-            _inPlaceUiWindow?.Dispose();
-            _inPlaceUiWindow = null;
-            _clientSite?.Dispose();
-            _clientSite = null;
+            // Disposing the client site handle can get us called back with SetClientSite(null). We need to
+            // make sure that we clear the field before disposing it. To avoid similar problems, we do the same
+            // pattern for every COM pointer.
+
+            DisposeHelper.NullAndDispose(ref _inPlaceFrame);
+            DisposeHelper.NullAndDispose(ref _inPlaceUiWindow);
+            DisposeHelper.NullAndDispose(ref _clientSite);
         }
     }
 }
