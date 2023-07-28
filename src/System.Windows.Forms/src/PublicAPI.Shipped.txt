@@ -546,10 +546,10 @@ System.Windows.Forms.DataGridViewCellPaintingEventArgs.Value.get -> object?
 ~System.Windows.Forms.DataGridViewRowCollection.List.get -> System.Collections.ArrayList
 ~System.Windows.Forms.DataGridViewRowCollection.SharedRow(int rowIndex) -> System.Windows.Forms.DataGridViewRow
 ~System.Windows.Forms.DataGridViewRowCollection.this[int index].get -> System.Windows.Forms.DataGridViewRow
-~System.Windows.Forms.DataGridViewSelectedCellCollection.Contains(System.Windows.Forms.DataGridViewCell dataGridViewCell) -> bool
-~System.Windows.Forms.DataGridViewSelectedCellCollection.CopyTo(System.Windows.Forms.DataGridViewCell[] array, int index) -> void
-~System.Windows.Forms.DataGridViewSelectedCellCollection.Insert(int index, System.Windows.Forms.DataGridViewCell dataGridViewCell) -> void
-~System.Windows.Forms.DataGridViewSelectedCellCollection.this[int index].get -> System.Windows.Forms.DataGridViewCell
+System.Windows.Forms.DataGridViewSelectedCellCollection.Contains(System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> bool
+System.Windows.Forms.DataGridViewSelectedCellCollection.CopyTo(System.Windows.Forms.DataGridViewCell![]! array, int index) -> void
+System.Windows.Forms.DataGridViewSelectedCellCollection.Insert(int index, System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> void
+System.Windows.Forms.DataGridViewSelectedCellCollection.this[int index].get -> System.Windows.Forms.DataGridViewCell!
 ~System.Windows.Forms.HtmlElement.All.get -> System.Windows.Forms.HtmlElementCollection
 ~System.Windows.Forms.HtmlElement.AppendChild(System.Windows.Forms.HtmlElement newElement) -> System.Windows.Forms.HtmlElement
 ~System.Windows.Forms.HtmlElement.AttachEventHandler(string eventName, System.EventHandler eventHandler) -> void
