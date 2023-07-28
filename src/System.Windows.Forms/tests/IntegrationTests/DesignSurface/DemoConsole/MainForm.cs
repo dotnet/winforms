@@ -219,7 +219,7 @@ public partial class MainForm : Form
                         FontDialog fd1 = surface.CreateComponent<FontDialog>();
                         PrintDialog pd1 = surface.CreateComponent<PrintDialog>();
 
-                        surface.CreateControl<MonthCalendar>(new Size(230, 170), new Point(10, 110));
+                        surface.CreateControl<MonthCalendar>(new Size(230, 170), new Point(10,110));
                     }
 
                     break;
