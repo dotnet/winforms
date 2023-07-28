@@ -11406,7 +11406,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Insert</source>
-        <target state="new">Insert</target>
+        <target state="translated">Insert</target>
         <note>{Locked=!fr,de,it,es,zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
