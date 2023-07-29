@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Drawing.Design;
@@ -15,7 +13,7 @@ public class FontNameEditor : UITypeEditor
 {
     private const float ScaleFactor = 1.5f;
 
-    private static readonly FontStyle[] s_fontStyles = new[]
+    private static readonly FontStyle[] s_fontStyles =
     {
          FontStyle.Regular,
          FontStyle.Italic,
@@ -27,12 +25,12 @@ public class FontNameEditor : UITypeEditor
     /// <returns>
     ///  <see langword="true" /> as this editor supports the painting of a representation of an object's value.
     /// </returns>
-    public override bool GetPaintValueSupported(ITypeDescriptorContext context) => true;
+    public override bool GetPaintValueSupported(ITypeDescriptorContext? context) => true;
 
     /// <inheritdoc />
     public override void PaintValue(PaintValueEventArgs e)
     {
-        string fontName = e.Value as string;
+        string? fontName = e.Value as string;
         if (string.IsNullOrWhiteSpace(fontName))
         {
             // Don't draw anything if we don't have a value.
@@ -41,7 +39,7 @@ public class FontNameEditor : UITypeEditor
 
         try
         {
-            using var fontFamily = new FontFamily(fontName);
+            using FontFamily fontFamily = new(fontName);
             e.Graphics.FillRectangle(SystemBrushes.ActiveCaption, e.Bounds);
 
             // Believe it or not, not all font families have a "normal" face. Try normal, then italic,
@@ -72,9 +70,9 @@ public class FontNameEditor : UITypeEditor
     private static void DrawFontSample(PaintValueEventArgs e, FontFamily fontFamily, FontStyle fontStyle)
     {
         float fontSize = e.Bounds.Height / ScaleFactor;
-        using var font = new Font(fontFamily, fontSize, fontStyle, GraphicsUnit.Pixel);
+        using Font font = new(fontFamily, fontSize, fontStyle, GraphicsUnit.Pixel);
 
-        var format = new StringFormat(StringFormatFlags.NoWrap | StringFormatFlags.NoFontFallback)
+        StringFormat format = new(StringFormatFlags.NoWrap | StringFormatFlags.NoFontFallback)
         {
             LineAlignment = StringAlignment.Far
         };
