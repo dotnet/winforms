@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Windows.Forms.Design;
 
@@ -14,14 +12,14 @@ namespace System.Drawing.Design;
 /// </summary>
 public partial class ContentAlignmentEditor : UITypeEditor
 {
-    private ContentUI _contentUI;
+    private ContentUI? _contentUI;
 
     /// <summary>
     ///  Edits the given object value using the editor style provided by GetEditStyle.
     /// </summary>
-    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
+        if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
         {
             return value;
         }
@@ -37,6 +35,6 @@ public partial class ContentAlignmentEditor : UITypeEditor
     }
 
     /// <inheritdoc />
-    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
         => UITypeEditorEditStyle.DropDown;
 }
