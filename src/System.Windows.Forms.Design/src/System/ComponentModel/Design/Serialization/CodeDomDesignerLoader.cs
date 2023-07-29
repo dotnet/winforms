@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -37,24 +35,24 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
     // State for the designer loader.
     private BitVector32 _state;
-    private IExtenderProvider[] _extenderProviders;
-    private IExtenderProviderService _extenderProviderService;
+    private IExtenderProvider[]? _extenderProviders;
+    private IExtenderProviderService? _extenderProviderService;
 
     // State for the code dom parser / generator
-    private ICodeGenerator _codeGenerator;
+    private ICodeGenerator? _codeGenerator;
 
     // The following fields are setup by EnsureDocument and deleted by ClearDocument.
-    private CodeDomSerializer _rootSerializer;
-    private TypeCodeDomSerializer _typeSerializer;
-    private CodeCompileUnit _documentCompileUnit;
-    private CodeNamespace _documentNamespace;
-    private CodeTypeDeclaration _documentType;
+    private CodeDomSerializer? _rootSerializer;
+    private TypeCodeDomSerializer? _typeSerializer;
+    private CodeCompileUnit? _documentCompileUnit;
+    private CodeNamespace? _documentNamespace;
+    private CodeTypeDeclaration? _documentType;
 
     /// <summary>
     ///  This abstract property returns the code dom provider that should
     ///  be used by this designer loader.
     /// </summary>
-    protected abstract CodeDomProvider CodeDomProvider { get; }
+    protected abstract CodeDomProvider? CodeDomProvider { get; }
 
     /// <summary>
     ///  The TypeResolutionService property returns a type resolution service that the code dom
@@ -63,7 +61,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     ///  is non-null.  While the type resolution service is optional in many scenarios, it is required for
     ///  code interpretation because source code contains type names, but no assembly references.
     /// </summary>
-    protected abstract ITypeResolutionService TypeResolutionService { get; }
+    protected abstract ITypeResolutionService? TypeResolutionService { get; }
 
     /// <summary>
     ///  This is the reverse of EnsureDocument.  It clears the document state which will
@@ -91,13 +89,13 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     /// </summary>
     public override void Dispose()
     {
-        if (GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
+        if (TryGetService(out IComponentChangeService? cs))
         {
             cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
             cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
         }
 
-        if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
+        if (TryGetService(out IDesignerHost? host))
         {
             host.RemoveService(typeof(INameCreationService));
             host.RemoveService(typeof(IDesignerSerializationService));
@@ -112,7 +110,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (_extenderProviderService is not null)
         {
-            foreach (IExtenderProvider p in _extenderProviders)
+            foreach (IExtenderProvider p in _extenderProviders!)
             {
                 _extenderProviderService.RemoveExtenderProvider(p);
             }
@@ -125,7 +123,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     /// <summary>
     ///  Internal debug method to dump a code dom tree to text.
     /// </summary>
-    internal static void DumpTypeDeclaration(CodeTypeDeclaration typeDecl)
+    internal static void DumpTypeDeclaration(CodeTypeDeclaration? typeDecl)
     {
         if (typeDecl is null || !s_traceCDLoader.TraceVerbose)
         {
@@ -137,7 +135,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         try
         {
-            codeGenerator.GenerateCodeFromType(typeDecl, sw, null);
+            codeGenerator.GenerateCodeFromType(typeDecl, sw, null!);
         }
         catch (Exception ex)
         {
@@ -147,7 +145,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         // spit this line by line so it respects the indent.
         StringReader sr = new StringReader(sw.ToString());
 
-        for (string ln = sr.ReadLine(); ln is not null; ln = sr.ReadLine())
+        for (string? ln = sr.ReadLine(); ln is not null; ln = sr.ReadLine())
         {
             Debug.WriteLine(ln);
         }
@@ -163,7 +161,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         {
             if (attributes[i] is DesignerAttribute da)
             {
-                Type attributeBaseType = Type.GetType(da.DesignerBaseTypeName);
+                Type? attributeBaseType = Type.GetType(da.DesignerBaseTypeName);
 
                 if (attributeBaseType is not null && attributeBaseType == typeof(IRootDesigner))
                 {
@@ -186,6 +184,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     ///  will throw a human readable exception if any part of the
     ///  process fails.
     /// </summary>
+    [MemberNotNull(nameof(_documentCompileUnit))]
+    [MemberNotNull(nameof(_documentType))]
     private void EnsureDocument(IDesignerSerializationManager manager)
     {
         Debug.Assert(manager is not null, "Should pass a serialization manager into EnsureDocument");
@@ -210,17 +210,14 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         {
             // We keep track of any failures here.  If we failed to find a type this
             // array list will contain a list of strings listing what we have tried.
-            List<string> failures = null;
+            List<string>? failures = null;
             bool firstClass = true;
 
-            if (_documentCompileUnit.UserData[typeof(InvalidOperationException)] is not null)
+            if (_documentCompileUnit.UserData[typeof(InvalidOperationException)] is InvalidOperationException invalidOp)
             {
-                if (_documentCompileUnit.UserData[typeof(InvalidOperationException)] is InvalidOperationException invalidOp)
-                {
-                    _documentCompileUnit = null; // not efficient but really a corner case...
+                _documentCompileUnit = null; // not efficient but really a corner case...
 
-                    throw invalidOp;
-                }
+                throw invalidOp;
             }
 
             // Look in the compile unit for a class we can load.  The first one we find
@@ -231,22 +228,21 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                 {
                     // Uncover the base type of this class.  In case we totally fail
                     // we document each time we were unable to load a particular class.
-                    Type baseType = null;
+                    Type? baseType = null;
 
                     foreach (CodeTypeReference typeRef in typeDecl.BaseTypes)
                     {
-                        Type t = LoaderHost.GetType(CodeDomSerializerBase.GetTypeNameFromCodeTypeReference(manager, typeRef));
-
-                        if (t is not null && !(t.IsInterface))
-                        {
-                            baseType = t;
-                            break;
-                        }
+                        Type? t = LoaderHost.GetType(CodeDomSerializerBase.GetTypeNameFromCodeTypeReference(manager, typeRef));
 
                         if (t is null)
                         {
                             failures ??= new();
                             failures.Add(string.Format(SR.CodeDomDesignerLoaderDocumentFailureTypeNotFound, typeDecl.Name, typeRef.BaseType));
+                        }
+                        else if (!t.IsInterface)
+                        {
+                            baseType = t;
+                            break;
                         }
                     }
 
@@ -269,7 +265,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                                 // This serializer must support a CodeDomSerializer or we're not interested.
                                 if (ra.SerializerBaseTypeName is not null && LoaderHost.GetType(ra.SerializerBaseTypeName) == typeof(CodeDomSerializer))
                                 {
-                                    Type serializerType = LoaderHost.GetType(ra.SerializerTypeName);
+                                    Type? serializerType = LoaderHost.GetType(ra.SerializerTypeName!);
 
                                     if (serializerType is not null)
                                     {
@@ -277,7 +273,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
                                         if (firstClass)
                                         {
-                                            _rootSerializer = (CodeDomSerializer)Activator.CreateInstance(serializerType, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
+                                            _rootSerializer = (CodeDomSerializer?)Activator.CreateInstance(serializerType, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
                                             break;
                                         }
                                         else
@@ -293,7 +289,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                         //that cannot be designed.
                         if (_rootSerializer is null && HasRootDesignerAttribute(baseType))
                         {
-                            _typeSerializer = manager.GetSerializer(baseType, typeof(TypeCodeDomSerializer)) as TypeCodeDomSerializer;
+                            _typeSerializer = manager.GetSerializer<TypeCodeDomSerializer>(baseType);
 
                             if (!firstClass && _typeSerializer is not null)
                             {
@@ -378,13 +374,15 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     ///  tree stored in _documentCompileUnit.  This returns true if any changes
     ///  were made to the tree.
     /// </summary>
+    [MemberNotNull(nameof(_documentCompileUnit))]
+    [MemberNotNull(nameof(_documentType))]
     private bool IntegrateSerializedTree(IDesignerSerializationManager manager, CodeTypeDeclaration newDecl)
     {
         EnsureDocument(manager);
         CodeTypeDeclaration docDecl = _documentType;
         bool caseInsensitive = false;
         bool codeDomDirty = false;
-        CodeDomProvider provider = CodeDomProvider;
+        CodeDomProvider? provider = CodeDomProvider;
 
         if (provider is not null)
         {
@@ -596,9 +594,9 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         // The code dom designer loader requires a working ITypeResolutionService to
         // function.  See if someone added one already, and if not, provide
         // our own.
-        if (GetService(typeof(ITypeResolutionService)) is null)
+        if (!TryGetService(out ITypeResolutionService? trs))
         {
-            ITypeResolutionService trs = TypeResolutionService;
+            trs = TypeResolutionService;
 
             if (trs is null)
             {
@@ -609,9 +607,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             _state[s_stateOwnTypeResolution] = true;
         }
 
-        _extenderProviderService = GetService(typeof(IExtenderProviderService)) as IExtenderProviderService;
-
-        if (_extenderProviderService is not null)
+        if (TryGetService(out _extenderProviderService))
         {
             _extenderProviders = new IExtenderProvider[]
             {
@@ -648,7 +644,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         // If we can't get to a code dom provider, or if that provider doesn't
         // implement ICodeDomDesignerReload, we can't optimize the reload, so we
         // just assume it is needed.
-        if (!(CodeDomProvider is ICodeDomDesignerReload reloader))
+        if (CodeDomProvider is not ICodeDomDesignerReload reloader)
         {
             return true;
         }
@@ -662,7 +658,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         try
         {
             ClearDocument();
-            EnsureDocument(GetService(typeof(IDesignerSerializationManager)) as IDesignerSerializationManager);
+            EnsureDocument(GetService<IDesignerSerializationManager>()!);
         }
         catch
         {
@@ -697,9 +693,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     protected override void OnBeginLoad()
     {
         // Make sure that we're removed any event sinks we added after we finished the load.
-        IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
-        if (cs is not null)
+        if (TryGetService(out IComponentChangeService? cs))
         {
             cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
             cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
@@ -724,9 +719,9 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     /// <summary>
     ///  This is called whenever a component is removed from the design surface.
     /// </summary>
-    private void OnComponentRemoved(object sender, ComponentEventArgs e)
+    private void OnComponentRemoved(object? sender, ComponentEventArgs e)
     {
-        string name = e.Component.Site.Name;
+        string? name = e.Component!.Site!.Name;
         RemoveDeclaration(name);
     }
 
@@ -735,15 +730,15 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     ///  and then whack the component declaration.  At the next code gen
     ///  cycle we will recreate the declaration.
     /// </summary>
-    private void OnComponentRename(object sender, ComponentRenameEventArgs e)
+    private void OnComponentRename(object? sender, ComponentRenameEventArgs e)
     {
-        OnComponentRename(e.Component, e.OldName, e.NewName);
+        OnComponentRename(e.Component!, e.OldName, e.NewName);
     }
 
     /// <summary>
     ///  Callback to create our demand-created services.
     /// </summary>
-    private object OnCreateService(IServiceContainer container, Type serviceType)
+    private object? OnCreateService(IServiceContainer container, Type serviceType)
     {
         if (serviceType == typeof(ComponentSerializationService))
         {
@@ -767,7 +762,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     ///  indirectly by calling DependentLoadComplete if IDesignerLoaderService
     ///  is available, or directly if it is not.
     /// </summary>
-    protected override void OnEndLoad(bool successful, ICollection errors)
+    protected override void OnEndLoad(bool successful, ICollection? errors)
     {
         base.OnEndLoad(successful, errors);
 
@@ -778,9 +773,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         // After a successful load we will want to monitor a bunch of events so we know when
         // to make the loader dirty.
-        IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-
-        if (cs is null)
+        if (!TryGetService(out IComponentChangeService? cs))
         {
             return;
         }
@@ -801,7 +794,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     /// </summary>
     protected override void PerformFlush(IDesignerSerializationManager manager)
     {
-        CodeTypeDeclaration typeDecl = null;
+        CodeTypeDeclaration? typeDecl = null;
 
         // Ask the serializer for the root component to serialize.  This should return
         // a CodeTypeDeclaration, which we will plug into our existing code DOM tree.
@@ -872,7 +865,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         }
         else
         {
-            _typeSerializer.Deserialize(manager, _documentType);
+            _typeSerializer!.Deserialize(manager, _documentType);
         }
 
         SetBaseComponentClassName($"{_documentNamespace.Name}.{_documentType.Name}");
@@ -882,13 +875,13 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     ///  This virtual method gets override in the VsCodeDomDesignerLoader to call the RenameElement on the
     ///  ChangeNotificationService to rename the component name through out the project scope.
     /// </summary>
-    protected virtual void OnComponentRename(object component, string oldName, string newName)
+    protected virtual void OnComponentRename(object component, string? oldName, string? newName)
     {
         if (LoaderHost.RootComponent == component)
         {
             if (_documentType is not null)
             {
-                _documentType.Name = newName;
+                _documentType.Name = newName!;
             }
 
             return;
@@ -906,7 +899,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             if (members[i] is CodeMemberField && members[i].Name.Equals(oldName)
                                               && ((CodeMemberField)members[i]).Type.BaseType.Equals(TypeDescriptor.GetClassName(component)))
             {
-                members[i].Name = newName;
+                members[i].Name = newName!;
                 break;
             }
         }
@@ -916,7 +909,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     ///  This is called when a component is deleted or renamed.  We remove
     ///  the component's declaration here, if it exists.
     /// </summary>
-    private void RemoveDeclaration(string name)
+    private void RemoveDeclaration(string? name)
     {
         if (_documentType is null)
         {
@@ -933,19 +926,6 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                 break;
             }
         }
-    }
-
-    /// <summary>
-    ///  Simple helper routine that will throw an exception if we need a service, but cannot get
-    ///  to it.  You should only throw for missing services that are absolutely essential for
-    ///  operation.  If there is a way to gracefully degrade, then you should do it.
-    /// </summary>
-    private static void ThrowMissingService(Type serviceType)
-    {
-        Exception ex = new InvalidOperationException(string.Format(SR.BasicDesignerLoaderMissingService, serviceType.Name));
-        ex.HelpLink = SR.BasicDesignerLoaderMissingService;
-
-        throw ex;
     }
 
     /// <summary>
@@ -991,7 +971,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (typeLeft.ArrayRank > 0)
         {
-            return TypesEqual(typeLeft.ArrayElementType, typeRight.ArrayElementType);
+            return TypesEqual(typeLeft.ArrayElementType!, typeRight.ArrayElementType!);
         }
 
         return true;
@@ -1013,7 +993,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     /// </summary>
     ICollection IDesignerSerializationService.Deserialize(object serializationData)
     {
-        if (!(serializationData is SerializationStore))
+        if (serializationData is not SerializationStore data)
         {
             Exception ex = new ArgumentException(SR.CodeDomDesignerLoaderBadSerializationObject);
             ex.HelpLink = SR.CodeDomDesignerLoaderBadSerializationObject;
@@ -1021,14 +1001,8 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             throw ex;
         }
 
-        ComponentSerializationService css = GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
-
-        if (css is null)
-        {
-            ThrowMissingService(typeof(ComponentSerializationService));
-        }
-
-        return css.Deserialize((SerializationStore)serializationData, LoaderHost.Container);
+        ComponentSerializationService css = GetRequiredService<ComponentSerializationService>();
+        return css.Deserialize(data, LoaderHost.Container);
     }
 
     /// <summary>
@@ -1036,17 +1010,11 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     ///  stores them in an opaque serialization data object.
     ///  The returning object fully supports runtime serialization.
     /// </summary>
-    object IDesignerSerializationService.Serialize(ICollection objects)
+    object IDesignerSerializationService.Serialize(ICollection? objects)
     {
         objects ??= Array.Empty<object>();
 
-        ComponentSerializationService css = GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
-
-        if (css is null)
-        {
-            ThrowMissingService(typeof(ComponentSerializationService));
-        }
-
+        ComponentSerializationService css = GetRequiredService<ComponentSerializationService>();
         SerializationStore store = css.CreateStore();
 
         using (store)
@@ -1066,7 +1034,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     ///  an object of the given data type, so the service may
     ///  derive a name from the data type's name.
     /// </summary>
-    string INameCreationService.CreateName(IContainer container, Type dataType)
+    string INameCreationService.CreateName(IContainer? container, Type dataType)
     {
         ArgumentNullException.ThrowIfNull(dataType);
 
@@ -1091,7 +1059,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         });
 
         // Now hash up all of the member variable names using a case insensitive hash.
-        CodeTypeDeclaration type = _documentType;
+        CodeTypeDeclaration? type = _documentType;
         HashSet<string> memberHash = new(StringComparer.CurrentCultureIgnoreCase);
 
         if (type is not null)
@@ -1139,7 +1107,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         // generator to ensure it's not a keyword.
         if (_codeGenerator is null)
         {
-            CodeDomProvider provider = CodeDomProvider;
+            CodeDomProvider? provider = CodeDomProvider;
 
             if (provider is not null)
             {
@@ -1172,7 +1140,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (_codeGenerator is null)
         {
-            CodeDomProvider provider = CodeDomProvider;
+            CodeDomProvider? provider = CodeDomProvider;
 
             if (provider is not null)
             {
@@ -1198,7 +1166,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         // parser, so of course there will be duplicates.
         if (!Loading)
         {
-            CodeTypeDeclaration type = _documentType;
+            CodeTypeDeclaration? type = _documentType;
 
             if (type is not null)
             {
@@ -1247,7 +1215,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (_codeGenerator is null)
         {
-            CodeDomProvider provider = CodeDomProvider;
+            CodeDomProvider? provider = CodeDomProvider;
 
             if (provider is not null)
             {
@@ -1286,7 +1254,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         // because during load these members are being added by the
         // parser, so of course there will be duplicates.
         bool dup = false;
-        CodeTypeDeclaration type = _documentType;
+        CodeTypeDeclaration? type = _documentType;
 
         if (type is not null)
         {

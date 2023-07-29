@@ -4,10 +4,10 @@
 ~abstract System.ComponentModel.Design.EventBindingService.ShowCode(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> bool
 abstract System.ComponentModel.Design.Serialization.BasicDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! serializationManager) -> void
 abstract System.ComponentModel.Design.Serialization.BasicDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! serializationManager) -> void
-~abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomProvider.get -> System.CodeDom.Compiler.CodeDomProvider
-~abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Parse() -> System.CodeDom.CodeCompileUnit
-~abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.TypeResolutionService.get -> System.ComponentModel.Design.ITypeResolutionService
-~abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Write(System.CodeDom.CodeCompileUnit unit) -> void
+abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomProvider.get -> System.CodeDom.Compiler.CodeDomProvider?
+abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Parse() -> System.CodeDom.CodeCompileUnit!
+abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.TypeResolutionService.get -> System.ComponentModel.Design.ITypeResolutionService?
+abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Write(System.CodeDom.CodeCompileUnit! unit) -> void
 ~abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value, System.ComponentModel.MemberDescriptor descriptor, System.CodeDom.CodeStatementCollection statements) -> void
 ~abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.ShouldSerialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value, System.ComponentModel.MemberDescriptor descriptor) -> bool
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Mask.get -> string
@@ -36,9 +36,9 @@ override System.ComponentModel.Design.Serialization.BasicDesignerLoader.BeginLoa
 ~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeAbsolute(System.ComponentModel.Design.Serialization.SerializationStore store, object value) -> void
 ~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeMember(System.ComponentModel.Design.Serialization.SerializationStore store, object owningObject, System.ComponentModel.MemberDescriptor member) -> void
 ~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeMemberAbsolute(System.ComponentModel.Design.Serialization.SerializationStore store, object owningObject, System.ComponentModel.MemberDescriptor member) -> void
-~override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection errors) -> void
-~override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
-~override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
+override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection? errors) -> void
+override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
+override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
 ~override System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
 ~override System.Drawing.Design.ToolboxItem.Equals(object obj) -> bool
 ~override System.Drawing.Design.ToolboxItem.ToString() -> string
@@ -353,7 +353,7 @@ System.ComponentModel.Design.Serialization.BasicDesignerLoader.SetBaseComponentC
 ~virtual System.ComponentModel.Design.MenuCommandService.Verbs.get -> System.ComponentModel.Design.DesignerVerbCollection
 virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection? errors) -> void
 virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReportFlushErrors(System.Collections.ICollection! errors) -> void
-~virtual System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnComponentRename(object component, string oldName, string newName) -> void
+virtual System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnComponentRename(object! component, string? oldName, string? newName) -> void
 ~virtual System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.SerializeCollection(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeExpression targetExpression, System.Type targetType, System.Collections.ICollection originalCollection, System.Collections.ICollection valuesToSerialize) -> object
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration) -> object
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.GetInitializeMethod(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration, object value) -> System.CodeDom.CodeMemberMethod
