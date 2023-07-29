@@ -52,8 +52,8 @@
 ~override System.Drawing.Design.ContentAlignmentEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.Drawing.Design.CursorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
 ~override System.Drawing.Design.CursorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.Drawing.Design.FontEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Drawing.Design.FontEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.FontEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Drawing.Design.FontEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.Drawing.Design.FontNameEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
 ~override System.Drawing.Design.FontNameEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
 ~override System.Drawing.Design.ToolboxItem.Equals(object obj) -> bool
