@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.Specialized;
 using System.Reflection;
@@ -34,15 +32,15 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
     // State for the designer loader.
     private BitVector32 _state;
-    private IDesignerLoaderHost _host;
+    private IDesignerLoaderHost? _host;
     private int _loadDependencyCount;
-    private string _baseComponentClassName;
+    private string? _baseComponentClassName;
     private bool _hostInitialized;
     private bool _loading;
 
     // State for serialization.
-    private DesignerSerializationManager _serializationManager;
-    private IDisposable _serializationSession;
+    private DesignerSerializationManager? _serializationManager;
+    private IDisposable? _serializationSession;
 
     /// <summary>
     ///  Creates a new BasicDesignerLoader
@@ -102,7 +100,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     ///  Provides an object whose public properties will be made available to the designer serialization manager's
     ///  Properties property.  The default value of this property is null.
     /// </summary>
-    protected object PropertyProvider
+    protected object? PropertyProvider
     {
         get
         {
@@ -168,21 +166,13 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
             // Add our services.  We do IDesignerSerializationManager separate because
             // it is not something the user can replace.
-            DesignSurfaceServiceContainer dsc = GetService(typeof(DesignSurfaceServiceContainer)) as DesignSurfaceServiceContainer;
-
-            if (dsc is not null)
+            if (TryGetService(out DesignSurfaceServiceContainer? dsc))
             {
                 dsc.AddFixedService(typeof(IDesignerSerializationManager), _serializationManager);
             }
             else
             {
-                IServiceContainer sc = GetService(typeof(IServiceContainer)) as IServiceContainer;
-
-                if (sc is null)
-                {
-                    ThrowMissingService(typeof(IServiceContainer));
-                }
-
+                IServiceContainer sc = GetRequiredService<IServiceContainer>();
                 sc.AddService(typeof(IDesignerSerializationManager), _serializationManager);
             }
 
@@ -198,8 +188,8 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
         //
         // StartTimingMark();
         bool successful = true;
-        List<object> localErrorList = null;
-        IDesignerLoaderService ls = GetService(typeof(IDesignerLoaderService)) as IDesignerLoaderService;
+        List<object>? localErrorList = null;
+        IDesignerLoaderService? ls = GetService<IDesignerLoaderService>();
 
         try
         {
@@ -213,13 +203,13 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
                 OnBeginLoad();
             }
 
-            PerformLoad(_serializationManager);
+            PerformLoad(_serializationManager!);
         }
         catch (Exception e)
         {
             while (e is TargetInvocationException)
             {
-                e = e.InnerException;
+                e = e.InnerException!;
             }
 
             localErrorList = new() { e };
@@ -253,9 +243,8 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
         }
 
         UnloadDocument();
-        IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
-        if (cs is not null)
+        if (TryGetService(out IComponentChangeService? cs))
         {
             cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
             cs.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
@@ -293,21 +282,21 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
         }
 
         _state[s_stateFlushInProgress] = true;
-        Cursor oldCursor = Cursor.Current;
+        Cursor? oldCursor = Cursor.Current;
         Cursor.Current = Cursors.WaitCursor;
 
         try
         {
-            IDesignerLoaderHost host = _host;
+            IDesignerLoaderHost? host = _host;
             Debug.Assert(host is not null, "designer loader was asked to flush after it has been disposed.");
 
             // If the host has a null root component, it probably failed
             // its last load.  In that case, there is nothing to flush.
             bool shouldChangeModified = true;
 
-            if (host is not null && host.RootComponent is not null)
+            if (host?.RootComponent is not null)
             {
-                using (_serializationManager.CreateSession())
+                using (_serializationManager!.CreateSession())
                 {
                     try
                     {
@@ -347,9 +336,9 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// <summary>
     ///  Helper method that gives access to the service provider.
     /// </summary>
-    protected object GetService(Type serviceType)
+    protected object? GetService(Type serviceType)
     {
-        object service = null;
+        object? service = null;
 
         if (_host is not null)
         {
@@ -357,6 +346,29 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
         }
 
         return service;
+    }
+
+    private protected T? GetService<T>() where T : class
+        => GetService(typeof(T)) as T;
+
+    private protected bool TryGetService<T>([NotNullWhen(true)] out T? service) where T : class
+    {
+        service = GetService<T>();
+        return service is not null;
+    }
+
+    /// <summary>
+    ///  Simple helper routine that will throw an exception if we need a service, but cannot get
+    ///  to it.  You should only throw for missing services that are absolutely essential for
+    ///  operation.  If there is a way to gracefully degrade, then you should do it.
+    /// </summary>
+    private protected T GetRequiredService<T>() where T : class
+    {
+        return GetService<T>() ??
+               throw new InvalidOperationException(string.Format(SR.BasicDesignerLoaderMissingService, typeof(T).Name))
+               {
+                   HelpLink = SR.BasicDesignerLoaderMissingService
+               };
     }
 
     /// <summary>
@@ -393,15 +405,14 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// </summary>
     protected virtual void OnBeginLoad()
     {
-        _serializationSession = _serializationManager.CreateSession();
+        _serializationSession = _serializationManager!.CreateSession();
         _state[s_stateLoaded] = false;
 
         // Make sure that we're removed any event sinks we added after we finished the load.
         // Make sure that we're removed any event sinks we added after we finished the load.
         EnableComponentNotification(false);
-        IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
-        if (cs is null)
+        if (!TryGetService(out IComponentChangeService? cs))
         {
             return;
         }
@@ -447,7 +458,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// <summary>
     ///  This is called whenever a new component is added to the design surface.
     /// </summary>
-    private void OnComponentAdded(object sender, ComponentEventArgs e)
+    private void OnComponentAdded(object? sender, ComponentEventArgs e)
     {
         // We check the loader host here.  We do not actually listen to
         // this event until the loader has finished loading but if we
@@ -462,7 +473,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// <summary>
     ///  This is called right before a component is added to the design surface.
     /// </summary>
-    private void OnComponentAdding(object sender, ComponentEventArgs e)
+    private void OnComponentAdding(object? sender, ComponentEventArgs e)
     {
         // We check the loader host here.  We do not actually listen to
         // this event until the loader has finished loading but if we
@@ -477,7 +488,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// <summary>
     ///  This is called whenever a component on the design surface changes.
     /// </summary>
-    private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
+    private void OnComponentChanged(object? sender, ComponentChangedEventArgs e)
     {
         // We check the loader host here.  We do not actually listen to
         // this event until the loader has finished loading but if we
@@ -492,7 +503,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// <summary>
     ///  This is called right before a component on the design surface changes.
     /// </summary>
-    private void OnComponentChanging(object sender, ComponentChangingEventArgs e)
+    private void OnComponentChanging(object? sender, ComponentChangingEventArgs e)
     {
         // We check the loader host here.  We do not actually listen to
         // this event until the loader has finished loading but if we
@@ -507,7 +518,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// <summary>
     ///  This is called whenever a component is removed from the design surface.
     /// </summary>
-    private void OnComponentRemoved(object sender, ComponentEventArgs e)
+    private void OnComponentRemoved(object? sender, ComponentEventArgs e)
     {
         // We check the loader host here.  We do not actually listen to
         // this event until the loader has finished loading but if we
@@ -522,7 +533,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// <summary>
     ///  This is called right before a component is removed from the design surface.
     /// </summary>
-    private void OnComponentRemoving(object sender, ComponentEventArgs e)
+    private void OnComponentRemoving(object? sender, ComponentEventArgs e)
     {
         // We check the loader host here.  We do not actually listen to
         // this event until the loader has finished loading but if we
@@ -539,7 +550,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     ///  and then whack the component declaration.  At the next code gen
     ///  cycle we will recreate the declaration.
     /// </summary>
-    private void OnComponentRename(object sender, ComponentRenameEventArgs e)
+    private void OnComponentRename(object? sender, ComponentRenameEventArgs e)
     {
         // We check the loader host here.  We do not actually listen to
         // this event until the loader has finished loading but if we
@@ -557,7 +568,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     ///  someone else has modified the contents of our buffer.  If so, we
     ///  ask the designer to reload.
     /// </summary>
-    private void OnDesignerActivate(object sender, EventArgs e)
+    private void OnDesignerActivate(object? sender, EventArgs e)
     {
         _state[s_stateActiveDocument] = true;
 
@@ -591,7 +602,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     ///  Called when this document loses activation.  We just remember this
     ///  for later.
     /// </summary>
-    private void OnDesignerDeactivate(object sender, EventArgs e) => _state[s_stateActiveDocument] = false;
+    private void OnDesignerDeactivate(object? sender, EventArgs e) => _state[s_stateActiveDocument] = false;
 
     /// <summary>
     ///  This method should be called by the designer loader service
@@ -605,20 +616,19 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     ///  indirectly by calling DependentLoadComplete if IDesignerLoaderService
     ///  is available, or directly if it is not.
     /// </summary>
-    protected virtual void OnEndLoad(bool successful, ICollection errors)
+    protected virtual void OnEndLoad(bool successful, ICollection? errors)
     {
         //we don't want successful to be true here if there were load errors.
         //this may allow a situation where we have a dirtied WSOD and might allow
         //a user to save a partially loaded designer docdata.
         successful = successful && (errors is null || errors.Count == 0)
-                                && (_serializationManager.Errors is null
+                                && (_serializationManager!.Errors is null
                                 || _serializationManager.Errors.Count == 0);
         try
         {
             _state[s_stateLoaded] = true;
-            IDesignerLoaderHost2 lh2 = GetService(typeof(IDesignerLoaderHost2)) as IDesignerLoaderHost2;
 
-            if (!successful && (lh2 is null || !lh2.IgnoreErrorsDuringReload))
+            if (!successful && !(TryGetService(out IDesignerLoaderHost2? lh2) && lh2.IgnoreErrorsDuringReload))
             {
                 // Can we even show the Continue Ignore errors in DTEL?
                 if (lh2 is not null)
@@ -640,15 +650,15 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             {
                 foreach (object err in errors)
                 {
-                    _serializationManager.Errors.Add(err);
+                    _serializationManager!.Errors!.Add(err);
                 }
             }
 
-            errors = _serializationManager.Errors;
+            errors = _serializationManager!.Errors;
         }
         finally
         {
-            _serializationSession.Dispose();
+            _serializationSession!.Dispose();
             _serializationSession = null;
         }
 
@@ -656,9 +666,8 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
         {
             // After a successful load we will want to monitor a bunch of events so we know when
             // to make the loader modified.
-            IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
-            if (cs is not null)
+            if (TryGetService(out IComponentChangeService? cs))
             {
                 cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
                 cs.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
@@ -672,7 +681,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             EnableComponentNotification(true);
         }
 
-        LoaderHost.EndLoad(_baseComponentClassName, successful, errors);
+        LoaderHost.EndLoad(_baseComponentClassName!, successful, errors);
 
         // if we got errors in the load, set ourselves as modified so we'll regen code.  If this fails, we don't
         // care; the Modified bit was only a hint.
@@ -707,7 +716,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     ///  the reload actually happens.  Here we unload our part of the loader
     ///  and get us ready for the pending reload.
     /// </summary>
-    private void OnIdle(object sender, EventArgs e)
+    private void OnIdle(object? sender, EventArgs e)
     {
         Application.Idle -= new EventHandler(OnIdle);
 
@@ -719,8 +728,8 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
         _state[s_stateReloadAtIdle] = false;
 
         //check to see if we are actually the active document.
-        DesignSurfaceManager mgr = (DesignSurfaceManager)GetService(typeof(DesignSurfaceManager));
-        DesignSurface thisSurface = (DesignSurface)GetService(typeof(DesignSurface));
+        DesignSurfaceManager? mgr = GetService<DesignSurfaceManager>();
+        DesignSurface? thisSurface = GetService<DesignSurface>();
         Debug.Assert(mgr is not null && thisSurface is not null);
 
         if (mgr is not null && thisSurface is not null)
@@ -833,7 +842,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     /// </summary>
     protected virtual void ReportFlushErrors(ICollection errors)
     {
-        object lastError = null;
+        object? lastError = null;
 
         foreach (object e in errors)
         {
@@ -847,7 +856,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             return;
         }
 
-        Exception ex = lastError as Exception;
+        Exception? ex = lastError as Exception;
 
         ex ??= new InvalidOperationException(lastError.ToString());
 
@@ -866,19 +875,6 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
         ArgumentNullException.ThrowIfNull(name);
 
         _baseComponentClassName = name;
-    }
-
-    /// <summary>
-    ///  Simple helper routine that will throw an exception if we need a service, but cannot get
-    ///  to it.  You should only throw for missing services that are absolutely essential for
-    ///  operation.  If there is a way to gracefully degrade, then you should do it.
-    /// </summary>
-    private static void ThrowMissingService(Type serviceType)
-    {
-        Exception ex = new InvalidOperationException(string.Format(SR.BasicDesignerLoaderMissingService, serviceType.Name));
-        ex.HelpLink = SR.BasicDesignerLoaderMissingService;
-
-        throw ex;
     }
 
     /// <summary>
@@ -918,7 +914,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     ///  a successful load, or a collection of exceptions that indicate the
     ///  reason(s) for failure.
     /// </summary>
-    void IDesignerLoaderService.DependentLoadComplete(bool successful, ICollection errorCollection)
+    void IDesignerLoaderService.DependentLoadComplete(bool successful, ICollection? errorCollection)
     {
         if (_loadDependencyCount == 0)
         {
@@ -947,7 +943,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
         // Otherwise, add these errors to the serialization manager.
         foreach (object err in errorCollection)
         {
-            _serializationManager.Errors.Add(err);
+            _serializationManager!.Errors.Add(err);
         }
     }
 

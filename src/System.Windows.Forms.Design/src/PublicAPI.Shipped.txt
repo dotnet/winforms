@@ -2,8 +2,8 @@
 ~abstract System.ComponentModel.Design.EventBindingService.CreateUniqueMethodName(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e) -> string
 ~abstract System.ComponentModel.Design.EventBindingService.GetCompatibleMethods(System.ComponentModel.EventDescriptor e) -> System.Collections.ICollection
 ~abstract System.ComponentModel.Design.EventBindingService.ShowCode(System.ComponentModel.IComponent component, System.ComponentModel.EventDescriptor e, string methodName) -> bool
-~abstract System.ComponentModel.Design.Serialization.BasicDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager serializationManager) -> void
-~abstract System.ComponentModel.Design.Serialization.BasicDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager serializationManager) -> void
+abstract System.ComponentModel.Design.Serialization.BasicDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! serializationManager) -> void
+abstract System.ComponentModel.Design.Serialization.BasicDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! serializationManager) -> void
 ~abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDomProvider.get -> System.CodeDom.Compiler.CodeDomProvider
 ~abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Parse() -> System.CodeDom.CodeCompileUnit
 ~abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.TypeResolutionService.get -> System.ComponentModel.Design.ITypeResolutionService
@@ -26,7 +26,7 @@
 ~override System.ComponentModel.Design.CollectionEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.ComponentModel.Design.DateTimeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
 ~override System.ComponentModel.Design.DateTimeEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.ComponentModel.Design.Serialization.BasicDesignerLoader.BeginLoad(System.ComponentModel.Design.Serialization.IDesignerLoaderHost host) -> void
+override System.ComponentModel.Design.Serialization.BasicDesignerLoader.BeginLoad(System.ComponentModel.Design.Serialization.IDesignerLoaderHost! host) -> void
 ~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore() -> System.ComponentModel.Design.Serialization.SerializationStore
 ~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize(System.ComponentModel.Design.Serialization.SerializationStore store) -> System.Collections.ICollection
 ~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize(System.ComponentModel.Design.Serialization.SerializationStore store, System.ComponentModel.IContainer container) -> System.Collections.ICollection
@@ -172,11 +172,11 @@
 ~System.ComponentModel.Design.MenuCommandService.GetCommandList(System.Guid guid) -> System.Collections.ICollection
 ~System.ComponentModel.Design.MenuCommandService.GetService(System.Type serviceType) -> object
 ~System.ComponentModel.Design.MenuCommandService.MenuCommandService(System.IServiceProvider serviceProvider) -> void
-~System.ComponentModel.Design.Serialization.BasicDesignerLoader.GetService(System.Type serviceType) -> object
-~System.ComponentModel.Design.Serialization.BasicDesignerLoader.LoaderHost.get -> System.ComponentModel.Design.Serialization.IDesignerLoaderHost
-~System.ComponentModel.Design.Serialization.BasicDesignerLoader.PropertyProvider.get -> object
-~System.ComponentModel.Design.Serialization.BasicDesignerLoader.PropertyProvider.set -> void
-~System.ComponentModel.Design.Serialization.BasicDesignerLoader.SetBaseComponentClassName(string name) -> void
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.GetService(System.Type! serviceType) -> object?
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.LoaderHost.get -> System.ComponentModel.Design.Serialization.IDesignerLoaderHost!
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.PropertyProvider.get -> object?
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.PropertyProvider.set -> void
+System.ComponentModel.Design.Serialization.BasicDesignerLoader.SetBaseComponentClassName(string! name) -> void
 ~System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationService(System.IServiceProvider provider) -> void
 ~System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model) -> void
 ~System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model, System.Globalization.CultureInfo[] supportedCultures) -> void
@@ -351,8 +351,8 @@
 ~virtual System.ComponentModel.Design.MenuCommandService.RemoveVerb(System.ComponentModel.Design.DesignerVerb verb) -> void
 ~virtual System.ComponentModel.Design.MenuCommandService.ShowContextMenu(System.ComponentModel.Design.CommandID menuID, int x, int y) -> void
 ~virtual System.ComponentModel.Design.MenuCommandService.Verbs.get -> System.ComponentModel.Design.DesignerVerbCollection
-~virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection errors) -> void
-~virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReportFlushErrors(System.Collections.ICollection errors) -> void
+virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection? errors) -> void
+virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReportFlushErrors(System.Collections.ICollection! errors) -> void
 ~virtual System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnComponentRename(object component, string oldName, string newName) -> void
 ~virtual System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.SerializeCollection(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeExpression targetExpression, System.Type targetType, System.Collections.ICollection originalCollection, System.Collections.ICollection valuesToSerialize) -> object
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration) -> object
