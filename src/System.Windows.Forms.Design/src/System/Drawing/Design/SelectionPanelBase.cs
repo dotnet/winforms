@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
@@ -12,12 +10,12 @@ namespace System.Drawing.Design;
 internal abstract partial class SelectionPanelBase : Control
 {
     private bool _allowExit = true;
-    private RadioButton _checkedControl;
-    private IWindowsFormsEditorService _editorService;
+    private RadioButton? _checkedControl;
+    private IWindowsFormsEditorService? _editorService;
 
     protected RadioButton CheckedControl
     {
-        get => _checkedControl;
+        get => _checkedControl!;
         set
         {
             _checkedControl = value;
@@ -27,7 +25,7 @@ internal abstract partial class SelectionPanelBase : Control
 
     protected abstract ControlCollection SelectionOptions { get; }
 
-    public object Value { get; protected set; }
+    public object? Value { get; protected set; }
 
     public void End()
     {
@@ -45,11 +43,11 @@ internal abstract partial class SelectionPanelBase : Control
         _allowExit = true;
     }
 
-    private void OnClick(object sender, EventArgs e)
+    private void OnClick(object? sender, EventArgs e)
     {
         if (_allowExit)
         {
-            CheckedControl = (RadioButton)sender;
+            CheckedControl = (RadioButton)sender!;
             UpdateValue();
             Teardown();
         }
@@ -61,9 +59,9 @@ internal abstract partial class SelectionPanelBase : Control
         FocusCheckedControl();
     }
 
-    private void OnKeyDown(object sender, KeyEventArgs e)
+    private void OnKeyDown(object? sender, KeyEventArgs e)
     {
-        var radioButton = (RadioButton)sender;
+        var radioButton = (RadioButton)sender!;
         Keys key = e.KeyCode;
         RadioButton target;
 
@@ -120,7 +118,7 @@ internal abstract partial class SelectionPanelBase : Control
 
     protected abstract void SetInitialCheckedControl();
 
-    public void Start(IWindowsFormsEditorService edSvc, object value)
+    public void Start(IWindowsFormsEditorService edSvc, object? value)
     {
         foreach (RadioButton radioButton in SelectionOptions)
         {
@@ -145,7 +143,7 @@ internal abstract partial class SelectionPanelBase : Control
 
     private void Teardown()
     {
-        _editorService.CloseDropDown();
+        _editorService!.CloseDropDown();
     }
 
     protected abstract void UpdateValue();
