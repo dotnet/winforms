@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
@@ -16,7 +14,7 @@ public partial class DateTimeEditor
     private class DateTimeUI : Control
     {
         private readonly MonthCalendar _monthCalendar = new DateTimeMonthCalendar();
-        private IWindowsFormsEditorService _editorService;
+        private IWindowsFormsEditorService? _editorService;
 
         public DateTimeUI()
         {
@@ -25,7 +23,7 @@ public partial class DateTimeEditor
             _monthCalendar.Resize += MonthCalResize;
         }
 
-        public object Value { get; private set; }
+        public object? Value { get; private set; }
 
         public void End()
         {
@@ -33,7 +31,7 @@ public partial class DateTimeEditor
             Value = null;
         }
 
-        private void MonthCalKeyDown(object sender, KeyEventArgs e)
+        private void MonthCalKeyDown(object? sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -58,15 +56,15 @@ public partial class DateTimeEditor
             Controls.Add(_monthCalendar);
         }
 
-        private void MonthCalResize(object sender, EventArgs e)
+        private void MonthCalResize(object? sender, EventArgs e)
         {
             Size = _monthCalendar.Size;
         }
 
-        private void OnDateSelected(object sender, DateRangeEventArgs e)
+        private void OnDateSelected(object? sender, DateRangeEventArgs? e)
         {
             Value = _monthCalendar.SelectionStart;
-            _editorService.CloseDropDown();
+            _editorService!.CloseDropDown();
         }
 
         protected override void OnGotFocus(EventArgs e)
@@ -75,7 +73,7 @@ public partial class DateTimeEditor
             _monthCalendar.Focus();
         }
 
-        public void Start(IWindowsFormsEditorService editorService, object value)
+        public void Start(IWindowsFormsEditorService editorService, object? value)
         {
             _editorService = editorService;
             Value = value;
