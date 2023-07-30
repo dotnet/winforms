@@ -75,10 +75,10 @@ public class AnchorEditorTests
     }
 
     [Theory]
-    [InlineData("left")]
-    [InlineData("right")]
-    [InlineData("top")]
-    [InlineData("bottom")]
+    [InlineData("_left")]
+    [InlineData("_right")]
+    [InlineData("_top")]
+    [InlineData("_bottom")]
     public void AnchorEditor_AnchorUI_ControlType_IsCheckButton(string fieldName)
     {
         AnchorEditor editor = new();
