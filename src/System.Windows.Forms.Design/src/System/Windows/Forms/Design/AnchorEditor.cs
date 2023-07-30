@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing.Design;
 
@@ -14,11 +12,11 @@ namespace System.Windows.Forms.Design;
 [CLSCompliant(false)]
 public sealed partial class AnchorEditor : UITypeEditor
 {
-    private AnchorUI _anchorUI;
+    private AnchorUI? _anchorUI;
 
-    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
+        if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
         {
             return value;
         }
@@ -34,5 +32,5 @@ public sealed partial class AnchorEditor : UITypeEditor
     }
 
     /// <inheritdoc />
-    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.DropDown;
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.DropDown;
 }

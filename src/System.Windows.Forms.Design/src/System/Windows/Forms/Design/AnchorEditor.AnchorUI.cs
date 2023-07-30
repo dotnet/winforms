@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.Design;
@@ -22,7 +20,7 @@ public sealed partial class AnchorEditor
         private readonly SpringControl[] tabOrder;
         private readonly SpringControl top;
         private readonly AnchorEditor editor;
-        private IWindowsFormsEditorService edSvc;
+        private IWindowsFormsEditorService? edSvc;
         private AnchorStyles oldAnchor;
 
         public AnchorUI(AnchorEditor editor)
@@ -37,7 +35,7 @@ public sealed partial class AnchorEditor
             InitializeComponent();
         }
 
-        public object Value { get; private set; }
+        public object? Value { get; private set; }
 
         public void End()
         {
@@ -145,18 +143,18 @@ public sealed partial class AnchorEditor
             Value = GetSelectedAnchor();
         }
 
-        public void Start(IWindowsFormsEditorService edSvc, object value)
+        public void Start(IWindowsFormsEditorService edSvc, object? value)
         {
             this.edSvc = edSvc;
             Value = value;
 
-            if (value is AnchorStyles)
+            if (value is AnchorStyles anchorStyles)
             {
-                left.SetSolid(((AnchorStyles)value & AnchorStyles.Left) == AnchorStyles.Left);
-                top.SetSolid(((AnchorStyles)value & AnchorStyles.Top) == AnchorStyles.Top);
-                bottom.SetSolid(((AnchorStyles)value & AnchorStyles.Bottom) == AnchorStyles.Bottom);
-                right.SetSolid(((AnchorStyles)value & AnchorStyles.Right) == AnchorStyles.Right);
-                oldAnchor = (AnchorStyles)value;
+                left.SetSolid((anchorStyles & AnchorStyles.Left) == AnchorStyles.Left);
+                top.SetSolid((anchorStyles & AnchorStyles.Top) == AnchorStyles.Top);
+                bottom.SetSolid((anchorStyles & AnchorStyles.Bottom) == AnchorStyles.Bottom);
+                right.SetSolid((anchorStyles & AnchorStyles.Right) == AnchorStyles.Right);
+                oldAnchor = anchorStyles;
             }
             else
             {
@@ -171,7 +169,7 @@ public sealed partial class AnchorEditor
                 Value = oldAnchor;
             }
 
-            edSvc.CloseDropDown();
+            edSvc!.CloseDropDown();
         }
 
         private class ContainerPlaceholder : Control
@@ -337,7 +335,7 @@ public sealed partial class AnchorEditor
                 {
                 }
 
-                public override string DefaultAction => ((SpringControl)Owner).GetSolid()
+                public override string DefaultAction => ((SpringControl)Owner!).GetSolid()
                     ? SR.AccessibleActionUncheck
                     : SR.AccessibleActionCheck;
 
@@ -347,7 +345,7 @@ public sealed partial class AnchorEditor
                     {
                         AccessibleStates state = base.State;
 
-                        if (((SpringControl)Owner).GetSolid())
+                        if (((SpringControl)Owner!).GetSolid())
                         {
                             state |= AccessibleStates.Checked;
                         }

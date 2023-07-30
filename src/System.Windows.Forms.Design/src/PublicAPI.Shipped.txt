@@ -42,8 +42,8 @@
 ~override System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
 ~override System.Drawing.Design.ToolboxItem.Equals(object obj) -> bool
 ~override System.Drawing.Design.ToolboxItem.ToString() -> string
-~override System.Windows.Forms.Design.AnchorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Windows.Forms.Design.AnchorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Windows.Forms.Design.AnchorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Windows.Forms.Design.AnchorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.Windows.Forms.Design.ComponentDocumentDesigner.Initialize(System.ComponentModel.IComponent component) -> void
 ~override System.Windows.Forms.Design.ComponentDocumentDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
 ~override System.Windows.Forms.Design.ComponentTray.GetService(System.Type serviceType) -> object
