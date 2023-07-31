@@ -91,7 +91,7 @@ dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
 
 # .NET diagnostic
 dotnet_diagnostic.RS0041.severity = none
-dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0005.severity = error
 
 # New line preferences
 csharp_new_line_before_open_brace = all
