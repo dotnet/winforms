@@ -1697,11 +1697,22 @@ public partial class Control
         internal void SetClientSite(IOleClientSite* value)
         {
             DisposeHelper.NullAndDispose(ref _clientSite);
-            _clientSite = value is null ? null : new(value, takeOwnership: true);
 
-            _control.Site = _clientSite is not null
-                ? new AxSourcingSite(_control, _clientSite, "ControlAxSourcingSite")
-                : (ISite?)null;
+            if (value is not null)
+            {
+                // Callers don't increment the ref count when they pass IOleClientSite, it is up to us to do so as we're
+                // maintaining a reference to the pointer. Validated this behavior with the ATL/MFC sources.
+                //
+                // https://learn.microsoft.com/windows/win32/api/oleidl/nf-oleidl-ioleobject-setclientsite#notes-to-implementers
+
+                value->AddRef();
+                _clientSite = new(value, takeOwnership: true);
+                _control.Site = new AxSourcingSite(_control, _clientSite, "ControlAxSourcingSite");
+            }
+            else
+            {
+                _control.Site = null;
+            }
 
             // Get the ambient properties that effect us.
             using VARIANT property = GetAmbientProperty(PInvoke.DISPID_AMBIENT_UIDEAD);
