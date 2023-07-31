@@ -15,6 +15,11 @@ indent_size = 4
 indent_size = 2
 
 # C# and VB files
+[src/**/*.{cs,vb}]
+charset = utf-8-bom
+file_header_template = Licensed to the .NET Foundation under one or more agreements.\nThe .NET Foundation licenses this file to you under the MIT license.\nSee the LICENSE file in the project root for more information.
+
+# C# and VB files
 [*.{cs,vb}]
 charset = utf-8-bom
 insert_final_newline = true
