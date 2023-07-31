@@ -16,7 +16,7 @@ internal class TableLayoutPanelResizeGlyph : Glyph
     private TableLayoutResizeType type;
 
     /// <summary>
-    /// This constructor caches our necessary state and determine what 'type' it is.
+    ///  This constructor caches our necessary state and determine what 'type' it is.
     /// </summary>
     internal TableLayoutPanelResizeGlyph(Rectangle controlBounds, TableLayoutStyle style, Cursor hitTestCursor, Behavior behavior) : base(behavior)
     {
@@ -35,41 +35,23 @@ internal class TableLayoutPanelResizeGlyph : Glyph
     }
 
     /// <summary>
-    /// Represents the bounds of the row or column line being rendered by the TableLayoutPanelDesigner.
+    ///  Represents the bounds of the row or column line being rendered by the TableLayoutPanelDesigner.
     /// </summary>
-    public override Rectangle Bounds
-    {
-        get
-        {
-            return bounds;
-        }
-    }
+    public override Rectangle Bounds => bounds;
 
     /// <summary>
-    /// Represents the Style associated with this glyph: Row or Column.
-    /// This is used by the behaviors resize methods to set the values.
+    ///  Represents the Style associated with this glyph: Row or Column.
+    ///  This is used by the behaviors resize methods to set the values.
     /// </summary>
-    public TableLayoutStyle Style
-    {
-        get
-        {
-            return style;
-        }
-    }
+    public TableLayoutStyle Style => style;
 
     /// <summary>
-    /// Used as quick check by our behavior when dragging/resizing.
+    ///  Used as quick check by our behavior when dragging/resizing.
     /// </summary>
-    public TableLayoutResizeType Type
-    {
-        get
-        {
-            return type;
-        }
-    }
+    public TableLayoutResizeType Type => type;
 
     /// <summary>
-    /// Simply returns the proper cursor if the mouse pointer is within our cached bounds.
+    ///  Simply returns the proper cursor if the mouse pointer is within our cached bounds.
     /// </summary>
     public override Cursor GetHitTest(Point p)
     {
@@ -82,14 +64,14 @@ internal class TableLayoutPanelResizeGlyph : Glyph
     }
 
     /// <summary>
-    /// No painting necessary - this glyph is more of a 'hot spot'
+    ///  No painting necessary - this glyph is more of a 'hot spot'
     /// </summary>
     public override void Paint(PaintEventArgs pe)
     {
     }
 
     /// <summary>
-    /// Internal Enum defining the two different types of glyphs a TableLayoutPanel can have: column or row.
+    ///  Internal Enum defining the two different types of glyphs a TableLayoutPanel can have: column or row.
     /// </summary>
     public enum TableLayoutResizeType
     {

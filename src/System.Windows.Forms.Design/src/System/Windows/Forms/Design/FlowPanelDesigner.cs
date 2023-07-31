@@ -11,13 +11,7 @@ namespace System.Windows.Forms.Design;
 
 internal class FlowPanelDesigner : PanelDesigner
 {
-    public override bool ParticipatesWithSnapLines
-    {
-        get
-        {
-            return false;
-        }
-    }
+    public override bool ParticipatesWithSnapLines => false;
 
     public override IList SnapLines
     {
@@ -45,14 +39,11 @@ internal class FlowPanelDesigner : PanelDesigner
         }
     }
 
-    internal override void AddChildControl(Control newChild)
-    {
-        // Skip location adjustment because FlowPanel is going to position this control.
-        // Also, Skip z-order adjustment because SendToFront will put the new control at the
-        // beginning of the flow instead of the end, plus FlowLayout is already preventing
-        // overlap.
-        Control.Controls.Add(newChild);
-    }
+    // Skip location adjustment because FlowPanel is going to position this control.
+    // Also, Skip z-order adjustment because SendToFront will put the new control at the
+    // beginning of the flow instead of the end, plus FlowLayout is already preventing
+    // overlap.
+    internal override void AddChildControl(Control newChild) => Control.Controls.Add(newChild);
 
     protected override void OnDragDrop(DragEventArgs de)
     {

@@ -61,21 +61,9 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    private TableLayoutColumnStyleCollection ColumnStyles
-    {
-        get
-        {
-            return Table.ColumnStyles;
-        }
-    }
+    private TableLayoutColumnStyleCollection ColumnStyles => Table.ColumnStyles;
 
-    private TableLayoutRowStyleCollection RowStyles
-    {
-        get
-        {
-            return Table.RowStyles;
-        }
-    }
+    private TableLayoutRowStyleCollection RowStyles => Table.RowStyles;
 
     public int RowCount
     {
@@ -234,13 +222,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    internal TableLayoutPanel Table
-    {
-        get
-        {
-            return Component as TableLayoutPanel;
-        }
-    }
+    internal TableLayoutPanel Table => Component as TableLayoutPanel;
 
     private bool Undoing
     {
@@ -467,30 +449,15 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             return items;
         }
 
-        public void AddColumn()
-        {
-            owner.OnAdd(false);
-        }
+        public void AddColumn() => owner.OnAdd(false);
 
-        public void AddRow()
-        {
-            owner.OnAdd(true);
-        }
+        public void AddRow() => owner.OnAdd(true);
 
-        public void RemoveColumn()
-        {
-            owner.OnRemove(false);
-        }
+        public void RemoveColumn() => owner.OnRemove(false);
 
-        public void RemoveRow()
-        {
-            owner.OnRemove(true);
-        }
+        public void RemoveRow() => owner.OnRemove(true);
 
-        public void EditRowAndCol()
-        {
-            owner.OnEdit();
-        }
+        public void EditRowAndCol() => owner.OnEdit();
     }
 
     private void RemoveControlInternal(Control c)
@@ -677,12 +644,8 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             uiService?.ShowError(argumentEx);
         }
 
-        catch (Exception ex)
+        catch (Exception ex) when (!ex.IsCriticalException())
         {
-            if (ClientUtils.IsCriticalException(ex))
-            {
-                throw;
-            }
         }
 
         finally
@@ -941,10 +904,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    internal void SuspendEnsureAvailableStyles()
-    {
-        ensureSuspendCount++;
-    }
+    internal void SuspendEnsureAvailableStyles() => ensureSuspendCount++;
 
     internal void ResumeEnsureAvailableStyles(bool performEnsure)
     {
@@ -1733,11 +1693,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    private void OnAddClick(object sender, EventArgs e)
-    {
-        //Tag = isRow
-        OnAdd((bool)((ToolStripMenuItem)sender).Tag);
-    }
+    private void OnAddClick(object sender, EventArgs e) => OnAdd((bool)((ToolStripMenuItem)sender).Tag); //Tag = isRow
 
     internal void InsertRowCol(bool isRow, int index)
     {
@@ -1770,7 +1726,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 }
             }
         }
-        catch (System.InvalidOperationException ex)
+        catch (InvalidOperationException ex)
         {
             IUIService uiService = (IUIService)GetService(typeof(IUIService));
             uiService.ShowError(ex.Message);
@@ -2000,10 +1956,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    private void OnRemove(bool isRow)
-    {
-        OnRemoveInternal(isRow, isRow ? Table.RowCount - 1 : Table.ColumnCount - 1);
-    }
+    private void OnRemove(bool isRow) => OnRemoveInternal(isRow, isRow ? Table.RowCount - 1 : Table.ColumnCount - 1);
 
     private void OnDeleteClick(object sender, EventArgs e)
     {
@@ -2122,20 +2075,11 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    private void OnAbsoluteClick(object sender, EventArgs e)
-    {
-        ChangeSizeType((bool)((ToolStripMenuItem)sender).Tag, SizeType.Absolute);
-    }
+    private void OnAbsoluteClick(object sender, EventArgs e) => ChangeSizeType((bool)((ToolStripMenuItem)sender).Tag, SizeType.Absolute);
 
-    private void OnPercentClick(object sender, EventArgs e)
-    {
-        ChangeSizeType((bool)((ToolStripMenuItem)sender).Tag, SizeType.Percent);
-    }
+    private void OnPercentClick(object sender, EventArgs e) => ChangeSizeType((bool)((ToolStripMenuItem)sender).Tag, SizeType.Percent);
 
-    private void OnAutoSizeClick(object sender, EventArgs e)
-    {
-        ChangeSizeType((bool)((ToolStripMenuItem)sender).Tag, SizeType.AutoSize);
-    }
+    private void OnAutoSizeClick(object sender, EventArgs e) => ChangeSizeType((bool)((ToolStripMenuItem)sender).Tag, SizeType.AutoSize);
 
     private void OnEdit()
     {
@@ -2150,10 +2094,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    private static string ReplaceText(string text)
-    {
-        return text is null ? null : Regex.Replace(text, @"\(\&.\)", "");
-    }
+    private static string ReplaceText(string text) => text is null ? null : Regex.Replace(text, @"\(\&.\)", "");
 
     private void OnVerbRemove(object sender, EventArgs e)
     {
@@ -2169,10 +2110,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         OnAdd(isRow);
     }
 
-    private void OnVerbEdit(object sender, EventArgs e)
-    {
-        OnEdit();
-    }
+    private void OnVerbEdit(object sender, EventArgs e) => OnEdit();
 
     protected override void PreFilterProperties(IDictionary properties)
     {
@@ -2246,110 +2184,41 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         private TableLayoutControlCollection realCollection;
 
-        public DesignerTableLayoutControlCollection(TableLayoutPanel owner) : base(owner)
-        {
-            realCollection = owner.Controls;
-        }
+        public DesignerTableLayoutControlCollection(TableLayoutPanel owner) : base(owner) => realCollection = owner.Controls;
 
-        public override int Count
-        {
-            get
-            {
-                return realCollection.Count;
-            }
-        }
+        public override int Count => realCollection.Count;
 
-        object ICollection.SyncRoot
-        {
-            get
-            {
-                return this;
-            }
-        }
+        object ICollection.SyncRoot => this;
 
-        bool ICollection.IsSynchronized
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool ICollection.IsSynchronized => false;
 
-        bool IList.IsFixedSize
-        {
-            get
-            {
-                return false;
-            }
-        }
+        bool IList.IsFixedSize => false;
 
-        public new bool IsReadOnly
-        {
-            get
-            {
-                return realCollection.IsReadOnly;
-            }
-        }
+        public new bool IsReadOnly => realCollection.IsReadOnly;
 
-        int IList.Add(object control)
-        {
-            return ((IList)realCollection).Add(control);
-        }
+        int IList.Add(object control) => ((IList)realCollection).Add(control);
 
-        public override void Add(Control c)
-        {
-            realCollection.Add(c);
-        }
+        public override void Add(Control c) => realCollection.Add(c);
 
-        public override void AddRange(Control[] controls)
-        {
-            realCollection.AddRange(controls);
-        }
+        public override void AddRange(Control[] controls) => realCollection.AddRange(controls);
 
-        bool IList.Contains(object control)
-        {
-            return ((IList)realCollection).Contains(control);
-        }
+        bool IList.Contains(object control) => ((IList)realCollection).Contains(control);
 
-        public new void CopyTo(Array dest, int index)
-        {
-            realCollection.CopyTo(dest, index);
-        }
+        public new void CopyTo(Array dest, int index) => realCollection.CopyTo(dest, index);
 
-        public override bool Equals(object other)
-        {
-            return realCollection.Equals(other);
-        }
+        public override bool Equals(object other) => realCollection.Equals(other);
 
-        public new IEnumerator GetEnumerator()
-        {
-            return realCollection.GetEnumerator();
-        }
+        public new IEnumerator GetEnumerator() => realCollection.GetEnumerator();
 
-        public override int GetHashCode()
-        {
-            return realCollection.GetHashCode();
-        }
+        public override int GetHashCode() => realCollection.GetHashCode();
 
-        int IList.IndexOf(object control)
-        {
-            return ((IList)realCollection).IndexOf(control);
-        }
+        int IList.IndexOf(object control) => ((IList)realCollection).IndexOf(control);
 
-        void IList.Insert(int index, object value)
-        {
-            ((IList)realCollection).Insert(index, value);
-        }
+        void IList.Insert(int index, object value) => ((IList)realCollection).Insert(index, value);
 
-        void IList.Remove(object control)
-        {
-            ((IList)realCollection).Remove(control);
-        }
+        void IList.Remove(object control) => ((IList)realCollection).Remove(control);
 
-        void IList.RemoveAt(int index)
-        {
-            ((IList)realCollection).RemoveAt(index);
-        }
+        void IList.RemoveAt(int index) => ((IList)realCollection).RemoveAt(index);
 
         object IList.this[int index]
         {
@@ -2363,20 +2232,11 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             }
         }
 
-        public override void Add(Control control, int column, int row)
-        {
-            realCollection.Add(control, column, row);
-        }
+        public override void Add(Control control, int column, int row) => realCollection.Add(control, column, row);
 
-        public override int GetChildIndex(Control child, bool throwException)
-        {
-            return realCollection.GetChildIndex(child, throwException);
-        }
+        public override int GetChildIndex(Control child, bool throwException) => realCollection.GetChildIndex(child, throwException);
 
-        public override void SetChildIndex(Control child, int newIndex)
-        {
-            realCollection.SetChildIndex(child, newIndex);
-        }
+        public override void SetChildIndex(Control child, int newIndex) => realCollection.SetChildIndex(child, newIndex);
 
         public override void Clear()
         {

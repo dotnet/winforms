@@ -24,13 +24,7 @@ internal class TabControlDesigner : ParentControlDesigner
     private bool addingOnInitialize;
     private bool forwardOnDrag;
 
-    protected override bool AllowControlLasso
-    {
-        get
-        {
-            return false;
-        }
-    }
+    protected override bool AllowControlLasso => false;
 
     protected override bool DrawGrid
     {
@@ -129,12 +123,9 @@ internal class TabControlDesigner : ParentControlDesigner
         }
     }
 
-    public override bool CanParent(Control control)
-    {
-        // If the tabcontrol already contains the control we are dropping then don't allow the drop.
-        // I.e. we don't want to allow local drag-drop for tabcontrols.
-        return (control is TabPage && !Control.Contains(control));
-    }
+    // If the tabcontrol already contains the control we are dropping then don't allow the drop.
+    // I.e. we don't want to allow local drag-drop for tabcontrols.
+    public override bool CanParent(Control control) => (control is TabPage && !Control.Contains(control));
 
     private void CheckVerbStatus()
     {
@@ -332,10 +323,7 @@ internal class TabControlDesigner : ParentControlDesigner
         }
     }
 
-    private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
-    {
-        CheckVerbStatus();
-    }
+    private void OnComponentChanged(object sender, ComponentChangedEventArgs e) => CheckVerbStatus();
 
     private void OnGotFocus(object sender, EventArgs e)
     {
@@ -421,10 +409,7 @@ internal class TabControlDesigner : ParentControlDesigner
         }
     }
 
-    private void OnRightToLeftLayoutChanged(object sender, EventArgs e)
-    {
-        BehaviorService?.SyncSelection();
-    }
+    private void OnRightToLeftLayoutChanged(object sender, EventArgs e) => BehaviorService?.SyncSelection();
 
     private void OnSelectionChanged(object sender, EventArgs e)
     {

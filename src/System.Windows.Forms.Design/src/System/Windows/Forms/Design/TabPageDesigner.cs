@@ -6,10 +6,7 @@ namespace System.Windows.Forms.Design;
 
 internal class TabPageDesigner : PanelDesigner
 {
-    public override bool CanBeParentedTo(IDesigner parentDesigner)
-    {
-        return (parentDesigner is not null && parentDesigner.Component is TabControl);
-    }
+    public override bool CanBeParentedTo(IDesigner parentDesigner) => (parentDesigner is not null && parentDesigner.Component is TabControl);
 
     public override SelectionRules SelectionRules
     {
@@ -27,30 +24,15 @@ internal class TabPageDesigner : PanelDesigner
         }
     }
 
-    internal void OnDragDropInternal(DragEventArgs de)
-    {
-        OnDragDrop(de);
-    }
+    internal void OnDragDropInternal(DragEventArgs de) => OnDragDrop(de);
 
-    internal void OnDragEnterInternal(DragEventArgs de)
-    {
-        OnDragEnter(de);
-    }
+    internal void OnDragEnterInternal(DragEventArgs de) => OnDragEnter(de);
 
-    internal void OnDragLeaveInternal(EventArgs e)
-    {
-        OnDragLeave(e);
-    }
+    internal void OnDragLeaveInternal(EventArgs e) => OnDragLeave(e);
 
-    internal void OnDragOverInternal(DragEventArgs e)
-    {
-        OnDragOver(e);
-    }
+    internal void OnDragOverInternal(DragEventArgs e) => OnDragOver(e);
 
-    internal void OnGiveFeedbackInternal(GiveFeedbackEventArgs e)
-    {
-        OnGiveFeedback(e);
-    }
+    internal void OnGiveFeedbackInternal(GiveFeedbackEventArgs e) => OnGiveFeedback(e);
 
     protected override ControlBodyGlyph GetControlGlyph(GlyphSelectionType selectionType)
     {

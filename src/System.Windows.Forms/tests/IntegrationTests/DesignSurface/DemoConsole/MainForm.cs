@@ -30,7 +30,7 @@ public partial class MainForm : Form
         tabPage2.Text = "Use Grid (Snap to the grid)";
         tabPage3.Text = "Use Grid";
         tabPage4.Text = "Align control by hand";
-        tabPage5.Text = "TabControl and TabLayoutPanel";
+        tabPage5.Text = "TabControl and TableLayoutPanel";
 
         //- enable the UndoEngines
         for (int i = 0; i < tabControl1.TabCount; i++)
