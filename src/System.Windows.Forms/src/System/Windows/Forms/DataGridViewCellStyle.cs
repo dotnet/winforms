@@ -108,7 +108,7 @@ public class DataGridViewCellStyle : ICloneable
     {
         set
         {
-            Debug.Assert(Enum.IsDefined(typeof(DataGridViewContentAlignment), value));
+            Debug.Assert(Enum.IsDefined(value));
             if (Alignment != value)
             {
                 Properties.SetInteger(PropAlignment, (int)value);

@@ -45,7 +45,7 @@ public class KeyEventArgs : EventArgs
             Keys keyGenerated = KeyData & Keys.KeyCode;
 
             // since Keys can be discontiguous, keeping Enum.IsDefined.
-            if (!Enum.IsDefined(typeof(Keys), (int)keyGenerated))
+            if (!Enum.IsDefined(keyGenerated))
             {
                 return Keys.None;
             }

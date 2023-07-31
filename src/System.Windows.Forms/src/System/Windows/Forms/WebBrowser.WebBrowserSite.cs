@@ -162,7 +162,7 @@ public partial class WebBrowser
             if (!wb.WebBrowserShortcutsEnabled)
             {
                 int keyCode = (int)(uint)lpMsg->wParam | (int)ModifierKeys;
-                if (lpMsg->message != (uint)PInvoke.WM_CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
+                if (lpMsg->message != (uint)PInvoke.WM_CHAR && Enum.IsDefined((Shortcut)keyCode))
                 {
                     return HRESULT.S_OK;
                 }
