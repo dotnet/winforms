@@ -88,10 +88,10 @@
 ~override System.Windows.Forms.Design.DocumentDesigner.GetGlyphs(System.Windows.Forms.Design.Behavior.GlyphSelectionType selectionType) -> System.Windows.Forms.Design.Behavior.GlyphCollection
 ~override System.Windows.Forms.Design.DocumentDesigner.Initialize(System.ComponentModel.IComponent component) -> void
 ~override System.Windows.Forms.Design.DocumentDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
-~override System.Windows.Forms.Design.FileNameEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Windows.Forms.Design.FileNameEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.Windows.Forms.Design.FolderNameEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Windows.Forms.Design.FolderNameEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Windows.Forms.Design.FileNameEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Windows.Forms.Design.FileNameEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Windows.Forms.Design.FolderNameEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Windows.Forms.Design.FolderNameEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.Windows.Forms.Design.ImageListCodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object codeObject) -> object
 ~override System.Windows.Forms.Design.ImageListCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
 ~override System.Windows.Forms.Design.MaskDescriptor.Equals(object maskDescriptor) -> bool
@@ -356,10 +356,10 @@
 ~System.Windows.Forms.Design.EventHandlerService.GetHandler(System.Type handlerType) -> object
 ~System.Windows.Forms.Design.EventHandlerService.PopHandler(object handler) -> void
 ~System.Windows.Forms.Design.EventHandlerService.PushHandler(object handler) -> void
-~System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.Description.get -> string
-~System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.Description.set -> void
-~System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.DirectoryPath.get -> string
-~System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.ShowDialog(System.Windows.Forms.IWin32Window owner) -> System.Windows.Forms.DialogResult
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.Description.get -> string!
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.Description.set -> void
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.DirectoryPath.get -> string!
+System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.ShowDialog(System.Windows.Forms.IWin32Window? owner) -> System.Windows.Forms.DialogResult
 ~System.Windows.Forms.Design.ParentControlDesigner.AddPaddingSnapLines(ref System.Collections.ArrayList snapLines) -> void
 ~System.Windows.Forms.Design.ParentControlDesigner.CreateTool(System.Drawing.Design.ToolboxItem tool) -> void
 ~System.Windows.Forms.Design.ParentControlDesigner.CreateTool(System.Drawing.Design.ToolboxItem tool, System.Drawing.Point location) -> void
@@ -475,8 +475,8 @@
 ~virtual System.Windows.Forms.Design.ControlDesigner.SnapLines.get -> System.Collections.IList
 ~virtual System.Windows.Forms.Design.DocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
 ~virtual System.Windows.Forms.Design.DocumentDesigner.ToolPicked(System.Drawing.Design.ToolboxItem tool) -> void
-~virtual System.Windows.Forms.Design.FileNameEditor.InitializeDialog(System.Windows.Forms.OpenFileDialog openFileDialog) -> void
-~virtual System.Windows.Forms.Design.FolderNameEditor.InitializeDialog(System.Windows.Forms.Design.FolderNameEditor.FolderBrowser folderBrowser) -> void
+virtual System.Windows.Forms.Design.FileNameEditor.InitializeDialog(System.Windows.Forms.OpenFileDialog! openFileDialog) -> void
+virtual System.Windows.Forms.Design.FolderNameEditor.InitializeDialog(System.Windows.Forms.Design.FolderNameEditor.FolderBrowser! folderBrowser) -> void
 ~virtual System.Windows.Forms.Design.MaskDescriptor.Culture.get -> System.Globalization.CultureInfo
 ~virtual System.Windows.Forms.Design.ParentControlDesigner.CanAddComponent(System.ComponentModel.IComponent component) -> bool
 ~virtual System.Windows.Forms.Design.ParentControlDesigner.CanParent(System.Windows.Forms.Control control) -> bool
