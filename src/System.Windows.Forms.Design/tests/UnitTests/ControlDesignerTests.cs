@@ -2,6 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using Moq;
 using Windows.Win32;
 
 namespace System.Windows.Forms.Design.Tests;
@@ -194,5 +197,82 @@ public class ControlDesignerTests
             Msg = (int)PInvoke.WM_PAINT
         };
         designer.TestAccessor().Dynamic.WndProc(ref m);
+    }
+
+    [Fact]
+    public void ControlDesigner_AssociatedComponents_NullSite_Test()
+    {
+        using ControlDesigner controlDesigner = new();
+        using Control control = new();
+
+        using Control childControl = new();
+        controlDesigner.Initialize(control);
+
+        Assert.Empty(controlDesigner.AssociatedComponents);
+
+        control.Controls.Add(childControl);
+
+        Assert.Empty(controlDesigner.AssociatedComponents);
+    }
+
+    internal static Mock<ISite> CreateMockSiteWithDesignerHost(object designerHost)
+    {
+        Mock<ISite> mockSite = new(MockBehavior.Strict);
+        mockSite
+            .Setup(s => s.GetService(typeof(IDesignerHost)))
+            .Returns(designerHost);
+        mockSite
+            .Setup(s => s.GetService(typeof(IComponentChangeService)))
+            .Returns(null);
+        mockSite
+            .Setup(s => s.GetService(typeof(IInheritanceService)))
+            .Returns(null);
+        mockSite
+            .Setup(s => s.GetService(typeof(IDictionaryService)))
+            .Returns(null);
+        mockSite
+            .Setup(s => s.GetService(typeof(IExtenderListService)))
+            .Returns(null);
+        mockSite
+            .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
+            .Returns(null);
+        mockSite
+            .Setup(s => s.GetService(typeof(AmbientProperties)))
+            .Returns(null);
+        mockSite
+            .Setup(s => s.GetService(typeof(Control)))
+            .Returns(null);
+        mockSite
+            .SetupGet(s => s.Container)
+            .Returns((IContainer)null);
+
+        return mockSite;
+    }
+
+    [WinFormsFact]
+    public void ControlDesigner_AssociatedComponentsTest()
+    {
+        using Control control = new();
+        using ControlDesigner controlDesigner = new();
+
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
+        mockDesignerHost
+            .Setup(h => h.RootComponent)
+            .Returns(control);
+        mockDesignerHost
+            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
+            .Returns(() => null);
+        var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        control.Site = mockSite.Object;
+
+        controlDesigner.Initialize(control);
+
+        Assert.Empty(controlDesigner.AssociatedComponents);
+
+        using Control childControl = new();
+        childControl.Site = mockSite.Object;
+        control.Controls.Add(childControl);
+
+        Assert.Equal(1, controlDesigner.AssociatedComponents.Count);
     }
 }
