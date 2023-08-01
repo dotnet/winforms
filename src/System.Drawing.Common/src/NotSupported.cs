@@ -230,7 +230,8 @@ namespace System.Drawing
     }
     public partial struct CharacterRange : System.IEquatable<CharacterRange>
     {
-        private int _dummyPrimitive;
+        private int _first;
+        private int _length;
         public CharacterRange(int First, int Length) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public int First { readonly get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public int Length { readonly get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
