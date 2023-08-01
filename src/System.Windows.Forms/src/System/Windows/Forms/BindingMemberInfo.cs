@@ -4,7 +4,7 @@
 
 namespace System.Windows.Forms;
 
-public struct BindingMemberInfo : IEquatable<BindingMemberInfo>
+public readonly struct BindingMemberInfo : IEquatable<BindingMemberInfo>
 {
     private readonly string? _dataList;
     private readonly string? _dataField;

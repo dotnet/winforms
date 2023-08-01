@@ -29,7 +29,7 @@ public struct TableLayoutPanelCellPosition : IEquatable<TableLayoutPanelCellPosi
 
     public int Column { get; set; }
 
-    public override bool Equals(object? other)
+    public override readonly bool Equals(object? other)
     {
         if (other is not TableLayoutPanelCellPosition otherCellPosition)
         {
@@ -39,7 +39,7 @@ public struct TableLayoutPanelCellPosition : IEquatable<TableLayoutPanelCellPosi
         return Equals(otherCellPosition);
     }
 
-    public bool Equals(TableLayoutPanelCellPosition other)
+    public readonly bool Equals(TableLayoutPanelCellPosition other)
         => Row == other.Row && Column == other.Column;
 
     public static bool operator ==(TableLayoutPanelCellPosition p1, TableLayoutPanelCellPosition p2)
@@ -52,7 +52,7 @@ public struct TableLayoutPanelCellPosition : IEquatable<TableLayoutPanelCellPosi
         return !(p1 == p2);
     }
 
-    public override string ToString() => $"{Column},{Row}";
+    public override readonly string ToString() => $"{Column},{Row}";
 
-    public override int GetHashCode() => HashCode.Combine(Row, Column);
+    public override readonly int GetHashCode() => HashCode.Combine(Row, Column);
 }

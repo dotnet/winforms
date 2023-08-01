@@ -23,21 +23,21 @@ public partial struct LinkArea : IEquatable<LinkArea>
 
     public int Start
     {
-        get => start;
+        readonly get => start;
         set => start = value;
     }
 
     public int Length
     {
-        get => length;
+        readonly get => length;
         set => length = value;
     }
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool IsEmpty => length == start && start == 0;
+    public readonly bool IsEmpty => length == start && start == 0;
 
-    public override bool Equals(object? o)
+    public override readonly bool Equals(object? o)
     {
         if (o is not LinkArea a)
         {
@@ -47,10 +47,10 @@ public partial struct LinkArea : IEquatable<LinkArea>
         return Equals(a);
     }
 
-    public bool Equals(LinkArea other)
+    public readonly bool Equals(LinkArea other)
         => other.Start == start && other.Length == length;
 
-    public override string ToString() => $"{{Start={Start}, Length={Length}}}";
+    public override readonly string ToString() => $"{{Start={Start}, Length={Length}}}";
 
     public static bool operator ==(LinkArea linkArea1, LinkArea linkArea2)
         => linkArea1.Equals(linkArea2);
@@ -58,5 +58,5 @@ public partial struct LinkArea : IEquatable<LinkArea>
     public static bool operator !=(LinkArea linkArea1, LinkArea linkArea2)
         => !linkArea1.Equals(linkArea2);
 
-    public override int GetHashCode() => HashCode.Combine(start, length);
+    public override readonly int GetHashCode() => HashCode.Combine(start, length);
 }

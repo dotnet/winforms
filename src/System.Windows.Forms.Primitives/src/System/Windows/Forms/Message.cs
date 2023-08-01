@@ -32,7 +32,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
 
     public int Msg
     {
-        get => (int)MsgInternal;
+        readonly get => (int)MsgInternal;
         set => MsgInternal = (MessageId)value;
     }
 
@@ -58,7 +58,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
 #endif
     public IntPtr WParam
     {
-        get => (nint)(nuint)WParamInternal;
+        readonly get => (nint)(nuint)WParamInternal;
         set => WParamInternal = (nuint)value;
     }
 
@@ -69,7 +69,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
 #endif
     public IntPtr LParam
     {
-        get => LParamInternal;
+        readonly get => LParamInternal;
         set => LParamInternal = value;
     }
 
@@ -80,7 +80,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
 #endif
     public IntPtr Result
     {
-        get => ResultInternal;
+        readonly get => ResultInternal;
         set => ResultInternal = (LRESULT)value;
     }
 
@@ -89,7 +89,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
     /// <summary>
     ///  Gets the <see cref="LParam"/> value, and converts the value to an object.
     /// </summary>
-    public object? GetLParam(
+    public readonly object? GetLParam(
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
         Type cls) => Marshal.PtrToStructure(LParamInternal, cls);
 
@@ -122,7 +122,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
         return m;
     }
 
-    public override bool Equals(object? o)
+    public override readonly bool Equals(object? o)
     {
         if (o is not Message m)
         {
@@ -132,7 +132,7 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
         return Equals(m);
     }
 
-    public bool Equals(Message other)
+    public readonly bool Equals(Message other)
         => HWnd == other.HWnd
             && MsgInternal == other.MsgInternal
             && WParamInternal == other.WParamInternal
@@ -143,9 +143,9 @@ public struct Message : IEquatable<Message>, IHandle<HWND>
 
     public static bool operator !=(Message a, Message b) => !a.Equals(b);
 
-    public override int GetHashCode() => HashCode.Combine(HWnd, Msg);
+    public override readonly int GetHashCode() => HashCode.Combine(HWnd, Msg);
 
-    public override string ToString() => MessageDecoder.ToString(this);
+    public override readonly string ToString() => MessageDecoder.ToString(this);
 
     internal MSG ToMSG() => new()
     {
