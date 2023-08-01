@@ -24,11 +24,13 @@ public partial class MainForm : Form
         CreateDesignSurface(2);
         CreateDesignSurface(3);
         CreateDesignSurface(4);
+        CreateDesignSurface(5);
 
         tabPage1.Text = "Use SnapLines";
         tabPage2.Text = "Use Grid (Snap to the grid)";
         tabPage3.Text = "Use Grid";
         tabPage4.Text = "Align control by hand";
+        tabPage5.Text = "TabControl and TableLayoutPanel";
 
         //- enable the UndoEngines
         for (int i = 0; i < tabControl1.TabCount; i++)
@@ -88,6 +90,9 @@ public partial class MainForm : Form
                 surface.UseGridWithoutSnapping(new System.Drawing.Size(32, 32));
                 break;
             case 4:
+                surface.UseNoGuides();
+                break;
+            case 5:
                 surface.UseNoGuides();
                 break;
             default:
@@ -222,6 +227,17 @@ public partial class MainForm : Form
                     }
 
                     break;
+                case 5:
+                    {
+                        rootComponent = surface.CreateRootComponent<Form>(new Size(800, 600));
+                        rootComponent.BackColor = Color.Orange;
+                        rootComponent.Text = "Root Component hosted by the DesignSurface N.5";
+
+                        surface.CreateControl<TabControl>(new Size(400, 100), new Point(12, 21));
+                        surface.CreateControl<TableLayoutPanel>(new Size(290, 160), new Point(20, 150));
+                    }
+
+                    break;
                 default:
                     Console.WriteLine("Invalid selection");
                     break;
@@ -251,6 +267,9 @@ public partial class MainForm : Form
                     break;
                 case 4:
                     view.Parent = tabPage4;
+                    break;
+                case 5:
+                    view.Parent = tabPage5;
                     break;
                 default:
                     Console.WriteLine("Invalid selection");
