@@ -1,3 +1,6 @@
+*REMOVED*System.ComponentModel.Design.DesignerActionListCollection.AddRange(System.ComponentModel.Design.DesignerActionList?[]! value) -> void
+*REMOVED*~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.Adorner[] value) -> void
+*REMOVED*~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(System.Windows.Forms.Design.Behavior.Glyph[] value) -> void
 System.ComponentModel.Design.DesignerActionListCollection.AddRange(params System.ComponentModel.Design.DesignerActionList?[]! value) -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(params System.Windows.Forms.Design.Behavior.Adorner[] value) -> void
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(params System.Windows.Forms.Design.Behavior.Glyph[] value) -> void
