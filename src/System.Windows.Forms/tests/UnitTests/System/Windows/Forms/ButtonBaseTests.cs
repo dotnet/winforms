@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using System.Runtime.Versioning;
 using System.Windows.Forms.DataBinding.TestUtilities;
 using System.Windows.Forms.TestUtilities;
 using Moq;
