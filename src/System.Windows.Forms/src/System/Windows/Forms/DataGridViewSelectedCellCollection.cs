@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -17,7 +15,7 @@ public class DataGridViewSelectedCellCollection : BaseCollection, IList
 {
     private readonly List<DataGridViewCell> _items = new();
 
-    int IList.Add(object value)
+    int IList.Add(object? value)
     {
         throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
     }
@@ -27,16 +25,16 @@ public class DataGridViewSelectedCellCollection : BaseCollection, IList
         throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
     }
 
-    bool IList.Contains(object value) => ((IList)_items).Contains(value);
+    bool IList.Contains(object? value) => ((IList)_items).Contains(value);
 
-    int IList.IndexOf(object value) => ((IList)_items).IndexOf(value);
+    int IList.IndexOf(object? value) => ((IList)_items).IndexOf(value);
 
-    void IList.Insert(int index, object value)
+    void IList.Insert(int index, object? value)
     {
         throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
     }
 
-    void IList.Remove(object value)
+    void IList.Remove(object? value)
     {
         throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection);
     }
@@ -50,7 +48,7 @@ public class DataGridViewSelectedCellCollection : BaseCollection, IList
 
     bool IList.IsReadOnly => true;
 
-    object IList.this[int index]
+    object? IList.this[int index]
     {
         get { return _items[index]; }
         set { throw new NotSupportedException(SR.DataGridView_ReadOnlyCollection); }

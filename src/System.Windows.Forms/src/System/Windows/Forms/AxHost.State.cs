@@ -350,10 +350,8 @@ public abstract partial class AxHost
         {
             if (disposing)
             {
-                _lockBytes?.Dispose();
-                _storage?.Dispose();
-                _lockBytes = null;
-                _storage = null;
+                DisposeHelper.NullAndDispose(ref _lockBytes);
+                DisposeHelper.NullAndDispose(ref _storage);
             }
         }
 

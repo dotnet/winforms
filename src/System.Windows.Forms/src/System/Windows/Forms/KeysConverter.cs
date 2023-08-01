@@ -29,7 +29,7 @@ public class KeysConverter : TypeConverter, IComparer
 
     private void AddLocalizedKeyNames(CultureInfo cultureInfo)
     {
-        if (CultureToDisplayOrder.ContainsKey(cultureInfo) && CultureToDisplayOrder.ContainsKey(cultureInfo))
+        if (CultureToDisplayOrder.ContainsKey(cultureInfo) && CultureToKeyName.ContainsKey(cultureInfo))
         {
             return;
         }

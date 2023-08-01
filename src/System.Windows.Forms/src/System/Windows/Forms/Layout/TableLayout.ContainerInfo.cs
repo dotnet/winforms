@@ -187,6 +187,7 @@ internal partial class TableLayout
             }
         }
 
+        [AllowNull]
         public TableLayoutRowStyleCollection RowStyles
         {
             get
@@ -202,6 +203,7 @@ internal partial class TableLayout
             }
         }
 
+        [AllowNull]
         public TableLayoutColumnStyleCollection ColumnStyles
         {
             get

@@ -459,7 +459,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         }
 
         object? value = _errorManager.Current;
-        if (value is not IDataErrorInfo)
+        if (value is not IDataErrorInfo dataErrorInfo)
         {
             return;
         }
@@ -486,7 +486,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
             }
 
             Binding dataBinding = errBindings[j];
-            string error = ((IDataErrorInfo)value)[dataBinding.BindingMemberInfo.BindingField];
+            string error = dataErrorInfo[dataBinding.BindingMemberInfo.BindingField];
 
             error ??= string.Empty;
 

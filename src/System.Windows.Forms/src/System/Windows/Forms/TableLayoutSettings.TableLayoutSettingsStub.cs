@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Windows.Forms.Layout;
 
@@ -13,9 +11,9 @@ public sealed partial class TableLayoutSettings
     private class TableLayoutSettingsStub
     {
         private static ControlInformation s_defaultControlInfo = new(null, -1, -1, 1, 1);
-        private TableLayoutColumnStyleCollection _columnStyles;
-        private TableLayoutRowStyleCollection _rowStyles;
-        private Dictionary<object, ControlInformation> _controlsInfo;
+        private TableLayoutColumnStyleCollection? _columnStyles;
+        private TableLayoutRowStyleCollection? _rowStyles;
+        private Dictionary<object, ControlInformation>? _controlsInfo;
 
         public TableLayoutSettingsStub()
         {
@@ -47,8 +45,8 @@ public sealed partial class TableLayoutSettings
                     {
                         if (tableControl is not null)
                         {
-                            string name = null;
-                            PropertyDescriptor prop = TypeDescriptor.GetProperties(tableControl)["Name"];
+                            string? name = null;
+                            PropertyDescriptor? prop = TypeDescriptor.GetProperties(tableControl)["Name"];
                             if (prop is not null && prop.PropertyType == typeof(string))
                             {
                                 name = prop.GetValue(tableControl) as string;

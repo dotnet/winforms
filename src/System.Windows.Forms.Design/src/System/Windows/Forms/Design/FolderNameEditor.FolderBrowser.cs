@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Buffers;
 using System.ComponentModel;
 using Windows.Win32.UI.Shell.Common;
@@ -37,6 +35,7 @@ public partial class FolderNameEditor
         ///  Gets or sets a description to show above the folders. Here you can provide instructions for
         ///  selecting a folder.
         /// </summary>
+        [AllowNull]
         public string Description
         {
             get => _descriptionText;
@@ -51,7 +50,7 @@ public partial class FolderNameEditor
         /// <summary>
         ///  Shows the folder browser dialog with the specified owner.
         /// </summary>
-        public unsafe DialogResult ShowDialog(IWin32Window owner)
+        public unsafe DialogResult ShowDialog(IWin32Window? owner)
         {
             // Get/find an owner HWND for this dialog.
             HWND hWndOwner = owner is not null ? (HWND)owner.Handle : PInvoke.GetActiveWindow();

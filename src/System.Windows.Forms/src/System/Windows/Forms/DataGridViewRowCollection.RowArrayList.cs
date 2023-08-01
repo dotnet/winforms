@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms;
@@ -11,12 +9,12 @@ public partial class DataGridViewRowCollection
 {
     private class RowArrayList : ArrayList
     {
-        private readonly DataGridViewRowCollection owner;
-        private RowComparer rowComparer;
+        private readonly DataGridViewRowCollection _owner;
+        private RowComparer? _rowComparer;
 
         public RowArrayList(DataGridViewRowCollection owner)
         {
-            this.owner = owner;
+            _owner = owner;
         }
 
         public void CustomSort(RowComparer rowComparer)
@@ -24,7 +22,7 @@ public partial class DataGridViewRowCollection
             Debug.Assert(rowComparer is not null);
             Debug.Assert(Count > 0);
 
-            this.rowComparer = rowComparer;
+            _rowComparer = rowComparer;
             CustomQuickSort(0, Count - 1);
         }
 
@@ -39,9 +37,9 @@ public partial class DataGridViewRowCollection
             {
                 if (right - left < 2) // sort subarray of two elements
                 {
-                    if (right - left > 0 && rowComparer.CompareObjects(rowComparer.GetComparedObject(left), rowComparer.GetComparedObject(right), left, right) > 0)
+                    if (right - left > 0 && _rowComparer!.CompareObjects(_rowComparer.GetComparedObject(left), _rowComparer.GetComparedObject(right), left, right) > 0)
                     {
-                        owner.SwapSortedRows(left, right);
+                        _owner.SwapSortedRows(left, right);
                     }
 
                     return;
@@ -53,12 +51,12 @@ public partial class DataGridViewRowCollection
                 int j = right - 1;
                 do
                 {
-                    while (k != i && rowComparer.CompareObjects(rowComparer.GetComparedObject(i), x, i, k) < 0)
+                    while (k != i && _rowComparer!.CompareObjects(_rowComparer.GetComparedObject(i), x, i, k) < 0)
                     {
                         i++;
                     }
 
-                    while (k != j && rowComparer.CompareObjects(x, rowComparer.GetComparedObject(j), k, j) < 0)
+                    while (k != j && _rowComparer!.CompareObjects(x, _rowComparer.GetComparedObject(j), k, j) < 0)
                     {
                         j--;
                     }
@@ -71,7 +69,7 @@ public partial class DataGridViewRowCollection
 
                     if (i < j)
                     {
-                        owner.SwapSortedRows(i, j);
+                        _owner.SwapSortedRows(i, j);
                         if (i == k)
                         {
                             k = j;
@@ -112,22 +110,22 @@ public partial class DataGridViewRowCollection
         private object Pivot(int left, int center, int right)
         {
             // find median-of-3 (left, center and right) and sort these 3 elements
-            if (rowComparer.CompareObjects(rowComparer.GetComparedObject(left), rowComparer.GetComparedObject(center), left, center) > 0)
+            if (_rowComparer!.CompareObjects(_rowComparer.GetComparedObject(left), _rowComparer.GetComparedObject(center), left, center) > 0)
             {
-                owner.SwapSortedRows(left, center);
+                _owner.SwapSortedRows(left, center);
             }
 
-            if (rowComparer.CompareObjects(rowComparer.GetComparedObject(left), rowComparer.GetComparedObject(right), left, right) > 0)
+            if (_rowComparer.CompareObjects(_rowComparer.GetComparedObject(left), _rowComparer.GetComparedObject(right), left, right) > 0)
             {
-                owner.SwapSortedRows(left, right);
+                _owner.SwapSortedRows(left, right);
             }
 
-            if (rowComparer.CompareObjects(rowComparer.GetComparedObject(center), rowComparer.GetComparedObject(right), center, right) > 0)
+            if (_rowComparer.CompareObjects(_rowComparer.GetComparedObject(center), _rowComparer.GetComparedObject(right), center, right) > 0)
             {
-                owner.SwapSortedRows(center, right);
+                _owner.SwapSortedRows(center, right);
             }
 
-            return rowComparer.GetComparedObject(center);
+            return _rowComparer.GetComparedObject(center);
         }
     }
 }

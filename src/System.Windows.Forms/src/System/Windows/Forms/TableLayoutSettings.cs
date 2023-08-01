@@ -28,14 +28,17 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     private TableLayoutSettingsStub? _stub;
 
     // used by TableLayoutSettingsTypeConverter
-    internal TableLayoutSettings() : base(null)
+    internal TableLayoutSettings()
+        : base(null)
     {
         _stub = new TableLayoutSettingsStub();
     }
 
-    internal TableLayoutSettings(IArrangedElement owner) : base(owner) { }
+    internal TableLayoutSettings(IArrangedElement owner)
+        : base(owner) { }
 
-    private TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context) : this()
+    private TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context)
+        : this()
     {
         TypeConverter converter = TypeDescriptor.GetConverter(this);
         string? stringVal = serializationInfo.GetString("SerializedString");
