@@ -30,7 +30,8 @@ public partial class ListViewItem
         /// </summary>
         /// <param name="accessibleChildIndex">The index of the child <see cref="AccessibleObject"/>.</param>
         /// <returns>The index of an owning <see cref="ListViewSubItem"/>'s object.</returns>
-        private int AccessibleChildToSubItemIndex(int accessibleChildIndex) => HasImage ? accessibleChildIndex - 1 : accessibleChildIndex;
+        private int AccessibleChildToSubItemIndex(int accessibleChildIndex) => HasImage ? _owningListView.Columns[accessibleChildIndex - 1]._correspondingListViewSubItemIndex
+            : _owningListView.Columns[accessibleChildIndex]._correspondingListViewSubItemIndex;
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
@@ -107,7 +108,16 @@ public partial class ListViewItem
             }
 
             int subItemIndex = _owningItem.SubItems.IndexOf(subItemAccessibleObject.OwningSubItem);
-            int accessibleChildIndex = SubItemToAccessibleChildIndex(subItemIndex);
+            int accessibleChildIndex = InvalidIndex;
+            for (int i = 0; i < _owningListView.Columns.Count; i++)
+            {
+                if (_owningListView.Columns[i]._correspondingListViewSubItemIndex == subItemIndex)
+                {
+                    accessibleChildIndex = i + (HasImage ? 1 : 0);
+                    break;
+                }
+            }
+
             return accessibleChildIndex > LastChildIndex ? InvalidIndex : accessibleChildIndex;
         }
 
