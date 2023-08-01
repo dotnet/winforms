@@ -19,7 +19,7 @@ Up until now, developers have been advised to adhere to the instructions given [
 
 ## Solution
 
-In Visual Studio 2022 Version 17.8, we introduced a new [configuration]((https://aka.ms/applicationconfiguration)) option called `ForceDesignerDpiUnaware`, distinct from `ApplicationHighDpiMode`. This option enables developers to enforce DpiUnAware mode for all WinForms designers in the project, regardless of the `ApplicationHighDpiMode`, which continues to take effect during runtime.
+In Visual Studio 2022 Version 17.8, we are introducing a new [configuration]((https://aka.ms/applicationconfiguration)) option called `ForceDesignerDpiUnaware`, distinct from `ApplicationHighDpiMode`. This option enables developers to enforce DpiUnAware mode for all WinForms designers in the project, regardless of the `ApplicationHighDpiMode`, which continues to take effect during runtime. The rest of the Visual Studio environment remains in PerMonitor mode and renders crisply.
 
 
 ```CS
