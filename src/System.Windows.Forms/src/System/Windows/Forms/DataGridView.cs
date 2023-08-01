@@ -279,8 +279,8 @@ public partial class DataGridView : Control, ISupportInitialize
     // Note that a cell can only be in one bag but not both at the same time.
     private readonly DataGridViewCellLinkedList _individualSelectedCells;
     private readonly DataGridViewCellLinkedList _individualReadOnlyCells;
-    private readonly DataGridViewIntLinkedList _selectedBandIndexes;
-    private DataGridViewIntLinkedList _selectedBandSnapshotIndexes;
+    private readonly SinglyLinkedList<int> _selectedBandIndexes;
+    private SinglyLinkedList<int> _selectedBandSnapshotIndexes;
 
     private DataGridViewCellStyle _defaultCellStyle, _columnHeadersDefaultCellStyle, _rowHeadersDefaultCellStyle;
     private DataGridViewCellStyle _rowsDefaultCellStyle, _alternatingRowsDefaultCellStyle;
@@ -409,7 +409,7 @@ public partial class DataGridView : Control, ISupportInitialize
         _converters = new(8);
         GridPenColor = DefaultGridColor;
 
-        _selectedBandIndexes = new DataGridViewIntLinkedList();
+        _selectedBandIndexes = new();
         _individualSelectedCells = new DataGridViewCellLinkedList();
         _individualReadOnlyCells = new DataGridViewCellLinkedList();
 
