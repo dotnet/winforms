@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -19,10 +19,9 @@ internal class PrintDialogDesigner : ComponentDesigner
     /// </summary>
     public override void InitializeNewComponent(IDictionary defaultValues)
     {
-        PrintDialog? pd = Component as PrintDialog;
-        if (pd is not null)
+        if (Component is PrintDialog dialog)
         {
-            pd.UseEXDialog = true;
+            dialog.UseEXDialog = true;
         }
     }
 }
