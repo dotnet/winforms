@@ -5,9 +5,21 @@ using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms;
 
-internal class SinglyLinkedList<T>
+internal sealed class SinglyLinkedList<T>
 {
     public SinglyLinkedList() { }
+    public SinglyLinkedList(SinglyLinkedList<T> singlyLinkedList)
+    {
+        ArgumentNullException.ThrowIfNull(singlyLinkedList);
+
+        foreach (Node? item in singlyLinkedList)
+        {
+            if (item is not null)
+            {
+                AddLast(item.Value);
+            }
+        }
+    }
 
     public int Count { get; private set; }
     public Node? First { get; private set; }
@@ -56,13 +68,116 @@ internal class SinglyLinkedList<T>
 
     public Enumerator GetEnumerator() => new(this);
 
-    public class Node
+    public void Clear()
+    {
+        Node? current = First;
+        while (current is not null)
+        {
+            Node temp = current;
+            current = current.Next;
+            temp.Invalidate();
+        }
+
+        First = null;
+        Last = null;
+        Count = 0;
+    }
+
+    public bool Contains(T value)
+    {
+        return Find(value) is not null;
+    }
+
+    public Node? Find(T value)
+    {
+        Node? node = First;
+        EqualityComparer<T> c = EqualityComparer<T>.Default;
+        if (node is not null)
+        {
+            if (value is not null)
+            {
+                while (node != First)
+                {
+                    if (c.Equals(node!.Value, value))
+                    {
+                        return node;
+                    }
+
+                    node = node.Next;
+                }
+            }
+            else
+            {
+                while (node != First)
+                {
+                    if (node!.Value is null)
+                    {
+                        return node;
+                    }
+
+                    node = node.Next;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public bool Remove(T value)
+    {
+        Node? node = Find(value);
+        if (node is not null)
+        {
+            InternalRemoveNode(node);
+            return true;
+        }
+
+        return false;
+    }
+
+    public void Remove(Node node)
+    {
+        InternalRemoveNode(node);
+    }
+
+    internal void InternalRemoveNode(Node node)
+    {
+        Node? tmp1 = null, tmp2 = First;
+        while (tmp2 is not null)
+        {
+            if (tmp2 == node)
+            {
+                break;
+            }
+
+            tmp1 = tmp2;
+            tmp2 = tmp2.Next;
+        }
+
+        if (tmp2 == node)
+        {
+            Node? tmp3 = tmp2.Next;
+            if (tmp1 is null)
+            {
+                First = tmp3;
+            }
+            else
+            {
+                tmp1.Next = tmp3;
+            }
+
+            Count--;
+        }
+    }
+
+    public sealed class Node
     {
         public Node(T value) => Value = value;
         public Node? Next { get; set; }
         public T Value { get; set; }
 
         public static implicit operator T(Node? node) => node is null ? default! : node.Value;
+        public void Invalidate() => Next = null;
     }
 
     public struct Enumerator

@@ -3545,7 +3545,7 @@ public partial class DataGridView
                     {
                         while (_selectedBandIndexes.Count > 0)
                         {
-                            SetSelectedRowCore(_selectedBandIndexes.HeadInt, false);
+                            SetSelectedRowCore(_selectedBandIndexes.First.Value, false);
                         }
 
                         // Force repainting of the current column's header cell to remove highlighting
@@ -3563,7 +3563,7 @@ public partial class DataGridView
                     {
                         while (_selectedBandIndexes.Count > 0)
                         {
-                            SetSelectedColumnCore(_selectedBandIndexes.HeadInt, false);
+                            SetSelectedColumnCore(_selectedBandIndexes.First.Value, false);
                         }
 
                         break;
@@ -3656,17 +3656,15 @@ public partial class DataGridView
                 case DataGridViewSelectionMode.FullRowSelect:
                 case DataGridViewSelectionMode.RowHeaderSelect:
                     {
-                        int bandIndex = 0;
-                        while (bandIndex < _selectedBandIndexes.Count)
+                        var enumerator = _selectedBandIndexes.GetEnumerator();
+                        while (enumerator.MoveNext())
                         {
-                            if (_selectedBandIndexes[bandIndex] != rowIndexException)
+                            SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+
+                            if (currentNode.Value != rowIndexException)
                             {
-                                // deselect currently selected row
-                                SetSelectedRowCore(_selectedBandIndexes[bandIndex], false);
-                            }
-                            else
-                            {
-                                bandIndex++;
+                                // deselect currently selected column
+                                SetSelectedColumnCore(currentNode.Value, false);
                             }
                         }
 
@@ -3681,17 +3679,15 @@ public partial class DataGridView
                 case DataGridViewSelectionMode.FullColumnSelect:
                 case DataGridViewSelectionMode.ColumnHeaderSelect:
                     {
-                        int bandIndex = 0;
-                        while (bandIndex < _selectedBandIndexes.Count)
+                        var enumerator = _selectedBandIndexes.GetEnumerator();
+                        while (enumerator.MoveNext())
                         {
-                            if (_selectedBandIndexes[bandIndex] != columnIndexException)
+                            SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+
+                            if (currentNode.Value != columnIndexException)
                             {
                                 // deselect currently selected column
-                                SetSelectedColumnCore(_selectedBandIndexes[bandIndex], false);
-                            }
-                            else
-                            {
-                                bandIndex++;
+                                SetSelectedColumnCore(currentNode.Value, false);
                             }
                         }
 
@@ -12818,7 +12814,6 @@ public partial class DataGridView
                             if (!MultiSelect || !isControlDown || isShiftDown)
                             {
                                 Debug.Assert(MultiSelect || _selectedBandIndexes.Count <= 1);
-                                int bandIndex = 0;
                                 bool switchedToBulkPaint = false;
                                 if (_selectedBandIndexes.Count > BulkPaintThreshold)
                                 {
@@ -12828,16 +12823,15 @@ public partial class DataGridView
 
                                 try
                                 {
-                                    while (bandIndex < _selectedBandIndexes.Count)
+                                    var enumerator = _selectedBandIndexes.GetEnumerator();
+                                    while (enumerator.MoveNext())
                                     {
-                                        if (_selectedBandIndexes[bandIndex] != hti._col)
+                                        SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+
+                                        if (currentNode.Value != hti._col)
                                         {
                                             // deselect currently selected column
-                                            SetSelectedColumnCore(_selectedBandIndexes[bandIndex], false);
-                                        }
-                                        else
-                                        {
-                                            bandIndex++;
+                                            SetSelectedColumnCore(currentNode.Value, false);
                                         }
                                     }
                                 }
@@ -12898,7 +12892,7 @@ public partial class DataGridView
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
                                 if (_selectedBandIndexes.Count > 0)
                                 {
-                                    SetSelectedColumnCore(_selectedBandIndexes.HeadInt, false);
+                                    SetSelectedColumnCore(_selectedBandIndexes.First.Value, false);
                                 }
                                 else
                                 {
@@ -12922,7 +12916,7 @@ public partial class DataGridView
                                     {
                                         while (_selectedBandIndexes.Count > 0)
                                         {
-                                            SetSelectedColumnCore(_selectedBandIndexes.HeadInt, false);
+                                            SetSelectedColumnCore(_selectedBandIndexes.First.Value, false);
                                         }
 
                                         RemoveIndividuallySelectedCells(hti._col, hti._row);
@@ -12966,7 +12960,7 @@ public partial class DataGridView
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
                                 if (_selectedBandIndexes.Count > 0)
                                 {
-                                    SetSelectedColumnCore(_selectedBandIndexes.HeadInt, false);
+                                    SetSelectedColumnCore(_selectedBandIndexes.First.Value, false);
                                 }
                                 else
                                 {
@@ -13007,7 +13001,6 @@ public partial class DataGridView
                             if (!MultiSelect || !isControlDown || isShiftDown)
                             {
                                 Debug.Assert(MultiSelect || _selectedBandIndexes.Count <= 1);
-                                int bandIndex = 0;
                                 bool switchedToBulkPaint = false;
                                 if (_selectedBandIndexes.Count > BulkPaintThreshold)
                                 {
@@ -13017,16 +13010,15 @@ public partial class DataGridView
 
                                 try
                                 {
-                                    while (bandIndex < _selectedBandIndexes.Count)
+                                    var enumerator = _selectedBandIndexes.GetEnumerator();
+                                    while (enumerator.MoveNext())
                                     {
-                                        if (_selectedBandIndexes[bandIndex] != hti._row)
+                                        SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+
+                                        if (currentNode.Value != hti._row)
                                         {
                                             // deselect currently selected row
-                                            SetSelectedRowCore(_selectedBandIndexes[bandIndex], false);
-                                        }
-                                        else
-                                        {
-                                            bandIndex++;
+                                            SetSelectedRowCore(currentNode.Value, false);
                                         }
                                     }
                                 }
@@ -13090,7 +13082,7 @@ public partial class DataGridView
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
                                 if (_selectedBandIndexes.Count > 0)
                                 {
-                                    SetSelectedRowCore(_selectedBandIndexes.HeadInt, false);
+                                    SetSelectedRowCore(_selectedBandIndexes.First.Value, false);
                                 }
                                 else
                                 {
@@ -13114,7 +13106,7 @@ public partial class DataGridView
                                     {
                                         while (_selectedBandIndexes.Count > 0)
                                         {
-                                            SetSelectedRowCore(_selectedBandIndexes.HeadInt, false);
+                                            SetSelectedRowCore(_selectedBandIndexes.First.Value, false);
                                         }
 
                                         RemoveIndividuallySelectedCells(hti._col, hti._row);
@@ -13158,7 +13150,7 @@ public partial class DataGridView
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
                                 if (_selectedBandIndexes.Count > 0)
                                 {
-                                    SetSelectedRowCore(_selectedBandIndexes.HeadInt, false);
+                                    SetSelectedRowCore(_selectedBandIndexes.First.Value, false);
                                 }
                                 else
                                 {
@@ -14475,7 +14467,6 @@ public partial class DataGridView
                             if (!MultiSelect || !isControlDown || isShiftDown)
                             {
                                 Debug.Assert(MultiSelect || _selectedBandIndexes.Count <= 1);
-                                int bandIndex = 0;
                                 bool switchedToBulkPaint = false;
                                 if (_selectedBandIndexes.Count > BulkPaintThreshold)
                                 {
@@ -14485,16 +14476,15 @@ public partial class DataGridView
 
                                 try
                                 {
-                                    while (bandIndex < _selectedBandIndexes.Count)
+                                    var enumerator = _selectedBandIndexes.GetEnumerator();
+                                    while (enumerator.MoveNext())
                                     {
-                                        if (_selectedBandIndexes[bandIndex] != hti._col)
+                                        SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+
+                                        if (currentNode.Value != hti._col)
                                         {
                                             // deselect currently selected column
-                                            SetSelectedColumnCore(_selectedBandIndexes[bandIndex], false);
-                                        }
-                                        else
-                                        {
-                                            bandIndex++;
+                                            SetSelectedColumnCore(currentNode.Value, false);
                                         }
                                     }
 
@@ -16230,32 +16220,28 @@ public partial class DataGridView
         {
             case DataGridViewSelectionMode.FullColumnSelect:
             case DataGridViewSelectionMode.ColumnHeaderSelect:
-                int columnEntries = _selectedBandIndexes.Count;
-                int columnEntry = 0;
-                while (columnEntry < columnEntries)
+                var enumerator = _selectedBandIndexes.GetEnumerator();
+                while (enumerator.MoveNext())
                 {
-                    int columnIndex = _selectedBandIndexes[columnEntry];
-                    if (columnIndexInserted <= columnIndex)
-                    {
-                        _selectedBandIndexes[columnEntry] = columnIndex + 1;
-                    }
+                    SinglyLinkedList<int>.Node currentNode = enumerator.Current;
 
-                    columnEntry++;
+                    if (columnIndexInserted <= currentNode.Value)
+                    {
+                        currentNode.Value++;
+                    }
                 }
 
                 if (_selectedBandSnapshotIndexes is not null)
                 {
-                    columnEntries = _selectedBandSnapshotIndexes.Count;
-                    columnEntry = 0;
-                    while (columnEntry < columnEntries)
+                    enumerator = _selectedBandSnapshotIndexes.GetEnumerator();
+                    while (enumerator.MoveNext())
                     {
-                        int columnIndex = _selectedBandSnapshotIndexes[columnEntry];
-                        if (columnIndexInserted <= columnIndex)
-                        {
-                            _selectedBandSnapshotIndexes[columnEntry] = columnIndex + 1;
-                        }
+                        SinglyLinkedList<int>.Node currentNode = enumerator.Current;
 
-                        columnEntry++;
+                        if (columnIndexInserted <= currentNode.Value)
+                        {
+                            currentNode.Value++;
+                        }
                     }
                 }
 
@@ -16314,32 +16300,28 @@ public partial class DataGridView
         {
             case DataGridViewSelectionMode.FullRowSelect:
             case DataGridViewSelectionMode.RowHeaderSelect:
-                int rowEntries = _selectedBandIndexes.Count;
-                int rowEntry = 0;
-                while (rowEntry < rowEntries)
+                var enumerator = _selectedBandIndexes.GetEnumerator();
+                while (enumerator.MoveNext())
                 {
-                    int rowIndex = _selectedBandIndexes[rowEntry];
-                    if (rowIndexInserted <= rowIndex)
-                    {
-                        _selectedBandIndexes[rowEntry] = rowIndex + insertionCount;
-                    }
+                    SinglyLinkedList<int>.Node currentNode = enumerator.Current;
 
-                    rowEntry++;
+                    if (rowIndexInserted <= currentNode.Value)
+                    {
+                        currentNode.Value += insertionCount;
+                    }
                 }
 
                 if (_selectedBandSnapshotIndexes is not null)
                 {
-                    rowEntries = _selectedBandSnapshotIndexes.Count;
-                    rowEntry = 0;
-                    while (rowEntry < rowEntries)
+                    enumerator = _selectedBandSnapshotIndexes.GetEnumerator();
+                    while (enumerator.MoveNext())
                     {
-                        int rowIndex = _selectedBandSnapshotIndexes[rowEntry];
-                        if (rowIndexInserted <= rowIndex)
-                        {
-                            _selectedBandSnapshotIndexes[rowEntry] = rowIndex + insertionCount;
-                        }
+                        SinglyLinkedList<int>.Node currentNode = enumerator.Current;
 
-                        rowEntry++;
+                        if (rowIndexInserted <= currentNode.Value)
+                        {
+                            currentNode.Value += insertionCount;
+                        }
                     }
                 }
 
@@ -16374,32 +16356,28 @@ public partial class DataGridView
         {
             case DataGridViewSelectionMode.FullRowSelect:
             case DataGridViewSelectionMode.RowHeaderSelect:
-                int rowEntries = _selectedBandIndexes.Count;
-                int rowEntry = 0;
-                while (rowEntry < rowEntries)
+                var enumerator = _selectedBandIndexes.GetEnumerator();
+                while (enumerator.MoveNext())
                 {
-                    int rowIndex = _selectedBandIndexes[rowEntry];
-                    if (rowIndexInserted <= rowIndex)
-                    {
-                        _selectedBandIndexes[rowEntry] = rowIndex + dataGridViewRows.Length;
-                    }
+                    SinglyLinkedList<int>.Node currentNode = enumerator.Current;
 
-                    rowEntry++;
+                    if (rowIndexInserted <= currentNode.Value)
+                    {
+                        currentNode.Value += dataGridViewRows.Length;
+                    }
                 }
 
                 if (_selectedBandSnapshotIndexes is not null)
                 {
-                    rowEntries = _selectedBandSnapshotIndexes.Count;
-                    rowEntry = 0;
-                    while (rowEntry < rowEntries)
+                    enumerator = _selectedBandSnapshotIndexes.GetEnumerator();
+                    while (enumerator.MoveNext())
                     {
-                        int rowIndex = _selectedBandSnapshotIndexes[rowEntry];
-                        if (rowIndexInserted <= rowIndex)
-                        {
-                            _selectedBandSnapshotIndexes[rowEntry] = rowIndex + dataGridViewRows.Length;
-                        }
+                        SinglyLinkedList<int>.Node currentNode = enumerator.Current;
 
-                        rowEntry++;
+                        if (rowIndexInserted <= currentNode.Value)
+                        {
+                            currentNode.Value += dataGridViewRows.Length;
+                        }
                     }
                 }
 
@@ -17930,25 +17908,22 @@ public partial class DataGridView
         {
             case DataGridViewSelectionMode.FullColumnSelect:
             case DataGridViewSelectionMode.ColumnHeaderSelect:
-                int columnEntries = _selectedBandIndexes.Count;
-                int columnEntry = 0;
-                while (columnEntry < columnEntries)
+                var enumerator = _selectedBandIndexes.GetEnumerator();
+                while (enumerator.MoveNext())
                 {
-                    int columnIndexSelected = _selectedBandIndexes[columnEntry];
-                    if (columnIndex == columnIndexSelected)
+                    SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+
+                    if (columnIndex == currentNode.Value)
                     {
-                        _selectedBandIndexes.RemoveAt(columnEntry);
-                        columnEntries--;
+                        _selectedBandIndexes.Remove(currentNode);
                         raiseSelectionChanged = true;
                     }
                     else
                     {
-                        if (columnIndex < columnIndexSelected)
+                        if (columnIndex < currentNode.Value)
                         {
-                            _selectedBandIndexes[columnEntry] = columnIndexSelected - 1;
+                            currentNode.Value--;
                         }
-
-                        columnEntry++;
                     }
                 }
 
@@ -18049,48 +18024,42 @@ public partial class DataGridView
         {
             case DataGridViewSelectionMode.FullRowSelect:
             case DataGridViewSelectionMode.RowHeaderSelect:
-                int rowEntries = _selectedBandIndexes.Count;
-                int rowEntry = 0;
-                while (rowEntry < rowEntries)
+                var enumerator = _selectedBandIndexes.GetEnumerator();
+                while (enumerator.MoveNext())
                 {
-                    int rowIndex = _selectedBandIndexes[rowEntry];
-                    if (rowIndexDeleted == rowIndex)
+                    SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+
+                    if (rowIndexDeleted == currentNode.Value)
                     {
                         raiseSelectionChanged = true;
-                        _selectedBandIndexes.RemoveAt(rowEntry);
-                        rowEntries--;
+                        _selectedBandIndexes.Remove(currentNode);
                     }
                     else
                     {
-                        if (rowIndexDeleted < rowIndex)
+                        if (rowIndexDeleted < currentNode.Value)
                         {
-                            _selectedBandIndexes[rowEntry] = rowIndex - 1;
+                            currentNode.Value--;
                         }
-
-                        rowEntry++;
                     }
                 }
 
                 if (_selectedBandSnapshotIndexes is not null)
                 {
-                    rowEntries = _selectedBandSnapshotIndexes.Count;
-                    rowEntry = 0;
-                    while (rowEntry < rowEntries)
+                    enumerator = _selectedBandSnapshotIndexes.GetEnumerator();
+                    while (enumerator.MoveNext())
                     {
-                        int rowIndex = _selectedBandSnapshotIndexes[rowEntry];
-                        if (rowIndexDeleted == rowIndex)
+                        SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+
+                        if (rowIndexDeleted == currentNode.Value)
                         {
-                            _selectedBandSnapshotIndexes.RemoveAt(rowEntry);
-                            rowEntries--;
+                            _selectedBandSnapshotIndexes.Remove(currentNode);
                         }
                         else
                         {
-                            if (rowIndexDeleted < rowIndex)
+                            if (rowIndexDeleted < currentNode.Value)
                             {
-                                _selectedBandSnapshotIndexes[rowEntry] = rowIndex - 1;
+                                currentNode.Value--;
                             }
-
-                            rowEntry++;
                         }
                     }
                 }
@@ -18811,7 +18780,6 @@ public partial class DataGridView
                             if (!MultiSelect || !isControlDown || isShiftDown)
                             {
                                 Debug.Assert(MultiSelect || _selectedBandIndexes.Count <= 1);
-                                int bandIndex = 0;
                                 bool switchedToBulkPaint = false;
                                 if (_selectedBandIndexes.Count > BulkPaintThreshold)
                                 {
@@ -18821,16 +18789,14 @@ public partial class DataGridView
 
                                 try
                                 {
-                                    while (bandIndex < _selectedBandIndexes.Count)
+                                    var enumerator = _selectedBandIndexes.GetEnumerator();
+                                    while (enumerator.MoveNext())
                                     {
-                                        if (_selectedBandIndexes[bandIndex] != hti._row)
+                                        SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+                                        if (currentNode.Value != hti._row)
                                         {
                                             // deselect currently selected row
-                                            SetSelectedRowCore(_selectedBandIndexes[bandIndex], false);
-                                        }
-                                        else
-                                        {
-                                            bandIndex++;
+                                            SetSelectedRowCore(currentNode.Value, false);
                                         }
                                     }
 
@@ -20756,97 +20722,93 @@ public partial class DataGridView
             {
                 case DataGridViewSelectionMode.FullRowSelect:
                 case DataGridViewSelectionMode.RowHeaderSelect:
-                    int remainingSelectedRows = 0;
                     try
                     {
-                        _selectedBandSnapshotIndexes = new DataGridViewIntLinkedList(_selectedBandIndexes);
-                        while (_selectedBandSnapshotIndexes.Count > remainingSelectedRows)
+                        _selectedBandSnapshotIndexes = new(_selectedBandIndexes);
+                        var enumerator = _selectedBandSnapshotIndexes.GetEnumerator();
+                        while (enumerator.MoveNext())
                         {
-                            int rowIndex = _selectedBandSnapshotIndexes[remainingSelectedRows];
+                            SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+
+                            int rowIndex = currentNode.Value;
                             Debug.Assert(rowIndex >= 0);
                             if (rowIndex == NewRowIndex || rowIndex >= Rows.Count)
                             {
-                                remainingSelectedRows++;
+                                continue;
                             }
-                            else
+
+                            DataGridViewRowCancelEventArgs dgvrce = new DataGridViewRowCancelEventArgs(Rows[rowIndex]);
+                            OnUserDeletingRow(dgvrce);
+                            if (dgvrce.Cancel)
                             {
-                                DataGridViewRowCancelEventArgs dgvrce = new DataGridViewRowCancelEventArgs(Rows[rowIndex]);
-                                OnUserDeletingRow(dgvrce);
-                                if (!dgvrce.Cancel)
-                                {
-                                    DataGridViewRow dataGridViewRow = Rows[rowIndex];
-                                    if (DataSource is not null)
-                                    {
-                                        int dataGridRowsCount = Rows.Count;
+                                continue;
+                            }
+
+                            DataGridViewRow dataGridViewRow = Rows[rowIndex];
+                            if (DataSource is not null)
+                            {
+                                int dataGridRowsCount = Rows.Count;
 #if DEBUG
-                                        int dataGridViewRowsCount = Rows.Count;           // the number of rows in the dataGridView row collection not counting the AddNewRow
-                                        int rowCount = DataConnection.CurrencyManager.List.Count;
-                                        if (AllowUserToAddRowsInternal)
-                                        {
-                                            if (NewRowIndex < rowCount)
-                                            {
-                                                // the user did not type inside the 'add new row'
-                                                Debug.Assert(rowCount == dataGridViewRowsCount, "out of sync in AddNewTransaction when the user did not type in the 'add new row'");
-                                            }
-                                            else
-                                            {
-                                                dataGridViewRowsCount--;
-                                            }
-                                        }
-
-                                        Debug.Assert(rowCount == dataGridViewRowsCount, "out of sync");
-#endif
-                                        DataGridViewDataErrorEventArgs dgvdee = null;
-                                        try
-                                        {
-                                            DataConnection.DeleteRow(rowIndex);
-                                        }
-                                        catch (Exception exception) when (!exception.IsCriticalException())
-                                        {
-                                            // this is tricky.
-                                            // the back-end threw an exception. At that stage, we did not delete the dataGridView row
-                                            // from our collection of dataGridView rows.
-                                            // So all we do is to throw the exception if the user wants. Otherwise we don't do anything.
-                                            dgvdee = new(
-                                                exception,
-                                                -1,
-                                                rowIndex,
-                                                DataGridViewDataErrorContexts.RowDeletion);
-                                            OnDataErrorInternal(dgvdee);
-
-                                            if (dgvdee.ThrowException)
-                                            {
-                                                throw dgvdee.Exception;
-                                            }
-                                            else
-                                            {
-                                                remainingSelectedRows++;
-                                            }
-                                        }
-
-                                        if (dataGridRowsCount != Rows.Count)
-                                        {
-                                            Debug.Assert(dataGridViewRow.Index == -1);
-                                            DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(dataGridViewRow);
-                                            OnUserDeletedRow(dgvre);
-                                        }
-                                        else if (dgvdee is null)
-                                        {
-                                            remainingSelectedRows++;
-                                        }
+                                int dataGridViewRowsCount = Rows.Count;           // the number of rows in the dataGridView row collection not counting the AddNewRow
+                                int rowCount = DataConnection.CurrencyManager.List.Count;
+                                if (AllowUserToAddRowsInternal)
+                                {
+                                    if (NewRowIndex < rowCount)
+                                    {
+                                        // the user did not type inside the 'add new row'
+                                        Debug.Assert(rowCount == dataGridViewRowsCount, "out of sync in AddNewTransaction when the user did not type in the 'add new row'");
                                     }
                                     else
                                     {
-                                        Rows.RemoveAtInternal(rowIndex, false /*force*/);
-                                        Debug.Assert(dataGridViewRow.Index == -1);
-                                        DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(dataGridViewRow);
-                                        OnUserDeletedRow(dgvre);
+                                        dataGridViewRowsCount--;
                                     }
                                 }
-                                else
+
+                                Debug.Assert(rowCount == dataGridViewRowsCount, "out of sync");
+#endif
+                                DataGridViewDataErrorEventArgs dgvdee = null;
+                                try
                                 {
-                                    remainingSelectedRows++;
+                                    DataConnection.DeleteRow(rowIndex);
                                 }
+                                catch (Exception exception) when (!exception.IsCriticalException())
+                                {
+                                    // this is tricky.
+                                    // the back-end threw an exception. At that stage, we did not delete the dataGridView row
+                                    // from our collection of dataGridView rows.
+                                    // So all we do is to throw the exception if the user wants. Otherwise we don't do anything.
+                                    dgvdee = new(
+                                        exception,
+                                        -1,
+                                        rowIndex,
+                                        DataGridViewDataErrorContexts.RowDeletion);
+                                    OnDataErrorInternal(dgvdee);
+
+                                    if (!dgvdee.ThrowException)
+                                    {
+                                        continue;
+                                    }
+
+                                    throw dgvdee.Exception;
+                                }
+
+                                if (dataGridRowsCount != Rows.Count)
+                                {
+                                    Debug.Assert(dataGridViewRow.Index == -1);
+                                    DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(dataGridViewRow);
+                                    OnUserDeletedRow(dgvre);
+                                }
+                                else if (dgvdee is null)
+                                {
+                                    continue;
+                                }
+                            }
+                            else
+                            {
+                                Rows.RemoveAtInternal(rowIndex, false /*force*/);
+                                Debug.Assert(dataGridViewRow.Index == -1);
+                                DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(dataGridViewRow);
+                                OnUserDeletedRow(dgvre);
                             }
                         }
                     }
@@ -24991,17 +24953,14 @@ public partial class DataGridView
                 {
                     // Same as clicking the column header cell
                     Debug.Assert(MultiSelect || _selectedBandIndexes.Count <= 1);
-                    int bandIndex = 0;
-                    while (bandIndex < _selectedBandIndexes.Count)
+                    var enumerator = _selectedBandIndexes.GetEnumerator();
+                    while (enumerator.MoveNext())
                     {
-                        if (_selectedBandIndexes[bandIndex] != _ptCurrentCell.X)
+                        SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+                        if (currentNode.Value != _ptCurrentCell.X)
                         {
-                            // deselect currently selected column
-                            SetSelectedColumnCore(_selectedBandIndexes[bandIndex], false);
-                        }
-                        else
-                        {
-                            bandIndex++;
+                            // deselect currently selected row
+                            SetSelectedRowCore(currentNode.Value, false);
                         }
                     }
 
@@ -25018,17 +24977,14 @@ public partial class DataGridView
                 {
                     // Same as clicking the row header cell
                     Debug.Assert(MultiSelect || _selectedBandIndexes.Count <= 1);
-                    int bandIndex = 0;
-                    while (bandIndex < _selectedBandIndexes.Count)
+                    var enumerator = _selectedBandIndexes.GetEnumerator();
+                    while (enumerator.MoveNext())
                     {
-                        if (_selectedBandIndexes[bandIndex] != _ptCurrentCell.Y)
+                        SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+                        if (currentNode.Value != _ptCurrentCell.Y)
                         {
                             // deselect currently selected row
-                            SetSelectedRowCore(_selectedBandIndexes[bandIndex], false);
-                        }
-                        else
-                        {
-                            bandIndex++;
+                            SetSelectedRowCore(currentNode.Value, false);
                         }
                     }
 
@@ -26246,7 +26202,7 @@ public partial class DataGridView
                         {
                             if (column.Selected && (!_selectedBandIndexes.Contains(column.Index)))
                             {
-                                _selectedBandIndexes.Add(column.Index);
+                                _selectedBandIndexes.AddFirst(column.Index);
                             }
                         }
                     }
@@ -27331,18 +27287,20 @@ public partial class DataGridView
             case DataGridViewSelectionMode.FullColumnSelect:
             case DataGridViewSelectionMode.ColumnHeaderSelect:
                 {
-                    int selectedBand = 0, selectedBands = _selectedBandIndexes.Count;
-                    while (selectedBand < selectedBands && index >= 0)
+                    var enumerator = _selectedBandIndexes.GetEnumerator();
+                    int selectedBand = 0;
+                    while (enumerator.MoveNext() && index >= 0)
                     {
-                        if (index >= Rows.Count)
+                        SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+                        if (index >= Columns.Count)
                         {
-                            index -= Rows.Count;
+                            index -= Columns.Count;
                             selectedBand++;
                         }
                         else
                         {
-                            int columnIndex = _selectedBandIndexes[selectedBand];
-                            return Rows.SharedRow(index).Cells[columnIndex];
+                            int rowIndex = currentNode.Value;
+                            return Rows.SharedRow(rowIndex).Cells[index];
                         }
                     }
 
@@ -27358,9 +27316,11 @@ public partial class DataGridView
             case DataGridViewSelectionMode.FullRowSelect:
             case DataGridViewSelectionMode.RowHeaderSelect:
                 {
-                    int selectedBand = 0, selectedBands = _selectedBandIndexes.Count;
-                    while (selectedBand < selectedBands && index >= 0)
+                    var enumerator = _selectedBandIndexes.GetEnumerator();
+                    int selectedBand = 0;
+                    while (enumerator.MoveNext() && index >= 0)
                     {
+                        SinglyLinkedList<int>.Node currentNode = enumerator.Current;
                         if (index >= Columns.Count)
                         {
                             index -= Columns.Count;
@@ -27368,7 +27328,7 @@ public partial class DataGridView
                         }
                         else
                         {
-                            int rowIndex = _selectedBandIndexes[selectedBand];
+                            int rowIndex = currentNode.Value;
                             return Rows.SharedRow(rowIndex).Cells[index];
                         }
                     }
@@ -28069,7 +28029,7 @@ public partial class DataGridView
                         case DataGridViewSelectionMode.FullColumnSelect:
                         case DataGridViewSelectionMode.ColumnHeaderSelect:
                             {
-                                if (_selectedBandIndexes.HeadInt != columnIndex)
+                                if (_selectedBandIndexes.First.Value != columnIndex)
                                 {
                                     return true;  // Do not change a single selection that does not match the new current cell
                                 }
@@ -28080,7 +28040,7 @@ public partial class DataGridView
                         case DataGridViewSelectionMode.FullRowSelect:
                         case DataGridViewSelectionMode.RowHeaderSelect:
                             {
-                                if (_selectedBandIndexes.HeadInt != rowIndex)
+                                if (_selectedBandIndexes.First.Value != rowIndex)
                                 {
                                     return true;  // Do not change a single selection that does not match the new current cell
                                 }
@@ -28423,17 +28383,14 @@ public partial class DataGridView
                             if (!MultiSelect)
                             {
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
-                                int bandIndex = 0;
-                                while (bandIndex < _selectedBandIndexes.Count)
+                                var enumerator = _selectedBandIndexes.GetEnumerator();
+                                while (enumerator.MoveNext())
                                 {
-                                    if (_selectedBandIndexes[bandIndex] != columnIndex)
+                                    SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+                                    if (currentNode.Value != columnIndex)
                                     {
                                         // deselect currently selected column
-                                        SetSelectedColumnCore(_selectedBandIndexes[bandIndex], false);
-                                    }
-                                    else
-                                    {
-                                        bandIndex++;
+                                        SetSelectedColumnCore(currentNode.Value, false);
                                     }
                                 }
                             }
@@ -28463,7 +28420,7 @@ public partial class DataGridView
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
                                 if (_selectedBandIndexes.Count > 0)
                                 {
-                                    SetSelectedColumnCore(_selectedBandIndexes.HeadInt, false);
+                                    SetSelectedColumnCore(_selectedBandIndexes.First.Value, false);
                                 }
                                 else
                                 {
@@ -28480,7 +28437,7 @@ public partial class DataGridView
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
                                 if (_selectedBandIndexes.Count > 0)
                                 {
-                                    SetSelectedColumnCore(_selectedBandIndexes.HeadInt, false);
+                                    SetSelectedColumnCore(_selectedBandIndexes.First.Value, false);
                                 }
                                 else
                                 {
@@ -28503,17 +28460,14 @@ public partial class DataGridView
                             if (!MultiSelect)
                             {
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
-                                int bandIndex = 0;
-                                while (bandIndex < _selectedBandIndexes.Count)
+                                var enumerator = _selectedBandIndexes.GetEnumerator();
+                                while (enumerator.MoveNext())
                                 {
-                                    if (_selectedBandIndexes[bandIndex] != rowIndex)
+                                    SinglyLinkedList<int>.Node currentNode = enumerator.Current;
+                                    if (currentNode.Value != columnIndex)
                                     {
-                                        // deselect currently selected row
-                                        SetSelectedRowCore(_selectedBandIndexes[bandIndex], false);
-                                    }
-                                    else
-                                    {
-                                        bandIndex++;
+                                        // deselect currently selected column
+                                        SetSelectedColumnCore(currentNode.Value, false);
                                     }
                                 }
                             }
@@ -28547,7 +28501,7 @@ public partial class DataGridView
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
                                 if (_selectedBandIndexes.Count > 0)
                                 {
-                                    SetSelectedRowCore(_selectedBandIndexes.HeadInt, false);
+                                    SetSelectedRowCore(_selectedBandIndexes.First.Value, false);
                                 }
                                 else
                                 {
@@ -28564,7 +28518,7 @@ public partial class DataGridView
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
                                 if (_selectedBandIndexes.Count > 0)
                                 {
-                                    SetSelectedRowCore(_selectedBandIndexes.HeadInt, false);
+                                    SetSelectedRowCore(_selectedBandIndexes.First.Value, false);
                                 }
                                 else
                                 {
@@ -28611,7 +28565,7 @@ public partial class DataGridView
                     RemoveIndividuallySelectedCellsInColumn(columnIndex);
                     Columns[columnIndex].SelectedInternal = true;
                     Debug.Assert(!_selectedBandIndexes.Contains(columnIndex));
-                    _selectedBandIndexes.Add(columnIndex);
+                    _selectedBandIndexes.AddFirst(columnIndex);
                 }
                 else
                 {
@@ -28644,7 +28598,7 @@ public partial class DataGridView
                 Debug.Assert(_selectedBandIndexes.Count <= 1);
                 if (_selectedBandIndexes.Count > 0)
                 {
-                    int columnIndexSelected = _selectedBandIndexes.HeadInt;
+                    int columnIndexSelected = _selectedBandIndexes.First.Value;
                     if (columnIndexSelected != columnIndex)
                     {
                         SetSelectedColumnCore(columnIndexSelected, false);
@@ -28730,7 +28684,7 @@ public partial class DataGridView
                     // first remove individually selected cells of this row
                     RemoveIndividuallySelectedCellsInRow(rowIndex);
                     Debug.Assert(!_selectedBandIndexes.Contains(rowIndex));
-                    _selectedBandIndexes.Add(rowIndex);
+                    _selectedBandIndexes.AddFirst(rowIndex);
                     Rows.SetRowState(rowIndex, DataGridViewElementStates.Selected, true);
                 }
                 else
@@ -28764,7 +28718,7 @@ public partial class DataGridView
                 Debug.Assert(_selectedBandIndexes.Count <= 1);
                 if (_selectedBandIndexes.Count > 0)
                 {
-                    int rowIndexSelected = _selectedBandIndexes.HeadInt;
+                    int rowIndexSelected = _selectedBandIndexes.First.Value;
                     if (rowIndexSelected != rowIndex)
                     {
                         SetSelectedRowCore(rowIndexSelected, false);
@@ -29009,28 +28963,28 @@ public partial class DataGridView
         {
             case DataGridViewSelectionMode.FullRowSelect:
             case DataGridViewSelectionMode.RowHeaderSelect:
-                int row1Selected = _selectedBandIndexes.IndexOf(rowIndex1);
-                int row2Selected = _selectedBandIndexes.IndexOf(rowIndex2);
-                if (row1Selected != -1 && row2Selected == -1)
+                SinglyLinkedList<int>.Node nodeRow1Selected = _selectedBandIndexes.Find(rowIndex1);
+                SinglyLinkedList<int>.Node nodeRow2Selected = _selectedBandIndexes.Find(rowIndex2);
+                if (nodeRow1Selected is not null && nodeRow2Selected is null)
                 {
-                    _selectedBandIndexes[row1Selected] = rowIndex2;
+                    nodeRow1Selected.Value = rowIndex2;
                 }
-                else if (row1Selected == -1 && row2Selected != -1)
+                else if (nodeRow1Selected is null && nodeRow2Selected is not null)
                 {
-                    _selectedBandIndexes[row2Selected] = rowIndex1;
+                    nodeRow2Selected.Value = rowIndex1;
                 }
 
                 if (_selectedBandSnapshotIndexes is not null)
                 {
-                    row1Selected = _selectedBandSnapshotIndexes.IndexOf(rowIndex1);
-                    row2Selected = _selectedBandSnapshotIndexes.IndexOf(rowIndex2);
-                    if (row1Selected != -1 && row2Selected == -1)
+                    nodeRow1Selected = _selectedBandSnapshotIndexes.Find(rowIndex1);
+                    nodeRow2Selected = _selectedBandSnapshotIndexes.Find(rowIndex2);
+                    if (nodeRow1Selected is not null && nodeRow2Selected is null)
                     {
-                        _selectedBandSnapshotIndexes[row1Selected] = rowIndex2;
+                        nodeRow1Selected.Value = rowIndex2;
                     }
-                    else if (row1Selected == -1 && row2Selected != -1)
+                    else if (nodeRow1Selected is null && nodeRow2Selected is not null)
                     {
-                        _selectedBandSnapshotIndexes[row2Selected] = rowIndex1;
+                        nodeRow2Selected.Value = rowIndex1;
                     }
                 }
 
