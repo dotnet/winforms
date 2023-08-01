@@ -14,21 +14,31 @@ public partial class DateTimeEditor
     private class DateTimeUI : Control
     {
         private readonly MonthCalendar _monthCalendar = new DateTimeMonthCalendar();
-        private IWindowsFormsEditorService? _editorService;
+        private IWindowsFormsEditorService _editorService;
 
-        public DateTimeUI()
+        public DateTimeUI(IWindowsFormsEditorService editorService, object? value)
         {
             InitializeComponent();
             Size = _monthCalendar.SingleMonthSize;
             _monthCalendar.Resize += MonthCalResize;
+            _editorService = editorService;
+            Value = value;
+
+            if (value is not null)
+            {
+                DateTime dateTime = (DateTime)value;
+                _monthCalendar.SetDate(dateTime.Equals(DateTime.MinValue) ? DateTime.Today : dateTime);
+            }
         }
 
         public object? Value { get; private set; }
 
-        public void End()
+        protected override void Dispose(bool disposing)
         {
-            _editorService = null;
+            _editorService = null!;
             Value = null;
+
+            base.Dispose(disposing);
         }
 
         private void MonthCalKeyDown(object? sender, KeyEventArgs e)
@@ -71,18 +81,6 @@ public partial class DateTimeEditor
         {
             base.OnGotFocus(e);
             _monthCalendar.Focus();
-        }
-
-        public void Start(IWindowsFormsEditorService editorService, object? value)
-        {
-            _editorService = editorService;
-            Value = value;
-
-            if (value is not null)
-            {
-                DateTime dateTime = (DateTime)value;
-                _monthCalendar.SetDate((dateTime.Equals(DateTime.MinValue)) ? DateTime.Today : dateTime);
-            }
         }
 
         private class DateTimeMonthCalendar : MonthCalendar
