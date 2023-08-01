@@ -15,7 +15,7 @@ The following example demonstrates an undesired modification in the serialized W
 ![Unwanted Serialization changes](../images/Serialization.png)
 
 
-Up until now, developers have been advised to adhere to the instructions given [here](https://go.microsoft.com/fwlink/?linkid=875609) and restart Visual Studio in DpiUnAware mode to resolve these problems. Nevertheless, this process requires individual developers to do it every time they work on the project, adding inconvenience.
+Up until now, developers have been advised to adhere to the instructions given [here](https://go.microsoft.com/fwlink/?linkid=875609) and restart Visual Studio in DpiUnAware mode to resolve these problems. Nevertheless, this process requires individual developers to do it every time they work on the project, adding inconvenience. Additionally, the entire Visual Studio IDE would be launched as DPI Unaware resulting in a blurry IDE experience.
 
 ## Solution
 
