@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -19,8 +17,8 @@ public class InheritanceService : IInheritanceService, IDisposable
     private static readonly TraceSwitch s_inheritanceServiceSwitch = new("InheritanceService", "InheritanceService : Debug inheritance scan.");
     private Dictionary<IComponent, InheritanceAttribute> _inheritedComponents;
     // While we're adding an inherited component, we must be wary of components that the inherited component adds as a result of being sited.  These are treated as inherited as well.  To track these, we keep track of the component we're currently adding as well as it's inheritance attribute. During the add, we sync IComponentAdding events and push in the component
-    private IComponent _addingComponent;
-    private InheritanceAttribute _addingAttribute;
+    private IComponent? _addingComponent;
+    private InheritanceAttribute? _addingAttribute;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="InheritanceService"/> class.
@@ -43,7 +41,7 @@ public class InheritanceService : IInheritanceService, IDisposable
         if (disposing && _inheritedComponents is not null)
         {
             _inheritedComponents.Clear();
-            _inheritedComponents = null;
+            _inheritedComponents = null!;
         }
     }
 
@@ -58,7 +56,7 @@ public class InheritanceService : IInheritanceService, IDisposable
     /// <summary>
     ///  Adds inherited components to the <see cref="InheritanceService"/>.
     /// </summary>
-    protected virtual void AddInheritedComponents(Type type, IComponent component, IContainer container)
+    protected virtual void AddInheritedComponents(Type? type, IComponent component, IContainer container)
     {
         // We get out now if this component type is not assignable from IComponent.  We only walk down to the component level.
         if (type is null || !typeof(IComponent).IsAssignableFrom(type))
@@ -68,14 +66,14 @@ public class InheritanceService : IInheritanceService, IDisposable
 
         Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Searching for inherited components on '{type.FullName}'.");
         Debug.Indent();
-        ISite site = component.Site;
-        IComponentChangeService cs = null;
-        INameCreationService ncs = null;
+        ISite? site = component.Site;
+        IComponentChangeService? cs = null;
+        INameCreationService? ncs = null;
 
         if (site is not null)
         {
-            ncs = (INameCreationService)site.GetService(typeof(INameCreationService));
-            cs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
+            ncs = site.GetService<INameCreationService>();
+            cs = site.GetService<IComponentChangeService>();
             if (cs is not null)
             {
                 cs.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
@@ -89,9 +87,8 @@ public class InheritanceService : IInheritanceService, IDisposable
                 Type reflect = TypeDescriptor.GetReflectionType(type);
                 FieldInfo[] fields = reflect.GetFields(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic);
                 Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"...found {fields.Length} fields.");
-                for (int i = 0; i < fields.Length; i++)
+                foreach (FieldInfo field in fields)
                 {
-                    FieldInfo field = fields[i];
                     string name = field.Name;
 
                     // Get out now if this field is not assignable from IComponent.
@@ -106,7 +103,7 @@ public class InheritanceService : IInheritanceService, IDisposable
                     Debug.Assert(!field.IsStatic, "Instance binding shouldn't have found this field");
 
                     // If the value of the field is null, then don't mess with it.  If it wasn't assigned when our base class was created then we can't really use it.
-                    object value = field.GetValue(component);
+                    object? value = field.GetValue(component);
                     if (value is null)
                     {
                         Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"...skipping {name}: Contains NULL");
@@ -123,7 +120,7 @@ public class InheritanceService : IInheritanceService, IDisposable
                         Debug.Assert(fieldAttrs[0] is AccessedThroughPropertyAttribute, "Reflection bug:  GetCustomAttributes(type) didn't discriminate by type");
                         AccessedThroughPropertyAttribute propAttr = (AccessedThroughPropertyAttribute)fieldAttrs[0];
 
-                        PropertyInfo fieldProp = reflect.GetProperty(propAttr.PropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                        PropertyInfo? fieldProp = reflect.GetProperty(propAttr.PropertyName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
                         Debug.Assert(fieldProp is not null, "Field declared with AccessedThroughPropertyAttribute has no associated property");
                         Debug.Assert(fieldProp.PropertyType == field.FieldType, "Field declared with AccessedThroughPropertyAttribute is associated with a property with a different return type.");
@@ -136,7 +133,7 @@ public class InheritanceService : IInheritanceService, IDisposable
                             }
 
                             // We never access the set for the property, so we can concentrate on just the get method.
-                            member = fieldProp.GetGetMethod(true);
+                            member = fieldProp.GetGetMethod(true)!;
                             Debug.Assert(member is not null, "GetGetMethod for property didn't return a method, but CanRead is true");
                             name = propAttr.PropertyName;
                         }
@@ -186,44 +183,43 @@ public class InheritanceService : IInheritanceService, IDisposable
 
                     // We only get values via IComponent Keys and don't expose any other behaviors.
                     // So only use IComponent as a key.
-                    bool notPresent = false;
                     if (value is IComponent compValue)
                     {
-                        notPresent = !_inheritedComponents.ContainsKey(compValue);
+                        bool notPresent = !_inheritedComponents.ContainsKey(compValue);
                         _inheritedComponents[compValue] = attr;
-                    }
 
-                    if (!ignoreMember && notPresent)
-                    {
-                        Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Adding {name} to container.");
-                        try
+                        if (!ignoreMember && notPresent)
                         {
-                            _addingComponent = (IComponent)value;
-                            _addingAttribute = attr;
-
-                            // Lets make sure this is a valid name
-                            if (ncs is null || ncs.IsValidName(name))
+                            Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Adding {name} to container.");
+                            try
                             {
-                                try
+                                _addingComponent = compValue;
+                                _addingAttribute = attr;
+
+                                // Lets make sure this is a valid name
+                                if (ncs is null || ncs.IsValidName(name))
                                 {
-                                    container.Add((IComponent)value, name);
-                                }
-                                catch
-                                { // We do not always control the base components, and there could be a lot of rogue base components. If there are exceptions when adding them, lets just ignore and continue.
+                                    try
+                                    {
+                                        container.Add(compValue, name);
+                                    }
+                                    catch
+                                    { // We do not always control the base components, and there could be a lot of rogue base components. If there are exceptions when adding them, lets just ignore and continue.
+                                    }
                                 }
                             }
-                        }
-                        finally
-                        {
-                            _addingComponent = null;
-                            _addingAttribute = null;
+                            finally
+                            {
+                                _addingComponent = null;
+                                _addingAttribute = null;
+                            }
                         }
                     }
 
                     Debug.Unindent();
                 }
 
-                type = type.BaseType;
+                type = type.BaseType!;
             }
         }
         finally
@@ -240,7 +236,7 @@ public class InheritanceService : IInheritanceService, IDisposable
     /// <summary>
     ///  Indicates the inherited members to ignore.
     /// </summary>
-    protected virtual bool IgnoreInheritedMember(MemberInfo member, IComponent component)
+    protected virtual bool IgnoreInheritedMember(MemberInfo member, IComponent? component)
     {
         // Our default implementation ignores all private or assembly members.
         if (member is FieldInfo field)
@@ -260,29 +256,30 @@ public class InheritanceService : IInheritanceService, IDisposable
     ///  Gets the inheritance attribute of the specified component.
     /// </summary>
     public InheritanceAttribute GetInheritanceAttribute(IComponent component)
-        => _inheritedComponents.TryGetValue(component, out InheritanceAttribute attr)
+        => _inheritedComponents.TryGetValue(component, out InheritanceAttribute? attr)
             ? attr
             : InheritanceAttribute.Default;
 
-    private void OnComponentAdding(object sender, ComponentEventArgs ce)
+    private void OnComponentAdding(object? sender, ComponentEventArgs ce)
     {
         if (_addingComponent is not null && _addingComponent != ce.Component)
         {
             Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, $"Adding component... {ce.Component}");
-            _inheritedComponents[ce.Component] = InheritanceAttribute.InheritedReadOnly;
+            _inheritedComponents[ce.Component!] = InheritanceAttribute.InheritedReadOnly;
             // If this component is being added to a nested container of addingComponent, it should  get the same inheritance level.
             if (sender is INestedContainer nested && nested.Owner == _addingComponent)
             {
-                _inheritedComponents[ce.Component] = _addingAttribute;
+                _inheritedComponents[ce.Component!] = _addingAttribute!;
             }
         }
     }
 
-    private static Type GetReflectionTypeFromTypeHelper(Type type)
+    [return: NotNullIfNotNull(nameof(type))]
+    private static Type? GetReflectionTypeFromTypeHelper(Type? type)
     {
         if (type is not null)
         {
-            TypeDescriptionProvider targetProvider = GetTargetFrameworkProviderForType(type);
+            TypeDescriptionProvider? targetProvider = GetTargetFrameworkProviderForType(type);
             if (targetProvider is not null)
             {
                 if (targetProvider.IsSupportedType(type))
@@ -295,17 +292,8 @@ public class InheritanceService : IInheritanceService, IDisposable
         return type;
     }
 
-    private static TypeDescriptionProvider GetTargetFrameworkProviderForType(Type type)
+    private static TypeDescriptionProvider? GetTargetFrameworkProviderForType(Type type)
     {
-        IDesignerSerializationManager manager = DocumentDesigner.manager;
-        if (manager is not null)
-        {
-            if (manager.GetService(typeof(TypeDescriptionProviderService)) is TypeDescriptionProviderService service)
-            {
-                return service.GetProvider(type);
-            }
-        }
-
-        return null;
+        return DocumentDesigner.manager?.GetService<TypeDescriptionProviderService>()?.GetProvider(type);
     }
 }
