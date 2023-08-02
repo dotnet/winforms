@@ -112,13 +112,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         }
     }
 
-    public override Type FormattedValueType
-    {
-        get
-        {
-            return s_defaultFormattedValueType;
-        }
-    }
+    public override Type FormattedValueType => s_defaultFormattedValueType;
 
     [DefaultValue(LinkBehavior.SystemDefault)]
     public LinkBehavior LinkBehavior
@@ -733,10 +727,9 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         if (UseColumnTextForLinkValue &&
             DataGridView is not null &&
             DataGridView.NewRowIndex != rowIndex &&
-            OwningColumn is not null &&
-            OwningColumn is DataGridViewLinkColumn)
+            OwningColumn is DataGridViewLinkColumn dataGridViewLinkColumn)
         {
-            return ((DataGridViewLinkColumn)OwningColumn).Text;
+            return dataGridViewLinkColumn.Text;
         }
 
         return base.GetValue(rowIndex);

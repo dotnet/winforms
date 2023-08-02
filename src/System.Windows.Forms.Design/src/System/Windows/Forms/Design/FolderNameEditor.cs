@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing.Design;
 
@@ -15,9 +13,9 @@ namespace System.Windows.Forms.Design;
 [CLSCompliant(false)]
 public partial class FolderNameEditor : UITypeEditor
 {
-    private FolderBrowser _folderBrowser;
+    private FolderBrowser? _folderBrowser;
 
-    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
         if (_folderBrowser is null)
         {
@@ -34,7 +32,7 @@ public partial class FolderNameEditor : UITypeEditor
     }
 
     /// <inheritdoc />
-    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.Modal;
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
 
     /// <summary>
     ///  Initializes the folder browser dialog when it is created. This gives you an opportunity

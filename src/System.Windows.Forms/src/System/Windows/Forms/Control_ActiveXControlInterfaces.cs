@@ -26,6 +26,7 @@ public unsafe partial class Control :
     IPersistStorage.Interface,
     IQuickActivate.Interface
 {
+    /// <inheritdoc cref="IOleControl.GetControlInfo(CONTROLINFO*)"/>
     unsafe HRESULT IOleControl.Interface.GetControlInfo(CONTROLINFO* pCI)
     {
         if (pCI is null)
@@ -52,6 +53,7 @@ public unsafe partial class Control :
         return ActiveXInstance.GetControlInfo(pCI);
     }
 
+    /// <inheritdoc cref="IOleControl.OnMnemonic(MSG*)"/>
     unsafe HRESULT IOleControl.Interface.OnMnemonic(MSG* pMsg)
     {
         if (pMsg is null)
@@ -66,6 +68,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleControl.OnAmbientPropertyChange(int)"/>
     HRESULT IOleControl.Interface.OnAmbientPropertyChange(int dispID)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:OnAmbientPropertyChange. Dispid: {dispID}");
@@ -75,6 +78,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleControl.FreezeEvents(BOOL)"/>
     HRESULT IOleControl.Interface.FreezeEvents(BOOL bFreeze)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:FreezeEvents. Freeze: {bFreeze}");
@@ -83,15 +87,19 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
-    unsafe HRESULT IOleInPlaceActiveObject.Interface.GetWindow(HWND* phwnd)
+    /// <inheritdoc cref="IOleWindow.GetWindow(HWND*)"/>
+    HRESULT IOleInPlaceActiveObject.Interface.GetWindow(HWND* phwnd)
         => ((IOleInPlaceObject.Interface)this).GetWindow(phwnd);
 
+    /// <inheritdoc cref="IOleWindow.ContextSensitiveHelp(BOOL)"/>
     HRESULT IOleInPlaceActiveObject.Interface.ContextSensitiveHelp(BOOL fEnterMode)
         => ((IOleInPlaceObject.Interface)this).ContextSensitiveHelp(fEnterMode);
 
-    unsafe HRESULT IOleInPlaceActiveObject.Interface.TranslateAccelerator(MSG* lpmsg)
+    /// <inheritdoc cref="IOleInPlaceActiveObject.TranslateAccelerator(MSG*)"/>
+    HRESULT IOleInPlaceActiveObject.Interface.TranslateAccelerator(MSG* lpmsg)
         => ActiveXInstance.TranslateAccelerator(lpmsg);
 
+    /// <inheritdoc cref="IOleInPlaceActiveObject.OnFrameWindowActivate(BOOL)"/>
     HRESULT IOleInPlaceActiveObject.Interface.OnFrameWindowActivate(BOOL fActivate)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnFrameWindowActivate");
@@ -99,6 +107,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleInPlaceActiveObject.OnDocWindowActivate(BOOL)"/>
     HRESULT IOleInPlaceActiveObject.Interface.OnDocWindowActivate(BOOL fActivate)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:OnDocWindowActivate.  Activate: {(bool)fActivate}");
@@ -108,19 +117,22 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
-    unsafe HRESULT IOleInPlaceActiveObject.Interface.ResizeBorder(RECT* prcBorder, IOleInPlaceUIWindow* pUIWindow, BOOL fFrameWindow)
+    /// <inheritdoc cref="IOleInPlaceActiveObject.ResizeBorder(RECT*, IOleInPlaceUIWindow*, BOOL)"/>
+    HRESULT IOleInPlaceActiveObject.Interface.ResizeBorder(RECT* prcBorder, IOleInPlaceUIWindow* pUIWindow, BOOL fFrameWindow)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ResizesBorder");
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleInPlaceActiveObject.EnableModeless(BOOL)"/>
     HRESULT IOleInPlaceActiveObject.Interface.EnableModeless(BOOL fEnable)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnableModeless");
         return HRESULT.E_NOTIMPL;
     }
 
-    unsafe HRESULT IOleInPlaceObject.Interface.GetWindow(HWND* phwnd)
+    /// <inheritdoc cref="IOleWindow.GetWindow(HWND*)"/>
+    HRESULT IOleInPlaceObject.Interface.GetWindow(HWND* phwnd)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetWindow");
         HRESULT hr = ActiveXInstance.GetWindow(phwnd);
@@ -128,6 +140,7 @@ public unsafe partial class Control :
         return hr;
     }
 
+    /// <inheritdoc cref="IOleWindow.ContextSensitiveHelp(BOOL)"/>
     HRESULT IOleInPlaceObject.Interface.ContextSensitiveHelp(BOOL fEnterMode)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:ContextSensitiveHelp.  Mode: {fEnterMode}");
@@ -139,6 +152,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleInPlaceObject.InPlaceDeactivate"/>
     HRESULT IOleInPlaceObject.Interface.InPlaceDeactivate()
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:InPlaceDeactivate");
@@ -148,13 +162,15 @@ public unsafe partial class Control :
         return hr;
     }
 
+    /// <inheritdoc cref="IOleInPlaceObject.UIDeactivate"/>
     HRESULT IOleInPlaceObject.Interface.UIDeactivate()
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:UIDeactivate");
         return ActiveXInstance.UIDeactivate();
     }
 
-    unsafe HRESULT IOleInPlaceObject.Interface.SetObjectRects(RECT* lprcPosRect, RECT* lprcClipRect)
+    /// <inheritdoc cref="IOleInPlaceObject.SetObjectRects(RECT*, RECT*)"/>
+    HRESULT IOleInPlaceObject.Interface.SetObjectRects(RECT* lprcPosRect, RECT* lprcClipRect)
     {
         if (lprcClipRect is not null)
         {
@@ -168,20 +184,23 @@ public unsafe partial class Control :
         return hr;
     }
 
+    /// <inheritdoc cref="IOleInPlaceObject.ReactivateAndUndo"/>
     HRESULT IOleInPlaceObject.Interface.ReactivateAndUndo()
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ReactivateAndUndo");
         return HRESULT.S_OK;
     }
 
-    unsafe HRESULT IOleObject.Interface.SetClientSite(IOleClientSite* pClientSite)
+    /// <inheritdoc cref="IOleObject.SetClientSite(IOleClientSite*)"/>
+    HRESULT IOleObject.Interface.SetClientSite(IOleClientSite* pClientSite)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetClientSite");
         ActiveXInstance.SetClientSite(pClientSite);
         return HRESULT.S_OK;
     }
 
-    unsafe HRESULT IOleObject.Interface.GetClientSite(IOleClientSite** ppClientSite)
+    /// <inheritdoc cref="IOleObject.GetClientSite(IOleClientSite**)"/>
+    HRESULT IOleObject.Interface.GetClientSite(IOleClientSite** ppClientSite)
     {
         if (ppClientSite is null)
         {
@@ -193,6 +212,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleObject.SetHostNames(PCWSTR, PCWSTR)"/>
     HRESULT IOleObject.Interface.SetHostNames(PCWSTR szContainerApp, PCWSTR szContainerObj)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetHostNames");
@@ -201,6 +221,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleObject.Close(uint)"/>
     HRESULT IOleObject.Interface.Close(uint dwSaveOption)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"AxSource:Close. Save option: {dwSaveOption}");
@@ -208,12 +229,14 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
-    unsafe HRESULT IOleObject.Interface.SetMoniker(uint dwWhichMoniker, IMoniker* pmk)
+    /// <inheritdoc cref="IOleObject.SetMoniker(uint, IMoniker*)"/>
+    HRESULT IOleObject.Interface.SetMoniker(uint dwWhichMoniker, IMoniker* pmk)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetMoniker");
         return HRESULT.E_NOTIMPL;
     }
 
+    /// <inheritdoc cref="IOleObject.GetMoniker(uint, uint, IMoniker**)"/>
     HRESULT IOleObject.Interface.GetMoniker(uint dwAssign, uint dwWhichMoniker, IMoniker** ppmk)
     {
         if (ppmk is null)
@@ -226,12 +249,14 @@ public unsafe partial class Control :
         return HRESULT.E_NOTIMPL;
     }
 
+    /// <inheritdoc cref="IOleObject.InitFromData(ComIDataObject*, BOOL, uint)"/>
     HRESULT IOleObject.Interface.InitFromData(ComIDataObject* pDataObject, BOOL fCreation, uint dwReserved)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:InitFromData");
         return HRESULT.E_NOTIMPL;
     }
 
+    /// <inheritdoc cref="IOleObject.GetClipboardData(uint, ComIDataObject**)"/>
     HRESULT IOleObject.Interface.GetClipboardData(uint dwReserved, ComIDataObject** ppDataObject)
     {
         if (ppDataObject is null)
@@ -244,6 +269,7 @@ public unsafe partial class Control :
         return HRESULT.E_NOTIMPL;
     }
 
+    /// <inheritdoc cref="IOleObject.DoVerb(int, MSG*, IOleClientSite*, int, HWND, RECT*)"/>
     HRESULT IOleObject.Interface.DoVerb(
         int iVerb,
         MSG* lpmsg,
@@ -281,7 +307,8 @@ public unsafe partial class Control :
         }
     }
 
-    unsafe HRESULT IOleObject.Interface.EnumVerbs(IEnumOLEVERB** ppEnumOleVerb)
+    /// <inheritdoc cref="IOleObject.EnumVerbs(IEnumOLEVERB**)"/>
+    HRESULT IOleObject.Interface.EnumVerbs(IEnumOLEVERB** ppEnumOleVerb)
     {
         if (ppEnumOleVerb is null)
         {
@@ -293,19 +320,22 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleObject.Update()"/>
     HRESULT IOleObject.Interface.Update()
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OleUpdate");
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleObject.IsUpToDate"/>
     HRESULT IOleObject.Interface.IsUpToDate()
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IsUpToDate");
         return HRESULT.S_OK;
     }
 
-    unsafe HRESULT IOleObject.Interface.GetUserClassID(Guid* pClsid)
+    /// <inheritdoc cref="IOleObject.GetUserClassID(Guid*)"/>
+    HRESULT IOleObject.Interface.GetUserClassID(Guid* pClsid)
     {
         if (pClsid is null)
         {
@@ -317,6 +347,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleObject.GetUserType(uint, PWSTR*)"/>
     HRESULT IOleObject.Interface.GetUserType(uint dwFormOfType, PWSTR* pszUserType)
     {
         if (pszUserType is null)
@@ -331,6 +362,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleObject.SetExtent(DVASPECT, SIZE*)"/>
     HRESULT IOleObject.Interface.SetExtent(DVASPECT dwDrawAspect, SIZE* psizel)
     {
         if (psizel is null)
@@ -345,6 +377,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleObject.GetExtent(DVASPECT, SIZE*)"/>
     HRESULT IOleObject.Interface.GetExtent(DVASPECT dwDrawAspect, SIZE* psizel)
     {
         if (psizel is null)
@@ -360,6 +393,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleObject.Advise(IAdviseSink*, uint*)"/>
     HRESULT IOleObject.Interface.Advise(IAdviseSink* pAdvSink, uint* pdwConnection)
     {
         if (pdwConnection is null)
@@ -368,10 +402,10 @@ public unsafe partial class Control :
         }
 
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Advise");
-        *pdwConnection = ActiveXInstance.Advise(pAdvSink);
-        return HRESULT.S_OK;
+        return ActiveXInstance.Advise(pAdvSink, pdwConnection);
     }
 
+    /// <inheritdoc cref="IOleObject.Unadvise(uint)"/>
     HRESULT IOleObject.Interface.Unadvise(uint dwConnection)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Unadvise");
@@ -381,6 +415,7 @@ public unsafe partial class Control :
         return hr;
     }
 
+    /// <inheritdoc cref="IOleObject.EnumAdvise(IEnumSTATDATA**)"/>
     HRESULT IOleObject.Interface.EnumAdvise(IEnumSTATDATA** ppenumAdvise)
     {
         if (ppenumAdvise is null)
@@ -393,6 +428,7 @@ public unsafe partial class Control :
         return HRESULT.E_NOTIMPL;
     }
 
+    /// <inheritdoc cref="IOleObject.GetMiscStatus(DVASPECT, OLEMISC*)"/>
     HRESULT IOleObject.Interface.GetMiscStatus(DVASPECT dwAspect, OLEMISC* pdwStatus)
     {
         if (pdwStatus is null)
@@ -423,15 +459,19 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleObject.SetColorScheme(LOGPALETTE*)"/>
     HRESULT IOleObject.Interface.SetColorScheme(LOGPALETTE* pLogpal)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetColorScheme");
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IOleWindow.GetWindow(HWND*)"/>
     HRESULT IOleWindow.Interface.GetWindow(HWND* phwnd) => ((IOleInPlaceObject.Interface)this).GetWindow(phwnd);
 
-    HRESULT IOleWindow.Interface.ContextSensitiveHelp(BOOL fEnterMode) => ((IOleInPlaceObject.Interface)this).ContextSensitiveHelp(fEnterMode);
+    /// <inheritdoc cref="IOleWindow.ContextSensitiveHelp(BOOL)"/>
+    HRESULT IOleWindow.Interface.ContextSensitiveHelp(BOOL fEnterMode)
+        => ((IOleInPlaceObject.Interface)this).ContextSensitiveHelp(fEnterMode);
 
     unsafe HRESULT IPersist.Interface.GetClassID(Guid* pClassID)
     {
@@ -684,7 +724,7 @@ public unsafe partial class Control :
         return HRESULT.E_NOTIMPL;
     }
 
-    unsafe HRESULT IViewObject.Interface.Freeze(DVASPECT dwDrawAspect, int lindex, void* pvAspect, uint* pdwFreeze)
+    HRESULT IViewObject.Interface.Freeze(DVASPECT dwDrawAspect, int lindex, void* pvAspect, uint* pdwFreeze)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Freezes");
         return HRESULT.E_NOTIMPL;
