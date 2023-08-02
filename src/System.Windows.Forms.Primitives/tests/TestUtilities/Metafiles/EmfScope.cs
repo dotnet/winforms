@@ -55,7 +55,7 @@ internal class EmfScope :
         }
     }
 
-    public static unsafe EmfScope Create() => new EmfScope();
+    public static unsafe EmfScope Create() => new();
 
     public HENHMETAFILE HENHMETAFILE
     {

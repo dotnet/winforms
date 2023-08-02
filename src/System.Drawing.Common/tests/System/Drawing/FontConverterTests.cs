@@ -195,7 +195,7 @@ public class FontConverterTest
         }
     }
 
-    public static TheoryData<string, string, string> ArgumentExceptionFontConverterData() => new TheoryData<string, string, string>()
+    public static TheoryData<string, string, string> ArgumentExceptionFontConverterData() => new()
     {
         { $"Courier New{s_separator} 11 px{s_separator} type=Bold{s_separator} Italic", "units", null },
         { $"Courier New{s_separator} {s_separator} Style=Bold", "value", null },
@@ -209,7 +209,7 @@ public class FontConverterTest
         { $"Arial{s_separator} 10style{s_separator} style=bold", "units", null },
     };
 
-    public static TheoryData<string, string> InvalidEnumArgumentExceptionFontConverterData() => new TheoryData<string, string>()
+    public static TheoryData<string, string> InvalidEnumArgumentExceptionFontConverterData() => new()
     {
         { $"Arial{s_separator} 10{s_separator} style=56", "style" },
         { $"Arial{s_separator} 10{s_separator} style=-1", "style" },

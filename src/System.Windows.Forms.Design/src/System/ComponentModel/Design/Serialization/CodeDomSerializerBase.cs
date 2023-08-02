@@ -20,7 +20,7 @@ namespace System.ComponentModel.Design.Serialization;
 public abstract partial class CodeDomSerializerBase
 {
     private static readonly Attribute[] runTimeProperties = new Attribute[] { DesignOnlyAttribute.No };
-    private static readonly TraceSwitch traceSerialization = new TraceSwitch("DesignerSerialization", "Trace design time serialization");
+    private static readonly TraceSwitch traceSerialization = new("DesignerSerialization", "Trace design time serialization");
 #pragma warning disable CS0649
     private static Stack<string>? traceScope;
 #pragma warning restore CS0649

@@ -34,7 +34,7 @@ public abstract partial class AxHost
         private const string DataSerializationName = "Data";
 
         // Create on save from IPersistStream.
-        internal State(MemoryStream memoryStream, int storageType, AxHost control, PropertyBagStream propertyBag)
+        internal State(MemoryStream memoryStream, int storageType, AxHost control, PropertyBagStream? propertyBag)
         {
             Type = storageType;
             _propertyBag = propertyBag;
@@ -351,10 +351,8 @@ public abstract partial class AxHost
         {
             if (disposing)
             {
-                _lockBytes?.Dispose();
-                _storage?.Dispose();
-                _lockBytes = null;
-                _storage = null;
+                DisposeHelper.NullAndDispose(ref _lockBytes);
+                DisposeHelper.NullAndDispose(ref _storage);
             }
         }
 

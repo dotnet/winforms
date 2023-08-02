@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.InteropServices;
 using static Interop.Mshtml;
 
@@ -26,38 +24,27 @@ public sealed partial class HtmlDocument
     /// </summary>
     internal class HtmlDocumentShim : HtmlShim
     {
-        private readonly IHTMLWindow2 _associatedWindow;
-        private AxHost.ConnectionPointCookie _cookie;
+        private readonly IHTMLWindow2? _associatedWindow;
+        private AxHost.ConnectionPointCookie? _cookie;
         private HtmlDocument _htmlDocument;
 
         internal HtmlDocumentShim(HtmlDocument htmlDocument)
         {
             _htmlDocument = htmlDocument;
-            // snap our associated window so we know when to disconnect.
-            if (_htmlDocument is not null)
+
+            // Snap our associated window so we know when to disconnect.
+            HtmlWindow? window = htmlDocument.Window;
+            if (window is not null)
             {
-                HtmlWindow window = htmlDocument.Window;
-                if (window is not null)
-                {
-                    _associatedWindow = window.NativeHtmlWindow;
-                }
+                _associatedWindow = window.NativeHtmlWindow;
             }
         }
 
-        public override IHTMLWindow2 AssociatedWindow
-        {
-            get { return _associatedWindow; }
-        }
+        public override IHTMLWindow2? AssociatedWindow => _associatedWindow;
 
-        public IHTMLDocument2 NativeHtmlDocument2
-        {
-            get { return _htmlDocument.NativeHtmlDocument2; }
-        }
+        public IHTMLDocument2 NativeHtmlDocument2 => _htmlDocument.NativeHtmlDocument2;
 
-        internal HtmlDocument Document
-        {
-            get { return _htmlDocument; }
-        }
+        internal HtmlDocument Document => _htmlDocument;
 
         ///  Support IHtmlDocument3.AttachHandler
         public override void AttachEventHandler(string eventName, EventHandler eventHandler)
@@ -93,7 +80,7 @@ public sealed partial class HtmlDocument
         ///  Support IHtmlDocument3.DetachHandler
         public override void DetachEventHandler(string eventName, EventHandler eventHandler)
         {
-            HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
+            HtmlToClrEventProxy? proxy = RemoveEventProxy(eventHandler);
             if (proxy is not null)
             {
                 ((IHTMLDocument3)NativeHtmlDocument2).DetachEvent(eventName, proxy);
@@ -122,13 +109,10 @@ public sealed partial class HtmlDocument
                     Marshal.FinalReleaseComObject(_htmlDocument.NativeHtmlDocument2);
                 }
 
-                _htmlDocument = null;
+                _htmlDocument = null!;
             }
         }
 
-        protected override object GetEventSender()
-        {
-            return _htmlDocument;
-        }
+        protected override object GetEventSender() => _htmlDocument;
     }
 }

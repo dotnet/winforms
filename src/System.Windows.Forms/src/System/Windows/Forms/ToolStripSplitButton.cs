@@ -25,9 +25,9 @@ public partial class ToolStripSplitButton : ToolStripDropDownItem
 
     private const int DefaultDropDownWidth = 11;
 
-    private static readonly object s_eventDefaultItemChanged = new object();
-    private static readonly object s_eventButtonClick = new object();
-    private static readonly object s_eventButtonDoubleClick = new object();
+    private static readonly object s_eventDefaultItemChanged = new();
+    private static readonly object s_eventButtonClick = new();
+    private static readonly object s_eventButtonDoubleClick = new();
 
     private static bool s_isScalingInitialized;
     private static int s_scaledDropDownButtonWidth = DefaultDropDownWidth;

@@ -65,5 +65,5 @@ public static partial class TestAccessors
     }
 
     internal static UiaTextRangeTestAccessor TestAccessor(this UiaTextRange textRange)
-        => new UiaTextRangeTestAccessor(textRange);
+        => new(textRange);
 }

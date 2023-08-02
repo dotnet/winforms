@@ -794,10 +794,8 @@ public class PrinterSettings : ICloneable
 
     private int GetDeviceCaps(Gdi32.DeviceCapability capability)
     {
-        using (DeviceContext dc = CreateInformationContext(DefaultPageSettings))
-        {
-            return Gdi32.GetDeviceCaps(new HandleRef(dc, dc.Hdc), capability);
-        }
+        using DeviceContext dc = CreateInformationContext(DefaultPageSettings);
+        return Gdi32.GetDeviceCaps(new HandleRef(dc, dc.Hdc), capability);
     }
 
     /// <summary>

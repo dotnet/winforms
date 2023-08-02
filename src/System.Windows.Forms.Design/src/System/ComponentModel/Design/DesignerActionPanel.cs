@@ -17,8 +17,8 @@ namespace System.ComponentModel.Design;
 
 internal sealed partial class DesignerActionPanel : ContainerControl
 {
-    private static readonly object s_eventFormActivated = new object();
-    private static readonly object s_eventFormDeactivate = new object();
+    private static readonly object s_eventFormActivated = new();
+    private static readonly object s_eventFormDeactivate = new();
 
     private const int EditInputWidth = 150; // The static size of edit controls
     private const int ListBoxMaximumHeight = 200; // The maximum height of a dropdown listbox

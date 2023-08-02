@@ -7,7 +7,7 @@ namespace System.Drawing;
 
 public static class SystemBrushes
 {
-    private static readonly object s_systemBrushesKey = new object();
+    private static readonly object s_systemBrushesKey = new();
 
     public static Brush ActiveBorder => FromSystemColor(SystemColors.ActiveBorder);
     public static Brush ActiveCaption => FromSystemColor(SystemColors.ActiveCaption);

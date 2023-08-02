@@ -65,7 +65,7 @@ public static partial class PlatformDetection
     // running in AppContainer when running on .NetNative.
     public static bool IsNotNetNativeRunningAsConsoleApp => !(IsNetNative && !IsInAppContainer);
 
-    private static readonly Lazy<bool> m_isWindowsSubsystemForLinux = new Lazy<bool>(GetIsWindowsSubsystemForLinux);
+    private static readonly Lazy<bool> m_isWindowsSubsystemForLinux = new(GetIsWindowsSubsystemForLinux);
 
     public static bool IsWindowsSubsystemForLinux => m_isWindowsSubsystemForLinux.Value;
     public static bool IsNotWindowsSubsystemForLinux => !IsWindowsSubsystemForLinux;
@@ -91,7 +91,7 @@ public static partial class PlatformDetection
         return false;
     }
 
-    private static readonly Lazy<bool> s_largeArrayIsNotSupported = new Lazy<bool>(IsLargeArrayNotSupported);
+    private static readonly Lazy<bool> s_largeArrayIsNotSupported = new(IsLargeArrayNotSupported);
 
     [MethodImpl(MethodImplOptions.NoOptimization)]
     private static bool IsLargeArrayNotSupported()

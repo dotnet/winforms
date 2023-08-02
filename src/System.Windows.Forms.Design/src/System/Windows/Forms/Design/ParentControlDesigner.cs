@@ -526,7 +526,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         if (host is not null && newChild is not null && !Control.Contains(newChild)
             && (host.GetDesigner(newChild) as ControlDesigner) is not null && !(newChild is Form && ((Form)newChild).TopLevel))
         {
-            Rectangle bounds = default(Rectangle);
+            Rectangle bounds = default;
 
             // If we were provided with a location, convert it to parent control coordinates.
             // Otherwise, get the control's size and put the location in the middle of it
@@ -2112,35 +2112,31 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             //graphics.SetClip(frameRect);
 
             //draw the new border
-            using (Region newRegion = new Region(frameRect))
+            using Region newRegion = new Region(frameRect);
+            int frameWidth = FrameWidth(_mouseDragFrame);
+            newRegion.Exclude(Rectangle.Inflate(frameRect, -frameWidth, -frameWidth));
+
+            //erase the right part of the old frame
+            if (!oldFrameRect.IsEmpty)
             {
-                int frameWidth = FrameWidth(_mouseDragFrame);
-                newRegion.Exclude(Rectangle.Inflate(frameRect, -frameWidth, -frameWidth));
+                oldFrameRect.X -= _adornerWindowToScreenOffset.X;
+                oldFrameRect.Y -= _adornerWindowToScreenOffset.Y;
 
-                //erase the right part of the old frame
-                if (!oldFrameRect.IsEmpty)
-                {
-                    oldFrameRect.X -= _adornerWindowToScreenOffset.X;
-                    oldFrameRect.Y -= _adornerWindowToScreenOffset.Y;
+                //Let's not try and be smart about invalidating just the part of the old frame
+                //that's not part of the new frame. When I did that (using the commented out
+                //lines below), you could get serious screen artifacts when dragging fast. I think
+                //this might be because of some bad region forming (bad region, bad), or some missing
+                //updates.
 
-                    //Let's not try and be smart about invalidating just the part of the old frame
-                    //that's not part of the new frame. When I did that (using the commented out
-                    //lines below), you could get serious screen artifacts when dragging fast. I think
-                    //this might be because of some bad region forming (bad region, bad), or some missing
-                    //updates.
-
-                    // Since we invalidate and then immediately redraw, the flicker should be minimal.
-                    using (Region oldRegion = new Region(oldFrameRect))
-                    {
-                        oldRegion.Exclude(Rectangle.Inflate(oldFrameRect, -frameWidth, -frameWidth));
-                        //oldRegion.Union(newRegion);
-                        //oldRegion.Exclude(newRegion);
-                        BehaviorService.Invalidate(oldRegion);
-                    }
-                }
-
-                DesignerUtils.DrawFrame(_graphics, newRegion, _mouseDragFrame, Control.BackColor);
+                // Since we invalidate and then immediately redraw, the flicker should be minimal.
+                using Region oldRegion = new Region(oldFrameRect);
+                oldRegion.Exclude(Rectangle.Inflate(oldFrameRect, -frameWidth, -frameWidth));
+                //oldRegion.Union(newRegion);
+                //oldRegion.Exclude(newRegion);
+                BehaviorService.Invalidate(oldRegion);
             }
+
+            DesignerUtils.DrawFrame(_graphics, newRegion, _mouseDragFrame, Control.BackColor);
 
             //graphics.ResetClip();
         }
@@ -2268,89 +2264,87 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     /// </summary>
     private void ReParentControls(Control newParent, ArrayList controls, string transactionName, IDesignerHost host)
     {
-        using (DesignerTransaction dt = host.CreateTransaction(transactionName))
+        using DesignerTransaction dt = host.CreateTransaction(transactionName);
+        var changeService = GetService<IComponentChangeService>();
+
+        PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(newParent)["Controls"];
+        PropertyDescriptor locationProp = TypeDescriptor.GetProperties(newParent)["Location"];
+
+        //get the location of our parent - so we can correctly offset the new lasso'd controls
+        //once they are re-parented
+        Point parentLoc = Point.Empty;
+        if (locationProp is not null)
         {
-            var changeService = GetService<IComponentChangeService>();
-
-            PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(newParent)["Controls"];
-            PropertyDescriptor locationProp = TypeDescriptor.GetProperties(newParent)["Location"];
-
-            //get the location of our parent - so we can correctly offset the new lasso'd controls
-            //once they are re-parented
-            Point parentLoc = Point.Empty;
-            if (locationProp is not null)
-            {
-                parentLoc = (Point)locationProp.GetValue(newParent);
-            }
-
-            changeService?.OnComponentChanging(newParent, controlsProp);
-
-            //enumerate the lasso'd controls relocate and re-parent...
-            //
-            foreach (object comp in controls)
-            {
-                Control control = comp as Control;
-                Control oldParent = control.Parent;
-                Point controlLoc = Point.Empty;
-
-                //do not want to reparent any control that is inherited readonly
-                InheritanceAttribute inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(control)[typeof(InheritanceAttribute)];
-                if (inheritanceAttribute is not null && inheritanceAttribute == InheritanceAttribute.InheritedReadOnly)
-                {
-                    continue;
-                }
-
-                //get the current location of the control
-                PropertyDescriptor locProp = TypeDescriptor.GetProperties(control)["Location"];
-                if (locProp is not null)
-                {
-                    controlLoc = (Point)locProp.GetValue(control);
-                }
-
-                //fire comp changing on parent and control
-                if (oldParent is not null)
-                {
-                    changeService?.OnComponentChanging(oldParent, controlsProp);
-
-                    //remove control from the old parent
-                    oldParent.Controls.Remove(control);
-                }
-
-                //finally add & relocate the control with the new parent
-                newParent.Controls.Add(control);
-
-                Point newLoc = Point.Empty;
-
-                //this condition will determine which way we need to 'offset' our control location
-                //based on whether we are moving controls into a child or bringing them out to
-                //a parent
-                if (oldParent is not null)
-                {
-                    if (oldParent.Controls.Contains(newParent))
-                    {
-                        newLoc = new Point(controlLoc.X - parentLoc.X, controlLoc.Y - parentLoc.Y);
-                    }
-                    else
-                    {
-                        Point oldParentLoc = (Point)locProp.GetValue(oldParent);
-                        newLoc = new Point(controlLoc.X + oldParentLoc.X, controlLoc.Y + oldParentLoc.Y);
-                    }
-                }
-
-                locProp.SetValue(control, newLoc);
-
-                //fire our comp changed events
-                if (changeService is not null && oldParent is not null)
-                {
-                    changeService.OnComponentChanged(oldParent, controlsProp);
-                }
-            }
-
-            changeService?.OnComponentChanged(newParent, controlsProp);
-
-            //commit the transaction
-            dt.Commit();
+            parentLoc = (Point)locationProp.GetValue(newParent);
         }
+
+        changeService?.OnComponentChanging(newParent, controlsProp);
+
+        //enumerate the lasso'd controls relocate and re-parent...
+        //
+        foreach (object comp in controls)
+        {
+            Control control = comp as Control;
+            Control oldParent = control.Parent;
+            Point controlLoc = Point.Empty;
+
+            //do not want to reparent any control that is inherited readonly
+            InheritanceAttribute inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(control)[typeof(InheritanceAttribute)];
+            if (inheritanceAttribute is not null && inheritanceAttribute == InheritanceAttribute.InheritedReadOnly)
+            {
+                continue;
+            }
+
+            //get the current location of the control
+            PropertyDescriptor locProp = TypeDescriptor.GetProperties(control)["Location"];
+            if (locProp is not null)
+            {
+                controlLoc = (Point)locProp.GetValue(control);
+            }
+
+            //fire comp changing on parent and control
+            if (oldParent is not null)
+            {
+                changeService?.OnComponentChanging(oldParent, controlsProp);
+
+                //remove control from the old parent
+                oldParent.Controls.Remove(control);
+            }
+
+            //finally add & relocate the control with the new parent
+            newParent.Controls.Add(control);
+
+            Point newLoc = Point.Empty;
+
+            //this condition will determine which way we need to 'offset' our control location
+            //based on whether we are moving controls into a child or bringing them out to
+            //a parent
+            if (oldParent is not null)
+            {
+                if (oldParent.Controls.Contains(newParent))
+                {
+                    newLoc = new Point(controlLoc.X - parentLoc.X, controlLoc.Y - parentLoc.Y);
+                }
+                else
+                {
+                    Point oldParentLoc = (Point)locProp.GetValue(oldParent);
+                    newLoc = new Point(controlLoc.X + oldParentLoc.X, controlLoc.Y + oldParentLoc.Y);
+                }
+            }
+
+            locProp.SetValue(control, newLoc);
+
+            //fire our comp changed events
+            if (changeService is not null && oldParent is not null)
+            {
+                changeService.OnComponentChanged(oldParent, controlsProp);
+            }
+        }
+
+        changeService?.OnComponentChanged(newParent, controlsProp);
+
+        //commit the transaction
+        dt.Commit();
     }
 
     /// <summary>

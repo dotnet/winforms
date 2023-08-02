@@ -4,8 +4,8 @@ namespace DesignSurfaceExt;
 
 public class UndoEngineExt : UndoEngine
 {
-    private Stack<UndoEngine.UndoUnit> undoStack = new Stack<UndoEngine.UndoUnit>();
-    private Stack<UndoEngine.UndoUnit> redoStack = new Stack<UndoEngine.UndoUnit>();
+    private Stack<UndoEngine.UndoUnit> undoStack = new();
+    private Stack<UndoEngine.UndoUnit> redoStack = new();
 
     public UndoEngineExt(IServiceProvider provider) : base(provider) { }
 

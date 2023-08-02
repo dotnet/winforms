@@ -30,8 +30,8 @@ internal static partial class PInvoke
 
         public static bool operator !=(LCID a, LCID b) => a.RawValue != b.RawValue;
 
-        public static implicit operator LCID(uint value) => new LCID(value);
+        public static implicit operator LCID(uint value) => new(value);
 
-        public static readonly LCID USER_DEFAULT = new LCID(0x0400);
+        public static readonly LCID USER_DEFAULT = new(0x0400);
     }
 }

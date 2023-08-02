@@ -48,7 +48,7 @@ public sealed partial class BehaviorService : IDisposable
     private bool _queriedSnapLines;                                 // only query for this once since we require the user restart design sessions when this changes
     private readonly HashSet<Glyph> _dragEnterReplies;              // we keep track of whether glyph has already responded to a DragEnter this D&D.
     private static readonly TraceSwitch s_dragDropSwitch
-        = new TraceSwitch("BSDRAGDROP", "Behavior service drag & drop messages");
+        = new("BSDRAGDROP", "Behavior service drag & drop messages");
 
     //test hooks for SnapLines
     private static MessageId WM_GETALLSNAPLINES;

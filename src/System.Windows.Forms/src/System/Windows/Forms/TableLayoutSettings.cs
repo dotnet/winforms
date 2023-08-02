@@ -518,7 +518,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
             {
                 if (element is Control c)
                 {
-                    ControlInformation controlInfo = default(ControlInformation);
+                    ControlInformation controlInfo = default;
 
                     // We need to go through the PropertyDescriptor for the Name property
                     // since it is shadowed.

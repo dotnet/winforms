@@ -13,7 +13,7 @@ namespace System.Windows.Forms;
 ///  Represents a simple binding of a value in a list and the property of a control.
 /// </summary>
 [TypeConverter(typeof(ListBindingConverter))]
-public class Binding
+public partial class Binding
 {
     private BindingManagerBase _bindingManagerBase;
 
@@ -608,11 +608,11 @@ public class Binding
         if (_formattingEnabled)
         {
             // Fire the Parse event so that user code gets a chance to supply the parsed value for us
-            var e = new ConvertEventArgs(value, type);
+            ConvertEventArgs e = new(value, type);
             OnParse(e);
 
             object newValue = e.Value;
-            if (!object.Equals(value, newValue))
+            if (!Equals(value, newValue))
             {
                 // If event handler replaced formatted value with parsed value, use that
                 return newValue;
@@ -626,27 +626,36 @@ public class Binding
                     fieldInfoConverter = _bindToObject.FieldInfo.Converter;
                 }
 
-                return Formatter.ParseObject(value, type, (value is null ? _propInfo.PropertyType : value.GetType()), fieldInfoConverter, _propInfoConverter, _formatInfo, _nullValue, GetDataSourceNullValue(type));
+                return Formatter.ParseObject(
+                    value,
+                    type,
+                    (value is null ? _propInfo.PropertyType : value.GetType()),
+                    fieldInfoConverter,
+                    _propInfoConverter,
+                    _formatInfo,
+                    _nullValue,
+                    GetDataSourceNullValue(type));
             }
         }
         else
         {
-            var e = new ConvertEventArgs(value, type);
-            // first try: use the OnParse event
+            ConvertEventArgs e = new(value, type);
+
+            // First try: use the OnParse event
             OnParse(e);
             if (e.Value is not null && (e.Value.GetType().IsSubclassOf(type) || e.Value.GetType() == type || e.Value is DBNull))
             {
                 return e.Value;
             }
 
-            // second try: use the TypeConverter
+            // Second try: use the TypeConverter
             TypeConverter typeConverter = TypeDescriptor.GetConverter(value is not null ? value.GetType() : typeof(object));
             if (typeConverter is not null && typeConverter.CanConvertTo(type))
             {
                 return typeConverter.ConvertTo(value, type);
             }
 
-            // last try: use Convert.ToType
+            // Last try: use Convert.ToType
             if (value is IConvertible)
             {
                 object ret = Convert.ChangeType(value, type, CultureInfo.CurrentCulture);
@@ -674,7 +683,7 @@ public class Binding
         if (_formattingEnabled)
         {
             // Fire the Format event so that user code gets a chance to supply the formatted value for us
-            var e = new ConvertEventArgs(value, type);
+            ConvertEventArgs e = new(value, type);
             OnFormat(e);
 
             if (e.Value != value)
@@ -697,7 +706,7 @@ public class Binding
         else
         {
             // first try: use the Format event
-            var e = new ConvertEventArgs(value, type);
+            ConvertEventArgs e = new(value, type);
             OnFormat(e);
             object ret = e.Value;
 
@@ -1079,243 +1088,6 @@ public class Binding
                 {
                     PushData();
                 }
-            }
-        }
-    }
-
-    private class BindToObject
-    {
-        private BindingManagerBase _bindingManager;
-        private readonly Binding _owner;
-        private bool _dataSourceInitialized;
-        private bool _waitingOnDataSource;
-
-        private void PropValueChanged(object sender, EventArgs e)
-        {
-            _bindingManager?.OnCurrentChanged(EventArgs.Empty);
-        }
-
-        private bool IsDataSourceInitialized
-        {
-            get
-            {
-                Debug.Assert(_owner.DataSource is not null, "how can we determine if DataSource is initialized or not if we have no data source?");
-                if (_dataSourceInitialized)
-                {
-                    return true;
-                }
-
-                if (!(_owner.DataSource is ISupportInitializeNotification ds) || ds.IsInitialized)
-                {
-                    _dataSourceInitialized = true;
-                    return true;
-                }
-
-                // We have an ISupportInitializeNotification which was not initialized yet.
-                // We already hooked up the Initialized event and the data source is not initialized yet.
-                if (_waitingOnDataSource)
-                {
-                    return false;
-                }
-
-                // Hook up the Initialized event.
-                ds.Initialized += new EventHandler(DataSource_Initialized);
-                _waitingOnDataSource = true;
-                return false;
-            }
-        }
-
-        internal BindToObject(Binding owner)
-        {
-            Debug.Assert(owner is not null);
-            _owner = owner;
-            CheckBinding();
-        }
-
-        private void DataSource_Initialized(object sender, EventArgs e)
-        {
-            Debug.Assert(sender == _owner.DataSource, "data source should not change");
-            Debug.Assert(_owner.DataSource is ISupportInitializeNotification, "data source should not change on the BindToObject");
-            Debug.Assert(_waitingOnDataSource);
-
-            // Unhook the Initialized event.
-            if (_owner.DataSource is ISupportInitializeNotification ds)
-            {
-                ds.Initialized -= new EventHandler(DataSource_Initialized);
-            }
-
-            // The wait is over: DataSource is initialized.
-            _waitingOnDataSource = false;
-            _dataSourceInitialized = true;
-
-            // Rebind.
-            CheckBinding();
-        }
-
-        internal void SetBindingManagerBase(BindingManagerBase lManager)
-        {
-            if (_bindingManager == lManager)
-            {
-                return;
-            }
-
-            // remove notification from the backEnd
-            if (_bindingManager is not null && FieldInfo is not null && _bindingManager.IsBinding && !(_bindingManager is CurrencyManager))
-            {
-                FieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
-                FieldInfo = null;
-            }
-
-            _bindingManager = lManager;
-            CheckBinding();
-        }
-
-        internal string DataErrorText { get; private set; } = string.Empty;
-
-        /// <summary>
-        ///  Returns any data error info on the data source for the bound data field
-        ///  in the current row
-        /// </summary>
-        private string GetErrorText(object value)
-        {
-            string text = string.Empty;
-
-            if (value is IDataErrorInfo errorInfo)
-            {
-                // Get the row error if there is no DataMember
-                if (FieldInfo is null)
-                {
-                    text = errorInfo.Error;
-                }
-
-                // Get the column error if there is a DataMember.
-                // The DataTable uses its own Locale to lookup column names <sigh>.
-                // So passing the DataMember from the BindingField could cause problems.
-                // Pass the name from the PropertyDescriptor that the DataTable gave us.
-                // (If there is no fieldInfo, data binding would have failed already )
-                else
-                {
-                    text = errorInfo[FieldInfo.Name];
-                }
-            }
-
-            return text ?? string.Empty;
-        }
-
-        internal object GetValue()
-        {
-            object obj = _bindingManager.Current;
-
-            // Update IDataErrorInfo text: it's ok to get this now because we're going to need
-            // this as part of the BindingCompleteEventArgs anyway.
-            DataErrorText = GetErrorText(obj);
-
-            if (FieldInfo is not null)
-            {
-                obj = FieldInfo.GetValue(obj);
-            }
-
-            return obj;
-        }
-
-        internal Type BindToType
-        {
-            get
-            {
-                if (_owner.BindingMemberInfo.BindingField.Length == 0)
-                {
-                    // if we are bound to a list w/o any properties, then
-                    // take the type from the BindingManager
-                    Type type = _bindingManager.BindType;
-                    if (typeof(Array).IsAssignableFrom(type))
-                    {
-                        type = type.GetElementType();
-                    }
-
-                    return type;
-                }
-
-                return FieldInfo?.PropertyType;
-            }
-        }
-
-        internal void SetValue(object value)
-        {
-            object obj = null;
-
-            if (FieldInfo is not null)
-            {
-                obj = _bindingManager.Current;
-                if (obj is IEditableObject editableObject)
-                {
-                    editableObject.BeginEdit();
-                }
-
-                if (!FieldInfo.IsReadOnly)
-                {
-                    FieldInfo.SetValue(obj, value);
-                }
-            }
-            else
-            {
-                if (_bindingManager is CurrencyManager cm)
-                {
-                    cm[cm.Position] = value;
-                    obj = value;
-                }
-            }
-
-            // Update IDataErrorInfo text.
-            DataErrorText = GetErrorText(obj);
-        }
-
-        internal PropertyDescriptor FieldInfo { get; private set; }
-
-        internal void CheckBinding()
-        {
-            // At design time, don't check anything.
-            if (_owner.BindableComponent is not null && _owner.ControlAtDesignTime())
-            {
-                return;
-            }
-
-            // Remove propertyChangedNotification when this binding is deleted
-            if (_bindingManager is not null &&
-                FieldInfo is not null &&
-                _bindingManager.IsBinding &&
-                !(_bindingManager is CurrencyManager))
-            {
-                FieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
-            }
-
-            if (_bindingManager is not null &&
-                _owner.BindableComponent is not null &&
-                _owner.ComponentCreated &&
-                IsDataSourceInitialized)
-            {
-                string dataField = _owner.BindingMemberInfo.BindingField;
-
-                FieldInfo = _bindingManager.GetItemProperties().Find(dataField, true);
-                if (_bindingManager.DataSource is not null && FieldInfo is null && dataField.Length > 0)
-                {
-                    throw new ArgumentException(string.Format(SR.ListBindingBindField, dataField), "dataMember");
-                }
-
-                // Do not add propertyChange notification if the fieldInfo is null
-                //
-                // We add an event handler to the dataSource in the BindingManagerBase because
-                // if the binding is of the form (Control, ControlProperty, DataSource, Property1.Property2.Property3)
-                // then we want to get notification from Current.Property1.Property2 and not from DataSource
-                // when we get the backEnd notification we push the new value into the Control's property
-                if (FieldInfo is not null && _bindingManager.IsBinding &&
-                    !(_bindingManager is CurrencyManager))
-                {
-                    FieldInfo.AddValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
-                }
-            }
-            else
-            {
-                FieldInfo = null;
             }
         }
     }

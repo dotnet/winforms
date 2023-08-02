@@ -14,7 +14,7 @@ namespace System.Drawing.Tests
 
     public class ToolboxBitmapAttributeTests
     {
-        private static Size DefaultSize = new Size(16, 16);
+        private static Size DefaultSize = new(16, 16);
         private void AssertDefaultSize(Image image)
         {
             Assert.Equal(DefaultSize, image.Size);

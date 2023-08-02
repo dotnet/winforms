@@ -10,7 +10,7 @@ namespace System.Windows.Forms;
 public partial class ToolStripOverflow : ToolStripDropDown, IArrangedElement
 {
 #if DEBUG
-    internal static readonly TraceSwitch PopupLayoutDebug = new TraceSwitch("PopupLayoutDebug", "Debug ToolStripPopup Layout code");
+    internal static readonly TraceSwitch PopupLayoutDebug = new("PopupLayoutDebug", "Debug ToolStripPopup Layout code");
 #else
     internal static readonly TraceSwitch? PopupLayoutDebug;
 #endif

@@ -46,9 +46,10 @@ internal static class DataGridViewUtilities
         }
     }
 
-    internal static TextFormatFlags ComputeTextFormatFlagsForCellStyleAlignment(bool rightToLeft,
-                                                                                DataGridViewContentAlignment alignment,
-                                                                                DataGridViewTriState wrapMode)
+    internal static TextFormatFlags ComputeTextFormatFlagsForCellStyleAlignment(
+        bool rightToLeft,
+        DataGridViewContentAlignment alignment,
+        DataGridViewTriState wrapMode)
     {
         TextFormatFlags tff;
         switch (alignment)
@@ -159,15 +160,16 @@ internal static class DataGridViewUtilities
         return tff;
     }
 
-    internal static Size GetPreferredRowHeaderSize(Graphics graphics,
-                                                   string val,
-                                                   DataGridViewCellStyle cellStyle,
-                                                   int borderAndPaddingWidths,
-                                                   int borderAndPaddingHeights,
-                                                   bool showRowErrors,
-                                                   bool showGlyph,
-                                                   Size constraintSize,
-                                                   TextFormatFlags flags)
+    internal static Size GetPreferredRowHeaderSize(
+        Graphics graphics,
+        string? val,
+        DataGridViewCellStyle cellStyle,
+        int borderAndPaddingWidths,
+        int borderAndPaddingHeights,
+        bool showRowErrors,
+        bool showGlyph,
+        Size constraintSize,
+        TextFormatFlags flags)
     {
         Size preferredSize;
         DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
@@ -312,19 +314,21 @@ internal static class DataGridViewUtilities
         }
     }
 
-    internal static Rectangle GetTextBounds(Rectangle cellBounds,
-                                            string text,
-                                            TextFormatFlags flags,
-                                            DataGridViewCellStyle cellStyle)
+    internal static Rectangle GetTextBounds(
+        Rectangle cellBounds,
+        string text,
+        TextFormatFlags flags,
+        DataGridViewCellStyle cellStyle)
     {
         return GetTextBounds(cellBounds, text, flags, cellStyle, cellStyle.Font);
     }
 
-    internal static Rectangle GetTextBounds(Rectangle cellBounds,
-                                            string text,
-                                            TextFormatFlags flags,
-                                            DataGridViewCellStyle cellStyle,
-                                            Font font)
+    internal static Rectangle GetTextBounds(
+        Rectangle cellBounds,
+        string text,
+        TextFormatFlags flags,
+        DataGridViewCellStyle cellStyle,
+        Font font)
     {
         if ((flags & TextFormatFlags.SingleLine) != 0)
         {
@@ -355,10 +359,11 @@ internal static class DataGridViewUtilities
         return new Rectangle(GetTextLocation(cellBounds, sizeConstraint, flags, cellStyle), sizeConstraint);
     }
 
-    internal static Point GetTextLocation(Rectangle cellBounds,
-                                          Size sizeText,
-                                          TextFormatFlags flags,
-                                          DataGridViewCellStyle cellStyle)
+    internal static Point GetTextLocation(
+        Rectangle cellBounds,
+        Size sizeText,
+        TextFormatFlags flags,
+        DataGridViewCellStyle cellStyle)
     {
         Point ptTextLocation = new Point(0, 0);
 

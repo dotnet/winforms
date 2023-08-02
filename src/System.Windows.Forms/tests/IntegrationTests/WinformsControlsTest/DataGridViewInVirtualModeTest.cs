@@ -10,7 +10,7 @@ public partial class DataGridViewInVirtualModeTest : Form
     // The example was taken from: https://docs.microsoft.com/dotnet/desktop/winforms/controls/implementing-virtual-mode-wf-datagridview-control
 
     // Declare a List to serve as the test data source
-    private readonly List<TestCustomer> _customers = new List<TestCustomer>();
+    private readonly List<TestCustomer> _customers = new();
 
     // Declare a TestCustomer object to store data for a row being edited
     private TestCustomer _customerInEdit;

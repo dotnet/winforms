@@ -39,7 +39,7 @@ internal abstract class SelectionUIHandler
     /// </summary>
     public virtual bool BeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
     {
-        dragOffset = default(Rectangle);
+        dragOffset = default;
         originalCoords = null;
         this.rules = rules;
 
@@ -93,7 +93,7 @@ internal abstract class SelectionUIHandler
     {
         Debug.Assert(bounds is not null && controls is not null && bounds.Length == controls.Length, "bounds->controls mismatch");
 
-        Rectangle b = default(Rectangle);
+        Rectangle b = default;
 
         // Whip through each of the controls.
         //
@@ -209,7 +209,7 @@ internal abstract class SelectionUIHandler
         Control[] controls = dragControls;
         Rectangle offset = dragOffset;
         BoundsInfo[] bounds = originalCoords;
-        Point adjustedLoc = default(Point);
+        Point adjustedLoc = default;
 
         // Erase the clipping and other state if this is the final move.
         //

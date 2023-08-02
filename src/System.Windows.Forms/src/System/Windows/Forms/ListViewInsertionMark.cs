@@ -55,9 +55,9 @@ public sealed class ListViewInsertionMark
     {
         get
         {
-            var rect = default(RECT);
-            PInvoke.SendMessage(_listView, PInvoke.LVM_GETINSERTMARKRECT, (WPARAM)0, ref rect);
-            return rect;
+            RECT bounds = default;
+            PInvoke.SendMessage(_listView, PInvoke.LVM_GETINSERTMARKRECT, (WPARAM)0, ref bounds);
+            return bounds;
         }
     }
 
@@ -115,7 +115,7 @@ public sealed class ListViewInsertionMark
     /// </summary>
     public unsafe int NearestIndex(Point pt)
     {
-        var lvInsertMark = new LVINSERTMARK
+        LVINSERTMARK lvInsertMark = new()
         {
             cbSize = (uint)sizeof(LVINSERTMARK)
         };
@@ -128,7 +128,7 @@ public sealed class ListViewInsertionMark
     internal unsafe void UpdateListView()
     {
         Debug.Assert(_listView.IsHandleCreated, "ApplySavedState Precondition: List-view handle must be created");
-        var lvInsertMark = new LVINSERTMARK
+        LVINSERTMARK lvInsertMark = new()
         {
             cbSize = (uint)sizeof(LVINSERTMARK),
             dwFlags = _appearsAfterItem ? LVIM.AFTER : LVIM.BEFORE,

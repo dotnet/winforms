@@ -336,19 +336,15 @@ internal class ToolboxItemSnapLineBehavior : Behavior
             if (!lastRectangle.IsEmpty)
             {
                 //build up the invalid region
-                using (Region invalidRegion = new Region(lastRectangle))
-                {
-                    invalidRegion.Exclude(newRectangle);
-                    behaviorService.Invalidate(invalidRegion);
-                }
+                using Region invalidRegion = new Region(lastRectangle);
+                invalidRegion.Exclude(newRectangle);
+                behaviorService.Invalidate(invalidRegion);
             }
 
             if (targetAllowsDragBox)
             {
-                using (Graphics graphics = behaviorService.AdornerWindowGraphics)
-                {
-                    graphics.DrawImage(DesignerUtils.BoxImage, newRectangle.Location);
-                }
+                using Graphics graphics = behaviorService.AdornerWindowGraphics;
+                graphics.DrawImage(DesignerUtils.BoxImage, newRectangle.Location);
             }
 
             //offset the mouse loc to screen coords for calculations on drops

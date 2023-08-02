@@ -397,15 +397,14 @@ internal sealed class SelectionManager : IDisposable
             }
         }
 
-        using (Graphics g = _behaviorService.AdornerWindowGraphics)
+        using Graphics g = _behaviorService.AdornerWindowGraphics;
+
+        // If all that changed was the primary selection, then the refresh region was empty, but we do need to update the 2 controls.
+        if (toRefresh.IsEmpty(g) && primarySelection is not null && !primarySelection.Equals(_prevPrimarySelection))
         {
-            // If all that changed was the primary selection, then the refresh region was empty, but we do need to update the 2 controls.
-            if (toRefresh.IsEmpty(g) && primarySelection is not null && !primarySelection.Equals(_prevPrimarySelection))
+            for (int i = 0; i < _curSelectionBounds.Length; i++)
             {
-                for (int i = 0; i < _curSelectionBounds.Length; i++)
-                {
-                    toRefresh.Union(_curSelectionBounds[i]);
-                }
+                toRefresh.Union(_curSelectionBounds[i]);
             }
         }
 
@@ -445,12 +444,10 @@ internal sealed class SelectionManager : IDisposable
             if (_prevSelectionBounds is not null)
             {
                 Region toUpdate = DetermineRegionToRefresh(primarySelection);
-                using (Graphics g = _behaviorService.AdornerWindowGraphics)
+                using Graphics g = _behaviorService.AdornerWindowGraphics;
+                if (!toUpdate.IsEmpty(g))
                 {
-                    if (!toUpdate.IsEmpty(g))
-                    {
-                        _selectionAdorner.Invalidate(toUpdate);
-                    }
+                    _selectionAdorner.Invalidate(toUpdate);
                 }
             }
             else

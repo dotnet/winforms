@@ -18,7 +18,7 @@ public struct Padding : IEquatable<Padding>
     private int _right; // Do NOT rename (binary serialization).
     private int _bottom; // Do NOT rename (binary serialization).
 
-    public static readonly Padding Empty = new Padding(0);
+    public static readonly Padding Empty = new(0);
 
     public Padding(int all)
     {
@@ -124,7 +124,7 @@ public struct Padding : IEquatable<Padding>
     public int Vertical => Top + Bottom;
 
     [Browsable(false)]
-    public Size Size => new Size(Horizontal, Vertical);
+    public Size Size => new(Horizontal, Vertical);
 
     public static Padding Add(Padding p1, Padding p2) => p1 + p2;
 

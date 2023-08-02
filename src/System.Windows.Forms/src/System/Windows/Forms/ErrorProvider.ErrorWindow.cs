@@ -22,7 +22,7 @@ public partial class ErrorProvider
     {
         private static readonly int s_accessibilityProperty = PropertyStore.CreateKey();
 
-        private readonly List<ControlItem> _items = new List<ControlItem>();
+        private readonly List<ControlItem> _items = new();
         private readonly Control _parent;
         private readonly ErrorProvider _provider;
         private Rectangle _windowBounds;
@@ -71,7 +71,7 @@ public partial class ErrorProvider
 
             if (_tipWindow is not null)
             {
-                var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, TOOLTIP_FLAGS.TTF_SUBCLASS, item.Error);
+                ComCtl32.ToolInfoWrapper<ErrorWindow> toolInfo = new(this, item.Id, TOOLTIP_FLAGS.TTF_SUBCLASS, item.Error);
                 toolInfo.SendMessage(_tipWindow, PInvoke.TTM_ADDTOOLW);
             }
 
@@ -287,7 +287,7 @@ public partial class ErrorProvider
 
             if (_tipWindow is not null)
             {
-                var info = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id);
+                ComCtl32.ToolInfoWrapper<ErrorWindow> info = new(this, item.Id);
                 info.SendMessage(_tipWindow, PInvoke.TTM_DELTOOLW);
             }
 
@@ -338,17 +338,10 @@ public partial class ErrorProvider
             {
                 ControlItem item = _items[i];
                 Rectangle iconBounds = item.GetIconBounds(size);
-                if (_windowBounds.IsEmpty)
-                {
-                    _windowBounds = iconBounds;
-                }
-                else
-                {
-                    _windowBounds = Rectangle.Union(_windowBounds, iconBounds);
-                }
+                _windowBounds = _windowBounds.IsEmpty ? iconBounds : Rectangle.Union(_windowBounds, iconBounds);
             }
 
-            using var windowRegion = new Region(new Rectangle(0, 0, 0, 0));
+            using Region windowRegion = new(new Rectangle(0, 0, 0, 0));
 
             for (int i = 0; i < _items.Count; i++)
             {
@@ -389,7 +382,7 @@ public partial class ErrorProvider
                         flags |= TOOLTIP_FLAGS.TTF_RTLREADING;
                     }
 
-                    var toolInfo = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id, flags, item.Error, iconBounds);
+                    ComCtl32.ToolInfoWrapper<ErrorWindow> toolInfo = new(this, item.Id, flags, item.Error, iconBounds);
                     toolInfo.SendMessage(_tipWindow, PInvoke.TTM_SETTOOLINFOW);
                 }
 

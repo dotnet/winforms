@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 public class TaskDialogButtonCollection : Collection<TaskDialogButton>
 {
     // HashSet to detect duplicate items.
-    private readonly HashSet<TaskDialogButton> _itemSet = new HashSet<TaskDialogButton>();
+    private readonly HashSet<TaskDialogButton> _itemSet = new();
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="TaskDialogButtonCollection"/> class.
@@ -37,7 +37,7 @@ public class TaskDialogButtonCollection : Collection<TaskDialogButton>
     /// </exception>
     public TaskDialogButton Add(string? text, bool enabled = true, bool allowCloseDialog = true)
     {
-        var button = new TaskDialogButton(text, enabled, allowCloseDialog);
+        TaskDialogButton button = new(text, enabled, allowCloseDialog);
         Add(button);
 
         return button;

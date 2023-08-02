@@ -148,7 +148,7 @@ public static partial class DataFormats
     private static Format[]? s_formatList;
     private static int s_formatCount;
 
-    private static readonly object s_internalSyncObject = new object();
+    private static readonly object s_internalSyncObject = new();
 
     /// <summary>
     ///  Gets a <see cref="Format"/> with the Windows Clipboard numeric ID and name for the specified format.

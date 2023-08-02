@@ -131,9 +131,9 @@ public partial class GroupBox : Control
     }
 
     // Set the default Padding to 3 so that it is consistent with Everett
-    protected override Padding DefaultPadding => new Padding(3);
+    protected override Padding DefaultPadding => new(3);
 
-    protected override Size DefaultSize => new Size(200, 100);
+    protected override Size DefaultSize => new(200, 100);
 
     /// <summary>
     ///  Gets a rectangle that represents the dimensions of the <see cref="GroupBox"/>
@@ -490,7 +490,7 @@ public partial class GroupBox : Control
         }
         else
         {
-            using var hdc = new DeviceContextHdcScope(e);
+            using DeviceContextHdcScope hdc = new(e);
 
             DRAW_TEXT_FORMAT flags = DRAW_TEXT_FORMAT.DT_WORDBREAK | DRAW_TEXT_FORMAT.DT_EDITCONTROL;
 

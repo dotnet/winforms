@@ -423,7 +423,7 @@ internal partial class PropertyGridView
             }
 
             // Convert to client coordinates
-            var point = new Point(x, y);
+            Point point = new(x, y);
             PInvoke.ScreenToClient(owner, ref point);
 
             // Find the grid entry at the given client coordinates

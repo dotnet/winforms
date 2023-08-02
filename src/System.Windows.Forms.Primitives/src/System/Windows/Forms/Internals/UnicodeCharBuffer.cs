@@ -31,7 +31,7 @@ internal sealed class UnicodeCharBuffer
             i++;
         }
 
-        string result = new string(_buffer, _offset, i - _offset);
+        string result = new(_buffer, _offset, i - _offset);
         if (i < _buffer.Length)
         {
             i++;

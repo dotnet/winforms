@@ -726,7 +726,7 @@ public class BindingSourceTests
 
     private class VirtualList<T> : IList
     {
-        private readonly List<T> _innerList = new List<T>();
+        private readonly List<T> _innerList = new();
 
         public VirtualList()
         {

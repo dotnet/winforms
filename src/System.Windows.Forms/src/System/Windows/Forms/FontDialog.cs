@@ -19,7 +19,7 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionFontDialog))]
 public class FontDialog : CommonDialog
 {
-    protected static readonly object EventApply = new object();
+    protected static readonly object EventApply = new();
 
     private const int defaultMinSize = 0;
     private const int defaultMaxSize = 0;
@@ -430,7 +430,7 @@ public class FontDialog : CommonDialog
         using Graphics graphics = Graphics.FromHdcInternal(dc);
         LOGFONTW logFont = LOGFONTW.FromFont(Font, graphics);
 
-        var cf = new Comdlg32.CHOOSEFONTW
+        Comdlg32.CHOOSEFONTW cf = new()
         {
             lStructSize = (uint)sizeof(Comdlg32.CHOOSEFONTW),
             hwndOwner = hWndOwner,

@@ -16,7 +16,7 @@ public sealed class EventHandlerService : IEventHandlerService
     private Type _lastHandlerType;
     private EventHandler _changedEvent;
 
-    private readonly LinkedList<object> _handlers = new LinkedList<object>();
+    private readonly LinkedList<object> _handlers = new();
 
     /// <summary>
     ///  Initializes a new instance of the EventHandlerService class.

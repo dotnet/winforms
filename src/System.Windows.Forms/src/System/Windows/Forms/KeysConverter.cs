@@ -35,8 +35,8 @@ public class KeysConverter : TypeConverter, IComparer
             return;
         }
 
-        var localizedOrder = new List<string>(34);
-        var localizedNames = new Dictionary<string, Keys>(34);
+        List<string> localizedOrder = new(34);
+        Dictionary<string, Keys> localizedNames = new(34);
 
         AddLocalizedKey(nameof(SR.toStringEnter), Keys.Return);
         AddKey("F12", Keys.F12);

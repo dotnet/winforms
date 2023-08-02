@@ -22,5 +22,5 @@ public partial class HScrollBar : ScrollBar
     }
 
     protected override Size DefaultSize
-        => new Size(80, SystemInformation.HorizontalScrollBarHeight);
+        => new(80, SystemInformation.HorizontalScrollBarHeight);
 }

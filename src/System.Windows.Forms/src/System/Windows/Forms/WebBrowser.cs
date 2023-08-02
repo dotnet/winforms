@@ -301,7 +301,7 @@ public partial class WebBrowser : WebBrowserBase
                 return string.Empty;
             }
 
-            using var reader = new StreamReader(stream);
+            using StreamReader reader = new(stream);
             stream.Position = 0;
             return reader.ReadToEnd().TrimEnd('\0');
         }
@@ -1067,7 +1067,7 @@ public partial class WebBrowser : WebBrowserBase
     /// <summary>
     ///  Overrides the default size property of Control to specify a bigger default size of 250 x 250.
     /// </summary>
-    protected override Size DefaultSize => new Size(250, 250);
+    protected override Size DefaultSize => new(250, 250);
 
     /// <summary>
     ///  Retrieves IWebBrowser2 from the native object. Overriding classes should first call base.AttachInterfaces.

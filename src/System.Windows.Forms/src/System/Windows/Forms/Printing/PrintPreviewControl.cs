@@ -18,31 +18,32 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionPrintPreviewControl))]
 public partial class PrintPreviewControl : Control
 {
-    private Size virtualSize = new Size(1, 1);
-    private Point position = new Point(0, 0);
-    private Point lastOffset;
-    private bool antiAlias;
-
-    private const int SCROLL_PAGE = 100;
-    private const int SCROLL_LINE = 5;
+    private const int ScrollSmallChange = 5;
     private const double DefaultZoom = .3;
+    private const int Border = 10; // spacing per page, in mm
 
-    private const int border = 10; // spacing per page, in mm
+    private PrintDocument? _document;
+    private PreviewPageInfo[]? _pageInfo; // null if needs refreshing
+    private int _startPage;  // 0-based
+    private int _rows = 1;
+    private int _columns = 1;
+    private bool _autoZoom = true;
+    private Size _virtualSize = new(1, 1);
+    private Point _position = new(0, 0);
 
-    private PrintDocument? document;
-    private PreviewPageInfo[]? pageInfo; // null if needs refreshing
-    private int startPage;  // 0-based
-    private int rows = 1;
-    private int columns = 1;
-    private bool autoZoom = true;
+    private readonly int _focusHOffset = SystemInformation.HorizontalFocusThickness;
+    private readonly int _focusVOffset = SystemInformation.VerticalFocusThickness;
+    private HScrollBar _hScrollBar = new HorizontalScrollBar();
+    private VScrollBar _vScrollBar = new VerticalScrollBar();
+    private bool _scrollLayoutPending;
 
     // The following are all computed by ComputeLayout
-    private bool layoutOk;
-    private Size imageSize = System.Drawing.Size.Empty; // 100ths of inch, not pixels
-    private Point screendpi = Point.Empty;
-    private double zoom = DefaultZoom;
-    private bool pageInfoCalcPending;
-    private bool exceptionPrinting;
+    private bool _layoutOk;
+    private Size _imageSize = Size.Empty; // 100ths of inch, not pixels
+    private Point _screenDPI = Point.Empty;
+    private double _zoom = DefaultZoom;
+    private bool _pageInfoCalcPending;
+    private bool _exceptionPrinting;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="PrintPreviewControl"/> class.
@@ -53,8 +54,27 @@ public partial class PrintPreviewControl : Control
         ResetForeColor();
         Size = new Size(100, 100);
         SetStyle(ControlStyles.ResizeRedraw, false);
-        SetStyle(ControlStyles.Opaque | ControlStyles.OptimizedDoubleBuffer, true);
+        SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
         TabStop = false;
+
+        _hScrollBar.AccessibleName = SR.HScrollBarDefaultAccessibleName;
+        _hScrollBar.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+        _hScrollBar.Left = _focusHOffset;
+        _hScrollBar.SmallChange = ScrollSmallChange;
+        _hScrollBar.RightToLeft = RightToLeft.No;
+        _hScrollBar.Visible = false;
+        _hScrollBar.ValueChanged += scrollBar_ValueChanged;
+        _hScrollBar.TabStop = false;
+        Controls.Add(_hScrollBar);
+
+        _vScrollBar.AccessibleName = SR.VScrollBarDefaultAccessibleName;
+        _vScrollBar.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+        _vScrollBar.SmallChange = ScrollSmallChange;
+        _vScrollBar.Top = _focusVOffset;
+        _vScrollBar.Visible = false;
+        _vScrollBar.ValueChanged += scrollBar_ValueChanged;
+        _vScrollBar.TabStop = false;
+        Controls.Add(_vScrollBar);
     }
 
     [SRCategory(nameof(SR.CatBehavior))]
@@ -62,14 +82,7 @@ public partial class PrintPreviewControl : Control
     [SRDescription(nameof(SR.PrintPreviewAntiAliasDescr))]
     public bool UseAntiAlias
     {
-        get
-        {
-            return antiAlias;
-        }
-        set
-        {
-            antiAlias = value;
-        }
+        get; set;
     }
 
     /// <summary>
@@ -81,14 +94,36 @@ public partial class PrintPreviewControl : Control
     [SRDescription(nameof(SR.PrintPreviewAutoZoomDescr))]
     public bool AutoZoom
     {
-        get { return autoZoom; }
+        get { return _autoZoom; }
         set
         {
-            if (autoZoom != value)
+            if (_autoZoom != value)
             {
-                autoZoom = value;
+                _autoZoom = value;
                 InvalidateLayout();
             }
+        }
+    }
+
+    /// <summary>
+    ///  Gets or sets a value indicating how large the pages will appear.
+    /// </summary>
+    [SRCategory(nameof(SR.CatBehavior))]
+    [SRDescription(nameof(SR.PrintPreviewZoomDescr))]
+    [DefaultValue(DefaultZoom)]
+    public double Zoom
+    {
+        get { return _zoom; }
+        set
+        {
+            if (value <= 0)
+            {
+                throw new ArgumentException(SR.PrintPreviewControlZoomNegative);
+            }
+
+            _autoZoom = false;
+            _zoom = value;
+            InvalidateLayout();
         }
     }
 
@@ -100,64 +135,11 @@ public partial class PrintPreviewControl : Control
     [SRDescription(nameof(SR.PrintPreviewDocumentDescr))]
     public PrintDocument? Document
     {
-        get { return document; }
+        get { return _document; }
         set
         {
-            document = value;
+            _document = value;
             InvalidatePreview();
-        }
-    }
-
-    /// <summary>
-    ///  Gets or sets the number of pages
-    ///  displayed horizontally across the screen.
-    /// </summary>
-    [DefaultValue(1)]
-    [SRCategory(nameof(SR.CatLayout))]
-    [SRDescription(nameof(SR.PrintPreviewColumnsDescr))]
-    public int Columns
-    {
-        get { return columns; }
-        set
-        {
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Columns), value, 1));
-            }
-
-            columns = value;
-            InvalidateLayout();
-        }
-    }
-
-    /// <summary>
-    ///  Gets the CreateParams used to create the window.
-    ///  If a subclass overrides this function, it must call the base implementation.
-    /// </summary>
-    protected override CreateParams CreateParams
-    {
-        get
-        {
-            CreateParams cp = base.CreateParams;
-            cp.Style |= (int)WINDOW_STYLE.WS_HSCROLL;
-            cp.Style |= (int)WINDOW_STYLE.WS_VSCROLL;
-            return cp;
-        }
-    }
-
-    /// <summary>
-    ///  The virtual coordinate of the upper left visible pixel.
-    /// </summary>
-    [SRCategory(nameof(SR.CatLayout))]
-    [Browsable(false)]
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [SRDescription(nameof(SR.ControlWithScrollbarsPositionDescr))]
-    private Point Position
-    {
-        get { return position; }
-        set
-        {
-            SetPositionNoInvalidate(value);
         }
     }
 
@@ -170,7 +152,7 @@ public partial class PrintPreviewControl : Control
     [SRCategory(nameof(SR.CatBehavior))]
     public int Rows
     {
-        get { return rows; }
+        get { return _rows; }
         set
         {
             if (value < 1)
@@ -178,8 +160,85 @@ public partial class PrintPreviewControl : Control
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Rows), value, 1));
             }
 
-            rows = value;
+            _rows = value;
             InvalidateLayout();
+        }
+    }
+
+    /// <summary>
+    ///  Gets or sets the number of pages
+    ///  displayed horizontally across the screen.
+    /// </summary>
+    [DefaultValue(1)]
+    [SRCategory(nameof(SR.CatLayout))]
+    [SRDescription(nameof(SR.PrintPreviewColumnsDescr))]
+    public int Columns
+    {
+        get { return _columns; }
+        set
+        {
+            if (value < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Columns), value, 1));
+            }
+
+            _columns = value;
+            InvalidateLayout();
+        }
+    }
+
+    /// <summary>
+    ///  Gets or sets the page number of the upper left page.
+    /// </summary>
+    [DefaultValue(0)]
+    [SRDescription(nameof(SR.PrintPreviewStartPageDescr))]
+    [SRCategory(nameof(SR.CatBehavior))]
+    public int StartPage
+    {
+        get
+        {
+            int value = _startPage;
+            if (_pageInfo is not null)
+            {
+                value = Math.Min(value, _pageInfo.Length - (_rows * _columns));
+            }
+
+            value = Math.Max(value, 0);
+
+            return value;
+        }
+        set
+        {
+            if (value < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(StartPage), value, 0));
+            }
+
+            int oldValue = StartPage;
+            _startPage = value;
+            if (oldValue != _startPage)
+            {
+                InvalidateLayout();
+                OnStartPageChanged(EventArgs.Empty);
+            }
+        }
+    }
+
+    private static readonly object EVENT_STARTPAGECHANGED = new();
+
+    [SRCategory(nameof(SR.CatPropertyChanged))]
+    [SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
+    public event EventHandler? StartPageChanged
+    {
+        add => Events.AddHandler(EVENT_STARTPAGECHANGED, value);
+        remove => Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
+    }
+
+    protected virtual void OnStartPageChanged(EventArgs e)
+    {
+        if (Events[EVENT_STARTPAGECHANGED] is EventHandler eh)
+        {
+            eh(this, e);
         }
     }
 
@@ -202,8 +261,6 @@ public partial class PrintPreviewControl : Control
         }
     }
 
-    internal override bool SupportsUiaProviders => true;
-
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Bindable(false)]
@@ -223,473 +280,12 @@ public partial class PrintPreviewControl : Control
         remove => base.TextChanged -= value;
     }
 
-    /// <summary>
-    ///  Gets or sets the page number of the upper left page.
-    /// </summary>
-    [DefaultValue(0)]
-    [SRDescription(nameof(SR.PrintPreviewStartPageDescr))]
-    [SRCategory(nameof(SR.CatBehavior))]
-    public int StartPage
-    {
-        get
-        {
-            int value = startPage;
-            if (pageInfo is not null)
-            {
-                value = Math.Min(value, pageInfo.Length - (rows * columns));
-            }
-
-            value = Math.Max(value, 0);
-
-            return value;
-        }
-        set
-        {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(StartPage), value, 0));
-            }
-
-            int oldValue = StartPage;
-            startPage = value;
-            if (oldValue != startPage)
-            {
-                InvalidateLayout();
-                OnStartPageChanged(EventArgs.Empty);
-            }
-        }
-    }
-
-    private static readonly object EVENT_STARTPAGECHANGED = new object();
-
-    [SRCategory(nameof(SR.CatPropertyChanged))]
-    [SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
-    public event EventHandler? StartPageChanged
-    {
-        add => Events.AddHandler(EVENT_STARTPAGECHANGED, value);
-        remove => Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
-    }
-
     [DefaultValue(false)]
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
     [DispId(PInvoke.DISPID_TABSTOP)]
     public new bool TabStop
     {
         get => base.TabStop;
         set => base.TabStop = value;
-    }
-
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler? TabStopChanged
-    {
-        add => base.TabStopChanged += value;
-        remove => base.TabStopChanged -= value;
-    }
-
-    /// <summary>
-    ///  How big the control would be if the screen was infinitely large.
-    /// </summary>
-    [SRCategory(nameof(SR.CatLayout))]
-    [Browsable(false)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    [SRDescription(nameof(SR.ControlWithScrollbarsVirtualSizeDescr))]
-    private Size VirtualSize
-    {
-        get { return virtualSize; }
-        set
-        {
-            SetVirtualSizeNoInvalidate(value);
-            Invalidate();
-        }
-    }
-
-    /// <summary>
-    ///  Gets or sets a value indicating how large the pages will appear.
-    /// </summary>
-    [SRCategory(nameof(SR.CatBehavior))]
-    [SRDescription(nameof(SR.PrintPreviewZoomDescr))]
-    [DefaultValue(DefaultZoom)]
-    public double Zoom
-    {
-        get { return zoom; }
-        set
-        {
-            if (value <= 0)
-            {
-                throw new ArgumentException(SR.PrintPreviewControlZoomNegative);
-            }
-
-            autoZoom = false;
-            zoom = value;
-            InvalidateLayout();
-        }
-    }
-
-    private static unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
-    {
-        switch ((SCROLLBAR_COMMAND)m.WParamInternal.LOWORD)
-        {
-            case SCROLLBAR_COMMAND.SB_THUMBPOSITION:
-            case SCROLLBAR_COMMAND.SB_THUMBTRACK:
-                SCROLLINFO si = new()
-                {
-                    cbSize = (uint)sizeof(SCROLLINFO),
-                    fMask = SCROLLINFO_MASK.SIF_TRACKPOS
-                };
-
-                SCROLLBAR_CONSTANTS direction = horizontal ? SCROLLBAR_CONSTANTS.SB_HORZ : SCROLLBAR_CONSTANTS.SB_VERT;
-                pos = PInvoke.GetScrollInfo(m.HWND, direction, ref si) ? si.nTrackPos : m.WParamInternal.HIWORD;
-                break;
-            case SCROLLBAR_COMMAND.SB_LINELEFT:
-                if (pos > SCROLL_LINE)
-                {
-                    pos -= SCROLL_LINE;
-                }
-                else
-                {
-                    pos = 0;
-                }
-
-                break;
-            case SCROLLBAR_COMMAND.SB_LINERIGHT:
-                if (pos < maxPos - SCROLL_LINE)
-                {
-                    pos += SCROLL_LINE;
-                }
-                else
-                {
-                    pos = maxPos;
-                }
-
-                break;
-            case SCROLLBAR_COMMAND.SB_PAGELEFT:
-                if (pos > SCROLL_PAGE)
-                {
-                    pos -= SCROLL_PAGE;
-                }
-                else
-                {
-                    pos = 0;
-                }
-
-                break;
-            case SCROLLBAR_COMMAND.SB_PAGERIGHT:
-                if (pos < maxPos - SCROLL_PAGE)
-                {
-                    pos += SCROLL_PAGE;
-                }
-                else
-                {
-                    pos = maxPos;
-                }
-
-                break;
-        }
-
-        return pos;
-    }
-
-    // This function computes everything in terms of physical size (millimeters), not pixels
-    private void ComputeLayout()
-    {
-        Debug.Assert(pageInfo is not null, "Must call ComputePreview first");
-        layoutOk = true;
-        if (pageInfo.Length == 0)
-        {
-            ClientSize = Size;
-            return;
-        }
-
-        using GetDcScope hdc = new(HWND);
-        screendpi = new Point(
-            PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
-            PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
-
-        Size pageSize = pageInfo[StartPage].PhysicalSize;
-        Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));
-
-        if (autoZoom)
-        {
-            double zoomX = ((double)controlPhysicalSize.Width - border * (columns + 1)) / (columns * pageSize.Width);
-            double zoomY = ((double)controlPhysicalSize.Height - border * (rows + 1)) / (rows * pageSize.Height);
-            zoom = Math.Min(zoomX, zoomY);
-        }
-
-        imageSize = new Size((int)(zoom * pageSize.Width), (int)(zoom * pageSize.Height));
-        int virtualX = (imageSize.Width * columns) + border * (columns + 1);
-        int virtualY = (imageSize.Height * rows) + border * (rows + 1);
-        SetVirtualSizeNoInvalidate(new Size(PhysicalToPixels(new Point(virtualX, virtualY), screendpi)));
-    }
-
-    // "Prints" the document to memory
-    private void ComputePreview()
-    {
-        int oldStart = StartPage;
-
-        if (document is null)
-        {
-            pageInfo = Array.Empty<PreviewPageInfo>();
-        }
-        else
-        {
-            PrintController oldController = document.PrintController;
-            PreviewPrintController previewController = new PreviewPrintController
-            {
-                UseAntiAlias = UseAntiAlias
-            };
-            document.PrintController = new PrintControllerWithStatusDialog(previewController,
-                                                                           SR.PrintControllerWithStatusDialog_DialogTitlePreview);
-
-            document.Print();
-            pageInfo = previewController.GetPreviewPageInfo();
-            Debug.Assert(pageInfo is not null, $"{nameof(PreviewPrintController)} did not give us preview info.");
-
-            document.PrintController = oldController;
-        }
-
-        if (oldStart != StartPage)
-        {
-            OnStartPageChanged(EventArgs.Empty);
-        }
-    }
-
-    protected override AccessibleObject CreateAccessibilityInstance()
-        => new PrintPreviewControlAccessibleObject(this);
-
-    // Recomputes the sizes and positions of pages without forcing a new "preview print"
-    private void InvalidateLayout()
-    {
-        layoutOk = false;
-        Invalidate();
-    }
-
-    /// <summary>
-    ///  Refreshes the preview of the document.
-    /// </summary>
-    public void InvalidatePreview()
-    {
-        pageInfo = null;
-        exceptionPrinting = false;
-        InvalidateLayout();
-    }
-
-    /// <summary>
-    ///  Invalidate the layout, if necessary.
-    /// </summary>
-    protected override void OnResize(EventArgs eventargs)
-    {
-        InvalidateLayout();
-        base.OnResize(eventargs);
-    }
-
-    private void CalculatePageInfo()
-    {
-        if (pageInfoCalcPending)
-        {
-            return;
-        }
-
-        pageInfoCalcPending = true;
-        try
-        {
-            if (pageInfo is null)
-            {
-                try
-                {
-                    ComputePreview();
-                }
-                catch
-                {
-                    exceptionPrinting = true;
-                    throw;
-                }
-                finally
-                {
-                    Invalidate();
-                }
-            }
-        }
-        finally
-        {
-            pageInfoCalcPending = false;
-        }
-    }
-
-    /// <summary>
-    ///  Paints the control.
-    /// </summary>
-    protected override void OnPaint(PaintEventArgs pevent)
-    {
-        Color backColor = GetBackColor(SystemInformation.HighContrast);
-        using var backBrush = backColor.GetCachedSolidBrushScope();
-
-        if (pageInfo is null || pageInfo.Length == 0)
-        {
-            pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
-
-            if (pageInfo is not null || exceptionPrinting)
-            {
-                // Calculate formats
-                using StringFormat format = new()
-                {
-                    Alignment = StringAlignment.Center,
-                    LineAlignment = StringAlignment.Center
-                };
-
-                // Do actual drawing
-                using var brush = ForeColor.GetCachedSolidBrushScope();
-                pevent.Graphics.DrawString(
-                    exceptionPrinting ? SR.PrintPreviewExceptionPrinting : SR.PrintPreviewNoPages,
-                    Font,
-                    brush,
-                    ClientRectangle,
-                    format);
-            }
-            else
-            {
-                BeginInvoke(new MethodInvoker(CalculatePageInfo));
-            }
-        }
-        else
-        {
-            if (!layoutOk)
-            {
-                ComputeLayout();
-            }
-
-            Size controlPhysicalSize = new Size(PixelsToPhysical(new Point(Size), screendpi));
-
-            //Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
-            Point virtualPixels = new Point(VirtualSize);
-
-            // center pages on screen if small enough
-            Point offset = new Point(
-                Math.Max(0, (Size.Width - virtualPixels.X) / 2),
-                Math.Max(0, (Size.Height - virtualPixels.Y) / 2));
-            offset.X -= Position.X;
-            offset.Y -= Position.Y;
-            lastOffset = offset;
-
-            int borderPixelsX = PhysicalToPixels(border, screendpi.X);
-            int borderPixelsY = PhysicalToPixels(border, screendpi.Y);
-
-            Region originalClip = pevent.Graphics.Clip;
-            Rectangle[] pageRenderArea = new Rectangle[rows * columns];
-            Point lastImageSize = Point.Empty;
-            int maxImageHeight = 0;
-
-            using (var clipScope = new GraphicsClipScope(pevent.GraphicsInternal))
-            {
-                for (int row = 0; row < rows; row++)
-                {
-                    // Initialize our LastImageSize variable...
-                    lastImageSize.X = 0;
-                    lastImageSize.Y = maxImageHeight * row;
-
-                    for (int column = 0; column < columns; column++)
-                    {
-                        int imageIndex = StartPage + column + row * columns;
-                        if (imageIndex < pageInfo.Length)
-                        {
-                            Size pageSize = pageInfo[imageIndex].PhysicalSize;
-                            if (autoZoom)
-                            {
-                                double zoomX = ((double)controlPhysicalSize.Width - border * (columns + 1))
-                                    / (columns * pageSize.Width);
-                                double zoomY = ((double)controlPhysicalSize.Height - border * (rows + 1))
-                                    / (rows * pageSize.Height);
-                                zoom = Math.Min(zoomX, zoomY);
-                            }
-
-                            imageSize = new Size((int)(zoom * pageSize.Width), (int)(zoom * pageSize.Height));
-                            Point imagePixels = PhysicalToPixels(new Point(imageSize), screendpi);
-
-                            int x = offset.X + borderPixelsX * (column + 1) + lastImageSize.X;
-                            int y = offset.Y + borderPixelsY * (row + 1) + lastImageSize.Y;
-
-                            lastImageSize.X += imagePixels.X;
-                            //The Height is the Max of any PageHeight..
-                            maxImageHeight = Math.Max(maxImageHeight, imagePixels.Y);
-
-                            pageRenderArea[imageIndex - StartPage] = new Rectangle(x, y, imagePixels.X, imagePixels.Y);
-                            pevent.Graphics.ExcludeClip(pageRenderArea[imageIndex - StartPage]);
-                        }
-                    }
-                }
-
-                pevent.Graphics.FillRectangle(backBrush, ClientRectangle);
-            }
-
-            for (int i = 0; i < pageRenderArea.Length; i++)
-            {
-                if (i + StartPage < pageInfo.Length)
-                {
-                    Rectangle box = pageRenderArea[i];
-                    pevent.Graphics.DrawRectangle(Pens.Black, box);
-                    using (var brush = ForeColor.GetCachedSolidBrushScope())
-                    {
-                        pevent.Graphics.FillRectangle(brush, box);
-                    }
-
-                    box.Inflate(-1, -1);
-                    if (pageInfo[i + StartPage].Image is not null)
-                    {
-                        pevent.Graphics.DrawImage(pageInfo[i + StartPage].Image, box);
-                    }
-
-                    box.Width--;
-                    box.Height--;
-                    pevent.Graphics.DrawRectangle(Pens.Black, box);
-                }
-            }
-        }
-
-        base.OnPaint(pevent); // raise paint event
-    }
-
-    protected virtual void OnStartPageChanged(EventArgs e)
-    {
-        if (Events[EVENT_STARTPAGECHANGED] is EventHandler eh)
-        {
-            eh(this, e);
-        }
-    }
-
-    private static int PhysicalToPixels(int physicalSize, int dpi)
-    {
-        return (int)(physicalSize * dpi / 100.0);
-    }
-
-    private static Point PhysicalToPixels(Point physical, Point dpi)
-    {
-        return new Point(PhysicalToPixels(physical.X, dpi.X),
-                         PhysicalToPixels(physical.Y, dpi.Y));
-    }
-
-    private static Size PhysicalToPixels(Size physicalSize, Point dpi)
-    {
-        return new Size(PhysicalToPixels(physicalSize.Width, dpi.X),
-                        PhysicalToPixels(physicalSize.Height, dpi.Y));
-    }
-
-    private static int PixelsToPhysical(int pixels, int dpi)
-    {
-        return (int)(pixels * 100.0 / dpi);
-    }
-
-    private static Point PixelsToPhysical(Point pixels, Point dpi)
-    {
-        return new Point(PixelsToPhysical(pixels.X, dpi.X),
-                         PixelsToPhysical(pixels.Y, dpi.Y));
-    }
-
-    private static Size PixelsToPhysical(Size pixels, Point dpi)
-    {
-        return new Size(PixelsToPhysical(pixels.Width, dpi.X),
-                        PixelsToPhysical(pixels.Height, dpi.Y));
     }
 
     /// <summary>
@@ -702,6 +298,14 @@ public partial class PrintPreviewControl : Control
     }
 
     /// <summary>
+    ///  Indicates whether the <see cref="Control.BackColor"/> property should be persisted.
+    /// </summary>
+    internal override bool ShouldSerializeBackColor()
+    {
+        return !BackColor.Equals(SystemColors.AppWorkspace);
+    }
+
+    /// <summary>
     ///  Resets the back color to the defaults for the PrintPreviewControl.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -711,268 +315,440 @@ public partial class PrintPreviewControl : Control
     }
 
     /// <summary>
-    ///  WM_HSCROLL handler.
-    /// </summary>
-    private void WmHScroll(ref Message m)
-    {
-        // The lparam is the handle of the sending scrollbar, or NULL when the scrollbar sending
-        // the message is the built-in Window scrollbar.
-        if (m.LParamInternal != 0)
-        {
-            base.WndProc(ref m);
-            return;
-        }
-
-        Point locPos = position;
-        int pos = locPos.X;
-        int maxPos = Math.Max(Width, virtualSize.Width /*- Width*/);
-
-        locPos.X = AdjustScroll(m, pos, maxPos, true);
-        Position = locPos;
-    }
-
-    private unsafe void SetPositionNoInvalidate(Point value)
-    {
-        Point current = position;
-
-        position = value;
-        position.X = Math.Min(position.X, virtualSize.Width - Width);
-        position.Y = Math.Min(position.Y, virtualSize.Height - Height);
-        if (position.X < 0)
-        {
-            position.X = 0;
-        }
-
-        if (position.Y < 0)
-        {
-            position.Y = 0;
-        }
-
-        RECT scroll = ClientRectangle;
-        PInvoke.ScrollWindow(
-            this,
-            current.X - position.X,
-            current.Y - position.Y,
-            &scroll,
-            &scroll);
-
-        PInvoke.SetScrollPos(this, SCROLLBAR_CONSTANTS.SB_HORZ, position.X, true);
-        PInvoke.SetScrollPos(this, SCROLLBAR_CONSTANTS.SB_VERT, position.Y, true);
-    }
-
-    internal unsafe void SetVirtualSizeNoInvalidate(Size value)
-    {
-        virtualSize = value;
-        SetPositionNoInvalidate(position); // Make sure it's within range
-
-        SCROLLINFO info = new()
-        {
-            cbSize = (uint)sizeof(SCROLLINFO),
-            fMask = SCROLLINFO_MASK.SIF_RANGE | SCROLLINFO_MASK.SIF_PAGE,
-            nMin = 0,
-            nMax = Math.Max(Height, virtualSize.Height) - 1,
-            nPage = (uint)Height
-        };
-
-        PInvoke.SetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_VERT, ref info, true);
-
-        info.fMask = SCROLLINFO_MASK.SIF_RANGE | SCROLLINFO_MASK.SIF_PAGE;
-        info.nMin = 0;
-        info.nMax = Math.Max(Width, virtualSize.Width) - 1;
-        info.nPage = (uint)Width;
-        PInvoke.SetScrollInfo(this, SCROLLBAR_CONSTANTS.SB_HORZ, ref info, true);
-    }
-
-    /// <summary>
-    ///  WM_VSCROLL handler.
-    /// </summary>
-    private void WmVScroll(ref Message m)
-    {
-        // The lparam is the handle of the sending scrollbar, or NULL when the scrollbar sending
-        // the message is the built-in Window scrollbar.
-        if (m.LParamInternal != 0)
-        {
-            base.WndProc(ref m);
-            return;
-        }
-
-        Point locPos = Position;
-        int pos = locPos.Y;
-        int maxPos = Math.Max(Height, virtualSize.Height/* - Height*/);
-
-        locPos.Y = AdjustScroll(m, pos, maxPos, false);
-        Position = locPos;
-    }
-
-    /// <summary>
-    ///  Handles the WM_KEYDOWN message.
-    /// </summary>
-    private void WmKeyDown(ref Message msg)
-    {
-        Keys keyData = (Keys)(nint)msg.WParamInternal | ModifierKeys;
-        Point locPos = Position;
-        int pos;
-        int maxPos;
-
-        switch (keyData & Keys.KeyCode)
-        {
-            case Keys.PageUp:
-                if ((keyData & Keys.Modifiers) == Keys.Control)
-                {
-                    pos = locPos.X;
-                    if (pos > SCROLL_PAGE)
-                    {
-                        pos -= SCROLL_PAGE;
-                    }
-                    else
-                    {
-                        pos = 0;
-                    }
-
-                    locPos.X = pos;
-                    Position = locPos;
-                }
-                else if (StartPage > 0)
-                {
-                    StartPage--;
-                }
-
-                break;
-            case Keys.PageDown:
-                if ((keyData & Keys.Modifiers) == Keys.Control)
-                {
-                    pos = locPos.X;
-                    maxPos = Math.Max(Width, virtualSize.Width);
-                    if (pos < maxPos - SCROLL_PAGE)
-                    {
-                        pos += SCROLL_PAGE;
-                    }
-                    else
-                    {
-                        pos = maxPos;
-                    }
-
-                    locPos.X = pos;
-                    Position = locPos;
-                }
-                else if (pageInfo is not null && StartPage < pageInfo.Length)
-                {
-                    StartPage++;
-                }
-
-                break;
-            case Keys.Home:
-                if ((keyData & Keys.Modifiers) == Keys.Control)
-                {
-                    StartPage = 0;
-                }
-
-                break;
-            case Keys.End:
-                if (pageInfo is not null && (keyData & Keys.Modifiers) == Keys.Control)
-                {
-                    StartPage = pageInfo.Length;
-                }
-
-                break;
-
-            case Keys.Up:
-                pos = locPos.Y;
-                if (pos > SCROLL_LINE)
-                {
-                    pos -= SCROLL_LINE;
-                }
-                else
-                {
-                    pos = 0;
-                }
-
-                locPos.Y = pos;
-                Position = locPos;
-                break;
-            case Keys.Down:
-
-                pos = locPos.Y;
-                maxPos = Math.Max(Height, virtualSize.Height);
-
-                if (pos < maxPos - SCROLL_LINE)
-                {
-                    pos += SCROLL_LINE;
-                }
-                else
-                {
-                    pos = maxPos;
-                }
-
-                locPos.Y = pos;
-                Position = locPos;
-                break;
-            case Keys.Left:
-
-                pos = locPos.X;
-                if (pos > SCROLL_LINE)
-                {
-                    pos -= SCROLL_LINE;
-                }
-                else
-                {
-                    pos = 0;
-                }
-
-                locPos.X = pos;
-                Position = locPos;
-                break;
-            case Keys.Right:
-                pos = locPos.X;
-                maxPos = Math.Max(Width, virtualSize.Width);
-                if (pos < maxPos - SCROLL_LINE)
-                {
-                    pos += SCROLL_LINE;
-                }
-                else
-                {
-                    pos = maxPos;
-                }
-
-                locPos.X = pos;
-                Position = locPos;
-                break;
-        }
-    }
-
-    protected override void WndProc(ref Message m)
-    {
-        switch (m.MsgInternal)
-        {
-            case PInvoke.WM_VSCROLL:
-                WmVScroll(ref m);
-                break;
-            case PInvoke.WM_HSCROLL:
-                WmHScroll(ref m);
-                break;
-            case PInvoke.WM_KEYDOWN:
-                WmKeyDown(ref m);
-                break;
-            default:
-                base.WndProc(ref m);
-                break;
-        }
-    }
-
-    /// <summary>
-    ///  Indicates whether the <see cref="Control.BackColor"/> property should be persisted.
-    /// </summary>
-    internal override bool ShouldSerializeBackColor()
-    {
-        return !BackColor.Equals(SystemColors.AppWorkspace);
-    }
-
-    /// <summary>
     ///  Indicates whether the <see cref="Control.ForeColor"/> property should be persisted.
     /// </summary>
     internal override bool ShouldSerializeForeColor()
     {
         return !ForeColor.Equals(Color.White);
+    }
+
+    internal override bool SupportsUiaProviders => true;
+
+    protected override AccessibleObject CreateAccessibilityInstance()
+        => new PrintPreviewControlAccessibleObject(this);
+
+    /// <summary>
+    ///  Invalidate the layout, if necessary.
+    /// </summary>
+    protected override void OnResize(EventArgs eventargs)
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        InvalidateLayout();
+        base.OnResize(eventargs);
+    }
+
+    protected override void OnMouseDown(MouseEventArgs e)
+    {
+        if (!Focused)
+        {
+            Focus();
+        }
+
+        base.OnMouseDown(e);
+    }
+
+    protected override void OnGotFocus(EventArgs e)
+    {
+        Invalidate();
+
+        base.OnGotFocus(e);
+    }
+
+    protected override void OnLostFocus(EventArgs e)
+    {
+        Invalidate();
+
+        base.OnLostFocus(e);
+    }
+
+    protected override void OnPaintBackground(PaintEventArgs e)
+    {
+        PaintTransparentBackground(e, ClientRectangle);
+    }
+
+    /// <summary>
+    ///  Paints the control.
+    /// </summary>
+    protected override void OnPaint(PaintEventArgs pevent)
+    {
+        bool isHighContrast = SystemInformation.HighContrast;
+        Color backColor = GetBackColor(isHighContrast);
+        using var backBrush = backColor.GetCachedSolidBrushScope();
+
+        PaintResizeBox(pevent, isHighContrast);
+        PaintFocus(pevent, isHighContrast);
+
+        if (_pageInfo is null || _pageInfo.Length == 0)
+        {
+            Rectangle rect = InsideRectangle;
+
+            pevent.Graphics.FillRectangle(backBrush, rect);
+
+            if (_pageInfo is not null || _exceptionPrinting)
+            {
+                DrawMessage(pevent.Graphics, rect, _exceptionPrinting, isHighContrast);
+            }
+            else
+            {
+                BeginInvoke(new MethodInvoker(CalculatePageInfo));
+            }
+        }
+        else
+        {
+            if (!_layoutOk)
+            {
+                ComputeLayout();
+            }
+
+            DrawPages(pevent.Graphics, InsideRectangle, _pageInfo, backBrush);
+        }
+
+        base.OnPaint(pevent); // raise paint event
+    }
+
+    /// <summary>
+    ///  How big the control would be if the screen was infinitely large.
+    /// </summary>
+    [SRCategory(nameof(SR.CatLayout))]
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [SRDescription(nameof(SR.ControlWithScrollbarsVirtualSizeDescr))]
+    private Size VirtualSize
+    {
+        get { return _virtualSize; }
+        set
+        {
+            SetVirtualSizeNoInvalidate(value);
+            Invalidate();
+        }
+    }
+
+    /// <summary>
+    ///  The virtual coordinate of the upper left visible pixel.
+    /// </summary>
+    [SRCategory(nameof(SR.CatLayout))]
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [SRDescription(nameof(SR.ControlWithScrollbarsPositionDescr))]
+    private Point Position
+    {
+        get { return _position; }
+        set
+        {
+            SetPositionNoInvalidate(value);
+            Invalidate();
+        }
+    }
+
+    private Rectangle InnerClientRectangle
+    {
+        get
+        {
+            Rectangle rect = ClientRectangle;
+            rect.Inflate(-_focusHOffset, -_focusVOffset);
+            rect.Width = Math.Max(0, rect.Width - 1);
+            rect.Height = Math.Max(0, rect.Height - 1);
+
+            return rect;
+        }
+    }
+
+    private Rectangle InsideRectangle
+    {
+        get
+        {
+            Rectangle rect = InnerClientRectangle;
+
+            if (_hScrollBar.Visible)
+            {
+                rect.Height -= _hScrollBar.Height;
+            }
+
+            if (_vScrollBar.Visible)
+            {
+                rect.Width -= _vScrollBar.Width;
+
+                if (RightToLeft == RightToLeft.Yes)
+                {
+                    rect.X += _vScrollBar.Width;
+                }
+            }
+
+            return rect;
+        }
+    }
+
+    private Rectangle FocusRectangle
+        => new(0, 0, Width - 1, Height - 1);
+
+    private Rectangle ResizeBoxRectangle
+        => new(_vScrollBar.Left, _hScrollBar.Top, _vScrollBar.Width, _hScrollBar.Height);
+
+    // This function computes everything in terms of physical size (millimeters), not pixels
+    private void ComputeLayout()
+    {
+        Debug.Assert(_pageInfo is not null, "Must call ComputePreview first");
+        _layoutOk = true;
+        if (_pageInfo.Length == 0)
+        {
+            return;
+        }
+
+        using GetDcScope hdc = new(HWND);
+        _screenDPI = new Point(
+            PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX),
+            PInvoke.GetDeviceCaps(hdc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY));
+
+        Size pageSize = _pageInfo[StartPage].PhysicalSize;
+        Size controlPhysicalSize = PixelsToPhysical(Size, _screenDPI);
+
+        if (_autoZoom)
+        {
+            double zoomX = ((double)controlPhysicalSize.Width - Border * (_columns + 1)) / (_columns * pageSize.Width);
+            double zoomY = ((double)controlPhysicalSize.Height - Border * (_rows + 1)) / (_rows * pageSize.Height);
+            _zoom = Math.Min(zoomX, zoomY);
+        }
+
+        _imageSize = new Size((int)(_zoom * pageSize.Width), (int)(_zoom * pageSize.Height));
+        int virtualX = (_imageSize.Width * _columns) + Border * (_columns + 1);
+        int virtualY = (_imageSize.Height * _rows) + Border * (_rows + 1);
+        SetVirtualSizeNoInvalidate(PhysicalToPixels(new Size(virtualX, virtualY), _screenDPI));
+    }
+
+    // "Prints" the document to memory
+    private void ComputePreview()
+    {
+        int oldStart = StartPage;
+
+        if (_document is null)
+        {
+            _pageInfo = Array.Empty<PreviewPageInfo>();
+        }
+        else
+        {
+            PrintController oldController = _document.PrintController;
+            PreviewPrintController previewController = new PreviewPrintController
+            {
+                UseAntiAlias = UseAntiAlias
+            };
+            _document.PrintController = new PrintControllerWithStatusDialog(previewController,
+                                                                           SR.PrintControllerWithStatusDialog_DialogTitlePreview);
+
+            _document.Print();
+            _pageInfo = previewController.GetPreviewPageInfo();
+            Debug.Assert(_pageInfo is not null, $"{nameof(PreviewPrintController)} did not give us preview info.");
+
+            _document.PrintController = oldController;
+        }
+
+        if (oldStart != StartPage)
+        {
+            OnStartPageChanged(EventArgs.Empty);
+        }
+    }
+
+    // Recomputes the sizes and positions of pages without forcing a new "preview print"
+    private void InvalidateLayout()
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        _layoutOk = false;
+        LayoutScrollBars();
+        Invalidate();
+    }
+
+    /// <summary>
+    ///  Refreshes the preview of the document.
+    /// </summary>
+    public void InvalidatePreview()
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        _pageInfo = null;
+        _exceptionPrinting = false;
+        SetVirtualSizeNoInvalidate(Size.Empty);
+        InvalidateLayout();
+    }
+
+    private void CalculatePageInfo()
+    {
+        if (_pageInfoCalcPending)
+        {
+            return;
+        }
+
+        _pageInfoCalcPending = true;
+        try
+        {
+            if (_pageInfo is null)
+            {
+                try
+                {
+                    ComputePreview();
+                }
+                catch
+                {
+                    _exceptionPrinting = true;
+                    throw;
+                }
+                finally
+                {
+                    Invalidate();
+                }
+            }
+        }
+        finally
+        {
+            _pageInfoCalcPending = false;
+        }
+    }
+
+    private void DrawMessage(Graphics g, Rectangle rect, bool isExceptionPrinting, bool isHighContrast)
+    {
+        using var brush = ForeColor.GetCachedSolidBrushScope();
+
+        using StringFormat format = new()
+        {
+            Alignment = StringAlignment.Center,
+            LineAlignment = StringAlignment.Center
+        };
+
+        string message = isExceptionPrinting
+            ? SR.PrintPreviewExceptionPrinting
+            : SR.PrintPreviewNoPages;
+
+        g.DrawString(message, Font, brush, rect, format);
+    }
+
+    private void DrawPages(Graphics g, Rectangle rect, PreviewPageInfo[] pages, Brush backBrush)
+    {
+        using GraphicsClipScope clipScope = new(g);
+        g.SetClip(rect);
+
+        _position.X = _hScrollBar.Value;
+        _position.Y = _vScrollBar.Value;
+
+        Size controlPhysicalSize = PixelsToPhysical(rect.Size, _screenDPI);
+
+        // center pages on screen if small enough
+        Point offset = new Point(
+            Math.Max(0, (rect.Width - _virtualSize.Width) / 2),
+            Math.Max(0, (rect.Height - _virtualSize.Height) / 2));
+        offset.X -= Position.X;
+        offset.Y -= Position.Y;
+
+        int borderPixelsX = PhysicalToPixels(Border, _screenDPI.X);
+        int borderPixelsY = PhysicalToPixels(Border, _screenDPI.Y);
+
+        Rectangle[] pageRenderArea = new Rectangle[_rows * _columns];
+        Point lastImageSize = Point.Empty;
+        int maxImageHeight = 0;
+
+        using (new GraphicsClipScope(g))
+        {
+            for (int row = 0; row < _rows; row++)
+            {
+                // Initialize our LastImageSize variable...
+                lastImageSize.X = 0;
+                lastImageSize.Y = maxImageHeight * row;
+
+                for (int column = 0; column < _columns; column++)
+                {
+                    int imageIndex = StartPage + column + row * _columns;
+                    if (imageIndex < pages.Length)
+                    {
+                        Size pageSize = pages[imageIndex].PhysicalSize;
+                        if (_autoZoom)
+                        {
+                            double zoomX = ((double)controlPhysicalSize.Width - Border * (_columns + 1))
+                                / (_columns * pageSize.Width);
+                            double zoomY = ((double)controlPhysicalSize.Height - Border * (_rows + 1))
+                                / (_rows * pageSize.Height);
+                            _zoom = Math.Min(zoomX, zoomY);
+                        }
+
+                        _imageSize = new Size((int)(_zoom * pageSize.Width), (int)(_zoom * pageSize.Height));
+                        Size imagePixels = PhysicalToPixels(_imageSize, _screenDPI);
+
+                        int x = offset.X + borderPixelsX * (column + 1) + lastImageSize.X;
+                        int y = offset.Y + borderPixelsY * (row + 1) + lastImageSize.Y;
+
+                        lastImageSize.X += imagePixels.Width;
+
+                        // The Height is the Max of any PageHeight..
+                        maxImageHeight = Math.Max(maxImageHeight, imagePixels.Height);
+
+                        pageRenderArea[imageIndex - StartPage] = new Rectangle(x, y, imagePixels.Width, imagePixels.Height);
+                        g.ExcludeClip(pageRenderArea[imageIndex - StartPage]);
+                    }
+                }
+            }
+
+            g.FillRectangle(backBrush, rect);
+        }
+
+        for (int i = 0; i < pageRenderArea.Length; i++)
+        {
+            if (i + StartPage < pages.Length)
+            {
+                Rectangle box = pageRenderArea[i];
+                g.DrawRectangle(Pens.Black, box);
+                using (var brush = ForeColor.GetCachedSolidBrushScope())
+                {
+                    g.FillRectangle(brush, box);
+                }
+
+                box.Inflate(-1, -1);
+                if (pages[i + StartPage].Image is not null)
+                {
+                    g.DrawImage(pages[i + StartPage].Image, box);
+                }
+
+                box.Width--;
+                box.Height--;
+                g.DrawRectangle(Pens.Black, box);
+            }
+        }
+    }
+
+    private void PaintResizeBox(PaintEventArgs e, bool isHighContrast)
+    {
+        if (!_hScrollBar.Visible || !_vScrollBar.Visible)
+        {
+            return;
+        }
+
+        e.Graphics.FillRectangle(SystemBrushes.Control, ResizeBoxRectangle);
+    }
+
+    private void PaintFocus(PaintEventArgs e, bool isHighContrast)
+    {
+        Rectangle focusRect = FocusRectangle;
+
+        if (!e.ClipRectangle.Contains(focusRect) || !Focused || !ShowFocusCues)
+        {
+            return;
+        }
+
+        if (isHighContrast)
+        {
+            ControlPaint.DrawHighContrastFocusRectangle(e.Graphics, focusRect, SystemColors.ControlText);
+        }
+        else
+        {
+            ControlPaint.DrawFocusRectangle(e.Graphics, focusRect);
+        }
     }
 
     /// <summary>
@@ -988,5 +764,362 @@ public partial class PrintPreviewControl : Control
     private Color GetBackColor(bool isHighContract)
     {
         return (isHighContract && !ShouldSerializeBackColor()) ? SystemColors.ControlDark : BackColor;
+    }
+
+    private static int PixelsToPhysical(int pixels, int dpi)
+            => (int)(pixels * 100.0 / dpi);
+
+    private static Size PixelsToPhysical(Size pixels, Point dpi)
+        => new (PixelsToPhysical(pixels.Width, dpi.X),
+                PixelsToPhysical(pixels.Height, dpi.Y));
+
+    private static int PhysicalToPixels(int physicalSize, int dpi)
+        => (int)(physicalSize * dpi / 100.0);
+
+    private static Size PhysicalToPixels(Size physical, Point dpi)
+        => new (PhysicalToPixels(physical.Width, dpi.X),
+                PhysicalToPixels(physical.Height, dpi.Y));
+
+    private void SetPositionNoInvalidate(Point value)
+    {
+        _scrollLayoutPending = true;
+
+        _hScrollBar.Value = Clamp(value.X, _hScrollBar.Minimum, _hScrollBar.Maximum);
+        _vScrollBar.Value = Clamp(value.Y, _vScrollBar.Minimum, _vScrollBar.Maximum);
+
+        _scrollLayoutPending = false;
+
+        static int Clamp(int value, int min, int max)
+        {
+            if (value < min)
+            {
+                return min;
+            }
+
+            if (max < value)
+            {
+                return max;
+            }
+
+            return value;
+        }
+    }
+
+    internal void SetVirtualSizeNoInvalidate(Size value)
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        _virtualSize = value;
+
+        LayoutScrollBars();
+    }
+
+    private void LayoutScrollBars()
+    {
+        if (!IsHandleCreated)
+        {
+            return;
+        }
+
+        _scrollLayoutPending = true;
+        SuspendLayout();
+
+        Rectangle availableRect = InnerClientRectangle;
+
+        (bool horizontalScrollNeeded, bool verticalScrollNeeded) = IsScrollNeeded(availableRect.Size);
+
+        bool scrollBarsVisibilityChanged = (_vScrollBar.Visible ^ verticalScrollNeeded) || (_hScrollBar.Visible ^ horizontalScrollNeeded);
+
+        _hScrollBar.Visible = horizontalScrollNeeded;
+        if (horizontalScrollNeeded)
+        {
+            _hScrollBar.Top = availableRect.Bottom - _hScrollBar.Height;
+            _hScrollBar.Width = availableRect.Width - (verticalScrollNeeded ? _vScrollBar.Width : 0);
+
+            AdjustScroll(
+                _hScrollBar,
+                virtualDimension: _virtualSize.Width,
+                displayDimension: availableRect.Width,
+                offset: (verticalScrollNeeded ? _vScrollBar.Width : 0));
+        }
+        else if (_hScrollBar.Value > 0)
+        {
+            _hScrollBar.Value = 0;
+        }
+
+        _vScrollBar.Visible = verticalScrollNeeded;
+        if (verticalScrollNeeded)
+        {
+            _vScrollBar.Height = availableRect.Height - (horizontalScrollNeeded ? _hScrollBar.Height : 0);
+
+            if (RightToLeft == RightToLeft.Yes)
+            {
+                _vScrollBar.Left = availableRect.Left;
+                _vScrollBar.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom;
+            }
+            else
+            {
+                _vScrollBar.Left = availableRect.Right - _vScrollBar.Width;
+                _vScrollBar.Anchor = AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom;
+            }
+
+            AdjustScroll(
+                _vScrollBar,
+                virtualDimension: _virtualSize.Height,
+                displayDimension: availableRect.Height,
+                offset: (horizontalScrollNeeded ? _hScrollBar.Height : 0));
+        }
+        else if (_vScrollBar.Value > 0)
+        {
+            _vScrollBar.Value = 0;
+        }
+
+        ResumeLayout(true);
+        _scrollLayoutPending = false;
+
+        if (scrollBarsVisibilityChanged &&
+            IsAccessibilityObjectCreated &&
+            AccessibilityObject is PrintPreviewControlAccessibleObject ao)
+        {
+            ao.RaiseStructureChangedEvent(Interop.UiaCore.StructureChangeType.ChildrenInvalidated, Array.Empty<int>());
+        }
+
+        (bool horizontal, bool vertical) IsScrollNeeded(Size displaySize)
+        {
+            bool horizontal = _virtualSize.Width > displaySize.Width;
+            bool vertical = _virtualSize.Height > displaySize.Height;
+
+            if (!horizontal && vertical)
+            {
+                horizontal = _virtualSize.Width > (displaySize.Width - _vScrollBar.Width);
+            }
+
+            if (!vertical && horizontal)
+            {
+                vertical = _virtualSize.Height > (displaySize.Height - _hScrollBar.Height);
+            }
+
+            return (horizontal, vertical);
+        }
+
+        void AdjustScroll(ScrollBar scrollBar, int virtualDimension, int displayDimension, int offset)
+        {
+            var oldLargeChange = scrollBar.LargeChange;
+
+            scrollBar.Maximum = virtualDimension;
+            scrollBar.LargeChange = displayDimension - offset;
+
+            if (scrollBar.Value > 0)
+            {
+                var diff = scrollBar.LargeChange - oldLargeChange;
+
+                if (scrollBar.Value >= diff)
+                {
+                    scrollBar.Value -= diff;
+                }
+            }
+        }
+    }
+
+    private void scrollBar_ValueChanged(object? sender, EventArgs e)
+    {
+        if (_scrollLayoutPending)
+        {
+            return;
+        }
+
+        Invalidate(InsideRectangle);
+    }
+
+    /// <summary>
+    ///  Handles the WM_KEYDOWN message.
+    /// </summary>
+    private void WmKeyDown(ref Message msg)
+    {
+        Keys keyData = (Keys)(nint)msg.WParamInternal | ModifierKeys;
+        Point locPos = Position;
+        int pos;
+        int maxPos;
+        bool scrollVisible = _vScrollBar.Visible || _hScrollBar.Visible;
+        bool vertical = _vScrollBar.Visible;
+        int largeChange = vertical ? _vScrollBar.LargeChange : _hScrollBar.LargeChange;
+
+        switch (keyData & Keys.KeyCode)
+        {
+            case Keys.PageUp:
+                if ((keyData & Keys.Modifiers) == Keys.Control)
+                {
+                    if (scrollVisible)
+                    {
+                        pos = vertical ? locPos.Y : locPos.X;
+                        if (pos > largeChange)
+                        {
+                            pos -= largeChange;
+                        }
+                        else
+                        {
+                            pos = 0;
+                        }
+
+                        if (vertical)
+                        {
+                            locPos.Y = pos;
+                        }
+                        else
+                        {
+                            locPos.X = pos;
+                        }
+
+                        Position = locPos;
+                    }
+                }
+                else if (StartPage > 0)
+                {
+                    StartPage--;
+                }
+
+                break;
+            case Keys.PageDown:
+                if ((keyData & Keys.Modifiers) == Keys.Control)
+                {
+                    if (scrollVisible)
+                    {
+                        pos = vertical ? locPos.Y : locPos.X;
+                        maxPos = vertical ? _vScrollBar.Maximum : _hScrollBar.Maximum;
+                        if (pos < maxPos - largeChange)
+                        {
+                            pos += largeChange;
+                        }
+                        else
+                        {
+                            pos = maxPos;
+                        }
+
+                        if (vertical)
+                        {
+                            locPos.Y = pos;
+                        }
+                        else
+                        {
+                            locPos.X = pos;
+                        }
+
+                        Position = locPos;
+                    }
+                }
+                else if (_pageInfo is not null && StartPage < _pageInfo.Length)
+                {
+                    StartPage++;
+                }
+
+                break;
+            case Keys.Home:
+                if ((keyData & Keys.Modifiers) == Keys.Control)
+                {
+                    StartPage = 0;
+                }
+
+                break;
+            case Keys.End:
+                if (_pageInfo is not null && (keyData & Keys.Modifiers) == Keys.Control)
+                {
+                    StartPage = _pageInfo.Length;
+                }
+
+                break;
+
+            case Keys.Up:
+                if (_vScrollBar.Visible)
+                {
+                    pos = locPos.Y;
+                    if (pos > _vScrollBar.SmallChange)
+                    {
+                        pos -= _vScrollBar.SmallChange;
+                    }
+                    else
+                    {
+                        pos = 0;
+                    }
+
+                    locPos.Y = pos;
+                    Position = locPos;
+                }
+
+                break;
+            case Keys.Down:
+                if (_vScrollBar.Visible)
+                {
+                    pos = locPos.Y;
+                    maxPos = _vScrollBar.Maximum - _vScrollBar.SmallChange;
+
+                    if (pos < maxPos - _vScrollBar.SmallChange)
+                    {
+                        pos += _vScrollBar.SmallChange;
+                    }
+                    else
+                    {
+                        pos = maxPos;
+                    }
+
+                    locPos.Y = pos;
+                    Position = locPos;
+                }
+
+                break;
+            case Keys.Left:
+                if (_hScrollBar.Visible)
+                {
+                    pos = locPos.X;
+                    if (pos > _hScrollBar.SmallChange)
+                    {
+                        pos -= _hScrollBar.SmallChange;
+                    }
+                    else
+                    {
+                        pos = 0;
+                    }
+
+                    locPos.X = pos;
+                    Position = locPos;
+                }
+
+                break;
+            case Keys.Right:
+                if (_hScrollBar.Visible)
+                {
+                    pos = locPos.X;
+                    maxPos = _hScrollBar.Maximum - _hScrollBar.SmallChange;
+
+                    if (pos < maxPos - _hScrollBar.SmallChange)
+                    {
+                        pos += _hScrollBar.SmallChange;
+                    }
+                    else
+                    {
+                        pos = maxPos;
+                    }
+
+                    locPos.X = pos;
+                    Position = locPos;
+                }
+
+                break;
+        }
+    }
+
+    protected override void WndProc(ref Message m)
+    {
+        switch (m.MsgInternal)
+        {
+            case PInvoke.WM_KEYDOWN:
+                WmKeyDown(ref m);
+                break;
+            default:
+                base.WndProc(ref m);
+                break;
+        }
     }
 }

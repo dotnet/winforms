@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -15,7 +13,7 @@ namespace System.Windows.Forms.Layout;
 
 internal partial class DefaultLayout : LayoutEngine
 {
-    internal static readonly DefaultLayout Instance = new DefaultLayout();
+    internal static readonly DefaultLayout Instance = new();
 
     private static readonly int s_layoutInfoProperty = PropertyStore.CreateKey();
     private static readonly int s_cachedBoundsProperty = PropertyStore.CreateKey();
@@ -176,7 +174,7 @@ internal partial class DefaultLayout : LayoutEngine
             return bounds;
         }
 
-        AnchorInfo anchorInfo = GetAnchorInfo(element);
+        AnchorInfo? anchorInfo = GetAnchorInfo(element);
         if (anchorInfo is null)
         {
             return bounds;
@@ -249,7 +247,7 @@ internal partial class DefaultLayout : LayoutEngine
 
     private static Rectangle ComputeAnchoredBounds(IArrangedElement element, Rectangle displayRect, bool measureOnly)
     {
-        AnchorInfo layout = GetAnchorInfo(element);
+        AnchorInfo layout = GetAnchorInfo(element)!;
 
         int left = layout.Left + displayRect.X;
         int top = layout.Top + displayRect.Y;
@@ -406,7 +404,7 @@ internal partial class DefaultLayout : LayoutEngine
         Rectangle remainingBounds = measureOnly ? Rectangle.Empty : container.DisplayRectangle;
         Size preferredSize = Size.Empty;
 
-        IArrangedElement mdiClient = null;
+        IArrangedElement? mdiClient = null;
 
         // Docking layout is order dependent. After much debate, we decided to use z-order as the
         // docking order. (Introducing a DockOrder property was a close second)
@@ -543,7 +541,7 @@ internal partial class DefaultLayout : LayoutEngine
             element.SetBounds(newElementBounds, BoundsSpecified.None);
 
 #if DEBUG
-            Control control = element as Control;
+            Control control = (Control)element;
             newElementBounds.Size = control.ApplySizeConstraints(newElementBounds.Size);
 
             // This usually happens when a Control overrides its SetBoundsCore or sets size during OnResize
@@ -756,7 +754,7 @@ internal partial class DefaultLayout : LayoutEngine
             return;
         }
 
-        AnchorInfo anchorInfo = GetAnchorInfo(element);
+        AnchorInfo? anchorInfo = GetAnchorInfo(element);
         if (anchorInfo is null)
         {
             anchorInfo = new AnchorInfo();
@@ -868,7 +866,7 @@ internal partial class DefaultLayout : LayoutEngine
         }
 
         Debug.Assert(LocalAppContextSwitches.AnchorLayoutV2, $"AnchorLayoutV2 should be called only when {LocalAppContextSwitches.AnchorLayoutV2SwitchName} is enabled.");
-        Control parent = control.Parent;
+        Control? parent = control.Parent;
 
         // Check if control is ready for anchors calculation.
         if (parent is null)
@@ -876,7 +874,7 @@ internal partial class DefaultLayout : LayoutEngine
             return;
         }
 
-        AnchorInfo anchorInfo = GetAnchorInfo(control);
+        AnchorInfo? anchorInfo = GetAnchorInfo(control);
 
         // AnchorsInfo is not computed yet. Check if control is ready for AnchorInfo calculation at this time.
         if (anchorInfo is null)
@@ -910,7 +908,7 @@ internal partial class DefaultLayout : LayoutEngine
         // Reset parent flag as we now ready to iterate over all children requiring AnchorInfo calculation.
         parent._childControlsNeedAnchorLayout = false;
 
-        Rectangle displayRectangle = control.Parent.DisplayRectangle;
+        Rectangle displayRectangle = control.Parent!.DisplayRectangle;
         Rectangle elementBounds = GetCachedBounds(control);
         int x = elementBounds.X;
         int y = elementBounds.Y;
@@ -944,7 +942,7 @@ internal partial class DefaultLayout : LayoutEngine
             }
             else
             {
-                SetAnchorInfo(element, null);
+                SetAnchorInfo(element, value: null);
             }
 
             if (element.Container is not null)
@@ -1008,7 +1006,7 @@ internal partial class DefaultLayout : LayoutEngine
 
     public static void ScaleAnchorInfo(IArrangedElement element, SizeF factor)
     {
-        AnchorInfo anchorInfo = GetAnchorInfo(element);
+        AnchorInfo? anchorInfo = GetAnchorInfo(element);
 
         // some controls don't have AnchorInfo, i.e. Panels
         if (anchorInfo is not null)
@@ -1018,10 +1016,10 @@ internal partial class DefaultLayout : LayoutEngine
 
             if (UseAnchorLayoutV2(element))
             {
-                // AutoScaleFactor is not alligned with Window's SuggestedRectangle applied on top-level window/Form.
+                // AutoScaleFactor is not aligned with Window's SuggestedRectangle applied on top-level window/Form.
                 // So, compute factor with respect to the change in DisplayRectangle and apply it to scale anchors.
                 // See https://github.com/dotnet/winforms/issues/8266 for more information.
-                Rectangle displayRect = element.Container.DisplayRectangle;
+                Rectangle displayRect = element.Container!.DisplayRectangle;
                 heightFactor = ((double)displayRect.Height) / anchorInfo.DisplayRectangle.Height;
                 widthFactor = ((double)displayRect.Width) / anchorInfo.DisplayRectangle.Width;
                 anchorInfo.DisplayRectangle = displayRect;
@@ -1040,10 +1038,10 @@ internal partial class DefaultLayout : LayoutEngine
     {
         if (element.Container is not null)
         {
-            IDictionary dictionary = (IDictionary)element.Container.Properties.GetObject(s_cachedBoundsProperty);
+            IDictionary? dictionary = (IDictionary?)element.Container.Properties.GetObject(s_cachedBoundsProperty);
             if (dictionary is not null)
             {
-                object bounds = dictionary[element];
+                object? bounds = dictionary[element];
                 if (bounds is not null)
                 {
                     return (Rectangle)bounds;
@@ -1054,7 +1052,7 @@ internal partial class DefaultLayout : LayoutEngine
         return element.Bounds;
     }
 
-    private static bool HasCachedBounds(IArrangedElement container)
+    private static bool HasCachedBounds(IArrangedElement? container)
     {
         return container is not null && container.Properties.ContainsObjectThatIsNotNull(s_cachedBoundsProperty);
     }
@@ -1072,7 +1070,7 @@ internal partial class DefaultLayout : LayoutEngine
             }
         }
 
-        IDictionary dictionary = (IDictionary)container.Properties.GetObject(s_cachedBoundsProperty);
+        IDictionary? dictionary = (IDictionary?)container.Properties.GetObject(s_cachedBoundsProperty);
         if (dictionary is not null)
         {
 #if DEBUG
@@ -1093,7 +1091,7 @@ internal partial class DefaultLayout : LayoutEngine
                     // and will callback InitLayout with a different bounds and BoundsSpecified.
                     dictionary.Remove(entry.Key);
 #endif
-                    Rectangle bounds = (Rectangle)entry.Value;
+                    Rectangle bounds = (Rectangle)entry.Value!;
                     element.SetBounds(bounds, BoundsSpecified.None);
 #if DEBUG
                     break;
@@ -1114,7 +1112,7 @@ internal partial class DefaultLayout : LayoutEngine
     {
         if (bounds != GetCachedBounds(element))
         {
-            IDictionary dictionary = (IDictionary)element.Container.Properties.GetObject(s_cachedBoundsProperty);
+            IDictionary? dictionary = (IDictionary?)element.Container!.Properties.GetObject(s_cachedBoundsProperty);
             if (dictionary is null)
             {
                 dictionary = new HybridDictionary();
@@ -1125,12 +1123,12 @@ internal partial class DefaultLayout : LayoutEngine
         }
     }
 
-    internal static AnchorInfo GetAnchorInfo(IArrangedElement element)
+    internal static AnchorInfo? GetAnchorInfo(IArrangedElement element)
     {
-        return (AnchorInfo)element.Properties.GetObject(s_layoutInfoProperty);
+        return (AnchorInfo?)element.Properties.GetObject(s_layoutInfoProperty);
     }
 
-    internal static void SetAnchorInfo(IArrangedElement element, AnchorInfo value)
+    internal static void SetAnchorInfo(IArrangedElement element, AnchorInfo? value)
     {
         element.Properties.SetObject(s_layoutInfoProperty, value);
     }
@@ -1190,7 +1188,7 @@ internal partial class DefaultLayout : LayoutEngine
                     // the container is, and make sure our container is large enough to accomodate us.
                     if (useV2Layout)
                     {
-                        AnchorInfo anchorInfo = GetAnchorInfo(element);
+                        AnchorInfo? anchorInfo = GetAnchorInfo(element);
                         Rectangle bounds = GetCachedBounds(element);
                         prefSize.Width = Math.Max(prefSize.Width, anchorInfo is null ? bounds.Right : bounds.Right + anchorInfo.Right);
                     }
@@ -1210,7 +1208,7 @@ internal partial class DefaultLayout : LayoutEngine
                     Rectangle anchorDest = GetAnchorDestination(element, Rectangle.Empty, measureOnly: true);
                     if (useV2Layout)
                     {
-                        AnchorInfo anchorInfo = GetAnchorInfo(element);
+                        AnchorInfo? anchorInfo = GetAnchorInfo(element);
                         Rectangle bounds = GetCachedBounds(element);
                         prefSize.Height = Math.Max(prefSize.Height, anchorInfo is null ? bounds.Bottom : bounds.Bottom + anchorInfo.Bottom);
                     }

@@ -29,7 +29,7 @@ public class PathGradientBrushTests
 {
     private readonly Point[] _defaultIntPoints = new Point[2] { new Point(1, 2), new Point(20, 30) };
     private readonly PointF[] _defaultFloatPoints = new PointF[2] { new PointF(1, 2), new PointF(20, 30) };
-    private readonly RectangleF _defaultRectangle = new RectangleF(1, 2, 19, 28);
+    private readonly RectangleF _defaultRectangle = new(1, 2, 19, 28);
 
     [Fact]
     public void Ctor_Points_ReturnsExpected()

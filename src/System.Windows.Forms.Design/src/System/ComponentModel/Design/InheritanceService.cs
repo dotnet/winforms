@@ -16,7 +16,7 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public class InheritanceService : IInheritanceService, IDisposable
 {
-    private static readonly TraceSwitch s_inheritanceServiceSwitch = new TraceSwitch("InheritanceService", "InheritanceService : Debug inheritance scan.");
+    private static readonly TraceSwitch s_inheritanceServiceSwitch = new("InheritanceService", "InheritanceService : Debug inheritance scan.");
     private Dictionary<IComponent, InheritanceAttribute> _inheritedComponents;
     // While we're adding an inherited component, we must be wary of components that the inherited component adds as a result of being sited.  These are treated as inherited as well.  To track these, we keep track of the component we're currently adding as well as it's inheritance attribute. During the add, we sync IComponentAdding events and push in the component
     private IComponent _addingComponent;

@@ -37,7 +37,7 @@ internal partial class SplitContainerDesigner : ParentControlDesigner
     /// <summary>
     ///  Gets the design-time supported actions on the control.
     /// </summary>
-    public override DesignerActionListCollection ActionLists => new DesignerActionListCollection()
+    public override DesignerActionListCollection ActionLists => new()
     {
         new OrientationActionList(this)
     };

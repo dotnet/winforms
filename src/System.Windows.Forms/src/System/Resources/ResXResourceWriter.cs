@@ -31,7 +31,7 @@ public class ResXResourceWriter : IResourceWriter
 
     private Dictionary<string, string?>? _cachedAliases;
 
-    private static readonly TraceSwitch s_resValueProviderSwitch = new TraceSwitch("ResX", "Debug the resource value provider");
+    private static readonly TraceSwitch s_resValueProviderSwitch = new("ResX", "Debug the resource value provider");
 
 #pragma warning disable IDE1006 // Naming Styles (Shipped public API)
     public static readonly string BinSerializedObjectMimeType = "application/x-microsoft.net.object.binary.base64";

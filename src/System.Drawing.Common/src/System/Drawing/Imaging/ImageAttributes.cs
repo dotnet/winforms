@@ -499,7 +499,7 @@ public sealed class ImageAttributes : ICloneable, IDisposable
 
     public void SetWrapMode(WrapMode mode)
     {
-        SetWrapMode(mode, default(Color), false);
+        SetWrapMode(mode, default, false);
     }
 
     public void SetWrapMode(WrapMode mode, Color color)

@@ -93,7 +93,7 @@ internal class ToolStripDesigner : ControlDesigner
     {
         get
         {
-            Rectangle rect = default(Rectangle);
+            Rectangle rect = default;
             if (_miniToolStrip is null)
             {
                 return rect;
@@ -372,7 +372,7 @@ internal class ToolStripDesigner : ControlDesigner
     {
         get
         {
-            Rectangle rect = default(Rectangle);
+            Rectangle rect = default;
             if (ToolStrip.OverflowButton.Visible)
             {
                 return ToolStrip.OverflowButton.Bounds;

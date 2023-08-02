@@ -18,7 +18,7 @@ public class PreviewPrintController : PrintController
 {
     private Graphics? _graphics;
     private DeviceContext? _dc;
-    private readonly ArrayList _list = new ArrayList();
+    private readonly ArrayList _list = new();
 
     public override bool IsPreview => true;
 

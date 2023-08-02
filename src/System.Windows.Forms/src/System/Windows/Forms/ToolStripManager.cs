@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Concurrent;
 using System.Drawing;
 using Microsoft.Win32;
@@ -15,26 +13,26 @@ public static partial class ToolStripManager
     // WARNING: ThreadStatic initialization happens only on the first thread at class CTOR time.
     // use InitializeThread mechanism to initialize ThreadStatic members
     [ThreadStatic]
-    private static WeakRefCollection t_toolStripWeakArrayList;
+    private static WeakRefCollection? t_toolStripWeakArrayList;
 
     [ThreadStatic]
-    private static WeakRefCollection t_toolStripPanelWeakArrayList;
+    private static WeakRefCollection? t_toolStripPanelWeakArrayList;
 
     [ThreadStatic]
     private static bool t_initialized;
 
-    private static Font s_defaultFont;
-    private static ConcurrentDictionary<int, Font> s_defaultFontCache = new ConcurrentDictionary<int, Font>();
+    private static Font? s_defaultFont;
+    private static ConcurrentDictionary<int, Font> s_defaultFontCache = new();
 
     // WARNING: When subscribing to static event handlers - make sure you unhook from them
     // otherwise you can leak USER objects on process shutdown.
     // Consider: use WeakRefCollection
     [ThreadStatic]
-    private static Delegate[] t_staticEventHandlers;
+    private static Delegate?[]? t_staticEventHandlers;
     private const int StaticEventDefaultRendererChanged = 0;
     private const int StaticEventCount = 1;
 
-    private static readonly object s_internalSyncObject = new object();
+    private static readonly object s_internalSyncObject = new();
 
     private static void InitializeThread()
     {
@@ -54,33 +52,30 @@ public static partial class ToolStripManager
     {
         get
         {
-            Font sysFont = null;
+            Font? sysFont = null;
 
             // We need to cache the default fonts for the different DPIs.
             if (DpiHelper.IsPerMonitorV2Awareness)
             {
                 int dpi = CurrentDpi;
 
-                Font retFont = null;
-                if (s_defaultFontCache.TryGetValue(dpi, out retFont) == false || retFont is null)
+                if (!s_defaultFontCache.TryGetValue(dpi, out Font? retFont))
                 {
                     // Default to menu font
                     sysFont = SystemInformation.GetMenuFontForDpi(dpi);
-                    if (sysFont is not null)
-                    {
-                        // Ensure font is in pixels so it displays properly in the property grid at design time.
-                        if (sysFont.Unit != GraphicsUnit.Point)
-                        {
-                            retFont = ControlPaint.FontInPoints(sysFont);
-                            sysFont.Dispose();
-                        }
-                        else
-                        {
-                            retFont = sysFont;
-                        }
 
-                        s_defaultFontCache[dpi] = retFont;
+                    // Ensure font is in pixels so it displays properly in the property grid at design time.
+                    if (sysFont.Unit != GraphicsUnit.Point)
+                    {
+                        retFont = ControlPaint.FontInPoints(sysFont);
+                        sysFont.Dispose();
                     }
+                    else
+                    {
+                        retFont = sysFont;
+                    }
+
+                    s_defaultFontCache[dpi] = retFont;
                 }
 
                 return retFont;
@@ -88,7 +83,7 @@ public static partial class ToolStripManager
             else
             {
                 // Threadsafe local reference
-                Font retFont = s_defaultFont;
+                Font? retFont = s_defaultFont;
 
                 if (retFont is null)
                 {
@@ -101,23 +96,21 @@ public static partial class ToolStripManager
                         {
                             // Default to menu font
                             sysFont = SystemFonts.MenuFont;
+
                             // ...or to control font if menu font unavailable
                             sysFont ??= Control.DefaultFont;
 
-                            if (sysFont is not null)
+                            // Ensure font is in pixels so it displays properly in the property grid at design time.
+                            if (sysFont.Unit != GraphicsUnit.Point)
                             {
-                                // Ensure font is in pixels so it displays properly in the property grid at design time.
-                                if (sysFont.Unit != GraphicsUnit.Point)
-                                {
-                                    s_defaultFont = ControlPaint.FontInPoints(sysFont);
-                                    retFont = s_defaultFont;
-                                    sysFont.Dispose();
-                                }
-                                else
-                                {
-                                    s_defaultFont = sysFont;
-                                    retFont = s_defaultFont;
-                                }
+                                s_defaultFont = ControlPaint.FontInPoints(sysFont);
+                                retFont = s_defaultFont;
+                                sysFont.Dispose();
+                            }
+                            else
+                            {
+                                s_defaultFont = sysFont;
+                                retFont = s_defaultFont;
                             }
 
                             return retFont;
@@ -136,7 +129,7 @@ public static partial class ToolStripManager
         => t_toolStripWeakArrayList ??= new WeakRefCollection();
 
     /// <summary>Static events only!!!</summary>
-    private static void AddEventHandler(int key, Delegate value)
+    private static void AddEventHandler(int key, Delegate? value)
     {
         lock (s_internalSyncObject)
         {
@@ -148,14 +141,14 @@ public static partial class ToolStripManager
     /// <summary>
     ///  Find a toolstrip in the weak ref ArrayList, return null if nothing was found
     /// </summary>
-    public static ToolStrip FindToolStrip(string toolStripName)
+    public static ToolStrip? FindToolStrip(string toolStripName)
     {
-        ToolStrip result = null;
+        ToolStrip? result = null;
         for (int i = 0; i < ToolStrips.Count; i++)
         {
-            if (ToolStrips[i] is not null && string.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal))
+            if (ToolStrips[i] is ToolStrip toolStrip && string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
             {
-                result = (ToolStrip)ToolStrips[i];
+                result = toolStrip;
                 break;
             }
         }
@@ -166,14 +159,14 @@ public static partial class ToolStripManager
     /// <summary>
     ///  Find a toolstrip in the weak ref ArrayList, return null if nothing was found
     /// </summary>
-    internal static ToolStrip FindToolStrip(Form owningForm, string toolStripName)
+    internal static ToolStrip? FindToolStrip(Form owningForm, string toolStripName)
     {
-        ToolStrip result = null;
+        ToolStrip? result = null;
         for (int i = 0; i < ToolStrips.Count; i++)
         {
-            if (ToolStrips[i] is not null && string.Equals(((ToolStrip)ToolStrips[i]).Name, toolStripName, StringComparison.Ordinal))
+            if (ToolStrips[i] is ToolStrip toolStrip && string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
             {
-                result = (ToolStrip)ToolStrips[i];
+                result = toolStrip;
                 if (result.FindForm() == owningForm)
                 {
                     break;
@@ -249,7 +242,7 @@ public static partial class ToolStripManager
         return true;
     }
 
-    private static Delegate GetEventHandler(int key)
+    private static Delegate? GetEventHandler(int key)
     {
         lock (s_internalSyncObject)
         {
@@ -300,7 +293,7 @@ public static partial class ToolStripManager
         // If we've toggled the ShowUnderlines value, we'll need to invalidate
         for (int i = 0; i < ToolStrips.Count; i++)
         {
-            if (!(ToolStrips[i] is ToolStrip toolStrip))
+            if (ToolStrips[i] is not ToolStrip toolStrip)
             {
                 toolStripPruneNeeded = true;
                 continue;
@@ -342,7 +335,7 @@ public static partial class ToolStripManager
         }
     }
 
-    private static void RemoveEventHandler(int key, Delegate value)
+    private static void RemoveEventHandler(int key, Delegate? value)
     {
         lock (s_internalSyncObject)
         {
@@ -366,8 +359,8 @@ public static partial class ToolStripManager
             return false;
         }
 
-        ToolStrip wrappedControl = null;
-        ToolStrip nextControl = null;
+        ToolStrip? wrappedControl = null;
+        ToolStrip? nextControl = null;
 
         int startTabIndex = start.TabIndex;
         int index = ToolStrips.IndexOf(start);
@@ -377,7 +370,7 @@ public static partial class ToolStripManager
             index = (forward) ? (index + 1) % totalCount
                               : (index + totalCount - 1) % totalCount;
 
-            if (!(ToolStrips[index] is ToolStrip toolStrip) ||
+            if (ToolStrips[index] is not ToolStrip toolStrip ||
                 toolStrip == start)
             {
                 continue;
@@ -473,7 +466,7 @@ public static partial class ToolStripManager
     ///  locks in painting code.
     /// </remarks>
     [ThreadStatic]
-    private static ToolStripRenderer t_defaultRenderer;
+    private static ToolStripRenderer? t_defaultRenderer;
 
     // types cached for perf.
     internal static Type s_systemRendererType = typeof(ToolStripSystemRenderer);
@@ -481,14 +474,14 @@ public static partial class ToolStripManager
     private static bool s_visualStylesEnabledIfPossible = true;
 
     [ThreadStatic]
-    private static Type t_currentRendererType;
+    private static Type? t_currentRendererType;
 
     private static Type CurrentRendererType
     {
         get
         {
             InitializeThread();
-            return t_currentRendererType;
+            return t_currentRendererType!;
         }
         set => t_currentRendererType = value;
     }
@@ -499,6 +492,7 @@ public static partial class ToolStripManager
     ///  The default renderer for the thread. When ToolStrip.RenderMode is set
     ///  to manager - this is the property used.
     /// </summary>
+    [AllowNull]
     public static ToolStripRenderer Renderer
     {
         get
@@ -514,7 +508,7 @@ public static partial class ToolStripManager
                 CurrentRendererType = (value is null) ? s_defaultRendererType : value.GetType();
                 t_defaultRenderer = value;
 
-                ((EventHandler)GetEventHandler(StaticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
+                ((EventHandler?)GetEventHandler(StaticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
             }
         }
     }
@@ -524,7 +518,7 @@ public static partial class ToolStripManager
     ///  Warning: When subscribing to static event handlers - make sure you unhook from them
     ///  otherwise you can leak user objects on process shutdown.
     /// </summary>
-    public static event EventHandler RendererChanged
+    public static event EventHandler? RendererChanged
     {
         add => AddEventHandler(StaticEventDefaultRendererChanged, value);
         remove => RemoveEventHandler(StaticEventDefaultRendererChanged, value);
@@ -589,7 +583,7 @@ public static partial class ToolStripManager
 
             if (oldVis != VisualStylesEnabled)
             {
-                ((EventHandler)GetEventHandler(StaticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
+                ((EventHandler?)GetEventHandler(StaticEventDefaultRendererChanged))?.Invoke(null, EventArgs.Empty);
             }
         }
     }
@@ -625,11 +619,11 @@ public static partial class ToolStripManager
     internal static WeakRefCollection ToolStripPanels
         => t_toolStripPanelWeakArrayList ??= new WeakRefCollection();
 
-    internal static ToolStripPanel ToolStripPanelFromPoint(Control draggedControl, Point screenLocation)
+    internal static ToolStripPanel? ToolStripPanelFromPoint(Control draggedControl, Point screenLocation)
     {
         if (t_toolStripPanelWeakArrayList is not null)
         {
-            ISupportToolStripPanel draggedItem = draggedControl as ISupportToolStripPanel;
+            ISupportToolStripPanel draggedItem = (ISupportToolStripPanel)draggedControl;
             bool rootWindowCheck = draggedItem.IsCurrentlyDragging;
 
             for (int i = 0; i < t_toolStripPanelWeakArrayList.Count; i++)
@@ -663,7 +657,7 @@ public static partial class ToolStripManager
     {
         ArgumentNullException.ThrowIfNull(targetForm);
 
-        LoadSettings(targetForm, targetForm.GetType().FullName);
+        LoadSettings(targetForm, targetForm.GetType().FullName!);
     }
 
     /// <summary>
@@ -686,7 +680,7 @@ public static partial class ToolStripManager
     {
         ArgumentNullException.ThrowIfNull(sourceForm);
 
-        SaveSettings(sourceForm, sourceForm.GetType().FullName);
+        SaveSettings(sourceForm, sourceForm.GetType().FullName!);
     }
 
     /// <summary>
@@ -697,7 +691,7 @@ public static partial class ToolStripManager
         ArgumentNullException.ThrowIfNull(sourceForm);
         ArgumentNullException.ThrowIfNull(key);
 
-        var settingsManager = new ToolStripSettingsManager(sourceForm, key);
+        ToolStripSettingsManager settingsManager = new(sourceForm, key);
         settingsManager.Save();
     }
 
@@ -820,8 +814,8 @@ public static partial class ToolStripManager
             return false;
         }
 
-        Control activeControl = Control.FromChildHandle(m.HWnd);
-        Control activeControlInChain = activeControl;
+        Control? activeControl = Control.FromChildHandle(m.HWnd);
+        Control? activeControlInChain = activeControl;
 
         if (activeControlInChain is not null && IsValidShortcut(shortcut))
         {
@@ -833,7 +827,7 @@ public static partial class ToolStripManager
                 // Check the context menu strip first.
                 if (activeControlInChain.ContextMenuStrip is not null)
                 {
-                    if (activeControlInChain.ContextMenuStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem item))
+                    if (activeControlInChain.ContextMenuStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item))
                     {
                         if (item.ProcessCmdKey(ref m, shortcut))
                         {
@@ -864,7 +858,7 @@ public static partial class ToolStripManager
                 bool isAssociatedContextMenu = false;
                 bool isDoublyAssignedContextMenuStrip = false;
 
-                if (!(ToolStrips[i] is ToolStrip toolStrip))
+                if (ToolStrips[i] is not ToolStrip toolStrip)
                 {
                     // Consider prune tree.
                     needsPrune = true;
@@ -881,17 +875,17 @@ public static partial class ToolStripManager
                         // We don't want to process someone else's context menu (e.g. button1 and button2 have context menus)
                         // button2's context menu should not be processed if button1 is the one we're processing.
 
-                        ToolStripDropDown dropDown = toolStrip as ToolStripDropDown;
+                        ToolStripDropDown dropDown = (ToolStripDropDown)toolStrip;
 
                         // If a context menu is re-used between the main menu and the
                         // and some other control's context menu, we should go ahead and evaluate it.
 
-                        if (dropDown.GetFirstDropDown() is ContextMenuStrip toplevelContextMenu)
+                        if (dropDown.GetFirstDropDown() is ContextMenuStrip topLevelContextMenu)
                         {
-                            isDoublyAssignedContextMenuStrip = toplevelContextMenu.IsAssignedToDropDownItem;
+                            isDoublyAssignedContextMenuStrip = topLevelContextMenu.IsAssignedToDropDownItem;
                             if (!isDoublyAssignedContextMenuStrip)
                             {
-                                if (toplevelContextMenu != activeControl.ContextMenuStrip)
+                                if (topLevelContextMenu != activeControl!.ContextMenuStrip)
                                 {
                                     // The toplevel context menu is NOT the same as the active control's context menu.
                                     continue;
@@ -913,7 +907,7 @@ public static partial class ToolStripManager
                         // Make sure that were processing shortcuts for the correct window.
                         // since the shortcut lookup is faster than this check we've postponed this to the last
                         // possible moment.
-                        ToolStrip topMostToolStrip = toolStrip.GetToplevelOwnerToolStrip();
+                        ToolStrip? topMostToolStrip = toolStrip.GetToplevelOwnerToolStrip();
                         if (topMostToolStrip is not null && activeControl is not null)
                         {
                             HWND rootWindowOfToolStrip = PInvoke.GetAncestor(topMostToolStrip, GET_ANCESTOR_FLAGS.GA_ROOT);
@@ -925,7 +919,7 @@ public static partial class ToolStripManager
                                 // Double check this is not an MDIContainer type situation...
                                 if (Control.FromHandle(rootWindowOfControl) is Form mainForm && mainForm.IsMdiContainer)
                                 {
-                                    Form toolStripForm = topMostToolStrip.FindForm();
+                                    Form? toolStripForm = topMostToolStrip.FindForm();
                                     if (toolStripForm != mainForm && toolStripForm is not null)
                                     {
                                         // We should only process shortcuts of the ActiveMDIChild or the Main Form.
@@ -938,7 +932,7 @@ public static partial class ToolStripManager
 
                     if (isAssociatedContextMenu || rootWindowsMatch || isDoublyAssignedContextMenuStrip)
                     {
-                        if (toolStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem item))
+                        if (toolStrip.Shortcuts.TryGetValue(shortcut, out ToolStripMenuItem? item))
                         {
                             if (item.ProcessCmdKey(ref m, shortcut))
                             {
@@ -982,10 +976,10 @@ public static partial class ToolStripManager
         Keys keyData = (Keys)(nint)m.LParamInternal;
 
         // Search for our menu to work with
-        Control intendedControl = Control.FromHandle(m.HWnd);
-        Control toplevelControl = null;
+        Control? intendedControl = Control.FromHandle(m.HWnd);
+        Control? toplevelControl = null;
 
-        MenuStrip menuStripToActivate = null;
+        MenuStrip? menuStripToActivate = null;
         if (intendedControl is not null)
         {
             // Search for a menustrip to select.
@@ -1059,7 +1053,7 @@ public static partial class ToolStripManager
         return false;
     }
 
-    internal static MenuStrip GetMainMenuStrip(Control control)
+    internal static MenuStrip? GetMainMenuStrip(Control control)
     {
         if (control is null)
         {
@@ -1068,7 +1062,7 @@ public static partial class ToolStripManager
         }
 
         // Look for a particular main menu strip to be set.
-        Form mainForm = control.FindForm();
+        Form? mainForm = control.FindForm();
         if (mainForm is not null && mainForm.MainMenuStrip is not null)
         {
             return mainForm.MainMenuStrip;
@@ -1078,7 +1072,7 @@ public static partial class ToolStripManager
         return GetFirstMenuStripRecursive(control.Controls);
     }
 
-    private static MenuStrip GetFirstMenuStripRecursive(Control.ControlCollection controlsToLookIn)
+    private static MenuStrip? GetFirstMenuStripRecursive(Control.ControlCollection controlsToLookIn)
     {
         try
         {
@@ -1091,9 +1085,9 @@ public static partial class ToolStripManager
                     continue;
                 }
 
-                if (controlsToLookIn[i] is MenuStrip)
+                if (controlsToLookIn[i] is MenuStrip menuStrip)
                 {
-                    return controlsToLookIn[i] as MenuStrip;
+                    return menuStrip;
                 }
             }
 
@@ -1108,7 +1102,7 @@ public static partial class ToolStripManager
                 if ((controlsToLookIn[i].Controls is not null) && controlsToLookIn[i].Controls.Count > 0)
                 {
                     // If it has a valid child collection, append those results to our collection
-                    MenuStrip menuStrip = GetFirstMenuStripRecursive(controlsToLookIn[i].Controls);
+                    MenuStrip? menuStrip = GetFirstMenuStripRecursive(controlsToLookIn[i].Controls);
                     if (menuStrip is not null)
                     {
                         return menuStrip;
@@ -1123,11 +1117,11 @@ public static partial class ToolStripManager
         return null;
     }
 
-    private static ToolStripItem FindMatch(ToolStripItem source, ToolStripItemCollection destinationItems)
+    private static ToolStripItem? FindMatch(ToolStripItem source, ToolStripItemCollection destinationItems)
     {
         // Based on MergeAction:
         // Append, return the last sibling
-        ToolStripItem result = null;
+        ToolStripItem? result = null;
         if (source is not null)
         {
             for (int i = 0; i < destinationItems.Count; i++)
@@ -1151,14 +1145,14 @@ public static partial class ToolStripManager
         return result;
     }
 
-    internal static List<ToolStrip> FindMergeableToolStrips(ContainerControl container)
+    internal static List<ToolStrip> FindMergeableToolStrips(ContainerControl? container)
     {
         List<ToolStrip> result = new();
         if (container is not null)
         {
             for (int i = 0; i < ToolStrips.Count; i++)
             {
-                ToolStrip candidateTS = (ToolStrip)ToolStrips[i];
+                ToolStrip? candidateTS = (ToolStrip?)ToolStrips[i];
                 if (candidateTS is not null && candidateTS.AllowMerge && container == candidateTS.FindForm())
                 {
                     result.Add(candidateTS);
@@ -1192,7 +1186,7 @@ public static partial class ToolStripManager
         canMerge = (canMerge || (sourceToolStrip.AllowMerge &&
                                   targetToolStrip.AllowMerge &&
                                   (sourceToolStrip.GetType().IsAssignableFrom(targetToolStrip.GetType()) || targetToolStrip.GetType().IsAssignableFrom(sourceToolStrip.GetType()))));
-        MergeHistory mergeHistory = null;
+        MergeHistory? mergeHistory = null;
         if (canMerge)
         {
             Debug.Indent();
@@ -1246,7 +1240,7 @@ public static partial class ToolStripManager
             case MergeAction.MatchOnly:
             case MergeAction.Replace:
             case MergeAction.Remove:
-                ToolStripItem item = FindMatch(source, destinationItems);
+                ToolStripItem? item = FindMatch(source, destinationItems);
                 if (item is not null)
                 {
                     switch (source.MergeAction)
@@ -1298,7 +1292,7 @@ public static partial class ToolStripManager
                             {
                                 maction = new MergeHistoryItem(MergeAction.Remove)
                                 {
-                                    PreviousIndexCollection = source.Owner.Items
+                                    PreviousIndexCollection = source.Owner!.Items
                                 };
                                 maction.PreviousIndex = maction.PreviousIndexCollection.IndexOf(source);
                                 maction.TargetItem = source;
@@ -1318,7 +1312,7 @@ public static partial class ToolStripManager
                 {
                     maction = new MergeHistoryItem(MergeAction.Remove)
                     {
-                        PreviousIndexCollection = source.Owner.Items
+                        PreviousIndexCollection = source.Owner!.Items
                     };
                     maction.PreviousIndex = maction.PreviousIndexCollection.IndexOf(source);
                     maction.TargetItem = source;
@@ -1333,7 +1327,7 @@ public static partial class ToolStripManager
             case MergeAction.Append:
                 maction = new MergeHistoryItem(MergeAction.Remove)
                 {
-                    PreviousIndexCollection = source.Owner.Items
+                    PreviousIndexCollection = source.Owner!.Items
                 };
                 maction.PreviousIndex = maction.PreviousIndexCollection.IndexOf(source);
                 maction.TargetItem = source;
@@ -1355,7 +1349,7 @@ public static partial class ToolStripManager
         ArgumentNullException.ThrowIfNull(sourceToolStrip);
         ArgumentNullException.ThrowIfNull(targetName);
 
-        ToolStrip target = FindToolStrip(targetName);
+        ToolStrip? target = FindToolStrip(targetName);
         if (target is null)
         {
             return false;
@@ -1369,7 +1363,7 @@ public static partial class ToolStripManager
     /// <remarks>
     ///  Doesn't do a null check on source - if it's null we unmerge everything
     /// </remarks>
-    internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip sourceToolStrip, bool revertMDIControls)
+    internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip? sourceToolStrip, bool revertMDIControls)
     {
         bool result = false;
         ArgumentNullException.ThrowIfNull(targetToolStrip);
@@ -1436,12 +1430,12 @@ public static partial class ToolStripManager
                     switch (historyItem.MergeAction)
                     {
                         case MergeAction.Remove:
-                            historyItem.IndexCollection.Remove(historyItem.TargetItem);
+                            historyItem.IndexCollection!.Remove(historyItem.TargetItem!);
                             // Put it back
-                            historyItem.PreviousIndexCollection.Insert(Math.Min(historyItem.PreviousIndex, historyItem.PreviousIndexCollection.Count), historyItem.TargetItem);
+                            historyItem.PreviousIndexCollection!.Insert(Math.Min(historyItem.PreviousIndex, historyItem.PreviousIndexCollection.Count), historyItem.TargetItem!);
                             break;
                         case MergeAction.Insert:
-                            historyItem.IndexCollection.Insert(Math.Min(historyItem.Index, historyItem.IndexCollection.Count), historyItem.TargetItem);
+                            historyItem.IndexCollection!.Insert(Math.Min(historyItem.Index, historyItem.IndexCollection.Count), historyItem.TargetItem!);
                             // No need to put it back, inserting it in a new collection, moved it at the correct location
                             break;
                     }
@@ -1470,7 +1464,7 @@ public static partial class ToolStripManager
     ///  Unmerge two toolstrips
     /// </summary>
     public static bool RevertMerge(ToolStrip targetToolStrip)
-        => RevertMergeInternal(targetToolStrip, null, revertMDIControls: false);
+        => RevertMergeInternal(targetToolStrip, sourceToolStrip: null, revertMDIControls: false);
 
     /// <summary>
     ///  Unmerge two toolstrips
@@ -1487,7 +1481,7 @@ public static partial class ToolStripManager
     /// </summary>
     public static bool RevertMerge(string targetName)
     {
-        ToolStrip target = FindToolStrip(targetName);
+        ToolStrip? target = FindToolStrip(targetName);
         if (target is null)
         {
             return false;

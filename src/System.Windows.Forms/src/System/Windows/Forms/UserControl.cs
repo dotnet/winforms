@@ -20,7 +20,7 @@ namespace System.Windows.Forms;
 [DefaultEvent(nameof(Load))]
 public class UserControl : ContainerControl
 {
-    private static readonly object EVENT_LOAD = new object();
+    private static readonly object EVENT_LOAD = new();
     private BorderStyle _borderStyle = BorderStyle.None;
 
     /// <summary>

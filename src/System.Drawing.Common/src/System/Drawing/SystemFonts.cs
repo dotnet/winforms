@@ -188,10 +188,8 @@ public static class SystemFonts
                 IntPtr handle = Gdi32.GetStockObject(Gdi32.StockObject.DEFAULT_GUI_FONT);
                 try
                 {
-                    using (Font fontInWorldUnits = Font.FromHfont(handle))
-                    {
-                        defaultFont = FontInPoints(fontInWorldUnits);
-                    }
+                    using Font fontInWorldUnits = Font.FromHfont(handle);
+                    defaultFont = FontInPoints(fontInWorldUnits);
                 }
                 catch (ArgumentException)
                 {

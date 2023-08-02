@@ -61,7 +61,7 @@ public sealed partial class ImageAnimator
     ///     access to it for a single thread.  Observe that synchronization access to image objects are done
     ///     with critical sections (lock).
     /// </summary>
-    private static readonly ReaderWriterLock s_rwImgListLock = new ReaderWriterLock();
+    private static readonly ReaderWriterLock s_rwImgListLock = new();
 
     /// <summary>
     ///     Flag to avoid a deadlock when waiting on a write-lock and an attempt to acquire a read-lock is

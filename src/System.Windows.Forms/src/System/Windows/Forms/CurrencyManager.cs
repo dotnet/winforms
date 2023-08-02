@@ -30,7 +30,7 @@ public class CurrencyManager : BindingManagerBase
     private bool suspendPushDataInCurrentChanged;
     private ItemChangedEventHandler onItemChanged;
     private ListChangedEventHandler onListChanged;
-    private readonly ItemChangedEventArgs resetEvent = new ItemChangedEventArgs(-1);
+    private readonly ItemChangedEventArgs resetEvent = new(-1);
     private EventHandler onMetaDataChangedHandler;
 
     /// <summary>

@@ -299,7 +299,7 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
     private RECT GetFormattingRectangle()
     {
         // Send an EM_GETRECT message to find out the bounding rectangle.
-        RECT rectangle = default(RECT);
+        RECT rectangle = default;
         PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETRECT, 0, ref rectangle);
 
         return rectangle;
@@ -319,9 +319,9 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
 
     private unsafe bool GetTextExtentPoint32(char item, out Size size)
     {
-        size = default(Size);
+        size = default;
 
-        using var hdc = new GetDcScope(_owningChildEdit.Handle);
+        using GetDcScope hdc = new(_owningChildEdit.Handle);
         if (hdc.IsNull)
         {
             return false;

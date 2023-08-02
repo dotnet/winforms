@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
@@ -56,7 +56,7 @@ internal sealed class DbgUtil
     {
         if (!expression)
         {
-            var e = new Win32Exception();
+            Win32Exception e = new();
             string message = string.Format(CultureInfo.CurrentCulture, format, args);
             Debug.Fail($"{message}\r\nError: 0x{e.NativeErrorCode:x8} - {e.Message}");
         }

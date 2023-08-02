@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design;
 /// </summary>
 internal partial class DesignerActionUI : IDisposable
 {
-    private static readonly TraceSwitch s_designerActionPanelTraceSwitch = new TraceSwitch("DesignerActionPanelTrace", "DesignerActionPanel tracing");
+    private static readonly TraceSwitch s_designerActionPanelTraceSwitch = new("DesignerActionPanelTrace", "DesignerActionPanel tracing");
 
     private Adorner _designerActionAdorner; //used to add designeraction-related glyphs
     private IServiceProvider _serviceProvider; //standard service provider
@@ -52,7 +52,7 @@ internal partial class DesignerActionUI : IDisposable
 
     private delegate void ActionChangedEventHandler(object sender, DesignerActionListsChangedEventArgs e);
 #if DEBUG
-    internal static readonly TraceSwitch DropDownVisibilityDebug = new TraceSwitch("DropDownVisibilityDebug", "Debug ToolStrip Selection code");
+    internal static readonly TraceSwitch DropDownVisibilityDebug = new("DropDownVisibilityDebug", "Debug ToolStrip Selection code");
 #else
     internal static readonly TraceSwitch DropDownVisibilityDebug;
 #endif

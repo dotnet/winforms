@@ -10571,7 +10571,7 @@ public partial class DataGridView
                 }
             }
 
-            _layout.ResizeBoxRect = default(Rectangle);
+            _layout.ResizeBoxRect = default;
             if (needVertScrollbar && needHorizScrollbar)
             {
                 _layout.ResizeBoxRect = new Rectangle(
@@ -17219,7 +17219,7 @@ public partial class DataGridView
 
             if (clipRect.IntersectsWith(gridRect))
             {
-                using var clipScope = new GraphicsClipScope(g);
+                using GraphicsClipScope clipScope = new(g);
                 g.SetClip(gridRect);
                 PaintBackground(g, clipRect, gridRect);
                 PaintGrid(g, gridRect, clipRect, SingleVerticalBorderAdded, SingleHorizontalBorderAdded);
@@ -19974,7 +19974,7 @@ public partial class DataGridView
             bool isFirstDisplayedColumn = true, isLastVisibleColumn = false;
             DataGridViewCell cell;
             DataGridViewCellStyle inheritedCellStyle = new DataGridViewCellStyle();
-            DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
+            DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new(), dgvabsEffective;
             DataGridViewColumn dataGridViewColumnNext = null;
 
             // first paint the visible frozen columns

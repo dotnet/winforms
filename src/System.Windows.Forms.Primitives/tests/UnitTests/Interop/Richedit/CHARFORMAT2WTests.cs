@@ -28,7 +28,7 @@ public class CHARFORMAT2WTests
 
         // CHARFORMAT has space for 32 characters, we want to see it gets
         // cut to 31 to make room for the null.
-        string bigString = new string('*', 32);
+        string bigString = new('*', 32);
 
         charFormat.FaceName = bigString;
         Assert.True(charFormat.FaceName.SequenceEqual(bigString.AsSpan().Slice(1)));

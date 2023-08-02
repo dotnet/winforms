@@ -246,7 +246,7 @@ public partial class DataGridViewRow : DataGridViewBand
                 throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, nameof(InheritedStyle)));
             }
 
-            var inheritedRowStyle = new DataGridViewCellStyle();
+            DataGridViewCellStyle inheritedRowStyle = new();
             BuildInheritedRowStyle(Index, inheritedRowStyle);
             return inheritedRowStyle;
         }
@@ -1522,7 +1522,7 @@ public partial class DataGridViewRow : DataGridViewBand
         DataGridViewCell cell;
         DataGridViewCellStyle inheritedCellStyle = new DataGridViewCellStyle();
         DataGridViewColumn dataGridViewColumnNext = null;
-        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
+        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new(), dgvabsEffective;
 
         // first paint the potential visible frozen cells
         DataGridViewColumn dataGridViewColumn = dataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
@@ -1720,7 +1720,7 @@ public partial class DataGridViewRow : DataGridViewBand
             if (clipBounds.IntersectsWith(cellBounds))
             {
                 DataGridViewCellStyle inheritedCellStyle = new DataGridViewCellStyle();
-                DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
+                DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new(), dgvabsEffective;
                 BuildInheritedRowHeaderCellStyle(inheritedCellStyle);
                 dgvabsEffective = AdjustRowHeaderBorderStyle(dataGridView.AdvancedRowHeadersBorderStyle,
                     dataGridViewAdvancedBorderStylePlaceholder,

@@ -26,7 +26,7 @@ public class MenuCommandService : IMenuCommandService, IDisposable
     private List<DesignerVerb> _globalVerbs;
     private ISelectionService _selectionService;
 
-    internal static TraceSwitch MENUSERVICE = new TraceSwitch("MENUSERVICE", "MenuCommandService: Track menu command routing");
+    internal static TraceSwitch MENUSERVICE = new("MENUSERVICE", "MenuCommandService: Track menu command routing");
 
     // This is the set of verbs we offer through the Verbs property.
     // It consists of the global verbs + any verbs that the currently

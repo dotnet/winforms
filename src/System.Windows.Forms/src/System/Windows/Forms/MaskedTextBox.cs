@@ -38,11 +38,11 @@ public partial class MaskedTextBox : TextBoxBase
     private const bool backward = false;
     private const string nullMask = "<>"; // any char/str is OK here.
 
-    private static readonly object EVENT_MASKINPUTREJECTED = new object();
-    private static readonly object EVENT_VALIDATIONCOMPLETED = new object();
-    private static readonly object EVENT_TEXTALIGNCHANGED = new object();
-    private static readonly object EVENT_ISOVERWRITEMODECHANGED = new object();
-    private static readonly object EVENT_MASKCHANGED = new object();
+    private static readonly object EVENT_MASKINPUTREJECTED = new();
+    private static readonly object EVENT_VALIDATIONCOMPLETED = new();
+    private static readonly object EVENT_TEXTALIGNCHANGED = new();
+    private static readonly object EVENT_ISOVERWRITEMODECHANGED = new();
+    private static readonly object EVENT_MASKCHANGED = new();
 
     // The native edit control's default password char (per thread). See corresponding property for more info.
     private static char systemPwdChar;

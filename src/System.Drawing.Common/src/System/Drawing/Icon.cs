@@ -430,11 +430,10 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         copy.X += (int)offset.X;
         copy.Y += (int)offset.Y;
 
-        using (WindowsGraphics wg = WindowsGraphics.FromGraphics(graphics, ApplyGraphicsProperties.Clipping))
-        {
-            IntPtr dc = wg.GetHdc();
-            DrawIcon(dc, Rectangle.Empty, copy, true);
-        }
+        using var wg = WindowsGraphics.FromGraphics(graphics, ApplyGraphicsProperties.Clipping);
+
+        IntPtr dc = wg.GetHdc();
+        DrawIcon(dc, Rectangle.Empty, copy, true);
     }
 
     // Draws this image to a graphics object.  The drawing command originates on the graphics
@@ -449,11 +448,10 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         copy.X += (int)offset.X;
         copy.Y += (int)offset.Y;
 
-        using (WindowsGraphics wg = WindowsGraphics.FromGraphics(graphics, ApplyGraphicsProperties.Clipping))
-        {
-            IntPtr dc = wg.GetHdc();
-            DrawIcon(dc, Rectangle.Empty, copy, false);
-        }
+        using var wg = WindowsGraphics.FromGraphics(graphics, ApplyGraphicsProperties.Clipping);
+
+        IntPtr dc = wg.GetHdc();
+        DrawIcon(dc, Rectangle.Empty, copy, false);
     }
 
     ~Icon() => Dispose(false);
@@ -818,10 +816,8 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
             {
                 try
                 {
-                    using (Bitmap tmpBitmap = Bitmap.FromHicon(Handle))
-                    {
-                        graphics.DrawImage(tmpBitmap, new Rectangle(0, 0, size.Width, size.Height));
-                    }
+                    using var tmpBitmap = Bitmap.FromHicon(Handle);
+                    graphics.DrawImage(tmpBitmap, new Rectangle(0, 0, size.Width, size.Height));
                 }
                 catch (ArgumentException)
                 {
@@ -847,11 +843,9 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     private Bitmap PngFrame()
     {
         Debug.Assert(_iconData != null);
-        using (var stream = new MemoryStream())
-        {
-            stream.Write(_iconData, (int)_bestImageOffset, (int)_bestBytesInRes);
-            return new Bitmap(stream);
-        }
+        using var stream = new MemoryStream();
+        stream.Write(_iconData, (int)_bestImageOffset, (int)_bestBytesInRes);
+        return new Bitmap(stream);
     }
 
     private bool HasPngSignature()

@@ -346,11 +346,7 @@ public partial class Control
                     {
                         // Must translate message coordinates over to our HWND.
                         HWND hwndMap = hwnd.IsNull ? hwndParent : hwnd;
-                        var pt = new Point
-                        {
-                            X = PARAM.LOWORD(lpmsg->lParam),
-                            Y = PARAM.HIWORD(lpmsg->lParam)
-                        };
+                        Point pt = new(PARAM.LOWORD(lpmsg->lParam), PARAM.HIWORD(lpmsg->lParam));
 
                         PInvoke.MapWindowPoints(hwndMap, _control, ref pt);
 
@@ -869,11 +865,8 @@ public partial class Control
                 RECT posRect = default;
                 RECT clipRect = default;
 
-                _inPlaceUiWindow?.Dispose();
-                _inPlaceUiWindow = null;
-
-                _inPlaceFrame?.Dispose();
-                _inPlaceFrame = null;
+                DisposeHelper.NullAndDispose(ref _inPlaceUiWindow);
+                DisposeHelper.NullAndDispose(ref _inPlaceFrame);
 
                 IOleInPlaceFrame* pFrame;
                 IOleInPlaceUIWindow* pWindow;
@@ -1006,11 +999,8 @@ public partial class Control
             _control.Visible = false;
             HWNDParent = default;
 
-            _inPlaceUiWindow?.Dispose();
-            _inPlaceUiWindow = null;
-
-            _inPlaceFrame?.Dispose();
-            _inPlaceFrame = null;
+            DisposeHelper.NullAndDispose(ref _inPlaceUiWindow);
+            DisposeHelper.NullAndDispose(ref _inPlaceFrame);
 
             return HRESULT.S_OK;
         }
@@ -1706,12 +1696,23 @@ public partial class Control
         /// </summary>
         internal void SetClientSite(IOleClientSite* value)
         {
-            _clientSite?.Dispose();
-            _clientSite = value is null ? null : new(value, takeOwnership: true);
+            DisposeHelper.NullAndDispose(ref _clientSite);
 
-            _control.Site = _clientSite is not null
-                ? new AxSourcingSite(_control, _clientSite, "ControlAxSourcingSite")
-                : (ISite?)null;
+            if (value is not null)
+            {
+                // Callers don't increment the ref count when they pass IOleClientSite, it is up to us to do so as we're
+                // maintaining a reference to the pointer. Validated this behavior with the ATL/MFC sources.
+                //
+                // https://learn.microsoft.com/windows/win32/api/oleidl/nf-oleidl-ioleobject-setclientsite#notes-to-implementers
+
+                value->AddRef();
+                _clientSite = new(value, takeOwnership: true);
+                _control.Site = new AxSourcingSite(_control, _clientSite, "ControlAxSourcingSite");
+            }
+            else
+            {
+                _control.Site = null;
+            }
 
             // Get the ambient properties that effect us.
             using VARIANT property = GetAmbientProperty(PInvoke.DISPID_AMBIENT_UIDEAD);
@@ -2261,12 +2262,13 @@ public partial class Control
 
         public void Dispose()
         {
-            _inPlaceFrame?.Dispose();
-            _inPlaceFrame = null;
-            _inPlaceUiWindow?.Dispose();
-            _inPlaceUiWindow = null;
-            _clientSite?.Dispose();
-            _clientSite = null;
+            // Disposing the client site handle can get us called back with SetClientSite(null). We need to
+            // make sure that we clear the field before disposing it. To avoid similar problems, we do the same
+            // pattern for every COM pointer.
+
+            DisposeHelper.NullAndDispose(ref _inPlaceFrame);
+            DisposeHelper.NullAndDispose(ref _inPlaceUiWindow);
+            DisposeHelper.NullAndDispose(ref _clientSite);
         }
     }
 }

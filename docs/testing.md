@@ -126,7 +126,7 @@ Tests are built and executed by file name convention
     [WinFormsFact]
     public void ButtonBase_GetAutoSizeMode_Invoke_ReturnsExpected()
     {
-        using var control = new SubButtonBase();
+        using SubButtonBase control = new();
         Assert.Equal(AutoSizeMode.GrowOnly, control.GetAutoSizeMode());
     }  
   ```
@@ -163,8 +163,8 @@ When writing theories note the following:
     [WinFormsTheory]
     [MemberData(nameof(GetButton_TestData))]
     public void Ctor_Control_DataGridViewCellStyle(string buttonText) 
-    { 
-        using var button = new Button() { Text = buttonText };
+    {
+        using Button button = new() { Text = buttonText };
         ...
     }    
     ```
@@ -184,7 +184,7 @@ When writing theories note the following:
     // ** DO NOT DO THIS! **
     public static IEnumerable<object[]> GetButton_TestData()
     {
-        var button = new Button();
+        Button button = new();
         yield return new object[] { button, new DataGridViewCellStyle() };
         yield return new object[] { button { Text = "bla" }, new DataGridViewCellStyle() }; // the button could already be disposed by the time this theory runs
     }
@@ -233,12 +233,12 @@ public void MyControl_Rendering()
     // 1. Create a control to validate rendering for.
     // 2. Add the control to a form, and make sure the form is created
     using Form form = new Form();
-    using var control = new MyControl { ... };
+    using MyControl control = new() { ... };
     form.Controls.Add(control);
     Assert.NotEqual(IntPtr.Zero, form.Handle);
 
     // Create an Enhance Metafile into which we will render the control
-    using var emf = new EmfScope();
+    using EmfScope emf = new();
     DeviceContextState state = new DeviceContextState(emf);
 
     // Render the control

@@ -23,7 +23,7 @@ internal class ToolStripDropTargetManager : IDropTarget
 #endif
 
 #if DEBUG
-    internal static readonly TraceSwitch DragDropDebug = new TraceSwitch("DragDropDebug", "Debug ToolStrip DragDrop code");
+    internal static readonly TraceSwitch DragDropDebug = new("DragDropDebug", "Debug ToolStrip DragDrop code");
 #else
     internal static readonly TraceSwitch? DragDropDebug;
 #endif

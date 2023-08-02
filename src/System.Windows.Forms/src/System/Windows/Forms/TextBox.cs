@@ -17,7 +17,7 @@ namespace System.Windows.Forms;
 [SRDescription(nameof(SR.DescriptionTextBox))]
 public partial class TextBox : TextBoxBase
 {
-    private static readonly object EVENT_TEXTALIGNCHANGED = new object();
+    private static readonly object EVENT_TEXTALIGNCHANGED = new();
 
     /// <summary>
     ///  Controls whether or not the edit box consumes/respects ENTER key
@@ -967,7 +967,7 @@ public partial class TextBox : TextBoxBase
                         PInvoke.InvalidateRect(this, lpRect: null, bErase: true);
 
                         // Use BeginPaint instead of GetDC to prevent flicker and support print-to-image scenarios.
-                        using var paintScope = new PInvoke.BeginPaintScope((HWND)Handle);
+                        using PInvoke.BeginPaintScope paintScope = new((HWND)Handle);
                         DrawPlaceholderText(paintScope);
 
                         PInvoke.ValidateRect(this, lpRect: null);

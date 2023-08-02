@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
@@ -109,22 +109,21 @@ internal static class DpiHelper
     {
         Bitmap deviceImage = new Bitmap(deviceImageSize.Width, deviceImageSize.Height, logicalImage.PixelFormat);
 
-        using (Graphics graphics = Graphics.FromImage(deviceImage))
-        {
-            graphics.InterpolationMode = InterpolationMode;
+        using var graphics = Graphics.FromImage(deviceImage);
 
-            RectangleF sourceRect = new RectangleF(0, 0, logicalImage.Size.Width, logicalImage.Size.Height);
-            RectangleF destRect = new RectangleF(0, 0, deviceImageSize.Width, deviceImageSize.Height);
+        graphics.InterpolationMode = InterpolationMode;
 
-            // Specify a source rectangle shifted by half of pixel to account for GDI+ considering the source origin the center of top-left pixel
-            // Failing to do so will result in the right and bottom of the bitmap lines being interpolated with the graphics' background color,
-            // and will appear black even if we cleared the background with transparent color.
-            // The apparition of these artifacts depends on the interpolation mode, on the dpi scaling factor, etc.
-            // E.g. at 150% DPI, Bicubic produces them and NearestNeighbor is fine, but at 200% DPI NearestNeighbor also shows them.
-            sourceRect.Offset(-0.5f, -0.5f);
+        RectangleF sourceRect = new RectangleF(0, 0, logicalImage.Size.Width, logicalImage.Size.Height);
+        RectangleF destRect = new RectangleF(0, 0, deviceImageSize.Width, deviceImageSize.Height);
 
-            graphics.DrawImage(logicalImage, destRect, sourceRect, GraphicsUnit.Pixel);
-        }
+        // Specify a source rectangle shifted by half of pixel to account for GDI+ considering the source origin the center of top-left pixel
+        // Failing to do so will result in the right and bottom of the bitmap lines being interpolated with the graphics' background color,
+        // and will appear black even if we cleared the background with transparent color.
+        // The apparition of these artifacts depends on the interpolation mode, on the dpi scaling factor, etc.
+        // E.g. at 150% DPI, Bicubic produces them and NearestNeighbor is fine, but at 200% DPI NearestNeighbor also shows them.
+        sourceRect.Offset(-0.5f, -0.5f);
+
+        graphics.DrawImage(logicalImage, destRect, sourceRect, GraphicsUnit.Pixel);
 
         return deviceImage;
     }

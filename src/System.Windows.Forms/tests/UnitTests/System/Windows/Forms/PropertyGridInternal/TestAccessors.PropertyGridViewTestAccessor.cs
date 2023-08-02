@@ -18,5 +18,5 @@ public static partial class TestAccessors
     }
 
     internal static PropertyGridViewTestAccessor TestAccessor(this Windows.Forms.PropertyGridInternal.PropertyGridView propertyGridView)
-        => new PropertyGridViewTestAccessor(propertyGridView);
+        => new(propertyGridView);
 }

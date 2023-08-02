@@ -130,7 +130,7 @@ public abstract partial class AxHost
                 return HRESULT.E_POINTER;
             }
 
-            object ambient = _host.GetAmbientProperty(dispId);
+            object? ambient = _host.GetAmbientProperty(dispId);
             if (ambient is not null)
             {
                 Marshal.GetNativeVariantForObject(ambient, (nint)result);
