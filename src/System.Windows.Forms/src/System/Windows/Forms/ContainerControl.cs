@@ -820,7 +820,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
         {
             if (ActiveControl is null)
             {
-                SelectNextControl(null, true, true, true, false);
+                SelectNextControl(ctl: null, forward: true, tabStopOnly: true, nested: true, wrap: false);
             }
 
             InnerMostActiveContainerControl.FocusActiveControlInternal();
