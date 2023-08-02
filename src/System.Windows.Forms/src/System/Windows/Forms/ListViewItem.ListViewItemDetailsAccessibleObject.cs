@@ -179,7 +179,7 @@ public partial class ListViewItem
 
         internal override Rectangle GetSubItemBounds(int accessibleChildIndex)
             => _owningListView.IsHandleCreated
-                ? _owningListView.GetSubItemRect(_owningItem.Index, AccessibleChildToSubItemIndex(accessibleChildIndex))
+                ? _owningListView.GetSubItemRect(_owningItem.Index, HasImage ? accessibleChildIndex - 1 : accessibleChildIndex)
                 : Rectangle.Empty;
 
         /// <devdoc>

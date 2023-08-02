@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 
@@ -154,5 +155,70 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         var accessibleObject = (ListViewItemDetailsAccessibleObject)listView.Items[0].AccessibilityObject;
         Assert.Equal(addImages, accessibleObject.HasImage);
         Assert.False(listView.IsHandleCreated);
+    }
+
+    private ListView GetListView()
+    {
+        ListView listView1 = new();
+        ColumnHeader columnHeader1 = new();
+        ColumnHeader columnHeader2 = new();
+        ColumnHeader columnHeader3 = new();
+
+        ListViewItem listViewItem1 = new(new string[] { "Item1", "sub1", "sub2" }, 0);
+        ListViewItem listViewItem2 = new(new string[] { "Item2", "sub1", "sub2" }, 0);
+
+        listView1.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3 });
+        listView1.Items.AddRange(new ListViewItem[] { listViewItem1, listViewItem2 });
+        listView1.View = View.Details;
+
+        columnHeader1.Text = "Col1";
+        columnHeader2.Text = "Col2";
+        columnHeader3.Text = "Col3";
+
+        return listView1;
+    }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/7492.
+    [WinFormsFact]
+    public void ListViewItemDetailsAccessibleObject_WithImageColumnAfterRemoveColumnSubItemAccessibleObjects_ReturnsExpected()
+    {
+        using Form form = new();
+        using ListView listView1 = GetListView();
+
+        using ImageList imageList1 = new();
+        using Image image = new Bitmap(1, 1);
+        imageList1.Images.Add(image);
+        listView1.LargeImageList = imageList1;
+        listView1.SmallImageList = imageList1;
+
+        form.Controls.Add(listView1);
+        form.Show();
+
+        AccessibleObject listItemAO = listView1.AccessibilityObject.GetChild(1);
+
+        Assert.Equal("sub1", listItemAO.GetChild(2).Name);
+
+        listView1.Columns.RemoveAt(0);
+
+        Assert.Equal("sub2", listItemAO.GetChild(2).Name);
+    }
+
+    // Unit test for https://github.com/dotnet/winforms/issues/7492.
+    [WinFormsFact]
+    public void ListViewItemDetailsAccessibleObject_AfterRemoveColumnSubItemAccessibleObjects_ReturnsExpected()
+    {
+        using Form form = new();
+        using ListView listView1 = GetListView();
+
+        form.Controls.Add(listView1);
+        form.Show();
+
+        AccessibleObject listItemAO = listView1.AccessibilityObject.GetChild(1);
+
+        Assert.Equal("sub1", listItemAO.GetChild(1).Name);
+
+        listView1.Columns.RemoveAt(0);
+
+        Assert.Equal("sub2", listItemAO.GetChild(1).Name);
     }
 }
