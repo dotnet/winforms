@@ -555,7 +555,7 @@ public partial class Control
             }
         }
 
-        // <inheritdoc cref="IViewObject.GetAdvise(uint*, uint*, IAdviseSink**)"/>
+        /// <inheritdoc cref="IViewObject.GetAdvise(uint*, uint*, IAdviseSink**)"/>
         internal unsafe HRESULT GetAdvise(DVASPECT* pAspects, ADVF* pAdvf, IAdviseSink** ppAdvSink)
         {
             if (pAspects is not null)
