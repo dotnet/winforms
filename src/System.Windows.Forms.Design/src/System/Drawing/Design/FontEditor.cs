@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
@@ -16,12 +14,12 @@ namespace System.Drawing.Design;
 [CLSCompliant(false)]
 public class FontEditor : UITypeEditor
 {
-    private FontDialog _fontDialog;
+    private FontDialog? _fontDialog;
 
-    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
         // Even though we don't use the editor service this is historically what we did.
-        if (!provider.TryGetService(out IWindowsFormsEditorService _))
+        if (!provider.TryGetService(out IWindowsFormsEditorService? _))
         {
             return value;
         }
@@ -57,5 +55,5 @@ public class FontEditor : UITypeEditor
         return value;
     }
 
-    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.Modal;
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
 }
