@@ -796,23 +796,18 @@ public sealed partial class Application
         /// </summary>
         internal bool IsValidComponentId() => _componentID != s_invalidId;
 
-        internal ApartmentState OleRequired()
+        internal unsafe ApartmentState OleRequired()
         {
-            _ = Thread.CurrentThread;
             if (!GetState(STATE_OLEINITIALIZED))
             {
-                HRESULT ret;
-                unsafe
-                {
-                    ret = PInvoke.OleInitialize(pvReserved: (void*)null);
-                }
+                HRESULT hr = PInvoke.OleInitialize(pvReserved: (void*)null);
 
                 SetState(STATE_OLEINITIALIZED, true);
-                if (ret == HRESULT.RPC_E_CHANGED_MODE)
+                if (hr == HRESULT.RPC_E_CHANGED_MODE)
                 {
                     // This could happen if the thread was already initialized for MTA
-                    // and then we call OleInitialize which tries to initialized it for STA
-                    // This currently happens while profiling...
+                    // and then we call OleInitialize which tries to initialize it for STA
+                    // This currently happens while profiling.
                     SetState(STATE_EXTERNALOLEINIT, true);
                 }
             }
