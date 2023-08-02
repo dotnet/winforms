@@ -487,13 +487,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
     }
 
-    public override Type FormattedValueType
-    {
-        get
-        {
-            return s_defaultFormattedValueType;
-        }
-    }
+    public override Type FormattedValueType => s_defaultFormattedValueType;
 
     internal bool HasItems => Properties.ContainsObjectThatIsNotNull(s_propComboBoxCellItems);
 

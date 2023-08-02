@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
@@ -16,22 +14,22 @@ namespace System.Windows.Forms;
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
 public partial class DataGridViewButtonCell : DataGridViewCell
 {
-    private static readonly int PropButtonCellFlatStyle = PropertyStore.CreateKey();
-    private static readonly int PropButtonCellState = PropertyStore.CreateKey();
-    private static readonly int PropButtonCellUseColumnTextForButtonValue = PropertyStore.CreateKey();
-    private static readonly VisualStyleElement ButtonElement = VisualStyleElement.Button.PushButton.Normal;
+    private static readonly int s_propButtonCellFlatStyle = PropertyStore.CreateKey();
+    private static readonly int s_propButtonCellState = PropertyStore.CreateKey();
+    private static readonly int s_propButtonCellUseColumnTextForButtonValue = PropertyStore.CreateKey();
+    private static readonly VisualStyleElement s_buttonElement = VisualStyleElement.Button.PushButton.Normal;
 
     private const byte DATAGRIDVIEWBUTTONCELL_themeMargin = 100; // Used to calculate the margins required for theming rendering
     private const byte DATAGRIDVIEWBUTTONCELL_horizontalTextMargin = 2;
     private const byte DATAGRIDVIEWBUTTONCELL_verticalTextMargin = 1;
     private const byte DATAGRIDVIEWBUTTONCELL_textPadding = 5;
 
-    private static Rectangle rectThemeMargins = new(-1, -1, 0, 0);
-    private static bool mouseInContentBounds;
+    private static Rectangle s_rectThemeMargins = new(-1, -1, 0, 0);
+    private static bool s_mouseInContentBounds;
 
-    private static readonly Type defaultFormattedValueType = typeof(string);
-    private static readonly Type defaultValueType = typeof(object);
-    private static readonly Type cellType = typeof(DataGridViewButtonCell);
+    private static readonly Type s_defaultFormattedValueType = typeof(string);
+    private static readonly Type s_defaultValueType = typeof(object);
+    private static readonly Type s_cellType = typeof(DataGridViewButtonCell);
 
     public DataGridViewButtonCell()
     {
@@ -41,7 +39,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     {
         get
         {
-            int buttonState = Properties.GetInteger(PropButtonCellState, out bool found);
+            int buttonState = Properties.GetInteger(s_propButtonCellState, out bool found);
             if (found)
             {
                 return (ButtonState)buttonState;
@@ -56,13 +54,13 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             Debug.Assert((value & ~(ButtonState.Normal | ButtonState.Pushed | ButtonState.Checked)) == 0);
             if (ButtonState != value)
             {
-                Properties.SetInteger(PropButtonCellState, (int)value);
+                Properties.SetInteger(s_propButtonCellState, (int)value);
             }
         }
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
-    public override Type EditType
+    public override Type? EditType
     {
         get
         {
@@ -76,7 +74,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     {
         get
         {
-            int flatStyle = Properties.GetInteger(PropButtonCellFlatStyle, out bool found);
+            int flatStyle = Properties.GetInteger(s_propButtonCellFlatStyle, out bool found);
             if (found)
             {
                 return (FlatStyle)flatStyle;
@@ -90,7 +88,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             SourceGenerated.EnumValidator.Validate(value);
             if (value != FlatStyle)
             {
-                Properties.SetInteger(PropButtonCellFlatStyle, (int)value);
+                Properties.SetInteger(s_propButtonCellFlatStyle, (int)value);
                 OnCommonChange();
             }
         }
@@ -103,26 +101,21 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             Debug.Assert(value >= FlatStyle.Flat && value <= FlatStyle.System);
             if (value != FlatStyle)
             {
-                Properties.SetInteger(PropButtonCellFlatStyle, (int)value);
+                Properties.SetInteger(s_propButtonCellFlatStyle, (int)value);
             }
         }
     }
 
-    public override Type FormattedValueType
-    {
-        get
-        {
-            // we return string for the formatted type
-            return defaultFormattedValueType;
-        }
-    }
+    public override Type FormattedValueType =>
+            // We return string for the formatted type.
+            s_defaultFormattedValueType;
 
     [DefaultValue(false)]
     public bool UseColumnTextForButtonValue
     {
         get
         {
-            int useColumnTextForButtonValue = Properties.GetInteger(PropButtonCellUseColumnTextForButtonValue, out bool found);
+            int useColumnTextForButtonValue = Properties.GetInteger(s_propButtonCellUseColumnTextForButtonValue, out bool found);
             if (found)
             {
                 return useColumnTextForButtonValue == 0 ? false : true;
@@ -134,7 +127,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         {
             if (value != UseColumnTextForButtonValue)
             {
-                Properties.SetInteger(PropButtonCellUseColumnTextForButtonValue, value ? 1 : 0);
+                Properties.SetInteger(s_propButtonCellUseColumnTextForButtonValue, value ? 1 : 0);
                 OnCommonChange();
             }
         }
@@ -146,7 +139,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         {
             if (value != UseColumnTextForButtonValue)
             {
-                Properties.SetInteger(PropButtonCellUseColumnTextForButtonValue, value ? 1 : 0);
+                Properties.SetInteger(s_propButtonCellUseColumnTextForButtonValue, value ? 1 : 0);
             }
         }
     }
@@ -161,7 +154,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                 return valueType;
             }
 
-            return defaultValueType;
+            return s_defaultValueType;
         }
     }
 
@@ -170,13 +163,13 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         DataGridViewButtonCell dataGridViewCell;
         Type thisType = GetType();
 
-        if (thisType == cellType) //performance improvement
+        if (thisType == s_cellType) //performance improvement
         {
             dataGridViewCell = new DataGridViewButtonCell();
         }
         else
         {
-            dataGridViewCell = (DataGridViewButtonCell)System.Activator.CreateInstance(thisType);
+            dataGridViewCell = (DataGridViewButtonCell)Activator.CreateInstance(thisType)!;
         }
 
         base.CloneInternal(dataGridViewCell);
@@ -185,10 +178,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         return dataGridViewCell;
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewButtonCellAccessibleObject(this);
-    }
+    protected override AccessibleObject CreateAccessibilityInstance() => new DataGridViewButtonCellAccessibleObject(this);
 
     protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
     {
@@ -205,7 +195,8 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             out DataGridViewElementStates cellState,
             out Rectangle cellBounds);
 
-        Rectangle contentBounds = PaintPrivate(graphics,
+        Rectangle contentBounds = PaintPrivate(
+            graphics,
             cellBounds,
             cellBounds,
             rowIndex,
@@ -220,27 +211,28 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             paint: false);
 
 #if DEBUG
-        object value = GetValue(rowIndex);
-        Rectangle contentBoundsDebug = PaintPrivate(graphics,
+        object? value = GetValue(rowIndex);
+        Rectangle contentBoundsDebug = PaintPrivate(
+            graphics,
             cellBounds,
             cellBounds,
             rowIndex,
             cellState,
-            GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting),
+            GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter: null, formattedValueTypeConverter: null, DataGridViewDataErrorContexts.Formatting),
             GetErrorText(rowIndex),
             cellStyle,
             dgvabsEffective,
             DataGridViewPaintParts.ContentForeground,
-            true  /*computeContentBounds*/,
-            false /*computeErrorIconBounds*/,
-            false /*paint*/);
+            computeContentBounds: true,
+            computeErrorIconBounds: false,
+            paint: false);
         Debug.Assert(contentBoundsDebug.Equals(contentBounds));
 #endif
 
         return contentBounds;
     }
 
-    private protected override string GetDefaultToolTipText()
+    private protected override string? GetDefaultToolTipText()
     {
         if (string.IsNullOrEmpty(Value?.ToString()?.Trim(' ')) || Value is DBNull)
         {
@@ -263,44 +255,54 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             return Rectangle.Empty;
         }
 
-        ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
+        ComputeBorderStyleCellStateAndCellBounds(
+            rowIndex,
+            out DataGridViewAdvancedBorderStyle dgvabsEffective,
+            out DataGridViewElementStates cellState,
+            out Rectangle cellBounds);
 
-        Rectangle errorIconBounds = PaintPrivate(graphics,
+        Rectangle errorIconBounds = PaintPrivate(
+            graphics,
             cellBounds,
             cellBounds,
             rowIndex,
             cellState,
-            null /*formattedValue*/,            // errorIconBounds is independent of formattedValue
+            formattedValue: null, // errorIconBounds is independent of formattedValue
             GetErrorText(rowIndex),
             cellStyle,
             dgvabsEffective,
             DataGridViewPaintParts.ContentForeground,
-            false /*computeContentBounds*/,
-            true  /*computeErrorIconBounds*/,
-            false /*paint*/);
+            computeContentBounds: false,
+            computeErrorIconBounds: true,
+            paint: false);
 
 #if DEBUG
-        object value = GetValue(rowIndex);
-        Rectangle errorIconBoundsDebug = PaintPrivate(graphics,
+        object? value = GetValue(rowIndex);
+        Rectangle errorIconBoundsDebug = PaintPrivate(
+            graphics,
             cellBounds,
             cellBounds,
             rowIndex,
             cellState,
-            GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting),
+            GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter: null, formattedValueTypeConverter: null, DataGridViewDataErrorContexts.Formatting),
             GetErrorText(rowIndex),
             cellStyle,
             dgvabsEffective,
             DataGridViewPaintParts.ContentForeground,
-            false /*computeContentBounds*/,
-            true  /*computeErrorIconBounds*/,
-            false /*paint*/);
+            computeContentBounds: false,
+            computeErrorIconBounds: true,
+            paint: false);
         Debug.Assert(errorIconBoundsDebug.Equals(errorIconBounds));
 #endif
 
         return errorIconBounds;
     }
 
-    protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
+    protected override Size GetPreferredSize(
+        Graphics graphics,
+        DataGridViewCellStyle cellStyle,
+        int rowIndex,
+        Size constraintSize)
     {
         if (DataGridView is null)
         {
@@ -315,7 +317,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         int borderAndPaddingHeights = borderWidthsRect.Top + borderWidthsRect.Height + cellStyle.Padding.Vertical;
         DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
         int marginWidths, marginHeights;
-        string formattedString = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize) as string;
+        string? formattedString = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize) as string;
         if (string.IsNullOrEmpty(formattedString))
         {
             formattedString = " ";
@@ -348,8 +350,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                                 graphics,
                                 formattedString,
                                 cellStyle.Font,
-                                constraintSize.Height - borderAndPaddingHeights - marginHeights - 2
-                                    * DATAGRIDVIEWBUTTONCELL_verticalTextMargin,
+                                constraintSize.Height - borderAndPaddingHeights - marginHeights - 2 * DATAGRIDVIEWBUTTONCELL_verticalTextMargin,
                                 flags),
                             0);
                     }
@@ -431,62 +432,49 @@ public partial class DataGridViewButtonCell : DataGridViewCell
 
     private static Rectangle GetThemeMargins(Graphics g)
     {
-        if (rectThemeMargins.X == -1)
+        if (s_rectThemeMargins.X == -1)
         {
             Rectangle rectCell = new Rectangle(0, 0, DATAGRIDVIEWBUTTONCELL_themeMargin, DATAGRIDVIEWBUTTONCELL_themeMargin);
             Rectangle rectContent = DataGridViewButtonCellRenderer.DataGridViewButtonRenderer.GetBackgroundContentRectangle(g, rectCell);
-            rectThemeMargins.X = rectContent.X;
-            rectThemeMargins.Y = rectContent.Y;
-            rectThemeMargins.Width = DATAGRIDVIEWBUTTONCELL_themeMargin - rectContent.Right;
-            rectThemeMargins.Height = DATAGRIDVIEWBUTTONCELL_themeMargin - rectContent.Bottom;
+            s_rectThemeMargins.X = rectContent.X;
+            s_rectThemeMargins.Y = rectContent.Y;
+            s_rectThemeMargins.Width = DATAGRIDVIEWBUTTONCELL_themeMargin - rectContent.Right;
+            s_rectThemeMargins.Height = DATAGRIDVIEWBUTTONCELL_themeMargin - rectContent.Bottom;
         }
 
-        return rectThemeMargins;
+        return s_rectThemeMargins;
     }
 
-    protected override object GetValue(int rowIndex)
+    protected override object? GetValue(int rowIndex)
     {
         if (UseColumnTextForButtonValue &&
             DataGridView is not null &&
             DataGridView.NewRowIndex != rowIndex &&
-            OwningColumn is not null &&
-            OwningColumn is DataGridViewButtonColumn)
+            OwningColumn is DataGridViewButtonColumn dataGridViewButtonColumn)
         {
-            return ((DataGridViewButtonColumn)OwningColumn).Text;
+            return dataGridViewButtonColumn.Text;
         }
 
         return base.GetValue(rowIndex);
     }
 
-    protected override bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex)
-    {
-        return e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift;
-    }
+    protected override bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex) =>
+        e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift;
 
-    protected override bool KeyUpUnsharesRow(KeyEventArgs e, int rowIndex)
-    {
-        return e.KeyCode == Keys.Space;
-    }
+    protected override bool KeyUpUnsharesRow(KeyEventArgs e, int rowIndex) =>
+        e.KeyCode == Keys.Space;
 
-    protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
-    {
-        return e.Button == MouseButtons.Left;
-    }
+    protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e) =>
+        e.Button == MouseButtons.Left;
 
-    protected override bool MouseEnterUnsharesRow(int rowIndex)
-    {
-        return ColumnIndex == DataGridView.MouseDownCellAddress.X && rowIndex == DataGridView.MouseDownCellAddress.Y;
-    }
+    protected override bool MouseEnterUnsharesRow(int rowIndex) =>
+        ColumnIndex == DataGridView!.MouseDownCellAddress.X && rowIndex == DataGridView.MouseDownCellAddress.Y;
 
-    protected override bool MouseLeaveUnsharesRow(int rowIndex)
-    {
-        return (ButtonState & ButtonState.Pushed) != 0;
-    }
+    protected override bool MouseLeaveUnsharesRow(int rowIndex) =>
+        (ButtonState & ButtonState.Pushed) != 0;
 
-    protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
-    {
-        return e.Button == MouseButtons.Left;
-    }
+    protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e) =>
+        e.Button == MouseButtons.Left;
 
     protected override void OnKeyDown(KeyEventArgs e, int rowIndex)
     {
@@ -548,7 +536,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             return;
         }
 
-        if (e.Button == MouseButtons.Left && mouseInContentBounds)
+        if (e.Button == MouseButtons.Left && s_mouseInContentBounds)
         {
             Debug.Assert(DataGridView.CellMouseDownInContentBounds);
             UpdateButtonState(ButtonState | ButtonState.Pushed, e.RowIndex);
@@ -562,9 +550,9 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             return;
         }
 
-        if (mouseInContentBounds)
+        if (s_mouseInContentBounds)
         {
-            mouseInContentBounds = false;
+            s_mouseInContentBounds = false;
             if (ColumnIndex >= 0 &&
                 rowIndex >= 0 &&
                 (DataGridView.ApplyVisualStylesToInnerCells || FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
@@ -588,9 +576,9 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             return;
         }
 
-        bool oldMouseInContentBounds = mouseInContentBounds;
-        mouseInContentBounds = GetContentBounds(e.RowIndex).Contains(e.X, e.Y);
-        if (oldMouseInContentBounds != mouseInContentBounds)
+        bool oldMouseInContentBounds = s_mouseInContentBounds;
+        s_mouseInContentBounds = GetContentBounds(e.RowIndex).Contains(e.X, e.Y);
+        if (oldMouseInContentBounds != s_mouseInContentBounds)
         {
             if (DataGridView.ApplyVisualStylesToInnerCells || FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
             {
@@ -602,12 +590,12 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                 Control.MouseButtons == MouseButtons.Left)
             {
                 if ((ButtonState & ButtonState.Pushed) == 0 &&
-                    mouseInContentBounds &&
+                    s_mouseInContentBounds &&
                     DataGridView.CellMouseDownInContentBounds)
                 {
                     UpdateButtonState(ButtonState | ButtonState.Pushed, e.RowIndex);
                 }
-                else if ((ButtonState & ButtonState.Pushed) != 0 && !mouseInContentBounds)
+                else if ((ButtonState & ButtonState.Pushed) != 0 && !s_mouseInContentBounds)
                 {
                     UpdateButtonState(ButtonState & ~ButtonState.Pushed, e.RowIndex);
                 }
@@ -630,21 +618,23 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         }
     }
 
-    protected override void Paint(Graphics graphics,
+    protected override void Paint(
+        Graphics graphics,
         Rectangle clipBounds,
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates elementState,
-        object value,
-        object formattedValue,
-        string errorText,
+        object? value,
+        object? formattedValue,
+        string? errorText,
         DataGridViewCellStyle cellStyle,
         DataGridViewAdvancedBorderStyle advancedBorderStyle,
         DataGridViewPaintParts paintParts)
     {
         ArgumentNullException.ThrowIfNull(cellStyle);
 
-        PaintPrivate(graphics,
+        PaintPrivate(
+            graphics,
             clipBounds,
             cellBounds,
             rowIndex,
@@ -654,9 +644,9 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             cellStyle,
             advancedBorderStyle,
             paintParts,
-            false /*computeContentBounds*/,
-            false /*computeErrorIconBounds*/,
-            true  /*paint*/);
+            computeContentBounds: false,
+            computeErrorIconBounds: false,
+            paint: true);
     }
 
     // PaintPrivate is used in three places that need to duplicate the paint code:
@@ -667,13 +657,14 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     // if computeContentBounds is true then PaintPrivate returns the contentBounds
     // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
     // else it returns Rectangle.Empty;
-    private Rectangle PaintPrivate(Graphics g,
+    private Rectangle PaintPrivate(
+        Graphics g,
         Rectangle clipBounds,
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates elementState,
-        object formattedValue,
-        string errorText,
+        object? formattedValue,
+        string? errorText,
         DataGridViewCellStyle cellStyle,
         DataGridViewAdvancedBorderStyle advancedBorderStyle,
         DataGridViewPaintParts paintParts,
@@ -689,12 +680,12 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         Debug.Assert(!computeErrorIconBounds || !paint || !computeContentBounds);
         Debug.Assert(cellStyle is not null);
 
-        Point ptCurrentCell = DataGridView.CurrentCellAddress;
+        Point ptCurrentCell = DataGridView!.CurrentCellAddress;
         bool cellSelected = (elementState & DataGridViewElementStates.Selected) != 0;
         bool cellCurrent = (ptCurrentCell.X == ColumnIndex && ptCurrentCell.Y == rowIndex);
 
         Rectangle resultBounds;
-        string formattedString = formattedValue as string;
+        string? formattedString = formattedValue as string;
 
         Color backBrushColor = PaintSelectionBackground(paintParts) && cellSelected
             ? cellStyle.SelectionBackColor
@@ -757,7 +748,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                                 pbState = PushButtonState.Pressed;
                             }
                             else if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
-                                DataGridView.MouseEnteredCellAddress.X == ColumnIndex && mouseInContentBounds)
+                                DataGridView.MouseEnteredCellAddress.X == ColumnIndex && s_mouseInContentBounds)
                             {
                                 pbState = PushButtonState.Hot;
                             }
@@ -813,7 +804,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                                 hdc.FillRectangle(valBounds, hbrush);
                             }
                             else if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
-                                DataGridView.MouseEnteredCellAddress.X == ColumnIndex && mouseInContentBounds)
+                                DataGridView.MouseEnteredCellAddress.X == ColumnIndex && s_mouseInContentBounds)
                             {
                                 using DeviceContextHdcScope hdc = new(g);
                                 using PInvoke.CreateBrushScope hbrush = new(SystemColors.ControlDark);
@@ -851,7 +842,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                         }
                         else if (DataGridView.MouseEnteredCellAddress.Y == rowIndex &&
                                     DataGridView.MouseEnteredCellAddress.X == ColumnIndex &&
-                                    mouseInContentBounds)
+                                    s_mouseInContentBounds)
                         {
                             // paint over
                             ButtonBaseAdapter.ColorData colors = ButtonBaseAdapter.PaintPopupRender(
@@ -1038,17 +1029,15 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         return resultBounds;
     }
 
-    public override string ToString()
-    {
-        return $"DataGridViewButtonCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewButtonCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
 
     private void UpdateButtonState(ButtonState newButtonState, int rowIndex)
     {
         if (ButtonState != newButtonState)
         {
             ButtonState = newButtonState;
-            DataGridView.InvalidateCell(ColumnIndex, rowIndex);
+            DataGridView!.InvalidateCell(ColumnIndex, rowIndex);
         }
     }
 }

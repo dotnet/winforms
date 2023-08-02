@@ -111,13 +111,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         }
     }
 
-    public override Type FormattedValueType
-    {
-        get
-        {
-            return s_defaultFormattedValueType;
-        }
-    }
+    public override Type FormattedValueType => s_defaultFormattedValueType;
 
     [Browsable(false)]
     public override bool Frozen
