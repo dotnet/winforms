@@ -6,6 +6,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -408,9 +409,7 @@ public partial class Control
             return HRESULT.S_OK;
         }
 
-        /// <summary>
-        ///  Implements IViewObject2::Draw.
-        /// </summary>
+        /// <inheritdoc cref="IViewObject.Interface.Draw(DVASPECT, int, void*, DVTARGETDEVICE*, HDC, HDC, RECTL*, RECTL*, nint, nuint)"/>
         internal HRESULT Draw(
             DVASPECT dwDrawAspect,
             int lindex,
@@ -556,9 +555,7 @@ public partial class Control
             }
         }
 
-        /// <summary>
-        ///  Implements IViewObject2::GetAdvise.
-        /// </summary>
+        /// <inheritdoc cref="IViewObject.GetAdvise(uint*, uint*, IAdviseSink**)"/>
         internal unsafe HRESULT GetAdvise(DVASPECT* pAspects, ADVF* pAdvf, IAdviseSink** ppAdvSink)
         {
             if (pAspects is not null)
@@ -584,6 +581,11 @@ public partial class Control
             if (ppAdvSink is not null)
             {
                 *ppAdvSink = _viewAdviseSink;
+
+                if (_viewAdviseSink is not null)
+                {
+                    _viewAdviseSink->AddRef();
+                }
             }
 
             return HRESULT.S_OK;
@@ -963,9 +965,7 @@ public partial class Control
             }
         }
 
-        /// <summary>
-        ///  Implements IOleInPlaceObject::InPlaceDeactivate.
-        /// </summary>
+        /// <inheritdoc cref="IOleInPlaceObject.InPlaceDeactivate"/>
         internal HRESULT InPlaceDeactivate()
         {
             // Only do this if we're already in place active.
@@ -1004,9 +1004,7 @@ public partial class Control
             return HRESULT.S_OK;
         }
 
-        /// <summary>
-        ///  Implements IPersistStreamInit::IsDirty.
-        /// </summary>
+        /// <inheritdoc cref="IPersistStorage.IsDirty"/>
         internal HRESULT IsDirty() => _activeXState[s_isDirty] ? HRESULT.S_OK : HRESULT.S_FALSE;
 
         /// <summary>
@@ -1034,9 +1032,7 @@ public partial class Control
                 || property.GetValue(_control) is ISerializable;
         }
 
-        /// <summary>
-        ///  Implements IPersistStorage::Load
-        /// </summary>
+        /// <inheritdoc cref="IPersistStorage.Load(IStorage*)"/>
         internal HRESULT Load(IStorage* stg)
         {
             using ComScope<IStream> stream = new(null);
@@ -1065,9 +1061,7 @@ public partial class Control
             return hr;
         }
 
-        /// <summary>
-        ///  Implements IPersistStreamInit::Load
-        /// </summary>
+        /// <inheritdoc cref="IPersistStreamInit.Load(IStream*)"/>
         internal void Load(IStream* stream)
         {
             // We do everything through property bags because we support full fidelity
@@ -1077,9 +1071,7 @@ public partial class Control
             Load(ComHelpers.GetComPointer<IPropertyBag>(bagStream), errorLog: null);
         }
 
-        /// <summary>
-        ///  Implements IPersistPropertyBag::Load
-        /// </summary>
+        /// <inheritdoc cref="IPersistPropertyBag.Load(IPropertyBag*, IErrorLog*)"/>
         internal unsafe void Load(IPropertyBag* propertyBag, IErrorLog* errorLog)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
@@ -1401,9 +1393,7 @@ public partial class Control
             Y = (HiMetricPerInch * y + (LogPixels.Y >> 1)) / LogPixels.Y
         };
 
-        /// <summary>
-        ///  Our implementation of IQuickActivate::QuickActivate
-        /// </summary>
+        /// <inheritdoc cref="IQuickActivate.QuickActivate(QACONTAINER*, QACONTROL*)"/>
         internal unsafe HRESULT QuickActivate(QACONTAINER* pQaContainer, QACONTROL* pQaControl)
         {
             if (pQaControl is null)
@@ -1461,9 +1451,7 @@ public partial class Control
             if ((pQaContainer->pUnkEventSink is not null) && (_control is UserControl))
             {
                 // Check if this control exposes events to COM.
-                Type? eventInterface = GetDefaultEventsInterface(_control.GetType());
-
-                if (eventInterface is not null)
+                if (GetDefaultEventsInterface(_control.GetType()) is { } eventInterface)
                 {
                     // Control doesn't explicitly implement IConnectionPointContainer, but it is generated with a CCW by
                     // COM interop.
@@ -1481,43 +1469,27 @@ public partial class Control
                 }
             }
 
-            if (pQaContainer->pPropertyNotifySink is not null)
-            {
-                pQaContainer->pPropertyNotifySink->Release();
-            }
-
-            if (pQaContainer->pUnkEventSink is not null)
-            {
-                pQaContainer->pUnkEventSink->Release();
-            }
-
             return HRESULT.S_OK;
-        }
 
-        /// <summary>
-        ///  Return the default COM events interface declared on a .NET class.
-        ///  This looks for the ComSourceInterfacesAttribute and returns the .NET
-        ///  interface type of the first interface declared.
-        /// </summary>
-        private static Type? GetDefaultEventsInterface(Type controlType)
-        {
-            Type? eventInterface = null;
-            object[] custom = controlType.GetCustomAttributes(typeof(ComSourceInterfacesAttribute), inherit: false);
-
-            if (custom.Length > 0)
+            // Get the default COM events interface declared on a .NET class.
+            static Type? GetDefaultEventsInterface(Type controlType)
             {
-                ComSourceInterfacesAttribute coms = (ComSourceInterfacesAttribute)custom[0];
-                string eventName = coms.Value.Split('\0')[0];
-                eventInterface = controlType.Module.Assembly.GetType(eventName, throwOnError: false);
-                eventInterface ??= Type.GetType(eventName, throwOnError: false);
-            }
+                Type? eventInterface = null;
 
-            return eventInterface;
+                // Get the first declared interface, if any.
+                if (controlType.GetCustomAttributes<ComSourceInterfacesAttribute>(inherit: false).FirstOrDefault()
+                    is { } comSourceInterfaces)
+                {
+                    string eventName = comSourceInterfaces.Value.Split('\0')[0];
+                    eventInterface = controlType.Module.Assembly.GetType(eventName, throwOnError: false);
+                    eventInterface ??= Type.GetType(eventName, throwOnError: false);
+                }
+
+                return eventInterface;
+            }
         }
 
-        /// <summary>
-        ///  Implements IPersistStorage::Save
-        /// </summary>
+        /// <inheritdoc cref="IPersistStorage.Save(IStorage*, BOOL)"/>
         internal HRESULT Save(IStorage* storage, BOOL fSameAsLoad)
         {
             using ComScope<IStream> stream = new(null);
@@ -1538,9 +1510,7 @@ public partial class Control
             return hr;
         }
 
-        /// <summary>
-        ///  Implements IPersistStreamInit::Save
-        /// </summary>
+        /// <inheritdoc cref="IPersistStreamInit.Save(IStream*, BOOL)"/>
         internal void Save(IStream* stream, BOOL fClearDirty)
         {
             // We do everything through property bags because we support full fidelity in them.
@@ -1550,9 +1520,7 @@ public partial class Control
             bagStream.Write(stream);
         }
 
-        /// <summary>
-        ///  Implements IPersistPropertyBag::Save. Releases <paramref name="propertyBag"/> when finished.
-        /// </summary>
+        /// <inheritdoc cref="IPersistPropertyBag.Save(IPropertyBag*, BOOL, BOOL)"/>
         internal void Save(IPropertyBag* propertyBag, BOOL clearDirty, BOOL saveAllProperties)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
@@ -1655,9 +1623,7 @@ public partial class Control
             holder.Value->SendOnSave();
         }
 
-        /// <summary>
-        ///  Implements IViewObject2::SetAdvise.
-        /// </summary>
+        /// <inheritdoc cref="IViewObject.SetAdvise(DVASPECT, uint, IAdviseSink*)"/>
         internal HRESULT SetAdvise(DVASPECT aspects, ADVF advf, IAdviseSink* pAdvSink)
         {
             // If it's not a content aspect, we don't support it.
@@ -1675,9 +1641,14 @@ public partial class Control
                 _viewAdviseSink->Release();
             }
 
+            if (pAdvSink is not null)
+            {
+                pAdvSink->AddRef();
+            }
+
             _viewAdviseSink = pAdvSink;
 
-            // prime them if they want it [we need to store this so they can get flags later]
+            // Prime them if they want it [we need to store this so they can get flags later]
             if (_activeXState[s_viewAdvisePrimeFirst])
             {
                 ViewChanged();

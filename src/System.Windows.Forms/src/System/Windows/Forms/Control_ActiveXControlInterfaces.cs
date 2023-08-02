@@ -485,12 +485,14 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersistPropertyBag.InitNew"/>
     HRESULT IPersistPropertyBag.Interface.InitNew()
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.InitNew");
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersist.GetClassID(Guid*)"/>
     HRESULT IPersistPropertyBag.Interface.GetClassID(Guid* pClassID)
     {
         if (pClassID is null)
@@ -503,6 +505,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersistPropertyBag.Load(IPropertyBag*, IErrorLog*)"/>
     HRESULT IPersistPropertyBag.Interface.Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Load (IPersistPropertyBag)");
@@ -512,6 +515,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersistPropertyBag.Save(IPropertyBag*, BOOL, BOOL)"/>
     HRESULT IPersistPropertyBag.Interface.Save(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Save (IPersistPropertyBag)");
@@ -521,6 +525,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersist.GetClassID(Guid*)"/>
     HRESULT IPersistStorage.Interface.GetClassID(Guid* pClassID)
     {
         if (pClassID is null)
@@ -533,18 +538,21 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersistStorage.IsDirty"/>
     HRESULT IPersistStorage.Interface.IsDirty()
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.IsDirty");
         return ActiveXInstance.IsDirty();
     }
 
+    /// <inheritdoc cref="IPersistStorage.InitNew(IStorage*)"/>
     HRESULT IPersistStorage.Interface.InitNew(IStorage* pStg)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.InitNew");
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersistStorage.Load(IStorage*)"/>
     HRESULT IPersistStorage.Interface.Load(IStorage* pStg)
     {
         if (pStg is null)
@@ -559,6 +567,7 @@ public unsafe partial class Control :
         return result;
     }
 
+    /// <inheritdoc cref="IPersistStorage.Save(IStorage*, BOOL)"/>
     HRESULT IPersistStorage.Interface.Save(IStorage* pStgSave, BOOL fSameAsLoad)
     {
         if (pStgSave is null)
@@ -573,18 +582,21 @@ public unsafe partial class Control :
         return result;
     }
 
+    /// <inheritdoc cref="IPersistStorage.SaveCompleted(IStorage*)"/>
     HRESULT IPersistStorage.Interface.SaveCompleted(IStorage* pStgNew)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.SaveCompleted");
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersistStorage.HandsOffStorage"/>
     HRESULT IPersistStorage.Interface.HandsOffStorage()
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.HandsOffStorage");
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersist.GetClassID(Guid*)"/>
     HRESULT IPersistStreamInit.Interface.GetClassID(Guid* pClassID)
     {
         if (pClassID is null)
@@ -597,12 +609,14 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersistStorage.IsDirty"/>
     HRESULT IPersistStreamInit.Interface.IsDirty()
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.IsDirty");
         return ActiveXInstance.IsDirty();
     }
 
+    /// <inheritdoc cref="IPersistStreamInit.Load(IStream*)"/>
     HRESULT IPersistStreamInit.Interface.Load(IStream* pStm)
     {
         if (pStm is null)
@@ -617,6 +631,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersistStreamInit.Save(IStream*, BOOL)"/>
     HRESULT IPersistStreamInit.Interface.Save(IStream* pStm, BOOL fClearDirty)
     {
         if (pStm is null)
@@ -631,18 +646,21 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersistStreamInit.GetSizeMax(ulong*)"/>
     HRESULT IPersistStreamInit.Interface.GetSizeMax(ulong* pCbSize)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetSizeMax");
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IPersistStreamInit.InitNew"/>
     HRESULT IPersistStreamInit.Interface.InitNew()
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.InitNew");
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IQuickActivate.QuickActivate(QACONTAINER*, QACONTROL*)"/>
     HRESULT IQuickActivate.Interface.QuickActivate(QACONTAINER* pQaContainer, QACONTROL* pQaControl)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:QuickActivate");
@@ -652,6 +670,7 @@ public unsafe partial class Control :
         return hr;
     }
 
+    /// <inheritdoc cref="IQuickActivate.SetContentExtent(SIZE*)"/>
     HRESULT IQuickActivate.Interface.SetContentExtent(SIZE* pSizel)
     {
         if (pSizel is null)
@@ -666,6 +685,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IQuickActivate.GetContentExtent(SIZE*)"/>
     HRESULT IQuickActivate.Interface.GetContentExtent(SIZE* pSizel)
     {
         if (pSizel is null)
@@ -680,6 +700,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IViewObject.Draw(DVASPECT, int, void*, DVTARGETDEVICE*, HDC, HDC, RECTL*, RECTL*, nint, nuint)"/>
     HRESULT IViewObject.Interface.Draw(
         DVASPECT dwDrawAspect,
         int lindex,
@@ -710,6 +731,7 @@ public unsafe partial class Control :
         return HRESULT.S_OK;
     }
 
+    /// <inheritdoc cref="IViewObject.GetColorSet(DVASPECT, int, void*, DVTARGETDEVICE*, HDC, LOGPALETTE**)"/>
     HRESULT IViewObject.Interface.GetColorSet(
         DVASPECT dwDrawAspect,
         int lindex,
@@ -724,30 +746,35 @@ public unsafe partial class Control :
         return HRESULT.E_NOTIMPL;
     }
 
+    /// <inheritdoc cref="IViewObject.Freeze(DVASPECT, int, void*, uint*)"/>
     HRESULT IViewObject.Interface.Freeze(DVASPECT dwDrawAspect, int lindex, void* pvAspect, uint* pdwFreeze)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Freezes");
         return HRESULT.E_NOTIMPL;
     }
 
+    /// <inheritdoc cref="IViewObject.Unfreeze(uint)"/>
     HRESULT IViewObject.Interface.Unfreeze(uint dwFreeze)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Unfreeze");
         return HRESULT.E_NOTIMPL;
     }
 
+    /// <inheritdoc cref="IViewObject.SetAdvise(DVASPECT, uint, IAdviseSink*)"/>
     HRESULT IViewObject.Interface.SetAdvise(DVASPECT aspects, uint advf, IAdviseSink* pAdvSink)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetAdvise");
         return ActiveXInstance.SetAdvise(aspects, (ADVF)advf, pAdvSink);
     }
 
+    /// <inheritdoc cref="IViewObject.GetAdvise(uint*, uint*, IAdviseSink**)"/>
     HRESULT IViewObject.Interface.GetAdvise(uint* pAspects, uint* pAdvf, IAdviseSink** ppAdvSink)
     {
         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAdvise");
         return ActiveXInstance.GetAdvise((DVASPECT*)pAspects, (ADVF*)pAdvf, ppAdvSink);
     }
 
+    /// <inheritdoc cref="IViewObject.Draw(DVASPECT, int, void*, DVTARGETDEVICE*, HDC, HDC, RECTL*, RECTL*, nint, nuint)"/>
     HRESULT IViewObject2.Interface.Draw(
         DVASPECT dwDrawAspect,
         int lindex,
@@ -771,6 +798,7 @@ public unsafe partial class Control :
             pfnContinue,
             dwContinue);
 
+    /// <inheritdoc cref="IViewObject.GetColorSet(DVASPECT, int, void*, DVTARGETDEVICE*, HDC, LOGPALETTE**)"/>
     HRESULT IViewObject2.Interface.GetColorSet(
         DVASPECT dwDrawAspect,
         int lindex,
@@ -780,18 +808,23 @@ public unsafe partial class Control :
         LOGPALETTE** ppColorSet)
         => ((IViewObject.Interface)this).GetColorSet(dwDrawAspect, lindex, pvAspect, ptd, hdcTargetDev, ppColorSet);
 
+    /// <inheritdoc cref="IViewObject.Freeze(DVASPECT, int, void*, uint*)"/>
     HRESULT IViewObject2.Interface.Freeze(DVASPECT dwDrawAspect, int lindex, void* pvAspect, uint* pdwFreeze)
         => ((IViewObject.Interface)this).Freeze(dwDrawAspect, lindex, pvAspect, pdwFreeze);
 
+    /// <inheritdoc cref="IViewObject.Unfreeze(uint)"/>
     HRESULT IViewObject2.Interface.Unfreeze(uint dwFreeze)
         => ((IViewObject.Interface)this).Unfreeze(dwFreeze);
 
+    /// <inheritdoc cref="IViewObject.SetAdvise(DVASPECT, uint, IAdviseSink*)"/>
     HRESULT IViewObject2.Interface.SetAdvise(DVASPECT aspects, uint advf, IAdviseSink* pAdvSink)
         => ((IViewObject.Interface)this).SetAdvise(aspects, advf, pAdvSink);
 
+    /// <inheritdoc cref="IViewObject.GetAdvise(uint*, uint*, IAdviseSink**)"/>
     HRESULT IViewObject2.Interface.GetAdvise(uint* pAspects, uint* pAdvf, IAdviseSink** ppAdvSink)
         => ((IViewObject.Interface)this).GetAdvise(pAspects, pAdvf, ppAdvSink);
 
+    /// <inheritdoc cref="IOleObject.GetExtent(DVASPECT, SIZE*)"/>
     HRESULT IViewObject2.Interface.GetExtent(DVASPECT dwDrawAspect, int lindex, DVTARGETDEVICE* ptd, SIZE* lpsizel)
-        => ((IOleObject.Interface)this).GetExtent((DVASPECT)dwDrawAspect, lpsizel);
+        => ((IOleObject.Interface)this).GetExtent(dwDrawAspect, lpsizel);
 }
