@@ -15,7 +15,7 @@ indent_size = 4
 indent_size = 2
 
 # C# and VB files
-[src/**/*.{cs,vb}]
+[src/**/*.cs]
 file_header_template = Licensed to the .NET Foundation under one or more agreements.\nThe .NET Foundation licenses this file to you under the MIT license.
 
 # C# and VB files
