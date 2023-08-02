@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms.Design.Tests;
+
 public class ToolStripMenuItemDesignerTest
 {
     [WinFormsFact]

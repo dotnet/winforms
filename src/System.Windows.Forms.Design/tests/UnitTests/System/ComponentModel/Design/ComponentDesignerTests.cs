@@ -7,6 +7,7 @@ using System.Configuration;
 using Moq;
 using Moq.Protected;
 using System.Windows.Forms.TestUtilities;
+using System.Windows.Forms.Design.Tests.Mocks;
 
 namespace System.ComponentModel.Design.Tests;
 
@@ -56,7 +57,7 @@ public class ComponentDesignerTests
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(component);
-        var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         component.Site = mockSite.Object;
         designer.Initialize(component);
 
@@ -83,41 +84,13 @@ public class ComponentDesignerTests
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(component);
-        var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         component.Site = mockSite.Object;
         designer.Initialize(component);
 
         designer.PostFilterProperties(properties);
         result = (PropertyDescriptor)properties["SettingsKey"];
         Assert.NotSame(descriptor, result);
-    }
-
-    private static Mock<ISite> CreateMockSiteWithDesignerHost(object designerHost)
-    {
-        Mock<ISite> mockSite = new(MockBehavior.Strict);
-        mockSite
-            .Setup(s => s.GetService(typeof(IDesignerHost)))
-            .Returns(designerHost);
-        mockSite
-            .Setup(s => s.GetService(typeof(IComponentChangeService)))
-            .Returns(null);
-        mockSite
-            .Setup(s => s.GetService(typeof(IInheritanceService)))
-            .Returns(null);
-        mockSite
-            .Setup(s => s.GetService(typeof(IDictionaryService)))
-            .Returns(null);
-        mockSite
-            .Setup(s => s.GetService(typeof(IExtenderListService)))
-            .Returns(null);
-        mockSite
-            .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-            .Returns(null);
-        mockSite
-            .SetupGet(s => s.Container)
-            .Returns((IContainer)null);
-
-        return mockSite;
     }
 
     [Fact]
@@ -145,7 +118,7 @@ public class ComponentDesignerTests
 
         using Component component = new()
         {
-            Site = CreateMockSiteWithDesignerHost(mockDesignerHost.Object).Object
+            Site = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object).Object
         };
 
         designer.Initialize(component);
@@ -183,7 +156,7 @@ public class ComponentDesignerTests
 
         using Component component = new()
         {
-            Site = CreateMockSiteWithDesignerHost(mockDesignerHost.Object).Object
+            Site = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object).Object
         };
 
         designer.Initialize(component);
@@ -215,7 +188,7 @@ public class ComponentDesignerTests
 
         using Component component = new()
         {
-            Site = CreateMockSiteWithDesignerHost(host).Object
+            Site = MockSiteUtil.CreateMockSiteWithDesignerHost(host).Object
         };
 
         designer.Initialize(component);
@@ -337,7 +310,7 @@ public class ComponentDesignerTests
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(rootComponent);
-        var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
 
         using Component component = new()
         {
@@ -367,7 +340,7 @@ public class ComponentDesignerTests
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(component);
-        var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         component.Site = mockSite.Object;
         designer.Initialize(component);
         mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
@@ -394,7 +367,7 @@ public class ComponentDesignerTests
     public void ComponentDesigner_ParentComponent_GetWithInvalidService_ReturnsNull(object host)
     {
         using SubComponentDesigner designer = new();
-        var mockSite = CreateMockSiteWithDesignerHost(host);
+        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(host);
 
         using Component component = new()
         {
@@ -426,7 +399,7 @@ public class ComponentDesignerTests
             .Setup(h => h.GetDesigner(rootComponent))
             .Returns(designer)
             .Verifiable();
-        var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
 
         using Component component = new()
         {
@@ -460,7 +433,7 @@ public class ComponentDesignerTests
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(component);
-        var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         component.Site = mockSite.Object;
         designer.Initialize(component);
         mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
@@ -482,7 +455,7 @@ public class ComponentDesignerTests
     {
         using SubComponentDesigner designer = new();
         ITreeDesigner treeDesigner = designer;
-        var mockSite = CreateMockSiteWithDesignerHost(host);
+        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(host);
 
         using Component component = new()
         {
