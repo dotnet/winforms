@@ -21,6 +21,11 @@
       See https://github.com/dotnet/winforms/issues/4649
     -->
     <NoWarn>$(NoWarn);IL2026;IL2050</NoWarn>
+    <!--
+      Libraries code has changed a number of APIs from `ref` to `in`. CSWin32 generates code that passes by `ref`
+      to some of these. Disabling for now until we can get https://github.com/microsoft/CsWin32/issues/1014 resolved.
+    -->
+    <NoWarn>$(NoWarn);CS9195</NoWarn>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
