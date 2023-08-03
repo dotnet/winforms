@@ -1,8 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Collections;
 using System.ComponentModel;
@@ -10,62 +7,48 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms;
 
-[
-Editor($"System.Windows.Forms.Design.TreeNodeCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))
-]
+[Editor($"System.Windows.Forms.Design.TreeNodeCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
 public class TreeNodeCollection : IList
 {
-    private readonly TreeNode owner;
+    private readonly TreeNode _owner;
 
     ///  A caching mechanism for key accessor
     ///  We use an index here rather than control so that we don't have lifetime
     ///  issues by holding on to extra references.
-    private int lastAccessedIndex = -1;
-
-    //this index is used to optimize performance of AddRange
-    //items are added from last to first after this index
-    //(to work around TV_INSertItem comctl32 perf issue with consecutive adds in the end of the list)
-    private int fixedIndex = -1;
+    private int _lastAccessedIndex = -1;
 
     internal TreeNodeCollection(TreeNode owner)
     {
-        this.owner = owner;
+        _owner = owner;
     }
 
-    internal int FixedIndex
-    {
-        get
-        {
-            return fixedIndex;
-        }
-        set
-        {
-            fixedIndex = value;
-        }
-    }
+    // This index is used to optimize performance of AddRange
+    // items are added from last to first after this index
+    // (to work around TV_INSertItem comctl32 perf issue with consecutive adds in the end of the list)
+    internal int FixedIndex { get; set; } = -1;
 
     public virtual TreeNode this[int index]
     {
         get
         {
-            if (index < 0 || index >= owner.childNodes.Count)
+            if (index < 0 || index >= _owner.childNodes.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
 
-            return owner.childNodes[index];
+            return _owner.childNodes[index];
         }
         set
         {
-            if (index < 0 || index >= owner.childNodes.Count)
+            if (index < 0 || index >= _owner.childNodes.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
             ArgumentNullException.ThrowIfNull(value);
 
-            TreeView tv = owner.treeView;
-            TreeNode actual = owner.childNodes[index];
+            TreeView tv = _owner.treeView;
+            TreeNode actual = _owner.childNodes[index];
 
             if (value.treeView is not null && value.treeView.Handle != tv.Handle)
             {
@@ -89,17 +72,14 @@ public class TreeNodeCollection : IList
         }
     }
 
-    object IList.this[int index]
+    object? IList.this[int index]
     {
-        get
-        {
-            return this[index];
-        }
+        get => this[index];
         set
         {
-            if (value is TreeNode)
+            if (value is TreeNode treeNode)
             {
-                this[index] = (TreeNode)value;
+                this[index] = treeNode;
             }
             else
             {
@@ -111,7 +91,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Retrieves the child control with the specified key.
     /// </summary>
-    public virtual TreeNode this[string key]
+    public virtual TreeNode? this[string? key]
     {
         get
         {
@@ -136,50 +116,20 @@ public class TreeNodeCollection : IList
 
     // Make this property available to Intellisense. (Removed the EditorBrowsable attribute.)
     [Browsable(false)]
-    public int Count
-    {
-        get
-        {
-            return owner.childNodes.Count;
-        }
-    }
+    public int Count => _owner.childNodes.Count;
 
-    object ICollection.SyncRoot
-    {
-        get
-        {
-            return this;
-        }
-    }
+    object ICollection.SyncRoot => this;
 
-    bool ICollection.IsSynchronized
-    {
-        get
-        {
-            return false;
-        }
-    }
+    bool ICollection.IsSynchronized => false;
 
-    bool IList.IsFixedSize
-    {
-        get
-        {
-            return false;
-        }
-    }
+    bool IList.IsFixedSize => false;
 
-    public bool IsReadOnly
-    {
-        get
-        {
-            return false;
-        }
-    }
+    public bool IsReadOnly => false;
 
     /// <summary>
     ///  Creates a new child node under this node.  Child node is positioned after siblings.
     /// </summary>
-    public virtual TreeNode Add(string text)
+    public virtual TreeNode Add(string? text)
     {
         TreeNode tn = new TreeNode(text);
         Add(tn);
@@ -191,7 +141,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Creates a new child node under this node.  Child node is positioned after siblings.
     /// </summary>
-    public virtual TreeNode Add(string key, string text)
+    public virtual TreeNode Add(string? key, string? text)
     {
         TreeNode tn = new TreeNode(text)
         {
@@ -204,7 +154,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Creates a new child node under this node.  Child node is positioned after siblings.
     /// </summary>
-    public virtual TreeNode Add(string key, string text, int imageIndex)
+    public virtual TreeNode Add(string? key, string? text, int imageIndex)
     {
         TreeNode tn = new TreeNode(text)
         {
@@ -218,7 +168,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Creates a new child node under this node.  Child node is positioned after siblings.
     /// </summary>
-    public virtual TreeNode Add(string key, string text, string imageKey)
+    public virtual TreeNode Add(string? key, string? text, string? imageKey)
     {
         TreeNode tn = new TreeNode(text)
         {
@@ -232,7 +182,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Creates a new child node under this node.  Child node is positioned after siblings.
     /// </summary>
-    public virtual TreeNode Add(string key, string text, int imageIndex, int selectedImageIndex)
+    public virtual TreeNode Add(string? key, string? text, int imageIndex, int selectedImageIndex)
     {
         TreeNode tn = new TreeNode(text, imageIndex, selectedImageIndex)
         {
@@ -245,7 +195,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Creates a new child node under this node.  Child node is positioned after siblings.
     /// </summary>
-    public virtual TreeNode Add(string key, string text, string imageKey, string selectedImageKey)
+    public virtual TreeNode Add(string? key, string? text, string? imageKey, string? selectedImageKey)
     {
         TreeNode tn = new TreeNode(text)
         {
@@ -268,20 +218,20 @@ public class TreeNodeCollection : IList
             return;
         }
 
-        TreeView tv = owner.TreeView;
+        TreeView tv = _owner.TreeView;
         if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
         {
             tv.BeginUpdate();
         }
 
-        owner.Nodes.FixedIndex = owner.childNodes.Count;
-        owner.childNodes.EnsureCapacity(nodes.Length);
+        _owner.Nodes.FixedIndex = _owner.childNodes.Count;
+        _owner.childNodes.EnsureCapacity(nodes.Length);
         for (int i = 0; i < nodes.Length; i++)
         {
             AddInternal(nodes[i], i);
         }
 
-        owner.Nodes.FixedIndex = -1;
+        _owner.Nodes.FixedIndex = -1;
         if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
         {
             tv.EndUpdate();
@@ -297,7 +247,11 @@ public class TreeNodeCollection : IList
         return foundNodes.ToArray();
     }
 
-    private static List<TreeNode> FindInternal(string key, bool searchAllChildren, TreeNodeCollection treeNodeCollectionToLookIn, List<TreeNode> foundTreeNodes)
+    private static List<TreeNode> FindInternal(
+        string key,
+        bool searchAllChildren,
+        TreeNodeCollection treeNodeCollectionToLookIn,
+        List<TreeNode> foundTreeNodes)
     {
         // Perform breadth first search - as it's likely people will want tree nodes belonging
         // to the same parent close to each other.
@@ -338,10 +292,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Adds a new child node to this node.  Child node is positioned after siblings.
     /// </summary>
-    public virtual int Add(TreeNode node)
-    {
-        return AddInternal(node, 0);
-    }
+    public virtual int Add(TreeNode node) => AddInternal(node, 0);
 
     private int AddInternal(TreeNode node, int delta)
     {
@@ -353,10 +304,10 @@ public class TreeNodeCollection : IList
         }
 
         // Check for ParentingCycle
-        owner.CheckParentingCycle(node);
+        _owner.CheckParentingCycle(node);
 
         // If the TreeView is sorted, index is ignored
-        TreeView tv = owner.TreeView;
+        TreeView tv = _owner.TreeView;
 
         if (tv is not null)
         {
@@ -368,11 +319,11 @@ public class TreeNodeCollection : IList
 
         if (tv is not null && tv.Sorted)
         {
-            return owner.AddSorted(node);
+            return _owner.AddSorted(node);
         }
 
-        node.parent = owner;
-        int fixedIndex = owner.Nodes.FixedIndex;
+        node.parent = _owner;
+        int fixedIndex = _owner.Nodes.FixedIndex;
         if (fixedIndex != -1)
         {
             node.index = fixedIndex + delta;
@@ -381,10 +332,10 @@ public class TreeNodeCollection : IList
         {
             //if fixedIndex != -1 capacity was ensured by AddRange
             Debug.Assert(delta == 0, "delta should be 0");
-            node.index = owner.childNodes.Count;
+            node.index = _owner.childNodes.Count;
         }
 
-        owner.childNodes.Add(node);
+        _owner.childNodes.Add(node);
         node.Realize(false);
 
         if (tv is not null && node == tv.selectedNode)
@@ -400,13 +351,13 @@ public class TreeNodeCollection : IList
         return node.index;
     }
 
-    int IList.Add(object node)
+    int IList.Add(object? node)
     {
         ArgumentNullException.ThrowIfNull(node);
 
-        if (node is TreeNode)
+        if (node is TreeNode treeNode)
         {
-            return Add((TreeNode)node);
+            return Add(treeNode);
         }
         else
         {
@@ -414,30 +365,17 @@ public class TreeNodeCollection : IList
         }
     }
 
-    public bool Contains(TreeNode node)
-    {
-        return IndexOf(node) != -1;
-    }
+    public bool Contains(TreeNode node) => IndexOf(node) != -1;
 
     /// <summary>
     ///  Returns true if the collection contains an item with the specified key, false otherwise.
     /// </summary>
-    public virtual bool ContainsKey(string key)
-    {
-        return IsValidIndex(IndexOfKey(key));
-    }
+    public virtual bool ContainsKey(string? key) => IsValidIndex(IndexOfKey(key));
 
-    bool IList.Contains(object node)
-    {
-        if (node is TreeNode)
-        {
-            return Contains((TreeNode)node);
-        }
-        else
-        {
-            return false;
-        }
-    }
+    bool IList.Contains(object? node) =>
+        node is TreeNode treeNode
+            ? Contains(treeNode)
+            : false;
 
     public int IndexOf(TreeNode node)
     {
@@ -452,22 +390,15 @@ public class TreeNodeCollection : IList
         return -1;
     }
 
-    int IList.IndexOf(object node)
-    {
-        if (node is TreeNode)
-        {
-            return IndexOf((TreeNode)node);
-        }
-        else
-        {
-            return -1;
-        }
-    }
+    int IList.IndexOf(object? node) =>
+        node is TreeNode treeNode
+            ? IndexOf(treeNode)
+            : -1;
 
     /// <summary>
     ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
     /// </summary>
-    public virtual int IndexOfKey(string key)
+    public virtual int IndexOfKey(string? key)
     {
         // Step 0 - Arg validation
         if (string.IsNullOrEmpty(key))
@@ -476,26 +407,26 @@ public class TreeNodeCollection : IList
         }
 
         // step 1 - check the last cached item
-        if (IsValidIndex(lastAccessedIndex))
+        if (IsValidIndex(_lastAccessedIndex))
         {
-            if (WindowsFormsUtils.SafeCompareStrings(this[lastAccessedIndex].Name, key, /* ignoreCase = */ true))
+            if (WindowsFormsUtils.SafeCompareStrings(this[_lastAccessedIndex].Name, key, ignoreCase: true))
             {
-                return lastAccessedIndex;
+                return _lastAccessedIndex;
             }
         }
 
         // step 2 - search for the item
         for (int i = 0; i < Count; i++)
         {
-            if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, /* ignoreCase = */ true))
+            if (WindowsFormsUtils.SafeCompareStrings(this[i].Name, key, ignoreCase: true))
             {
-                lastAccessedIndex = i;
+                _lastAccessedIndex = i;
                 return i;
             }
         }
 
         // step 3 - we didn't find it.  Invalidate the last accessed index and return -1.
-        lastAccessedIndex = -1;
+        _lastAccessedIndex = -1;
         return -1;
     }
 
@@ -510,10 +441,10 @@ public class TreeNodeCollection : IList
         }
 
         // Check for ParentingCycle
-        owner.CheckParentingCycle(node);
+        _owner.CheckParentingCycle(node);
 
         // If the TreeView is sorted, index is ignored
-        TreeView tv = owner.TreeView;
+        TreeView tv = _owner.TreeView;
 
         if (tv is not null)
         {
@@ -525,7 +456,7 @@ public class TreeNodeCollection : IList
 
         if (tv is not null && tv.Sorted)
         {
-            owner.AddSorted(node);
+            _owner.AddSorted(node);
             return;
         }
 
@@ -534,19 +465,19 @@ public class TreeNodeCollection : IList
             index = 0;
         }
 
-        if (index > owner.childNodes.Count)
+        if (index > _owner.childNodes.Count)
         {
-            index = owner.childNodes.Count;
+            index = _owner.childNodes.Count;
         }
 
-        owner.InsertNodeAt(index, node);
+        _owner.InsertNodeAt(index, node);
     }
 
-    void IList.Insert(int index, object node)
+    void IList.Insert(int index, object? node)
     {
-        if (node is TreeNode)
+        if (node is TreeNode treeNode)
         {
-            Insert(index, (TreeNode)node);
+            Insert(index, treeNode);
         }
         else
         {
@@ -559,7 +490,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
     /// </summary>
-    public virtual TreeNode Insert(int index, string text)
+    public virtual TreeNode Insert(int index, string? text)
     {
         TreeNode tn = new TreeNode(text);
         Insert(index, tn);
@@ -569,7 +500,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
     /// </summary>
-    public virtual TreeNode Insert(int index, string key, string text)
+    public virtual TreeNode Insert(int index, string? key, string? text)
     {
         TreeNode tn = new TreeNode(text)
         {
@@ -582,7 +513,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
     /// </summary>
-    public virtual TreeNode Insert(int index, string key, string text, int imageIndex)
+    public virtual TreeNode Insert(int index, string? key, string? text, int imageIndex)
     {
         TreeNode tn = new TreeNode(text)
         {
@@ -596,7 +527,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
     /// </summary>
-    public virtual TreeNode Insert(int index, string key, string text, string imageKey)
+    public virtual TreeNode Insert(int index, string? key, string? text, string? imageKey)
     {
         TreeNode tn = new TreeNode(text)
         {
@@ -610,7 +541,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
     /// </summary>
-    public virtual TreeNode Insert(int index, string key, string text, int imageIndex, int selectedImageIndex)
+    public virtual TreeNode Insert(int index, string? key, string? text, int imageIndex, int selectedImageIndex)
     {
         TreeNode tn = new TreeNode(text, imageIndex, selectedImageIndex)
         {
@@ -623,7 +554,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Inserts a new child node on this node.  Child node is positioned as specified by index.
     /// </summary>
-    public virtual TreeNode Insert(int index, string key, string text, string imageKey, string selectedImageKey)
+    public virtual TreeNode Insert(int index, string? key, string? text, string? imageKey, string? selectedImageKey)
     {
         TreeNode tn = new TreeNode(text)
         {
@@ -640,24 +571,21 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Determines if the index is valid for the collection.
     /// </summary>
-    private bool IsValidIndex(int index)
-    {
-        return ((index >= 0) && (index < Count));
-    }
+    private bool IsValidIndex(int index) => (index >= 0) && (index < Count);
 
     /// <summary>
     ///  Remove all nodes from the tree view.
     /// </summary>
     public virtual void Clear()
     {
-        owner.Clear();
+        _owner.Clear();
     }
 
     public void CopyTo(Array dest, int index)
     {
-        if (owner.childNodes.Count > 0)
+        if (_owner.childNodes.Count > 0)
         {
-            ((ICollection)owner.childNodes).CopyTo(dest, index);
+            ((ICollection)_owner.childNodes).CopyTo(dest, index);
         }
     }
 
@@ -666,11 +594,11 @@ public class TreeNodeCollection : IList
         node.Remove();
     }
 
-    void IList.Remove(object node)
+    void IList.Remove(object? node)
     {
-        if (node is TreeNode)
+        if (node is TreeNode treeNode)
         {
-            Remove((TreeNode)node);
+            Remove(treeNode);
         }
     }
 
@@ -682,7 +610,7 @@ public class TreeNodeCollection : IList
     /// <summary>
     ///  Removes the child control with the specified key.
     /// </summary>
-    public virtual void RemoveByKey(string key)
+    public virtual void RemoveByKey(string? key)
     {
         int index = IndexOfKey(key);
         if (IsValidIndex(index))
@@ -691,8 +619,5 @@ public class TreeNodeCollection : IList
         }
     }
 
-    public IEnumerator GetEnumerator()
-    {
-        return owner.childNodes.GetEnumerator();
-    }
+    public IEnumerator GetEnumerator() => _owner.childNodes.GetEnumerator();
 }
