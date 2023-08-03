@@ -275,24 +275,15 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     internal bool CheckedStateInternal
     {
-        get
-        {
-            return _treeNodeState[TREENODESTATE_isChecked];
-        }
-        set
-        {
-            _treeNodeState[TREENODESTATE_isChecked] = value;
-        }
+        get => _treeNodeState[TREENODESTATE_isChecked];
+        set => _treeNodeState[TREENODESTATE_isChecked] = value;
     }
 
     // Checked does sanity checking and fires Before/AfterCheck events, then forwards to this
     // property to get/set the actual checked value.
     internal unsafe bool CheckedInternal
     {
-        get
-        {
-            return CheckedStateInternal;
-        }
+        get => CheckedStateInternal;
         set
         {
             CheckedStateInternal = value;
@@ -666,20 +657,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  This denotes the depth of nesting of the TreeNode.
     /// </summary>
     [Browsable(false)]
-    public int Level
-    {
-        get
-        {
-            if (Parent is null)
-            {
-                return 0;
-            }
-            else
-            {
-                return Parent.Level + 1;
-            }
-        }
-    }
+    public int Level => Parent is null ? 0 : Parent.Level + 1;
 
     /// <summary>
     ///  The next sibling node.
@@ -1013,10 +991,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [AllowNull]
     public string StateImageKey
     {
-        get
-        {
-            return StateImageIndexer.Key;
-        }
+        get => StateImageIndexer.Key;
         set
         {
             if (StateImageIndexer.Key == value && !string.Equals(value, ImageList.Indexer.DefaultKey))
@@ -1080,14 +1055,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [TypeConverter(typeof(StringConverter))]
     public object? Tag
     {
-        get
-        {
-            return _userData;
-        }
-        set
-        {
-            _userData = value;
-        }
+        get => _userData;
+        set => _userData = value;
     }
 
     /// <summary>
@@ -1099,10 +1068,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [AllowNull]
     public string Text
     {
-        get
-        {
-            return _text ?? string.Empty;
-        }
+        get => _text ?? string.Empty;
         set
         {
             _text = value;
@@ -1119,14 +1085,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [DefaultValue("")]
     public string ToolTipText
     {
-        get
-        {
-            return _toolTipText;
-        }
-        set
-        {
-            _toolTipText = value;
-        }
+        get => _toolTipText;
+        set => _toolTipText = value;
     }
 
     /// <summary>
@@ -1137,14 +1097,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [AllowNull]
     public string Name
     {
-        get
-        {
-            return _name ?? string.Empty;
-        }
-        set
-        {
-            _name = value;
-        }
+        get => _name ?? string.Empty;
+        set => _name = value;
     }
 
     /// <summary>
@@ -1235,10 +1189,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// <summary>
     ///  Returns a TreeNode object for the given HTREEITEM handle
     /// </summary>
-    public static TreeNode FromHandle(TreeView tree, IntPtr handle)
-    {
-        return tree.NodeFromHandle(handle);
-    }
+    public static TreeNode FromHandle(TreeView tree, IntPtr handle) => tree.NodeFromHandle(handle);
 
     private void SortChildren(TreeView parentTreeView)
     {
@@ -1293,7 +1244,6 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         // This is a node that is a child of some other node.  We have
         // to selectively remove children here.
-        //
         bool isBulkOperation = false;
         TreeView tv = TreeView;
 
