@@ -1457,7 +1457,7 @@ public readonly struct ImeModeConversion
     /// </summary>
     public static Dictionary<ImeMode, ImeModeConversion> ImeModeConversionBits
     {
-        get => s_imeModeConversionBits ??= new()
+        get => s_imeModeConversionBits ??= new(7)
         {
             // Hiragana, On
             {
