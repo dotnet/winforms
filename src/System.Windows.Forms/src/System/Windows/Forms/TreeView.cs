@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -31,26 +29,26 @@ public partial class TreeView : Control
     private const string backSlash = "\\";
     private const int DefaultTreeViewIndent = 19;
 
-    private DrawTreeNodeEventHandler onDrawNode;
-    private NodeLabelEditEventHandler onBeforeLabelEdit;
-    private NodeLabelEditEventHandler onAfterLabelEdit;
-    private TreeViewCancelEventHandler onBeforeCheck;
-    private TreeViewEventHandler onAfterCheck;
-    private TreeViewCancelEventHandler onBeforeCollapse;
-    private TreeViewEventHandler onAfterCollapse;
-    private TreeViewCancelEventHandler onBeforeExpand;
-    private TreeViewEventHandler onAfterExpand;
-    private TreeViewCancelEventHandler onBeforeSelect;
-    private TreeViewEventHandler onAfterSelect;
-    private ItemDragEventHandler onItemDrag;
-    private TreeNodeMouseHoverEventHandler onNodeMouseHover;
-    private EventHandler onRightToLeftLayoutChanged;
+    private DrawTreeNodeEventHandler? onDrawNode;
+    private NodeLabelEditEventHandler? onBeforeLabelEdit;
+    private NodeLabelEditEventHandler? onAfterLabelEdit;
+    private TreeViewCancelEventHandler? onBeforeCheck;
+    private TreeViewEventHandler? onAfterCheck;
+    private TreeViewCancelEventHandler? onBeforeCollapse;
+    private TreeViewEventHandler? onAfterCollapse;
+    private TreeViewCancelEventHandler? onBeforeExpand;
+    private TreeViewEventHandler? onAfterExpand;
+    private TreeViewCancelEventHandler? onBeforeSelect;
+    private TreeViewEventHandler? onAfterSelect;
+    private ItemDragEventHandler? onItemDrag;
+    private TreeNodeMouseHoverEventHandler? onNodeMouseHover;
+    private EventHandler? onRightToLeftLayoutChanged;
 
-    internal TreeNode selectedNode;
-    private ImageList.Indexer imageIndexer;
-    private ImageList.Indexer selectedImageIndexer;
+    internal TreeNode? selectedNode;
+    private ImageList.Indexer? imageIndexer;
+    private ImageList.Indexer? selectedImageIndexer;
     private bool setOddHeight;
-    private TreeNode prevHoveredNode;
+    private TreeNode? prevHoveredNode;
     private bool hoveredAlready;
     private bool rightToLeftLayout;
 
@@ -121,14 +119,14 @@ public partial class TreeView : Control
         }
     }
 
-    private ImageList imageList;
+    private ImageList? imageList;
     private int indent = -1;
     private int itemHeight = -1;
     private string pathSeparator = backSlash;
     private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 
-    internal TreeNodeCollection nodes;
-    internal TreeNode editNode;
+    internal TreeNodeCollection? nodes;
+    internal TreeNode? editNode;
     internal TreeNode root;
     internal Dictionary<IntPtr, TreeNode> _nodesByHandle = new();
     internal bool nodesCollectionClear; //this is set when the treeNodeCollection is getting cleared and used by TreeView
@@ -136,18 +134,18 @@ public partial class TreeView : Control
     private TreeViewDrawMode drawMode = TreeViewDrawMode.Normal;
 
     //Properties newly added to TreeView....
-    private ImageList internalStateImageList;
-    private TreeNode topNode;
-    private ImageList stateImageList;
+    private ImageList? internalStateImageList;
+    private TreeNode? topNode;
+    private ImageList? stateImageList;
     private Color lineColor;
-    private string controlToolTipText;
+    private string? controlToolTipText;
 
     // Sorting
-    private IComparer treeViewNodeSorter;
+    private IComparer? treeViewNodeSorter;
 
     //Events
-    private TreeNodeMouseClickEventHandler onNodeMouseClick;
-    private TreeNodeMouseClickEventHandler onNodeMouseDoubleClick;
+    private TreeNodeMouseClickEventHandler? onNodeMouseClick;
+    private TreeNodeMouseClickEventHandler? onNodeMouseDoubleClick;
 
     private ToolTipBuffer _toolTipBuffer;
 
@@ -155,13 +153,14 @@ public partial class TreeView : Control
     ///  Creates a TreeView control
     /// </summary>
     public TreeView()
-    : base()
+        : base()
     {
-        treeViewState = new Collections.Specialized.BitVector32(TREEVIEWSTATE_showRootLines |
-                                                                            TREEVIEWSTATE_showPlusMinus |
-                                                                            TREEVIEWSTATE_showLines |
-                                                                            TREEVIEWSTATE_scrollable |
-                                                                            TREEVIEWSTATE_hideSelection);
+        treeViewState = new Collections.Specialized.BitVector32(
+            TREEVIEWSTATE_showRootLines |
+            TREEVIEWSTATE_showPlusMinus |
+            TREEVIEWSTATE_showLines |
+            TREEVIEWSTATE_scrollable |
+            TREEVIEWSTATE_hideSelection);
 
         root = new TreeNode(this);
 
@@ -223,7 +222,7 @@ public partial class TreeView : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Image BackgroundImage
+    public override Image? BackgroundImage
     {
         get => base.BackgroundImage;
         set => base.BackgroundImage = value;
@@ -231,7 +230,7 @@ public partial class TreeView : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageChanged
+    public new event EventHandler? BackgroundImageChanged
     {
         add => base.BackgroundImageChanged += value;
         remove => base.BackgroundImageChanged -= value;
@@ -247,7 +246,7 @@ public partial class TreeView : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageLayoutChanged
+    public new event EventHandler? BackgroundImageLayoutChanged
     {
         add => base.BackgroundImageLayoutChanged += value;
         remove => base.BackgroundImageLayoutChanged -= value;
@@ -429,7 +428,7 @@ public partial class TreeView : Control
     {
         get
         {
-            return new Size(121, 97);
+            return new(121, 97);
         }
     }
 
@@ -624,6 +623,7 @@ public partial class TreeView : Control
     [RefreshProperties(RefreshProperties.Repaint)]
     [SRDescription(nameof(SR.TreeViewImageKeyDescr))]
     [RelatedImageList("ImageList")]
+    [AllowNull]
     public string ImageKey
     {
         get
@@ -656,7 +656,7 @@ public partial class TreeView : Control
     [DefaultValue(null)]
     [SRDescription(nameof(SR.TreeViewImageListDescr))]
     [RefreshProperties(RefreshProperties.Repaint)]
-    public ImageList ImageList
+    public ImageList? ImageList
     {
         get
         {
@@ -735,7 +735,7 @@ public partial class TreeView : Control
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(null)]
     [SRDescription(nameof(SR.TreeViewStateImageListDescr))]
-    public ImageList StateImageList
+    public ImageList? StateImageList
     {
         get
         {
@@ -749,8 +749,7 @@ public partial class TreeView : Control
                 stateImageList = value;
                 AttachStateImageListHandlers();
 
-                // Update TreeView's images
-                //
+                // Update TreeView's images.
                 if (IsHandleCreated)
                 {
                     UpdateNativeStateImageList();
@@ -759,7 +758,7 @@ public partial class TreeView : Control
                     // and stateimage value for each node.
                     UpdateCheckedState(root, true);
 
-                    if ((value is null || stateImageList.Images.Count == 0) && CheckBoxes)
+                    if ((value is null || stateImageList!.Images.Count == 0) && CheckBoxes)
                     {
                         // Requires Handle Recreate to force on the checkBoxes and states..
                         RecreateHandle();
@@ -993,7 +992,7 @@ public partial class TreeView : Control
             }
         }
     }
-
+#nullable disable
     /// <summary>
     ///  The delimeter string used by TreeNode.getFullPath().
     /// </summary>

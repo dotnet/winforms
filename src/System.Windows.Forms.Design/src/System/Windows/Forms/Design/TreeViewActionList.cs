@@ -23,7 +23,7 @@ internal class TreeViewActionList : DesignerActionList
         EditorServiceContext.EditValue(_designer, Component, "Nodes");
     }
 
-    public ImageList ImageList
+    public ImageList? ImageList
     {
         get
         {
