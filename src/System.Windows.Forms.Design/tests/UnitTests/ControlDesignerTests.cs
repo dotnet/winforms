@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Windows.Forms.Design.Tests.Mocks;
 using Moq;
 using Windows.Win32;
 
@@ -214,40 +214,6 @@ public class ControlDesignerTests
         Assert.Empty(controlDesigner.AssociatedComponents);
     }
 
-    internal static Mock<ISite> CreateMockSiteWithDesignerHost(object designerHost)
-    {
-        Mock<ISite> mockSite = new(MockBehavior.Strict);
-        mockSite
-            .Setup(s => s.GetService(typeof(IDesignerHost)))
-            .Returns(designerHost);
-        mockSite
-            .Setup(s => s.GetService(typeof(IComponentChangeService)))
-            .Returns(null);
-        mockSite
-            .Setup(s => s.GetService(typeof(IInheritanceService)))
-            .Returns(null);
-        mockSite
-            .Setup(s => s.GetService(typeof(IDictionaryService)))
-            .Returns(null);
-        mockSite
-            .Setup(s => s.GetService(typeof(IExtenderListService)))
-            .Returns(null);
-        mockSite
-            .Setup(s => s.GetService(typeof(ITypeDescriptorFilterService)))
-            .Returns(null);
-        mockSite
-            .Setup(s => s.GetService(typeof(AmbientProperties)))
-            .Returns(null);
-        mockSite
-            .Setup(s => s.GetService(typeof(Control)))
-            .Returns(null);
-        mockSite
-            .SetupGet(s => s.Container)
-            .Returns((IContainer)null);
-
-        return mockSite;
-    }
-
     [WinFormsFact]
     public void ControlDesigner_AssociatedComponentsTest()
     {
@@ -261,7 +227,7 @@ public class ControlDesignerTests
         mockDesignerHost
             .Setup(s => s.GetDesigner(It.IsAny<Control>()))
             .Returns(() => null);
-        var mockSite = CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         control.Site = mockSite.Object;
 
         controlDesigner.Initialize(control);
