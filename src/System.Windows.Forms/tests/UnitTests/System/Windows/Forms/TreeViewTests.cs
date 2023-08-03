@@ -6792,14 +6792,14 @@ public class TreeViewTests
         treeView.CreateControl();
 
         dynamic listViewDynamic = treeView.TestAccessor().Dynamic;
-        string actual = listViewDynamic.controlToolTipText;
+        string actual = listViewDynamic._controlToolTipText;
 
         Assert.Null(actual);
         Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
 
         string text = "Some test text";
         toolTip.SetToolTip(treeView, text); // Invokes TreeView's SetToolTip inside
-        actual = listViewDynamic.controlToolTipText;
+        actual = listViewDynamic._controlToolTipText;
 
         Assert.Equal(text, actual);
     }
