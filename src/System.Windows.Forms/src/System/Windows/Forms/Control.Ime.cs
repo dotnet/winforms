@@ -1254,8 +1254,8 @@ public static class ImeContext
                         PInvoke.ImmGetConversionStatus(inputContext, &conversion, &sentence);
                     }
 
-                    conversion |= conversionEntry.setBits;
-                    conversion &= ~conversionEntry.clearBits;
+                    conversion |= conversionEntry.SetBits;
+                    conversion &= ~conversionEntry.ClearBits;
 
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, $"ImmSetConversionStatus({inputContext}, conversion, sentence)");
                     PInvoke.ImmSetConversionStatus(inputContext, conversion, sentence);
