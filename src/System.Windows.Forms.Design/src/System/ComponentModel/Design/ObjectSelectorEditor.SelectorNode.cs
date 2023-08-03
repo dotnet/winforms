@@ -14,7 +14,7 @@ public abstract partial class ObjectSelectorEditor
         /// <summary>
         ///  Sets label and value to given.
         /// </summary>
-        public SelectorNode(string label, object? value) : base(label)
+        public SelectorNode(string? label, object? value) : base(label)
         {
             this.value = value;
         }
