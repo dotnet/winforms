@@ -16,13 +16,13 @@ public partial class DocumentDesigner
 {
     private class AxToolboxItem : ToolboxItem
     {
-        private string clsid;
-        private Type? axctlType;
-        private string version = string.Empty;
+        private string _clsid;
+        private Type? _axctlType;
+        private string _version = string.Empty;
 
         public AxToolboxItem(string clsid) : base(typeof(AxHost))
         {
-            this.clsid = clsid;
+            this._clsid = clsid;
             Company = null; //we don't get any company info for ax controls.
             LoadVersionInfo();
         }
@@ -39,18 +39,18 @@ public partial class DocumentDesigner
         /// </summary>
         public override string ComponentType => SR.Ax_Control;
 
-        public override string Version => version;
+        public override string Version => _version;
 
         private void LoadVersionInfo()
         {
-            string controlKey = $"CLSID\\{clsid}";
+            string controlKey = $"CLSID\\{_clsid}";
             using RegistryKey? key = Registry.ClassesRoot.OpenSubKey(controlKey);
 
             // Fail later- not for tooltip info.
             using RegistryKey? verKey = key?.OpenSubKey("Version");
             if (verKey is not null)
             {
-                version = (string)verKey.GetValue("")!;
+                _version = (string)verKey.GetValue("")!;
             }
         }
 
@@ -84,7 +84,7 @@ public partial class DocumentDesigner
                         references,
                         args,
                         CultureInfo.InvariantCulture);
-                    Debug.Assert(tlbRef is not null, $"Null reference returned by AddActiveX (tlbimp) by the project system for: {clsid}");
+                    Debug.Assert(tlbRef is not null, $"Null reference returned by AddActiveX (tlbimp) by the project system for: {_clsid}");
 
                     args[4] = "aximp";
                     object? axRef = references.GetType().InvokeMember(
@@ -94,9 +94,9 @@ public partial class DocumentDesigner
                         references,
                         args,
                         CultureInfo.InvariantCulture);
-                    Debug.Assert(axRef is not null, $"Null reference returned by AddActiveX (aximp) by the project system for: {clsid}");
+                    Debug.Assert(axRef is not null, $"Null reference returned by AddActiveX (aximp) by the project system for: {_clsid}");
 
-                    axctlType = GetAxTypeFromReference(axRef, host);
+                    _axctlType = GetAxTypeFromReference(axRef, host);
                 }
                 catch (TargetInvocationException tie)
                 {
@@ -110,7 +110,7 @@ public partial class DocumentDesigner
                 }
             }
 
-            if (axctlType is null)
+            if (_axctlType is null)
             {
                 IUIService? uiSvc = host.GetService<IUIService>();
                 if (uiSvc is null)
@@ -135,7 +135,7 @@ public partial class DocumentDesigner
             var comps = new IComponent[1];
             try
             {
-                comps[0] = host.CreateComponent(axctlType);
+                comps[0] = host.CreateComponent(_axctlType);
             }
             catch (Exception e)
             {
@@ -151,11 +151,11 @@ public partial class DocumentDesigner
         /// <para>Loads the state of this 'AxToolboxItem'
         /// from the stream.</para>
         /// </summary>
-        [MemberNotNull(nameof(clsid))]
+        [MemberNotNull(nameof(_clsid))]
         protected override void Deserialize(SerializationInfo info, StreamingContext context)
         {
             base.Deserialize(info, context);
-            clsid = info.GetString("Clsid")!;
+            _clsid = info.GetString("Clsid")!;
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ public partial class DocumentDesigner
                 Debug.Assert(attrs is not null && attrs.Length == 1, $"Invalid number of GuidAttributes found on: {t.FullName}");
 
                 AxHost.ClsidAttribute guid = (AxHost.ClsidAttribute)attrs[0];
-                if (string.Equals(guid.Value, clsid, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(guid.Value, _clsid, StringComparison.OrdinalIgnoreCase))
                 {
                     return t;
                 }
@@ -255,7 +255,7 @@ public partial class DocumentDesigner
         /// </summary>
         private unsafe TLIBATTR GetTypeLibAttr()
         {
-            string controlKey = $"CLSID\\{clsid}";
+            string controlKey = $"CLSID\\{_clsid}";
             using RegistryKey? key = Registry.ClassesRoot.OpenSubKey(controlKey);
             if (key is null)
             {
@@ -358,9 +358,9 @@ public partial class DocumentDesigner
         /// </summary>
         protected override void Serialize(SerializationInfo info, StreamingContext context)
         {
-            Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Serializing AxToolboxItem:{clsid}");
+            Debug.WriteLineIf(AxToolSwitch.TraceVerbose, $"Serializing AxToolboxItem:{_clsid}");
             base.Serialize(info, context);
-            info.AddValue("Clsid", clsid);
+            info.AddValue("Clsid", _clsid);
         }
     }
 }
