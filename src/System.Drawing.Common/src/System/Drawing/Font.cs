@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
@@ -596,7 +597,7 @@ internal
             throw new ArgumentException(SR.Format(SR.GdiplusNotTrueTypeFont, logFont.AsString()));
         }
 
-        bool gdiVerticalFont = logFont.lfFaceName[0] == '@';
+        bool gdiVerticalFont = logFont._lfFaceName[0] == '@';
         return new Font(font, logFont.lfCharSet, gdiVerticalFont);
     }
 
