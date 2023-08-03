@@ -227,7 +227,7 @@ internal partial class ResourceCodeDomSerializer
             Dictionary<string, object> resourceSet = GetResourceSet(culture);
             if (resourceSet is not null && resourceSet.TryGetValue(name, out object parentValue))
             {
-                return !parentValue.Equals(value) || parentValue is null ? CompareValue.Different : CompareValue.Same;
+                return parentValue is null || !parentValue.Equals(value) ? CompareValue.Different : CompareValue.Same;
             }
             else if (culture.Equals(CultureInfo.InvariantCulture))
             {
