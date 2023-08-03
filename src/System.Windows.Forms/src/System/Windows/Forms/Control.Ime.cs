@@ -1496,7 +1496,7 @@ public readonly struct ImeModeConversion
                 {
                     SetBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE,
                     ClearBits = IME_CONVERSION_MODE.IME_CMODE_KATAKANA | IME_CONVERSION_MODE.IME_CMODE_NATIVE
-                },
+                }
             },
 
             // Alpha
