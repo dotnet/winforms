@@ -57,7 +57,7 @@ public class ComponentDesignerTests
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(component);
-        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         component.Site = mockSite.Object;
         designer.Initialize(component);
 
@@ -84,7 +84,7 @@ public class ComponentDesignerTests
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(component);
-        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         component.Site = mockSite.Object;
         designer.Initialize(component);
 
@@ -118,7 +118,7 @@ public class ComponentDesignerTests
 
         using Component component = new()
         {
-            Site = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object).Object
+            Site = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object).Object
         };
 
         designer.Initialize(component);
@@ -156,7 +156,7 @@ public class ComponentDesignerTests
 
         using Component component = new()
         {
-            Site = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object).Object
+            Site = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object).Object
         };
 
         designer.Initialize(component);
@@ -188,7 +188,7 @@ public class ComponentDesignerTests
 
         using Component component = new()
         {
-            Site = MockSiteUtil.CreateMockSiteWithDesignerHost(host).Object
+            Site = MockSite.CreateMockSiteWithDesignerHost(host).Object
         };
 
         designer.Initialize(component);
@@ -310,7 +310,7 @@ public class ComponentDesignerTests
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(rootComponent);
-        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
 
         using Component component = new()
         {
@@ -340,7 +340,7 @@ public class ComponentDesignerTests
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(component);
-        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         component.Site = mockSite.Object;
         designer.Initialize(component);
         mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
@@ -367,7 +367,7 @@ public class ComponentDesignerTests
     public void ComponentDesigner_ParentComponent_GetWithInvalidService_ReturnsNull(object host)
     {
         using SubComponentDesigner designer = new();
-        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(host);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(host);
 
         using Component component = new()
         {
@@ -399,7 +399,7 @@ public class ComponentDesignerTests
             .Setup(h => h.GetDesigner(rootComponent))
             .Returns(designer)
             .Verifiable();
-        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
 
         using Component component = new()
         {
@@ -433,7 +433,7 @@ public class ComponentDesignerTests
         mockDesignerHost
             .Setup(h => h.RootComponent)
             .Returns(component);
-        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         component.Site = mockSite.Object;
         designer.Initialize(component);
         mockSite.Verify(s => s.GetService(typeof(IDesignerHost)), Times.Once());
@@ -455,7 +455,7 @@ public class ComponentDesignerTests
     {
         using SubComponentDesigner designer = new();
         ITreeDesigner treeDesigner = designer;
-        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(host);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(host);
 
         using Component component = new()
         {

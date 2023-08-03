@@ -28,7 +28,7 @@ public class SplitContainerDesignerTests
             .Setup(s => s.GetService(typeof(IComponentChangeService)))
             .Returns(mockComponentChangeService.Object);
 
-        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         splitContainer.Site = mockSite.Object;
 
         splitContainerDesigner.Initialize(splitContainer);

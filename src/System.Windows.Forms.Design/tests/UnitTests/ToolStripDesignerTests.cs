@@ -28,7 +28,7 @@ public class ToolStripDesignerTests
         mockDesignerHost.Setup(s => s.AddService(typeof(ToolStripKeyboardHandlingService), It.IsAny<object>()));
         mockDesignerHost.Setup(s => s.AddService(typeof(ISupportInSituService), It.IsAny<object>()));
 
-        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         mockSite.Setup(s => s.GetService(typeof(BehaviorService))).Returns(null);
         mockSite.Setup(s => s.GetService(typeof(ToolStripAdornerWindowService))).Returns(null);
         toolStrip.Site = mockSite.Object;

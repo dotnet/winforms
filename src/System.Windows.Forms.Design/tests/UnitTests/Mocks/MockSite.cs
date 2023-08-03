@@ -4,7 +4,7 @@ using Moq;
 
 namespace System.Windows.Forms.Design.Tests.Mocks
 {
-    public class MockSiteUtil
+    public class MockSite
     {
         public static Mock<ISite> CreateMockSiteWithDesignerHost(object designerHost)
         {

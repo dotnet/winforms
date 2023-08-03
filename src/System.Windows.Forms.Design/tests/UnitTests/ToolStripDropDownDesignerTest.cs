@@ -30,7 +30,7 @@ public class ToolStripDropDownDesignerTest
             .Returns(mockComponentChangeService.Object);
         mockDesignerHost.Setup(s => s.AddService(It.IsAny<Type>(), It.IsAny<object>()));
 
-        Mock<ISite> mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        Mock<ISite> mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         toolStripDropDown.Site = mockSite.Object;
 
         toolStripDropDownDesigner.Initialize(toolStripDropDown);

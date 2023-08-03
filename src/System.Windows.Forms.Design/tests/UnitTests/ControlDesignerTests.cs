@@ -215,7 +215,6 @@ public class ControlDesignerTests
         Assert.Empty(controlDesigner.AssociatedComponents);
     }
 
-
     [WinFormsFact]
     public void ControlDesigner_AssociatedComponentsTest()
     {
@@ -229,7 +228,7 @@ public class ControlDesignerTests
         mockDesignerHost
             .Setup(s => s.GetDesigner(It.IsAny<Control>()))
             .Returns(() => null);
-        var mockSite = MockSiteUtil.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
         control.Site = mockSite.Object;
 
         controlDesigner.Initialize(control);
