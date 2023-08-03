@@ -230,8 +230,7 @@ namespace System.Drawing
     }
     public partial struct CharacterRange
     {
-        private int _first;
-        private int _length;
+        private int _dummyPrimitive;
         public CharacterRange(int First, int Length) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public int First { readonly get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public int Length { readonly get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
