@@ -96,7 +96,7 @@ internal sealed class SinglyLinkedList<T>
         {
             if (value is not null)
             {
-                while (node != First)
+                while (node is not null)
                 {
                     if (c.Equals(node!.Value, value))
                     {
@@ -108,7 +108,7 @@ internal sealed class SinglyLinkedList<T>
             }
             else
             {
-                while (node != First)
+                while (node is not null)
                 {
                     if (node!.Value is null)
                     {
