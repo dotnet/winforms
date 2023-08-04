@@ -30,7 +30,9 @@ unsafe struct LOGFONT
     public byte lfClipPrecision;
     public byte lfQuality;
     public byte lfPitchAndFamily;
-    internal fixed char _lfFaceName[LF_FACESIZE];
+    private fixed char _lfFaceName[LF_FACESIZE];
+
+    internal readonly bool IsGdiVerticalFont => _lfFaceName[0] == '@';
 
 #if NET7_0_OR_GREATER
     [UnscopedRef]
