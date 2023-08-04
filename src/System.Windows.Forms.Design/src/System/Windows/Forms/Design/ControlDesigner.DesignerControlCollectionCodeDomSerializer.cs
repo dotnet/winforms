@@ -14,9 +14,9 @@ public partial class ControlDesigner
     // that aren't sited in the host's container.
     internal class DesignerControlCollectionCodeDomSerializer : CollectionCodeDomSerializer
     {
-        protected override object SerializeCollection(
+        protected override object? SerializeCollection(
             IDesignerSerializationManager manager,
-            CodeExpression targetExpression,
+            CodeExpression? targetExpression,
             Type targetType,
             ICollection originalCollection,
             ICollection valuesToSerialize)
