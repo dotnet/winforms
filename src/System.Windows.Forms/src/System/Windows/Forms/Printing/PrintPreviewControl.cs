@@ -888,8 +888,8 @@ public partial class PrintPreviewControl : Control
 
         (bool horizontal, bool vertical) IsScrollNeeded(Size displaySize)
         {
-            bool horizontal = _virtualSize.Width > displaySize.Width;
-            bool vertical = _virtualSize.Height > displaySize.Height;
+            bool horizontal = _virtualSize.Width > displaySize.Width && displaySize.Width > _vScrollBar.Width;
+            bool vertical = _virtualSize.Height > displaySize.Height && displaySize.Height > _hScrollBar.Height;
 
             if (!horizontal && vertical)
             {
