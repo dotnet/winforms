@@ -48,8 +48,8 @@ override System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnNodeMouseC
 override System.ComponentModel.Design.Serialization.CodeDomSerializerException.GetObjectData(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
 ~override System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
 ~override System.ComponentModel.Design.UndoEngine.UndoUnit.ToString() -> string
-~override System.Drawing.Design.ContentAlignmentEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Drawing.Design.ContentAlignmentEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.ContentAlignmentEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Drawing.Design.ContentAlignmentEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 override System.Drawing.Design.CursorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
 override System.Drawing.Design.CursorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 override System.Drawing.Design.FontEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
@@ -83,8 +83,8 @@ override System.Drawing.Design.FontNameEditor.PaintValue(System.Drawing.Design.P
 ~override System.Windows.Forms.Design.ControlDesigner.InitializeNewComponent(System.Collections.IDictionary defaultValues) -> void
 ~override System.Windows.Forms.Design.ControlDesigner.ParentComponent.get -> System.ComponentModel.IComponent
 ~override System.Windows.Forms.Design.ControlDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
-~override System.Windows.Forms.Design.DockEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Windows.Forms.Design.DockEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Windows.Forms.Design.DockEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Windows.Forms.Design.DockEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.Windows.Forms.Design.DocumentDesigner.GetGlyphs(System.Windows.Forms.Design.Behavior.GlyphSelectionType selectionType) -> System.Windows.Forms.Design.Behavior.GlyphCollection
 ~override System.Windows.Forms.Design.DocumentDesigner.Initialize(System.ComponentModel.IComponent component) -> void
 ~override System.Windows.Forms.Design.DocumentDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
@@ -219,13 +219,13 @@ System.ComponentModel.Design.ObjectSelectorEditor.Selector.Start(System.Windows.
 ~System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationService(System.IServiceProvider provider) -> void
 ~System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model) -> void
 ~System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model, System.Globalization.CultureInfo[] supportedCultures) -> void
-~System.ComponentModel.Design.Serialization.CodeDomSerializer.DeserializeStatementToInstance(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeStatement statement) -> object
-~System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeToReferenceExpression(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> System.CodeDom.CodeExpression
 System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(string? message, System.CodeDom.CodeLinePragma? linePragma) -> void
 System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(string? message, System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
 System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(System.Exception? ex, System.CodeDom.CodeLinePragma? linePragma) -> void
 System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(System.Exception? ex, System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
 System.ComponentModel.Design.Serialization.CodeDomSerializerException.LinePragma.get -> System.CodeDom.CodeLinePragma?
+System.ComponentModel.Design.Serialization.CodeDomSerializer.DeserializeStatementToInstance(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, System.CodeDom.CodeStatement! statement) -> object?
+System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeToReferenceExpression(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! value) -> System.CodeDom.CodeExpression?
 ~System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.MethodSupportsSerialization(System.Reflection.MethodInfo method) -> bool
 ~System.ComponentModel.Design.UndoEngine.GetRequiredService(System.Type serviceType) -> object
 ~System.ComponentModel.Design.UndoEngine.GetService(System.Type serviceType) -> object
@@ -420,13 +420,13 @@ virtual System.ComponentModel.Design.ObjectSelectorEditor.SetValue(object? value
 ~virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection errors) -> void
 ~virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReportFlushErrors(System.Collections.ICollection errors) -> void
 ~virtual System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnComponentRename(object component, string oldName, string newName) -> void
-~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object codeObject) -> object
-~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.GetTargetComponentName(System.CodeDom.CodeStatement statement, System.CodeDom.CodeExpression expression, System.Type targetType) -> string
-~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
-~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeAbsolute(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
-~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeMember(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object owningObject, System.ComponentModel.MemberDescriptor member) -> System.CodeDom.CodeStatementCollection
-~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeMemberAbsolute(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object owningObject, System.ComponentModel.MemberDescriptor member) -> System.CodeDom.CodeStatementCollection
 ~virtual System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.SerializeCollection(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeExpression targetExpression, System.Type targetType, System.Collections.ICollection originalCollection, System.Collections.ICollection valuesToSerialize) -> object
+virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! codeObject) -> object?
+virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.GetTargetComponentName(System.CodeDom.CodeStatement? statement, System.CodeDom.CodeExpression? expression, System.Type? targetType) -> string?
+virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! value) -> object?
+virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeAbsolute(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! value) -> object?
+virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeMember(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! owningObject, System.ComponentModel.MemberDescriptor! member) -> System.CodeDom.CodeStatementCollection!
+virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeMemberAbsolute(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! owningObject, System.ComponentModel.MemberDescriptor! member) -> System.CodeDom.CodeStatementCollection!
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration) -> object
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.GetInitializeMethod(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration, object value) -> System.CodeDom.CodeMemberMethod
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.GetInitializeMethods(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration) -> System.CodeDom.CodeMemberMethod[]

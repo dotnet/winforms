@@ -146,7 +146,7 @@ internal class LocalizationCodeDomSerializer : CodeDomSerializer
         }
 
         return callExistingSerializer
-            ? _currentSerializer?.Serialize(manager, value)
+            ? _currentSerializer?.Serialize(manager, value!)
             : SerializeToResourceExpression(manager, value);
     }
 

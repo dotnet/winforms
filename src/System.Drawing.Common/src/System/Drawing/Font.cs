@@ -596,8 +596,7 @@ internal
             throw new ArgumentException(SR.Format(SR.GdiplusNotTrueTypeFont, logFont.AsString()));
         }
 
-        bool gdiVerticalFont = logFont.lfFaceName[0] == '@';
-        return new Font(font, logFont.lfCharSet, gdiVerticalFont);
+        return new Font(font, logFont.lfCharSet, logFont.IsGdiVerticalFont);
     }
 
     /// <summary>

@@ -39,7 +39,7 @@ public struct Padding : IEquatable<Padding>
     [RefreshProperties(RefreshProperties.All)]
     public int All
     {
-        get => _all ? _top : -1;
+        readonly get => _all ? _top : -1;
         set
         {
             if (_all != true || _top != value)
@@ -55,7 +55,7 @@ public struct Padding : IEquatable<Padding>
     [RefreshProperties(RefreshProperties.All)]
     public int Bottom
     {
-        get => _all ? _top : _bottom;
+        readonly get => _all ? _top : _bottom;
         set
         {
             if (_all || _bottom != value)
@@ -71,7 +71,7 @@ public struct Padding : IEquatable<Padding>
     [RefreshProperties(RefreshProperties.All)]
     public int Left
     {
-        get => _all ? _top : _left;
+        readonly get => _all ? _top : _left;
         set
         {
             if (_all || _left != value)
@@ -87,7 +87,7 @@ public struct Padding : IEquatable<Padding>
     [RefreshProperties(RefreshProperties.All)]
     public int Right
     {
-        get => _all ? _top : _right;
+        readonly get => _all ? _top : _right;
         set
         {
             if (_all || _right != value)
@@ -103,7 +103,7 @@ public struct Padding : IEquatable<Padding>
     [RefreshProperties(RefreshProperties.All)]
     public int Top
     {
-        get => _top;
+        readonly get => _top;
         set
         {
             if (_all || _top != value)
@@ -117,19 +117,19 @@ public struct Padding : IEquatable<Padding>
     }
 
     [Browsable(false)]
-    public int Horizontal => Left + Right;
+    public readonly int Horizontal => Left + Right;
 
     [Browsable(false)]
-    public int Vertical => Top + Bottom;
+    public readonly int Vertical => Top + Bottom;
 
     [Browsable(false)]
-    public Size Size => new(Horizontal, Vertical);
+    public readonly Size Size => new(Horizontal, Vertical);
 
     public static Padding Add(Padding p1, Padding p2) => p1 + p2;
 
     public static Padding Subtract(Padding p1, Padding p2) => p1 - p2;
 
-    public override bool Equals(object? other)
+    public override readonly bool Equals(object? other)
     {
         if (other is not Padding otherPadding)
         {
@@ -139,7 +139,7 @@ public struct Padding : IEquatable<Padding>
         return Equals(otherPadding);
     }
 
-    public bool Equals(Padding other)
+    public readonly bool Equals(Padding other)
         => Left == other.Left
             && Top == other.Top
             && Right == other.Right
@@ -174,9 +174,9 @@ public struct Padding : IEquatable<Padding>
     /// </summary>
     public static bool operator !=(Padding p1, Padding p2) => !(p1 == p2);
 
-    public override int GetHashCode() => HashCode.Combine(Left, Top, Right, Bottom);
+    public override readonly int GetHashCode() => HashCode.Combine(Left, Top, Right, Bottom);
 
-    public override string ToString() => $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
+    public override readonly string ToString() => $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
 
     private void ResetAll() => All = 0;
 

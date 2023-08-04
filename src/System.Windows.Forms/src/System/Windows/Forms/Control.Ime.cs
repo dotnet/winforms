@@ -1253,8 +1253,8 @@ public static class ImeContext
                         PInvoke.ImmGetConversionStatus(inputContext, &conversion, &sentence);
                     }
 
-                    conversion |= conversionEntry.setBits;
-                    conversion &= ~conversionEntry.clearBits;
+                    conversion |= conversionEntry.SetBits;
+                    conversion &= ~conversionEntry.ClearBits;
 
                     Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Verbose, $"ImmSetConversionStatus({inputContext}, conversion, sentence)");
                     PInvoke.ImmSetConversionStatus(inputContext, conversion, sentence);
@@ -1310,12 +1310,12 @@ public static class ImeContext
 ///  Helper class that provides information about IME conversion mode.  Conversion mode refers to how IME interprets input like
 ///  ALPHANUMERIC or HIRAGANA and depending on its value the IME enables/disables the IME conversion window appropriately.
 /// </summary>
-public struct ImeModeConversion
+public readonly struct ImeModeConversion
 {
-    private static Dictionary<ImeMode, ImeModeConversion>? imeModeConversionBits;
+    private static volatile Dictionary<ImeMode, ImeModeConversion>? s_imeModeConversionBits;
 
-    internal IME_CONVERSION_MODE setBits;
-    internal IME_CONVERSION_MODE clearBits;
+    internal IME_CONVERSION_MODE SetBits { get; init; }
+    internal IME_CONVERSION_MODE ClearBits { get; init; }
 
     // Tables of conversions from IME context bits to IME mode
     //
@@ -1456,65 +1456,88 @@ public struct ImeModeConversion
     /// </summary>
     public static Dictionary<ImeMode, ImeModeConversion> ImeModeConversionBits
     {
-        get
+        get => s_imeModeConversionBits ??= new(7)
         {
-            if (imeModeConversionBits is null)
+            // Hiragana, On
             {
-                // Create ImeModeConversionBits dictionary
-                imeModeConversionBits = new Dictionary<ImeMode, ImeModeConversion>(7);
-                ImeModeConversion conversion;
+                ImeMode.Hiragana,
+                new()
+                {
+                    SetBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE | IME_CONVERSION_MODE.IME_CMODE_NATIVE,
+                    ClearBits = IME_CONVERSION_MODE.IME_CMODE_KATAKANA
+                }
+            },
 
-                // Hiragana, On
-                //
-                conversion.setBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE | IME_CONVERSION_MODE.IME_CMODE_NATIVE;
-                conversion.clearBits = IME_CONVERSION_MODE.IME_CMODE_KATAKANA;
-                imeModeConversionBits.Add(ImeMode.Hiragana, conversion);
+            // Katakana
+            {
+                ImeMode.Katakana,
+                new()
+                {
+                    SetBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE | IME_CONVERSION_MODE.IME_CMODE_KATAKANA | IME_CONVERSION_MODE.IME_CMODE_NATIVE,
+                    ClearBits = 0
+                }
+            },
 
-                // Katakana
-                //
-                conversion.setBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE | IME_CONVERSION_MODE.IME_CMODE_KATAKANA | IME_CONVERSION_MODE.IME_CMODE_NATIVE;
-                conversion.clearBits = 0;
-                imeModeConversionBits.Add(ImeMode.Katakana, conversion);
+            // KatakanaHalf
+            {
+                ImeMode.KatakanaHalf,
+                new()
+                {
+                    SetBits = IME_CONVERSION_MODE.IME_CMODE_KATAKANA | IME_CONVERSION_MODE.IME_CMODE_NATIVE,
+                    ClearBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE
+                }
+            },
 
-                // KatakanaHalf
-                //
-                conversion.setBits = IME_CONVERSION_MODE.IME_CMODE_KATAKANA | IME_CONVERSION_MODE.IME_CMODE_NATIVE;
-                conversion.clearBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE;
-                imeModeConversionBits.Add(ImeMode.KatakanaHalf, conversion);
+            // AlphaFull
+            {
+                ImeMode.AlphaFull,
+                new()
+                {
+                    SetBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE,
+                    ClearBits = IME_CONVERSION_MODE.IME_CMODE_KATAKANA | IME_CONVERSION_MODE.IME_CMODE_NATIVE
+                }
+            },
 
-                // AlphaFull
-                //
-                conversion.setBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE;
-                conversion.clearBits = IME_CONVERSION_MODE.IME_CMODE_KATAKANA | IME_CONVERSION_MODE.IME_CMODE_NATIVE;
-                imeModeConversionBits.Add(ImeMode.AlphaFull, conversion);
+            // Alpha
+            {
+                ImeMode.Alpha,
+                new()
+                {
+                    SetBits = 0,
+                    ClearBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE | IME_CONVERSION_MODE.IME_CMODE_KATAKANA | IME_CONVERSION_MODE.IME_CMODE_NATIVE
+                }
+            },
 
-                // Alpha
-                //
-                conversion.setBits = 0;
-                conversion.clearBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE | IME_CONVERSION_MODE.IME_CMODE_KATAKANA | IME_CONVERSION_MODE.IME_CMODE_NATIVE;
-                imeModeConversionBits.Add(ImeMode.Alpha, conversion);
+            // HangulFull
+            {
+                ImeMode.HangulFull,
+                new()
+                {
+                    SetBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE | IME_CONVERSION_MODE.IME_CMODE_NATIVE,
+                    ClearBits = 0
+                }
+            },
 
-                // HangulFull
-                //
-                conversion.setBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE | IME_CONVERSION_MODE.IME_CMODE_NATIVE;
-                conversion.clearBits = 0;
-                imeModeConversionBits.Add(ImeMode.HangulFull, conversion);
+            // Hangul
+            {
+                ImeMode.Hangul,
+                new()
+                {
+                    SetBits = IME_CONVERSION_MODE.IME_CMODE_NATIVE,
+                    ClearBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE
+                }
+            },
 
-                // Hangul
-                //
-                conversion.setBits = IME_CONVERSION_MODE.IME_CMODE_NATIVE;
-                conversion.clearBits = IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE;
-                imeModeConversionBits.Add(ImeMode.Hangul, conversion);
-
-                // OnHalf
-                //
-                conversion.setBits = IME_CONVERSION_MODE.IME_CMODE_NATIVE;
-                conversion.clearBits = IME_CONVERSION_MODE.IME_CMODE_KATAKANA | IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE;
-                imeModeConversionBits.Add(ImeMode.OnHalf, conversion);
+            // OnHalf
+            {
+                ImeMode.OnHalf,
+                new()
+                {
+                    SetBits = IME_CONVERSION_MODE.IME_CMODE_NATIVE,
+                    ClearBits = IME_CONVERSION_MODE.IME_CMODE_KATAKANA | IME_CONVERSION_MODE.IME_CMODE_FULLSHAPE
+                }
             }
-
-            return imeModeConversionBits;
-        }
+        };
     }
 
     public static bool IsCurrentConversionTableSupported
