@@ -13,7 +13,6 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms;
 
-#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
 [DesignTimeVisible(false)]
 [Designer($"System.Windows.Forms.Design.ToolStripItemDesigner, {AssemblyRef.SystemDesign}")]
 [DefaultEvent(nameof(Click))]
@@ -3728,5 +3727,3 @@ public abstract partial class ToolStripItem : BindableComponent,
         return local is not null;
     }
 }
-#pragma warning restore CA2252
-

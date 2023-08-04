@@ -879,11 +879,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     protected override void OnClick(EventArgs e)
     {
         base.OnClick(e);
-
-        // We won't let the preview feature warnings bubble further up beyond this point.
-#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
-        OnRequestCommandExecute(e);
-#pragma warning restore CA2252
     }
 
     /// <summary>
