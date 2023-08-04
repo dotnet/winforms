@@ -236,6 +236,8 @@ public partial class MainForm : Form
 
                         surface.CreateControl<TabControl>(new Size(400, 100), new Point(12, 21));
                         surface.CreateControl<TableLayoutPanel>(new Size(290, 160), new Point(20, 150));
+                        surface.CreateControl<PropertyGrid>(new Size(200, 150), new Point(430, 23));
+                        surface.CreateComponent<NotifyIcon>();
                     }
 
                     break;

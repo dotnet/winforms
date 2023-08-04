@@ -227,6 +227,11 @@
         <target state="translated">已選取預覽</target>
         <note />
       </trans-unit>
+      <trans-unit id="ChooseIconDisplayName">
+        <source>Choose Icon...</source>
+        <target state="new">選擇圖示...</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ChooseImageDescription">
         <source>Select the image displayed in the PictureBox</source>
         <target state="translated">選取 PictureBox 中顯示的影像</target>

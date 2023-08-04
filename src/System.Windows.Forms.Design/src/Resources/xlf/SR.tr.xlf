@@ -227,6 +227,11 @@
         <target state="translated">Seçili Önizleme</target>
         <note />
       </trans-unit>
+      <trans-unit id="ChooseIconDisplayName">
+        <source>Choose Icon...</source>
+        <target state="new">Simge Seç...</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ChooseImageDescription">
         <source>Select the image displayed in the PictureBox</source>
         <target state="translated">PictureBox içinde gösterilen görüntüyü seçin</target>
