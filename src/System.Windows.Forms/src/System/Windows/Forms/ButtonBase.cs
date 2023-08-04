@@ -879,6 +879,7 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     protected override void OnClick(EventArgs e)
     {
         base.OnClick(e);
+        OnRequestCommandExecute(e);
     }
 
     /// <summary>
