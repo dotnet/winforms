@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
 using System.Windows.Forms;
@@ -22,11 +26,10 @@ public abstract partial class UndoEngine
 
         public UndoUnit(UndoEngine engine, string? name)
         {
-            name ??= string.Empty;
+            Name = name ?? string.Empty;
 
-            Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: Creating undo unit '{name}'");
+            Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: Creating undo unit '{Name}'");
 
-            Name = name;
             UndoEngine = engine.OrThrowIfNull();
             _reverse = true;
             if (UndoEngine.TryGetService(out ISelectionService? ss))
@@ -339,26 +342,18 @@ public abstract partial class UndoEngine
         /// <summary>
         ///  The undo engine will cal this on the active undo unit in response to a component rename event.
         /// </summary>
-        public virtual void ComponentRename(ComponentRenameEventArgs e)
-        {
+        public virtual void ComponentRename(ComponentRenameEventArgs e) =>
             AddEvent(new RenameUndoEvent(e.OldName, e.NewName));
-        }
 
         /// <summary>
         ///  Returns an instance of the requested service.
         /// </summary>
-        protected object? GetService(Type serviceType)
-        {
-            return UndoEngine.GetService(serviceType);
-        }
+        protected object? GetService(Type serviceType) => UndoEngine.GetService(serviceType);
 
         /// <summary>
         ///  Override for object.ToString()
         /// </summary>
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
 
         /// <summary>
         ///  Either performs undo, or redo, depending on the state of the unit.  UndoUnit initially assumes that the undoable work has already been "done", so the first call to undo will undo the work.  The next call will undo the "undo", performing a redo.
@@ -611,10 +606,7 @@ public abstract partial class UndoEngine
                 }
             }
 
-            public ComponentChangingEventArgs ComponentChangingEventArgs
-            {
-                get => new(OpenComponent, _member);
-            }
+            public ComponentChangingEventArgs ComponentChangingEventArgs => new(OpenComponent, _member);
 
             /// <summary>
             ///  Indicates that undoing this event may cause side effects in other objects.
@@ -775,7 +767,7 @@ public abstract partial class UndoEngine
             ///  Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
             ///  Events without side effects have their BeforeUndo called and then their Undo called immediately after.
             /// </summary>
-            public virtual bool CausesSideEffects { get { return false; } }
+            public virtual bool CausesSideEffects => false;
 
             /// <summary>
             ///  Called before Undo is called.  All undo events get their BeforeUndo called, and then they all get their Undo called. This allows the undo event to examine the state of the world before other undo events mess with it. BeforeUndo returns true if before undo was supported, and false if not.  If before undo is not supported, the undo unit should be undone immediately.
