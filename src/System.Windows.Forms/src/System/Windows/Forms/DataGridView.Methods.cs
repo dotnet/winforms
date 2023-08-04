@@ -12890,7 +12890,7 @@ public partial class DataGridView
                             if (!MultiSelect)
                             {
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
-                                if (_selectedBandIndexes.Count > 0)
+                                if (_selectedBandIndexes.First is not null)
                                 {
                                     SetSelectedColumnCore(_selectedBandIndexes.First.Value, false);
                                 }
@@ -12914,7 +12914,7 @@ public partial class DataGridView
 
                                     try
                                     {
-                                        while (_selectedBandIndexes.Count > 0)
+                                        while (_selectedBandIndexes.First is not null)
                                         {
                                             SetSelectedColumnCore(_selectedBandIndexes.First.Value, false);
                                         }
@@ -12958,7 +12958,7 @@ public partial class DataGridView
                             if (!MultiSelect)
                             {
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
-                                if (_selectedBandIndexes.Count > 0)
+                                if (_selectedBandIndexes.First is not null)
                                 {
                                     SetSelectedColumnCore(_selectedBandIndexes.First.Value, false);
                                 }
@@ -13080,7 +13080,7 @@ public partial class DataGridView
                             if (!MultiSelect)
                             {
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
-                                if (_selectedBandIndexes.Count > 0)
+                                if (_selectedBandIndexes.First is not null)
                                 {
                                     SetSelectedRowCore(_selectedBandIndexes.First.Value, false);
                                 }
@@ -13104,7 +13104,7 @@ public partial class DataGridView
 
                                     try
                                     {
-                                        while (_selectedBandIndexes.Count > 0)
+                                        while (_selectedBandIndexes.First is not null)
                                         {
                                             SetSelectedRowCore(_selectedBandIndexes.First.Value, false);
                                         }
@@ -13148,7 +13148,7 @@ public partial class DataGridView
                             if (!MultiSelect)
                             {
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
-                                if (_selectedBandIndexes.Count > 0)
+                                if (_selectedBandIndexes.First is not null)
                                 {
                                     SetSelectedRowCore(_selectedBandIndexes.First.Value, false);
                                 }
@@ -28418,7 +28418,7 @@ public partial class DataGridView
                             if (!MultiSelect)
                             {
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
-                                if (_selectedBandIndexes.Count > 0)
+                                if (_selectedBandIndexes.First is not null)
                                 {
                                     SetSelectedColumnCore(_selectedBandIndexes.First.Value, false);
                                 }
@@ -28435,7 +28435,7 @@ public partial class DataGridView
                             if (!MultiSelect)
                             {
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
-                                if (_selectedBandIndexes.Count > 0)
+                                if (_selectedBandIndexes.First is not null)
                                 {
                                     SetSelectedColumnCore(_selectedBandIndexes.First.Value, false);
                                 }
@@ -28499,7 +28499,7 @@ public partial class DataGridView
                             if (!MultiSelect)
                             {
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
-                                if (_selectedBandIndexes.Count > 0)
+                                if (_selectedBandIndexes.First is not null)
                                 {
                                     SetSelectedRowCore(_selectedBandIndexes.First.Value, false);
                                 }
@@ -28516,7 +28516,7 @@ public partial class DataGridView
                             if (!MultiSelect)
                             {
                                 Debug.Assert(_selectedBandIndexes.Count <= 1);
-                                if (_selectedBandIndexes.Count > 0)
+                                if (_selectedBandIndexes.First is not null)
                                 {
                                     SetSelectedRowCore(_selectedBandIndexes.First.Value, false);
                                 }
@@ -28596,7 +28596,7 @@ public partial class DataGridView
             if (!MultiSelect)
             {
                 Debug.Assert(_selectedBandIndexes.Count <= 1);
-                if (_selectedBandIndexes.Count > 0)
+                if (_selectedBandIndexes.First is not null)
                 {
                     int columnIndexSelected = _selectedBandIndexes.First.Value;
                     if (columnIndexSelected != columnIndex)
@@ -28716,7 +28716,7 @@ public partial class DataGridView
             if (!MultiSelect)
             {
                 Debug.Assert(_selectedBandIndexes.Count <= 1);
-                if (_selectedBandIndexes.Count > 0)
+                if (_selectedBandIndexes.First is not null)
                 {
                     int rowIndexSelected = _selectedBandIndexes.First.Value;
                     if (rowIndexSelected != rowIndex)
