@@ -19,7 +19,7 @@ internal readonly unsafe partial struct BSTR : IDisposable
         if (Value is not null)
         {
             Marshal.FreeBSTR((nint)Value);
-            Unsafe.AsRef(this) = default;
+            Unsafe.AsRef(in this) = default;
         }
     }
 

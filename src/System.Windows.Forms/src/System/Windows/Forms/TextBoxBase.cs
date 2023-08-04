@@ -1693,7 +1693,7 @@ public abstract partial class TextBoxBase : Control
 
                 try
                 {
-                    Marshal.QueryInterface(editOlePtr, ref iiTextDocumentGuid, out iTextDocument);
+                    Marshal.QueryInterface(editOlePtr, in iiTextDocumentGuid, out iTextDocument);
 
                     if (Marshal.GetObjectForIUnknown(iTextDocument) is Richedit.ITextDocument textDocument)
                     {

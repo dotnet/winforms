@@ -47,7 +47,7 @@ internal partial class Interop
                 || flags == CreateObjectFlags.None
                 || flags == CreateObjectFlags.Unwrap);
 
-            int hr = Marshal.QueryInterface(externalComObject, ref IID.GetRef<IErrorInfo>(), out IntPtr errorInfoComObject);
+            int hr = Marshal.QueryInterface(externalComObject, in IID.GetRef<IErrorInfo>(), out IntPtr errorInfoComObject);
             if (hr == S_OK)
             {
                 Marshal.Release(externalComObject);
