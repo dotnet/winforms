@@ -555,10 +555,9 @@ public abstract partial class UndoEngine
                 {
                     Debug.WriteLineIf(s_traceUndo.TraceVerbose, $"UndoEngine: ---> Adding '{_componentName}'");
                     // We need to add this component.  To add it, we deserialize it and then we add it to the designer host's container.
-                    if (engine.GetRequiredService(typeof(IDesignerHost)) is IDesignerHost host)
-                    {
-                        engine._serializationService.DeserializeTo(_serializedData, host.Container);
-                    }
+                    IDesignerHost host = engine.GetRequiredService<IDesignerHost>();
+
+                    engine._serializationService.DeserializeTo(_serializedData, host.Container);
                 }
                 else
                 {
