@@ -45,7 +45,7 @@ override System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnNodeMouseC
 ~override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection errors) -> void
 ~override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
 ~override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
-~override System.ComponentModel.Design.Serialization.CodeDomSerializerException.GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
+override System.ComponentModel.Design.Serialization.CodeDomSerializerException.GetObjectData(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
 ~override System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
 ~override System.ComponentModel.Design.UndoEngine.UndoUnit.ToString() -> string
 override System.Drawing.Design.ContentAlignmentEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
@@ -219,13 +219,13 @@ System.ComponentModel.Design.ObjectSelectorEditor.Selector.Start(System.Windows.
 ~System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationService(System.IServiceProvider provider) -> void
 ~System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model) -> void
 ~System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model, System.Globalization.CultureInfo[] supportedCultures) -> void
+System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(string? message, System.CodeDom.CodeLinePragma? linePragma) -> void
+System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(string? message, System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
+System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(System.Exception? ex, System.CodeDom.CodeLinePragma? linePragma) -> void
+System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(System.Exception? ex, System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
+System.ComponentModel.Design.Serialization.CodeDomSerializerException.LinePragma.get -> System.CodeDom.CodeLinePragma?
 System.ComponentModel.Design.Serialization.CodeDomSerializer.DeserializeStatementToInstance(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, System.CodeDom.CodeStatement! statement) -> object?
 System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeToReferenceExpression(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! value) -> System.CodeDom.CodeExpression?
-~System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(string message, System.CodeDom.CodeLinePragma linePragma) -> void
-~System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(string message, System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
-~System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(System.Exception ex, System.CodeDom.CodeLinePragma linePragma) -> void
-~System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(System.Exception ex, System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
-~System.ComponentModel.Design.Serialization.CodeDomSerializerException.LinePragma.get -> System.CodeDom.CodeLinePragma
 ~System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.MethodSupportsSerialization(System.Reflection.MethodInfo method) -> bool
 ~System.ComponentModel.Design.UndoEngine.GetRequiredService(System.Type serviceType) -> object
 ~System.ComponentModel.Design.UndoEngine.GetService(System.Type serviceType) -> object
