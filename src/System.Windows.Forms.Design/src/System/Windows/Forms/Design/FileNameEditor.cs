@@ -1,8 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -15,11 +12,11 @@ namespace System.Windows.Forms.Design;
 [CLSCompliant(false)]
 public class FileNameEditor : UITypeEditor
 {
-    private OpenFileDialog _openFileDialog;
+    private OpenFileDialog? _openFileDialog;
 
-    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (!provider.TryGetService(out IWindowsFormsEditorService _))
+        if (!provider.TryGetService(out IWindowsFormsEditorService? _))
         {
             return value;
         }
@@ -44,7 +41,7 @@ public class FileNameEditor : UITypeEditor
     }
 
     /// <inheritdoc />
-    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.Modal;
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
 
     /// <summary>
     ///  Initializes the open file dialog when it is created. This gives you an opportunity to

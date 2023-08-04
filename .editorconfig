@@ -14,6 +14,10 @@ indent_size = 4
 [*.json]
 indent_size = 2
 
+# C# files
+[src/**/*.cs]
+file_header_template = Licensed to the .NET Foundation under one or more agreements.\nThe .NET Foundation licenses this file to you under the MIT license.
+
 # C# and VB files
 [*.{cs,vb}]
 charset = utf-8-bom
@@ -91,7 +95,7 @@ dotnet_style_allow_statement_immediately_after_block_experimental = true:silent
 
 # .NET diagnostic
 dotnet_diagnostic.RS0041.severity = none
-dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0005.severity = error
 
 # New line preferences
 csharp_new_line_before_open_brace = all

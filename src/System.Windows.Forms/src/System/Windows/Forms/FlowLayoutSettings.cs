@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
 using System.Windows.Forms.Layout;
@@ -10,7 +9,8 @@ namespace System.Windows.Forms;
 [DefaultProperty(nameof(FlowDirection))]
 public class FlowLayoutSettings : LayoutSettings
 {
-    internal FlowLayoutSettings(IArrangedElement owner) : base(owner)
+    internal FlowLayoutSettings(IArrangedElement owner)
+        : base(owner)
     {
     }
 
@@ -21,10 +21,10 @@ public class FlowLayoutSettings : LayoutSettings
     [SRCategory(nameof(SR.CatLayout))]
     public FlowDirection FlowDirection
     {
-        get => FlowLayout.GetFlowDirection(Owner);
+        get => FlowLayout.GetFlowDirection(Owner!);
         set
         {
-            FlowLayout.SetFlowDirection(Owner, value);
+            FlowLayout.SetFlowDirection(Owner!, value);
             Debug.Assert(FlowDirection == value, "FlowDirection should be the same as we set it");
         }
     }
@@ -34,10 +34,10 @@ public class FlowLayoutSettings : LayoutSettings
     [SRCategory(nameof(SR.CatLayout))]
     public bool WrapContents
     {
-        get => FlowLayout.GetWrapContents(Owner);
+        get => FlowLayout.GetWrapContents(Owner!);
         set
         {
-            FlowLayout.SetWrapContents(Owner, value);
+            FlowLayout.SetWrapContents(Owner!, value);
             Debug.Assert(WrapContents == value, "WrapContents should be the same as we set it");
         }
     }

@@ -1,8 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.ComponentModel;
 using System.Windows.Forms.Design;
@@ -15,16 +12,16 @@ namespace System.Drawing.Design;
 [CLSCompliant(false)]
 public partial class CursorEditor : UITypeEditor
 {
-    private CursorUI _cursorUI;
+    private CursorUI? _cursorUI;
 
     /// <summary>
     ///  Returns true, indicating that this drop-down control can be resized.
     /// </summary>
     public override bool IsDropDownResizable => true;
 
-    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
+        if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
         {
             return value;
         }
@@ -40,5 +37,5 @@ public partial class CursorEditor : UITypeEditor
     }
 
     /// <inheritdoc />
-    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.DropDown;
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.DropDown;
 }

@@ -63,6 +63,7 @@ CreateHalftonePalette
 CreateICW
 CreateILockBytesOnHGlobal
 CreateMenu
+CreateOleAdviseHolder
 CreatePatternBrush
 CreatePen
 CreateRectRgn

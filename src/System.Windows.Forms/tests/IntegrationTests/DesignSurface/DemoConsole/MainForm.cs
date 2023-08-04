@@ -24,11 +24,13 @@ public partial class MainForm : Form
         CreateDesignSurface(2);
         CreateDesignSurface(3);
         CreateDesignSurface(4);
+        CreateDesignSurface(5);
 
         tabPage1.Text = "Use SnapLines";
         tabPage2.Text = "Use Grid (Snap to the grid)";
         tabPage3.Text = "Use Grid";
         tabPage4.Text = "Align control by hand";
+        tabPage5.Text = "TabControl and TableLayoutPanel";
 
         //- enable the UndoEngines
         for (int i = 0; i < tabControl1.TabCount; i++)
@@ -88,6 +90,9 @@ public partial class MainForm : Form
                 surface.UseGridWithoutSnapping(new System.Drawing.Size(32, 32));
                 break;
             case 4:
+                surface.UseNoGuides();
+                break;
+            case 5:
                 surface.UseNoGuides();
                 break;
             default:
@@ -203,13 +208,13 @@ public partial class MainForm : Form
                     break;
                 case 4:
                     {
-                        rootComponent = surface.CreateRootComponent<Form>(new Size(320, 200));
+                        rootComponent = surface.CreateRootComponent<Form>(new Size(800, 600));
                         rootComponent.BackColor = Color.Orange;
                         rootComponent.Text = "Root Component hosted by the DesignSurface N.4";       //- step.1
                                                                                                      //- step.3
                                                                                                      //- create some Controls at DesignTime
                         Button b1 = surface.CreateControl<Button>(new Size(200, 40), new Point(10, 10));
-                        Button b2 = surface.CreateControl<Button>(new Size(200, 40), new Point(100, 100));
+                        Button b2 = surface.CreateControl<Button>(new Size(200, 40), new Point(10, 60));
                         b1.Text = "I'm the first Button";
                         b2.Text = "I'm the second Button";
                         b1.BackColor = Color.Gold;
@@ -217,6 +222,20 @@ public partial class MainForm : Form
 
                         Timer tm11 = surface.CreateComponent<Timer>();
                         FontDialog fd1 = surface.CreateComponent<FontDialog>();
+                        PrintDialog pd1 = surface.CreateComponent<PrintDialog>();
+
+                        surface.CreateControl<MonthCalendar>(new Size(230, 170), new Point(10,110));
+                    }
+
+                    break;
+                case 5:
+                    {
+                        rootComponent = surface.CreateRootComponent<Form>(new Size(800, 600));
+                        rootComponent.BackColor = Color.Orange;
+                        rootComponent.Text = "Root Component hosted by the DesignSurface N.5";
+
+                        surface.CreateControl<TabControl>(new Size(400, 100), new Point(12, 21));
+                        surface.CreateControl<TableLayoutPanel>(new Size(290, 160), new Point(20, 150));
                     }
 
                     break;
@@ -249,6 +268,9 @@ public partial class MainForm : Form
                     break;
                 case 4:
                     view.Parent = tabPage4;
+                    break;
+                case 5:
+                    view.Parent = tabPage5;
                     break;
                 default:
                     Console.WriteLine("Invalid selection");

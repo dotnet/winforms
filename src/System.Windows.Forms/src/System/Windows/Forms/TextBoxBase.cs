@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -1694,7 +1693,7 @@ public abstract partial class TextBoxBase : Control
 
                 try
                 {
-                    Marshal.QueryInterface(editOlePtr, ref iiTextDocumentGuid, out iTextDocument);
+                    Marshal.QueryInterface(editOlePtr, in iiTextDocumentGuid, out iTextDocument);
 
                     if (Marshal.GetObjectForIUnknown(iTextDocument) is Richedit.ITextDocument textDocument)
                     {

@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Runtime.CompilerServices;
 
@@ -37,18 +36,25 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ComboBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DateTimePickerDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FormDocumentDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FlowPanelDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.GroupBoxDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ImageListDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.LabelDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ListBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ListViewDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.MaskedTextBoxDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.MonthCalendarDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.PanelDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.PictureBoxDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.PrintDialogDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.RadioButtonDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.RichTextBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.SplitContainerDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.SplitterPanelDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.SplitterDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabControlDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TableLayoutPanelDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabPageDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TextBoxBaseDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TextBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripDesigner))]

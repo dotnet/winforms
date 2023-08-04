@@ -1317,10 +1317,133 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="ExceptionCollectionInvalidArgument" xml:space="preserve">
     <value>Argument must only contain objects of type '{0}'.</value>
   </data>
-    <data name="DesignerShortcutVerticalOrientation" xml:space="preserve">
+  <data name="DesignerShortcutVerticalOrientation" xml:space="preserve">
     <value>Vertical Splitter Orientation.</value>
   </data>
-    <data name="DesignerShortcutHorizontalOrientation" xml:space="preserve">
+  <data name="DesignerShortcutHorizontalOrientation" xml:space="preserve">
     <value>Horizontal Splitter Orientation.</value>
+  </data>
+  <data name="TabControlAdd" xml:space="preserve">
+    <value>Add Tab</value>
+  </data>
+  <data name="TabControlAddTab" xml:space="preserve">
+    <value>Add tab to '{0}'</value>
+  </data>
+  <data name="TabControlRemove" xml:space="preserve">
+    <value>Remove Tab</value>
+  </data>
+  <data name="TabControlRemoveTab" xml:space="preserve">
+    <value>Remove tab '{0}' from '{1}'</value>
+  </data>
+  <data name="TabControlInvalidTabPageType" xml:space="preserve">
+    <value>Cannot add '{0}' to TabControl.  Only TabPages can be directly added to TabControls.</value>
+  </data>
+  <data name="TableLayoutPanelDesignerAbsoluteMenu" xml:space="preserve">
+    <value>A&amp;bsolute</value>
+  </data>
+  <data name="TableLayoutPanelDesignerAddColumn" xml:space="preserve">
+    <value>&amp;Add Column</value>
+  </data>
+  <data name="TableLayoutPanelDesignerAddColumnUndoUnit" xml:space="preserve">
+    <value>Add Column on {0}</value>
+  </data>
+  <data name="TableLayoutPanelDesignerAddMenu" xml:space="preserve">
+    <value>&amp;Add</value>
+  </data>
+  <data name="TableLayoutPanelDesignerAddRow" xml:space="preserve">
+    <value>Add Ro&amp;w</value>
+  </data>
+  <data name="TableLayoutPanelDesignerAddRowUndoUnit" xml:space="preserve">
+    <value>Add Row on {0}</value>
+  </data>
+  <data name="TableLayoutPanelDesignerAutoSizeMenu" xml:space="preserve">
+    <value>A&amp;utoSize</value>
+  </data>
+  <data name="TableLayoutPanelDesignerChangeSizeTypeUndoUnit" xml:space="preserve">
+    <value>Change SizeType on {0}</value>
+  </data>
+  <data name="TableLayoutPanelDesignerClearAnchor" xml:space="preserve">
+    <value>Clearing Anchor property of {0} for {1}</value>
+  </data>
+  <data name="TableLayoutPanelDesignerClearDock" xml:space="preserve">
+    <value>Clearing Dock property of {0} for {1}</value>
+  </data>
+  <data name="TableLayoutPanelDesignerColMenu" xml:space="preserve">
+    <value>&amp;Column</value>
+  </data>
+  <data name="TableLayoutPanelDesignerContextMenuCopy" xml:space="preserve">
+    <value>C&amp;opy TableLayoutPanel</value>
+  </data>
+  <data name="TableLayoutPanelDesignerContextMenuCut" xml:space="preserve">
+    <value>&amp;Cut TableLayoutPanel</value>
+  </data>
+  <data name="TableLayoutPanelDesignerContextMenuDelete" xml:space="preserve">
+    <value>&amp;Delete TableLayoutPanel</value>
+  </data>
+  <data name="TableLayoutPanelDesignerControlsSwapped" xml:space="preserve">
+    <value>{0} swapped with {1}</value>
+  </data>
+  <data name="TableLayoutPanelDesignerDeleteMenu" xml:space="preserve">
+    <value>&amp;Delete</value>
+  </data>
+  <data name="TableLayoutPanelDesignerDontBoldLabel" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="TableLayoutPanelDesignerEditRowAndCol" xml:space="preserve">
+    <value>&amp;Edit Rows and Columns...</value>
+  </data>
+  <data name="TableLayoutPanelDesignerInsertMenu" xml:space="preserve">
+    <value>&amp;Insert</value>
+  </data>
+  <data name="TableLayoutPanelDesignerInvalidColumnRowCount" xml:space="preserve">
+    <value>{0} must be greater than zero.</value>
+  </data>
+  <data name="TableLayoutPanelDesignerLabelMenu" xml:space="preserve">
+    <value>SizeMode</value>
+  </data>
+  <data name="TableLayoutPanelDesignerPercentageMenu" xml:space="preserve">
+    <value>&amp;Percentage</value>
+  </data>
+  <data name="TableLayoutPanelDesignerRemoveColumn" xml:space="preserve">
+    <value>Remove Last Colu&amp;mn</value>
+  </data>
+  <data name="TableLayoutPanelDesignerRemoveColumnUndoUnit" xml:space="preserve">
+    <value>Remove Column on {0}</value>
+  </data>
+  <data name="TableLayoutPanelDesignerRemoveRow" xml:space="preserve">
+    <value>Remo&amp;ve Last Row</value>
+  </data>
+  <data name="TableLayoutPanelDesignerRemoveRowUndoUnit" xml:space="preserve">
+    <value>Remove Row on {0}</value>
+  </data>
+  <data name="TableLayoutPanelDesignerRowMenu" xml:space="preserve">
+    <value>&amp;Row</value>
+  </data>
+  <data name="TableLayoutPanelFullDesc" xml:space="preserve">
+    <value>Additional Rows or Columns cannot be created.  TableLayoutPanel is full and GrowStyle is 'FixedSize'.</value>
+  </data>
+  <data name="TableLayoutPanelRowColResize" xml:space="preserve">
+    <value>Resizing {0} within {1}</value>
+  </data>
+  <data name="TableLayoutPanelSpanDesc" xml:space="preserve">
+    <value>TableLayoutPanel cannot expand to contain the control, because the panel's GrowStyle property is set to 'FixedSize'.</value>
+  </data>
+  <data name="ImageListActionList_ChooseImagesDescription" xml:space="preserve">
+    <value>Opens the Images collection editor</value>
+  </data>
+  <data name="ImageListActionList_ChooseImagesDisplayName" xml:space="preserve">
+    <value>Choose images</value>
+  </data>
+  <data name="ImageListActionList_ColorDepthDescription" xml:space="preserve">
+    <value>Changes the bit depth images imported into this ImageList are stored at</value>
+  </data>
+  <data name="ImageListActionList_ColorDepthDisplayName" xml:space="preserve">
+    <value>Image Bit Depth</value>
+  </data>
+  <data name="ImageListActionList_ImageSizeDescription" xml:space="preserve">
+    <value>Changes the size images imported into this ImageList are stored at</value>
+  </data>
+  <data name="ImageListActionList_ImageSizeDisplayName" xml:space="preserve">
+    <value>Image Size</value>
   </data>
 </root>

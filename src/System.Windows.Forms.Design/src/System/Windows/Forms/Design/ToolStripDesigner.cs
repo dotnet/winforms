@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 #nullable disable
 
@@ -1442,7 +1441,7 @@ internal class ToolStripDesigner : ControlDesigner
     /// </summary>
     public override void InitializeNewComponent(IDictionary defaultValues)
     {
-        Control parent = defaultValues["Parent"] as Control;
+        Control parent = defaultValues is not null ? defaultValues["Parent"] as Control : null;
         Form parentForm = _host.RootComponent as Form;
         FormDocumentDesigner parentFormDesigner = null;
         if (parentForm is not null)

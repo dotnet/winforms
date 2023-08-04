@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms;
 
@@ -15,7 +14,7 @@ public abstract partial class ObjectSelectorEditor
         /// <summary>
         ///  Sets label and value to given.
         /// </summary>
-        public SelectorNode(string label, object? value) : base(label)
+        public SelectorNode(string? label, object? value) : base(label)
         {
             this.value = value;
         }

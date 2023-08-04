@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -7282,7 +7281,6 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnFontChanged(EventArgs e)
     {
-        // bail if disposing
         if (GetAnyDisposingInHierarchy())
         {
             return;
@@ -7295,7 +7293,7 @@ public unsafe partial class Control :
             Properties.SetInteger(s_fontHeightProperty, -1);
         }
 
-        // Cleanup any font handle wrapper...
+        // Cleanup any font handle wrapper.
         DisposeFontHandle();
 
         if (IsHandleCreated)
@@ -9520,22 +9518,25 @@ public unsafe partial class Control :
     }
 
     /// <summary>
-    ///  Processes a mnemonic character. This method is called to give a control
-    ///  the opportunity to process a mnemonic character. The method should check
-    ///  if the control is in a state to process mnemonics and if the given
-    ///  character represents a mnemonic. If so, the method should perform the
-    ///  action associated with the mnemonic and return true. If not, the method
-    ///  should return false.
-    ///  Implementations of this method often use the isMnemonic() method to
-    ///  check if the given character matches a mnemonic in the control's text,
-    ///  for example:
-    /// <code>
-    ///  if (canSelect() &amp;&amp; isMnemonic(charCode, getText()) {
-    ///  // perform action associated with mnemonic
-    ///  }
-    /// </code>
-    ///  This default implementation of processMnemonic() simply returns false
-    ///  to indicate that the control has no mnemonic.
+    ///  <para>
+    ///   Processes a mnemonic character. This method is called to give a control
+    ///   the opportunity to process a mnemonic character. The method should check
+    ///   if the control is in a state to process mnemonics and if the given
+    ///   character represents a mnemonic. If so, the method should perform the
+    ///   action associated with the mnemonic and return <see langword="true"/>.
+    ///   If not, the method should return <see langword="false"/>.
+    ///  </para>
+    ///  <para>
+    ///   Implementations of this method often use the isMnemonic() method to
+    ///   check if the given character matches a mnemonic in the control's text,
+    ///   for example:
+    ///  </para>
+    ///  <code>
+    ///   if (CanSelect() &amp;&amp; IsMnemonic(charCode, GetText())
+    ///   {
+    ///       // Perform action associated with mnemonic...
+    ///   }
+    ///  </code>
     /// </summary>
     protected internal virtual bool ProcessMnemonic(char charCode)
     {

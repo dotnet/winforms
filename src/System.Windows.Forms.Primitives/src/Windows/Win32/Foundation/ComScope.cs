@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Runtime.CompilerServices;
 using Windows.Win32.System.Com;
@@ -47,10 +46,10 @@ internal readonly unsafe ref struct ComScope<T> where T : unmanaged, IComIID
     public static implicit operator nint(in ComScope<T> scope) => scope._value;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator T**(in ComScope<T> scope) => (T**)Unsafe.AsPointer(ref Unsafe.AsRef(scope._value));
+    public static implicit operator T**(in ComScope<T> scope) => (T**)Unsafe.AsPointer(ref Unsafe.AsRef(in scope._value));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator void**(in ComScope<T> scope) => (void**)Unsafe.AsPointer(ref Unsafe.AsRef(scope._value));
+    public static implicit operator void**(in ComScope<T> scope) => (void**)Unsafe.AsPointer(ref Unsafe.AsRef(in scope._value));
 
     public bool IsNull => _value == 0;
 

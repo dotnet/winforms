@@ -1,8 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 #if DEBUG
 using System.ComponentModel;
@@ -28,7 +25,7 @@ internal partial class FlowLayout : LayoutEngine
 
         // ScrollableControl will first try to get the layoutbounds from the derived control when
         // trying to figure out if ScrollBars should be added.
-        CommonProperties.SetLayoutBounds(container, TryCalculatePreferredSize(container, container.DisplayRectangle, /* measureOnly = */ false));
+        CommonProperties.SetLayoutBounds(container, TryCalculatePreferredSize(container, container.DisplayRectangle, measureOnly: false));
 
         Debug.Unindent();
 
@@ -45,7 +42,7 @@ internal partial class FlowLayout : LayoutEngine
         }
 #endif
         Rectangle measureBounds = new Rectangle(new Point(0, 0), proposedConstraints);
-        Size prefSize = TryCalculatePreferredSize(container, measureBounds, /* measureOnly = */ true);
+        Size prefSize = TryCalculatePreferredSize(container, measureBounds, measureOnly: true);
 
         if (prefSize.Width > proposedConstraints.Width || prefSize.Height > proposedConstraints.Height)
         {
@@ -53,7 +50,7 @@ internal partial class FlowLayout : LayoutEngine
             // shift around with the new bounds. We need to make a 2nd pass through the
             // controls using these bounds which are guaranteed to fit.
             measureBounds.Size = prefSize;
-            prefSize = TryCalculatePreferredSize(container, measureBounds, /* measureOnly = */ true);
+            prefSize = TryCalculatePreferredSize(container, measureBounds, measureOnly: true);
         }
 
 #if DEBUG
@@ -66,21 +63,14 @@ internal partial class FlowLayout : LayoutEngine
         return prefSize;
     }
 
-    private static ContainerProxy CreateContainerProxy(IArrangedElement container, FlowDirection flowDirection)
-    {
-        switch (flowDirection)
+    private static ContainerProxy CreateContainerProxy(IArrangedElement container, FlowDirection flowDirection) =>
+        flowDirection switch
         {
-            case FlowDirection.RightToLeft:
-                return new RightToLeftProxy(container);
-            case FlowDirection.TopDown:
-                return new TopDownProxy(container);
-            case FlowDirection.BottomUp:
-                return new BottomUpProxy(container);
-            case FlowDirection.LeftToRight:
-            default:
-                return new ContainerProxy(container);
-        }
-    }
+            FlowDirection.RightToLeft => new RightToLeftProxy(container),
+            FlowDirection.TopDown => new TopDownProxy(container),
+            FlowDirection.BottomUp => new BottomUpProxy(container),
+            _ => new ContainerProxy(container),
+        };
 
     /// <summary>
     ///  Both LayoutCore and GetPreferredSize forward to this method.
@@ -147,9 +137,21 @@ internal partial class FlowLayout : LayoutEngine
     ///  index. RowBounds was computed by a call to measure row and is used for alignment/boxstretch.
     ///  See the ElementProxy class for an explanation of the elementProxy parameter.
     /// </summary>
-    private static void LayoutRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds)
+    private static void LayoutRow(
+        ContainerProxy containerProxy,
+        ElementProxy elementProxy,
+        int startIndex,
+        int endIndex,
+        Rectangle rowBounds)
     {
-        Size outSize = TryCalculatePreferredSizeRow(containerProxy, elementProxy, startIndex, endIndex, rowBounds, /* breakIndex = */ out int dummy, /* measureOnly = */ false);
+        Size outSize = TryCalculatePreferredSizeRow(
+            containerProxy,
+            elementProxy,
+            startIndex,
+            endIndex,
+            rowBounds,
+            breakIndex: out int dummy,
+            measureOnly: false);
         Debug.Assert(dummy == endIndex, "EndIndex / BreakIndex mismatch.");
     }
 
@@ -159,16 +161,33 @@ internal partial class FlowLayout : LayoutEngine
     ///  controls from startIndex up to but not including breakIndex. See the ElementProxy
     ///  class for an explanation of the elementProxy parameter.
     /// </summary>
-    private static Size MeasureRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, Rectangle displayRectangle, out int breakIndex)
-    {
-        return TryCalculatePreferredSizeRow(containerProxy, elementProxy, startIndex, endIndex: containerProxy.Container.Children.Count, rowBounds: displayRectangle, breakIndex: out breakIndex, measureOnly: true);
-    }
+    private static Size MeasureRow(
+        ContainerProxy containerProxy,
+        ElementProxy elementProxy,
+        int startIndex,
+        Rectangle displayRectangle,
+        out int breakIndex) =>
+        TryCalculatePreferredSizeRow(
+            containerProxy,
+            elementProxy,
+            startIndex,
+            endIndex: containerProxy.Container.Children.Count,
+            rowBounds: displayRectangle,
+            breakIndex: out breakIndex,
+            measureOnly: true);
 
     /// <summary>
     ///  LayoutRow and MeasureRow both forward to this method. The measureOnly flag
     ///  determines which behavior we get.
     /// </summary>
-    private static Size TryCalculatePreferredSizeRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds, out int breakIndex, bool measureOnly)
+    private static Size TryCalculatePreferredSizeRow(
+        ContainerProxy containerProxy,
+        ElementProxy elementProxy,
+        int startIndex,
+        int endIndex,
+        Rectangle rowBounds,
+        out int breakIndex,
+        bool measureOnly)
     {
         Debug.Assert(startIndex < endIndex, "Loop should be in forward Z-order.");
         Point location = rowBounds.Location;
@@ -287,10 +306,8 @@ internal partial class FlowLayout : LayoutEngine
         return rowSize;
     }
 
-    public static bool GetWrapContents(IArrangedElement container)
-    {
-        return container.Properties.GetInteger(s_wrapContentsProperty) == 0;
-    }
+    public static bool GetWrapContents(IArrangedElement container) =>
+        container.Properties.GetInteger(s_wrapContentsProperty) == 0;
 
     public static void SetWrapContents(IArrangedElement container, bool value)
     {
@@ -299,10 +316,8 @@ internal partial class FlowLayout : LayoutEngine
         Debug.Assert(GetWrapContents(container) == value, "GetWrapContents should return the same value as we set");
     }
 
-    public static FlowDirection GetFlowDirection(IArrangedElement container)
-    {
-        return (FlowDirection)container.Properties.GetInteger(s_flowDirectionProperty);
-    }
+    public static FlowDirection GetFlowDirection(IArrangedElement container) =>
+        (FlowDirection)container.Properties.GetInteger(s_flowDirectionProperty);
 
     public static void SetFlowDirection(IArrangedElement container, FlowDirection value)
     {

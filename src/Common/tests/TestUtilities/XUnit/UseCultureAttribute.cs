@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 // The original code was borrowed from https://github.com/xunit/samples.xunit/blob/93f87d5/UseCulture/UseCultureAttribute.cs
 // Licensed under http://www.apache.org/licenses/LICENSE-2.0.

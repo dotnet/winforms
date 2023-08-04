@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 #nullable disable
 
@@ -488,13 +487,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
     }
 
-    public override Type FormattedValueType
-    {
-        get
-        {
-            return s_defaultFormattedValueType;
-        }
-    }
+    public override Type FormattedValueType => s_defaultFormattedValueType;
 
     internal bool HasItems => Properties.ContainsObjectThatIsNotNull(s_propComboBoxCellItems);
 
