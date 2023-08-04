@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 #nullable disable
 
@@ -48,6 +47,9 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
             return inheritanceAttribute is not null && !inheritanceAttribute.Equals(InheritanceAttribute.NotInherited);
         }
     }
+
+    internal bool IsInheritedReadOnly
+        => InheritanceAttribute.InheritanceLevel == InheritanceLevel.InheritedReadOnly;
 
     /// <summary>
     ///  This property provides a generic mechanism for discovering parent relationships within designers,
