@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.CodeDom;
 using System.Reflection;
 
@@ -13,18 +11,10 @@ namespace System.ComponentModel.Design.Serialization;
 /// </summary>
 internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer
 {
-    private static readonly CodeThisReferenceExpression _thisRef = new();
-    private static EventMemberCodeDomSerializer s_default;
+    private static readonly CodeThisReferenceExpression s_thisRef = new();
+    private static EventMemberCodeDomSerializer? s_default;
 
-    internal static EventMemberCodeDomSerializer Default
-    {
-        get
-        {
-            s_default ??= new EventMemberCodeDomSerializer();
-
-            return s_default;
-        }
-    }
+    internal static EventMemberCodeDomSerializer Default => s_default ??= new EventMemberCodeDomSerializer();
 
     /// <summary>
     ///  This method actually performs the serialization.  When the member is serialized
@@ -35,7 +25,7 @@ internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer
         ArgumentNullException.ThrowIfNull(manager);
         ArgumentNullException.ThrowIfNull(value);
 
-        if (!(descriptor is EventDescriptor eventToSerialize))
+        if (descriptor is not EventDescriptor eventToSerialize)
         {
             throw new ArgumentNullException(nameof(descriptor));
         }
@@ -44,21 +34,23 @@ internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer
 
         try
         {
+            IEventBindingService? eventBindings = manager.GetService<IEventBindingService>();
+
             // If the IEventBindingService is not available, we don't throw - we just don't do anything.
-            if (manager.GetService(typeof(IEventBindingService)) is IEventBindingService eventBindings)
+            if (eventBindings is not null)
             {
                 PropertyDescriptor prop = eventBindings.GetEventProperty(eventToSerialize);
-                string methodName = (string)prop.GetValue(value);
+                string? methodName = (string?)prop.GetValue(value);
 
                 if (methodName is not null)
                 {
                     Trace(TraceLevel.Verbose, $"Event {eventToSerialize.Name} bound to {methodName}");
-                    CodeExpression eventTarget = SerializeToExpression(manager, value);
+                    CodeExpression? eventTarget = SerializeToExpression(manager, value);
                     TraceIf(TraceLevel.Warning, eventTarget is null, $"Object has no name and no property ref in context so we cannot serialize events: {value}");
                     if (eventTarget is not null)
                     {
                         CodeTypeReference delegateTypeRef = new CodeTypeReference(eventToSerialize.EventType);
-                        CodeDelegateCreateExpression delegateCreate = new CodeDelegateCreateExpression(delegateTypeRef, _thisRef, methodName);
+                        CodeDelegateCreateExpression delegateCreate = new CodeDelegateCreateExpression(delegateTypeRef, s_thisRef, methodName);
                         CodeEventReferenceExpression eventRef = new CodeEventReferenceExpression(eventTarget, eventToSerialize.Name);
                         CodeAttachEventStatement attach = new CodeAttachEventStatement(eventRef, delegateCreate);
 
@@ -76,7 +68,7 @@ internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer
             //
             if (e is TargetInvocationException)
             {
-                e = e.InnerException;
+                e = e.InnerException!;
             }
 
             manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerPropertyGenFailed, eventToSerialize.Name, e.Message), manager));
