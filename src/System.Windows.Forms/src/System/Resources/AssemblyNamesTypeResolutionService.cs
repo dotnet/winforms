@@ -9,14 +9,14 @@ namespace System.Resources;
 
 internal class AssemblyNamesTypeResolutionService : ITypeResolutionService
 {
-    private AssemblyName[] _names;
+    private AssemblyName[]? _names;
     private ConcurrentDictionary<AssemblyName, Assembly>? _cachedAssemblies;
     private ConcurrentDictionary<string, Type>? _cachedTypes;
 
     private static readonly string s_dotNetPath = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles") ?? string.Empty, "dotnet\\shared");
     private static readonly string s_dotNetPathX86 = Path.Combine(Environment.GetEnvironmentVariable("ProgramFiles(x86)") ?? string.Empty, "dotnet\\shared");
 
-    internal AssemblyNamesTypeResolutionService(AssemblyName[] names) => _names = names;
+    internal AssemblyNamesTypeResolutionService(AssemblyName[]? names) => _names = names;
 
     public Assembly? GetAssembly(AssemblyName name) => GetAssembly(name, true);
 
