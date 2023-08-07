@@ -50,10 +50,10 @@ public class PropertyStoreTests
     [MemberData(nameof(PropertyStore_TryGetValue_Exists_TestData))]
     public void PropertyStore_TryGetValue_Exists(int key, object? value)
     {
-        PropertyStore properties = new PropertyStore();
-        properties.SetObject(key, value);
-        Assert.True(properties.ContainsObject(key), "PropertyStore does not contain key.");
-        Assert.True(properties.TryGetObject(key, out object? outValue));
+        PropertyStore store = new();
+        store.SetObject(key, value);
+        Assert.True(store.ContainsObject(key), "PropertyStore does not contain key.");
+        Assert.True(store.TryGetObject(key, out object? outValue));
         Assert.Equal(value, outValue);
     }
 
@@ -61,10 +61,10 @@ public class PropertyStoreTests
     [MemberData(nameof(PropertyStore_TryGetValue_Exists_TestData))]
     public void PropertyStore_TryGetValue_Exists_Null(int key, object? value)
     {
-        PropertyStore properties = new PropertyStore();
-        properties.SetObject(key, null);
-        Assert.True(properties.ContainsObject(key), "PropertyStore does not contain key.");
-        Assert.True(properties.TryGetObject(key, out object? outValue));
+        PropertyStore store = new();
+        store.SetObject(key, null);
+        Assert.True(store.ContainsObject(key), "PropertyStore does not contain key.");
+        Assert.True(store.TryGetObject(key, out object? outValue));
         Assert.NotEqual(value, outValue);
     }
 
@@ -72,20 +72,20 @@ public class PropertyStoreTests
     [MemberData(nameof(PropertyStore_TryGetValue_Exists_TestData))]
     public void PropertyStore_TryGetValue_NotExists(int key, object? value)
     {
-        PropertyStore properties = new PropertyStore();
-        properties.SetObject(key, null);
-        properties.RemoveObject(key);
-        Assert.False(properties.ContainsObject(key), "PropertyStore contains key.");
-        Assert.False(properties.TryGetObject(key, out object? outValue), "PropertyStore contains key.");
+        PropertyStore store = new();
+        store.SetObject(key, null);
+        store.RemoveObject(key);
+        Assert.False(store.ContainsObject(key), "PropertyStore contains key.");
+        Assert.False(store.TryGetObject(key, out object? outValue), "PropertyStore contains key.");
         Assert.NotEqual(value, outValue);
     }
 
     [WinFormsFact]
     public void PropertyStore_TryGetValue_Enum_Unset_IsDefault()
     {
-        PropertyStore properties = new PropertyStore();
-        Assert.False(properties.ContainsObject(s_formWindowState), "PropertyStore contains key.");
-        Assert.False(properties.TryGetObject(s_formWindowState, out FormWindowState outValue), "PropertyStore contains key.");
+        PropertyStore store = new();
+        Assert.False(store.ContainsObject(s_formWindowState), "PropertyStore contains key.");
+        Assert.False(store.TryGetObject(s_formWindowState, out FormWindowState outValue), "PropertyStore contains key.");
         FormWindowState windowState = default;
         Assert.Equal(windowState, outValue);
     }
@@ -93,19 +93,19 @@ public class PropertyStoreTests
     [WinFormsFact]
     public void PropertyStore_TryGetValue_Struct_Unset_IsDefault()
     {
-        PropertyStore properties = new PropertyStore();
-        Assert.False(properties.ContainsObject(s_color), "PropertyStore contains key.");
-        Assert.False(properties.TryGetObject(s_color, out Color outValue), "PropertyStore contains key.");
+        PropertyStore store = new();
+        Assert.False(store.ContainsObject(s_color), "PropertyStore contains key.");
+        Assert.False(store.TryGetObject(s_color, out Color outValue), "PropertyStore contains key.");
         Color color = default;
         Assert.Equal(color, outValue);
     }
 
     [WinFormsFact]
-    public void PropertyStore_TryGetValue_Int_Unset_IsDefault()
+    public void PropertyStore_TryGetValue_Primitive_Unset_IsDefault()
     {
-        PropertyStore properties = new PropertyStore();
-        Assert.False(properties.ContainsObject(s_int), "PropertyStore does not contain key.");
-        Assert.False(properties.TryGetObject(s_int, out int outValue), "PropertyStore contains key.");
+        PropertyStore store = new();
+        Assert.False(store.ContainsObject(s_int), "PropertyStore does not contain key.");
+        Assert.False(store.TryGetObject(s_int, out int outValue), "PropertyStore contains key.");
         int intDefault = default;
         Assert.Equal(intDefault, outValue);
     }
@@ -113,10 +113,10 @@ public class PropertyStoreTests
     [WinFormsFact]
     public void PropertyStore_TryGetValue_Enum_Null()
     {
-        PropertyStore properties = new PropertyStore();
-        properties.SetObject(s_formWindowState, null);
-        Assert.True(properties.ContainsObject(s_formWindowState), "PropertyStore contains key.");
-        Assert.True(properties.TryGetObject(s_formWindowState, out FormWindowState outValue), "PropertyStore contains key.");
+        PropertyStore store = new();
+        store.SetObject(s_formWindowState, null);
+        Assert.True(store.ContainsObject(s_formWindowState), "PropertyStore contains key.");
+        Assert.True(store.TryGetObject(s_formWindowState, out FormWindowState outValue), "PropertyStore contains key.");
         FormWindowState windowState = default;
         Assert.Equal(windowState, outValue);
     }
@@ -124,21 +124,21 @@ public class PropertyStoreTests
     [WinFormsFact]
     public void PropertyStore_TryGetValue_Struct_Null()
     {
-        PropertyStore properties = new PropertyStore();
-        properties.SetObject(s_color, null);
-        Assert.True(properties.ContainsObject(s_color), "PropertyStore does not contain key.");
-        Assert.True(properties.TryGetObject(s_color, out Color outValue), "PropertyStore does not contain key.");
+        PropertyStore store = new();
+        store.SetObject(s_color, null);
+        Assert.True(store.ContainsObject(s_color), "PropertyStore does not contain key.");
+        Assert.True(store.TryGetObject(s_color, out Color outValue), "PropertyStore does not contain key.");
         Color color = default;
         Assert.Equal(color, outValue);
     }
 
     [WinFormsFact]
-    public void PropertyStore_TryGetValue_Int_Null()
+    public void PropertyStore_TryGetValue_Primitive_Null()
     {
-        PropertyStore properties = new PropertyStore();
-        properties.SetObject(s_int, null);
-        Assert.True(properties.ContainsObject(s_int), "PropertyStore does not contain key.");
-        Assert.True(properties.TryGetObject(s_int, out int outValue), "PropertyStore does not contain key.");
+        PropertyStore store = new();
+        store.SetObject(s_int, null);
+        Assert.True(store.ContainsObject(s_int), "PropertyStore does not contain key.");
+        Assert.True(store.TryGetObject(s_int, out int outValue), "PropertyStore does not contain key.");
         int intDefault = default;
         Assert.Equal(intDefault, outValue);
     }
@@ -146,57 +146,57 @@ public class PropertyStoreTests
     [WinFormsFact]
     public void PropertyStore_TryGetValue_Enum_Nullable()
     {
-        PropertyStore properties = new PropertyStore();
-        properties.SetObject(s_formWindowState, null);
-        Assert.True(properties.ContainsObject(s_formWindowState), "PropertyStore does not contain key.");
-        Assert.True(properties.TryGetObject(s_formWindowState, out FormWindowState? outValue), "PropertyStore does not contain key.");
+        PropertyStore store = new();
+        store.SetObject(s_formWindowState, null);
+        Assert.True(store.ContainsObject(s_formWindowState), "PropertyStore does not contain key.");
+        Assert.True(store.TryGetObject(s_formWindowState, out FormWindowState? outValue), "PropertyStore does not contain key.");
         Assert.Null(outValue);
     }
 
     [WinFormsFact]
     public void PropertyStore_TryGetValue_Struct_Nullable()
     {
-        PropertyStore properties = new PropertyStore();
-        properties.SetObject(s_color, null);
-        Assert.True(properties.ContainsObject(s_color), "PropertyStore does not contain key.");
-        Assert.True(properties.TryGetObject(s_color, out Color? outValue), "PropertyStore does not contain key.");
+        PropertyStore store = new();
+        store.SetObject(s_color, null);
+        Assert.True(store.ContainsObject(s_color), "PropertyStore does not contain key.");
+        Assert.True(store.TryGetObject(s_color, out Color? outValue), "PropertyStore does not contain key.");
         Assert.Null(outValue);
     }
 
     [WinFormsFact]
-    public void PropertyStore_TryGetValue_Int_Nullable()
+    public void PropertyStore_TryGetValue_Primitive_Nullable()
     {
-        PropertyStore properties = new PropertyStore();
-        properties.SetObject(s_int, null);
-        Assert.True(properties.ContainsObject(s_int), "PropertyStore contains key.");
-        Assert.True(properties.TryGetObject(s_int, out int? outValue), "PropertyStore contains key.");
+        PropertyStore store = new();
+        store.SetObject(s_int, null);
+        Assert.True(store.ContainsObject(s_int), "PropertyStore contains key.");
+        Assert.True(store.TryGetObject(s_int, out int? outValue), "PropertyStore contains key.");
         Assert.Null(outValue);
     }
 
     [WinFormsFact]
     public void PropertyStore_TryGetValue_Enum_Unset_Nullable()
     {
-        PropertyStore properties = new PropertyStore();
-        Assert.False(properties.ContainsObject(s_formWindowState), "PropertyStore contains key.");
-        Assert.False(properties.TryGetObject(s_formWindowState, out FormWindowState? outValue), "PropertyStore contains key.");
+        PropertyStore store = new();
+        Assert.False(store.ContainsObject(s_formWindowState), "PropertyStore contains key.");
+        Assert.False(store.TryGetObject(s_formWindowState, out FormWindowState? outValue), "PropertyStore contains key.");
         Assert.Null(outValue);
     }
 
     [WinFormsFact]
     public void PropertyStore_TryGetValue_Struct_Unset_Nullable()
     {
-        PropertyStore properties = new PropertyStore();
-        Assert.False(properties.ContainsObject(s_color), "PropertyStore contains key.");
-        Assert.False(properties.TryGetObject(s_color, out Color? outValue), "PropertyStore contains key.");
+        PropertyStore store = new();
+        Assert.False(store.ContainsObject(s_color), "PropertyStore contains key.");
+        Assert.False(store.TryGetObject(s_color, out Color? outValue), "PropertyStore contains key.");
         Assert.Null(outValue);
     }
 
     [WinFormsFact]
-    public void PropertyStore_TryGetValue_Int_Unset_Nullable()
+    public void PropertyStore_TryGetValue_Primitive_Unset_Nullable()
     {
-        PropertyStore properties = new PropertyStore();
-        Assert.False(properties.ContainsObject(s_int), "PropertyStore contains key.");
-        Assert.False(properties.TryGetObject(s_int, out int? outValue), "PropertyStore contains key.");
+        PropertyStore store = new();
+        Assert.False(store.ContainsObject(s_int), "PropertyStore contains key.");
+        Assert.False(store.TryGetObject(s_int, out int? outValue), "PropertyStore contains key.");
         Assert.Null(outValue);
     }
 }
