@@ -197,7 +197,6 @@ internal partial class PropertyStore
     ///  it will return true and a null value.</para></remarks>
     /// <returns>True if an object (including null) is found for the given key; otherwise, false.</returns>
     public bool TryGetObject<T>(int key, out T? value)
-
     {
         object? entry = GetObject(key, out bool found);
         Debug.Assert(!found || entry is null || entry is T, $"Entry is not of type {typeof(T)}, but of type {entry?.GetType()}");
