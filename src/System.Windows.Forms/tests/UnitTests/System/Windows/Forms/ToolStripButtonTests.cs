@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.Versioning;
 using System.Windows.Forms.DataBinding.TestUtilities;
 using System.Windows.Forms.TestUtilities;
 using Size = System.Drawing.Size;
@@ -566,7 +565,6 @@ public partial class ToolStripButtonTests
     }
 
     [WinFormsFact]
-    [RequiresPreviewFeatures]
     public void ToolStripButton_BasicCommandBinding()
     {
         const string CommandParameter = nameof(CommandParameter);
