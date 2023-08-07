@@ -12,11 +12,11 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design;
 
 /// <summary>
-/// This class handles all design time behavior for the <see cref="System.Windows.Forms.FlowLayoutPanel"/>
-/// control. Basically, this designer carefully watches drag operations.  During a drag, we attempt to
-/// draw an "I" bar for insertion/feedback purposes.  When a control is added to our designer, we check
-/// some cached state to see if we believe that it needs to be inserted at a particular index. If
-/// so, we re-insert the control appropriately.
+///  This class handles all design time behavior for the <see cref="System.Windows.Forms.FlowLayoutPanel"/>
+///  control. Basically, this designer carefully watches drag operations.  During a drag, we attempt to
+///  draw an "I" bar for insertion/feedback purposes.  When a control is added to our designer, we check
+///  some cached state to see if we believe that it needs to be inserted at a particular index. If
+///  so, we re-insert the control appropriately.
 /// </summary>
 internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
 {
@@ -31,29 +31,29 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     private Point _lastMouseLocation;
 
     /// <summary>
-    /// Store the maximum height/width of each row/column.
+    ///  Store the maximum height/width of each row/column.
     /// </summary>
     private readonly List<(int Min, int Max, int Size, int LastIndex)> _commonSizes = new();
 
     private const int s_invalidIndex = -1;
 
     /// <summary>
-    /// The index which we will re-insert a newly added child.
+    ///  The index which we will re-insert a newly added child.
     /// </summary>
     private int _insertionIndex = s_invalidIndex;
 
     /// <summary>
-    /// Tracks the top or left last rendered I-bar location.
+    ///  Tracks the top or left last rendered I-bar location.
     /// </summary>
     private Point _oldPoint1 = Point.Empty;
 
     /// <summary>
-    /// Tracks the bottom or right last rendered I-bar location.
+    ///  Tracks the bottom or right last rendered I-bar location.
     /// </summary>
     private Point _oldPoint2 = Point.Empty;
 
     /// <summary>
-    /// If space for IBar is less than or equal to minIBar we draw a simple IBar.
+    ///  If space for IBar is less than or equal to minIBar we draw a simple IBar.
     /// </summary>
     private const int MinIBar = 10;
     private const int IBarHatHeight = 3;
@@ -64,11 +64,10 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     private const int IBarLineOffset = IBarHatHeight + IBarSpace;
 
     /// <summary>
-    /// Since we don't always know which IBar we are going draw we want to invalidate max area.
+    ///  Since we don't always know which IBar we are going draw we want to invalidate max area.
     /// </summary>
     private readonly int _maxIBarWidth = Math.Max(IBarHalfSize, (IBarHatWidth - 1) / 2);
 
-    /// <inheritdoc/>
     public override void Initialize(IComponent component)
     {
         base.Initialize(component);
@@ -85,7 +84,6 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
 
     private FlowLayoutPanel FlowLayoutPanel => (FlowLayoutPanel)Control;
 
-    /// <inheritdoc/>
     protected override void PreFilterProperties(IDictionary properties)
     {
         base.PreFilterProperties(properties);
@@ -99,25 +97,24 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     }
 
     /// <summary>
-    /// This is called to check whether the z-order of dragged controls should be maintained when dropped on a
-    /// ParentControlDesigner. By default it will, but e.g. FlowLayoutPanelDesigner wants to do its own z-ordering.
+    ///  This is called to check whether the z-order of dragged controls should be maintained when dropped on a
+    ///  ParentControlDesigner. By default it will, but e.g. FlowLayoutPanelDesigner wants to do its own z-ordering.
     ///
-    /// If this returns true, then the DropSourceBehavior will attempt to set the index of the controls being
-    /// dropped to preserve the original order (in the dragSource). If it returns false, the index will not
-    /// be set.
+    ///  If this returns true, then the DropSourceBehavior will attempt to set the index of the controls being
+    ///  dropped to preserve the original order (in the dragSource). If it returns false, the index will not
+    ///  be set.
     ///
-    /// If this is set to false, then the DropSourceBehavior will not treat a drag as a local drag even
-    /// if the dragSource and the dragTarget are the same. This will allow a ParentControlDesigner to hook
-    /// OnChildControlAdded to set the right child index, since in this case, the control(s) being dragged
-    /// will be removed from the dragSource and then added to the dragTarget.
+    ///  If this is set to false, then the DropSourceBehavior will not treat a drag as a local drag even
+    ///  if the dragSource and the dragTarget are the same. This will allow a ParentControlDesigner to hook
+    ///  OnChildControlAdded to set the right child index, since in this case, the control(s) being dragged
+    ///  will be removed from the dragSource and then added to the dragTarget.
     /// </summary>
     protected internal override bool AllowSetChildIndexOnDrop => false;
 
-    /// <inheritdoc/>
     protected override bool AllowGenericDragBox => false;
 
     /// <summary>
-    /// Returns true if flow direction is right-to-left or left-to-right
+    ///  Returns true if flow direction is right-to-left or left-to-right
     /// </summary>
     private bool HorizontalFlow
     {
@@ -150,7 +147,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     private bool IsRtl => Control.RightToLeft == RightToLeft.Yes;
 
     /// <summary>
-    /// Returns a Rectangle representing the margin bounds of the control.
+    ///  Returns a Rectangle representing the margin bounds of the control.
     /// </summary>
     private Rectangle GetMarginBounds(Control control)
     {
@@ -167,11 +164,11 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     }
 
     /// <summary>
-    /// Called when we receive a DragEnter notification - here we attempt to cache child position and information
-    /// intended to be used by drag move and drop messages. Basically we pass through the children twice - first
-    /// we build up an array of rects representing the children bounds (w/margins) and identify where the row/
-    /// column changes are.  Secondly, we normalize the child rects so that children in each row/column are the
-    /// same height/width;
+    ///  Called when we receive a DragEnter notification - here we attempt to cache child position and information
+    ///  intended to be used by drag move and drop messages. Basically we pass through the children twice - first
+    ///  we build up an array of rects representing the children bounds (w/margins) and identify where the row/
+    ///  column changes are.  Secondly, we normalize the child rects so that children in each row/column are the
+    ///  same height/width;
     /// </summary>
     private void CreateMarginBoundsList()
     {
@@ -401,9 +398,9 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         => ReDrawIBar(Point.Empty, Point.Empty);
 
     /// <summary>
-    /// Given two points, we'll draw an I-Bar. Note that we only erase at our
-    /// old points if they are different from the new ones. Also note that if
-    /// the points are empty - we will simply erase and not draw.
+    ///  Given two points, we'll draw an I-Bar. Note that we only erase at our
+    ///  old points if they are different from the new ones. Also note that if
+    ///  the points are empty - we will simply erase and not draw.
     /// </summary>
     private void ReDrawIBar(Point point1, Point point2)
     {
@@ -712,8 +709,8 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     }
 
     /// <summary>
-    /// When we receive a drag enter notification - we clear our recommended insertion
-    /// index and mouse location - then call our method to cache all the bounds of the children.
+    ///  When we receive a drag enter notification - we clear our recommended insertion
+    ///  index and mouse location - then call our method to cache all the bounds of the children.
     /// </summary>
     protected override void OnDragEnter(DragEventArgs de)
     {
@@ -735,7 +732,6 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         CreateMarginBoundsList();
     }
 
-    /// <inheritdoc/>
     protected override void OnDragLeave(EventArgs e)
     {
         EraseIBar();
@@ -748,11 +744,11 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     }
 
     /// <summary>
-    /// During a drag over, if we have successfully cached margin/row/col information
-    /// we will attempt to render an "I-bar" for the user based on where we think the
-    /// user is attempting to insert the control at.  Note that we also cache off this
-    /// guessed-index so that if a control is dropped/added we can re-insert it at this
-    /// spot.
+    ///  During a drag over, if we have successfully cached margin/row/col information
+    ///  we will attempt to render an "I-bar" for the user based on where we think the
+    ///  user is attempting to insert the control at.  Note that we also cache off this
+    ///  guessed-index so that if a control is dropped/added we can re-insert it at this
+    ///  spot.
     /// </summary>
     protected override void OnDragOver(DragEventArgs de)
     {

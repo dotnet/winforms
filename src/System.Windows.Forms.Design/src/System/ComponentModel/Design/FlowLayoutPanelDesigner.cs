@@ -10,12 +10,12 @@ internal partial class FlowLayoutPanelDesigner
     private struct ChildInfo
     {
         /// <summary>
-        /// Represents the bounds (including margins) of a child - used for hit testing.
+        ///  Represents the bounds (including margins) of a child - used for hit testing.
         /// </summary>
         public Rectangle MarginBounds;
 
         /// <summary>
-        /// Bounds of the control -- used for drawing the IBar.
+        ///  Bounds of the control -- used for drawing the IBar.
         /// </summary>
         public Rectangle ControlBounds;
 
