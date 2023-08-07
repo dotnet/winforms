@@ -184,11 +184,22 @@ internal partial class PropertyStore
     /// </summary>
     public object? GetObject(int key) => GetObject(key, out _);
 
+    /// <summary>
+    /// Retrieves an object value from our property list.
+    /// This will set value to null and return false if the
+    /// list does not contain the given key.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="key"></param>
+    /// <param name="value"></param>
+    /// <remarks><para>If a null value is set for a given key
+    /// it will return true and a null value.</para></remarks>
+    /// <returns></returns>
     public bool TryGetObject<T>(int key, out T? value)
     {
         object? entry = GetObject(key, out bool found);
         Debug.Assert(!found || entry is null || entry is T, $"Entry is not of type {typeof(T)}, but of type {entry?.GetType()}");
-        if (typeof(T).IsValueType && !typeof(T).IsPrimitive && !typeof(T).IsEnum)
+        if (typeof(T).IsValueType || typeof(T).IsEnum || typeof(T).IsPrimitive)
         {
             value = found && entry is not null ? (T?)entry : default;
             return found;
