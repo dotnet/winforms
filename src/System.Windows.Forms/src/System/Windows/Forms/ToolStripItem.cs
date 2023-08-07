@@ -472,7 +472,6 @@ public abstract partial class ToolStripItem : BindableComponent,
     {
         get => _commandParameter;
 
-        // We need to opt into previre features here, because we calling a preview feature from the setter.
         set
         {
             if (!Equals(_commandParameter, value))
@@ -2693,8 +2692,6 @@ public abstract partial class ToolStripItem : BindableComponent,
     protected virtual void OnClick(EventArgs e)
     {
         RaiseEvent(s_clickEvent, e);
-
-        // We won't let the preview feature warnings bubble further up beyond this point.
         OnRequestCommandExecute(e);
     }
 
@@ -2762,7 +2759,8 @@ public abstract partial class ToolStripItem : BindableComponent,
     protected virtual void OnCommandParameterChanged(EventArgs e) => RaiseEvent(s_commandParameterChangedEvent, e);
 
     /// <summary>
-    ///  Called in the context of <see cref="OnClick(EventArgs)"/> to invoke <see cref="System.Windows.Input.ICommand.Execute(object?)"/> if the context allows.
+    ///  Called in the context of <see cref="OnClick(EventArgs)"/> to invoke
+    ///  <see cref="System.Windows.Input.ICommand.Execute(object?)"/> if the context allows.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
     protected virtual void OnRequestCommandExecute(EventArgs e)

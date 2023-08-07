@@ -222,8 +222,6 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
     {
         get => _commandParameter;
 
-        // We need to opt into preview features on the getter and the setter rather than on top of the property,
-        // because we calling a preview feature from the setter.
         set
         {
             if (!Equals(_commandParameter, value))
