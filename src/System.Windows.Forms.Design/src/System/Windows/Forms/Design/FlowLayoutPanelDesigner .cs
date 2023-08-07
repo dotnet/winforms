@@ -151,7 +151,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// </summary>
     private Rectangle GetMarginBounds(Control control)
     {
-        // If the FLP is RightToLeft.Yes, then the values of Right and Left margins are swapped, 
+        // If the FLP is RightToLeft.Yes, then the values of Right and Left margins are swapped,
         // account for that here.
         var bounds = control.Bounds;
         var margin = control.Margin;
