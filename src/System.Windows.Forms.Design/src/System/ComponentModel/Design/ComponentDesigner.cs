@@ -48,6 +48,9 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         }
     }
 
+    internal bool IsInheritedReadOnly
+        => InheritanceAttribute.InheritanceLevel == InheritanceLevel.InheritedReadOnly;
+
     /// <summary>
     ///  This property provides a generic mechanism for discovering parent relationships within designers,
     ///  and is used by ComponentDesigner's ITreeDesigner interface implementation.  This property

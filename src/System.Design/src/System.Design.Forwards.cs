@@ -52,6 +52,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.SplitContainerDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.SplitterPanelDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.SplitterDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FlowLayoutPanelDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabControlDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TableLayoutPanelDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.TabPageDesigner))]
