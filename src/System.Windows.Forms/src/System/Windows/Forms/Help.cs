@@ -216,12 +216,7 @@ public static class Help
     {
         WindowsFormsHelpTrace.TraceVerbose($"Help:: ShowHTMLHelp:: {url}, {command:G}, {param}");
 
-        Uri? file = Resolve(url);
-
-        if (file is null)
-        {
-            throw new ArgumentException(string.Format(SR.HelpInvalidURL, url), nameof(url));
-        }
+        Uri? file = Resolve(url) ?? throw new ArgumentException(string.Format(SR.HelpInvalidURL, url), nameof(url));
 
         switch (command)
         {
@@ -240,19 +235,35 @@ public static class Help
                 break;
         }
 
-        HandleRef<HWND> handle;
-        if (parent is not null)
+        HandleRef<HWND> handle = parent is not null ? new(parent) : Control.GetHandleRef(PInvoke.GetActiveWindow());
+        WindowsFormsHelpTrace.TraceVerbose($"\tExecuting '{file}'");
+        string fileName = file.ToString();
+        if (file.IsFile)
         {
-            handle = new(parent);
+            string? executable = FindExecutable(file.LocalPath.ToString());
+            PInvoke.ShellExecute(handle.Handle, lpOperation: null, executable ?? fileName, executable is not null ? fileName : null, lpDirectory: null, SHOW_WINDOW_CMD.SW_NORMAL);
         }
         else
         {
-            handle = Control.GetHandleRef(PInvoke.GetActiveWindow());
+            PInvoke.ShellExecute(handle.Handle, lpOperation: null, fileName, lpParameters: null, lpDirectory: null, SHOW_WINDOW_CMD.SW_NORMAL);
         }
 
-        WindowsFormsHelpTrace.TraceVerbose($"\tExecuting '{file}'");
-        PInvoke.ShellExecute(handle.Handle, lpOperation: null, file.ToString(), lpParameters: null, lpDirectory: null, SHOW_WINDOW_CMD.SW_NORMAL);
         GC.KeepAlive(handle.Wrapper);
+    }
+
+    private static unsafe string? FindExecutable(string uri)
+    {
+        HINSTANCE result;
+        Span<char> buffer = stackalloc char[PInvoke.MAX_PATH + 1];
+        fixed (char* lpFileLocal = uri)
+        {
+            fixed (char* b = buffer)
+            {
+                result = PInvoke.FindExecutable(lpFileLocal, lpDirectory: null, lpResult: b);
+            }
+        }
+
+        return result <= 32 ? null : buffer.SliceAtFirstNull().ToString();
     }
 
     private static Uri? Resolve(string? partialUri)
