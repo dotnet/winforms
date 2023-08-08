@@ -231,6 +231,9 @@ public partial class MainForm : Form
                         FlowLayoutPanel layoutPanel = surface.CreateControl<FlowLayoutPanel>(new Size(430, 200), new Point(250, 10));
                         layoutPanel.Controls.Add(subButton1OfLayoutPanel);
                         layoutPanel.Controls.Add(subButton2OfLayoutPanel);
+
+                        FolderBrowserDialog folderBrowserDialog = surface.CreateComponent<FolderBrowserDialog>();
+                        SaveFileDialog saveFileDialog = surface.CreateComponent<SaveFileDialog>();
                     }
 
                     break;

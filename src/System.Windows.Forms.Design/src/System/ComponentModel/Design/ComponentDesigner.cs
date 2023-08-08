@@ -34,6 +34,23 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     /// </summary>
     public virtual ICollection AssociatedComponents => Array.Empty<IComponent>();
 
+    private protected virtual void UpdateTextualDefaultProperty()
+    {
+        var component = Component;
+        if (component.Site is { } site)
+        {
+            var defaultProperty = TypeDescriptor.GetDefaultProperty(component);
+            if (defaultProperty is not null && defaultProperty.PropertyType.Equals(typeof(string)))
+            {
+                var currentValue = (string)defaultProperty.GetValue(component);
+                if (string.IsNullOrEmpty(currentValue))
+                {
+                    defaultProperty.SetValue(component, site.Name);
+                }
+            }
+        }
+    }
+
     internal virtual bool CanBeAssociatedWith(IDesigner parentDesigner) => true;
 
     /// <summary>
@@ -125,6 +142,15 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     {
         // execute legacy code
         InitializeNonDefault();
+
+        // Note: This was originally an obsoleted API called OnSetComponentDefaults(). The
+        // default behavior of this API was to set the the default property to the component's
+        // site name, if the property was a string and null or empty. We've removed the API
+        // but preserved the same behavior, now controlled by SetTextualDefaultProperty.
+        if (SetTextualDefaultProperty)
+        {
+            UpdateTextualDefaultProperty();
+        }
     }
 
     void IDesignerFilter.PostFilterAttributes(IDictionary attributes) => PostFilterAttributes(attributes);
@@ -148,6 +174,13 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     ///  Gets the design-time verbs supported by the component associated with the designer.
     /// </summary>
     public virtual DesignerVerbCollection Verbs => _verbs ??= new DesignerVerbCollection();
+
+    /// <summary>
+    /// Controls whether the default property of <see cref="Component"/> is automatically set
+    /// to <see cref="ISite.Name"/> on creation. The default is <see langword="true"/>.
+    /// </summary>
+    protected virtual bool SetTextualDefaultProperty
+        => true;
 
     ICollection ITreeDesigner.Children
     {
