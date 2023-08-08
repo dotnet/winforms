@@ -238,12 +238,7 @@ public static class Help
         HandleRef<HWND> handle = parent is not null ? new(parent) : Control.GetHandleRef(PInvoke.GetActiveWindow());
         s_windowsFormsHelpTrace.TraceVerbose($"\tExecuting '{file}'");
         string fileName = file.ToString();
-        string? executable = null;
-        if (file.IsFile)
-        {
-            executable = FindExecutableInternal(file.LocalPath.ToString());
-        }
-
+        string? executable = file.IsFile ? FindExecutableInternal(file.LocalPath.ToString()) : null;
         PInvoke.ShellExecute(handle.Handle, lpOperation: null, executable ?? fileName, executable is not null ? fileName : null, lpDirectory: null, SHOW_WINDOW_CMD.SW_NORMAL);
         GC.KeepAlive(handle.Wrapper);
     }
