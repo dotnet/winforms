@@ -37,7 +37,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     private protected virtual void UpdateTextualDefaultProperty()
     {
         var component = Component;
-        if (component.Site is { } site)
+        if (component?.Site is { } site)
         {
             var defaultProperty = TypeDescriptor.GetDefaultProperty(component);
             if (defaultProperty is not null && defaultProperty.PropertyType.Equals(typeof(string)))
