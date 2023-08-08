@@ -1087,7 +1087,7 @@
       </trans-unit>
       <trans-unit id="ImageListActionList_ChooseImagesDisplayName">
         <source>Choose images</source>
-        <target state="new">Choose images</target>
+        <target state="translated">Wybierz obrazy</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ColorDepthDescription">
@@ -1097,7 +1097,7 @@
       </trans-unit>
       <trans-unit id="ImageListActionList_ColorDepthDisplayName">
         <source>Image Bit Depth</source>
-        <target state="new">Image Bit Depth</target>
+        <target state="translated">Głębia bitowa obrazu</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ImageSizeDescription">
@@ -1107,7 +1107,7 @@
       </trans-unit>
       <trans-unit id="ImageListActionList_ImageSizeDisplayName">
         <source>Image Size</source>
-        <target state="new">Image Size</target>
+        <target state="translated">Rozmiar obrazu</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListDescription">
@@ -1849,7 +1849,7 @@ Naciśnij klawisze Ctrl+Enter, aby zaakceptować tekst.</target>
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerDontBoldLabel">
         <source>0</source>
-        <target state="new">0</target>
+        <target state="translated">0</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerEditRowAndCol">
@@ -1869,7 +1869,7 @@ Naciśnij klawisze Ctrl+Enter, aby zaakceptować tekst.</target>
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerLabelMenu">
         <source>SizeMode</source>
-        <target state="new">SizeMode</target>
+        <target state="translated">SizeMode</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerPercentageMenu">

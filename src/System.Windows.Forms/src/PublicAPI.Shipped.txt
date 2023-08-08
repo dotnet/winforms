@@ -4039,9 +4039,9 @@ System.Resources.ResXDataNode.Comment.set -> void
 System.Resources.ResXDataNode.FileRef.get -> System.Resources.ResXFileRef?
 System.Resources.ResXDataNode.GetNodePosition() -> System.Drawing.Point
 System.Resources.ResXDataNode.GetValue(System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> object?
-System.Resources.ResXDataNode.GetValue(System.Reflection.AssemblyName![]! names) -> object?
+System.Resources.ResXDataNode.GetValue(System.Reflection.AssemblyName![]? names) -> object?
 System.Resources.ResXDataNode.GetValueTypeName(System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> string?
-System.Resources.ResXDataNode.GetValueTypeName(System.Reflection.AssemblyName![]! names) -> string?
+System.Resources.ResXDataNode.GetValueTypeName(System.Reflection.AssemblyName![]? names) -> string?
 System.Resources.ResXDataNode.Name.get -> string!
 System.Resources.ResXDataNode.Name.set -> void
 System.Resources.ResXDataNode.ResXDataNode(string! name, object? value) -> void
