@@ -25,7 +25,7 @@ public class UndoUnitTests : UndoEngine
             .Returns(mockComponentChangeService.Object);
         mockServiceProvider
             .Setup(p => p.GetService(typeof(ComponentSerializationService)))
-            .Returns(new object());
+            .Returns(new CodeDomComponentSerializationService());
         return mockServiceProvider.Object;
     }
 
