@@ -176,11 +176,10 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     public virtual DesignerVerbCollection Verbs => _verbs ??= new DesignerVerbCollection();
 
     /// <summary>
-    /// Controls whether the default property of <see cref="Component"/> is automatically set
-    /// to <see cref="ISite.Name"/> on creation. The default is <see langword="true"/>.
+    ///  Controls whether the default property of <see cref="Component"/> is automatically set
+    ///  to <see cref="ISite.Name"/> on creation. The default is <see langword="true"/>.
     /// </summary>
-    protected virtual bool SetTextualDefaultProperty
-        => true;
+    protected virtual bool SetTextualDefaultProperty => true;
 
     ICollection ITreeDesigner.Children
     {

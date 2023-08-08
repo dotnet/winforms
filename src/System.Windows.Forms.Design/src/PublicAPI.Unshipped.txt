@@ -1,0 +1,1 @@
+virtual System.ComponentModel.Design.ComponentDesigner.SetTextualDefaultProperty.get -> bool
