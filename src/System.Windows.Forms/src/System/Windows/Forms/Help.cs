@@ -238,20 +238,17 @@ public static class Help
         HandleRef<HWND> handle = parent is not null ? new(parent) : Control.GetHandleRef(PInvoke.GetActiveWindow());
         s_windowsFormsHelpTrace.TraceVerbose($"\tExecuting '{file}'");
         string fileName = file.ToString();
+        string? executable = null;
         if (file.IsFile)
         {
-            string? executable = FindExecutable(file.LocalPath.ToString());
-            PInvoke.ShellExecute(handle.Handle, lpOperation: null, executable ?? fileName, executable is not null ? fileName : null, lpDirectory: null, SHOW_WINDOW_CMD.SW_NORMAL);
-        }
-        else
-        {
-            PInvoke.ShellExecute(handle.Handle, lpOperation: null, fileName, lpParameters: null, lpDirectory: null, SHOW_WINDOW_CMD.SW_NORMAL);
+            executable = FindExecutableInternal(file.LocalPath.ToString());
         }
 
+        PInvoke.ShellExecute(handle.Handle, lpOperation: null, executable ?? fileName, executable is not null ? fileName : null, lpDirectory: null, SHOW_WINDOW_CMD.SW_NORMAL);
         GC.KeepAlive(handle.Wrapper);
     }
 
-    private static unsafe string? FindExecutable(string uri)
+    private static unsafe string? FindExecutableInternal(string uri)
     {
         HINSTANCE result;
         Span<char> buffer = stackalloc char[PInvoke.MAX_PATH + 1];
