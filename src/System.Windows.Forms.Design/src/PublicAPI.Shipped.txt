@@ -351,11 +351,11 @@ System.ComponentModel.Design.UndoEngine.UndoUnit.UndoUnit(System.ComponentModel.
 ~System.Windows.Forms.Design.ControlDesigner.EnableDesignMode(System.Windows.Forms.Control child, string name) -> bool
 ~System.Windows.Forms.Design.ControlDesigner.HookChildControls(System.Windows.Forms.Control firstChild) -> void
 ~System.Windows.Forms.Design.ControlDesigner.UnhookChildControls(System.Windows.Forms.Control firstChild) -> void
-~System.Windows.Forms.Design.EventHandlerService.EventHandlerService(System.Windows.Forms.Control focusWnd) -> void
-~System.Windows.Forms.Design.EventHandlerService.FocusWindow.get -> System.Windows.Forms.Control
-~System.Windows.Forms.Design.EventHandlerService.GetHandler(System.Type handlerType) -> object
-~System.Windows.Forms.Design.EventHandlerService.PopHandler(object handler) -> void
-~System.Windows.Forms.Design.EventHandlerService.PushHandler(object handler) -> void
+System.Windows.Forms.Design.EventHandlerService.EventHandlerService(System.Windows.Forms.Control? focusWnd) -> void
+System.Windows.Forms.Design.EventHandlerService.FocusWindow.get -> System.Windows.Forms.Control?
+System.Windows.Forms.Design.EventHandlerService.GetHandler(System.Type! handlerType) -> object?
+System.Windows.Forms.Design.EventHandlerService.PopHandler(object! handler) -> void
+System.Windows.Forms.Design.EventHandlerService.PushHandler(object! handler) -> void
 System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.Description.get -> string!
 System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.Description.set -> void
 System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.DirectoryPath.get -> string!
@@ -1038,7 +1038,7 @@ System.Windows.Forms.Design.DockEditor.DockEditor() -> void
 System.Windows.Forms.Design.DocumentDesigner
 System.Windows.Forms.Design.DocumentDesigner.DocumentDesigner() -> void
 System.Windows.Forms.Design.EventHandlerService
-System.Windows.Forms.Design.EventHandlerService.EventHandlerChanged -> System.EventHandler
+System.Windows.Forms.Design.EventHandlerService.EventHandlerChanged -> System.EventHandler?
 System.Windows.Forms.Design.FileNameEditor
 System.Windows.Forms.Design.FileNameEditor.FileNameEditor() -> void
 System.Windows.Forms.Design.FolderNameEditor

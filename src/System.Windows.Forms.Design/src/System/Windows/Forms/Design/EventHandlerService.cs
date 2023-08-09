@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 namespace System.Windows.Forms.Design;
 
 /// <summary>
@@ -11,9 +9,9 @@ namespace System.Windows.Forms.Design;
 public sealed class EventHandlerService : IEventHandlerService
 {
     // We cache the last requested handler for speed.
-    private object _lastHandler;
-    private Type _lastHandlerType;
-    private EventHandler _changedEvent;
+    private object? _lastHandler;
+    private Type? _lastHandlerType;
+    private EventHandler? _changedEvent;
 
     private readonly LinkedList<object> _handlers = new();
 
@@ -21,7 +19,7 @@ public sealed class EventHandlerService : IEventHandlerService
     ///  Initializes a new instance of the EventHandlerService class.
     /// </summary>
     /// <param name="focusWnd">The <see cref="Control"/> which is being designed.</param>
-    public EventHandlerService(Control focusWnd)
+    public EventHandlerService(Control? focusWnd)
     {
         FocusWindow = focusWnd;
     }
@@ -29,18 +27,18 @@ public sealed class EventHandlerService : IEventHandlerService
     /// <summary>
     ///  Fires an OnEventHandlerChanged event.
     /// </summary>
-    public event EventHandler EventHandlerChanged
+    public event EventHandler? EventHandlerChanged
     {
         add => _changedEvent += value;
         remove => _changedEvent -= value;
     }
 
-    public Control FocusWindow { get; }
+    public Control? FocusWindow { get; }
 
     /// <summary>
     ///  Gets the currently active event handler of the specified type.
     /// </summary>
-    public object GetHandler(Type handlerType)
+    public object? GetHandler(Type handlerType)
     {
         ArgumentNullException.ThrowIfNull(handlerType);
 
@@ -56,7 +54,7 @@ public sealed class EventHandlerService : IEventHandlerService
 
         Debug.Assert(_handlers.Count > 0, "Should have handlers to look through.");
 
-        object handler = _handlers.FirstOrDefault(handlerType.IsInstanceOfType);
+        object? handler = _handlers.FirstOrDefault(handlerType.IsInstanceOfType);
 
         if (handler is not null)
         {
@@ -74,10 +72,8 @@ public sealed class EventHandlerService : IEventHandlerService
     {
         ArgumentNullException.ThrowIfNull(handler);
 
-        var node = _handlers.Find(handler);
-        if (node is not null)
+        if (_handlers.Remove(handler))
         {
-            _handlers.Remove(node);
             _lastHandler = null;
             _lastHandlerType = null;
             OnEventHandlerChanged(EventArgs.Empty);

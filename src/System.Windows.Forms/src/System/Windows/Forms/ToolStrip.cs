@@ -1758,7 +1758,7 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
     {
         get
         {
-            if (!Properties.TryGetObject(ToolStrip.s_propToolTip, out ToolTip? toolTip))
+            if (!Properties.TryGetObject(ToolStrip.s_propToolTip, out ToolTip? toolTip) || toolTip is null)
             {
                 toolTip = new ToolTip();
                 Properties.SetObject(ToolStrip.s_propToolTip, toolTip);
