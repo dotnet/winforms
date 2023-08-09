@@ -148,7 +148,7 @@ public class ListViewGroupCollection : IList
         return Add(group);
     }
 
-    public void AddRange(ListViewGroup[] groups)
+    public void AddRange(params ListViewGroup[] groups)
     {
         ArgumentNullException.ThrowIfNull(groups);
         ThrowInvalidOperationExceptionIfVirtualMode();
