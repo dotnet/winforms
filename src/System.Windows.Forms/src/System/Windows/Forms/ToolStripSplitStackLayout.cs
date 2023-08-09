@@ -258,16 +258,16 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
             if (j == -1)
             {
-                // the first time through place the overflow button if its required.
+                item = toolStrip.OverflowButton;
+
+                // The first time through place the overflow button if its required.
                 if (needOverflow)
                 {
-                    item = toolStrip.OverflowButton;
                     item.SetPlacement(ToolStripItemPlacement.Main);
                     itemSize = OverflowButtonSize;
                 }
                 else
                 {
-                    item = toolStrip.OverflowButton;
                     item.SetPlacement(ToolStripItemPlacement.None);
                     continue;
                 }
@@ -299,7 +299,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             // We need to honor left to right and head and tail.
             //      In RTL.Yes, Head is to the Right, Tail is to the Left
             //      In RTL.No,  Head is to the Left,  Tail is to the Right
-            if ((item is not null) && (item.Placement == ToolStripItemPlacement.Main))
+            if (item.Placement == ToolStripItemPlacement.Main)
             {
                 int x = displayRectangle.Left;
                 int y = displayRectangle.Top;
@@ -361,7 +361,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             }
             else
             {
-                item!.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
+                item.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
             }
 
             DebugLayoutTraceSwitch.TraceVerbose($"Item {item} Placement {item.Placement} Bounds {item.Bounds} Parent {(item.ParentInternal is null ? "null" : item.ParentInternal.ToString())}");
@@ -408,15 +408,15 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
             if (j == -1)
             {
-                // the first time through place the overflow button if its required.
+                item = toolStrip.OverflowButton;
+
+                // The first time through place the overflow button if its required.
                 if (needOverflow)
                 {
-                    item = toolStrip.OverflowButton;
                     item.SetPlacement(ToolStripItemPlacement.Main);
                 }
                 else
                 {
-                    item = toolStrip.OverflowButton;
                     item.SetPlacement(ToolStripItemPlacement.None);
                     continue;
                 }
@@ -449,7 +449,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             // Vertical split stack management ignores left to right.
             //      Items aligned to the Head are placed from Top to Bottom
             //      Items aligned to the Tail are placed from Bottom to Top
-            if ((item is not null) && (item.Placement == ToolStripItemPlacement.Main))
+            if (item.Placement == ToolStripItemPlacement.Main)
             {
                 Padding itemMargin = item.Margin;
                 int x = displayRectangle.Left + itemMargin.Left;
@@ -502,7 +502,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             }
             else
             {
-                item!.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
+                item.ParentInternal = (item.Placement == ToolStripItemPlacement.Overflow) ? toolStrip.OverflowButton.DropDown : null;
             }
 
             DebugLayoutTraceSwitch.TraceVerbose($"Item {item} Placement {item.Placement} Bounds {item.Bounds} Parent {(item.ParentInternal is null ? "null" : item.ParentInternal.ToString())}");
