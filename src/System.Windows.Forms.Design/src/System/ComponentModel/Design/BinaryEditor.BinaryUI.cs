@@ -94,8 +94,8 @@ public sealed partial class BinaryEditor
 
         private void ButtonOK_click(object? source, EventArgs e)
         {
-            object? localValue = _value;
-            ConvertToValue(_byteViewer.GetBytes(), ref localValue!);
+            object localValue = _value!;
+            ConvertToValue(_byteViewer.GetBytes(), ref localValue);
             _value = localValue;
         }
 
