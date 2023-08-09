@@ -39,14 +39,15 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         var component = Component;
         if (component?.Site is { } site)
         {
-            var defaultProperty = TypeDescriptor.GetDefaultProperty(component);
-            if (defaultProperty is not null && defaultProperty.PropertyType.Equals(typeof(string)))
+            PropertyDescriptor defaultProperty = TypeDescriptor.GetDefaultProperty(component);
+            if (!(defaultProperty is not null && defaultProperty.PropertyType.Equals(typeof(string))))
             {
-                var currentValue = (string)defaultProperty.GetValue(component);
-                if (string.IsNullOrEmpty(currentValue))
-                {
-                    defaultProperty.SetValue(component, site.Name);
-                }
+                return;
+            }
+
+            if (defaultProperty.GetValue(component) is string currentValue && string.IsNullOrEmpty(currentValue))
+            {
+                defaultProperty.SetValue(component, site.Name);
             }
         }
     }
