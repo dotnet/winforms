@@ -193,18 +193,7 @@ public partial class TreeView : Control
     /// </summary>
     public override Color BackColor
     {
-        get
-        {
-            if (ShouldSerializeBackColor())
-            {
-                return base.BackColor;
-            }
-            else
-            {
-                return SystemColors.Window;
-            }
-        }
-
+        get => ShouldSerializeBackColor() ? base.BackColor : SystemColors.Window;
         set
         {
             base.BackColor = value;
@@ -284,10 +273,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewCheckBoxesDescr))]
     public bool CheckBoxes
     {
-        get
-        {
-            return _treeViewState[TREEVIEWSTATE_checkBoxes];
-        }
+        get => _treeViewState[TREEVIEWSTATE_checkBoxes];
 
         set
         {
@@ -424,13 +410,7 @@ public partial class TreeView : Control
     ///  Deriving classes can override this to configure a default size for their control.
     ///  This is more efficient than setting the size in the control's constructor.
     /// </summary>
-    protected override Size DefaultSize
-    {
-        get
-        {
-            return new(121, 97);
-        }
-    }
+    protected override Size DefaultSize => new(121, 97);
 
     /// <summary>
     ///  This property is overridden and hidden from statement completion
@@ -457,18 +437,7 @@ public partial class TreeView : Control
     /// </summary>
     public override Color ForeColor
     {
-        get
-        {
-            if (ShouldSerializeForeColor())
-            {
-                return base.ForeColor;
-            }
-            else
-            {
-                return SystemColors.WindowText;
-            }
-        }
-
+        get => ShouldSerializeForeColor() ? base.ForeColor : SystemColors.WindowText;
         set
         {
             base.ForeColor = value;
@@ -488,7 +457,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewFullRowSelectDescr))]
     public bool FullRowSelect
     {
-        get { return _treeViewState[TREEVIEWSTATE_fullRowSelect]; }
+        get => _treeViewState[TREEVIEWSTATE_fullRowSelect];
         set
         {
             if (FullRowSelect != value)
@@ -511,11 +480,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewHideSelectionDescr))]
     public bool HideSelection
     {
-        get
-        {
-            return _treeViewState[TREEVIEWSTATE_hideSelection];
-        }
-
+        get => _treeViewState[TREEVIEWSTATE_hideSelection];
         set
         {
             if (HideSelection != value)
@@ -539,11 +504,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewHotTrackingDescr))]
     public bool HotTracking
     {
-        get
-        {
-            return _treeViewState[TREEVIEWSTATE_hotTracking];
-        }
-
+        get => _treeViewState[TREEVIEWSTATE_hotTracking];
         set
         {
             if (HotTracking != value)
@@ -590,7 +551,6 @@ public partial class TreeView : Control
             // If (none) is selected in the image index editor, we'll just adjust this to
             // mean image index 0. This is because a treeview must always have an image index -
             // even if no imagelist exists we want the image index to be 0.
-            //
             if (value == ImageList.Indexer.DefaultIndex)
             {
                 value = 0;
@@ -626,11 +586,7 @@ public partial class TreeView : Control
     [AllowNull]
     public string ImageKey
     {
-        get
-        {
-            return ImageIndexer.Key;
-        }
-
+        get => ImageIndexer.Key;
         set
         {
             if (ImageIndexer.Key != value)
@@ -658,10 +614,7 @@ public partial class TreeView : Control
     [RefreshProperties(RefreshProperties.Repaint)]
     public ImageList? ImageList
     {
-        get
-        {
-            return _imageList;
-        }
+        get => _imageList;
         set
         {
             if (value != _imageList)
@@ -737,10 +690,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewStateImageListDescr))]
     public ImageList? StateImageList
     {
-        get
-        {
-            return _stateImageList;
-        }
+        get => _stateImageList;
         set
         {
             if (value != _stateImageList)
@@ -896,10 +846,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewLabelEditDescr))]
     public bool LabelEdit
     {
-        get
-        {
-            return _treeViewState[TREEVIEWSTATE_labelEdit];
-        }
+        get => _treeViewState[TREEVIEWSTATE_labelEdit];
         set
         {
             if (LabelEdit != value)
@@ -970,11 +917,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewDrawModeDescr))]
     public TreeViewDrawMode DrawMode
     {
-        get
-        {
-            return _drawMode;
-        }
-
+        get => _drawMode;
         set
         {
             //valid values are 0x0 to 0x2
@@ -1001,14 +944,8 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewPathSeparatorDescr))]
     public string PathSeparator
     {
-        get
-        {
-            return _pathSeparator;
-        }
-        set
-        {
-            _pathSeparator = value;
-        }
+        get => _pathSeparator;
+        set => _pathSeparator = value;
     }
 
     [Browsable(false)]
@@ -1039,11 +976,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))]
     public virtual bool RightToLeftLayout
     {
-        get
-        {
-            return _rightToLeftLayout;
-        }
-
+        get => _rightToLeftLayout;
         set
         {
             if (value != _rightToLeftLayout)
@@ -1062,10 +995,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewScrollableDescr))]
     public bool Scrollable
     {
-        get
-        {
-            return _treeViewState[TREEVIEWSTATE_scrollable];
-        }
+        get => _treeViewState[TREEVIEWSTATE_scrollable];
         set
         {
             if (Scrollable != value)
@@ -1143,11 +1073,7 @@ public partial class TreeView : Control
     [RelatedImageList("ImageList")]
     public string SelectedImageKey
     {
-        get
-        {
-            return SelectedImageIndexer.Key;
-        }
-
+        get => SelectedImageIndexer.Key;
         set
         {
             if (SelectedImageIndexer.Key != value)
@@ -1226,10 +1152,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewShowLinesDescr))]
     public bool ShowLines
     {
-        get
-        {
-            return _treeViewState[TREEVIEWSTATE_showLines];
-        }
+        get => _treeViewState[TREEVIEWSTATE_showLines];
         set
         {
             if (ShowLines != value)
@@ -1251,10 +1174,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewShowShowNodeToolTipsDescr))]
     public bool ShowNodeToolTips
     {
-        get
-        {
-            return _treeViewState[TREEVIEWSTATE_showNodeToolTips];
-        }
+        get => _treeViewState[TREEVIEWSTATE_showNodeToolTips];
         set
         {
             if (ShowNodeToolTips != value)
@@ -1277,10 +1197,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewShowPlusMinusDescr))]
     public bool ShowPlusMinus
     {
-        get
-        {
-            return _treeViewState[TREEVIEWSTATE_showPlusMinus];
-        }
+        get => _treeViewState[TREEVIEWSTATE_showPlusMinus];
         set
         {
             if (ShowPlusMinus != value)
@@ -1303,7 +1220,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewShowRootLinesDescr))]
     public bool ShowRootLines
     {
-        get { return _treeViewState[TREEVIEWSTATE_showRootLines]; }
+        get => _treeViewState[TREEVIEWSTATE_showRootLines];
         set
         {
             if (ShowRootLines != value)
@@ -1327,10 +1244,7 @@ public partial class TreeView : Control
     [EditorBrowsable(EditorBrowsableState.Never)]
     public bool Sorted
     {
-        get
-        {
-            return _treeViewState[TREEVIEWSTATE_sorted];
-        }
+        get => _treeViewState[TREEVIEWSTATE_sorted];
         set
         {
             if (Sorted != value)
@@ -1353,10 +1267,7 @@ public partial class TreeView : Control
     [SRDescription(nameof(SR.TreeViewNodeSorterDescr))]
     public IComparer TreeViewNodeSorter
     {
-        get
-        {
-            return _treeViewNodeSorter;
-        }
+        get => _treeViewNodeSorter;
         set
         {
             if (_treeViewNodeSorter != value)
@@ -1729,10 +1640,7 @@ public partial class TreeView : Control
     /// <summary>
     ///  Gives the information about which part of the treeNode is at the given point.
     /// </summary>
-    public TreeViewHitTestInfo HitTest(Point pt)
-    {
-        return HitTest(pt.X, pt.Y);
-    }
+    public TreeViewHitTestInfo HitTest(Point pt) => HitTest(pt.X, pt.Y);
 
     /// <summary>
     ///  Gives the information about which part of the treeNode is at the given x, y.
@@ -1768,18 +1676,12 @@ public partial class TreeView : Control
     /// <summary>
     ///  Returns count of nodes at root, optionally including all subtrees.
     /// </summary>
-    public int GetNodeCount(bool includeSubTrees)
-    {
-        return _root.GetNodeCount(includeSubTrees);
-    }
+    public int GetNodeCount(bool includeSubTrees) => _root.GetNodeCount(includeSubTrees);
 
     /// <summary>
     ///  Returns the TreeNode at the given location in tree view coordinates.
     /// </summary>
-    public TreeNode GetNodeAt(Point pt)
-    {
-        return GetNodeAt(pt.X, pt.Y);
-    }
+    public TreeNode GetNodeAt(Point pt) => GetNodeAt(pt.X, pt.Y);
 
     /// <summary>
     ///  Returns the TreeNode at the given location in tree view coordinates.
@@ -1807,6 +1709,7 @@ public partial class TreeView : Control
     private static void UpdateImagesRecursive(TreeNode node)
     {
         node.UpdateImage();
+
         // Iterate only through the Nodes collection rather than the
         // array since an item might have been removed from the collection, and
         // correspondingly "removed" from the array, but still exist in the array
@@ -2471,18 +2374,12 @@ public partial class TreeView : Control
     /// <summary>
     ///  Retrieves true if the indent should be persisted in code gen.
     /// </summary>
-    private bool ShouldSerializeIndent()
-    {
-        return (_indent != -1);
-    }
+    private bool ShouldSerializeIndent() => (_indent != -1);
 
     /// <summary>
     ///  Retrieves true if the itemHeight should be persisted in code gen.
     /// </summary>
-    private bool ShouldSerializeItemHeight()
-    {
-        return (_itemHeight != -1);
-    }
+    private bool ShouldSerializeItemHeight() => (_itemHeight != -1);
 
     private bool ShouldSerializeSelectedImageIndex()
     {
