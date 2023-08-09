@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 
@@ -23,7 +21,7 @@ public partial class BorderSidesEditor
         private CheckBox leftCheckBox;
         private CheckBox noneCheckBox;
         private bool noneChecked;
-        private object originalValue;
+        private object? originalValue;
         private CheckBox rightCheckBox;
         private Label splitterLabel;
 
@@ -43,7 +41,7 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  Allows someone else to close our dropdown.
         /// </summary>
-        public IWindowsFormsEditorService EditorService
+        public IWindowsFormsEditorService? EditorService
         {
             get;
             private set;
@@ -52,7 +50,7 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  Returns the current value of BorderSides, if nothing is selected returns BorderSides.None.
         /// </summary>
-        public object Value { get; private set; }
+        public object? Value { get; private set; }
 
         public void End()
         {
@@ -71,6 +69,14 @@ public partial class BorderSidesEditor
             noneCheckBox.Focus();
         }
 
+        [MemberNotNull(nameof(allCheckBox))]
+        [MemberNotNull(nameof(bottomCheckBox))]
+        [MemberNotNull(nameof(leftCheckBox))]
+        [MemberNotNull(nameof(noneCheckBox))]
+        [MemberNotNull(nameof(rightCheckBox))]
+        [MemberNotNull(nameof(splitterLabel))]
+        [MemberNotNull(nameof(tableLayoutPanel1))]
+        [MemberNotNull(nameof(topCheckBox))]
         private void InitializeComponent()
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(BorderSidesEditor));
@@ -178,9 +184,9 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
         /// </summary>
-        private void rightCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void rightCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            CheckBox senderCheckBox = sender as CheckBox;
+            CheckBox senderCheckBox = (CheckBox)sender!;
             if (senderCheckBox.Checked)
             {
                 noneCheckBox.Checked = false;
@@ -199,9 +205,9 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
         /// </summary>
-        private void leftCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void leftCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            CheckBox senderCheckBox = sender as CheckBox;
+            CheckBox senderCheckBox = (CheckBox)sender!;
             if (senderCheckBox.Checked)
             {
                 noneCheckBox.Checked = false;
@@ -220,9 +226,9 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
         /// </summary>
-        private void bottomCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void bottomCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            CheckBox senderCheckBox = sender as CheckBox;
+            CheckBox senderCheckBox = (CheckBox)sender!;
             if (senderCheckBox.Checked)
             {
                 noneCheckBox.Checked = false;
@@ -241,9 +247,9 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
         /// </summary>
-        private void topCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void topCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            CheckBox senderCheckBox = sender as CheckBox;
+            CheckBox senderCheckBox = (CheckBox)sender!;
             if (senderCheckBox.Checked)
             {
                 noneCheckBox.Checked = false;
@@ -262,9 +268,9 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
         /// </summary>
-        private void noneCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void noneCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            CheckBox senderCheckBox = sender as CheckBox;
+            CheckBox senderCheckBox = (CheckBox)sender!;
             if (senderCheckBox.Checked)
             {
                 allCheckBox.Checked = false;
@@ -280,9 +286,9 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
         /// </summary>
-        private void allCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void allCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            CheckBox senderCheckBox = sender as CheckBox;
+            CheckBox senderCheckBox = (CheckBox)sender!;
             if (senderCheckBox.Checked)
             {
                 noneCheckBox.Checked = false;
@@ -298,7 +304,7 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  Click event.
         /// </summary>
-        private void noneCheckBoxClicked(object sender, EventArgs e)
+        private void noneCheckBoxClicked(object? sender, EventArgs e)
         {
             if (noneChecked)
             {
@@ -309,7 +315,7 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  Click event.
         /// </summary>
-        private void allCheckBoxClicked(object sender, EventArgs e)
+        private void allCheckBoxClicked(object? sender, EventArgs e)
         {
             if (allChecked)
             {
@@ -363,7 +369,7 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  Triggered whenever the user drops down the editor.
         /// </summary>
-        public void Start(IWindowsFormsEditorService edSvc, object value)
+        public void Start(IWindowsFormsEditorService edSvc, object? value)
         {
             Debug.Assert(edSvc is not null);
 
