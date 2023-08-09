@@ -196,8 +196,8 @@ static System.ComponentModel.Design.ObjectSelectorEditor.ApplyTreeViewThemeStyle
 ~System.ComponentModel.Design.EventBindingService.GetService(System.Type serviceType) -> object
 System.ComponentModel.Design.InheritanceService.AddInheritedComponents(System.ComponentModel.IComponent! component, System.ComponentModel.IContainer! container) -> void
 System.ComponentModel.Design.InheritanceService.GetInheritanceAttribute(System.ComponentModel.IComponent! component) -> System.ComponentModel.InheritanceAttribute!
-~System.ComponentModel.Design.LoadedEventArgs.Errors.get -> System.Collections.ICollection
-~System.ComponentModel.Design.LoadedEventArgs.LoadedEventArgs(bool succeeded, System.Collections.ICollection errors) -> void
+System.ComponentModel.Design.LoadedEventArgs.Errors.get -> System.Collections.ICollection!
+System.ComponentModel.Design.LoadedEventArgs.LoadedEventArgs(bool succeeded, System.Collections.ICollection? errors) -> void
 ~System.ComponentModel.Design.MenuCommandService.FindCommand(System.ComponentModel.Design.CommandID commandID) -> System.ComponentModel.Design.MenuCommand
 ~System.ComponentModel.Design.MenuCommandService.FindCommand(System.Guid guid, int id) -> System.ComponentModel.Design.MenuCommand
 ~System.ComponentModel.Design.MenuCommandService.GetCommandList(System.Guid guid) -> System.Collections.ICollection
