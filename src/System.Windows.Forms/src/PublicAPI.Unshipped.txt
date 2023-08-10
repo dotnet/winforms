@@ -18,7 +18,6 @@ override System.Windows.Forms.PrintPreviewControl.OnPaintBackground(System.Windo
 *REMOVED*System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanelRow![]! value) -> void
 *REMOVED*virtual System.Windows.Forms.Control.ControlCollection.AddRange(System.Windows.Forms.Control![]! controls) -> void
 *REMOVED*virtual System.Windows.Forms.ListView.ColumnHeaderCollection.AddRange(System.Windows.Forms.ColumnHeader![]! values) -> void
-*REMOVED*~virtual System.Windows.Forms.TreeNodeCollection.AddRange(System.Windows.Forms.TreeNode[] nodes) -> void
 System.Windows.Forms.AutoCompleteStringCollection.AddRange(params string![]! value) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.AddRange(params object![]! items) -> void
 System.Windows.Forms.ImageList.ImageCollection.AddRange(params System.Drawing.Image![]! images) -> void
@@ -33,4 +32,3 @@ System.Windows.Forms.ToolStripItemCollection.AddRange(params System.Windows.Form
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(params System.Windows.Forms.ToolStripPanelRow![]! value) -> void
 virtual System.Windows.Forms.Control.ControlCollection.AddRange(params System.Windows.Forms.Control![]! controls) -> void
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.AddRange(params System.Windows.Forms.ColumnHeader![]! values) -> void
-~virtual System.Windows.Forms.TreeNodeCollection.AddRange(params System.Windows.Forms.TreeNode[] nodes) -> void

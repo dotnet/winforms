@@ -94,7 +94,7 @@ public partial class FolderNameEditor
                     }
 
                     // Retrieve the path from the IDList.
-                    PWSTR selectedPath = default;
+                    PWSTR selectedPath = pDisplayName;
                     PInvoke.SHGetPathFromIDList(browseHandle, selectedPath);
                     DirectoryPath = new string((char*)selectedPath);
                     return DialogResult.OK;
