@@ -589,7 +589,7 @@ public sealed class ResXDataNode : ISerializable
     /// <summary>
     ///  Retrieves the type name for the value by examining the specified assemblies.
     /// </summary>
-    public string? GetValueTypeName(AssemblyName[] names)
+    public string? GetValueTypeName(AssemblyName[]? names)
         => GetValueTypeName(new AssemblyNamesTypeResolutionService(names));
 
     /// <summary>
@@ -632,7 +632,7 @@ public sealed class ResXDataNode : ISerializable
     /// <summary>
     ///  Retrieves the object that is stored by this node by searching the specified assemblies.
     /// </summary>
-    public object? GetValue(AssemblyName[] names) => GetValue(new AssemblyNamesTypeResolutionService(names));
+    public object? GetValue(AssemblyName[]? names) => GetValue(new AssemblyNamesTypeResolutionService(names));
 
     private static byte[] FromBase64WrappedString(string text)
     {

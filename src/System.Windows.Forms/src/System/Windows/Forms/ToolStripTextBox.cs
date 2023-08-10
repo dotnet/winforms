@@ -154,7 +154,6 @@ public partial class ToolStripTextBox : ToolStripControlHost
         OnReadOnlyChanged(e);
     }
 
-#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
     private void HandleTextBoxTextAlignChanged(object? sender, EventArgs e)
     {
         RaiseEvent(s_eventTextBoxTextAlignChanged, e);
@@ -189,7 +188,6 @@ public partial class ToolStripTextBox : ToolStripControlHost
     {
         RaiseEvent(s_eventReadOnlyChanged, e);
     }
-#pragma warning restore CA2252
 
     protected override void OnSubscribeControlEvents(Control? control)
     {

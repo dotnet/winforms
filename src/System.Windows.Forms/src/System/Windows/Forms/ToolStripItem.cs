@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
-using System.Runtime.Versioning;
 using System.Windows.Forms.Layout;
 using Windows.Win32.System.Ole;
 using static Interop;
@@ -14,7 +13,6 @@ using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms;
 
-#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
 [DesignTimeVisible(false)]
 [Designer($"System.Windows.Forms.Design.ToolStripItemDesigner, {AssemblyRef.SystemDesign}")]
 [DefaultEvent(nameof(Click))]
@@ -425,7 +423,6 @@ public abstract partial class ToolStripItem : BindableComponent,
     ///  Gets or sets the <see cref="System.Windows.Input.ICommand"/> whose <see cref="System.Windows.Input.ICommand.Execute(object?)"/>
     ///  method will be called when the ToolStripItem's <see cref="Click"/> event gets invoked.
     /// </summary>
-    [RequiresPreviewFeatures]
     [Bindable(true)]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -441,7 +438,6 @@ public abstract partial class ToolStripItem : BindableComponent,
     ///  Occurs when the <see cref="System.Windows.Input.ICommand.CanExecute(object?)"/> status of the
     ///  <see cref="System.Windows.Input.ICommand"/> which is assigned to the <see cref="Command"/> property has changed.
     /// </summary>
-    [RequiresPreviewFeatures]
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.CommandCanExecuteChangedEventDescr))]
@@ -454,7 +450,6 @@ public abstract partial class ToolStripItem : BindableComponent,
     /// <summary>
     ///  Occurs when the assigned <see cref="System.Windows.Input.ICommand"/> of the <see cref="Command"/> property has changed.
     /// </summary>
-    [RequiresPreviewFeatures]
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.CommandChangedEventDescr))]
@@ -475,11 +470,8 @@ public abstract partial class ToolStripItem : BindableComponent,
     [SRDescription(nameof(SR.CommandComponentCommandParameterDescr))]
     public object? CommandParameter
     {
-        [RequiresPreviewFeatures]
         get => _commandParameter;
 
-        // We need to opt into previre features here, because we calling a preview feature from the setter.
-        [RequiresPreviewFeatures]
         set
         {
             if (!Equals(_commandParameter, value))
@@ -493,7 +485,6 @@ public abstract partial class ToolStripItem : BindableComponent,
     /// <summary>
     ///  Occurs when the value of the <see cref="CommandParameter"/> property has changed.
     /// </summary>
-    [RequiresPreviewFeatures]
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.CommandParameterChangedEventDescr))]
@@ -2701,8 +2692,6 @@ public abstract partial class ToolStripItem : BindableComponent,
     protected virtual void OnClick(EventArgs e)
     {
         RaiseEvent(s_clickEvent, e);
-
-        // We won't let the preview feature warnings bubble further up beyond this point.
         OnRequestCommandExecute(e);
     }
 
@@ -2750,7 +2739,6 @@ public abstract partial class ToolStripItem : BindableComponent,
     ///  Raises the <see cref="ToolStripItem.CommandChanged"/> event.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
-    [RequiresPreviewFeatures]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnCommandChanged(EventArgs e)
         => RaiseEvent(s_commandChangedEvent, e);
@@ -2759,7 +2747,6 @@ public abstract partial class ToolStripItem : BindableComponent,
     ///  Raises the <see cref="ToolStripItem.CommandCanExecuteChanged"/> event.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
-    [RequiresPreviewFeatures]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnCommandCanExecuteChanged(EventArgs e)
         => ((EventHandler?)Events[s_commandCanExecuteChangedEvent])?.Invoke(this, e);
@@ -2768,25 +2755,22 @@ public abstract partial class ToolStripItem : BindableComponent,
     ///  Raises the <see cref="ToolStripItem.CommandParameterChanged"/> event.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
-    [RequiresPreviewFeatures]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void OnCommandParameterChanged(EventArgs e) => RaiseEvent(s_commandParameterChangedEvent, e);
 
     /// <summary>
-    ///  Called in the context of <see cref="OnClick(EventArgs)"/> to invoke <see cref="System.Windows.Input.ICommand.Execute(object?)"/> if the context allows.
+    ///  Called in the context of <see cref="OnClick(EventArgs)"/> to invoke
+    ///  <see cref="System.Windows.Input.ICommand.Execute(object?)"/> if the context allows.
     /// </summary>
     /// <param name="e">An empty <see cref="EventArgs"/> instance.</param>
-    [RequiresPreviewFeatures]
     protected virtual void OnRequestCommandExecute(EventArgs e)
         => ICommandBindingTargetProvider.RequestCommandExecute(this);
 
     // Called by the CommandProviderManager's command handling logic.
-    [RequiresPreviewFeatures]
     void ICommandBindingTargetProvider.RaiseCommandChanged(EventArgs e)
         => OnCommandChanged(e);
 
     // Called by the CommandProviderManager's command handling logic.
-    [RequiresPreviewFeatures]
     void ICommandBindingTargetProvider.RaiseCommandCanExecuteChanged(EventArgs e)
         => OnCommandCanExecuteChanged(e);
 
@@ -3741,5 +3725,3 @@ public abstract partial class ToolStripItem : BindableComponent,
         return local is not null;
     }
 }
-#pragma warning restore CA2252
-

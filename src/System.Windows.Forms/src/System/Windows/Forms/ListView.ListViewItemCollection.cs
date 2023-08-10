@@ -245,7 +245,7 @@ public partial class ListView
 
         // END - NEW ADD OVERLOADS IN WHIDBEY  -->
 
-        public void AddRange(ListViewItem[] items)
+        public void AddRange(params ListViewItem[] items)
         {
             ArgumentNullException.ThrowIfNull(items);
 

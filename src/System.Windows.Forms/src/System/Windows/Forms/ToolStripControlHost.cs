@@ -521,7 +521,6 @@ public partial class ToolStripControlHost : ToolStripItem
         RaiseMouseEvent(s_mouseDownEvent, e);
     }
 
-#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
     private void HandleMouseEnter(object? sender, EventArgs e)
     {
         OnMouseEnter(e);
@@ -539,7 +538,6 @@ public partial class ToolStripControlHost : ToolStripItem
         OnMouseHover(e);
         RaiseEvent(s_mouseHoverEvent, e);
     }
-#pragma warning restore CA2252
 
     private void HandleMouseMove(object? sender, MouseEventArgs e)
     {
@@ -617,7 +615,6 @@ public partial class ToolStripControlHost : ToolStripItem
         ControlInternal.AccessibleRole = AccessibleRole;
     }
 
-#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
     protected virtual void OnEnter(EventArgs e) => RaiseEvent(s_enterEvent, e);
 
     /// <summary>
@@ -631,7 +628,6 @@ public partial class ToolStripControlHost : ToolStripItem
     ///  called when the control has lost focus
     /// </summary>
     protected virtual void OnLostFocus(EventArgs e) => RaiseEvent(s_lostFocusEvent, e);
-#pragma warning restore CA2252
 
     protected virtual void OnKeyDown(KeyEventArgs e) => RaiseKeyEvent(s_keyDownEvent, e);
 
@@ -795,9 +791,7 @@ public partial class ToolStripControlHost : ToolStripItem
 
     protected virtual void OnValidating(CancelEventArgs e) => RaiseCancelEvent(s_validatingEvent, e);
 
-#pragma warning disable CA2252 // Suppress 'Opt in to preview features' (https://aka.ms/dotnet-warnings/preview-features)
     protected virtual void OnValidated(EventArgs e) => RaiseEvent(s_validatedEvent, e);
-#pragma warning restore CA2252
 
     private static ReadOnlyControlCollection? GetControlCollection(ToolStrip? toolStrip)
         => (ReadOnlyControlCollection?)toolStrip?.Controls;

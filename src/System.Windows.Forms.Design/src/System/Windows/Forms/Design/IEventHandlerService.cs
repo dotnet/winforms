@@ -27,14 +27,14 @@ internal interface IEventHandlerService
     ///  Gets the control that handles focus changes
     ///  for this event handler service.
     /// </summary>
-    Control FocusWindow { get; }
+    Control? FocusWindow { get; }
 
-    event EventHandler EventHandlerChanged;
+    event EventHandler? EventHandlerChanged;
 
     /// <summary>
     ///  Gets the currently active event handler of the specified type.
     /// </summary>
-    object GetHandler(Type handlerType);
+    object? GetHandler(Type handlerType);
 
     /// <summary>
     ///  Pops
