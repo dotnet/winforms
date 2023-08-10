@@ -21,35 +21,13 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (_actionLists is null)
+                _actionLists ??= new DesignerActionListCollection
                 {
-                    _actionLists = new DesignerActionListCollection();
-                    _actionLists.Add(new NotifyIconActionList(this));
-                }
+                    new NotifyIconActionList(this)
+                };
 
                 return _actionLists;
             }
-        }
-    }
-
-    internal class NotifyIconActionList : DesignerActionList
-    {
-        private NotifyIconDesigner _designer;
-        public NotifyIconActionList(NotifyIconDesigner designer) : base(designer.Component)
-        {
-            _designer = designer;
-        }
-
-        public void ChooseIcon()
-        {
-            EditorServiceContext.EditValue(_designer, Component, "Icon");
-        }
-
-        public override DesignerActionItemCollection GetSortedActionItems()
-        {
-            DesignerActionItemCollection items = new DesignerActionItemCollection();
-            items.Add(new DesignerActionMethodItem(this, "ChooseIcon", SR.ChooseIconDisplayName, true));
-            return items;
         }
     }
 }
