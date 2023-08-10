@@ -3327,7 +3327,7 @@ public partial class DataGridView
                 {
                     int oldCurrentCellX = _ptCurrentCell.X;
                     DataConnection!.CancelRowEdit(restoreRow: true, addNewFinished: _dataGridViewState1[State1_NewRowEdited]);
-                    if (DataConnection.List.Count == 0)
+                    if (DataConnection.List!.Count == 0)
                     {
                         // There are no rows left in the back end.
                         if (currentCellDirty || _ptCurrentCell.Y == -1 || _ptCurrentCell.X == -1)
@@ -3479,7 +3479,7 @@ public partial class DataGridView
             return false;
         }
 
-        if (DataConnection.CurrencyManager.Count <= _ptCurrentCell.Y)
+        if (DataConnection.CurrencyManager!.Count <= _ptCurrentCell.Y)
         {
             // don't validate a row beyond the last row in the back end list
             return false;
