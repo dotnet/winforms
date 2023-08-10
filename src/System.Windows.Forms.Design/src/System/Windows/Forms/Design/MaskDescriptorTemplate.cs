@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Globalization;
 
 namespace System.Windows.Forms.Design;
@@ -12,45 +10,39 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class MaskDescriptorTemplate : MaskDescriptor
 {
-    private readonly string _mask;
-    private readonly string _name;
-    private readonly string _sample;
-    private readonly Type _type;
-    private readonly CultureInfo _culture;
-
-    public MaskDescriptorTemplate(string mask, string name, string sample, Type validatingType, CultureInfo culture) : this(mask, name, sample, validatingType, culture, false)
+    public MaskDescriptorTemplate(string? mask, string name, string? sample, Type? validatingType, CultureInfo culture) : this(mask, name, sample, validatingType, culture, false)
     {
     }
 
-    public MaskDescriptorTemplate(string mask, string name, string sample, Type validatingType, CultureInfo culture, bool skipValidation)
+    public MaskDescriptorTemplate(string? mask, string name, string? sample, Type? validatingType, CultureInfo? culture, bool skipValidation)
     {
-        _mask = mask;
-        _name = name;
-        _sample = sample;
-        _type = validatingType;
-        _culture = culture;
+        Mask = mask;
+        Name = name;
+        Sample = sample;
+        ValidatingType = validatingType;
+        Culture = culture!;
 
         if (skipValidation)
         {
             return;
         }
 
-        if (!IsValidMaskDescriptor(this, out _))
+        if (!IsValidMaskDescriptor(this))
         {
             // Don't throw here, callers should check the Mask property for validity. See the ValidMaskDescriptorList below.
-            _mask = null;
+            Mask = null;
         }
     }
 
-    public override string Mask => _mask;
+    public override string? Mask { get; }
 
-    public override string Name => _name;
+    public override string Name { get; }
 
-    public override string Sample => _sample;
+    public override string? Sample { get; }
 
-    public override Type ValidatingType => _type;
+    public override Type? ValidatingType { get; }
 
-    public override CultureInfo Culture => _culture;
+    public override CultureInfo Culture { get; }
 
     /// <summary>
     /// Get the canned mask descriptors according to the specified culture.

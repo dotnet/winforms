@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 
@@ -19,31 +17,28 @@ public abstract class MaskDescriptor
     /// <summary>
     /// The mask being described.
     /// </summary>
-    public abstract string Mask { get; }
+    public abstract string? Mask { get; }
 
     /// <summary>
     /// The friendly name of the mask descriptor.
     /// Used also as the description for the mask.
     /// </summary>
-    public abstract string Name { get; }
+    public abstract string? Name { get; }
 
     /// <summary>
     /// A sample text following the mask specification.
     /// </summary>
-    public abstract string Sample { get; }
+    public abstract string? Sample { get; }
 
     /// <summary>
     /// A Type representing the type providing validation for this mask.
     /// </summary>
-    public abstract Type ValidatingType { get; }
+    public abstract Type? ValidatingType { get; }
 
     /// <summary>
     /// The CultureInfo representing the locale the mask is designed for.
     /// </summary>
-    public virtual CultureInfo Culture
-    {
-        get { return Thread.CurrentThread.CurrentCulture; }
-    }
+    public virtual CultureInfo Culture => Thread.CurrentThread.CurrentCulture;
 
     /// <summary>
     /// Determines whether the specified mask descriptor is valid and hence can be added to the canned masks list.
@@ -55,12 +50,12 @@ public abstract class MaskDescriptor
     /// 5. The sample is correct based on the mask and all required edit characters have been provided (mask completed - not necessarily full).
     /// 6. The sample is valid based on the ValidatingType object (if any).
     /// </summary>
-    public static bool IsValidMaskDescriptor(MaskDescriptor maskDescriptor)
+    public static bool IsValidMaskDescriptor([NotNullWhen(true)] MaskDescriptor? maskDescriptor)
     {
         return IsValidMaskDescriptor(maskDescriptor, out string _);
     }
 
-    public static bool IsValidMaskDescriptor(MaskDescriptor maskDescriptor, out string validationErrorDescription)
+    public static bool IsValidMaskDescriptor([NotNullWhen(true)] MaskDescriptor? maskDescriptor, out string validationErrorDescription)
     {
         validationErrorDescription = string.Empty;
 
@@ -77,14 +72,15 @@ public abstract class MaskDescriptor
         }
 
         MaskedTextProvider maskedTextProvider = new MaskedTextProvider(maskDescriptor.Mask, maskDescriptor.Culture);
-        MaskedTextBox maskedTextBox = new MaskedTextBox(maskedTextProvider);
-
-        maskedTextBox.SkipLiterals = true;
-        maskedTextBox.ResetOnPrompt = true;
-        maskedTextBox.ResetOnSpace = true;
-        maskedTextBox.ValidatingType = maskDescriptor.ValidatingType;
-        maskedTextBox.FormatProvider = maskDescriptor.Culture;
-        maskedTextBox.Culture = maskDescriptor.Culture;
+        MaskedTextBox maskedTextBox = new MaskedTextBox(maskedTextProvider)
+        {
+            SkipLiterals = true,
+            ResetOnPrompt = true,
+            ResetOnSpace = true,
+            ValidatingType = maskDescriptor.ValidatingType,
+            FormatProvider = maskDescriptor.Culture,
+            Culture = maskDescriptor.Culture
+        };
         maskedTextBox.TypeValidationCompleted += new TypeValidationEventHandler(maskedTextBox1_TypeValidationCompleted);
         maskedTextBox.MaskInputRejected += new MaskInputRejectedEventHandler(maskedTextBox1_MaskInputRejected);
 
@@ -101,26 +97,26 @@ public abstract class MaskDescriptor
 
         if (maskedTextBox.Tag is not null) // Validation failed.
         {
-            validationErrorDescription = maskedTextBox.Tag.ToString();
+            validationErrorDescription = maskedTextBox.Tag.ToString()!;
         }
 
         return validationErrorDescription.Length == 0;
     }
 
-    private static void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+    private static void maskedTextBox1_MaskInputRejected(object? sender, MaskInputRejectedEventArgs e)
     {
-        MaskedTextBox maskedTextBox = sender as MaskedTextBox;
+        MaskedTextBox maskedTextBox = (MaskedTextBox)sender!;
         maskedTextBox.Tag = MaskedTextBoxDesigner.GetMaskInputRejectedErrorMessage(e);
     }
 
-    private static void maskedTextBox1_TypeValidationCompleted(object sender, TypeValidationEventArgs e)
+    private static void maskedTextBox1_TypeValidationCompleted(object? sender, TypeValidationEventArgs e)
     {
         if (e.IsValidInput)
         {
             return;
         }
 
-        MaskedTextBox maskedTextBox = sender as MaskedTextBox;
+        MaskedTextBox maskedTextBox = (MaskedTextBox)sender!;
         maskedTextBox.Tag = e.Message;
     }
 
@@ -132,9 +128,9 @@ public abstract class MaskDescriptor
     /// Observe that the Name property is not considered since MaskedTextProvider/Box are not
     /// aware of it.
     /// </summary>
-    public override bool Equals(object maskDescriptor)
+    public override bool Equals(object? maskDescriptor)
     {
-        MaskDescriptor descriptor = maskDescriptor as MaskDescriptor;
+        MaskDescriptor? descriptor = maskDescriptor as MaskDescriptor;
 
         if (!IsValidMaskDescriptor(descriptor) || !IsValidMaskDescriptor(this))
         {
