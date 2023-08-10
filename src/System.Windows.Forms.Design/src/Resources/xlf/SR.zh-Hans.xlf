@@ -1087,32 +1087,32 @@
       </trans-unit>
       <trans-unit id="ImageListActionList_ChooseImagesDescription">
         <source>Opens the Images collection editor</source>
-        <target state="new">Opens the Images collection editor</target>
+        <target state="translated">打开图像集合编辑器</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ChooseImagesDisplayName">
         <source>Choose images</source>
-        <target state="new">Choose images</target>
+        <target state="translated">选择图像</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ColorDepthDescription">
         <source>Changes the bit depth images imported into this ImageList are stored at</source>
-        <target state="new">Changes the bit depth images imported into this ImageList are stored at</target>
+        <target state="translated">更改在存储导入到此 ImageList 中的图像时所用的位深度</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ColorDepthDisplayName">
         <source>Image Bit Depth</source>
-        <target state="new">Image Bit Depth</target>
+        <target state="translated">图像位深度</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ImageSizeDescription">
         <source>Changes the size images imported into this ImageList are stored at</source>
-        <target state="new">Changes the size images imported into this ImageList are stored at</target>
+        <target state="translated">更改在存储导入此 ImageList 中的图像时的所用大小</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ImageSizeDisplayName">
         <source>Image Size</source>
-        <target state="new">Image Size</target>
+        <target state="translated">图像大小</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListDescription">
@@ -1749,177 +1749,177 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="TabControlAdd">
         <source>Add Tab</source>
-        <target state="new">Add Tab</target>
+        <target state="translated">添加选项卡</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlAddTab">
         <source>Add tab to '{0}'</source>
-        <target state="new">Add tab to '{0}'</target>
+        <target state="translated">将选项卡添加到“{0}”</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlInvalidTabPageType">
         <source>Cannot add '{0}' to TabControl.  Only TabPages can be directly added to TabControls.</source>
-        <target state="new">Cannot add '{0}' to TabControl.  Only TabPages can be directly added to TabControls.</target>
+        <target state="translated">无法将“{0}”添加到 TabControl。只有 TabPages 才能直接添加到 TabControls。</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlRemove">
         <source>Remove Tab</source>
-        <target state="new">Remove Tab</target>
+        <target state="translated">移除选项卡</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlRemoveTab">
         <source>Remove tab '{0}' from '{1}'</source>
-        <target state="new">Remove tab '{0}' from '{1}'</target>
+        <target state="translated">将选项卡“{0}”从“{1}”中移除</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAbsoluteMenu">
         <source>A&amp;bsolute</source>
-        <target state="new">A&amp;bsolute</target>
+        <target state="translated">绝对(&amp;B)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddColumn">
         <source>&amp;Add Column</source>
-        <target state="new">&amp;Add Column</target>
+        <target state="translated">添加列(&amp;A)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddColumnUndoUnit">
         <source>Add Column on {0}</source>
-        <target state="new">Add Column on {0}</target>
+        <target state="translated">在 {0} 上添加列</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddMenu">
         <source>&amp;Add</source>
-        <target state="new">&amp;Add</target>
+        <target state="translated">添加(&amp;A)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddRow">
         <source>Add Ro&amp;w</source>
-        <target state="new">Add Ro&amp;w</target>
+        <target state="translated">添加行(&amp;W)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddRowUndoUnit">
         <source>Add Row on {0}</source>
-        <target state="new">Add Row on {0}</target>
+        <target state="translated">在 {0} 上添加行</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAutoSizeMenu">
         <source>A&amp;utoSize</source>
-        <target state="new">A&amp;utoSize</target>
+        <target state="translated">自动调整大小(&amp;U)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerChangeSizeTypeUndoUnit">
         <source>Change SizeType on {0}</source>
-        <target state="new">Change SizeType on {0}</target>
+        <target state="translated">更改 {0} 上的 SizeType</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerClearAnchor">
         <source>Clearing Anchor property of {0} for {1}</source>
-        <target state="new">Clearing Anchor property of {0} for {1}</target>
+        <target state="translated">清除 {1} 的 {0} 的 Anchor 属性 </target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerClearDock">
         <source>Clearing Dock property of {0} for {1}</source>
-        <target state="new">Clearing Dock property of {0} for {1}</target>
+        <target state="translated">清除 {1} 的 {0} 的 Dock 属性 </target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerColMenu">
         <source>&amp;Column</source>
-        <target state="new">&amp;Column</target>
+        <target state="translated">列(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerContextMenuCopy">
         <source>C&amp;opy TableLayoutPanel</source>
-        <target state="new">C&amp;opy TableLayoutPanel</target>
+        <target state="translated">复制 TableLayoutPanel(&amp;O)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerContextMenuCut">
         <source>&amp;Cut TableLayoutPanel</source>
-        <target state="new">&amp;Cut TableLayoutPanel</target>
+        <target state="translated">剪切 TableLayoutPanel(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerContextMenuDelete">
         <source>&amp;Delete TableLayoutPanel</source>
-        <target state="new">&amp;Delete TableLayoutPanel</target>
+        <target state="translated">删除 TableLayoutPanel(&amp;D)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerControlsSwapped">
         <source>{0} swapped with {1}</source>
-        <target state="new">{0} swapped with {1}</target>
+        <target state="translated">与 {1} 交换的 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerDeleteMenu">
         <source>&amp;Delete</source>
-        <target state="new">&amp;Delete</target>
+        <target state="translated">删除(&amp;D)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerDontBoldLabel">
         <source>0</source>
-        <target state="new">0</target>
+        <target state="translated">0</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerEditRowAndCol">
         <source>&amp;Edit Rows and Columns...</source>
-        <target state="new">&amp;Edit Rows and Columns...</target>
+        <target state="translated">编辑行和列(&amp;E)...</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerInsertMenu">
         <source>&amp;Insert</source>
-        <target state="new">&amp;Insert</target>
+        <target state="translated">插入(&amp;I)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerInvalidColumnRowCount">
         <source>{0} must be greater than zero.</source>
-        <target state="new">{0} must be greater than zero.</target>
+        <target state="translated">{0} 必须大于零。</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerLabelMenu">
         <source>SizeMode</source>
-        <target state="new">SizeMode</target>
+        <target state="translated">SizeMode</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerPercentageMenu">
         <source>&amp;Percentage</source>
-        <target state="new">&amp;Percentage</target>
+        <target state="translated">百分比(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRemoveColumn">
         <source>Remove Last Colu&amp;mn</source>
-        <target state="new">Remove Last Colu&amp;mn</target>
+        <target state="translated">移除最后一列(&amp;M)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRemoveColumnUndoUnit">
         <source>Remove Column on {0}</source>
-        <target state="new">Remove Column on {0}</target>
+        <target state="translated">移除 {0} 上的列</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRemoveRow">
         <source>Remo&amp;ve Last Row</source>
-        <target state="new">Remo&amp;ve Last Row</target>
+        <target state="translated">移除最后一行(&amp;V)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRemoveRowUndoUnit">
         <source>Remove Row on {0}</source>
-        <target state="new">Remove Row on {0}</target>
+        <target state="translated">移除 {0} 上的行</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRowMenu">
         <source>&amp;Row</source>
-        <target state="new">&amp;Row</target>
+        <target state="translated">行(&amp;R)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelFullDesc">
         <source>Additional Rows or Columns cannot be created.  TableLayoutPanel is full and GrowStyle is 'FixedSize'.</source>
-        <target state="new">Additional Rows or Columns cannot be created.  TableLayoutPanel is full and GrowStyle is 'FixedSize'.</target>
+        <target state="translated">无法创建更多行或列。TableLayoutPanel 已满并且 GrowStyle 为“FixedSize”。</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelRowColResize">
         <source>Resizing {0} within {1}</source>
-        <target state="new">Resizing {0} within {1}</target>
+        <target state="translated">在 {1} 内调整 {0} 的大小</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelSpanDesc">
         <source>TableLayoutPanel cannot expand to contain the control, because the panel's GrowStyle property is set to 'FixedSize'.</source>
-        <target state="new">TableLayoutPanel cannot expand to contain the control, because the panel's GrowStyle property is set to 'FixedSize'.</target>
+        <target state="translated">TableLayoutPanel 无法扩展以包含该控件，因为该面板的 GrowStyle 属性设置为“FixedSize”。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_Dock">

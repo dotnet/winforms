@@ -10,7 +10,7 @@
 ~abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Write(System.CodeDom.CodeCompileUnit unit) -> void
 ~abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value, System.ComponentModel.MemberDescriptor descriptor, System.CodeDom.CodeStatementCollection statements) -> void
 ~abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.ShouldSerialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value, System.ComponentModel.MemberDescriptor descriptor) -> bool
-~abstract System.ComponentModel.Design.UndoEngine.AddUndoUnit(System.ComponentModel.Design.UndoEngine.UndoUnit unit) -> void
+abstract System.ComponentModel.Design.UndoEngine.AddUndoUnit(System.ComponentModel.Design.UndoEngine.UndoUnit! unit) -> void
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Mask.get -> string
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Name.get -> string
 ~abstract System.Windows.Forms.Design.MaskDescriptor.Sample.get -> string
@@ -27,11 +27,11 @@
 ~override System.ComponentModel.Design.CollectionEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.ComponentModel.Design.DateTimeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
 ~override System.ComponentModel.Design.DateTimeEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.ComponentModel.Design.ObjectSelectorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.ComponentModel.Design.ObjectSelectorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
-~override System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnNodeMouseClick(System.Windows.Forms.TreeNodeMouseClickEventArgs e) -> void
+override System.ComponentModel.Design.ObjectSelectorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.ComponentModel.Design.ObjectSelectorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e) -> void
+override System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnNodeMouseClick(System.Windows.Forms.TreeNodeMouseClickEventArgs! e) -> void
 ~override System.ComponentModel.Design.Serialization.BasicDesignerLoader.BeginLoad(System.ComponentModel.Design.Serialization.IDesignerLoaderHost host) -> void
 ~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore() -> System.ComponentModel.Design.Serialization.SerializationStore
 ~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize(System.ComponentModel.Design.Serialization.SerializationStore store) -> System.Collections.ICollection
@@ -45,13 +45,13 @@
 ~override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection errors) -> void
 ~override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
 ~override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
-~override System.ComponentModel.Design.Serialization.CodeDomSerializerException.GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
+override System.ComponentModel.Design.Serialization.CodeDomSerializerException.GetObjectData(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
 ~override System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
-~override System.ComponentModel.Design.UndoEngine.UndoUnit.ToString() -> string
-~override System.Drawing.Design.ContentAlignmentEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Drawing.Design.ContentAlignmentEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.Drawing.Design.CursorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Drawing.Design.CursorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.ComponentModel.Design.UndoEngine.UndoUnit.ToString() -> string!
+override System.Drawing.Design.ContentAlignmentEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Drawing.Design.ContentAlignmentEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Drawing.Design.CursorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Drawing.Design.CursorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 override System.Drawing.Design.FontEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
 override System.Drawing.Design.FontEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 override System.Drawing.Design.FontNameEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
@@ -83,8 +83,8 @@ override System.Drawing.Design.FontNameEditor.PaintValue(System.Drawing.Design.P
 ~override System.Windows.Forms.Design.ControlDesigner.InitializeNewComponent(System.Collections.IDictionary defaultValues) -> void
 ~override System.Windows.Forms.Design.ControlDesigner.ParentComponent.get -> System.ComponentModel.IComponent
 ~override System.Windows.Forms.Design.ControlDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
-~override System.Windows.Forms.Design.DockEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Windows.Forms.Design.DockEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Windows.Forms.Design.DockEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Windows.Forms.Design.DockEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.Windows.Forms.Design.DocumentDesigner.GetGlyphs(System.Windows.Forms.Design.Behavior.GlyphSelectionType selectionType) -> System.Windows.Forms.Design.Behavior.GlyphCollection
 ~override System.Windows.Forms.Design.DocumentDesigner.Initialize(System.ComponentModel.IComponent component) -> void
 ~override System.Windows.Forms.Design.DocumentDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
@@ -92,8 +92,8 @@ override System.Windows.Forms.Design.FileNameEditor.EditValue(System.ComponentMo
 override System.Windows.Forms.Design.FileNameEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 override System.Windows.Forms.Design.FolderNameEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
 override System.Windows.Forms.Design.FolderNameEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.Windows.Forms.Design.ImageListCodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object codeObject) -> object
-~override System.Windows.Forms.Design.ImageListCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
+override System.Windows.Forms.Design.ImageListCodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! codeObject) -> object?
+override System.Windows.Forms.Design.ImageListCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! value) -> object?
 ~override System.Windows.Forms.Design.MaskDescriptor.Equals(object maskDescriptor) -> bool
 ~override System.Windows.Forms.Design.MaskDescriptor.ToString() -> string
 ~override System.Windows.Forms.Design.ParentControlDesigner.GetControlGlyph(System.Windows.Forms.Design.Behavior.GlyphSelectionType selectionType) -> System.Windows.Forms.Design.Behavior.ControlBodyGlyph
@@ -146,7 +146,7 @@ override System.Windows.Forms.Design.FolderNameEditor.GetEditStyle(System.Compon
 ~static readonly System.Windows.Forms.Design.MenuCommands.SetStatusRectangle -> System.ComponentModel.Design.CommandID
 ~static readonly System.Windows.Forms.Design.MenuCommands.SetStatusText -> System.ComponentModel.Design.CommandID
 ~static readonly System.Windows.Forms.Design.MenuCommands.TraySelectionMenu -> System.ComponentModel.Design.CommandID
-~static System.ComponentModel.Design.ObjectSelectorEditor.ApplyTreeViewThemeStyles(System.Windows.Forms.TreeView treeView) -> void
+static System.ComponentModel.Design.ObjectSelectorEditor.ApplyTreeViewThemeStyles(System.Windows.Forms.TreeView! treeView) -> void
 ~static System.Resources.Tools.StronglyTypedResourceBuilder.Create(string resxFile, string baseName, string generatedCodeNamespace, string resourcesNamespace, System.CodeDom.Compiler.CodeDomProvider codeProvider, bool internalClass, out string[] unmatchable) -> System.CodeDom.CodeCompileUnit
 ~static System.Resources.Tools.StronglyTypedResourceBuilder.Create(string resxFile, string baseName, string generatedCodeNamespace, System.CodeDom.Compiler.CodeDomProvider codeProvider, bool internalClass, out string[] unmatchable) -> System.CodeDom.CodeCompileUnit
 ~static System.Resources.Tools.StronglyTypedResourceBuilder.Create(System.Collections.IDictionary resourceList, string baseName, string generatedCodeNamespace, string resourcesNamespace, System.CodeDom.Compiler.CodeDomProvider codeProvider, bool internalClass, out string[] unmatchable) -> System.CodeDom.CodeCompileUnit
@@ -203,14 +203,14 @@ System.ComponentModel.Design.InheritanceService.GetInheritanceAttribute(System.C
 ~System.ComponentModel.Design.MenuCommandService.GetCommandList(System.Guid guid) -> System.Collections.ICollection
 ~System.ComponentModel.Design.MenuCommandService.GetService(System.Type serviceType) -> object
 ~System.ComponentModel.Design.MenuCommandService.MenuCommandService(System.IServiceProvider serviceProvider) -> void
-~System.ComponentModel.Design.ObjectSelectorEditor.currValue -> object
-~System.ComponentModel.Design.ObjectSelectorEditor.EqualsToValue(object value) -> bool
-~System.ComponentModel.Design.ObjectSelectorEditor.prevValue -> object
-~System.ComponentModel.Design.ObjectSelectorEditor.Selector.AddNode(string label, object value, System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode parent) -> System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode
-~System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnAfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e) -> void
-~System.ComponentModel.Design.ObjectSelectorEditor.Selector.Selector(System.ComponentModel.Design.ObjectSelectorEditor editor) -> void
-~System.ComponentModel.Design.ObjectSelectorEditor.Selector.SetSelection(object value, System.Windows.Forms.TreeNodeCollection nodes) -> bool
-~System.ComponentModel.Design.ObjectSelectorEditor.Selector.Start(System.Windows.Forms.Design.IWindowsFormsEditorService edSvc, object value) -> void
+System.ComponentModel.Design.ObjectSelectorEditor.currValue -> object?
+System.ComponentModel.Design.ObjectSelectorEditor.EqualsToValue(object? value) -> bool
+System.ComponentModel.Design.ObjectSelectorEditor.prevValue -> object?
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.AddNode(string? label, object? value, System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode? parent) -> System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode!
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.OnAfterSelect(object? sender, System.Windows.Forms.TreeViewEventArgs! e) -> void
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.Selector(System.ComponentModel.Design.ObjectSelectorEditor! editor) -> void
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.SetSelection(object? value, System.Windows.Forms.TreeNodeCollection? nodes) -> bool
+System.ComponentModel.Design.ObjectSelectorEditor.Selector.Start(System.Windows.Forms.Design.IWindowsFormsEditorService! edSvc, object? value) -> void
 ~System.ComponentModel.Design.Serialization.BasicDesignerLoader.GetService(System.Type serviceType) -> object
 ~System.ComponentModel.Design.Serialization.BasicDesignerLoader.LoaderHost.get -> System.ComponentModel.Design.Serialization.IDesignerLoaderHost
 ~System.ComponentModel.Design.Serialization.BasicDesignerLoader.PropertyProvider.get -> object
@@ -219,21 +219,21 @@ System.ComponentModel.Design.InheritanceService.GetInheritanceAttribute(System.C
 ~System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationService(System.IServiceProvider provider) -> void
 ~System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model) -> void
 ~System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model, System.Globalization.CultureInfo[] supportedCultures) -> void
-~System.ComponentModel.Design.Serialization.CodeDomSerializer.DeserializeStatementToInstance(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeStatement statement) -> object
-~System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeToReferenceExpression(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> System.CodeDom.CodeExpression
-~System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(string message, System.CodeDom.CodeLinePragma linePragma) -> void
-~System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(string message, System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
-~System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(System.Exception ex, System.CodeDom.CodeLinePragma linePragma) -> void
-~System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(System.Exception ex, System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager) -> void
-~System.ComponentModel.Design.Serialization.CodeDomSerializerException.LinePragma.get -> System.CodeDom.CodeLinePragma
+System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(string? message, System.CodeDom.CodeLinePragma? linePragma) -> void
+System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(string? message, System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
+System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(System.Exception? ex, System.CodeDom.CodeLinePragma? linePragma) -> void
+System.ComponentModel.Design.Serialization.CodeDomSerializerException.CodeDomSerializerException(System.Exception? ex, System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
+System.ComponentModel.Design.Serialization.CodeDomSerializerException.LinePragma.get -> System.CodeDom.CodeLinePragma?
+System.ComponentModel.Design.Serialization.CodeDomSerializer.DeserializeStatementToInstance(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, System.CodeDom.CodeStatement! statement) -> object?
+System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeToReferenceExpression(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! value) -> System.CodeDom.CodeExpression?
 ~System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.MethodSupportsSerialization(System.Reflection.MethodInfo method) -> bool
-~System.ComponentModel.Design.UndoEngine.GetRequiredService(System.Type serviceType) -> object
-~System.ComponentModel.Design.UndoEngine.GetService(System.Type serviceType) -> object
-~System.ComponentModel.Design.UndoEngine.UndoEngine(System.IServiceProvider provider) -> void
-~System.ComponentModel.Design.UndoEngine.UndoUnit.GetService(System.Type serviceType) -> object
-~System.ComponentModel.Design.UndoEngine.UndoUnit.Name.get -> string
-~System.ComponentModel.Design.UndoEngine.UndoUnit.UndoEngine.get -> System.ComponentModel.Design.UndoEngine
-~System.ComponentModel.Design.UndoEngine.UndoUnit.UndoUnit(System.ComponentModel.Design.UndoEngine engine, string name) -> void
+System.ComponentModel.Design.UndoEngine.GetRequiredService(System.Type! serviceType) -> object!
+System.ComponentModel.Design.UndoEngine.GetService(System.Type! serviceType) -> object?
+System.ComponentModel.Design.UndoEngine.UndoEngine(System.IServiceProvider! provider) -> void
+System.ComponentModel.Design.UndoEngine.UndoUnit.GetService(System.Type! serviceType) -> object?
+System.ComponentModel.Design.UndoEngine.UndoUnit.Name.get -> string!
+System.ComponentModel.Design.UndoEngine.UndoUnit.UndoEngine.get -> System.ComponentModel.Design.UndoEngine!
+System.ComponentModel.Design.UndoEngine.UndoUnit.UndoUnit(System.ComponentModel.Design.UndoEngine! engine, string? name) -> void
 ~System.Drawing.Design.IToolboxService.AddCreator(System.Drawing.Design.ToolboxItemCreatorCallback creator, string format) -> void
 ~System.Drawing.Design.IToolboxService.AddCreator(System.Drawing.Design.ToolboxItemCreatorCallback creator, string format, System.ComponentModel.Design.IDesignerHost host) -> void
 ~System.Drawing.Design.IToolboxService.AddLinkedToolboxItem(System.Drawing.Design.ToolboxItem toolboxItem, string category, System.ComponentModel.Design.IDesignerHost host) -> void
@@ -351,11 +351,11 @@ System.ComponentModel.Design.InheritanceService.GetInheritanceAttribute(System.C
 ~System.Windows.Forms.Design.ControlDesigner.EnableDesignMode(System.Windows.Forms.Control child, string name) -> bool
 ~System.Windows.Forms.Design.ControlDesigner.HookChildControls(System.Windows.Forms.Control firstChild) -> void
 ~System.Windows.Forms.Design.ControlDesigner.UnhookChildControls(System.Windows.Forms.Control firstChild) -> void
-~System.Windows.Forms.Design.EventHandlerService.EventHandlerService(System.Windows.Forms.Control focusWnd) -> void
-~System.Windows.Forms.Design.EventHandlerService.FocusWindow.get -> System.Windows.Forms.Control
-~System.Windows.Forms.Design.EventHandlerService.GetHandler(System.Type handlerType) -> object
-~System.Windows.Forms.Design.EventHandlerService.PopHandler(object handler) -> void
-~System.Windows.Forms.Design.EventHandlerService.PushHandler(object handler) -> void
+System.Windows.Forms.Design.EventHandlerService.EventHandlerService(System.Windows.Forms.Control? focusWnd) -> void
+System.Windows.Forms.Design.EventHandlerService.FocusWindow.get -> System.Windows.Forms.Control?
+System.Windows.Forms.Design.EventHandlerService.GetHandler(System.Type! handlerType) -> object?
+System.Windows.Forms.Design.EventHandlerService.PopHandler(object! handler) -> void
+System.Windows.Forms.Design.EventHandlerService.PushHandler(object! handler) -> void
 System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.Description.get -> string!
 System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.Description.set -> void
 System.Windows.Forms.Design.FolderNameEditor.FolderBrowser.DirectoryPath.get -> string!
@@ -415,33 +415,33 @@ virtual System.ComponentModel.Design.InheritanceService.IgnoreInheritedMember(Sy
 ~virtual System.ComponentModel.Design.MenuCommandService.RemoveVerb(System.ComponentModel.Design.DesignerVerb verb) -> void
 ~virtual System.ComponentModel.Design.MenuCommandService.ShowContextMenu(System.ComponentModel.Design.CommandID menuID, int x, int y) -> void
 ~virtual System.ComponentModel.Design.MenuCommandService.Verbs.get -> System.ComponentModel.Design.DesignerVerbCollection
-~virtual System.ComponentModel.Design.ObjectSelectorEditor.FillTreeWithData(System.ComponentModel.Design.ObjectSelectorEditor.Selector selector, System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider) -> void
-~virtual System.ComponentModel.Design.ObjectSelectorEditor.SetValue(object value) -> void
+virtual System.ComponentModel.Design.ObjectSelectorEditor.FillTreeWithData(System.ComponentModel.Design.ObjectSelectorEditor.Selector! selector, System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider) -> void
+virtual System.ComponentModel.Design.ObjectSelectorEditor.SetValue(object? value) -> void
 ~virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection errors) -> void
 ~virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReportFlushErrors(System.Collections.ICollection errors) -> void
 ~virtual System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnComponentRename(object component, string oldName, string newName) -> void
-~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object codeObject) -> object
-~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.GetTargetComponentName(System.CodeDom.CodeStatement statement, System.CodeDom.CodeExpression expression, System.Type targetType) -> string
-~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
-~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeAbsolute(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
-~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeMember(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object owningObject, System.ComponentModel.MemberDescriptor member) -> System.CodeDom.CodeStatementCollection
-~virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeMemberAbsolute(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object owningObject, System.ComponentModel.MemberDescriptor member) -> System.CodeDom.CodeStatementCollection
 ~virtual System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.SerializeCollection(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeExpression targetExpression, System.Type targetType, System.Collections.ICollection originalCollection, System.Collections.ICollection valuesToSerialize) -> object
+virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! codeObject) -> object?
+virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.GetTargetComponentName(System.CodeDom.CodeStatement? statement, System.CodeDom.CodeExpression? expression, System.Type? targetType) -> string?
+virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! value) -> object?
+virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeAbsolute(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! value) -> object?
+virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeMember(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! owningObject, System.ComponentModel.MemberDescriptor! member) -> System.CodeDom.CodeStatementCollection!
+virtual System.ComponentModel.Design.Serialization.CodeDomSerializer.SerializeMemberAbsolute(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! owningObject, System.ComponentModel.MemberDescriptor! member) -> System.CodeDom.CodeStatementCollection!
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration) -> object
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.GetInitializeMethod(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration, object value) -> System.CodeDom.CodeMemberMethod
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.GetInitializeMethods(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration) -> System.CodeDom.CodeMemberMethod[]
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object root, System.Collections.ICollection members) -> System.CodeDom.CodeTypeDeclaration
-~virtual System.ComponentModel.Design.UndoEngine.CreateUndoUnit(string name, bool primary) -> System.ComponentModel.Design.UndoEngine.UndoUnit
-~virtual System.ComponentModel.Design.UndoEngine.DiscardUndoUnit(System.ComponentModel.Design.UndoEngine.UndoUnit unit) -> void
-~virtual System.ComponentModel.Design.UndoEngine.OnUndoing(System.EventArgs e) -> void
-~virtual System.ComponentModel.Design.UndoEngine.OnUndone(System.EventArgs e) -> void
-~virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentAdded(System.ComponentModel.Design.ComponentEventArgs e) -> void
-~virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentAdding(System.ComponentModel.Design.ComponentEventArgs e) -> void
-~virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentChanged(System.ComponentModel.Design.ComponentChangedEventArgs e) -> void
-~virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentChanging(System.ComponentModel.Design.ComponentChangingEventArgs e) -> void
-~virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentRemoved(System.ComponentModel.Design.ComponentEventArgs e) -> void
-~virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentRemoving(System.ComponentModel.Design.ComponentEventArgs e) -> void
-~virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentRename(System.ComponentModel.Design.ComponentRenameEventArgs e) -> void
+virtual System.ComponentModel.Design.UndoEngine.CreateUndoUnit(string? name, bool primary) -> System.ComponentModel.Design.UndoEngine.UndoUnit!
+virtual System.ComponentModel.Design.UndoEngine.DiscardUndoUnit(System.ComponentModel.Design.UndoEngine.UndoUnit! unit) -> void
+virtual System.ComponentModel.Design.UndoEngine.OnUndoing(System.EventArgs! e) -> void
+virtual System.ComponentModel.Design.UndoEngine.OnUndone(System.EventArgs! e) -> void
+virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentAdded(System.ComponentModel.Design.ComponentEventArgs! e) -> void
+virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentAdding(System.ComponentModel.Design.ComponentEventArgs! e) -> void
+virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentChanged(System.ComponentModel.Design.ComponentChangedEventArgs! e) -> void
+virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentChanging(System.ComponentModel.Design.ComponentChangingEventArgs! e) -> void
+virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentRemoved(System.ComponentModel.Design.ComponentEventArgs! e) -> void
+virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentRemoving(System.ComponentModel.Design.ComponentEventArgs! e) -> void
+virtual System.ComponentModel.Design.UndoEngine.UndoUnit.ComponentRename(System.ComponentModel.Design.ComponentRenameEventArgs! e) -> void
 ~virtual System.Drawing.Design.ToolboxItem.ComponentType.get -> string
 ~virtual System.Drawing.Design.ToolboxItem.CreateComponentsCore(System.ComponentModel.Design.IDesignerHost host) -> System.ComponentModel.IComponent[]
 ~virtual System.Drawing.Design.ToolboxItem.CreateComponentsCore(System.ComponentModel.Design.IDesignerHost host, System.Collections.IDictionary defaultValues) -> System.ComponentModel.IComponent[]
@@ -765,7 +765,7 @@ System.ComponentModel.Design.ObjectSelectorEditor.Selector.Clear() -> void
 System.ComponentModel.Design.ObjectSelectorEditor.Selector.clickSeen -> bool
 System.ComponentModel.Design.ObjectSelectorEditor.Selector.Stop() -> void
 System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode
-System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode.SelectorNode(string! label, object? value) -> void
+System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode.SelectorNode(string? label, object? value) -> void
 System.ComponentModel.Design.ObjectSelectorEditor.SelectorNode.value -> object?
 System.ComponentModel.Design.ObjectSelectorEditor.SubObjectSelector -> bool
 System.ComponentModel.Design.ProjectTargetFrameworkAttribute
@@ -850,9 +850,9 @@ System.ComponentModel.Design.UndoEngine
 System.ComponentModel.Design.UndoEngine.Dispose() -> void
 System.ComponentModel.Design.UndoEngine.Enabled.get -> bool
 System.ComponentModel.Design.UndoEngine.Enabled.set -> void
-System.ComponentModel.Design.UndoEngine.Undoing -> System.EventHandler
+System.ComponentModel.Design.UndoEngine.Undoing -> System.EventHandler?
 System.ComponentModel.Design.UndoEngine.UndoInProgress.get -> bool
-System.ComponentModel.Design.UndoEngine.Undone -> System.EventHandler
+System.ComponentModel.Design.UndoEngine.Undone -> System.EventHandler?
 System.ComponentModel.Design.UndoEngine.UndoUnit
 System.ComponentModel.Design.UndoEngine.UndoUnit.Undo() -> void
 System.Drawing.Design.BitmapEditor
@@ -1038,7 +1038,7 @@ System.Windows.Forms.Design.DockEditor.DockEditor() -> void
 System.Windows.Forms.Design.DocumentDesigner
 System.Windows.Forms.Design.DocumentDesigner.DocumentDesigner() -> void
 System.Windows.Forms.Design.EventHandlerService
-System.Windows.Forms.Design.EventHandlerService.EventHandlerChanged -> System.EventHandler
+System.Windows.Forms.Design.EventHandlerService.EventHandlerChanged -> System.EventHandler?
 System.Windows.Forms.Design.FileNameEditor
 System.Windows.Forms.Design.FileNameEditor.FileNameEditor() -> void
 System.Windows.Forms.Design.FolderNameEditor

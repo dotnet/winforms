@@ -46,10 +46,10 @@ internal readonly unsafe ref struct ComScope<T> where T : unmanaged, IComIID
     public static implicit operator nint(in ComScope<T> scope) => scope._value;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator T**(in ComScope<T> scope) => (T**)Unsafe.AsPointer(ref Unsafe.AsRef(scope._value));
+    public static implicit operator T**(in ComScope<T> scope) => (T**)Unsafe.AsPointer(ref Unsafe.AsRef(in scope._value));
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static implicit operator void**(in ComScope<T> scope) => (void**)Unsafe.AsPointer(ref Unsafe.AsRef(scope._value));
+    public static implicit operator void**(in ComScope<T> scope) => (void**)Unsafe.AsPointer(ref Unsafe.AsRef(in scope._value));
 
     public bool IsNull => _value == 0;
 

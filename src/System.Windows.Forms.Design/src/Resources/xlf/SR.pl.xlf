@@ -1087,32 +1087,32 @@
       </trans-unit>
       <trans-unit id="ImageListActionList_ChooseImagesDescription">
         <source>Opens the Images collection editor</source>
-        <target state="new">Opens the Images collection editor</target>
+        <target state="translated">Otwiera edytora kolekcji obrazów</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ChooseImagesDisplayName">
         <source>Choose images</source>
-        <target state="new">Choose images</target>
+        <target state="translated">Wybierz obrazy</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ColorDepthDescription">
         <source>Changes the bit depth images imported into this ImageList are stored at</source>
-        <target state="new">Changes the bit depth images imported into this ImageList are stored at</target>
+        <target state="translated">Zmienia lokalizację, w której są przechowywane obrazy z głębią bitową importowane do tej listy ImageList</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ColorDepthDisplayName">
         <source>Image Bit Depth</source>
-        <target state="new">Image Bit Depth</target>
+        <target state="translated">Głębia bitowa obrazu</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ImageSizeDescription">
         <source>Changes the size images imported into this ImageList are stored at</source>
-        <target state="new">Changes the size images imported into this ImageList are stored at</target>
+        <target state="translated">Zmienia lokalizację, w której są przechowywane obrazy o określonych rozmiarach importowane do tej listy ImageList</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ImageSizeDisplayName">
         <source>Image Size</source>
-        <target state="new">Image Size</target>
+        <target state="translated">Rozmiar obrazu</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListDescription">
@@ -1749,177 +1749,177 @@ Naciśnij klawisze Ctrl+Enter, aby zaakceptować tekst.</target>
       </trans-unit>
       <trans-unit id="TabControlAdd">
         <source>Add Tab</source>
-        <target state="new">Add Tab</target>
+        <target state="translated">Dodaj kartę</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlAddTab">
         <source>Add tab to '{0}'</source>
-        <target state="new">Add tab to '{0}'</target>
+        <target state="translated">Dodaj kartę do '{0}'</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlInvalidTabPageType">
         <source>Cannot add '{0}' to TabControl.  Only TabPages can be directly added to TabControls.</source>
-        <target state="new">Cannot add '{0}' to TabControl.  Only TabPages can be directly added to TabControls.</target>
+        <target state="translated">Nie można dodać '{0}' do elementu TabControl. Tylko elementy TabPage mogą być bezpośrednio dodawane do elementów TabControl.</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlRemove">
         <source>Remove Tab</source>
-        <target state="new">Remove Tab</target>
+        <target state="translated">Usuń kartę</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlRemoveTab">
         <source>Remove tab '{0}' from '{1}'</source>
-        <target state="new">Remove tab '{0}' from '{1}'</target>
+        <target state="translated">Usuń kartę '{0}' z '{1}'</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAbsoluteMenu">
         <source>A&amp;bsolute</source>
-        <target state="new">A&amp;bsolute</target>
+        <target state="translated">&amp;Bezwzględna</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddColumn">
         <source>&amp;Add Column</source>
-        <target state="new">&amp;Add Column</target>
+        <target state="translated">&amp;Dodaj kolumnę</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddColumnUndoUnit">
         <source>Add Column on {0}</source>
-        <target state="new">Add Column on {0}</target>
+        <target state="translated">Dodaj kolumnę z {0} </target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddMenu">
         <source>&amp;Add</source>
-        <target state="new">&amp;Add</target>
+        <target state="translated">&amp;Dodaj</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddRow">
         <source>Add Ro&amp;w</source>
-        <target state="new">Add Ro&amp;w</target>
+        <target state="translated">&amp;Dodaj wiersz</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddRowUndoUnit">
         <source>Add Row on {0}</source>
-        <target state="new">Add Row on {0}</target>
+        <target state="translated">Dodaj wiersz z {0} </target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAutoSizeMenu">
         <source>A&amp;utoSize</source>
-        <target state="new">A&amp;utoSize</target>
+        <target state="translated">&amp;AutoSize </target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerChangeSizeTypeUndoUnit">
         <source>Change SizeType on {0}</source>
-        <target state="new">Change SizeType on {0}</target>
+        <target state="translated">Zmień SizeType z {0} </target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerClearAnchor">
         <source>Clearing Anchor property of {0} for {1}</source>
-        <target state="new">Clearing Anchor property of {0} for {1}</target>
+        <target state="translated">Czyszczenie właściwości Anchor {0} dla {1} </target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerClearDock">
         <source>Clearing Dock property of {0} for {1}</source>
-        <target state="new">Clearing Dock property of {0} for {1}</target>
+        <target state="translated">Czyszczenie właściwości Dock {0} dla {1} </target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerColMenu">
         <source>&amp;Column</source>
-        <target state="new">&amp;Column</target>
+        <target state="translated">&amp;Kolumna</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerContextMenuCopy">
         <source>C&amp;opy TableLayoutPanel</source>
-        <target state="new">C&amp;opy TableLayoutPanel</target>
+        <target state="translated">&amp;Kopiuj TableLayoutPanel</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerContextMenuCut">
         <source>&amp;Cut TableLayoutPanel</source>
-        <target state="new">&amp;Cut TableLayoutPanel</target>
+        <target state="translated">&amp;Wytnij TableLayoutPanel</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerContextMenuDelete">
         <source>&amp;Delete TableLayoutPanel</source>
-        <target state="new">&amp;Delete TableLayoutPanel</target>
+        <target state="translated">&amp;Usuń TableLayoutPanel</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerControlsSwapped">
         <source>{0} swapped with {1}</source>
-        <target state="new">{0} swapped with {1}</target>
+        <target state="translated">{0} zamieniono z {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerDeleteMenu">
         <source>&amp;Delete</source>
-        <target state="new">&amp;Delete</target>
+        <target state="translated">&amp;Usuń</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerDontBoldLabel">
         <source>0</source>
-        <target state="new">0</target>
+        <target state="translated">0</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerEditRowAndCol">
         <source>&amp;Edit Rows and Columns...</source>
-        <target state="new">&amp;Edit Rows and Columns...</target>
+        <target state="translated">&amp;Edytuj wiersze i kolumny...</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerInsertMenu">
         <source>&amp;Insert</source>
-        <target state="new">&amp;Insert</target>
+        <target state="translated">&amp;Wstaw</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerInvalidColumnRowCount">
         <source>{0} must be greater than zero.</source>
-        <target state="new">{0} must be greater than zero.</target>
+        <target state="translated">Wartość {0} musi być większa od zera.</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerLabelMenu">
         <source>SizeMode</source>
-        <target state="new">SizeMode</target>
+        <target state="translated">SizeMode</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerPercentageMenu">
         <source>&amp;Percentage</source>
-        <target state="new">&amp;Percentage</target>
+        <target state="translated">&amp;Wartość procentowa</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRemoveColumn">
         <source>Remove Last Colu&amp;mn</source>
-        <target state="new">Remove Last Colu&amp;mn</target>
+        <target state="translated">&amp;Usuń ostatnią kolumnę</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRemoveColumnUndoUnit">
         <source>Remove Column on {0}</source>
-        <target state="new">Remove Column on {0}</target>
+        <target state="translated">Usuń kolumnę z {0} </target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRemoveRow">
         <source>Remo&amp;ve Last Row</source>
-        <target state="new">Remo&amp;ve Last Row</target>
+        <target state="translated">&amp;Usuń ostatni wiersz</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRemoveRowUndoUnit">
         <source>Remove Row on {0}</source>
-        <target state="new">Remove Row on {0}</target>
+        <target state="translated">Usuń wiersz z {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRowMenu">
         <source>&amp;Row</source>
-        <target state="new">&amp;Row</target>
+        <target state="translated">&amp;Wiersz</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelFullDesc">
         <source>Additional Rows or Columns cannot be created.  TableLayoutPanel is full and GrowStyle is 'FixedSize'.</source>
-        <target state="new">Additional Rows or Columns cannot be created.  TableLayoutPanel is full and GrowStyle is 'FixedSize'.</target>
+        <target state="translated">Nie można utworzyć dodatkowych wierszy ani kolumn. Obiekt TableLayoutPanel jest zapełniony, a właściwość GrowStyle ma wartość „FixedSize”.</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelRowColResize">
         <source>Resizing {0} within {1}</source>
-        <target state="new">Resizing {0} within {1}</target>
+        <target state="translated">Zmienianie rozmiaru {0} w {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelSpanDesc">
         <source>TableLayoutPanel cannot expand to contain the control, because the panel's GrowStyle property is set to 'FixedSize'.</source>
-        <target state="new">TableLayoutPanel cannot expand to contain the control, because the panel's GrowStyle property is set to 'FixedSize'.</target>
+        <target state="translated">Obiektu TableLayoutPanel nie można rozwinąć w celu pomieszczenia formantu, ponieważ właściwość GrowStyle panelu ma ustawioną wartość FixedSize.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_Dock">

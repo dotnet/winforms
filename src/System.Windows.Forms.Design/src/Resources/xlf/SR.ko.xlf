@@ -1087,32 +1087,32 @@
       </trans-unit>
       <trans-unit id="ImageListActionList_ChooseImagesDescription">
         <source>Opens the Images collection editor</source>
-        <target state="new">Opens the Images collection editor</target>
+        <target state="translated">이미지 컬렉션 편집기를 엽니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ChooseImagesDisplayName">
         <source>Choose images</source>
-        <target state="new">Choose images</target>
+        <target state="translated">이미지 선택</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ColorDepthDescription">
         <source>Changes the bit depth images imported into this ImageList are stored at</source>
-        <target state="new">Changes the bit depth images imported into this ImageList are stored at</target>
+        <target state="translated">이 ImageList가 저장되어 있는 위치로 가져온 이미지의 비트 수준을 변경합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ColorDepthDisplayName">
         <source>Image Bit Depth</source>
-        <target state="new">Image Bit Depth</target>
+        <target state="translated">이미지 비트 수준</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ImageSizeDescription">
         <source>Changes the size images imported into this ImageList are stored at</source>
-        <target state="new">Changes the size images imported into this ImageList are stored at</target>
+        <target state="translated">이 ImageList가 저장되어 있는 위치로 가져온 이미지의 크기를 변경합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListActionList_ImageSizeDisplayName">
         <source>Image Size</source>
-        <target state="new">Image Size</target>
+        <target state="translated">이미지 크기</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListDescription">
@@ -1749,177 +1749,177 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="TabControlAdd">
         <source>Add Tab</source>
-        <target state="new">Add Tab</target>
+        <target state="translated">탭 추가</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlAddTab">
         <source>Add tab to '{0}'</source>
-        <target state="new">Add tab to '{0}'</target>
+        <target state="translated">'{0}'에 탭을 추가합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlInvalidTabPageType">
         <source>Cannot add '{0}' to TabControl.  Only TabPages can be directly added to TabControls.</source>
-        <target state="new">Cannot add '{0}' to TabControl.  Only TabPages can be directly added to TabControls.</target>
+        <target state="translated">TabControl에 '{0}'을(를) 추가할 수 없습니다. TabControls에는 TabPages만 직접 추가할 수 있습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlRemove">
         <source>Remove Tab</source>
-        <target state="new">Remove Tab</target>
+        <target state="translated">탭 제거</target>
         <note />
       </trans-unit>
       <trans-unit id="TabControlRemoveTab">
         <source>Remove tab '{0}' from '{1}'</source>
-        <target state="new">Remove tab '{0}' from '{1}'</target>
+        <target state="translated">'{1}'에서 '{0}' 탭을 제거합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAbsoluteMenu">
         <source>A&amp;bsolute</source>
-        <target state="new">A&amp;bsolute</target>
+        <target state="translated">절대(&amp;B)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddColumn">
         <source>&amp;Add Column</source>
-        <target state="new">&amp;Add Column</target>
+        <target state="translated">열 추가(&amp;A)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddColumnUndoUnit">
         <source>Add Column on {0}</source>
-        <target state="new">Add Column on {0}</target>
+        <target state="translated">{0}에 열 추가</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddMenu">
         <source>&amp;Add</source>
-        <target state="new">&amp;Add</target>
+        <target state="translated">추가(&amp;A)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddRow">
         <source>Add Ro&amp;w</source>
-        <target state="new">Add Ro&amp;w</target>
+        <target state="translated">행 추가(&amp;W)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAddRowUndoUnit">
         <source>Add Row on {0}</source>
-        <target state="new">Add Row on {0}</target>
+        <target state="translated">{0}에 행 추가</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerAutoSizeMenu">
         <source>A&amp;utoSize</source>
-        <target state="new">A&amp;utoSize</target>
+        <target state="translated">크기 자동 조정(&amp;U)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerChangeSizeTypeUndoUnit">
         <source>Change SizeType on {0}</source>
-        <target state="new">Change SizeType on {0}</target>
+        <target state="translated">{0}의 SizeType 변경</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerClearAnchor">
         <source>Clearing Anchor property of {0} for {1}</source>
-        <target state="new">Clearing Anchor property of {0} for {1}</target>
+        <target state="translated">{1}에 대한 {0}의 Anchor 속성 지우기</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerClearDock">
         <source>Clearing Dock property of {0} for {1}</source>
-        <target state="new">Clearing Dock property of {0} for {1}</target>
+        <target state="translated">{1}에 대한 {0}의 Dock 속성 지우기</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerColMenu">
         <source>&amp;Column</source>
-        <target state="new">&amp;Column</target>
+        <target state="translated">열(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerContextMenuCopy">
         <source>C&amp;opy TableLayoutPanel</source>
-        <target state="new">C&amp;opy TableLayoutPanel</target>
+        <target state="translated">TableLayoutPanel 복사(&amp;O)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerContextMenuCut">
         <source>&amp;Cut TableLayoutPanel</source>
-        <target state="new">&amp;Cut TableLayoutPanel</target>
+        <target state="translated">TableLayoutPanel 잘라내기(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerContextMenuDelete">
         <source>&amp;Delete TableLayoutPanel</source>
-        <target state="new">&amp;Delete TableLayoutPanel</target>
+        <target state="translated">TableLayoutPanel 삭제(&amp;D)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerControlsSwapped">
         <source>{0} swapped with {1}</source>
-        <target state="new">{0} swapped with {1}</target>
+        <target state="translated">{1}과(와) 대체된 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerDeleteMenu">
         <source>&amp;Delete</source>
-        <target state="new">&amp;Delete</target>
+        <target state="translated">삭제(&amp;D)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerDontBoldLabel">
         <source>0</source>
-        <target state="new">0</target>
+        <target state="translated">0</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerEditRowAndCol">
         <source>&amp;Edit Rows and Columns...</source>
-        <target state="new">&amp;Edit Rows and Columns...</target>
+        <target state="translated">행 및 열 편집(&amp;E)...</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerInsertMenu">
         <source>&amp;Insert</source>
-        <target state="new">&amp;Insert</target>
+        <target state="translated">삽입(&amp;I)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerInvalidColumnRowCount">
         <source>{0} must be greater than zero.</source>
-        <target state="new">{0} must be greater than zero.</target>
+        <target state="translated">{0}은(는) 0보다 커야 합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerLabelMenu">
         <source>SizeMode</source>
-        <target state="new">SizeMode</target>
+        <target state="translated">SizeMode</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerPercentageMenu">
         <source>&amp;Percentage</source>
-        <target state="new">&amp;Percentage</target>
+        <target state="translated">백분율(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRemoveColumn">
         <source>Remove Last Colu&amp;mn</source>
-        <target state="new">Remove Last Colu&amp;mn</target>
+        <target state="translated">마지막 열 제거(&amp;M)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRemoveColumnUndoUnit">
         <source>Remove Column on {0}</source>
-        <target state="new">Remove Column on {0}</target>
+        <target state="translated">{0}에서 열 제거</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRemoveRow">
         <source>Remo&amp;ve Last Row</source>
-        <target state="new">Remo&amp;ve Last Row</target>
+        <target state="translated">마지막 행 제거(&amp;V)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRemoveRowUndoUnit">
         <source>Remove Row on {0}</source>
-        <target state="new">Remove Row on {0}</target>
+        <target state="translated">{0}에서 행 제거</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelDesignerRowMenu">
         <source>&amp;Row</source>
-        <target state="new">&amp;Row</target>
+        <target state="translated">행(&amp;R)</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelFullDesc">
         <source>Additional Rows or Columns cannot be created.  TableLayoutPanel is full and GrowStyle is 'FixedSize'.</source>
-        <target state="new">Additional Rows or Columns cannot be created.  TableLayoutPanel is full and GrowStyle is 'FixedSize'.</target>
+        <target state="translated">추가 행이나 열을 만들 수 없습니다. TableLayoutPanel에 여유 공간이 없고 GrowStyle이 'FixedSize'입니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelRowColResize">
         <source>Resizing {0} within {1}</source>
-        <target state="new">Resizing {0} within {1}</target>
+        <target state="translated">{1}에서 {0} 크기 조정</target>
         <note />
       </trans-unit>
       <trans-unit id="TableLayoutPanelSpanDesc">
         <source>TableLayoutPanel cannot expand to contain the control, because the panel's GrowStyle property is set to 'FixedSize'.</source>
-        <target state="new">TableLayoutPanel cannot expand to contain the control, because the panel's GrowStyle property is set to 'FixedSize'.</target>
+        <target state="translated">패널의 GrowStyle 속성이 'FixedSize'로 설정되어 있으므로 컨트롤을 포함하도록 TableLayoutPanel을 확장할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_Dock">

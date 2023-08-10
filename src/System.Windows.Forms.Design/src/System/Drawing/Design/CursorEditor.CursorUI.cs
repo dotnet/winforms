@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
@@ -16,8 +14,7 @@ public partial class CursorEditor
     /// </summary>
     private class CursorUI : ListBox
     {
-        private object _value;
-        private IWindowsFormsEditorService _editorService;
+        private IWindowsFormsEditorService? _editorService;
         private readonly TypeConverter _cursorConverter;
 
         public CursorUI()
@@ -35,26 +32,26 @@ public partial class CursorEditor
             // Fill the list with cursors.
             if (_cursorConverter.GetStandardValuesSupported())
             {
-                foreach (object obj in _cursorConverter.GetStandardValues())
+                foreach (object obj in _cursorConverter.GetStandardValues()!)
                 {
                     Items.Add(obj);
                 }
             }
         }
 
-        public object Value => _value;
+        public object? Value { get; private set; }
 
         public void End()
         {
             _editorService = null;
-            _value = null;
+            Value = null;
         }
 
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
-            _value = SelectedItem;
-            _editorService.CloseDropDown();
+            Value = SelectedItem;
+            _editorService!.CloseDropDown();
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e)
@@ -64,8 +61,8 @@ public partial class CursorEditor
             if (e.Index != -1)
             {
                 Cursor cursor = (Cursor)Items[e.Index];
-                string text = _cursorConverter.ConvertToString(cursor);
-                Font font = e.Font;
+                string? text = _cursorConverter.ConvertToString(cursor);
+                Font font = e.Font!;
                 using var brushText = e.ForeColor.GetCachedSolidBrushScope();
 
                 e.DrawBackground();
@@ -88,10 +85,10 @@ public partial class CursorEditor
             return base.ProcessDialogKey(keyData);
         }
 
-        public void Start(IWindowsFormsEditorService editorService, object value)
+        public void Start(IWindowsFormsEditorService editorService, object? value)
         {
             _editorService = editorService;
-            _value = value;
+            Value = value;
 
             // Select the current cursor
             if (value is not null)

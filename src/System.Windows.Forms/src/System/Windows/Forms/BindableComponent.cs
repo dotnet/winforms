@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Runtime.Versioning;
 
 namespace System.Windows.Forms;
 
@@ -10,7 +9,6 @@ namespace System.Windows.Forms;
 /// Base class for components which provide properties which can be
 /// data bound with the WinForms Designer.
 /// </summary>
-[RequiresPreviewFeatures]
 public abstract class BindableComponent : Component, IBindableComponent
 {
     internal static readonly object s_bindingContextChangedEvent = new();

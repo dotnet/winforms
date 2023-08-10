@@ -8,7 +8,7 @@ internal static partial class PInvoke
     public static int FillRect<T>(T hDC, ref RECT lprc, HBRUSH hbr)
         where T : IHandle<HDC>
     {
-        int result = FillRect(hDC.Handle, ref lprc, hbr);
+        int result = FillRect(hDC.Handle, in lprc, hbr);
         GC.KeepAlive(hDC.Wrapper);
         return result;
     }

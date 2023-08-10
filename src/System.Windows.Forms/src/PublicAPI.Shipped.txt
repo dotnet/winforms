@@ -662,12 +662,12 @@ System.Windows.Forms.DataGridViewSelectedCellCollection.this[int index].get -> S
 ~System.Windows.Forms.TreeNode.TreeNode(string text, System.Windows.Forms.TreeNode[] children) -> void
 ~System.Windows.Forms.TreeNode.TreeNode(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
 ~System.Windows.Forms.TreeNode.TreeView.get -> System.Windows.Forms.TreeView
-~System.Windows.Forms.TreeNodeCollection.Contains(System.Windows.Forms.TreeNode node) -> bool
-~System.Windows.Forms.TreeNodeCollection.CopyTo(System.Array dest, int index) -> void
-~System.Windows.Forms.TreeNodeCollection.Find(string key, bool searchAllChildren) -> System.Windows.Forms.TreeNode[]
-~System.Windows.Forms.TreeNodeCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.TreeNodeCollection.IndexOf(System.Windows.Forms.TreeNode node) -> int
-~System.Windows.Forms.TreeNodeCollection.Remove(System.Windows.Forms.TreeNode node) -> void
+System.Windows.Forms.TreeNodeCollection.Contains(System.Windows.Forms.TreeNode! node) -> bool
+System.Windows.Forms.TreeNodeCollection.CopyTo(System.Array! dest, int index) -> void
+System.Windows.Forms.TreeNodeCollection.Find(string! key, bool searchAllChildren) -> System.Windows.Forms.TreeNode![]!
+System.Windows.Forms.TreeNodeCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.TreeNodeCollection.IndexOf(System.Windows.Forms.TreeNode! node) -> int
+System.Windows.Forms.TreeNodeCollection.Remove(System.Windows.Forms.TreeNode! node) -> void
 ~System.Windows.Forms.TreeView.GetItemRenderStyles(System.Windows.Forms.TreeNode node, int state) -> System.Windows.Forms.OwnerDrawPropertyBag
 ~System.Windows.Forms.TreeView.GetNodeAt(int x, int y) -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeView.GetNodeAt(System.Drawing.Point pt) -> System.Windows.Forms.TreeNode
@@ -976,27 +976,27 @@ virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.GetEditingContro
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.set -> void
 ~virtual System.Windows.Forms.TreeNode.Deserialize(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Windows.Forms.TreeNode.Serialize(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-~virtual System.Windows.Forms.TreeNodeCollection.Add(string key, string text) -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.Add(string key, string text, int imageIndex) -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.Add(string key, string text, int imageIndex, int selectedImageIndex) -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.Add(string key, string text, string imageKey) -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.Add(string key, string text, string imageKey, string selectedImageKey) -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.Add(string text) -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.Add(System.Windows.Forms.TreeNode node) -> int
-~virtual System.Windows.Forms.TreeNodeCollection.AddRange(System.Windows.Forms.TreeNode[] nodes) -> void
-~virtual System.Windows.Forms.TreeNodeCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.TreeNodeCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string key, string text) -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string key, string text, int imageIndex) -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string key, string text, int imageIndex, int selectedImageIndex) -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string key, string text, string imageKey) -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string key, string text, string imageKey, string selectedImageKey) -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string text) -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, System.Windows.Forms.TreeNode node) -> void
-~virtual System.Windows.Forms.TreeNodeCollection.RemoveByKey(string key) -> void
-~virtual System.Windows.Forms.TreeNodeCollection.this[int index].get -> System.Windows.Forms.TreeNode
-~virtual System.Windows.Forms.TreeNodeCollection.this[int index].set -> void
-~virtual System.Windows.Forms.TreeNodeCollection.this[string key].get -> System.Windows.Forms.TreeNode
+virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, int imageIndex) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, int imageIndex, int selectedImageIndex) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, string? imageKey) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, string? imageKey, string? selectedImageKey) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Add(string? text) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Add(System.Windows.Forms.TreeNode! node) -> int
+virtual System.Windows.Forms.TreeNodeCollection.AddRange(params System.Windows.Forms.TreeNode![]! nodes) -> void
+virtual System.Windows.Forms.TreeNodeCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.TreeNodeCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text, int imageIndex) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text, int imageIndex, int selectedImageIndex) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text, string? imageKey) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text, string? imageKey, string? selectedImageKey) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? text) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, System.Windows.Forms.TreeNode! node) -> void
+virtual System.Windows.Forms.TreeNodeCollection.RemoveByKey(string? key) -> void
+virtual System.Windows.Forms.TreeNodeCollection.this[int index].get -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.this[int index].set -> void
+virtual System.Windows.Forms.TreeNodeCollection.this[string? key].get -> System.Windows.Forms.TreeNode?
 ~virtual System.Windows.Forms.TreeView.OnAfterCheck(System.Windows.Forms.TreeViewEventArgs e) -> void
 ~virtual System.Windows.Forms.TreeView.OnAfterCollapse(System.Windows.Forms.TreeViewEventArgs e) -> void
 ~virtual System.Windows.Forms.TreeView.OnAfterExpand(System.Windows.Forms.TreeViewEventArgs e) -> void
@@ -4039,9 +4039,9 @@ System.Resources.ResXDataNode.Comment.set -> void
 System.Resources.ResXDataNode.FileRef.get -> System.Resources.ResXFileRef?
 System.Resources.ResXDataNode.GetNodePosition() -> System.Drawing.Point
 System.Resources.ResXDataNode.GetValue(System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> object?
-System.Resources.ResXDataNode.GetValue(System.Reflection.AssemblyName![]! names) -> object?
+System.Resources.ResXDataNode.GetValue(System.Reflection.AssemblyName![]? names) -> object?
 System.Resources.ResXDataNode.GetValueTypeName(System.ComponentModel.Design.ITypeResolutionService? typeResolver) -> string?
-System.Resources.ResXDataNode.GetValueTypeName(System.Reflection.AssemblyName![]! names) -> string?
+System.Resources.ResXDataNode.GetValueTypeName(System.Reflection.AssemblyName![]? names) -> string?
 System.Resources.ResXDataNode.Name.get -> string!
 System.Resources.ResXDataNode.Name.set -> void
 System.Resources.ResXDataNode.ResXDataNode(string! name, object? value) -> void
