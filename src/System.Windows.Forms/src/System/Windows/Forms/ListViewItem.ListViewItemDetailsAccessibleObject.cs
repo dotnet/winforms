@@ -126,7 +126,7 @@ public partial class ListViewItem
         // when there is no ListViewSubItem, but the cell for it is displayed and the user can interact with it.
         internal AccessibleObject? GetDetailsSubItemOrFake(int subItemIndex)
         {
-            int accessibleChildIndex = SubItemToAccessibleChildIndex(subItemIndex);
+            int accessibleChildIndex = HasImage ? subItemIndex + 1 : subItemIndex;
             return GetDetailsSubItemOrFakeInternal(accessibleChildIndex);
         }
 
@@ -196,12 +196,5 @@ public partial class ListViewItem
 
             _listViewSubItemAccessibleObjects.Clear();
         }
-
-        /// <summary>
-        ///  Converts the provided index of a <see cref="ListViewSubItem"/> to an index of the <see cref="AccessibleObject"/>'s child.
-        /// </summary>
-        /// <param name="subItemIndex">The index of an owning <see cref="ListViewSubItem"/>'s object.</param>
-        /// <returns>The index of the child <see cref="AccessibleObject"/>.</returns>
-        private int SubItemToAccessibleChildIndex(int subItemIndex) => HasImage ? subItemIndex + 1 : subItemIndex;
     }
 }

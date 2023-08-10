@@ -194,13 +194,18 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         form.Controls.Add(listView1);
         form.Show();
 
-        AccessibleObject listItemAO = listView1.AccessibilityObject.GetChild(1);
+        AccessibleObject listItemAccessibleObject = listView1.AccessibilityObject.GetChild(1);
 
-        Assert.Equal("sub1", listItemAO.GetChild(2).Name);
+        Assert.Equal("sub1", listItemAccessibleObject.GetChild(2).Name);
 
         listView1.Columns.RemoveAt(0);
 
-        Assert.Equal("sub2", listItemAO.GetChild(2).Name);
+        Assert.Equal("sub2", listItemAccessibleObject.GetChild(2).Name);
+
+        foreach (ColumnHeader col in listView1.Columns)
+        {
+            col.Dispose();
+        }
     }
 
     // Unit test for https://github.com/dotnet/winforms/issues/7492.
@@ -213,12 +218,17 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         form.Controls.Add(listView1);
         form.Show();
 
-        AccessibleObject listItemAO = listView1.AccessibilityObject.GetChild(1);
+        AccessibleObject listItemAccessibleObject = listView1.AccessibilityObject.GetChild(1);
 
-        Assert.Equal("sub1", listItemAO.GetChild(1).Name);
+        Assert.Equal("sub1", listItemAccessibleObject.GetChild(1).Name);
 
         listView1.Columns.RemoveAt(0);
 
-        Assert.Equal("sub2", listItemAO.GetChild(1).Name);
+        Assert.Equal("sub2", listItemAccessibleObject.GetChild(1).Name);
+
+        foreach (ColumnHeader col in listView1.Columns)
+        {
+            col.Dispose();
+        }
     }
 }
