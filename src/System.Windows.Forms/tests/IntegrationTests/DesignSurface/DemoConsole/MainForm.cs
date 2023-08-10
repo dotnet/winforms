@@ -231,6 +231,8 @@ public partial class MainForm : Form
                         FlowLayoutPanel layoutPanel = surface.CreateControl<FlowLayoutPanel>(new Size(430, 200), new Point(250, 10));
                         layoutPanel.Controls.Add(subButton1OfLayoutPanel);
                         layoutPanel.Controls.Add(subButton2OfLayoutPanel);
+
+                        TrackBar trackBar = surface.CreateControl<TrackBar>(new Size(200, 50), new Point(250, 220));
                     }
 
                     break;
