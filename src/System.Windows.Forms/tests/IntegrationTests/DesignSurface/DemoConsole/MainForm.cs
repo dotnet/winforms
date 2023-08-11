@@ -166,21 +166,23 @@ public partial class MainForm : Form
                         //- create some Controls at DesignTime
                         TextBox t1 = surface.CreateControl<TextBox>(new Size(200, 20), new Point(10, 10));
                         Button b1 = surface.CreateControl<Button>(new Size(200, 40), new Point(10, 40));
-                        Label l1 = surface.CreateControl<Label>(new Size(200, 120), new Point(48, 100));
+                        Label l1 = surface.CreateControl<Label>(new Size(200, 100), new Point(10, 100));
                         t1.Text = "I'm a TextBox";
                         b1.Text = "I'm a Button";
                         b1.BackColor = Color.Coral;
                         l1.Text = "I'm a Label";
                         l1.BackColor = Color.Coral;
 
-                        ComboBox cb1 = surface.CreateControl<ComboBox>(new Size(200, 20), new Point(288, 16));
+                        MaskedTextBox maskTextBox = surface.CreateControl<MaskedTextBox>(new Size(200, 20), new Point(260, 60));
+
+                        ComboBox cb1 = surface.CreateControl<ComboBox>(new Size(200, 20), new Point(260, 16));
                         cb1.Items.AddRange(new string[] { "a1", "b2", "c3" });
                         cb1.SelectedIndex = 1;
 
-                        ListBox lb1 = surface.CreateControl<ListBox>(new Size(200, 130), new Point(288, 100));
+                        ListBox lb1 = surface.CreateControl<ListBox>(new Size(200, 130), new Point(260, 100));
                         lb1.Items.AddRange(new string[] { "a1", "b2", "c3" });
 
-                        TreeView tv1 = surface.CreateControl<TreeView>(new Size(290, 160), new Point(20, 220));
+                        TreeView tv1 = surface.CreateControl<TreeView>(new Size(200, 160), new Point(10, 220));
                     }
 
                     break;
