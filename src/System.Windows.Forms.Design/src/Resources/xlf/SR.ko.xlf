@@ -227,6 +227,11 @@
         <target state="translated">선택된 미리 보기</target>
         <note />
       </trans-unit>
+      <trans-unit id="ChooseIconDisplayName">
+        <source>Choose Icon...</source>
+        <target state="new">아이콘 선택...</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ChooseImageDescription">
         <source>Select the image displayed in the PictureBox</source>
         <target state="translated">PictureBox에 표시된 이미지를 선택합니다.</target>
