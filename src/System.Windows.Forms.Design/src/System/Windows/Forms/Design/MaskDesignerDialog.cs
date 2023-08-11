@@ -342,11 +342,13 @@ internal class MaskDesignerDialog : Form
     {
         Debug.Assert(maskDescriptor is not null, "Null mask descriptor.");
 
+        string maskDescriptorName = maskDescriptor.Name!.Trim();
+
         foreach (MaskDescriptor descriptor in _maskDescriptors)
         {
             Debug.Assert(descriptor is not null, "Null mask descriptor in the collection.");
 
-            if (maskDescriptor.Equals(descriptor) || maskDescriptor.Name!.Trim() == descriptor.Name!.Trim())
+            if (maskDescriptor.Equals(descriptor) || maskDescriptorName == descriptor.Name!.Trim())
             {
                 return true;
             }

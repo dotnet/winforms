@@ -34,7 +34,8 @@ internal class MaskDescriptorComparer : IComparer<MaskDescriptor>
             return 0;
         }
 
-        string? textA, textB;
+        string? textA;
+        string? textB;
 
         switch (_sortType)
         {
