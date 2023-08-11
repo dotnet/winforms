@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms.Layout;
 
@@ -16,7 +14,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 #if DEBUG
     internal static readonly TraceSwitch DebugLayoutTraceSwitch = new("DebugLayout", "Debug ToolStrip Layout code");
 #else
-    internal static readonly TraceSwitch DebugLayoutTraceSwitch;
+    internal static readonly TraceSwitch? DebugLayoutTraceSwitch;
 #endif
     internal ToolStripSplitStackLayout(ToolStrip owner)
     {
@@ -256,20 +254,20 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
         for (int j = -1; j < toolStrip.Items.Count; j++)
         {
-            ToolStripItem item = null;
+            ToolStripItem? item = null;
 
             if (j == -1)
             {
-                // the first time through place the overflow button if its required.
+                item = toolStrip.OverflowButton;
+
+                // The first time through place the overflow button if its required.
                 if (needOverflow)
                 {
-                    item = toolStrip.OverflowButton;
                     item.SetPlacement(ToolStripItemPlacement.Main);
                     itemSize = OverflowButtonSize;
                 }
                 else
                 {
-                    item = toolStrip.OverflowButton;
                     item.SetPlacement(ToolStripItemPlacement.None);
                     continue;
                 }
@@ -301,7 +299,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             // We need to honor left to right and head and tail.
             //      In RTL.Yes, Head is to the Right, Tail is to the Left
             //      In RTL.No,  Head is to the Left,  Tail is to the Right
-            if ((item is not null) && (item.Placement == ToolStripItemPlacement.Main))
+            if (item.Placement == ToolStripItemPlacement.Main)
             {
                 int x = displayRectangle.Left;
                 int y = displayRectangle.Top;
@@ -406,19 +404,19 @@ internal class ToolStripSplitStackLayout : LayoutEngine
 
         for (int j = -1; j < ToolStrip.Items.Count; j++)
         {
-            ToolStripItem item = null;
+            ToolStripItem? item = null;
 
             if (j == -1)
             {
-                // the first time through place the overflow button if its required.
+                item = toolStrip.OverflowButton;
+
+                // The first time through place the overflow button if its required.
                 if (needOverflow)
                 {
-                    item = toolStrip.OverflowButton;
                     item.SetPlacement(ToolStripItemPlacement.Main);
                 }
                 else
                 {
-                    item = toolStrip.OverflowButton;
                     item.SetPlacement(ToolStripItemPlacement.None);
                     continue;
                 }
@@ -451,7 +449,7 @@ internal class ToolStripSplitStackLayout : LayoutEngine
             // Vertical split stack management ignores left to right.
             //      Items aligned to the Head are placed from Top to Bottom
             //      Items aligned to the Tail are placed from Bottom to Top
-            if ((item is not null) && (item.Placement == ToolStripItemPlacement.Main))
+            if (item.Placement == ToolStripItemPlacement.Main)
             {
                 Padding itemMargin = item.Margin;
                 int x = displayRectangle.Left + itemMargin.Left;
