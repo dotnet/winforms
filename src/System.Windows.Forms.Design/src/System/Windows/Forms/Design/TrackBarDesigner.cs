@@ -22,10 +22,7 @@ internal class TrackBarDesigner : ControlDesigner
             if (GetPropertyValue<bool>(Component, nameof(TrackBar.AutoSize)))
             {
                 var orientation = GetPropertyValue<Orientation?>(Component, nameof(TrackBar.Orientation));
-                if (orientation != null)
-                {
-                    orientation = Orientation.Horizontal;
-                }
+                orientation ??= Orientation.Horizontal;
 
                 switch (orientation)
                 {
