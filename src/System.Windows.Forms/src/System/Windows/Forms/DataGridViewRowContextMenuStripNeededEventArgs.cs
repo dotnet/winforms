@@ -7,10 +7,7 @@ public class DataGridViewRowContextMenuStripNeededEventArgs : EventArgs
 {
     public DataGridViewRowContextMenuStripNeededEventArgs(int rowIndex)
     {
-        if (rowIndex < -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(rowIndex, -1);
 
         RowIndex = rowIndex;
     }

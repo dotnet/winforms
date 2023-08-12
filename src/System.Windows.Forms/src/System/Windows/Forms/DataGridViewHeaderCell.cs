@@ -321,10 +321,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         else if (OwningColumn is not null)
         {
             // column header cell
-            if (rowIndex != -1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rowIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
             state |= (OwningColumn.State & DataGridViewElementStates.Frozen);
             if (OwningColumn.Resizable == DataGridViewTriState.True ||
@@ -345,10 +342,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         else if (DataGridView is not null)
         {
             // top left header cell
-            if (rowIndex != -1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rowIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
             state |= DataGridViewElementStates.Frozen;
             if (DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || DataGridView.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.EnableResizing)
@@ -412,10 +406,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         if (DataGridView is null)
         {
             // detached cell
-            if (rowIndex != -1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rowIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
             return new Size(-1, -1);
         }
@@ -423,10 +414,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         if (OwningColumn is not null)
         {
             // must be a column header cell
-            if (rowIndex != -1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rowIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
             return new Size(OwningColumn.Thickness, DataGridView.ColumnHeadersHeight);
         }
@@ -448,10 +436,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         else
         {
             // must be the top left header cell
-            if (rowIndex != -1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rowIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
             return new Size(DataGridView.RowHeadersWidth, DataGridView.ColumnHeadersHeight);
         }
@@ -497,10 +482,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
 
     protected override object GetValue(int rowIndex)
     {
-        if (rowIndex != -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         return Properties.GetObject(s_propCellValue);
     }

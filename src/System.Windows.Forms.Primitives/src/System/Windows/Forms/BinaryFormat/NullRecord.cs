@@ -15,10 +15,7 @@ internal abstract partial class NullRecord
         get => _count;
         private protected set
         {
-            if (value == 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value));
-            }
+            ArgumentOutOfRangeException.ThrowIfZero(value);
 
             _count = value;
         }
