@@ -44,11 +44,9 @@ public sealed unsafe class HtmlHistory : IDisposable
 
     public void Back(int numberBack)
     {
-        if (numberBack < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(numberBack), numberBack, string.Format(SR.InvalidLowBoundArgumentEx, nameof(numberBack), numberBack, 0));
-        }
-        else if (numberBack > 0)
+        ArgumentOutOfRangeException.ThrowIfNegative(numberBack);
+
+        if (numberBack > 0)
         {
             var oNumForward = (VARIANT)(-numberBack);
             using var omHistory = NativeOmHistory.GetInterface();
@@ -58,11 +56,9 @@ public sealed unsafe class HtmlHistory : IDisposable
 
     public void Forward(int numberForward)
     {
-        if (numberForward < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(numberForward), numberForward, string.Format(SR.InvalidLowBoundArgumentEx, nameof(numberForward), numberForward, 0));
-        }
-        else if (numberForward > 0)
+        ArgumentOutOfRangeException.ThrowIfNegative(numberForward);
+
+        if (numberForward > 0)
         {
             var oNumForward = (VARIANT)numberForward;
             using var omHistory = NativeOmHistory.GetInterface();

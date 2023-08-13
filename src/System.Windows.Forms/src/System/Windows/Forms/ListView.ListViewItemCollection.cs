@@ -95,19 +95,15 @@ public partial class ListView
         {
             get
             {
-                if (index < 0 || index >= InnerList.Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, InnerList.Count);
 
                 return InnerList[index];
             }
             set
             {
-                if (index < 0 || index >= InnerList.Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, InnerList.Count);
 
                 InnerList[index] = value;
             }
@@ -406,10 +402,8 @@ public partial class ListView
 
         public ListViewItem Insert(int index, ListViewItem item)
         {
-            if (index < 0 || index > Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(index, Count);
 
             InnerList.Insert(index, item);
             return item;
@@ -469,10 +463,8 @@ public partial class ListView
         /// </summary>
         public virtual void RemoveAt(int index)
         {
-            if (index < 0 || index >= Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 
             InnerList.RemoveAt(index);
         }

@@ -26,9 +26,11 @@ public partial class ListView
         {
             get
             {
-                if (_owner._columnHeaders is null || index < 0 || index >= _owner._columnHeaders.Length)
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+
+                if (_owner._columnHeaders is null || index >= _owner._columnHeaders.Length)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
                 return _owner._columnHeaders[index];
@@ -410,10 +412,8 @@ public partial class ListView
 
         public void Insert(int index, ColumnHeader value)
         {
-            if (index < 0 || index > Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(index, Count);
 
             _owner.InsertColumn(index, value);
         }

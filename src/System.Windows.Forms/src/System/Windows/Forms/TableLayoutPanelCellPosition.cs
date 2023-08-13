@@ -10,15 +10,8 @@ public struct TableLayoutPanelCellPosition : IEquatable<TableLayoutPanelCellPosi
 {
     public TableLayoutPanelCellPosition(int column, int row)
     {
-        if (row < -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, nameof(row), row));
-        }
-
-        if (column < -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, nameof(column), column));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(row, -1);
+        ArgumentOutOfRangeException.ThrowIfLessThan(column, -1);
 
         Row = row;
         Column = column;

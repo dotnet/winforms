@@ -71,10 +71,7 @@ public partial class ListView
         {
             get
             {
-                if (index < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
 
                 // Loop through the main collection until we find the right index.
                 int cnt = _owner.Items.Count;

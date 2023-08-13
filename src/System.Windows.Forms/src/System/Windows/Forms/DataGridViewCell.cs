@@ -2592,11 +2592,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     {
         ArgumentNullException.ThrowIfNull(graphics);
         ArgumentNullException.ThrowIfNull(font);
-
-        if (maxWidth <= 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(maxWidth), string.Format(SR.InvalidLowBoundArgument, "maxWidth", (maxWidth).ToString(CultureInfo.CurrentCulture), 0));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxWidth);
 
         if (!DataGridViewUtilities.ValidTextFormatFlags(flags))
         {
@@ -2615,11 +2611,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     {
         ArgumentNullException.ThrowIfNull(graphics);
         ArgumentNullException.ThrowIfNull(font);
-
-        if (maxRatio <= 0.0F)
-        {
-            throw new ArgumentOutOfRangeException(nameof(maxRatio), string.Format(SR.InvalidLowBoundArgument, "maxRatio", (maxRatio).ToString(CultureInfo.CurrentCulture), "0.0"));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxRatio);
 
         if (!DataGridViewUtilities.ValidTextFormatFlags(flags))
         {
@@ -2674,10 +2666,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public static int MeasureTextWidth(Graphics graphics, string text, Font font, int maxHeight, TextFormatFlags flags)
     {
-        if (maxHeight <= 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(maxHeight), string.Format(SR.InvalidLowBoundArgument, "maxHeight", (maxHeight).ToString(CultureInfo.CurrentCulture), 0));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxHeight);
 
         Size oneLineSize = DataGridViewCell.MeasureTextSize(graphics, text, font, flags);
         if (oneLineSize.Height >= maxHeight || (flags & TextFormatFlags.SingleLine) != 0)

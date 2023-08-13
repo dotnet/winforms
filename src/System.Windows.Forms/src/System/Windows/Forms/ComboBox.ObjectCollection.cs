@@ -215,10 +215,8 @@ public partial class ComboBox
         {
             get
             {
-                if (index < 0 || index >= Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 
                 return InnerList[index].Item;
             }
@@ -269,9 +267,11 @@ public partial class ComboBox
 
             int count = InnerList.Count;
 
-            if (arrayIndex < 0 || count + arrayIndex > destination.Length)
+            ArgumentOutOfRangeException.ThrowIfNegative(arrayIndex);
+
+            if (count + arrayIndex > destination.Length)
             {
-                throw new ArgumentOutOfRangeException(nameof(arrayIndex), arrayIndex, string.Format(SR.InvalidArgument, nameof(arrayIndex), arrayIndex));
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex));
             }
 
             for (int i = 0; i < count; i++)
@@ -286,9 +286,11 @@ public partial class ComboBox
 
             int count = InnerList.Count;
 
-            if (index < 0 || count + index > destination.Length)
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+
+            if (count + index > destination.Length)
             {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
 
             for (int i = 0; i < count; i++)
@@ -316,11 +318,8 @@ public partial class ComboBox
             _owner.CheckNoDataSource();
 
             ArgumentNullException.ThrowIfNull(item);
-
-            if (index < 0 || index > Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(index, Count);
 
             // If the combo box is sorted, then nust treat this like an add
             // because we are going to twiddle the index anyway.
@@ -367,10 +366,8 @@ public partial class ComboBox
         {
             _owner.CheckNoDataSource();
 
-            if (index < 0 || index >= Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 
             if (_owner.IsHandleCreated)
             {
@@ -415,10 +412,8 @@ public partial class ComboBox
 
         internal void SetItemInternal(int index, object value)
         {
-            if (index < 0 || index >= Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 
             InnerList[index].Item = value.OrThrowIfNull();
 

@@ -256,11 +256,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     public void SetColumnSpan(object control, int value)
     {
         ArgumentNullException.ThrowIfNull(control);
-
-        if (value < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
         if (IsStub)
         {
@@ -298,11 +294,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     public void SetRowSpan(object control, int value)
     {
         ArgumentNullException.ThrowIfNull(control);
-
-        if (value < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
 
         if (IsStub)
         {
@@ -352,11 +344,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     public void SetRow(object control, int row)
     {
         ArgumentNullException.ThrowIfNull(control);
-
-        if (row < -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, nameof(row), row));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(row, -1);
 
         SetCellPosition(control, row, -1, rowSpecified: true, colSpecified: false);
     }
@@ -417,11 +405,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     public void SetColumn(object control, int column)
     {
         ArgumentNullException.ThrowIfNull(control);
-
-        if (column < -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, nameof(column), column));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(column, -1);
 
         if (IsStub)
         {
