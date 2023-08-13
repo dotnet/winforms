@@ -28,8 +28,9 @@ public class LinkClickedEventArgs : EventArgs
     public LinkClickedEventArgs(string? linkText, int linkStart, int linkLength)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(linkStart);
+        ArgumentOutOfRangeException.ThrowIfNegative(linkLength);
 
-        if (linkLength < 0 || linkStart + linkLength < 0)
+        if (linkStart + linkLength < 0)
             throw new ArgumentOutOfRangeException(nameof(linkLength));
 
         LinkText = linkText;

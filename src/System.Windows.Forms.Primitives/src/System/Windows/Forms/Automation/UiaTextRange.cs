@@ -1044,8 +1044,11 @@ internal class UiaTextRange : ITextRangeProvider
     /// </summary>
     private void MoveTo(int start, int end)
     {
-        _start = start >= 0 ? start : throw new ArgumentOutOfRangeException(nameof(start));
-        _end = end >= start ? end : throw new ArgumentOutOfRangeException(nameof(end));
+        ArgumentOutOfRangeException.ThrowIfNegative(start);
+        ArgumentOutOfRangeException.ThrowIfLessThan(end, start);
+
+        _start = start;
+        _end = end;
     }
 
     private void ValidateEndpoints()
