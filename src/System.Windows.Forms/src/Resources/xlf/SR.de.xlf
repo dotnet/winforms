@@ -11391,7 +11391,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="toStringEnd">
         <source>End</source>
-        <target state="translated">Beenden</target>
+        <target state="translated">Ende</target>
         <note>{Locked=!fr,de,it,es; "End"}</note>
       </trans-unit>
       <trans-unit id="toStringEnter">
@@ -11406,7 +11406,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Insert</source>
-        <target state="translated">Einfügen</target>
+        <target state="translated">Einfg</target>
         <note>{Locked=!fr,de,it,es,zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
