@@ -177,7 +177,7 @@ public class BinaryFormattedObjectTests
         value.ObjectId.Should().Be(4);
         value.Value.Should().BeOneOf("Yowza", "Youza", "Meeza");
 
-        array = (ArrayRecord)format[(MemberReference)systemClass["Values"]]; ;
+        array = (ArrayRecord)format[(MemberReference)systemClass["Values"]];
         array.ArrayInfo.ObjectId.Should().Be(3);
         array.ArrayInfo.Length.Should().Be(3);
         array.ArrayObjects[0].Should().BeOfType<ObjectNull>();
