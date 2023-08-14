@@ -136,10 +136,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                                                   bool inLastRow,
                                                   string format)
     {
-        if (rowIndex != -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         if (DataGridView is null)
         {
@@ -229,10 +226,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
     {
         ArgumentNullException.ThrowIfNull(cellStyle);
 
-        if (rowIndex != -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         if (DataGridView is null || OwningColumn is null)
         {
@@ -279,10 +273,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
 
     public override ContextMenuStrip GetInheritedContextMenuStrip(int rowIndex)
     {
-        if (rowIndex != -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         ContextMenuStrip contextMenuStrip = GetContextMenuStrip(-1);
         if (contextMenuStrip is not null)
@@ -307,10 +298,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
             throw new InvalidOperationException(SR.DataGridView_CellNeedsDataGridViewForInheritedStyle);
         }
 
-        if (rowIndex != -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         DataGridViewCellStyle inheritedCellStyleTmp = inheritedCellStyle ?? new DataGridViewCellStyle();
 
@@ -506,10 +494,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
 
     protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
     {
-        if (rowIndex != -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         if (DataGridView is null)
         {
@@ -715,10 +700,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
 
     protected override object GetValue(int rowIndex)
     {
-        if (rowIndex != -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         if (ContainsLocalValue)
         {
@@ -1205,10 +1187,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
 
     protected override bool SetValue(int rowIndex, object value)
     {
-        if (rowIndex != -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         object originalValue = GetValue(rowIndex);
         Properties.SetObject(s_propCellValue, value);

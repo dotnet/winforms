@@ -8,10 +8,7 @@ public class DataGridViewRowDividerDoubleClickEventArgs : HandledMouseEventArgs
     public DataGridViewRowDividerDoubleClickEventArgs(int rowIndex, HandledMouseEventArgs e)
         : base((e.OrThrowIfNull()).Button, e.Clicks, e.X, e.Y, e.Delta, e.Handled)
     {
-        if (rowIndex < -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(rowIndex, -1);
 
         RowIndex = rowIndex;
     }
