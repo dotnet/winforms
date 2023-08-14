@@ -47,4 +47,14 @@ internal static class ClientUtils
 
         return index + 1;
     }
+
+    public static bool IsCriticalException(Exception ex)
+    {
+        return ex is NullReferenceException
+                || ex is StackOverflowException
+                || ex is OutOfMemoryException
+                || ex is ThreadAbortException
+                || ex is IndexOutOfRangeException
+                || ex is AccessViolationException;
+    }
 }

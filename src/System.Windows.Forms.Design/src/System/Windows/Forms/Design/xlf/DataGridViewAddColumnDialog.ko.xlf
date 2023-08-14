@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ko" original="../DataGridViewAddColumnDialog.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>Add Column</source>
+        <target state="translated">열 추가</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="addButton.Text">
+        <source>&amp;Add</source>
+        <target state="translated">추가(&amp;A)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="cancelButton.Text">
+        <source>Cancel</source>
+        <target state="translated">취소</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="columnInDataSourceLabel.Text">
+        <source>&amp;Columns in the DataSource</source>
+        <target state="translated">DataSource의 열(&amp;C)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="dataBoundColumnRadioButton.Text">
+        <source>Data&amp;bound column</source>
+        <target state="translated">데이터 바인딩된 열(&amp;B)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="frozenCheckBox.Text">
+        <source>&amp;Frozen</source>
+        <target state="translated">고정(&amp;F)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="headerTextLabel.Text">
+        <source>&amp;Header text:</source>
+        <target state="translated">머리글 텍스트(&amp;H):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="nameLabel.Text">
+        <source>&amp;Name:</source>
+        <target state="translated">이름(&amp;N):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="readOnlyCheckBox.Text">
+        <source>&amp;Read Only</source>
+        <target state="translated">읽기 전용(&amp;R)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="typeLabel.Text">
+        <source>&amp;Type:</source>
+        <target state="translated">유형(&amp;T):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="unboundColumnRadioButton.Text">
+        <source>&amp;Unbound column</source>
+        <target state="translated">바인딩되지 않은 열(&amp;U)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="visibleCheckBox.Text">
+        <source>&amp;Visible</source>
+        <target state="translated">표시(&amp;V)</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
