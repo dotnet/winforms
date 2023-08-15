@@ -13,16 +13,8 @@ public class DataGridViewCellMouseEventArgs : MouseEventArgs
         MouseEventArgs? e)
         : base(e?.Button ?? MouseButtons.None, e?.Clicks ?? 0, localX, localY, e?.Delta ?? 0)
     {
-        if (columnIndex < -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex));
-        }
-
-        if (rowIndex < -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
-
+        ArgumentOutOfRangeException.ThrowIfLessThan(columnIndex, -1);
+        ArgumentOutOfRangeException.ThrowIfLessThan(rowIndex, -1);
         ArgumentNullException.ThrowIfNull(e);
 
         ColumnIndex = columnIndex;

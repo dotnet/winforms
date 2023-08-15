@@ -27,10 +27,7 @@ public partial class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCel
     {
         ArgumentNullException.ThrowIfNull(cellStyle);
 
-        if (rowIndex != -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         if (DataGridView is null)
         {
@@ -85,10 +82,7 @@ public partial class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCel
 
     protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
     {
-        if (rowIndex != -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         if (DataGridView is null)
         {
@@ -139,10 +133,7 @@ public partial class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCel
 
     protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
     {
-        if (rowIndex != -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         if (DataGridView is null)
         {

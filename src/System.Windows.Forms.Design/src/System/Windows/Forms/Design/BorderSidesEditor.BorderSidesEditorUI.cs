@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 
@@ -15,26 +13,26 @@ public partial class BorderSidesEditor
     /// </summary>
     private class BorderSidesEditorUI : UserControl
     {
-        private CheckBox allCheckBox;
+        private CheckBox _allCheckBox;
 
-        private bool allChecked;
-        private CheckBox bottomCheckBox;
-        private readonly BorderSidesEditor editor;
-        private CheckBox leftCheckBox;
-        private CheckBox noneCheckBox;
-        private bool noneChecked;
-        private object originalValue;
-        private CheckBox rightCheckBox;
-        private Label splitterLabel;
+        private bool _allChecked;
+        private CheckBox _bottomCheckBox;
+        private readonly BorderSidesEditor _editor;
+        private CheckBox _leftCheckBox;
+        private CheckBox _noneCheckBox;
+        private bool _noneChecked;
+        private object? _originalValue;
+        private CheckBox _rightCheckBox;
+        private Label _splitterLabel;
 
-        private TableLayoutPanel tableLayoutPanel1;
-        private CheckBox topCheckBox;
+        private TableLayoutPanel _tableLayoutPanel;
+        private CheckBox _topCheckBox;
 
         private bool updateCurrentValue;
 
         public BorderSidesEditorUI(BorderSidesEditor editor)
         {
-            this.editor = editor;
+            this._editor = editor;
             End();
             InitializeComponent();
             Size = PreferredSize;
@@ -43,7 +41,7 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  Allows someone else to close our dropdown.
         /// </summary>
-        public IWindowsFormsEditorService EditorService
+        public IWindowsFormsEditorService? EditorService
         {
             get;
             private set;
@@ -52,12 +50,12 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  Returns the current value of BorderSides, if nothing is selected returns BorderSides.None.
         /// </summary>
-        public object Value { get; private set; }
+        public object? Value { get; private set; }
 
         public void End()
         {
             EditorService = null;
-            originalValue = null;
+            _originalValue = null;
             Value = null;
             updateCurrentValue = false;
         }
@@ -68,128 +66,136 @@ public partial class BorderSidesEditor
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
-            noneCheckBox.Focus();
+            _noneCheckBox.Focus();
         }
 
+        [MemberNotNull(nameof(_allCheckBox))]
+        [MemberNotNull(nameof(_bottomCheckBox))]
+        [MemberNotNull(nameof(_leftCheckBox))]
+        [MemberNotNull(nameof(_noneCheckBox))]
+        [MemberNotNull(nameof(_rightCheckBox))]
+        [MemberNotNull(nameof(_splitterLabel))]
+        [MemberNotNull(nameof(_tableLayoutPanel))]
+        [MemberNotNull(nameof(_topCheckBox))]
         private void InitializeComponent()
         {
             ComponentResourceManager resources = new ComponentResourceManager(typeof(BorderSidesEditor));
-            tableLayoutPanel1 = new TableLayoutPanel();
-            noneCheckBox = new CheckBox();
-            allCheckBox = new CheckBox();
-            topCheckBox = new CheckBox();
-            bottomCheckBox = new CheckBox();
-            rightCheckBox = new CheckBox();
-            leftCheckBox = new CheckBox();
-            splitterLabel = new Label();
-            tableLayoutPanel1.SuspendLayout();
+            _tableLayoutPanel = new TableLayoutPanel();
+            _noneCheckBox = new CheckBox();
+            _allCheckBox = new CheckBox();
+            _topCheckBox = new CheckBox();
+            _bottomCheckBox = new CheckBox();
+            _rightCheckBox = new CheckBox();
+            _leftCheckBox = new CheckBox();
+            _splitterLabel = new Label();
+            _tableLayoutPanel.SuspendLayout();
             SuspendLayout();
             //
             // tableLayoutPanel1
             //
-            resources.ApplyResources(tableLayoutPanel1, "tableLayoutPanel1");
-            tableLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            tableLayoutPanel1.BackColor = SystemColors.Window;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
-            tableLayoutPanel1.Controls.Add(noneCheckBox, 0, 0);
-            tableLayoutPanel1.Controls.Add(allCheckBox, 0, 2);
-            tableLayoutPanel1.Controls.Add(topCheckBox, 0, 3);
-            tableLayoutPanel1.Controls.Add(bottomCheckBox, 0, 4);
-            tableLayoutPanel1.Controls.Add(rightCheckBox, 0, 6);
-            tableLayoutPanel1.Controls.Add(leftCheckBox, 0, 5);
-            tableLayoutPanel1.Controls.Add(splitterLabel, 0, 1);
-            tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.RowStyles.Add(new RowStyle());
-            tableLayoutPanel1.Margin = new Padding(0);
+            resources.ApplyResources(_tableLayoutPanel, "tableLayoutPanel1");
+            _tableLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            _tableLayoutPanel.BackColor = SystemColors.Window;
+            _tableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+            _tableLayoutPanel.Controls.Add(_noneCheckBox, 0, 0);
+            _tableLayoutPanel.Controls.Add(_allCheckBox, 0, 2);
+            _tableLayoutPanel.Controls.Add(_topCheckBox, 0, 3);
+            _tableLayoutPanel.Controls.Add(_bottomCheckBox, 0, 4);
+            _tableLayoutPanel.Controls.Add(_rightCheckBox, 0, 6);
+            _tableLayoutPanel.Controls.Add(_leftCheckBox, 0, 5);
+            _tableLayoutPanel.Controls.Add(_splitterLabel, 0, 1);
+            _tableLayoutPanel.Name = "tableLayoutPanel1";
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            _tableLayoutPanel.RowStyles.Add(new RowStyle());
+            _tableLayoutPanel.Margin = new Padding(0);
             //
             // noneCheckBox
             //
-            resources.ApplyResources(noneCheckBox, "noneCheckBox");
-            noneCheckBox.Name = "noneCheckBox";
-            noneCheckBox.Margin = new Padding(3, 3, 3, 1);
+            resources.ApplyResources(_noneCheckBox, "noneCheckBox");
+            _noneCheckBox.Name = "noneCheckBox";
+            _noneCheckBox.Margin = new Padding(3, 3, 3, 1);
             //
             // allCheckBox
             //
-            resources.ApplyResources(allCheckBox, "allCheckBox");
-            allCheckBox.Name = "allCheckBox";
-            allCheckBox.Margin = new Padding(3, 3, 3, 1);
+            resources.ApplyResources(_allCheckBox, "allCheckBox");
+            _allCheckBox.Name = "allCheckBox";
+            _allCheckBox.Margin = new Padding(3, 3, 3, 1);
             //
             // topCheckBox
             //
-            resources.ApplyResources(topCheckBox, "topCheckBox");
-            topCheckBox.Margin = new Padding(20, 1, 3, 1);
-            topCheckBox.Name = "topCheckBox";
+            resources.ApplyResources(_topCheckBox, "topCheckBox");
+            _topCheckBox.Margin = new Padding(20, 1, 3, 1);
+            _topCheckBox.Name = "topCheckBox";
             //
             // bottomCheckBox
             //
-            resources.ApplyResources(bottomCheckBox, "bottomCheckBox");
-            bottomCheckBox.Margin = new Padding(20, 1, 3, 1);
-            bottomCheckBox.Name = "bottomCheckBox";
+            resources.ApplyResources(_bottomCheckBox, "bottomCheckBox");
+            _bottomCheckBox.Margin = new Padding(20, 1, 3, 1);
+            _bottomCheckBox.Name = "bottomCheckBox";
             //
             // rightCheckBox
             //
-            resources.ApplyResources(rightCheckBox, "rightCheckBox");
-            rightCheckBox.Margin = new Padding(20, 1, 3, 1);
-            rightCheckBox.Name = "rightCheckBox";
+            resources.ApplyResources(_rightCheckBox, "rightCheckBox");
+            _rightCheckBox.Margin = new Padding(20, 1, 3, 1);
+            _rightCheckBox.Name = "rightCheckBox";
             //
             // leftCheckBox
             //
-            resources.ApplyResources(leftCheckBox, "leftCheckBox");
-            leftCheckBox.Margin = new Padding(20, 1, 3, 1);
-            leftCheckBox.Name = "leftCheckBox";
+            resources.ApplyResources(_leftCheckBox, "leftCheckBox");
+            _leftCheckBox.Margin = new Padding(20, 1, 3, 1);
+            _leftCheckBox.Name = "leftCheckBox";
             //
             // splitterLabel
             //
-            resources.ApplyResources(splitterLabel, "splitterLabel");
-            splitterLabel.BackColor = SystemColors.ControlDark;
-            splitterLabel.Name = "splitterLabel";
+            resources.ApplyResources(_splitterLabel, "splitterLabel");
+            _splitterLabel.BackColor = SystemColors.ControlDark;
+            _splitterLabel.Name = "splitterLabel";
             //
             // Control
             //
             resources.ApplyResources(this, "$this");
-            Controls.Add(tableLayoutPanel1);
+            Controls.Add(_tableLayoutPanel);
             Padding = new Padding(1, 1, 1, 1);
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             AutoScaleMode = AutoScaleMode.Font;
             AutoScaleDimensions = new SizeF(6F, 13F);
-            tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel1.PerformLayout();
+            _tableLayoutPanel.ResumeLayout(false);
+            _tableLayoutPanel.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
 
             //Events
-            rightCheckBox.CheckedChanged += rightCheckBox_CheckedChanged;
-            leftCheckBox.CheckedChanged += leftCheckBox_CheckedChanged;
-            bottomCheckBox.CheckedChanged += bottomCheckBox_CheckedChanged;
-            topCheckBox.CheckedChanged += topCheckBox_CheckedChanged;
-            noneCheckBox.CheckedChanged += noneCheckBox_CheckedChanged;
-            allCheckBox.CheckedChanged += allCheckBox_CheckedChanged;
+            _rightCheckBox.CheckedChanged += rightCheckBox_CheckedChanged;
+            _leftCheckBox.CheckedChanged += leftCheckBox_CheckedChanged;
+            _bottomCheckBox.CheckedChanged += bottomCheckBox_CheckedChanged;
+            _topCheckBox.CheckedChanged += topCheckBox_CheckedChanged;
+            _noneCheckBox.CheckedChanged += noneCheckBox_CheckedChanged;
+            _allCheckBox.CheckedChanged += allCheckBox_CheckedChanged;
 
-            noneCheckBox.Click += noneCheckBoxClicked;
-            allCheckBox.Click += allCheckBoxClicked;
+            _noneCheckBox.Click += noneCheckBoxClicked;
+            _allCheckBox.Click += allCheckBoxClicked;
         }
 
         /// <summary>
         ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
         /// </summary>
-        private void rightCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void rightCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            CheckBox senderCheckBox = sender as CheckBox;
+            CheckBox senderCheckBox = (CheckBox)sender!;
             if (senderCheckBox.Checked)
             {
-                noneCheckBox.Checked = false;
+                _noneCheckBox.Checked = false;
             }
             else // this is turned off....
             {
-                if (allCheckBox.Checked)
+                if (_allCheckBox.Checked)
                 {
-                    allCheckBox.Checked = false;
+                    _allCheckBox.Checked = false;
                 }
             }
 
@@ -199,18 +205,18 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
         /// </summary>
-        private void leftCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void leftCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            CheckBox senderCheckBox = sender as CheckBox;
+            CheckBox senderCheckBox = (CheckBox)sender!;
             if (senderCheckBox.Checked)
             {
-                noneCheckBox.Checked = false;
+                _noneCheckBox.Checked = false;
             }
             else // this is turned off....
             {
-                if (allCheckBox.Checked)
+                if (_allCheckBox.Checked)
                 {
-                    allCheckBox.Checked = false;
+                    _allCheckBox.Checked = false;
                 }
             }
 
@@ -220,18 +226,18 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
         /// </summary>
-        private void bottomCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void bottomCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            CheckBox senderCheckBox = sender as CheckBox;
+            CheckBox senderCheckBox = (CheckBox)sender!;
             if (senderCheckBox.Checked)
             {
-                noneCheckBox.Checked = false;
+                _noneCheckBox.Checked = false;
             }
             else // this is turned off....
             {
-                if (allCheckBox.Checked)
+                if (_allCheckBox.Checked)
                 {
-                    allCheckBox.Checked = false;
+                    _allCheckBox.Checked = false;
                 }
             }
 
@@ -241,18 +247,18 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
         /// </summary>
-        private void topCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void topCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            CheckBox senderCheckBox = sender as CheckBox;
+            CheckBox senderCheckBox = (CheckBox)sender!;
             if (senderCheckBox.Checked)
             {
-                noneCheckBox.Checked = false;
+                _noneCheckBox.Checked = false;
             }
             else // this is turned off....
             {
-                if (allCheckBox.Checked)
+                if (_allCheckBox.Checked)
                 {
-                    allCheckBox.Checked = false;
+                    _allCheckBox.Checked = false;
                 }
             }
 
@@ -262,16 +268,16 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
         /// </summary>
-        private void noneCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void noneCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            CheckBox senderCheckBox = sender as CheckBox;
+            CheckBox senderCheckBox = (CheckBox)sender!;
             if (senderCheckBox.Checked)
             {
-                allCheckBox.Checked = false;
-                topCheckBox.Checked = false;
-                bottomCheckBox.Checked = false;
-                leftCheckBox.Checked = false;
-                rightCheckBox.Checked = false;
+                _allCheckBox.Checked = false;
+                _topCheckBox.Checked = false;
+                _bottomCheckBox.Checked = false;
+                _leftCheckBox.Checked = false;
+                _rightCheckBox.Checked = false;
             }
 
             UpdateCurrentValue();
@@ -280,16 +286,16 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  CheckBox CheckedChanged event.. allows selecting/Deselecting proper values.
         /// </summary>
-        private void allCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void allCheckBox_CheckedChanged(object? sender, EventArgs e)
         {
-            CheckBox senderCheckBox = sender as CheckBox;
+            CheckBox senderCheckBox = (CheckBox)sender!;
             if (senderCheckBox.Checked)
             {
-                noneCheckBox.Checked = false;
-                topCheckBox.Checked = true;
-                bottomCheckBox.Checked = true;
-                leftCheckBox.Checked = true;
-                rightCheckBox.Checked = true;
+                _noneCheckBox.Checked = false;
+                _topCheckBox.Checked = true;
+                _bottomCheckBox.Checked = true;
+                _leftCheckBox.Checked = true;
+                _rightCheckBox.Checked = true;
             }
 
             UpdateCurrentValue();
@@ -298,22 +304,22 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  Click event.
         /// </summary>
-        private void noneCheckBoxClicked(object sender, EventArgs e)
+        private void noneCheckBoxClicked(object? sender, EventArgs e)
         {
-            if (noneChecked)
+            if (_noneChecked)
             {
-                noneCheckBox.Checked = true;
+                _noneCheckBox.Checked = true;
             }
         }
 
         /// <summary>
         ///  Click event.
         /// </summary>
-        private void allCheckBoxClicked(object sender, EventArgs e)
+        private void allCheckBoxClicked(object? sender, EventArgs e)
         {
-            if (allChecked)
+            if (_allChecked)
             {
-                allCheckBox.Checked = true;
+                _allCheckBox.Checked = true;
             }
         }
 
@@ -322,12 +328,12 @@ public partial class BorderSidesEditor
         /// </summary>
         private void ResetCheckBoxState()
         {
-            allCheckBox.Checked = false;
-            noneCheckBox.Checked = false;
-            topCheckBox.Checked = false;
-            bottomCheckBox.Checked = false;
-            leftCheckBox.Checked = false;
-            rightCheckBox.Checked = false;
+            _allCheckBox.Checked = false;
+            _noneCheckBox.Checked = false;
+            _topCheckBox.Checked = false;
+            _bottomCheckBox.Checked = false;
+            _leftCheckBox.Checked = false;
+            _rightCheckBox.Checked = false;
         }
 
         /// <summary>
@@ -338,24 +344,24 @@ public partial class BorderSidesEditor
             ResetCheckBoxState();
             if ((sides & ToolStripStatusLabelBorderSides.All) == ToolStripStatusLabelBorderSides.All)
             {
-                allCheckBox.Checked = true;
-                topCheckBox.Checked = true;
-                bottomCheckBox.Checked = true;
-                leftCheckBox.Checked = true;
-                rightCheckBox.Checked = true;
-                allCheckBox.Checked = true;
+                _allCheckBox.Checked = true;
+                _topCheckBox.Checked = true;
+                _bottomCheckBox.Checked = true;
+                _leftCheckBox.Checked = true;
+                _rightCheckBox.Checked = true;
+                _allCheckBox.Checked = true;
             }
             else
             {
-                noneCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.None) ==
+                _noneCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.None) ==
                                        ToolStripStatusLabelBorderSides.None;
-                topCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.Top) ==
+                _topCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.Top) ==
                                       ToolStripStatusLabelBorderSides.Top;
-                bottomCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.Bottom) ==
+                _bottomCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.Bottom) ==
                                          ToolStripStatusLabelBorderSides.Bottom;
-                leftCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.Left) ==
+                _leftCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.Left) ==
                                        ToolStripStatusLabelBorderSides.Left;
-                rightCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.Right) ==
+                _rightCheckBox.Checked = (sides & ToolStripStatusLabelBorderSides.Right) ==
                                         ToolStripStatusLabelBorderSides.Right;
             }
         }
@@ -363,12 +369,12 @@ public partial class BorderSidesEditor
         /// <summary>
         ///  Triggered whenever the user drops down the editor.
         /// </summary>
-        public void Start(IWindowsFormsEditorService edSvc, object value)
+        public void Start(IWindowsFormsEditorService edSvc, object? value)
         {
             Debug.Assert(edSvc is not null);
 
             EditorService = edSvc;
-            originalValue = Value = value;
+            _originalValue = Value = value;
 
             if (value is ToolStripStatusLabelBorderSides currentSides)
             {
@@ -388,53 +394,53 @@ public partial class BorderSidesEditor
             }
 
             ToolStripStatusLabelBorderSides valueSide = ToolStripStatusLabelBorderSides.None;
-            if (allCheckBox.Checked)
+            if (_allCheckBox.Checked)
             {
                 valueSide |= ToolStripStatusLabelBorderSides.All;
                 Value = valueSide;
-                allChecked = true;
-                noneChecked = false;
+                _allChecked = true;
+                _noneChecked = false;
                 return;
             }
 
-            if (noneCheckBox.Checked)
+            if (_noneCheckBox.Checked)
             {
                 valueSide |= ToolStripStatusLabelBorderSides.None;
             }
 
-            if (topCheckBox.Checked)
+            if (_topCheckBox.Checked)
             {
                 valueSide |= ToolStripStatusLabelBorderSides.Top;
             }
 
-            if (bottomCheckBox.Checked)
+            if (_bottomCheckBox.Checked)
             {
                 valueSide |= ToolStripStatusLabelBorderSides.Bottom;
             }
 
-            if (leftCheckBox.Checked)
+            if (_leftCheckBox.Checked)
             {
                 valueSide |= ToolStripStatusLabelBorderSides.Left;
             }
 
-            if (rightCheckBox.Checked)
+            if (_rightCheckBox.Checked)
             {
                 valueSide |= ToolStripStatusLabelBorderSides.Right;
             }
 
             if (valueSide == ToolStripStatusLabelBorderSides.None)
             {
-                allChecked = false;
-                noneChecked = true;
-                noneCheckBox.Checked = true;
+                _allChecked = false;
+                _noneChecked = true;
+                _noneCheckBox.Checked = true;
             }
 
             if (valueSide == (ToolStripStatusLabelBorderSides.Left | ToolStripStatusLabelBorderSides.Right |
                               ToolStripStatusLabelBorderSides.Top | ToolStripStatusLabelBorderSides.Bottom))
             {
-                allChecked = true;
-                noneChecked = false;
-                allCheckBox.Checked = true;
+                _allChecked = true;
+                _noneChecked = false;
+                _allCheckBox.Checked = true;
             }
 
             Value = valueSide;

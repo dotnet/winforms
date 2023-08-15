@@ -612,10 +612,7 @@ public partial class TaskDialog : IWin32Window
     /// </param>
     internal unsafe void SetProgressBarMarquee(bool enableMarquee, int animationSpeed = 0)
     {
-        if (animationSpeed < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(animationSpeed));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(animationSpeed);
 
         SendTaskDialogMessage(
             TASKDIALOG_MESSAGES.TDM_SET_PROGRESS_BAR_MARQUEE,
