@@ -415,6 +415,7 @@ IsAccelerator
 IsAppThemed
 IsChild
 IsDialogMessage
+IScrollProvider
 IServiceProvider
 IShellItem
 ISimpleFrameSite
