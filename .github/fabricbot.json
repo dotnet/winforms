@@ -645,7 +645,7 @@
           {
             "name": "addMilestone",
             "parameters": {
-              "milestoneName": "8.0 RC1"
+              "milestoneName": "9.0 Preview1"
             }
           }
         ],
