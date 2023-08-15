@@ -267,7 +267,7 @@ public partial class ListView
 
         // END - NEW ADD OVERLOADS IN WHIDBEY  -->
 
-        public virtual void AddRange(ColumnHeader[] values)
+        public virtual void AddRange(params ColumnHeader[] values)
         {
             ArgumentNullException.ThrowIfNull(values);
 

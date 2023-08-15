@@ -841,13 +841,27 @@ public abstract class ToolStripRenderer
 
         if (imageRect != Rectangle.Empty && image is not null)
         {
-            if (e.Item is not null && !e.Item.Enabled)
+            if (e.Item is not null)
             {
-                image = CreateDisabledImage(image, e.ImageAttributes);
+                if (!e.Item.Enabled)
+                {
+                    image = CreateDisabledImage(image, e.ImageAttributes);
+                }
+
+                if (SystemInformation.HighContrast && image is Bitmap bitmap)
+                {
+                    Color backgroundColor = e.Item.Selected ? SystemColors.Highlight : e.Item.BackColor;
+
+                    if (ControlPaint.IsDark(backgroundColor))
+                    {
+                        Image invertedImage = ControlPaint.CreateBitmapWithInvertedForeColor(bitmap, e.Item.BackColor);
+                        image = invertedImage;
+                    }
+                }
             }
 
             e.Graphics.DrawImage(image, imageRect, 0, 0, imageRect.Width,
-                imageRect.Height, GraphicsUnit.Pixel, e.ImageAttributes);
+            imageRect.Height, GraphicsUnit.Pixel, e.ImageAttributes);
         }
     }
 

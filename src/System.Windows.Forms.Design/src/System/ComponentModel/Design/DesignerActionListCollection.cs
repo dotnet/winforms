@@ -24,7 +24,7 @@ public class DesignerActionListCollection : CollectionBase
 
     public int Add(DesignerActionList? value) => List.Add(value);
 
-    public void AddRange(DesignerActionList?[] value)
+    public void AddRange(params DesignerActionList?[] value)
     {
         ArgumentNullException.ThrowIfNull(value);
 

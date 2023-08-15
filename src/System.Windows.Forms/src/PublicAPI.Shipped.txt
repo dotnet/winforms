@@ -13493,7 +13493,7 @@ virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, s
 virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, string? imageKey, string? selectedImageKey) -> System.Windows.Forms.TreeNode!
 virtual System.Windows.Forms.TreeNodeCollection.Add(string? text) -> System.Windows.Forms.TreeNode!
 virtual System.Windows.Forms.TreeNodeCollection.Add(System.Windows.Forms.TreeNode! node) -> int
-virtual System.Windows.Forms.TreeNodeCollection.AddRange(System.Windows.Forms.TreeNode![]! nodes) -> void
+virtual System.Windows.Forms.TreeNodeCollection.AddRange(params System.Windows.Forms.TreeNode![]! nodes) -> void
 virtual System.Windows.Forms.TreeNodeCollection.Clear() -> void
 virtual System.Windows.Forms.TreeNodeCollection.ContainsKey(string? key) -> bool
 virtual System.Windows.Forms.TreeNodeCollection.IndexOfKey(string? key) -> int
