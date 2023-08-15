@@ -358,7 +358,7 @@ public static partial class StronglyTypedResourceBuilder
         codeCompileUnit.UserData.Add("AllowLateBound", value: false);
         codeCompileUnit.UserData.Add("RequireVariableDeclaration", value: true);
 
-        CodeNamespace codeNamespace = new(generatedCodeNamespace!);
+        CodeNamespace codeNamespace = new(generatedCodeNamespace);
         codeNamespace.Imports.Add(new CodeNamespaceImport("System"));
         codeCompileUnit.Namespaces.Add(codeNamespace);
 
@@ -438,7 +438,7 @@ public static partial class StronglyTypedResourceBuilder
     {
         CodeAttributeDeclaration generatedCodeAttrib = new(new CodeTypeReference(typeof(GeneratedCodeAttribute)));
         generatedCodeAttrib.AttributeType.Options = CodeTypeReferenceOptions.GlobalReference;
-        CodeAttributeArgument toolArg = new(new CodePrimitiveExpression(typeof(StronglyTypedResourceBuilder).FullName!));
+        CodeAttributeArgument toolArg = new(new CodePrimitiveExpression(typeof(StronglyTypedResourceBuilder).FullName));
 
         // This historically was the VS version, now pick up the .NET version
         CodeAttributeArgument versionArg =
@@ -573,14 +573,14 @@ public static partial class StronglyTypedResourceBuilder
         //
         // return resourceMan;
 
-        CodeFieldReferenceExpression resourceManagerField = new(null!, ResourceManagerFieldName);
+        CodeFieldReferenceExpression resourceManagerField = new(null, ResourceManagerFieldName);
         CodeMethodReferenceExpression objectEqualsMethod =
             new(new CodeTypeReferenceExpression(typeof(object)), "ReferenceEquals");
 
         CodeMethodInvokeExpression isResourceManagerNull = new(
             objectEqualsMethod,
             resourceManagerField,
-            new CodePrimitiveExpression(null!));
+            new CodePrimitiveExpression(null));
 
         CodePropertyReferenceExpression getAssemblyProperty;
 
@@ -624,7 +624,7 @@ public static partial class StronglyTypedResourceBuilder
         resourceManagerProperty.Comments.Add(new(DocCommentSummaryEnd, docComment: true));
 
         // Emit code for Culture property
-        CodeFieldReferenceExpression cultureInfoField = new(targetObject: null!, CultureInfoFieldName);
+        CodeFieldReferenceExpression cultureInfoField = new(targetObject: null, CultureInfoFieldName);
         culture.GetStatements.Add(new CodeMethodReturnStatement(cultureInfoField));
 
         CodePropertySetValueReferenceExpression newCulture = new();
@@ -728,9 +728,9 @@ public static partial class StronglyTypedResourceBuilder
         // For Objects, emit this:
         //    Object obj = ResourceManager.GetObject("name", _resCulture);
         //    return (MyValueType) obj;
-        CodePropertyReferenceExpression resourceManagerProperty = new(targetObject: null!, "ResourceManager");
+        CodePropertyReferenceExpression resourceManagerProperty = new(targetObject: null, "ResourceManager");
         CodeFieldReferenceExpression cultureInfoField = new(useStatic
-            ? null!
+            ? null
             : new CodeThisReferenceExpression(), CultureInfoFieldName);
 
         bool isString = type == typeof(string);
