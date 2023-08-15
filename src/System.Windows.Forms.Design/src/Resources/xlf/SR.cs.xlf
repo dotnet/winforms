@@ -227,6 +227,11 @@
         <target state="translated">Náhled na vybrané položky</target>
         <note />
       </trans-unit>
+      <trans-unit id="ChooseIconDisplayName">
+        <source>Choose Icon...</source>
+        <target state="new">Vybrat ikonu...</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ChooseImageDescription">
         <source>Select the image displayed in the PictureBox</source>
         <target state="translated">Vyberte obrázek zobrazený v ovládacím prvku PictureBox</target>

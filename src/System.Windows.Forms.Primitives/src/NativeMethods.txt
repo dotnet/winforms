@@ -172,6 +172,7 @@ FDAP
 fdex*
 FILETIME
 FillRect
+FindExecutable
 FindWindow
 FONTDESC
 FormatMessage
