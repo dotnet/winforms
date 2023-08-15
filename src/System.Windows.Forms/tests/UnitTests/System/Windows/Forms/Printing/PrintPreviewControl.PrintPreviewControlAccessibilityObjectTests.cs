@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using static System.Windows.Forms.PrintPreviewControl;
+using IScrollProvider = Windows.Win32.UI.Accessibility.IScrollProvider;
 
 namespace System.Windows.Forms.Tests;
 
@@ -136,6 +138,41 @@ public class PrintPreviewControl_PrintPreviewControlAccessibilityObjectTests
 
         Assert.Equal(accessibleObject, verticalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
         Assert.Equal(accessibleObject, horizontalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
+    }
+
+    [WinFormsFact]
+    public void PrintPreviewControlAccessibilityObject_ScrollInfo_ReturnsConsistent()
+    {
+        using SubPrintPreviewControl control = new();
+
+        PrintPreviewControlAccessibleObject accessibleObject = (PrintPreviewControlAccessibleObject)control.AccessibilityObject;
+        IScrollProvider.Interface scrollProvider = accessibleObject;
+        Assert.False(accessibleObject.IsPatternSupported(Interop.UiaCore.UIA.ScrollPatternId));
+
+        control.MakeOnlyVerticalScrollBarVisible();
+        Assert.True(accessibleObject.IsPatternSupported(Interop.UiaCore.UIA.ScrollPatternId));
+
+        Assert.False((bool)scrollProvider.HorizontallyScrollable);
+        Assert.Equal(0, (int)scrollProvider.HorizontalScrollPercent);
+        Assert.Equal(100, (int)scrollProvider.HorizontalViewSize);
+
+        Assert.True((bool)scrollProvider.VerticallyScrollable);
+        Assert.InRange((int)scrollProvider.VerticalScrollPercent, 0, 100);
+        AssertExtensions.GreaterThanOrEqualTo((int)scrollProvider.VerticalViewSize, 0);
+
+        control.MakeNoScrollBarsVisible();
+        Assert.False(accessibleObject.IsPatternSupported(Interop.UiaCore.UIA.ScrollPatternId));
+
+        control.MakeOnlyHorizontalScrollBarVisible();
+        Assert.True(accessibleObject.IsPatternSupported(Interop.UiaCore.UIA.ScrollPatternId));
+
+        Assert.False((bool)scrollProvider.VerticallyScrollable);
+        Assert.Equal(0, (int)scrollProvider.VerticalScrollPercent);
+        Assert.Equal(100, (int)scrollProvider.VerticalViewSize);
+
+        Assert.True((bool)scrollProvider.HorizontallyScrollable);
+        Assert.InRange((int)scrollProvider.HorizontalScrollPercent, 0, 100);
+        AssertExtensions.GreaterThanOrEqualTo((int)scrollProvider.HorizontalViewSize, 0);
     }
 
     private class SubPrintPreviewControl : PrintPreviewControl

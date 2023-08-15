@@ -444,6 +444,16 @@ public partial class PrintPreviewControl : Control
         }
     }
 
+    /// <summary>
+    ///  Equal to the vertical percentage of the entire control that is currently viewable.
+    /// </summary>
+    internal double VerticalViewSize => InsideRectangle.Height * 100.0 / VirtualSize.Height;
+
+    /// <summary>
+    ///  Equal to the horizontal percentage of the entire control that is currently viewable.
+    /// </summary>
+    internal double HorizontalViewSize => InsideRectangle.Width * 100.0 / VirtualSize.Width;
+
     private Rectangle InnerClientRectangle
     {
         get
