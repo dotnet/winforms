@@ -421,10 +421,8 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         else if (OwningRow is not null)
         {
             // must be a row header cell
-            if (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(rowIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(rowIndex);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, DataGridView.Rows.Count);
 
             if (DataGridView.Rows.SharedRow(rowIndex) != OwningRow)
             {

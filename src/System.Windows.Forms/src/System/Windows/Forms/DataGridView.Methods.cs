@@ -1734,10 +1734,8 @@ public partial class DataGridView
                 throw new InvalidEnumArgumentException(nameof(autoSizeColumnMode), (int)autoSizeColumnMode, typeof(DataGridViewAutoSizeColumnMode));
         }
 
-        if (columnIndex < 0 || columnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(columnIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(columnIndex, Columns.Count);
 
         if (autoSizeColumnMode == DataGridViewAutoSizeColumnMode.ColumnHeader && !ColumnHeadersVisible)
         {
@@ -1830,10 +1828,8 @@ public partial class DataGridView
 
     protected void AutoResizeColumnHeadersHeight(int columnIndex, bool fixedRowHeadersWidth, bool fixedColumnWidth)
     {
-        if (columnIndex < -1 || columnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(columnIndex, -1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(columnIndex, Columns.Count);
 
         if (!ColumnHeadersVisible)
         {
@@ -1993,10 +1989,8 @@ public partial class DataGridView
 
     protected void AutoResizeRow(int rowIndex, DataGridViewAutoSizeRowMode autoSizeRowMode, bool fixedWidth)
     {
-        if (rowIndex < 0 || rowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(rowIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
 
         // not using ClientUtils here because it's a flags enum, masking instead.
         if (((DataGridViewAutoSizeRowCriteriaInternal)autoSizeRowMode & InvalidDataGridViewAutoSizeRowCriteriaInternalMask) != 0)
@@ -2190,10 +2184,8 @@ public partial class DataGridView
                                              bool fixedColumnHeadersHeight,
                                              bool fixedRowHeight)
     {
-        if (rowIndex < -1 || rowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(rowIndex, -1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
 
         if (rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing ||
             rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.DisableResizing)
@@ -3569,10 +3561,8 @@ public partial class DataGridView
             case DataGridViewSelectionMode.FullColumnSelect:
             case DataGridViewSelectionMode.ColumnHeaderSelect:
                 {
-                    if (columnIndexException < 0 || columnIndexException >= Columns.Count)
-                    {
-                        throw new ArgumentOutOfRangeException(nameof(columnIndexException));
-                    }
+                    ArgumentOutOfRangeException.ThrowIfNegative(columnIndexException);
+                    ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(columnIndexException, Columns.Count);
 
                     break;
                 }
@@ -3580,10 +3570,8 @@ public partial class DataGridView
             case DataGridViewSelectionMode.FullRowSelect:
             case DataGridViewSelectionMode.RowHeaderSelect:
                 {
-                    if (columnIndexException < -1 || columnIndexException >= Columns.Count)
-                    {
-                        throw new ArgumentOutOfRangeException(nameof(columnIndexException));
-                    }
+                    ArgumentOutOfRangeException.ThrowIfLessThan(columnIndexException, -1);
+                    ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(columnIndexException, Columns.Count);
 
                     break;
                 }
@@ -3595,10 +3583,8 @@ public partial class DataGridView
             case DataGridViewSelectionMode.FullRowSelect:
             case DataGridViewSelectionMode.RowHeaderSelect:
                 {
-                    if (rowIndexException < 0 || rowIndexException >= Rows.Count)
-                    {
-                        throw new ArgumentOutOfRangeException(nameof(rowIndexException));
-                    }
+                    ArgumentOutOfRangeException.ThrowIfNegative(rowIndexException);
+                    ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndexException, Rows.Count);
 
                     break;
                 }
@@ -3606,10 +3592,8 @@ public partial class DataGridView
             case DataGridViewSelectionMode.FullColumnSelect:
             case DataGridViewSelectionMode.ColumnHeaderSelect:
                 {
-                    if (rowIndexException < -1 || rowIndexException >= Rows.Count)
-                    {
-                        throw new ArgumentOutOfRangeException(nameof(rowIndexException));
-                    }
+                    ArgumentOutOfRangeException.ThrowIfLessThan(rowIndexException, -1);
+                    ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndexException, Rows.Count);
 
                     break;
                 }
@@ -8252,10 +8236,8 @@ public partial class DataGridView
     // Rectangle returned includes the potential column header
     public Rectangle GetColumnDisplayRectangle(int columnIndex, bool cutOverflow)
     {
-        if (columnIndex < 0 || columnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(columnIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(columnIndex, Columns.Count);
 
         return GetColumnDisplayRectanglePrivate(columnIndex, cutOverflow);
     }
@@ -9148,10 +9130,8 @@ public partial class DataGridView
     // Rectangle returned includes the potential row header
     public Rectangle GetRowDisplayRectangle(int rowIndex, bool cutOverflow)
     {
-        if (rowIndex < 0 || rowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(rowIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
 
         return GetRowDisplayRectanglePrivate(rowIndex, cutOverflow);
     }
@@ -10018,15 +9998,11 @@ public partial class DataGridView
 
     public void InvalidateCell(int columnIndex, int rowIndex)
     {
-        if (columnIndex < -1 || columnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(columnIndex, -1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(columnIndex, Columns.Count);
 
-        if (rowIndex < -1 || rowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(rowIndex, -1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
 
         InvalidateCellPrivate(columnIndex, rowIndex);
     }
@@ -10048,10 +10024,8 @@ public partial class DataGridView
     /// </summary>
     public void InvalidateColumn(int columnIndex)
     {
-        if (columnIndex < 0 || columnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(columnIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(columnIndex, Columns.Count);
 
         InvalidateColumnInternal(columnIndex);
     }
@@ -10094,10 +10068,8 @@ public partial class DataGridView
     /// </summary>
     public void InvalidateRow(int rowIndex)
     {
-        if (rowIndex < 0 || rowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(rowIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
 
         InvalidateRowPrivate(rowIndex);
     }
@@ -27205,18 +27177,21 @@ public partial class DataGridView
         bool validateCurrentCell,
         bool throughMouseClick)
     {
-        if (columnIndex < -1 ||
-            (columnIndex >= 0 && rowIndex == -1) ||
-            columnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(columnIndex, Columns.Count);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
 
-        if (rowIndex < -1 ||
-            (columnIndex == -1 && rowIndex >= 0) ||
-            rowIndex >= Rows.Count)
+        if (rowIndex == -1)
         {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
+            ArgumentOutOfRangeException.ThrowIfNotEqual(columnIndex, -1);
+        }
+        else if (columnIndex == -1)
+        {
+            ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
+        }
+        else
+        {
+            ArgumentOutOfRangeException.ThrowIfNegative(columnIndex);
+            ArgumentOutOfRangeException.ThrowIfNegative(rowIndex);
         }
 
         if (columnIndex > -1 &&
@@ -28048,15 +28023,11 @@ public partial class DataGridView
 
     protected virtual void SetSelectedCellCore(int columnIndex, int rowIndex, bool selected)
     {
-        if (columnIndex < 0 || columnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(columnIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(columnIndex, Columns.Count);
 
-        if (rowIndex < 0 || rowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(rowIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
 
         // cell selection changes
         DataGridViewRow dataGridViewRow = Rows.SharedRow(rowIndex);
@@ -28384,10 +28355,8 @@ public partial class DataGridView
 
     protected virtual void SetSelectedColumnCore(int columnIndex, bool selected)
     {
-        if (columnIndex < 0 || columnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(columnIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(columnIndex, Columns.Count);
 
         _noSelectionChangeCount++;
         try
@@ -28505,10 +28474,8 @@ public partial class DataGridView
 
     protected virtual void SetSelectedRowCore(int rowIndex, bool selected)
     {
-        if (rowIndex < 0 || rowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(rowIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
 
         _noSelectionChangeCount++;
         try
@@ -29300,15 +29267,10 @@ public partial class DataGridView
 
     public void UpdateCellErrorText(int columnIndex, int rowIndex)
     {
-        if (columnIndex < -1 || columnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex));
-        }
-
-        if (rowIndex < -1 || rowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(columnIndex, -1);
+        ArgumentOutOfRangeException.ThrowIfLessThan(rowIndex, -1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(columnIndex, Columns.Count);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
 
         if (IsHandleCreated)
         {
@@ -29318,15 +29280,11 @@ public partial class DataGridView
 
     public void UpdateCellValue(int columnIndex, int rowIndex)
     {
-        if (columnIndex < 0 || columnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(columnIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(columnIndex, Columns.Count);
 
-        if (rowIndex < 0 || rowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(rowIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
 
         if (IsHandleCreated)
         {
@@ -29380,10 +29338,8 @@ public partial class DataGridView
 
     public void UpdateRowErrorText(int rowIndex)
     {
-        if (rowIndex < 0 || rowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(rowIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
 
         if (IsHandleCreated && _layout.RowHeadersVisible)
         {
@@ -29393,15 +29349,11 @@ public partial class DataGridView
 
     public void UpdateRowErrorText(int rowIndexStart, int rowIndexEnd)
     {
-        if (rowIndexStart < 0 || rowIndexStart >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndexStart));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(rowIndexStart);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndexStart, Rows.Count);
 
-        if (rowIndexEnd < 0 || rowIndexEnd >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndexEnd));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(rowIndexEnd);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndexEnd, Rows.Count);
 
         ArgumentOutOfRangeException.ThrowIfLessThan(rowIndexEnd, rowIndexStart);
 
@@ -29430,10 +29382,8 @@ public partial class DataGridView
 
     private void UpdateRowHeightInfoPrivate(int rowIndex, bool updateToEnd, bool invalidInAdjustFillingColumns)
     {
-        if ((updateToEnd && rowIndex < 0) || (!updateToEnd && rowIndex < -1) || rowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(rowIndex, updateToEnd ? 0 : -1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
 
         Rows.InvalidateCachedRowsHeights();
 

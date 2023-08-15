@@ -178,10 +178,8 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             return null;
         }
 
-        if (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(rowIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, DataGridView.Rows.Count);
 
         // Not using formatted values for header cells.
         object val = GetValue(rowIndex);
@@ -365,9 +363,10 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
 
     public override ContextMenuStrip GetInheritedContextMenuStrip(int rowIndex)
     {
-        if (DataGridView is not null && (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count))
+        if (DataGridView is not null)
         {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
+            ArgumentOutOfRangeException.ThrowIfNegative(rowIndex);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, DataGridView.Rows.Count);
         }
 
         ContextMenuStrip contextMenuStrip = GetContextMenuStrip(rowIndex);
@@ -641,9 +640,10 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
     {
         // We allow multiple rows to share the same row header value. The row header cell's cloning does this.
         // So here we need to allow rowIndex == -1.
-        if (DataGridView is not null && (rowIndex < -1 || rowIndex >= DataGridView.Rows.Count))
+        if (DataGridView is not null)
         {
-            throw new ArgumentOutOfRangeException(nameof(rowIndex));
+            ArgumentOutOfRangeException.ThrowIfLessThan(rowIndex, -1);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, DataGridView.Rows.Count);
         }
 
         return Properties.GetObject(s_propCellValue);
