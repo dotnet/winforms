@@ -495,7 +495,7 @@ internal static partial class DpiHelper
     /// Create a new button bitmap scaled for the device units.
     /// Note: original image might be disposed.
     /// </summary>
-    public static Image? ScaleButtonImageLogicalToDevice(Image buttonImage)
+    public static Image? ScaleButtonImageLogicalToDevice(Image? buttonImage)
     {
         if (buttonImage is null)
         {

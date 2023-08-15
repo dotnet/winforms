@@ -5,12 +5,12 @@ namespace System.Windows.Forms.Design;
 
 internal class DesignBinding
 {
-    private object dataSource;
-    private string dataMember;
+    private object? dataSource;
+    private string? dataMember;
 
     public static DesignBinding Null = new(null, null);
 
-    public DesignBinding(object dataSource, string dataMember)
+    public DesignBinding(object? dataSource, string? dataMember)
     {
         this.dataSource = dataSource;
         this.dataMember = dataMember;
@@ -20,11 +20,11 @@ internal class DesignBinding
     {
         get
         {
-            return (dataSource == null);
+            return (dataSource is null);
         }
     }
 
-    public object DataSource
+    public object? DataSource
     {
         get
         {
@@ -32,7 +32,7 @@ internal class DesignBinding
         }
     }
 
-    public string DataMember
+    public string? DataMember
     {
         get
         {
@@ -61,7 +61,7 @@ internal class DesignBinding
         }
     }
 
-    public bool Equals(object dataSource, string dataMember)
+    public bool Equals(object? dataSource, string dataMember)
     {
         return dataSource == this.dataSource && string.Equals(dataMember, this.dataMember, StringComparison.OrdinalIgnoreCase);
     }

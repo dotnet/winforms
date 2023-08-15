@@ -7,9 +7,9 @@ namespace System.Windows.Forms.Design;
 
 internal class VsPropertyGrid : PropertyGrid
 {
-    private static readonly Size ICON_SIZE = new(16, 16);
-    private static Size IconSize = ICON_SIZE;
-    private static bool IsScalingInitialized = false;
+    private static readonly Size _ICON_SIZE = new(16, 16);
+    private static Size _iconSize = _ICON_SIZE;
+    private static bool _isScalingInitialized = false;
 
     public VsPropertyGrid(IServiceProvider serviceProvider) : base()
     {
@@ -42,23 +42,23 @@ internal class VsPropertyGrid : PropertyGrid
     // try to find the best possible image
     private Bitmap GetBitmap(string resourceName, bool setMagentaTransparent = false)
     {
-        Bitmap bitmap = null;
+        Bitmap? bitmap = null;
         // this resource might be present in System.Windows.Forms.VisualStudio.11.0.dll if this code is running on dev14 or newer
         Stream stream = BitmapSelector.GetResourceStream(typeof(PropertyGrid), resourceName);
-        if (stream != null)
+        if (stream is not null)
         {
-            if (!IsScalingInitialized)
+            if (!_isScalingInitialized)
             {
                 if (DpiHelper.IsScalingRequired)
                 {
-                    IconSize = DpiHelper.LogicalToDeviceUnits(ICON_SIZE);
+                    _iconSize = DpiHelper.LogicalToDeviceUnits(_ICON_SIZE);
                 }
 
-                IsScalingInitialized = true;
+                _isScalingInitialized = true;
             }
 
             // retrieve icon closest to the desired size
-            Icon icon = new Icon(stream, IconSize);
+            Icon icon = new Icon(stream, _iconSize);
             bitmap = icon.ToBitmap();
             icon.Dispose();
         }

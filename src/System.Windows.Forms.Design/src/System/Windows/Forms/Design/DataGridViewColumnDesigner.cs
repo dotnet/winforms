@@ -11,20 +11,20 @@ namespace System.Windows.Forms.Design;
 internal class DataGridViewColumnDesigner : ComponentDesigner
 {
     private const int DATAGRIDVIEWCOLUMN_defaultWidth = 100;
-    private bool userAddedColumn = false;
+    private bool userAddedColumn;
     private bool initializing;
-    BehaviorService behaviorService;
-    ISelectionService selectionService;
-    private FilterCutCopyPasteDeleteBehavior behavior;
-    private bool behaviorPushed = false;
-    private DataGridView liveDataGridView;
+    private BehaviorService? behaviorService;
+    private ISelectionService? selectionService;
+    private FilterCutCopyPasteDeleteBehavior? behavior;
+    private bool behaviorPushed;
+    private DataGridView? liveDataGridView;
 
     private string Name
     {
         get
         {
             DataGridViewColumn col = (DataGridViewColumn)this.Component;
-            if (col.Site != null)
+            if (col.Site is not null)
             {
                 return col.Site.Name;
             }
@@ -36,57 +36,54 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
 
         set
         {
-            if (value == null)
-            {
-                value = String.Empty;
-            }
+            value ??= string.Empty;
 
             DataGridViewColumn col = (DataGridViewColumn)this.Component;
 
-            if (col == null)
+            if (col is null)
             {
                 return;
             }
 
             // Note: case sensitive because lookup inside DataGridViewColumnCollection is case sensitive.
-            if (String.Compare(value, col.Name, false, System.Globalization.CultureInfo.InvariantCulture) == 0)
+            if (string.Compare(value, col.Name, false, System.Globalization.CultureInfo.InvariantCulture) == 0)
             {
                 return;
             }
 
-            DataGridView dgv = col.DataGridView;
+            DataGridView? dgv = col?.DataGridView;
 
-            IDesignerHost host = null;
-            IContainer container = null;
-            INameCreationService nameCreationService = null;
+            IDesignerHost? host = null;
+            IContainer? container = null;
+            INameCreationService? nameCreationService = null;
 
-            if (dgv != null && dgv.Site != null)
+            if (dgv is not null && dgv.Site is not null)
             {
                 host = dgv.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
                 nameCreationService = dgv.Site.GetService(typeof(INameCreationService)) as INameCreationService;
             }
 
-            if (host != null)
+            if (host is not null)
             {
                 container = host.Container;
             }
 
             // ValidName() checks any name conflicts on the DGV's column collection as well as any name conflicts
             // on the Container::Components collection.
-            string errorString = String.Empty;
-            if (dgv != null &&
-                !System.Windows.Forms.Design.DataGridViewAddColumnDialog.ValidName(value,
-                                                                    dgv.Columns,
-                                                                    container,
-                                                                    nameCreationService,
-                                                                    this.liveDataGridView != null ? this.liveDataGridView.Columns : null,
-                                                                    true /*allowDuplicateNameInLiveColumnCollection*/,
-                                                                    out errorString))
+            string errorString = string.Empty;
+            if (dgv is not null &&
+                !DataGridViewAddColumnDialog.ValidName(value,
+                                                        dgv.Columns,
+                                                        container,
+                                                        nameCreationService,
+                                                        this.liveDataGridView is not null ? this.liveDataGridView.Columns : null,
+                                                        true /*allowDuplicateNameInLiveColumnCollection*/,
+                                                        out errorString))
             {
-                if (dgv != null && dgv.Site != null)
+                if (dgv is not null && dgv.Site is not null)
                 {
-                    IUIService uiService = (IUIService)dgv.Site.GetService(typeof(IUIService));
-                    System.Windows.Forms.Design.DataGridViewDesigner.ShowErrorDialog(uiService, errorString, this.liveDataGridView);
+                    IUIService? uiService = dgv.Site.GetService(typeof(IUIService)) as IUIService;
+                    DataGridViewDesigner.ShowErrorDialog(uiService, errorString, this.liveDataGridView);
                 }
 
                 return;
@@ -95,7 +92,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
             // we are good.
             // Set the site name if the column is sited.
             // Then set the column name.
-            if ((host == null || (host != null && !host.Loading)) && this.Component.Site != null)
+            if ((host is null || (host is not null && !host.Loading)) && this.Component.Site is not null)
             {
                 Component.Site.Name = value;
             }
@@ -159,20 +156,20 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
         initializing = true;
         base.Initialize(component);
 
-        if (component.Site != null)
+        if (component.Site is not null)
         {
             // Acquire a reference to ISelectionService.
             this.selectionService =
                 GetService(typeof(ISelectionService))
                 as ISelectionService;
-            Debug.Assert(selectionService != null);
+            Debug.Assert(selectionService is not null);
 
             // Acquire a reference to BehaviorService.
             this.behaviorService =
                 GetService(typeof(BehaviorService))
                 as BehaviorService;
 
-            if (behaviorService != null && selectionService != null)
+            if (behaviorService is not null && selectionService is not null)
             {
                 behavior = new FilterCutCopyPasteDeleteBehavior(true, behaviorService);
 
@@ -189,7 +186,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
         if (disposing)
         {
             PopBehavior();
-            if (selectionService != null)
+            if (selectionService is not null)
             {
                 this.selectionService.SelectionChanged -= new EventHandler(selectionService_SelectionChanged);
             }
@@ -203,10 +200,10 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
     {
         if (!behaviorPushed)
         {
-            Debug.Assert(behavior != null);
+            Debug.Assert(behavior is not null);
             try
             {
-                this.behaviorService.PushBehavior(behavior);
+                this.behaviorService?.PushBehavior(behavior);
             }
             finally
             {
@@ -219,10 +216,10 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
     {
         if (behaviorPushed)
         {
-            Debug.Assert(behavior != null);
+            Debug.Assert(behavior is not null);
             try
             {
-                this.behaviorService.PopBehavior(behavior);
+                this.behaviorService?.PopBehavior(behavior);
             }
             finally
             {
@@ -233,9 +230,9 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
 
     private void UpdateBehavior()
     {
-        if (selectionService != null)
+        if (selectionService is not null)
         {
-            if (selectionService.PrimarySelection != null
+            if (selectionService.PrimarySelection is not null
                     && this.Component.Equals(selectionService.PrimarySelection))
             {
                 PushBehavior();
@@ -248,7 +245,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
         }
     }
 
-    void selectionService_SelectionChanged(object sender, EventArgs e)
+    private void selectionService_SelectionChanged(object? sender, EventArgs e)
     {
         UpdateBehavior();
     }
@@ -257,16 +254,16 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
     {
         base.PreFilterProperties(properties);
 
-        PropertyDescriptor prop = (PropertyDescriptor)properties["Width"];
-        if (prop != null)
+        PropertyDescriptor? prop = properties["Width"] as PropertyDescriptor;
+        if (prop is not null)
         {
             properties["Width"] = TypeDescriptor.CreateProperty(typeof(DataGridViewColumnDesigner), prop, new Attribute[0]);
         }
 
-        prop = (PropertyDescriptor)properties["Name"];
-        if (prop != null)
+        prop = properties["Name"] as PropertyDescriptor;
+        if (prop is not null)
         {
-            if (this.Component.Site == null)
+            if (this.Component.Site is null)
             {
                 // When the Site is not null the Extender provider will add the (Name) property.
                 // However, when columns are on the data grid view column collection editor, the site is null.
@@ -304,7 +301,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
     private bool ShouldSerializeName()
     {
         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-        if (host == null)
+        if (host is null)
         {
             // The column is hosted in the column collection dialog.
             // Return false : let the user type whatever he feels like.
@@ -319,7 +316,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
     {
         public FilterCutCopyPasteDeleteBehavior(bool callParentBehavior, BehaviorService behaviorService) : base(callParentBehavior, behaviorService) { }
 
-        public override MenuCommand FindCommand(CommandID commandId)
+        public override MenuCommand? FindCommand(CommandID commandId)
         {
             MenuCommand command;
             if ((commandId.ID == StandardCommands.Copy.ID) && (commandId.Guid == StandardCommands.Copy.Guid))
@@ -357,7 +354,6 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
             return base.FindCommand(commandId);
         }
 
-        private void handler(object sender, EventArgs e) { }
+        private void handler(object? sender, EventArgs e) { }
     }
-
 }

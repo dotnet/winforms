@@ -8,8 +8,7 @@ namespace System.Windows.Forms.Design;
 
 internal class DataSourceListEditor : UITypeEditor
 {
-
-    private DesignBindingPicker designBindingPicker;
+    private DesignBindingPicker? _designBindingPicker;
 
     public override bool IsDropDownResizable
     {
@@ -19,23 +18,20 @@ internal class DataSourceListEditor : UITypeEditor
         }
     }
 
-    public override object EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (provider != null && context.Instance != null)
+        if (provider is not null && context is not null && context.Instance is not null)
         {
-            if (designBindingPicker == null)
-            {
-                designBindingPicker = new DesignBindingPicker();
-            }
+            _designBindingPicker ??= new DesignBindingPicker();
 
             DesignBinding oldSelection = new DesignBinding(value, "");
-            DesignBinding newSelection = designBindingPicker.Pick(context, provider,
+            DesignBinding? newSelection = _designBindingPicker.Pick(context, provider,
                                                                   true,  /* showDataSources   */
                                                                   false, /* showDataMembers   */
                                                                   false, /* selectListMembers */
                                                                   null, string.Empty,
                                                                   oldSelection);
-            if (newSelection != null)
+            if (newSelection is not null)
             {
                 value = newSelection.DataSource;
             }

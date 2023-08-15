@@ -11,20 +11,15 @@ namespace System.Windows.Forms.Design;
 
 internal class DataGridViewDesigner : ControlDesigner
 {
-    /// <include file='doc\TableDesigner.uex' path='docs/doc[@for="DataGridViewDesigner.designerVerbs"]/*' />
-    /// <devdoc>
-    ///    <para>Gets the design-time verbs suppoted by the component associated with the 
-    ///       designer.</para>
-    /// </devdoc>
     protected DesignerVerbCollection designerVerbs;
 
     // CHROME stuff
     //
     // DesignerActionLists
-    DesignerActionListCollection actionLists = null;
+    private DesignerActionListCollection? actionLists;
 
     // need this to trap meta data changes
-    CurrencyManager cm = null;
+    private CurrencyManager? cm;
 
     // cache this type cause we will use it a lot
     private static Type typeofIList = typeof(IList);
@@ -32,10 +27,6 @@ internal class DataGridViewDesigner : ControlDesigner
     private static Type typeofDataGridViewTextBoxColumn = typeof(DataGridViewTextBoxColumn);
     private static Type typeofDataGridViewCheckBoxColumn = typeof(DataGridViewCheckBoxColumn);
 
-    /// <include file='doc\TableDesigner.uex' path='docs/doc[@for="DataGridViewDesigner.DataGridViewDesigner"]/*' />
-    /// <devdoc>
-    /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Design.DataGridViewDesigner'/> class.</para>
-    /// </devdoc>
     public DataGridViewDesigner()
     {
         AutoResizeHandles = true;
@@ -46,8 +37,8 @@ internal class DataGridViewDesigner : ControlDesigner
     {
         get
         {
-            DataGridView dataGridView = this.Component as DataGridView;
-            if (dataGridView != null)
+            DataGridView? dataGridView = Component as DataGridView;
+            if (dataGridView is not null)
             {
                 return dataGridView.Columns;
             }
@@ -60,29 +51,29 @@ internal class DataGridViewDesigner : ControlDesigner
     {
         get
         {
-            DataGridView dataGridView = this.Component as DataGridView;
-            Debug.Assert(dataGridView != null, "Unexpected null dataGridView in DataGridViewDesigner:get_AutoSizeColumnsMode");
+            DataGridView? dataGridView = Component as DataGridView;
+            Debug.Assert(dataGridView is not null, "Unexpected null dataGridView in DataGridViewDesigner:get_AutoSizeColumnsMode");
             return dataGridView.AutoSizeColumnsMode;
         }
         set
         {
             // DANIELHE: this is a workaround for a bug in ComponentCache: if a component changed then its list of AssociatedComponents
             // is not marked as changed to the serialization engine will not serialize them.
-            DataGridView dataGridView = this.Component as DataGridView;
-            Debug.Assert(dataGridView != null, "Unexpected null dataGridView in DataGridViewDesigner:set_AutoSizeColumnsMode");
-            IComponentChangeService ccs = this.Component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-            PropertyDescriptor prop = TypeDescriptor.GetProperties(typeof(DataGridViewColumn))["Width"];
+            DataGridView? dataGridView = Component as DataGridView;
+            Debug.Assert(dataGridView is not null, "Unexpected null dataGridView in DataGridViewDesigner:set_AutoSizeColumnsMode");
+            IComponentChangeService? ccs = Component.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+            PropertyDescriptor? prop = TypeDescriptor.GetProperties(typeof(DataGridViewColumn))["Width"];
 
             for (int i = 0; i < dataGridView.Columns.Count; i++)
             {
-                ccs.OnComponentChanging(dataGridView.Columns[i], prop);
+                ccs?.OnComponentChanging(dataGridView.Columns[i], prop);
             }
 
             dataGridView.AutoSizeColumnsMode = value;
 
             for (int i = 0; i < dataGridView.Columns.Count; i++)
             {
-                ccs.OnComponentChanged(dataGridView.Columns[i], prop, null, null);
+                ccs?.OnComponentChanged(dataGridView.Columns[i], prop, null, null);
             }
         }
     }
@@ -91,26 +82,25 @@ internal class DataGridViewDesigner : ControlDesigner
     {
         get
         {
-            return ((DataGridView)this.Component).DataSource;
+            return ((DataGridView)Component).DataSource;
         }
         set
         {
-            DataGridView dgv = this.Component as DataGridView;
-            if (dgv.AutoGenerateColumns && dgv.DataSource == null && value != null)
+            DataGridView? dgv = Component as DataGridView;
+            if (dgv is not null && dgv.AutoGenerateColumns && dgv.DataSource is null && value is not null)
             {
                 //
-                // RefreshColumnCollection() method does the job of siting/unsiting DataGridViewColumns 
+                // RefreshColumnCollection() method does the job of siting/unsiting DataGridViewColumns
                 // and calls OnComponentChanged/ing at the right times.
                 // So we need to create / remove columns from the DataGridView DataSource via RefreshColumnCollection() method.
                 // Set AutoGenerateColumn to false before setting the DataSource, otherwise DataGridViewColumns will be created
                 // via the runtime method.
                 //
                 // We set AutoGenerateColumns to FALSE only if the DataGridView will get a not-null DataSource.
-                // 
                 dgv.AutoGenerateColumns = false;
             }
 
-            ((DataGridView)this.Component).DataSource = value;
+            ((DataGridView)Component).DataSource = value;
         }
     }
 
@@ -120,28 +110,31 @@ internal class DataGridViewDesigner : ControlDesigner
         {
             // we still need the current Component
             // so execute this code before base.Dispose(...)
-            Debug.Assert(this.Component != null, "how did this get set to null?");
-            DataGridView dataGridView = this.Component as DataGridView;
+            Debug.Assert(Component is not null, "how did this get set to null?");
+            DataGridView? dataGridView = Component as DataGridView;
 
             // unhook our event handlers
-            dataGridView.DataSourceChanged -= new EventHandler(dataGridViewChanged);
-            dataGridView.DataMemberChanged -= new EventHandler(dataGridViewChanged);
-            dataGridView.BindingContextChanged -= new EventHandler(dataGridViewChanged);
-            dataGridView.ColumnRemoved -= new DataGridViewColumnEventHandler(dataGridView_ColumnRemoved);
-
-            // unhook MetaDataChanged handler from the currency manager
-            if (this.cm != null)
+            if (dataGridView is not null)
             {
-                cm.MetaDataChanged -= new EventHandler(this.dataGridViewMetaDataChanged);
+                dataGridView.DataSourceChanged -= new EventHandler(dataGridViewChanged);
+                dataGridView.DataMemberChanged -= new EventHandler(dataGridViewChanged);
+                dataGridView.BindingContextChanged -= new EventHandler(dataGridViewChanged);
+                dataGridView.ColumnRemoved -= new DataGridViewColumnEventHandler(dataGridView_ColumnRemoved);
             }
 
-            this.cm = null;
+            // unhook MetaDataChanged handler from the currency manager
+            if (cm is not null)
+            {
+                cm.MetaDataChanged -= new EventHandler(dataGridViewMetaDataChanged);
+            }
+
+            cm = null;
 
             // unhook the ComponentRemoved event handler
-            if (this.Component.Site != null)
+            if (Component.Site is not null)
             {
-                IComponentChangeService ccs = this.Component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                if (ccs != null)
+                IComponentChangeService? ccs = Component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                if (ccs is not null)
                 {
                     ccs.ComponentRemoving -= new ComponentEventHandler(DataGridViewDesigner_ComponentRemoving);
                 }
@@ -155,10 +148,10 @@ internal class DataGridViewDesigner : ControlDesigner
     {
         base.Initialize(component);
 
-        if (component.Site != null)
+        if (component.Site is not null)
         {
-            IComponentChangeService ccs = component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-            if (ccs != null)
+            IComponentChangeService? ccs = component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+            if (ccs is not null)
             {
                 ccs.ComponentRemoving += new ComponentEventHandler(DataGridViewDesigner_ComponentRemoving);
             }
@@ -168,7 +161,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         // DataGridViewDesigner::Initialize runs after InitializeComponent was deserialized.
         // just in case the user tinkered w/ InitializeComponent set AutoGenerateColumns to TRUE if there is no DataSource, otherwise set it to FALSE
-        dataGridView.AutoGenerateColumns = (dataGridView.DataSource == null);
+        dataGridView.AutoGenerateColumns = (dataGridView.DataSource is null);
 
         // hook up the DataSourceChanged event, DataMemberChanged event
         dataGridView.DataSourceChanged += new EventHandler(dataGridViewChanged);
@@ -176,7 +169,7 @@ internal class DataGridViewDesigner : ControlDesigner
         dataGridView.BindingContextChanged += new EventHandler(dataGridViewChanged);
 
         // now add data bound columns
-        this.dataGridViewChanged(this.Component, EventArgs.Empty);
+        dataGridViewChanged(Component, EventArgs.Empty);
 
         // Attach to column removed for clean up
         dataGridView.ColumnRemoved += new DataGridViewColumnEventHandler(dataGridView_ColumnRemoved);
@@ -185,9 +178,8 @@ internal class DataGridViewDesigner : ControlDesigner
     public override void InitializeNewComponent(IDictionary defaultValues)
     {
         base.InitializeNewComponent(defaultValues);
-        ((DataGridView)this.Component).ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+        ((DataGridView)Component).ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
     }
-
 
     /// <devdoc>
     ///     <para>
@@ -208,41 +200,31 @@ internal class DataGridViewDesigner : ControlDesigner
         }
     }
 
-    /// <include file='doc\TableDesigner.uex' path='docs/doc[@for="DataGridViewDesigner.Verbs"]/*' />
-    /// <devdoc>
-    ///    <para>Gets the design-time verbs supported by the component associated with the 
-    ///       designer.</para>
-    /// </devdoc>
     public override DesignerVerbCollection Verbs
     {
         get
         {
-            if (designerVerbs == null)
+            if (designerVerbs is null)
             {
                 designerVerbs = new DesignerVerbCollection();
-                designerVerbs.Add(new DesignerVerb((SR.DataGridViewEditColumnsVerb), new EventHandler(this.OnEditColumns)));
-                designerVerbs.Add(new DesignerVerb((SR.DataGridViewAddColumnVerb), new EventHandler(this.OnAddColumn)));
+                designerVerbs.Add(new DesignerVerb((SR.DataGridViewEditColumnsVerb), new EventHandler(OnEditColumns)));
+                designerVerbs.Add(new DesignerVerb((SR.DataGridViewAddColumnVerb), new EventHandler(OnAddColumn)));
             }
 
             return designerVerbs;
         }
     }
 
-    /// <include file='doc\TableDesigner.uex' path='docs/doc[@for="DataGridViewDesigner.ActionLists"]/*' />
-    /// <devdoc>
-    ///    <para>Gets the design-time action lists supported by the component associated with the 
-    ///       designer.</para>
-    /// </devdoc>
     public override DesignerActionListCollection ActionLists
     {
         get
         {
-            if (actionLists == null)
+            if (actionLists is null)
             {
                 BuildActionLists();
             }
 
-            return actionLists;
+            return actionLists!;
         }
     }
 
@@ -263,37 +245,37 @@ internal class DataGridViewDesigner : ControlDesigner
         // It would make sense to promote AutoShow to DesignerActionListCollection.
         // But we don't own the DesignerActionListCollection so we just set AutoShow on the first ActionList
         //
-        actionLists[0].AutoShow = true;
+        actionLists[0]!.AutoShow = true;
     }
 
-    private void dataGridViewChanged(object sender, EventArgs e)
+    private void dataGridViewChanged(object? sender, EventArgs e)
     {
-        DataGridView dataGridView = (DataGridView)this.Component;
+        DataGridView dataGridView = (DataGridView)Component;
 
         CurrencyManager newCM = null;
-        if (dataGridView.DataSource != null && dataGridView.BindingContext != null)
+        if (dataGridView.DataSource is not null && dataGridView.BindingContext is not null)
         {
             newCM = (CurrencyManager)dataGridView.BindingContext[dataGridView.DataSource, dataGridView.DataMember];
         }
 
-        if (newCM != this.cm)
+        if (newCM != cm)
         {
             // unwire cm
-            if (this.cm != null)
+            if (cm is not null)
             {
-                this.cm.MetaDataChanged -= new EventHandler(this.dataGridViewMetaDataChanged);
+                cm.MetaDataChanged -= new EventHandler(dataGridViewMetaDataChanged);
             }
 
             cm = newCM;
 
             // wire cm
-            if (this.cm != null)
+            if (cm is not null)
             {
-                this.cm.MetaDataChanged += new EventHandler(this.dataGridViewMetaDataChanged);
+                cm.MetaDataChanged += new EventHandler(dataGridViewMetaDataChanged);
             }
         }
 
-        if (dataGridView.BindingContext == null)
+        if (dataGridView.BindingContext is null)
         {
             MakeSureColumnsAreSited(dataGridView);
             return;
@@ -302,15 +284,15 @@ internal class DataGridViewDesigner : ControlDesigner
         // the user changed the DataSource from null to something else
         // Because AutoGenerateColumns is already set to true, all the bound columns are created
         // Just set AutoGenerateColumns to false and return
-        if (dataGridView.AutoGenerateColumns && dataGridView.DataSource != null)
+        if (dataGridView.AutoGenerateColumns && dataGridView.DataSource is not null)
         {
-            Debug.Assert(String.IsNullOrEmpty(dataGridView.DataMember), "in the designer we can't set DataSource and DataMember at the same time. Did you forget to set AutoGenerateColumns to false at a previous stage?");
+            Debug.Assert(string.IsNullOrEmpty(dataGridView.DataMember), "in the designer we can't set DataSource and DataMember at the same time. Did you forget to set AutoGenerateColumns to false at a previous stage?");
             dataGridView.AutoGenerateColumns = false;
             MakeSureColumnsAreSited(dataGridView);
             return;
         }
 
-        if (dataGridView.DataSource == null)
+        if (dataGridView.DataSource is null)
         {
             if (dataGridView.AutoGenerateColumns)
             {
@@ -336,11 +318,11 @@ internal class DataGridViewDesigner : ControlDesigner
         RefreshColumnCollection();
     }
 
-    private void DataGridViewDesigner_ComponentRemoving(object sender, ComponentEventArgs e)
+    private void DataGridViewDesigner_ComponentRemoving(object? sender, ComponentEventArgs e)
     {
-        DataGridView dataGridView = this.Component as DataGridView;
+        DataGridView? dataGridView = Component as DataGridView;
 
-        if (e.Component != null && e.Component == dataGridView.DataSource)
+        if (e.Component is not null && dataGridView is not null && e.Component == dataGridView.DataSource)
         {
             //
             // The current data source was removed from the designer
@@ -356,11 +338,11 @@ internal class DataGridViewDesigner : ControlDesigner
             string previousDataMember = dataGridView.DataMember;
 
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(dataGridView);
-            PropertyDescriptor dmPD = props != null ? props["DataMember"] : null;
+            PropertyDescriptor? dmPD = props is not null ? props?["DataMember"] : null;
 
-            if (ccs != null)
+            if (ccs is not null)
             {
-                if (dmPD != null)
+                if (dmPD is not null)
                 {
                     ccs.OnComponentChanging(dataGridView, dmPD);
                 }
@@ -368,9 +350,9 @@ internal class DataGridViewDesigner : ControlDesigner
 
             dataGridView.DataSource = null;
 
-            if (ccs != null)
+            if (ccs is not null)
             {
-                if (dmPD != null)
+                if (dmPD is not null)
                 {
                     ccs.OnComponentChanged(dataGridView, dmPD, previousDataMember, "");
                 }
@@ -378,7 +360,7 @@ internal class DataGridViewDesigner : ControlDesigner
         }
     }
 
-    private void dataGridView_ColumnRemoved(object sender, DataGridViewColumnEventArgs e)
+    private void dataGridView_ColumnRemoved(object? sender, DataGridViewColumnEventArgs e)
     {
         // Clear out the DisplayIndex for columns removed at design time.
         // If we don't do this, the columns will be reordered after build when there are both databound
@@ -386,7 +368,7 @@ internal class DataGridViewDesigner : ControlDesigner
         // of the column collection but there is no event there and we are restricted from adding any
         // Note: this does not break Undo/Redo because Undo/Redo uses serialization the same way
         // the build does and DisplayIndex is not serialized
-        if (e.Column != null && e.Column.IsDataBound == false)
+        if (e.Column is not null && e.Column.IsDataBound == false)
             e.Column.DisplayIndex = -1;
     }
 
@@ -395,22 +377,16 @@ internal class DataGridViewDesigner : ControlDesigner
         // Other designers ( VS Data ) may manipulate the column collection but not add the columns to the
         // current container.
         // So we have to make sure that the data grid view columns are sited on the current container.
-        IContainer currentContainer = dataGridView.Site != null ? dataGridView.Site.Container : null;
+        IContainer? currentContainer = dataGridView.Site?.Container;
         for (int i = 0; i < dataGridView.Columns.Count; i++)
         {
             DataGridViewColumn col = dataGridView.Columns[i];
-            IContainer cont = col.Site != null ? col.Site.Container : null;
+            IContainer? cont = col.Site?.Container;
             if (currentContainer != cont)
             {
-                if (cont != null)
-                {
-                    cont.Remove(col);
-                }
+                cont?.Remove(col);
 
-                if (currentContainer != null)
-                {
-                    currentContainer.Add(col);
-                }
+                currentContainer?.Add(col);
             }
         }
     }
@@ -419,7 +395,7 @@ internal class DataGridViewDesigner : ControlDesigner
     {
         base.PreFilterProperties(properties);
 
-        PropertyDescriptor prop;
+        PropertyDescriptor? prop;
 
         // Handle shadowed properties
         //
@@ -429,12 +405,12 @@ internal class DataGridViewDesigner : ControlDesigner
             "DataSource"
         };
 
-        Attribute[] empty = new Attribute[0];
+        Attribute[] empty = Array.Empty<Attribute>();
 
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            prop = (PropertyDescriptor)properties[shadowProps[i]];
-            if (prop != null)
+            prop = properties[shadowProps[i]] as PropertyDescriptor;
+            if (prop is not null)
             {
                 properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(DataGridViewDesigner), prop, empty);
             }
@@ -446,13 +422,12 @@ internal class DataGridViewDesigner : ControlDesigner
     // work of removing columns which are not common and returns TRUE.
     // Otherwise ProcessSimilarSchema returns FALSE.
     //
-    [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private bool ProcessSimilarSchema(DataGridView dataGridView)
     {
-        Debug.Assert(dataGridView.DataSource == null || this.cm != null, "if we have a data source we should also have a currency manager by now");
-        PropertyDescriptorCollection backEndProps = null;
+        Debug.Assert(dataGridView.DataSource is null || cm is not null, "if we have a data source we should also have a currency manager by now");
+        PropertyDescriptorCollection? backEndProps = null;
 
-        if (cm != null)
+        if (cm is not null)
         {
             try
             {
@@ -462,35 +437,34 @@ internal class DataGridViewDesigner : ControlDesigner
             {
                 throw new InvalidOperationException((SR.DataGridViewDataSourceNoLongerValid), ex);
             }
-
         }
 
-        IContainer currentContainer = dataGridView.Site != null ? dataGridView.Site.Container : null;
+        IContainer? currentContainer = dataGridView.Site?.Container;
 
         bool similarSchema = false;
 
         for (int i = 0; i < dataGridView.Columns.Count; i++)
         {
-
             DataGridViewColumn dataGridViewColumn = dataGridView.Columns[i];
 
-            if (String.IsNullOrEmpty(dataGridViewColumn.DataPropertyName))
+            if (string.IsNullOrEmpty(dataGridViewColumn.DataPropertyName))
             {
                 continue;
             }
 
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(dataGridViewColumn)["UserAddedColumn"];
-            if (pd != null && (bool)pd.GetValue(dataGridViewColumn))
+            PropertyDescriptor? pd = TypeDescriptor.GetProperties(dataGridViewColumn)["UserAddedColumn"];
+            object? UserAddedColumn = pd?.GetValue(dataGridViewColumn);
+            if (pd is not null && UserAddedColumn is not null && (bool)UserAddedColumn)
             {
                 continue;
             }
 
-            PropertyDescriptor dataFieldProperty = (backEndProps != null ? backEndProps[dataGridViewColumn.DataPropertyName] : null);
+            PropertyDescriptor? dataFieldProperty = backEndProps?[dataGridViewColumn.DataPropertyName];
             // remove the column if the DataGridViewColumn::DataPropertyName does not map to any column anymore
             // or if the DataGridViewColumn::DataPropertyName maps to a sub list
             bool removeColumn = false;
 
-            if (dataFieldProperty == null)
+            if (dataFieldProperty is null)
             {
                 // DataPropertyName does not map to a column anymore
                 removeColumn = true;
@@ -516,11 +490,12 @@ internal class DataGridViewDesigner : ControlDesigner
 
         if (similarSchema)
         {
-            IComponentChangeService changeService = this.Component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-            PropertyDescriptor columnsProp = TypeDescriptor.GetProperties(this.Component)["Columns"];
+            ISite? site = Component?.Site;
+            IComponentChangeService? changeService = site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+            PropertyDescriptor? columnsProp = Component is null ? null : TypeDescriptor.GetProperties(Component)["Columns"];
             try
             {
-                changeService.OnComponentChanging(this.Component, columnsProp);
+                changeService?.OnComponentChanging(Component, columnsProp);
             }
             catch (InvalidOperationException)
             {
@@ -531,25 +506,26 @@ internal class DataGridViewDesigner : ControlDesigner
             {
                 DataGridViewColumn dataGridViewColumn = dataGridView.Columns[i];
 
-                if (String.IsNullOrEmpty(dataGridViewColumn.DataPropertyName))
+                if (string.IsNullOrEmpty(dataGridViewColumn.DataPropertyName))
                 {
                     i++;
                     continue;
                 }
 
-                PropertyDescriptor pd = TypeDescriptor.GetProperties(dataGridViewColumn)["UserAddedColumn"];
-                if (pd != null && (bool)pd.GetValue(dataGridViewColumn))
+                PropertyDescriptor? pd = TypeDescriptor.GetProperties(dataGridViewColumn)["UserAddedColumn"];
+                object? UserAddedColumn = pd?.GetValue(dataGridViewColumn);
+                if (pd is not null && UserAddedColumn is not null && (bool)UserAddedColumn)
                 {
                     i++;
                     continue;
                 }
 
-                PropertyDescriptor dataFieldProperty = (backEndProps != null ? backEndProps[dataGridViewColumn.DataPropertyName] : null);
+                PropertyDescriptor? dataFieldProperty = backEndProps?[dataGridViewColumn.DataPropertyName];
                 // remove the column if the DataGridViewColumn::DataPropertyName does not map to any column anymore
                 // or if the DataGridViewColumn::DataPropertyName maps to a sub list
                 bool removeColumn = false;
 
-                if (dataFieldProperty == null)
+                if (dataFieldProperty is null)
                 {
                     // DataPropertyName does not map to a column anymore
                     removeColumn = true;
@@ -569,10 +545,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 if (removeColumn)
                 {
                     dataGridView.Columns.Remove(dataGridViewColumn);
-                    if (currentContainer != null)
-                    {
-                        currentContainer.Remove(dataGridViewColumn);
-                    }
+                    currentContainer?.Remove(dataGridViewColumn);
                 }
                 else
                 {
@@ -580,7 +553,10 @@ internal class DataGridViewDesigner : ControlDesigner
                 }
             }
 
-            changeService.OnComponentChanged(this.Component, columnsProp, null, null);
+            if (Component is not null)
+            {
+                changeService?.OnComponentChanged(Component, columnsProp, null, null);
+            }
         }
 
         return similarSchema;
@@ -589,10 +565,10 @@ internal class DataGridViewDesigner : ControlDesigner
     [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private void RefreshColumnCollection()
     {
-        DataGridView dataGridView = (DataGridView)this.Component;
+        DataGridView? dataGridView = (DataGridView)Component;
 
-        ISupportInitializeNotification ds = dataGridView.DataSource as ISupportInitializeNotification;
-        if (ds != null && !ds.IsInitialized)
+        ISupportInitializeNotification? ds = dataGridView?.DataSource as ISupportInitializeNotification;
+        if (ds is not null && !ds.IsInitialized)
         {
             // The DataSource is not initialized yet.
             // When the dataSource gets initialized it will send a MetaDataChanged event and at
@@ -600,9 +576,10 @@ internal class DataGridViewDesigner : ControlDesigner
             return;
         }
 
-        IComponentChangeService changeService = null;
-        PropertyDescriptor columnsProp = null;
-        IDesignerHost host = this.Component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
+        IComponentChangeService? changeService = null;
+        PropertyDescriptor? columnsProp = null;
+        ISite? site = Component.Site;
+        IDesignerHost? host = site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
 
         // if after changing the data source / data member the dataGridView has columns which are still databound
         // then keep them and don't change the column collection.
@@ -615,7 +592,7 @@ internal class DataGridViewDesigner : ControlDesigner
         // then we don't want to throw these columns away when the dataManager receives another dataSet from the web service.
         // and we don't want to add another columns
 
-        if (ProcessSimilarSchema(dataGridView))
+        if (dataGridView is not null && ProcessSimilarSchema(dataGridView))
         {
             return;
         }
@@ -632,10 +609,10 @@ internal class DataGridViewDesigner : ControlDesigner
         // 8. OnComponentChanged DataGridView.Columns
         //
 
-        Debug.Assert(dataGridView.DataSource == null || this.cm != null, "if we have a data source we should also have a currency manager by now");
-        PropertyDescriptorCollection backEndProps = null;
+        Debug.Assert(dataGridView?.DataSource is null || cm is not null, "if we have a data source we should also have a currency manager by now");
+        PropertyDescriptorCollection? backEndProps = null;
 
-        if (cm != null)
+        if (cm is not null)
         {
             try
             {
@@ -645,25 +622,25 @@ internal class DataGridViewDesigner : ControlDesigner
             {
                 throw new InvalidOperationException((SR.DataGridViewDataSourceNoLongerValid), ex);
             }
-
         }
 
-        IContainer currentContainer = dataGridView.Site != null ? dataGridView.Site.Container : null;
-        changeService = this.Component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-        columnsProp = TypeDescriptor.GetProperties(this.Component)["Columns"];
+        IContainer? currentContainer = dataGridView?.Site is not null ? dataGridView.Site.Container : null;
+        changeService = Component?.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+        columnsProp = TypeDescriptor.GetProperties(Component!)["Columns"];
 
         // 1. OnComponentChanging DataGridView.Columns
-        changeService.OnComponentChanging(this.Component, columnsProp);
+        changeService?.OnComponentChanging(Component!, columnsProp);
 
-        DataGridViewColumn[] removeColumns = new DataGridViewColumn[dataGridView.Columns.Count];
+        DataGridViewColumn[] removeColumns = new DataGridViewColumn[dataGridView!.Columns.Count];
         int removeColumnsCount = 0;
         for (int i = 0; i < dataGridView.Columns.Count; i++)
         {
             DataGridViewColumn col = dataGridView.Columns[i];
-            if (!String.IsNullOrEmpty(col.DataPropertyName))
+            if (!string.IsNullOrEmpty(col.DataPropertyName))
             {
-                PropertyDescriptor pd = TypeDescriptor.GetProperties(col)["UserAddedColumn"];
-                if (pd == null || !((bool)pd.GetValue(col)))
+                PropertyDescriptor? pd = TypeDescriptor.GetProperties(col)["UserAddedColumn"];
+                object? UserAddedColumn = pd?.GetValue(col);
+                if (pd is null || UserAddedColumn is null || !(bool)UserAddedColumn)
                 {
                     removeColumns[removeColumnsCount] = col;
                     removeColumnsCount++;
@@ -678,10 +655,10 @@ internal class DataGridViewDesigner : ControlDesigner
         }
 
         // 3. OnComponentChanged DataGridView.Columns
-        changeService.OnComponentChanged(this.Component, columnsProp, null, null);
+        changeService?.OnComponentChanged(Component, columnsProp, null, null);
 
         // 4. IContainer.Remove(dataGridView.Columns)
-        if (currentContainer != null)
+        if (currentContainer is not null)
         {
             for (int i = 0; i < removeColumnsCount; i++)
             {
@@ -689,15 +666,15 @@ internal class DataGridViewDesigner : ControlDesigner
             }
         }
 
-        DataGridViewColumn[] columnsToBeAdded = null;
+        DataGridViewColumn[]? columnsToBeAdded = null;
         int columnsToBeAddedCount = 0;
-        if (dataGridView.DataSource != null)
+        if (dataGridView.DataSource is not null)
         {
             columnsToBeAdded = new DataGridViewColumn[backEndProps.Count];
             columnsToBeAddedCount = 0;
             for (int i = 0; i < backEndProps.Count; i++)
             {
-                DataGridViewColumn dataGridViewColumn = null;
+                DataGridViewColumn? dataGridViewColumn = null;
 
                 TypeConverter imageTypeConverter = TypeDescriptor.GetConverter(typeof(System.Drawing.Image));
 
@@ -729,7 +706,7 @@ internal class DataGridViewDesigner : ControlDesigner
                     columnType = typeofDataGridViewTextBoxColumn;
                 }
 
-                string nameFromText = ToolStripDesigner.NameFromText(backEndProps[i].Name, columnType, this.Component.Site);
+                string nameFromText = ToolStripDesigner.NameFromText(backEndProps[i].Name, columnType, Component.Site);
 
                 //
                 // host.CreateComponent adds the column to its list of components
@@ -738,21 +715,24 @@ internal class DataGridViewDesigner : ControlDesigner
                 //
                 dataGridViewColumn = TypeDescriptor.CreateInstance(host, columnType, null, null) as DataGridViewColumn;
 
-                dataGridViewColumn.DataPropertyName = backEndProps[i].Name;
-                dataGridViewColumn.HeaderText = !String.IsNullOrEmpty(backEndProps[i].DisplayName) ? backEndProps[i].DisplayName : backEndProps[i].Name;
-                dataGridViewColumn.Name = backEndProps[i].Name;
-                dataGridViewColumn.ValueType = backEndProps[i].PropertyType;
-                dataGridViewColumn.ReadOnly = backEndProps[i].IsReadOnly;
+                if (dataGridViewColumn is not null)
+                {
+                    dataGridViewColumn.DataPropertyName = backEndProps[i].Name;
+                    dataGridViewColumn.HeaderText = !string.IsNullOrEmpty(backEndProps[i].DisplayName) ? backEndProps[i].DisplayName : backEndProps[i].Name;
+                    dataGridViewColumn.Name = backEndProps[i].Name;
+                    dataGridViewColumn.ValueType = backEndProps[i].PropertyType;
+                    dataGridViewColumn.ReadOnly = backEndProps[i].IsReadOnly;
 
-                host.Container.Add(dataGridViewColumn, nameFromText);
+                    host?.Container.Add(dataGridViewColumn, nameFromText);
 
-                columnsToBeAdded[columnsToBeAddedCount] = dataGridViewColumn;
-                columnsToBeAddedCount++;
+                    columnsToBeAdded[columnsToBeAddedCount] = dataGridViewColumn;
+                    columnsToBeAddedCount++;
+                }
             }
         }
 
         // 6. OnComponentChanging DataGridView.Columns
-        changeService.OnComponentChanging(this.Component, columnsProp);
+        changeService?.OnComponentChanging(Component, columnsProp);
 
         // 7. DataGridView.Columns.Add( new DataGridViewColumns)
         for (int i = 0; i < columnsToBeAddedCount; i++)
@@ -763,13 +743,13 @@ internal class DataGridViewDesigner : ControlDesigner
         }
 
         // 8. OnComponentChanged DataGridView.Columns
-        changeService.OnComponentChanged(this.Component, columnsProp, null, null);
+        changeService?.OnComponentChanged(Component, columnsProp, null, null);
     }
 
     private bool ShouldSerializeAutoSizeColumnsMode()
     {
-        DataGridView dataGridView = this.Component as DataGridView;
-        if (dataGridView != null)
+        DataGridView? dataGridView = Component as DataGridView;
+        if (dataGridView is not null)
         {
             return dataGridView.AutoSizeColumnsMode != DataGridViewAutoSizeColumnsMode.None;
         }
@@ -781,20 +761,20 @@ internal class DataGridViewDesigner : ControlDesigner
 
     private bool ShouldSerializeDataSource()
     {
-        return ((DataGridView)this.Component).DataSource != null;
+        return ((DataGridView)Component).DataSource is not null;
     }
 
     // Ideally there would be a public method like this somewhere.
-    internal static void ShowErrorDialog(IUIService uiService, Exception ex, Control dataGridView)
+    internal static void ShowErrorDialog(IUIService? uiService, Exception ex, Control dataGridView)
     {
-        if (uiService != null)
+        if (uiService is not null)
         {
             uiService.ShowError(ex);
         }
         else
         {
             string message = ex.Message;
-            if (message == null || message.Length == 0)
+            if (message is null || message.Length == 0)
             {
                 message = ex.ToString();
             }
@@ -804,9 +784,9 @@ internal class DataGridViewDesigner : ControlDesigner
         }
     }
 
-    internal static void ShowErrorDialog(IUIService uiService, string errorString, Control dataGridView)
+    internal static void ShowErrorDialog(IUIService? uiService, string errorString, Control dataGridView)
     {
-        if (uiService != null)
+        if (uiService is not null)
         {
             uiService.ShowError(errorString);
         }
@@ -817,86 +797,86 @@ internal class DataGridViewDesigner : ControlDesigner
         }
     }
 
-    private void dataGridViewMetaDataChanged(object sender, EventArgs e)
+    private void dataGridViewMetaDataChanged(object? sender, EventArgs e)
     {
         RefreshColumnCollection();
     }
 
-    public void OnEditColumns(object sender, EventArgs e)
+    public void OnEditColumns(object? sender, EventArgs e)
     {
-        IDesignerHost host = Component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
+        IDesignerHost? host = Component.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
 
         // child modal dialog -launching in System Aware mode
-        DataGridViewColumnCollectionDialog dialog = DpiHelper.CreateInstanceInSystemAwareContext(() => new DataGridViewColumnCollectionDialog(((DataGridView)this.Component).Site));
-        dialog.SetLiveDataGridView((DataGridView)this.Component);
-        DesignerTransaction transaction = host.CreateTransaction((SR.DataGridViewEditColumnsTransactionString));
+        DataGridViewColumnCollectionDialog dialog = DpiHelper.CreateInstanceInSystemAwareContext(() => new DataGridViewColumnCollectionDialog(((DataGridView)Component).Site));
+        dialog.SetLiveDataGridView((DataGridView)Component);
+        DesignerTransaction? transaction = host?.CreateTransaction((SR.DataGridViewEditColumnsTransactionString));
         DialogResult result = DialogResult.Cancel;
 
         try
         {
-            result = this.ShowDialog(dialog);
+            result = ShowDialog(dialog);
         }
         finally
         {
             if (result == DialogResult.OK)
             {
-                transaction.Commit();
+                transaction?.Commit();
             }
             else
             {
-                transaction.Cancel();
+                transaction?.Cancel();
             }
         }
     }
 
-    public void OnAddColumn(object sender, EventArgs e)
+    public void OnAddColumn(object? sender, EventArgs e)
     {
-        IDesignerHost host = Component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
-        DesignerTransaction transaction = host.CreateTransaction((SR.DataGridViewAddColumnTransactionString));
+        IDesignerHost? host = Component.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+        DesignerTransaction? transaction = host?.CreateTransaction((SR.DataGridViewAddColumnTransactionString));
         DialogResult result = DialogResult.Cancel;
 
         // child modal dialog -launching in System Aware mode
-        DataGridViewAddColumnDialog dialog = DpiHelper.CreateInstanceInSystemAwareContext(() => new DataGridViewAddColumnDialog(((DataGridView)this.Component).Columns, (DataGridView)this.Component));
-        dialog.Start(((DataGridView)this.Component).Columns.Count, true /*persistChangesToDesigner*/);
+        DataGridViewAddColumnDialog dialog = DpiHelper.CreateInstanceInSystemAwareContext(() => new DataGridViewAddColumnDialog(((DataGridView)Component).Columns, (DataGridView)Component));
+        dialog.Start(((DataGridView)Component).Columns.Count, true /*persistChangesToDesigner*/);
 
         try
         {
-            result = this.ShowDialog(dialog);
+            result = ShowDialog(dialog);
         }
         finally
         {
             if (result == DialogResult.OK)
             {
-                transaction.Commit();
+                transaction?.Commit();
             }
             else
             {
-                transaction.Cancel();
+                transaction?.Cancel();
             }
         }
     }
 
     private DialogResult ShowDialog(Form dialog)
     {
-        IUIService uiSvc = this.Component.Site.GetService(typeof(IUIService)) as IUIService;
-        if (uiSvc != null)
+        IUIService uiSvc = Component.Site.GetService(typeof(IUIService)) as IUIService;
+        if (uiSvc is not null)
         {
             return uiSvc.ShowDialog(dialog);
         }
         else
         {
-            return dialog.ShowDialog(this.Component as IWin32Window);
+            return dialog.ShowDialog(Component as IWin32Window);
         }
     }
 
     [ComplexBindingProperties("DataSource", "DataMember")]
     private class DataGridViewChooseDataSourceActionList : DesignerActionList
     {
-        DataGridViewDesigner owner;
+        private DataGridViewDesigner _owner;
 
         public DataGridViewChooseDataSourceActionList(DataGridViewDesigner owner) : base(owner.Component)
         {
-            this.owner = owner;
+            _owner = owner;
         }
 
         public override DesignerActionItemCollection GetSortedActionItems()
@@ -904,7 +884,7 @@ internal class DataGridViewDesigner : ControlDesigner
             DesignerActionItemCollection items = new DesignerActionItemCollection();
             DesignerActionPropertyItem chooseDataSource = new DesignerActionPropertyItem("DataSource",                          // property name
                                                                                          (SR.DataGridViewChooseDataSource));// displayName
-            chooseDataSource.RelatedComponent = this.owner.Component;
+            chooseDataSource.RelatedComponent = _owner.Component;
             items.Add(chooseDataSource);
             return items;
         }
@@ -919,7 +899,7 @@ internal class DataGridViewDesigner : ControlDesigner
             get
             {
                 // Use the shadow property which is defined on the designer.
-                return this.owner.DataSource;
+                return _owner.DataSource;
             }
 
             [
@@ -928,26 +908,23 @@ internal class DataGridViewDesigner : ControlDesigner
             set
             {
                 // left to do: transaction stuff
-                DataGridView dataGridView = (DataGridView)this.owner.Component;
-                IDesignerHost host = this.owner.Component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
-                PropertyDescriptor dataSourceProp = TypeDescriptor.GetProperties(dataGridView)["DataSource"];
-                IComponentChangeService changeService = this.owner.Component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                DesignerTransaction transaction = host.CreateTransaction(string.Format(SR.DataGridViewChooseDataSourceTransactionString, dataGridView.Name));
+                DataGridView dataGridView = (DataGridView)_owner.Component;
+                IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                PropertyDescriptor? dataSourceProp = TypeDescriptor.GetProperties(dataGridView)["DataSource"];
+                IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                DesignerTransaction? transaction = host?.CreateTransaction(string.Format(SR.DataGridViewChooseDataSourceTransactionString, dataGridView.Name));
                 try
                 {
-                    changeService.OnComponentChanging(this.owner.Component, dataSourceProp);
+                    changeService?.OnComponentChanging(_owner.Component, dataSourceProp);
                     // Use the shadow property which is defined on the designer.
-                    this.owner.DataSource = value;
-                    changeService.OnComponentChanged(this.owner.Component, dataSourceProp, null, null);
-                    transaction.Commit();
+                    _owner.DataSource = value;
+                    changeService?.OnComponentChanged(_owner.Component, dataSourceProp, null, null);
+                    transaction?.Commit();
                     transaction = null;
                 }
                 finally
                 {
-                    if (transaction != null)
-                    {
-                        transaction.Cancel();
-                    }
+                    transaction?.Cancel();
                 }
             }
         }
@@ -955,10 +932,10 @@ internal class DataGridViewDesigner : ControlDesigner
 
     private class DataGridViewColumnEditingActionList : DesignerActionList
     {
-        DataGridViewDesigner owner;
+        private DataGridViewDesigner _owner;
         public DataGridViewColumnEditingActionList(DataGridViewDesigner owner) : base(owner.Component)
         {
-            this.owner = owner;
+            _owner = owner;
         }
 
         public override DesignerActionItemCollection GetSortedActionItems()
@@ -981,7 +958,7 @@ internal class DataGridViewDesigner : ControlDesigner
         ]
         public void EditColumns()
         {
-            this.owner.OnEditColumns(this, EventArgs.Empty);
+            _owner.OnEditColumns(this, EventArgs.Empty);
         }
 
         [
@@ -989,17 +966,17 @@ internal class DataGridViewDesigner : ControlDesigner
         ]
         public void AddColumn()
         {
-            this.owner.OnAddColumn(this, EventArgs.Empty);
+            _owner.OnAddColumn(this, EventArgs.Empty);
         }
     }
 
     private class DataGridViewPropertiesActionList : DesignerActionList
     {
-        DataGridViewDesigner owner;
+        private DataGridViewDesigner _owner;
 
         public DataGridViewPropertiesActionList(DataGridViewDesigner owner) : base(owner.Component)
         {
-            this.owner = owner;
+            _owner = owner;
         }
 
         public override DesignerActionItemCollection GetSortedActionItems()
@@ -1023,7 +1000,7 @@ internal class DataGridViewDesigner : ControlDesigner
             ]
             get
             {
-                return ((DataGridView)this.owner.Component).AllowUserToAddRows;
+                return ((DataGridView)_owner.Component).AllowUserToAddRows;
             }
 
             [
@@ -1031,41 +1008,37 @@ internal class DataGridViewDesigner : ControlDesigner
             ]
             set
             {
-                if (value != this.AllowUserToAddRows)
+                if (value != AllowUserToAddRows)
                 {
-                    IDesignerHost host = this.owner.Component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                    IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
 
-                    DesignerTransaction transaction;
+                    DesignerTransaction? transaction;
 
                     if (value)
                     {
-                        transaction = host.CreateTransaction((SR.DataGridViewEnableAddingTransactionString));
+                        transaction = host?.CreateTransaction((SR.DataGridViewEnableAddingTransactionString));
                     }
                     else
                     {
-                        transaction = host.CreateTransaction((SR.DataGridViewDisableAddingTransactionString));
+                        transaction = host?.CreateTransaction((SR.DataGridViewDisableAddingTransactionString));
                     }
 
                     try
                     {
-                        IComponentChangeService changeService = this.owner.Component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                        PropertyDescriptor prop = TypeDescriptor.GetProperties(this.owner.Component)["AllowUserToAddRows"];
-                        changeService.OnComponentChanging(this.owner.Component, prop);
+                        IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                        PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component)["AllowUserToAddRows"];
+                        changeService?.OnComponentChanging(_owner.Component, prop);
 
-                        ((DataGridView)this.owner.Component).AllowUserToAddRows = value;
+                        ((DataGridView)_owner.Component).AllowUserToAddRows = value;
 
-                        changeService.OnComponentChanged(this.owner.Component, prop, null, null);
-                        transaction.Commit();
+                        changeService?.OnComponentChanged(_owner.Component, prop, null, null);
+                        transaction?.Commit();
                         transaction = null;
                     }
                     finally
                     {
-                        if (transaction != null)
-                        {
-                            transaction.Cancel();
-                        }
+                        transaction?.Cancel();
                     }
-
                 }
             }
         }
@@ -1077,7 +1050,7 @@ internal class DataGridViewDesigner : ControlDesigner
             ]
             get
             {
-                return ((DataGridView)this.owner.Component).AllowUserToDeleteRows;
+                return ((DataGridView)_owner.Component).AllowUserToDeleteRows;
             }
 
             [
@@ -1085,41 +1058,37 @@ internal class DataGridViewDesigner : ControlDesigner
             ]
             set
             {
-                if (value != this.AllowUserToDeleteRows)
+                if (value != AllowUserToDeleteRows)
                 {
-                    IDesignerHost host = this.owner.Component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                    IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
 
-                    DesignerTransaction transaction;
+                    DesignerTransaction? transaction;
 
                     if (value)
                     {
-                        transaction = host.CreateTransaction((SR.DataGridViewEnableDeletingTransactionString));
+                        transaction = host?.CreateTransaction((SR.DataGridViewEnableDeletingTransactionString));
                     }
                     else
                     {
-                        transaction = host.CreateTransaction((SR.DataGridViewDisableDeletingTransactionString));
+                        transaction = host?.CreateTransaction((SR.DataGridViewDisableDeletingTransactionString));
                     }
 
                     try
                     {
-                        IComponentChangeService changeService = this.owner.Component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                        PropertyDescriptor prop = TypeDescriptor.GetProperties(this.owner.Component)["AllowUserToDeleteRows"];
-                        changeService.OnComponentChanging(this.owner.Component, prop);
+                        IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                        PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component)["AllowUserToDeleteRows"];
+                        changeService?.OnComponentChanging(_owner.Component, prop);
 
-                        ((DataGridView)this.owner.Component).AllowUserToDeleteRows = value;
+                        ((DataGridView)_owner.Component).AllowUserToDeleteRows = value;
 
-                        changeService.OnComponentChanged(this.owner.Component, prop, null, null);
-                        transaction.Commit();
+                        changeService?.OnComponentChanged(_owner.Component, prop, null, null);
+                        transaction?.Commit();
                         transaction = null;
                     }
                     finally
                     {
-                        if (transaction != null)
-                        {
-                            transaction.Cancel();
-                        }
+                        transaction?.Cancel();
                     }
-
                 }
             }
         }
@@ -1131,7 +1100,7 @@ internal class DataGridViewDesigner : ControlDesigner
             ]
             get
             {
-                return ((DataGridView)this.owner.Component).AllowUserToOrderColumns;
+                return ((DataGridView)_owner.Component).AllowUserToOrderColumns;
             }
 
             [
@@ -1139,41 +1108,37 @@ internal class DataGridViewDesigner : ControlDesigner
             ]
             set
             {
-                if (value != this.AllowUserToOrderColumns)
+                if (value != AllowUserToOrderColumns)
                 {
-                    IDesignerHost host = this.owner.Component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                    IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
 
-                    DesignerTransaction transaction;
+                    DesignerTransaction? transaction;
 
                     if (value)
                     {
-                        transaction = host.CreateTransaction((SR.DataGridViewEnableColumnReorderingTransactionString));
+                        transaction = host?.CreateTransaction((SR.DataGridViewEnableColumnReorderingTransactionString));
                     }
                     else
                     {
-                        transaction = host.CreateTransaction((SR.DataGridViewDisableColumnReorderingTransactionString));
+                        transaction = host?.CreateTransaction((SR.DataGridViewDisableColumnReorderingTransactionString));
                     }
 
                     try
                     {
-                        IComponentChangeService changeService = this.owner.Component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                        PropertyDescriptor prop = TypeDescriptor.GetProperties(this.owner.Component)["AllowUserToReorderColumns"];
-                        changeService.OnComponentChanging(this.owner.Component, prop);
+                        IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                        PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component)["AllowUserToReorderColumns"];
+                        changeService?.OnComponentChanging(_owner.Component, prop);
 
-                        ((DataGridView)this.owner.Component).AllowUserToOrderColumns = value;
+                        ((DataGridView)_owner.Component).AllowUserToOrderColumns = value;
 
-                        changeService.OnComponentChanged(this.owner.Component, prop, null, null);
-                        transaction.Commit();
+                        changeService?.OnComponentChanged(_owner.Component, prop, null, null);
+                        transaction?.Commit();
                         transaction = null;
                     }
                     finally
                     {
-                        if (transaction != null)
-                        {
-                            transaction.Cancel();
-                        }
+                        transaction?.Cancel();
                     }
-
                 }
             }
         }
@@ -1185,7 +1150,7 @@ internal class DataGridViewDesigner : ControlDesigner
             ]
             get
             {
-                return !((DataGridView)this.owner.Component).ReadOnly;
+                return !((DataGridView)_owner.Component).ReadOnly;
             }
 
             [
@@ -1193,41 +1158,37 @@ internal class DataGridViewDesigner : ControlDesigner
             ]
             set
             {
-                if (value != this.ReadOnly)
+                if (value != ReadOnly)
                 {
-                    IDesignerHost host = this.owner.Component.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                    IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
 
-                    DesignerTransaction transaction;
+                    DesignerTransaction? transaction;
 
                     if (value)
                     {
-                        transaction = host.CreateTransaction((SR.DataGridViewEnableEditingTransactionString));
+                        transaction = host?.CreateTransaction((SR.DataGridViewEnableEditingTransactionString));
                     }
                     else
                     {
-                        transaction = host.CreateTransaction((SR.DataGridViewDisableEditingTransactionString));
+                        transaction = host?.CreateTransaction((SR.DataGridViewDisableEditingTransactionString));
                     }
 
                     try
                     {
-                        IComponentChangeService changeService = this.owner.Component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                        PropertyDescriptor prop = TypeDescriptor.GetProperties(this.owner.Component)["ReadOnly"];
-                        changeService.OnComponentChanging(this.owner.Component, prop);
+                        IComponentChangeService changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                        PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component)["ReadOnly"];
+                        changeService?.OnComponentChanging(_owner.Component, prop);
 
-                        ((DataGridView)this.owner.Component).ReadOnly = !value;
+                        ((DataGridView)_owner.Component).ReadOnly = !value;
 
-                        changeService.OnComponentChanged(this.owner.Component, prop, null, null);
-                        transaction.Commit();
+                        changeService?.OnComponentChanged(_owner.Component, prop, null, null);
+                        transaction?.Commit();
                         transaction = null;
                     }
                     finally
                     {
-                        if (transaction != null)
-                        {
-                            transaction.Cancel();
-                        }
+                        transaction?.Cancel();
                     }
-
                 }
             }
         }
