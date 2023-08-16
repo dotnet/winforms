@@ -4280,7 +4280,7 @@ System.Windows.Forms.AutoCompleteSource.None = 128 -> System.Windows.Forms.AutoC
 System.Windows.Forms.AutoCompleteSource.RecentlyUsedList = 4 -> System.Windows.Forms.AutoCompleteSource
 System.Windows.Forms.AutoCompleteStringCollection
 System.Windows.Forms.AutoCompleteStringCollection.Add(string! value) -> int
-System.Windows.Forms.AutoCompleteStringCollection.AddRange(string![]! value) -> void
+System.Windows.Forms.AutoCompleteStringCollection.AddRange(params string![]! value) -> void
 System.Windows.Forms.AutoCompleteStringCollection.AutoCompleteStringCollection() -> void
 System.Windows.Forms.AutoCompleteStringCollection.Clear() -> void
 System.Windows.Forms.AutoCompleteStringCollection.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler?
@@ -4876,7 +4876,7 @@ System.Windows.Forms.ComboBox.MaxLength.set -> void
 System.Windows.Forms.ComboBox.MeasureItem -> System.Windows.Forms.MeasureItemEventHandler?
 System.Windows.Forms.ComboBox.ObjectCollection
 System.Windows.Forms.ComboBox.ObjectCollection.Add(object! item) -> int
-System.Windows.Forms.ComboBox.ObjectCollection.AddRange(object![]! items) -> void
+System.Windows.Forms.ComboBox.ObjectCollection.AddRange(params object![]! items) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.Clear() -> void
 System.Windows.Forms.ComboBox.ObjectCollection.Contains(object? value) -> bool
 System.Windows.Forms.ComboBox.ObjectCollection.CopyTo(object![]! destination, int arrayIndex) -> void
@@ -7285,7 +7285,7 @@ System.Windows.Forms.ImageList.ImageCollection.Add(string! key, System.Drawing.I
 System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Icon! value) -> void
 System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Image! value) -> void
 System.Windows.Forms.ImageList.ImageCollection.Add(System.Drawing.Image! value, System.Drawing.Color transparentColor) -> int
-System.Windows.Forms.ImageList.ImageCollection.AddRange(System.Drawing.Image![]! images) -> void
+System.Windows.Forms.ImageList.ImageCollection.AddRange(params System.Drawing.Image![]! images) -> void
 System.Windows.Forms.ImageList.ImageCollection.AddStrip(System.Drawing.Image! value) -> int
 System.Windows.Forms.ImageList.ImageCollection.Clear() -> void
 System.Windows.Forms.ImageList.ImageCollection.Contains(System.Drawing.Image! image) -> bool
@@ -7814,7 +7814,7 @@ System.Windows.Forms.ListBox.IndexFromPoint(int x, int y) -> int
 System.Windows.Forms.ListBox.IndexFromPoint(System.Drawing.Point p) -> int
 System.Windows.Forms.ListBox.IntegerCollection
 System.Windows.Forms.ListBox.IntegerCollection.Add(int item) -> int
-System.Windows.Forms.ListBox.IntegerCollection.AddRange(int[]! items) -> void
+System.Windows.Forms.ListBox.IntegerCollection.AddRange(param int[] items) -> void
 System.Windows.Forms.ListBox.IntegerCollection.AddRange(System.Windows.Forms.ListBox.IntegerCollection! value) -> void
 System.Windows.Forms.ListBox.IntegerCollection.Clear() -> void
 System.Windows.Forms.ListBox.IntegerCollection.Contains(int item) -> bool
@@ -7836,7 +7836,7 @@ System.Windows.Forms.ListBox.MultiColumn.get -> bool
 System.Windows.Forms.ListBox.MultiColumn.set -> void
 System.Windows.Forms.ListBox.ObjectCollection
 System.Windows.Forms.ListBox.ObjectCollection.Add(object! item) -> int
-System.Windows.Forms.ListBox.ObjectCollection.AddRange(object![]! items) -> void
+System.Windows.Forms.ListBox.ObjectCollection.AddRange(params object![]! items) -> void
 System.Windows.Forms.ListBox.ObjectCollection.AddRange(System.Windows.Forms.ListBox.ObjectCollection! value) -> void
 System.Windows.Forms.ListBox.ObjectCollection.Contains(object! value) -> bool
 System.Windows.Forms.ListBox.ObjectCollection.CopyTo(object![]! destination, int arrayIndex) -> void
@@ -8044,7 +8044,7 @@ System.Windows.Forms.ListView.LargeImageList.set -> void
 System.Windows.Forms.ListView.ListView() -> void
 System.Windows.Forms.ListView.ListViewItemCollection
 System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListView.ListViewItemCollection! items) -> void
-System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListViewItem![]! items) -> void
+System.Windows.Forms.ListView.ListViewItemCollection.AddRange(params System.Windows.Forms.ListViewItem![]! items) -> void
 System.Windows.Forms.ListView.ListViewItemCollection.Contains(System.Windows.Forms.ListViewItem! item) -> bool
 System.Windows.Forms.ListView.ListViewItemCollection.CopyTo(System.Array! dest, int index) -> void
 System.Windows.Forms.ListView.ListViewItemCollection.Count.get -> int
@@ -8166,7 +8166,7 @@ System.Windows.Forms.ListViewGroupCollapsedState.Expanded = 1 -> System.Windows.
 System.Windows.Forms.ListViewGroupCollection
 System.Windows.Forms.ListViewGroupCollection.Add(string? key, string? headerText) -> System.Windows.Forms.ListViewGroup!
 System.Windows.Forms.ListViewGroupCollection.Add(System.Windows.Forms.ListViewGroup! group) -> int
-System.Windows.Forms.ListViewGroupCollection.AddRange(System.Windows.Forms.ListViewGroup![]! groups) -> void
+System.Windows.Forms.ListViewGroupCollection.AddRange(params System.Windows.Forms.ListViewGroup![]! groups) -> void
 System.Windows.Forms.ListViewGroupCollection.AddRange(System.Windows.Forms.ListViewGroupCollection! groups) -> void
 System.Windows.Forms.ListViewGroupCollection.Clear() -> void
 System.Windows.Forms.ListViewGroupCollection.Contains(System.Windows.Forms.ListViewGroup! value) -> bool
@@ -8279,9 +8279,9 @@ System.Windows.Forms.ListViewItem.ListViewSubItemCollection
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(string? text) -> System.Windows.Forms.ListViewItem.ListViewSubItem!
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(string? text, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font! font) -> System.Windows.Forms.ListViewItem.ListViewSubItem!
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Add(System.Windows.Forms.ListViewItem.ListViewSubItem! item) -> System.Windows.Forms.ListViewItem.ListViewSubItem!
-System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string![]! items) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(params string![]! items) -> void
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string![]! items, System.Drawing.Color foreColor, System.Drawing.Color backColor, System.Drawing.Font! font) -> void
-System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(System.Windows.Forms.ListViewItem.ListViewSubItem![]! items) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(params System.Windows.Forms.ListViewItem.ListViewSubItem![]! items) -> void
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Clear() -> void
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Contains(System.Windows.Forms.ListViewItem.ListViewSubItem? subItem) -> bool
 System.Windows.Forms.ListViewItem.ListViewSubItemCollection.Count.get -> int
@@ -9944,7 +9944,7 @@ System.Windows.Forms.TabControl.TabPageCollection.Add(string? key, string? text,
 System.Windows.Forms.TabControl.TabPageCollection.Add(string? key, string? text, string! imageKey) -> void
 System.Windows.Forms.TabControl.TabPageCollection.Add(string? text) -> void
 System.Windows.Forms.TabControl.TabPageCollection.Add(System.Windows.Forms.TabPage! value) -> void
-System.Windows.Forms.TabControl.TabPageCollection.AddRange(System.Windows.Forms.TabPage![]! pages) -> void
+System.Windows.Forms.TabControl.TabPageCollection.AddRange(params System.Windows.Forms.TabPage![]! pages) -> void
 System.Windows.Forms.TabControl.TabPageCollection.Contains(System.Windows.Forms.TabPage! page) -> bool
 System.Windows.Forms.TabControl.TabPageCollection.Count.get -> int
 System.Windows.Forms.TabControl.TabPageCollection.GetEnumerator() -> System.Collections.IEnumerator!
@@ -10954,7 +10954,7 @@ System.Windows.Forms.ToolStripItemCollection.Add(string? text, System.Drawing.Im
 System.Windows.Forms.ToolStripItemCollection.Add(string? text, System.Drawing.Image? image, System.EventHandler? onClick) -> System.Windows.Forms.ToolStripItem!
 System.Windows.Forms.ToolStripItemCollection.Add(System.Drawing.Image? image) -> System.Windows.Forms.ToolStripItem!
 System.Windows.Forms.ToolStripItemCollection.Add(System.Windows.Forms.ToolStripItem! value) -> int
-System.Windows.Forms.ToolStripItemCollection.AddRange(System.Windows.Forms.ToolStripItem![]! toolStripItems) -> void
+System.Windows.Forms.ToolStripItemCollection.AddRange(params System.Windows.Forms.ToolStripItem![]! toolStripItems) -> void
 System.Windows.Forms.ToolStripItemCollection.AddRange(System.Windows.Forms.ToolStripItemCollection! toolStripItems) -> void
 System.Windows.Forms.ToolStripItemCollection.Contains(System.Windows.Forms.ToolStripItem! value) -> bool
 System.Windows.Forms.ToolStripItemCollection.CopyTo(System.Windows.Forms.ToolStripItem![]! array, int index) -> void
@@ -11110,7 +11110,7 @@ System.Windows.Forms.ToolStripPanel.ToolStripPanel() -> void
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Add(System.Windows.Forms.ToolStripPanelRow! value) -> int
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection! value) -> void
-System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanelRow![]! value) -> void
+System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(params System.Windows.Forms.ToolStripPanelRow![]! value) -> void
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.Contains(System.Windows.Forms.ToolStripPanelRow! value) -> bool
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.CopyTo(System.Windows.Forms.ToolStripPanelRow![]! array, int index) -> void
 System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.IndexOf(System.Windows.Forms.ToolStripPanelRow! value) -> int
@@ -12599,7 +12599,7 @@ virtual System.Windows.Forms.Control.CanEnableIme.get -> bool
 virtual System.Windows.Forms.Control.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
 virtual System.Windows.Forms.Control.ContextMenuStrip.set -> void
 virtual System.Windows.Forms.Control.ControlCollection.Add(System.Windows.Forms.Control? value) -> void
-virtual System.Windows.Forms.Control.ControlCollection.AddRange(System.Windows.Forms.Control![]! controls) -> void
+virtual System.Windows.Forms.Control.ControlCollection.AddRange(params System.Windows.Forms.Control![]! controls) -> void
 virtual System.Windows.Forms.Control.ControlCollection.Clear() -> void
 virtual System.Windows.Forms.Control.ControlCollection.ContainsKey(string? key) -> bool
 virtual System.Windows.Forms.Control.ControlCollection.GetChildIndex(System.Windows.Forms.Control! child, bool throwException) -> int
@@ -13054,7 +13054,7 @@ virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? text) -
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? text, int width) -> System.Windows.Forms.ColumnHeader!
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(string? text, int width, System.Windows.Forms.HorizontalAlignment textAlign) -> System.Windows.Forms.ColumnHeader!
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Add(System.Windows.Forms.ColumnHeader! value) -> int
-virtual System.Windows.Forms.ListView.ColumnHeaderCollection.AddRange(System.Windows.Forms.ColumnHeader![]! values) -> void
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.AddRange(params System.Windows.Forms.ColumnHeader![]! values) -> void
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.Clear() -> void
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.ContainsKey(string? key) -> bool
 virtual System.Windows.Forms.ListView.ColumnHeaderCollection.IndexOfKey(string? key) -> int
