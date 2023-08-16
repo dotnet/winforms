@@ -55,7 +55,6 @@ public abstract partial class TextBoxBase
                 return owner.Focused;
             }
 
-
             return base.GetPropertyValue(propertyID);
         }
 
