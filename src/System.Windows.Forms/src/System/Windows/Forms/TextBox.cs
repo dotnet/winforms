@@ -651,7 +651,7 @@ public partial class TextBox : TextBoxBase
     {
         base.OnKeyUp(e);
 
-        if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode))
+        if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode) && _passwordChar == 0 && !_useSystemPasswordChar)
         {
             AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
         }
@@ -661,7 +661,7 @@ public partial class TextBox : TextBoxBase
     {
         base.OnMouseDown(e);
 
-        if (IsHandleCreated && IsAccessibilityObjectCreated)
+        if (IsHandleCreated && IsAccessibilityObjectCreated && _passwordChar == 0 && !_useSystemPasswordChar)
         {
             // As there is no corresponding windows notification
             // about text selection changed for TextBox assuming

@@ -2041,7 +2041,7 @@ public partial class MaskedTextBox : TextBoxBase
             _flagState[IME_ENDING_COMPOSITION] = false;
         }
 
-        if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode))
+        if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode) && _passwordChar == 0 && !UseSystemPasswordChar)
         {
             AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
         }
@@ -2082,7 +2082,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         base.OnMouseDown(e);
 
-        if (IsHandleCreated && IsAccessibilityObjectCreated)
+        if (IsHandleCreated && IsAccessibilityObjectCreated && _passwordChar == 0 && !UseSystemPasswordChar)
         {
             // As there is no corresponding windows notification
             // about text selection changed for TextBox assuming

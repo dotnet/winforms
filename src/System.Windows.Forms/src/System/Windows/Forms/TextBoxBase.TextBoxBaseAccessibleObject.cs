@@ -44,10 +44,17 @@ public abstract partial class TextBoxBase
 
         internal override object? GetPropertyValue(UIA propertyID)
         {
-            if (propertyID == UIA.IsPasswordPropertyId && this.TryGetOwnerAs(out TextBoxBase? owner))
+            TextBoxBase? owner;
+            if (propertyID == UIA.IsPasswordPropertyId && this.TryGetOwnerAs(out owner))
             {
                 return owner.PasswordProtect;
             }
+
+            if (propertyID == UIA.HasKeyboardFocusPropertyId && this.TryGetOwnerAs(out owner))
+            {
+                return owner.Focused;
+            }
+
 
             return base.GetPropertyValue(propertyID);
         }
