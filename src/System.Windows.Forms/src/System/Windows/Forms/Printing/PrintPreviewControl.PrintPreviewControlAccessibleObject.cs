@@ -117,16 +117,12 @@ public partial class PrintPreviewControl
                         scrollValue = owner._hScrollBar.Value - owner._hScrollBar.SmallChange;
                         owner._hScrollBar.Value = (scrollValue < owner._hScrollBar.Minimum ? owner._hScrollBar.Minimum : scrollValue);
                         break;
-                    case ScrollAmount.ScrollAmount_NoAmount:
-                        return HRESULT.E_FAIL;
                 }
-
-                return HRESULT.S_OK;
             }
 
-            if (owner._vScrollBar.Visible && horizontalAmount != ScrollAmount.ScrollAmount_NoAmount)
+            if (owner._vScrollBar.Visible && verticalAmount != ScrollAmount.ScrollAmount_NoAmount)
             {
-                switch (horizontalAmount)
+                switch (verticalAmount)
                 {
                     case ScrollAmount.ScrollAmount_LargeIncrement:
                         scrollValue = owner._vScrollBar.Value + owner._vScrollBar.LargeChange;
@@ -144,14 +140,10 @@ public partial class PrintPreviewControl
                         scrollValue = owner._vScrollBar.Value - owner._vScrollBar.SmallChange;
                         owner._vScrollBar.Value = (scrollValue < owner._vScrollBar.Minimum ? owner._vScrollBar.Minimum : scrollValue);
                         break;
-                    case ScrollAmount.ScrollAmount_NoAmount:
-                        return HRESULT.E_FAIL;
                 }
-
-                return HRESULT.S_OK;
             }
 
-            return HRESULT.E_FAIL;
+            return HRESULT.S_OK;
         }
 
         HRESULT IScrollProvider.Interface.SetScrollPercent(double horizontalPercent, double verticalPercent)
@@ -166,17 +158,15 @@ public partial class PrintPreviewControl
             {
                 scrollValue = owner._hScrollBar.Minimum + (int)((owner._hScrollBar.Maximum - owner._hScrollBar.Minimum) * horizontalPercent);
                 owner._hScrollBar.Value = scrollValue;
-                return HRESULT.S_OK;
             }
 
             if (owner._vScrollBar.Visible && verticalPercent >= 0 && verticalPercent <= 100)
             {
                 scrollValue = owner._vScrollBar.Minimum + (int)((owner._vScrollBar.Maximum - owner._vScrollBar.Minimum) * verticalPercent);
                 owner._vScrollBar.Value = scrollValue;
-                return HRESULT.S_OK;
             }
 
-            return HRESULT.E_FAIL;
+            return HRESULT.S_OK;
         }
 
         public double HorizontalScrollPercent
