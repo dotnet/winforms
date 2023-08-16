@@ -224,7 +224,16 @@ public partial class MainForm : Form
                         FontDialog fd1 = surface.CreateComponent<FontDialog>();
                         PrintDialog pd1 = surface.CreateComponent<PrintDialog>();
 
-                        surface.CreateControl<MonthCalendar>(new Size(230, 170), new Point(10,110));
+                        MonthCalendar monthCalendar1 = surface.CreateControl<MonthCalendar>(new Size(230, 170), new Point(10, 110));
+
+                        Button subButton1OfLayoutPanel = surface.CreateControl<Button>(new Size(100, 40), new Point(10, 10));
+                        Button subButton2OfLayoutPanel = surface.CreateControl<Button>(new Size(100, 40), new Point(10, 10));
+                        FlowLayoutPanel layoutPanel = surface.CreateControl<FlowLayoutPanel>(new Size(430, 200), new Point(250, 10));
+                        layoutPanel.Controls.Add(subButton1OfLayoutPanel);
+                        layoutPanel.Controls.Add(subButton2OfLayoutPanel);
+
+                        FolderBrowserDialog folderBrowserDialog = surface.CreateComponent<FolderBrowserDialog>();
+                        SaveFileDialog saveFileDialog = surface.CreateComponent<SaveFileDialog>();
                     }
 
                     break;
@@ -236,6 +245,8 @@ public partial class MainForm : Form
 
                         surface.CreateControl<TabControl>(new Size(400, 100), new Point(12, 21));
                         surface.CreateControl<TableLayoutPanel>(new Size(290, 160), new Point(20, 150));
+                        surface.CreateControl<PropertyGrid>(new Size(200, 150), new Point(430, 23));
+                        surface.CreateComponent<NotifyIcon>();
                     }
 
                     break;

@@ -1,0 +1,30 @@
+*REMOVED*System.Windows.Forms.AutoCompleteStringCollection.AddRange(string![]! value) -> void
+*REMOVED*System.Windows.Forms.ComboBox.ObjectCollection.AddRange(object![]! items) -> void
+*REMOVED*System.Windows.Forms.ImageList.ImageCollection.AddRange(System.Drawing.Image![]! images) -> void
+*REMOVED*System.Windows.Forms.ListBox.IntegerCollection.AddRange(int[]! items) -> void
+*REMOVED*System.Windows.Forms.ListBox.ObjectCollection.AddRange(object![]! items) -> void
+*REMOVED*System.Windows.Forms.ListView.ListViewItemCollection.AddRange(System.Windows.Forms.ListViewItem![]! items) -> void
+*REMOVED*System.Windows.Forms.ListViewGroupCollection.AddRange(System.Windows.Forms.ListViewGroup![]! groups) -> void
+*REMOVED*System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(string![]! items) -> void
+*REMOVED*System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(System.Windows.Forms.ListViewItem.ListViewSubItem![]! items) -> void
+*REMOVED*System.Windows.Forms.TabControl.TabPageCollection.AddRange(System.Windows.Forms.TabPage![]! pages) -> void
+*REMOVED*System.Windows.Forms.ToolStripItemCollection.AddRange(System.Windows.Forms.ToolStripItem![]! toolStripItems) -> void
+*REMOVED*System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(System.Windows.Forms.ToolStripPanelRow![]! value) -> void
+*REMOVED*virtual System.Windows.Forms.Control.ControlCollection.AddRange(System.Windows.Forms.Control![]! controls) -> void
+*REMOVED*virtual System.Windows.Forms.ListView.ColumnHeaderCollection.AddRange(System.Windows.Forms.ColumnHeader![]! values) -> void
+*REMOVED*virtual System.Windows.Forms.TreeNodeCollection.AddRange(System.Windows.Forms.TreeNode![]! nodes) -> void
+System.Windows.Forms.AutoCompleteStringCollection.AddRange(params string![]! value) -> void
+System.Windows.Forms.ComboBox.ObjectCollection.AddRange(params object![]! items) -> void
+System.Windows.Forms.ImageList.ImageCollection.AddRange(params System.Drawing.Image![]! images) -> void
+System.Windows.Forms.ListBox.IntegerCollection.AddRange(params int[]! items) -> void
+System.Windows.Forms.ListBox.ObjectCollection.AddRange(params object![]! items) -> void
+System.Windows.Forms.ListView.ListViewItemCollection.AddRange(params System.Windows.Forms.ListViewItem![]! items) -> void
+System.Windows.Forms.ListViewGroupCollection.AddRange(params System.Windows.Forms.ListViewGroup![]! groups) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(params string![]! items) -> void
+System.Windows.Forms.ListViewItem.ListViewSubItemCollection.AddRange(params System.Windows.Forms.ListViewItem.ListViewSubItem![]! items) -> void
+System.Windows.Forms.TabControl.TabPageCollection.AddRange(params System.Windows.Forms.TabPage![]! pages) -> void
+System.Windows.Forms.ToolStripItemCollection.AddRange(params System.Windows.Forms.ToolStripItem![]! toolStripItems) -> void
+System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.AddRange(params System.Windows.Forms.ToolStripPanelRow![]! value) -> void
+virtual System.Windows.Forms.Control.ControlCollection.AddRange(params System.Windows.Forms.Control![]! controls) -> void
+virtual System.Windows.Forms.ListView.ColumnHeaderCollection.AddRange(params System.Windows.Forms.ColumnHeader![]! values) -> void
+virtual System.Windows.Forms.TreeNodeCollection.AddRange(params System.Windows.Forms.TreeNode![]! nodes) -> void

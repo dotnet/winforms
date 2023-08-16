@@ -227,6 +227,11 @@
         <target state="translated">Auswahlvorschau</target>
         <note />
       </trans-unit>
+      <trans-unit id="ChooseIconDisplayName">
+        <source>Choose Icon...</source>
+        <target state="new">Symbol auswählen...</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ChooseImageDescription">
         <source>Select the image displayed in the PictureBox</source>
         <target state="translated">In PictureBox angezeigtes Bild auswählen</target>

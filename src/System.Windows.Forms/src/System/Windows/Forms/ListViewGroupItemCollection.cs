@@ -46,7 +46,7 @@ internal class ListViewGroupItemCollection : ListView.ListViewItemCollection.IIn
         return value;
     }
 
-    public void AddRange(ListViewItem[] items)
+    public void AddRange(params ListViewItem[] items)
     {
         for (int i = 0; i < items.Length; i++)
         {
