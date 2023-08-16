@@ -272,7 +272,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         object actual = comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NativeWindowHandlePropertyId);
 
         Assert.True(comboBox.IsHandleCreated);
-        Assert.Equal(comboBox.InternalHandle, actual);
+        Assert.Equal((nint)comboBox.InternalHandle, actual);
     }
 
     [WinFormsTheory]
