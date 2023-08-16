@@ -18,7 +18,7 @@
   "symbols/Framework/choices/net8.0/displayName": ".NET 8.0",
   "symbols/Framework/choices/net9.0/description": "Target net9.0",
   "symbols/Framework/choices/net9.0/displayName": ".NET 9.0",
-  "symbols/Framework/displayName": ".NET 8.0",
+  "symbols/Framework/displayName": ".NET 9.0",
   "symbols/langVersion/description": "Définit langVersion dans le fichier projet créé",
   "symbols/langVersion/displayName": "Version du Langage",
   "symbols/skipRestore/description": "S’il est spécifié, ignore la restauration automatique du projet lors de la création.",
