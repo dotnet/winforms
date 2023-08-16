@@ -11,67 +11,62 @@ namespace System.Windows.Forms.Design;
 
 internal class DataGridViewAddColumnDialog :Form
 {
-    private RadioButton? dataBoundColumnRadioButton;
-    private Label? columnInDataSourceLabel;
+    private RadioButton? _dataBoundColumnRadioButton;
+    private Label? _columnInDataSourceLabel;
 
-    private ListBox? dataColumns;
+    private ListBox? _dataColumns;
 
-    private RadioButton? unboundColumnRadioButton;
-    private TextBox? nameTextBox;
+    private RadioButton? _unboundColumnRadioButton;
+    private TextBox? _nameTextBox;
 
-    private ComboBox? columnTypesCombo;
+    private ComboBox? _columnTypesCombo;
 
-    private TextBox? headerTextBox;
-    private Label? nameLabel;
+    private TextBox? _headerTextBox;
+    private Label? _nameLabel;
 
-    private Label? typeLabel;
+    private Label? _typeLabel;
 
-    private Label? headerTextLabel;
-    private CheckBox? visibleCheckBox;
+    private Label? _headerTextLabel;
+    private CheckBox? _visibleCheckBox;
 
-    private CheckBox? readOnlyCheckBox;
+    private CheckBox? _readOnlyCheckBox;
 
-    private CheckBox? frozenCheckBox;
-    private Button? addButton;
+    private CheckBox? _frozenCheckBox;
+    private Button? _addButton;
 
-    private Button? cancelButton;
+    private Button? _cancelButton;
 
-    private DataGridViewColumnCollection? dataGridViewColumns;
-    private DataGridView? liveDataGridView;
-    private int insertAtPosition = -1;
-    private int initialDataGridViewColumnsCount = -1;
-    private bool persistChangesToDesigner;
+    private DataGridViewColumnCollection? _dataGridViewColumns;
+    private DataGridView? _liveDataGridView;
+    private int _insertAtPosition = -1;
+    private int _initialDataGridViewColumnsCount = -1;
+    private bool _persistChangesToDesigner;
 
     private static Type dataGridViewColumnType = typeof(DataGridViewColumn);
     private static Type iDesignerType = typeof(IDesigner);
     private static Type iTypeDiscoveryServiceType = typeof(ITypeDiscoveryService);
     private static Type iComponentChangeServiceType = typeof(IComponentChangeService);
     private static Type iHelpServiceType = typeof(IHelpService);
-    private static Type iUIServiceType = typeof(Design.IUIService);
+    private static Type iUIServiceType = typeof(IUIService);
     private static Type iDesignerHostType = typeof(IDesignerHost);
     private static Type iNameCreationServiceType = typeof(INameCreationService);
     private static Type dataGridViewColumnDesignTimeVisibleAttributeType = typeof(DataGridViewColumnDesignTimeVisibleAttribute);
-    private TableLayoutPanel? okCancelTableLayoutPanel;
-    private TableLayoutPanel? checkBoxesTableLayoutPanel;
-    private TableLayoutPanel? overarchingTableLayoutPanel;
-
-    /// <summary>
-    /// Required designer variable.
-    /// </summary>
-    private IContainer? components;
+    private TableLayoutPanel? _okCancelTableLayoutPanel;
+    private TableLayoutPanel? _checkBoxesTableLayoutPanel;
+    private TableLayoutPanel? _overarchingTableLayoutPanel;
 
     public DataGridViewAddColumnDialog(DataGridViewColumnCollection dataGridViewColumns, DataGridView liveDataGridView)
     {
-        this.dataGridViewColumns = dataGridViewColumns;
-        this.liveDataGridView = liveDataGridView;
+        _dataGridViewColumns = dataGridViewColumns;
+        _liveDataGridView = liveDataGridView;
 
         // PERF: set the Dialog Font before InitializeComponent.
         //
         Font uiFont = Control.DefaultFont;
-        IUIService? uiService = this.liveDataGridView.Site?.GetService(iUIServiceType) as IUIService;
+        IUIService? uiService = _liveDataGridView.Site?.GetService(iUIServiceType) as IUIService;
         if (uiService is not null)
         {
-            uiFont = (Font)uiService.Styles["DialogFont"];
+            uiFont = (Font)uiService.Styles["DialogFont"]!;
         }
 
         this.Font = uiFont;
@@ -90,63 +85,63 @@ internal class DataGridViewAddColumnDialog :Form
     // and insert it in the data grid view column collection
     private void AddColumn()
     {
-        ComboBoxItem? comboBoxItem = columnTypesCombo?.SelectedItem as ComboBoxItem;
+        ComboBoxItem? comboBoxItem = _columnTypesCombo?.SelectedItem as ComboBoxItem;
         Type? columnType = comboBoxItem?.ColumnType;
 
-        DataGridViewColumn? column = System.Activator.CreateInstance(columnType) as DataGridViewColumn;
+        DataGridViewColumn? column = Activator.CreateInstance(columnType!) as DataGridViewColumn;
 
         // if we want to insert a column before a frozen column then make sure that we insert a frozen column
-        bool forceColumnFrozen = dataGridViewColumns.Count > insertAtPosition && dataGridViewColumns[insertAtPosition].Frozen;
+        bool forceColumnFrozen = _dataGridViewColumns!.Count > _insertAtPosition && _dataGridViewColumns[_insertAtPosition].Frozen;
 
-        column.Frozen = forceColumnFrozen;
+        column!.Frozen = forceColumnFrozen;
 
         // if we don't persist changes to the designer then we want to add the columns before
         // setting the Frozen bit
-        if (!persistChangesToDesigner)
+        if (!_persistChangesToDesigner)
         {
             // set the header text because the DataGridViewColumnCollection needs it to compute
             // its listbox'x HorizontalOffset
-            column.HeaderText = headerTextBox.Text;
-            column.Name = nameTextBox.Text;
+            column.HeaderText = _headerTextBox!.Text;
+            column.Name = _nameTextBox!.Text;
             column.DisplayIndex = -1;
-            this.dataGridViewColumns.Insert(this.insertAtPosition, column);
-            insertAtPosition++;
+            _dataGridViewColumns.Insert(_insertAtPosition, column);
+            _insertAtPosition++;
         }
 
         // if we persist changes directly to the designer then:
-        // 1. set the column property values 
+        // 1. set the column property values
         // 2. Add the new column
         // 3. site the column
 
         // 1. set the property values in the column
         //
-        column.HeaderText = this.headerTextBox.Text;
-        column.Name = this.nameTextBox.Text;
-        column.Visible = this.visibleCheckBox.Checked;
-        column.Frozen = this.frozenCheckBox.Checked || forceColumnFrozen;
-        column.ReadOnly = this.readOnlyCheckBox.Checked;
+        column.HeaderText = _headerTextBox!.Text;
+        column.Name = _nameTextBox!.Text;
+        column.Visible = _visibleCheckBox!.Checked;
+        column.Frozen = _frozenCheckBox!.Checked || forceColumnFrozen;
+        column.ReadOnly = _readOnlyCheckBox!.Checked;
 
-        if (this.dataBoundColumnRadioButton.Checked && dataColumns.SelectedIndex > -1)
+        if (_dataBoundColumnRadioButton!.Checked && _dataColumns!.SelectedIndex > -1)
         {
-            column.DataPropertyName = ((ListBoxItem)dataColumns.SelectedItem).PropertyName;
+            column.DataPropertyName = ((ListBoxItem)_dataColumns.SelectedItem!).PropertyName;
         }
 
-        if (this.persistChangesToDesigner)
+        if (this._persistChangesToDesigner)
         {
             try
             {
                 // insert the column before siting the column.
                 // if DataGridView throws an exception then the designer does not end up w/ a column that is not in any data grid view.
                 column.DisplayIndex = -1;
-                this.dataGridViewColumns.Insert(insertAtPosition, column);
-                insertAtPosition++;
+                _dataGridViewColumns.Insert(_insertAtPosition, column);
+                _insertAtPosition++;
                 // site the column
-                this.liveDataGridView.Site.Container.Add(column, column.Name);
+                _liveDataGridView?.Site?.Container?.Add(column, column.Name);
             }
             catch (InvalidOperationException ex)
             {
-                IUIService? uiService = this.liveDataGridView.Site?.GetService(typeof(IUIService)) as IUIService;
-                DataGridViewDesigner.ShowErrorDialog(uiService, ex, this.liveDataGridView);
+                IUIService? uiService = _liveDataGridView?.Site?.GetService(typeof(IUIService)) as IUIService;
+                DataGridViewDesigner.ShowErrorDialog(uiService, ex, _liveDataGridView);
                 return;
             }
         }
@@ -158,8 +153,8 @@ internal class DataGridViewAddColumnDialog :Form
 
         // pick a new Column name
         //
-        this.nameTextBox.Text = this.headerTextBox.Text = this.AssignName();
-        this.nameTextBox.Focus();
+        this._nameTextBox.Text = this._headerTextBox.Text = this.AssignName();
+        this._nameTextBox.Focus();
     }
 
     private string AssignName()
@@ -171,18 +166,18 @@ internal class DataGridViewAddColumnDialog :Form
         IDesignerHost? host = null;
         IContainer? container = null;
 
-        host = liveDataGridView?.Site?.GetService(iDesignerHostType) as IDesignerHost;
+        host = _liveDataGridView?.Site?.GetService(iDesignerHostType) as IDesignerHost;
         if (host is not null)
         {
             container = host.Container;
         }
 
         while (!ValidName(columnName,
-                            dataGridViewColumns,
+                            _dataGridViewColumns!,
                             container,
                             null /*nameCreationService*/,
-                            liveDataGridView.Columns,
-                            !persistChangesToDesigner))
+                            _liveDataGridView!.Columns,
+                            !_persistChangesToDesigner))
         {
             colId++;
             // columnName = (SR.DataGridView_ColumnName, colId.ToString());
@@ -197,37 +192,32 @@ internal class DataGridViewAddColumnDialog :Form
     /// </summary>
     protected override void Dispose(bool disposing)
     {
-        if (disposing)
-        {
-            components?.Dispose();
-        }
-
         base.Dispose(disposing);
     }
 
     private void EnableDataBoundSection()
     {
-        bool dataGridViewIsDataBound = dataColumns.Items.Count > 0;
+        bool dataGridViewIsDataBound = _dataColumns!.Items.Count > 0;
         if (dataGridViewIsDataBound)
         {
-            dataBoundColumnRadioButton.Enabled = true;
-            dataBoundColumnRadioButton.Checked = true;
-            dataBoundColumnRadioButton.Focus();
-            headerTextBox.Text = nameTextBox.Text = AssignName();
+            _dataBoundColumnRadioButton!.Enabled = true;
+            _dataBoundColumnRadioButton.Checked = true;
+            _dataBoundColumnRadioButton.Focus();
+            _headerTextBox!.Text = _nameTextBox!.Text = AssignName();
         }
         else
         {
-            dataBoundColumnRadioButton.Enabled = false;
-            unboundColumnRadioButton.Checked = true;
-            nameTextBox.Focus();
-            headerTextBox.Text = nameTextBox.Text = AssignName();
+            _dataBoundColumnRadioButton!.Enabled = false;
+            _unboundColumnRadioButton!.Checked = true;
+            _nameTextBox!.Focus();
+            _headerTextBox!.Text = _nameTextBox.Text = AssignName();
         }
     }
 
     //
     // public because the EditColumns dialog wants to use it as well.
     //
-    public static ComponentDesigner GetComponentDesignerForType(ITypeResolutionService tr, Type type)
+    public static ComponentDesigner? GetComponentDesignerForType(ITypeResolutionService? tr, Type type)
     {
         ComponentDesigner? compDesigner = null;
         DesignerAttribute? designerAttr = null;
@@ -275,203 +265,203 @@ internal class DataGridViewAddColumnDialog :Form
     private void InitializeComponent()
     {
         ComponentResourceManager resources = new ComponentResourceManager(typeof(DataGridViewAddColumnDialog));
-        dataBoundColumnRadioButton = new RadioButton();
-        overarchingTableLayoutPanel = new TableLayoutPanel();
-        checkBoxesTableLayoutPanel = new TableLayoutPanel();
-        frozenCheckBox = new CheckBox();
-        visibleCheckBox = new CheckBox();
-        readOnlyCheckBox = new CheckBox();
-        okCancelTableLayoutPanel = new TableLayoutPanel();
-        addButton = new Button();
-        cancelButton = new Button();
-        columnInDataSourceLabel = new Label();
-        dataColumns = new ListBox();
-        unboundColumnRadioButton = new RadioButton();
-        nameLabel = new Label();
-        nameTextBox = new TextBox();
-        typeLabel = new Label();
-        columnTypesCombo = new ComboBox();
-        headerTextLabel = new Label();
-        headerTextBox = new TextBox();
-        overarchingTableLayoutPanel.SuspendLayout();
-        checkBoxesTableLayoutPanel.SuspendLayout();
-        okCancelTableLayoutPanel.SuspendLayout();
+        _dataBoundColumnRadioButton = new RadioButton();
+        _overarchingTableLayoutPanel = new TableLayoutPanel();
+        _checkBoxesTableLayoutPanel = new TableLayoutPanel();
+        _frozenCheckBox = new CheckBox();
+        _visibleCheckBox = new CheckBox();
+        _readOnlyCheckBox = new CheckBox();
+        _okCancelTableLayoutPanel = new TableLayoutPanel();
+        _addButton = new Button();
+        _cancelButton = new Button();
+        _columnInDataSourceLabel = new Label();
+        _dataColumns = new ListBox();
+        _unboundColumnRadioButton = new RadioButton();
+        _nameLabel = new Label();
+        _nameTextBox = new TextBox();
+        _typeLabel = new Label();
+        _columnTypesCombo = new ComboBox();
+        _headerTextLabel = new Label();
+        _headerTextBox = new TextBox();
+        _overarchingTableLayoutPanel.SuspendLayout();
+        _checkBoxesTableLayoutPanel.SuspendLayout();
+        _okCancelTableLayoutPanel.SuspendLayout();
         SuspendLayout();
         //
         // dataBoundColumnRadioButton
         //
-        resources.ApplyResources(dataBoundColumnRadioButton, "dataBoundColumnRadioButton");
-        dataBoundColumnRadioButton.Checked = true;
-        overarchingTableLayoutPanel.SetColumnSpan(dataBoundColumnRadioButton, 3);
-        dataBoundColumnRadioButton.Margin = new Padding(0);
-        dataBoundColumnRadioButton.Name = "dataBoundColumnRadioButton";
-        dataBoundColumnRadioButton.CheckedChanged += new System.EventHandler(dataBoundColumnRadioButton_CheckedChanged);
+        resources.ApplyResources(_dataBoundColumnRadioButton, "dataBoundColumnRadioButton");
+        _dataBoundColumnRadioButton.Checked = true;
+        _overarchingTableLayoutPanel.SetColumnSpan(_dataBoundColumnRadioButton, 3);
+        _dataBoundColumnRadioButton.Margin = new Padding(0);
+        _dataBoundColumnRadioButton.Name = "dataBoundColumnRadioButton";
+        _dataBoundColumnRadioButton.CheckedChanged += new System.EventHandler(dataBoundColumnRadioButton_CheckedChanged);
         //
         // overarchingTableLayoutPanel
         //
-        resources.ApplyResources(this.overarchingTableLayoutPanel, "overarchingTableLayoutPanel");
-        overarchingTableLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 14F));
-        overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
-        overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 250F));
-        overarchingTableLayoutPanel.Controls.Add(checkBoxesTableLayoutPanel, 0, 10);
-        overarchingTableLayoutPanel.Controls.Add(okCancelTableLayoutPanel, 2, 11);
-        overarchingTableLayoutPanel.Controls.Add(dataBoundColumnRadioButton, 0, 0);
-        overarchingTableLayoutPanel.Controls.Add(columnInDataSourceLabel, 1, 1);
-        overarchingTableLayoutPanel.Controls.Add(dataColumns, 1, 2);
-        overarchingTableLayoutPanel.Controls.Add(unboundColumnRadioButton, 0, 4);
-        overarchingTableLayoutPanel.Controls.Add(nameLabel, 1, 5);
-        overarchingTableLayoutPanel.Controls.Add(nameTextBox, 2, 5);
-        overarchingTableLayoutPanel.Controls.Add(typeLabel, 1, 7);
-        overarchingTableLayoutPanel.Controls.Add(columnTypesCombo, 2, 7);
-        overarchingTableLayoutPanel.Controls.Add(headerTextLabel, 1, 9);
-        overarchingTableLayoutPanel.Controls.Add(headerTextBox, 2, 9);
-        overarchingTableLayoutPanel.Margin = new Padding(12, 12, 12, 13);
-        overarchingTableLayoutPanel.Name = "overarchingTableLayoutPanel";
-        overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
-        overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 16F));
-        overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 91F));
-        overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 12F));
-        overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
-        overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
-        overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 4F));
-        overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
-        overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 4F));
-        overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
-        overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
-        overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
-        // 
+        resources.ApplyResources(this._overarchingTableLayoutPanel, "overarchingTableLayoutPanel");
+        _overarchingTableLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        _overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 14F));
+        _overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+        _overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 250F));
+        _overarchingTableLayoutPanel.Controls.Add(_checkBoxesTableLayoutPanel, 0, 10);
+        _overarchingTableLayoutPanel.Controls.Add(_okCancelTableLayoutPanel, 2, 11);
+        _overarchingTableLayoutPanel.Controls.Add(_dataBoundColumnRadioButton, 0, 0);
+        _overarchingTableLayoutPanel.Controls.Add(_columnInDataSourceLabel, 1, 1);
+        _overarchingTableLayoutPanel.Controls.Add(_dataColumns, 1, 2);
+        _overarchingTableLayoutPanel.Controls.Add(_unboundColumnRadioButton, 0, 4);
+        _overarchingTableLayoutPanel.Controls.Add(_nameLabel, 1, 5);
+        _overarchingTableLayoutPanel.Controls.Add(_nameTextBox, 2, 5);
+        _overarchingTableLayoutPanel.Controls.Add(_typeLabel, 1, 7);
+        _overarchingTableLayoutPanel.Controls.Add(_columnTypesCombo, 2, 7);
+        _overarchingTableLayoutPanel.Controls.Add(_headerTextLabel, 1, 9);
+        _overarchingTableLayoutPanel.Controls.Add(_headerTextBox, 2, 9);
+        _overarchingTableLayoutPanel.Margin = new Padding(12, 12, 12, 13);
+        _overarchingTableLayoutPanel.Name = "overarchingTableLayoutPanel";
+        _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
+        _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 16F));
+        _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 91F));
+        _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 12F));
+        _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
+        _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
+        _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 4F));
+        _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
+        _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 4F));
+        _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
+        _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
+        _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
+        //
         // checkBoxesTableLayoutPanel
-        // 
-        resources.ApplyResources(checkBoxesTableLayoutPanel, "checkBoxesTableLayoutPanel");
-        checkBoxesTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
-        checkBoxesTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
-        checkBoxesTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
-        checkBoxesTableLayoutPanel.Controls.Add(frozenCheckBox, 2, 0);
-        checkBoxesTableLayoutPanel.Controls.Add(visibleCheckBox, 0, 0);
-        checkBoxesTableLayoutPanel.Controls.Add(readOnlyCheckBox, 1, 0);
-        checkBoxesTableLayoutPanel.Margin = new Padding(0);
-        overarchingTableLayoutPanel.SetColumnSpan(checkBoxesTableLayoutPanel, 3);
-        checkBoxesTableLayoutPanel.Name = "checkBoxesTableLayoutPanel";
-        checkBoxesTableLayoutPanel.RowStyles.Add(new RowStyle());
+        //
+        resources.ApplyResources(_checkBoxesTableLayoutPanel, "checkBoxesTableLayoutPanel");
+        _checkBoxesTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+        _checkBoxesTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+        _checkBoxesTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
+        _checkBoxesTableLayoutPanel.Controls.Add(_frozenCheckBox, 2, 0);
+        _checkBoxesTableLayoutPanel.Controls.Add(_visibleCheckBox, 0, 0);
+        _checkBoxesTableLayoutPanel.Controls.Add(_readOnlyCheckBox, 1, 0);
+        _checkBoxesTableLayoutPanel.Margin = new Padding(0);
+        _overarchingTableLayoutPanel.SetColumnSpan(_checkBoxesTableLayoutPanel, 3);
+        _checkBoxesTableLayoutPanel.Name = "checkBoxesTableLayoutPanel";
+        _checkBoxesTableLayoutPanel.RowStyles.Add(new RowStyle());
         //
         // frozenCheckBox
         //
-        resources.ApplyResources(frozenCheckBox, "frozenCheckBox");
-        frozenCheckBox.Margin = new Padding(0);
-        frozenCheckBox.Name = "frozenCheckBox";
+        resources.ApplyResources(_frozenCheckBox, "frozenCheckBox");
+        _frozenCheckBox.Margin = new Padding(0);
+        _frozenCheckBox.Name = "frozenCheckBox";
         //
         // visibleCheckBox
         //
-        resources.ApplyResources(visibleCheckBox, "visibleCheckBox");
-        visibleCheckBox.Checked = true;
-        visibleCheckBox.CheckState = CheckState.Checked;
-        visibleCheckBox.Margin = new Padding(0);
-        visibleCheckBox.Name = "visibleCheckBox";
+        resources.ApplyResources(_visibleCheckBox, "visibleCheckBox");
+        _visibleCheckBox.Checked = true;
+        _visibleCheckBox.CheckState = CheckState.Checked;
+        _visibleCheckBox.Margin = new Padding(0);
+        _visibleCheckBox.Name = "visibleCheckBox";
         //
         // readOnlyCheckBox
         //
-        resources.ApplyResources(readOnlyCheckBox, "readOnlyCheckBox");
-        readOnlyCheckBox.Margin = new Padding(0);
-        readOnlyCheckBox.Name = "readOnlyCheckBox";
+        resources.ApplyResources(_readOnlyCheckBox, "readOnlyCheckBox");
+        _readOnlyCheckBox.Margin = new Padding(0);
+        _readOnlyCheckBox.Name = "readOnlyCheckBox";
         //
         // okCancelTableLayoutPanel
         //
-        resources.ApplyResources(okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
-        okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-        okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-        okCancelTableLayoutPanel.Controls.Add(addButton, 0, 0);
-        okCancelTableLayoutPanel.Controls.Add(cancelButton, 1, 0);
-        okCancelTableLayoutPanel.Margin = new Padding(0, 6, 0, 0);
-        okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
-        okCancelTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+        resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
+        _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        _okCancelTableLayoutPanel.Controls.Add(_addButton, 0, 0);
+        _okCancelTableLayoutPanel.Controls.Add(_cancelButton, 1, 0);
+        _okCancelTableLayoutPanel.Margin = new Padding(0, 6, 0, 0);
+        _okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
+        _okCancelTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
         //
         // addButton
         //
-        resources.ApplyResources(addButton, "addButton");
-        addButton.Margin = new Padding(0, 0, 3, 0);
-        addButton.Name = "addButton";
-        addButton.Click += new System.EventHandler(addButton_Click);
+        resources.ApplyResources(_addButton, "addButton");
+        _addButton.Margin = new Padding(0, 0, 3, 0);
+        _addButton.Name = "addButton";
+        _addButton.Click += new System.EventHandler(addButton_Click);
         //
         // cancelButton
         //
-        resources.ApplyResources(cancelButton, "cancelButton");
-        cancelButton.Margin = new Padding(3, 0, 0, 0);
-        cancelButton.Name = "cancelButton";
-        cancelButton.Click += new EventHandler(cancelButton_Click);
+        resources.ApplyResources(_cancelButton, "cancelButton");
+        _cancelButton.Margin = new Padding(3, 0, 0, 0);
+        _cancelButton.Name = "cancelButton";
+        _cancelButton.Click += new EventHandler(cancelButton_Click);
         //
         // columnInDataSourceLabel
         //
-        resources.ApplyResources(columnInDataSourceLabel, "columnInDataSourceLabel");
-        overarchingTableLayoutPanel.SetColumnSpan(columnInDataSourceLabel, 2);
-        columnInDataSourceLabel.Margin = new Padding(0);
-        columnInDataSourceLabel.Name = "columnInDataSourceLabel";
+        resources.ApplyResources(_columnInDataSourceLabel, "columnInDataSourceLabel");
+        _overarchingTableLayoutPanel.SetColumnSpan(_columnInDataSourceLabel, 2);
+        _columnInDataSourceLabel.Margin = new Padding(0);
+        _columnInDataSourceLabel.Name = "columnInDataSourceLabel";
         //
         // dataColumns
         //
-        resources.ApplyResources(dataColumns, "dataColumns");
-        overarchingTableLayoutPanel.SetColumnSpan(dataColumns, 2);
-        dataColumns.FormattingEnabled = true;
-        dataColumns.Margin = new Padding(0);
-        dataColumns.Name = "dataColumns";
+        resources.ApplyResources(_dataColumns, "dataColumns");
+        _overarchingTableLayoutPanel.SetColumnSpan(_dataColumns, 2);
+        _dataColumns.FormattingEnabled = true;
+        _dataColumns.Margin = new Padding(0);
+        _dataColumns.Name = "dataColumns";
 
-        dataColumns.SelectedIndexChanged += new EventHandler(dataColumns_SelectedIndexChanged);
+        _dataColumns.SelectedIndexChanged += new EventHandler(dataColumns_SelectedIndexChanged);
         //
         // unboundColumnRadioButton
         //
-        resources.ApplyResources(unboundColumnRadioButton, "unboundColumnRadioButton");
-        overarchingTableLayoutPanel.SetColumnSpan(unboundColumnRadioButton, 3);
-        unboundColumnRadioButton.Margin = new Padding(0);
-        unboundColumnRadioButton.Name = "unboundColumnRadioButton";
-        unboundColumnRadioButton.CheckedChanged += new EventHandler(unboundColumnRadioButton_CheckedChanged);
+        resources.ApplyResources(_unboundColumnRadioButton, "unboundColumnRadioButton");
+        _overarchingTableLayoutPanel.SetColumnSpan(_unboundColumnRadioButton, 3);
+        _unboundColumnRadioButton.Margin = new Padding(0);
+        _unboundColumnRadioButton.Name = "unboundColumnRadioButton";
+        _unboundColumnRadioButton.CheckedChanged += new EventHandler(unboundColumnRadioButton_CheckedChanged);
         //
         // nameLabel
         //
-        resources.ApplyResources(nameLabel, "nameLabel");
-        nameLabel.Margin = new Padding(0);
-        nameLabel.Name = "nameLabel";
+        resources.ApplyResources(_nameLabel, "nameLabel");
+        _nameLabel.Margin = new Padding(0);
+        _nameLabel.Name = "nameLabel";
         //
         // nameTextBox
         //
-        resources.ApplyResources(nameTextBox, "nameTextBox");
-        nameTextBox.Margin = new Padding(0);
-        nameTextBox.Name = "nameTextBox";
-        nameTextBox.Validating += new CancelEventHandler(nameTextBox_Validating);
+        resources.ApplyResources(_nameTextBox, "nameTextBox");
+        _nameTextBox.Margin = new Padding(0);
+        _nameTextBox.Name = "nameTextBox";
+        _nameTextBox.Validating += new CancelEventHandler(nameTextBox_Validating);
         //
         // typeLabel
         //
-        resources.ApplyResources(typeLabel, "typeLabel");
-        typeLabel.Margin = new Padding(0);
-        typeLabel.Name = "typeLabel";
+        resources.ApplyResources(_typeLabel, "typeLabel");
+        _typeLabel.Margin = new Padding(0);
+        _typeLabel.Name = "typeLabel";
         //
         // columnTypesCombo
         //
-        resources.ApplyResources(columnTypesCombo, "columnTypesCombo");
-        columnTypesCombo.DropDownStyle = ComboBoxStyle.DropDownList;
-        columnTypesCombo.FormattingEnabled = true;
-        columnTypesCombo.Margin = new Padding(0);
-        columnTypesCombo.Name = "columnTypesCombo";
-        columnTypesCombo.Sorted = true;
+        resources.ApplyResources(_columnTypesCombo, "columnTypesCombo");
+        _columnTypesCombo.DropDownStyle = ComboBoxStyle.DropDownList;
+        _columnTypesCombo.FormattingEnabled = true;
+        _columnTypesCombo.Margin = new Padding(0);
+        _columnTypesCombo.Name = "columnTypesCombo";
+        _columnTypesCombo.Sorted = true;
         //
         // headerTextLabel
         //
-        resources.ApplyResources(headerTextLabel, "headerTextLabel");
-        headerTextLabel.Margin = new Padding(0);
-        headerTextLabel.Name = "headerTextLabel";
+        resources.ApplyResources(_headerTextLabel, "headerTextLabel");
+        _headerTextLabel.Margin = new Padding(0);
+        _headerTextLabel.Name = "headerTextLabel";
         //
         // headerTextBox
         //
-        resources.ApplyResources(headerTextBox, "headerTextBox");
-        headerTextBox.Margin = new Padding(0);
-        headerTextBox.Name = "headerTextBox";
+        resources.ApplyResources(_headerTextBox, "headerTextBox");
+        _headerTextBox.Margin = new Padding(0);
+        _headerTextBox.Name = "headerTextBox";
         //
         // DataGridViewAddColumnDialog
         //
         resources.ApplyResources(this, "$this");
         AutoScaleMode = AutoScaleMode.Font;
-        CancelButton = cancelButton;
+        CancelButton = _cancelButton;
         AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        Controls.Add(overarchingTableLayoutPanel);
+        Controls.Add(_overarchingTableLayoutPanel);
         FormBorderStyle = FormBorderStyle.FixedDialog;
         HelpButton = true;
         MaximizeBox = false;
@@ -484,57 +474,57 @@ internal class DataGridViewAddColumnDialog :Form
         VisibleChanged += new EventHandler(DataGridViewAddColumnDialog_VisibleChanged);
         Load += new EventHandler(DataGridViewAddColumnDialog_Load);
         HelpRequested += new HelpEventHandler(DataGridViewAddColumnDialog_HelpRequested);
-        overarchingTableLayoutPanel.ResumeLayout(false);
-        overarchingTableLayoutPanel.PerformLayout();
-        checkBoxesTableLayoutPanel.ResumeLayout(false);
-        checkBoxesTableLayoutPanel.PerformLayout();
-        okCancelTableLayoutPanel.ResumeLayout(false);
-        okCancelTableLayoutPanel.PerformLayout();
+        _overarchingTableLayoutPanel.ResumeLayout(false);
+        _overarchingTableLayoutPanel.PerformLayout();
+        _checkBoxesTableLayoutPanel.ResumeLayout(false);
+        _checkBoxesTableLayoutPanel.PerformLayout();
+        _okCancelTableLayoutPanel.ResumeLayout(false);
+        _okCancelTableLayoutPanel.PerformLayout();
         ResumeLayout(false);
         PerformLayout();
     }
     #endregion
 
-    private void dataBoundColumnRadioButton_CheckedChanged(object? sender, System.EventArgs e)
+    private void dataBoundColumnRadioButton_CheckedChanged(object? sender, EventArgs e)
     {
-        columnInDataSourceLabel.Enabled = dataBoundColumnRadioButton.Checked;
-        dataColumns.Enabled = dataBoundColumnRadioButton.Checked;
+        _columnInDataSourceLabel!.Enabled = _dataBoundColumnRadioButton!.Checked;
+        _dataColumns!.Enabled = _dataBoundColumnRadioButton.Checked;
 
         // push the property name into the headerTextBox and into the nameTextBox
         dataColumns_SelectedIndexChanged(null, EventArgs.Empty);
     }
 
-    private void dataColumns_SelectedIndexChanged(object? sender, System.EventArgs e)
+    private void dataColumns_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        if (dataColumns?.SelectedItem is null)
+        if (_dataColumns?.SelectedItem is null)
         {
             return;
         }
 
-        headerTextBox.Text = nameTextBox.Text = ((ListBoxItem)dataColumns.SelectedItem).PropertyName;
+        _headerTextBox!.Text = _nameTextBox!.Text = ((ListBoxItem)_dataColumns.SelectedItem).PropertyName;
 
         // pick a default data grid view column type
         // NOTE: this will pick one of our data grid view column types
-        SetDefaultDataGridViewColumnType(((ListBoxItem)dataColumns.SelectedItem).PropertyType);
+        SetDefaultDataGridViewColumnType(((ListBoxItem)_dataColumns.SelectedItem).PropertyType);
     }
 
-    private void unboundColumnRadioButton_CheckedChanged(object? sender, System.EventArgs e)
+    private void unboundColumnRadioButton_CheckedChanged(object? sender, EventArgs e)
     {
-        if (unboundColumnRadioButton.Checked)
+        if (_unboundColumnRadioButton!.Checked)
         {
-            nameTextBox.Text = headerTextBox.Text = AssignName();
-            nameTextBox.Focus();
+            _nameTextBox!.Text = _headerTextBox!.Text = AssignName();
+            _nameTextBox.Focus();
         }
     }
 
-    private void DataGridViewAddColumnDialog_Closed(object? sender, System.EventArgs e)
+    private void DataGridViewAddColumnDialog_Closed(object? sender, EventArgs e)
     {
-        if (persistChangesToDesigner)
+        if (_persistChangesToDesigner)
         {
             try
             {
-                Debug.Assert(initialDataGridViewColumnsCount != -1, "did you forget to set the initialDataGridViewColumnsCount when you started the dialog?");
-                IComponentChangeService changeService = (IComponentChangeService)liveDataGridView.Site.GetService(iComponentChangeServiceType);
+                Debug.Assert(_initialDataGridViewColumnsCount != -1, "did you forget to set the initialDataGridViewColumnsCount when you started the dialog?");
+                IComponentChangeService? changeService = _liveDataGridView!.Site?.GetService(iComponentChangeServiceType) as IComponentChangeService;
                 if (changeService is null)
                 {
                     return;
@@ -542,21 +532,21 @@ internal class DataGridViewAddColumnDialog :Form
 
                 // to get good Undo/Redo we need to bring the data grid view column collection
                 // back to its initial state before firing the componentChanging event
-                DataGridViewColumn[] cols = new DataGridViewColumn[liveDataGridView.Columns.Count - initialDataGridViewColumnsCount];
-                for (int i = initialDataGridViewColumnsCount; i < liveDataGridView.Columns.Count; i++)
+                DataGridViewColumn[] cols = new DataGridViewColumn[_liveDataGridView.Columns.Count - _initialDataGridViewColumnsCount];
+                for (int i = _initialDataGridViewColumnsCount; i < _liveDataGridView.Columns.Count; i++)
                 {
-                    cols[i - initialDataGridViewColumnsCount] = liveDataGridView.Columns[i];
+                    cols[i - _initialDataGridViewColumnsCount] = _liveDataGridView.Columns[i];
                 }
 
-                for (int i = initialDataGridViewColumnsCount; i < liveDataGridView.Columns.Count;)
+                for (int i = _initialDataGridViewColumnsCount; i < _liveDataGridView.Columns.Count;)
                 {
-                    liveDataGridView.Columns.RemoveAt(initialDataGridViewColumnsCount);
+                    _liveDataGridView.Columns.RemoveAt(_initialDataGridViewColumnsCount);
                 }
 
                 // the data grid view column collection is back to its initial state
                 // fire the component changing event
-                PropertyDescriptor? prop = TypeDescriptor.GetProperties(liveDataGridView)["Columns"];
-                changeService.OnComponentChanging(liveDataGridView, prop);
+                PropertyDescriptor? prop = TypeDescriptor.GetProperties(_liveDataGridView)["Columns"];
+                changeService.OnComponentChanging(_liveDataGridView, prop);
 
                 // add back the data grid view columns the user added using the Add Columns dialog
                 // But first wipe out the existing display index.
@@ -565,10 +555,10 @@ internal class DataGridViewAddColumnDialog :Form
                     cols[i].DisplayIndex = -1;
                 }
 
-                liveDataGridView.Columns.AddRange(cols);
+                _liveDataGridView.Columns.AddRange(cols);
 
                 // fire component changed event
-                changeService.OnComponentChanged(liveDataGridView, prop, null, null);
+                changeService.OnComponentChanged(_liveDataGridView, prop, null, null);
             }
             catch (InvalidOperationException)
             {
@@ -577,7 +567,7 @@ internal class DataGridViewAddColumnDialog :Form
 #if DEBUG
         else
         {
-            Debug.Assert(this.initialDataGridViewColumnsCount == -1, "did you forget to reset the initialDataGridViewColumnsCount when you started the dialog?");
+            Debug.Assert(this._initialDataGridViewColumnsCount == -1, "did you forget to reset the _initialDataGridViewColumnsCount when you started the dialog?");
         }
 #endif // DEBUG
 
@@ -599,7 +589,7 @@ internal class DataGridViewAddColumnDialog :Form
 
     private void DataGridViewAddColumnDialog_HelpRequestHandled()
     {
-        IHelpService? helpService = liveDataGridView?.Site?.GetService(iHelpServiceType) as IHelpService;
+        IHelpService? helpService = _liveDataGridView?.Site?.GetService(iHelpServiceType) as IHelpService;
         helpService?.ShowHelpFromKeyword("vs.DataGridViewAddColumnDialog");
     }
 
@@ -607,15 +597,15 @@ internal class DataGridViewAddColumnDialog :Form
     {
         // setup Visible/ReadOnly/Frozen checkboxes
         // localization will change the check boxes text length
-        if (dataBoundColumnRadioButton!.Checked)
+        if (_dataBoundColumnRadioButton!.Checked)
         {
-            headerTextBox!.Text = nameTextBox!.Text = AssignName();
+            _headerTextBox!.Text = _nameTextBox!.Text = AssignName();
         }
         else
         {
-            Debug.Assert(unboundColumnRadioButton!.Checked, "we only have 2 radio buttons");
+            Debug.Assert(_unboundColumnRadioButton!.Checked, "we only have 2 radio buttons");
             string columnName = AssignName();
-            headerTextBox!.Text = nameTextBox!.Text = columnName;
+            _headerTextBox!.Text = _nameTextBox!.Text = columnName;
         }
 
         PopulateColumnTypesCombo();
@@ -624,7 +614,7 @@ internal class DataGridViewAddColumnDialog :Form
 
         EnableDataBoundSection();
 
-        cancelButton!.Text = SR.DataGridView_Cancel;
+        _cancelButton!.Text = SR.DataGridView_Cancel;
     }
 
     private void DataGridViewAddColumnDialog_VisibleChanged(object? sender, System.EventArgs e)
@@ -632,15 +622,15 @@ internal class DataGridViewAddColumnDialog :Form
         if (Visible && IsHandleCreated)
         {
             // we loaded the form
-            if (dataBoundColumnRadioButton!.Checked)
+            if (_dataBoundColumnRadioButton!.Checked)
             {
-                Debug.Assert(dataColumns!.Enabled, "dataColumns list box and dataBoundColumnRadioButton should be enabled / disabled in sync");
-                dataColumns.Select();
+                Debug.Assert(_dataColumns!.Enabled, "dataColumns list box and dataBoundColumnRadioButton should be enabled / disabled in sync");
+                _dataColumns.Select();
             }
             else
             {
-                Debug.Assert(unboundColumnRadioButton!.Checked, "We only have 2 radio buttons");
-                nameTextBox!.Select();
+                Debug.Assert(_unboundColumnRadioButton!.Checked, "We only have 2 radio buttons");
+                _nameTextBox!.Select();
             }
         }
     }
@@ -651,25 +641,25 @@ internal class DataGridViewAddColumnDialog :Form
         INameCreationService? nameCreationService = null;
         IContainer? container = null;
 
-        host = liveDataGridView?.Site?.GetService(iDesignerHostType) as IDesignerHost;
+        host = _liveDataGridView?.Site?.GetService(iDesignerHostType) as IDesignerHost;
         if (host is not null)
         {
             container = host.Container;
         }
 
-        nameCreationService = liveDataGridView?.Site?.GetService(iNameCreationServiceType) as INameCreationService;
+        nameCreationService = _liveDataGridView?.Site?.GetService(iNameCreationServiceType) as INameCreationService;
 
         string errorString = string.Empty;
-        if (!ValidName(nameTextBox.Text,
-                       dataGridViewColumns,
+        if (!ValidName(_nameTextBox!.Text,
+                       _dataGridViewColumns!,
                        container,
                        nameCreationService,
-                       liveDataGridView.Columns,
-                       !persistChangesToDesigner,
+                       _liveDataGridView!.Columns,
+                       !_persistChangesToDesigner,
                        out errorString))
         {
-            IUIService? uiService = liveDataGridView?.Site?.GetService(iUIServiceType) as IUIService;
-            DataGridViewDesigner.ShowErrorDialog(uiService, errorString, liveDataGridView);
+            IUIService? uiService = _liveDataGridView?.Site?.GetService(iUIServiceType) as IUIService;
+            DataGridViewDesigner.ShowErrorDialog(uiService, errorString, _liveDataGridView);
             e.Cancel = true;
         }
     }
@@ -678,9 +668,9 @@ internal class DataGridViewAddColumnDialog :Form
     // data grid view column types
     private void PopulateColumnTypesCombo()
     {
-        columnTypesCombo.Items.Clear();
+        _columnTypesCombo!.Items.Clear();
 
-        IDesignerHost? host = liveDataGridView?.Site?.GetService(iDesignerHostType) as IDesignerHost;
+        IDesignerHost? host = _liveDataGridView?.Site?.GetService(iDesignerHostType) as IDesignerHost;
         if (host is null)
         {
             return;
@@ -712,39 +702,41 @@ internal class DataGridViewAddColumnDialog :Form
                 continue;
             }
 
+#pragma warning disable IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
             DataGridViewColumnDesignTimeVisibleAttribute? attr = TypeDescriptor.GetAttributes(t)[dataGridViewColumnDesignTimeVisibleAttributeType] as DataGridViewColumnDesignTimeVisibleAttribute;
+#pragma warning restore IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
             if (attr is not null && !attr.Visible)
             {
                 continue;
             }
 
-            columnTypesCombo.Items.Add(new ComboBoxItem(t));
+            _columnTypesCombo.Items.Add(new ComboBoxItem(t));
         }
 
         // make the textBoxColumn type the selected type
-        columnTypesCombo.SelectedIndex = TypeToSelectedIndex(typeof(DataGridViewTextBoxColumn));
+        _columnTypesCombo.SelectedIndex = TypeToSelectedIndex(typeof(DataGridViewTextBoxColumn));
     }
 
     private void PopulateDataColumns()
     {
-        int selectedIndex = dataColumns.SelectedIndex;
+        int selectedIndex = _dataColumns!.SelectedIndex;
 
-        dataColumns.SelectedIndex = -1;
-        dataColumns.Items.Clear();
+        _dataColumns.SelectedIndex = -1;
+        _dataColumns.Items.Clear();
 
-        if (liveDataGridView.DataSource is not null)
+        if (_liveDataGridView?.DataSource is not null)
         {
             CurrencyManager? cm = null;
             try
             {
-                cm = BindingContext[liveDataGridView.DataSource, liveDataGridView.DataMember] as CurrencyManager;
+                cm = BindingContext?[_liveDataGridView.DataSource, _liveDataGridView.DataMember] as CurrencyManager;
             }
             catch (ArgumentException)
             {
                 cm = null;
             }
 
-            PropertyDescriptorCollection props = cm is not null ? cm.GetItemProperties() : null;
+            PropertyDescriptorCollection? props = cm?.GetItemProperties();
 
             if (props is not null)
             {
@@ -761,33 +753,33 @@ internal class DataGridViewAddColumnDialog :Form
                         }
                     }
 
-                    this.dataColumns.Items.Add(new ListBoxItem(props[i].PropertyType, props[i].Name));
+                    _dataColumns.Items.Add(new ListBoxItem(props[i].PropertyType, props[i].Name));
                 }
             }
         }
 
-        if (selectedIndex != -1 && selectedIndex < this.dataColumns.Items.Count)
+        if (selectedIndex != -1 && selectedIndex < _dataColumns.Items.Count)
         {
-            this.dataColumns.SelectedIndex = selectedIndex;
+            _dataColumns.SelectedIndex = selectedIndex;
         }
         else
         {
-            this.dataColumns.SelectedIndex = this.dataColumns.Items.Count > 0 ? 0 : -1;
+            _dataColumns.SelectedIndex = _dataColumns.Items.Count > 0 ? 0 : -1;
         }
     }
 
-    private void addButton_Click(object? sender, System.EventArgs e)
+    private void addButton_Click(object? sender, EventArgs e)
     {
-        this.cancelButton.Text = (SR.DataGridView_Close);
+        _cancelButton!.Text = (SR.DataGridView_Close);
 
         // AddColumn takes all the information from this dialog, makes a DataGridViewColumn out of it
         // and inserts it at the right index in the data grid view column collection
-        this.AddColumn();
+        AddColumn();
     }
 
-    private void cancelButton_Click(object? sender, System.EventArgs e)
+    private void cancelButton_Click(object? sender, EventArgs e)
     {
-        this.Close();
+        Close();
         /*
         if (this.cancelButtonIsCloseButton)
         {
@@ -808,21 +800,21 @@ internal class DataGridViewAddColumnDialog :Form
                     INameCreationService? nameCreationService = null;
                     IContainer? container = null;
 
-                    host = this.liveDataGridView.Site.GetService(iDesignerHostType) as IDesignerHost;
+                    host = _liveDataGridView?.Site?.GetService(iDesignerHostType) as IDesignerHost;
                     if (host is not null)
                     {
                         container = host.Container;
                     }
 
-                    nameCreationService = this.liveDataGridView.Site.GetService(iNameCreationServiceType) as INameCreationService;
+                    nameCreationService = _liveDataGridView?.Site?.GetService(iNameCreationServiceType) as INameCreationService;
 
                     string errorString = string.Empty;
-                    if (ValidName(this.nameTextBox.Text,
-                                  this.dataGridViewColumns,
+                    if (ValidName(_nameTextBox!.Text,
+                                  _dataGridViewColumns!,
                                   container,
                                   nameCreationService,
-                                  this.liveDataGridView.Columns,
-                                  !this.persistChangesToDesigner,
+                                  _liveDataGridView!.Columns,
+                                  !_persistChangesToDesigner,
                                   out errorString))
                     {
                         this.AddColumn();
@@ -830,8 +822,8 @@ internal class DataGridViewAddColumnDialog :Form
                     }
                     else
                     {
-                        IUIService uiService = (IUIService)this.liveDataGridView.Site.GetService(iUIServiceType);
-                        Design.DataGridViewDesigner.ShowErrorDialog(uiService, errorString, this.liveDataGridView);
+                        IUIService? uiService = _liveDataGridView?.Site?.GetService(iUIServiceType) as IUIService;
+                        DataGridViewDesigner.ShowErrorDialog(uiService, errorString, this._liveDataGridView);
                     }
 
                     return true;
@@ -843,16 +835,16 @@ internal class DataGridViewAddColumnDialog :Form
 
     internal void Start(int insertAtPosition, bool persistChangesToDesigner)
     {
-        this.insertAtPosition = insertAtPosition;
-        this.persistChangesToDesigner = persistChangesToDesigner;
+        this._insertAtPosition = insertAtPosition;
+        this._persistChangesToDesigner = persistChangesToDesigner;
 
-        if (this.persistChangesToDesigner)
+        if (this._persistChangesToDesigner)
         {
-            initialDataGridViewColumnsCount = liveDataGridView.Columns.Count;
+            _initialDataGridViewColumnsCount = _liveDataGridView!.Columns.Count;
         }
         else
         {
-            initialDataGridViewColumnsCount = -1;
+            _initialDataGridViewColumnsCount = -1;
         }
     }
 
@@ -863,25 +855,25 @@ internal class DataGridViewAddColumnDialog :Form
         if (type == typeof(bool) || type == typeof(CheckState))
         {
             // get the data grid view check box column type
-            columnTypesCombo.SelectedIndex = TypeToSelectedIndex(typeof(DataGridViewCheckBoxColumn));
+            _columnTypesCombo!.SelectedIndex = TypeToSelectedIndex(typeof(DataGridViewCheckBoxColumn));
         }
-        else if (typeof(System.Drawing.Image).IsAssignableFrom(type) || imageTypeConverter.CanConvertFrom(type))
+        else if (typeof(Image).IsAssignableFrom(type) || imageTypeConverter.CanConvertFrom(type))
         {
             // get the data grid view image column type
-            columnTypesCombo.SelectedIndex = TypeToSelectedIndex(typeof(DataGridViewImageColumn));
+            _columnTypesCombo!.SelectedIndex = TypeToSelectedIndex(typeof(DataGridViewImageColumn));
         }
         else
         {
             // get the data grid view text box column type
-            this.columnTypesCombo.SelectedIndex = this.TypeToSelectedIndex(typeof(DataGridViewTextBoxColumn));
+            _columnTypesCombo!.SelectedIndex = TypeToSelectedIndex(typeof(DataGridViewTextBoxColumn));
         }
     }
 
     private int TypeToSelectedIndex(Type type)
     {
-        for (int i = 0; i < this.columnTypesCombo.Items.Count; i++)
+        for (int i = 0; i < _columnTypesCombo!.Items.Count; i++)
         {
-            if (type == ((ComboBoxItem)this.columnTypesCombo.Items[i]).ColumnType)
+            if (type == (_columnTypesCombo!.Items![i] as ComboBoxItem)!.ColumnType)
             {
                 return i;
             }
@@ -894,8 +886,8 @@ internal class DataGridViewAddColumnDialog :Form
 
     public static bool ValidName(string name,
                                  DataGridViewColumnCollection columns,
-                                 IContainer container,
-                                 INameCreationService nameCreationService,
+                                 IContainer? container,
+                                 INameCreationService? nameCreationService,
                                  DataGridViewColumnCollection liveColumns,
                                  bool allowDuplicateNameInLiveColumnCollection)
     {
@@ -929,9 +921,9 @@ internal class DataGridViewAddColumnDialog :Form
     /// </devdoc>
     public static bool ValidName(string name,
                                  DataGridViewColumnCollection columns,
-                                 IContainer container,
-                                 INameCreationService nameCreationService,
-                                 DataGridViewColumnCollection liveColumns,
+                                 IContainer? container,
+                                 INameCreationService? nameCreationService,
+                                 DataGridViewColumnCollection? liveColumns,
                                  bool allowDuplicateNameInLiveColumnCollection,
                                  out string errorString)
     {

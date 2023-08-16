@@ -9,7 +9,7 @@ internal class VsPropertyGrid : PropertyGrid
 {
     private static readonly Size _ICON_SIZE = new(16, 16);
     private static Size _iconSize = _ICON_SIZE;
-    private static bool _isScalingInitialized = false;
+    private static bool _isScalingInitialized;
 
     public VsPropertyGrid(IServiceProvider serviceProvider) : base()
     {
@@ -40,7 +40,7 @@ internal class VsPropertyGrid : PropertyGrid
     }
 
     // try to find the best possible image
-    private Bitmap GetBitmap(string resourceName, bool setMagentaTransparent = false)
+    private static Bitmap GetBitmap(string resourceName, bool setMagentaTransparent = false)
     {
         Bitmap? bitmap = null;
         // this resource might be present in System.Windows.Forms.VisualStudio.11.0.dll if this code is running on dev14 or newer

@@ -11,15 +11,15 @@ namespace System.Windows.Forms.Design;
 internal class DataGridViewColumnDesigner : ComponentDesigner
 {
     private const int DATAGRIDVIEWCOLUMN_defaultWidth = 100;
-    private bool userAddedColumn;
-    private bool initializing;
-    private BehaviorService? behaviorService;
-    private ISelectionService? selectionService;
-    private FilterCutCopyPasteDeleteBehavior? behavior;
-    private bool behaviorPushed;
-    private DataGridView? liveDataGridView;
+    private bool _userAddedColumn;
+    private bool _initializing;
+    private BehaviorService? _behaviorService;
+    private ISelectionService? _selectionService;
+    private FilterCutCopyPasteDeleteBehavior? _behavior;
+    private bool _behaviorPushed;
+    private DataGridView? _liveDataGridView;
 
-    private string Name
+    private string? Name
     {
         get
         {
@@ -38,7 +38,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
         {
             value ??= string.Empty;
 
-            DataGridViewColumn col = (DataGridViewColumn)this.Component;
+            DataGridViewColumn? col = (DataGridViewColumn)this.Component;
 
             if (col is null)
             {
@@ -76,14 +76,14 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
                                                         dgv.Columns,
                                                         container,
                                                         nameCreationService,
-                                                        this.liveDataGridView is not null ? this.liveDataGridView.Columns : null,
+                                                        _liveDataGridView?.Columns,
                                                         true /*allowDuplicateNameInLiveColumnCollection*/,
                                                         out errorString))
             {
                 if (dgv is not null && dgv.Site is not null)
                 {
                     IUIService? uiService = dgv.Site.GetService(typeof(IUIService)) as IUIService;
-                    DataGridViewDesigner.ShowErrorDialog(uiService, errorString, this.liveDataGridView);
+                    DataGridViewDesigner.ShowErrorDialog(uiService, errorString, _liveDataGridView);
                 }
 
                 return;
@@ -97,7 +97,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
                 Component.Site.Name = value;
             }
 
-            col.Name = value;
+            col!.Name = value;
         }
     }
 
@@ -105,7 +105,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
     {
         set
         {
-            this.liveDataGridView = value;
+            this._liveDataGridView = value;
         }
     }
 
@@ -128,11 +128,11 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
     {
         get
         {
-            return this.userAddedColumn;
+            return this._userAddedColumn;
         }
         set
         {
-            this.userAddedColumn = value;
+            this._userAddedColumn = value;
         }
     }
 
@@ -153,32 +153,32 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
 
     public override void Initialize(IComponent component)
     {
-        initializing = true;
+        _initializing = true;
         base.Initialize(component);
 
         if (component.Site is not null)
         {
             // Acquire a reference to ISelectionService.
-            this.selectionService =
+            this._selectionService =
                 GetService(typeof(ISelectionService))
                 as ISelectionService;
-            Debug.Assert(selectionService is not null);
+            Debug.Assert(_selectionService is not null);
 
             // Acquire a reference to BehaviorService.
-            this.behaviorService =
+            this._behaviorService =
                 GetService(typeof(BehaviorService))
                 as BehaviorService;
 
-            if (behaviorService is not null && selectionService is not null)
+            if (_behaviorService is not null && _selectionService is not null)
             {
-                behavior = new FilterCutCopyPasteDeleteBehavior(true, behaviorService);
+                _behavior = new FilterCutCopyPasteDeleteBehavior(true, _behaviorService);
 
                 UpdateBehavior();
-                this.selectionService.SelectionChanged += new EventHandler(selectionService_SelectionChanged);
+                this._selectionService.SelectionChanged += new EventHandler(selectionService_SelectionChanged);
             }
         }
 
-        initializing = false;
+        _initializing = false;
     }
 
     protected override void Dispose(bool disposing)
@@ -186,54 +186,54 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
         if (disposing)
         {
             PopBehavior();
-            if (selectionService is not null)
+            if (_selectionService is not null)
             {
-                this.selectionService.SelectionChanged -= new EventHandler(selectionService_SelectionChanged);
+                this._selectionService.SelectionChanged -= new EventHandler(selectionService_SelectionChanged);
             }
 
-            selectionService = null;
-            behaviorService = null;
+            _selectionService = null;
+            _behaviorService = null;
         }
     }
 
     private void PushBehavior()
     {
-        if (!behaviorPushed)
+        if (!_behaviorPushed)
         {
-            Debug.Assert(behavior is not null);
+            Debug.Assert(_behavior is not null);
             try
             {
-                this.behaviorService?.PushBehavior(behavior);
+                this._behaviorService?.PushBehavior(_behavior);
             }
             finally
             {
-                behaviorPushed = true;
+                _behaviorPushed = true;
             }
         }
     }
 
     private void PopBehavior()
     {
-        if (behaviorPushed)
+        if (_behaviorPushed)
         {
-            Debug.Assert(behavior is not null);
+            Debug.Assert(_behavior is not null);
             try
             {
-                this.behaviorService?.PopBehavior(behavior);
+                this._behaviorService?.PopBehavior(_behavior);
             }
             finally
             {
-                behaviorPushed = false;
+                _behaviorPushed = false;
             }
         }
     }
 
     private void UpdateBehavior()
     {
-        if (selectionService is not null)
+        if (_selectionService is not null)
         {
-            if (selectionService.PrimarySelection is not null
-                    && this.Component.Equals(selectionService.PrimarySelection))
+            if (_selectionService.PrimarySelection is not null
+                    && this.Component.Equals(_selectionService.PrimarySelection))
             {
                 PushBehavior();
             }
@@ -257,7 +257,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
         PropertyDescriptor? prop = properties["Width"] as PropertyDescriptor;
         if (prop is not null)
         {
-            properties["Width"] = TypeDescriptor.CreateProperty(typeof(DataGridViewColumnDesigner), prop, new Attribute[0]);
+            properties["Width"] = TypeDescriptor.CreateProperty(typeof(DataGridViewColumnDesigner), prop, Array.Empty<Attribute>());
         }
 
         prop = properties["Name"] as PropertyDescriptor;
@@ -308,8 +308,8 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
             return false;
         }
 
-        return initializing ? (Component != host.RootComponent)  //for non root components, respect the name that the base Control serialized unless changed
-            : ShadowProperties.ShouldSerializeValue("Name", null);
+        return _initializing ? (Component != host.RootComponent)  //for non root components, respect the name that the base Control serialized unless changed
+            : ShadowProperties.ShouldSerializeValue(nameof(Name), null);
     }
 
     public class FilterCutCopyPasteDeleteBehavior : System.Windows.Forms.Design.Behavior.Behavior

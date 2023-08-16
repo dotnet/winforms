@@ -11,10 +11,6 @@ using System.Globalization;
 
 namespace System.Windows.Forms.Design
 {
-    /// <include file='doc\DesignBindingPicker.uex' path='docs/doc[@for="DesignBindingPicker"]/*' />
-    /// <internalonly/>
-    /// <devdoc>
-    ///
     /// OVERVIEW:
     ///
     /// Multi-purpose data binding picker control. Used for picking data sources,
@@ -83,8 +79,6 @@ namespace System.Windows.Forms.Design
     /// List members under either BindingSources or project-level data sources
     /// count as data sources. When one is picked, a new 'related' BindingSource
     /// is created that refers to that list member.
-    ///
-    /// </devdoc>
     [
     ToolboxItem(false),
     DesignTimeVisible(false)
@@ -1429,6 +1423,7 @@ namespace System.Windows.Forms.Design
         /// reliably instantiate project level types).
         ///
         /// </devdoc>
+        [SuppressMessage("Trimming", "IL2096:Call to 'Type.GetType' method can perform case insensitive lookup of the type, currently trimming can not guarantee presence of all the matching types.", Justification = "<Pending>")]
         private Type? GetType(string name, bool throwOnError, bool ignoreCase)
         {
             if (_typeSvc is not null)
@@ -2065,7 +2060,7 @@ namespace System.Windows.Forms.Design
                 _dpi = dpi;
 
                 // Get ImageList from cache or create new one from unscaled
-                if (!_imageListCacheByDPI.TryGetValue(dpi, out ImageList scaledImageList))
+                if (!_imageListCacheByDPI.TryGetValue(dpi, out ImageList? scaledImageList))
                 {
                     ImageList unscaledImageList = _imageListCacheByDPI[(int)DpiHelper.LogicalDpi];
                     scaledImageList = CreateScaledCopy(unscaledImageList, dpi);
