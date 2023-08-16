@@ -95,7 +95,7 @@ public sealed class BehaviorServiceAdornerCollection : CollectionBase
     ///  None.
     /// </returns>
     /// <seealso cref="Add"/>
-    public void AddRange(Adorner[] value)
+    public void AddRange(params Adorner[] value)
     {
         for (int i = 0; (i < value.Length); i++)
         {
