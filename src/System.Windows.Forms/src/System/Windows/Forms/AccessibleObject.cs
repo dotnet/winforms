@@ -790,7 +790,26 @@ public unsafe partial class AccessibleObject :
         return null;
     }
 
-    object? UiaCore.IRawElementProviderSimple.GetPropertyValue(UiaCore.UIA propertyID) => GetPropertyValue(propertyID);
+    object? UiaCore.IRawElementProviderSimple.GetPropertyValue(UiaCore.UIA propertyID)
+    {
+        object? value = GetPropertyValue(propertyID);
+
+#if DEBUG
+        if (value?.GetType() is { } type && type.IsValueType && !type.IsPrimitive && !type.IsEnum)
+        {
+            // Check to make sure we can actually convert this to a VARIANT.
+            //
+            // Our interop handle structs (such as HWND) cannot be marshalled directly and will fail "silently" on
+            // callbacks (they will throw but the marshaller will convert that to an HRESULT that we won't see unless
+            // first-chance exceptions are on when we're debugging).
+
+            using VARIANT variant = default;
+            Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
+        }
+#endif
+
+        return value;
+    }
 
     object? UiaCore.IRawElementProviderFragment.Navigate(UiaCore.NavigateDirection direction) => FragmentNavigate(direction);
 
