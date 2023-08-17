@@ -32,6 +32,7 @@ public class PaddingConverterTests
     }
 
     [Theory]
+    [UseDefaultXunitCulture]
     [MemberData(nameof(ConvertFrom_TestData))]
     public void PaddingConverter_ConvertFrom_String_ReturnsExpected(string value, object expected)
     {
@@ -72,6 +73,7 @@ public class PaddingConverterTests
     }
 
     [Fact]
+    [UseDefaultXunitCulture]
     public void PaddingConverter_ConvertTo_String_ReturnsExpected()
     {
         var converter = new PaddingConverter();
