@@ -6238,7 +6238,7 @@ public partial class Form : ContainerControl
 
             if (m.MsgInternal == PInvoke.WM_QUERYENDSESSION)
             {
-                m.ResultInternal = (LRESULT)(nint)(BOOL)e.Cancel;
+                m.ResultInternal = (LRESULT)(BOOL)!e.Cancel;
             }
             else if (e.Cancel && (MdiParent is not null))
             {
