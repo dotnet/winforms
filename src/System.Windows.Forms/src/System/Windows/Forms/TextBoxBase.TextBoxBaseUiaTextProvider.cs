@@ -209,7 +209,7 @@ public abstract partial class TextBoxBase
                 : Owner.Text
                 : string.Empty;
 
-        private string _passwordString => Owner is not null ? new string('*', Owner.Text.Length) : string.Empty;
+        private string _passwordString => Owner is not null ? new string(Owner is TextBox ? ((TextBox)Owner).PasswordChar : ((MaskedTextBox)Owner).PasswordChar, Owner.Text.Length) : string.Empty;
 
         public override int TextLength => Text.Length;
 
