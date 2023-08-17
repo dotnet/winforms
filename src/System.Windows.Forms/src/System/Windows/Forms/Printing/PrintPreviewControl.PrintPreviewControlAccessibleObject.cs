@@ -58,7 +58,7 @@ public partial class PrintPreviewControl
             => patternId switch
             {
                 UiaCore.UIA.ScrollPatternId => this.TryGetOwnerAs(out PrintPreviewControl? owner)
-                    && (owner._vScrollBar.Visible || owner._hScrollBar.Visible) ? true : false,
+                    && (owner._vScrollBar.Visible || owner._hScrollBar.Visible),
                 _ => base.IsPatternSupported(patternId)
             };
 
@@ -204,9 +204,9 @@ public partial class PrintPreviewControl
             && owner._vScrollBar.Visible ? owner.VerticalViewSize : 100;
 
         BOOL IScrollProvider.Interface.HorizontallyScrollable =>
-            this.TryGetOwnerAs(out PrintPreviewControl? owner) ? owner._hScrollBar.Visible : false;
+            this.TryGetOwnerAs(out PrintPreviewControl? owner) && owner._hScrollBar.Visible;
 
         BOOL IScrollProvider.Interface.VerticallyScrollable =>
-            this.TryGetOwnerAs(out PrintPreviewControl? owner) ? owner._vScrollBar.Visible : false;
+            this.TryGetOwnerAs(out PrintPreviewControl? owner) && owner._vScrollBar.Visible;
     }
 }
