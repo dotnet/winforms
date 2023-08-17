@@ -76,6 +76,7 @@ public class EmbeddedResourceTests
     }
 
     private const string expectedResourceNames = """
+            System.ComponentModel.Design.BinaryEditor.resources
             System.ComponentModel.Design.CollectionEditor.resources
             System.SR.resources
             System.Windows.Forms.Design.BorderSidesEditor.resources
@@ -83,7 +84,6 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.FormatControl.resources
             System.Windows.Forms.Design.LinkAreaEditor.resources
             System.Windows.Forms.Design.MaskDesignerDialog.resources
-            System.Windows.Forms.Design.Resources.System.ComponentModel.Design.BinaryEditor.resources
             System.Windows.Forms.Design.ShortcutKeysEditor.resources
             System.Windows.Forms.Design.StringCollectionEditor.resources
             """;
