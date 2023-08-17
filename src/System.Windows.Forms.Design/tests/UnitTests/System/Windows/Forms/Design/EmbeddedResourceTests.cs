@@ -24,6 +24,7 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.256_1
             System.Windows.Forms.Design.256_2
             System.Windows.Forms.Design.AddNewDataSource
+            System.Windows.Forms.Design.AddNewDataSource.bmp
             System.Windows.Forms.Design.Behavior.bottomclose
             System.Windows.Forms.Design.Behavior.bottomopen
             System.Windows.Forms.Design.Behavior.Close_left
@@ -47,7 +48,9 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.DataGridViewColumnsDialog.moveDown
             System.Windows.Forms.Design.DataGridViewColumnsDialog.moveUp
             System.Windows.Forms.Design.DataGridViewColumnsDialog.selectedColumns
+            System.Windows.Forms.Design.DataGridViewColumnsDialog.selectedColumns.bmp
             System.Windows.Forms.Design.DataPickerImages
+            System.Windows.Forms.Design.DataPickerImages.bmp
             System.Windows.Forms.Design.default
             System.Windows.Forms.Design.Delete
             System.Windows.Forms.Design.DummyNodeImage
@@ -62,7 +65,7 @@ public class EmbeddedResourceTests
             """;
 
     public static TheoryData ExpectedIconNames()
-        => s_expectedIconNames.Split(Environment.NewLine).ToTheoryData();
+        => s_expectedIconNames.Split(Environment.NewLine).Where(item => !item.EndsWith(".bmp")).ToTheoryData();
 
     [Theory]
     [MemberData(nameof(ExpectedIconNames))]
@@ -81,6 +84,8 @@ public class EmbeddedResourceTests
             System.SR.resources
             System.Windows.Forms.Design.BorderSidesEditor.resources
             System.Windows.Forms.Design.colordlg.data
+            System.Windows.Forms.Design.DataGridViewAddColumnDialog.resources
+            System.Windows.Forms.Design.DataGridViewColumnCollectionDialog.resources
             System.Windows.Forms.Design.FormatControl.resources
             System.Windows.Forms.Design.LinkAreaEditor.resources
             System.Windows.Forms.Design.MaskDesignerDialog.resources

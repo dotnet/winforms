@@ -35,6 +35,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ToolStripMenuItemCodeDomSerializer))]
 
 // internal designers
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.BindingSourceDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ButtonBaseDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ComboBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewDesigner))]
