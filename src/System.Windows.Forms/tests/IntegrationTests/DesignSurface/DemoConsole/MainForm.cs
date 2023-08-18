@@ -250,7 +250,7 @@ public partial class MainForm : Form
                         surface.CreateControl<PropertyGrid>(new Size(200, 150), new Point(430, 23));
                         surface.CreateComponent<NotifyIcon>();
 
-                        ListBox lb1 = surface.CreateControl<ListBox>(new Size(120, 94), new Point(448, 47));
+                        ListBox lb1 = surface.CreateControl<ListBox>(new Size(120, 94), new Point(337, 217));
                         BindingSource bs1 = surface.CreateComponent<BindingSource>();
                         bs1.DataSource = new List<string> { "a1", "b2", "c3", "d4", "e5", "f6" };
                         lb1.DataSource = bs1;
