@@ -72,7 +72,7 @@ public abstract class MaskDescriptor
         }
 
         MaskedTextProvider maskedTextProvider = new MaskedTextProvider(maskDescriptor.Mask, maskDescriptor.Culture);
-        MaskedTextBox maskedTextBox = new MaskedTextBox(maskedTextProvider)
+        MaskedTextBox maskedTextBox = new(maskedTextProvider)
         {
             SkipLiterals = true,
             ResetOnPrompt = true,

@@ -10,7 +10,8 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class MaskDescriptorTemplate : MaskDescriptor
 {
-    public MaskDescriptorTemplate(string? mask, string name, string? sample, Type? validatingType, CultureInfo culture) : this(mask, name, sample, validatingType, culture, skipValidation: false)
+    public MaskDescriptorTemplate(string? mask, string name, string? sample, Type? validatingType, CultureInfo culture)
+        : this(mask, name, sample, validatingType, culture, skipValidation: false)
     {
     }
 

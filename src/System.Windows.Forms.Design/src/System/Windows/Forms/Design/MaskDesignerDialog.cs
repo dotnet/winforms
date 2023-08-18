@@ -509,7 +509,7 @@ internal class MaskDesignerDialog : Form
                 string validatingType = maskDescriptor.ValidatingType is not null ? maskDescriptor.ValidatingType.Name : nullEntry;
 
                 // Make sure the sample displays literals.
-                MaskedTextProvider mtp = new MaskedTextProvider(maskDescriptor.Mask!, maskDescriptor.Culture);
+                MaskedTextProvider mtp = new(maskDescriptor.Mask!, maskDescriptor.Culture);
                 bool success = mtp.Add(maskDescriptor.Sample!);
                 Debug.Assert(success, "BadBad: Could not add MaskDescriptor.Sample even it was validated, something is wrong!");
                 // Don't include prompt.
