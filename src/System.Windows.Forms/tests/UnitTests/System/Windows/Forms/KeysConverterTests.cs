@@ -8,6 +8,7 @@ namespace System.Windows.Forms.Tests;
 public class KeysConverterTests
 {
     [Theory]
+    [UseDefaultXunitCulture]
     [InlineData("Ctrl+Alt+Shift+A", Keys.Control | Keys.Alt | Keys.Shift | Keys.A)]
     [InlineData("Ctrl+Alt+Shift+F1", Keys.Control | Keys.Alt | Keys.Shift | Keys.F1)]
     [InlineData("Ctrl+Alt+D", Keys.Control | Keys.Alt | Keys.D)]
