@@ -60,7 +60,6 @@ public sealed partial class BinaryEditor : UITypeEditor
             int size = stringValue.Length * 2;
             byte[] buffer = new byte[size];
             Encoding.Unicode.GetBytes(stringValue.AsSpan(), buffer.AsSpan());
-            buffer = Encoding.Unicode.GetBytes(stringValue);
             return buffer;
         }
 
