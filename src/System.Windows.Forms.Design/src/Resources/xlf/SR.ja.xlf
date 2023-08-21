@@ -227,6 +227,11 @@
         <target state="translated">選択されたプレビュー</target>
         <note />
       </trans-unit>
+      <trans-unit id="ChooseIconDisplayName">
+        <source>Choose Icon...</source>
+        <target state="translated">アイコンの選択...</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ChooseImageDescription">
         <source>Select the image displayed in the PictureBox</source>
         <target state="translated">PictureBox に表示されているイメージを選択してください</target>
