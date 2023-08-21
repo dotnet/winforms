@@ -2636,6 +2636,15 @@ public class FormTests
         parent.Dispose();
     }
 
+    [WinFormsFact]
+    public void Form_DoesNot_PreventShutDown()
+    {
+        using SubForm form = new();
+        var message = Message.Create(HWND.Null, PInvoke.WM_QUERYENDSESSION, wparam: default, lparam: default);
+        form.WndProc(ref message);
+        Assert.True((BOOL)message.ResultInternal);
+    }
+
     public partial class ParentedForm : Form
     {
         private ParentingForm _parentForm;
