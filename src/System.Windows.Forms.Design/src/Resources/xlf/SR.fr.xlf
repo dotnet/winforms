@@ -229,7 +229,7 @@
       </trans-unit>
       <trans-unit id="ChooseIconDisplayName">
         <source>Choose Icon...</source>
-        <target state="new">Choisir une icône...</target>
+        <target state="translated">Choisir une icône...</target>
         <note />
       </trans-unit>
       <trans-unit id="ChooseImageDescription">
