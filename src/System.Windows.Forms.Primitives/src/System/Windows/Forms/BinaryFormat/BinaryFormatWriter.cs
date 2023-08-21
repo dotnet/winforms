@@ -432,7 +432,9 @@ internal static class BinaryFormatWriter
     ///   Primitive types are anything in the <see cref="PrimitiveType"/> enum.
     ///  </para>
     /// </remarks>
-    /// <exception cref="ArgumentException"><paramref name="hashtable"/> contained non-primitive values.</exception>
+    /// <exception cref="ArgumentException">
+    ///  <paramref name="hashtable"/> contained non-primitive values or a custom comparer or hash code provider.
+    /// </exception>
     public static void WritePrimitiveHashtable(Stream stream, Hashtable hashtable)
     {
         // Get the ISerializable data from the hashtable. This way we don't have to worry about
@@ -443,6 +445,12 @@ internal static class BinaryFormatWriter
 #pragma warning disable SYSLIB0051 // Type or member is obsolete
         hashtable.GetObjectData(info, default);
 #pragma warning restore SYSLIB0051
+
+        if (info.GetValue<object?>("Comparer") is not null
+            || info.GetValue<object?>("HashCodeProvider") is not null)
+        {
+            throw new ArgumentException("Hashtable has custom Comparer or HashCodeProvider.", nameof(hashtable));
+        }
 
         // Build up the key and value data
         object[] keys = info.GetValue<object[]>("Keys")!;
