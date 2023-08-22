@@ -21,8 +21,7 @@ public class DataSourceDescriptorCollection : CollectionBase
 
     public void CopyTo(DataSourceDescriptor[] array, int index) => List.CopyTo(array, index);
 
-    public void Remove(DataSourceDescriptor value)
-    => List.Remove(value);
+    public void Remove(DataSourceDescriptor value) => List.Remove(value);
 
     public DataSourceDescriptor? this[int index]
     {

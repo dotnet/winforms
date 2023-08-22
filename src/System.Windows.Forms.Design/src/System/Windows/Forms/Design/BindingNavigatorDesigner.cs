@@ -9,10 +9,16 @@ namespace System.Windows.Forms.Design;
 
 internal class BindingNavigatorDesigner : ToolStripDesigner
 {
-    private static string[] itemNames = new string[]
+    private static readonly string[] s_itemNames = new string[]
     {
-        "MovePreviousItem", "MoveFirstItem", "MoveNextItem", "MoveLastItem", "AddNewItem",
-                                            "DeleteItem", "PositionItem", "CountItem"
+        "MovePreviousItem",
+        "MoveFirstItem",
+        "MoveNextItem",
+        "MoveLastItem",
+        "AddNewItem",
+        "DeleteItem",
+        "PositionItem",
+        "CountItem"
     };
 
     public override void Initialize(IComponent component)
@@ -22,8 +28,8 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
         IComponentChangeService componentChangeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
         if (componentChangeSvc is not null)
         {
-            componentChangeSvc.ComponentRemoved += new ComponentEventHandler(ComponentChangeSvc_ComponentRemoved);
-            componentChangeSvc.ComponentChanged += new ComponentChangedEventHandler(ComponentChangeSvc_ComponentChanged);
+            componentChangeSvc.ComponentRemoved += ComponentChangeSvc_ComponentRemoved;
+            componentChangeSvc.ComponentChanged += ComponentChangeSvc_ComponentChanged;
         }
     }
 
@@ -34,8 +40,8 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
             IComponentChangeService componentChangeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (componentChangeSvc is not null)
             {
-                componentChangeSvc.ComponentRemoved -= new ComponentEventHandler(ComponentChangeSvc_ComponentRemoved);
-                componentChangeSvc.ComponentChanged -= new ComponentChangedEventHandler(ComponentChangeSvc_ComponentChanged);
+                componentChangeSvc.ComponentRemoved -= ComponentChangeSvc_ComponentRemoved;
+                componentChangeSvc.ComponentChanged -= ComponentChangeSvc_ComponentChanged;
             }
         }
 
@@ -46,18 +52,18 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
     {
         base.InitializeNewComponent(defaultValues);
 
-        BindingNavigator dn = (BindingNavigator)Component;
+        BindingNavigator navigator = (BindingNavigator)Component;
         IDesignerHost? host = Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
 
         try
         {
             s_autoAddNewItems = false;    // Temporarily suppress "new items go to the selected strip" behavior
-            dn.SuspendLayout();          // Turn off layout while adding items
-            dn.AddStandardItems();       // Let the control add its standard items (user overridable)
-            SiteItems(host: host, dn.Items);   // Recursively site and name all the items on the strip
+            navigator.SuspendLayout();          // Turn off layout while adding items
+            navigator.AddStandardItems();       // Let the control add its standard items (user overridable)
+            SiteItems(host: host, navigator.Items);   // Recursively site and name all the items on the strip
             RaiseItemsChanged();         // Make designer Undo engine aware of the newly added and sited items
-            dn.ResumeLayout();           // Allow strip to lay out now
-            dn.ShowItemToolTips = true;  // Non-default property setting for ShowToolTips
+            navigator.ResumeLayout();           // Allow strip to lay out now
+            navigator.ShowItemToolTips = true;  // Non-default property setting for ShowToolTips
         }
         finally
         {
@@ -67,23 +73,23 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
 
     private void RaiseItemsChanged()
     {
-        BindingNavigator dn = (BindingNavigator)Component;
+        BindingNavigator navigator = (BindingNavigator)Component;
         IComponentChangeService componentChangeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
         if (componentChangeSvc is not null)
         {
-            MemberDescriptor? itemsProp = TypeDescriptor.GetProperties(dn)["Items"];
-            componentChangeSvc.OnComponentChanging(dn, itemsProp);
-            componentChangeSvc.OnComponentChanged(dn, itemsProp, null, null);
+            MemberDescriptor? itemsProp = TypeDescriptor.GetProperties(navigator)["Items"];
+            componentChangeSvc.OnComponentChanging(navigator, itemsProp);
+            componentChangeSvc.OnComponentChanged(navigator, itemsProp, null, null);
 
-            foreach (string itemName in itemNames)
+            foreach (string itemName in s_itemNames)
             {
-                PropertyDescriptor? prop = TypeDescriptor.GetProperties(dn)[itemName];
+                PropertyDescriptor? prop = TypeDescriptor.GetProperties(navigator)[itemName];
 
                 if (prop is not null)
                 {
-                    componentChangeSvc.OnComponentChanging(dn, prop);
-                    componentChangeSvc.OnComponentChanged(dn, prop, null, null);
+                    componentChangeSvc.OnComponentChanging(navigator, prop);
+                    componentChangeSvc.OnComponentChanged(navigator, prop, null, null);
                 }
             }
         }
@@ -125,50 +131,50 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
 
         if (item is not null)
         {
-            BindingNavigator dn = (BindingNavigator)Component;
+            BindingNavigator navigator = (BindingNavigator)Component;
 
-            if (item == dn.MoveFirstItem)
+            if (item == navigator.MoveFirstItem)
             {
-                dn.MoveFirstItem = null;
+                navigator.MoveFirstItem = null;
             }
-            else if (item == dn.MovePreviousItem)
+            else if (item == navigator.MovePreviousItem)
             {
-                dn.MovePreviousItem = null;
+                navigator.MovePreviousItem = null;
             }
-            else if (item == dn.MoveNextItem)
+            else if (item == navigator.MoveNextItem)
             {
-                dn.MoveNextItem = null;
+                navigator.MoveNextItem = null;
             }
-            else if (item == dn.MoveLastItem)
+            else if (item == navigator.MoveLastItem)
             {
-                dn.MoveLastItem = null;
+                navigator.MoveLastItem = null;
             }
-            else if (item == dn.PositionItem)
+            else if (item == navigator.PositionItem)
             {
-                dn.PositionItem = null;
+                navigator.PositionItem = null;
             }
-            else if (item == dn.CountItem)
+            else if (item == navigator.CountItem)
             {
-                dn.CountItem = null;
+                navigator.CountItem = null;
             }
-            else if (item == dn.AddNewItem)
+            else if (item == navigator.AddNewItem)
             {
-                dn.AddNewItem = null;
+                navigator.AddNewItem = null;
             }
-            else if (item == dn.DeleteItem)
+            else if (item == navigator.DeleteItem)
             {
-                dn.DeleteItem = null;
+                navigator.DeleteItem = null;
             }
         }
     }
 
     private void ComponentChangeSvc_ComponentChanged(object? sender, ComponentChangedEventArgs e)
     {
-        BindingNavigator dn = (BindingNavigator)Component;
+        BindingNavigator navigator = (BindingNavigator)Component;
 
-        if (e.Component is not null && e.Component == dn.CountItem && e.Member is not null && e.Member.Name == "Text")
+        if (e.Component is not null && e.Component == navigator.CountItem && e.Member is not null && e.Member.Name == "Text")
         {
-            dn.CountItemFormat = dn.CountItem.Text ?? string.Empty;
+            navigator.CountItemFormat = navigator.CountItem.Text ?? string.Empty;
         }
     }
 }

@@ -8,13 +8,13 @@ namespace System.Windows.Forms.Design;
 
 internal class BindingSourceDesigner : ComponentDesigner
 {
-    private bool bindingUpdatedByUser;
+    private bool _bindingUpdatedByUser;
 
     public bool BindingUpdatedByUser
     {
         set
         {
-            bindingUpdatedByUser = value;
+            _bindingUpdatedByUser = value;
         }
     }
 
@@ -25,8 +25,8 @@ internal class BindingSourceDesigner : ComponentDesigner
         IComponentChangeService componentChangeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
         if (componentChangeSvc is not null)
         {
-            componentChangeSvc.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-            componentChangeSvc.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
+            componentChangeSvc.ComponentChanged += OnComponentChanged;
+            componentChangeSvc.ComponentRemoving += OnComponentRemoving;
         }
     }
 
@@ -37,8 +37,8 @@ internal class BindingSourceDesigner : ComponentDesigner
             IComponentChangeService componentChangeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             if (componentChangeSvc is not null)
             {
-                componentChangeSvc.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-                componentChangeSvc.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
+                componentChangeSvc.ComponentChanged -= OnComponentChanged;
+                componentChangeSvc.ComponentRemoving -= OnComponentRemoving;
             }
         }
 
@@ -47,11 +47,10 @@ internal class BindingSourceDesigner : ComponentDesigner
 
     private void OnComponentChanged(object? sender, ComponentChangedEventArgs e)
     {
-        if (bindingUpdatedByUser &&
-            e.Component == this.Component &&
+        if (_bindingUpdatedByUser && e.Component == Component &&
             e.Member is not null && (e.Member.Name == "DataSource" || e.Member.Name == "DataMember"))
         {
-            bindingUpdatedByUser = false;
+            _bindingUpdatedByUser = false;
 
             DataSourceProviderService dspSvc = (DataSourceProviderService)GetService(typeof(DataSourceProviderService));
             dspSvc?.NotifyDataSourceComponentAdded(Component);
@@ -60,30 +59,30 @@ internal class BindingSourceDesigner : ComponentDesigner
 
     private void OnComponentRemoving(object? sender, ComponentEventArgs e)
     {
-        BindingSource? b = Component as BindingSource;
-        if (b is not null && b.DataSource == e.Component)
+        BindingSource? bingSource = Component as BindingSource;
+        if (bingSource is not null && bingSource.DataSource == e.Component)
         {
-            IComponentChangeService ccs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            string previousDataMember = b.DataMember;
+            IComponentChangeService changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+            string previousDataMember = bingSource.DataMember;
 
-            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(b);
-            PropertyDescriptor? dmPD = props?["DataMember"];
+            PropertyDescriptorCollection descriptorCollection = TypeDescriptor.GetProperties(bingSource);
+            PropertyDescriptor? descriptor = descriptorCollection?["DataMember"];
 
-            if (ccs is not null)
+            if (changeService is not null)
             {
-                if (dmPD is not null)
+                if (descriptor is not null)
                 {
-                    ccs.OnComponentChanging(b, dmPD);
+                    changeService.OnComponentChanging(bingSource, descriptor);
                 }
             }
 
-            b.DataSource = null;
+            bingSource.DataSource = null;
 
-            if (ccs is not null)
+            if (changeService is not null)
             {
-                if (dmPD is not null)
+                if (descriptor is not null)
                 {
-                    ccs.OnComponentChanged(b, dmPD, previousDataMember, "");
+                    changeService.OnComponentChanged(bingSource, descriptor, previousDataMember, "");
                 }
             }
         }
