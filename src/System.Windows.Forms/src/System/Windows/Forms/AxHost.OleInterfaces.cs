@@ -160,13 +160,13 @@ public abstract partial class AxHost
                 return HRESULT.E_POINTER;
             }
 
-            object? proxy = _host.GetParentContainer().GetExtenderProxyForControl(_host);
+            AxContainer.ExtenderProxy? proxy = _host.GetParentContainer().GetExtenderProxyForControl(_host);
             if (proxy is null)
             {
                 return HRESULT.E_NOTIMPL;
             }
 
-            *ppDisp = (IDispatch*)Marshal.GetIDispatchForObject(proxy);
+            *ppDisp = ComHelpers.GetComPointer<IDispatch>(proxy);
             return HRESULT.S_OK;
         }
 
@@ -412,16 +412,24 @@ public abstract partial class AxHost
             RECT* lprcClipRect,
             OLEINPLACEFRAMEINFO* lpFrameInfo)
         {
-            ppDoc = null;
-
-            if (ppFrame is null || lprcPosRect is null || lprcClipRect is null)
+            if (ppDoc is null || ppFrame is null)
             {
                 return HRESULT.E_POINTER;
             }
 
+            *ppDoc = null;
             *ppFrame = ComHelpers.GetComPointer<IOleInPlaceFrame>(_host.GetParentContainer());
-            *lprcPosRect = _host.Bounds;
-            *lprcClipRect = WebBrowserHelper.GetClipRect();
+
+            if (lprcPosRect is not null)
+            {
+                *lprcPosRect = _host.Bounds;
+            }
+
+            if (lprcClipRect is not null)
+            {
+                *lprcClipRect = WebBrowserHelper.GetClipRect();
+            }
+
             if (lpFrameInfo is not null)
             {
                 lpFrameInfo->cb = (uint)sizeof(OLEINPLACEFRAMEINFO);
@@ -453,7 +461,7 @@ public abstract partial class AxHost
             s_axHTraceSwitch.TraceVerbose("in OnInPlaceDeactivate");
             if (_host.GetOcState() == OC_UIACTIVE)
             {
-                ((IOleInPlaceSite.Interface)this).OnUIDeactivate(false);
+                ((IOleInPlaceSite.Interface)this).OnUIDeactivate(fUndoable: false);
             }
 
             _host.GetParentContainer().OnInPlaceDeactivate(_host);
