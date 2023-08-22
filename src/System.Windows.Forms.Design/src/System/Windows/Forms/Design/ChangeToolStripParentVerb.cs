@@ -16,7 +16,7 @@ internal class ChangeToolStripParentVerb
 {
     private readonly ToolStripDesigner _designer;
     private readonly IDesignerHost _host;
-    private readonly IComponentChangeService _componentChangeSvc;
+    private readonly IComponentChangeService _componentChangeService;
     private readonly IServiceProvider _provider;
 
     /// <summary>
@@ -28,7 +28,7 @@ internal class ChangeToolStripParentVerb
         _designer = designer;
         _provider = designer.Component.Site;
         _host = (IDesignerHost)_provider.GetService(typeof(IDesignerHost));
-        _componentChangeSvc = (IComponentChangeService)_provider.GetService(typeof(IComponentChangeService));
+        _componentChangeService = (IComponentChangeService)_provider.GetService(typeof(IComponentChangeService));
     }
 
     /// <summary>

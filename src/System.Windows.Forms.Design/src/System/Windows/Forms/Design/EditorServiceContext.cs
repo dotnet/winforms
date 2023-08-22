@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Design;
 internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescriptorContext
 {
     private readonly ComponentDesigner _designer;
-    private IComponentChangeService _componentChangeSvc;
+    private IComponentChangeService _componentChangeService;
     private readonly PropertyDescriptor _targetProperty;
 
     internal EditorServiceContext(ComponentDesigner designer)
@@ -80,9 +80,9 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
     {
         get
         {
-            _componentChangeSvc ??= (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
+            _componentChangeService ??= (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
 
-            return _componentChangeSvc;
+            return _componentChangeService;
         }
     }
 

@@ -19,7 +19,7 @@ internal class DataGridViewDesigner : ControlDesigner
     private DesignerActionListCollection? _actionLists;
 
     // need this to trap meta data changes
-    private CurrencyManager? _cm;
+    private CurrencyManager? _currencyManager;
 
     // cache this type cause we will use it a lot
     private static Type typeofIList = typeof(IList);
@@ -61,19 +61,19 @@ internal class DataGridViewDesigner : ControlDesigner
             // is not marked as changed to the serialization engine will not serialize them.
             DataGridView? dataGridView = Component as DataGridView;
             Debug.Assert(dataGridView is not null, "Unexpected null dataGridView in DataGridViewDesigner:set_AutoSizeColumnsMode");
-            IComponentChangeService? ccs = Component.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+            IComponentChangeService? componentChangeService = Component.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
             PropertyDescriptor? prop = TypeDescriptor.GetProperties(typeof(DataGridViewColumn))["Width"];
 
             for (int i = 0; i < dataGridView.Columns.Count; i++)
             {
-                ccs?.OnComponentChanging(dataGridView.Columns[i], prop);
+                componentChangeService?.OnComponentChanging(dataGridView.Columns[i], prop);
             }
 
             dataGridView.AutoSizeColumnsMode = value;
 
             for (int i = 0; i < dataGridView.Columns.Count; i++)
             {
-                ccs?.OnComponentChanged(dataGridView.Columns[i], prop, null, null);
+                componentChangeService?.OnComponentChanged(dataGridView.Columns[i], prop, null, null);
             }
         }
     }
@@ -86,10 +86,9 @@ internal class DataGridViewDesigner : ControlDesigner
         }
         set
         {
-            DataGridView? dgv = Component as DataGridView;
-            if (dgv is not null && dgv.AutoGenerateColumns && dgv.DataSource is null && value is not null)
+            DataGridView? dataGridView = Component as DataGridView;
+            if (dataGridView is not null && dataGridView.AutoGenerateColumns && dataGridView.DataSource is null && value is not null)
             {
-                //
                 // RefreshColumnCollection() method does the job of siting/unsiting DataGridViewColumns
                 // and calls OnComponentChanged/ing at the right times.
                 // So we need to create / remove columns from the DataGridView DataSource via RefreshColumnCollection() method.
@@ -97,7 +96,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 // via the runtime method.
                 //
                 // We set AutoGenerateColumns to FALSE only if the DataGridView will get a not-null DataSource.
-                dgv.AutoGenerateColumns = false;
+                dataGridView.AutoGenerateColumns = false;
             }
 
             ((DataGridView)Component).DataSource = value;
@@ -116,19 +115,19 @@ internal class DataGridViewDesigner : ControlDesigner
             // unhook our event handlers
             if (dataGridView is not null)
             {
-                dataGridView.DataSourceChanged -= new EventHandler(dataGridViewChanged);
-                dataGridView.DataMemberChanged -= new EventHandler(dataGridViewChanged);
-                dataGridView.BindingContextChanged -= new EventHandler(dataGridViewChanged);
-                dataGridView.ColumnRemoved -= new DataGridViewColumnEventHandler(dataGridView_ColumnRemoved);
+                dataGridView.DataSourceChanged -= dataGridViewChanged;
+                dataGridView.DataMemberChanged -= dataGridViewChanged;
+                dataGridView.BindingContextChanged -= dataGridViewChanged;
+                dataGridView.ColumnRemoved -= dataGridView_ColumnRemoved;
             }
 
             // unhook MetaDataChanged handler from the currency manager
-            if (_cm is not null)
+            if (_currencyManager is not null)
             {
-                _cm.MetaDataChanged -= new EventHandler(dataGridViewMetaDataChanged);
+                _currencyManager.MetaDataChanged -= dataGridViewMetaDataChanged;
             }
 
-            _cm = null;
+            _currencyManager = null;
 
             // unhook the ComponentRemoved event handler
             if (Component.Site is not null)
@@ -136,7 +135,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 IComponentChangeService? ccs = Component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
                 if (ccs is not null)
                 {
-                    ccs.ComponentRemoving -= new ComponentEventHandler(DataGridViewDesigner_ComponentRemoving);
+                    ccs.ComponentRemoving -= DataGridViewDesigner_ComponentRemoving;
                 }
             }
         }
@@ -150,10 +149,10 @@ internal class DataGridViewDesigner : ControlDesigner
 
         if (component.Site is not null)
         {
-            IComponentChangeService? ccs = component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-            if (ccs is not null)
+            IComponentChangeService? componentChangeService = component.Site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+            if (componentChangeService is not null)
             {
-                ccs.ComponentRemoving += new ComponentEventHandler(DataGridViewDesigner_ComponentRemoving);
+                componentChangeService.ComponentRemoving += DataGridViewDesigner_ComponentRemoving;
             }
         }
 
@@ -161,18 +160,18 @@ internal class DataGridViewDesigner : ControlDesigner
 
         // DataGridViewDesigner::Initialize runs after InitializeComponent was deserialized.
         // just in case the user tinkered w/ InitializeComponent set AutoGenerateColumns to TRUE if there is no DataSource, otherwise set it to FALSE
-        dataGridView.AutoGenerateColumns = (dataGridView.DataSource is null);
+        dataGridView.AutoGenerateColumns = dataGridView.DataSource is null;
 
         // hook up the DataSourceChanged event, DataMemberChanged event
-        dataGridView.DataSourceChanged += new EventHandler(dataGridViewChanged);
-        dataGridView.DataMemberChanged += new EventHandler(dataGridViewChanged);
-        dataGridView.BindingContextChanged += new EventHandler(dataGridViewChanged);
+        dataGridView.DataSourceChanged += dataGridViewChanged;
+        dataGridView.DataMemberChanged += dataGridViewChanged;
+        dataGridView.BindingContextChanged += dataGridViewChanged;
 
         // now add data bound columns
         dataGridViewChanged(Component, EventArgs.Empty);
 
         // Attach to column removed for clean up
-        dataGridView.ColumnRemoved += new DataGridViewColumnEventHandler(dataGridView_ColumnRemoved);
+        dataGridView.ColumnRemoved += dataGridView_ColumnRemoved;
     }
 
     public override void InitializeNewComponent(IDictionary defaultValues)
@@ -182,9 +181,9 @@ internal class DataGridViewDesigner : ControlDesigner
     }
 
     /// <devdoc>
-    ///     <para>
-    ///         Gets the inheritance attribute for the data grid view.
-    ///     </para>
+    ///  <para>
+    ///   Gets the inheritance attribute for the data grid view.
+    ///  </para>
     /// </devdoc>
     protected override InheritanceAttribute InheritanceAttribute
     {
@@ -207,8 +206,8 @@ internal class DataGridViewDesigner : ControlDesigner
             if (designerVerbs is null)
             {
                 designerVerbs = new DesignerVerbCollection();
-                designerVerbs.Add(new DesignerVerb((SR.DataGridViewEditColumnsVerb), new EventHandler(OnEditColumns)));
-                designerVerbs.Add(new DesignerVerb((SR.DataGridViewAddColumnVerb), new EventHandler(OnAddColumn)));
+                designerVerbs.Add(new DesignerVerb((SR.DataGridViewEditColumnsVerb), OnEditColumns));
+                designerVerbs.Add(new DesignerVerb((SR.DataGridViewAddColumnVerb), OnAddColumn));
             }
 
             return designerVerbs;
@@ -258,20 +257,20 @@ internal class DataGridViewDesigner : ControlDesigner
             newCM = (CurrencyManager)dataGridView.BindingContext[dataGridView.DataSource, dataGridView.DataMember];
         }
 
-        if (newCM != _cm)
+        if (newCM != _currencyManager)
         {
             // unwire cm
-            if (_cm is not null)
+            if (_currencyManager is not null)
             {
-                _cm.MetaDataChanged -= new EventHandler(dataGridViewMetaDataChanged);
+                _currencyManager.MetaDataChanged -= dataGridViewMetaDataChanged;
             }
 
-            _cm = newCM;
+            _currencyManager = newCM;
 
             // wire cm
-            if (_cm is not null)
+            if (_currencyManager is not null)
             {
-                _cm.MetaDataChanged += new EventHandler(dataGridViewMetaDataChanged);
+                _currencyManager.MetaDataChanged += dataGridViewMetaDataChanged;
             }
         }
 
@@ -334,27 +333,27 @@ internal class DataGridViewDesigner : ControlDesigner
             // 4. set AutoGenerateColumns to TRUE.
             //
 
-            IComponentChangeService ccs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+            IComponentChangeService componentChangeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
             string previousDataMember = dataGridView.DataMember;
 
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(dataGridView);
-            PropertyDescriptor? dmPD = props is not null ? props?["DataMember"] : null;
+            PropertyDescriptor? propertyDescriptor = props is not null ? props?["DataMember"] : null;
 
-            if (ccs is not null)
+            if (componentChangeService is not null)
             {
-                if (dmPD is not null)
+                if (propertyDescriptor is not null)
                 {
-                    ccs.OnComponentChanging(dataGridView, dmPD);
+                    componentChangeService.OnComponentChanging(dataGridView, propertyDescriptor);
                 }
             }
 
             dataGridView.DataSource = null;
 
-            if (ccs is not null)
+            if (componentChangeService is not null)
             {
-                if (dmPD is not null)
+                if (propertyDescriptor is not null)
                 {
-                    ccs.OnComponentChanged(dataGridView, dmPD, previousDataMember, "");
+                    componentChangeService.OnComponentChanged(dataGridView, propertyDescriptor, previousDataMember, "");
                 }
             }
         }
@@ -381,10 +380,10 @@ internal class DataGridViewDesigner : ControlDesigner
         for (int i = 0; i < dataGridView.Columns.Count; i++)
         {
             DataGridViewColumn col = dataGridView.Columns[i];
-            IContainer? cont = col.Site?.Container;
-            if (currentContainer != cont)
+            IContainer? container = col.Site?.Container;
+            if (currentContainer != container)
             {
-                cont?.Remove(col);
+                container?.Remove(col);
 
                 currentContainer?.Add(col);
             }
@@ -417,21 +416,21 @@ internal class DataGridViewDesigner : ControlDesigner
         }
     }
 
-    //
-    // If the previous schema and the current schema have common columns then ProcessSimilarSchema does the
-    // work of removing columns which are not common and returns TRUE.
-    // Otherwise ProcessSimilarSchema returns FALSE.
-    //
+    /// <summary>
+    ///  If the previous schema and the current schema have common columns then ProcessSimilarSchema does the
+    ///  work of removing columns which are not common and returns TRUE.
+    ///  Otherwise ProcessSimilarSchema returns FALSE.
+    /// </summary>
     private bool ProcessSimilarSchema(DataGridView dataGridView)
     {
-        Debug.Assert(dataGridView.DataSource is null || _cm is not null, "if we have a data source we should also have a currency manager by now");
+        Debug.Assert(dataGridView.DataSource is null || _currencyManager is not null, "if we have a data source we should also have a currency manager by now");
         PropertyDescriptorCollection? backEndProps = null;
 
-        if (_cm is not null)
+        if (_currencyManager is not null)
         {
             try
             {
-                backEndProps = _cm.GetItemProperties();
+                backEndProps = _currencyManager.GetItemProperties();
             }
             catch (ArgumentException ex)
             {
@@ -567,8 +566,8 @@ internal class DataGridViewDesigner : ControlDesigner
     {
         DataGridView? dataGridView = (DataGridView)Component;
 
-        ISupportInitializeNotification? ds = dataGridView?.DataSource as ISupportInitializeNotification;
-        if (ds is not null && !ds.IsInitialized)
+        ISupportInitializeNotification? dataSource = dataGridView?.DataSource as ISupportInitializeNotification;
+        if (dataSource is not null && !dataSource.IsInitialized)
         {
             // The DataSource is not initialized yet.
             // When the dataSource gets initialized it will send a MetaDataChanged event and at
@@ -607,16 +606,15 @@ internal class DataGridViewDesigner : ControlDesigner
         // 6. OnComponentChanging DataGridView.Columns
         // 7. DataGridView.Columns.Add( new DataGridViewColumns)
         // 8. OnComponentChanged DataGridView.Columns
-        //
 
-        Debug.Assert(dataGridView?.DataSource is null || _cm is not null, "if we have a data source we should also have a currency manager by now");
+        Debug.Assert(dataGridView?.DataSource is null || _currencyManager is not null, "if we have a data source we should also have a currency manager by now");
         PropertyDescriptorCollection? backEndProps = null;
 
-        if (_cm is not null)
+        if (_currencyManager is not null)
         {
             try
             {
-                backEndProps = _cm.GetItemProperties();
+                backEndProps = _currencyManager.GetItemProperties();
             }
             catch (ArgumentException ex)
             {
@@ -638,9 +636,9 @@ internal class DataGridViewDesigner : ControlDesigner
             DataGridViewColumn col = dataGridView.Columns[i];
             if (!string.IsNullOrEmpty(col.DataPropertyName))
             {
-                PropertyDescriptor? pd = TypeDescriptor.GetProperties(col)["UserAddedColumn"];
-                object? UserAddedColumn = pd?.GetValue(col);
-                if (pd is null || UserAddedColumn is null || !(bool)UserAddedColumn)
+                PropertyDescriptor? propertyDescriptor = TypeDescriptor.GetProperties(col)["UserAddedColumn"];
+                object? UserAddedColumn = propertyDescriptor?.GetValue(col);
+                if (propertyDescriptor is null || UserAddedColumn is null || !(bool)UserAddedColumn)
                 {
                     removeColumns[removeColumnsCount] = col;
                     removeColumnsCount++;
@@ -697,7 +695,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 {
                     columnType = typeofDataGridViewCheckBoxColumn;
                 }
-                else if (typeof(System.Drawing.Image).IsAssignableFrom(propType) || imageTypeConverter.CanConvertFrom(propType))
+                else if (typeof(Image).IsAssignableFrom(propType) || imageTypeConverter.CanConvertFrom(propType))
                 {
                     columnType = typeofDataGridViewImageColumn;
                 }
@@ -860,10 +858,10 @@ internal class DataGridViewDesigner : ControlDesigner
 
     private DialogResult ShowDialog(Form dialog)
     {
-        IUIService? uiSvc = Component.Site?.GetService(typeof(IUIService)) as IUIService;
-        if (uiSvc is not null)
+        IUIService? service = Component.Site?.GetService(typeof(IUIService)) as IUIService;
+        if (service is not null)
         {
-            return uiSvc.ShowDialog(dialog);
+            return service.ShowDialog(dialog);
         }
         else
         {
@@ -884,15 +882,15 @@ internal class DataGridViewDesigner : ControlDesigner
         public override DesignerActionItemCollection GetSortedActionItems()
         {
             DesignerActionItemCollection items = new DesignerActionItemCollection();
-            DesignerActionPropertyItem chooseDataSource = new DesignerActionPropertyItem("DataSource",                          // property name
-                                                                                         (SR.DataGridViewChooseDataSource));// displayName
+            DesignerActionPropertyItem chooseDataSource = new DesignerActionPropertyItem("DataSource", // property name
+                                                               (SR.DataGridViewChooseDataSource));// displayName
             chooseDataSource.RelatedComponent = _owner.Component;
             items.Add(chooseDataSource);
             return items;
         }
 
         [AttributeProvider(typeof(IListSource))]
-        [Editor($"System.Windows.Forms.Design.DataSourceListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+        //[Editor($"System.Windows.Forms.Design.DataSourceListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         public object DataSource
         {
             [
@@ -944,13 +942,13 @@ internal class DataGridViewDesigner : ControlDesigner
         {
             DesignerActionItemCollection items = new DesignerActionItemCollection();
             items.Add(new DesignerActionMethodItem(this,
-                                                                                "EditColumns",                                  // method name
-                                                                                (SR.DataGridViewEditColumnsVerb),   // display name
-                                                                                true));                                          // promoteToDesignerVerb
+                        "EditColumns",                      // method name
+                        (SR.DataGridViewEditColumnsVerb),   // display name
+                        true));                             // promoteToDesignerVerb
             items.Add(new DesignerActionMethodItem(this,
-                                                                               "AddColumn",                                     // method name
-                                                                               (SR.DataGridViewAddColumnVerb),      // display name
-                                                                               true));                                           // promoteToDesignerVerb
+                        "AddColumn",                        // method name
+                        (SR.DataGridViewAddColumnVerb),     // display name
+                        true));                             // promoteToDesignerVerb
 
             return items;
         }
@@ -985,7 +983,7 @@ internal class DataGridViewDesigner : ControlDesigner
         {
             DesignerActionItemCollection items = new DesignerActionItemCollection();
             items.Add(new DesignerActionPropertyItem("AllowUserToAddRows",
-                                                                                     (SR.DataGridViewEnableAdding)));
+                                                        (SR.DataGridViewEnableAdding)));
             items.Add(new DesignerActionPropertyItem("ReadOnly",
                                                         (SR.DataGridViewEnableEditing)));
             items.Add(new DesignerActionPropertyItem("AllowUserToDeleteRows",
@@ -1118,11 +1116,11 @@ internal class DataGridViewDesigner : ControlDesigner
 
                     if (value)
                     {
-                        transaction = host?.CreateTransaction((SR.DataGridViewEnableColumnReorderingTransactionString));
+                        transaction = host?.CreateTransaction(SR.DataGridViewEnableColumnReorderingTransactionString);
                     }
                     else
                     {
-                        transaction = host?.CreateTransaction((SR.DataGridViewDisableColumnReorderingTransactionString));
+                        transaction = host?.CreateTransaction(SR.DataGridViewDisableColumnReorderingTransactionString);
                     }
 
                     try

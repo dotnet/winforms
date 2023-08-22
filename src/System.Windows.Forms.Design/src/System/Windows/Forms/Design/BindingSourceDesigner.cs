@@ -59,8 +59,8 @@ internal class BindingSourceDesigner : ComponentDesigner
 
     private void OnComponentRemoving(object? sender, ComponentEventArgs e)
     {
-        BindingSource? bingSource = Component as BindingSource;
-        if (bingSource is not null && bingSource.DataSource == e.Component)
+        BindingSource? bindingSource = Component as BindingSource;
+        if (bindingSource is not null && bindingSource.DataSource == e.Component)
         {
             IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
             string previousDataMember = bingSource.DataMember;
@@ -73,7 +73,7 @@ internal class BindingSourceDesigner : ComponentDesigner
                 componentChangeService.OnComponentChanging(bingSource, propertyDescriptor);
             }
 
-            bingSource.DataSource = null;
+            bindingSource.DataSource = null;
 
             if (componentChangeService is not null && propertyDescriptor is not null)
             {

@@ -85,14 +85,8 @@
     <EmbeddedResource Include="Resources\System\WinForms\Design\*.ico">
       <LogicalName>System.Windows.Forms.Design.%(FileName)</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\WinForms\Design\DataGridViewColumnsDialog.selectedColumns.bmp">
-      <LogicalName>System.Windows.Forms.Design.DataGridViewColumnsDialog.selectedColumns.bmp</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\WinForms\Design\DataPickerImages.bmp">
-      <LogicalName>System.Windows.Forms.Design.DataPickerImages.bmp</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\WinForms\Design\AddNewDataSource.bmp">
-      <LogicalName>System.Windows.Forms.Design.AddNewDataSource.bmp</LogicalName>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\*.bmp">
+      <LogicalName>System.Windows.Forms.Design.%(FileName).bmp</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   
