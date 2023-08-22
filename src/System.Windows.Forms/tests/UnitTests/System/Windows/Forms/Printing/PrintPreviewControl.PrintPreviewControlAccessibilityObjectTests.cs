@@ -145,7 +145,7 @@ public class PrintPreviewControl_PrintPreviewControlAccessibilityObjectTests
     {
         using SubPrintPreviewControl control = new();
 
-        PrintPreviewControlAccessibleObject accessibleObject = (PrintPreviewControlAccessibleObject)control.AccessibilityObject;
+        var accessibleObject = (PrintPreviewControlAccessibleObject)control.AccessibilityObject;
         IScrollProvider.Interface scrollProvider = accessibleObject;
         Assert.False(accessibleObject.IsPatternSupported(Interop.UiaCore.UIA.ScrollPatternId));
 
