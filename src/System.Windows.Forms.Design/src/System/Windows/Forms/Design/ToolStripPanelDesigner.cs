@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Collections;
 using System.ComponentModel.Design;
@@ -19,23 +17,23 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ToolStripPanelDesigner : ScrollableControlDesigner
 {
-    private ToolStripPanel _panel;
-    private IComponentChangeService _componentChangeService;
+    private ToolStripPanel? _panel;
+    private IComponentChangeService? _componentChangeService;
     private static Padding _defaultPadding = new(0);
-    private IDesignerHost _designerHost;
+    private IDesignerHost? _designerHost;
 
     // the container selector glyph which is associated with this designer.
-    private ToolStripPanelSelectionGlyph _containerSelectorGlyph;
-    private ToolStripPanelSelectionBehavior _behavior;
+    private ToolStripPanelSelectionGlyph? _containerSelectorGlyph;
+    private ToolStripPanelSelectionBehavior? _behavior;
 
     //Designer context Menu for this designer
-    private BaseContextMenuStrip _contextMenu;
+    private BaseContextMenuStrip? _contextMenu;
 
     // The SelectionService..
-    private ISelectionService _selectionService;
+    private ISelectionService? _selectionService;
 
-    private MenuCommand _designerShortCutCommand;
-    private MenuCommand _oldShortCutCommand;
+    private MenuCommand? _designerShortCutCommand;
+    private MenuCommand? _oldShortCutCommand;
 
     /// <summary>
     ///  Creates a Dashed-Pen of appropriate color.
@@ -126,7 +124,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     ///  Called from <see cref="ToolStripContainerActionList"/> to set the Expanded
     ///  state to false when the panel's visibility is changed.
     /// </summary>
-    public ToolStripPanelSelectionGlyph ToolStripPanelSelectorGlyph { get; private set; }
+    public ToolStripPanelSelectionGlyph? ToolStripPanelSelectorGlyph { get; private set; }
 
     /// <summary>
     ///  ShadowProperty.
@@ -140,7 +138,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         set
         {
             ShadowProperties[nameof(Visible)] = value;
-            _panel.Visible = value;
+            _panel!.Visible = value;
         }
     }
 
@@ -161,15 +159,14 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// <summary>
     ///  Update the glyph whenever component is changed.
     /// </summary>
-    private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
-        //=> ToolStripPanelSelectorGlyph?.UpdateGlyph();
+    private void OnComponentChanged(object? sender, ComponentChangedEventArgs e)
         => _containerSelectorGlyph?.UpdateGlyph();
 
     /// <summary>
     ///  This is the worker method of all CreateTool methods.  It is the only one
     ///  that can be overridden.
     /// </summary>
-    protected override IComponent[] CreateToolCore(ToolboxItem tool, int x, int y, int width, int height, bool hasLocation, bool hasSize)
+    protected override IComponent[]? CreateToolCore(ToolboxItem tool, int x, int y, int width, int height, bool hasLocation, bool hasSize)
     {
         if (tool is not null)
         {
@@ -177,13 +174,13 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
             if (!(typeof(ToolStrip).IsAssignableFrom(toolType)))
             {
-                ToolStripContainer parent = _panel.Parent as ToolStripContainer;
+                ToolStripContainer? parent = _panel?.Parent as ToolStripContainer;
                 if (parent is not null)
                 {
                     ToolStripContentPanel contentPanel = parent.ContentPanel;
                     if (contentPanel is not null)
                     {
-                        PanelDesigner designer = _designerHost.GetDesigner(contentPanel) as PanelDesigner;
+                        PanelDesigner? designer = _designerHost?.GetDesigner(contentPanel) as PanelDesigner;
                         if (designer is not null)
                         {
                             InvokeCreateTool(designer, tool);
@@ -224,18 +221,18 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
             if (_selectionService is not null)
             {
-                _selectionService.SelectionChanging -= new EventHandler(this.OnSelectionChanging);
-                _selectionService.SelectionChanged -= new EventHandler(this.OnSelectionChanged);
+                _selectionService.SelectionChanging -= OnSelectionChanging;
+                _selectionService.SelectionChanged -= OnSelectionChanged;
                 _selectionService = null;
             }
 
             if (_componentChangeService is not null)
             {
-                _componentChangeService.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                _componentChangeService.ComponentChanged -= OnComponentChanged;
             }
 
-            _panel.ControlAdded -= new ControlEventHandler(OnControlAdded);
-            _panel.ControlRemoved -= new ControlEventHandler(OnControlRemoved);
+            _panel!.ControlAdded -= OnControlAdded;
+            _panel.ControlRemoved -= OnControlRemoved;
         }
     }
 
@@ -266,7 +263,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         {
             //get the adorner window-relative coordinates for the container control
             _behavior = new ToolStripPanelSelectionBehavior(_panel, Component.Site);
-            _containerSelectorGlyph = new ToolStripPanelSelectionGlyph(Rectangle.Empty, Cursors.Default, _panel, Component.Site, _behavior);
+            _containerSelectorGlyph = new ToolStripPanelSelectionGlyph(Rectangle.Empty, Cursors.Default, _panel!, Component.Site, _behavior);
         }
 
         if (_panel?.Dock == DockStyle.Top)
@@ -276,11 +273,11 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         }
     }
 
-    private void OnKeyShowDesignerActions(object sender, EventArgs e)
+    private void OnKeyShowDesignerActions(object? sender, EventArgs e)
     {
         if (_containerSelectorGlyph is not null)
         {
-            _behavior.OnMouseDown(_containerSelectorGlyph, MouseButtons.Left, Point.Empty);
+            _behavior?.OnMouseDown(_containerSelectorGlyph, MouseButtons.Left, Point.Empty);
         }
     }
 
@@ -288,7 +285,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     ///  Since we have to initialize glyphs for SplitterPanel (which is not a part of Components.) we override the
     ///  GetGlyphs for the parent.
     /// </summary>
-    internal Glyph GetGlyph()
+    internal Glyph? GetGlyph()
     {
         if (_panel is null)
         {
@@ -313,7 +310,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     ///  e.g: When SplitContainer is selected and a component is being added ... the SplitContainer designer would return a
     ///  SelectedPanel as the ParentControl for all the items being added rather than itself.
     /// </summary>
-    protected override Control GetParentForComponent(IComponent component)
+    protected override Control? GetParentForComponent(IComponent component)
     {
         Type toolType = component.GetType();
 
@@ -322,8 +319,8 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
             return _panel;
         }
 
-        ToolStripContainer parent = _panel.Parent as ToolStripContainer;
-        return parent is not null ? parent.ContentPanel : (Control)null;
+        ToolStripContainer? parent = _panel?.Parent as ToolStripContainer;
+        return parent is not null ? parent.ContentPanel : (Control?)null;
     }
 
     /// <summary>
@@ -331,23 +328,28 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     public override void Initialize(IComponent component)
     {
+        if (component is null)
+        {
+            return;
+        }
+
         _panel = component as ToolStripPanel;
 
         base.Initialize(component);
 
-        Padding = _panel.Padding;
-        _designerHost = (IDesignerHost)component.Site.GetService(typeof(IDesignerHost));
+        Padding = _panel!.Padding;
+        _designerHost = component?.Site?.GetService<IDesignerHost>();
 
         if (_selectionService is null)
         {
             _selectionService = GetService<ISelectionService>();
-            _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
-            _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+            _selectionService.SelectionChanging += OnSelectionChanging;
+            _selectionService.SelectionChanged += OnSelectionChanged;
         }
 
         if (_designerHost is not null)
         {
-            _componentChangeService = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
+            _componentChangeService = _designerHost.GetService<IComponentChangeService>();
         }
 
         if (_componentChangeService is not null)
@@ -374,19 +376,19 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// <summary>
     ///  Required to CodeGen the Controls collection.
     /// </summary>
-    private void OnControlAdded(object sender, ControlEventArgs e)
+    private void OnControlAdded(object? sender, ControlEventArgs e)
     {
         if (e.Control is ToolStrip)
         {
             // Change the padding which might have been set by the Behavior if the _panel is Expanded.
-            _panel.Padding = new Padding(0);
+            _panel!.Padding = new Padding(0);
             if (_containerSelectorGlyph is not null)
             {
                 _containerSelectorGlyph.IsExpanded = false;
             }
 
             // Smoke the dock property whenever we add a toolstrip to a toolstrip _panel.
-            PropertyDescriptor dockProp = TypeDescriptor.GetProperties(e.Control)["Dock"];
+            PropertyDescriptor? dockProp = TypeDescriptor.GetProperties(e.Control)["Dock"];
             dockProp?.SetValue(e.Control, DockStyle.None);
 
             RefreshSelection();
@@ -396,9 +398,9 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// <summary>
     ///  Required to CodeGen the Controls collection.
     /// </summary>
-    private void OnControlRemoved(object sender, ControlEventArgs e)
+    private void OnControlRemoved(object? sender, ControlEventArgs e)
     {
-        if (_panel.Controls.Count == 0)
+        if (_panel is not null && _panel.Controls.Count == 0)
         {
             if (_containerSelectorGlyph is not null)
             {
@@ -433,7 +435,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         }
     }
 
-    private void OnSelectionChanging(object sender, EventArgs e)
+    private void OnSelectionChanging(object? sender, EventArgs e)
     {
         //Remove our DesignerShortCutHandler
         if (_designerShortCutCommand is not null)
@@ -452,11 +454,11 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         }
     }
 
-    private void OnSelectionChanged(object sender, EventArgs e)
+    private void OnSelectionChanged(object? sender, EventArgs e)
     {
-        if (_selectionService.PrimarySelection == _panel)
+        if (_selectionService?.PrimarySelection == _panel)
         {
-            _designerShortCutCommand = new MenuCommand(new EventHandler(OnKeyShowDesignerActions), MenuCommands.KeyInvokeSmartTag);
+            _designerShortCutCommand = new MenuCommand(OnKeyShowDesignerActions, MenuCommands.KeyInvokeSmartTag);
             IMenuCommandService menuCommandService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
             if (menuCommandService is not null)
             {
@@ -474,25 +476,25 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// <summary>
     ///  Paint the borders for the panels.
     /// </summary>
-    protected override void OnPaintAdornments(PaintEventArgs pe)
+    protected override void OnPaintAdornments(PaintEventArgs paintEvent)
     {
         if (!ToolStripDesignerUtils.DisplayInformation.TerminalServer && !ToolStripDesignerUtils.DisplayInformation.HighContrast && !ToolStripDesignerUtils.DisplayInformation.LowResolution)
         {
-            using (Brush b = new SolidBrush(Color.FromArgb(50, Color.White)))
+            using (Brush brush = new SolidBrush(Color.FromArgb(50, Color.White)))
             {
-                pe.Graphics.FillRectangle(b, _panel.ClientRectangle);
+                paintEvent.Graphics.FillRectangle(brush, _panel!.ClientRectangle);
             }
         }
 
-        DrawBorder(pe.Graphics);
+        DrawBorder(paintEvent.Graphics);
     }
 
     protected override void PreFilterEvents(IDictionary events)
     {
         base.PreFilterEvents(events);
-        EventDescriptor eventDescriptor;
+        EventDescriptor? eventDescriptor;
 
-        if (_panel.Parent is ToolStripContainer)
+        if (_panel?.Parent is ToolStripContainer)
         {
             string[] noBrowseEvents =
             [
@@ -527,7 +529,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
             for (int i = 0; i < noBrowseEvents.Length; i++)
             {
-                eventDescriptor = (EventDescriptor)events[noBrowseEvents[i]];
+                eventDescriptor = (EventDescriptor?)events[noBrowseEvents[i]];
                 if (eventDescriptor is not null)
                 {
                     events[noBrowseEvents[i]] = TypeDescriptor.CreateEvent(eventDescriptor.ComponentType, eventDescriptor, BrowsableAttribute.No);
@@ -542,9 +544,9 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     protected override void PreFilterProperties(IDictionary properties)
     {
         base.PreFilterProperties(properties);
-        PropertyDescriptor propertyDescriptor;
+        PropertyDescriptor? propertyDescriptor;
 
-        if (_panel.Parent is ToolStripContainer)
+        if (_panel?.Parent is ToolStripContainer)
         {
             properties.Remove("Modifiers");
             properties.Remove("Locked");
@@ -569,7 +571,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
             for (int i = 0; i < noBrowseProps.Length; i++)
             {
-                propertyDescriptor = (PropertyDescriptor)properties[noBrowseProps[i]];
+                propertyDescriptor = (PropertyDescriptor?)properties[noBrowseProps[i]];
                 if (propertyDescriptor is not null)
                 {
                     properties[noBrowseProps[i]] = TypeDescriptor.CreateProperty(propertyDescriptor.ComponentType, propertyDescriptor, BrowsableAttribute.No, DesignerSerializationVisibilityAttribute.Hidden);
@@ -581,7 +583,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         Attribute[] empty = [];
         for (int i = 0; i < shadowProps.Length; i++)
         {
-            propertyDescriptor = (PropertyDescriptor)properties[shadowProps[i]];
+            propertyDescriptor = (PropertyDescriptor?)properties[shadowProps[i]];
             if (propertyDescriptor is not null)
             {
                 properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ToolStripPanelDesigner), propertyDescriptor, empty);

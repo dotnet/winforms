@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -11,12 +9,12 @@ namespace System.Windows.Forms.Design.Behavior;
 
 internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
 {
-    private readonly ToolStripPanel _relatedPanel;
+    private readonly ToolStripPanel? _relatedPanel;
     private Rectangle _glyphBounds;
-    private Bitmap _image;
+    private Bitmap? _image;
 
-    private Control _baseParent;
-    private BehaviorService _behaviorService;
+    private Control? _baseParent;
+    private BehaviorService? _behaviorService;
     private bool _isExpanded;
 
     // imageWidth is the larger dimension
@@ -27,16 +25,16 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
     private int _imageWidth = ImageWidthOriginal;
     private int _imageHeight = ImageHeightOriginal;
 
-    internal ToolStripPanelSelectionGlyph(Rectangle bounds, Cursor cursor, IComponent relatedComponent, IServiceProvider _provider, ToolStripPanelSelectionBehavior behavior) : base(bounds, cursor, relatedComponent, behavior)
+    internal ToolStripPanelSelectionGlyph(Rectangle bounds, Cursor cursor, IComponent relatedComponent, IServiceProvider? _provider, ToolStripPanelSelectionBehavior behavior) : base(bounds, cursor, relatedComponent, behavior)
     {
         _relatedPanel = relatedComponent as ToolStripPanel;
-        _behaviorService = _provider.GetService<BehaviorService>();
+        _behaviorService = _provider?.GetService<BehaviorService>();
         if (_behaviorService is null)
         {
             return;
         }
 
-        IDesignerHost host = _provider.GetService<IDesignerHost>();
+        IDesignerHost? host = _provider?.GetService<IDesignerHost>();
         if (host is null)
         {
             return;
@@ -65,12 +63,12 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
     {
         if (_behaviorService is not null)
         {
-            Rectangle translatedBounds = _behaviorService.ControlRectInAdornerWindow(_relatedPanel);
+            Rectangle translatedBounds = _behaviorService.ControlRectInAdornerWindow(_relatedPanel!);
             //Reset the glyph.
             _glyphBounds = Rectangle.Empty;
 
             // Refresh the parent
-            ToolStripContainer parent = _relatedPanel.Parent as ToolStripContainer;
+            ToolStripContainer? parent = _relatedPanel?.Parent as ToolStripContainer;
             if (parent is not null)
             {
                 // get the control to which ToolStripContainer is added.
@@ -101,7 +99,7 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
 
         if (DpiHelper.IsScalingRequired)
         {
-            Bitmap deviceImage = null;
+            Bitmap? deviceImage = null;
             if (_image.Width > _image.Height)
             {
                 _imageWidth = DpiHelper.LogicalToDeviceUnitsX(ImageWidthOriginal);
@@ -125,7 +123,7 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
 
     private void CollapseGlyph(Rectangle bounds)
     {
-        DockStyle dock = _relatedPanel.Dock;
+        DockStyle? dock = _relatedPanel?.Dock;
         int x = 0;
         int y = 0;
 
@@ -174,7 +172,7 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
 
     private void ExpandGlyph(Rectangle bounds)
     {
-        DockStyle dock = _relatedPanel.Dock;
+        DockStyle? dock = _relatedPanel?.Dock;
         int x = 0;
         int y = 0;
 
@@ -230,7 +228,7 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
     ///  Simple hit test rule: if the point is contained within the bounds
     ///  then it is a positive hit test.
     /// </summary>
-    public override Cursor GetHitTest(Point p)
+    public override Cursor? GetHitTest(Point p)
     {
         if (_behaviorService is not null && _baseParent is not null)
         {
@@ -252,7 +250,7 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
         if (_behaviorService is not null && _baseParent is not null)
         {
             Rectangle baseParentBounds = _behaviorService.ControlRectInAdornerWindow(_baseParent);
-            if (_relatedPanel.Visible && _image is not null && _glyphBounds != Rectangle.Empty && baseParentBounds.Contains(_glyphBounds))
+            if (_relatedPanel!.Visible && _image is not null && _glyphBounds != Rectangle.Empty && baseParentBounds.Contains(_glyphBounds))
             {
                 pe.Graphics.DrawImage(_image, _glyphBounds.Left, _glyphBounds.Top);
             }

@@ -13,35 +13,33 @@ namespace System.Windows.Forms.Design;
 internal class ToolStripContainerActionList : DesignerActionList
 {
     private readonly ToolStripContainer _toolStripContainer;
-    private readonly IDesignerHost _host;
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IDesignerHost? _designerHost;
+    private readonly IServiceProvider? _serviceProvider;
 
-    public ToolStripContainerActionList(ToolStripContainer toolStripContainer)
-        : base(toolStripContainer)
+    /// <summary>
+    ///  ToolStripContainer ActionList.
+    /// </summary>
+    public ToolStripContainerActionList(ToolStripContainer toolStripContainer) : base(toolStripContainer)
     {
         _toolStripContainer = toolStripContainer;
-        _serviceProvider = toolStripContainer.Site ?? throw new ArgumentException(nameof(toolStripContainer));
-        _host = _serviceProvider.GetRequiredService<IDesignerHost>();
+        _serviceProvider = _toolStripContainer.Site;
+        _designerHost = _serviceProvider?.GetService<IDesignerHost>();
     }
 
+    // Helper function to get the property on the component.
     private static object? GetProperty(Component component, string propertyName)
     {
-        PropertyDescriptor? getProperty = TypeDescriptor.GetProperties(component)[propertyName];
-
-        if (getProperty is not null)
-        {
-            return getProperty.GetValue(component);
-        }
-
-        return null;
+        PropertyDescriptor? getProperty = TypeDescriptor.GetProperties(component)?[propertyName];
+        return getProperty?.GetValue(component);
     }
 
+    // Helper function to change the property on the component
     private void ChangeProperty(Component component, string propertyName, object value)
     {
-        if (_host is not null)
+        if (_designerHost is not null)
         {
             ToolStripPanel? panel = component as ToolStripPanel;
-            ToolStripPanelDesigner? panelDesigner = _host.GetDesigner(component) as ToolStripPanelDesigner;
+            ToolStripPanelDesigner? panelDesigner = _designerHost.GetDesigner(component) as ToolStripPanelDesigner;
 
             if (propertyName.Equals("Visible") && panel is not null)
             {
@@ -51,7 +49,7 @@ internal class ToolStripContainerActionList : DesignerActionList
                     visibleProperty?.SetValue(control, value);
                 }
 
-                if (!((bool)value))
+                if (!(bool)value)
                 {
                     if (panel is not null)
                     {
@@ -71,48 +69,50 @@ internal class ToolStripContainerActionList : DesignerActionList
             PropertyDescriptor? changingProperty = TypeDescriptor.GetProperties(component)[propertyName];
             changingProperty?.SetValue(component, value);
 
-            //Reset the Glyphs.
-            SelectionManager? selectionManager = (SelectionManager?)_serviceProvider.GetService(typeof(SelectionManager));
+            // Reset the Glyphs.
+            SelectionManager? selectionManager = _serviceProvider?.GetService<SelectionManager>();
             selectionManager?.Refresh();
 
-            // Invalidate the Window...
+            // Invalidate the Window
             panelDesigner?.InvalidateGlyph();
         }
     }
 
     /// <summary>
-    /// Checks if the <see cref="ToolStripContainer" /> is dock filled.
+    ///  Checks if the <see cref="ToolStripContainer" /> is dock filled.
     /// </summary>
     private bool IsDockFilled
     {
         get
         {
-            PropertyDescriptor? property = TypeDescriptor.GetProperties(_toolStripContainer)["Dock"];
-            return property is null || (DockStyle?)property.GetValue(_toolStripContainer) == DockStyle.Fill;
+            PropertyDescriptor? dockProperty = TypeDescriptor.GetProperties(_toolStripContainer)["Dock"];
+            return dockProperty is null || (DockStyle?)dockProperty.GetValue(_toolStripContainer) == DockStyle.Fill;
         }
     }
 
     /// <summary>
-    /// Checks if the <see cref="ToolStripContainer" /> is a child control of 
-    /// the <see cref="IDesignerHost.RootComponent" /> before re-parenting.
+    ///  Checks if the ToolStripContainer is a child control of the designerHost's rootComponent
     /// </summary>
     private bool ProvideReparent
-        => _host.RootComponent is Control root
+        => _designerHost?.RootComponent is Control root
             && _toolStripContainer.Parent == root
             && IsDockFilled
             && root.Controls.Count > 1;
 
+    /// <summary>
+    ///  Sets the Dock
+    /// </summary>
     public void SetDockToForm()
     {
-        if (_host is not null)
+        if (_designerHost is not null)
         {
-            //change the Parent only if its not parented to the form.
-            if (_host.RootComponent is Control control && _toolStripContainer.Parent is not Control)
+            // change the Parent only if its not parented to the form.
+            if (_designerHost.RootComponent is Control root && _toolStripContainer.Parent is not Control)
             {
-                control.Controls.Add(_toolStripContainer);
+                root.Controls.Add(_toolStripContainer);
             }
 
-            //set the dock prop to DockStyle.Fill
+            // set the dock prop to DockStyle.Fill
             if (!IsDockFilled)
             {
                 PropertyDescriptor? dockProp = TypeDescriptor.GetProperties(_toolStripContainer)["Dock"];
@@ -122,12 +122,12 @@ internal class ToolStripContainerActionList : DesignerActionList
     }
 
     /// <summary>
-    /// Reparent child controls of the form to this container.
+    ///  Reparent the controls on the form.
     /// </summary>
     public void ReparentControls()
     {
         // Reparent the Controls only if the ToolStripContainer is a child of the RootComponent.
-        if (_host.RootComponent is not Control root
+        if (_designerHost?.RootComponent is not Control root
             || _toolStripContainer.Parent != root
             || root.Controls.Count <= 1)
         {
@@ -135,80 +135,79 @@ internal class ToolStripContainerActionList : DesignerActionList
         }
 
         Control newParent = _toolStripContainer.ContentPanel;
-        PropertyDescriptor? autoScrollProperty = TypeDescriptor.GetProperties(newParent)["AutoScroll"];
-        autoScrollProperty?.SetValue(newParent, true);
+        PropertyDescriptor? autoScrollProp = TypeDescriptor.GetProperties(newParent)["AutoScroll"];
+        autoScrollProp?.SetValue(newParent, true);
 
-        // Create a transaction so this happens as an atomic unit.
-        using DesignerTransaction transaction =
-            _host.CreateTransaction(string.Format(
-                SR._0_reparent_controls_transaction,
-                nameof(ToolStripContainer)));
+        // create a transaction so this happens as an atomic unit.
+        DesignerTransaction? changeParent = _designerHost.CreateTransaction(string.Format(SR._0_reparent_controls_transaction, nameof(ToolStripContainer)));
 
-        var childControls = new Control[root.Controls.Count];
-        root.Controls.CopyTo(childControls, 0);
-
-        var changeService = _serviceProvider.GetRequiredService<IComponentChangeService>();
-        bool changed = false;
-
-        foreach (Control control in childControls)
+        try
         {
-            if (control == _toolStripContainer || control is MdiClient)
+            IComponentChangeService? componentChangeService = _serviceProvider?.GetService<IComponentChangeService>();
+            Control[] childControls = new Control[root.Controls.Count];
+            root.Controls.CopyTo(childControls, 0);
+
+            foreach (Control control in childControls)
             {
-                continue;
+                if (control == _toolStripContainer || control is MdiClient)
+                {
+                    continue;
+                }
+
+                // We should not reparent inherited Controls
+                var inheritanceAttribute = TypeDescriptor.GetAttributes(control)?[typeof(InheritanceAttribute)] as InheritanceAttribute;
+                if (inheritanceAttribute is null || inheritanceAttribute.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                {
+                    continue;
+                }
+
+                newParent = control is ToolStrip ? GetParent(control) : _toolStripContainer.ContentPanel;
+
+                PropertyDescriptor? controlsProp = TypeDescriptor.GetProperties(newParent)["Controls"];
+                Control? oldParent = control.Parent;
+
+                if (oldParent is not null)
+                {
+                    componentChangeService?.OnComponentChanging(oldParent, controlsProp);
+
+                    // Remove control from the old parent
+                    oldParent.Controls.Remove(control);
+                }
+
+                componentChangeService?.OnComponentChanging(newParent, controlsProp);
+
+                // Finally add & relocate the control with the new parent
+                newParent.Controls.Add(control);
+
+                // Fire our component changed events
+                if (componentChangeService is not null && oldParent is not null)
+                {
+                    componentChangeService.OnComponentChanged(oldParent, controlsProp, oldValue: null, newValue: null);
+                }
+
+                // fire component changed on the newParent
+                componentChangeService?.OnComponentChanged(newParent, controlsProp,oldValue: null, newValue: null);
             }
-
-            // We should not reparent inherited Controls.
-            AttributeCollection attributes = TypeDescriptor.GetAttributes(control);
-            var inheritanceAttribute = attributes[typeof(InheritanceAttribute)];
-            if (inheritanceAttribute is null
-                || inheritanceAttribute.Equals(InheritanceAttribute.InheritedReadOnly))
-            {
-                continue;
-            }
-
-            newParent = control is ToolStrip
-                ? GetParent(control)
-                : _toolStripContainer.ContentPanel;
-
-            PropertyDescriptor? controlsProp = TypeDescriptor.GetProperties(newParent)["Controls"];
-            Control? oldParent = control.Parent;
-
-            if (oldParent is not null)
-            {
-                changeService.OnComponentChanging(oldParent, controlsProp);
-                // Remove control from the old parent.
-                oldParent.Controls.Remove(control);
-            }
-
-            changeService.OnComponentChanging(newParent, controlsProp);
-
-            // Finally add and relocate the control with the new parent.
-            newParent.Controls.Add(control);
-
-            if (oldParent is not null)
-            {
-                changeService.OnComponentChanged(oldParent, controlsProp, oldValue: null, newValue: null);
-            }
-
-            changeService.OnComponentChanged(newParent, controlsProp, oldValue: null, newValue: null);
-            changed = true;
         }
-
-        transaction.Commit();
-
-        var selectionService = _serviceProvider.GetRequiredService<ISelectionService>();
-        if (changed)
+        catch
         {
-            // Designer action panel will get updated correctly only if its related component is selected,
-            // thus select the entire container.
-            selectionService.SetSelectedComponents(new IComponent[] { _toolStripContainer }, SelectionTypes.Replace);
-
-            DesignerActionUIService? actionUIService = (DesignerActionUIService?)Component?.Site?.GetService(typeof(DesignerActionUIService));
-            actionUIService?.Refresh(_toolStripContainer);
+            if (changeParent is not null)
+            {
+                changeParent.Cancel();
+                changeParent = null;
+            }
         }
-        else
+        finally
         {
-            selectionService.SetSelectedComponents(new IComponent[] { newParent }, SelectionTypes.Replace);
+            if (changeParent is not null)
+            {
+                changeParent.Commit();
+                changeParent = null;
+            }
+
+            // Set the Selection on the new Parent, so that the selection is restored to the new item
+            ISelectionService? selectionService = _serviceProvider?.GetService<ISelectionService>();
+            selectionService?.SetSelectedComponents(new IComponent[] { newParent });
         }
     }
 
@@ -217,7 +216,7 @@ internal class ToolStripContainerActionList : DesignerActionList
         Control newParent = _toolStripContainer.ContentPanel;
         DockStyle dock = control.Dock;
 
-        foreach (Control? panel in _toolStripContainer.Controls)
+        foreach (Control panel in _toolStripContainer.Controls)
         {
             if (panel is ToolStripPanel && panel.Dock == dock)
             {
@@ -230,7 +229,7 @@ internal class ToolStripContainerActionList : DesignerActionList
     }
 
     /// <summary>
-    /// Visibility of the top ToolStripPanel.
+    ///  Visibility of TopToolStripPanel.
     /// </summary>
     public bool TopVisible
     {
@@ -239,52 +238,52 @@ internal class ToolStripContainerActionList : DesignerActionList
         {
             if (value != TopVisible)
             {
-                ChangeProperty(_toolStripContainer, nameof(ToolStripContainer.TopToolStripPanelVisible), value);
+                ChangeProperty(_toolStripContainer, "TopToolStripPanelVisible", value);
             }
         }
     }
 
     /// <summary>
-    /// Visibility of the bottom ToolStripPanel.
+    ///  Visibility of BottomToolStripPanel.
     /// </summary>
     public bool BottomVisible
     {
         get => (bool)(GetProperty(_toolStripContainer, nameof(ToolStripContainer.BottomToolStripPanelVisible)) ?? false);
         set
         {
-            if (value != TopVisible)
+            if (value != BottomVisible)
             {
-                ChangeProperty(_toolStripContainer, nameof(ToolStripContainer.BottomToolStripPanelVisible), value);
+                ChangeProperty(_toolStripContainer, "BottomToolStripPanelVisible", value);
             }
         }
     }
 
     /// <summary>
-    /// Visibility of left ToolStripPanel.
+    ///  Visibility of LeftToolStripPanel.
     /// </summary>
     public bool LeftVisible
     {
         get => (bool)(GetProperty(_toolStripContainer, nameof(ToolStripContainer.LeftToolStripPanelVisible)) ?? false);
         set
         {
-            if (value != TopVisible)
+            if (value != LeftVisible)
             {
-                ChangeProperty(_toolStripContainer, nameof(ToolStripContainer.LeftToolStripPanelVisible), value);
+                ChangeProperty(_toolStripContainer, "LeftToolStripPanelVisible", value);
             }
         }
     }
 
     /// <summary>
-    /// Visibility of right ToolStripPanel.
+    ///  Visibility of RightToolStripPanel.
     /// </summary>
     public bool RightVisible
     {
         get => (bool)(GetProperty(_toolStripContainer, nameof(ToolStripContainer.RightToolStripPanelVisible)) ?? false);
         set
         {
-            if (value != TopVisible)
+            if (value != RightVisible)
             {
-                ChangeProperty(_toolStripContainer, nameof(ToolStripContainer.RightToolStripPanelVisible), value);
+                ChangeProperty(_toolStripContainer, "RightToolStripPanelVisible", value);
             }
         }
     }
@@ -292,43 +291,35 @@ internal class ToolStripContainerActionList : DesignerActionList
     /// <summary>
     ///  Returns the control's action list items.
     /// </summary>
-    /// <returns></returns>
     public override DesignerActionItemCollection GetSortedActionItems()
     {
-        var items = new DesignerActionItemCollection
+        DesignerActionItemCollection items = new DesignerActionItemCollection
         {
-            new DesignerActionHeaderItem(
-                SR.ToolStripContainerActionList_Visible,
-                SR.ToolStripContainerActionList_Show),
+            new DesignerActionHeaderItem(SR.ToolStripContainerActionList_Visible, SR.ToolStripContainerActionList_Show),
+            new DesignerActionPropertyItem(nameof(TopVisible),
+                                           SR.ToolStripContainerActionList_Top,
+                                           SR.ToolStripContainerActionList_Show,
+                                           SR.ToolStripContainerActionList_TopDesc),
 
-            new DesignerActionPropertyItem(
-                nameof(TopVisible),
-                SR.ToolStripContainerActionList_Top,
-                SR.ToolStripContainerActionList_Show,
-                SR.ToolStripContainerActionList_TopDesc),
+            new DesignerActionPropertyItem(nameof(BottomVisible),
+                                           SR.ToolStripContainerActionList_Bottom,
+                                           SR.ToolStripContainerActionList_Show,
+                                           SR.ToolStripContainerActionList_BottomDesc),
 
-            new DesignerActionPropertyItem(
-                nameof(BottomVisible),
-                SR.ToolStripContainerActionList_Bottom,
-                SR.ToolStripContainerActionList_Show,
-                SR.ToolStripContainerActionList_BottomDesc),
+            new DesignerActionPropertyItem(nameof(LeftVisible),
+                                           SR.ToolStripContainerActionList_Left,
+                                           SR.ToolStripContainerActionList_Show,
+                                           SR.ToolStripContainerActionList_LeftDesc),
 
-            new DesignerActionPropertyItem(
-                nameof(LeftVisible),
-                SR.ToolStripContainerActionList_Left,
-                SR.ToolStripContainerActionList_Show,
-                SR.ToolStripContainerActionList_LeftDesc),
-
-            new DesignerActionPropertyItem(
-                nameof(RightVisible),
-                SR.ToolStripContainerActionList_Right,
-                SR.ToolStripContainerActionList_Show,
-                SR.ToolStripContainerActionList_RightDesc)
+            new DesignerActionPropertyItem(nameof(RightVisible),
+                                           SR.ToolStripContainerActionList_Right,
+                                           SR.ToolStripContainerActionList_Show,
+                                           SR.ToolStripContainerActionList_RightDesc)
         };
 
         if (!IsDockFilled)
         {
-            var displayName = _host.RootComponent is UserControl
+            string displayName = _designerHost?.RootComponent is UserControl
                 ? SR.DesignerShortcutDockInUserControl
                 : SR.DesignerShortcutDockInForm;
 
@@ -340,10 +331,7 @@ internal class ToolStripContainerActionList : DesignerActionList
 
         if (ProvideReparent)
         {
-            items.Add(new DesignerActionMethodItem(
-                this,
-                nameof(ReparentControls),
-                SR.DesignerShortcutReparentControls));
+            items.Add(new DesignerActionMethodItem(this, nameof(ReparentControls), SR.DesignerShortcutReparentControls));
         }
 
         return items;
