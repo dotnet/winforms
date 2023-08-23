@@ -102,7 +102,7 @@ internal unsafe class AgileComPointer<TInterface> :
         // Clear the cookie before revoking the interface to guard against re-entry.
 
         uint cookie = Interlocked.Exchange(ref _cookie, 0);
-        if (_cookie == 0)
+        if (cookie == 0)
         {
             return;
         }

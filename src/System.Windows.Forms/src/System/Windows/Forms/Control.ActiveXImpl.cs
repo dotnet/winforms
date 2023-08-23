@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Buffers;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -116,7 +117,7 @@ public partial class Control
         private static readonly int s_uiActive = BitVector32.CreateMask(s_inPlaceVisible);
         private static readonly int s_uiDead = BitVector32.CreateMask(s_uiActive);
         private static readonly int s_adjustingRect = BitVector32.CreateMask(s_uiDead);
-        private static readonly char[] s_whitespace = new char[] { ' ', '\r', '\n' };
+        private static readonly SearchValues<char> s_whitespace = SearchValues.Create(new char[] { ' ', '\r', '\n' });
 
         private static Point s_logPixels = Point.Empty;
         private static OLEVERB[]? s_axVerbs;
@@ -530,7 +531,7 @@ public partial class Control
         /// </summary>
         private static byte[] FromBase64WrappedString(string text)
         {
-            if (text.IndexOfAny(s_whitespace) != -1)
+            if (text.AsSpan().ContainsAny(s_whitespace))
             {
                 StringBuilder sb = new StringBuilder(text.Length);
                 for (int i = 0; i < text.Length; i++)
