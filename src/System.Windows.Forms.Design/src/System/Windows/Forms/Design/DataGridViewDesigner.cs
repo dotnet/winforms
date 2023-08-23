@@ -890,7 +890,7 @@ internal class DataGridViewDesigner : ControlDesigner
         }
 
         [AttributeProvider(typeof(IListSource))]
-        //[Editor($"System.Windows.Forms.Design.DataSourceListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.DataSourceListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         public object DataSource
         {
             [
