@@ -63,21 +63,21 @@ internal class BindingSourceDesigner : ComponentDesigner
         if (bindingSource is not null && bindingSource.DataSource == e.Component)
         {
             IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
-            string previousDataMember = bingSource.DataMember;
+            string previousDataMember = bindingSource.DataMember;
 
-            PropertyDescriptorCollection propertyDescriptorCollection = TypeDescriptor.GetProperties(bingSource);
+            PropertyDescriptorCollection propertyDescriptorCollection = TypeDescriptor.GetProperties(bindingSource);
             PropertyDescriptor? propertyDescriptor = propertyDescriptorCollection?["DataMember"];
 
             if (componentChangeService is not null && propertyDescriptor is not null)
             {
-                componentChangeService.OnComponentChanging(bingSource, propertyDescriptor);
+                componentChangeService.OnComponentChanging(bindingSource, propertyDescriptor);
             }
 
             bindingSource.DataSource = null;
 
             if (componentChangeService is not null && propertyDescriptor is not null)
             {
-                componentChangeService.OnComponentChanged(bingSource, propertyDescriptor, previousDataMember, string.Empty);
+                componentChangeService.OnComponentChanged(bindingSource, propertyDescriptor, previousDataMember, string.Empty);
             }
         }
     }
