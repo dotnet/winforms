@@ -123,11 +123,8 @@ public class EmbeddedResourceTests
         string[] actual = assembly.GetManifestResourceNames();
         Array.Sort(actual, StringComparer.Ordinal);
 
-        string pictureNames = s_expectedIconNames + "\r\n" + s_expectedBitmapNames;
-        //string[] expectedIcons = $"{s_expectedIconNames}{Environment.NewLine}{expectedResourceNames}".Split(Environment.NewLine);
-        //string[] expectedBitmaps = $"{s_expectedBitmapNames}{Environment.NewLine}{expectedResourceNames}".Split(Environment.NewLine);
-        //string[] expected = expectedIcons.Concat(expectedBitmaps).ToArray();
-        string[] expected = $"{pictureNames}{Environment.NewLine}{expectedResourceNames}".Split(Environment.NewLine);
+        string resourceNames = s_expectedIconNames + "\r\n" + s_expectedBitmapNames;
+        string[] expected = $"{resourceNames}{Environment.NewLine}{expectedResourceNames}".Split(Environment.NewLine);
         Array.Sort(expected, StringComparer.Ordinal);
 
         AssertExtensions.Equal(expected, actual);
