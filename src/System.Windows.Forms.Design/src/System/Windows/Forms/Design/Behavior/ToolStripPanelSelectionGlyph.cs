@@ -10,11 +10,10 @@ namespace System.Windows.Forms.Design.Behavior;
 internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
 {
     private readonly ToolStripPanel? _relatedPanel;
+    private readonly BehaviorService? _behaviorService;
     private Rectangle _glyphBounds;
     private Bitmap? _image;
-
     private Control? _baseParent;
-    private BehaviorService? _behaviorService;
     private bool _isExpanded;
 
     // imageWidth is the larger dimension

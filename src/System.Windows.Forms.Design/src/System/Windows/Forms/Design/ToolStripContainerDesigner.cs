@@ -486,7 +486,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         //now create SelectionGlyph for the panel and add it
         if (designer is not null)
         {
-            Glyph childGlyph = designer.GetGlyph();
+            Glyph? childGlyph = designer.GetGlyph();
             if (childGlyph is not null && _selectionService is not null)
             {
                 ICollection selectedComponents = _selectionService.GetSelectedComponents();

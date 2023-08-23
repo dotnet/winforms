@@ -186,7 +186,7 @@ internal class ToolStripContainerActionList : DesignerActionList
                 }
 
                 // fire component changed on the newParent
-                componentChangeService?.OnComponentChanged(newParent, controlsProp,oldValue: null, newValue: null);
+                componentChangeService?.OnComponentChanged(newParent, controlsProp, oldValue: null, newValue: null);
             }
         }
         catch

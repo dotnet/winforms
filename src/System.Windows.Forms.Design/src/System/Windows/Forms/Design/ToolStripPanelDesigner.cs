@@ -17,9 +17,9 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ToolStripPanelDesigner : ScrollableControlDesigner
 {
+    private static Padding s_defaultPadding = new(0);
     private ToolStripPanel? _panel;
     private IComponentChangeService? _componentChangeService;
-    private static Padding _defaultPadding = new(0);
     private IDesignerHost? _designerHost;
 
     // the container selector glyph which is associated with this designer.
@@ -259,14 +259,14 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     internal void ExpandTopPanel()
     {
-        if (_containerSelectorGlyph is null)
+        if (_containerSelectorGlyph is null && Component.Site is not null)
         {
             //get the adorner window-relative coordinates for the container control
-            _behavior = new ToolStripPanelSelectionBehavior(_panel, Component.Site);
+            _behavior = new ToolStripPanelSelectionBehavior(_panel!, Component.Site);
             _containerSelectorGlyph = new ToolStripPanelSelectionGlyph(Rectangle.Empty, Cursors.Default, _panel!, Component.Site, _behavior);
         }
 
-        if (_panel?.Dock == DockStyle.Top)
+        if (_containerSelectorGlyph is not null && _panel?.Dock == DockStyle.Top)
         {
             _panel.Padding = new Padding(0, 0, 25, 25);
             _containerSelectorGlyph.IsExpanded = true;
@@ -293,7 +293,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
         }
 
         // Add own Glyphs.
-        if (_containerSelectorGlyph is null)
+        if (_containerSelectorGlyph is null && Component.Site is not null)
         {
             //get the adorner window-relative coordinates for the container control
             _behavior = new ToolStripPanelSelectionBehavior(_panel, Component.Site);
@@ -597,7 +597,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     private bool ShouldSerializePadding()
     {
         Padding padding = (Padding)ShadowProperties[nameof(Padding)];
-        return !padding.Equals(_defaultPadding);
+        return !padding.Equals(s_defaultPadding);
     }
 
     /// <summary>

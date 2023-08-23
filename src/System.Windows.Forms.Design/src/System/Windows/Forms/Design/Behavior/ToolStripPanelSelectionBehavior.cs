@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -98,23 +96,26 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
 
                 // Select our parent.
                 ISelectionService selectionService = _serviceProvider.GetRequiredService<ISelectionService>();
-                Component currentSelection = selectionService.PrimarySelection as Component;
+                Component? currentSelection = selectionService.PrimarySelection as Component;
 
-                if (currentSelection != _relatedControl.Parent)
+                if (_relatedControl.Parent is not null)
                 {
-                    selectionService?.SetSelectedComponents(new object[] { _relatedControl.Parent }, SelectionTypes.Replace);
-                }
-                else
-                {
-                    Control parent = _relatedControl.Parent;
-                    parent?.PerformLayout();
+                    if (currentSelection != _relatedControl.Parent)
+                    {
+                        selectionService?.SetSelectedComponents(new object[] { _relatedControl.Parent }, SelectionTypes.Replace);
+                    }
+                    else
+                    {
+                        Control parent = _relatedControl.Parent;
+                        parent?.PerformLayout();
 
-                    var selectionManager = _serviceProvider.GetRequiredService<SelectionManager>();
-                    selectionManager.Refresh();
+                        var selectionManager = _serviceProvider.GetRequiredService<SelectionManager>();
+                        selectionManager.Refresh();
 
-                    Point loc = _behaviorService.ControlToAdornerWindow(parent);
-                    var translatedBounds = new Rectangle(loc, parent.Size);
-                    _behaviorService.Invalidate(translatedBounds);
+                        Point loc = _behaviorService.ControlToAdornerWindow(parent!);
+                        var translatedBounds = new Rectangle(loc, parent!.Size);
+                        _behaviorService.Invalidate(translatedBounds);
+                    }
                 }
             }
         }
@@ -133,7 +134,7 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
         var host = _serviceProvider.GetRequiredService<IDesignerHost>();
         using DesignerTransaction transaction = host.CreateTransaction(GetTransactionDescription());
 
-        List<IComponent> temp = copy ? new List<IComponent>() : null;
+        List<IComponent>? temp = copy ? new List<IComponent>() : null;
         ISelectionService selectionService = _serviceProvider.GetRequiredService<ISelectionService>();
         IComponentChangeService changeService = _serviceProvider.GetRequiredService<IComponentChangeService>();
 
@@ -158,8 +159,8 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
             }
 
             Control newParent = _relatedControl;
-            PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(newParent)["Controls"];
-            Control oldParent = control.Parent;
+            PropertyDescriptor? controlsProp = TypeDescriptor.GetProperties(newParent)["Controls"];
+            Control? oldParent = control.Parent;
             if (oldParent is not null && !copy)
             {
                 changeService.OnComponentChanging(oldParent, controlsProp);
@@ -212,11 +213,11 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
     /// Simply clear the initial drag point, so we can start again
     /// on the next mouse down.
     /// </summary>
-    public override void OnDragDrop(Glyph glyph, DragEventArgs e)
+    public override void OnDragDrop(Glyph? glyph, DragEventArgs e)
     {
         // Expand the glyph only if ToolStrip is dragged around
         var expandPanel = false;
-        List<IComponent> components = null;
+        List<IComponent>? components = null;
 
         if (e.Data is DropSourceBehavior.BehaviorDataObject data)
         {
@@ -237,7 +238,7 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
 
             if (expandPanel)
             {
-                Control root = _relatedControl.Parent;
+                Control? root = _relatedControl.Parent;
                 if (root is not null)
                 {
                     try
@@ -292,16 +293,30 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
         }
     }
 
-    public override void OnDragEnter(Glyph glyph, DragEventArgs e)
-        => e.Effect = GetEffect(e.Data);
+    public override void OnDragEnter(Glyph? glyph, DragEventArgs e)
+    {
+        if (e.Data is not null)
+        {
+            e.Effect = GetEffect(e.Data);
+        }
 
-    public override void OnDragOver(Glyph glyph, DragEventArgs e)
-        => e.Effect = GetEffect(e.Data);
+        base.OnDragEnter(glyph, e);
+    }
+
+    public override void OnDragOver(Glyph? glyph, DragEventArgs e)
+    {
+        if (e.Data is not null)
+        {
+            e.Effect = GetEffect(e.Data);
+        }
+
+        base.OnDragOver(glyph, e);
+    }
 
     private static DragDropEffects GetEffect(IDataObject data)
-        => DragComponentContainsToolStrip(data as DropSourceBehavior.BehaviorDataObject)
-            ? Control.ModifierKeys == Keys.Control
-                ? DragDropEffects.Copy
-                : DragDropEffects.Move
-            : DragDropEffects.None;
+            => DragComponentContainsToolStrip(data as DropSourceBehavior.BehaviorDataObject)
+                ? Control.ModifierKeys == Keys.Control
+                    ? DragDropEffects.Copy
+                    : DragDropEffects.Move
+                : DragDropEffects.None;
 }

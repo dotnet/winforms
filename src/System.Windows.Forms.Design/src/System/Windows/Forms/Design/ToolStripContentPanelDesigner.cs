@@ -9,19 +9,19 @@ namespace System.Windows.Forms.Design;
 
 internal class ToolStripContentPanelDesigner : PanelDesigner
 {
-    private BaseContextMenuStrip? contextMenu;
+    private BaseContextMenuStrip? _contextMenu;
 
     private ContextMenuStrip DesignerContextMenu
     {
         get
         {
-            if (contextMenu is null)
+            if (_contextMenu is null)
             {
-                contextMenu = new BaseContextMenuStrip(Component.Site, Component as Component);
+                _contextMenu = new BaseContextMenuStrip(Component.Site, Component as Component);
 
                 // If multiple Items Selected don't show the custom properties...
-                contextMenu.GroupOrdering.Clear();
-                contextMenu.GroupOrdering.AddRange(
+                _contextMenu.GroupOrdering.Clear();
+                _contextMenu.GroupOrdering.AddRange(
                 [
                     StandardGroups.Code,
                     StandardGroups.Verbs,
@@ -30,10 +30,10 @@ internal class ToolStripContentPanelDesigner : PanelDesigner
                     StandardGroups.Edit,
                     StandardGroups.Properties
                 ]);
-                contextMenu.Text = "CustomContextMenu";
+                _contextMenu.Text = "CustomContextMenu";
             }
 
-            return contextMenu;
+            return _contextMenu;
         }
     }
 
