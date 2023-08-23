@@ -13,7 +13,7 @@ namespace System.ComponentModel.Design;
 /// </summary>
 internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
 {
-    private PropertyDescriptor propertyDescriptor;
+    private PropertyDescriptor _propertyDescriptor;
     private object? _defaultValue;
     private static readonly object s_noDefault = new();
 
@@ -23,7 +23,7 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     public InheritedPropertyDescriptor(PropertyDescriptor propertyDescriptor, object component) : base(propertyDescriptor, Array.Empty<Attribute>())
     {
         Debug.Assert(propertyDescriptor is not InheritedPropertyDescriptor, $"Recursive inheritance propertyDescriptor {propertyDescriptor}");
-        this.propertyDescriptor = propertyDescriptor;
+        _propertyDescriptor = propertyDescriptor;
 
         InitInheritedDefaultValue(component);
 
@@ -105,38 +105,29 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     /// <summary>
     ///  Gets the type of the component this property descriptor is bound to.
     /// </summary>
-    public override Type ComponentType => propertyDescriptor.ComponentType;
+    public override Type ComponentType => _propertyDescriptor.ComponentType;
 
     /// <summary>
     ///  Gets a value indicating whether this property is read only.
     /// </summary>
-    public override bool IsReadOnly
-    {
-        get
-        {
-            return propertyDescriptor.IsReadOnly || Attributes[typeof(ReadOnlyAttribute)]!.Equals(ReadOnlyAttribute.Yes);
-        }
-    }
+    public override bool IsReadOnly => _propertyDescriptor.IsReadOnly || Equals(Attributes[typeof(ReadOnlyAttribute)], ReadOnlyAttribute.Yes);
 
     internal object? OriginalValue { get; private set; }
 
     internal PropertyDescriptor PropertyDescriptor
     {
-        get
-        {
-            return propertyDescriptor;
-        }
+        get => _propertyDescriptor;
         set
         {
-            Debug.Assert(value is not InheritedPropertyDescriptor, $"Recursive inheritance propertyDescriptor {propertyDescriptor}");
-            propertyDescriptor = value;
+            Debug.Assert(value is not InheritedPropertyDescriptor, $"Recursive inheritance propertyDescriptor {_propertyDescriptor}");
+            _propertyDescriptor = value;
         }
     }
 
     /// <summary>
     ///  Gets the type of the property.
     /// </summary>
-    public override Type PropertyType => propertyDescriptor.PropertyType;
+    public override Type PropertyType => _propertyDescriptor.PropertyType;
 
     /// <summary>
     ///  Indicates whether reset will change the value of the component.
@@ -146,7 +137,7 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
         // We always have a default value, because we got it from the component when we were constructed.
         if (_defaultValue == s_noDefault)
         {
-            return propertyDescriptor.CanResetValue(component);
+            return _propertyDescriptor.CanResetValue(component);
         }
         else
         {
@@ -159,7 +150,7 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     {
         // if we have a persist contents guy, we'll need to try to clone the value because otherwise we won't be able to tell when it's been modified.
         if (value is null ||
-            !propertyDescriptor.TryGetAttribute(out DesignerSerializationVisibilityAttribute? dsva) ||
+            !_propertyDescriptor.TryGetAttribute(out DesignerSerializationVisibilityAttribute? dsva) ||
             dsva.Visibility != DesignerSerializationVisibility.Content)
         {
             return value;
@@ -181,7 +172,7 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     protected override void FillAttributes(IList attributeList)
     {
         base.FillAttributes(attributeList);
-        foreach (Attribute attr in propertyDescriptor.Attributes)
+        foreach (Attribute attr in _propertyDescriptor.Attributes)
         {
             attributeList.Add(attr);
         }
@@ -192,7 +183,7 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     /// </summary>
     public override object? GetValue(object? component)
     {
-        return propertyDescriptor.GetValue(component);
+        return _propertyDescriptor.GetValue(component);
     }
 
     private void InitInheritedDefaultValue(object component)
@@ -203,9 +194,9 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
             // Don't just get the default value.  Check to see if the propertyDescriptor has indicated ShouldSerialize, and if it hasn't try to use the default value.
             // We need to do this for properties that inherit from their parent.  If we are processing properties on the root component, we always favor the presence of a default value attribute.
             // The root component is always inherited but some values should always be written into code.
-            if (!propertyDescriptor.ShouldSerializeValue(component))
+            if (!_propertyDescriptor.ShouldSerializeValue(component))
             {
-                if (propertyDescriptor.TryGetAttribute(out DefaultValueAttribute? defaultAttribute))
+                if (_propertyDescriptor.TryGetAttribute(out DefaultValueAttribute? defaultAttribute))
                 {
                     _defaultValue = defaultAttribute.Value;
                     currentValue = _defaultValue;
@@ -213,12 +204,12 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
                 else
                 {
                     _defaultValue = s_noDefault;
-                    currentValue = propertyDescriptor.GetValue(component);
+                    currentValue = _propertyDescriptor.GetValue(component);
                 }
             }
             else
             {
-                _defaultValue = propertyDescriptor.GetValue(component);
+                _defaultValue = _propertyDescriptor.GetValue(component);
                 currentValue = _defaultValue;
                 _defaultValue = ClonedDefaultValue(_defaultValue);
             }
@@ -241,7 +232,7 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     {
         if (_defaultValue == s_noDefault)
         {
-            propertyDescriptor.ResetValue(component);
+            _propertyDescriptor.ResetValue(component);
         }
         else
         {
@@ -267,7 +258,7 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     /// </summary>
     public override void SetValue(object? component, object? value)
     {
-        propertyDescriptor.SetValue(component, value);
+        _propertyDescriptor.SetValue(component, value);
     }
 
     /// <summary>
@@ -277,12 +268,12 @@ internal sealed class InheritedPropertyDescriptor : PropertyDescriptor
     {
         if (IsReadOnly)
         {
-            return propertyDescriptor.ShouldSerializeValue(component) && Attributes.Contains(DesignerSerializationVisibilityAttribute.Content);
+            return _propertyDescriptor.ShouldSerializeValue(component) && Attributes.Contains(DesignerSerializationVisibilityAttribute.Content);
         }
 
         if (_defaultValue == s_noDefault)
         {
-            return propertyDescriptor.ShouldSerializeValue(component);
+            return _propertyDescriptor.ShouldSerializeValue(component);
         }
         else
         {
