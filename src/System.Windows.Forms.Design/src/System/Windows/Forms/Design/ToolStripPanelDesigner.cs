@@ -22,7 +22,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     private IComponentChangeService? _componentChangeService;
     private IDesignerHost? _designerHost;
 
-    // the container selector glyph which is associated with this designer.
+    // The container selector glyph which is associated with this designer.
     private ToolStripPanelSelectionGlyph? _containerSelectorGlyph;
     private ToolStripPanelSelectionBehavior? _behavior;
 
@@ -357,7 +357,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
             _componentChangeService.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
         }
 
-        //Hook up the ControlAdded Event
+        // Hook up the ControlAdded Event
         _panel.ControlAdded += new ControlEventHandler(OnControlAdded);
         _panel.ControlRemoved += new ControlEventHandler(OnControlRemoved);
     }
@@ -437,7 +437,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
     private void OnSelectionChanging(object? sender, EventArgs e)
     {
-        //Remove our DesignerShortCutHandler
+        // Remove our DesignerShortCutHandler
         if (_designerShortCutCommand is not null)
         {
             IMenuCommandService menuCommandService = (IMenuCommandService)GetService(typeof(IMenuCommandService));

@@ -68,8 +68,8 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
     }
 
     /// <summary>
-    /// Simply clear the initial drag point, so we can start again
-    /// on the next mouse down.
+    ///  Simply clear the initial drag point, so we can start again
+    ///  on the next mouse down.
     /// </summary>
     public override bool OnMouseDown(Glyph? glyph, MouseButtons button, Point screenCoordinates)
     {
@@ -210,8 +210,8 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
     }
 
     /// <summary>
-    /// Simply clear the initial drag point, so we can start again
-    /// on the next mouse down.
+    ///  Simply clear the initial drag point, so we can start again
+    ///  on the next mouse down.
     /// </summary>
     public override void OnDragDrop(Glyph? glyph, DragEventArgs e)
     {

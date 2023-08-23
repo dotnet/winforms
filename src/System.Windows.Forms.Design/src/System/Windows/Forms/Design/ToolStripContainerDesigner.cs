@@ -109,8 +109,10 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
             DesignerActionListCollection actions = new DesignerActionListCollection();
 
             // Here is our action list we'll use
-            ToolStripContainerActionList actionList = new ToolStripContainerActionList(_toolStripContainer!);
-            actionList.AutoShow = true;
+            ToolStripContainerActionList actionList = new ToolStripContainerActionList(_toolStripContainer!)
+            {
+                AutoShow = true
+            };
             actions.Add(actionList);
             return actions;
         }
@@ -129,8 +131,8 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         => SnapLinesInternal();
 
     /// <summary>
-    /// Returns the internal control designer with the specified index in the ControlDesigner.
-    /// internalControlIndex is zero-based.
+    ///  Returns the internal control designer with the specified index in the ControlDesigner.
+    ///  internalControlIndex is zero-based.
     /// </summary>
     public override ControlDesigner? InternalControlDesigner(int internalControlIndex)
     {
@@ -262,14 +264,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
                         foreach (object comp in selComponents)
                         {
                             ToolStripContainer container = ContainerParent((Control)comp)!;
-                            if (container == _toolStripContainer)
-                            {
-                                addGlyphs = true;
-                            }
-                            else
-                            {
-                                addGlyphs = false;
-                            }
+                            addGlyphs = container == _toolStripContainer;
                         }
                     }
 
@@ -391,7 +386,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
 
         _panels = [_contentToolStripPanel, _leftToolStripPanel, _rightToolStripPanel, _topToolStripPanel, _bottomToolStripPanel];
 
-        // add custom bitmaps for the child toolStripPanels.
+        // Add custom bitmaps for the child toolStripPanels.
         ToolboxBitmapAttribute bottomToolboxBitmapAttribute = new ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripContainer_BottomToolStripPanel");
         ToolboxBitmapAttribute rightToolboxBitmapAttribute = new ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripContainer_RightToolStripPanel");
         ToolboxBitmapAttribute topToolboxBitmapAttribute = new ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripContainer_TopToolStripPanel");
@@ -483,7 +478,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
 
     private void AddPanelSelectionGlyph(ToolStripPanelDesigner designer, SelectionManager selectionManager)
     {
-        //now create SelectionGlyph for the panel and add it
+        // Now create SelectionGlyph for the panel and add it
         if (designer is not null)
         {
             Glyph? childGlyph = designer.GetGlyph();

@@ -24,17 +24,29 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.256_1
             System.Windows.Forms.Design.256_2
             System.Windows.Forms.Design.AddNewDataSource
+            System.Windows.Forms.Design.Behavior.BottomClose
+            System.Windows.Forms.Design.Behavior.BottomOpen
             System.Windows.Forms.Design.Behavior.bottomclose
             System.Windows.Forms.Design.Behavior.bottomopen
             System.Windows.Forms.Design.Behavior.Close_left
             System.Windows.Forms.Design.Behavior.DesignerShortcutBox
+            System.Windows.Forms.Design.Behavior.LeftClose
             System.Windows.Forms.Design.Behavior.leftClose
+            System.Windows.Forms.Design.Behavior.LeftOpen
             System.Windows.Forms.Design.Behavior.leftOpen
             System.Windows.Forms.Design.Behavior.MoverGlyph
             System.Windows.Forms.Design.Behavior.Open_left
+            System.Windows.Forms.Design.Behavior.RightClose
             System.Windows.Forms.Design.Behavior.rightclose
+            System.Windows.Forms.Design.Behavior.RightOpen
             System.Windows.Forms.Design.Behavior.rightopen
+            System.Windows.Forms.Design.Behavior.ToolStripContainer_BottomToolStripPanel
+            System.Windows.Forms.Design.Behavior.ToolStripContainer_LeftToolStripPanel
+            System.Windows.Forms.Design.Behavior.ToolStripContainer_RightToolStripPanel
+            System.Windows.Forms.Design.Behavior.ToolStripContainer_TopToolStripPanel
+            System.Windows.Forms.Design.Behavior.TopClose
             System.Windows.Forms.Design.Behavior.topclose
+            System.Windows.Forms.Design.Behavior.TopOpen
             System.Windows.Forms.Design.Behavior.topopen
             System.Windows.Forms.Design.BindingFormattingDialog.Arrow
             System.Windows.Forms.Design.BindingFormattingDialog.Bound

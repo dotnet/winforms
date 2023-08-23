@@ -106,13 +106,13 @@ internal class ToolStripContainerActionList : DesignerActionList
     {
         if (_designerHost is not null)
         {
-            // change the Parent only if its not parented to the form.
+            // Change the Parent only if its not parented to the form.
             if (_designerHost.RootComponent is Control root && _toolStripContainer.Parent is not Control)
             {
                 root.Controls.Add(_toolStripContainer);
             }
 
-            // set the dock prop to DockStyle.Fill
+            // Set the dock prop to DockStyle.Fill
             if (!IsDockFilled)
             {
                 PropertyDescriptor? dockProp = TypeDescriptor.GetProperties(_toolStripContainer)["Dock"];
