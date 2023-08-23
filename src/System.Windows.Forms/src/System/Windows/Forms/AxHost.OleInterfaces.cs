@@ -412,23 +412,27 @@ public abstract partial class AxHost
             RECT* lprcClipRect,
             OLEINPLACEFRAMEINFO* lpFrameInfo)
         {
-            if (ppDoc is null || ppFrame is null)
+            // Following MFC CAxHostWindow::GetWindowContext handling
+
+            if (ppFrame is not null)
+            {
+                *ppFrame = null;
+            }
+
+            if (ppDoc is not null)
+            {
+                *ppDoc = null;
+            }
+
+            if (ppDoc is null || ppFrame is null || lprcPosRect is null || lprcClipRect is null)
             {
                 return HRESULT.E_POINTER;
             }
 
             *ppDoc = null;
             *ppFrame = ComHelpers.GetComPointer<IOleInPlaceFrame>(_host.GetParentContainer());
-
-            if (lprcPosRect is not null)
-            {
-                *lprcPosRect = _host.Bounds;
-            }
-
-            if (lprcClipRect is not null)
-            {
-                *lprcClipRect = WebBrowserHelper.GetClipRect();
-            }
+            *lprcPosRect = _host.Bounds;
+            *lprcClipRect = WebBrowserHelper.GetClipRect();
 
             if (lpFrameInfo is not null)
             {
