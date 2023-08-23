@@ -429,7 +429,6 @@ public abstract partial class AxHost
                 return HRESULT.E_POINTER;
             }
 
-            *ppDoc = null;
             *ppFrame = ComHelpers.GetComPointer<IOleInPlaceFrame>(_host.GetParentContainer());
             *lprcPosRect = _host.Bounds;
             *lprcClipRect = WebBrowserHelper.GetClipRect();
