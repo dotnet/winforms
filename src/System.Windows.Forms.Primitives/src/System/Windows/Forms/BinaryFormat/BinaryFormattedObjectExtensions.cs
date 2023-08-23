@@ -392,7 +392,9 @@ internal static class BinaryFormattedObjectExtensions
         {
             hashtable = null;
 
-            if (format.RecordCount < 5
+            // Note that hashtables with custom comparers and/or hash code providers will have that information before
+            // the value pair arrays.
+            if (format.RecordCount != 5
                 || format[1] is not SystemClassWithMembersAndTypes classInfo
                 || classInfo.Name != TypeInfo.HashtableType
                 || format[2] is not ArraySingleObject keys

@@ -464,10 +464,8 @@ public abstract class ListControl : Control
             return -1;
         }
 
-        if (startIndex < -1 || startIndex >= items.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(startIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(startIndex, -1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(startIndex, items.Count);
 
         // Start from the start index and wrap around until we find the string
         // in question. Use a separate counter to ensure that we aren't cycling through the list infinitely.

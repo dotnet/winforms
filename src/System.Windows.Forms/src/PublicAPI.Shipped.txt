@@ -42,26 +42,6 @@
 ~override System.Windows.Forms.DataGridView.OnVisibleChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.Text.get -> string
 ~override System.Windows.Forms.DataGridView.Text.set -> void
-override System.Windows.Forms.DataGridViewButtonCell.Clone() -> object!
-override System.Windows.Forms.DataGridViewButtonCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.DataGridViewButtonCell.EditType.get -> System.Type?
-override System.Windows.Forms.DataGridViewButtonCell.FormattedValueType.get -> System.Type!
-override System.Windows.Forms.DataGridViewButtonCell.GetContentBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
-override System.Windows.Forms.DataGridViewButtonCell.GetErrorIconBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
-override System.Windows.Forms.DataGridViewButtonCell.GetPreferredSize(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
-override System.Windows.Forms.DataGridViewButtonCell.GetValue(int rowIndex) -> object?
-override System.Windows.Forms.DataGridViewButtonCell.KeyDownUnsharesRow(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> bool
-override System.Windows.Forms.DataGridViewButtonCell.KeyUpUnsharesRow(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> bool
-override System.Windows.Forms.DataGridViewButtonCell.MouseDownUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
-override System.Windows.Forms.DataGridViewButtonCell.MouseUpUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
-override System.Windows.Forms.DataGridViewButtonCell.OnKeyDown(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> void
-override System.Windows.Forms.DataGridViewButtonCell.OnKeyUp(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> void
-override System.Windows.Forms.DataGridViewButtonCell.OnMouseDown(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
-override System.Windows.Forms.DataGridViewButtonCell.OnMouseMove(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
-override System.Windows.Forms.DataGridViewButtonCell.OnMouseUp(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
-override System.Windows.Forms.DataGridViewButtonCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates elementState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
-override System.Windows.Forms.DataGridViewButtonCell.ToString() -> string!
-override System.Windows.Forms.DataGridViewButtonCell.ValueType.get -> System.Type!
 ~override System.Windows.Forms.DataGridViewButtonColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
 ~override System.Windows.Forms.DataGridViewButtonColumn.CellTemplate.set -> void
 ~override System.Windows.Forms.DataGridViewButtonColumn.Clone() -> object
@@ -142,9 +122,6 @@ override System.Windows.Forms.DataGridViewButtonCell.ValueType.get -> System.Typ
 ~override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.set -> void
 ~override System.Windows.Forms.DataGridViewComboBoxColumn.Clone() -> object
 ~override System.Windows.Forms.DataGridViewComboBoxColumn.ToString() -> string
-override System.Windows.Forms.DataGridViewComboBoxEditingControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
-override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnHandleCreated(System.EventArgs! e) -> void
-override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnSelectedIndexChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.DataGridViewHeaderCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewHeaderCell.FormattedValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewHeaderCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip
@@ -305,28 +282,11 @@ override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnSelectedIndex
 ~static System.Windows.Forms.HtmlElement.operator ==(System.Windows.Forms.HtmlElement left, System.Windows.Forms.HtmlElement right) -> bool
 ~static System.Windows.Forms.HtmlWindow.operator !=(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
 ~static System.Windows.Forms.HtmlWindow.operator ==(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
-static System.Windows.Forms.ToolStripManager.FindToolStrip(string! toolStripName) -> System.Windows.Forms.ToolStrip?
-static System.Windows.Forms.ToolStripManager.LoadSettings(System.Windows.Forms.Form! targetForm) -> void
-static System.Windows.Forms.ToolStripManager.LoadSettings(System.Windows.Forms.Form! targetForm, string! key) -> void
-static System.Windows.Forms.ToolStripManager.Merge(System.Windows.Forms.ToolStrip! sourceToolStrip, string! targetName) -> bool
-static System.Windows.Forms.ToolStripManager.Merge(System.Windows.Forms.ToolStrip! sourceToolStrip, System.Windows.Forms.ToolStrip! targetToolStrip) -> bool
-static System.Windows.Forms.ToolStripManager.Renderer.get -> System.Windows.Forms.ToolStripRenderer!
-static System.Windows.Forms.ToolStripManager.Renderer.set -> void
-static System.Windows.Forms.ToolStripManager.RevertMerge(string! targetName) -> bool
-static System.Windows.Forms.ToolStripManager.RevertMerge(System.Windows.Forms.ToolStrip! targetToolStrip) -> bool
-static System.Windows.Forms.ToolStripManager.RevertMerge(System.Windows.Forms.ToolStrip! targetToolStrip, System.Windows.Forms.ToolStrip! sourceToolStrip) -> bool
-static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form! sourceForm) -> void
-static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form! sourceForm, string! key) -> void
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
-System.Windows.Forms.AxHost.ContainingControl.get -> System.Windows.Forms.ContainerControl?
-System.Windows.Forms.AxHost.ContainingControl.set -> void
 ~System.Windows.Forms.AxHost.GetOcx() -> object
-System.Windows.Forms.AxHost.OcxState.get -> System.Windows.Forms.AxHost.State?
-System.Windows.Forms.AxHost.OcxState.set -> void
 ~System.Windows.Forms.AxHost.RaiseOnMouseDown(object o1, object o2, object o3, object o4) -> void
 ~System.Windows.Forms.AxHost.RaiseOnMouseMove(object o1, object o2, object o3, object o4) -> void
 ~System.Windows.Forms.AxHost.RaiseOnMouseUp(object o1, object o2, object o3, object o4) -> void
-System.Windows.Forms.AxHost.SetAboutBoxDelegate(System.Windows.Forms.AxHost.AboutBoxDelegate! d) -> void
 ~System.Windows.Forms.AxHost.ShowPropertyPages(System.Windows.Forms.Control control) -> void
 ~System.Windows.Forms.Binding.BindableComponent.get -> System.Windows.Forms.IBindableComponent
 ~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember) -> void
@@ -441,13 +401,6 @@ System.Windows.Forms.AxHost.SetAboutBoxDelegate(System.Windows.Forms.AxHost.Abou
 ~System.Windows.Forms.DataGridViewCellCollection.this[int index].set -> void
 ~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].get -> System.Windows.Forms.DataGridViewCell
 ~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].set -> void
-System.Windows.Forms.DataGridViewCellPaintingEventArgs.AdvancedBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle?
-System.Windows.Forms.DataGridViewCellPaintingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle?
-System.Windows.Forms.DataGridViewCellPaintingEventArgs.DataGridViewCellPaintingEventArgs(System.Windows.Forms.DataGridView! dataGridView, System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, int columnIndex, System.Windows.Forms.DataGridViewElementStates cellState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle? advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
-System.Windows.Forms.DataGridViewCellPaintingEventArgs.ErrorText.get -> string?
-System.Windows.Forms.DataGridViewCellPaintingEventArgs.FormattedValue.get -> object?
-System.Windows.Forms.DataGridViewCellPaintingEventArgs.Graphics.get -> System.Drawing.Graphics?
-System.Windows.Forms.DataGridViewCellPaintingEventArgs.Value.get -> object?
 ~System.Windows.Forms.DataGridViewCellStyle.DataGridViewCellStyle(System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle) -> void
 ~System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.get -> object
 ~System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.set -> void
@@ -546,10 +499,6 @@ System.Windows.Forms.DataGridViewCellPaintingEventArgs.Value.get -> object?
 ~System.Windows.Forms.DataGridViewRowCollection.List.get -> System.Collections.ArrayList
 ~System.Windows.Forms.DataGridViewRowCollection.SharedRow(int rowIndex) -> System.Windows.Forms.DataGridViewRow
 ~System.Windows.Forms.DataGridViewRowCollection.this[int index].get -> System.Windows.Forms.DataGridViewRow
-System.Windows.Forms.DataGridViewSelectedCellCollection.Contains(System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> bool
-System.Windows.Forms.DataGridViewSelectedCellCollection.CopyTo(System.Windows.Forms.DataGridViewCell![]! array, int index) -> void
-System.Windows.Forms.DataGridViewSelectedCellCollection.Insert(int index, System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> void
-System.Windows.Forms.DataGridViewSelectedCellCollection.this[int index].get -> System.Windows.Forms.DataGridViewCell!
 ~System.Windows.Forms.HtmlElement.All.get -> System.Windows.Forms.HtmlElementCollection
 ~System.Windows.Forms.HtmlElement.AppendChild(System.Windows.Forms.HtmlElement newElement) -> System.Windows.Forms.HtmlElement
 ~System.Windows.Forms.HtmlElement.AttachEventHandler(string eventName, System.EventHandler eventHandler) -> void
@@ -662,12 +611,6 @@ System.Windows.Forms.DataGridViewSelectedCellCollection.this[int index].get -> S
 ~System.Windows.Forms.TreeNode.TreeNode(string text, System.Windows.Forms.TreeNode[] children) -> void
 ~System.Windows.Forms.TreeNode.TreeNode(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
 ~System.Windows.Forms.TreeNode.TreeView.get -> System.Windows.Forms.TreeView
-System.Windows.Forms.TreeNodeCollection.Contains(System.Windows.Forms.TreeNode! node) -> bool
-System.Windows.Forms.TreeNodeCollection.CopyTo(System.Array! dest, int index) -> void
-System.Windows.Forms.TreeNodeCollection.Find(string! key, bool searchAllChildren) -> System.Windows.Forms.TreeNode![]!
-System.Windows.Forms.TreeNodeCollection.GetEnumerator() -> System.Collections.IEnumerator!
-System.Windows.Forms.TreeNodeCollection.IndexOf(System.Windows.Forms.TreeNode! node) -> int
-System.Windows.Forms.TreeNodeCollection.Remove(System.Windows.Forms.TreeNode! node) -> void
 ~System.Windows.Forms.TreeView.GetItemRenderStyles(System.Windows.Forms.TreeNode node, int state) -> System.Windows.Forms.OwnerDrawPropertyBag
 ~System.Windows.Forms.TreeView.GetNodeAt(int x, int y) -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeView.GetNodeAt(System.Drawing.Point pt) -> System.Windows.Forms.TreeNode
@@ -690,7 +633,6 @@ System.Windows.Forms.TreeNodeCollection.Remove(System.Windows.Forms.TreeNode! no
 ~System.Windows.Forms.TreeView.TopNode.set -> void
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
-virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object?
 ~virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void
 ~virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs cevent) -> void
 ~virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs cevent) -> void
@@ -935,13 +877,6 @@ virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> obj
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.ValueMember.get -> string
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.ValueMember.set -> void
-virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
-virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlDataGridView.get -> System.Windows.Forms.DataGridView?
-virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlDataGridView.set -> void
-virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlFormattedValue.get -> object!
-virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlFormattedValue.set -> void
-virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor!
-virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object!
 ~virtual System.Windows.Forms.DataGridViewRow.AdjustRowHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedRow, bool isLastVisibleRow) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~virtual System.Windows.Forms.DataGridViewRow.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~virtual System.Windows.Forms.DataGridViewRow.CreateCellsInstance() -> System.Windows.Forms.DataGridViewCellCollection
@@ -976,27 +911,6 @@ virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.GetEditingContro
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.set -> void
 ~virtual System.Windows.Forms.TreeNode.Deserialize(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Windows.Forms.TreeNode.Serialize(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text) -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, int imageIndex) -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, int imageIndex, int selectedImageIndex) -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, string? imageKey) -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, string? imageKey, string? selectedImageKey) -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.Add(string? text) -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.Add(System.Windows.Forms.TreeNode! node) -> int
-virtual System.Windows.Forms.TreeNodeCollection.AddRange(params System.Windows.Forms.TreeNode![]! nodes) -> void
-virtual System.Windows.Forms.TreeNodeCollection.ContainsKey(string? key) -> bool
-virtual System.Windows.Forms.TreeNodeCollection.IndexOfKey(string? key) -> int
-virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text) -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text, int imageIndex) -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text, int imageIndex, int selectedImageIndex) -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text, string? imageKey) -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text, string? imageKey, string? selectedImageKey) -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? text) -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, System.Windows.Forms.TreeNode! node) -> void
-virtual System.Windows.Forms.TreeNodeCollection.RemoveByKey(string? key) -> void
-virtual System.Windows.Forms.TreeNodeCollection.this[int index].get -> System.Windows.Forms.TreeNode!
-virtual System.Windows.Forms.TreeNodeCollection.this[int index].set -> void
-virtual System.Windows.Forms.TreeNodeCollection.this[string? key].get -> System.Windows.Forms.TreeNode?
 ~virtual System.Windows.Forms.TreeView.OnAfterCheck(System.Windows.Forms.TreeViewEventArgs e) -> void
 ~virtual System.Windows.Forms.TreeView.OnAfterCollapse(System.Windows.Forms.TreeViewEventArgs e) -> void
 ~virtual System.Windows.Forms.TreeView.OnAfterExpand(System.Windows.Forms.TreeViewEventArgs e) -> void
@@ -1350,13 +1264,33 @@ override System.Windows.Forms.DataGridViewAdvancedBorderStyle.Equals(object? oth
 override System.Windows.Forms.DataGridViewAdvancedBorderStyle.GetHashCode() -> int
 override System.Windows.Forms.DataGridViewAdvancedBorderStyle.ToString() -> string!
 override System.Windows.Forms.DataGridViewBand.ToString() -> string!
+override System.Windows.Forms.DataGridViewButtonCell.Clone() -> object!
+override System.Windows.Forms.DataGridViewButtonCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.DefaultAction.get -> string!
 override System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.DoDefaultAction() -> void
 override System.Windows.Forms.DataGridViewButtonCell.DataGridViewButtonCellAccessibleObject.GetChildCount() -> int
+override System.Windows.Forms.DataGridViewButtonCell.EditType.get -> System.Type?
+override System.Windows.Forms.DataGridViewButtonCell.FormattedValueType.get -> System.Type!
+override System.Windows.Forms.DataGridViewButtonCell.GetContentBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewButtonCell.GetErrorIconBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewButtonCell.GetPreferredSize(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
+override System.Windows.Forms.DataGridViewButtonCell.GetValue(int rowIndex) -> object?
+override System.Windows.Forms.DataGridViewButtonCell.KeyDownUnsharesRow(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> bool
+override System.Windows.Forms.DataGridViewButtonCell.KeyUpUnsharesRow(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> bool
+override System.Windows.Forms.DataGridViewButtonCell.MouseDownUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
 override System.Windows.Forms.DataGridViewButtonCell.MouseEnterUnsharesRow(int rowIndex) -> bool
 override System.Windows.Forms.DataGridViewButtonCell.MouseLeaveUnsharesRow(int rowIndex) -> bool
+override System.Windows.Forms.DataGridViewButtonCell.MouseUpUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
+override System.Windows.Forms.DataGridViewButtonCell.OnKeyDown(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> void
+override System.Windows.Forms.DataGridViewButtonCell.OnKeyUp(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> void
 override System.Windows.Forms.DataGridViewButtonCell.OnLeave(int rowIndex, bool throughMouseClick) -> void
+override System.Windows.Forms.DataGridViewButtonCell.OnMouseDown(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
 override System.Windows.Forms.DataGridViewButtonCell.OnMouseLeave(int rowIndex) -> void
+override System.Windows.Forms.DataGridViewButtonCell.OnMouseMove(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+override System.Windows.Forms.DataGridViewButtonCell.OnMouseUp(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+override System.Windows.Forms.DataGridViewButtonCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates elementState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+override System.Windows.Forms.DataGridViewButtonCell.ToString() -> string!
+override System.Windows.Forms.DataGridViewButtonCell.ValueType.get -> System.Type!
 override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.Bounds.get -> System.Drawing.Rectangle
 override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.DefaultAction.get -> string!
 override System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.DoDefaultAction() -> void
@@ -1412,6 +1346,9 @@ override System.Windows.Forms.DataGridViewComboBoxCell.OnEnter(int rowIndex, boo
 override System.Windows.Forms.DataGridViewComboBoxCell.OnLeave(int rowIndex, bool throughMouseClick) -> void
 override System.Windows.Forms.DataGridViewComboBoxCell.OnMouseEnter(int rowIndex) -> void
 override System.Windows.Forms.DataGridViewComboBoxCell.OnMouseLeave(int rowIndex) -> void
+override System.Windows.Forms.DataGridViewComboBoxEditingControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.DataGridViewComboBoxEditingControl.OnSelectedIndexChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.DataGridViewHeaderCell.Displayed.get -> bool
 override System.Windows.Forms.DataGridViewHeaderCell.Dispose(bool disposing) -> void
 override System.Windows.Forms.DataGridViewHeaderCell.Frozen.get -> bool
@@ -1966,7 +1903,11 @@ override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPage(System
 override System.Windows.Forms.PrintControllerWithStatusDialog.OnStartPrint(System.Drawing.Printing.PrintDocument! document, System.Drawing.Printing.PrintEventArgs! e) -> void
 override System.Windows.Forms.PrintDialog.Reset() -> void
 override System.Windows.Forms.PrintPreviewControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.PrintPreviewControl.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.PrintPreviewControl.OnLostFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.PrintPreviewControl.OnMouseDown(System.Windows.Forms.MouseEventArgs! e) -> void
 override System.Windows.Forms.PrintPreviewControl.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.PrintPreviewControl.OnPaintBackground(System.Windows.Forms.PaintEventArgs! e) -> void
 override System.Windows.Forms.PrintPreviewControl.OnResize(System.EventArgs! eventargs) -> void
 override System.Windows.Forms.PrintPreviewControl.ResetBackColor() -> void
 override System.Windows.Forms.PrintPreviewControl.ResetForeColor() -> void
@@ -3525,11 +3466,23 @@ static System.Windows.Forms.TextRenderer.MeasureText(System.ReadOnlySpan<char> t
 static System.Windows.Forms.TextRenderer.MeasureText(System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Size proposedSize) -> System.Drawing.Size
 static System.Windows.Forms.TextRenderer.MeasureText(System.ReadOnlySpan<char> text, System.Drawing.Font? font, System.Drawing.Size proposedSize, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 static System.Windows.Forms.ToolStrip.SetItemParent(System.Windows.Forms.ToolStripItem! item, System.Windows.Forms.ToolStrip! parent) -> void
+static System.Windows.Forms.ToolStripManager.FindToolStrip(string! toolStripName) -> System.Windows.Forms.ToolStrip?
 static System.Windows.Forms.ToolStripManager.IsShortcutDefined(System.Windows.Forms.Keys shortcut) -> bool
 static System.Windows.Forms.ToolStripManager.IsValidShortcut(System.Windows.Forms.Keys shortcut) -> bool
+static System.Windows.Forms.ToolStripManager.LoadSettings(System.Windows.Forms.Form! targetForm) -> void
+static System.Windows.Forms.ToolStripManager.LoadSettings(System.Windows.Forms.Form! targetForm, string! key) -> void
+static System.Windows.Forms.ToolStripManager.Merge(System.Windows.Forms.ToolStrip! sourceToolStrip, string! targetName) -> bool
+static System.Windows.Forms.ToolStripManager.Merge(System.Windows.Forms.ToolStrip! sourceToolStrip, System.Windows.Forms.ToolStrip! targetToolStrip) -> bool
+static System.Windows.Forms.ToolStripManager.Renderer.get -> System.Windows.Forms.ToolStripRenderer!
+static System.Windows.Forms.ToolStripManager.Renderer.set -> void
 static System.Windows.Forms.ToolStripManager.RendererChanged -> System.EventHandler?
 static System.Windows.Forms.ToolStripManager.RenderMode.get -> System.Windows.Forms.ToolStripManagerRenderMode
 static System.Windows.Forms.ToolStripManager.RenderMode.set -> void
+static System.Windows.Forms.ToolStripManager.RevertMerge(string! targetName) -> bool
+static System.Windows.Forms.ToolStripManager.RevertMerge(System.Windows.Forms.ToolStrip! targetToolStrip) -> bool
+static System.Windows.Forms.ToolStripManager.RevertMerge(System.Windows.Forms.ToolStrip! targetToolStrip, System.Windows.Forms.ToolStrip! sourceToolStrip) -> bool
+static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form! sourceForm) -> void
+static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form! sourceForm, string! key) -> void
 static System.Windows.Forms.ToolStripManager.VisualStylesEnabled.get -> bool
 static System.Windows.Forms.ToolStripManager.VisualStylesEnabled.set -> void
 static System.Windows.Forms.ToolStripRenderer.CreateDisabledImage(System.Drawing.Image! normalImage) -> System.Drawing.Image!
@@ -4382,6 +4335,8 @@ System.Windows.Forms.AxHost.ConnectionPointCookie
 System.Windows.Forms.AxHost.ConnectionPointCookie.~ConnectionPointCookie() -> void
 System.Windows.Forms.AxHost.ConnectionPointCookie.ConnectionPointCookie(object! source, object! sink, System.Type! eventInterface) -> void
 System.Windows.Forms.AxHost.ConnectionPointCookie.Disconnect() -> void
+System.Windows.Forms.AxHost.ContainingControl.get -> System.Windows.Forms.ContainerControl?
+System.Windows.Forms.AxHost.ContainingControl.set -> void
 System.Windows.Forms.AxHost.CursorChanged -> System.EventHandler?
 System.Windows.Forms.AxHost.DoubleClick -> System.EventHandler?
 System.Windows.Forms.AxHost.DoVerb(int verb) -> void
@@ -4420,6 +4375,8 @@ System.Windows.Forms.AxHost.MouseLeave -> System.EventHandler?
 System.Windows.Forms.AxHost.MouseMove -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.AxHost.MouseUp -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.AxHost.MouseWheel -> System.Windows.Forms.MouseEventHandler?
+System.Windows.Forms.AxHost.OcxState.get -> System.Windows.Forms.AxHost.State?
+System.Windows.Forms.AxHost.OcxState.set -> void
 System.Windows.Forms.AxHost.Paint -> System.Windows.Forms.PaintEventHandler?
 System.Windows.Forms.AxHost.PropsValid() -> bool
 System.Windows.Forms.AxHost.QueryAccessibilityHelp -> System.Windows.Forms.QueryAccessibilityHelpEventHandler?
@@ -4431,6 +4388,7 @@ System.Windows.Forms.AxHost.RaiseOnMouseMove(short button, short shift, int x, i
 System.Windows.Forms.AxHost.RaiseOnMouseUp(short button, short shift, float x, float y) -> void
 System.Windows.Forms.AxHost.RaiseOnMouseUp(short button, short shift, int x, int y) -> void
 System.Windows.Forms.AxHost.RightToLeftChanged -> System.EventHandler?
+System.Windows.Forms.AxHost.SetAboutBoxDelegate(System.Windows.Forms.AxHost.AboutBoxDelegate! d) -> void
 System.Windows.Forms.AxHost.ShowAboutBox() -> void
 System.Windows.Forms.AxHost.ShowPropertyPages() -> void
 System.Windows.Forms.AxHost.State
@@ -5796,15 +5754,22 @@ System.Windows.Forms.DataGridViewCellMouseEventArgs.DataGridViewCellMouseEventAr
 System.Windows.Forms.DataGridViewCellMouseEventArgs.RowIndex.get -> int
 System.Windows.Forms.DataGridViewCellMouseEventHandler
 System.Windows.Forms.DataGridViewCellPaintingEventArgs
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.AdvancedBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle?
 System.Windows.Forms.DataGridViewCellPaintingEventArgs.CellBounds.get -> System.Drawing.Rectangle
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle?
 System.Windows.Forms.DataGridViewCellPaintingEventArgs.ClipBounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.DataGridViewCellPaintingEventArgs.ColumnIndex.get -> int
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.DataGridViewCellPaintingEventArgs(System.Windows.Forms.DataGridView! dataGridView, System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, int columnIndex, System.Windows.Forms.DataGridViewElementStates cellState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle? advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.ErrorText.get -> string?
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.FormattedValue.get -> object?
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.Graphics.get -> System.Drawing.Graphics?
 System.Windows.Forms.DataGridViewCellPaintingEventArgs.Paint(System.Drawing.Rectangle clipBounds, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 System.Windows.Forms.DataGridViewCellPaintingEventArgs.PaintBackground(System.Drawing.Rectangle clipBounds, bool cellsPaintSelectionBackground) -> void
 System.Windows.Forms.DataGridViewCellPaintingEventArgs.PaintContent(System.Drawing.Rectangle clipBounds) -> void
 System.Windows.Forms.DataGridViewCellPaintingEventArgs.PaintParts.get -> System.Windows.Forms.DataGridViewPaintParts
 System.Windows.Forms.DataGridViewCellPaintingEventArgs.RowIndex.get -> int
 System.Windows.Forms.DataGridViewCellPaintingEventArgs.State.get -> System.Windows.Forms.DataGridViewElementStates
+System.Windows.Forms.DataGridViewCellPaintingEventArgs.Value.get -> object?
 System.Windows.Forms.DataGridViewCellPaintingEventHandler
 System.Windows.Forms.DataGridViewCellParsingEventArgs
 System.Windows.Forms.DataGridViewCellParsingEventArgs.ColumnIndex.get -> int
@@ -6252,6 +6217,10 @@ System.Windows.Forms.DataGridViewRowStateChangedEventArgs.StateChanged.get -> Sy
 System.Windows.Forms.DataGridViewRowStateChangedEventHandler
 System.Windows.Forms.DataGridViewSelectedCellCollection
 System.Windows.Forms.DataGridViewSelectedCellCollection.Clear() -> void
+System.Windows.Forms.DataGridViewSelectedCellCollection.Contains(System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> bool
+System.Windows.Forms.DataGridViewSelectedCellCollection.CopyTo(System.Windows.Forms.DataGridViewCell![]! array, int index) -> void
+System.Windows.Forms.DataGridViewSelectedCellCollection.Insert(int index, System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> void
+System.Windows.Forms.DataGridViewSelectedCellCollection.this[int index].get -> System.Windows.Forms.DataGridViewCell!
 System.Windows.Forms.DataGridViewSelectedColumnCollection
 System.Windows.Forms.DataGridViewSelectedColumnCollection.Clear() -> void
 System.Windows.Forms.DataGridViewSelectedColumnCollection.Contains(System.Windows.Forms.DataGridViewColumn! dataGridViewColumn) -> bool
@@ -11548,8 +11517,14 @@ System.Windows.Forms.TreeNode.StateImageIndex.set -> void
 System.Windows.Forms.TreeNode.Toggle() -> void
 System.Windows.Forms.TreeNode.TreeNode() -> void
 System.Windows.Forms.TreeNodeCollection
+System.Windows.Forms.TreeNodeCollection.Contains(System.Windows.Forms.TreeNode! node) -> bool
+System.Windows.Forms.TreeNodeCollection.CopyTo(System.Array! dest, int index) -> void
 System.Windows.Forms.TreeNodeCollection.Count.get -> int
+System.Windows.Forms.TreeNodeCollection.Find(string! key, bool searchAllChildren) -> System.Windows.Forms.TreeNode![]!
+System.Windows.Forms.TreeNodeCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.TreeNodeCollection.IndexOf(System.Windows.Forms.TreeNode! node) -> int
 System.Windows.Forms.TreeNodeCollection.IsReadOnly.get -> bool
+System.Windows.Forms.TreeNodeCollection.Remove(System.Windows.Forms.TreeNode! node) -> void
 System.Windows.Forms.TreeNodeConverter
 System.Windows.Forms.TreeNodeConverter.TreeNodeConverter() -> void
 System.Windows.Forms.TreeNodeMouseClickEventArgs
@@ -12515,6 +12490,7 @@ virtual System.Windows.Forms.ApplicationContext.Dispose(bool disposing) -> void
 virtual System.Windows.Forms.ApplicationContext.ExitThreadCore() -> void
 virtual System.Windows.Forms.ApplicationContext.OnMainFormClosed(object? sender, System.EventArgs! e) -> void
 virtual System.Windows.Forms.AxHost.AttachInterfaces() -> void
+virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object?
 virtual System.Windows.Forms.AxHost.CreateSink() -> void
 virtual System.Windows.Forms.AxHost.DetachSink() -> void
 virtual System.Windows.Forms.AxHost.Enabled.get -> bool
@@ -12848,11 +12824,18 @@ virtual System.Windows.Forms.DataGridViewComboBoxCell.MaxDropDownItems.get -> in
 virtual System.Windows.Forms.DataGridViewComboBoxCell.MaxDropDownItems.set -> void
 virtual System.Windows.Forms.DataGridViewComboBoxCell.Sorted.get -> bool
 virtual System.Windows.Forms.DataGridViewComboBoxCell.Sorted.set -> void
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlDataGridView.get -> System.Windows.Forms.DataGridView?
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlDataGridView.set -> void
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlFormattedValue.get -> object!
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlFormattedValue.set -> void
 virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlRowIndex.get -> int
 virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlRowIndex.set -> void
 virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlValueChanged.get -> bool
 virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlValueChanged.set -> void
 virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingControlWantsInputKey(System.Windows.Forms.Keys keyData, bool dataGridViewWantsInputKey) -> bool
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.EditingPanelCursor.get -> System.Windows.Forms.Cursor!
+virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.GetEditingControlFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object!
 virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.PrepareEditingControlForEdit(bool selectAll) -> void
 virtual System.Windows.Forms.DataGridViewComboBoxEditingControl.RepositionEditingControlOnValueChange.get -> bool
 virtual System.Windows.Forms.DataGridViewElement.OnDataGridViewChanged() -> void
@@ -13503,8 +13486,29 @@ virtual System.Windows.Forms.TrackBar.OnScroll(System.EventArgs! e) -> void
 virtual System.Windows.Forms.TrackBar.OnValueChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.TrackBar.RightToLeftLayout.get -> bool
 virtual System.Windows.Forms.TrackBar.RightToLeftLayout.set -> void
+virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, int imageIndex) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, int imageIndex, int selectedImageIndex) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, string? imageKey) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Add(string? key, string? text, string? imageKey, string? selectedImageKey) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Add(string? text) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Add(System.Windows.Forms.TreeNode! node) -> int
+virtual System.Windows.Forms.TreeNodeCollection.AddRange(System.Windows.Forms.TreeNode![]! nodes) -> void
 virtual System.Windows.Forms.TreeNodeCollection.Clear() -> void
+virtual System.Windows.Forms.TreeNodeCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.TreeNodeCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text, int imageIndex) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text, int imageIndex, int selectedImageIndex) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text, string? imageKey) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? key, string? text, string? imageKey, string? selectedImageKey) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, string? text) -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.Insert(int index, System.Windows.Forms.TreeNode! node) -> void
 virtual System.Windows.Forms.TreeNodeCollection.RemoveAt(int index) -> void
+virtual System.Windows.Forms.TreeNodeCollection.RemoveByKey(string? key) -> void
+virtual System.Windows.Forms.TreeNodeCollection.this[int index].get -> System.Windows.Forms.TreeNode!
+virtual System.Windows.Forms.TreeNodeCollection.this[int index].set -> void
+virtual System.Windows.Forms.TreeNodeCollection.this[string? key].get -> System.Windows.Forms.TreeNode?
 virtual System.Windows.Forms.TreeView.RightToLeftLayout.get -> bool
 virtual System.Windows.Forms.TreeView.RightToLeftLayout.set -> void
 virtual System.Windows.Forms.UpDownBase.OnChanged(object? source, System.EventArgs! e) -> void

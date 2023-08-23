@@ -304,11 +304,8 @@ public partial class ListViewItem
 
         public void Insert(int index, ListViewSubItem item)
         {
-            if (index < 0 || index > Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
-
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(index, Count);
             ArgumentNullException.ThrowIfNull(item);
 
             item._owner = _owner;
@@ -350,10 +347,8 @@ public partial class ListViewItem
 
         public void RemoveAt(int index)
         {
-            if (index < 0 || index >= Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 
             // Remove ourselves as the owner.
             _owner._subItems[index]._owner = null;

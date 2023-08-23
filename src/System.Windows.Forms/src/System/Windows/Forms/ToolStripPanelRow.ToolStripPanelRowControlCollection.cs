@@ -285,10 +285,7 @@ public partial class ToolStripPanelRow
         {
             ArgumentNullException.ThrowIfNull(array);
 
-            if (index < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
 
             if (index >= array.Length || InnerList.Count > array.Length - index)
             {

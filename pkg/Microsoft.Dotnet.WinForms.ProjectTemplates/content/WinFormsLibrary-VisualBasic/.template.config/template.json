@@ -6,8 +6,8 @@
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project template for creating a class library that targets .NET Windows Forms (WinForms).",
   "groupIdentity": "Microsoft.Common.WinForms.Library",
-  "precedence": "8000",
-  "identity": "Microsoft.Common.WinForms.Library.VisualBasic.8.0",
+  "precedence": "9000",
+  "identity": "Microsoft.Common.WinForms.Library.VisualBasic.9.0",
   "shortName": "winformslib",
   "tags": {
     "language": "VB",
@@ -53,11 +53,16 @@
           "choice": "net8.0",
           "description": "Target net8.0",
           "displayName": ".NET 8.0"
+        },
+        {
+          "choice": "net9.0",
+          "description": "Target net9.0",
+          "displayName": ".NET 9.0"
         }
       ],
       "replaces": "FrameworkParameter",
-      "defaultValue": "net8.0",
-      "displayName": ".NET 8.0"
+      "defaultValue": "net9.0",
+      "displayName": ".NET 9.0"
     },
     "UseWindowsDesktopSdk": {
       "type": "computed",

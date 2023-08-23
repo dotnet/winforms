@@ -58,6 +58,55 @@ public class HashtableTests
         enumerator.Current.Value.Should().BeEquivalentTo(new object[] { "That" });
     }
 
+    [Fact]
+    public void HashTable_CustomComparer()
+    {
+        Hashtable hashtable = new(new CustomHashCodeProvider(), StringComparer.OrdinalIgnoreCase)
+        {
+            { "This", "That" }
+        };
+
+        BinaryFormattedObject format = hashtable.SerializeAndParse();
+        format[1].Should().BeOfType<BinaryLibrary>();
+        format[2].Should().BeOfType<SystemClassWithMembersAndTypes>().Which.Name.Should().Be("System.Collections.Hashtable");
+        format[3].Should().BeOfType<SystemClassWithMembersAndTypes>().Which.Name.Should().Be("System.OrdinalComparer");
+        format[4].Should().BeOfType<ClassWithMembersAndTypes>().Which.Name.Should().Be("System.Windows.Forms.BinaryFormat.Tests.HashtableTests+CustomHashCodeProvider");
+        format[5].Should().BeOfType<ArraySingleObject>();
+        format[6].Should().BeOfType<ArraySingleObject>();
+    }
+
+    [Fact]
+    public void HashTable_CustomComparer_DoesNotRead()
+    {
+        Hashtable hashtable = new(new CustomHashCodeProvider(), StringComparer.OrdinalIgnoreCase)
+        {
+            { "This", "That" }
+        };
+
+        BinaryFormattedObject format = hashtable.SerializeAndParse();
+        format.TryGetPrimitiveHashtable(out Hashtable? deserialized).Should().BeFalse();
+        deserialized.Should().BeNull();
+    }
+
+    [Serializable]
+    public class CustomHashCodeProvider : IHashCodeProvider
+    {
+        public int GetHashCode(object obj) => HashCode.Combine(obj);
+    }
+
+    [Fact]
+    public void BinaryFormatWriter_WriteCustomComparerfails()
+    {
+        Hashtable hashtable = new(new CustomHashCodeProvider(), StringComparer.OrdinalIgnoreCase)
+        {
+            { "This", "That" }
+        };
+
+        using MemoryStream stream = new();
+        BinaryFormatWriter.TryWriteHashtable(stream, hashtable).Should().BeFalse();
+        stream.Position.Should().Be(0);
+    }
+
     [Theory]
     [MemberData(nameof(Hashtables_TestData))]
     public void BinaryFormatWriter_WriteHashtables(Hashtable hashtable)

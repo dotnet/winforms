@@ -177,7 +177,7 @@ public partial class ListViewItem
                 UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                 UiaCore.UIA.IsOffscreenPropertyId => OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed ||
                                                      (bool)(base.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId) ?? false),
-                UiaCore.UIA.NativeWindowHandlePropertyId => _owningListView.InternalHandle,
+                UiaCore.UIA.NativeWindowHandlePropertyId => (nint)_owningListView.InternalHandle,
                 _ => base.GetPropertyValue(propertyID)
             };
 

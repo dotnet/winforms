@@ -31,10 +31,8 @@ public class TreeNodeCollection : IList
     {
         get
         {
-            if (index < 0 || index >= _owner.childNodes.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _owner.childNodes.Count);
 
             return _owner.childNodes[index];
         }

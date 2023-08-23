@@ -6,8 +6,8 @@
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project template for creating a .NET Windows Forms (WinForms) App.",
   "groupIdentity": "Microsoft.Common.WinForms",
-  "precedence": "8000",
-  "identity": "Microsoft.Common.WinForms.VisualBasic.8.0",
+  "precedence": "9000",
+  "identity": "Microsoft.Common.WinForms.VisualBasic.9.0",
   "shortName": "winforms",
   "tags": {
     "language": "VB",
@@ -59,11 +59,16 @@
           "choice": "net8.0",
           "description": "Target net8.0",
           "displayName": ".NET 8.0"
+        },
+        {
+          "choice": "net9.0",
+          "description": "Target net9.0",
+          "displayName": ".NET 9.0"
         }
       ],
       "replaces": "FrameworkParameter",
-      "defaultValue": "net8.0",
-      "displayName": ".NET 8.0"
+      "defaultValue": "net9.0",
+      "displayName": ".NET 9.0"
     },
     "UseWindowsDesktopSdk": {
       "type": "computed",
