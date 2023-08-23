@@ -22,11 +22,11 @@ internal class BindingSourceDesigner : ComponentDesigner
     {
         base.Initialize(component);
 
-        IComponentChangeService componentChangeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-        if (componentChangeSvc is not null)
+        IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
+        if (componentChangeService is not null)
         {
-            componentChangeSvc.ComponentChanged += OnComponentChanged;
-            componentChangeSvc.ComponentRemoving += OnComponentRemoving;
+            componentChangeService.ComponentChanged += OnComponentChanged;
+            componentChangeService.ComponentRemoving += OnComponentRemoving;
         }
     }
 
@@ -34,11 +34,11 @@ internal class BindingSourceDesigner : ComponentDesigner
     {
         if (disposing)
         {
-            IComponentChangeService componentChangeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (componentChangeSvc is not null)
+            IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
+            if (componentChangeService is not null)
             {
-                componentChangeSvc.ComponentChanged -= OnComponentChanged;
-                componentChangeSvc.ComponentRemoving -= OnComponentRemoving;
+                componentChangeService.ComponentChanged -= OnComponentChanged;
+                componentChangeService.ComponentRemoving -= OnComponentRemoving;
             }
         }
 
@@ -52,8 +52,8 @@ internal class BindingSourceDesigner : ComponentDesigner
         {
             _bindingUpdatedByUser = false;
 
-            DataSourceProviderService dspSvc = (DataSourceProviderService)GetService(typeof(DataSourceProviderService));
-            dspSvc?.NotifyDataSourceComponentAdded(Component);
+            DataSourceProviderService dataSourceProviderService = GetService<DataSourceProviderService>();
+            dataSourceProviderService?.NotifyDataSourceComponentAdded(Component);
         }
     }
 
@@ -62,28 +62,22 @@ internal class BindingSourceDesigner : ComponentDesigner
         BindingSource? bingSource = Component as BindingSource;
         if (bingSource is not null && bingSource.DataSource == e.Component)
         {
-            IComponentChangeService changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+            IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
             string previousDataMember = bingSource.DataMember;
 
-            PropertyDescriptorCollection descriptorCollection = TypeDescriptor.GetProperties(bingSource);
-            PropertyDescriptor? descriptor = descriptorCollection?["DataMember"];
+            PropertyDescriptorCollection propertyDescriptorCollection = TypeDescriptor.GetProperties(bingSource);
+            PropertyDescriptor? propertyDescriptor = propertyDescriptorCollection?["DataMember"];
 
-            if (changeService is not null)
+            if (componentChangeService is not null && propertyDescriptor is not null)
             {
-                if (descriptor is not null)
-                {
-                    changeService.OnComponentChanging(bingSource, descriptor);
-                }
+                componentChangeService.OnComponentChanging(bingSource, propertyDescriptor);
             }
 
             bingSource.DataSource = null;
 
-            if (changeService is not null)
+            if (componentChangeService is not null && propertyDescriptor is not null)
             {
-                if (descriptor is not null)
-                {
-                    changeService.OnComponentChanged(bingSource, descriptor, previousDataMember, "");
-                }
+                componentChangeService.OnComponentChanged(bingSource, propertyDescriptor, previousDataMember, string.Empty);
             }
         }
     }

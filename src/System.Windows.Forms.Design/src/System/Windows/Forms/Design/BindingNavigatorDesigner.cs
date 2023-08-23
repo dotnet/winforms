@@ -9,8 +9,8 @@ namespace System.Windows.Forms.Design;
 
 internal class BindingNavigatorDesigner : ToolStripDesigner
 {
-    private static readonly string[] s_itemNames = new string[]
-    {
+    private static readonly string[] s_itemNames =
+    [
         "MovePreviousItem",
         "MoveFirstItem",
         "MoveNextItem",
@@ -19,17 +19,17 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
         "DeleteItem",
         "PositionItem",
         "CountItem"
-    };
+    ];
 
     public override void Initialize(IComponent component)
     {
         base.Initialize(component);
 
-        IComponentChangeService componentChangeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-        if (componentChangeSvc is not null)
+        IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
+        if (componentChangeService is not null)
         {
-            componentChangeSvc.ComponentRemoved += ComponentChangeSvc_ComponentRemoved;
-            componentChangeSvc.ComponentChanged += ComponentChangeSvc_ComponentChanged;
+            componentChangeService.ComponentRemoved += ComponentChangeService_ComponentRemoved;
+            componentChangeService.ComponentChanged += ComponentChangeService_ComponentChanged;
         }
     }
 
@@ -37,11 +37,11 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
     {
         if (disposing)
         {
-            IComponentChangeService componentChangeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (componentChangeSvc is not null)
+            IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
+            if (componentChangeService is not null)
             {
-                componentChangeSvc.ComponentRemoved -= ComponentChangeSvc_ComponentRemoved;
-                componentChangeSvc.ComponentChanged -= ComponentChangeSvc_ComponentChanged;
+                componentChangeService.ComponentRemoved -= ComponentChangeService_ComponentRemoved;
+                componentChangeService.ComponentChanged -= ComponentChangeService_ComponentChanged;
             }
         }
 
@@ -53,14 +53,14 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
         base.InitializeNewComponent(defaultValues);
 
         BindingNavigator navigator = (BindingNavigator)Component;
-        IDesignerHost? host = Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+        IDesignerHost? host = Component?.Site?.GetService<IDesignerHost>();
 
         try
         {
             s_autoAddNewItems = false;    // Temporarily suppress "new items go to the selected strip" behavior
             navigator.SuspendLayout();          // Turn off layout while adding items
             navigator.AddStandardItems();       // Let the control add its standard items (user overridable)
-            SiteItems(host: host, navigator.Items);   // Recursively site and name all the items on the strip
+            SiteItems(host: host, items: navigator.Items);   // Recursively site and name all the items on the strip
             RaiseItemsChanged();         // Make designer Undo engine aware of the newly added and sited items
             navigator.ResumeLayout();           // Allow strip to lay out now
             navigator.ShowItemToolTips = true;  // Non-default property setting for ShowToolTips
@@ -74,22 +74,22 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
     private void RaiseItemsChanged()
     {
         BindingNavigator navigator = (BindingNavigator)Component;
-        IComponentChangeService componentChangeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+        IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
 
-        if (componentChangeSvc is not null)
+        if (componentChangeService is not null)
         {
-            MemberDescriptor? itemsProp = TypeDescriptor.GetProperties(navigator)["Items"];
-            componentChangeSvc.OnComponentChanging(navigator, itemsProp);
-            componentChangeSvc.OnComponentChanged(navigator, itemsProp, null, null);
+            MemberDescriptor? memberDescriptor = TypeDescriptor.GetProperties(navigator)["Items"];
+            componentChangeService.OnComponentChanging(component: navigator, member: memberDescriptor);
+            componentChangeService.OnComponentChanged(component: navigator, member: memberDescriptor, oldValue: null, newValue: null);
 
             foreach (string itemName in s_itemNames)
             {
-                PropertyDescriptor? prop = TypeDescriptor.GetProperties(navigator)[itemName];
+                PropertyDescriptor? propertyDescriptor = TypeDescriptor.GetProperties(navigator)[itemName];
 
-                if (prop is not null)
+                if (propertyDescriptor is not null)
                 {
-                    componentChangeSvc.OnComponentChanging(navigator, prop);
-                    componentChangeSvc.OnComponentChanged(navigator, prop, null, null);
+                    componentChangeService.OnComponentChanging(component: navigator, member: propertyDescriptor);
+                    componentChangeService.OnComponentChanged(component: navigator, member: propertyDescriptor, oldValue: null, newValue: null);
                 }
             }
         }
@@ -113,7 +113,7 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
         ToolStripDropDownItem? dropDownItem = item as ToolStripDropDownItem;
         if (dropDownItem is not null && dropDownItem.HasDropDownItems)
         {
-            SiteItems(host, dropDownItem.DropDownItems);
+            SiteItems(host: host, items: dropDownItem.DropDownItems);
         }
     }
 
@@ -125,7 +125,7 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
         }
     }
 
-    private void ComponentChangeSvc_ComponentRemoved(object? sender, ComponentEventArgs e)
+    private void ComponentChangeService_ComponentRemoved(object? sender, ComponentEventArgs e)
     {
         ToolStripItem? item = e.Component as ToolStripItem;
 
@@ -168,7 +168,7 @@ internal class BindingNavigatorDesigner : ToolStripDesigner
         }
     }
 
-    private void ComponentChangeSvc_ComponentChanged(object? sender, ComponentChangedEventArgs e)
+    private void ComponentChangeService_ComponentChanged(object? sender, ComponentChangedEventArgs e)
     {
         BindingNavigator navigator = (BindingNavigator)Component;
 
