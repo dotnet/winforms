@@ -117,7 +117,7 @@ public partial class Control
         private static readonly int s_uiActive = BitVector32.CreateMask(s_inPlaceVisible);
         private static readonly int s_uiDead = BitVector32.CreateMask(s_uiActive);
         private static readonly int s_adjustingRect = BitVector32.CreateMask(s_uiDead);
-        private static readonly SearchValues<char> s_whitespace = SearchValues.Create(new char[] { ' ', '\r', '\n' });
+        private static readonly SearchValues<char> s_whitespace = SearchValues.Create(" \r\n");
 
         private static Point s_logPixels = Point.Empty;
         private static OLEVERB[]? s_axVerbs;
