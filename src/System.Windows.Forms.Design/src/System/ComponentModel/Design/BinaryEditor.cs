@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing.Design;
 using System.Text;
 using System.Windows.Forms;
@@ -16,19 +14,25 @@ namespace System.ComponentModel.Design;
 public sealed partial class BinaryEditor : UITypeEditor
 {
     private const string HELP_KEYWORD = "System.ComponentModel.Design.BinaryEditor";
-    private ITypeDescriptorContext _context;
-    private BinaryUI _binaryUI;
+    private ITypeDescriptorContext? _context;
+    private BinaryUI? _binaryUI;
 
-    internal object GetService(Type serviceType)
+    internal object? GetService(Type serviceType)
     {
         if (_context is null)
         {
             return null;
         }
 
-        return _context.TryGetService(out IDesignerHost designerhost)
+        return _context.TryGetService(out IDesignerHost? designerhost)
             ? designerhost.GetService(serviceType)
             : _context.GetService(serviceType);
+    }
+
+    private bool TryGetService<T>([NotNullWhen(true)] out T? service) where T : class
+    {
+        service = GetService(typeof(T)) as T;
+        return service is not null;
     }
 
     /// <summary>
@@ -55,7 +59,7 @@ public sealed partial class BinaryEditor : UITypeEditor
         {
             int size = stringValue.Length * 2;
             byte[] buffer = new byte[size];
-            Encoding.Unicode.GetBytes(stringValue.ToCharArray(), 0, size / 2, buffer, 0);
+            Encoding.Unicode.GetBytes(stringValue.AsSpan(), buffer.AsSpan());
             return buffer;
         }
 
@@ -88,7 +92,7 @@ public sealed partial class BinaryEditor : UITypeEditor
         }
     }
 
-    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
         if (provider is null)
         {
@@ -97,7 +101,7 @@ public sealed partial class BinaryEditor : UITypeEditor
 
         _context = context;
 
-        if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
+        if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
         {
             return value;
         }
@@ -117,11 +121,11 @@ public sealed partial class BinaryEditor : UITypeEditor
     }
 
     /// <inheritdoc />
-    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.Modal;
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
 
     internal void ShowHelp()
     {
-        if (GetService(typeof(IHelpService)) is IHelpService helpService)
+        if (TryGetService(out IHelpService? helpService))
         {
             helpService.ShowHelpFromKeyword(HELP_KEYWORD);
         }
