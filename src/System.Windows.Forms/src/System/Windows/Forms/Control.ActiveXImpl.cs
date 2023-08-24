@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Buffers;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -116,6 +117,7 @@ public partial class Control
         private static readonly int s_uiActive = BitVector32.CreateMask(s_inPlaceVisible);
         private static readonly int s_uiDead = BitVector32.CreateMask(s_uiActive);
         private static readonly int s_adjustingRect = BitVector32.CreateMask(s_uiDead);
+        private static readonly SearchValues<char> s_whitespace = SearchValues.Create(" \r\n");
 
         private static Point s_logPixels = Point.Empty;
         private static OLEVERB[]? s_axVerbs;
@@ -529,7 +531,7 @@ public partial class Control
         /// </summary>
         private static byte[] FromBase64WrappedString(string text)
         {
-            if (text.IndexOfAny(new char[] { ' ', '\r', '\n' }) != -1)
+            if (text.AsSpan().ContainsAny(s_whitespace))
             {
                 StringBuilder sb = new StringBuilder(text.Length);
                 for (int i = 0; i < text.Length; i++)
@@ -806,7 +808,7 @@ public partial class Control
         }
 
         /// <summary>
-        ///  In place activates this Object.
+        ///  In place activates this object.
         /// </summary>
         internal unsafe void InPlaceActivate(OLEIVERB verb)
         {
@@ -930,14 +932,13 @@ public partial class Control
             // Set ourselves up in the host.
             Debug.Assert(_inPlaceFrame is not null, "Setting us to visible should have created the in place frame");
 
-            var activeObject = ComHelpers.GetComPointer<IOleInPlaceActiveObject>(_control);
+            using var activeObject = ComHelpers.GetComScope<IOleInPlaceActiveObject>(_control);
 
             using var inPlaceFrame = _inPlaceFrame.GetInterface();
             inPlaceFrame.Value->SetActiveObject(activeObject, (PCWSTR)null);
             using var inPlaceUiWindow = _inPlaceUiWindow is null ? default : _inPlaceUiWindow.GetInterface();
             if (_inPlaceUiWindow is not null)
             {
-                activeObject->AddRef();
                 inPlaceUiWindow.Value->SetActiveObject(activeObject, (PCWSTR)null);
             }
 
@@ -1064,10 +1065,11 @@ public partial class Control
         internal void Load(IStream* stream)
         {
             // We do everything through property bags because we support full fidelity
-            // in them.  So, load through that method.
+            // in them. So, load through that method.
             PropertyBagStream bagStream = new();
             bagStream.Read(stream);
-            Load(ComHelpers.GetComPointer<IPropertyBag>(bagStream), errorLog: null);
+            using var propertyBag = ComHelpers.GetComScope<IPropertyBag>(bagStream);
+            Load(propertyBag, errorLog: null);
         }
 
         /// <inheritdoc cref="IPersistPropertyBag.Load(IPropertyBag*, IErrorLog*)"/>
@@ -1076,8 +1078,6 @@ public partial class Control
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                 _control,
                 new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
-
-            using ComScope<IPropertyBag> scope = new(propertyBag);
 
             for (int i = 0; i < props.Count; i++)
             {
@@ -1455,10 +1455,12 @@ public partial class Control
                     // Control doesn't explicitly implement IConnectionPointContainer, but it is generated with a CCW by
                     // COM interop.
 
-                    using var container = ComHelpers.GetComScope<IConnectionPointContainer>(_control);
+                    using var container = ComHelpers.TryGetComScope<IConnectionPointContainer>(_control, out HRESULT hr);
+
+                    hr.AssertSuccess();
+
                     using ComScope<IConnectionPoint> connectionPoint = new(null);
-                    HRESULT hr = container.Value->FindConnectionPoint(eventInterface.GUID, connectionPoint);
-                    if (hr.Failed)
+                    if (hr.Failed || container.Value->FindConnectionPoint(eventInterface.GUID, connectionPoint).Failed)
                     {
                         throw new ArgumentException(string.Format(SR.AXNoConnectionPoint, eventInterface.Name));
                     }
@@ -1515,7 +1517,9 @@ public partial class Control
             // We do everything through property bags because we support full fidelity in them.
             // So, save through that method.
             PropertyBagStream bagStream = new();
-            Save(ComHelpers.GetComPointer<IPropertyBag>(bagStream), fClearDirty, saveAllProperties: false);
+
+            using var propertyBag = ComHelpers.GetComScope<IPropertyBag>(bagStream);
+            Save(propertyBag, fClearDirty, saveAllProperties: false);
             bagStream.Write(stream);
         }
 
@@ -1525,8 +1529,6 @@ public partial class Control
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(
                 _control,
                 new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
-
-            using ComScope<IPropertyBag> scope = new(propertyBag);
 
             for (int i = 0; i < props.Count; i++)
             {
@@ -1635,10 +1637,7 @@ public partial class Control
             _activeXState[s_viewAdvisePrimeFirst] = advf.HasFlag(ADVF.ADVF_PRIMEFIRST);
             _activeXState[s_viewAdviseOnlyOnce] = advf.HasFlag(ADVF.ADVF_ONLYONCE);
 
-            if (_viewAdviseSink is not null)
-            {
-                _viewAdviseSink->Release();
-            }
+            DisposeHelper.NullAndRelease(ref _viewAdviseSink);
 
             if (pAdvSink is not null)
             {
@@ -2044,7 +2043,7 @@ public partial class Control
                 using var inPlaceSite = _clientSite.TryGetInterface<IOleInPlaceSite>(out HRESULT hr);
                 if (hr.Succeeded)
                 {
-                    inPlaceSite.Value->OnUIDeactivate(BOOL.FALSE);
+                    inPlaceSite.Value->OnUIDeactivate(fUndoable: BOOL.FALSE);
                 }
             }
 
@@ -2175,8 +2174,7 @@ public partial class Control
 
             if (_activeXState[s_viewAdviseOnlyOnce])
             {
-                _viewAdviseSink->Release();
-                _viewAdviseSink = null;
+                DisposeHelper.NullAndRelease(ref _viewAdviseSink);
             }
         }
 
