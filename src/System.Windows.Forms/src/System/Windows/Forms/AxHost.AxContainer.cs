@@ -684,7 +684,12 @@ public abstract partial class AxHost
                 // Release the field before disposing to avoid accessing it during disposal on callbacks.
                 activeHost._iOleInPlaceActiveObjectExternal = null;
                 existing.Dispose();
-                activeHost._iOleInPlaceActiveObjectExternal = new(pActiveObject, takeOwnership: true);
+
+                if (pActiveObject is not null)
+                {
+                    pActiveObject->AddRef();
+                    activeHost._iOleInPlaceActiveObjectExternal = new(pActiveObject, takeOwnership: true);
+                }
             }
 
             if (pActiveObject is null)
@@ -741,7 +746,7 @@ public abstract partial class AxHost
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT IOleInPlaceFrame.Interface.InsertMenus(HMENU hmenuShared, OLEMENUGROUPWIDTHS* lpMenuWidths)
+        HRESULT IOleInPlaceFrame.Interface.InsertMenus(HMENU hmenuShared, OLEMENUGROUPWIDTHS* lpMenuWidths)
         {
             s_axHTraceSwitch.TraceVerbose("in InsertMenus");
             return HRESULT.S_OK;
