@@ -21,7 +21,7 @@ public sealed partial class AnchorEditor : UITypeEditor
             return value;
         }
 
-        _anchorUI ??= new AnchorUI(this);
+        _anchorUI ??= new AnchorUI();
 
         _anchorUI.Start(editorService, value);
         editorService.DropDownControl(_anchorUI);

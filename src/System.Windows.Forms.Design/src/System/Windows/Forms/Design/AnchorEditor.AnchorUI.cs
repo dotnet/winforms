@@ -19,13 +19,11 @@ public sealed partial class AnchorEditor
         private readonly SpringControl _right;
         private readonly SpringControl[] _tabOrder;
         private readonly SpringControl _top;
-        private readonly AnchorEditor _editor;
         private IWindowsFormsEditorService? _edSvc;
         private AnchorStyles _oldAnchor;
 
-        public AnchorUI(AnchorEditor editor)
+        public AnchorUI()
         {
-            _editor = editor;
             _left = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
             _right = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
             _top = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };

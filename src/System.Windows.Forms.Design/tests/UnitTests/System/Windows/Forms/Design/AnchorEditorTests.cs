@@ -81,10 +81,9 @@ public class AnchorEditorTests
     [InlineData("_bottom")]
     public void AnchorEditor_AnchorUI_ControlType_IsCheckButton(string fieldName)
     {
-        AnchorEditor editor = new();
-        Type type = editor.GetType()
+        Type type = typeof(AnchorEditor)
             .GetNestedType("AnchorUI", BindingFlags.NonPublic | BindingFlags.Instance);
-        var anchorUI = (Control)Activator.CreateInstance(type, new object[] { editor });
+        var anchorUI = (Control)Activator.CreateInstance(type);
         var item = (Control)anchorUI.GetType()
             .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(anchorUI);
 
