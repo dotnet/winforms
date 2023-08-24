@@ -32,7 +32,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
             if (_actions is null)
             {
                 _actions = new DesignerActionListCollection();
-                _ = _actions.Add(new MaskedTextBoxDesignerActionList(this));
+                _actions.Add(new MaskedTextBoxDesignerActionList(this));
             }
 
             return _actions;
@@ -294,7 +294,7 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
             if (_verbs is null)
             {
                 _verbs = new DesignerVerbCollection();
-                _ = _verbs.Add(new DesignerVerb(SR.MaskedTextBoxDesignerVerbsSetMaskDesc, new EventHandler(OnVerbSetMask)));
+                _verbs.Add(new DesignerVerb(SR.MaskedTextBoxDesignerVerbsSetMaskDesc, new EventHandler(OnVerbSetMask)));
             }
 
             return _verbs;
