@@ -99,14 +99,13 @@ internal unsafe class AgileComPointer<TInterface> :
 
     protected virtual void Dispose(bool disposing)
     {
-        if (_cookie == 0)
+        // Clear the cookie before revoking the interface to guard against re-entry.
+
+        uint cookie = Interlocked.Exchange(ref _cookie, 0);
+        if (cookie == 0)
         {
             return;
         }
-
-        // Clear the cookie before revoking the interface to guard against re-entry.
-        uint cookie = _cookie;
-        _cookie = 0;
 
         HRESULT hr = GlobalInterfaceTable.RevokeInterface(cookie);
 
