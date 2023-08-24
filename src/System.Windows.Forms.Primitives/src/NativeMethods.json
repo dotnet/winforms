@@ -169,6 +169,7 @@
       "ITypeInfo.ReleaseFuncDesc",
       "ITypeInfo.ReleaseTypeAttr",
       "ITypeLib.GetLibAttr",
+      "ITypeLib.GetTypeInfoOfGuid",
       "IUnknown.QueryInterface"
     ]
   }
