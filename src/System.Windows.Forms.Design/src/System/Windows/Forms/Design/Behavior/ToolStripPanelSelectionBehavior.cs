@@ -73,49 +73,51 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
     /// </summary>
     public override bool OnMouseDown(Glyph? glyph, MouseButtons button, Point screenCoordinates)
     {
-        if (button == MouseButtons.Left && glyph is ToolStripPanelSelectionGlyph selectionGlyph)
+        if (button != MouseButtons.Left || !(glyph is ToolStripPanelSelectionGlyph selectionGlyph))
         {
-            if (!selectionGlyph.IsExpanded)
+            return false;
+        }
+
+        if (!selectionGlyph.IsExpanded)
+        {
+            ExpandPanel(true);
+
+            Rectangle oldBounds = selectionGlyph.Bounds;
+            selectionGlyph.IsExpanded = true;
+            _behaviorService.Invalidate(oldBounds);
+            _behaviorService.Invalidate(selectionGlyph.Bounds);
+        }
+        else
+        {
+            // Change the padding to "dynamically" increase the bounds.
+            _relatedControl.Padding = new Padding(0);
+
+            Rectangle oldBounds = selectionGlyph.Bounds;
+            selectionGlyph.IsExpanded = false;
+            _behaviorService.Invalidate(oldBounds);
+            _behaviorService.Invalidate(selectionGlyph.Bounds);
+
+            // Select our parent.
+            ISelectionService selectionService = _serviceProvider.GetRequiredService<ISelectionService>();
+            Component? currentSelection = selectionService.PrimarySelection as Component;
+
+            if (_relatedControl.Parent is not null)
             {
-                ExpandPanel(true);
-
-                Rectangle oldBounds = selectionGlyph.Bounds;
-                selectionGlyph.IsExpanded = true;
-                _behaviorService.Invalidate(oldBounds);
-                _behaviorService.Invalidate(selectionGlyph.Bounds);
-            }
-            else
-            {
-                // Change the padding to "dynamically" increase the bounds.
-                _relatedControl.Padding = new Padding(0);
-
-                Rectangle oldBounds = selectionGlyph.Bounds;
-                selectionGlyph.IsExpanded = false;
-                _behaviorService.Invalidate(oldBounds);
-                _behaviorService.Invalidate(selectionGlyph.Bounds);
-
-                // Select our parent.
-                ISelectionService selectionService = _serviceProvider.GetRequiredService<ISelectionService>();
-                Component? currentSelection = selectionService.PrimarySelection as Component;
-
-                if (_relatedControl.Parent is not null)
+                if (currentSelection != _relatedControl.Parent)
                 {
-                    if (currentSelection != _relatedControl.Parent)
-                    {
-                        selectionService?.SetSelectedComponents(new object[] { _relatedControl.Parent }, SelectionTypes.Replace);
-                    }
-                    else
-                    {
-                        Control parent = _relatedControl.Parent;
-                        parent?.PerformLayout();
+                    selectionService?.SetSelectedComponents(new object[] { _relatedControl.Parent }, SelectionTypes.Replace);
+                }
+                else
+                {
+                    Control parent = _relatedControl.Parent;
+                    parent?.PerformLayout();
 
-                        var selectionManager = _serviceProvider.GetRequiredService<SelectionManager>();
-                        selectionManager.Refresh();
+                    var selectionManager = _serviceProvider.GetRequiredService<SelectionManager>();
+                    selectionManager.Refresh();
 
-                        Point loc = _behaviorService.ControlToAdornerWindow(parent!);
-                        var translatedBounds = new Rectangle(loc, parent!.Size);
-                        _behaviorService.Invalidate(translatedBounds);
-                    }
+                    Point loc = _behaviorService.ControlToAdornerWindow(parent!);
+                    var translatedBounds = new Rectangle(loc, parent!.Size);
+                    _behaviorService.Invalidate(translatedBounds);
                 }
             }
         }
@@ -236,30 +238,26 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
                 }
             }
 
-            if (expandPanel)
+            if (expandPanel && _relatedControl.Parent is { } root)
             {
-                Control? root = _relatedControl.Parent;
-                if (root is not null)
+                try
                 {
-                    try
-                    {
-                        root.SuspendLayout();
-                        ExpandPanel(false);
+                    root.SuspendLayout();
+                    ExpandPanel(false);
 
-                        if (glyph is ToolStripPanelSelectionGlyph selectionGlyph)
-                        {
-                            Rectangle oldBounds = selectionGlyph.Bounds;
-                            selectionGlyph.IsExpanded = true;
-                            _behaviorService.Invalidate(oldBounds);
-                            _behaviorService.Invalidate(selectionGlyph.Bounds);
-                        }
-
-                        ReParentControls(components, e.Effect == DragDropEffects.Copy);
-                    }
-                    finally
+                    if (glyph is ToolStripPanelSelectionGlyph selectionGlyph)
                     {
-                        root.ResumeLayout(true);
+                        Rectangle oldBounds = selectionGlyph.Bounds;
+                        selectionGlyph.IsExpanded = true;
+                        _behaviorService.Invalidate(oldBounds);
+                        _behaviorService.Invalidate(selectionGlyph.Bounds);
                     }
+
+                    ReParentControls(components, e.Effect == DragDropEffects.Copy);
+                }
+                finally
+                {
+                    root.ResumeLayout(true);
                 }
             }
 

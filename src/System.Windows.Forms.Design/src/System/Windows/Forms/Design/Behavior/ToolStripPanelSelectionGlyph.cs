@@ -44,10 +44,7 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
 
     public bool IsExpanded
     {
-        get
-        {
-            return _isExpanded;
-        }
+        get => _isExpanded;
         set
         {
             if (value != _isExpanded)
@@ -60,34 +57,36 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
 
     public void UpdateGlyph()
     {
-        if (_behaviorService is not null)
+        if (_behaviorService is null)
         {
-            Rectangle translatedBounds = _behaviorService.ControlRectInAdornerWindow(_relatedPanel!);
-            //Reset the glyph.
-            _glyphBounds = Rectangle.Empty;
+            return;
+        }
 
-            // Refresh the parent
-            ToolStripContainer? parent = _relatedPanel?.Parent as ToolStripContainer;
-            if (parent is not null)
-            {
-                // get the control to which ToolStripContainer is added.
-                _baseParent = parent.Parent;
-            }
+        Rectangle translatedBounds = _behaviorService.ControlRectInAdornerWindow(_relatedPanel!);
+        //Reset the glyph.
+        _glyphBounds = Rectangle.Empty;
 
-            if (_image is not null)
-            {
-                _image.Dispose();
-                _image = null;
-            }
+        // Refresh the parent
+        ToolStripContainer? parent = _relatedPanel?.Parent as ToolStripContainer;
+        if (parent is not null)
+        {
+            // get the control to which ToolStripContainer is added.
+            _baseParent = parent.Parent;
+        }
 
-            if (!_isExpanded)
-            {
-                CollapseGlyph(translatedBounds);
-            }
-            else
-            {
-                ExpandGlyph(translatedBounds);
-            }
+        if (_image is not null)
+        {
+            _image.Dispose();
+            _image = null;
+        }
+
+        if (!_isExpanded)
+        {
+            CollapseGlyph(translatedBounds);
+        }
+        else
+        {
+            ExpandGlyph(translatedBounds);
         }
     }
 
@@ -229,16 +228,13 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
     /// </summary>
     public override Cursor? GetHitTest(Point p)
     {
-        if (_behaviorService is not null && _baseParent is not null)
+        if (_behaviorService is null || _baseParent is null)
         {
-            Rectangle baseParentBounds = _behaviorService.ControlRectInAdornerWindow(_baseParent);
-            if (_glyphBounds != Rectangle.Empty && baseParentBounds.Contains(_glyphBounds) && _glyphBounds.Contains(p))
-            {
-                return Cursors.Hand;
-            }
+            return null;
         }
 
-        return null;
+        Rectangle baseParentBounds = _behaviorService.ControlRectInAdornerWindow(_baseParent);
+        return _glyphBounds != Rectangle.Empty && baseParentBounds.Contains(_glyphBounds) && _glyphBounds.Contains(p) ? Cursors.Hand : null;
     }
 
     /// <summary>
@@ -246,13 +242,15 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
     /// </summary>
     public override void Paint(PaintEventArgs pe)
     {
-        if (_behaviorService is not null && _baseParent is not null)
+        if (_behaviorService is null || _baseParent is null)
         {
-            Rectangle baseParentBounds = _behaviorService.ControlRectInAdornerWindow(_baseParent);
-            if (_relatedPanel!.Visible && _image is not null && _glyphBounds != Rectangle.Empty && baseParentBounds.Contains(_glyphBounds))
-            {
-                pe.Graphics.DrawImage(_image, _glyphBounds.Left, _glyphBounds.Top);
-            }
+            return;
+        }
+
+        Rectangle baseParentBounds = _behaviorService.ControlRectInAdornerWindow(_baseParent);
+        if (_relatedPanel!.Visible && _image is not null && _glyphBounds != Rectangle.Empty && baseParentBounds.Contains(_glyphBounds))
+        {
+            pe.Graphics.DrawImage(_image, _glyphBounds.Left, _glyphBounds.Top);
         }
     }
 }

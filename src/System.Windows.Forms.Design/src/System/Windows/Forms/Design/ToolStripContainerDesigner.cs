@@ -40,10 +40,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     /// </summary>
     private bool TopToolStripPanelVisible
     {
-        get
-        {
-            return (bool)ShadowProperties[nameof(TopToolStripPanelVisible)];
-        }
+        get => (bool)ShadowProperties[nameof(TopToolStripPanelVisible)];
         set
         {
             ShadowProperties[nameof(TopToolStripPanelVisible)] = value;
@@ -57,10 +54,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     /// </summary>
     private bool LeftToolStripPanelVisible
     {
-        get
-        {
-            return (bool)ShadowProperties[nameof(LeftToolStripPanelVisible)];
-        }
+        get => (bool)ShadowProperties[nameof(LeftToolStripPanelVisible)];
         set
         {
             ShadowProperties[nameof(LeftToolStripPanelVisible)] = value;
@@ -74,10 +68,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     /// </summary>
     private bool RightToolStripPanelVisible
     {
-        get
-        {
-            return (bool)ShadowProperties[nameof(RightToolStripPanelVisible)];
-        }
+        get => (bool)ShadowProperties[nameof(RightToolStripPanelVisible)];
         set
         {
             ShadowProperties[nameof(RightToolStripPanelVisible)] = value;
@@ -91,10 +82,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     /// </summary>
     private bool BottomToolStripPanelVisible
     {
-        get
-        {
-            return (bool)ShadowProperties[nameof(BottomToolStripPanelVisible)];
-        }
+        get => (bool)ShadowProperties[nameof(BottomToolStripPanelVisible)];
         set
         {
             ShadowProperties[nameof(BottomToolStripPanelVisible)] = value;
@@ -113,6 +101,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
             {
                 AutoShow = true
             };
+
             actions.Add(actionList);
             return actions;
         }
@@ -173,31 +162,30 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
 
     protected override IComponent[]? CreateToolCore(ToolboxItem tool, int x, int y, int width, int height, bool hasLocation, bool hasSize)
     {
-        if (tool is not null)
+        if (tool is null)
         {
-            Type toolType = tool.GetType(_designerHost);
+            return null;
+        }
 
-            if (typeof(StatusStrip).IsAssignableFrom(toolType))
-            {
-                InvokeCreateTool(GetDesigner(_bottomToolStripPanel!), tool);
-            }
-            else if (typeof(ToolStrip).IsAssignableFrom(toolType))
-            {
-                InvokeCreateTool(GetDesigner(_topToolStripPanel!), tool);
-            }
-            else
-            {
-                InvokeCreateTool(GetDesigner(_contentToolStripPanel!), tool);
-            }
+        Type toolType = tool.GetType(_designerHost);
+
+        if (typeof(StatusStrip).IsAssignableFrom(toolType))
+        {
+            InvokeCreateTool(GetDesigner(_bottomToolStripPanel!), tool);
+        }
+        else if (typeof(ToolStrip).IsAssignableFrom(toolType))
+        {
+            InvokeCreateTool(GetDesigner(_topToolStripPanel!), tool);
+        }
+        else
+        {
+            InvokeCreateTool(GetDesigner(_contentToolStripPanel!), tool);
         }
 
         return null;
     }
 
-    public override bool CanParent(Control control)
-    {
-        return false;
-    }
+    public override bool CanParent(Control control) => false;
 
     protected override void Dispose(bool disposing)
     {
@@ -208,31 +196,27 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         }
     }
 
-    private ToolStripPanelDesigner GetDesigner(ToolStripPanel panel)
-    {
-        return (ToolStripPanelDesigner)_designerHost.GetDesigner(panel)!;
-    }
+    private ToolStripPanelDesigner GetDesigner(ToolStripPanel panel) => (ToolStripPanelDesigner)_designerHost.GetDesigner(panel)!;
 
-    private PanelDesigner GetDesigner(ToolStripContentPanel panel)
-    {
-        return (PanelDesigner)_designerHost.GetDesigner(panel)!;
-    }
+    private PanelDesigner GetDesigner(ToolStripContentPanel panel) => (PanelDesigner)_designerHost.GetDesigner(panel)!;
 
     private static ToolStripContainer? ContainerParent(Control control)
     {
-        ToolStripContainer? parent = null;
-        if (control is not null and not ToolStripContainer)
+        if (control is null or ToolStripContainer)
         {
-            while (control.Parent is not null)
-            {
-                if (control.Parent is ToolStripContainer)
-                {
-                    parent = control.Parent as ToolStripContainer;
-                    break;
-                }
+            return null;
+        }
 
-                control = control.Parent;
+        ToolStripContainer? parent = null;
+        while (control.Parent is not null)
+        {
+            if (control.Parent is ToolStripContainer)
+            {
+                parent = control.Parent as ToolStripContainer;
+                break;
             }
+
+            control = control.Parent;
         }
 
         return parent;
@@ -241,40 +225,43 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
     protected override ControlBodyGlyph GetControlGlyph(GlyphSelectionType selectionType)
     {
         SelectionManager selectionManager = GetService<SelectionManager>();
-        if (selectionManager is not null)
+
+        if (selectionManager is null)
         {
-            //Create BodyGlyphs for all _panels
-            for (int i = 0; i <= 4; i++)
+            return base.GetControlGlyph(selectionType);
+        }
+
+        //Create BodyGlyphs for all _panels
+        for (int i = 0; i <= 4; i++)
+        {
+            Control currentPanel = _panels![i];
+            Rectangle translatedBounds = BehaviorService.ControlRectInAdornerWindow(currentPanel);
+            ControlDesigner? panelDesigner = InternalControlDesigner(i);
+            OnSetCursor();
+
+            if (panelDesigner is not null)
             {
-                Control currentPanel = _panels![i];
-                Rectangle translatedBounds = BehaviorService.ControlRectInAdornerWindow(currentPanel);
-                ControlDesigner? panelDesigner = InternalControlDesigner(i);
-                OnSetCursor();
+                //create our glyph, and set its cursor appropriately
+                ControlBodyGlyph bodyGlyph = new ControlBodyGlyph(translatedBounds, Cursor.Current, currentPanel, panelDesigner);
+                selectionManager.BodyGlyphAdorner.Glyphs.Add(bodyGlyph);
 
-                if (panelDesigner is not null)
+                bool addGlyphs = true;
+                ICollection selComponents = _selectionService!.GetSelectedComponents();
+                if (!_selectionService.GetComponentSelected(_toolStripContainer!))
                 {
-                    //create our glyph, and set its cursor appropriately
-                    ControlBodyGlyph bodyGlyph = new ControlBodyGlyph(translatedBounds, Cursor.Current, currentPanel, panelDesigner);
-                    selectionManager.BodyGlyphAdorner.Glyphs.Add(bodyGlyph);
-
-                    bool addGlyphs = true;
-                    ICollection selComponents = _selectionService!.GetSelectedComponents();
-                    if (!_selectionService.GetComponentSelected(_toolStripContainer!))
+                    foreach (object comp in selComponents)
                     {
-                        foreach (object comp in selComponents)
-                        {
-                            ToolStripContainer container = ContainerParent((Control)comp)!;
-                            addGlyphs = container == _toolStripContainer;
-                        }
+                        ToolStripContainer container = ContainerParent((Control)comp)!;
+                        addGlyphs = container == _toolStripContainer;
                     }
+                }
 
-                    if (addGlyphs)
+                if (addGlyphs)
+                {
+                    ToolStripPanelDesigner? designer = panelDesigner as ToolStripPanelDesigner;
+                    if (designer is not null)
                     {
-                        ToolStripPanelDesigner? designer = panelDesigner as ToolStripPanelDesigner;
-                        if (designer is not null)
-                        {
-                            AddPanelSelectionGlyph(designer, selectionManager);
-                        }
+                        AddPanelSelectionGlyph(designer, selectionManager);
                     }
                 }
             }
@@ -304,19 +291,19 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
 
     private bool CheckDropDownBounds(ToolStripDropDownItem dropDownItem, Glyph childGlyph, GlyphCollection glyphs)
     {
-        if (dropDownItem is not null)
+        if (dropDownItem is null)
         {
-            Rectangle glyphBounds = childGlyph.Bounds;
-            Rectangle controlBounds = BehaviorService.ControlRectInAdornerWindow(dropDownItem.DropDown);
-            if (!glyphBounds.IntersectsWith(controlBounds))
-            {
-                glyphs.Insert(0, childGlyph);
-            }
-
-            return true;
+            return false;
         }
 
-        return false;
+        Rectangle glyphBounds = childGlyph.Bounds;
+        Rectangle controlBounds = BehaviorService.ControlRectInAdornerWindow(dropDownItem.DropDown);
+        if (!glyphBounds.IntersectsWith(controlBounds))
+        {
+            glyphs.Insert(0, childGlyph);
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -418,10 +405,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         BottomToolStripPanelVisible = _toolStripContainer.BottomToolStripPanelVisible;
     }
 
-    public override void InitializeNewComponent(IDictionary defaultValues)
-    {
-        base.InitializeNewComponent(defaultValues);
-    }
+    public override void InitializeNewComponent(IDictionary defaultValues) => base.InitializeNewComponent(defaultValues);
 
     protected override void OnPaintAdornments(PaintEventArgs pe)
     {
@@ -478,23 +462,21 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
 
     private void AddPanelSelectionGlyph(ToolStripPanelDesigner designer, SelectionManager selectionManager)
     {
-        // Now create SelectionGlyph for the panel and add it
-        if (designer is not null)
+        if (designer is null || designer.GetGlyph() is not { } childGlyph || _selectionService is null)
         {
-            Glyph? childGlyph = designer.GetGlyph();
-            if (childGlyph is not null && _selectionService is not null)
+            return;
+        }
+
+        // Now create SelectionGlyph for the panel and add it
+        ICollection selectedComponents = _selectionService.GetSelectedComponents();
+        foreach (object selectedComponent in selectedComponents)
+        {
+            Component component = (Component)selectedComponent;
+            if (component is not null)
             {
-                ICollection selectedComponents = _selectionService.GetSelectedComponents();
-                foreach (object selectedComponent in selectedComponents)
+                if (!CheckAssociatedControl(component, childGlyph, selectionManager.BodyGlyphAdorner.Glyphs))
                 {
-                    Component component = (Component)selectedComponent;
-                    if (component is not null)
-                    {
-                        if (!CheckAssociatedControl(component, childGlyph, selectionManager.BodyGlyphAdorner.Glyphs))
-                        {
-                            selectionManager.BodyGlyphAdorner.Glyphs.Insert(0, childGlyph);
-                        }
-                    }
+                    selectionManager.BodyGlyphAdorner.Glyphs.Insert(0, childGlyph);
                 }
             }
         }

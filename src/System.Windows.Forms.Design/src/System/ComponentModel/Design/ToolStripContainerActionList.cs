@@ -36,46 +36,45 @@ internal class ToolStripContainerActionList : DesignerActionList
     // Helper function to change the property on the component
     private void ChangeProperty(Component component, string propertyName, object value)
     {
-        if (_designerHost is not null)
+        if (_designerHost is null)
         {
-            ToolStripPanel? panel = component as ToolStripPanel;
-            ToolStripPanelDesigner? panelDesigner = _designerHost.GetDesigner(component) as ToolStripPanelDesigner;
+            return;
+        }
 
-            if (propertyName.Equals("Visible") && panel is not null)
+        ToolStripPanel? panel = component as ToolStripPanel;
+        ToolStripPanelDesigner? panelDesigner = _designerHost.GetDesigner(component) as ToolStripPanelDesigner;
+
+        if (propertyName.Equals("Visible") && panel is not null)
+        {
+            foreach (Control control in panel.Controls)
             {
-                foreach (Control control in panel.Controls)
-                {
-                    PropertyDescriptor? visibleProperty = TypeDescriptor.GetProperties(control)["Visible"];
-                    visibleProperty?.SetValue(control, value);
-                }
-
-                if (!(bool)value)
-                {
-                    if (panel is not null)
-                    {
-                        panel.Padding = new Padding(0);
-                    }
-
-                    if (panelDesigner is not null)
-                    {
-                        if (panelDesigner.ToolStripPanelSelectorGlyph is not null)
-                        {
-                            panelDesigner.ToolStripPanelSelectorGlyph.IsExpanded = false;
-                        }
-                    }
-                }
+                PropertyDescriptor? visibleProperty = TypeDescriptor.GetProperties(control)["Visible"];
+                visibleProperty?.SetValue(control, value);
             }
 
-            PropertyDescriptor? changingProperty = TypeDescriptor.GetProperties(component)[propertyName];
-            changingProperty?.SetValue(component, value);
+            if (!(bool)value)
+            {
+                if (panel is not null)
+                {
+                    panel.Padding = new Padding(0);
+                }
 
-            // Reset the Glyphs.
-            SelectionManager? selectionManager = _serviceProvider?.GetService<SelectionManager>();
-            selectionManager?.Refresh();
-
-            // Invalidate the Window
-            panelDesigner?.InvalidateGlyph();
+                if (panelDesigner?.ToolStripPanelSelectorGlyph is not null)
+                {
+                    panelDesigner.ToolStripPanelSelectorGlyph.IsExpanded = false;
+                }
+            }
         }
+
+        PropertyDescriptor? changingProperty = TypeDescriptor.GetProperties(component)[propertyName];
+        changingProperty?.SetValue(component, value);
+
+        // Reset the Glyphs.
+        SelectionManager? selectionManager = _serviceProvider?.GetService<SelectionManager>();
+        selectionManager?.Refresh();
+
+        // Invalidate the Window
+        panelDesigner?.InvalidateGlyph();
     }
 
     /// <summary>
@@ -104,20 +103,22 @@ internal class ToolStripContainerActionList : DesignerActionList
     /// </summary>
     public void SetDockToForm()
     {
-        if (_designerHost is not null)
+        if (_designerHost is null)
         {
-            // Change the Parent only if its not parented to the form.
-            if (_designerHost.RootComponent is Control root && _toolStripContainer.Parent is not Control)
-            {
-                root.Controls.Add(_toolStripContainer);
-            }
+            return;
+        }
 
-            // Set the dock prop to DockStyle.Fill
-            if (!IsDockFilled)
-            {
-                PropertyDescriptor? dockProp = TypeDescriptor.GetProperties(_toolStripContainer)["Dock"];
-                dockProp?.SetValue(_toolStripContainer, DockStyle.Fill);
-            }
+        // Change the Parent only if its not parented to the form.
+        if (_designerHost.RootComponent is Control root && _toolStripContainer.Parent is not Control)
+        {
+            root.Controls.Add(_toolStripContainer);
+        }
+
+        // Set the dock prop to DockStyle.Fill
+        if (!IsDockFilled)
+        {
+            PropertyDescriptor? dockProp = TypeDescriptor.GetProperties(_toolStripContainer)["Dock"];
+            dockProp?.SetValue(_toolStripContainer, DockStyle.Fill);
         }
     }
 
