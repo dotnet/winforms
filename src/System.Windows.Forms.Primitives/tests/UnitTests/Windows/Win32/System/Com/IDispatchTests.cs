@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 
-namespace System.Windows.Forms.Primitives.Tests.Windows.Win32.System.Com;
+namespace Windows.Win32.System.Com.Tests;
 
 [Collection("Sequential")]
 public partial class IDispatchTests
