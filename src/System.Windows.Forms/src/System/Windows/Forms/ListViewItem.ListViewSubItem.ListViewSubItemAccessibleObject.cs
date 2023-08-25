@@ -164,7 +164,7 @@ public partial class ListViewItem
             private protected override string AutomationId
                 => $"{nameof(ListViewSubItem)}-{ParentInternal.GetChildIndex(this)}";
 
-            public AccessibleObject? GetChild()
+            private AccessibleObject? GetChild()
             {
                 if (_owningListView._labelEdit is { } labelEdit)
                 {
