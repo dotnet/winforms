@@ -412,18 +412,18 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
         // Make sure that we're removed any event sinks we added after we finished the load.
         EnableComponentNotification(false);
 
-        if (!TryGetService(out IComponentChangeService? cs))
+        if (!TryGetService(out IComponentChangeService? componentChangeService))
         {
             return;
         }
 
-        cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-        cs.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
-        cs.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
-        cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-        cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-        cs.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
-        cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+        componentChangeService.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
+        componentChangeService.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
+        componentChangeService.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
+        componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+        componentChangeService.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+        componentChangeService.ComponentChanging -= new ComponentChangingEventHandler(OnComponentChanging);
+        componentChangeService.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
     }
 
     /// <summary>
@@ -667,15 +667,15 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             // After a successful load we will want to monitor a bunch of events so we know when
             // to make the loader modified.
 
-            if (TryGetService(out IComponentChangeService? cs))
+            if (TryGetService(out IComponentChangeService? componentChangeService))
             {
-                cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-                cs.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
-                cs.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
-                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-                cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-                cs.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
-                cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+                componentChangeService.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
+                componentChangeService.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
+                componentChangeService.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
+                componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+                componentChangeService.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+                componentChangeService.ComponentChanging += new ComponentChangingEventHandler(OnComponentChanging);
+                componentChangeService.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
             }
 
             EnableComponentNotification(true);

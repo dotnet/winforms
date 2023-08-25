@@ -23,13 +23,13 @@ public abstract partial class CodeDomDesignerLoader
         /// </summary>
         public bool CanExtend(object o)
         {
-            if (o is not IComponent c)
+            if (o is not IComponent component)
             {
                 return false;
             }
 
             // We don't add modifiers to the base component.
-            IComponent? baseComponent = GetBaseComponent(c);
+            IComponent? baseComponent = GetBaseComponent(component);
 
             if (o == baseComponent)
             {
@@ -46,9 +46,9 @@ public abstract partial class CodeDomDesignerLoader
             return true;
         }
 
-        private IComponent? GetBaseComponent(IComponent c)
+        private IComponent? GetBaseComponent(IComponent component)
         {
-            _host ??= c.Site?.GetService<IDesignerHost>();
+            _host ??= component.Site?.GetService<IDesignerHost>();
 
             return _host?.RootComponent;
         }

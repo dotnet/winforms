@@ -24,13 +24,13 @@ public abstract partial class CodeDomDesignerLoader
         /// </summary>
         public bool CanExtend(object o)
         {
-            if (o is not IComponent c)
+            if (o is not IComponent component)
             {
                 return false;
             }
 
             // We don't add modifiers to the base component.
-            IComponent? baseComponent = GetBaseComponent(c);
+            IComponent? baseComponent = GetBaseComponent(component);
 
             if (o == baseComponent)
             {
@@ -48,14 +48,14 @@ public abstract partial class CodeDomDesignerLoader
             return false;
         }
 
-        private IComponent? GetBaseComponent(IComponent? c)
+        private IComponent? GetBaseComponent(IComponent? component)
         {
-            if (c is null)
+            if (component is null)
             {
                 return null;
             }
 
-            _host ??= c.Site?.GetService<IDesignerHost>();
+            _host ??= component.Site?.GetService<IDesignerHost>();
 
             return _host?.RootComponent;
         }
@@ -113,27 +113,27 @@ public abstract partial class CodeDomDesignerLoader
             // visibility of this accessor to fix the modifiers up.
             PropertyInfo? prop = TypeDescriptor.GetReflectionType(baseType).GetProperty(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
             MethodInfo?[]? accessors = prop?.GetAccessors(true);
-            if (accessors is not [MethodInfo mi, ..])
+            if (accessors is not [MethodInfo methodInfo, ..])
             {
                 return MemberAttributes.Private;
             }
 
-            if (mi.IsPrivate)
+            if (methodInfo.IsPrivate)
                 return MemberAttributes.Private;
 
-            if (mi.IsPublic)
+            if (methodInfo.IsPublic)
                 return MemberAttributes.Public;
 
-            if (mi.IsFamily)
+            if (methodInfo.IsFamily)
                 return MemberAttributes.Family;
 
-            if (mi.IsAssembly)
+            if (methodInfo.IsAssembly)
                 return MemberAttributes.Assembly;
 
-            if (mi.IsFamilyOrAssembly)
+            if (methodInfo.IsFamilyOrAssembly)
                 return MemberAttributes.FamilyOrAssembly;
 
-            if (mi.IsFamilyAndAssembly)
+            if (methodInfo.IsFamilyAndAssembly)
                 return MemberAttributes.FamilyAndAssembly;
 
             return MemberAttributes.Private;
