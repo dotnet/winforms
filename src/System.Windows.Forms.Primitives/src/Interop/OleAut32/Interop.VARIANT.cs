@@ -889,6 +889,7 @@ internal unsafe partial struct VARIANT : IDisposable
     public static explicit operator VARIANT(int value)
         => new()
         {
+            // Legacy marshalling uses VT_I4, not VT_INT
             vt = VT_I4,
             data = new() { intVal = value }
         };
@@ -901,6 +902,7 @@ internal unsafe partial struct VARIANT : IDisposable
     public static explicit operator VARIANT(uint value)
         => new()
         {
+            // Legacy marshalling uses VT_UI4, not VT_UINT
             vt = VT_UI4,
             data = new() { uintVal = value }
         };

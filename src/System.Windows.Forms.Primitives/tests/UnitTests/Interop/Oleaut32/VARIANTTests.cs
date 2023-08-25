@@ -5785,6 +5785,19 @@ public unsafe class VARIANTTests
         }
     }
 
+    [Fact]
+    public void MarshallingFromIntAndUint()
+    {
+        // Interop marshals as VT_I4/VT_UI4 and not VT_INT/VT_UINT
+        VARIANT variant = new();
+        int intValue = 42;
+        Marshal.GetNativeVariantForObject(intValue, (nint)(void*)&variant);
+        variant.vt.Should().Be(VT_I4);
+        uint uintValue = 42;
+        Marshal.GetNativeVariantForObject(uintValue, (nint)(void*)&variant);
+        variant.vt.Should().Be(VT_UI4);
+    }
+
     [DllImport(Libraries.Propsys, ExactSpelling = true)]
     private static extern unsafe HRESULT InitPropVariantFromCLSID(Guid* clsid, VARIANT* ppropvar);
 

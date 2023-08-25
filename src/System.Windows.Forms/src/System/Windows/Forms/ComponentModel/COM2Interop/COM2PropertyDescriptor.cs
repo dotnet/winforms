@@ -846,11 +846,12 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
         }
 
         hr = dispatch.Value->SetPropertyValue(DISPID, nativeValue, out string? errorText);
+        nativeValue.Dispose();
 
         if (hr == HRESULT.S_OK || hr == HRESULT.S_FALSE)
         {
             OnValueChanged(component, EventArgs.Empty);
-            _lastValue = nativeValue;
+            _lastValue = value;
             return;
         }
 
@@ -867,16 +868,18 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
         {
             if (iSupportErrorInfo.Value->InterfaceSupportsErrorInfo(IID.Get<IDispatch>()).Succeeded)
             {
-                Oleaut32.GetErrorInfo(out WinFormsComWrappers.ErrorInfoWrapper? errorInfo);
+                using ComScope<IErrorInfo> errorInfo = new(null);
+                hr = PInvoke.GetErrorInfo(0, errorInfo);
 
-                if (errorInfo is not null)
+                if (hr.Succeeded)
                 {
-                    if (errorInfo.GetDescription(out string? description))
-                    {
-                        errorText = description;
-                    }
+                    using BSTR description = default;
+                    hr = errorInfo.Value->GetDescription(&description);
 
-                    errorInfo.Dispose();
+                    if (hr.Succeeded)
+                    {
+                        errorText = description.ToString();
+                    }
                 }
             }
         }
