@@ -220,6 +220,7 @@ GetDlgItemInt
 GetDoubleClickTime
 GetDpiForSystem
 GetDpiForWindow
+GetErrorInfo
 GetExitCodeThread
 GetFocus
 GetForegroundWindow
