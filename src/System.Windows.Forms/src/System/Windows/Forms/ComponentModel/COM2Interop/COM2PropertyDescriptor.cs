@@ -9,7 +9,6 @@ using Windows.Win32.System.Com;
 using Windows.Win32.System.Diagnostics.Debug;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
-using static Interop;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop;
 
