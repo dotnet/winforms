@@ -881,7 +881,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
         {
             if (_documentType is not null)
             {
-                _documentType.Name = newName!;
+                _documentType.Name = newName;
             }
 
             return;
@@ -899,7 +899,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             if (members[i] is CodeMemberField && members[i].Name.Equals(oldName)
                                               && ((CodeMemberField)members[i]).Type.BaseType.Equals(TypeDescriptor.GetClassName(component)))
             {
-                members[i].Name = newName!;
+                members[i].Name = newName;
                 break;
             }
         }
