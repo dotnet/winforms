@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 namespace System.Windows.Forms.Design;
 
 /// <summary>
@@ -27,7 +25,7 @@ internal class MaskDescriptorComparer : IComparer<MaskDescriptor>
         _sortOrder = sortOrder;
     }
 
-    public int Compare(MaskDescriptor maskDescriptorA, MaskDescriptor maskDescriptorB)
+    public int Compare(MaskDescriptor? maskDescriptorA, MaskDescriptor? maskDescriptorB)
     {
         if (maskDescriptorA is null || maskDescriptorB is null)
         {
@@ -36,7 +34,8 @@ internal class MaskDescriptorComparer : IComparer<MaskDescriptor>
             return 0;
         }
 
-        string textA, textB;
+        string? textA;
+        string? textB;
 
         switch (_sortType)
         {
@@ -76,7 +75,7 @@ internal class MaskDescriptorComparer : IComparer<MaskDescriptor>
         return 0;
     }
 
-    public static bool Equals(MaskDescriptor maskDescriptorA, MaskDescriptor maskDescriptorB)
+    public static bool Equals(MaskDescriptor? maskDescriptorA, MaskDescriptor? maskDescriptorB)
     {
         if (!MaskDescriptor.IsValidMaskDescriptor(maskDescriptorA) || !MaskDescriptor.IsValidMaskDescriptor(maskDescriptorB))
         {
