@@ -27,7 +27,7 @@ public class PropertyGridTests
                 try
                 {
                     encodingEntry.SetPropertyTextValue("333");
-                    Assert.False(true, "Invalid set values should produce ExternalException which will be presenttted to the user.");
+                    Assert.False(true, "Invalid set values should produce ExternalException which will be presented to the user.");
                 }
                 catch (ExternalException ex)
                 {
