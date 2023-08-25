@@ -19,7 +19,7 @@ public sealed partial class AnchorEditor
         private readonly SpringControl _right;
         private readonly SpringControl[] _tabOrder;
         private readonly SpringControl _top;
-        private IWindowsFormsEditorService? _edSvc;
+        private IWindowsFormsEditorService? _editorService;
         private AnchorStyles _oldAnchor;
 
         public AnchorUI()
@@ -37,7 +37,7 @@ public sealed partial class AnchorEditor
 
         public void End()
         {
-            _edSvc = null;
+            _editorService = null;
             Value = null;
         }
 
@@ -143,7 +143,7 @@ public sealed partial class AnchorEditor
 
         public void Start(IWindowsFormsEditorService edSvc, object? value)
         {
-            _edSvc = edSvc;
+            _editorService = edSvc;
             Value = value;
 
             if (value is AnchorStyles anchorStyles)
@@ -167,7 +167,7 @@ public sealed partial class AnchorEditor
                 Value = _oldAnchor;
             }
 
-            _edSvc!.CloseDropDown();
+            _editorService!.CloseDropDown();
         }
 
         private class ContainerPlaceholder : Control
@@ -219,10 +219,7 @@ public sealed partial class AnchorEditor
                 return new SpringControlAccessibleObject(this);
             }
 
-            public virtual bool GetSolid()
-            {
-                return _solid;
-            }
+            public virtual bool GetSolid() => _solid;
 
             protected override void OnGotFocus(EventArgs e)
             {
