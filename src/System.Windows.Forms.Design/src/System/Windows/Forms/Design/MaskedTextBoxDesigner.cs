@@ -18,6 +18,10 @@ internal class MaskedTextBoxDesigner : TextBoxBaseDesigner
     private DesignerVerbCollection _verbs;
     private DesignerActionListCollection _actions;
 
+    // Overridden to avoid setting the default property ("Mask")
+    // to the Site.Name (i.e. maskedTextBox1).
+    protected override bool SetTextualDefaultProperty => false;
+
     /// <summary>
     /// MaskedTextBox designer action list property. Gets the design-time supported actions on the control.
     /// </summary>
