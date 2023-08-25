@@ -870,7 +870,7 @@ internal unsafe partial class Com2PropertyDescriptor : PropertyDescriptor, IClon
                 using ComScope<IErrorInfo> errorInfo = new(null);
                 hr = PInvoke.GetErrorInfo(0, errorInfo);
 
-                if (hr.Succeeded)
+                if (hr.Succeeded && hr != HRESULT.S_FALSE && !errorInfo.IsNull)
                 {
                     using BSTR description = default;
                     hr = errorInfo.Value->GetDescription(&description);
