@@ -95,11 +95,6 @@ public partial class ListView
                 return null;
             }
 
-            if (owningListView._labelEdit is {} labelEdit && index == GetChildCount() - 1)
-            {
-                return labelEdit.AccessibilityObject;
-            }
-
             if (owningListView.GroupsDisplayed)
             {
                 IReadOnlyList<ListViewGroup> visibleGroups = GetVisibleGroups();
@@ -117,10 +112,6 @@ public partial class ListView
             }
 
             int count = owningListView.GroupsDisplayed ? GetVisibleGroups().Count : owningListView.Items.Count;
-            if (owningListView._labelEdit is not null)
-            {
-                count++;
-            }
 
             return count;
         }
@@ -167,9 +158,7 @@ public partial class ListView
                 return base.GetChildIndex(child);
             }
 
-            return owningListView._labelEdit is { } labelEdit && child == labelEdit.AccessibilityObject
-                     ? GetChildCount() - 1
-                     : owningListView.GroupsDisplayed ? GetGroupIndex(child) : GetItemIndex(child);
+            return owningListView.GroupsDisplayed ? GetGroupIndex(child) : GetItemIndex(child);
         }
 
         private string GetItemStatus()
@@ -237,11 +226,6 @@ public partial class ListView
             if (!this.TryGetOwnerAs(out ListView? owningListView))
             {
                 return null;
-            }
-
-            if (owningListView._labelEdit is {} labelEdit)
-            {
-                return labelEdit.AccessibilityObject;
             }
 
             if (owningListView.GroupsDisplayed)
