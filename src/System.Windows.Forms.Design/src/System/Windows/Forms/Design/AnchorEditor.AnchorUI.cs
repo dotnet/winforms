@@ -44,22 +44,22 @@ public sealed partial class AnchorEditor
         public virtual AnchorStyles GetSelectedAnchor()
         {
             AnchorStyles baseVar = 0;
-            if (_left.GetSolid())
+            if (_left.IsSolid)
             {
                 baseVar |= AnchorStyles.Left;
             }
 
-            if (_top.GetSolid())
+            if (_top.IsSolid)
             {
                 baseVar |= AnchorStyles.Top;
             }
 
-            if (_bottom.GetSolid())
+            if (_bottom.IsSolid)
             {
                 baseVar |= AnchorStyles.Bottom;
             }
 
-            if (_right.GetSolid())
+            if (_right.IsSolid)
             {
                 baseVar |= AnchorStyles.Right;
             }
@@ -121,11 +121,11 @@ public sealed partial class AnchorEditor
             _container.Controls.Clear();
             _container.Controls.AddRange(new Control[]
             {
-                    _control,
-                    _top,
-                    _left,
-                    _bottom,
-                    _right
+                _control,
+                _top,
+                _left,
+                _bottom,
+                _right
             });
             ResumeLayout(false);
         }
@@ -148,10 +148,10 @@ public sealed partial class AnchorEditor
 
             if (value is AnchorStyles anchorStyles)
             {
-                _left.SetSolid((anchorStyles & AnchorStyles.Left) == AnchorStyles.Left);
-                _top.SetSolid((anchorStyles & AnchorStyles.Top) == AnchorStyles.Top);
-                _bottom.SetSolid((anchorStyles & AnchorStyles.Bottom) == AnchorStyles.Bottom);
-                _right.SetSolid((anchorStyles & AnchorStyles.Right) == AnchorStyles.Right);
+                _left.IsSolid = (anchorStyles & AnchorStyles.Left) == AnchorStyles.Left;
+                _top.IsSolid = (anchorStyles & AnchorStyles.Top) == AnchorStyles.Top;
+                _bottom.IsSolid = (anchorStyles & AnchorStyles.Bottom) == AnchorStyles.Bottom;
+                _right.IsSolid = (anchorStyles & AnchorStyles.Right) == AnchorStyles.Right;
                 _oldAnchor = anchorStyles;
             }
             else
@@ -219,7 +219,19 @@ public sealed partial class AnchorEditor
                 return new SpringControlAccessibleObject(this);
             }
 
-            public virtual bool GetSolid() => _solid;
+            public bool IsSolid
+            {
+                get => _solid;
+                set
+                {
+                    if (_solid != value)
+                    {
+                        _solid = value;
+                        _picker.SetValue();
+                        Invalidate();
+                    }
+                }
+            }
 
             protected override void OnGotFocus(EventArgs e)
             {
@@ -245,7 +257,7 @@ public sealed partial class AnchorEditor
 
             protected override void OnMouseDown(MouseEventArgs e)
             {
-                SetSolid(!_solid);
+                IsSolid = !_solid;
                 Focus();
             }
 
@@ -274,7 +286,7 @@ public sealed partial class AnchorEditor
             {
                 if (charCode == ' ')
                 {
-                    SetSolid(!_solid);
+                    IsSolid = !_solid;
                     return true;
                 }
 
@@ -314,23 +326,13 @@ public sealed partial class AnchorEditor
                 return base.ProcessDialogKey(keyData);
             }
 
-            public virtual void SetSolid(bool value)
-            {
-                if (_solid != value)
-                {
-                    _solid = value;
-                    _picker.SetValue();
-                    Invalidate();
-                }
-            }
-
             private class SpringControlAccessibleObject : ControlAccessibleObject
             {
                 public SpringControlAccessibleObject(SpringControl owner) : base(owner)
                 {
                 }
 
-                public override string DefaultAction => ((SpringControl)Owner!).GetSolid()
+                public override string DefaultAction => ((SpringControl)Owner!).IsSolid
                     ? SR.AccessibleActionUncheck
                     : SR.AccessibleActionCheck;
 
@@ -340,7 +342,7 @@ public sealed partial class AnchorEditor
                     {
                         AccessibleStates state = base.State;
 
-                        if (((SpringControl)Owner!).GetSolid())
+                        if (((SpringControl)Owner!).IsSolid)
                         {
                             state |= AccessibleStates.Checked;
                         }
