@@ -708,7 +708,7 @@ public partial class TreeView : Control
                     // and stateimage value for each node.
                     UpdateCheckedState(_root, true);
 
-                    if ((value is null || _stateImageList!.Images.Count == 0) && CheckBoxes)
+                    if ((_stateImageList is null || _stateImageList.Images.Count == 0) && CheckBoxes)
                     {
                         // Requires Handle Recreate to force on the checkBoxes and states..
                         RecreateHandle();
@@ -1766,45 +1766,46 @@ public partial class TreeView : Control
 
     private void StateImageListChangedHandle(object sender, EventArgs e)
     {
-        if ((sender is not null) && (sender == _stateImageList) && IsHandleCreated)
+        if (sender is null || sender != _stateImageList || !IsHandleCreated)
         {
-            // Since the native treeview requires the state imagelist to be 1-indexed we need to
-            // re add the images if the original collection had changed.
-            if (_stateImageList is not null && _stateImageList.Images.Count > 0)
+            return;
+        }
+
+        // Since the native treeview requires the state imagelist to be 1-indexed we need to
+        // re add the images if the original collection had changed.
+        if (_stateImageList is null || _stateImageList.Images.Count <= 0)
+        {
+            UpdateCheckedState(_root, true);
+            return;
+        }
+
+        Image[] images = new Image[_stateImageList.Images.Count + 1];
+        images[0] = _stateImageList.Images[0];
+        for (int i = 1; i <= _stateImageList.Images.Count; i++)
+        {
+            images[i] = _stateImageList.Images[i - 1];
+        }
+
+        if (_internalStateImageList is not null)
+        {
+            _internalStateImageList.Images.Clear();
+            _internalStateImageList.Images.AddRange(images);
+        }
+        else
+        {
+            _internalStateImageList = new ImageList();
+            _internalStateImageList.Images.AddRange(images);
+        }
+
+        Debug.Assert(_internalStateImageList is not null, "Why are changing images when the Imagelist is null?");
+        if (_internalStateImageList is not null)
+        {
+            if (ScaledStateImageSize is not null)
             {
-                Image[] images = new Image[_stateImageList.Images.Count + 1];
-                images[0] = _stateImageList.Images[0];
-                for (int i = 1; i <= _stateImageList.Images.Count; i++)
-                {
-                    images[i] = _stateImageList.Images[i - 1];
-                }
-
-                if (_internalStateImageList is not null)
-                {
-                    _internalStateImageList.Images.Clear();
-                    _internalStateImageList.Images.AddRange(images);
-                }
-                else
-                {
-                    _internalStateImageList = new ImageList();
-                    _internalStateImageList.Images.AddRange(images);
-                }
-
-                Debug.Assert(_internalStateImageList is not null, "Why are changing images when the Imagelist is null?");
-                if (_internalStateImageList is not null)
-                {
-                    if (ScaledStateImageSize is not null)
-                    {
-                        _internalStateImageList.ImageSize = (Size)ScaledStateImageSize;
-                    }
-
-                    SetStateImageList(_internalStateImageList.Handle);
-                }
+                _internalStateImageList.ImageSize = (Size)ScaledStateImageSize;
             }
-            else //stateImageList is null || stateImageList.Images.Count = 0;
-            {
-                UpdateCheckedState(_root, true);
-            }
+
+            SetStateImageList(_internalStateImageList.Handle);
         }
     }
 
@@ -1979,27 +1980,29 @@ public partial class TreeView : Control
     // set the value of internalStateImageList to the new list
     private void UpdateNativeStateImageList()
     {
-        if (_stateImageList is not null && _stateImageList.Images.Count > 0)
+        if (_stateImageList is null || _stateImageList.Images.Count <= 0)
         {
-            ImageList newImageList = new ImageList();
-            if (ScaledStateImageSize is not null)
-            {
-                newImageList.ImageSize = (Size)ScaledStateImageSize;
-            }
-
-            Image[] images = new Image[_stateImageList.Images.Count + 1];
-            images[0] = _stateImageList.Images[0];
-            for (int i = 1; i <= _stateImageList.Images.Count; i++)
-            {
-                images[i] = _stateImageList.Images[i - 1];
-            }
-
-            newImageList.Images.AddRange(images);
-            PInvoke.SendMessage(this, PInvoke.TVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.TVSIL_STATE, (LPARAM)newImageList.Handle);
-
-            _internalStateImageList?.Dispose();
-            _internalStateImageList = newImageList;
+            return;
         }
+
+        ImageList newImageList = new();
+        if (ScaledStateImageSize is not null)
+        {
+            newImageList.ImageSize = (Size)ScaledStateImageSize;
+        }
+
+        Image[] images = new Image[_stateImageList.Images.Count + 1];
+        images[0] = _stateImageList.Images[0];
+        for (int i = 1; i <= _stateImageList.Images.Count; i++)
+        {
+            images[i] = _stateImageList.Images[i - 1];
+        }
+
+        newImageList.Images.AddRange(images);
+        PInvoke.SendMessage(this, PInvoke.TVM_SETIMAGELIST, (WPARAM)(uint)PInvoke.TVSIL_STATE, (LPARAM)newImageList.Handle);
+
+        _internalStateImageList?.Dispose();
+        _internalStateImageList = newImageList;
     }
 
     private void SetStateImageList(IntPtr handle)
