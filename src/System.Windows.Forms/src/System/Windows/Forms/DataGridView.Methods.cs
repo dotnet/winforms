@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -57,7 +55,11 @@ public partial class DataGridView
         AccessibilityNotifyClients(AccessibleEvents.Selection, objectID, childID);
     }
 
-    internal void ActivateToolTip(bool activate, string toolTipText, int columnIndex, int rowIndex)
+    internal void ActivateToolTip(
+        bool activate,
+        string toolTipText,
+        int columnIndex,
+        int rowIndex)
     {
         ToolTipPrivate = toolTipText;
         _ptToolTipCell = new Point(columnIndex, rowIndex);
@@ -68,7 +70,7 @@ public partial class DataGridView
     {
         Debug.Assert(NewRowIndex == -1);
 
-        Rows.AddInternal(true /*newRow*/, null /*values*/);
+        Rows.AddInternal(newRow: true, values: null);
         NewRowIndex = Rows.Count - 1;
         _dataGridViewState1[State1_NewRowCreatedByEditing] = createdByEditing;
 
@@ -88,10 +90,11 @@ public partial class DataGridView
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public virtual DataGridViewAdvancedBorderStyle AdjustColumnHeaderBorderStyle(DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput,
-                                                                     DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder,
-                                                                     bool isFirstDisplayedColumn,
-                                                                     bool isLastVisibleColumn)
+    public virtual DataGridViewAdvancedBorderStyle AdjustColumnHeaderBorderStyle(
+        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput,
+        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder,
+        bool isFirstDisplayedColumn,
+        bool isLastVisibleColumn)
     {
         if (ApplyVisualStylesToHeaderCells)
         {
@@ -371,7 +374,8 @@ public partial class DataGridView
                 ret |= AdjustExpandingColumn(dataGridViewColumn, rowIndex);
             }
 
-            dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
+            dataGridViewColumn = Columns.GetNextColumn(
+                dataGridViewColumn,
                 DataGridViewElementStates.Visible,
                 DataGridViewElementStates.None);
         }
@@ -510,7 +514,7 @@ public partial class DataGridView
                     }
                     finally
                     {
-                        ExitBulkLayout(false /*invalidInAdjustFillingColumns*/);
+                        ExitBulkLayout(invalidInAdjustFillingColumns: false);
                     }
                 }
                 else
@@ -897,7 +901,11 @@ public partial class DataGridView
             _dataGridViewState2[State2_UsedFillWeightsDirty] = false;
             _availableWidthForFillColumns = availableWidth;
             // AdjustFillingColumns() will resize columns based on the UsedFillWeight values
-            PerformLayoutPrivate(false /*useRowShortcut*/, true /*computeVisibleRows*/, false /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
+            PerformLayoutPrivate(
+                useRowShortcut: false,
+                computeVisibleRows: true,
+                invalidInAdjustFillingColumns: false,
+                repositionEditingControl: false);
         }
         finally
         {
@@ -923,7 +931,7 @@ public partial class DataGridView
             int imposedWidthSum = 0;        // total width of columns that don't have a flexible width.
             int requiredWidthSum = 0;       // total of the minimum widths of the visible auto filled columns.
             float weightSum = 0F;           // total of the weights of the visible auto filled columns.
-            List<DataGridViewColumn> autoFillColumns = null;
+            List<DataGridViewColumn>? autoFillColumns = null;
             foreach (DataGridViewColumn dataGridViewColumn in Columns)
             {
                 if (dataGridViewColumn.Visible)
@@ -976,7 +984,7 @@ public partial class DataGridView
                 {
                     // All auto filled columns need to take their minimum width. If (availableWidth < requiredWidthSum) a horizontal scrollbar appears.
                     availableWidth = 0;
-                    for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
+                    for (columnEntry = 0; columnEntry < autoFillColumns!.Count; columnEntry++)
                     {
                         DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                         int minimumWidth = dataGridViewColumn.DesiredMinimumWidth > 0 ? dataGridViewColumn.DesiredMinimumWidth : dataGridViewColumn.MinimumWidth;
@@ -1015,7 +1023,7 @@ public partial class DataGridView
                     // Assign desired widths
                     Debug.Assert(weightSum > 0);
                     bool desiredWidthTooSmall = false;
-                    for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
+                    for (columnEntry = 0; columnEntry < autoFillColumns!.Count; columnEntry++)
                     {
                         DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                         if (columnEntry == autoFillColumns.Count - 1)
@@ -1086,7 +1094,7 @@ public partial class DataGridView
                         // Available width increased
                         int widthGain = availableWidth - _availableWidthForFillColumns;
                         // Allocate additional width according to UsedFillWeight and FillWeight values
-                        for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
+                        for (columnEntry = 0; columnEntry < autoFillColumns!.Count; columnEntry++)
                         {
                             DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                             dataGridViewColumn.DesiredFillWidth = dataGridViewColumn.Width;
@@ -1137,7 +1145,7 @@ public partial class DataGridView
                         // availableWidth < this.availableWidthForFillColumns - Available width decreased
                         int totalWidthLoss = _availableWidthForFillColumns - availableWidth;
                         int cumulatedWidthLoss = 0;
-                        for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
+                        for (columnEntry = 0; columnEntry < autoFillColumns!.Count; columnEntry++)
                         {
                             DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                             dataGridViewColumn.DesiredFillWidth = dataGridViewColumn.Width;
@@ -1155,7 +1163,7 @@ public partial class DataGridView
                                 changeDone = false;
                                 // Determine which column deserves to shrink the most
                                 float biggestWeightDeficiency = 0F, fillWeightRatioSum = 0F, fillWeightRatio;
-                                DataGridViewColumn mostDeservingDataGridViewColumn = null;
+                                DataGridViewColumn? mostDeservingDataGridViewColumn = null;
                                 for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                                 {
                                     DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
@@ -1213,7 +1221,7 @@ public partial class DataGridView
 
 #if DEBUG
                 float weightSumDbg = 0F;
-                for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
+                for (columnEntry = 0; columnEntry < autoFillColumns!.Count; columnEntry++)
                 {
                     DataGridViewColumn dataGridViewColumn = autoFillColumns[columnEntry];
                     weightSumDbg += dataGridViewColumn.UsedFillWeight;
@@ -1228,9 +1236,9 @@ public partial class DataGridView
                     _dataGridViewState2[State2_AllowHorizontalScrollbar] = false;
                     usedWidth = 0;
                     float carryover = 0F;
-                    while (autoFillColumns.Count > 0)
+                    while (autoFillColumns!.Count > 0)
                     {
-                        DataGridViewColumn mostDeservingDataGridViewColumn = null;
+                        DataGridViewColumn? mostDeservingDataGridViewColumn = null;
                         if (autoFillColumns.Count == 1)
                         {
                             mostDeservingDataGridViewColumn = autoFillColumns[0];
@@ -1251,7 +1259,7 @@ public partial class DataGridView
                                 }
                             }
 
-                            float floatDesiredWidth = (mostDeservingDataGridViewColumn.UsedFillWeight * availableWidth / weightSum) + carryover;
+                            float floatDesiredWidth = (mostDeservingDataGridViewColumn!.UsedFillWeight * availableWidth / weightSum) + carryover;
                             mostDeservingDataGridViewColumn.DesiredFillWidth = Math.Max(mostDeservingDataGridViewColumn.MinimumWidth, (int)Math.Round(floatDesiredWidth, MidpointRounding.AwayFromZero));
                             carryover = floatDesiredWidth - mostDeservingDataGridViewColumn.DesiredFillWidth;
                             usedWidth += mostDeservingDataGridViewColumn.DesiredFillWidth;
@@ -1336,7 +1344,7 @@ public partial class DataGridView
                     }
                     finally
                     {
-                        ExitBulkLayout(false /*invalidInAdjustFillingColumns*/);
+                        ExitBulkLayout(invalidInAdjustFillingColumns: false);
                     }
                 }
                 else
@@ -1414,7 +1422,7 @@ public partial class DataGridView
             return true;
         }
 
-        DataGridViewRow dataGridViewRow = null;
+        DataGridViewRow? dataGridViewRow = null;
         bool allCellsSelected;
         switch (SelectionMode)
         {
@@ -1533,11 +1541,11 @@ public partial class DataGridView
     /// <summary>
     ///  Assigns a new parent control to the DataGridView.
     /// </summary>
-    internal override void AssignParent(Control value)
+    internal override void AssignParent(Control? value)
     {
         if (_toolTipControl.Activated)
         {
-            _toolTipControl.Activate(false /*activate*/);
+            _toolTipControl.Activate(activate: false);
         }
 
         base.AssignParent(value);
@@ -1589,7 +1597,7 @@ public partial class DataGridView
         {
             if (dataGridViewCols[i].IsDataBound)
             {
-                dataGridViewCols.RemoveAtInternal(i, true /*force*/);
+                dataGridViewCols.RemoveAtInternal(i, force: true);
             }
             else
             {
@@ -1601,7 +1609,7 @@ public partial class DataGridView
 
         // Sort the cloned columns array by the display index.
         // We need to copy the cloned columns into a possibly smaller array.
-        DataGridViewColumn[] finalClonedColumns;
+        DataGridViewColumn?[] finalClonedColumns;
         if (clonedColumns.Length == clonedColumnsCount)
         {
             finalClonedColumns = clonedColumns;
@@ -1633,7 +1641,7 @@ public partial class DataGridView
                     if (clonedColumn is not null &&
                         string.Compare(clonedColumn.DataPropertyName,
                             boundColumns[j].DataPropertyName,
-                            true /*ignoreCase*/,
+                            ignoreCase: true,
                             CultureInfo.InvariantCulture) == 0)
                     {
                         // add the cloned column.
@@ -1670,7 +1678,7 @@ public partial class DataGridView
                 {
                     dataGridViewCols.Add(finalClonedColumns[k]);
                     MapDataGridViewColumnToDataBoundField(finalClonedColumns[k]);
-                    Debug.Assert(finalClonedColumns[k].IsDataBound);
+                    Debug.Assert(finalClonedColumns[k]!.IsDataBound);
                 }
             }
         }
@@ -1707,7 +1715,7 @@ public partial class DataGridView
 
     public void AutoResizeColumn(int columnIndex, DataGridViewAutoSizeColumnMode autoSizeColumnMode)
     {
-        AutoResizeColumn(columnIndex, autoSizeColumnMode, true);
+        AutoResizeColumn(columnIndex, autoSizeColumnMode, fixedHeight: true);
     }
 
     protected void AutoResizeColumn(int columnIndex, DataGridViewAutoSizeColumnMode autoSizeColumnMode, bool fixedHeight)
@@ -1747,12 +1755,12 @@ public partial class DataGridView
 
     public void AutoResizeColumnHeadersHeight()
     {
-        AutoResizeColumnHeadersHeight(true, true);
+        AutoResizeColumnHeadersHeight(fixedRowHeadersWidth: true, fixedColumnsWidth: true);
     }
 
     public void AutoResizeColumnHeadersHeight(int columnIndex)
     {
-        AutoResizeColumnHeadersHeight(columnIndex, true, true);
+        AutoResizeColumnHeadersHeight(columnIndex, fixedRowHeadersWidth: true, fixedColumnWidth: true);
     }
 
     protected void AutoResizeColumnHeadersHeight(bool fixedRowHeadersWidth, bool fixedColumnsWidth)
@@ -1816,7 +1824,7 @@ public partial class DataGridView
 
             if (preferredHeight != ColumnHeadersHeight)
             {
-                SetColumnHeadersHeightInternal(preferredHeight, !fixedColumnsWidth /*invalidInAdjustFillingColumns*/);
+                SetColumnHeadersHeightInternal(preferredHeight, invalidInAdjustFillingColumns: !fixedColumnsWidth);
             }
         }
         finally
@@ -1890,7 +1898,7 @@ public partial class DataGridView
 
             if (preferredHeight != ColumnHeadersHeight)
             {
-                SetColumnHeadersHeightInternal(preferredHeight, !fixedColumnWidth /*invalidInAdjustFillingColumns*/);
+                SetColumnHeadersHeightInternal(preferredHeight, invalidInAdjustFillingColumns: !fixedColumnWidth);
             }
         }
         finally
@@ -1966,7 +1974,7 @@ public partial class DataGridView
 
     public void AutoResizeColumns(DataGridViewAutoSizeColumnsMode autoSizeColumnsMode)
     {
-        AutoResizeColumns(autoSizeColumnsMode, true);
+        AutoResizeColumns(autoSizeColumnsMode, fixedHeight: true);
     }
 
     protected void AutoResizeColumns(DataGridViewAutoSizeColumnsMode autoSizeColumnsMode, bool fixedHeight)
@@ -1984,7 +1992,7 @@ public partial class DataGridView
 
     public void AutoResizeRow(int rowIndex, DataGridViewAutoSizeRowMode autoSizeRowMode)
     {
-        AutoResizeRow(rowIndex, autoSizeRowMode, true /*fixedWidth*/);
+        AutoResizeRow(rowIndex, autoSizeRowMode, fixedWidth: true);
     }
 
     protected void AutoResizeRow(int rowIndex, DataGridViewAutoSizeRowMode autoSizeRowMode, bool fixedWidth)
@@ -2003,21 +2011,23 @@ public partial class DataGridView
             throw new InvalidOperationException(SR.DataGridView_CannotAutoSizeRowInvisibleRowHeader);
         }
 
-        AutoResizeRowInternal(rowIndex, autoSizeRowMode, fixedWidth, false /*internalAutosizing*/);
+        AutoResizeRowInternal(rowIndex, autoSizeRowMode, fixedWidth, internalAutosizing: false);
     }
 
     // User can override this if there is a quicker way to determine preferred row headers width
     public void AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode)
     {
-        AutoResizeRowHeadersWidth(rowHeadersWidthSizeMode,
-                                  true /*fixedColumnHeadersHeight*/,
-                                  true /*fixedRowsHeight*/);
+        AutoResizeRowHeadersWidth(
+            rowHeadersWidthSizeMode,
+            fixedColumnHeadersHeight: true,
+            fixedRowsHeight: true);
     }
 
     // User can override this if there is a quicker way to determine preferred row headers width
-    protected void AutoResizeRowHeadersWidth(DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode,
-                                             bool fixedColumnHeadersHeight,
-                                             bool fixedRowsHeight)
+    protected void AutoResizeRowHeadersWidth(
+        DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode,
+        bool fixedColumnHeadersHeight,
+        bool fixedRowsHeight)
     {
         if (rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing ||
             rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.DisableResizing)
@@ -2100,8 +2110,9 @@ public partial class DataGridView
                                 preferredWidth = Math.Max(preferredWidth, dataGridViewRow.HeaderCell.GetPreferredSize(rowIndex).Width);
                             }
 
-                            rowIndex = Rows.GetNextRow(rowIndex,
-                                                            DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+                            rowIndex = Rows.GetNextRow(
+                                rowIndex,
+                                DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                         }
 
                         if (cy < displayHeight)
@@ -2173,16 +2184,18 @@ public partial class DataGridView
 
     public void AutoResizeRowHeadersWidth(int rowIndex, DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode)
     {
-        AutoResizeRowHeadersWidth(rowIndex,
-                                  rowHeadersWidthSizeMode,
-                                  true /*fixedColumnHeadersHeight*/,
-                                  true /*fixedRowHeight*/);
+        AutoResizeRowHeadersWidth(
+            rowIndex,
+            rowHeadersWidthSizeMode,
+            fixedColumnHeadersHeight: true,
+            fixedRowHeight: true);
     }
 
-    protected void AutoResizeRowHeadersWidth(int rowIndex,
-                                             DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode,
-                                             bool fixedColumnHeadersHeight,
-                                             bool fixedRowHeight)
+    protected void AutoResizeRowHeadersWidth(
+        int rowIndex,
+        DataGridViewRowHeadersWidthSizeMode rowHeadersWidthSizeMode,
+        bool fixedColumnHeadersHeight,
+        bool fixedRowHeight)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(rowIndex, -1);
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, Rows.Count);
@@ -2424,7 +2437,7 @@ public partial class DataGridView
 
     public void AutoResizeRows(DataGridViewAutoSizeRowsMode autoSizeRowsMode)
     {
-        AutoResizeRows(autoSizeRowsMode, true /*fixedWidth*/);
+        AutoResizeRows(autoSizeRowsMode, fixedWidth: true);
     }
 
     protected void AutoResizeRows(DataGridViewAutoSizeRowsMode autoSizeRowsMode, bool fixedWidth)
@@ -2454,7 +2467,7 @@ public partial class DataGridView
             throw new InvalidOperationException(SR.DataGridView_CannotAutoSizeRowsInvisibleRowHeader);
         }
 
-        AdjustShrinkingRows(autoSizeRowsMode, fixedWidth, false /*internalAutosizing*/);
+        AdjustShrinkingRows(autoSizeRowsMode, fixedWidth, internalAutosizing: false);
     }
 
     protected void AutoResizeRows(int rowIndexStart, int rowsCount, DataGridViewAutoSizeRowMode autoSizeRowMode, bool fixedWidth)
@@ -2490,7 +2503,7 @@ public partial class DataGridView
             int autoSizedCount = 0;
             while (rowIndex != -1 && autoSizedCount < rowsCount)
             {
-                AutoResizeRowInternal(rowIndex, autoSizeRowMode, fixedWidth, false /*internalAutosizing*/);
+                AutoResizeRowInternal(rowIndex, autoSizeRowMode, fixedWidth, internalAutosizing: false);
                 autoSizedCount++;
                 if (autoSizedCount < rowsCount)
                 {
@@ -2500,7 +2513,7 @@ public partial class DataGridView
         }
         finally
         {
-            ExitBulkLayout(true /*invalidInAdjustFillingColumns*/);
+            ExitBulkLayout(invalidInAdjustFillingColumns: true);
             ExitBulkPaint(-1, -1);
         }
     }
@@ -2687,7 +2700,7 @@ public partial class DataGridView
             if (editControlType is null)
             {
                 // Current cell does not have an editing control. Does it implement IDataGridViewEditingCell?
-                Type editingCellInterface = dataGridViewCell.GetType().GetInterface("System.Windows.Forms.IDataGridViewEditingCell");
+                Type? editingCellInterface = dataGridViewCell.GetType().GetInterface("System.Windows.Forms.IDataGridViewEditingCell");
                 if (editingCellInterface is null)
                 {
                     return false;
@@ -2721,7 +2734,7 @@ public partial class DataGridView
                     if (editControlType is null)
                     {
                         // Current cell does not have an editing control. Does it implement IDataGridViewEditingCell?
-                        Type editingCellInterface = dataGridViewCell.GetType().GetInterface("System.Windows.Forms.IDataGridViewEditingCell");
+                        Type? editingCellInterface = dataGridViewCell.GetType().GetInterface("System.Windows.Forms.IDataGridViewEditingCell");
                         if (editingCellInterface is null)
                         {
                             return false;
@@ -2734,7 +2747,7 @@ public partial class DataGridView
                 return false;
             }
 
-            DataGridViewCellStyle dataGridViewCellStyle = dataGridViewCell.GetInheritedStyle(null, _ptCurrentCell.Y, true);
+            DataGridViewCellStyle dataGridViewCellStyle = dataGridViewCell.GetInheritedStyle(inheritedCellStyle: null, _ptCurrentCell.Y, includeColors: true);
 
             if (editControlType is null)
             {
@@ -2744,8 +2757,8 @@ public partial class DataGridView
                 return true;
             }
 
-            Type editingCtrlInterface = editControlType.GetInterface("System.Windows.Forms.IDataGridViewEditingControl");
-            if (!editControlType.IsSubclassOf(Type.GetType("System.Windows.Forms.Control")) ||
+            Type? editingCtrlInterface = editControlType.GetInterface("System.Windows.Forms.IDataGridViewEditingControl");
+            if (!editControlType.IsSubclassOf(Type.GetType("System.Windows.Forms.Control")!) ||
                 editingCtrlInterface is null)
             {
                 throw new InvalidCastException(SR.DataGridView_InvalidEditingControl);
@@ -2761,7 +2774,7 @@ public partial class DataGridView
             else
             {
                 Debug.Assert(EditingControl is null);
-                EditingControl = (Control)Activator.CreateInstance(editControlType);
+                EditingControl = (Control)Activator.CreateInstance(editControlType)!;
                 Debug.Assert(EditingControl is not null);
 
                 ((IDataGridViewEditingControl)EditingControl).EditingControlDataGridView = this;
@@ -2802,10 +2815,10 @@ public partial class DataGridView
             // Get rid of the tooltip if it's showing for the current cell
             if (_toolTipControl.Activated && _ptToolTipCell == _ptCurrentCell)
             {
-                _toolTipControl.Activate(false /*activate*/);
+                _toolTipControl.Activate(activate: false);
             }
 
-            PositionEditingControl(true, true, true);
+            PositionEditingControl(setLocation: true, setSize: true, setFocus: true);
 
             // Guarding against bugs in customer code.
             // For example setting the CurrentCell to null in DataGridView_OnLostFocus(...) causes this.editingControl
@@ -2889,7 +2902,7 @@ public partial class DataGridView
     {
         Debug.Assert(inheritedCellStyle is not null);
 
-        DataGridViewCellStyle cellStyle = null;
+        DataGridViewCellStyle? cellStyle = null;
         if (cell.HasStyle)
         {
             cellStyle = cell.Style;
@@ -3051,7 +3064,7 @@ public partial class DataGridView
         {
             inheritedCellStyle.Tag = cellStyle.Tag;
         }
-        else if (columnHeadersStyle.Tag is not null)
+        else if (columnHeadersStyle!.Tag is not null)
         {
             inheritedCellStyle.Tag = columnHeadersStyle.Tag;
         }
@@ -3064,7 +3077,7 @@ public partial class DataGridView
         {
             inheritedCellStyle.PaddingInternal = cellStyle.Padding;
         }
-        else if (columnHeadersStyle.Padding != Padding.Empty)
+        else if (columnHeadersStyle!.Padding != Padding.Empty)
         {
             inheritedCellStyle.PaddingInternal = columnHeadersStyle.Padding;
         }
@@ -3084,16 +3097,21 @@ public partial class DataGridView
 
         if (RightToLeftInternal)
         {
-            r = new Rectangle(mouseX + _mouseBarOffset - Columns[_trackColumn].Thickness + 1,
-                              inside.Y,
-                              Columns[_trackColumn].Thickness,
-                              inside.Height);
+            r = new Rectangle(
+                mouseX + _mouseBarOffset - Columns[_trackColumn].Thickness + 1,
+                inside.Y,
+                Columns[_trackColumn].Thickness,
+                inside.Height);
             r.X = Math.Max(inside.Left, r.X);
             r.X = Math.Min(r.X, inside.Right - r.Width);
         }
         else
         {
-            r = new Rectangle(mouseX + _mouseBarOffset - 1, inside.Y, Columns[_trackColumn].Thickness, inside.Height);
+            r = new Rectangle(
+                mouseX + _mouseBarOffset - 1,
+                inside.Y,
+                Columns[_trackColumn].Thickness,
+                inside.Height);
             r.X = Math.Min(inside.Right - r.Width, r.X);
             r.X = Math.Max(r.X, inside.Left);
         }
@@ -3104,7 +3122,11 @@ public partial class DataGridView
     private Rectangle CalcColResizeFeedbackRect(int mouseX)
     {
         Rectangle inside = _layout.Data;
-        Rectangle r = new Rectangle(mouseX + _mouseBarOffset - 1, inside.Y, 3, inside.Height);
+        Rectangle r = new Rectangle(
+            mouseX + _mouseBarOffset - 1,
+            inside.Y,
+            3,
+            inside.Height);
         if (RightToLeftInternal)
         {
             r.X = Math.Max(inside.Left, r.X);
@@ -3121,12 +3143,16 @@ public partial class DataGridView
     private Rectangle CalcRowResizeFeedbackRect(int mouseY)
     {
         Rectangle inside = _layout.Data;
-        Rectangle r = new Rectangle(inside.X, mouseY + _mouseBarOffset - 1, inside.Width, 3);
+        Rectangle r = new Rectangle(
+            inside.X,
+            mouseY + _mouseBarOffset - 1,
+            inside.Width,
+            3);
         r.Y = Math.Min(inside.Bottom - 3, r.Y);
         r.Y = Math.Max(r.Y, 0);
         return r;
     }
-
+#nullable disable
     public bool CancelEdit()
     {
         return CancelEdit(false /*endEdit, DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.InitialValueRestoration*/);
