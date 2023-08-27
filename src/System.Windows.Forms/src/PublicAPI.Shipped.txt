@@ -4,8 +4,8 @@
 ~override System.Windows.Forms.ControlBindingsCollection.RemoveCore(System.Windows.Forms.Binding dataBinding) -> void
 ~override System.Windows.Forms.CurrencyManager.Current.get -> object
 ~override System.Windows.Forms.CurrencyManager.GetItemProperties() -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.DataGridView.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
+override System.Windows.Forms.DataGridView.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
 ~override System.Windows.Forms.DataGridView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridView.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
 ~override System.Windows.Forms.DataGridView.Font.get -> System.Drawing.Font
@@ -331,11 +331,11 @@
 ~System.Windows.Forms.ControlBindingsCollection.Remove(System.Windows.Forms.Binding binding) -> void
 ~System.Windows.Forms.ControlBindingsCollection.this[string propertyName].get -> System.Windows.Forms.Binding
 ~System.Windows.Forms.CurrencyManager.List.get -> System.Collections.IList
-~System.Windows.Forms.DataGridView.AdvancedCellBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
-~System.Windows.Forms.DataGridView.AdvancedColumnHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
-~System.Windows.Forms.DataGridView.AdvancedRowHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
-~System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyle.set -> void
+System.Windows.Forms.DataGridView.AdvancedCellBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
+System.Windows.Forms.DataGridView.AdvancedColumnHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
+System.Windows.Forms.DataGridView.AdvancedRowHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
+System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyle.set -> void
 ~System.Windows.Forms.DataGridView.ColumnHeadersDefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
 ~System.Windows.Forms.DataGridView.ColumnHeadersDefaultCellStyle.set -> void
 ~System.Windows.Forms.DataGridView.Columns.get -> System.Windows.Forms.DataGridViewColumnCollection
@@ -668,7 +668,7 @@
 ~virtual System.Windows.Forms.BindingSource.this[int index].get -> object
 ~virtual System.Windows.Forms.BindingSource.this[int index].set -> void
 ~virtual System.Windows.Forms.DataGridView.AdjustColumnHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder, bool isFirstDisplayedColumn, bool isLastVisibleColumn) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
-~virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
+virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
 ~virtual System.Windows.Forms.DataGridView.CreateColumnsInstance() -> System.Windows.Forms.DataGridViewColumnCollection
 ~virtual System.Windows.Forms.DataGridView.CreateRowsInstance() -> System.Windows.Forms.DataGridViewRowCollection
 ~virtual System.Windows.Forms.DataGridView.GetClipboardContent() -> System.Windows.Forms.DataObject
@@ -5307,24 +5307,24 @@ System.Windows.Forms.DataFormats.Format.Name.get -> string!
 System.Windows.Forms.DataGridView
 System.Windows.Forms.DataGridView.AllowUserToAddRows.get -> bool
 System.Windows.Forms.DataGridView.AllowUserToAddRows.set -> void
-System.Windows.Forms.DataGridView.AllowUserToAddRowsChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AllowUserToAddRowsChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.AllowUserToDeleteRows.get -> bool
 System.Windows.Forms.DataGridView.AllowUserToDeleteRows.set -> void
-System.Windows.Forms.DataGridView.AllowUserToDeleteRowsChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AllowUserToDeleteRowsChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.AllowUserToOrderColumns.get -> bool
 System.Windows.Forms.DataGridView.AllowUserToOrderColumns.set -> void
-System.Windows.Forms.DataGridView.AllowUserToOrderColumnsChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AllowUserToOrderColumnsChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.AllowUserToResizeColumns.get -> bool
 System.Windows.Forms.DataGridView.AllowUserToResizeColumns.set -> void
-System.Windows.Forms.DataGridView.AllowUserToResizeColumnsChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AllowUserToResizeColumnsChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.AllowUserToResizeRows.get -> bool
 System.Windows.Forms.DataGridView.AllowUserToResizeRows.set -> void
-System.Windows.Forms.DataGridView.AllowUserToResizeRowsChanged -> System.EventHandler
-System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyleChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AllowUserToResizeRowsChanged -> System.EventHandler?
+System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyleChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.AreAllCellsSelected(bool includeInvisibleCells) -> bool
 System.Windows.Forms.DataGridView.AutoGenerateColumns.get -> bool
 System.Windows.Forms.DataGridView.AutoGenerateColumns.set -> void
-System.Windows.Forms.DataGridView.AutoGenerateColumnsChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AutoGenerateColumnsChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.AutoResizeColumn(int columnIndex) -> void
 System.Windows.Forms.DataGridView.AutoResizeColumn(int columnIndex, System.Windows.Forms.DataGridViewAutoSizeColumnMode autoSizeColumnMode) -> void
 System.Windows.Forms.DataGridView.AutoResizeColumn(int columnIndex, System.Windows.Forms.DataGridViewAutoSizeColumnMode autoSizeColumnMode, bool fixedHeight) -> void
@@ -5349,16 +5349,16 @@ System.Windows.Forms.DataGridView.AutoResizeRows(System.Windows.Forms.DataGridVi
 System.Windows.Forms.DataGridView.AutoSizeColumnModeChanged -> System.Windows.Forms.DataGridViewAutoSizeColumnModeEventHandler
 System.Windows.Forms.DataGridView.AutoSizeColumnsMode.get -> System.Windows.Forms.DataGridViewAutoSizeColumnsMode
 System.Windows.Forms.DataGridView.AutoSizeColumnsMode.set -> void
-System.Windows.Forms.DataGridView.AutoSizeColumnsModeChanged -> System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventHandler
+System.Windows.Forms.DataGridView.AutoSizeColumnsModeChanged -> System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventHandler?
 System.Windows.Forms.DataGridView.AutoSizeRowsMode.get -> System.Windows.Forms.DataGridViewAutoSizeRowsMode
 System.Windows.Forms.DataGridView.AutoSizeRowsMode.set -> void
-System.Windows.Forms.DataGridView.AutoSizeRowsModeChanged -> System.Windows.Forms.DataGridViewAutoSizeModeEventHandler
-System.Windows.Forms.DataGridView.BackColorChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AutoSizeRowsModeChanged -> System.Windows.Forms.DataGridViewAutoSizeModeEventHandler?
+System.Windows.Forms.DataGridView.BackColorChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.BackgroundColor.get -> System.Drawing.Color
 System.Windows.Forms.DataGridView.BackgroundColor.set -> void
-System.Windows.Forms.DataGridView.BackgroundColorChanged -> System.EventHandler
-System.Windows.Forms.DataGridView.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.DataGridView.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.BackgroundColorChanged -> System.EventHandler?
+System.Windows.Forms.DataGridView.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.DataGridView.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.DataGridView.BorderStyle.set -> void
 System.Windows.Forms.DataGridView.BorderStyleChanged -> System.EventHandler

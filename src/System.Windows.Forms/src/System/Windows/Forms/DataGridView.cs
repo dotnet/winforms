@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -254,24 +252,30 @@ public partial class DataGridView : Control, ISupportInitialize
 
     private const DataGridViewAutoSizeRowCriteriaInternal InvalidDataGridViewAutoSizeRowCriteriaInternalMask
         = ~(DataGridViewAutoSizeRowCriteriaInternal.Header | DataGridViewAutoSizeRowCriteriaInternal.AllColumns);
-    private Cursor _oldCursor;
+    private Cursor? _oldCursor;
 
     private HScrollBar _horizScrollBar = new();
     private VScrollBar _vertScrollBar = new();
-    private DataGridViewHeaderCell _topLeftHeaderCell;
+    private DataGridViewHeaderCell? _topLeftHeaderCell;
 
-    private DataGridViewRow _rowTemplate;
-    private DataGridViewRowCollection _dataGridViewRows;
-    private DataGridViewColumnCollection _dataGridViewColumns;
+    private DataGridViewRow? _rowTemplate;
+    private DataGridViewRowCollection? _dataGridViewRows;
+    private DataGridViewColumnCollection? _dataGridViewColumns;
 
-    private DataGridViewCellStyle _placeholderCellStyle;
-    private StringFormat _placeholderStringFormat;
-    private object _uneditedFormattedValue;
-    private Control _latestEditingControl, _cachedEditingControl;
-    private Panel _editingPanel;
-    private DataGridViewEditingPanelAccessibleObject _editingPanelAccessibleObject;
-    private Point _ptCurrentCell, _ptCurrentCellCache = Point.Empty, _ptAnchorCell, _ptMouseDownCell,
-        _ptMouseEnteredCell, _ptToolTipCell, _ptMouseDownGridCoord;
+    private DataGridViewCellStyle? _placeholderCellStyle;
+    private StringFormat? _placeholderStringFormat;
+    private object? _uneditedFormattedValue;
+    private Control? _latestEditingControl;
+    private Control? _cachedEditingControl;
+    private Panel? _editingPanel;
+    private DataGridViewEditingPanelAccessibleObject? _editingPanelAccessibleObject;
+    private Point _ptCurrentCell;
+    private Point _ptCurrentCellCache = Point.Empty;
+    private Point _ptAnchorCell;
+    private Point _ptMouseDownCell;
+    private Point _ptMouseEnteredCell;
+    private Point _ptToolTipCell;
+    private Point _ptMouseDownGridCoord;
 
     private DataGridViewSelectionMode _selectionMode;
     private DataGridViewEditMode _editMode;
@@ -280,10 +284,13 @@ public partial class DataGridView : Control, ISupportInitialize
     private readonly DataGridViewCellLinkedList _individualSelectedCells;
     private readonly DataGridViewCellLinkedList _individualReadOnlyCells;
     private readonly DataGridViewIntLinkedList _selectedBandIndexes;
-    private DataGridViewIntLinkedList _selectedBandSnapshotIndexes;
+    private DataGridViewIntLinkedList? _selectedBandSnapshotIndexes;
 
-    private DataGridViewCellStyle _defaultCellStyle, _columnHeadersDefaultCellStyle, _rowHeadersDefaultCellStyle;
-    private DataGridViewCellStyle _rowsDefaultCellStyle, _alternatingRowsDefaultCellStyle;
+    private DataGridViewCellStyle? _defaultCellStyle;
+    private DataGridViewCellStyle? _columnHeadersDefaultCellStyle;
+    private DataGridViewCellStyle? _rowHeadersDefaultCellStyle;
+    private DataGridViewCellStyle? _rowsDefaultCellStyle;
+    private DataGridViewCellStyle? _alternatingRowsDefaultCellStyle;
     private ScrollBars _scrollBars;
     private LayoutData _layout;
     private Rectangle _normalClientRectangle;
@@ -308,12 +315,12 @@ public partial class DataGridView : Control, ISupportInitialize
     private DataGridViewColumnHeadersHeightSizeMode _columnHeadersHeightSizeMode;
     private DataGridViewRowHeadersWidthSizeMode _rowHeadersWidthSizeMode;
 
-    private DataGridViewCellStyleChangedEventArgs _dgvcsce;
-    private DataGridViewCellPaintingEventArgs _dgvcpe;
-    private DataGridViewCellValueEventArgs _dgvcve;
-    private DataGridViewRowHeightInfoNeededEventArgs _dgvrhine;
-    private DataGridViewRowPostPaintEventArgs _dgvrpope;
-    private DataGridViewRowPrePaintEventArgs _dgvrprpe;
+    private DataGridViewCellStyleChangedEventArgs? _dgvcsce;
+    private DataGridViewCellPaintingEventArgs? _dgvcpe;
+    private DataGridViewCellValueEventArgs? _dgvcve;
+    private DataGridViewRowHeightInfoNeededEventArgs? _dgvrhine;
+    private DataGridViewRowPostPaintEventArgs? _dgvrpope;
+    private DataGridViewRowPrePaintEventArgs? _dgvrprpe;
 
     // The sum of the widths in pixels of the scrolling columns preceding the first visible scrolling column.
     private int _horizontalOffset;
@@ -342,14 +349,15 @@ public partial class DataGridView : Control, ISupportInitialize
     private int _keyboardResizeStep;
     private Rectangle _resizeClipRectangle;
 
-    private Timer _vertScrollTimer, _horizScrollTimer;
+    private Timer? _vertScrollTimer;
+    private Timer? _horizScrollTimer;
 
     private readonly Dictionary<Type, TypeConverter> _converters;
     private static Color s_defaultBackColor = SystemColors.Window;
     private static Color s_defaultBackgroundColor = SystemColors.ControlDark;
     private Color _backgroundColor = s_defaultBackgroundColor;
 
-    private RECT[] _cachedScrollableRegion;
+    private RECT[]? _cachedScrollableRegion;
 
     // ToolTip
     private readonly DataGridViewToolTip _toolTipControl;
@@ -683,7 +691,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewOnAllowUserToAddRowsChangedDescr))]
-    public event EventHandler AllowUserToAddRowsChanged
+    public event EventHandler? AllowUserToAddRowsChanged
     {
         add => Events.AddHandler(s_allowUserToAddRowsChangedEvent, value);
         remove => Events.RemoveHandler(s_allowUserToAddRowsChangedEvent, value);
@@ -725,7 +733,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewOnAllowUserToDeleteRowsChangedDescr))]
-    public event EventHandler AllowUserToDeleteRowsChanged
+    public event EventHandler? AllowUserToDeleteRowsChanged
     {
         add => Events.AddHandler(s_allowUserToDeleteRowsChangedEvent, value);
         remove => Events.RemoveHandler(s_allowUserToDeleteRowsChangedEvent, value);
@@ -752,7 +760,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewOnAllowUserToOrderColumnsChangedDescr))]
-    public event EventHandler AllowUserToOrderColumnsChanged
+    public event EventHandler? AllowUserToOrderColumnsChanged
     {
         add => Events.AddHandler(s_allowUserToOrderColumnsChangedEvent, value);
         remove => Events.RemoveHandler(s_allowUserToOrderColumnsChangedEvent, value);
@@ -783,7 +791,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewOnAllowUserToResizeColumnsChangedDescr))]
-    public event EventHandler AllowUserToResizeColumnsChanged
+    public event EventHandler? AllowUserToResizeColumnsChanged
     {
         add => Events.AddHandler(s_allowUserToResizeColumnsChangedEvent, value);
         remove => Events.RemoveHandler(s_allowUserToResizeColumnsChangedEvent, value);
@@ -814,7 +822,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewOnAllowUserToResizeRowsChangedDescr))]
-    public event EventHandler AllowUserToResizeRowsChanged
+    public event EventHandler? AllowUserToResizeRowsChanged
     {
         add => Events.AddHandler(s_allowUserToResizeRowsChangedEvent, value);
         remove => Events.RemoveHandler(s_allowUserToResizeRowsChangedEvent, value);
@@ -822,6 +830,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_AlternatingRowsDefaultCellStyleDescr))]
+    [AllowNull]
     public DataGridViewCellStyle AlternatingRowsDefaultCellStyle
     {
         get
@@ -839,10 +848,7 @@ public partial class DataGridView : Control, ISupportInitialize
             DataGridViewCellStyle cs = AlternatingRowsDefaultCellStyle;
             cs.RemoveScope(DataGridViewCellStyleScopes.AlternatingRows);
             _alternatingRowsDefaultCellStyle = value;
-            if (value is not null)
-            {
-                _alternatingRowsDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.AlternatingRows);
-            }
+            _alternatingRowsDefaultCellStyle?.AddScope(this, DataGridViewCellStyleScopes.AlternatingRows);
 
             DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(AlternatingRowsDefaultCellStyle);
             if (dgvcsc != DataGridViewCellStyleDifferences.None)
@@ -855,7 +861,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewAlternatingRowsDefaultCellStyleChangedDescr))]
-    public event EventHandler AlternatingRowsDefaultCellStyleChanged
+    public event EventHandler? AlternatingRowsDefaultCellStyleChanged
     {
         add => Events.AddHandler(s_alternatingRowsDefaultCellStyleChangedEvent, value);
         remove => Events.RemoveHandler(s_alternatingRowsDefaultCellStyleChangedEvent, value);
@@ -898,7 +904,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public event EventHandler AutoGenerateColumnsChanged
+    public event EventHandler? AutoGenerateColumnsChanged
     {
         add => Events.AddHandler(s_autoGenerateColumnsChangedEvent, value);
         remove => Events.RemoveHandler(s_autoGenerateColumnsChangedEvent, value);
@@ -989,7 +995,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewAutoSizeColumnsModeChangedDescr))]
-    public event DataGridViewAutoSizeColumnsModeEventHandler AutoSizeColumnsModeChanged
+    public event DataGridViewAutoSizeColumnsModeEventHandler? AutoSizeColumnsModeChanged
     {
         add => Events.AddHandler(s_autosizeColumnsModeChangedEvent, value);
         remove => Events.RemoveHandler(s_autosizeColumnsModeChangedEvent, value);
@@ -1040,7 +1046,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewAutoSizeRowsModeChangedDescr))]
-    public event DataGridViewAutoSizeModeEventHandler AutoSizeRowsModeChanged
+    public event DataGridViewAutoSizeModeEventHandler? AutoSizeRowsModeChanged
     {
         add => Events.AddHandler(s_autosizeRowsModeChangedEvent, value);
         remove => Events.RemoveHandler(s_autosizeRowsModeChangedEvent, value);
@@ -1057,7 +1063,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackColorChanged
+    public new event EventHandler? BackColorChanged
     {
         add => base.BackColorChanged += value;
         remove => base.BackColorChanged -= value;
@@ -1088,7 +1094,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewBackgroundColorChangedDescr))]
-    public event EventHandler BackgroundColorChanged
+    public event EventHandler? BackgroundColorChanged
     {
         add => Events.AddHandler(s_backgroundColorChangedEvent, value);
         remove => Events.RemoveHandler(s_backgroundColorChangedEvent, value);
@@ -1096,7 +1102,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public override Image BackgroundImage
+    public override Image? BackgroundImage
     {
         get => base.BackgroundImage;
         set => base.BackgroundImage = value;
@@ -1112,7 +1118,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageChanged
+    public new event EventHandler? BackgroundImageChanged
     {
         add => base.BackgroundImageChanged += value;
         remove => base.BackgroundImageChanged -= value;
@@ -1120,14 +1126,14 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler BackgroundImageLayoutChanged
+    public new event EventHandler? BackgroundImageLayoutChanged
     {
         add => base.BackgroundImageLayoutChanged += value;
         remove => base.BackgroundImageLayoutChanged -= value;
     }
 
     private bool ShouldSerializeBackgroundColor() => !BackgroundColor.Equals(s_defaultBackgroundColor);
-
+#nullable disable
     [DefaultValue(BorderStyle.FixedSingle)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_BorderStyleDescr))]
