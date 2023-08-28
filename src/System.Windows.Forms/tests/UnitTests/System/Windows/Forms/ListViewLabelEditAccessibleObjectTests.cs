@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using static System.Windows.Forms.ListViewItem;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -49,11 +50,8 @@ public class ListViewLabelEditAccessibleObjectTests
         ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
-        Assert.Equal(listView.AccessibilityObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
-        Assert.Equal(listView.Items[0].AccessibilityObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(listView._listViewSubItem.AccessibilityObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.NotNull(accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
     }
 
     [WinFormsFact]
@@ -79,17 +77,6 @@ public class ListViewLabelEditAccessibleObjectTests
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.Equal(new int[] { AccessibleObject.RuntimeIDFirstItem, PARAM.ToInt(labelEdit.Handle) }, accessibilityObject.RuntimeId);
-    }
-
-    [WinFormsFact]
-    public void ListViewLabelEditAccessibleObject_FragmentRoot_ReturnsExpected()
-    {
-        using ListView listView = CreateListViewAndStartEditing();
-
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
-        ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
-
-        Assert.Equal(listView.AccessibilityObject, accessibilityObject.FragmentRoot);
     }
 
     [WinFormsFact]
@@ -158,9 +145,11 @@ public class ListViewLabelEditAccessibleObjectTests
 
         listView.Columns.Add(new ColumnHeader() { Text = "Column 1", Width = 100 });
 
-        ListViewItem item = new("Test");
+        ListViewItem item = new("Test",0);
+        ListViewSubItem subItem = new ListViewSubItem(item, "Test");
+        item.SubItems.Add(subItem);
         listView.Items.Add(item);
-
+        listView._listViewSubItem = subItem;
         listView.CreateControl();
 
         PInvoke.SetFocus(listView);

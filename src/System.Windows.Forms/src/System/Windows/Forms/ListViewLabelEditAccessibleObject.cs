@@ -36,8 +36,6 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
         return direction switch
         {
             UiaCore.NavigateDirection.Parent => Parent,
-            UiaCore.NavigateDirection.NextSibling => Parent?.GetChildIndex(this) is int childId and >= 0 ? Parent.GetChild(childId + 1) : null,
-            UiaCore.NavigateDirection.PreviousSibling => Parent?.GetChildIndex(this) is int childId and >= 0 ? Parent.GetChild(childId - 1) : null,
             _ => base.FragmentNavigate(direction),
         };
     }

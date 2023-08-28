@@ -3397,24 +3397,24 @@ public partial class ListView : Control
                     // win32 listView control can't search inside sub items
                     for (int i = startIndex; i < Items.Count; i++)
                     {
-                        ListViewItem lvi = Items[i];
-                        for (int j = 0; j < lvi.SubItems.Count; j++)
+                        ListViewItem listViewItem = Items[i];
+                        for (int j = 0; j < listViewItem.SubItems.Count; j++)
                         {
-                            ListViewSubItem lvsi = lvi.SubItems[j];
+                            ListViewSubItem listViewSubItem = listViewItem.SubItems[j];
                             // the win32 list view search for items w/ text is case insensitive
                             // do the same for sub items
                             // because we are comparing user defined strings we have to do the slower String search
                             // ie, use String.Compare(string, string, case sensitive, CultureInfo)
                             // instead of new Whidbey String.Equals overload
                             // String.Equals(string, string, StringComparison.OrdinalIgnoreCase
-                            if (string.Equals(text, lvsi.Text, StringComparison.OrdinalIgnoreCase))
+                            if (string.Equals(text, listViewSubItem.Text, StringComparison.OrdinalIgnoreCase))
                             {
-                                return lvi;
+                                return listViewItem;
                             }
 
-                            if (isPrefixSearch && CultureInfo.CurrentCulture.CompareInfo.IsPrefix(lvsi.Text, text, CompareOptions.IgnoreCase))
+                            if (isPrefixSearch && CultureInfo.CurrentCulture.CompareInfo.IsPrefix(listViewSubItem.Text, text, CompareOptions.IgnoreCase))
                             {
-                                return lvi;
+                                return listViewItem;
                             }
                         }
                     }
