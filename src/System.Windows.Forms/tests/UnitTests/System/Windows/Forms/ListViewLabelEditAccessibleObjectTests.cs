@@ -80,6 +80,17 @@ public class ListViewLabelEditAccessibleObjectTests
     }
 
     [WinFormsFact]
+    public void ListViewLabelEditAccessibleObject_FragmentRoot_ReturnsExpected()
+    {
+        using ListView listView = CreateListViewAndStartEditing();
+
+        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
+
+        Assert.Equal(listView.AccessibilityObject, accessibilityObject.FragmentRoot);
+    }
+
+    [WinFormsFact]
     public void ListViewLabelEditAccessibleObject_HostRawElementProvider_ReturnsExpected()
     {
         using ListView listView = CreateListViewAndStartEditing();

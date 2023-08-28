@@ -40,6 +40,8 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
         };
     }
 
+    internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningListView.AccessibilityObject;
+
     internal override object? GetPropertyValue(UiaCore.UIA propertyID)
         => propertyID switch
         {
