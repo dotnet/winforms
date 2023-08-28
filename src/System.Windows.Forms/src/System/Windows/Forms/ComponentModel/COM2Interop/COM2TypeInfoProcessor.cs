@@ -782,7 +782,7 @@ internal static unsafe partial class Com2TypeInfoProcessor
                         // Get the value.
                         try
                         {
-                            varValue = Marshal.GetObjectForNativeVariant((nint)(void*)pVarDesc->Anonymous.lpvarValue);
+                            varValue = (*pVarDesc->Anonymous.lpvarValue).ToObject();
                         }
                         catch (Exception ex)
                         {

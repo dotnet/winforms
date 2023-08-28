@@ -59,11 +59,10 @@ internal abstract unsafe class StandardDispatch : IDispatch.Interface, IDispatch
 
         // Load the registered type library and get the relevant ITypeInfo for the specified interface.
         using ComScope<ITypeLib> typelib = new(null);
-        HRESULT hr = PInvoke.LoadRegTypeLib(_typeLibrary, _majorVersion, _minorVersion, 0, typelib);
-        hr.ThrowOnFailure();
+        PInvoke.LoadRegTypeLib(_typeLibrary, _majorVersion, _minorVersion, 0, typelib).ThrowOnFailure();
 
         using ComScope<ITypeInfo> typeinfo = new(null);
-        typelib.Value->GetTypeInfoOfGuid(_interfaceId, typeinfo);
+        typelib.Value->GetTypeInfoOfGuid(_interfaceId, typeinfo).ThrowOnFailure();
 
         // The unknown we get is a wrapper unknown.
         unknown->QueryInterface(_interfaceId, out void* instance).ThrowOnFailure();
@@ -113,6 +112,11 @@ internal abstract unsafe class StandardDispatch : IDispatch.Interface, IDispatch
         EXCEPINFO* pExcepInfo,
         uint* pArgErr)
     {
+        if (pDispParams is null)
+        {
+            return HRESULT.E_INVALIDARG;
+        }
+
         HRESULT hr = MapDotNetHRESULTs(Invoke(
             dispIdMember,
             lcid,
@@ -166,6 +170,11 @@ internal abstract unsafe class StandardDispatch : IDispatch.Interface, IDispatch
         EXCEPINFO* pei,
         IServiceProvider* pspCaller)
     {
+        if (pdp is null)
+        {
+            return HRESULT.E_INVALIDARG;
+        }
+
         HRESULT hr = MapDotNetHRESULTs(Invoke(
             id,
             lcid,
@@ -246,32 +255,6 @@ internal abstract unsafe class StandardDispatch : IDispatch.Interface, IDispatch
         return HRESULT.E_NOTIMPL;
     }
 
-    private static FDEX_PROP_FLAGS GetFuncDescProperties(FUNCDESC* funcdesc)
-    {
-        FDEX_PROP_FLAGS flags = default;
-
-        INVOKEKIND invokekind = funcdesc->invkind;
-        flags |= invokekind.HasFlag(INVOKEKIND.INVOKE_PROPERTYPUT)
-            ? FDEX_PROP_FLAGS.fdexPropCanPut
-            : FDEX_PROP_FLAGS.fdexPropCannotPut;
-
-        flags |= invokekind.HasFlag(INVOKEKIND.INVOKE_PROPERTYPUTREF)
-            ? FDEX_PROP_FLAGS.fdexPropCanPutRef
-            : FDEX_PROP_FLAGS.fdexPropCannotPutRef;
-
-        flags |= invokekind.HasFlag(INVOKEKIND.INVOKE_PROPERTYGET)
-            ? FDEX_PROP_FLAGS.fdexPropCanGet
-            : FDEX_PROP_FLAGS.fdexPropCannotGet;
-
-        flags |= invokekind.HasFlag(INVOKEKIND.INVOKE_FUNC)
-            ? FDEX_PROP_FLAGS.fdexPropCanCall
-            : FDEX_PROP_FLAGS.fdexPropCannotCall;
-
-        flags |= FDEX_PROP_FLAGS.fdexPropCannotConstruct | FDEX_PROP_FLAGS.fdexPropCannotSourceEvents;
-
-        return flags;
-    }
-
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)
@@ -282,6 +265,8 @@ internal abstract unsafe class StandardDispatch : IDispatch.Interface, IDispatch
 
     private static HRESULT MapDotNetHRESULTs(HRESULT hr)
     {
+        // Following along with .NET COM interop
+
         if (hr == HRESULT.COR_E_OVERFLOW)
         {
             return HRESULT.DISP_E_OVERFLOW;

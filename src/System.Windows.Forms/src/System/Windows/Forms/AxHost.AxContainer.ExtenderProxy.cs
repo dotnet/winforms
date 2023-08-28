@@ -82,7 +82,8 @@ public abstract partial class AxHost
 
                 if (GetControl() is AxHost hostControl)
                 {
-                    *ppvObj = ComHelpers.GetComPointer<IUnknown>(hostControl.GetOcx());
+                    // VB6 passes this back as the IOleObject interface.
+                    *ppvObj = ComHelpers.GetComPointer<IOleObject>(hostControl.GetOcx());
                     return HRESULT.S_OK;
                 }
 

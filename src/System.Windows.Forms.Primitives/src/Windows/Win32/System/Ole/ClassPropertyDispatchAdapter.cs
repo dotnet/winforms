@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
-using InteropMarshal = System.Runtime.InteropServices.Marshal;
 
 namespace Windows.Win32.System.Ole;
 
@@ -70,7 +69,7 @@ internal unsafe class ClassPropertyDispatchAdapter
 
     private int GetUnusedDispId(int desiredId)
     {
-        if (desiredId != PInvoke.DISPID_UNKNOWN && !_members.ContainsKey(desiredId))
+        if (desiredId != PInvoke.DISPID_UNKNOWN && !IdInUse(desiredId))
         {
             return desiredId;
         }
@@ -154,6 +153,16 @@ internal unsafe class ClassPropertyDispatchAdapter
             }
         }
 
+        if (!_members.TryGetValue(dispId, out var entry))
+        {
+            return HRESULT.DISP_E_MEMBERNOTFOUND;
+        }
+
+        if (!_instance.TryGetTarget(out object? target))
+        {
+            return HRESULT.COR_E_OBJECTDISPOSED;
+        }
+
         BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static;
 
         if (flags.HasFlag(DISPATCH_FLAGS.DISPATCH_PROPERTYPUT | DISPATCH_FLAGS.DISPATCH_PROPERTYPUTREF))
@@ -175,20 +184,12 @@ internal unsafe class ClassPropertyDispatchAdapter
 
         Debug.Assert(!bindingFlags.HasFlag(BindingFlags.NonPublic));
 
-        if (!_members.TryGetValue(dispId, out var entry))
-        {
-            return HRESULT.DISP_E_MEMBERNOTFOUND;
-        }
-
-        if (!_instance.TryGetTarget(out object? target))
-        {
-            return HRESULT.COR_E_OBJECTDISPOSED;
-        }
-
         object? resultObject = null;
 
         if (bindingFlags.HasFlag(BindingFlags.PutDispProperty))
         {
+            // Setter
+
             if (parameters->cArgs != 1)
             {
                 return HRESULT.DISP_E_BADPARAMCOUNT;
@@ -196,7 +197,8 @@ internal unsafe class ClassPropertyDispatchAdapter
 
             try
             {
-                object? value = InteropMarshal.GetObjectForNativeVariant((nint)parameters->rgvarg);
+                VARIANT* variantValue = parameters->rgvarg;
+                object? value = variantValue is null ? null : variantValue->ToObject();
                 resultObject = _type.InvokeMember(
                     entry.Name,
                     bindingFlags,
@@ -211,10 +213,7 @@ internal unsafe class ClassPropertyDispatchAdapter
         }
         else
         {
-            if (result is null)
-            {
-                return HRESULT.E_POINTER;
-            }
+            // Getter
 
             try
             {
@@ -225,7 +224,11 @@ internal unsafe class ClassPropertyDispatchAdapter
                     target,
                     args: null);
 
-                InteropMarshal.GetNativeVariantForObject(resultObject, (nint)result);
+                // It is technically ok to not get the result.
+                if (result is not null)
+                {
+                    *result = VARIANT.FromObject(resultObject);
+                }
             }
             catch (Exception ex)
             {
