@@ -251,6 +251,11 @@ public partial class MainForm : Form
                         surface.CreateControl<TableLayoutPanel>(new Size(290, 160), new Point(20, 150));
                         surface.CreateControl<PropertyGrid>(new Size(200, 150), new Point(430, 23));
                         surface.CreateComponent<NotifyIcon>();
+
+                        ListBox listBox = surface.CreateControl<ListBox>(new Size(120, 94), new Point(337, 217));
+                        BindingSource bindingSource = surface.CreateComponent<BindingSource>();
+                        bindingSource.DataSource = new List<string> { "a1", "b2", "c3", "d4", "e5", "f6" };
+                        listBox.DataSource = bindingSource;
                     }
 
                     break;

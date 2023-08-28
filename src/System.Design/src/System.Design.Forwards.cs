@@ -4,6 +4,8 @@
 using System.Runtime.CompilerServices;
 
 // internal UITypeEditors
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.BindingNavigatorDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.BindingSourceDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ColumnHeaderCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberFieldConverter))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewCellStyleEditor))]
