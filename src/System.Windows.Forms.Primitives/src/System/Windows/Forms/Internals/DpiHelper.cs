@@ -139,7 +139,7 @@ internal static partial class DpiHelper
         }
     }
 
-    internal static Bitmap ScaleBitmapToSize(Bitmap logicalImage, Size deviceImageSize, bool doNotOffset = false)
+    internal static Bitmap ScaleBitmapToSize(Bitmap logicalImage, Size deviceImageSize, bool offset = true)
     {
         Bitmap deviceImage;
         deviceImage = new Bitmap(deviceImageSize.Width, deviceImageSize.Height, logicalImage.PixelFormat);
@@ -156,7 +156,7 @@ internal static partial class DpiHelper
             // and will appear black even if we cleared the background with transparent color.
             // The apparition of these artifacts depends on the interpolation mode, on the dpi scaling factor, etc.
             // E.g. at 150% DPI, Bicubic produces them and NearestNeighbor is fine, but at 200% DPI NearestNeighbor also shows them.
-            if (!doNotOffset)
+            if (offset)
             {
                 sourceRect.Offset(-0.5f, -0.5f);
             }

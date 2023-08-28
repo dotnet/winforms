@@ -55,7 +55,7 @@ internal class CollectionEditVerbManager : IWindowsFormsEditorService, ITypeDesc
     {
         get
         {
-            _componentChangeService ??= (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
+            _componentChangeService ??= this.GetService<IComponentChangeService>();
 
             return _componentChangeService;
         }

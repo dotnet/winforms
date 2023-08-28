@@ -187,114 +187,116 @@ internal class DataGridViewColumnCollectionDialog : Form
     [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
     private void CommitChanges()
     {
-        if (_formIsDirty)
+        if (!_formIsDirty)
         {
-            try
+            return;
+        }
+
+        try
+        {
+            IComponentChangeService? changeService = _liveDataGridView?.Site?.GetService(_iComponentChangeServiceType) as IComponentChangeService;
+            PropertyDescriptor? prop = TypeDescriptor.GetProperties(_liveDataGridView!)["Columns"];
+            IContainer? currentContainer = _liveDataGridView?.Site is not null ? _liveDataGridView.Site.Container : null;
+
+            // Here is the order in which we should do the ComponentChanging/ComponentChanged
+            // Container.RemoveComponent, Container.AddComponent
+            //
+            // 1. OnComponentChanging DataGridView.Columns
+            // 2. DataGridView.Columns.Clear();
+            // 3. OnComponentChanged DataGridView.Columns
+            // 4. IContainer.Remove(dataGridView.Columns)
+            // 5. IContainer.Add(new dataGridView.Columns)
+            // 6. OnComponentChanging DataGridView.Columns
+            // 7. DataGridView.Columns.Add( new DataGridViewColumns)
+            // 8. OnComponentChanged DataGridView.Columns
+
+            DataGridViewColumn[] oldColumns = new DataGridViewColumn[_liveDataGridView!.Columns.Count];
+            _liveDataGridView.Columns.CopyTo(oldColumns, 0);
+
+            // 1. OnComponentChanging DataGridView.Columns
+            changeService?.OnComponentChanging(_liveDataGridView, prop);
+
+            // 2. DataGridView.Columns.Clear();
+            _liveDataGridView.Columns.Clear();
+
+            // 3. OnComponentChanged DataGridView.Columns
+            changeService?.OnComponentChanged(_liveDataGridView, prop, null, null);
+
+            // 4. IContainer.Remove(dataGridView.Columns)
+            if (currentContainer is not null)
             {
-                IComponentChangeService? changeService = _liveDataGridView?.Site?.GetService(_iComponentChangeServiceType) as IComponentChangeService;
-                PropertyDescriptor? prop = TypeDescriptor.GetProperties(_liveDataGridView!)["Columns"];
-                IContainer? currentContainer = _liveDataGridView?.Site is not null ? _liveDataGridView.Site.Container : null;
-
-                // Here is the order in which we should do the ComponentChanging/ComponentChanged
-                // Container.RemoveComponent, Container.AddComponent
-                //
-                // 1. OnComponentChanging DataGridView.Columns
-                // 2. DataGridView.Columns.Clear();
-                // 3. OnComponentChanged DataGridView.Columns
-                // 4. IContainer.Remove(dataGridView.Columns)
-                // 5. IContainer.Add(new dataGridView.Columns)
-                // 6. OnComponentChanging DataGridView.Columns
-                // 7. DataGridView.Columns.Add( new DataGridViewColumns)
-                // 8. OnComponentChanged DataGridView.Columns
-
-                DataGridViewColumn[] oldColumns = new DataGridViewColumn[_liveDataGridView!.Columns.Count];
-                _liveDataGridView.Columns.CopyTo(oldColumns, 0);
-
-                // 1. OnComponentChanging DataGridView.Columns
-                changeService?.OnComponentChanging(_liveDataGridView, prop);
-
-                // 2. DataGridView.Columns.Clear();
-                _liveDataGridView.Columns.Clear();
-
-                // 3. OnComponentChanged DataGridView.Columns
-                changeService?.OnComponentChanged(_liveDataGridView, prop, null, null);
-
-                // 4. IContainer.Remove(dataGridView.Columns)
-                if (currentContainer is not null)
+                for (int i = 0; i < oldColumns.Length; i++)
                 {
-                    for (int i = 0; i < oldColumns.Length; i++)
-                    {
-                        currentContainer.Remove(oldColumns[i]);
-                    }
+                    currentContainer.Remove(oldColumns[i]);
+                }
+            }
+
+            DataGridViewColumn[] newColumns = new DataGridViewColumn[_columnsPrivateCopy.Count];
+            bool[] userAddedColumnsInfo = new bool[_columnsPrivateCopy.Count];
+            string[] compNames = new string[_columnsPrivateCopy.Count];
+            for (int i = 0; i < _columnsPrivateCopy!.Count; i++)
+            {
+                DataGridViewColumn newColumn = (DataGridViewColumn)_columnsPrivateCopy[i].Clone();
+                // at design time we need to do a shallow copy for ContextMenuStrip property
+                newColumn.ContextMenuStrip = _columnsPrivateCopy[i].ContextMenuStrip;
+
+                newColumns[i] = newColumn;
+                object? boolObject = _userAddedColumns![_columnsPrivateCopy[i]];
+                if (boolObject is not null && boolObject is bool boolValue)
+                {
+                    userAddedColumnsInfo[i] = boolValue;
                 }
 
-                DataGridViewColumn[] newColumns = new DataGridViewColumn[_columnsPrivateCopy.Count];
-                bool[] userAddedColumnsInfo = new bool[_columnsPrivateCopy.Count];
-                string[] compNames = new string[_columnsPrivateCopy.Count];
-                for (int i = 0; i < _columnsPrivateCopy!.Count; i++)
+                if (_columnsNames is not null && _columnsPrivateCopy is not null)
                 {
-                    DataGridViewColumn newColumn = (DataGridViewColumn)_columnsPrivateCopy[i].Clone();
-                    // at design time we need to do a shallow copy for ContextMenuStrip property
-                    newColumn.ContextMenuStrip = _columnsPrivateCopy[i].ContextMenuStrip;
-
-                    newColumns[i] = newColumn;
-                    object? boolObject = _userAddedColumns![_columnsPrivateCopy[i]];
-                    if (boolObject is not null && boolObject is bool boolValue)
-                    {
-                        userAddedColumnsInfo[i] = boolValue;
-                    }
-
-                    if (_columnsNames is not null && _columnsPrivateCopy is not null)
-                    {
 #pragma warning disable CS8601 // Possible null reference assignment.
-                        compNames[i] = _columnsNames[_columnsPrivateCopy[i]] as string;
+                    compNames[i] = _columnsNames[_columnsPrivateCopy[i]] as string;
 #pragma warning restore CS8601 // Possible null reference assignment.
-                    }
                 }
+            }
 
-                // 5. IContainer.Add(new dataGridView.Columns)
-                if (currentContainer is not null)
-                {
-                    for (int i = 0; i < newColumns.Length; i++)
-                    {
-                        if (!string.IsNullOrEmpty(compNames[i]) && ValidateName(currentContainer, compNames[i], newColumns[i]))
-                        {
-                            currentContainer.Add(newColumns[i], compNames[i]);
-                        }
-                        else
-                        {
-                            currentContainer.Add(newColumns[i]);
-                        }
-                    }
-                }
-
-                // 6. OnComponentChanging DataGridView.Columns
-                changeService?.OnComponentChanging(_liveDataGridView, prop);
-
-                // 7. DataGridView.Columns.Add( new DataGridViewColumns)
+            // 5. IContainer.Add(new dataGridView.Columns)
+            if (currentContainer is not null)
+            {
                 for (int i = 0; i < newColumns.Length; i++)
                 {
-                    // wipe out the DisplayIndex
-                    PropertyDescriptor? propertyDescriptor = TypeDescriptor.GetProperties(newColumns[i])["DisplayIndex"];
-                    propertyDescriptor?.SetValue(newColumns[i], -1);
-
-                    _liveDataGridView.Columns.Add(newColumns[i]);
-                }
-
-                // 8. OnComponentChanged DataGridView.Columns
-                changeService?.OnComponentChanged(_liveDataGridView, prop, null, null);
-                for (int i = 0; i < userAddedColumnsInfo.Length; i++)
-                {
-                    PropertyDescriptor? pd = TypeDescriptor.GetProperties(newColumns[i])["UserAddedColumn"];
-                    pd?.SetValue(newColumns[i], userAddedColumnsInfo[i]);
+                    if (!string.IsNullOrEmpty(compNames[i]) && ValidateName(currentContainer, compNames[i], newColumns[i]))
+                    {
+                        currentContainer.Add(newColumns[i], compNames[i]);
+                    }
+                    else
+                    {
+                        currentContainer.Add(newColumns[i]);
+                    }
                 }
             }
-            catch (InvalidOperationException ex)
+
+            // 6. OnComponentChanging DataGridView.Columns
+            changeService?.OnComponentChanging(_liveDataGridView, prop);
+
+            // 7. DataGridView.Columns.Add( new DataGridViewColumns)
+            for (int i = 0; i < newColumns.Length; i++)
             {
-                IUIService? uiService = _liveDataGridView?.Site?.GetService(typeof(IUIService)) as IUIService;
-                DataGridViewDesigner.ShowErrorDialog(uiService, ex, _liveDataGridView);
-                DialogResult = DialogResult.Cancel;
+                // wipe out the DisplayIndex
+                PropertyDescriptor? propertyDescriptor = TypeDescriptor.GetProperties(newColumns[i])["DisplayIndex"];
+                propertyDescriptor?.SetValue(newColumns[i], -1);
+
+                _liveDataGridView.Columns.Add(newColumns[i]);
             }
+
+            // 8. OnComponentChanged DataGridView.Columns
+            changeService?.OnComponentChanged(_liveDataGridView, prop, null, null);
+            for (int i = 0; i < userAddedColumnsInfo.Length; i++)
+            {
+                PropertyDescriptor? pd = TypeDescriptor.GetProperties(newColumns[i])["UserAddedColumn"];
+                pd?.SetValue(newColumns[i], userAddedColumnsInfo[i]);
+            }
+        }
+        catch (InvalidOperationException ex)
+        {
+            IUIService? uiService = _liveDataGridView?.Site?.GetService(typeof(IUIService)) as IUIService;
+            DataGridViewDesigner.ShowErrorDialog(uiService, ex, _liveDataGridView);
+            DialogResult = DialogResult.Cancel;
         }
     }
 
@@ -846,15 +848,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private void addButton_Click(object? sender, EventArgs e)
     {
-        int insertIndex;
-        if (_selectedColumns!.SelectedIndex == -1)
-        {
-            insertIndex = _selectedColumns.Items.Count;
-        }
-        else
-        {
-            insertIndex = _selectedColumns.SelectedIndex + 1;
-        }
+        int insertIndex = _selectedColumns!.SelectedIndex == -1 ? _selectedColumns.Items.Count : _selectedColumns.SelectedIndex + 1;
 
         if (_addColumnDialog is null)
         {
@@ -903,54 +897,56 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private void propertyGrid1_PropertyValueChanged(object? sender, PropertyValueChangedEventArgs e)
     {
-        if (!_columnCollectionChanging)
+        if (_columnCollectionChanging)
         {
-            _formIsDirty = true;
-            // refresh the selected columns when the user changed the HeaderText property
-            if (e.ChangedItem!.PropertyDescriptor!.Name.Equals("HeaderText"))
+            return;
+        }
+
+        _formIsDirty = true;
+        // refresh the selected columns when the user changed the HeaderText property
+        if (e.ChangedItem!.PropertyDescriptor!.Name.Equals("HeaderText"))
+        {
+            // invalidate the selected index only
+            int selectedIndex = _selectedColumns!.SelectedIndex;
+            Debug.Assert(selectedIndex != -1, "we forgot to take away the selected object from the property grid");
+            Rectangle bounds = new Rectangle(0, selectedIndex * _selectedColumns.ItemHeight, _selectedColumns.Width, _selectedColumns.ItemHeight);
+            _columnCollectionChanging = true;
+            try
             {
-                // invalidate the selected index only
-                int selectedIndex = _selectedColumns!.SelectedIndex;
-                Debug.Assert(selectedIndex != -1, "we forgot to take away the selected object from the property grid");
-                Rectangle bounds = new Rectangle(0, selectedIndex * _selectedColumns.ItemHeight, _selectedColumns.Width, _selectedColumns.ItemHeight);
-                _columnCollectionChanging = true;
-                try
-                {
-                    // for accessibility reasons, we need to reset the item in the selected columns collection.
-                    _selectedColumns.Items[selectedIndex] = _selectedColumns.Items[selectedIndex];
-                }
-                finally
-                {
-                    _columnCollectionChanging = false;
-                }
-
-                _selectedColumns.Invalidate(bounds);
-
-                // if the header text changed make sure that we update the selected columns HorizontalExtent
-                SetSelectedColumnsHorizontalExtent();
+                // for accessibility reasons, we need to reset the item in the selected columns collection.
+                _selectedColumns.Items[selectedIndex] = _selectedColumns.Items[selectedIndex];
             }
-            else if (e.ChangedItem.PropertyDescriptor.Name.Equals("DataPropertyName"))
+            finally
             {
-                ListBoxItem? listBoxItem = _selectedColumns?.SelectedItem as ListBoxItem;
-                DataGridViewColumn? column = listBoxItem?.DataGridViewColumn;
-
-                if (string.IsNullOrEmpty(column?.DataPropertyName))
-                {
-                    _propertyGridLabel!.Text = (SR.DataGridViewUnboundColumnProperties);
-                }
-                else
-                {
-                    _propertyGridLabel!.Text = (SR.DataGridViewBoundColumnProperties);
-                }
+                _columnCollectionChanging = false;
             }
-            else if (e.ChangedItem.PropertyDescriptor.Name.Equals("Name"))
+
+            _selectedColumns.Invalidate(bounds);
+
+            // if the header text changed make sure that we update the selected columns HorizontalExtent
+            SetSelectedColumnsHorizontalExtent();
+        }
+        else if (e.ChangedItem.PropertyDescriptor.Name.Equals("DataPropertyName"))
+        {
+            ListBoxItem? listBoxItem = _selectedColumns?.SelectedItem as ListBoxItem;
+            DataGridViewColumn? column = listBoxItem?.DataGridViewColumn;
+
+            if (string.IsNullOrEmpty(column?.DataPropertyName))
             {
-                ListBoxItem? listBoxItem = _selectedColumns?.SelectedItem as ListBoxItem;
-                DataGridViewColumn? col = listBoxItem?.DataGridViewColumn;
-                if (_columnsNames is not null && col is not null)
-                {
-                    _columnsNames[col] = col.Name;
-                }
+                _propertyGridLabel!.Text = (SR.DataGridViewUnboundColumnProperties);
+            }
+            else
+            {
+                _propertyGridLabel!.Text = (SR.DataGridViewBoundColumnProperties);
+            }
+        }
+        else if (e.ChangedItem.PropertyDescriptor.Name.Equals("Name"))
+        {
+            ListBoxItem? listBoxItem = _selectedColumns?.SelectedItem as ListBoxItem;
+            DataGridViewColumn? col = listBoxItem?.DataGridViewColumn;
+            if (_columnsNames is not null && col is not null)
+            {
+                _columnsNames[col] = col.Name;
             }
         }
     }
@@ -1289,55 +1285,25 @@ internal class DataGridViewColumnCollectionDialog : Form
         }
 
         // ICustomTypeDescriptor implementation
-        AttributeCollection ICustomTypeDescriptor.GetAttributes()
-        {
-            return TypeDescriptor.GetAttributes(_column);
-        }
+        AttributeCollection ICustomTypeDescriptor.GetAttributes() => TypeDescriptor.GetAttributes(_column);
 
-        string? ICustomTypeDescriptor.GetClassName()
-        {
-            return TypeDescriptor.GetClassName(_column);
-        }
+        string? ICustomTypeDescriptor.GetClassName() => TypeDescriptor.GetClassName(_column);
 
-        string? ICustomTypeDescriptor.GetComponentName()
-        {
-            return TypeDescriptor.GetComponentName(_column);
-        }
+        string? ICustomTypeDescriptor.GetComponentName() => TypeDescriptor.GetComponentName(_column);
 
-        TypeConverter ICustomTypeDescriptor.GetConverter()
-        {
-            return TypeDescriptor.GetConverter(_column);
-        }
+        TypeConverter ICustomTypeDescriptor.GetConverter() => TypeDescriptor.GetConverter(_column);
 
-        EventDescriptor? ICustomTypeDescriptor.GetDefaultEvent()
-        {
-            return TypeDescriptor.GetDefaultEvent(_column);
-        }
+        EventDescriptor? ICustomTypeDescriptor.GetDefaultEvent() => TypeDescriptor.GetDefaultEvent(_column);
 
-        PropertyDescriptor? ICustomTypeDescriptor.GetDefaultProperty()
-        {
-            return TypeDescriptor.GetDefaultProperty(_column);
-        }
+        PropertyDescriptor? ICustomTypeDescriptor.GetDefaultProperty() => TypeDescriptor.GetDefaultProperty(_column);
 
-        object? ICustomTypeDescriptor.GetEditor(Type type)
-        {
-            return TypeDescriptor.GetEditor(_column, type);
-        }
+        object? ICustomTypeDescriptor.GetEditor(Type type) => TypeDescriptor.GetEditor(_column, type);
 
-        EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
-        {
-            return TypeDescriptor.GetEvents(_column);
-        }
+        EventDescriptorCollection ICustomTypeDescriptor.GetEvents() => TypeDescriptor.GetEvents(_column);
 
-        EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[]? attrs)
-        {
-            return TypeDescriptor.GetEvents(_column, attrs!);
-        }
+        EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[]? attrs) => TypeDescriptor.GetEvents(_column, attrs!);
 
-        PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
-        {
-            return (((ICustomTypeDescriptor)this).GetProperties(null));
-        }
+        PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() => ((ICustomTypeDescriptor)this).GetProperties(null);
 
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[]? attrs)
         {
@@ -1394,23 +1360,15 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         ISite? IComponent.Site
         {
-            get
-            {
-                return _owner._liveDataGridView?.Site;
-            }
-            set
-            {
-            }
+            get => _owner._liveDataGridView?.Site;
+
+            set { }
         }
 
         event EventHandler? IComponent.Disposed
         {
-            add
-            {
-            }
-            remove
-            {
-            }
+            add { }
+            remove { }
         }
 
         [

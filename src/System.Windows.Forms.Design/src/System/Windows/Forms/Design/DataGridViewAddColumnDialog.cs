@@ -180,7 +180,7 @@ internal class DataGridViewAddColumnDialog : Form
                             !_persistChangesToDesigner))
         {
             colId++;
-            columnName = "Column" + colId.ToString(CultureInfo.InvariantCulture);
+            columnName = $"Column{colId.ToString(CultureInfo.InvariantCulture)}";
         }
 
         return columnName;
@@ -189,10 +189,7 @@ internal class DataGridViewAddColumnDialog : Form
     /// <summary>
     ///  Clean up any resources being used.
     /// </summary>
-    protected override void Dispose(bool disposing)
-    {
-        base.Dispose(disposing);
-    }
+    protected override void Dispose(bool disposing) => base.Dispose(disposing);
 
     private void EnableDataBoundSection()
     {
@@ -240,15 +237,9 @@ internal class DataGridViewAddColumnDialog : Form
 
         if (designerAttribute is not null)
         {
-            Type? designerType = null;
-            if (typeResolutionService is not null)
-            {
-                designerType = typeResolutionService.GetType(designerAttribute.DesignerTypeName);
-            }
-            else
-            {
-                designerType = Type.GetType(designerAttribute.DesignerTypeName);
-            }
+            Type? designerType = typeResolutionService is not null
+                ? typeResolutionService.GetType(designerAttribute.DesignerTypeName)
+                : Type.GetType(designerAttribute.DesignerTypeName);
 
             if (designerType is not null && typeof(ComponentDesigner).IsAssignableFrom(designerType))
             {

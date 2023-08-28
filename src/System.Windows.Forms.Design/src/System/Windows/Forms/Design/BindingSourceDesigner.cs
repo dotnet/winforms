@@ -12,10 +12,7 @@ internal class BindingSourceDesigner : ComponentDesigner
 
     public bool BindingUpdatedByUser
     {
-        set
-        {
-            _bindingUpdatedByUser = value;
-        }
+        set => _bindingUpdatedByUser = value;
     }
 
     public override void Initialize(IComponent component)

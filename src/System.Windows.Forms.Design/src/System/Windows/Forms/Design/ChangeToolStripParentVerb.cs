@@ -27,7 +27,7 @@ internal class ChangeToolStripParentVerb
         Debug.Assert(designer is not null, "Can't have a StandardMenuStripVerb without an associated designer");
         _designer = designer;
         _provider = designer.Component.Site;
-        _host = (IDesignerHost)_provider.GetService(typeof(IDesignerHost));
+        _host = _provider.GetService<IDesignerHost>();
         _componentChangeService = (IComponentChangeService)_provider.GetService(typeof(IComponentChangeService));
     }
 
@@ -52,16 +52,16 @@ internal class ChangeToolStripParentVerb
                 ToolStrip toolStrip = _designer.Component as ToolStrip;
                 if (toolStrip is not null && _designer is not null && _designer.Component is not null && _provider is not null)
                 {
-                    DesignerActionUIService dapuisvc = _provider.GetService(typeof(DesignerActionUIService)) as DesignerActionUIService;
-                    dapuisvc.HideUI(toolStrip);
+                    DesignerActionUIService designerActionUIService = _provider.GetService(typeof(DesignerActionUIService)) as DesignerActionUIService;
+                    designerActionUIService.HideUI(toolStrip);
                 }
 
                 // Get OleDragHandler ...
-                ToolboxItem tbi = new ToolboxItem(typeof(ToolStripContainer));
-                OleDragDropHandler ddh = rootDesigner.GetOleDragHandler();
-                if (ddh is not null)
+                ToolboxItem toolboxItem = new ToolboxItem(typeof(ToolStripContainer));
+                OleDragDropHandler oleDragDropHandler = rootDesigner.GetOleDragHandler();
+                if (oleDragDropHandler is not null)
                 {
-                    IComponent[] newComp = ddh.CreateTool(tbi, root, 0, 0, 0, 0, false, false);
+                    IComponent[] newComp = oleDragDropHandler.CreateTool(toolboxItem, root, 0, 0, 0, 0, false, false);
                     if (newComp[0] is ToolStripContainer tsc)
                     {
                         if (toolStrip is not null)
