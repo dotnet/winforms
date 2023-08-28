@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.Design;
@@ -14,56 +12,54 @@ public sealed partial class AnchorEditor
     /// </summary>
     private class AnchorUI : Control
     {
-        private readonly SpringControl bottom;
-        private readonly ContainerPlaceholder container = new();
-        private readonly ControlPlaceholder control = new();
-        private readonly SpringControl left;
-        private readonly SpringControl right;
-        private readonly SpringControl[] tabOrder;
-        private readonly SpringControl top;
-        private readonly AnchorEditor editor;
-        private IWindowsFormsEditorService edSvc;
-        private AnchorStyles oldAnchor;
+        private readonly SpringControl _bottom;
+        private readonly ContainerPlaceholder _container = new();
+        private readonly ControlPlaceholder _control = new();
+        private readonly SpringControl _left;
+        private readonly SpringControl _right;
+        private readonly SpringControl[] _tabOrder;
+        private readonly SpringControl _top;
+        private IWindowsFormsEditorService? _editorService;
+        private AnchorStyles _oldAnchor;
 
-        public AnchorUI(AnchorEditor editor)
+        public AnchorUI()
         {
-            this.editor = editor;
-            left = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
-            right = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
-            top = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
-            bottom = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
-            tabOrder = new[] { left, top, right, bottom };
+            _left = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
+            _right = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
+            _top = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
+            _bottom = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
+            _tabOrder = new[] { _left, _top, _right, _bottom };
 
             InitializeComponent();
         }
 
-        public object Value { get; private set; }
+        public object? Value { get; private set; }
 
         public void End()
         {
-            edSvc = null;
+            _editorService = null;
             Value = null;
         }
 
         public virtual AnchorStyles GetSelectedAnchor()
         {
             AnchorStyles baseVar = 0;
-            if (left.GetSolid())
+            if (_left.IsSolid)
             {
                 baseVar |= AnchorStyles.Left;
             }
 
-            if (top.GetSolid())
+            if (_top.IsSolid)
             {
                 baseVar |= AnchorStyles.Top;
             }
 
-            if (bottom.GetSolid())
+            if (_bottom.IsSolid)
             {
                 baseVar |= AnchorStyles.Bottom;
             }
 
-            if (right.GetSolid())
+            if (_right.IsSolid)
             {
                 baseVar |= AnchorStyles.Right;
             }
@@ -80,56 +76,56 @@ public sealed partial class AnchorEditor
 
             AccessibleName = SR.AnchorEditorAccName;
 
-            container.Location = new Point(0, 0);
-            container.Size = new Size(90, 90);
-            container.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+            _container.Location = new Point(0, 0);
+            _container.Size = new Size(90, 90);
+            _container.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
 
-            control.Location = new Point(30, 30);
-            control.Size = new Size(30, 30);
-            control.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+            _control.Location = new Point(30, 30);
+            _control.Size = new Size(30, 30);
+            _control.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
 
-            right.Location = new Point(60, 40);
-            right.Size = new Size(30 - XBORDER, 10);
-            right.TabIndex = 2;
-            right.TabStop = true;
-            right.Anchor = AnchorStyles.Right;
-            right.AccessibleName = SR.AnchorEditorRightAccName;
+            _right.Location = new Point(60, 40);
+            _right.Size = new Size(30 - XBORDER, 10);
+            _right.TabIndex = 2;
+            _right.TabStop = true;
+            _right.Anchor = AnchorStyles.Right;
+            _right.AccessibleName = SR.AnchorEditorRightAccName;
 
-            left.Location = new Point(XBORDER, 40);
-            left.Size = new Size(30 - XBORDER, 10);
-            left.TabIndex = 0;
-            left.TabStop = true;
-            left.Anchor = AnchorStyles.Left;
-            left.AccessibleName = SR.AnchorEditorLeftAccName;
+            _left.Location = new Point(XBORDER, 40);
+            _left.Size = new Size(30 - XBORDER, 10);
+            _left.TabIndex = 0;
+            _left.TabStop = true;
+            _left.Anchor = AnchorStyles.Left;
+            _left.AccessibleName = SR.AnchorEditorLeftAccName;
 
-            top.Location = new Point(40, YBORDER);
-            top.Size = new Size(10, 30 - YBORDER);
-            top.TabIndex = 1;
-            top.TabStop = true;
-            top.Anchor = AnchorStyles.Top;
-            top.AccessibleName = SR.AnchorEditorTopAccName;
+            _top.Location = new Point(40, YBORDER);
+            _top.Size = new Size(10, 30 - YBORDER);
+            _top.TabIndex = 1;
+            _top.TabStop = true;
+            _top.Anchor = AnchorStyles.Top;
+            _top.AccessibleName = SR.AnchorEditorTopAccName;
 
-            bottom.Location = new Point(40, 60);
-            bottom.Size = new Size(10, 30 - YBORDER);
-            bottom.TabIndex = 3;
-            bottom.TabStop = true;
-            bottom.Anchor = AnchorStyles.Bottom;
-            bottom.AccessibleName = SR.AnchorEditorBottomAccName;
+            _bottom.Location = new Point(40, 60);
+            _bottom.Size = new Size(10, 30 - YBORDER);
+            _bottom.TabIndex = 3;
+            _bottom.TabStop = true;
+            _bottom.Anchor = AnchorStyles.Bottom;
+            _bottom.AccessibleName = SR.AnchorEditorBottomAccName;
 
             Controls.Clear();
             Controls.AddRange(new Control[]
             {
-                container
+                _container
             });
 
-            container.Controls.Clear();
-            container.Controls.AddRange(new Control[]
+            _container.Controls.Clear();
+            _container.Controls.AddRange(new Control[]
             {
-                    control,
-                    top,
-                    left,
-                    bottom,
-                    right
+                _control,
+                _top,
+                _left,
+                _bottom,
+                _right
             });
             ResumeLayout(false);
         }
@@ -137,7 +133,7 @@ public sealed partial class AnchorEditor
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
-            top.Focus();
+            _top.Focus();
         }
 
         private void SetValue()
@@ -145,22 +141,22 @@ public sealed partial class AnchorEditor
             Value = GetSelectedAnchor();
         }
 
-        public void Start(IWindowsFormsEditorService edSvc, object value)
+        public void Start(IWindowsFormsEditorService edSvc, object? value)
         {
-            this.edSvc = edSvc;
+            _editorService = edSvc;
             Value = value;
 
-            if (value is AnchorStyles)
+            if (value is AnchorStyles anchorStyles)
             {
-                left.SetSolid(((AnchorStyles)value & AnchorStyles.Left) == AnchorStyles.Left);
-                top.SetSolid(((AnchorStyles)value & AnchorStyles.Top) == AnchorStyles.Top);
-                bottom.SetSolid(((AnchorStyles)value & AnchorStyles.Bottom) == AnchorStyles.Bottom);
-                right.SetSolid(((AnchorStyles)value & AnchorStyles.Right) == AnchorStyles.Right);
-                oldAnchor = (AnchorStyles)value;
+                _left.IsSolid = (anchorStyles & AnchorStyles.Left) == AnchorStyles.Left;
+                _top.IsSolid = (anchorStyles & AnchorStyles.Top) == AnchorStyles.Top;
+                _bottom.IsSolid = (anchorStyles & AnchorStyles.Bottom) == AnchorStyles.Bottom;
+                _right.IsSolid = (anchorStyles & AnchorStyles.Right) == AnchorStyles.Right;
+                _oldAnchor = anchorStyles;
             }
             else
             {
-                oldAnchor = AnchorStyles.Top | AnchorStyles.Left;
+                _oldAnchor = AnchorStyles.Top | AnchorStyles.Left;
             }
         }
 
@@ -168,10 +164,10 @@ public sealed partial class AnchorEditor
         {
             if (!saveAnchor)
             {
-                Value = oldAnchor;
+                Value = _oldAnchor;
             }
 
-            edSvc.CloseDropDown();
+            _editorService!.CloseDropDown();
         }
 
         private class ContainerPlaceholder : Control
@@ -208,13 +204,13 @@ public sealed partial class AnchorEditor
 
         private class SpringControl : Control
         {
-            private readonly AnchorUI picker;
-            internal bool focused;
-            internal bool solid;
+            private readonly AnchorUI _picker;
+            internal bool _focused;
+            internal bool _solid;
 
             public SpringControl(AnchorUI picker)
             {
-                this.picker = picker ?? throw new ArgumentException();
+                _picker = picker ?? throw new ArgumentException();
                 TabStop = true;
             }
 
@@ -223,16 +219,25 @@ public sealed partial class AnchorEditor
                 return new SpringControlAccessibleObject(this);
             }
 
-            public virtual bool GetSolid()
+            public bool IsSolid
             {
-                return solid;
+                get => _solid;
+                set
+                {
+                    if (_solid != value)
+                    {
+                        _solid = value;
+                        _picker.SetValue();
+                        Invalidate();
+                    }
+                }
             }
 
             protected override void OnGotFocus(EventArgs e)
             {
-                if (!focused)
+                if (!_focused)
                 {
-                    focused = true;
+                    _focused = true;
                     Invalidate();
                 }
 
@@ -241,9 +246,9 @@ public sealed partial class AnchorEditor
 
             protected override void OnLostFocus(EventArgs e)
             {
-                if (focused)
+                if (_focused)
                 {
-                    focused = false;
+                    _focused = false;
                     Invalidate();
                 }
 
@@ -252,7 +257,7 @@ public sealed partial class AnchorEditor
 
             protected override void OnMouseDown(MouseEventArgs e)
             {
-                SetSolid(!solid);
+                IsSolid = !_solid;
                 Focus();
             }
 
@@ -260,7 +265,7 @@ public sealed partial class AnchorEditor
             {
                 Rectangle rc = ClientRectangle;
 
-                if (solid)
+                if (_solid)
                 {
                     e.Graphics.FillRectangle(SystemBrushes.ControlDark, rc);
                     e.Graphics.DrawRectangle(SystemPens.WindowFrame, rc.X, rc.Y, rc.Width - 1, rc.Height - 1);
@@ -270,7 +275,7 @@ public sealed partial class AnchorEditor
                     ControlPaint.DrawFocusRectangle(e.Graphics, rc);
                 }
 
-                if (focused)
+                if (_focused)
                 {
                     rc.Inflate(-2, -2);
                     ControlPaint.DrawFocusRectangle(e.Graphics, rc);
@@ -281,7 +286,7 @@ public sealed partial class AnchorEditor
             {
                 if (charCode == ' ')
                 {
-                    SetSolid(!solid);
+                    IsSolid = !_solid;
                     return true;
                 }
 
@@ -292,25 +297,25 @@ public sealed partial class AnchorEditor
             {
                 if ((keyData & Keys.KeyCode) == Keys.Return && (keyData & (Keys.Alt | Keys.Control)) == 0)
                 {
-                    picker.Teardown(true);
+                    _picker.Teardown(true);
                     return true;
                 }
 
                 if ((keyData & Keys.KeyCode) == Keys.Escape && (keyData & (Keys.Alt | Keys.Control)) == 0)
                 {
-                    picker.Teardown(false);
+                    _picker.Teardown(false);
                     return true;
                 }
 
                 if ((keyData & Keys.KeyCode) == Keys.Tab && (keyData & (Keys.Alt | Keys.Control)) == 0)
                 {
-                    for (int i = 0; i < picker.tabOrder.Length; i++)
+                    for (int i = 0; i < _picker._tabOrder.Length; i++)
                     {
-                        if (picker.tabOrder[i] == this)
+                        if (_picker._tabOrder[i] == this)
                         {
                             i += (keyData & Keys.Shift) == 0 ? 1 : -1;
-                            i = i < 0 ? i + picker.tabOrder.Length : i % picker.tabOrder.Length;
-                            picker.tabOrder[i].Focus();
+                            i = i < 0 ? i + _picker._tabOrder.Length : i % _picker._tabOrder.Length;
+                            _picker._tabOrder[i].Focus();
                             break;
                         }
                     }
@@ -321,23 +326,13 @@ public sealed partial class AnchorEditor
                 return base.ProcessDialogKey(keyData);
             }
 
-            public virtual void SetSolid(bool value)
-            {
-                if (solid != value)
-                {
-                    solid = value;
-                    picker.SetValue();
-                    Invalidate();
-                }
-            }
-
             private class SpringControlAccessibleObject : ControlAccessibleObject
             {
                 public SpringControlAccessibleObject(SpringControl owner) : base(owner)
                 {
                 }
 
-                public override string DefaultAction => ((SpringControl)Owner).GetSolid()
+                public override string DefaultAction => ((SpringControl)Owner!).IsSolid
                     ? SR.AccessibleActionUncheck
                     : SR.AccessibleActionCheck;
 
@@ -347,7 +342,7 @@ public sealed partial class AnchorEditor
                     {
                         AccessibleStates state = base.State;
 
-                        if (((SpringControl)Owner).GetSolid())
+                        if (((SpringControl)Owner!).IsSolid)
                         {
                             state |= AccessibleStates.Checked;
                         }
