@@ -13,4 +13,19 @@ internal static class TypeDescriptorHelper
         attribute = TypeDescriptor.GetAttributes(component)[typeof(T)] as T;
         return attribute is not null;
     }
+
+    public static bool TryGetPropertyValue<T>(
+        object component,
+        string name,
+        out T? value)
+    {
+        PropertyDescriptor? property = TypeDescriptor.GetProperties(component)[name];
+        if (property is not null && property.TryGetValue(component, out value))
+        {
+            return true;
+        }
+
+        value = default;
+        return false;
+    }
 }

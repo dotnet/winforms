@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.CodeDom;
 using System.Reflection;
 using System.Windows.Forms;
@@ -18,7 +16,7 @@ public abstract partial class CodeDomDesignerLoader
     [ProvideProperty("Modifiers", typeof(IComponent))]
     private class ModifiersInheritedExtenderProvider : IExtenderProvider
     {
-        private IDesignerHost _host;
+        private IDesignerHost? _host;
 
         /// <summary>
         ///  Determines if ths extender provider can extend the given object.  We extend
@@ -26,13 +24,13 @@ public abstract partial class CodeDomDesignerLoader
         /// </summary>
         public bool CanExtend(object o)
         {
-            if (!(o is IComponent c))
+            if (o is not IComponent component)
             {
                 return false;
             }
 
             // We don't add modifiers to the base component.
-            IComponent baseComponent = GetBaseComponent(c);
+            IComponent? baseComponent = GetBaseComponent(component);
 
             if (o == baseComponent)
             {
@@ -42,7 +40,7 @@ public abstract partial class CodeDomDesignerLoader
             // Now see if this object is inherited.  If so, then we are interested in it.
             AttributeCollection attributes = TypeDescriptor.GetAttributes(o);
 
-            if (!attributes[typeof(InheritanceAttribute)].Equals(InheritanceAttribute.NotInherited))
+            if (!attributes[typeof(InheritanceAttribute)]!.Equals(InheritanceAttribute.NotInherited))
             {
                 return true;
             }
@@ -50,31 +48,16 @@ public abstract partial class CodeDomDesignerLoader
             return false;
         }
 
-        private IComponent GetBaseComponent(IComponent c)
+        private IComponent? GetBaseComponent(IComponent? component)
         {
-            IComponent baseComponent = null;
-
-            if (c is null)
+            if (component is null)
             {
                 return null;
             }
 
-            if (_host is null)
-            {
-                ISite site = c.Site;
+            _host ??= component.Site?.GetService<IDesignerHost>();
 
-                if (site is not null)
-                {
-                    _host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
-                }
-            }
-
-            if (_host is not null)
-            {
-                baseComponent = _host.RootComponent;
-            }
-
-            return baseComponent;
+            return _host?.RootComponent;
         }
 
         /// <summary>
@@ -91,24 +74,19 @@ public abstract partial class CodeDomDesignerLoader
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public MemberAttributes GetModifiers(IComponent comp)
         {
-            IComponent baseComponent = GetBaseComponent(comp);
+            IComponent? baseComponent = GetBaseComponent(comp);
             Debug.Assert(baseComponent is not null, "Root component was null");
             Type baseType = baseComponent.GetType();
-            ISite site = comp.Site;
+            ISite? site = comp.Site;
 
-            if (site is null)
-            {
-                return MemberAttributes.Private;
-            }
-
-            string name = site.Name;
+            string? name = site?.Name;
 
             if (name is null)
             {
                 return MemberAttributes.Private;
             }
 
-            FieldInfo field = TypeDescriptor.GetReflectionType(baseType).GetField(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+            FieldInfo? field = TypeDescriptor.GetReflectionType(baseType).GetField(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
 
             if (field is not null)
             {
@@ -133,31 +111,29 @@ public abstract partial class CodeDomDesignerLoader
 
             // Visual Basic uses a property called Foo and generates a field called _Foo. We need to check the
             // visibility of this accessor to fix the modifiers up.
-            PropertyInfo prop = TypeDescriptor.GetReflectionType(baseType).GetProperty(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
-            MethodInfo[] accessors = prop?.GetAccessors(true);
-            if (accessors is null || accessors.Length == 0 || accessors[0] is null)
+            PropertyInfo? prop = TypeDescriptor.GetReflectionType(baseType).GetProperty(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+            MethodInfo?[]? accessors = prop?.GetAccessors(true);
+            if (accessors is not [MethodInfo methodInfo, ..])
             {
                 return MemberAttributes.Private;
             }
 
-            MethodInfo mi = accessors[0];
-
-            if (mi.IsPrivate)
+            if (methodInfo.IsPrivate)
                 return MemberAttributes.Private;
 
-            if (mi.IsPublic)
+            if (methodInfo.IsPublic)
                 return MemberAttributes.Public;
 
-            if (mi.IsFamily)
+            if (methodInfo.IsFamily)
                 return MemberAttributes.Family;
 
-            if (mi.IsAssembly)
+            if (methodInfo.IsAssembly)
                 return MemberAttributes.Assembly;
 
-            if (mi.IsFamilyOrAssembly)
+            if (methodInfo.IsFamilyOrAssembly)
                 return MemberAttributes.FamilyOrAssembly;
 
-            if (mi.IsFamilyAndAssembly)
+            if (methodInfo.IsFamilyAndAssembly)
                 return MemberAttributes.FamilyAndAssembly;
 
             return MemberAttributes.Private;
