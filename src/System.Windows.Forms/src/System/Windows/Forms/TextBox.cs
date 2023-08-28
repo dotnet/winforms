@@ -396,6 +396,8 @@ public partial class TextBox : TextBoxBase
         }
     }
 
+    private bool IsUseSystemPasswordChar => _passwordChar == 0 && !_useSystemPasswordChar;
+
     internal override bool SupportsUiaProviders => true;
 
     internal override Size GetPreferredSizeCore(Size proposedConstraints)
@@ -651,7 +653,7 @@ public partial class TextBox : TextBoxBase
     {
         base.OnKeyUp(e);
 
-        if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode) && _passwordChar == 0 && !_useSystemPasswordChar)
+        if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode) && IsUseSystemPasswordChar)
         {
             AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
         }
@@ -661,7 +663,7 @@ public partial class TextBox : TextBoxBase
     {
         base.OnMouseDown(e);
 
-        if (IsHandleCreated && IsAccessibilityObjectCreated && _passwordChar == 0 && !_useSystemPasswordChar)
+        if (IsHandleCreated && IsAccessibilityObjectCreated && IsUseSystemPasswordChar)
         {
             // As there is no corresponding windows notification
             // about text selection changed for TextBox assuming
