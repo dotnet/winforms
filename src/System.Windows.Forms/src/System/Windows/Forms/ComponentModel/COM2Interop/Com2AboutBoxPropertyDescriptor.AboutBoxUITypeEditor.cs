@@ -28,9 +28,9 @@ internal partial class Com2AboutBoxPropertyDescriptor
                     PInvoke.GetThreadLocale(),
                     DISPATCH_FLAGS.DISPATCH_METHOD,
                     &dispParams,
-                    null,
+                    pVarResult: null,
                     &pExcepInfo,
-                    null);
+                    puArgErr: null);
                 Debug.Assert(hr.Succeeded, $"Failed to launch about box. {hr}");
             }
 

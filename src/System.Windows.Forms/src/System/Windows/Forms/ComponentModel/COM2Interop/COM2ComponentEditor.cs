@@ -74,7 +74,7 @@ internal sealed class Com2ComponentEditor : WindowsFormsComponentEditor
                         &guid,
                         PInvoke.GetThreadLocale(),
                         0,
-                        null);
+                        null).ThrowOnFailure();
                 }
 
                 return true;
@@ -109,7 +109,7 @@ internal sealed class Com2ComponentEditor : WindowsFormsComponentEditor
                             uuids.pElems,
                             PInvoke.GetThreadLocale(),
                             0,
-                            null);
+                            null).ThrowOnFailure();
 
                         return true;
                     }
