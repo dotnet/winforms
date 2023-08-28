@@ -17,15 +17,15 @@ internal static class TypeDescriptorHelper
     public static bool TryGetPropertyValue<T>(
         object component,
         string name,
-        out T? attribute)
+        out T? value)
     {
         PropertyDescriptor? property = TypeDescriptor.GetProperties(component)[name];
-        if (property is not null && property.TryGetValue(component, out attribute))
+        if (property is not null && property.TryGetValue(component, out value))
         {
             return true;
         }
 
-        attribute = default;
+        value = default;
         return false;
     }
 }
