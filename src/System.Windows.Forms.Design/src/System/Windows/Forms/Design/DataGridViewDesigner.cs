@@ -333,7 +333,7 @@ internal class DataGridViewDesigner : ControlDesigner
             // 4. set AutoGenerateColumns to TRUE.
             //
 
-            IComponentChangeService componentChangeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+            IComponentChangeService? componentChangeService = GetService<IComponentChangeService>();
             string previousDataMember = dataGridView.DataMember;
 
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(dataGridView);

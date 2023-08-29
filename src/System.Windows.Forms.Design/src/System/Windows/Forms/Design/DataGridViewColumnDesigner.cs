@@ -51,26 +51,21 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
                 return;
             }
 
-            DataGridView? dataGridView = col?.DataGridView;
+            DataGridView? dataGridView = col.DataGridView;
 
             IDesignerHost? host = null;
-            IContainer? container = null;
             INameCreationService? nameCreationService = null;
 
             if (dataGridView is not null && dataGridView.Site is not null)
             {
-                host = dataGridView.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
-                nameCreationService = dataGridView.Site.GetService(typeof(INameCreationService)) as INameCreationService;
+                host = dataGridView.Site.GetService<IDesignerHost>();
+                nameCreationService = dataGridView.Site.GetService<INameCreationService>();
             }
 
-            if (host is not null)
-            {
-                container = host.Container;
-            }
+            IContainer? container = host?.Container;
 
             // ValidName() checks any name conflicts on the DGV's column collection as well as any name conflicts
             // on the Container::Components collection.
-            string errorString = string.Empty;
             if (dataGridView is not null &&
                 !DataGridViewAddColumnDialog.ValidName(value,
                     dataGridView.Columns,
@@ -78,11 +73,11 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
                     nameCreationService,
                     _liveDataGridView?.Columns,
                     true,
-                    out errorString))
+                    out string errorString))
             {
                 if (dataGridView is not null && dataGridView.Site is not null)
                 {
-                    IUIService? uiService = dataGridView.Site.GetService(typeof(IUIService)) as IUIService;
+                    IUIService? uiService = dataGridView.Site.GetService<IUIService>();
                     DataGridViewDesigner.ShowErrorDialog(uiService, errorString, _liveDataGridView);
                 }
 
@@ -97,7 +92,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
                 Component.Site.Name = value;
             }
 
-            col!.Name = value;
+            col.Name = value;
         }
     }
 
@@ -159,13 +154,11 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
         if (component.Site is not null)
         {
             // Acquire a reference to ISelectionService.
-            _selectionService =
-                GetService(typeof(ISelectionService))
-                as ISelectionService;
+            _selectionService = GetService<ISelectionService>();
             Debug.Assert(_selectionService is not null);
 
             // Acquire a reference to BehaviorService.
-            _behaviorService =  GetService(typeof(BehaviorService)) as BehaviorService;
+            _behaviorService = GetService<BehaviorService>();
 
             if (_behaviorService is not null && _selectionService is not null)
             {
@@ -298,8 +291,7 @@ internal class DataGridViewColumnDesigner : ComponentDesigner
 
     private bool ShouldSerializeName()
     {
-        IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-        if (host is null)
+        if (!TryGetService(out IDesignerHost? host))
         {
             // The column is hosted in the column collection dialog.
             // Return false : let the user type whatever he feels like.

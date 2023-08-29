@@ -37,7 +37,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         var component = Component;
         if (component?.Site is { } site)
         {
-            PropertyDescriptor defaultProperty = TypeDescriptor.GetDefaultProperty(component);
+            PropertyDescriptor? defaultProperty = TypeDescriptor.GetDefaultProperty(component);
             if (!(defaultProperty is not null && defaultProperty.PropertyType.Equals(typeof(string))))
             {
                 return;
@@ -66,7 +66,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     }
 
     internal bool IsInheritedReadOnly
-        => InheritanceAttribute.InheritanceLevel == InheritanceLevel.InheritedReadOnly;
+        => InheritanceAttribute!.InheritanceLevel == InheritanceLevel.InheritedReadOnly;
 
     /// <summary>
     ///  This property provides a generic mechanism for discovering parent relationships within designers,
