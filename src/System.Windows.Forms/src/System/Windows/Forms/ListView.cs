@@ -178,6 +178,7 @@ public partial class ListView : Control
 
     internal ListViewLabelEditNativeWindow? _labelEdit;
 
+    // Used to record the SubItem to which the Label Edit belongs.
     internal ListViewSubItem? _listViewSubItem;
 
     // Background image stuff
@@ -3829,7 +3830,7 @@ public partial class ListView : Control
             if (lvhi.iSubItem < item.SubItems.Count)
             {
                 _listViewSubItem = item.SubItems[lvhi.iSubItem];
-                return new ListViewHitTestInfo(item, item.SubItems[lvhi.iSubItem], location);
+                return new ListViewHitTestInfo(item, _listViewSubItem, location);
             }
             else
             {
