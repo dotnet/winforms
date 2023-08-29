@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
+using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design.Behavior;
 
@@ -13,7 +14,6 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
     private readonly IServiceProvider _serviceProvider;
     private readonly BehaviorService _behaviorService;
 
-    // TODO - scale these for HDPI - https://github.com/microsoft/winforms-designer/issues/1166
     private const int DefaultBounds = 25;
 
     internal ToolStripPanelSelectionBehavior(ToolStripPanel containerControl, IServiceProvider serviceProvider)
@@ -110,13 +110,13 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
                 else
                 {
                     Control parent = _relatedControl.Parent;
-                    parent?.PerformLayout();
+                    parent.PerformLayout();
 
                     var selectionManager = _serviceProvider.GetRequiredService<SelectionManager>();
                     selectionManager.Refresh();
 
-                    Point loc = _behaviorService.ControlToAdornerWindow(parent!);
-                    var translatedBounds = new Rectangle(loc, parent!.Size);
+                    Point loc = _behaviorService.ControlToAdornerWindow(parent);
+                    var translatedBounds = new Rectangle(loc, parent.Size);
                     _behaviorService.Invalidate(translatedBounds);
                 }
             }
@@ -265,29 +265,28 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
         }
         else if (e.Data is DataObject && components is null)
         {
-#if BEHAVIOR_DRAGDROP
-            var tbxService = (IToolboxService)_serviceProvider.GetService(typeof(IToolboxService));
+            IToolboxService toolboxService = _serviceProvider.GetRequiredService<IToolboxService>();
+            IDesignerHost host = _serviceProvider.GetRequiredService<IDesignerHost>();
 
-            if (tbxService != null && _serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
+            if (toolboxService is not null && host is not null)
             {
-                ToolboxItem item = tbxService.DeserializeToolboxItem(e.Data, host);
+                ToolboxItem item = toolboxService.DeserializeToolboxItem(e.Data, host);
                 if (item.GetType(host) == typeof(ToolStrip)
                     || item.GetType(host) == typeof(MenuStrip)
                     || item.GetType(host) == typeof(StatusStrip))
                 {
-                    if (host.GetDesigner(_relatedControl) is ToolStripPanelDesigner panelDesigner)
+                    ToolStripPanelDesigner? panelDesigner =
+                        host.GetDesigner(_relatedControl) is ToolStripPanelDesigner toolStripPanelDesigner
+                           ? toolStripPanelDesigner
+                           : null;
+
+                    if (panelDesigner is not null)
                     {
-
-                        OleDragDropHandler ddh = panelDesigner.GetOleDragHandler();
-                        if (ddh != null)
-                        {
-                            ddh.CreateTool(item, _relatedControl, 0, 0, 0, 0, false, false);
-                        }
-
+                        OleDragDropHandler oleDragDropHandler = panelDesigner.GetOleDragHandler();
+                        oleDragDropHandler?.CreateTool(item, _relatedControl, 0, 0, 0, 0, false, false);
                     }
                 }
             }
-#endif
         }
     }
 

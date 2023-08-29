@@ -196,9 +196,15 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         }
     }
 
-    private ToolStripPanelDesigner GetDesigner(ToolStripPanel panel) => (ToolStripPanelDesigner)_designerHost.GetDesigner(panel)!;
+    private ToolStripPanelDesigner? GetDesigner(ToolStripPanel panel)
+        => _designerHost.GetDesigner(panel) is ToolStripPanelDesigner toolStripPanelDesigner
+           ? toolStripPanelDesigner
+           : null;
 
-    private PanelDesigner GetDesigner(ToolStripContentPanel panel) => (PanelDesigner)_designerHost.GetDesigner(panel)!;
+    private PanelDesigner? GetDesigner(ToolStripContentPanel panel)
+        => _designerHost.GetDesigner(panel) is PanelDesigner panelDesigner
+           ? panelDesigner
+           : null;
 
     private static ToolStripContainer? ContainerParent(Control control)
     {
@@ -322,9 +328,9 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         if (!result)
         {
             Control? associatedControl = GetAssociatedControl(component);
-            if (associatedControl is not null && associatedControl != _toolStripContainer)
+            if (associatedControl is not null && _toolStripContainer is not null && associatedControl != _toolStripContainer)
             {
-                if (!PInvoke.IsChild((HWND)_toolStripContainer!.Handle, (HWND)associatedControl.Handle))
+                if (!PInvoke.IsChild(_toolStripContainer, associatedControl))
                 {
                     Rectangle glyphBounds = childGlyph.Bounds;
                     Rectangle controlBounds = BehaviorService.ControlRectInAdornerWindow(associatedControl);
