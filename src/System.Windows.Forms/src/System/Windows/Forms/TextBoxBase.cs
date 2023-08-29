@@ -1579,7 +1579,7 @@ public abstract partial class TextBoxBase : Control
 
     private protected virtual void RaiseAccessibilityTextChangedEvent()
     {
-        if (IsAccessibilityObjectCreated && !PasswordProtect)
+        if (IsAccessibilityObjectCreated)
         {
             AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
         }
