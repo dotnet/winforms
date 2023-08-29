@@ -582,7 +582,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             if (tv is not null)
             {
-                return tv.editNode == this;
+                return tv._editNode == this;
             }
 
             return false;
@@ -827,7 +827,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             TreeView tv = TreeView;
 
             // Don't expose the virtual root publicly
-            if (tv is not null && parent == tv.root)
+            if (tv is not null && parent == tv._root)
             {
                 return null;
             }
@@ -1308,7 +1308,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         {
             if (tv is not null)
             {
-                tv.nodesCollectionClear = true;
+                tv._nodesCollectionClear = true;
 
                 if (childNodes.Count > MAX_TREENODES_OPS)
                 {
@@ -1333,7 +1333,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         {
             if (tv is not null)
             {
-                tv.nodesCollectionClear = false;
+                tv._nodesCollectionClear = false;
             }
 
             nodesCleared = true;
@@ -1776,7 +1776,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
         node.Realize(false);
 
-        if (TreeView is not null && node == TreeView.selectedNode)
+        if (TreeView is not null && node == TreeView._selectedNode)
         {
             TreeView.SelectedNode = node; // communicate this to the handle
         }

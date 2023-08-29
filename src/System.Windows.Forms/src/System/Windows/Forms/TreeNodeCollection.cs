@@ -336,7 +336,7 @@ public class TreeNodeCollection : IList
         _owner.childNodes.Add(node);
         node.Realize(false);
 
-        if (tv is not null && node == tv.selectedNode)
+        if (tv is not null && node == tv._selectedNode)
         {
             tv.SelectedNode = node; // communicate this to the handle
         }

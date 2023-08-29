@@ -96,7 +96,7 @@ public partial class ComponentEditorForm
             Size size = default;
             RECT rc2 = default;
             RECT rc = rcIn;
-            ImageList imagelist = ImageList;
+            ImageList? imageList = ImageList;
 
             // Select the font of the dialog, so we don't get the underlined font
             // when the item is being tracked
@@ -141,13 +141,16 @@ public partial class ComponentEditorForm
                     DRAW_TEXT_FORMAT.DT_LEFT | DRAW_TEXT_FORMAT.DT_VCENTER | DRAW_TEXT_FORMAT.DT_END_ELLIPSIS | DRAW_TEXT_FORMAT.DT_NOPREFIX);
             }
 
-            PInvoke.ImageList.Draw(
-                imagelist,
-                imageIndex,
-                dc,
-                PADDING_HORZ,
-                rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
-                (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
+            if (imageList is not null)
+            {
+                PInvoke.ImageList.Draw(
+                    imageList,
+                    imageIndex,
+                    dc,
+                    PADDING_HORZ,
+                    rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
+                    (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
+            }
 
             // Draw the hot-tracking border if needed
             if ((state & STATE_HOT) != 0)

@@ -246,10 +246,10 @@
 ~override System.Windows.Forms.PropertyGrid.Text.get -> string
 ~override System.Windows.Forms.PropertyGrid.Text.set -> void
 ~override System.Windows.Forms.TreeNode.ToString() -> string
-~override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.TreeView.BackgroundImage.set -> void
+override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.TreeView.BackgroundImage.set -> void
 ~override System.Windows.Forms.TreeView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.TreeView.CreateParams.get -> System.Windows.Forms.CreateParams
+override System.Windows.Forms.TreeView.CreateParams.get -> System.Windows.Forms.CreateParams!
 ~override System.Windows.Forms.TreeView.OnGotFocus(System.EventArgs e) -> void
 ~override System.Windows.Forms.TreeView.OnHandleCreated(System.EventArgs e) -> void
 ~override System.Windows.Forms.TreeView.OnHandleDestroyed(System.EventArgs e) -> void
@@ -616,19 +616,19 @@
 ~System.Windows.Forms.TreeView.GetNodeAt(System.Drawing.Point pt) -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeView.HitTest(int x, int y) -> System.Windows.Forms.TreeViewHitTestInfo
 ~System.Windows.Forms.TreeView.HitTest(System.Drawing.Point pt) -> System.Windows.Forms.TreeViewHitTestInfo
-~System.Windows.Forms.TreeView.ImageKey.get -> string
-~System.Windows.Forms.TreeView.ImageKey.set -> void
-~System.Windows.Forms.TreeView.ImageList.get -> System.Windows.Forms.ImageList
-~System.Windows.Forms.TreeView.ImageList.set -> void
-~System.Windows.Forms.TreeView.Nodes.get -> System.Windows.Forms.TreeNodeCollection
+System.Windows.Forms.TreeView.ImageKey.get -> string!
+System.Windows.Forms.TreeView.ImageKey.set -> void
+System.Windows.Forms.TreeView.ImageList.get -> System.Windows.Forms.ImageList?
+System.Windows.Forms.TreeView.ImageList.set -> void
+System.Windows.Forms.TreeView.Nodes.get -> System.Windows.Forms.TreeNodeCollection!
 ~System.Windows.Forms.TreeView.PathSeparator.get -> string
 ~System.Windows.Forms.TreeView.PathSeparator.set -> void
 ~System.Windows.Forms.TreeView.SelectedImageKey.get -> string
 ~System.Windows.Forms.TreeView.SelectedImageKey.set -> void
 ~System.Windows.Forms.TreeView.SelectedNode.get -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeView.SelectedNode.set -> void
-~System.Windows.Forms.TreeView.StateImageList.get -> System.Windows.Forms.ImageList
-~System.Windows.Forms.TreeView.StateImageList.set -> void
+System.Windows.Forms.TreeView.StateImageList.get -> System.Windows.Forms.ImageList?
+System.Windows.Forms.TreeView.StateImageList.set -> void
 ~System.Windows.Forms.TreeView.TopNode.get -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeView.TopNode.set -> void
 ~System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer
@@ -11551,8 +11551,8 @@ System.Windows.Forms.TreeView.AfterCollapse -> System.Windows.Forms.TreeViewEven
 System.Windows.Forms.TreeView.AfterExpand -> System.Windows.Forms.TreeViewEventHandler
 System.Windows.Forms.TreeView.AfterLabelEdit -> System.Windows.Forms.NodeLabelEditEventHandler
 System.Windows.Forms.TreeView.AfterSelect -> System.Windows.Forms.TreeViewEventHandler
-System.Windows.Forms.TreeView.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.TreeView.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.TreeView.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.TreeView.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.TreeView.BeforeCheck -> System.Windows.Forms.TreeViewCancelEventHandler
 System.Windows.Forms.TreeView.BeforeCollapse -> System.Windows.Forms.TreeViewCancelEventHandler
 System.Windows.Forms.TreeView.BeforeExpand -> System.Windows.Forms.TreeViewCancelEventHandler
