@@ -4913,7 +4913,7 @@ public unsafe partial class Control :
     public void CreateControl()
     {
         bool controlIsAlreadyCreated = Created;
-        CreateControl(false);
+        CreateControl(ignoreVisible: false);
 
         if (!Properties.ContainsObjectThatIsNotNull(s_bindingManagerProperty) && ParentInternal is not null && !controlIsAlreadyCreated)
         {
@@ -5783,12 +5783,12 @@ public unsafe partial class Control :
             holders.Add(new ControlTabOrderHolder(holders.Count, tabIndex, ctl));
         }
 
-        holders.Sort(new ControlTabOrderComparer());
+        holders.Sort(ControlTabOrderComparer.Instance);
 
         int[] indexes = new int[holders.Count];
         for (int i = 0; i < holders.Count; i++)
         {
-            indexes[i] = holders[i]._oldOrder;
+            indexes[i] = holders[i].OriginalIndex;
         }
 
         return indexes;
@@ -5802,7 +5802,7 @@ public unsafe partial class Control :
     /// </summary>
     internal Control[] GetChildControlsInTabOrder(bool handleCreatedOnly)
     {
-        List<ControlTabOrderHolder> holders = new List<ControlTabOrderHolder>();
+        List<ControlTabOrderHolder> holders = new(Controls.Count);
 
         foreach (Control c in Controls)
         {
@@ -5812,44 +5812,46 @@ public unsafe partial class Control :
             }
         }
 
-        holders.Sort(new ControlTabOrderComparer());
+        holders.Sort(ControlTabOrderComparer.Instance);
 
-        Control[] ctls = new Control[holders.Count];
+        Control[] controls = new Control[holders.Count];
         for (int i = 0; i < holders.Count; i++)
         {
-            ctls[i] = holders[i]._control!;
+            controls[i] = holders[i].Control!;
         }
 
-        return ctls;
+        return controls;
     }
 
     internal virtual Control? GetFirstChildControlInTabOrder(bool forward)
     {
-        ControlCollection? ctlControls = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
+        ControlCollection? controls = (ControlCollection?)Properties.GetObject(s_controlsCollectionProperty);
+
+        if (controls is null)
+        {
+            return null;
+        }
 
         Control? found = null;
-        if (ctlControls is not null)
+        if (forward)
         {
-            if (forward)
+            for (int c = 0; c < controls.Count; c++)
             {
-                for (int c = 0; c < ctlControls.Count; c++)
+                if (found is null || found._tabIndex > controls[c]._tabIndex)
                 {
-                    if (found is null || found._tabIndex > ctlControls[c]._tabIndex)
-                    {
-                        found = ctlControls[c];
-                    }
+                    found = controls[c];
                 }
             }
-            else
+        }
+        else
+        {
+            // Cycle through the controls in reverse z-order looking for the one with the highest
+            // tab index.
+            for (int c = controls.Count - 1; c >= 0; c--)
             {
-                // Cycle through the controls in reverse z-order looking for the one with the highest
-                // tab index.
-                for (int c = ctlControls.Count - 1; c >= 0; c--)
+                if (found is null || found._tabIndex < controls[c]._tabIndex)
                 {
-                    if (found is null || found._tabIndex < ctlControls[c]._tabIndex)
-                    {
-                        found = ctlControls[c];
-                    }
+                    found = controls[c];
                 }
             }
         }
@@ -5918,11 +5920,11 @@ public unsafe partial class Control :
 
         if (forward)
         {
-            ControlCollection? ctlControls = (ControlCollection?)ctl!.Properties.GetObject(s_controlsCollectionProperty);
+            ControlCollection? controls = (ControlCollection?)ctl!.Properties.GetObject(s_controlsCollectionProperty);
 
-            if (ctlControls is not null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
+            if (controls is not null && controls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
             {
-                Control? found = ctl.GetFirstChildControlInTabOrder(/*forward=*/true);
+                Control? found = ctl.GetFirstChildControlInTabOrder(forward: true);
                 if (found is not null)
                 {
                     return found;

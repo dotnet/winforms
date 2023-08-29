@@ -87,6 +87,7 @@ public partial class RichTextBox
             return HRESULT.S_OK;
         }
 
+        /// <inheritdoc cref="IRichEditOleCallback.QueryAcceptData(Com.IDataObject*, ushort*, RECO_FLAGS, BOOL, HGLOBAL)"/>
         public HRESULT QueryAcceptData(Com.IDataObject* lpdataobj, ushort* lpcfFormat, RECO_FLAGS reco, BOOL fReally, HGLOBAL hMetaPict)
         {
             RichTextDbg.TraceVerbose($"IRichEditOleCallback::QueryAcceptData(reco={reco})");
@@ -162,7 +163,7 @@ public partial class RichTextBox
                     _lastDragEventArgs.Message ?? string.Empty,
                     _lastDragEventArgs.MessageReplacementToken ?? string.Empty);
 
-            if (fReally == 0)
+            if (!fReally)
             {
                 // We are just querying
 

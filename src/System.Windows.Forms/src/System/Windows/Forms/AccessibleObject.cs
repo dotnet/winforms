@@ -236,16 +236,19 @@ public unsafe partial class AccessibleObject :
     internal virtual int[]? GetSysChildOrder() => null;
 
     /// <summary>
-    ///  Mechanism for overriding default IAccessible.accNavigate behavior of
-    ///  the 'inner' system accessible object (accNavigate is how you move
-    ///  between parent, child and sibling accessible objects).
-    ///
-    ///  USAGE: 'navdir' indicates navigation operation to perform, relative to
-    ///  this accessible object.
-    ///  If operation is unsupported, return false to allow fall-back to default
-    ///  system behavior. Otherwise return destination object in the out
-    ///  parameter, or null to indicate 'off end of list'.
+    ///  Mechanism for overriding default <see cref="UIA.IAccessible.accNavigate(int, VARIANT, VARIANT*)"/>
+    ///  behavior of the 'inner' system accessible object (accNavigate is how you move between parent, child and
+    ///  sibling accessible objects).
     /// </summary>
+    /// <param name="navdir">
+    ///  Navigation operation to perform, relative to this accessible object.
+    /// </param>
+    /// <param name="accessibleObject">
+    ///  The destination object or <see langword="null"/> to indicate 'off end of list'.
+    /// </param>
+    /// <returns>
+    ///  <see langword="false"/> to allow fall-back to default system behavior.
+    /// </returns>
     internal virtual bool GetSysChild(AccessibleNavigation navdir, out AccessibleObject? accessibleObject)
     {
         accessibleObject = null;
@@ -1163,19 +1166,19 @@ public unsafe partial class AccessibleObject :
             }
         }
 
-        if (!SysNavigate(navDir, childID, out object? retObject))
+        if (SysNavigate((AccessibleNavigation)navDir, childID, out AccessibleObject? accessibleObject))
         {
-            using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
-            if (result.Failed)
-            {
-                return null;
-            }
-
-            result = accessible.Value->accNavigate(navDir, ChildIdToVARIANT(childID), out VARIANT endUpAt);
-            return endUpAt.ToObject();
+            return AsChildId(accessibleObject);
         }
 
-        return retObject;
+        using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
+        if (result.Failed)
+        {
+            return null;
+        }
+
+        result = accessible.Value->accNavigate(navDir, ChildIdToVARIANT(childID), out VARIANT endUpAt);
+        return endUpAt.ToObject();
     }
 
     /// <summary>
@@ -1856,13 +1859,20 @@ public unsafe partial class AccessibleObject :
         }
 
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
-        if (result.Succeeded && !SysNavigate((int)navdir, (int)PInvoke.CHILDID_SELF, out object? retObject))
+        if (result.Failed)
+        {
+            return null;
+        }
+
+        if (SysNavigate(navdir, (int)PInvoke.CHILDID_SELF, out AccessibleObject? accessibleObject))
+        {
+            return accessibleObject;
+        }
+        else
         {
             result = accessible.Value->accNavigate((int)navdir, CHILDID_SELF, out VARIANT endUpAt);
             return TryGetAccessibleObject(endUpAt);
         }
-
-        return null;
     }
 
     /// <summary>
@@ -1873,7 +1883,7 @@ public unsafe partial class AccessibleObject :
         using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
         if (result.Succeeded)
         {
-            accessible.Value->accSelect((int)flags, CHILDID_SELF);
+            result = accessible.Value->accSelect((int)flags, CHILDID_SELF);
         }
     }
 
@@ -1892,6 +1902,7 @@ public unsafe partial class AccessibleObject :
     {
         if (obj is not null && obj._isSystemWrapper && obj.SystemIAccessible is { } accessible)
         {
+            // We're just a simple system wrapper, return the pointer.
             return new VARIANT()
             {
                 vt = VARENUM.VT_DISPATCH,
@@ -1986,16 +1997,19 @@ public unsafe partial class AccessibleObject :
     }
 
     /// <summary>
-    ///  Performs custom navigation between parent/child/sibling accessible
-    ///  objects. This is basically just a wrapper for GetSysChild(), that
-    ///  does some of the dirty work, such as wrapping the returned object
-    ///  in a VARIANT. Usage is similar to GetSysChild(). Called prior to
-    ///  calling IAccessible.accNavigate on the 'inner' system accessible
-    ///  object.
+    ///  Performs custom navigation between parent, child, and sibling accessible objects.
     /// </summary>
-    private bool SysNavigate(int navDir, object childID, out object? retObject)
+    /// <remarks>
+    ///  <para>
+    ///   This is basically just a wrapper for <see cref="GetSysChild(AccessibleNavigation, out AccessibleObject?)"/>
+    ///   that does some of the dirty work, such as wrapping the returned object in a VARIANT. Usage is similar to
+    ///   <see cref="GetSysChild(AccessibleNavigation, out AccessibleObject?)"/> GetSysChild(). Called prior to calling
+    ///   IAccessible.accNavigate on the 'inner' system accessible object.
+    ///  </para>
+    /// </remarks>
+    private bool SysNavigate(AccessibleNavigation direction, object childID, out AccessibleObject? accessibleObject)
     {
-        retObject = null;
+        accessibleObject = null;
 
         // Only override system navigation relative to ourselves (since we can't interpret OLEACC child ids)
         if (!childID.Equals((int)PInvoke.CHILDID_SELF))
@@ -2004,16 +2018,7 @@ public unsafe partial class AccessibleObject :
         }
 
         // Perform any supported navigation operation (fall back on system for unsupported navigation ops)
-        if (!GetSysChild((AccessibleNavigation)navDir, out AccessibleObject? newObject))
-        {
-            return false;
-        }
-
-        // If object found, wrap in a VARIANT. Otherwise return null for 'end of list' (OLEACC expects this)
-        retObject = (newObject is null) ? null : AsChildId(newObject);
-
-        // Tell caller not to fall back on system behavior now
-        return true;
+        return GetSysChild(direction, out accessibleObject);
     }
 
     /// <summary>
@@ -2079,9 +2084,10 @@ public unsafe partial class AccessibleObject :
         }
 
         UIA.IAccessible* accessible;
-        if (dispatch->QueryInterface(IID.Get<IDispatch>(), (void**)&accessible).Failed)
+        if (dispatch->QueryInterface(IID.Get<UIA.IAccessible>(), (void**)&accessible).Failed)
         {
             Debug.Fail("This should never happen");
+            dispatch->Release();
             return null;
         }
 
@@ -2106,6 +2112,7 @@ public unsafe partial class AccessibleObject :
 
         return new AccessibleObject(
 #if DEBUG
+            // AccessibleObject is not disposable so we shouldn't be tracking it.
             new AgileComPointer<UIA.IAccessible>(accessible, takeOwnership: true, trackDisposal: false)
 #else
             new AgileComPointer<UIA.IAccessible>(accessible, takeOwnership: true)
