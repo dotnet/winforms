@@ -6,7 +6,6 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Design;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms;
@@ -2013,7 +2012,6 @@ public partial class DataGridView : Control, ISupportInitialize
         remove => Events.RemoveHandler(s_dataMemberChangedEvent, value);
     }
 
-    [Editor($"System.Windows.Forms.Design.DataSourceListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [DefaultValue(null)]
     [SRCategory(nameof(SR.CatData))]
     [RefreshProperties(RefreshProperties.Repaint)]

@@ -1212,20 +1212,21 @@ internal class DataGridViewColumnCollectionDialog : Form
     /// </summary>
     internal class ListBoxItem : ICustomTypeDescriptor, IComponent
     {
-        private DataGridViewColumn _column;
-        private DataGridViewColumnCollectionDialog _owner;
-        private ComponentDesigner? _compDesigner;
-        private Image? _toolboxBitmap;
+        public DataGridViewColumn DataGridViewColumn { get; }
+        public DataGridViewColumnCollectionDialog Owner { get; }
+        public ComponentDesigner? DataGridViewColumnDesigner { get; }
+        public Image? ToolboxBitmap { get; }
+
         public ListBoxItem(DataGridViewColumn column, DataGridViewColumnCollectionDialog owner, ComponentDesigner compDesigner)
         {
-            _column = column;
-            _owner = owner;
-            _compDesigner = compDesigner;
+            DataGridViewColumn = column;
+            Owner = owner;
+            DataGridViewColumnDesigner = compDesigner;
 
-            if (_compDesigner is not null)
+            if (DataGridViewColumnDesigner is not null)
             {
-                _compDesigner.Initialize(column);
-                TypeDescriptor.CreateAssociation(_column, _compDesigner);
+                DataGridViewColumnDesigner.Initialize(column);
+                TypeDescriptor.CreateAssociation(DataGridViewColumn, DataGridViewColumnDesigner);
             }
 
 #pragma warning disable IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
@@ -1233,84 +1234,52 @@ internal class DataGridViewColumnCollectionDialog : Form
 #pragma warning restore IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
             if (attr is not null)
             {
-                _toolboxBitmap = attr.GetImage(column, false /*large*/);
+                ToolboxBitmap = attr.GetImage(column, false /*large*/);
             }
             else
             {
-                _toolboxBitmap = SelectedColumnsItemBitmap;
+                ToolboxBitmap = SelectedColumnsItemBitmap;
             }
 
-            DataGridViewColumnDesigner? dgvColumnDesigner = compDesigner as DataGridViewColumnDesigner;
-            if (dgvColumnDesigner is not null && _owner._liveDataGridView is not null)
+            DataGridViewColumnDesigner? dataGridViewColumnDesigner = compDesigner as DataGridViewColumnDesigner;
+            if (dataGridViewColumnDesigner is not null && Owner._liveDataGridView is not null)
             {
-                dgvColumnDesigner.LiveDataGridView = _owner._liveDataGridView;
-            }
-        }
-
-        public DataGridViewColumn DataGridViewColumn
-        {
-            get
-            {
-                return _column;
-            }
-        }
-
-        public ComponentDesigner DataGridViewColumnDesigner
-        {
-            get
-            {
-                return _compDesigner!;
-            }
-        }
-
-        public DataGridViewColumnCollectionDialog Owner
-        {
-            get
-            {
-                return _owner;
-            }
-        }
-
-        public Image ToolboxBitmap
-        {
-            get
-            {
-                return _toolboxBitmap!;
+                dataGridViewColumnDesigner.LiveDataGridView = Owner._liveDataGridView;
             }
         }
 
         public override string ToString()
         {
-            return _column.HeaderText;
+            return DataGridViewColumn.HeaderText;
         }
 
         // ICustomTypeDescriptor implementation
-        AttributeCollection ICustomTypeDescriptor.GetAttributes() => TypeDescriptor.GetAttributes(_column);
+        AttributeCollection ICustomTypeDescriptor.GetAttributes() => TypeDescriptor.GetAttributes(DataGridViewColumn);
 
-        string? ICustomTypeDescriptor.GetClassName() => TypeDescriptor.GetClassName(_column);
+        string? ICustomTypeDescriptor.GetClassName() => TypeDescriptor.GetClassName(DataGridViewColumn);
 
-        string? ICustomTypeDescriptor.GetComponentName() => TypeDescriptor.GetComponentName(_column);
+        string? ICustomTypeDescriptor.GetComponentName() => TypeDescriptor.GetComponentName(DataGridViewColumn);
 
-        TypeConverter ICustomTypeDescriptor.GetConverter() => TypeDescriptor.GetConverter(_column);
+        TypeConverter ICustomTypeDescriptor.GetConverter() => TypeDescriptor.GetConverter(DataGridViewColumn);
 
-        EventDescriptor? ICustomTypeDescriptor.GetDefaultEvent() => TypeDescriptor.GetDefaultEvent(_column);
+        EventDescriptor? ICustomTypeDescriptor.GetDefaultEvent() => TypeDescriptor.GetDefaultEvent(DataGridViewColumn);
 
-        PropertyDescriptor? ICustomTypeDescriptor.GetDefaultProperty() => TypeDescriptor.GetDefaultProperty(_column);
+        PropertyDescriptor? ICustomTypeDescriptor.GetDefaultProperty() => TypeDescriptor.GetDefaultProperty(DataGridViewColumn);
 
-        object? ICustomTypeDescriptor.GetEditor(Type type) => TypeDescriptor.GetEditor(_column, type);
+        object? ICustomTypeDescriptor.GetEditor(Type type) => TypeDescriptor.GetEditor(DataGridViewColumn, type);
 
-        EventDescriptorCollection ICustomTypeDescriptor.GetEvents() => TypeDescriptor.GetEvents(_column);
+        EventDescriptorCollection ICustomTypeDescriptor.GetEvents() => TypeDescriptor.GetEvents(DataGridViewColumn);
 
-        EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[]? attrs) => TypeDescriptor.GetEvents(_column, attrs!);
+        EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[]? attrs) => TypeDescriptor.GetEvents(DataGridViewColumn, attrs!);
 
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() => ((ICustomTypeDescriptor)this).GetProperties(null);
 
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[]? attrs)
         {
-            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_column);
+            PropertyDescriptorCollection props = TypeDescriptor.GetProperties(DataGridViewColumn);
 
             PropertyDescriptor[]? propArray = null;
-            if (_compDesigner is not null)
+            if (DataGridViewColumnDesigner is not null)
             {
                 // PropertyDescriptorCollection does not let us change properties.
                 // So we have to create a hash table that we pass to PreFilterProperties
@@ -1324,7 +1293,7 @@ internal class DataGridViewColumnCollectionDialog : Form
                     hash.Add(props[i].Name, props[i]);
                 }
 
-                ((IDesignerFilter)_compDesigner).PreFilterProperties(hash);
+                ((IDesignerFilter)DataGridViewColumnDesigner).PreFilterProperties(hash);
 
                 // PreFilterProperties can add / remove properties.
                 // Use the hashtable's Count, not the old property descriptor collection's count.
@@ -1346,7 +1315,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         {
             if (pd is null)
             {
-                return _column;
+                return DataGridViewColumn;
             }
             else if (pd is ColumnTypePropertyDescriptor)
             {
@@ -1354,13 +1323,13 @@ internal class DataGridViewColumnCollectionDialog : Form
             }
             else
             {
-                return _column;
+                return DataGridViewColumn;
             }
         }
 
         ISite? IComponent.Site
         {
-            get => _owner._liveDataGridView?.Site;
+            get => Owner._liveDataGridView?.Site;
 
             set { }
         }
