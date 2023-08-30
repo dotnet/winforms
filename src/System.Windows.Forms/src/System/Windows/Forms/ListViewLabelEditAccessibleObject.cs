@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using static System.Windows.Forms.ListViewItem;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -11,6 +12,7 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
     private const string LIST_VIEW_LABEL_EDIT_AUTOMATION_ID = "1";
 
     private readonly ListView _owningListView;
+    private readonly ListViewSubItem _owningListViewSubItem;
     private readonly WeakReference<ListViewLabelEditNativeWindow> _labelEdit;
     private readonly ListViewLabelEditUiaTextProvider _textProvider;
     private int[]? _runtimeId;
@@ -18,6 +20,7 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
     public ListViewLabelEditAccessibleObject(ListView owningListView, ListViewLabelEditNativeWindow labelEdit)
     {
         _owningListView = owningListView.OrThrowIfNull();
+        _owningListViewSubItem = owningListView._listViewSubItem.OrThrowIfNull();
         _labelEdit = new(labelEdit);
         UseStdAccessibleObjects(labelEdit.Handle);
         _textProvider = new ListViewLabelEditUiaTextProvider(owningListView, labelEdit, this);
@@ -25,15 +28,13 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
 
     private protected override string AutomationId => LIST_VIEW_LABEL_EDIT_AUTOMATION_ID;
 
+    public override AccessibleObject? Parent => _owningListViewSubItem.AccessibilityObject;
+
     internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
     {
-        AccessibleObject parent = _owningListView.AccessibilityObject;
-
         return direction switch
         {
-            UiaCore.NavigateDirection.Parent => parent,
-            UiaCore.NavigateDirection.NextSibling => parent.GetChildIndex(this) is int childId and >= 0 ? parent.GetChild(childId + 1) : null,
-            UiaCore.NavigateDirection.PreviousSibling => parent.GetChildIndex(this) is int childId and >= 0 ? parent.GetChild(childId - 1) : null,
+            UiaCore.NavigateDirection.Parent => Parent,
             _ => base.FragmentNavigate(direction),
         };
     }

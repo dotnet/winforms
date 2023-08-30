@@ -12,6 +12,7 @@ using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static System.Windows.Forms.ListViewGroup;
+using static System.Windows.Forms.ListViewItem;
 using static Interop;
 using static Interop.ComCtl32;
 
@@ -175,7 +176,10 @@ public partial class ListView : Control
 
     private bool _blockLabelEdit;
 
-    private ListViewLabelEditNativeWindow? _labelEdit;
+    internal ListViewLabelEditNativeWindow? _labelEdit;
+
+    // Used to record the SubItem to which the Label Edit belongs.
+    internal ListViewSubItem? _listViewSubItem;
 
     // Background image stuff
     // Because we have to create a temporary file and the OS does not clean up the temporary files from the machine
@@ -3394,24 +3398,24 @@ public partial class ListView : Control
                     // win32 listView control can't search inside sub items
                     for (int i = startIndex; i < Items.Count; i++)
                     {
-                        ListViewItem lvi = Items[i];
-                        for (int j = 0; j < lvi.SubItems.Count; j++)
+                        ListViewItem listViewItem = Items[i];
+                        for (int j = 0; j < listViewItem.SubItems.Count; j++)
                         {
-                            ListViewItem.ListViewSubItem lvsi = lvi.SubItems[j];
+                            ListViewSubItem listViewSubItem = listViewItem.SubItems[j];
                             // the win32 list view search for items w/ text is case insensitive
                             // do the same for sub items
                             // because we are comparing user defined strings we have to do the slower String search
                             // ie, use String.Compare(string, string, case sensitive, CultureInfo)
                             // instead of new Whidbey String.Equals overload
                             // String.Equals(string, string, StringComparison.OrdinalIgnoreCase
-                            if (string.Equals(text, lvsi.Text, StringComparison.OrdinalIgnoreCase))
+                            if (string.Equals(text, listViewSubItem.Text, StringComparison.OrdinalIgnoreCase))
                             {
-                                return lvi;
+                                return listViewItem;
                             }
 
-                            if (isPrefixSearch && CultureInfo.CurrentCulture.CompareInfo.IsPrefix(lvsi.Text, text, CompareOptions.IgnoreCase))
+                            if (isPrefixSearch && CultureInfo.CurrentCulture.CompareInfo.IsPrefix(listViewSubItem.Text, text, CompareOptions.IgnoreCase))
                             {
-                                return lvi;
+                                return listViewItem;
                             }
                         }
                     }
@@ -3825,7 +3829,8 @@ public partial class ListView : Control
         {
             if (lvhi.iSubItem < item.SubItems.Count)
             {
-                return new ListViewHitTestInfo(item, item.SubItems[lvhi.iSubItem], location);
+                _listViewSubItem = item.SubItems[lvhi.iSubItem];
+                return new ListViewHitTestInfo(item, _listViewSubItem, location);
             }
             else
             {

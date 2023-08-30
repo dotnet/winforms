@@ -76,6 +76,8 @@ public partial class ListViewItem
                         => ParentInternal.GetChildInternal(ParentInternal.GetChildIndex(this) + 1),
                     UiaCore.NavigateDirection.PreviousSibling
                         => ParentInternal.GetChildInternal(ParentInternal.GetChildIndex(this) - 1),
+                    UiaCore.NavigateDirection.FirstChild => GetChild(),
+                    UiaCore.NavigateDirection.LastChild => GetChild(),
                     _ => base.FragmentNavigate(direction)
                 };
 
@@ -161,6 +163,16 @@ public partial class ListViewItem
 
             private protected override string AutomationId
                 => $"{nameof(ListViewSubItem)}-{ParentInternal.GetChildIndex(this)}";
+
+            private AccessibleObject? GetChild()
+            {
+                if (_owningListView._labelEdit is { } labelEdit)
+                {
+                    return labelEdit.AccessibilityObject;
+                }
+
+                return null;
+            }
         }
     }
 }
