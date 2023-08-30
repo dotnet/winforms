@@ -679,7 +679,7 @@ public abstract partial class AxHost
             s_axHTraceSwitch.TraceVerbose($"in SetActiveObject {pszObjName.ToString() ?? "<null>"}");
             if (_siteUIActive is { } activeHost
                 && activeHost._iOleInPlaceActiveObjectExternal is { } existing
-                && existing.OriginalHandle != pActiveObject)
+                && !existing.MatchesOriginalPointer(pActiveObject))
             {
                 // Release the field before disposing to avoid accessing it during disposal on callbacks.
                 activeHost._iOleInPlaceActiveObjectExternal = null;
