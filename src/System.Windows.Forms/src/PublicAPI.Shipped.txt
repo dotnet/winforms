@@ -248,20 +248,20 @@
 ~override System.Windows.Forms.TreeNode.ToString() -> string
 override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.TreeView.BackgroundImage.set -> void
-~override System.Windows.Forms.TreeView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.TreeView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.TreeView.CreateParams.get -> System.Windows.Forms.CreateParams!
 ~override System.Windows.Forms.TreeView.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
+override System.Windows.Forms.TreeView.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.TreeView.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.TreeView.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.TreeView.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e) -> void
+override System.Windows.Forms.TreeView.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
 ~override System.Windows.Forms.TreeView.OnLostFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnMouseHover(System.EventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnMouseLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.TreeView.Text.get -> string
-~override System.Windows.Forms.TreeView.Text.set -> void
-~override System.Windows.Forms.TreeView.ToString() -> string
+override System.Windows.Forms.TreeView.OnMouseHover(System.EventArgs! e) -> void
+override System.Windows.Forms.TreeView.OnMouseLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.TreeView.Text.get -> string!
+override System.Windows.Forms.TreeView.Text.set -> void
+override System.Windows.Forms.TreeView.ToString() -> string!
 ~static System.Windows.Forms.AxHost.GetFontFromIFont(object font) -> System.Drawing.Font
 ~static System.Windows.Forms.AxHost.GetFontFromIFontDisp(object font) -> System.Drawing.Font
 ~static System.Windows.Forms.AxHost.GetIFontDispFromFont(System.Drawing.Font font) -> object
@@ -612,27 +612,27 @@ override System.Windows.Forms.TreeView.CreateParams.get -> System.Windows.Forms.
 ~System.Windows.Forms.TreeNode.TreeNode(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
 ~System.Windows.Forms.TreeNode.TreeView.get -> System.Windows.Forms.TreeView
 ~System.Windows.Forms.TreeView.GetItemRenderStyles(System.Windows.Forms.TreeNode node, int state) -> System.Windows.Forms.OwnerDrawPropertyBag
-~System.Windows.Forms.TreeView.GetNodeAt(int x, int y) -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeView.GetNodeAt(System.Drawing.Point pt) -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeView.HitTest(int x, int y) -> System.Windows.Forms.TreeViewHitTestInfo
-~System.Windows.Forms.TreeView.HitTest(System.Drawing.Point pt) -> System.Windows.Forms.TreeViewHitTestInfo
+System.Windows.Forms.TreeView.GetNodeAt(int x, int y) -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeView.GetNodeAt(System.Drawing.Point pt) -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeView.HitTest(int x, int y) -> System.Windows.Forms.TreeViewHitTestInfo!
+System.Windows.Forms.TreeView.HitTest(System.Drawing.Point pt) -> System.Windows.Forms.TreeViewHitTestInfo!
 System.Windows.Forms.TreeView.ImageKey.get -> string!
 System.Windows.Forms.TreeView.ImageKey.set -> void
 System.Windows.Forms.TreeView.ImageList.get -> System.Windows.Forms.ImageList?
 System.Windows.Forms.TreeView.ImageList.set -> void
 System.Windows.Forms.TreeView.Nodes.get -> System.Windows.Forms.TreeNodeCollection!
-~System.Windows.Forms.TreeView.PathSeparator.get -> string
-~System.Windows.Forms.TreeView.PathSeparator.set -> void
-~System.Windows.Forms.TreeView.SelectedImageKey.get -> string
-~System.Windows.Forms.TreeView.SelectedImageKey.set -> void
-~System.Windows.Forms.TreeView.SelectedNode.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeView.SelectedNode.set -> void
+System.Windows.Forms.TreeView.PathSeparator.get -> string!
+System.Windows.Forms.TreeView.PathSeparator.set -> void
+System.Windows.Forms.TreeView.SelectedImageKey.get -> string!
+System.Windows.Forms.TreeView.SelectedImageKey.set -> void
+System.Windows.Forms.TreeView.SelectedNode.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeView.SelectedNode.set -> void
 System.Windows.Forms.TreeView.StateImageList.get -> System.Windows.Forms.ImageList?
 System.Windows.Forms.TreeView.StateImageList.set -> void
-~System.Windows.Forms.TreeView.TopNode.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeView.TopNode.set -> void
-~System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer
-~System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
+System.Windows.Forms.TreeView.TopNode.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeView.TopNode.set -> void
+System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer?
+System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
 ~virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void
 ~virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs cevent) -> void
 ~virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs cevent) -> void
@@ -911,22 +911,22 @@ System.Windows.Forms.TreeView.StateImageList.set -> void
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.set -> void
 ~virtual System.Windows.Forms.TreeNode.Deserialize(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Windows.Forms.TreeNode.Serialize(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-~virtual System.Windows.Forms.TreeView.OnAfterCheck(System.Windows.Forms.TreeViewEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnAfterCollapse(System.Windows.Forms.TreeViewEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnAfterExpand(System.Windows.Forms.TreeViewEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnAfterLabelEdit(System.Windows.Forms.NodeLabelEditEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnAfterSelect(System.Windows.Forms.TreeViewEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnBeforeCheck(System.Windows.Forms.TreeViewCancelEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnBeforeCollapse(System.Windows.Forms.TreeViewCancelEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnBeforeExpand(System.Windows.Forms.TreeViewCancelEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnBeforeLabelEdit(System.Windows.Forms.NodeLabelEditEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnBeforeSelect(System.Windows.Forms.TreeViewCancelEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnDrawNode(System.Windows.Forms.DrawTreeNodeEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnItemDrag(System.Windows.Forms.ItemDragEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnNodeMouseClick(System.Windows.Forms.TreeNodeMouseClickEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnNodeMouseDoubleClick(System.Windows.Forms.TreeNodeMouseClickEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnNodeMouseHover(System.Windows.Forms.TreeNodeMouseHoverEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.TreeView.OnAfterCheck(System.Windows.Forms.TreeViewEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnAfterCollapse(System.Windows.Forms.TreeViewEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnAfterExpand(System.Windows.Forms.TreeViewEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnAfterLabelEdit(System.Windows.Forms.NodeLabelEditEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnAfterSelect(System.Windows.Forms.TreeViewEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnBeforeCheck(System.Windows.Forms.TreeViewCancelEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnBeforeCollapse(System.Windows.Forms.TreeViewCancelEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnBeforeExpand(System.Windows.Forms.TreeViewCancelEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnBeforeLabelEdit(System.Windows.Forms.NodeLabelEditEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnBeforeSelect(System.Windows.Forms.TreeViewCancelEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnDrawNode(System.Windows.Forms.DrawTreeNodeEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnItemDrag(System.Windows.Forms.ItemDragEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnNodeMouseClick(System.Windows.Forms.TreeNodeMouseClickEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnNodeMouseDoubleClick(System.Windows.Forms.TreeNodeMouseClickEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnNodeMouseHover(System.Windows.Forms.TreeNodeMouseHoverEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
 abstract System.Windows.Forms.BindingManagerBase.AddNew() -> void
 abstract System.Windows.Forms.BindingManagerBase.CancelCurrentEdit() -> void
 abstract System.Windows.Forms.BindingManagerBase.Count.get -> int
@@ -11546,18 +11546,18 @@ System.Windows.Forms.TreeNodeStates.Marked = 128 -> System.Windows.Forms.TreeNod
 System.Windows.Forms.TreeNodeStates.Selected = 1 -> System.Windows.Forms.TreeNodeStates
 System.Windows.Forms.TreeNodeStates.ShowKeyboardCues = 512 -> System.Windows.Forms.TreeNodeStates
 System.Windows.Forms.TreeView
-System.Windows.Forms.TreeView.AfterCheck -> System.Windows.Forms.TreeViewEventHandler
-System.Windows.Forms.TreeView.AfterCollapse -> System.Windows.Forms.TreeViewEventHandler
-System.Windows.Forms.TreeView.AfterExpand -> System.Windows.Forms.TreeViewEventHandler
-System.Windows.Forms.TreeView.AfterLabelEdit -> System.Windows.Forms.NodeLabelEditEventHandler
-System.Windows.Forms.TreeView.AfterSelect -> System.Windows.Forms.TreeViewEventHandler
+System.Windows.Forms.TreeView.AfterCheck -> System.Windows.Forms.TreeViewEventHandler?
+System.Windows.Forms.TreeView.AfterCollapse -> System.Windows.Forms.TreeViewEventHandler?
+System.Windows.Forms.TreeView.AfterExpand -> System.Windows.Forms.TreeViewEventHandler?
+System.Windows.Forms.TreeView.AfterLabelEdit -> System.Windows.Forms.NodeLabelEditEventHandler?
+System.Windows.Forms.TreeView.AfterSelect -> System.Windows.Forms.TreeViewEventHandler?
 System.Windows.Forms.TreeView.BackgroundImageChanged -> System.EventHandler?
 System.Windows.Forms.TreeView.BackgroundImageLayoutChanged -> System.EventHandler?
-System.Windows.Forms.TreeView.BeforeCheck -> System.Windows.Forms.TreeViewCancelEventHandler
-System.Windows.Forms.TreeView.BeforeCollapse -> System.Windows.Forms.TreeViewCancelEventHandler
-System.Windows.Forms.TreeView.BeforeExpand -> System.Windows.Forms.TreeViewCancelEventHandler
-System.Windows.Forms.TreeView.BeforeLabelEdit -> System.Windows.Forms.NodeLabelEditEventHandler
-System.Windows.Forms.TreeView.BeforeSelect -> System.Windows.Forms.TreeViewCancelEventHandler
+System.Windows.Forms.TreeView.BeforeCheck -> System.Windows.Forms.TreeViewCancelEventHandler?
+System.Windows.Forms.TreeView.BeforeCollapse -> System.Windows.Forms.TreeViewCancelEventHandler?
+System.Windows.Forms.TreeView.BeforeExpand -> System.Windows.Forms.TreeViewCancelEventHandler?
+System.Windows.Forms.TreeView.BeforeLabelEdit -> System.Windows.Forms.NodeLabelEditEventHandler?
+System.Windows.Forms.TreeView.BeforeSelect -> System.Windows.Forms.TreeViewCancelEventHandler?
 System.Windows.Forms.TreeView.BeginUpdate() -> void
 System.Windows.Forms.TreeView.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.TreeView.BorderStyle.set -> void
@@ -11566,7 +11566,7 @@ System.Windows.Forms.TreeView.CheckBoxes.set -> void
 System.Windows.Forms.TreeView.CollapseAll() -> void
 System.Windows.Forms.TreeView.DrawMode.get -> System.Windows.Forms.TreeViewDrawMode
 System.Windows.Forms.TreeView.DrawMode.set -> void
-System.Windows.Forms.TreeView.DrawNode -> System.Windows.Forms.DrawTreeNodeEventHandler
+System.Windows.Forms.TreeView.DrawNode -> System.Windows.Forms.DrawTreeNodeEventHandler?
 System.Windows.Forms.TreeView.EndUpdate() -> void
 System.Windows.Forms.TreeView.ExpandAll() -> void
 System.Windows.Forms.TreeView.FullRowSelect.get -> bool
@@ -11580,21 +11580,21 @@ System.Windows.Forms.TreeView.ImageIndex.get -> int
 System.Windows.Forms.TreeView.ImageIndex.set -> void
 System.Windows.Forms.TreeView.Indent.get -> int
 System.Windows.Forms.TreeView.Indent.set -> void
-System.Windows.Forms.TreeView.ItemDrag -> System.Windows.Forms.ItemDragEventHandler
+System.Windows.Forms.TreeView.ItemDrag -> System.Windows.Forms.ItemDragEventHandler?
 System.Windows.Forms.TreeView.ItemHeight.get -> int
 System.Windows.Forms.TreeView.ItemHeight.set -> void
 System.Windows.Forms.TreeView.LabelEdit.get -> bool
 System.Windows.Forms.TreeView.LabelEdit.set -> void
 System.Windows.Forms.TreeView.LineColor.get -> System.Drawing.Color
 System.Windows.Forms.TreeView.LineColor.set -> void
-System.Windows.Forms.TreeView.NodeMouseClick -> System.Windows.Forms.TreeNodeMouseClickEventHandler
-System.Windows.Forms.TreeView.NodeMouseDoubleClick -> System.Windows.Forms.TreeNodeMouseClickEventHandler
-System.Windows.Forms.TreeView.NodeMouseHover -> System.Windows.Forms.TreeNodeMouseHoverEventHandler
+System.Windows.Forms.TreeView.NodeMouseClick -> System.Windows.Forms.TreeNodeMouseClickEventHandler?
+System.Windows.Forms.TreeView.NodeMouseDoubleClick -> System.Windows.Forms.TreeNodeMouseClickEventHandler?
+System.Windows.Forms.TreeView.NodeMouseHover -> System.Windows.Forms.TreeNodeMouseHoverEventHandler?
 System.Windows.Forms.TreeView.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.TreeView.Padding.set -> void
-System.Windows.Forms.TreeView.PaddingChanged -> System.EventHandler
-System.Windows.Forms.TreeView.Paint -> System.Windows.Forms.PaintEventHandler
-System.Windows.Forms.TreeView.RightToLeftLayoutChanged -> System.EventHandler
+System.Windows.Forms.TreeView.PaddingChanged -> System.EventHandler?
+System.Windows.Forms.TreeView.Paint -> System.Windows.Forms.PaintEventHandler?
+System.Windows.Forms.TreeView.RightToLeftLayoutChanged -> System.EventHandler?
 System.Windows.Forms.TreeView.Scrollable.get -> bool
 System.Windows.Forms.TreeView.Scrollable.set -> void
 System.Windows.Forms.TreeView.SelectedImageIndex.get -> int
@@ -11610,7 +11610,7 @@ System.Windows.Forms.TreeView.ShowRootLines.set -> void
 System.Windows.Forms.TreeView.Sort() -> void
 System.Windows.Forms.TreeView.Sorted.get -> bool
 System.Windows.Forms.TreeView.Sorted.set -> void
-System.Windows.Forms.TreeView.TextChanged -> System.EventHandler
+System.Windows.Forms.TreeView.TextChanged -> System.EventHandler?
 System.Windows.Forms.TreeView.TreeView() -> void
 System.Windows.Forms.TreeView.VisibleCount.get -> int
 System.Windows.Forms.TreeViewAction

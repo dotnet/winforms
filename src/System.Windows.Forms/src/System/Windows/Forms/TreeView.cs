@@ -935,7 +935,7 @@ public partial class TreeView : Control
             }
         }
     }
-#nullable disable
+
     /// <summary>
     ///  The delimeter string used by TreeNode.getFullPath().
     /// </summary>
@@ -959,7 +959,7 @@ public partial class TreeView : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler PaddingChanged
+    public new event EventHandler? PaddingChanged
     {
         add => base.PaddingChanged += value;
         remove => base.PaddingChanged -= value;
@@ -1071,6 +1071,7 @@ public partial class TreeView : Control
     [RefreshProperties(RefreshProperties.Repaint)]
     [SRDescription(nameof(SR.TreeViewSelectedImageKeyDescr))]
     [RelatedImageList("ImageList")]
+    [AllowNull]
     public string SelectedImageKey
     {
         get => SelectedImageIndexer.Key;
@@ -1100,7 +1101,7 @@ public partial class TreeView : Control
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.TreeViewSelectedNodeDescr))]
-    public TreeNode SelectedNode
+    public TreeNode? SelectedNode
     {
         get
         {
@@ -1265,7 +1266,7 @@ public partial class TreeView : Control
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.TreeViewNodeSorterDescr))]
-    public IComparer TreeViewNodeSorter
+    public IComparer? TreeViewNodeSorter
     {
         get => _treeViewNodeSorter;
         set
@@ -1284,6 +1285,7 @@ public partial class TreeView : Control
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Bindable(false)]
+    [AllowNull]
     public override string Text
     {
         get => base.Text;
@@ -1292,7 +1294,7 @@ public partial class TreeView : Control
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler TextChanged
+    public new event EventHandler? TextChanged
     {
         add => base.TextChanged += value;
         remove => base.TextChanged -= value;
@@ -1307,7 +1309,7 @@ public partial class TreeView : Control
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.TreeViewTopNodeDescr))]
-    public TreeNode TopNode
+    public TreeNode? TopNode
     {
         get
         {
@@ -1353,7 +1355,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewBeforeEditDescr))]
-    public event NodeLabelEditEventHandler BeforeLabelEdit
+    public event NodeLabelEditEventHandler? BeforeLabelEdit
     {
         add => _onBeforeLabelEdit += value;
         remove => _onBeforeLabelEdit -= value;
@@ -1361,7 +1363,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewAfterEditDescr))]
-    public event NodeLabelEditEventHandler AfterLabelEdit
+    public event NodeLabelEditEventHandler? AfterLabelEdit
     {
         add => _onAfterLabelEdit += value;
         remove => _onAfterLabelEdit -= value;
@@ -1369,7 +1371,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewBeforeCheckDescr))]
-    public event TreeViewCancelEventHandler BeforeCheck
+    public event TreeViewCancelEventHandler? BeforeCheck
     {
         add => _onBeforeCheck += value;
         remove => _onBeforeCheck -= value;
@@ -1377,7 +1379,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewAfterCheckDescr))]
-    public event TreeViewEventHandler AfterCheck
+    public event TreeViewEventHandler? AfterCheck
     {
         add => _onAfterCheck += value;
         remove => _onAfterCheck -= value;
@@ -1385,7 +1387,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewBeforeCollapseDescr))]
-    public event TreeViewCancelEventHandler BeforeCollapse
+    public event TreeViewCancelEventHandler? BeforeCollapse
     {
         add => _onBeforeCollapse += value;
         remove => _onBeforeCollapse -= value;
@@ -1393,7 +1395,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewAfterCollapseDescr))]
-    public event TreeViewEventHandler AfterCollapse
+    public event TreeViewEventHandler? AfterCollapse
     {
         add => _onAfterCollapse += value;
         remove => _onAfterCollapse -= value;
@@ -1401,7 +1403,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewBeforeExpandDescr))]
-    public event TreeViewCancelEventHandler BeforeExpand
+    public event TreeViewCancelEventHandler? BeforeExpand
     {
         add => _onBeforeExpand += value;
         remove => _onBeforeExpand -= value;
@@ -1409,7 +1411,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewAfterExpandDescr))]
-    public event TreeViewEventHandler AfterExpand
+    public event TreeViewEventHandler? AfterExpand
     {
         add => _onAfterExpand += value;
         remove => _onAfterExpand -= value;
@@ -1420,7 +1422,7 @@ public partial class TreeView : Control
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewDrawNodeEventDescr))]
-    public event DrawTreeNodeEventHandler DrawNode
+    public event DrawTreeNodeEventHandler? DrawNode
     {
         add => _onDrawNode += value;
         remove => _onDrawNode -= value;
@@ -1428,7 +1430,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.ListViewItemDragDescr))]
-    public event ItemDragEventHandler ItemDrag
+    public event ItemDragEventHandler? ItemDrag
     {
         add => _onItemDrag += value;
         remove => _onItemDrag -= value;
@@ -1436,7 +1438,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.TreeViewNodeMouseHoverDescr))]
-    public event TreeNodeMouseHoverEventHandler NodeMouseHover
+    public event TreeNodeMouseHoverEventHandler? NodeMouseHover
     {
         add => _onNodeMouseHover += value;
         remove => _onNodeMouseHover -= value;
@@ -1444,7 +1446,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewBeforeSelectDescr))]
-    public event TreeViewCancelEventHandler BeforeSelect
+    public event TreeViewCancelEventHandler? BeforeSelect
     {
         add => _onBeforeSelect += value;
         remove => _onBeforeSelect -= value;
@@ -1452,7 +1454,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewAfterSelectDescr))]
-    public event TreeViewEventHandler AfterSelect
+    public event TreeViewEventHandler? AfterSelect
     {
         add => _onAfterSelect += value;
         remove => _onAfterSelect -= value;
@@ -1464,7 +1466,7 @@ public partial class TreeView : Control
     /// <hideinheritance/>
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event PaintEventHandler Paint
+    public new event PaintEventHandler? Paint
     {
         add => base.Paint += value;
         remove => base.Paint -= value;
@@ -1472,7 +1474,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewNodeMouseClickDescr))]
-    public event TreeNodeMouseClickEventHandler NodeMouseClick
+    public event TreeNodeMouseClickEventHandler? NodeMouseClick
     {
         add => _onNodeMouseClick += value;
         remove => _onNodeMouseClick -= value;
@@ -1480,7 +1482,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeViewNodeMouseDoubleClickDescr))]
-    public event TreeNodeMouseClickEventHandler NodeMouseDoubleClick
+    public event TreeNodeMouseClickEventHandler? NodeMouseDoubleClick
     {
         add => _onNodeMouseDoubleClick += value;
         remove => _onNodeMouseDoubleClick -= value;
@@ -1488,7 +1490,7 @@ public partial class TreeView : Control
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
-    public event EventHandler RightToLeftLayoutChanged
+    public event EventHandler? RightToLeftLayoutChanged
     {
         add => _onRightToLeftLayoutChanged += value;
         remove => _onRightToLeftLayoutChanged -= value;
@@ -1541,7 +1543,7 @@ public partial class TreeView : Control
     ///  Resets the imageList to null.  We wire this method up to the imageList's
     ///  Dispose event, so that we don't hang onto an imageList that's gone away.
     /// </summary>
-    private void DetachImageList(object sender, EventArgs e)
+    private void DetachImageList(object? sender, EventArgs e)
     {
         ImageList = null;
     }
@@ -1550,7 +1552,7 @@ public partial class TreeView : Control
     ///  Resets the stateimageList to null.  We wire this method up to the stateimageList's
     ///  Dispose event, so that we don't hang onto an stateimageList that's gone away.
     /// </summary>
-    private void DetachStateImageList(object sender, EventArgs e)
+    private void DetachStateImageList(object? sender, EventArgs e)
     {
         _internalStateImageList = null;
         StateImageList = null;
@@ -1653,9 +1655,9 @@ public partial class TreeView : Control
         };
 
         nint hnode = PInvoke.SendMessage(this, PInvoke.TVM_HITTEST, 0, ref tvhi);
-        TreeNode node = hnode == 0 ? null : NodeFromHandle(hnode);
+        TreeNode? node = hnode == 0 ? null : NodeFromHandle(hnode);
         TreeViewHitTestLocations loc = (TreeViewHitTestLocations)tvhi.flags;
-        return (new TreeViewHitTestInfo(node, loc));
+        return new TreeViewHitTestInfo(node, loc);
     }
 
     /// <summary>
@@ -1681,12 +1683,12 @@ public partial class TreeView : Control
     /// <summary>
     ///  Returns the TreeNode at the given location in tree view coordinates.
     /// </summary>
-    public TreeNode GetNodeAt(Point pt) => GetNodeAt(pt.X, pt.Y);
+    public TreeNode? GetNodeAt(Point pt) => GetNodeAt(pt.X, pt.Y);
 
     /// <summary>
     ///  Returns the TreeNode at the given location in tree view coordinates.
     /// </summary>
-    public TreeNode GetNodeAt(int x, int y)
+    public TreeNode? GetNodeAt(int x, int y)
     {
         TVHITTESTINFO tvhi = new()
         {
@@ -1697,7 +1699,7 @@ public partial class TreeView : Control
         return (hnode == 0 ? null : NodeFromHandle(hnode));
     }
 
-    private void ImageListRecreateHandle(object sender, EventArgs e)
+    private void ImageListRecreateHandle(object? sender, EventArgs e)
     {
         if (IsHandleCreated)
         {
@@ -1720,7 +1722,7 @@ public partial class TreeView : Control
         }
     }
 
-    private void ImageListChangedHandle(object sender, EventArgs e)
+    private void ImageListChangedHandle(object? sender, EventArgs e)
     {
         if ((sender is not null) && (sender == _imageList) && IsHandleCreated)
         {
@@ -1742,7 +1744,7 @@ public partial class TreeView : Control
         }
     }
 
-    private static void NotifyAboutLostFocus(TreeNode treeNode)
+    private static void NotifyAboutLostFocus(TreeNode? treeNode)
     {
         if (treeNode is not null)
         {
@@ -1750,7 +1752,7 @@ public partial class TreeView : Control
         }
     }
 
-    private void StateImageListRecreateHandle(object sender, EventArgs e)
+    private void StateImageListRecreateHandle(object? sender, EventArgs e)
     {
         if (IsHandleCreated)
         {
@@ -1764,7 +1766,7 @@ public partial class TreeView : Control
         }
     }
 
-    private void StateImageListChangedHandle(object sender, EventArgs e)
+    private void StateImageListChangedHandle(object? sender, EventArgs e)
     {
         if (sender is null || sender != _stateImageList || !IsHandleCreated)
         {
@@ -1838,9 +1840,9 @@ public partial class TreeView : Control
     ///  Note this can be null - particularly if any windows messages get generated during
     ///  the insertion of a tree node (TVM_INSERTITEM)
     /// </summary>
-    internal TreeNode NodeFromHandle(IntPtr handle)
+    internal TreeNode? NodeFromHandle(IntPtr handle)
     {
-        _nodesByHandle.TryGetValue(handle, out TreeNode treeNode);
+        _nodesByHandle.TryGetValue(handle, out TreeNode? treeNode);
         return treeNode;
     }
 
@@ -1860,7 +1862,7 @@ public partial class TreeView : Control
             return;
         }
 
-        TreeNode savedSelectedNode = _selectedNode;
+        TreeNode? savedSelectedNode = _selectedNode;
         _selectedNode = null;
 
         base.OnHandleCreated(e);
@@ -2076,7 +2078,7 @@ public partial class TreeView : Control
         nint hnode = PInvoke.SendMessage(this, PInvoke.TVM_HITTEST, 0, ref tvhip);
         if (hnode != 0 && ((tvhip.flags & TVHT.ONITEM) != 0))
         {
-            TreeNode tn = NodeFromHandle(hnode);
+            TreeNode? tn = NodeFromHandle(hnode);
             if (tn != _prevHoveredNode && tn is not null)
             {
                 OnNodeMouseHover(new TreeNodeMouseHoverEventArgs(tn));
@@ -2113,7 +2115,7 @@ public partial class TreeView : Control
         // if editing hasn't been canceled.
         if (IsAccessibilityObjectCreated && !e.CancelEdit)
         {
-            e.Node.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            e.Node!.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
         }
     }
 
@@ -2135,7 +2137,7 @@ public partial class TreeView : Control
         // Raise an event to announce a toggle state change.
         if (IsAccessibilityObjectCreated)
         {
-            AccessibleObject nodeAccessibleObject = e.Node.AccessibilityObject;
+            AccessibleObject nodeAccessibleObject = e.Node!.AccessibilityObject;
             UiaCore.ToggleState newState = nodeAccessibleObject.ToggleState;
             UiaCore.ToggleState oldState = newState == UiaCore.ToggleState.On
                 ? UiaCore.ToggleState.Off
@@ -2166,7 +2168,7 @@ public partial class TreeView : Control
         // Raise an event to announce the expand-collapse state change.
         if (IsAccessibilityObjectCreated)
         {
-            e.Node.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+            e.Node!.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
                 oldValue: UiaCore.ExpandCollapseState.Expanded,
                 newValue: UiaCore.ExpandCollapseState.Collapsed);
@@ -2191,7 +2193,7 @@ public partial class TreeView : Control
         // Raise anevent to announce the expand-collapse state change.
         if (IsAccessibilityObjectCreated)
         {
-            e.Node.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+            e.Node!.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
                 oldValue: UiaCore.ExpandCollapseState.Collapsed,
                 newValue: UiaCore.ExpandCollapseState.Expanded);
@@ -2232,7 +2234,7 @@ public partial class TreeView : Control
         // Raise an event to highlight & announce the selected node.
         if (IsAccessibilityObjectCreated)
         {
-            AccessibleObject nodeAccessibleObject = e.Node.AccessibilityObject;
+            AccessibleObject nodeAccessibleObject = e.Node!.AccessibilityObject;
             nodeAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             nodeAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
 
@@ -2275,7 +2277,7 @@ public partial class TreeView : Control
         // cancelled.
         if (CheckBoxes && (e.KeyData & Keys.KeyCode) == Keys.Space)
         {
-            TreeNode node = SelectedNode;
+            TreeNode? node = SelectedNode;
             if (node is not null)
             {
                 bool eventReturn = TreeViewBeforeCheck(node, TreeViewAction.ByKeyboard);
@@ -2432,7 +2434,7 @@ public partial class TreeView : Control
 
         return s;
     }
-
+#nullable disable
     private unsafe void TvnBeginDrag(MouseButtons buttons, NMTREEVIEW* nmtv)
     {
         TVITEMW item = nmtv->itemNew;
