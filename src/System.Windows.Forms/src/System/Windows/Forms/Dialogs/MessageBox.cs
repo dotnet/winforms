@@ -413,15 +413,56 @@ public class MessageBox
         return ShowCore(owner, text, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
     }
 
+    /// <summary>
+    /// Displays a message box with specified text, caption, buttons, and icon asynchronously.
+    /// </summary>
+    /// <param name="text">The text to display in the message box.</param>
+    /// <param name="caption">The text to display in the title bar of the message box.</param>
+    /// <param name="buttons">One of the MessageBoxButtons values that specifies which buttons to display in the message box.</param>
+    /// <param name="icon">One of the MessageBoxIcon values that specifies which icon to display in the message box.</param>
+    /// <returns>A Task that represents the operation, returning a DialogResult indicating the result of the message box.</returns>
+    public static Task<DialogResult> ShowAsync(
+        string text,
+        string caption = "",
+        MessageBoxButtons buttons = MessageBoxButtons.OK,
+        MessageBoxIcon icon = MessageBoxIcon.None)
+    {
+        var tcs = new TaskCompletionSource<DialogResult>();
+
+        // Use BeginInvoke to show the MessageBox on the UI thread
+        void method()
+        {
+            try
+            {
+                var result = MessageBox.Show(text, caption, buttons, icon);
+                tcs.SetResult(result);
+            }
+            catch (Exception ex)
+            {
+                tcs.SetException(ex);
+            }
+        }
+
+        if (SynchronizationContext.Current is null)
+        {
+            WindowsFormsSynchronizationContext.InstallIfNeeded();
+        }
+
+        // Or, you can capture and use the SynchronizationContext of the UI thread
+        SynchronizationContext.Current!.Post(_ => method(), null);
+
+        return tcs.Task;
+    }
+
     private static DialogResult ShowCore(
-        IWin32Window? owner,
-        string? text,
-        string? caption,
-        MessageBoxButtons buttons,
-        MessageBoxIcon icon,
-        MessageBoxDefaultButton defaultButton,
-        MessageBoxOptions options,
-        HelpInfo hpi)
+    IWin32Window? owner,
+    string? text,
+    string? caption,
+    MessageBoxButtons buttons,
+    MessageBoxIcon icon,
+    MessageBoxDefaultButton defaultButton,
+    MessageBoxOptions options,
+    HelpInfo hpi)
     {
         DialogResult result = DialogResult.None;
         try
