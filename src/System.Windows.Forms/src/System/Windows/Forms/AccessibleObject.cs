@@ -2002,9 +2002,9 @@ public unsafe partial class AccessibleObject :
     /// <remarks>
     ///  <para>
     ///   This is basically just a wrapper for <see cref="GetSysChild(AccessibleNavigation, out AccessibleObject?)"/>
-    ///   that does some of the dirty work, such as wrapping the returned object in a VARIANT. Usage is similar to
-    ///   <see cref="GetSysChild(AccessibleNavigation, out AccessibleObject?)"/> GetSysChild(). Called prior to calling
-    ///   IAccessible.accNavigate on the 'inner' system accessible object.
+    ///   that does some of the dirty work. Usage is similar to <see cref="GetSysChild(AccessibleNavigation, out AccessibleObject?)"/>.
+    ///   Called prior to calling <see cref="UIA.IAccessible.get_accName(VARIANT, BSTR*)"/> on the 'inner' system
+    ///   accessible object.
     ///  </para>
     /// </remarks>
     private bool SysNavigate(AccessibleNavigation direction, object childID, out AccessibleObject? accessibleObject)
