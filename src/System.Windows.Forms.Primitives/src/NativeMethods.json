@@ -61,6 +61,7 @@
       "IEnumVARIANT.Skip",
       "IEnumVARIANT.Reset",
       "IEnumVARIANT.Clone",
+      "IErrorInfo.GetDescription",
       "IFileDialog.Show",
       "IFileDialog.GetResult",
       "IFileOpenDialog.GetResults",
@@ -169,6 +170,7 @@
       "ITypeInfo.ReleaseFuncDesc",
       "ITypeInfo.ReleaseTypeAttr",
       "ITypeLib.GetLibAttr",
+      "ITypeLib.GetTypeInfoOfGuid",
       "IUnknown.QueryInterface"
     ]
   }

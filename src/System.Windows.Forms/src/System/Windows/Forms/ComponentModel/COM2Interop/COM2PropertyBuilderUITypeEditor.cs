@@ -51,8 +51,8 @@ internal class Com2PropertyBuilderUITypeEditor : Com2ExtendedUITypeEditor
 
         VARIANT_BOOL useValue = VARIANT_BOOL.VARIANT_FALSE;
 
-        // Is it actually necessary to pass the value in?
-        VARIANT variantValue = VARIANT.FromObject(value);
+        // This is always an out value.
+        using VARIANT variantValue = default;
 
         using BSTR guidString = new(_guidString);
         hr = propertyBuilder.Value->ExecuteBuilder(

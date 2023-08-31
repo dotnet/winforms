@@ -52,7 +52,7 @@ internal sealed unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEd
         {
             if (provider.TryGetService(out IUIService? uiService))
             {
-                uiService?.ShowError(ex, SR.ErrorTypeConverterFailed);
+                uiService.ShowError(ex, SR.ErrorTypeConverterFailed);
             }
         }
 
@@ -84,7 +84,7 @@ internal sealed unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEd
                     (IUnknown**)pObjAddrs,
                     1,
                     pageGuid,
-                    PInvoke.GetThreadLocale());
+                    PInvoke.GetThreadLocale()).ThrowOnFailure();
             }
         }
         finally
