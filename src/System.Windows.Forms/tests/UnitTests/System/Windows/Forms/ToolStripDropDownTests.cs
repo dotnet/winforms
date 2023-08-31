@@ -1482,20 +1482,34 @@ public class ToolStripDropDownTests
     {
         using var font1 = new Font("Arial", 8.25f);
         using var font2 = new Font("Arial", 8.5f);
+        using var font3 = new Font("Arial", 6.5f);
+
         using var parent = new Control
         {
             Font = font1
         };
+
         using var control = new ToolStrip
         {
             Parent = parent
         };
-        Assert.NotSame(font1, control.Font);
-        Assert.Same(control.Font, control.Font);
+
+        // The font of the control is consistent with that of the parent control
+        Assert.Same(font1, control.Font);
 
         // Set custom.
         control.Font = font2;
         Assert.Same(font2, control.Font);
+
+        // When the parent window and the control itself set different fonts,
+        // the control is displayed with its own settings
+        using var control2 = new ToolStrip
+        {
+            Parent = parent,
+            Font = font3
+        };
+
+        Assert.Same(font3, control2.Font);
     }
 
     [WinFormsFact]
