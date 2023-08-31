@@ -73,6 +73,7 @@ public abstract class BindableComponent : Component, IBindableComponent
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [RefreshProperties(RefreshProperties.All)]
     [ParenthesizePropertyName(true)]
+    [SRCategory(nameof(SR.CatData))]
     public ControlBindingsCollection DataBindings
         => _dataBindings ??= new ControlBindingsCollection(this);
 
