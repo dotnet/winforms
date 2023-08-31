@@ -909,17 +909,25 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Dim invoked = False
 
             Try
-                AsyncOperationManager.
-                    SynchronizationContext.
-                    Send(
-                        Sub()
-                            invoked = True
+                Dim handleNextInstance As New Action(
+                    Sub()
+                        invoked = True
+                        OnStartupNextInstance(New StartupNextInstanceEventArgs(
+                                        New ReadOnlyCollection(Of String)(args),
+                                        bringToForegroundFlag:=True))
+                    End Sub)
 
-                            OnStartupNextInstance(
-                                New StartupNextInstanceEventArgs(
-                                    New ReadOnlyCollection(Of String)(args),
-                                    bringToForegroundFlag:=True))
-                        End Sub, Nothing)
+                ' If we have a Main form, we need to make sure that we are on _its_ UI thread
+                ' before we call OnStartupNextInstance.
+                If MainForm IsNot Nothing Then
+                    MainForm.Invoke(handleNextInstance)
+                Else
+                    ' Otherwise, we need to make sure that we are on the thread
+                    ' provided by the SynchronizationContext.
+                    AsyncOperationManager.
+                        SynchronizationContext.
+                        Send(Sub() handleNextInstance(), Nothing)
+                End If
 
             Catch ex As Exception When Not invoked
                 ' Only catch exceptions thrown when the UI thread is not available, before
