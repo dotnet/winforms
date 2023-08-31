@@ -28,8 +28,20 @@ internal unsafe class AgileComPointer<TInterface> :
     where TInterface : unmanaged, IComIID
 {
     private uint _cookie;
+    private readonly TInterface* _originalPointer;
 
-    public TInterface* OriginalHandle { get; }
+    /// <summary>
+    ///  Returns <see langword="true"/> if the given <paramref name="interface"/> is the same pointer this
+    ///  <see cref="AgileComPointer{TInterface}"/> was created from.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   This is useful in avoiding recreating a new <see cref="AgileComPointer{TInterface}"/> for the same
+    ///   object.
+    ///  </para>
+    /// </remarks>
+    public bool MatchesOriginalPointer(TInterface* @interface)
+        => _cookie != 0 && @interface == _originalPointer;
 
 #if DEBUG
     public AgileComPointer(TInterface* @interface, bool takeOwnership, bool trackDisposal = true)
@@ -39,7 +51,7 @@ internal unsafe class AgileComPointer<TInterface> :
 #endif
     {
         _cookie = GlobalInterfaceTable.RegisterInterface(@interface);
-        OriginalHandle = @interface;
+        _originalPointer = @interface;
 
         if (takeOwnership)
         {

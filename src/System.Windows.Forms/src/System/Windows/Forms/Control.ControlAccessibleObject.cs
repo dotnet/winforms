@@ -132,11 +132,11 @@ public partial class Control
             // Get the owning control's parent, if it has one
             Control? parentControl = owner.ParentInternal;
 
-            // ctrls[index] will indicate the control at the destination of this navigation operation
+            // ctrls[index] will indicate the control at the destination of this navigation operation.
             int index = -1;
             Control[]? ctrls = null;
 
-            // Now handle any 'appropriate' navigation requests...
+            // Now handle any 'appropriate' navigation requests.
             switch (navdir)
             {
                 case AccessibleNavigation.FirstChild:
