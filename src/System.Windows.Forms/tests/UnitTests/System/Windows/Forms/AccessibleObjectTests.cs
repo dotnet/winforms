@@ -535,6 +535,70 @@ public partial class AccessibleObjectTests
         accessibleObject.Select(flags);
     }
 
+    [WinFormsFact]
+    public void AccessibleObject_Navigate_FormChildren()
+    {
+        using Form form = new();
+        using Control first = new();
+        using Control second = new();
+        form.Controls.Add(first);
+        form.Controls.Add(second);
+        form.Show();
+
+        AccessibleObject firstChild = form.AccessibilityObject.Navigate(AccessibleNavigation.FirstChild);
+        Assert.NotNull(firstChild);
+        Assert.Equal((AccessibleObject)first.TestAccessor().Dynamic.NcAccessibilityObject, firstChild);
+
+        AccessibleObject next = firstChild.Navigate(AccessibleNavigation.Next);
+        Assert.NotNull(next);
+
+        AccessibleObject previous = next.Navigate(AccessibleNavigation.Previous);
+        Assert.NotNull(previous);
+        Assert.Same(firstChild, previous);
+    }
+
+    [WinFormsTheory]
+    [InlineData(AccessibleNavigation.FirstChild, true, false)]
+    [InlineData(AccessibleNavigation.LastChild, true, false)]
+    [InlineData(AccessibleNavigation.Next, false, false)]
+    [InlineData(AccessibleNavigation.Previous, true, true)]
+    [InlineData(AccessibleNavigation.Right, false, false)]
+    [InlineData(AccessibleNavigation.Up, true, true)]
+    public void AccessibleObject_Navigate_FromForm_OneChild(AccessibleNavigation direction, bool returnsObject, bool isSystemAccessible)
+    {
+        using Form form = new();
+        using Control control = new();
+        form.Controls.Add(control);
+        form.Show();
+
+        AccessibleObject target = form.AccessibilityObject.Navigate(direction);
+
+        Assert.Equal(returnsObject, target is not null);
+        if (target is not null)
+        {
+            Assert.Equal(isSystemAccessible, (bool)target.TestAccessor().Dynamic._isSystemWrapper);
+        }
+    }
+
+    [WinFormsTheory]
+    [InlineData(AccessibleNavigation.FirstChild, false)]
+    [InlineData(AccessibleNavigation.LastChild, false)]
+    [InlineData(AccessibleNavigation.Next, false)]
+    [InlineData(AccessibleNavigation.Previous, true)]
+    [InlineData(AccessibleNavigation.Right, false)]
+    [InlineData(AccessibleNavigation.Up, true)]
+    public void AccessibleObject_Navigate_FromForm_NoChildren(AccessibleNavigation direction, bool returnsObject)
+    {
+        using Form form = new();
+        form.Show();
+        AccessibleObject target = form.AccessibilityObject.Navigate(direction);
+        Assert.Equal(returnsObject, target is not null);
+        if (target is not null)
+        {
+            Assert.True((bool)target.TestAccessor().Dynamic._isSystemWrapper);
+        }
+    }
+
     public static IEnumerable<object[]> UseStdAccessibleObjects_IntPtr_InvalidHandle_TestData()
     {
         yield return new object[] { IntPtr.Zero };
