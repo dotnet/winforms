@@ -1,86 +1,85 @@
 ﻿using System.ComponentModel.Design;
 using System.Windows.Forms.Design;
 
-namespace DesignSurfaceExt
+namespace DesignSurfaceExt;
+
+internal class DesignerOptionServiceExt4SnapLines : DesignerOptionService
 {
-    internal class DesignerOptionServiceExt4SnapLines : DesignerOptionService
+    public DesignerOptionServiceExt4SnapLines() : base() { }
+
+    protected override void PopulateOptionCollection(DesignerOptionCollection options)
     {
-        public DesignerOptionServiceExt4SnapLines() : base() { }
+        if (options.Parent is not null)
+            return;
 
-        protected override void PopulateOptionCollection(DesignerOptionCollection options)
-        {
-            if (null != options.Parent)
-                return;
+        DesignerOptions ops = new DesignerOptions();
+        ops.UseSnapLines = true;
+        ops.UseSmartTags = true;
+        DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
+        CreateOptionCollection(wfd, "General", ops);
+    }
+}
 
-            DesignerOptions ops = new DesignerOptions();
-            ops.UseSnapLines = true;
-            ops.UseSmartTags = true;
-            DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
-            CreateOptionCollection(wfd, "General", ops);
-        }
-    }//end_class
+internal class DesignerOptionServiceExt4Grid : DesignerOptionService
+{
+    private System.Drawing.Size _gridSize;
 
-    internal class DesignerOptionServiceExt4Grid : DesignerOptionService
+    public DesignerOptionServiceExt4Grid(System.Drawing.Size gridSize) : base() { _gridSize = gridSize; }
+
+    protected override void PopulateOptionCollection(DesignerOptionCollection options)
     {
-        private System.Drawing.Size _gridSize;
+        if (options.Parent is not null)
+            return;
 
-        public DesignerOptionServiceExt4Grid(System.Drawing.Size gridSize) : base() { _gridSize = gridSize; }
+        DesignerOptions ops = new DesignerOptions();
+        ops.GridSize = _gridSize;
+        ops.SnapToGrid = true;
+        ops.ShowGrid = true;
+        ops.UseSnapLines = false;
+        ops.UseSmartTags = true;
+        DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
+        CreateOptionCollection(wfd, "General", ops);
+    }
+}
 
-        protected override void PopulateOptionCollection(DesignerOptionCollection options)
-        {
-            if (null != options.Parent)
-                return;
+internal class DesignerOptionServiceExt4GridWithoutSnapping : DesignerOptionService
+{
+    private System.Drawing.Size _gridSize;
 
-            DesignerOptions ops = new DesignerOptions();
-            ops.GridSize = _gridSize;
-            ops.SnapToGrid = true;
-            ops.ShowGrid = true;
-            ops.UseSnapLines = false;
-            ops.UseSmartTags = true;
-            DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
-            CreateOptionCollection(wfd, "General", ops);
-        }
-    }//end_class
+    public DesignerOptionServiceExt4GridWithoutSnapping(System.Drawing.Size gridSize) : base() { _gridSize = gridSize; }
 
-    internal class DesignerOptionServiceExt4GridWithoutSnapping : DesignerOptionService
+    protected override void PopulateOptionCollection(DesignerOptionCollection options)
     {
-        private System.Drawing.Size _gridSize;
+        if (options.Parent is not null)
+            return;
 
-        public DesignerOptionServiceExt4GridWithoutSnapping(System.Drawing.Size gridSize) : base() { _gridSize = gridSize; }
+        DesignerOptions ops = new DesignerOptions();
+        ops.GridSize = _gridSize;
+        ops.SnapToGrid = false;
+        ops.ShowGrid = true;
+        ops.UseSnapLines = false;
+        ops.UseSmartTags = true;
+        DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
+        CreateOptionCollection(wfd, "General", ops);
+    }
+}
 
-        protected override void PopulateOptionCollection(DesignerOptionCollection options)
-        {
-            if (null != options.Parent)
-                return;
+internal class DesignerOptionServiceExt4NoGuides : DesignerOptionService
+{
+    public DesignerOptionServiceExt4NoGuides() : base() { }
 
-            DesignerOptions ops = new DesignerOptions();
-            ops.GridSize = _gridSize;
-            ops.SnapToGrid = false;
-            ops.ShowGrid = true;
-            ops.UseSnapLines = false;
-            ops.UseSmartTags = true;
-            DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
-            CreateOptionCollection(wfd, "General", ops);
-        }
-    }//end_class
-
-    internal class DesignerOptionServiceExt4NoGuides : DesignerOptionService
+    protected override void PopulateOptionCollection(DesignerOptionCollection options)
     {
-        public DesignerOptionServiceExt4NoGuides() : base() { }
+        if (options.Parent is not null)
+            return;
 
-        protected override void PopulateOptionCollection(DesignerOptionCollection options)
-        {
-            if (null != options.Parent)
-                return;
-
-            DesignerOptions ops = new DesignerOptions();
-            ops.GridSize = new System.Drawing.Size(8, 8);
-            ops.SnapToGrid = false;
-            ops.ShowGrid = false;
-            ops.UseSnapLines = false;
-            ops.UseSmartTags = true;
-            DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
-            CreateOptionCollection(wfd, "General", ops);
-        }
-    }//end_class
-}//end_namespace
+        DesignerOptions ops = new DesignerOptions();
+        ops.GridSize = new System.Drawing.Size(8, 8);
+        ops.SnapToGrid = false;
+        ops.ShowGrid = false;
+        ops.UseSnapLines = false;
+        ops.UseSmartTags = true;
+        DesignerOptionCollection wfd = CreateOptionCollection(options, "WindowsFormsDesigner", null);
+        CreateOptionCollection(wfd, "General", ops);
+    }
+}

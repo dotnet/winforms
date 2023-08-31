@@ -1,177 +1,179 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Globalization;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop
+namespace System.Windows.Forms.ComponentModel.Com2Interop;
+
+internal partial class Com2IPerPropertyBrowsingHandler
 {
-    internal partial class Com2IPerPropertyBrowsingHandler
+    // This exists for perf reasons. We delay doing this until we are actually asked for the array of values.
+    private unsafe class Com2IPerPropertyBrowsingEnum : Com2Enum
     {
-        // This exists for perf reasons. We delay doing this until we are actually asked for the array of values.
-        private class Com2IPerPropertyBrowsingEnum : Com2Enum
+        private readonly string?[] _names;
+        private readonly uint[] _cookies;
+
+        public Com2IPerPropertyBrowsingEnum(
+            Com2PropertyDescriptor targetObject,
+            string?[] names,
+            uint[] cookies)
         {
-            private readonly string?[] _names;
-            private readonly uint[] _cookies;
+            Target = targetObject;
+            _names = names;
+            _cookies = cookies;
+            ArraysFetched = false;
+        }
 
-            public Com2IPerPropertyBrowsingEnum(
-                Com2PropertyDescriptor targetObject,
-                string?[] names,
-                uint[] cookies)
+        internal Com2PropertyDescriptor Target { get; private set; }
+        internal bool ArraysFetched { get; private set; }
+
+        public override object[] Values
+        {
+            get
             {
-                Target = targetObject;
-                _names = names;
-                _cookies = cookies;
-                ArraysFetched = false;
+                EnsureArrays();
+                return base.Values;
+            }
+        }
+
+        public override string[] Names
+        {
+            get
+            {
+                EnsureArrays();
+                return base.Names;
+            }
+        }
+
+        private unsafe void EnsureArrays()
+        {
+            if (ArraysFetched)
+            {
+                return;
             }
 
-            internal Com2PropertyDescriptor Target { get; private set; }
-            internal bool ArraysFetched { get; private set; }
+            ArraysFetched = true;
 
-            public override object[] Values
+            try
             {
-                get
+                // Marshal the items.
+
+                using var ppb = ComHelpers.TryGetComScope<IPerPropertyBrowsing>(Target.TargetObject, out HRESULT hr);
+
+                if (hr.Failed)
                 {
-                    EnsureArrays();
-                    return base.Values;
+                    PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
+                    return;
                 }
-            }
 
-            public override string[] Names
-            {
-                get
-                {
-                    EnsureArrays();
-                    return base.Names;
-                }
-            }
+                int itemCount = 0;
 
-            private unsafe void EnsureArrays()
-            {
-                if (ArraysFetched)
+                Debug.Assert(_cookies is not null && _names is not null, "An item array is null");
+
+                if (_names.Length == 0)
                 {
                     return;
                 }
 
-                ArraysFetched = true;
+                object[] valueItems = new object[_names.Length];
+                uint cookie;
 
-                try
+                Debug.Assert(_cookies.Length == _names.Length, "Got uneven names and cookies");
+
+                // For each name item, we ask the object for it's corresponding value.
+
+                Type? targetType = Target.PropertyType;
+
+                if (targetType is null)
                 {
-                    // Marshal the items.
-                    if (Target.TargetObject is not IPerPropertyBrowsing.Interface ppb)
+                    PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
+                    return;
+                }
+
+                for (int i = _names.Length - 1; i >= 0; i--)
+                {
+                    cookie = _cookies[i];
+                    if (_names[i] is null)
                     {
-                        PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
-                        return;
+                        Debug.Fail($"Bad IPerPropertyBrowsing item [{i}], name={_names?[i] ?? "(unknown)"}");
+                        continue;
                     }
 
-                    int itemCount = 0;
-
-                    Debug.Assert(_cookies is not null && _names is not null, "An item array is null");
-
-                    if (_names.Length == 0)
+                    using VARIANT variant = default;
+                    hr = ppb.Value->GetPredefinedValue(Target.DISPID, cookie, &variant);
+                    if (hr.Succeeded && variant.Type != VARENUM.VT_EMPTY)
                     {
-                        return;
-                    }
-
-                    object[] valueItems = new object[_names.Length];
-                    uint cookie;
-
-                    Debug.Assert(_cookies.Length == _names.Length, "Got uneven names and cookies");
-
-                    // For each name item, we ask the object for it's corresponding value.
-
-                    Type? targetType = Target.PropertyType;
-
-                    if (targetType is null)
-                    {
-                        PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
-                        return;
-                    }
-
-                    for (int i = _names.Length - 1; i >= 0; i--)
-                    {
-                        cookie = _cookies[i];
-                        if (_names[i] is null)
+                        valueItems[i] = variant.ToObject()!;
+                        if (valueItems[i].GetType() != targetType)
                         {
-                            Debug.Fail($"Bad IPerPropertyBrowsing item [{i}], name={_names?[i] ?? "(unknown)"}");
-                            continue;
-                        }
-
-                        using VARIANT variant = default;
-                        HRESULT hr = ppb.GetPredefinedValue((int)Target.DISPID, cookie, &variant);
-                        if (hr.Succeeded && variant.Type != VARENUM.VT_EMPTY)
-                        {
-                            valueItems[i] = variant.ToObject()!;
-                            if (valueItems[i].GetType() != targetType)
+                            if (targetType.IsEnum)
                             {
-                                if (targetType.IsEnum)
+                                valueItems[i] = Enum.ToObject(targetType, valueItems[i]);
+                            }
+                            else
+                            {
+                                try
                                 {
-                                    valueItems[i] = Enum.ToObject(targetType, valueItems[i]);
+                                    valueItems[i] = Convert.ChangeType(valueItems[i], targetType, CultureInfo.InvariantCulture);
                                 }
-                                else
+                                catch
                                 {
-                                    try
-                                    {
-                                        valueItems[i] = Convert.ChangeType(valueItems[i], targetType, CultureInfo.InvariantCulture);
-                                    }
-                                    catch
-                                    {
-                                    }
                                 }
                             }
                         }
-
-                        if (hr == HRESULT.S_OK)
-                        {
-                            itemCount++;
-                            continue;
-                        }
-
-                        if (itemCount > 0)
-                        {
-                            // Shorten the arrays to ignore the failed ones.  This isn't terribly
-                            // efficient but shouldn't happen very often.  It's rare for these to fail.
-                            Array.Copy(_names, i, _names, i + 1, itemCount);
-                            Array.Copy(valueItems, i, valueItems, i + 1, itemCount);
-                        }
                     }
 
-                    // Pass the data to the base Com2Enum object.
-                    string[] strings = new string[itemCount];
-                    Array.Copy(_names, 0, strings, 0, itemCount);
-                    PopulateArrays(strings, valueItems);
-                }
-                catch (Exception ex)
-                {
-                    PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
-                    Debug.Fail($"Failed to build IPerPropertyBrowsing editor. {ex.GetType().Name}, {ex.Message}");
-                }
-            }
+                    if (hr == HRESULT.S_OK)
+                    {
+                        itemCount++;
+                        continue;
+                    }
 
-            public override object FromString(string s)
-            {
-                EnsureArrays();
-                return base.FromString(s);
-            }
+                    if (itemCount > 0)
+                    {
+                        // Shorten the arrays to ignore the failed ones.  This isn't terribly
+                        // efficient but shouldn't happen very often.  It's rare for these to fail.
+                        Array.Copy(_names, i, _names, i + 1, itemCount);
+                        Array.Copy(valueItems, i, valueItems, i + 1, itemCount);
+                    }
+                }
 
-            public override string ToString(object? v)
+                // Pass the data to the base Com2Enum object.
+                string[] strings = new string[itemCount];
+                Array.Copy(_names, 0, strings, 0, itemCount);
+                PopulateArrays(strings, valueItems);
+            }
+            catch (Exception ex)
             {
-                // If the value is the object's current value, then ask GetDisplay string first. This is a perf
-                // improvement because this way we don't populate the arrays when an object is selected, only
-                // when the dropdown is actually opened.
-                if (Target.IsCurrentValue(v)
-                    && Target.TargetObject is IPerPropertyBrowsing.Interface propertyBrowsing
-                    && TryGetDisplayString(propertyBrowsing, Target.DISPID, out string? displayString))
+                PopulateArrays(Array.Empty<string>(), Array.Empty<object>());
+                Debug.Fail($"Failed to build IPerPropertyBrowsing editor. {ex.GetType().Name}, {ex.Message}");
+            }
+        }
+
+        public override object FromString(string s)
+        {
+            EnsureArrays();
+            return base.FromString(s);
+        }
+
+        public override string ToString(object? v)
+        {
+            // If the value is the object's current value, then ask GetDisplay string first. This is a perf
+            // improvement because this way we don't populate the arrays when an object is selected, only
+            // when the dropdown is actually opened.
+            if (Target.IsLastKnownValue(v))
+            {
+                using var propertyBrowsing = ComHelpers.TryGetComScope<IPerPropertyBrowsing>(Target.TargetObject, out HRESULT hr);
+                if (hr.Succeeded && TryGetDisplayString(propertyBrowsing, Target.DISPID, out string? displayString))
                 {
                     return displayString;
                 }
-
-                EnsureArrays();
-                return base.ToString(v);
             }
+
+            EnsureArrays();
+            return base.ToString(v);
         }
     }
 }

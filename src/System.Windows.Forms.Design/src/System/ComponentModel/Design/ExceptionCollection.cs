@@ -1,26 +1,40 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Collections;
 using System.Runtime.Serialization;
 
-namespace System.ComponentModel.Design
+namespace System.ComponentModel.Design;
+
+public sealed class ExceptionCollection : Exception
 {
-    public sealed class ExceptionCollection : Exception
+    private readonly List<Exception>? _exceptions;
+
+    public ExceptionCollection(ArrayList? exceptions)
     {
-        private readonly ArrayList _exceptions;
-
-        public ExceptionCollection(ArrayList exceptions)
+        if (exceptions is null)
         {
-            _exceptions = exceptions;
+            return;
         }
 
-        public ArrayList Exceptions => (ArrayList)_exceptions?.Clone();
-
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        if (exceptions.ToArray().Any(e => e is not Exception))
         {
-            throw new PlatformNotSupportedException();
+            throw new ArgumentException(string.Format(SR.ExceptionCollectionInvalidArgument, nameof(Exception)), nameof(exceptions));
         }
+
+        _exceptions = exceptions?.Cast<Exception>().ToList();
+    }
+
+    internal ExceptionCollection(List<Exception>? exceptions)
+    {
+        _exceptions = exceptions;
+    }
+
+    public ArrayList? Exceptions => _exceptions is null ? null : new ArrayList(_exceptions);
+
+    [Obsolete(DiagnosticId = "SYSLIB0051")]
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        throw new PlatformNotSupportedException();
     }
 }

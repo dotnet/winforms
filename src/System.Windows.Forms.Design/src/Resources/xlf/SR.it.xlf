@@ -227,6 +227,11 @@
         <target state="translated">Anteprima selezionata</target>
         <note />
       </trans-unit>
+      <trans-unit id="ChooseIconDisplayName">
+        <source>Choose Icon...</source>
+        <target state="translated">Seleziona icona...</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ChooseImageDescription">
         <source>Select the image displayed in the PictureBox</source>
         <target state="translated">Selezionare l'immagine da visualizzare nel controllo PictureBox.</target>
@@ -910,9 +915,19 @@
         <target state="translated">Ancora nel contenitore padre</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutHorizontalOrientation">
+        <source>Horizontal Splitter Orientation.</source>
+        <target state="translated">Barra di divisione orizzontale.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
         <source>Undock in Parent Container</source>
         <target state="translated">Disancora nel contenitore padre</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutVerticalOrientation">
+        <source>Vertical Splitter Orientation.</source>
+        <target state="translated">Barra di divisione verticale.</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorAccName">
@@ -1025,6 +1040,11 @@
         <target state="translated">Imposta evento {0}.{1}</target>
         <note />
       </trans-unit>
+      <trans-unit id="ExceptionCollectionInvalidArgument">
+        <source>Argument must only contain objects of type '{0}'.</source>
+        <target state="translated">L'argomento deve contenere solo oggetti di tipo '{0}'.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
         <source>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</source>
         <target state="translated">Il provider di Extender {0} è già stato aggiunto come Extender. Aggiungendone un altro si creerebbero proprietà duplicate.</target>
@@ -1063,6 +1083,36 @@
       <trans-unit id="ImageCollectionEditorFormText">
         <source>Images Collection Editor</source>
         <target state="translated">Editor della raccolta Images</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListActionList_ChooseImagesDescription">
+        <source>Opens the Images collection editor</source>
+        <target state="translated">Apre l'editor della raccolta Images</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListActionList_ChooseImagesDisplayName">
+        <source>Choose images</source>
+        <target state="translated">Seleziona immagini</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListActionList_ColorDepthDescription">
+        <source>Changes the bit depth images imported into this ImageList are stored at</source>
+        <target state="translated">Consente di modificare la profondità in bit a cui vengono archiviate le immagini importate nel controllo ImageList.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListActionList_ColorDepthDisplayName">
+        <source>Image Bit Depth</source>
+        <target state="translated">Profondità in bit immagini</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListActionList_ImageSizeDescription">
+        <source>Changes the size images imported into this ImageList are stored at</source>
+        <target state="translated">Consente di modificare le dimensioni a cui vengono archiviate le immagini importate nel controllo ImageList.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListActionList_ImageSizeDisplayName">
+        <source>Image Size</source>
+        <target state="translated">Dimensioni immagine</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListDescription">
@@ -1695,6 +1745,181 @@ Per accettare testo premere CTRL+INVIO.</target>
       <trans-unit id="StringPropertyTruncatedComment">
         <source> {0} [rest of string was truncated]";</source>
         <target state="translated"> {0} [stringa troncata]";</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TabControlAdd">
+        <source>Add Tab</source>
+        <target state="translated">Aggiungi scheda</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TabControlAddTab">
+        <source>Add tab to '{0}'</source>
+        <target state="translated">Aggiunge una scheda a '{0}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TabControlInvalidTabPageType">
+        <source>Cannot add '{0}' to TabControl.  Only TabPages can be directly added to TabControls.</source>
+        <target state="translated">Impossibile aggiungere '{0}' a una classe TabControl. Solo gli oggetti TabPage possono essere aggiunti direttamente a oggetti TabControl.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TabControlRemove">
+        <source>Remove Tab</source>
+        <target state="translated">Rimuovi scheda</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TabControlRemoveTab">
+        <source>Remove tab '{0}' from '{1}'</source>
+        <target state="translated">Rimuove la scheda '{0}' da '{1}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerAbsoluteMenu">
+        <source>A&amp;bsolute</source>
+        <target state="translated">A&amp;ssoluto</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerAddColumn">
+        <source>&amp;Add Column</source>
+        <target state="translated">&amp;Aggiungi colonna</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerAddColumnUndoUnit">
+        <source>Add Column on {0}</source>
+        <target state="translated">Aggiungi colonna su {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerAddMenu">
+        <source>&amp;Add</source>
+        <target state="translated">&amp;Aggiungi</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerAddRow">
+        <source>Add Ro&amp;w</source>
+        <target state="translated">Aggi&amp;ungi riga</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerAddRowUndoUnit">
+        <source>Add Row on {0}</source>
+        <target state="translated">Aggiungi riga su {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerAutoSizeMenu">
+        <source>A&amp;utoSize</source>
+        <target state="translated">A&amp;utoSize</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerChangeSizeTypeUndoUnit">
+        <source>Change SizeType on {0}</source>
+        <target state="translated">Modifica SizeType su {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerClearAnchor">
+        <source>Clearing Anchor property of {0} for {1}</source>
+        <target state="translated">Cancellazione della proprietà Anchor di {0} per {1} in corso...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerClearDock">
+        <source>Clearing Dock property of {0} for {1}</source>
+        <target state="translated">Cancellazione della proprietà Dock di {0} per {1} in corso...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerColMenu">
+        <source>&amp;Column</source>
+        <target state="translated">&amp;Colonna</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerContextMenuCopy">
+        <source>C&amp;opy TableLayoutPanel</source>
+        <target state="translated">C&amp;opia TableLayoutPanel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerContextMenuCut">
+        <source>&amp;Cut TableLayoutPanel</source>
+        <target state="translated">&amp;Taglia TableLayoutPanel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerContextMenuDelete">
+        <source>&amp;Delete TableLayoutPanel</source>
+        <target state="translated">&amp;Elimina TableLayoutPanel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerControlsSwapped">
+        <source>{0} swapped with {1}</source>
+        <target state="translated">Il controllo {0} è stato scambiato con {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerDeleteMenu">
+        <source>&amp;Delete</source>
+        <target state="translated">&amp;Elimina</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerDontBoldLabel">
+        <source>0</source>
+        <target state="translated">0</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerEditRowAndCol">
+        <source>&amp;Edit Rows and Columns...</source>
+        <target state="translated">&amp;Modifica righe e colonne...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerInsertMenu">
+        <source>&amp;Insert</source>
+        <target state="translated">&amp;Inserisci</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerInvalidColumnRowCount">
+        <source>{0} must be greater than zero.</source>
+        <target state="translated">{0} deve essere maggiore di zero.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerLabelMenu">
+        <source>SizeMode</source>
+        <target state="translated">SizeMode</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerPercentageMenu">
+        <source>&amp;Percentage</source>
+        <target state="translated">&amp;Percentuale</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerRemoveColumn">
+        <source>Remove Last Colu&amp;mn</source>
+        <target state="translated">Rimuovi ulti&amp;ma colonna</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerRemoveColumnUndoUnit">
+        <source>Remove Column on {0}</source>
+        <target state="translated">Rimuovi colonna su {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerRemoveRow">
+        <source>Remo&amp;ve Last Row</source>
+        <target state="translated">Rimuo&amp;vi ultima riga</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerRemoveRowUndoUnit">
+        <source>Remove Row on {0}</source>
+        <target state="translated">Rimuovi riga su {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelDesignerRowMenu">
+        <source>&amp;Row</source>
+        <target state="translated">&amp;Riga</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelFullDesc">
+        <source>Additional Rows or Columns cannot be created.  TableLayoutPanel is full and GrowStyle is 'FixedSize'.</source>
+        <target state="translated">Impossibile creare righe o colonne aggiuntive. TableLayoutPanel è pieno e GrowStyle è 'FixedSize'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelRowColResize">
+        <source>Resizing {0} within {1}</source>
+        <target state="translated">Ridimensionamento di {0} in {1} in corso...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TableLayoutPanelSpanDesc">
+        <source>TableLayoutPanel cannot expand to contain the control, because the panel's GrowStyle property is set to 'FixedSize'.</source>
+        <target state="translated">Impossibile espandere TableLayoutPanel affinché contenga il controllo perché la proprietà GrowStyle del riquadro è impostata su 'FixedSize'.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_Dock">

@@ -1,25 +1,22 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 #nullable enable
 
 using System.ComponentModel;
-using System.Windows.Forms;
 
-namespace WinformsControlsTest
+namespace WinformsControlsTest;
+
+public partial class Dialogs
 {
-    public partial class Dialogs
+    /// <summary>
+    /// Changes the <see cref="ClientGuid"/> metadata to be configurable in the <see cref="PropertyGrid"/> used
+    /// to prepare tests of <see cref="System.Windows.Forms.FileDialog"/> and <see cref="FolderBrowserDialog"/>.
+    /// </summary>
+    private sealed class ExposedClientGuidMetadata
     {
-        /// <summary>
-        /// Changes the <see cref="ClientGuid"/> metadata to be configurable in the <see cref="PropertyGrid"/> used
-        /// to prepare tests of <see cref="System.Windows.Forms.FileDialog"/> and <see cref="FolderBrowserDialog"/>.
-        /// </summary>
-        private sealed class ExposedClientGuidMetadata
-        {
-            [Browsable(true)]
-            [TypeConverter(typeof(ClientGuidConverter))]
-            public Guid? ClientGuid { get; set; }
-        }
+        [Browsable(true)]
+        [TypeConverter(typeof(ClientGuidConverter))]
+        public Guid? ClientGuid { get; set; }
     }
 }

@@ -1,28 +1,24 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
+namespace System.Windows.Forms;
 
-namespace System.Windows.Forms
+public partial class ToolStripItem
 {
-    public partial class ToolStripItem
+    internal class ToolStripItemImageIndexer : ImageList.Indexer
     {
-        internal class ToolStripItemImageIndexer : ImageList.Indexer
+        private readonly ToolStripItem _item;
+
+        public ToolStripItemImageIndexer(ToolStripItem item)
         {
-            private readonly ToolStripItem _item;
+            Debug.Assert(item is not null, $"{nameof(item)} should not be null.");
+            _item = item;
+        }
 
-            public ToolStripItemImageIndexer(ToolStripItem item)
-            {
-                Debug.Assert(item is not null, $"{nameof(item)} should not be null.");
-                _item = item;
-            }
-
-            public override ImageList? ImageList
-            {
-                get => _item.Owner?.ImageList;
-                set => Debug.Assert(false, "We should never set the image list");
-            }
+        public override ImageList? ImageList
+        {
+            get => _item.Owner?.ImageList;
+            set => Debug.Assert(false, "We should never set the image list");
         }
     }
 }

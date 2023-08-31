@@ -1,37 +1,35 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Provides data for <see cref="TabControl.Selecting"/> and <see cref="TabControl.Selected"/> events.
+/// </summary>
+public class TabControlEventArgs : EventArgs
 {
     /// <summary>
-    ///  Provides data for <see cref="TabControl.Selecting"/> and <see cref="TabControl.Selected"/> events.
+    ///  Initializes a new instance of the <see cref="TabControlEventArgs"/> class.
     /// </summary>
-    public class TabControlEventArgs : EventArgs
+    public TabControlEventArgs(TabPage? tabPage, int tabPageIndex, TabControlAction action)
     {
-        /// <summary>
-        ///  Initializes a new instance of the <see cref="TabControlEventArgs"/> class.
-        /// </summary>
-        public TabControlEventArgs(TabPage? tabPage, int tabPageIndex, TabControlAction action)
-        {
-            TabPage = tabPage;
-            TabPageIndex = tabPageIndex;
-            Action = action;
-        }
-
-        /// <summary>
-        ///  Stores the reference to the tabpage that is undergoing the event.
-        /// </summary>
-        public TabPage? TabPage { get; }
-
-        /// <summary>
-        ///  Stores the index to the tabpage that is undergoing the event.
-        /// </summary>
-        public int TabPageIndex { get; }
-
-        /// <summary>
-        ///  Stores the action which instigated the event.
-        /// </summary>
-        public TabControlAction Action { get; }
+        TabPage = tabPage;
+        TabPageIndex = tabPageIndex;
+        Action = action;
     }
+
+    /// <summary>
+    ///  Stores the reference to the tabpage that is undergoing the event.
+    /// </summary>
+    public TabPage? TabPage { get; }
+
+    /// <summary>
+    ///  Stores the index to the tabpage that is undergoing the event.
+    /// </summary>
+    public int TabPageIndex { get; }
+
+    /// <summary>
+    ///  Stores the action which instigated the event.
+    /// </summary>
+    public TabControlAction Action { get; }
 }

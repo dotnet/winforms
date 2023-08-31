@@ -1,25 +1,26 @@
-﻿using static Interop;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
 
-namespace System.Windows.Forms
+using static Interop;
+
+namespace System.Windows.Forms;
+
+public partial class TextBox
 {
-    public partial class TextBox
+    internal class TextBoxAccessibleObject : TextBoxBaseAccessibleObject
     {
-        internal class TextBoxAccessibleObject : TextBoxBaseAccessibleObject
+        public TextBoxAccessibleObject(TextBox owner) : base(owner)
+        { }
+
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
         {
-            public TextBoxAccessibleObject(TextBox owner) : base(owner)
-            { }
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            switch (propertyID)
             {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        string? placeholderText = (Owner as TextBox)?.PlaceholderText;
-                        return string.IsNullOrEmpty(placeholderText) ? base.GetPropertyValue(propertyID) : placeholderText;
-
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
+                case UiaCore.UIA.HelpTextPropertyId:
+                    string? placeholderText = this.TryGetOwnerAs(out TextBox? owner) ? owner.PlaceholderText : null;
+                    return string.IsNullOrEmpty(placeholderText) ? base.GetPropertyValue(propertyID) : placeholderText;
+                default:
+                    return base.GetPropertyValue(propertyID);
             }
         }
     }

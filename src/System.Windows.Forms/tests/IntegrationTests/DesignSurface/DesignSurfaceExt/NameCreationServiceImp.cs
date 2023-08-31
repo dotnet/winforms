@@ -5,89 +5,87 @@ using System.ComponentModel;
 //- The INameCreationService interface is used to supply a name to the control just created
 //- In the CreateName() we use the same naming algorithm used by Visual Studio: just
 //- increment an integer counter until we find a name that isn't already in use.
-namespace DesignSurfaceExt
+namespace DesignSurfaceExt;
+
+internal class NameCreationServiceImp : INameCreationService
 {
-    internal class NameCreationServiceImp : INameCreationService
+    public NameCreationServiceImp() { }
+
+    public string CreateName(IContainer container, Type type)
     {
-        public NameCreationServiceImp() { }
+        if (container is null)
+            return string.Empty;
 
-        public string CreateName(IContainer container, Type type)
+        ComponentCollection cc = container.Components;
+        int min = int.MaxValue;
+        int max = int.MinValue;
+        int count = 0;
+
+        int i = 0;
+        while (i < cc.Count)
         {
-            if (null == container)
-                return string.Empty;
+            Component comp = cc[i] as Component;
 
-            ComponentCollection cc = container.Components;
-            int min = int.MaxValue;
-            int max = int.MinValue;
-            int count = 0;
-
-            int i = 0;
-            while (i < cc.Count)
+            if (comp.GetType() == type)
             {
-                Component comp = cc[i] as Component;
+                count++;
 
-                if (comp.GetType() == type)
+                string name = comp.Site.Name;
+                if (name.StartsWith(type.Name))
                 {
-                    count++;
-
-                    string name = comp.Site.Name;
-                    if (name.StartsWith(type.Name))
+                    try
                     {
-                        try
-                        {
-                            int value = int.Parse(name.Substring(type.Name.Length));
-                            if (value < min)
-                                min = value;
-                            if (value > max)
-                                max = value;
-                        }
-                        catch (Exception) { }
-                    }//end_if
-                }//end_if
+                        int value = int.Parse(name.Substring(type.Name.Length));
+                        if (value < min)
+                            min = value;
+                        if (value > max)
+                            max = value;
+                    }
+                    catch (Exception) { }
+                }
+            }
 
-                i++;
-            } //end_while
-
-            if (0 == count)
-            {
-                return type.Name + "1";
-            }
-            else if (min > 1)
-            {
-                int j = min - 1;
-                return type.Name + j.ToString();
-            }
-            else
-            {
-                int j = max + 1;
-                return type.Name + j.ToString();
-            }
+            i++;
         }
 
-        public bool IsValidName(string name)
+        if (count == 0)
         {
-            //- Check that name is "something" and that is a string with at least one char
-            if (string.IsNullOrEmpty(name))
-                return false;
-
-            //- then the first character must be a letter
-            if (!(char.IsLetter(name, 0)))
-                return false;
-
-            //- then don't allow a leading underscore
-            if (name.StartsWith("_"))
-                return false;
-
-            //- ok, it's a valid name
-            return true;
+            return $"{type.Name}1";
         }
-
-        public void ValidateName(string name)
+        else if (min > 1)
         {
-            //-  Use our existing method to check, if it's invalid throw an exception
-            if (!(IsValidName(name)))
-                throw new ArgumentException("Invalid name: " + name);
+            int j = min - 1;
+            return $"{type.Name}{j}";
         }
-    }//end_class
-}//end_namespace
+        else
+        {
+            int j = max + 1;
+            return $"{type.Name}{j}";
+        }
+    }
 
+    public bool IsValidName(string name)
+    {
+        //- Check that name is "something" and that is a string with at least one char
+        if (string.IsNullOrEmpty(name))
+            return false;
+
+        //- then the first character must be a letter
+        if (!(char.IsLetter(name, 0)))
+            return false;
+
+        //- then don't allow a leading underscore
+        if (name.StartsWith("_"))
+            return false;
+
+        //- ok, it's a valid name
+        return true;
+    }
+
+    public void ValidateName(string name)
+    {
+        //-  Use our existing method to check, if it's invalid throw an exception
+        if (!(IsValidName(name)))
+            throw new ArgumentException($"Invalid name: {name}");
+    }
+}

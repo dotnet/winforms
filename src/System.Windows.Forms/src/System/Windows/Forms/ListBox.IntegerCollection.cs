@@ -1,341 +1,339 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Collections;
 using System.ComponentModel;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ListBox
 {
-    public partial class ListBox
+    public partial class IntegerCollection : IList
     {
-        public partial class IntegerCollection : IList
+        private readonly ListBox _owner;
+        private int[]? _innerArray;
+        private int _count;
+
+        public IntegerCollection(ListBox owner)
         {
-            private readonly ListBox _owner;
-            private int[]? _innerArray;
-            private int _count;
+            _owner = owner.OrThrowIfNull();
+        }
 
-            public IntegerCollection(ListBox owner)
+        /// <summary>
+        ///  Number of current selected items.
+        /// </summary>
+        [Browsable(false)]
+        public int Count
+        {
+            get
             {
-                _owner = owner.OrThrowIfNull();
+                return _count;
             }
+        }
 
-            /// <summary>
-            ///  Number of current selected items.
-            /// </summary>
-            [Browsable(false)]
-            public int Count
+        object ICollection.SyncRoot
+        {
+            get
             {
-                get
-                {
-                    return _count;
-                }
+                return this;
             }
+        }
 
-            object ICollection.SyncRoot
+        bool ICollection.IsSynchronized
+        {
+            get
             {
-                get
-                {
-                    return this;
-                }
+                return true;
             }
+        }
 
-            bool ICollection.IsSynchronized
+        bool IList.IsFixedSize
+        {
+            get
             {
-                get
-                {
-                    return true;
-                }
-            }
-
-            bool IList.IsFixedSize
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            bool IList.IsReadOnly
-            {
-                get
-                {
-                    return false;
-                }
-            }
-
-            public bool Contains(int item)
-            {
-                return IndexOf(item) != -1;
-            }
-
-            bool IList.Contains(object? item)
-            {
-                if (item is int itemAsInt)
-                {
-                    return Contains(itemAsInt);
-                }
-
                 return false;
             }
+        }
 
-            public void Clear()
+        bool IList.IsReadOnly
+        {
+            get
             {
-                _count = 0;
-                _innerArray = null;
+                return false;
+            }
+        }
+
+        public bool Contains(int item)
+        {
+            return IndexOf(item) != -1;
+        }
+
+        bool IList.Contains(object? item)
+        {
+            if (item is int itemAsInt)
+            {
+                return Contains(itemAsInt);
             }
 
-            public int IndexOf(int item)
+            return false;
+        }
+
+        public void Clear()
+        {
+            _count = 0;
+            _innerArray = null;
+        }
+
+        public int IndexOf(int item)
+        {
+            int index = -1;
+
+            if (_innerArray is not null)
             {
-                int index = -1;
+                index = Array.IndexOf(_innerArray, item);
 
-                if (_innerArray is not null)
+                // We initialize innerArray with more elements than needed in the method EnsureSpace,
+                // and we don't actually remove element from innerArray in the method RemoveAt,
+                // so there maybe some elements which are not actually in innerArray will be found
+                // and we need to filter them out
+                if (index >= _count)
                 {
-                    index = Array.IndexOf(_innerArray, item);
+                    index = -1;
+                }
+            }
 
-                    // We initialize innerArray with more elements than needed in the method EnsureSpace,
-                    // and we don't actually remove element from innerArray in the method RemoveAt,
-                    // so there maybe some elements which are not actually in innerArray will be found
-                    // and we need to filter them out
-                    if (index >= _count)
+            return index;
+        }
+
+        int IList.IndexOf(object? item)
+        {
+            if (item is int itemAsInt)
+            {
+                return IndexOf(itemAsInt);
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        ///  Add a unique integer to the collection in sorted order.
+        ///  A SystemException occurs if there is insufficient space available to
+        ///  store the new item.
+        /// </summary>
+        private int AddInternal(int item)
+        {
+            EnsureSpace(1);
+
+            int index = IndexOf(item);
+            if (index == -1)
+            {
+                _innerArray![_count++] = item;
+                Array.Sort(_innerArray, 0, _count);
+                index = IndexOf(item);
+            }
+
+            return index;
+        }
+
+        /// <summary>
+        ///  Adds a unique integer to the collection in sorted order.
+        ///  A SystemException occurs if there is insufficient space available to
+        ///  store the new item.
+        /// </summary>
+        public int Add(int item)
+        {
+            int index = AddInternal(item);
+            _owner.UpdateCustomTabOffsets();
+
+            return index;
+        }
+
+        int IList.Add(object? item)
+        {
+            if (!(item is int))
+            {
+                throw new ArgumentException(nameof(item));
+            }
+
+            return Add((int)item);
+        }
+
+        public void AddRange(params int[] items)
+        {
+            AddRangeInternal(items);
+        }
+
+        public void AddRange(IntegerCollection value)
+        {
+            AddRangeInternal(value);
+        }
+
+        /// <summary>
+        ///  Add range that bypasses the data source check.
+        /// </summary>
+        private void AddRangeInternal(ICollection items)
+        {
+            ArgumentNullException.ThrowIfNull(items);
+
+            _owner.BeginUpdate();
+            try
+            {
+                EnsureSpace(items.Count);
+                foreach (object item in items)
+                {
+                    if (!(item is int))
                     {
-                        index = -1;
+                        throw new ArgumentException(nameof(item));
+                    }
+                    else
+                    {
+                        AddInternal((int)item);
                     }
                 }
 
-                return index;
-            }
-
-            int IList.IndexOf(object? item)
-            {
-                if (item is int itemAsInt)
-                {
-                    return IndexOf(itemAsInt);
-                }
-
-                return -1;
-            }
-
-            /// <summary>
-            ///  Add a unique integer to the collection in sorted order.
-            ///  A SystemException occurs if there is insufficient space available to
-            ///  store the new item.
-            /// </summary>
-            private int AddInternal(int item)
-            {
-                EnsureSpace(1);
-
-                int index = IndexOf(item);
-                if (index == -1)
-                {
-                    _innerArray![_count++] = item;
-                    Array.Sort(_innerArray, 0, _count);
-                    index = IndexOf(item);
-                }
-
-                return index;
-            }
-
-            /// <summary>
-            ///  Adds a unique integer to the collection in sorted order.
-            ///  A SystemException occurs if there is insufficient space available to
-            ///  store the new item.
-            /// </summary>
-            public int Add(int item)
-            {
-                int index = AddInternal(item);
                 _owner.UpdateCustomTabOffsets();
-
-                return index;
             }
-
-            int IList.Add(object? item)
+            finally
             {
-                if (!(item is int))
-                {
-                    throw new ArgumentException(nameof(item));
-                }
-
-                return Add((int)item);
+                _owner.EndUpdate();
             }
+        }
 
-            public void AddRange(int[] items)
+        /// <summary>
+        ///  Ensures that our internal array has space for
+        ///  the requested # of elements.
+        /// </summary>
+        private void EnsureSpace(int elements)
+        {
+            if (_innerArray is null)
             {
-                AddRangeInternal(items);
+                _innerArray = new int[Math.Max(elements, 4)];
             }
-
-            public void AddRange(IntegerCollection value)
+            else if (_count + elements >= _innerArray.Length)
             {
-                AddRangeInternal(value);
+                int newLength = Math.Max(_innerArray.Length * 2, _innerArray.Length + elements);
+                int[] newEntries = new int[newLength];
+                _innerArray.CopyTo(newEntries, 0);
+                _innerArray = newEntries;
             }
+        }
 
-            /// <summary>
-            ///  Add range that bypasses the data source check.
-            /// </summary>
-            private void AddRangeInternal(ICollection items)
+        void IList.Clear()
+        {
+            Clear();
+        }
+
+        void IList.Insert(int index, object? value)
+        {
+            throw new NotSupportedException(SR.ListBoxCantInsertIntoIntegerCollection);
+        }
+
+        void IList.Remove(object? value)
+        {
+            if (!(value is int))
             {
-                ArgumentNullException.ThrowIfNull(items);
-
-                _owner.BeginUpdate();
-                try
-                {
-                    EnsureSpace(items.Count);
-                    foreach (object item in items)
-                    {
-                        if (!(item is int))
-                        {
-                            throw new ArgumentException(nameof(item));
-                        }
-                        else
-                        {
-                            AddInternal((int)item);
-                        }
-                    }
-
-                    _owner.UpdateCustomTabOffsets();
-                }
-                finally
-                {
-                    _owner.EndUpdate();
-                }
+                throw new ArgumentException(nameof(value));
             }
 
-            /// <summary>
-            ///  Ensures that our internal array has space for
-            ///  the requested # of elements.
-            /// </summary>
-            private void EnsureSpace(int elements)
-            {
-                if (_innerArray is null)
-                {
-                    _innerArray = new int[Math.Max(elements, 4)];
-                }
-                else if (_count + elements >= _innerArray.Length)
-                {
-                    int newLength = Math.Max(_innerArray.Length * 2, _innerArray.Length + elements);
-                    int[] newEntries = new int[newLength];
-                    _innerArray.CopyTo(newEntries, 0);
-                    _innerArray = newEntries;
-                }
-            }
+            Remove((int)value);
+        }
 
-            void IList.Clear()
-            {
-                Clear();
-            }
+        void IList.RemoveAt(int index)
+        {
+            RemoveAt(index);
+        }
 
-            void IList.Insert(int index, object? value)
-            {
-                throw new NotSupportedException(SR.ListBoxCantInsertIntoIntegerCollection);
-            }
+        /// <summary>
+        ///  Removes the given item from the array.  If
+        ///  the item is not in the array, this does nothing.
+        /// </summary>
+        public void Remove(int item)
+        {
+            int index = IndexOf(item);
 
-            void IList.Remove(object? value)
-            {
-                if (!(value is int))
-                {
-                    throw new ArgumentException(nameof(value));
-                }
-
-                Remove((int)value);
-            }
-
-            void IList.RemoveAt(int index)
+            if (index != -1)
             {
                 RemoveAt(index);
             }
+        }
 
-            /// <summary>
-            ///  Removes the given item from the array.  If
-            ///  the item is not in the array, this does nothing.
-            /// </summary>
-            public void Remove(int item)
+        /// <summary>
+        ///  Removes the item at the given index.
+        /// </summary>
+        public void RemoveAt(int index)
+        {
+            if (index < 0 || index >= _count)
             {
-                int index = IndexOf(item);
-
-                if (index != -1)
-                {
-                    RemoveAt(index);
-                }
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            /// <summary>
-            ///  Removes the item at the given index.
-            /// </summary>
-            public void RemoveAt(int index)
+            _count--;
+            for (int i = index; i < _count; i++)
+            {
+                _innerArray![i] = _innerArray[i + 1];
+            }
+        }
+
+        /// <summary>
+        ///  Retrieves the specified selected item.
+        /// </summary>
+        public int this[int index]
+        {
+            get
             {
                 if (index < 0 || index >= _count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                _count--;
-                for (int i = index; i < _count; i++)
-                {
-                    _innerArray![i] = _innerArray[i + 1];
-                }
+                return _innerArray![index];
             }
 
-            /// <summary>
-            ///  Retrieves the specified selected item.
-            /// </summary>
-            public int this[int index]
+            set
             {
-                get
+                if (index < 0 || index >= _count)
                 {
-                    if (index < 0 || index >= _count)
-                    {
-                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                    }
-
-                    return _innerArray![index];
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                set
-                {
-                    if (index < 0 || index >= _count)
-                    {
-                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                    }
-
-                    _innerArray![index] = value;
-                    _owner.UpdateCustomTabOffsets();
-                }
+                _innerArray![index] = value;
+                _owner.UpdateCustomTabOffsets();
             }
+        }
 
-            object? IList.this[int index]
+        object? IList.this[int index]
+        {
+            get
             {
-                get
-                {
-                    return this[index];
-                }
-                set
-                {
-                    if (!(value is int))
-                    {
-                        throw new ArgumentException(nameof(value));
-                    }
-                    else
-                    {
-                        this[index] = (int)value;
-                    }
-                }
+                return this[index];
             }
-
-            public void CopyTo(Array destination, int index)
+            set
             {
-                ArgumentNullException.ThrowIfNull(destination);
-
-                int cnt = Count;
-                for (int i = 0; i < cnt; i++)
+                if (!(value is int))
                 {
-                    destination.SetValue(this[i], i + index);
+                    throw new ArgumentException(nameof(value));
+                }
+                else
+                {
+                    this[index] = (int)value;
                 }
             }
+        }
 
-            IEnumerator IEnumerable.GetEnumerator()
+        public void CopyTo(Array destination, int index)
+        {
+            ArgumentNullException.ThrowIfNull(destination);
+
+            int cnt = Count;
+            for (int i = 0; i < cnt; i++)
             {
-                return new CustomTabOffsetsEnumerator(this);
+                destination.SetValue(this[i], i + index);
             }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new CustomTabOffsetsEnumerator(this);
         }
     }
 }

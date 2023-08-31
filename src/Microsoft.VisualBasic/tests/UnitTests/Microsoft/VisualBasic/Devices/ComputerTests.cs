@@ -1,40 +1,36 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using Xunit;
+namespace Microsoft.VisualBasic.Devices.Tests;
 
-namespace Microsoft.VisualBasic.Devices.Tests
+public class ComputerTests
 {
-    public class ComputerTests
+    [Fact]
+    public void Properties()
     {
-        [Fact]
-        public void Properties()
-        {
-            var computer = new Computer();
+        var computer = new Computer();
 
-            var audio = computer.Audio;
-            Assert.NotNull(audio);
-            Assert.Same(audio, computer.Audio);
+        var audio = computer.Audio;
+        Assert.NotNull(audio);
+        Assert.Same(audio, computer.Audio);
 
-            var clipboard = computer.Clipboard;
-            Assert.NotNull(clipboard);
-            Assert.Same(clipboard, computer.Clipboard);
+        var clipboard = computer.Clipboard;
+        Assert.NotNull(clipboard);
+        Assert.Same(clipboard, computer.Clipboard);
 
-            var keyboard = computer.Keyboard;
-            Assert.NotNull(keyboard);
-            Assert.Same(keyboard, computer.Keyboard);
+        var keyboard = computer.Keyboard;
+        Assert.NotNull(keyboard);
+        Assert.Same(keyboard, computer.Keyboard);
 
-            var mouse = computer.Mouse;
-            Assert.NotNull(mouse);
-            Assert.Same(mouse, computer.Mouse);
-        }
+        var mouse = computer.Mouse;
+        Assert.NotNull(mouse);
+        Assert.Same(mouse, computer.Mouse);
+    }
 
-        [Fact]
-        public void Screen()
-        {
-            var computer = new Computer();
-            Assert.Equal(System.Windows.Forms.Screen.PrimaryScreen, computer.Screen);
-        }
+    [Fact]
+    public void Screen()
+    {
+        var computer = new Computer();
+        Assert.Equal(System.Windows.Forms.Screen.PrimaryScreen, computer.Screen);
     }
 }

@@ -1,356 +1,353 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Drawing;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+public sealed partial class AnchorEditor
 {
-    public sealed partial class AnchorEditor
+    /// <summary>
+    ///  User Interface for the AnchorEditor.
+    /// </summary>
+    private class AnchorUI : Control
     {
-        /// <summary>
-        ///  User Interface for the AnchorEditor.
-        /// </summary>
-        private class AnchorUI : Control
+        private readonly SpringControl _bottom;
+        private readonly ContainerPlaceholder _container = new();
+        private readonly ControlPlaceholder _control = new();
+        private readonly SpringControl _left;
+        private readonly SpringControl _right;
+        private readonly SpringControl[] _tabOrder;
+        private readonly SpringControl _top;
+        private IWindowsFormsEditorService? _editorService;
+        private AnchorStyles _oldAnchor;
+
+        public AnchorUI()
         {
-            private readonly SpringControl bottom;
-            private readonly ContainerPlaceholder container = new ContainerPlaceholder();
-            private readonly ControlPlaceholder control = new ControlPlaceholder();
-            private readonly SpringControl left;
-            private readonly SpringControl right;
-            private readonly SpringControl[] tabOrder;
-            private readonly SpringControl top;
-            private readonly AnchorEditor editor;
-            private IWindowsFormsEditorService edSvc;
-            private AnchorStyles oldAnchor;
+            _left = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
+            _right = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
+            _top = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
+            _bottom = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
+            _tabOrder = new[] { _left, _top, _right, _bottom };
 
-            public AnchorUI(AnchorEditor editor)
+            InitializeComponent();
+        }
+
+        public object? Value { get; private set; }
+
+        public void End()
+        {
+            _editorService = null;
+            Value = null;
+        }
+
+        public virtual AnchorStyles GetSelectedAnchor()
+        {
+            AnchorStyles baseVar = 0;
+            if (_left.IsSolid)
             {
-                this.editor = editor;
-                left = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
-                right = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
-                top = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
-                bottom = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
-                tabOrder = new[] { left, top, right, bottom };
-
-                InitializeComponent();
+                baseVar |= AnchorStyles.Left;
             }
 
-            public object Value { get; private set; }
-
-            public void End()
+            if (_top.IsSolid)
             {
-                edSvc = null;
-                Value = null;
+                baseVar |= AnchorStyles.Top;
             }
 
-            public virtual AnchorStyles GetSelectedAnchor()
+            if (_bottom.IsSolid)
             {
-                AnchorStyles baseVar = 0;
-                if (left.GetSolid())
-                {
-                    baseVar |= AnchorStyles.Left;
-                }
-
-                if (top.GetSolid())
-                {
-                    baseVar |= AnchorStyles.Top;
-                }
-
-                if (bottom.GetSolid())
-                {
-                    baseVar |= AnchorStyles.Bottom;
-                }
-
-                if (right.GetSolid())
-                {
-                    baseVar |= AnchorStyles.Right;
-                }
-
-                return baseVar;
+                baseVar |= AnchorStyles.Bottom;
             }
 
-            internal virtual void InitializeComponent()
+            if (_right.IsSolid)
             {
-                int XBORDER = SystemInformation.Border3DSize.Width;
-                int YBORDER = SystemInformation.Border3DSize.Height;
-                SetBounds(0, 0, 90, 90);
+                baseVar |= AnchorStyles.Right;
+            }
 
-                AccessibleName = SR.AnchorEditorAccName;
+            return baseVar;
+        }
 
-                container.Location = new Point(0, 0);
-                container.Size = new Size(90, 90);
-                container.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+        internal virtual void InitializeComponent()
+        {
+            int XBORDER = SystemInformation.Border3DSize.Width;
+            int YBORDER = SystemInformation.Border3DSize.Height;
+            SuspendLayout();
+            SetBounds(0, 0, 90, 90);
 
-                control.Location = new Point(30, 30);
-                control.Size = new Size(30, 30);
-                control.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
+            AccessibleName = SR.AnchorEditorAccName;
 
-                right.Location = new Point(60, 40);
-                right.Size = new Size(30 - XBORDER, 10);
-                right.TabIndex = 2;
-                right.TabStop = true;
-                right.Anchor = AnchorStyles.Right;
-                right.AccessibleName = SR.AnchorEditorRightAccName;
+            _container.Location = new Point(0, 0);
+            _container.Size = new Size(90, 90);
+            _container.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
 
-                left.Location = new Point(XBORDER, 40);
-                left.Size = new Size(30 - XBORDER, 10);
-                left.TabIndex = 0;
-                left.TabStop = true;
-                left.Anchor = AnchorStyles.Left;
-                left.AccessibleName = SR.AnchorEditorLeftAccName;
+            _control.Location = new Point(30, 30);
+            _control.Size = new Size(30, 30);
+            _control.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Right;
 
-                top.Location = new Point(40, YBORDER);
-                top.Size = new Size(10, 30 - YBORDER);
-                top.TabIndex = 1;
-                top.TabStop = true;
-                top.Anchor = AnchorStyles.Top;
-                top.AccessibleName = SR.AnchorEditorTopAccName;
+            _right.Location = new Point(60, 40);
+            _right.Size = new Size(30 - XBORDER, 10);
+            _right.TabIndex = 2;
+            _right.TabStop = true;
+            _right.Anchor = AnchorStyles.Right;
+            _right.AccessibleName = SR.AnchorEditorRightAccName;
 
-                bottom.Location = new Point(40, 60);
-                bottom.Size = new Size(10, 30 - YBORDER);
-                bottom.TabIndex = 3;
-                bottom.TabStop = true;
-                bottom.Anchor = AnchorStyles.Bottom;
-                bottom.AccessibleName = SR.AnchorEditorBottomAccName;
+            _left.Location = new Point(XBORDER, 40);
+            _left.Size = new Size(30 - XBORDER, 10);
+            _left.TabIndex = 0;
+            _left.TabStop = true;
+            _left.Anchor = AnchorStyles.Left;
+            _left.AccessibleName = SR.AnchorEditorLeftAccName;
 
-                Controls.Clear();
-                Controls.AddRange(new Control[]
+            _top.Location = new Point(40, YBORDER);
+            _top.Size = new Size(10, 30 - YBORDER);
+            _top.TabIndex = 1;
+            _top.TabStop = true;
+            _top.Anchor = AnchorStyles.Top;
+            _top.AccessibleName = SR.AnchorEditorTopAccName;
+
+            _bottom.Location = new Point(40, 60);
+            _bottom.Size = new Size(10, 30 - YBORDER);
+            _bottom.TabIndex = 3;
+            _bottom.TabStop = true;
+            _bottom.Anchor = AnchorStyles.Bottom;
+            _bottom.AccessibleName = SR.AnchorEditorBottomAccName;
+
+            Controls.Clear();
+            Controls.AddRange(new Control[]
+            {
+                _container
+            });
+
+            _container.Controls.Clear();
+            _container.Controls.AddRange(new Control[]
+            {
+                _control,
+                _top,
+                _left,
+                _bottom,
+                _right
+            });
+            ResumeLayout(false);
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+            _top.Focus();
+        }
+
+        private void SetValue()
+        {
+            Value = GetSelectedAnchor();
+        }
+
+        public void Start(IWindowsFormsEditorService edSvc, object? value)
+        {
+            _editorService = edSvc;
+            Value = value;
+
+            if (value is AnchorStyles anchorStyles)
+            {
+                _left.IsSolid = (anchorStyles & AnchorStyles.Left) == AnchorStyles.Left;
+                _top.IsSolid = (anchorStyles & AnchorStyles.Top) == AnchorStyles.Top;
+                _bottom.IsSolid = (anchorStyles & AnchorStyles.Bottom) == AnchorStyles.Bottom;
+                _right.IsSolid = (anchorStyles & AnchorStyles.Right) == AnchorStyles.Right;
+                _oldAnchor = anchorStyles;
+            }
+            else
+            {
+                _oldAnchor = AnchorStyles.Top | AnchorStyles.Left;
+            }
+        }
+
+        private void Teardown(bool saveAnchor)
+        {
+            if (!saveAnchor)
+            {
+                Value = _oldAnchor;
+            }
+
+            _editorService!.CloseDropDown();
+        }
+
+        private class ContainerPlaceholder : Control
+        {
+            public ContainerPlaceholder()
+            {
+                BackColor = SystemColors.Window;
+                ForeColor = SystemColors.WindowText;
+                TabStop = false;
+            }
+
+            protected override void OnPaint(PaintEventArgs e)
+            {
+                Rectangle rc = ClientRectangle;
+                ControlPaint.DrawBorder3D(e.Graphics, rc, Border3DStyle.Sunken);
+            }
+        }
+
+        private class ControlPlaceholder : Control
+        {
+            public ControlPlaceholder()
+            {
+                BackColor = SystemColors.Control;
+                TabStop = false;
+                SetStyle(ControlStyles.Selectable, false);
+            }
+
+            protected override void OnPaint(PaintEventArgs e)
+            {
+                Rectangle rc = ClientRectangle;
+                ControlPaint.DrawButton(e.Graphics, rc, ButtonState.Normal);
+            }
+        }
+
+        private class SpringControl : Control
+        {
+            private readonly AnchorUI _picker;
+            internal bool _focused;
+            internal bool _solid;
+
+            public SpringControl(AnchorUI picker)
+            {
+                _picker = picker ?? throw new ArgumentException();
+                TabStop = true;
+            }
+
+            protected override AccessibleObject CreateAccessibilityInstance()
+            {
+                return new SpringControlAccessibleObject(this);
+            }
+
+            public bool IsSolid
+            {
+                get => _solid;
+                set
                 {
-                    container
-                });
-
-                container.Controls.Clear();
-                container.Controls.AddRange(new Control[]
-                {
-                    control,
-                    top,
-                    left,
-                    bottom,
-                    right
-                });
+                    if (_solid != value)
+                    {
+                        _solid = value;
+                        _picker.SetValue();
+                        Invalidate();
+                    }
+                }
             }
 
             protected override void OnGotFocus(EventArgs e)
             {
-                base.OnGotFocus(e);
-                top.Focus();
-            }
-
-            private void SetValue()
-            {
-                Value = GetSelectedAnchor();
-            }
-
-            public void Start(IWindowsFormsEditorService edSvc, object value)
-            {
-                this.edSvc = edSvc;
-                Value = value;
-
-                if (value is AnchorStyles)
+                if (!_focused)
                 {
-                    left.SetSolid(((AnchorStyles)value & AnchorStyles.Left) == AnchorStyles.Left);
-                    top.SetSolid(((AnchorStyles)value & AnchorStyles.Top) == AnchorStyles.Top);
-                    bottom.SetSolid(((AnchorStyles)value & AnchorStyles.Bottom) == AnchorStyles.Bottom);
-                    right.SetSolid(((AnchorStyles)value & AnchorStyles.Right) == AnchorStyles.Right);
-                    oldAnchor = (AnchorStyles)value;
+                    _focused = true;
+                    Invalidate();
+                }
+
+                base.OnGotFocus(e);
+            }
+
+            protected override void OnLostFocus(EventArgs e)
+            {
+                if (_focused)
+                {
+                    _focused = false;
+                    Invalidate();
+                }
+
+                base.OnLostFocus(e);
+            }
+
+            protected override void OnMouseDown(MouseEventArgs e)
+            {
+                IsSolid = !_solid;
+                Focus();
+            }
+
+            protected override void OnPaint(PaintEventArgs e)
+            {
+                Rectangle rc = ClientRectangle;
+
+                if (_solid)
+                {
+                    e.Graphics.FillRectangle(SystemBrushes.ControlDark, rc);
+                    e.Graphics.DrawRectangle(SystemPens.WindowFrame, rc.X, rc.Y, rc.Width - 1, rc.Height - 1);
                 }
                 else
                 {
-                    oldAnchor = AnchorStyles.Top | AnchorStyles.Left;
+                    ControlPaint.DrawFocusRectangle(e.Graphics, rc);
+                }
+
+                if (_focused)
+                {
+                    rc.Inflate(-2, -2);
+                    ControlPaint.DrawFocusRectangle(e.Graphics, rc);
                 }
             }
 
-            private void Teardown(bool saveAnchor)
+            protected override bool ProcessDialogChar(char charCode)
             {
-                if (!saveAnchor)
+                if (charCode == ' ')
                 {
-                    Value = oldAnchor;
+                    IsSolid = !_solid;
+                    return true;
                 }
 
-                edSvc.CloseDropDown();
+                return base.ProcessDialogChar(charCode);
             }
 
-            private class ContainerPlaceholder : Control
+            protected override bool ProcessDialogKey(Keys keyData)
             {
-                public ContainerPlaceholder()
+                if ((keyData & Keys.KeyCode) == Keys.Return && (keyData & (Keys.Alt | Keys.Control)) == 0)
                 {
-                    BackColor = SystemColors.Window;
-                    ForeColor = SystemColors.WindowText;
-                    TabStop = false;
+                    _picker.Teardown(true);
+                    return true;
                 }
 
-                protected override void OnPaint(PaintEventArgs e)
+                if ((keyData & Keys.KeyCode) == Keys.Escape && (keyData & (Keys.Alt | Keys.Control)) == 0)
                 {
-                    Rectangle rc = ClientRectangle;
-                    ControlPaint.DrawBorder3D(e.Graphics, rc, Border3DStyle.Sunken);
-                }
-            }
-
-            private class ControlPlaceholder : Control
-            {
-                public ControlPlaceholder()
-                {
-                    BackColor = SystemColors.Control;
-                    TabStop = false;
-                    SetStyle(ControlStyles.Selectable, false);
+                    _picker.Teardown(false);
+                    return true;
                 }
 
-                protected override void OnPaint(PaintEventArgs e)
+                if ((keyData & Keys.KeyCode) == Keys.Tab && (keyData & (Keys.Alt | Keys.Control)) == 0)
                 {
-                    Rectangle rc = ClientRectangle;
-                    ControlPaint.DrawButton(e.Graphics, rc, ButtonState.Normal);
-                }
-            }
-
-            private class SpringControl : Control
-            {
-                private readonly AnchorUI picker;
-                internal bool focused;
-                internal bool solid;
-
-                public SpringControl(AnchorUI picker)
-                {
-                    this.picker = picker ?? throw new ArgumentException();
-                    TabStop = true;
-                }
-
-                protected override AccessibleObject CreateAccessibilityInstance()
-                {
-                    return new SpringControlAccessibleObject(this);
-                }
-
-                public virtual bool GetSolid()
-                {
-                    return solid;
-                }
-
-                protected override void OnGotFocus(EventArgs e)
-                {
-                    if (!focused)
+                    for (int i = 0; i < _picker._tabOrder.Length; i++)
                     {
-                        focused = true;
-                        Invalidate();
-                    }
-
-                    base.OnGotFocus(e);
-                }
-
-                protected override void OnLostFocus(EventArgs e)
-                {
-                    if (focused)
-                    {
-                        focused = false;
-                        Invalidate();
-                    }
-
-                    base.OnLostFocus(e);
-                }
-
-                protected override void OnMouseDown(MouseEventArgs e)
-                {
-                    SetSolid(!solid);
-                    Focus();
-                }
-
-                protected override void OnPaint(PaintEventArgs e)
-                {
-                    Rectangle rc = ClientRectangle;
-
-                    if (solid)
-                    {
-                        e.Graphics.FillRectangle(SystemBrushes.ControlDark, rc);
-                        e.Graphics.DrawRectangle(SystemPens.WindowFrame, rc.X, rc.Y, rc.Width - 1, rc.Height - 1);
-                    }
-                    else
-                    {
-                        ControlPaint.DrawFocusRectangle(e.Graphics, rc);
-                    }
-
-                    if (focused)
-                    {
-                        rc.Inflate(-2, -2);
-                        ControlPaint.DrawFocusRectangle(e.Graphics, rc);
-                    }
-                }
-
-                protected override bool ProcessDialogChar(char charCode)
-                {
-                    if (charCode == ' ')
-                    {
-                        SetSolid(!solid);
-                        return true;
-                    }
-
-                    return base.ProcessDialogChar(charCode);
-                }
-
-                protected override bool ProcessDialogKey(Keys keyData)
-                {
-                    if ((keyData & Keys.KeyCode) == Keys.Return && (keyData & (Keys.Alt | Keys.Control)) == 0)
-                    {
-                        picker.Teardown(true);
-                        return true;
-                    }
-
-                    if ((keyData & Keys.KeyCode) == Keys.Escape && (keyData & (Keys.Alt | Keys.Control)) == 0)
-                    {
-                        picker.Teardown(false);
-                        return true;
-                    }
-
-                    if ((keyData & Keys.KeyCode) == Keys.Tab && (keyData & (Keys.Alt | Keys.Control)) == 0)
-                    {
-                        for (int i = 0; i < picker.tabOrder.Length; i++)
+                        if (_picker._tabOrder[i] == this)
                         {
-                            if (picker.tabOrder[i] == this)
-                            {
-                                i += (keyData & Keys.Shift) == 0 ? 1 : -1;
-                                i = i < 0 ? i + picker.tabOrder.Length : i % picker.tabOrder.Length;
-                                picker.tabOrder[i].Focus();
-                                break;
-                            }
+                            i += (keyData & Keys.Shift) == 0 ? 1 : -1;
+                            i = i < 0 ? i + _picker._tabOrder.Length : i % _picker._tabOrder.Length;
+                            _picker._tabOrder[i].Focus();
+                            break;
+                        }
+                    }
+
+                    return true;
+                }
+
+                return base.ProcessDialogKey(keyData);
+            }
+
+            private class SpringControlAccessibleObject : ControlAccessibleObject
+            {
+                public SpringControlAccessibleObject(SpringControl owner) : base(owner)
+                {
+                }
+
+                public override string DefaultAction => ((SpringControl)Owner!).IsSolid
+                    ? SR.AccessibleActionUncheck
+                    : SR.AccessibleActionCheck;
+
+                public override AccessibleStates State
+                {
+                    get
+                    {
+                        AccessibleStates state = base.State;
+
+                        if (((SpringControl)Owner!).IsSolid)
+                        {
+                            state |= AccessibleStates.Checked;
                         }
 
-                        return true;
-                    }
-
-                    return base.ProcessDialogKey(keyData);
-                }
-
-                public virtual void SetSolid(bool value)
-                {
-                    if (solid != value)
-                    {
-                        solid = value;
-                        picker.SetValue();
-                        Invalidate();
-                    }
-                }
-
-                private class SpringControlAccessibleObject : ControlAccessibleObject
-                {
-                    public SpringControlAccessibleObject(SpringControl owner) : base(owner)
-                    {
-                    }
-
-                    public override string DefaultAction => ((SpringControl)Owner).GetSolid()
-                        ? SR.AccessibleActionUncheck
-                        : SR.AccessibleActionCheck;
-
-                    public override AccessibleStates State
-                    {
-                        get
-                        {
-                            AccessibleStates state = base.State;
-
-                            if (((SpringControl)Owner).GetSolid())
-                            {
-                                state |= AccessibleStates.Checked;
-                            }
-
-                            return state;
-                        }
+                        return state;
                     }
                 }
             }

@@ -1,15 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.VisualStyles
+namespace System.Windows.Forms.VisualStyles;
+
+[Flags]
+public enum TextMetricsPitchAndFamilyValues
 {
-    [Flags]
-    public enum TextMetricsPitchAndFamilyValues
-    {
-        FixedPitch = TMPF_FLAGS.TMPF_FIXED_PITCH,
-        Vector = TMPF_FLAGS.TMPF_VECTOR,
-        TrueType =TMPF_FLAGS.TMPF_TRUETYPE,
-        Device = TMPF_FLAGS.TMPF_DEVICE
-    }
+    FixedPitch = TMPF_FLAGS.TMPF_FIXED_PITCH,
+    Vector = TMPF_FLAGS.TMPF_VECTOR,
+    TrueType =TMPF_FLAGS.TMPF_TRUETYPE,
+    Device = TMPF_FLAGS.TMPF_DEVICE
 }

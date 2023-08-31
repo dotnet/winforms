@@ -1,33 +1,35 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class Label
 {
-    public partial class Label
+    internal class LabelAccessibleObject : ControlAccessibleObject
     {
-        internal class LabelAccessibleObject : ControlAccessibleObject
+        public LabelAccessibleObject(Label owner) : base(owner)
         {
-            private readonly Label _owningLabel;
+        }
 
-            public LabelAccessibleObject(Label owner) : base(owner)
-            {
-                _owningLabel = owner;
-            }
+        public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.StaticText);
 
-            public override AccessibleRole Role
+        public override string? KeyboardShortcut => !this.TryGetOwnerAs(out Label? owner) || !owner.UseMnemonic ? null : base.KeyboardShortcut;
+
+        public override string? Name
+        {
+            get
             {
-                get
+                if (!this.TryGetOwnerAs(out Label? owner))
                 {
-                    AccessibleRole role = _owningLabel.AccessibleRole;
-
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-
-                    return AccessibleRole.StaticText;
+                    return null;
                 }
+
+                if (owner.AccessibleName is { } name)
+                {
+                    return name;
+                }
+
+                return owner.UseMnemonic ? WindowsFormsUtils.TextWithoutMnemonics(TextLabel) : TextLabel;
             }
         }
     }

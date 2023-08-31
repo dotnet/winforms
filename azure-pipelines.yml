@@ -34,6 +34,7 @@ pr:
       - internal/release/*
       - internal/experimental/*
       - feature/win32
+      - feature/9.0
   paths:
     include:
       - '*'
@@ -54,10 +55,14 @@ variables:
   # clean the local repo on the build agents
   - name: Build.Repository.Clean
     value: true
-  - name: PostBuildSign
-    value: true
+  - ${{ if or(startswith(variables['Build.SourceBranch'], 'refs/heads/release/'), startswith(variables['Build.SourceBranch'], 'refs/heads/internal/release/'), eq(variables['Build.Reason'], 'Manual')) }}:
+    - name: PostBuildSign
+      value: false
+  - ${{ else }}:
+    - name: PostBuildSign
+      value: true
   - name: EnableLoc
-    value: true
+    value: ${{ contains(variables['Build.SourceBranch'], 'main') }}
   - name: NativeToolsOnMachine
     value: true
   - name: isPublic
@@ -153,13 +158,15 @@ stages:
   - stage: PublishAssetRegistry
     displayName: Publish to Build Asset Registry
     dependsOn: Build
+    variables:
+    - template: /eng/common/templates/variables/pool-providers.yml
     jobs:
     # Publish to Build Asset Registry in order to generate the ReleaseConfigs artifact.
     - template: /eng/common/templates/job/publish-build-assets.yml
       parameters:
         publishUsingPipelines: true
         pool:
-          name: NetCore1ESPool-Internal
+          name: $(DncEngInternalBuildPool)
           demands: ImageOverride -equals windows.vs2022preview.amd64
 
 

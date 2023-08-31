@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -51,4 +50,15 @@ internal partial struct PICTDESC
         desc.Anonymous.emf.hemf = (HENHMETAFILE)metafile.GetHenhmetafile();
         return desc;
     }
+
+    /// <summary>
+    ///  Create a <see cref="PICTDESC"/> struct describing the given <paramref name="image"/>.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">The image type isn't supported.</exception>
+    public static PICTDESC FromImage(Image image) => image switch
+    {
+        Bitmap bitmap => FromBitmap(bitmap),
+        Metafile metafile => FromMetafile(metafile),
+        _ => throw new InvalidOperationException()
+    };
 }

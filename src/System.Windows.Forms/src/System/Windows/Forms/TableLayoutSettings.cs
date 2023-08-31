@@ -1,545 +1,544 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 using System.Windows.Forms.Layout;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  This is a wrapper class to expose interesting properties of TableLayout
+/// </summary>
+[TypeConverter(typeof(TableLayoutSettingsTypeConverter))]
+[Serializable]  // This class participates in resx serialization.
+public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
 {
-    /// <summary>
-    ///  This is a wrapper class to expose interesting properties of TableLayout
-    /// </summary>
-    [TypeConverter(typeof(TableLayoutSettingsTypeConverter))]
-    [Serializable]  // This class participates in resx serialization.
-    public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
+    private static readonly int[] borderStyleToOffset =
     {
-        private static readonly int[] borderStyleToOffset =
+        /*None = */ 0,
+        /*Single = */ 1,
+        /*Inset = */ 2,
+        /*InsetDouble = */ 3,
+        /*Outset = */ 2,
+        /*OutsetDouble = */ 3,
+        /*OutsetPartial = */ 3
+    };
+    private TableLayoutPanelCellBorderStyle _borderStyle;
+    private TableLayoutSettingsStub? _stub;
+
+    // used by TableLayoutSettingsTypeConverter
+    internal TableLayoutSettings()
+        : base(null)
+    {
+        _stub = new TableLayoutSettingsStub();
+    }
+
+    internal TableLayoutSettings(IArrangedElement owner)
+        : base(owner) { }
+
+    private TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context)
+        : this()
+    {
+        TypeConverter converter = TypeDescriptor.GetConverter(this);
+        string? stringVal = serializationInfo.GetString("SerializedString");
+
+        if (!string.IsNullOrEmpty(stringVal))
         {
-            /*None = */ 0,
-            /*Single = */ 1,
-            /*Inset = */ 2,
-            /*InsetDouble = */ 3,
-            /*Outset = */ 2,
-            /*OutsetDouble = */ 3,
-            /*OutsetPartial = */ 3
-        };
-        private TableLayoutPanelCellBorderStyle _borderStyle;
-        private TableLayoutSettingsStub? _stub;
-
-        // used by TableLayoutSettingsTypeConverter
-        internal TableLayoutSettings() : base(null)
-        {
-            _stub = new TableLayoutSettingsStub();
-        }
-
-        internal TableLayoutSettings(IArrangedElement owner) : base(owner) { }
-
-        private TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context) : this()
-        {
-            TypeConverter converter = TypeDescriptor.GetConverter(this);
-            string? stringVal = serializationInfo.GetString("SerializedString");
-
-            if (!string.IsNullOrEmpty(stringVal))
+            if (converter.ConvertFromInvariantString(stringVal) is TableLayoutSettings tls)
             {
-                if (converter.ConvertFromInvariantString(stringVal) is TableLayoutSettings tls)
-                {
-                    ApplySettings(tls);
-                }
+                ApplySettings(tls);
             }
         }
+    }
 
-        public override LayoutEngine LayoutEngine
+    public override LayoutEngine LayoutEngine
+    {
+        get { return TableLayout.Instance; }
+    }
+
+    private TableLayout TableLayout
+    {
+        get { return (TableLayout)LayoutEngine; }
+    }
+
+    /// <summary> internal as this is a TableLayoutPanel feature only </summary>
+    [DefaultValue(TableLayoutPanelCellBorderStyle.None)]
+    [SRCategory(nameof(SR.CatAppearance))]
+    [SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
+    internal TableLayoutPanelCellBorderStyle CellBorderStyle
+    {
+        get { return _borderStyle; }
+        set
         {
-            get { return TableLayout.Instance; }
+            //valid values are 0x0 to 0x6
+            SourceGenerated.EnumValidator.Validate(value);
+            _borderStyle = value;
+            //set the CellBorderWidth according to the current CellBorderStyle.
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+            containerInfo.CellBorderWidth = borderStyleToOffset[(int)value];
+            LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.CellBorderStyle);
+            Debug.Assert(CellBorderStyle == value, "CellBorderStyle should be the same as we set");
         }
+    }
 
-        private TableLayout TableLayout
+    [DefaultValue(0)]
+    internal int CellBorderWidth
+    {
+        get { return TableLayout.GetContainerInfo(Owner).CellBorderWidth; }
+    }
+
+    /// <summary>
+    ///  This sets the maximum number of columns allowed on this table instead of allocating
+    ///  actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
+    ///  causing out of memory exception
+    /// </summary>
+    [SRDescription(nameof(SR.GridPanelColumnsDescr))]
+    [SRCategory(nameof(SR.CatLayout))]
+    [DefaultValue(0)]
+    public int ColumnCount
+    {
+        get
         {
-            get { return (TableLayout)LayoutEngine; }
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+            return containerInfo.MaxColumns;
         }
-
-        /// <summary> internal as this is a TableLayoutPanel feature only </summary>
-        [DefaultValue(TableLayoutPanelCellBorderStyle.None)]
-        [SRCategory(nameof(SR.CatAppearance))]
-        [SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
-        internal TableLayoutPanelCellBorderStyle CellBorderStyle
+        set
         {
-            get { return _borderStyle; }
-            set
+            if (value < 0)
             {
-                //valid values are 0x0 to 0x6
-                SourceGenerated.EnumValidator.Validate(value);
-                _borderStyle = value;
-                //set the CellBorderWidth according to the current CellBorderStyle.
-                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
-                containerInfo.CellBorderWidth = borderStyleToOffset[(int)value];
-                LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.CellBorderStyle);
-                Debug.Assert(CellBorderStyle == value, "CellBorderStyle should be the same as we set");
-            }
-        }
-
-        [DefaultValue(0)]
-        internal int CellBorderWidth
-        {
-            get { return TableLayout.GetContainerInfo(Owner).CellBorderWidth; }
-        }
-
-        /// <summary>
-        ///  This sets the maximum number of columns allowed on this table instead of allocating
-        ///  actual spaces for these columns. So it is OK to set ColumnCount to Int32.MaxValue without
-        ///  causing out of memory exception
-        /// </summary>
-        [SRDescription(nameof(SR.GridPanelColumnsDescr))]
-        [SRCategory(nameof(SR.CatLayout))]
-        [DefaultValue(0)]
-        public int ColumnCount
-        {
-            get
-            {
-                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
-                return containerInfo.MaxColumns;
-            }
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnCount), value, 0));
-                }
-
-                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
-                containerInfo.MaxColumns = value;
-                LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Columns);
-                Debug.Assert(ColumnCount == value, "the max columns should equal to the value we set it to");
-            }
-        }
-
-        /// <summary>
-        ///  This sets the maximum number of rows allowed on this table instead of allocating
-        ///  actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
-        ///  causing out of memory exception
-        /// </summary>
-        [SRDescription(nameof(SR.GridPanelRowsDescr))]
-        [SRCategory(nameof(SR.CatLayout))]
-        [DefaultValue(0)]
-        public int RowCount
-        {
-            get
-            {
-                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
-                return containerInfo.MaxRows;
-            }
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
-                }
-
-                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
-                containerInfo.MaxRows = value;
-                LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Rows);
-                Debug.Assert(RowCount == value, "the max rows should equal to the value we set it to");
-            }
-        }
-
-        [SRDescription(nameof(SR.GridPanelRowStylesDescr))]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [SRCategory(nameof(SR.CatLayout))]
-        public TableLayoutRowStyleCollection RowStyles
-        {
-            get
-            {
-                if (IsStub)
-                {
-                    return _stub.RowStyles;
-                }
-                else
-                {
-                    TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
-                    return containerInfo.RowStyles;
-                }
-            }
-        }
-
-        [SRDescription(nameof(SR.GridPanelColumnStylesDescr))]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [SRCategory(nameof(SR.CatLayout))]
-        public TableLayoutColumnStyleCollection ColumnStyles
-        {
-            get
-            {
-                if (IsStub)
-                {
-                    return _stub.ColumnStyles;
-                }
-                else
-                {
-                    TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
-                    return containerInfo.ColumnStyles;
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
-        ///  become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
-        ///  when the TableLayoutPanel is over-filled.
-        /// </summary>
-        [SRDescription(nameof(SR.TableLayoutPanelGrowStyleDescr))]
-        [SRCategory(nameof(SR.CatLayout))]
-        [DefaultValue(TableLayoutPanelGrowStyle.AddRows)]
-        public TableLayoutPanelGrowStyle GrowStyle
-        {
-            get
-            {
-                return TableLayout.GetContainerInfo(Owner).GrowStyle;
+                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnCount), value, 0));
             }
 
-            set
-            {
-                //valid values are 0x0 to 0x2
-                SourceGenerated.EnumValidator.Validate(value);
-
-                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
-                if (containerInfo.GrowStyle != value)
-                {
-                    containerInfo.GrowStyle = value;
-                    LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.GrowStyle);
-                }
-            }
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+            containerInfo.MaxColumns = value;
+            LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Columns);
+            Debug.Assert(ColumnCount == value, "the max columns should equal to the value we set it to");
         }
+    }
 
-        [MemberNotNullWhen(true, nameof(_stub))]
-        internal bool IsStub
+    /// <summary>
+    ///  This sets the maximum number of rows allowed on this table instead of allocating
+    ///  actual spaces for these rows. So it is OK to set RowCount to Int32.MaxValue without
+    ///  causing out of memory exception
+    /// </summary>
+    [SRDescription(nameof(SR.GridPanelRowsDescr))]
+    [SRCategory(nameof(SR.CatLayout))]
+    [DefaultValue(0)]
+    public int RowCount
+    {
+        get
         {
-            get
-            {
-                if (_stub is not null)
-                {
-                    return true;
-                }
-
-                return false;
-            }
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+            return containerInfo.MaxRows;
         }
-
-        internal void ApplySettings(TableLayoutSettings settings)
+        set
         {
-            if (settings.IsStub)
+            if (value < 0)
             {
-                if (!IsStub)
-                {
-                    // we're the real-live thing here, gotta walk through and touch controls
-                    settings._stub.ApplySettings(this);
-                }
-                else
-                {
-                    // we're just copying another stub into us, just replace the member
-                    _stub = settings._stub;
-                }
+                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
             }
+
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+            containerInfo.MaxRows = value;
+            LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Rows);
+            Debug.Assert(RowCount == value, "the max rows should equal to the value we set it to");
         }
+    }
 
-        #region Extended Properties
-
-        public int GetColumnSpan(object control)
+    [SRDescription(nameof(SR.GridPanelRowStylesDescr))]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+    [SRCategory(nameof(SR.CatLayout))]
+    public TableLayoutRowStyleCollection RowStyles
+    {
+        get
         {
-            ArgumentNullException.ThrowIfNull(control);
-
             if (IsStub)
             {
-                return _stub.GetColumnSpan(control);
+                return _stub.RowStyles;
             }
             else
             {
-                IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                return TableLayout.GetLayoutInfo(element).ColumnSpan;
+                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+                return containerInfo.RowStyles;
             }
         }
+    }
 
-        public void SetColumnSpan(object control, int value)
+    [SRDescription(nameof(SR.GridPanelColumnStylesDescr))]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+    [SRCategory(nameof(SR.CatLayout))]
+    public TableLayoutColumnStyleCollection ColumnStyles
+    {
+        get
         {
-            ArgumentNullException.ThrowIfNull(control);
-
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
-            }
-
             if (IsStub)
             {
-                _stub.SetColumnSpan(control, value);
+                return _stub.ColumnStyles;
             }
             else
             {
-                IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container is not null)
-                {
-                    TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
-                }
-
-                TableLayout.GetLayoutInfo(element).ColumnSpan = value;
-                LayoutTransaction.DoLayout(element.Container, element, PropertyNames.ColumnSpan);
-                Debug.Assert(GetColumnSpan(element) == value, "column span should equal to the value we set");
+                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+                return containerInfo.ColumnStyles;
             }
         }
+    }
 
-        public int GetRowSpan(object control)
+    /// <summary>
+    ///  Specifies if a TableLayoutPanel will gain additional rows or columns once its existing cells
+    ///  become full.  If the value is 'FixedSize' then the TableLayoutPanel will throw an exception
+    ///  when the TableLayoutPanel is over-filled.
+    /// </summary>
+    [SRDescription(nameof(SR.TableLayoutPanelGrowStyleDescr))]
+    [SRCategory(nameof(SR.CatLayout))]
+    [DefaultValue(TableLayoutPanelGrowStyle.AddRows)]
+    public TableLayoutPanelGrowStyle GrowStyle
+    {
+        get
         {
-            ArgumentNullException.ThrowIfNull(control);
+            return TableLayout.GetContainerInfo(Owner).GrowStyle;
+        }
 
-            if (IsStub)
+        set
+        {
+            //valid values are 0x0 to 0x2
+            SourceGenerated.EnumValidator.Validate(value);
+
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+            if (containerInfo.GrowStyle != value)
             {
-                return _stub.GetRowSpan(control);
+                containerInfo.GrowStyle = value;
+                LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.GrowStyle);
+            }
+        }
+    }
+
+    [MemberNotNullWhen(true, nameof(_stub))]
+    internal bool IsStub
+    {
+        get
+        {
+            if (_stub is not null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    internal void ApplySettings(TableLayoutSettings settings)
+    {
+        if (settings.IsStub)
+        {
+            if (!IsStub)
+            {
+                // we're the real-live thing here, gotta walk through and touch controls
+                settings._stub.ApplySettings(this);
             }
             else
             {
-                IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                return TableLayout.GetLayoutInfo(element).RowSpan;
+                // we're just copying another stub into us, just replace the member
+                _stub = settings._stub;
             }
         }
+    }
 
-        public void SetRowSpan(object control, int value)
+    #region Extended Properties
+
+    public int GetColumnSpan(object control)
+    {
+        ArgumentNullException.ThrowIfNull(control);
+
+        if (IsStub)
         {
-            ArgumentNullException.ThrowIfNull(control);
+            return _stub.GetColumnSpan(control);
+        }
+        else
+        {
+            IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
+            return TableLayout.GetLayoutInfo(element).ColumnSpan;
+        }
+    }
 
-            if (value < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
-            }
+    public void SetColumnSpan(object control, int value)
+    {
+        ArgumentNullException.ThrowIfNull(control);
 
-            if (IsStub)
-            {
-                _stub.SetRowSpan(control, value);
-            }
-            else
-            {
-                IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container is not null)
-                {
-                    TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
-                }
-
-                TableLayout.GetLayoutInfo(element).RowSpan = value;
-                LayoutTransaction.DoLayout(element.Container, element, PropertyNames.RowSpan);
-                Debug.Assert(GetRowSpan(element) == value, "row span should equal to the value we set");
-            }
+        if (value < 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
         }
 
-        /// <summary>
-        ///  Get the row position of the element
-        /// </summary>
-        [SRDescription(nameof(SR.GridPanelRowDescr))]
-        [SRCategory(nameof(SR.CatLayout))]
-        [DefaultValue(-1)]
-        public int GetRow(object control)
+        if (IsStub)
         {
-            ArgumentNullException.ThrowIfNull(control);
+            _stub.SetColumnSpan(control, value);
+        }
+        else
+        {
+            IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
+            if (element.Container is not null)
+            {
+                TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
+            }
 
-            if (IsStub)
-            {
-                return _stub.GetRow(control);
-            }
-            else
-            {
-                IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
-                return layoutInfo.RowPosition;
-            }
+            TableLayout.GetLayoutInfo(element).ColumnSpan = value;
+            LayoutTransaction.DoLayout(element.Container, element, PropertyNames.ColumnSpan);
+            Debug.Assert(GetColumnSpan(element) == value, "column span should equal to the value we set");
+        }
+    }
+
+    public int GetRowSpan(object control)
+    {
+        ArgumentNullException.ThrowIfNull(control);
+
+        if (IsStub)
+        {
+            return _stub.GetRowSpan(control);
+        }
+        else
+        {
+            IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
+            return TableLayout.GetLayoutInfo(element).RowSpan;
+        }
+    }
+
+    public void SetRowSpan(object control, int value)
+    {
+        ArgumentNullException.ThrowIfNull(control);
+
+        if (value < 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
         }
 
-        /// <summary>
-        ///  Set the row position of the element
-        ///  If we set the row position to -1, it will automatically switch the control from
-        ///  absolutely positioned to non-absolutely positioned
-        /// </summary>
-        public void SetRow(object control, int row)
+        if (IsStub)
         {
-            ArgumentNullException.ThrowIfNull(control);
-
-            if (row < -1)
+            _stub.SetRowSpan(control, value);
+        }
+        else
+        {
+            IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
+            if (element.Container is not null)
             {
-                throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, nameof(row), row));
+                TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
             }
 
-            SetCellPosition(control, row, -1, rowSpecified: true, colSpecified: false);
+            TableLayout.GetLayoutInfo(element).RowSpan = value;
+            LayoutTransaction.DoLayout(element.Container, element, PropertyNames.RowSpan);
+            Debug.Assert(GetRowSpan(element) == value, "row span should equal to the value we set");
+        }
+    }
+
+    /// <summary>
+    ///  Get the row position of the element
+    /// </summary>
+    [SRDescription(nameof(SR.GridPanelRowDescr))]
+    [SRCategory(nameof(SR.CatLayout))]
+    [DefaultValue(-1)]
+    public int GetRow(object control)
+    {
+        ArgumentNullException.ThrowIfNull(control);
+
+        if (IsStub)
+        {
+            return _stub.GetRow(control);
+        }
+        else
+        {
+            IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
+            TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
+            return layoutInfo.RowPosition;
+        }
+    }
+
+    /// <summary>
+    ///  Set the row position of the element
+    ///  If we set the row position to -1, it will automatically switch the control from
+    ///  absolutely positioned to non-absolutely positioned
+    /// </summary>
+    public void SetRow(object control, int row)
+    {
+        ArgumentNullException.ThrowIfNull(control);
+
+        if (row < -1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, nameof(row), row));
         }
 
-        /// <summary>
-        ///  Get the column position of the element
-        /// </summary>
-        [SRDescription(nameof(SR.TableLayoutSettingsGetCellPositionDescr))]
-        [SRCategory(nameof(SR.CatLayout))]
-        [DefaultValue(-1)]
-        public TableLayoutPanelCellPosition GetCellPosition(object control)
-        {
-            ArgumentNullException.ThrowIfNull(control);
+        SetCellPosition(control, row, -1, rowSpecified: true, colSpecified: false);
+    }
 
-            return new TableLayoutPanelCellPosition(GetColumn(control), GetRow(control));
+    /// <summary>
+    ///  Get the column position of the element
+    /// </summary>
+    [SRDescription(nameof(SR.TableLayoutSettingsGetCellPositionDescr))]
+    [SRCategory(nameof(SR.CatLayout))]
+    [DefaultValue(-1)]
+    public TableLayoutPanelCellPosition GetCellPosition(object control)
+    {
+        ArgumentNullException.ThrowIfNull(control);
+
+        return new TableLayoutPanelCellPosition(GetColumn(control), GetRow(control));
+    }
+
+    /// <summary>
+    ///  Set the column position of the element
+    /// </summary>
+    [SRDescription(nameof(SR.TableLayoutSettingsSetCellPositionDescr))]
+    [SRCategory(nameof(SR.CatLayout))]
+    [DefaultValue(-1)]
+    public void SetCellPosition(object control, TableLayoutPanelCellPosition cellPosition)
+    {
+        ArgumentNullException.ThrowIfNull(control);
+
+        SetCellPosition(control, cellPosition.Row, cellPosition.Column, rowSpecified: true, colSpecified: true);
+    }
+
+    /// <summary>
+    ///  Get the column position of the element
+    /// </summary>
+    [SRDescription(nameof(SR.GridPanelColumnDescr))]
+    [SRCategory(nameof(SR.CatLayout))]
+    [DefaultValue(-1)]
+    public int GetColumn(object control)
+    {
+        ArgumentNullException.ThrowIfNull(control);
+
+        if (IsStub)
+        {
+            return _stub.GetColumn(control);
+        }
+        else
+        {
+            IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
+            TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
+            return layoutInfo.ColumnPosition;
+        }
+    }
+
+    /// <summary>
+    ///  Set the column position of the element
+    ///  If we set the column position to -1, it will automatically switch the control from
+    ///  absolutely positioned to non-absolutely positioned
+    /// </summary>
+    public void SetColumn(object control, int column)
+    {
+        ArgumentNullException.ThrowIfNull(control);
+
+        if (column < -1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, nameof(column), column));
         }
 
-        /// <summary>
-        ///  Set the column position of the element
-        /// </summary>
-        [SRDescription(nameof(SR.TableLayoutSettingsSetCellPositionDescr))]
-        [SRCategory(nameof(SR.CatLayout))]
-        [DefaultValue(-1)]
-        public void SetCellPosition(object control, TableLayoutPanelCellPosition cellPosition)
+        if (IsStub)
         {
-            ArgumentNullException.ThrowIfNull(control);
-
-            SetCellPosition(control, cellPosition.Row, cellPosition.Column, rowSpecified: true, colSpecified: true);
+            _stub.SetColumn(control, column);
         }
-
-        /// <summary>
-        ///  Get the column position of the element
-        /// </summary>
-        [SRDescription(nameof(SR.GridPanelColumnDescr))]
-        [SRCategory(nameof(SR.CatLayout))]
-        [DefaultValue(-1)]
-        public int GetColumn(object control)
+        else
         {
-            ArgumentNullException.ThrowIfNull(control);
-
-            if (IsStub)
-            {
-                return _stub.GetColumn(control);
-            }
-            else
-            {
-                IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
-                return layoutInfo.ColumnPosition;
-            }
+            SetCellPosition(control, -1, column, rowSpecified: false, colSpecified: true);
         }
+    }
 
-        /// <summary>
-        ///  Set the column position of the element
-        ///  If we set the column position to -1, it will automatically switch the control from
-        ///  absolutely positioned to non-absolutely positioned
-        /// </summary>
-        public void SetColumn(object control, int column)
+    private void SetCellPosition(object control, int row, int column, bool rowSpecified, bool colSpecified)
+    {
+        if (IsStub)
         {
-            ArgumentNullException.ThrowIfNull(control);
-
-            if (column < -1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, nameof(column), column));
-            }
-
-            if (IsStub)
+            if (colSpecified)
             {
                 _stub.SetColumn(control, column);
             }
-            else
+
+            if (rowSpecified)
             {
-                SetCellPosition(control, -1, column, rowSpecified: false, colSpecified: true);
+                _stub.SetRow(control, row);
             }
         }
-
-        private void SetCellPosition(object control, int row, int column, bool rowSpecified, bool colSpecified)
+        else
         {
-            if (IsStub)
+            IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
+            if (element.Container is not null)
             {
-                if (colSpecified)
-                {
-                    _stub.SetColumn(control, column);
-                }
-
-                if (rowSpecified)
-                {
-                    _stub.SetRow(control, row);
-                }
+                TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
             }
-            else
+
+            TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
+            if (colSpecified)
             {
-                IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container is not null)
-                {
-                    TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
-                }
-
-                TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
-                if (colSpecified)
-                {
-                    layoutInfo.ColumnPosition = column;
-                }
-
-                if (rowSpecified)
-                {
-                    layoutInfo.RowPosition = row;
-                }
-
-                LayoutTransaction.DoLayout(element.Container, element, PropertyNames.TableIndex);
-                Debug.Assert(!colSpecified || GetColumn(element) == column, "column position shoule equal to what we set");
-                Debug.Assert(!rowSpecified || GetRow(element) == row, "row position shoule equal to what we set");
+                layoutInfo.ColumnPosition = column;
             }
-        }
 
-        /// <summary>
-        ///  Get the element which covers the specified row and column. return null if we can't find one
-        /// </summary>
-        internal IArrangedElement? GetControlFromPosition(int column, int row)
-        {
-            return TableLayout.GetControlFromPosition(Owner, column, row);
-        }
-
-        internal TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement? element)
-        {
-            return TableLayout.GetPositionFromControl(Owner, element);
-        }
-
-        #endregion
-
-        void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
-        {
-            TypeConverter converter = TypeDescriptor.GetConverter(this);
-            string? stringVal = converter.ConvertToInvariantString(this);
-
-            if (!string.IsNullOrEmpty(stringVal))
+            if (rowSpecified)
             {
-                si.AddValue("SerializedString", stringVal);
+                layoutInfo.RowPosition = row;
             }
+
+            LayoutTransaction.DoLayout(element.Container, element, PropertyNames.TableIndex);
+            Debug.Assert(!colSpecified || GetColumn(element) == column, "column position shoule equal to what we set");
+            Debug.Assert(!rowSpecified || GetRow(element) == row, "row position shoule equal to what we set");
         }
+    }
 
-        internal List<ControlInformation> GetControlsInformation()
+    /// <summary>
+    ///  Get the element which covers the specified row and column. return null if we can't find one
+    /// </summary>
+    internal IArrangedElement? GetControlFromPosition(int column, int row)
+    {
+        return TableLayout.GetControlFromPosition(Owner, column, row);
+    }
+
+    internal TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement? element)
+    {
+        return TableLayout.GetPositionFromControl(Owner, element);
+    }
+
+    #endregion
+
+    void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
+    {
+        TypeConverter converter = TypeDescriptor.GetConverter(this);
+        string? stringVal = converter.ConvertToInvariantString(this);
+
+        if (!string.IsNullOrEmpty(stringVal))
         {
-            if (IsStub)
-            {
-                return _stub.GetControlsInformation();
-            }
-            else
-            {
-                List<ControlInformation> controlsInfo = new List<ControlInformation>(Owner!.Children.Count);
+            si.AddValue("SerializedString", stringVal);
+        }
+    }
 
-                foreach (IArrangedElement element in Owner.Children)
+    internal List<ControlInformation> GetControlsInformation()
+    {
+        if (IsStub)
+        {
+            return _stub.GetControlsInformation();
+        }
+        else
+        {
+            List<ControlInformation> controlsInfo = new List<ControlInformation>(Owner!.Children.Count);
+
+            foreach (IArrangedElement element in Owner.Children)
+            {
+                if (element is Control c)
                 {
-                    if (element is Control c)
+                    ControlInformation controlInfo = default;
+
+                    // We need to go through the PropertyDescriptor for the Name property
+                    // since it is shadowed.
+                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(c)["Name"];
+                    if (prop is not null && prop.PropertyType == typeof(string))
                     {
-                        ControlInformation controlInfo = default(ControlInformation);
-
-                        // We need to go through the PropertyDescriptor for the Name property
-                        // since it is shadowed.
-                        PropertyDescriptor? prop = TypeDescriptor.GetProperties(c)["Name"];
-                        if (prop is not null && prop.PropertyType == typeof(string))
-                        {
-                            controlInfo.Name = prop.GetValue(c);
-                        }
-
-                        controlInfo.Row = GetRow(c);
-                        controlInfo.RowSpan = GetRowSpan(c);
-                        controlInfo.Column = GetColumn(c);
-                        controlInfo.ColumnSpan = GetColumnSpan(c);
-                        controlsInfo.Add(controlInfo);
+                        controlInfo.Name = prop.GetValue(c);
                     }
-                }
 
-                return controlsInfo;
+                    controlInfo.Row = GetRow(c);
+                    controlInfo.RowSpan = GetRowSpan(c);
+                    controlInfo.Column = GetColumn(c);
+                    controlInfo.ColumnSpan = GetColumnSpan(c);
+                    controlsInfo.Add(controlInfo);
+                }
             }
+
+            return controlsInfo;
         }
     }
 }

@@ -1,8 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
+    <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
+    <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <RootNamespace>Microsoft.VisualBasic.Forms.Tests</RootNamespace>
     <LangVersion>latest</LangVersion>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +24,7 @@
 
   <ItemGroup>
     <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
-    <Reference Include="$(BaseOutputPath)..\System.Drawing.Facade\$(Configuration)\$(TargetFramework)\System.Drawing.dll" />
+    <Reference Include="$(BaseOutputPath)..\System.Drawing.Facade\$(Configuration)\$(SourceTargetFramework)\System.Drawing.dll" />
   </ItemGroup>
 
 </Project>

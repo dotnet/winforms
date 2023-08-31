@@ -1,29 +1,25 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using System.Windows.Forms;
+namespace WinformsControlsTest;
 
-namespace WinformsControlsTest
+public partial class ErrorProviderTest : Form
 {
-    public partial class ErrorProviderTest : Form
+    public ErrorProviderTest()
     {
-        public ErrorProviderTest()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private void submitButton_Click(object sender, EventArgs e)
+    private void submitButton_Click(object sender, EventArgs e)
+    {
+        if (textBox1.TextLength < 5 || textBox1.TextLength > 10)
         {
-            if (textBox1.TextLength < 5 || textBox1.TextLength > 10)
-            {
-                errorProvider1.SetError(textBox1, "The length of the testbox is invalid!");
-            }
-            else
-            {
-                errorProvider1.Clear();
-                MessageBox.Show("All right!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            errorProvider1.SetError(textBox1, "The length of the testbox is invalid!");
+        }
+        else
+        {
+            errorProvider1.Clear();
+            MessageBox.Show("All right!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

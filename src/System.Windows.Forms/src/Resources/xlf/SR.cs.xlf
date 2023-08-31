@@ -247,6 +247,31 @@
         <target state="translated">&amp;Použít</target>
         <note />
       </trans-unit>
+      <trans-unit id="Arg_ArrayPlusOffTooSmall">
+        <source>Destination array is not long enough to copy all the items in the collection. Check array index and length.</source>
+        <target state="translated">Cílové pole není dostatečně dlouhé, aby bylo možné zkopírovat všechny položky v kolekci. Zkontrolujte index a délku pole.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Arg_NonZeroLowerBound">
+        <source>The lower bound of target array must be zero.</source>
+        <target state="translated">Dolní mez cílového pole musí být nula.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Arg_RankMultiDimNotSupported">
+        <source>Only single dimensional arrays are supported for the requested action.</source>
+        <target state="translated">Pro požadovanou akci jsou podporována pouze jednorozměrná pole.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
+        <source>Non-negative number required.</source>
+        <target state="translated">Vyžaduje se nezáporné číslo.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_IncompatibleArrayType">
+        <source>Target array type is not compatible with the type of items in the collection.</source>
+        <target state="translated">Typ cílového pole není kompatibilní s typem položek v kolekci.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AutoCompleteFailure">
         <source>autoComplete cannot be initialized with given custom source.</source>
         <target state="translated">Funkci autoComplete nelze s daným vlastním zdrojem inicializovat.</target>
@@ -2237,6 +2262,11 @@
         <target state="translated">Vlastnící objekt DataGridViewCell ještě nebyl nastaven.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewCellAccessibleObject_OwnerWrongType">
+        <source>DataGridViewCell of type {0} does not provide the Toggle pattern.</source>
+        <target state="translated">DataGridViewCell typu {0} neposkytuje vzor přepínacího tlačítka.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCellCollection_AtLeastOneCellIsNull">
         <source>At least one of the provided cells is null.</source>
         <target state="translated">Nejméně jedna ze zadaných buněk má hodnotu Null.</target>
@@ -2305,6 +2335,11 @@
       <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
         <source>{0} check box checked</source>
         <target state="translated">Zaškrtávací políčko {0} je zaškrtnuté.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellIndeterminateStateDescription">
+        <source>{0} check box indeterminate</source>
+        <target state="translated">Zaškrtávací políčko {0} je neurčité.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
@@ -4819,13 +4854,11 @@ nikoli v tomto dialogovém okně.
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
         <source>{0}
     Assembly Version: {1}
-    Win32 Version: {2}
-    CodeBase: {3}
+    Location: {2}
 </source>
         <target state="translated">{0}
     Verze sestavení: {1}
-    Verze Win32: {2}
-    Kódová báze (CodeBase): {3}
+    Umístění: {2}
 </target>
         <note />
       </trans-unit>
@@ -4888,7 +4921,7 @@ Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se p
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
         <source>&amp;Details</source>
-        <target state="translated">&amp;Podrobnosti</target>
+        <target state="translated">Po&amp;drobnosti</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgWarningText">
@@ -4994,6 +5027,11 @@ Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se p
       <trans-unit id="FDvalidateNamesDescr">
         <source>Controls whether the dialog box ensures that file names do not contain invalid characters or sequences.</source>
         <target state="translated">Určuje, zda dialogové okno zajišťuje, že názvy souborů neobsahují neplatné znaky nebo posloupnosti.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FailedToLoadCursor">
+        <source>Failed to load cursor. Error '{1}'.</source>
+        <target state="translated">Nepodařilo se načíst kurzor. Chyba {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
@@ -5522,11 +5560,6 @@ Chcete jej nahradit?</target>
         <target state="translated">Hodnotu Null nelze převést na typ {1}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">Položka GridItem byla uvolněna a nelze ji již použít.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">Položku GridItem nelze rozbalit.</target>
@@ -5809,6 +5842,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">InvalidArgument=Hodnota {1} není platnou hodnotou pro argument {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidArgumentType">
+        <source>Argument '{0}' must be of type '{1}'.</source>
+        <target state="translated">Argument {0} musí být typu {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">
@@ -6614,11 +6652,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
         <target state="translated">Aktuální objekt přístupnosti je určený jenom pro ovládací prvek ListView v zobrazení {0}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">Aktuální objekt přístupnosti je určený jenom pro ovládací prvek ListView v zobrazení {0}, {1} nebo {2}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
@@ -7434,11 +7467,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">OK</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">Položka {0} byla uvolněna a nelze ji již použít.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">
@@ -8604,6 +8632,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="ResXResourceWriterSaved">
         <source>Resource writer has been saved.  You may not edit it.</source>
         <target state="translated">Modul pro zápis prostředků byl uložen. Pravděpodobně jej nebudete moci upravovat.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ResourceValueNotFound">
+        <source>The resource value '{0}' was not found.</source>
+        <target state="translated">Hodnota prostředku {0} nebyla nalezena.</target>
         <note />
       </trans-unit>
       <trans-unit id="RestartNotSupported">
@@ -11334,7 +11367,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="toStringAlt">
         <source>Alt</source>
         <target state="translated">Alt</target>
-        <note />
+        <note>{Locked="Alt"}</note>
       </trans-unit>
       <trans-unit id="toStringBack">
         <source>Back</source>
@@ -11344,7 +11377,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="toStringControl">
         <source>Ctrl</source>
         <target state="translated">Ctrl</target>
-        <note />
+        <note>{Locked=!de; "Ctrl"}</note>
       </trans-unit>
       <trans-unit id="toStringDefault">
         <source>(default)</source>
@@ -11353,28 +11386,28 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">Odstranit</target>
-        <note />
+        <target state="translated">Del</target>
+        <note>{Locked=!fr,de,it,es; "Del"}</note>
       </trans-unit>
       <trans-unit id="toStringEnd">
         <source>End</source>
         <target state="translated">End</target>
-        <note />
+        <note>{Locked=!fr,de,it,es; "End"}</note>
       </trans-unit>
       <trans-unit id="toStringEnter">
         <source>Enter</source>
         <target state="translated">Enter</target>
-        <note />
+        <note>{Locked=!fr,de,it,es; "Enter"}</note>
       </trans-unit>
       <trans-unit id="toStringHome">
         <source>Home</source>
-        <target state="translated">Domů</target>
-        <note />
+        <target state="translated">Home</target>
+        <note>{Locked=!fr,de,es; "Home"}</note>
       </trans-unit>
       <trans-unit id="toStringInsert">
-        <source>Ins</source>
-        <target state="translated">Vložit</target>
-        <note />
+        <source>Insert</source>
+        <target state="translated">Insert</target>
+        <note>{Locked=!fr,de,it,es,zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
         <source>(none)</source>
@@ -11383,18 +11416,18 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">Page Down</target>
-        <note />
+        <target state="translated">PgDn</target>
+        <note>{Locked=!fr,de,it,es; "PgDn"}</note>
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">Page Up</target>
-        <note />
+        <target state="translated">PgUp</target>
+        <note>{Locked=!fr,de,it,es; "PgUp"}</note>
       </trans-unit>
       <trans-unit id="toStringShift">
         <source>Shift</source>
         <target state="translated">Shift</target>
-        <note />
+        <note>{Locked=!fr,de,it,es; "Shift"}</note>
       </trans-unit>
       <trans-unit id="valueChangedEventDescr">
         <source>Occurs when the value of the control changes.</source>

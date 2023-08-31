@@ -1,111 +1,98 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal class RelatedPropertyManager : PropertyManager
 {
-    internal class RelatedPropertyManager : PropertyManager
+    private BindingManagerBase _parentManager;
+    private PropertyDescriptor _fieldInfo;
+
+    internal RelatedPropertyManager(BindingManagerBase parentManager, string dataField)
+        : base(GetCurrentOrNull(parentManager), dataField)
     {
-        BindingManagerBase parentManager;
-        string dataField;
-        PropertyDescriptor fieldInfo;
+        Bind(parentManager, dataField);
+    }
 
-        internal RelatedPropertyManager(BindingManagerBase parentManager, string dataField) : base(GetCurrentOrNull(parentManager), dataField)
+    [MemberNotNull(nameof(_parentManager))]
+    [MemberNotNull(nameof(_fieldInfo))]
+    private void Bind(BindingManagerBase parentManager, string dataField)
+    {
+        Debug.Assert(parentManager is not null, "How could this be a null parentManager.");
+        _parentManager = parentManager;
+        _fieldInfo = parentManager.GetItemProperties().Find(dataField, true) ??
+            throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
+
+        parentManager.CurrentItemChanged += new EventHandler(ParentManager_CurrentItemChanged);
+        Refresh();
+    }
+
+    internal override string GetListName()
+    {
+        string name = GetListName(new ArrayList());
+        if (name.Length > 0)
         {
-            Bind(parentManager, dataField);
+            return name;
         }
 
-        private void Bind(BindingManagerBase parentManager, string dataField)
-        {
-            Debug.Assert(parentManager is not null, "How could this be a null parentManager.");
-            this.parentManager = parentManager;
-            this.dataField = dataField;
-            fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
-            if (fieldInfo is null)
-            {
-                throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
-            }
+        return base.GetListName();
+    }
 
-            parentManager.CurrentItemChanged += new EventHandler(ParentManager_CurrentItemChanged);
-            Refresh();
+    protected internal override string GetListName(ArrayList? listAccessors)
+    {
+        if (listAccessors is null)
+        {
+            return string.Empty;
         }
 
-        internal override string GetListName()
-        {
-            string name = GetListName(new ArrayList());
-            if (name.Length > 0)
-            {
-                return name;
-            }
+        listAccessors.Insert(0, _fieldInfo);
 
-            return base.GetListName();
+        return _parentManager.GetListName(listAccessors);
+    }
+
+    internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors)
+    {
+        PropertyDescriptor[] accessors;
+
+        if (listAccessors is not null && listAccessors.Length > 0)
+        {
+            accessors = new PropertyDescriptor[listAccessors.Length + 1];
+            listAccessors.CopyTo(accessors, 1);
+        }
+        else
+        {
+            accessors = new PropertyDescriptor[1];
         }
 
-        protected internal override string GetListName(ArrayList listAccessors)
-        {
-            listAccessors.Insert(0, fieldInfo);
-            return parentManager.GetListName(listAccessors);
-        }
+        // Set this accessor (add to the beginning)
+        accessors[0] = _fieldInfo;
 
-        internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
-        {
-            PropertyDescriptor[] accessors;
+        // Get props
+        return _parentManager.GetItemProperties(accessors);
+    }
 
-            if (listAccessors is not null && listAccessors.Length > 0)
-            {
-                accessors = new PropertyDescriptor[listAccessors.Length + 1];
-                listAccessors.CopyTo(accessors, 1);
-            }
-            else
-            {
-                accessors = new PropertyDescriptor[1];
-            }
+    private void ParentManager_CurrentItemChanged(object? sender, EventArgs e)
+    {
+        Refresh();
+    }
 
-            // Set this accessor (add to the beginning)
-            accessors[0] = fieldInfo;
+    private void Refresh()
+    {
+        EndCurrentEdit();
+        SetDataSource(GetCurrentOrNull(_parentManager));
+        OnCurrentChanged(EventArgs.Empty);
+    }
 
-            // Get props
-            return parentManager.GetItemProperties(accessors);
-        }
+    internal override Type BindType => _fieldInfo.PropertyType;
 
-        private void ParentManager_CurrentItemChanged(object sender, EventArgs e)
-        {
-            Refresh();
-        }
+    public override object? Current => (DataSource is not null) ? _fieldInfo.GetValue(DataSource) : null;
 
-        private void Refresh()
-        {
-            EndCurrentEdit();
-            SetDataSource(GetCurrentOrNull(parentManager));
-            OnCurrentChanged(EventArgs.Empty);
-        }
-
-        internal override Type BindType
-        {
-            get
-            {
-                return fieldInfo.PropertyType;
-            }
-        }
-
-        public override object Current
-        {
-            get
-            {
-                return (DataSource is not null) ? fieldInfo.GetValue(DataSource) : null;
-            }
-        }
-
-        private static object GetCurrentOrNull(BindingManagerBase parentManager)
-        {
-            bool anyCurrent = (parentManager.Position >= 0 && parentManager.Position < parentManager.Count);
-            return anyCurrent ? parentManager.Current : null;
-        }
+    private static object? GetCurrentOrNull(BindingManagerBase parentManager)
+    {
+        bool anyCurrent = (parentManager.Position >= 0 && parentManager.Position < parentManager.Count);
+        return anyCurrent ? parentManager.Current : null;
     }
 }

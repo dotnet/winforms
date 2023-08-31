@@ -1,13 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
+    <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
   
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
     <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
-    <PackageReference Include="xunit.assert" Version="$(XUnitAssertVersion)" />
     <PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="$(MicrosoftDotNetXUnitExtensionsPackageVersion)" />
   </ItemGroup>
   

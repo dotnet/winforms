@@ -1,14 +1,12 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+public partial class ControlDesigner
 {
-    public partial class ControlDesigner
+    private interface IDesignerTarget : IDisposable
     {
-        private interface IDesignerTarget : IDisposable
-        {
-            void DefWndProc(ref Message m);
-        }
+        void DefWndProc(ref Message m);
     }
 }

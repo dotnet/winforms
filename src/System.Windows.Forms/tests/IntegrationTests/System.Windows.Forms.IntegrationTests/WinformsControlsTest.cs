@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 //#define MAUI
 
@@ -8,220 +7,219 @@ using System.Diagnostics;
 using System.Windows.Forms.IntegrationTests.Common;
 using Xunit;
 
-namespace System.Windows.Forms.IntegrationTests
+namespace System.Windows.Forms.IntegrationTests;
+
+public partial class WinformsControlsTest
 {
-    public partial class WinformsControlsTest
+    private const string ProjectName = "WinformsControlsTest";
+    private readonly string _exePath;
+
+    public WinformsControlsTest()
     {
-        private const string ProjectName = "WinformsControlsTest";
-        private readonly string _exePath;
-
-        public WinformsControlsTest()
-        {
-            _exePath = TestHelpers.GetExePath(ProjectName);
-        }
+        _exePath = TestHelpers.GetExePath(ProjectName);
+    }
 
 #if MAUI
-        [Fact]
+    [Fact]
 #endif
-        public void WinformsControlsTest_OpenAndClose()
-        {
-            Process process = TestHelpers.StartProcess(_exePath);
+    public void WinformsControlsTest_OpenAndClose()
+    {
+        Process process = TestHelpers.StartProcess(_exePath);
 
-            Assert.NotNull(process);
-            Assert.NotNull(Process.GetProcessById(process.Id));
-            Assert.False(process.HasExited);
+        Assert.NotNull(process);
+        Assert.NotNull(Process.GetProcessById(process.Id));
+        Assert.False(process.HasExited);
 
-            process.Kill();
-            process.WaitForExit();
+        process.Kill();
+        process.WaitForExit();
 
-            Assert.True(process.HasExited);
-        }
+        Assert.True(process.HasExited);
+    }
 
 #if MAUI
-        [Theory]
-        [InlineData(MainFormControlsTabOrder.ButtonsButton)]
-        [InlineData(MainFormControlsTabOrder.CalendarButton)]
-        [InlineData(MainFormControlsTabOrder.MultipleControlsButton)]
-        [InlineData(MainFormControlsTabOrder.ComboBoxesButton)]
-        [InlineData(MainFormControlsTabOrder.DateTimePickerButton)]
-        [InlineData(MainFormControlsTabOrder.DialogsButton)]
-        [InlineData(MainFormControlsTabOrder.DataGridViewButton)]
-        [InlineData(MainFormControlsTabOrder.TreeViewButton)]
-        [InlineData(MainFormControlsTabOrder.ContentAlignmentButton)]
-        [InlineData(MainFormControlsTabOrder.MenusButton)]
-        [InlineData(MainFormControlsTabOrder.PanelsButton)]
-        [InlineData(MainFormControlsTabOrder.SplitterButton)]
-        [InlineData(MainFormControlsTabOrder.MdiParentButton)]
-        [InlineData(MainFormControlsTabOrder.PropertyGridButton)]
-        [InlineData(MainFormControlsTabOrder.ListViewButton)]
-        [InlineData(MainFormControlsTabOrder.FontNameEditorButton)]
-        [InlineData(MainFormControlsTabOrder.CollectionEditorsButton)]
-        [InlineData(MainFormControlsTabOrder.RichTextBoxesButton)]
-        [InlineData(MainFormControlsTabOrder.PictureBoxesButton)]
-        [InlineData(MainFormControlsTabOrder.FormBorderStylesButton)]
-        [InlineData(MainFormControlsTabOrder.ToggleIconButton)]
+    [Theory]
+    [InlineData(MainFormControlsTabOrder.ButtonsButton)]
+    [InlineData(MainFormControlsTabOrder.CalendarButton)]
+    [InlineData(MainFormControlsTabOrder.MultipleControlsButton)]
+    [InlineData(MainFormControlsTabOrder.ComboBoxesButton)]
+    [InlineData(MainFormControlsTabOrder.DateTimePickerButton)]
+    [InlineData(MainFormControlsTabOrder.DialogsButton)]
+    [InlineData(MainFormControlsTabOrder.DataGridViewButton)]
+    [InlineData(MainFormControlsTabOrder.TreeViewButton)]
+    [InlineData(MainFormControlsTabOrder.ContentAlignmentButton)]
+    [InlineData(MainFormControlsTabOrder.MenusButton)]
+    [InlineData(MainFormControlsTabOrder.PanelsButton)]
+    [InlineData(MainFormControlsTabOrder.SplitterButton)]
+    [InlineData(MainFormControlsTabOrder.MdiParentButton)]
+    [InlineData(MainFormControlsTabOrder.PropertyGridButton)]
+    [InlineData(MainFormControlsTabOrder.ListViewButton)]
+    [InlineData(MainFormControlsTabOrder.FontNameEditorButton)]
+    [InlineData(MainFormControlsTabOrder.CollectionEditorsButton)]
+    [InlineData(MainFormControlsTabOrder.RichTextBoxesButton)]
+    [InlineData(MainFormControlsTabOrder.PictureBoxesButton)]
+    [InlineData(MainFormControlsTabOrder.FormBorderStylesButton)]
+    [InlineData(MainFormControlsTabOrder.ToggleIconButton)]
 #endif
-        public void WinformsControlsTest_InnerForms_OpenAndClose(MainFormControlsTabOrder tabOrder)
-        {
-            Process process = TestHelpers.StartProcess(_exePath);
-            TestHelpers.SendTabKeysToProcess(process, tabOrder);
-            TestHelpers.SendEnterKeyToProcess(process);
-            Assert.False(process.HasExited);
+    public void WinformsControlsTest_InnerForms_OpenAndClose(MainFormControlsTabOrder tabOrder)
+    {
+        Process process = TestHelpers.StartProcess(_exePath);
+        TestHelpers.SendTabKeysToProcess(process, tabOrder);
+        TestHelpers.SendEnterKeyToProcess(process);
+        Assert.False(process.HasExited);
 
-            process.Kill();
-            process.WaitForExit();
+        process.Kill();
+        process.WaitForExit();
 
-            Assert.True(process.HasExited);
-        }
+        Assert.True(process.HasExited);
+    }
 
 #if MAUI
-        [Fact]
+    [Fact]
 #endif
-        public void WinformsControlsTest_CalendarTest()
-        {
-            Process process = TestHelpers.StartProcess(_exePath);
-            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.CalendarButton);
-            TestHelpers.SendEnterKeyToProcess(process);
-            TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false);
-            Assert.False(process.HasExited);
+    public void WinformsControlsTest_CalendarTest()
+    {
+        Process process = TestHelpers.StartProcess(_exePath);
+        TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.CalendarButton);
+        TestHelpers.SendEnterKeyToProcess(process);
+        TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false);
+        Assert.False(process.HasExited);
 
-            process.Kill();
-            process.WaitForExit();
+        process.Kill();
+        process.WaitForExit();
 
-            Assert.True(process.HasExited);
-        }
+        Assert.True(process.HasExited);
+    }
 
 #if MAUI
-        [Fact]
+    [Fact]
 #endif
-        public void WinformsControlsTest_ThreadExceptionDialogTest()
-        {
-            Process process = TestHelpers.StartProcess(_exePath);
-            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.DialogsButton);
-            TestHelpers.SendEnterKeyToProcess(process);
-            TestHelpers.SendTabKeysToProcess(process, 3);
-            TestHelpers.SendEnterKeyToProcess(process);
-            TestHelpers.SendTabKeysToProcess(process, 2);
-            TestHelpers.SendEnterKeyToProcess(process);
+    public void WinformsControlsTest_ThreadExceptionDialogTest()
+    {
+        Process process = TestHelpers.StartProcess(_exePath);
+        TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.DialogsButton);
+        TestHelpers.SendEnterKeyToProcess(process);
+        TestHelpers.SendTabKeysToProcess(process, 3);
+        TestHelpers.SendEnterKeyToProcess(process);
+        TestHelpers.SendTabKeysToProcess(process, 2);
+        TestHelpers.SendEnterKeyToProcess(process);
 
-            Assert.False(process.HasExited);
+        Assert.False(process.HasExited);
 
-            process.Kill();
-            process.WaitForExit();
+        process.Kill();
+        process.WaitForExit();
 
-            Assert.True(process.HasExited);
-        }
+        Assert.True(process.HasExited);
+    }
 
 #if MAUI
-        [Fact]
+    [Fact]
 #endif
-        public void WinformsControlsTest_PropertyGrid_CollectionEditorTest()
-        {
-            Process process = TestHelpers.StartProcess(_exePath);
-            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.PropertyGridButton);
-            TestHelpers.SendEnterKeyToProcess(process);
-            TestHelpers.SendTabKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false); // once
-            TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false); // twice
-            TestHelpers.SendTabKeysToProcess(process, 2, switchToMainWindow: false);
-            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+    public void WinformsControlsTest_PropertyGrid_CollectionEditorTest()
+    {
+        Process process = TestHelpers.StartProcess(_exePath);
+        TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.PropertyGridButton);
+        TestHelpers.SendEnterKeyToProcess(process);
+        TestHelpers.SendTabKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false); // once
+        TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false); // twice
+        TestHelpers.SendTabKeysToProcess(process, 2, switchToMainWindow: false);
+        TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
 
-            Assert.False(process.HasExited);
+        Assert.False(process.HasExited);
 
-            process.Kill();
-            process.WaitForExit();
+        process.Kill();
+        process.WaitForExit();
 
-            Assert.True(process.HasExited);
-        }
+        Assert.True(process.HasExited);
+    }
 
 #if MAUI
-        [Fact]
+    [Fact]
 #endif
-        public void WinformsControlsTest_FileDialogTest()
-        {
-            Process process = TestHelpers.StartProcess(_exePath);
-            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.DialogsButton);
-            TestHelpers.SendEnterKeyToProcess(process);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendBackspaceKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
-            TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
-            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+    public void WinformsControlsTest_FileDialogTest()
+    {
+        Process process = TestHelpers.StartProcess(_exePath);
+        TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.DialogsButton);
+        TestHelpers.SendEnterKeyToProcess(process);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendRightArrowKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendBackspaceKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+        TestHelpers.SendTabKeysToProcess(process, 1, switchToMainWindow: false);
+        TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
 
-            Assert.False(process.HasExited);
+        Assert.False(process.HasExited);
 
-            process.Kill();
-            process.WaitForExit();
+        process.Kill();
+        process.WaitForExit();
 
-            Assert.True(process.HasExited);
-        }
+        Assert.True(process.HasExited);
+    }
 
 #if MAUI
-        [Fact]
+    [Fact]
 #endif
-        public void WinformsControlsTest_OpenFolderBrowserDialogTest()
-        {
-            Process process = TestHelpers.StartProcess(_exePath);
-            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.DialogsButton);
-            TestHelpers.SendEnterKeyToProcess(process);
-            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+    public void WinformsControlsTest_OpenFolderBrowserDialogTest()
+    {
+        Process process = TestHelpers.StartProcess(_exePath);
+        TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.DialogsButton);
+        TestHelpers.SendEnterKeyToProcess(process);
+        TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
 
-            TestHelpers.SendAltKeyToProcess(process, 'b', switchToMainWindow: false);
-            TestHelpers.SendAltKeyToProcess(process, 'o', switchToMainWindow: false);
+        TestHelpers.SendAltKeyToProcess(process, 'b', switchToMainWindow: false);
+        TestHelpers.SendAltKeyToProcess(process, 'o', switchToMainWindow: false);
 
-            process.WaitForExit(2_000);
-            Assert.False(process.HasExited);
+        process.WaitForExit(2_000);
+        Assert.False(process.HasExited);
 
-            process.Kill();
-            process.WaitForExit();
+        process.Kill();
+        process.WaitForExit();
 
-            Assert.True(process.HasExited);
-        }
+        Assert.True(process.HasExited);
+    }
 
 #if MAUI
-        [Fact]
+    [Fact]
 #endif
-        public void DataBindings_remove_should_unsubscribe_INotifyPropertyChanged_PropertyChanged_event()
-        {
-            var mainObject = new Mocks.MainObject();
-            mainObject.Text = "Test text";
-            Form form = new Form();
-            TextBox textBox = new TextBox();
-            Binding binding = new Binding("Text", mainObject, "Text");
-            textBox.DataBindings.Add(binding);
-            textBox.Parent = form;
-            form.Show();
+    public void DataBindings_remove_should_unsubscribe_INotifyPropertyChanged_PropertyChanged_event()
+    {
+        var mainObject = new Mocks.MainObject();
+        mainObject.Text = "Test text";
+        Form form = new Form();
+        TextBox textBox = new TextBox();
+        Binding binding = new Binding("Text", mainObject, "Text");
+        textBox.DataBindings.Add(binding);
+        textBox.Parent = form;
+        form.Show();
 
-            // bindings set
-            Assert.True(mainObject.IsPropertyChangedAssigned);
+        // bindings set
+        Assert.True(mainObject.IsPropertyChangedAssigned);
 
-            // remove bindings
-            textBox.DataBindings.Clear();
+        // remove bindings
+        textBox.DataBindings.Clear();
 
-            // bindings unset
-            Assert.False(mainObject.IsPropertyChangedAssigned);
-        }
+        // bindings unset
+        Assert.False(mainObject.IsPropertyChangedAssigned);
     }
 }

@@ -1,89 +1,118 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Collections;
-using System.Diagnostics;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms.BinaryFormat;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using Windows.Win32.System.Com.StructuredStorage;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public abstract unsafe partial class AxHost
 {
-    public abstract unsafe partial class AxHost
+    internal class PropertyBagStream : IPropertyBag.Interface
     {
-        internal class PropertyBagStream : IPropertyBag.Interface
+        private readonly Hashtable _bag;
+
+        internal PropertyBagStream() => _bag = new();
+
+        internal PropertyBagStream(Stream stream)
         {
-            private Hashtable _bag = new();
-
-            internal void Read(Stream stream)
+            long position = stream.Position;
+            try
             {
-                BinaryFormatter formatter = new BinaryFormatter();
-                try
+                BinaryFormattedObject format = new(stream, leaveOpen: true);
+                if (format.TryGetPrimitiveHashtable(out _bag!))
                 {
+                    return;
+                }
+            }
+            catch (Exception ex) when (!ex.IsCriticalException())
+            {
+                // Don't usually expect to fall into this case as we should usually not have anything
+                // in the stream other than primitive VARIANTs, which are handled. If there are arrays or
+                // interface pointers we'd hit this.
+                Debug.WriteLine($"PropertyBagStream: {nameof(BinaryFormattedObject)} failed with {ex.Message}");
+            }
+
+            try
+            {
+                stream.Position = position;
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                    _bag = (Hashtable)formatter.Deserialize(stream);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-                }
-                catch
-                {
-                    // Error reading.  Just init an empty hashtable.
-                    _bag = new Hashtable();
-                }
+                _bag = (Hashtable)new BinaryFormatter().Deserialize(stream);
+            }
+            catch (Exception inner) when (!inner.IsCriticalException())
+            {
+                Debug.Fail($"PropertyBagStream: {nameof(BinaryFormatter)} failed with {inner.Message}");
+#pragma warning restore SYSLIB0011
+
+                // Error reading. Just init an empty hashtable.
+                _bag = new();
+            }
+        }
+
+        HRESULT IPropertyBag.Interface.Read(PCWSTR pszPropName, VARIANT* pVar, IErrorLog* pErrorLog)
+        {
+            if (pVar is null || pszPropName.Value is null)
+            {
+                return HRESULT.E_POINTER;
             }
 
-            HRESULT IPropertyBag.Interface.Read(PCWSTR pszPropName, VARIANT* pVar, IErrorLog* pErrorLog)
+            string name = pszPropName.ToString();
+
+            s_axHTraceSwitch.TraceVerbose($"Reading property {name} from OCXState propertybag.");
+
+            if (!_bag.Contains(name))
             {
-                if (pVar is null)
-                {
-                    return HRESULT.E_POINTER;
-                }
-
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Reading property {pszPropName} from OCXState propertybag.");
-
-                if (!_bag.Contains(pszPropName))
-                {
-                    *pVar = default;
-                    return HRESULT.E_INVALIDARG;
-                }
-
-                *pVar = (VARIANT)_bag[pszPropName];
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\tValue={*pVar}");
-
-                // The EE returns a VT_EMPTY for a null. The problem is that visual basic6 expects the caller to respect the
-                // "hint" it gives in the VariantType. For eg., for a VT_BSTR, it expects that the callee will null
-                // out the BSTR field of the variant. Since, the EE or us cannot do anything about this, we will return
-                // a E_INVALIDARG rather than let visual basic6 crash.
-
-                return (*pVar).Equals(default(VARIANT)) ? HRESULT.E_INVALIDARG : HRESULT.S_OK;
+                *pVar = default;
+                return HRESULT.E_INVALIDARG;
             }
 
-            HRESULT IPropertyBag.Interface.Write(PCWSTR pszPropName, VARIANT* pVar)
+            object? value = _bag[name];
+            *pVar = VARIANT.FromObject(value);
+            s_axHTraceSwitch.TraceVerbose($"\tValue={value ?? "<null>"}");
+
+            // The EE returns a VT_EMPTY for a null. The problem is that Visual Basic 6 expects the caller to respect
+            // the "hint" it gives in the VariantType. For eg., for a VT_BSTR, it expects that the callee will null
+            // out the BSTR field of the variant. Since the EE or us cannot do anything about this, we will return
+            // a E_INVALIDARG rather than let Visual Basic 6 crash.
+
+            return (*pVar).Equals(default(VARIANT)) ? HRESULT.E_INVALIDARG : HRESULT.S_OK;
+        }
+
+        HRESULT IPropertyBag.Interface.Write(PCWSTR pszPropName, VARIANT* pVar)
+        {
+            if (pVar is null || pszPropName.Value is null)
             {
-                if (pVar is null)
-                {
-                    return HRESULT.E_POINTER;
-                }
-
-                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Writing property {pszPropName} [{*pVar}] into OCXState propertybag.");
-                if (!pVar->GetType().IsSerializable)
-                {
-                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t {pVar->GetType().FullName} is not serializable.");
-                    return HRESULT.S_OK;
-                }
-
-                _bag[pszPropName] = *pVar;
-                return HRESULT.S_OK;
+                return HRESULT.E_POINTER;
             }
 
-            internal void Write(Stream stream)
+            string name = pszPropName.ToString();
+            object? value = pVar->ToObject();
+
+            s_axHTraceSwitch.TraceVerbose($"Writing property {name} [{*pVar}] into OCXState propertybag.");
+            _bag[name] = value;
+            return HRESULT.S_OK;
+        }
+
+        internal void Save(Stream stream)
+        {
+            long position = stream.Position;
+
+            try
             {
-                BinaryFormatter formatter = new BinaryFormatter();
+                BinaryFormatWriter.WritePrimitiveHashtable(stream, _bag);
+            }
+            catch (Exception ex) when (!ex.IsCriticalException())
+            {
+                Debug.WriteLine($"PropertyBagStream.Save: {nameof(BinaryFormattedObject)} failed with {ex.Message}");
+
+                stream.Position = position;
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                formatter.Serialize(stream, _bag);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                new BinaryFormatter().Serialize(stream, _bag);
+#pragma warning restore SYSLIB0011
             }
         }
     }

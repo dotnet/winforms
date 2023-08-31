@@ -1,166 +1,163 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Xunit;
 using static Interop;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class CheckedListBoxAccessibleObjectTests
 {
-    public class CheckedListBoxAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    [WinFormsFact]
+    public void CheckedListBoxAccessibleObject_CheckBounds()
     {
-        [WinFormsFact]
-        public void CheckedListBoxAccessibleObject_CheckBounds()
+        using CheckedListBox checkedListBox = new CheckedListBox();
+        checkedListBox.Size = new Size(120, 100);
+        checkedListBox.Items.Add("a");
+        checkedListBox.Items.Add("b");
+        checkedListBox.Items.Add("c");
+        checkedListBox.Items.Add("d");
+        checkedListBox.Items.Add("e");
+        checkedListBox.Items.Add("f");
+        checkedListBox.Items.Add("g");
+        checkedListBox.Items.Add("h");
+        checkedListBox.Items.Add("i");
+
+        int listBoxHeight = checkedListBox.AccessibilityObject.Bounds.Height;
+        int sumItemsHeight = 0;
+
+        for (int i = 0; i < checkedListBox.Items.Count; i++)
         {
-            using CheckedListBox checkedListBox = new CheckedListBox();
-            checkedListBox.Size = new Size(120, 100);
-            checkedListBox.Items.Add("a");
-            checkedListBox.Items.Add("b");
-            checkedListBox.Items.Add("c");
-            checkedListBox.Items.Add("d");
-            checkedListBox.Items.Add("e");
-            checkedListBox.Items.Add("f");
-            checkedListBox.Items.Add("g");
-            checkedListBox.Items.Add("h");
-            checkedListBox.Items.Add("i");
+            AccessibleObject item = checkedListBox.AccessibilityObject.GetChild(i);
+            sumItemsHeight += item.Bounds.Height;
+        }
 
-            int listBoxHeight = checkedListBox.AccessibilityObject.Bounds.Height;
-            int sumItemsHeight = 0;
+        Assert.Equal(listBoxHeight, sumItemsHeight);
+    }
 
-            for (int i = 0; i < checkedListBox.Items.Count; i++)
+    [WinFormsTheory]
+    [InlineData(true, (int)UiaCore.UIA.ListControlTypeId)]
+    [InlineData(false, (int)UiaCore.UIA.ListControlTypeId)]
+    public void CheckedListBoxAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, int expectedType)
+    {
+        using CheckedListBox checkedListBox = new CheckedListBox();
+        // AccessibleRole is not set = Default
+
+        if (createControl)
+        {
+            checkedListBox.CreateControl();
+        }
+
+        object actual = checkedListBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+
+        Assert.Equal((UiaCore.UIA)expectedType, actual);
+        Assert.Equal(createControl, checkedListBox.IsHandleCreated);
+    }
+
+    public static IEnumerable<object[]> CheckedListBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+    {
+        Array roles = Enum.GetValues(typeof(AccessibleRole));
+
+        foreach (AccessibleRole role in roles)
+        {
+            if (role == AccessibleRole.Default)
             {
-                AccessibleObject item = checkedListBox.AccessibilityObject.GetChild(i);
-                sumItemsHeight += item.Bounds.Height;
+                continue; // The test checks custom roles
             }
 
-            Assert.Equal(listBoxHeight, sumItemsHeight);
+            yield return new object[] { role };
         }
+    }
 
-        [WinFormsTheory]
-        [InlineData(true, (int)UiaCore.UIA.ListControlTypeId)]
-        [InlineData(false, (int)UiaCore.UIA.ListControlTypeId)]
-        public void CheckedListBoxAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, int expectedType)
+    [WinFormsTheory]
+    [MemberData(nameof(CheckedListBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
+    public void CheckedListBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
+    {
+        using CheckedListBox checkedListBox = new CheckedListBox();
+        checkedListBox.AccessibleRole = role;
+
+        object actual = checkedListBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+
+        Assert.Equal(expected, actual);
+        Assert.False(checkedListBox.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(true, AccessibleRole.List)]
+    [InlineData(false, AccessibleRole.None)]
+    public void CheckedListBoxAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
+    {
+        using CheckedListBox checkedListBox = new CheckedListBox();
+        // AccessibleRole is not set = Default
+
+        if (createControl)
         {
-            using CheckedListBox checkedListBox = new CheckedListBox();
-            // AccessibleRole is not set = Default
-
-            if (createControl)
-            {
-                checkedListBox.CreateControl();
-            }
-
-            object actual = checkedListBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-
-            Assert.Equal((UiaCore.UIA)expectedType, actual);
-            Assert.Equal(createControl, checkedListBox.IsHandleCreated);
+            checkedListBox.CreateControl();
         }
 
-        public static IEnumerable<object[]> CheckedListBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData()
+        AccessibleRole actual = checkedListBox.AccessibilityObject.Role;
+
+        Assert.Equal(expectedRole, actual);
+        Assert.Equal(createControl, checkedListBox.IsHandleCreated);
+    }
+
+    [WinFormsTheory]
+    [InlineData(0)]
+    [InlineData(3)]
+    public void CheckedListBoxAccessibleObject_GetChildCount_ReturnsExpected(int childCount)
+    {
+        using CheckedListBox checkedListBox = new();
+
+        for (int i = 0; i < childCount; i++)
         {
-            Array roles = Enum.GetValues(typeof(AccessibleRole));
-
-            foreach (AccessibleRole role in roles)
-            {
-                if (role == AccessibleRole.Default)
-                {
-                    continue; // The test checks custom roles
-                }
-
-                yield return new object[] { role };
-            }
+            checkedListBox.Items.Add(i);
         }
 
-        [WinFormsTheory]
-        [MemberData(nameof(CheckedListBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
-        public void CheckedListBoxAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
-        {
-            using CheckedListBox checkedListBox = new CheckedListBox();
-            checkedListBox.AccessibleRole = role;
+        int actual = checkedListBox.AccessibilityObject.GetChildCount();
 
-            object actual = checkedListBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        Assert.Equal(childCount, actual);
+        Assert.False(checkedListBox.IsHandleCreated);
+    }
 
-            Assert.Equal(expected, actual);
-            Assert.False(checkedListBox.IsHandleCreated);
-        }
+    [WinFormsFact]
+    public void CheckedListBoxAccessibleObject_RuntimeId_NotNull()
+    {
+        using CheckedListBox checkedListBox = new();
 
-        [WinFormsTheory]
-        [InlineData(true, AccessibleRole.List)]
-        [InlineData(false, AccessibleRole.None)]
-        public void CheckedListBoxAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
-        {
-            using CheckedListBox checkedListBox = new CheckedListBox();
-            // AccessibleRole is not set = Default
+        Assert.NotNull(checkedListBox.AccessibilityObject.RuntimeId);
+        Assert.False(checkedListBox.IsHandleCreated);
+    }
 
-            if (createControl)
-            {
-                checkedListBox.CreateControl();
-            }
+    [WinFormsFact]
+    public void CheckedListBoxAccessibleObject_FragmentNavigate_NavigateToFirstChild_IsExpected()
+    {
+        using CheckedListBox checkedListBox = new();
+        AccessibleObject accessibleObject = checkedListBox.AccessibilityObject;
 
-            AccessibleRole actual = checkedListBox.AccessibilityObject.Role;
+        checkedListBox.Items.Add(0);
+        checkedListBox.Items.Add(1);
+        checkedListBox.Items.Add(2);
 
-            Assert.Equal(expectedRole, actual);
-            Assert.Equal(createControl, checkedListBox.IsHandleCreated);
-        }
+        AccessibleObject expected = accessibleObject.GetChild(0);
 
-        [WinFormsTheory]
-        [InlineData(0)]
-        [InlineData(3)]
-        public void CheckedListBoxAccessibleObject_GetChildCount_ReturnsExpected(int childCount)
-        {
-            using CheckedListBox checkedListBox = new();
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.False(checkedListBox.IsHandleCreated);
+    }
 
-            for (int i = 0; i < childCount; i++)
-            {
-                checkedListBox.Items.Add(i);
-            }
+    [WinFormsFact]
+    public void CheckedListBoxAccessibleObject_FragmentNavigate_NavigateToLastChild_IsExpected()
+    {
+        using CheckedListBox checkedListBox = new();
+        AccessibleObject accessibleObject = checkedListBox.AccessibilityObject;
 
-            int actual = checkedListBox.AccessibilityObject.GetChildCount();
+        checkedListBox.Items.Add(0);
+        checkedListBox.Items.Add(1);
+        checkedListBox.Items.Add(2);
 
-            Assert.Equal(childCount, actual);
-            Assert.False(checkedListBox.IsHandleCreated);
-        }
+        AccessibleObject expected = accessibleObject.GetChild(2);
 
-        [WinFormsFact]
-        public void CheckedListBoxAccessibleObject_RuntimeId_NotNull()
-        {
-            using CheckedListBox checkedListBox = new();
-
-            Assert.NotNull(checkedListBox.AccessibilityObject.RuntimeId);
-            Assert.False(checkedListBox.IsHandleCreated);
-        }
-
-        [WinFormsFact]
-        public void CheckedListBoxAccessibleObject_FragmentNavigate_NavigateToFirstChild_IsExpected()
-        {
-            using CheckedListBox checkedListBox = new();
-            AccessibleObject accessibleObject = checkedListBox.AccessibilityObject;
-
-            checkedListBox.Items.Add(0);
-            checkedListBox.Items.Add(1);
-            checkedListBox.Items.Add(2);
-
-            AccessibleObject expected = accessibleObject.GetChild(0);
-
-            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-            Assert.False(checkedListBox.IsHandleCreated);
-        }
-
-        [WinFormsFact]
-        public void CheckedListBoxAccessibleObject_FragmentNavigate_NavigateToLastChild_IsExpected()
-        {
-            using CheckedListBox checkedListBox = new();
-            AccessibleObject accessibleObject = checkedListBox.AccessibilityObject;
-
-            checkedListBox.Items.Add(0);
-            checkedListBox.Items.Add(1);
-            checkedListBox.Items.Add(2);
-
-            AccessibleObject expected = accessibleObject.GetChild(2);
-
-            Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-            Assert.False(checkedListBox.IsHandleCreated);
-        }
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.False(checkedListBox.IsHandleCreated);
     }
 }

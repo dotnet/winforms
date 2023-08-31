@@ -1,31 +1,28 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Configuration;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests;
+
+public class UserConfigDisposableFixture : IDisposable
 {
-    public class UserConfigDisposableFixture : ThreadExceptionFixture, IDisposable
+    public UserConfigDisposableFixture()
     {
-        public UserConfigDisposableFixture()
-        {
-            DeleteUserConfig();
-        }
+        DeleteUserConfig();
+    }
 
-        public override void Dispose()
-        {
-            DeleteUserConfig();
-            base.Dispose();
-        }
+    public void Dispose()
+    {
+        DeleteUserConfig();
+    }
 
-        private static void DeleteUserConfig()
+    private static void DeleteUserConfig()
+    {
+        var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+        if (File.Exists(configuration.FilePath))
         {
-            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
-            if (File.Exists(configuration.FilePath))
-            {
-                File.Delete(configuration.FilePath);
-            }
+            File.Delete(configuration.FilePath);
         }
     }
 }

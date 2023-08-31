@@ -1,87 +1,78 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using System.Diagnostics;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+/// <summary>
+///  This serializer serializes images.
+/// </summary>
+public class ImageListCodeDomSerializer : CodeDomSerializer
 {
     /// <summary>
-    ///  This serializer serializes images.
+    ///  This method takes a CodeDomObject and deserializes into a real object.
+    ///  We don't do anything here.
     /// </summary>
-    public class ImageListCodeDomSerializer : CodeDomSerializer
+    public override object? Deserialize(IDesignerSerializationManager manager, object codeObject)
     {
-        /// <summary>
-        ///  This method takes a CodeDomObject and deserializes into a real object.
-        ///  We don't do anything here.
-        /// </summary>
-        public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
+        // REVIEW: Please look at this carefully - This is just copied from ControlCodeDomSerializer
+        ArgumentNullException.ThrowIfNull(manager);
+        ArgumentNullException.ThrowIfNull(codeObject);
+
+        // Find our base class's serializer.
+        if (!manager.TryGetSerializer(typeof(Component), out CodeDomSerializer? serializer))
         {
-            // REVIEW: Please look at this carefully - This is just copied from ControlCodeDomSerializer
-            ArgumentNullException.ThrowIfNull(manager);
-            ArgumentNullException.ThrowIfNull(codeObject);
+            Debug.Fail("Unable to find a CodeDom serializer for 'Component'.  Has someone tampered with the serialization providers?");
 
-            // Find our base class's serializer.
-            CodeDomSerializer serializer = (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));
-
-            if (serializer is null)
-            {
-                Debug.Fail("Unable to find a CodeDom serializer for 'Component'.  Has someone tampered with the serialization providers?");
-
-                return null;
-            }
-
-            return serializer.Deserialize(manager, codeObject);
+            return null;
         }
 
-        /// <summary>
-        ///  Serializes the given object into a CodeDom object.
-        /// </summary>
-        public override object Serialize(IDesignerSerializationManager manager, object value)
+        return serializer.Deserialize(manager, codeObject);
+    }
+
+    /// <summary>
+    ///  Serializes the given object into a CodeDom object.
+    /// </summary>
+    public override object? Serialize(IDesignerSerializationManager manager, object value)
+    {
+        CodeDomSerializer baseSerializer = manager.GetSerializer<CodeDomSerializer>(typeof(ImageList).BaseType)!;
+        object? codeObject = baseSerializer.Serialize(manager, value);
+
+        if (value is ImageList imageList)
         {
-            CodeDomSerializer baseSerializer = (CodeDomSerializer)manager.GetSerializer(typeof(ImageList).BaseType, typeof(CodeDomSerializer));
-            object codeObject = baseSerializer.Serialize(manager, value);
-            ImageList imageList = value as ImageList;
-
-            if (imageList != null)
+            if (codeObject is CodeStatementCollection codeStatementCollection)
             {
-                StringCollection imageKeys = imageList.Images.Keys;
+                CodeExpression? imageListObject = GetExpression(manager, value);
 
-                if (codeObject is CodeStatementCollection)
+                if (imageListObject is not null)
                 {
-                    CodeExpression imageListObject = GetExpression(manager, value);
+                    CodeExpression imageListImagesProperty = new CodePropertyReferenceExpression(imageListObject, "Images");
 
-                    if (imageListObject != null)
+                    StringCollection imageKeys = imageList.Images.Keys;
+
+                    for (int i = 0; i < imageKeys.Count; i++)
                     {
-                        CodeExpression imageListImagesProperty = new CodePropertyReferenceExpression(imageListObject, "Images");
-
-                        if (imageListImagesProperty != null)
+                        if (imageKeys[i] is { Length: not 0 } imageKey)
                         {
-                            for (int i = 0; i < imageKeys.Count; i++)
-                            {
-                                if ((imageKeys[i] != null) || (imageKeys[i].Length != 0))
-                                {
-                                    CodeMethodInvokeExpression setNameMethodCall
-                                        = new(imageListImagesProperty, "SetKeyName",
-                                              new CodeExpression[]
-                                              {
-                                                  new CodePrimitiveExpression(i),         // SetKeyName(int,
-                                                  new CodePrimitiveExpression(imageKeys[i])        // string);
-                                              });
+                            CodeMethodInvokeExpression setNameMethodCall
+                                = new(imageListImagesProperty, "SetKeyName",
+                                    new CodeExpression[]
+                                    {
+                                        new CodePrimitiveExpression(i),         // SetKeyName(int,
+                                        new CodePrimitiveExpression(imageKey)        // string);
+                                    });
 
-                                    ((CodeStatementCollection)codeObject).Add(setNameMethodCall);
-                                }
-                            }
+                            codeStatementCollection.Add(setNameMethodCall);
                         }
                     }
                 }
             }
-
-            return codeObject;
         }
+
+        return codeObject;
     }
 }

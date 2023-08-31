@@ -1,41 +1,36 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class Control
 {
-    public partial class Control
+    /// <summary>
+    ///  Used to sort controls based on tab index and z-order.
+    /// </summary>
+    private class ControlTabOrderComparer : IComparer<ControlTabOrderHolder>
     {
-        /// <summary>
-        ///  Used to sort controls based on tab index and z-order.
-        /// </summary>
-        private class ControlTabOrderComparer : IComparer<ControlTabOrderHolder>
+        private ControlTabOrderComparer() { }
+
+        internal static ControlTabOrderComparer Instance { get; } = new();
+
+        public int Compare(ControlTabOrderHolder x, ControlTabOrderHolder y)
         {
-            public int Compare(ControlTabOrderHolder? x, ControlTabOrderHolder? y)
+            if (IComparerHelpers.CompareReturnIfNull(x, y, out int? returnValue))
             {
-                if (x is null && y is null)
-                {
-                    return 0;
-                }
-
-                if (x is null)
-                {
-                    return -1;
-                }
-
-                if (y is null)
-                {
-                    return 1;
-                }
-
-                int delta = x._newOrder - y._newOrder;
-                if (delta == 0)
-                {
-                    delta = x._oldOrder - y._oldOrder;
-                }
-
-                return delta;
+                return (int)returnValue;
             }
+
+            // If there is a specified tab index, use it for comparison, otherwise use the original index (which
+            // would be the index in the control collection or how Windows returns children using GW_HWNDNEXT from
+            // GW_HWNDCHILD).
+            int delta = x.TabIndex - y.TabIndex;
+            if (delta == 0)
+            {
+                delta = x.OriginalIndex - y.OriginalIndex;
+            }
+
+            return delta;
         }
     }
 }

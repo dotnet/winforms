@@ -1,129 +1,125 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using Xunit;
+namespace System.Windows.Forms.Tests;
 
-namespace System.Windows.Forms.Tests
+// NB: doesn't require thread affinity
+public class DragEventArgsTests
 {
-    // NB: doesn't require thread affinity
-    public class DragEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    public static IEnumerable<object[]> Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_TestData()
     {
-        public static IEnumerable<object[]> Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_TestData()
+        yield return new object[] { null, -1, -2, -3, (DragDropEffects)(DragDropEffects.None - 1), (DragDropEffects)(DragDropEffects.None - 1) };
+        yield return new object[] { new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move };
+    }
+
+    public static IEnumerable<object[]> Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_DropImageType_string_string_TestData()
+    {
+        yield return new object[] { null, -1, -2, -3, (DragDropEffects)(DragDropEffects.None - 1), (DragDropEffects)(DragDropEffects.None - 1), (DropImageType.Invalid - 1), null, null };
+        yield return new object[] { new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Move to %1", "Documents" };
+    }
+
+    [Theory]
+    [MemberData(nameof(Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_TestData))]
+    public void Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects(IDataObject data, int keyState, int x, int y, DragDropEffects allowedEffect, DragDropEffects effect)
+    {
+        var e = new DragEventArgs(data, keyState, x, y, allowedEffect, effect);
+        Assert.Equal(data, e.Data);
+        Assert.Equal(keyState, e.KeyState);
+        Assert.Equal(x, e.X);
+        Assert.Equal(y, e.Y);
+        Assert.Equal(allowedEffect, e.AllowedEffect);
+        Assert.Equal(effect, e.Effect);
+    }
+
+    [Theory]
+    [MemberData(nameof(Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_DropImageType_string_string_TestData))]
+    public void Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_DropImageType_string_string(IDataObject data, int keyState, int x,
+        int y, DragDropEffects allowedEffect, DragDropEffects effect, DropImageType dropImageType, string message, string messageReplacementToken)
+    {
+        var e = new DragEventArgs(data, keyState, x, y, allowedEffect, effect, dropImageType, message, messageReplacementToken);
+        Assert.Equal(data, e.Data);
+        Assert.Equal(keyState, e.KeyState);
+        Assert.Equal(x, e.X);
+        Assert.Equal(y, e.Y);
+        Assert.Equal(allowedEffect, e.AllowedEffect);
+        Assert.Equal(effect, e.Effect);
+        Assert.Equal(dropImageType, e.DropImageType);
+        Assert.Equal(message, e.Message);
+        Assert.Equal(messageReplacementToken, e.MessageReplacementToken);
+    }
+
+    [Theory]
+    [InlineData(DragDropEffects.Copy)]
+    [InlineData((DragDropEffects)(DragDropEffects.None - 1))]
+    public void Effect_Set_GetReturnsExpected(DragDropEffects value)
+    {
+        var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move)
         {
-            yield return new object[] { null, -1, -2, -3, (DragDropEffects)(DragDropEffects.None - 1), (DragDropEffects)(DragDropEffects.None - 1) };
-            yield return new object[] { new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move };
-        }
+            Effect = value
+        };
+        Assert.Equal(value, e.Effect);
+    }
 
-        public static IEnumerable<object[]> Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_DropImageType_string_string_TestData()
+    [Theory]
+    [InlineData(DropImageType.Copy)]
+    [InlineData(DropImageType.Invalid - 1)]
+    public void DropImageType_Set_GetReturnsExpected(DropImageType value)
+    {
+        var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Copy to %1", "Documents")
         {
-            yield return new object[] { null, -1, -2, -3, (DragDropEffects)(DragDropEffects.None - 1), (DragDropEffects)(DragDropEffects.None - 1), (DropImageType.Invalid - 1), null, null };
-            yield return new object[] { new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Move to %1", "Documents" };
-        }
+            DropImageType = value
+        };
+        Assert.Equal(value, e.DropImageType);
+    }
 
-        [Theory]
-        [MemberData(nameof(Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_TestData))]
-        public void Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects(IDataObject data, int keyState, int x, int y, DragDropEffects allowedEffect, DragDropEffects effect)
+    [Theory]
+    [InlineData("Copy to %1")]
+    [InlineData(null)]
+    public void Message_Set_GetReturnsExpected(string value)
+    {
+        var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Move to %1", "Documents")
         {
-            var e = new DragEventArgs(data, keyState, x, y, allowedEffect, effect);
-            Assert.Equal(data, e.Data);
-            Assert.Equal(keyState, e.KeyState);
-            Assert.Equal(x, e.X);
-            Assert.Equal(y, e.Y);
-            Assert.Equal(allowedEffect, e.AllowedEffect);
-            Assert.Equal(effect, e.Effect);
-        }
+            Message = value
+        };
+        Assert.Equal(value, e.Message);
+    }
 
-        [Theory]
-        [MemberData(nameof(Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_DropImageType_string_string_TestData))]
-        public void Ctor_IDataObject_Int_Int_Int_DragDropEffects_DragDropEffects_DropImageType_string_string(IDataObject data, int keyState, int x,
-            int y, DragDropEffects allowedEffect, DragDropEffects effect, DropImageType dropImageType, string message, string messageReplacementToken)
+    [Theory]
+    [InlineData("Documents")]
+    [InlineData(null)]
+    public void MessageReplacementToken_Set_GetReturnsExpected(string value)
+    {
+        var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Move to %1", "Desktop")
         {
-            var e = new DragEventArgs(data, keyState, x, y, allowedEffect, effect, dropImageType, message, messageReplacementToken);
-            Assert.Equal(data, e.Data);
-            Assert.Equal(keyState, e.KeyState);
-            Assert.Equal(x, e.X);
-            Assert.Equal(y, e.Y);
-            Assert.Equal(allowedEffect, e.AllowedEffect);
-            Assert.Equal(effect, e.Effect);
-            Assert.Equal(dropImageType, e.DropImageType);
-            Assert.Equal(message, e.Message);
-            Assert.Equal(messageReplacementToken, e.MessageReplacementToken);
-        }
+            MessageReplacementToken = value
+        };
+        Assert.Equal(value, e.MessageReplacementToken);
+    }
 
-        [Theory]
-        [InlineData(DragDropEffects.Copy)]
-        [InlineData((DragDropEffects)(DragDropEffects.None - 1))]
-        public void Effect_Set_GetReturnsExpected(DragDropEffects value)
-        {
-            var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move)
-            {
-                Effect = value
-            };
-            Assert.Equal(value, e.Effect);
-        }
+    private class CustomDataObject : IDataObject
+    {
+        public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
 
-        [Theory]
-        [InlineData(DropImageType.Copy)]
-        [InlineData(DropImageType.Invalid - 1)]
-        public void DropImageType_Set_GetReturnsExpected(DropImageType value)
-        {
-            var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Copy to %1", "Documents")
-            {
-                DropImageType = value
-            };
-            Assert.Equal(value, e.DropImageType);
-        }
+        public object GetData(string format) => throw new NotImplementedException();
 
-        [Theory]
-        [InlineData("Copy to %1")]
-        [InlineData(null)]
-        public void Message_Set_GetReturnsExpected(string value)
-        {
-            var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Move to %1", "Documents")
-            {
-                Message = value
-            };
-            Assert.Equal(value, e.Message);
-        }
+        public object GetData(Type format) => throw new NotImplementedException();
 
-        [Theory]
-        [InlineData("Documents")]
-        [InlineData(null)]
-        public void MessageReplacementToken_Set_GetReturnsExpected(string value)
-        {
-            var e = new DragEventArgs(new CustomDataObject(), 1, 2, 3, DragDropEffects.Copy, DragDropEffects.Move, DropImageType.Copy, "Move to %1", "Desktop")
-            {
-                MessageReplacementToken = value
-            };
-            Assert.Equal(value, e.MessageReplacementToken);
-        }
+        public void SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
 
-        private class CustomDataObject : IDataObject
-        {
-            public object GetData(string format, bool autoConvert) => throw new NotImplementedException();
+        public void SetData(string format, object data) => throw new NotImplementedException();
 
-            public object GetData(string format) => throw new NotImplementedException();
+        public void SetData(Type format, object data) => throw new NotImplementedException();
 
-            public object GetData(Type format) => throw new NotImplementedException();
+        public void SetData(object data) => throw new NotImplementedException();
 
-            public void SetData(string format, bool autoConvert, object data) => throw new NotImplementedException();
+        public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
 
-            public void SetData(string format, object data) => throw new NotImplementedException();
+        public bool GetDataPresent(string format) => throw new NotImplementedException();
 
-            public void SetData(Type format, object data) => throw new NotImplementedException();
+        public bool GetDataPresent(Type format) => throw new NotImplementedException();
 
-            public void SetData(object data) => throw new NotImplementedException();
+        public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
 
-            public bool GetDataPresent(string format, bool autoConvert) => throw new NotImplementedException();
-
-            public bool GetDataPresent(string format) => throw new NotImplementedException();
-
-            public bool GetDataPresent(Type format) => throw new NotImplementedException();
-
-            public string[] GetFormats(bool autoConvert) => throw new NotImplementedException();
-
-            public string[] GetFormats() => throw new NotImplementedException();
-        }
+        public string[] GetFormats() => throw new NotImplementedException();
     }
 }

@@ -1,603 +1,592 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
+
+#nullable disable
 
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
-using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
-using static Interop;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+internal class ToolStripItemDesigner : ComponentDesigner
 {
-    internal class ToolStripItemDesigner : ComponentDesigner
+    private const int GLYPHINSET = 2;
+    // Cached in value of the TemplateNode (which is the InSitu Editor)
+    private ToolStripTemplateNode _editorNode;
+    // Used by the ParentDesigner (ToolStripDesigner) to know whether there is any active Editor.
+    private bool isEditorActive;
+    // this property is used in the InitializeNewComponent not to set the text for the ToolstripItem
+    private bool internalCreate;
+    //hook to SelectionService to listen to SelectionChanged
+    private ISelectionService _selectionService;
+    //ToolStripItems Visibility needs to be WYSIWYG.
+    private bool currentVisible;
+    // Required to remove Body Glyphs...
+    internal ControlBodyGlyph bodyGlyph;
+    //bool which is set if we Add Dummy Item
+    internal bool dummyItemAdded;
+    //Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
+    internal Rectangle dragBoxFromMouseDown = Rectangle.Empty;
+    //defaulted to invalid index. this will be set by the behaviour.
+    internal int indexOfItemUnderMouseToDrag = -1;
+    private ToolStripItemCustomMenuItemCollection toolStripItemCustomMenuItemCollection;
+
+    internal bool AutoSize
     {
-        private const int GLYPHINSET = 2;
-        // Cached in value of the TemplateNode (which is the InSitu Editor)
-        private ToolStripTemplateNode _editorNode;
-        // Used by the ParentDesigner (ToolStripDesigner) to know whether there is any active Editor.
-        private bool isEditorActive;
-        // this property is used in the InitializeNewComponent not to set the text for the ToolstripItem
-        private bool internalCreate;
-        //hook to SelectionService to listen to SelectionChanged
-        private ISelectionService _selectionService;
-        //ToolStripItems Visibility needs to be WYSIWYG.
-        private bool currentVisible;
-        // Required to remove Body Glyphs...
-        internal ControlBodyGlyph bodyGlyph;
-        //bool which is set if we Add Dummy Item
-        internal bool dummyItemAdded;
-        //Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
-        internal Rectangle dragBoxFromMouseDown = Rectangle.Empty;
-        //defaulted to invalid index. this will be set by the behaviour.
-        internal int indexOfItemUnderMouseToDrag = -1;
-        private ToolStripItemCustomMenuItemCollection toolStripItemCustomMenuItemCollection;
-
-        internal bool AutoSize
+        get => (bool)ShadowProperties[nameof(AutoSize)];
+        set
         {
-            get => (bool)ShadowProperties[nameof(AutoSize)];
-            set
+            bool autoSize = (bool)ShadowProperties[nameof(AutoSize)];
+            // always set this in regardless of whether the property changed. it can come back to bite later after in-situ editing if we don't.
+            ShadowProperties[nameof(AutoSize)] = value;
+            if (value != autoSize)
             {
-                bool autoSize = (bool)ShadowProperties[nameof(AutoSize)];
-                // always set this in regardless of whether the property changed. it can come back to bite later after in-situ editing if we don't.
-                ShadowProperties[nameof(AutoSize)] = value;
-                if (value != autoSize)
-                {
-                    ToolStripItem.AutoSize = value;
-                }
+                ToolStripItem.AutoSize = value;
             }
         }
+    }
 
-        private string AccessibleName
+    private string AccessibleName
+    {
+        get
         {
-            get
+            return (string)ShadowProperties[nameof(AccessibleName)];
+        }
+        set
+        {
+            ShadowProperties[nameof(AccessibleName)] = value;
+        }
+    }
+
+    /// <summary>
+    ///  Associated Parent Designer
+    /// </summary>
+    internal override bool CanBeAssociatedWith(IDesigner parentDesigner)
+    {
+        return (parentDesigner is ToolStripDesigner);
+    }
+
+    /// <summary>
+    ///  Designer Custom ContextMenu.
+    /// </summary>
+    private ContextMenuStrip DesignerContextMenu
+    {
+        get
+        {
+            BaseContextMenuStrip toolStripContextMenu = new BaseContextMenuStrip(Component.Site, ToolStripItem);
+            // If multiple Items Selected don't show the custom properties...
+            if (_selectionService.SelectionCount > 1)
             {
-                return (string)ShadowProperties[nameof(AccessibleName)];
-            }
-            set
-            {
-                ShadowProperties[nameof(AccessibleName)] = value;
-            }
-        }
-
-        /// <summary>
-        ///  Associated Parent Designer
-        /// </summary>
-        internal override bool CanBeAssociatedWith(IDesigner parentDesigner)
-        {
-            return (parentDesigner is ToolStripDesigner);
-        }
-
-        /// <summary>
-        ///  Designer Custom ContextMenu.
-        /// </summary>
-        private ContextMenuStrip DesignerContextMenu
-        {
-            get
-            {
-                BaseContextMenuStrip toolStripContextMenu = new BaseContextMenuStrip(Component.Site, ToolStripItem);
-                // If multiple Items Selected don't show the custom properties...
-                if (_selectionService.SelectionCount > 1)
-                {
-                    toolStripContextMenu.GroupOrdering.Clear();
-                    toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
-                }
-                else
-                {
-                    toolStripContextMenu.GroupOrdering.Clear();
-                    toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
-                    toolStripContextMenu.Text = "CustomContextMenu";
-                    toolStripItemCustomMenuItemCollection ??= new ToolStripItemCustomMenuItemCollection(Component.Site, ToolStripItem);
-
-                    foreach (ToolStripItem item in toolStripItemCustomMenuItemCollection)
-                    {
-                        toolStripContextMenu.Groups[StandardGroups.Custom].Items.Add(item);
-                    }
-                }
-
-                // Refresh the list on every show..
-                toolStripItemCustomMenuItemCollection?.RefreshItems();
-
-                toolStripContextMenu.Populated = false;
-                return toolStripContextMenu;
-            }
-        }
-
-        /// <summary>
-        ///  ToolStripEditorManager used this internal property to  Activate the editor.
-        /// </summary>
-        internal virtual ToolStripTemplateNode Editor
-        {
-            get => _editorNode;
-            set => _editorNode = value;
-        }
-
-        // ToolStripItems if Inherited ACT as Readonly.
-        protected override InheritanceAttribute InheritanceAttribute
-        {
-            get
-            {
-                if ((base.InheritanceAttribute == InheritanceAttribute.Inherited))
-                {
-                    return InheritanceAttribute.InheritedReadOnly;
-                }
-
-                return base.InheritanceAttribute;
-            }
-        }
-
-        /// <summary>
-        ///  ToolStripEditorManager used this internal property to  set the designer's IsEditorActive to notify  if this item has entered or exited the InSitu Edit Mode.
-        /// </summary>
-        internal bool IsEditorActive
-        {
-            get => isEditorActive;
-            set => isEditorActive = value;
-        }
-
-        /// <summary>
-        ///  When the ToolStripItem is created we don't want InitializeNewComponent to set the "text" we do it ourselves from the Text the User has provided in the InSitu Edit Mode. Reason being the item and the Parent unnecessarily Layout and cause flicker.
-        /// </summary>
-        internal bool InternalCreate
-        {
-            get => internalCreate;
-            set => internalCreate = value;
-        }
-
-        protected IComponent ImmediateParent
-        {
-            get
-            {
-                if (ToolStripItem != null)
-                {
-                    ToolStrip parent = ToolStripItem.GetCurrentParent();
-                    return parent ?? ToolStripItem.Owner;
-                }
-
-                return null;
-            }
-        }
-
-        private ToolStripItemOverflow Overflow
-        {
-            get => (ToolStripItemOverflow)ShadowProperties[nameof(Overflow)];
-            set
-            {
-                // first Hide the Overflow..
-                if (ToolStripItem.IsOnOverflow)
-                {
-                    ToolStrip strip = ToolStripItem.Owner;
-                    if (strip.OverflowButton.DropDown.Visible)
-                    {
-                        strip.OverflowButton.HideDropDown();
-                    }
-                }
-
-                if (ToolStripItem is ToolStripDropDownItem)
-                {
-                    ToolStripDropDownItem item = ToolStripItem as ToolStripDropDownItem;
-                    item.HideDropDown();
-                }
-
-                // Set the value on actual item
-                if (value != ToolStripItem.Overflow)
-                {
-                    ToolStripItem.Overflow = value;
-                    ShadowProperties[nameof(Overflow)] = value;
-                }
-
-                // Since this causes the whole layout to change call SyncSelection to reset the glyphs
-                GetService<BehaviorService>()?.SyncSelection();
-            }
-        }
-
-        protected override IComponent ParentComponent
-        {
-            get
-            {
-                if (ToolStripItem != null)
-                {
-                    if (ToolStripItem.IsOnDropDown && !ToolStripItem.IsOnOverflow)
-                    {
-                        if (ImmediateParent is ToolStripDropDown parentDropDown)
-                        {
-                            if (parentDropDown.IsAutoGenerated)
-                            {
-                                return parentDropDown.OwnerItem;
-                            }
-                            else
-                            {
-                                return parentDropDown;
-                            }
-                        }
-                    }
-
-                    return GetMainToolStrip();
-                }
-
-                return null;
-            }
-        }
-
-        /// <summary>
-        ///  Easy method for getting to the ToolStripItem
-        /// </summary>
-        public ToolStripItem ToolStripItem
-        {
-            get => (ToolStripItem)Component;
-        }
-
-        protected bool Visible
-        {
-            get => (bool)ShadowProperties[nameof(Visible)];
-            set
-            {
-                ShadowProperties[nameof(Visible)] = value;
-                currentVisible = value;
-            }
-        }
-
-        /// <summary>
-        ///  This method adds the Parent Hierarchy to arraylist and returns that arraylist to the
-        ///  Base ContextMenu provider. This way the ToolStripItem can show the right parents in
-        ///  the contextMenu.
-        /// </summary>
-        internal ArrayList AddParentTree()
-        {
-            ArrayList parentControls = new ArrayList();
-            if (!TryGetService(out IDesignerHost designerHost))
-            {
-                return parentControls;
-            }
-
-            IComponent root = designerHost.RootComponent;
-            Component startComp = ToolStripItem;
-            if (startComp == null || root == null)
-            {
-                return parentControls;
-            }
-
-            while (startComp != root)
-            {
-                if (startComp is ToolStripItem)
-                {
-                    ToolStripItem item = startComp as ToolStripItem;
-                    if (item.IsOnDropDown)
-                    {
-                        if (item.IsOnOverflow)
-                        {
-                            parentControls.Add(item.Owner);
-                            startComp = item.Owner;
-                        }
-                        else
-                        {
-                            if (item.Owner is ToolStripDropDown parentDropDown)
-                            {
-                                ToolStripItem ownerItem = parentDropDown.OwnerItem;
-                                if (ownerItem != null)
-                                {
-                                    parentControls.Add(ownerItem);
-                                    startComp = ownerItem;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (item.Owner.Site != null)
-                        {
-                            parentControls.Add(item.Owner);
-                        }
-
-                        startComp = item.Owner;
-                    }
-                }
-                else if (startComp is Control)
-                {
-                    Control selectedControl = startComp as Control;
-                    Control parentControl = selectedControl.Parent;
-                    if (parentControl.Site != null)
-                    {
-                        parentControls.Add(parentControl);
-                    }
-
-                    startComp = parentControl;
-                }
-            }
-
-            return parentControls;
-        }
-
-        /// <summary>
-        ///  Creates the InSitu Edit Node (which is called the TemplateNode).
-        /// </summary>
-        private void CreateDummyNode()
-        {
-            _editorNode = new ToolStripTemplateNode(ToolStripItem, ToolStripItem.Text, ToolStripItem.Image);
-        }
-
-        /// <summary>
-        ///  This is called by the TemplateNode to Commit the Edit. This Function Simply changes the "Text and Image" property of the  current ToolStripItem.
-        /// </summary>
-        // Standard 'catch all - rethrow critical' exception pattern
-        internal virtual void CommitEdit(Type type, string text, bool commit, bool enterKeyPressed, bool tabKeyPressed)
-        {
-            ToolStripItem newItem = null;
-            SelectionManager selectionManager = GetService<SelectionManager>();
-            BehaviorService behaviorService = GetService<BehaviorService>();
-
-            ToolStrip immediateParent = ImmediateParent as ToolStrip;
-            immediateParent.SuspendLayout();
-            HideDummyNode();
-
-            IDesignerHost designerHost = GetService<IDesignerHost>();
-            ToolStripDesigner designer = (ToolStripDesigner)designerHost.GetDesigner(ToolStripItem.Owner);
-            designer?.EditManager?.ActivateEditor(null, false);
-
-            // Cannot Add ToolStripSeparator to MenuStrip
-            if (immediateParent is MenuStrip
-                && type == typeof(ToolStripSeparator)
-                && TryGetService(out IUIService uiService))
-            {
-                uiService.ShowError(SR.ToolStripSeparatorError);
-                commit = false;
-
-                // Select the MenuStrip
-                _selectionService?.SetSelectedComponents(new object[] { immediateParent });
-            }
-
-            if (commit)
-            {
-                if (dummyItemAdded)
-                {
-                    try
-                    {
-                        RemoveItem();
-                        newItem = designer.AddNewItem(type, text, enterKeyPressed, false /* Don't select the templateNode but select the newly added item */);
-                    }
-                    finally
-                    {
-                        if (designer.NewItemTransaction != null)
-                        {
-                            designer.NewItemTransaction.Commit();
-                            designer.NewItemTransaction = null;
-                        }
-                    }
-                }
-                else
-                {
-                    //create our transaction
-                    DesignerTransaction designerTransaction = designerHost.CreateTransaction(SR.ToolStripItemPropertyChangeTransaction);
-                    try
-                    {
-                        //Change the Text...
-                        PropertyDescriptor textProp = TypeDescriptor.GetProperties(ToolStripItem)["Text"];
-                        string oldValue = (string)textProp.GetValue(ToolStripItem);
-                        if (textProp != null && text != oldValue)
-                        {
-                            textProp.SetValue(ToolStripItem, text);
-                        }
-
-                        if (enterKeyPressed && _selectionService != null)
-                        {
-                            SelectNextItem(_selectionService, enterKeyPressed, designer);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        if (designerTransaction != null)
-                        {
-                            designerTransaction.Cancel();
-                            designerTransaction = null;
-                        }
-
-                        selectionManager?.Refresh();
-
-                        if (ClientUtils.IsCriticalException(e))
-                        {
-                            throw;
-                        }
-                    }
-                    finally
-                    {
-                        designerTransaction?.Commit();
-                    }
-                }
-
-                //Reset the DummyItem flag
-                dummyItemAdded = false;
+                toolStripContextMenu.GroupOrdering.Clear();
+                toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
             }
             else
             {
-                // Refresh on SelectionManager... To Change Glyph Size.
-                if (dummyItemAdded)
-                {
-                    dummyItemAdded = false;
-                    RemoveItem();
+                toolStripContextMenu.GroupOrdering.Clear();
+                toolStripContextMenu.GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
+                toolStripContextMenu.Text = "CustomContextMenu";
+                toolStripItemCustomMenuItemCollection ??= new ToolStripItemCustomMenuItemCollection(Component.Site, ToolStripItem);
 
-                    if (designer.NewItemTransaction != null)
+                foreach (ToolStripItem item in toolStripItemCustomMenuItemCollection)
+                {
+                    toolStripContextMenu.Groups[StandardGroups.Custom].Items.Add(item);
+                }
+            }
+
+            // Refresh the list on every show..
+            toolStripItemCustomMenuItemCollection?.RefreshItems();
+
+            toolStripContextMenu.Populated = false;
+            return toolStripContextMenu;
+        }
+    }
+
+    /// <summary>
+    ///  ToolStripEditorManager used this internal property to  Activate the editor.
+    /// </summary>
+    internal virtual ToolStripTemplateNode Editor
+    {
+        get => _editorNode;
+        set => _editorNode = value;
+    }
+
+    // ToolStripItems if Inherited ACT as Readonly.
+    protected override InheritanceAttribute InheritanceAttribute
+    {
+        get
+        {
+            if ((base.InheritanceAttribute == InheritanceAttribute.Inherited))
+            {
+                return InheritanceAttribute.InheritedReadOnly;
+            }
+
+            return base.InheritanceAttribute;
+        }
+    }
+
+    /// <summary>
+    ///  ToolStripEditorManager used this internal property to  set the designer's IsEditorActive to notify  if this item has entered or exited the InSitu Edit Mode.
+    /// </summary>
+    internal bool IsEditorActive
+    {
+        get => isEditorActive;
+        set => isEditorActive = value;
+    }
+
+    /// <summary>
+    ///  When the ToolStripItem is created we don't want InitializeNewComponent to set the "text" we do it ourselves from the Text the User has provided in the InSitu Edit Mode. Reason being the item and the Parent unnecessarily Layout and cause flicker.
+    /// </summary>
+    internal bool InternalCreate
+    {
+        get => internalCreate;
+        set => internalCreate = value;
+    }
+
+    protected IComponent ImmediateParent
+    {
+        get
+        {
+            if (ToolStripItem is not null)
+            {
+                ToolStrip parent = ToolStripItem.GetCurrentParent();
+                return parent ?? ToolStripItem.Owner;
+            }
+
+            return null;
+        }
+    }
+
+    private ToolStripItemOverflow Overflow
+    {
+        get => (ToolStripItemOverflow)ShadowProperties[nameof(Overflow)];
+        set
+        {
+            // first Hide the Overflow..
+            if (ToolStripItem.IsOnOverflow)
+            {
+                ToolStrip strip = ToolStripItem.Owner;
+                if (strip.OverflowButton.DropDown.Visible)
+                {
+                    strip.OverflowButton.HideDropDown();
+                }
+            }
+
+            if (ToolStripItem is ToolStripDropDownItem)
+            {
+                ToolStripDropDownItem item = ToolStripItem as ToolStripDropDownItem;
+                item.HideDropDown();
+            }
+
+            // Set the value on actual item
+            if (value != ToolStripItem.Overflow)
+            {
+                ToolStripItem.Overflow = value;
+                ShadowProperties[nameof(Overflow)] = value;
+            }
+
+            // Since this causes the whole layout to change call SyncSelection to reset the glyphs
+            GetService<BehaviorService>()?.SyncSelection();
+        }
+    }
+
+    protected override IComponent ParentComponent
+    {
+        get
+        {
+            if (ToolStripItem is not null)
+            {
+                if (ToolStripItem.IsOnDropDown && !ToolStripItem.IsOnOverflow)
+                {
+                    if (ImmediateParent is ToolStripDropDown parentDropDown)
                     {
-                        designer.NewItemTransaction.Cancel();
+                        if (parentDropDown.IsAutoGenerated)
+                        {
+                            return parentDropDown.OwnerItem;
+                        }
+                        else
+                        {
+                            return parentDropDown;
+                        }
+                    }
+                }
+
+                return GetMainToolStrip();
+            }
+
+            return null;
+        }
+    }
+
+    /// <summary>
+    ///  Easy method for getting to the ToolStripItem
+    /// </summary>
+    public ToolStripItem ToolStripItem
+    {
+        get => (ToolStripItem)Component;
+    }
+
+    protected bool Visible
+    {
+        get => (bool)ShadowProperties[nameof(Visible)];
+        set
+        {
+            ShadowProperties[nameof(Visible)] = value;
+            currentVisible = value;
+        }
+    }
+
+    /// <summary>
+    ///  This method adds the Parent Hierarchy to a list and returns that list to the
+    ///  Base ContextMenu provider. This way the ToolStripItem can show the right parents in
+    ///  the contextMenu.
+    /// </summary>
+    internal List<Component> AddParentTree()
+    {
+        List<Component> parentControls = new();
+        if (!TryGetService(out IDesignerHost designerHost))
+        {
+            return parentControls;
+        }
+
+        IComponent root = designerHost.RootComponent;
+        Component startComp = ToolStripItem;
+        if (startComp is null || root is null)
+        {
+            return parentControls;
+        }
+
+        while (startComp != root)
+        {
+            if (startComp is ToolStripItem)
+            {
+                ToolStripItem item = startComp as ToolStripItem;
+                if (item.IsOnDropDown)
+                {
+                    if (item.IsOnOverflow)
+                    {
+                        parentControls.Add(item.Owner);
+                        startComp = item.Owner;
+                    }
+                    else
+                    {
+                        if (item.Owner is ToolStripDropDown parentDropDown)
+                        {
+                            ToolStripItem ownerItem = parentDropDown.OwnerItem;
+                            if (ownerItem is not null)
+                            {
+                                parentControls.Add(ownerItem);
+                                startComp = ownerItem;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (item.Owner.Site is not null)
+                    {
+                        parentControls.Add(item.Owner);
+                    }
+
+                    startComp = item.Owner;
+                }
+            }
+            else if (startComp is Control)
+            {
+                Control selectedControl = startComp as Control;
+                Control parentControl = selectedControl.Parent;
+                if (parentControl.Site is not null)
+                {
+                    parentControls.Add(parentControl);
+                }
+
+                startComp = parentControl;
+            }
+        }
+
+        return parentControls;
+    }
+
+    /// <summary>
+    ///  Creates the InSitu Edit Node (which is called the TemplateNode).
+    /// </summary>
+    private void CreateDummyNode()
+    {
+        _editorNode = new ToolStripTemplateNode(ToolStripItem, ToolStripItem.Text, ToolStripItem.Image);
+    }
+
+    /// <summary>
+    ///  This is called by the TemplateNode to Commit the Edit. This Function Simply changes the "Text and Image" property of the  current ToolStripItem.
+    /// </summary>
+    // Standard 'catch all - rethrow critical' exception pattern
+    internal virtual void CommitEdit(Type type, string text, bool commit, bool enterKeyPressed, bool tabKeyPressed)
+    {
+        ToolStripItem newItem = null;
+        SelectionManager selectionManager = GetService<SelectionManager>();
+        BehaviorService behaviorService = GetService<BehaviorService>();
+
+        ToolStrip immediateParent = ImmediateParent as ToolStrip;
+        immediateParent.SuspendLayout();
+        HideDummyNode();
+
+        IDesignerHost designerHost = GetService<IDesignerHost>();
+        ToolStripDesigner designer = (ToolStripDesigner)designerHost.GetDesigner(ToolStripItem.Owner);
+        designer?.EditManager?.ActivateEditor(null, false);
+
+        // Cannot Add ToolStripSeparator to MenuStrip
+        if (immediateParent is MenuStrip
+            && type == typeof(ToolStripSeparator)
+            && TryGetService(out IUIService uiService))
+        {
+            uiService.ShowError(SR.ToolStripSeparatorError);
+            commit = false;
+
+            // Select the MenuStrip
+            _selectionService?.SetSelectedComponents(new object[] { immediateParent });
+        }
+
+        if (commit)
+        {
+            if (dummyItemAdded)
+            {
+                try
+                {
+                    RemoveItem();
+                    newItem = designer.AddNewItem(type, text, enterKeyPressed, false /* Don't select the templateNode but select the newly added item */);
+                }
+                finally
+                {
+                    if (designer.NewItemTransaction is not null)
+                    {
+                        designer.NewItemTransaction.Commit();
                         designer.NewItemTransaction = null;
                     }
                 }
             }
-
-            immediateParent.ResumeLayout();
-            if (newItem != null && !newItem.IsOnDropDown)
+            else
             {
-                if (newItem is ToolStripDropDownItem dropDown)
+                //create our transaction
+                DesignerTransaction designerTransaction = designerHost.CreateTransaction(SR.ToolStripItemPropertyChangeTransaction);
+                try
                 {
-                    ToolStripItemDesigner itemDesigner = (ToolStripItemDesigner)designerHost.GetDesigner(newItem);
-                    Rectangle itemBounds = itemDesigner.GetGlyphBounds();
-                    if (designerHost.RootComponent is Control parent)
+                    //Change the Text...
+                    PropertyDescriptor textProp = TypeDescriptor.GetProperties(ToolStripItem)["Text"];
+                    string oldValue = (string)textProp.GetValue(ToolStripItem);
+                    if (textProp is not null && text != oldValue)
                     {
-                        if (behaviorService != null)
+                        textProp.SetValue(ToolStripItem, text);
+                    }
+
+                    if (enterKeyPressed && _selectionService is not null)
+                    {
+                        SelectNextItem(_selectionService, enterKeyPressed, designer);
+                    }
+                }
+                catch (Exception e)
+                {
+                    if (designerTransaction is not null)
+                    {
+                        designerTransaction.Cancel();
+                        designerTransaction = null;
+                    }
+
+                    selectionManager?.Refresh();
+
+                    if (e.IsCriticalException())
+                    {
+                        throw;
+                    }
+                }
+                finally
+                {
+                    designerTransaction?.Commit();
+                }
+            }
+
+            //Reset the DummyItem flag
+            dummyItemAdded = false;
+        }
+        else
+        {
+            // Refresh on SelectionManager... To Change Glyph Size.
+            if (dummyItemAdded)
+            {
+                dummyItemAdded = false;
+                RemoveItem();
+
+                if (designer.NewItemTransaction is not null)
+                {
+                    designer.NewItemTransaction.Cancel();
+                    designer.NewItemTransaction = null;
+                }
+            }
+        }
+
+        immediateParent.ResumeLayout();
+        if (newItem is not null && !newItem.IsOnDropDown)
+        {
+            if (newItem is ToolStripDropDownItem dropDown)
+            {
+                ToolStripItemDesigner itemDesigner = (ToolStripItemDesigner)designerHost.GetDesigner(newItem);
+                Rectangle itemBounds = itemDesigner.GetGlyphBounds();
+                if (designerHost.RootComponent is Control parent)
+                {
+                    if (behaviorService is not null)
+                    {
+                        Rectangle parentBounds = behaviorService.ControlRectInAdornerWindow(parent);
+                        if (!ToolStripDesigner.IsGlyphTotallyVisible(itemBounds, parentBounds))
                         {
-                            Rectangle parentBounds = behaviorService.ControlRectInAdornerWindow(parent);
-                            if (!ToolStripDesigner.IsGlyphTotallyVisible(itemBounds, parentBounds))
-                            {
-                                dropDown.HideDropDown();
-                            }
+                            dropDown.HideDropDown();
                         }
                     }
                 }
             }
-
-            // used the SelectionManager to Add the glyphs.
-            selectionManager?.Refresh();
         }
 
-        /// <summary>
-        ///  Disposes of this designer.
-        /// </summary>
-        protected override void Dispose(bool disposing)
+        // used the SelectionManager to Add the glyphs.
+        selectionManager?.Refresh();
+    }
+
+    /// <summary>
+    ///  Disposes of this designer.
+    /// </summary>
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            if (disposing)
+            if (_editorNode is not null)
             {
-                if (_editorNode != null)
-                {
-                    _editorNode.CloseEditor();
-                    _editorNode = null;
-                }
-
-                if (ToolStripItem != null)
-                {
-                    ToolStripItem.Paint -= new PaintEventHandler(OnItemPaint);
-                }
-
-                // Now, unhook the component rename event
-                if (TryGetService(out IComponentChangeService cs))
-                {
-                    cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
-                }
-
-                if (_selectionService != null)
-                {
-                    _selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
-                }
-
-                // Clean up the ToolStripItem Glyph if Any
-                if (bodyGlyph != null
-                    && TryGetService(out ToolStripAdornerWindowService toolStripAdornerWindowService)
-                    && toolStripAdornerWindowService.DropDownAdorner.Glyphs.Contains(bodyGlyph))
-                {
-                    toolStripAdornerWindowService.DropDownAdorner.Glyphs.Remove(bodyGlyph);
-                }
-
-                // Remove the Collection
-                if (toolStripItemCustomMenuItemCollection != null && toolStripItemCustomMenuItemCollection.Count > 0)
-                {
-                    foreach (ToolStripItem item in toolStripItemCustomMenuItemCollection)
-                    {
-                        item.Dispose();
-                    }
-
-                    toolStripItemCustomMenuItemCollection.Clear();
-                }
-
-                toolStripItemCustomMenuItemCollection = null;
+                _editorNode.CloseEditor();
+                _editorNode = null;
             }
 
-            base.Dispose(disposing);
+            if (ToolStripItem is not null)
+            {
+                ToolStripItem.Paint -= new PaintEventHandler(OnItemPaint);
+            }
+
+            // Now, unhook the component rename event
+            if (TryGetService(out IComponentChangeService cs))
+            {
+                cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
+            }
+
+            if (_selectionService is not null)
+            {
+                _selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
+            }
+
+            // Clean up the ToolStripItem Glyph if Any
+            if (bodyGlyph is not null && TryGetService(out ToolStripAdornerWindowService toolStripAdornerWindowService)
+                && toolStripAdornerWindowService.DropDownAdorner.Glyphs.Contains(bodyGlyph))
+            {
+                toolStripAdornerWindowService.DropDownAdorner.Glyphs.Remove(bodyGlyph);
+            }
+
+            // Remove the Collection
+            if (toolStripItemCustomMenuItemCollection is not null && toolStripItemCustomMenuItemCollection.Count > 0)
+            {
+                foreach (ToolStripItem item in toolStripItemCustomMenuItemCollection)
+                {
+                    item.Dispose();
+                }
+
+                toolStripItemCustomMenuItemCollection.Clear();
+            }
+
+            toolStripItemCustomMenuItemCollection = null;
         }
 
-        /// <summary>
-        ///  Returns the owner of the current ToolStripItem.
-        /// </summary>
-        protected virtual Component GetOwnerForActionList() => (ToolStripItem.Placement == ToolStripItemPlacement.Main) ? ToolStripItem.GetCurrentParent() : ToolStripItem.Owner;
+        base.Dispose(disposing);
+    }
 
-        internal virtual ToolStrip GetMainToolStrip() => ToolStripItem.Owner;
+    /// <summary>
+    ///  Returns the owner of the current ToolStripItem.
+    /// </summary>
+    protected virtual Component GetOwnerForActionList() => (ToolStripItem.Placement == ToolStripItemPlacement.Main) ? ToolStripItem.GetCurrentParent() : ToolStripItem.Owner;
 
-        public Rectangle GetGlyphBounds()
+    internal virtual ToolStrip GetMainToolStrip() => ToolStripItem.Owner;
+
+    public Rectangle GetGlyphBounds()
+    {
+        Rectangle r = Rectangle.Empty;
+        if (TryGetService(out BehaviorService b) && ImmediateParent is not null)
         {
-            Rectangle r = Rectangle.Empty;
-            if (TryGetService(out BehaviorService b) && ImmediateParent != null)
-            {
-                Point loc = b.ControlToAdornerWindow((Control)ImmediateParent);
-                r = ToolStripItem.Bounds;
-                r.Offset(loc);
-            }
-
-            return r;
+            Point loc = b.ControlToAdornerWindow((Control)ImmediateParent);
+            r = ToolStripItem.Bounds;
+            r.Offset(loc);
         }
 
-        // Need to Fire ComponentChanging on all the DropDownItems. Please see "MorphToolStripItem" function for more details.
-        private void FireComponentChanging(ToolStripDropDownItem parent)
+        return r;
+    }
+
+    // Need to Fire ComponentChanging on all the DropDownItems. Please see "MorphToolStripItem" function for more details.
+    private void FireComponentChanging(ToolStripDropDownItem parent)
+    {
+        if (parent is null)
         {
-            if (parent == null)
-            {
-                return;
-            }
-
-            if (TryGetService(out IComponentChangeService changeService) && parent.Site != null)
-            {
-                changeService.OnComponentChanging(parent, TypeDescriptor.GetProperties(parent)["DropDownItems"]);
-            }
-
-            foreach (ToolStripItem item in parent.DropDownItems)
-            {
-                // Don't Serialize the DesignerToolStripControlHost...
-                if (item is ToolStripDropDownItem dropDownItem && dropDownItem.DropDownItems.Count > 1 /*including TN*/)
-                {
-                    FireComponentChanging(dropDownItem);
-                }
-            }
+            return;
         }
 
-        private void FireComponentChanged(ToolStripDropDownItem parent)
+        if (TryGetService(out IComponentChangeService changeService) && parent.Site is not null)
         {
-            if (parent == null)
-            {
-                return;
-            }
-
-            if (TryGetService(out IComponentChangeService changeService) && parent.Site != null)
-            {
-                changeService.OnComponentChanged(parent, TypeDescriptor.GetProperties(parent)["DropDownItems"]);
-            }
-
-            foreach (ToolStripItem item in parent.DropDownItems)
-            {
-                // Don't Serialize the DesignerToolStripControlHost...
-                if (item is ToolStripDropDownItem dropDownItem && dropDownItem.DropDownItems.Count > 1 /*including TN*/)
-                {
-                    FireComponentChanged(dropDownItem);
-                }
-            }
+            changeService.OnComponentChanging(parent, TypeDescriptor.GetProperties(parent)["DropDownItems"]);
         }
 
-        public void GetGlyphs(ref GlyphCollection glyphs, Behavior.Behavior standardBehavior)
+        foreach (ToolStripItem item in parent.DropDownItems)
         {
-            if (ImmediateParent == null)
+            // Don't Serialize the DesignerToolStripControlHost...
+            if (item is ToolStripDropDownItem dropDownItem && dropDownItem.DropDownItems.Count > 1 /*including TN*/)
             {
-                return;
+                FireComponentChanging(dropDownItem);
             }
+        }
+    }
 
-            Rectangle r = GetGlyphBounds();
-            ToolStripDesignerUtils.GetAdjustedBounds(ToolStripItem, ref r);
-            Rectangle parentBounds = GetService<BehaviorService>().ControlRectInAdornerWindow((Control)ImmediateParent);
-            if (parentBounds.Contains(r.Left, r.Top))
+    private void FireComponentChanged(ToolStripDropDownItem parent)
+    {
+        if (parent is null)
+        {
+            return;
+        }
+
+        if (TryGetService(out IComponentChangeService changeService) && parent.Site is not null)
+        {
+            changeService.OnComponentChanged(parent, TypeDescriptor.GetProperties(parent)["DropDownItems"]);
+        }
+
+        foreach (ToolStripItem item in parent.DropDownItems)
+        {
+            // Don't Serialize the DesignerToolStripControlHost...
+            if (item is ToolStripDropDownItem dropDownItem && dropDownItem.DropDownItems.Count > 1 /*including TN*/)
             {
-                // Don't paint the glyphs if we are opening a DropDown...
-                if (ToolStripItem.IsOnDropDown)
-                {
-                    ToolStrip parent = ToolStripItem.GetCurrentParent();
-                    parent ??= ToolStripItem.Owner;
+                FireComponentChanged(dropDownItem);
+            }
+        }
+    }
 
-                    if (parent != null && parent.Visible)
-                    {
-                        glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Top, standardBehavior, true));
-                        glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Bottom, standardBehavior, true));
-                        glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Left, standardBehavior, true));
-                        glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Right, standardBehavior, true));
-                    }
-                }
-                else
+    public void GetGlyphs(ref GlyphCollection glyphs, Behavior.Behavior standardBehavior)
+    {
+        if (ImmediateParent is null)
+        {
+            return;
+        }
+
+        Rectangle r = GetGlyphBounds();
+        ToolStripDesignerUtils.GetAdjustedBounds(ToolStripItem, ref r);
+        Rectangle parentBounds = GetService<BehaviorService>().ControlRectInAdornerWindow((Control)ImmediateParent);
+        if (parentBounds.Contains(r.Left, r.Top))
+        {
+            // Don't paint the glyphs if we are opening a DropDown...
+            if (ToolStripItem.IsOnDropDown)
+            {
+                ToolStrip parent = ToolStripItem.GetCurrentParent();
+                parent ??= ToolStripItem.Owner;
+
+                if (parent is not null && parent.Visible)
                 {
                     glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Top, standardBehavior, true));
                     glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Bottom, standardBehavior, true));
@@ -605,726 +594,736 @@ namespace System.Windows.Forms.Design
                     glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Right, standardBehavior, true));
                 }
             }
+            else
+            {
+                glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Top, standardBehavior, true));
+                glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Bottom, standardBehavior, true));
+                glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Left, standardBehavior, true));
+                glyphs.Add(new MiniLockedBorderGlyph(r, SelectionBorderGlyphType.Right, standardBehavior, true));
+            }
+        }
+    }
+
+    /// <summary>
+    ///  Returns the root dropdown in the chain.
+    /// </summary>
+    internal static ToolStripDropDown GetFirstDropDown(ToolStripItem currentItem)
+    {
+        if (currentItem.Owner is ToolStripDropDown)
+        {
+            ToolStripDropDown topmost = currentItem.Owner as ToolStripDropDown;
+            // walk back up the chain of windows to get the topmost
+            while (topmost.OwnerItem is not null && (topmost.OwnerItem.Owner is ToolStripDropDown))
+            {
+                topmost = topmost.OwnerItem.Owner as ToolStripDropDown;
+            }
+
+            return topmost;
         }
 
-        /// <summary>
-        ///  Returns the root dropdown in the chain.
-        /// </summary>
-        internal static ToolStripDropDown GetFirstDropDown(ToolStripItem currentItem)
+        return null;
+    }
+
+    /// <summary>
+    ///  This helper function resets the AutoSize property so that the item SNAPS back to its "preferredSize".
+    /// </summary>
+    private void HideDummyNode()
+    {
+        ToolStripItem.AutoSize = AutoSize;
+        if (_editorNode is not null)
         {
-            if (currentItem.Owner is ToolStripDropDown)
+            _editorNode.CloseEditor();
+            _editorNode = null;
+        }
+    }
+
+    /// <summary>
+    ///  Get the designer set up to run.
+    /// </summary>
+    public override void Initialize(IComponent component)
+    {
+        base.Initialize(component);
+
+        // Shadow AutoSize
+        AutoSize = ToolStripItem.AutoSize;
+        Visible = true;
+        currentVisible = Visible;
+
+        // Shadow the AccessibleName as we are going to change it at DesignTime
+        AccessibleName = ToolStripItem.AccessibleName;
+        ToolStripItem.Paint += new PaintEventHandler(OnItemPaint);
+
+        // Change the AccessibleName to point to ToolStirpItem.Name
+        ToolStripItem.AccessibleName = ToolStripItem.Name;
+
+        // Now, hook the component rename event so we can update the AccessibleName
+        if (TryGetService(out IComponentChangeService cs))
+        {
+            cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
+        }
+
+        if (TryGetService(out _selectionService))
+        {
+            _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+        }
+    }
+
+    /// <summary>
+    ///  Overriden to always Initialise the ToolStripItem with Text property.
+    /// </summary>
+    public override void InitializeNewComponent(IDictionary defaultValues)
+    {
+        //Set the Text only if the item is not created internally (via InSitu Edit)
+        if (!internalCreate)
+        {
+            ISite site = Component.Site;
+            if (site is not null && Component is ToolStripDropDownItem)
             {
-                ToolStripDropDown topmost = currentItem.Owner as ToolStripDropDown;
-                // walk back up the chain of windows to get the topmost
-                while (topmost.OwnerItem != null && (topmost.OwnerItem.Owner is ToolStripDropDown))
+                defaultValues ??= new Hashtable();
+
+                defaultValues["Text"] = site.Name;
+                IComponent component = Component;
+                PropertyDescriptor pd = TypeDescriptor.GetProperties(ToolStripItem)["Text"];
+
+                if (pd is not null && pd.PropertyType.Equals(typeof(string)))
                 {
-                    topmost = topmost.OwnerItem.Owner as ToolStripDropDown;
-                }
-
-                return topmost;
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        ///  This helper function resets the AutoSize property so that the item SNAPS back to its "preferredSize".
-        /// </summary>
-        private void HideDummyNode()
-        {
-            ToolStripItem.AutoSize = AutoSize;
-            if (_editorNode != null)
-            {
-                _editorNode.CloseEditor();
-                _editorNode = null;
-            }
-        }
-
-        /// <summary>
-        ///  Get the designer set up to run.
-        /// </summary>
-        public override void Initialize(IComponent component)
-        {
-            base.Initialize(component);
-
-            // Shadow AutoSize
-            AutoSize = ToolStripItem.AutoSize;
-            Visible = true;
-            currentVisible = Visible;
-
-            // Shadow the AccessibleName as we are going to change it at DesignTime
-            AccessibleName = ToolStripItem.AccessibleName;
-            ToolStripItem.Paint += new PaintEventHandler(OnItemPaint);
-
-            // Change the AccessibleName to point to ToolStirpItem.Name
-            ToolStripItem.AccessibleName = ToolStripItem.Name;
-
-            // Now, hook the component rename event so we can update the AccessibleName
-            if (TryGetService(out IComponentChangeService cs))
-            {
-                cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
-            }
-
-            if (TryGetService(out _selectionService))
-            {
-                _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
-            }
-        }
-
-        /// <summary>
-        ///  Overriden to always Initialise the ToolStripItem with Text property.
-        /// </summary>
-        public override void InitializeNewComponent(IDictionary defaultValues)
-        {
-            //Set the Text only if the item is not created internally (via InSitu Edit)
-            if (!internalCreate)
-            {
-                ISite site = Component.Site;
-                if (site != null && Component is ToolStripDropDownItem)
-                {
-                    defaultValues ??= new Hashtable();
-
-                    defaultValues["Text"] = site.Name;
-                    IComponent component = Component;
-                    PropertyDescriptor pd = TypeDescriptor.GetProperties(ToolStripItem)["Text"];
-
-                    if (pd != null && pd.PropertyType.Equals(typeof(string)))
+                    string current = (string)pd.GetValue(component);
+                    if (current is null || current.Length == 0)
                     {
-                        string current = (string)pd.GetValue(component);
-                        if (current is null || current.Length == 0)
-                        {
-                            pd.SetValue(component, site.Name);
-                        }
+                        pd.SetValue(component, site.Name);
                     }
                 }
             }
+        }
 
-            base.InitializeNewComponent(defaultValues);
-            // ComboBoxes and TextBoxes shouldn't have Texts... In TextBoxBaseDesigner we do similar thing where we call the base (which sets the text) and then reset it back
-            if (Component is ToolStripTextBox || Component is ToolStripComboBox)
+        base.InitializeNewComponent(defaultValues);
+        // ComboBoxes and TextBoxes shouldn't have Texts... In TextBoxBaseDesigner we do similar thing where we call the base (which sets the text) and then reset it back
+        if (Component is ToolStripTextBox || Component is ToolStripComboBox)
+        {
+            PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
+            if (textProp is not null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
             {
-                PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
-                if (textProp != null && textProp.PropertyType == typeof(string) && !textProp.IsReadOnly && textProp.IsBrowsable)
+                textProp.SetValue(Component, string.Empty);
+            }
+        }
+    }
+
+    /// <summary>
+    ///  This will morph the current item to the provided type "t" of the item...
+    /// </summary>
+    internal virtual ToolStripItem MorphCurrentItem(Type t)
+    {
+        ToolStripItem newItem = null;
+        if (!TryGetService(out IDesignerHost host))
+        {
+            Debug.Fail("Couldn't get designer host!");
+            return newItem;
+        }
+
+        // create our transaction
+        DesignerTransaction designerTransaction = host.CreateTransaction(SR.ToolStripMorphingItemTransaction);
+        ToolStrip parent = (ToolStrip)ImmediateParent;
+        // Special case overflow...
+        if (parent is ToolStripOverflow)
+        {
+            parent = ToolStripItem.Owner;
+        }
+
+        ToolStripMenuItemDesigner ownerItemDesigner = null;
+
+        int dummyIndex = parent.Items.IndexOf(ToolStripItem);
+        string name = ToolStripItem.Name;
+        ToolStripItem ownerItem = null;
+
+        // Get the main ToolStrip to Set the Glyph for the new Item once it is MORPHED.
+        if (ToolStripItem.IsOnDropDown)
+        {
+            if (ImmediateParent is ToolStripDropDown parentDropDown)
+            {
+                ownerItem = parentDropDown.OwnerItem;
+                if (ownerItem is not null)
                 {
-                    textProp.SetValue(Component, "");
+                    ownerItemDesigner = (ToolStripMenuItemDesigner)host.GetDesigner(ownerItem);
                 }
             }
         }
 
-        /// <summary>
-        ///  This will morph the current item to the provided type "t" of the item...
-        /// </summary>
-        internal virtual ToolStripItem MorphCurrentItem(Type t)
+        try
         {
-            ToolStripItem newItem = null;
-            if (!TryGetService(out IDesignerHost host))
+            // turn off Adding and Added Transactions..
+            ToolStripDesigner.s_autoAddNewItems = false;
+            SerializationStore serializedData = null;
+
+            if (!TryGetService(out ComponentSerializationService serializationService))
             {
-                Debug.Fail("Couldn't get designer host!");
                 return newItem;
             }
 
-            // create our transaction
-            DesignerTransaction designerTransaction = host.CreateTransaction(SR.ToolStripMorphingItemTransaction);
+            serializedData = serializationService.CreateStore();
+            serializationService.Serialize(serializedData, Component); //notice the use of component... since we want to preserve the type.
+
+            //Serialize all the DropDownItems for this Item....
+            SerializationStore _serializedDataForDropDownItems = null;
+            ToolStripDropDownItem dropDownItem = ToolStripItem as ToolStripDropDownItem;
+            if (dropDownItem is not null && typeof(ToolStripDropDownItem).IsAssignableFrom(t))
+            {
+                // Hide the DropDown.
+                dropDownItem.HideDropDown();
+                _serializedDataForDropDownItems = serializationService.CreateStore();
+                SerializeDropDownItems(dropDownItem, ref _serializedDataForDropDownItems, serializationService);
+                //close the SerializationStore to Serialize Items..
+                _serializedDataForDropDownItems.Close();
+            }
+
+            // close the SerializationStore to Serialize the ToolStripItem
+            serializedData.Close();
+
+            // Remove the currentItem that is getting morphed..
+            if (TryGetService(out IComponentChangeService changeService))
+            {
+                if (parent.Site is not null)
+                {
+                    changeService.OnComponentChanging(parent, TypeDescriptor.GetProperties(parent)["Items"]);
+                }
+                else if (ownerItem is not null)
+                {
+                    changeService.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
+                    changeService.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
+                }
+            }
+
+            FireComponentChanging(dropDownItem);
+            parent.Items.Remove(ToolStripItem);
+            host.DestroyComponent(ToolStripItem);
+            //Create our new Item
+            ToolStripItem component = (ToolStripItem)host.CreateComponent(t, name);
+            //Since destroying the original item took away its DropDownItems. We need to Deserialize the items again...
+            if (component is ToolStripDropDownItem)
+            {
+                if (_serializedDataForDropDownItems is not null)
+                {
+                    serializationService.Deserialize(_serializedDataForDropDownItems);
+                }
+            }
+
+            //Now deserialize the newItem to morph to the old item...
+            serializationService.DeserializeTo(serializedData, host.Container, false, true);
+            // Add the new Item...
+            newItem = (ToolStripItem)host.Container.Components[name];
+            //Set the Image property and DisplayStyle...
+            if (newItem.Image is null && newItem is ToolStripButton)
+            {
+                Image image = null;
+                try
+                {
+                    image = new Icon(typeof(ToolStripButton), "blank").ToBitmap();
+                }
+                catch (Exception ex) when (!ex.IsCriticalException())
+                {
+                }
+
+                PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(newItem)["Image"];
+                Debug.Assert(imageProperty is not null, "Could not find 'Image' property in ToolStripItem.");
+                if (imageProperty is not null && image is not null)
+                {
+                    imageProperty.SetValue(newItem, image);
+                }
+
+                PropertyDescriptor dispProperty = TypeDescriptor.GetProperties(newItem)["DisplayStyle"];
+                Debug.Assert(dispProperty is not null, "Could not find 'DisplayStyle' property in ToolStripItem.");
+                dispProperty?.SetValue(newItem, ToolStripItemDisplayStyle.Image);
+
+                PropertyDescriptor imageTransProperty = TypeDescriptor.GetProperties(newItem)["ImageTransparentColor"];
+                Debug.Assert(imageTransProperty is not null, "Could not find 'DisplayStyle' property in ToolStripItem.");
+                imageTransProperty?.SetValue(newItem, Color.Magenta);
+            }
+
+            parent.Items.Insert(dummyIndex, newItem);
+            if (changeService is not null)
+            {
+                if (parent.Site is not null)
+                {
+                    changeService.OnComponentChanged(parent, TypeDescriptor.GetProperties(parent)["Items"]);
+                }
+                else if (ownerItem is not null)
+                {
+                    changeService.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
+                    changeService.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
+                }
+            }
+
+            FireComponentChanged(dropDownItem);
+            // Add the Glyph for the DropDown ... We are responsible for the Glyph Addition since BodyGlyphs for DropDownItems are added by us.
+            if (newItem.IsOnDropDown && ownerItemDesigner is not null)
+            {
+                ownerItemDesigner.RemoveItemBodyGlyph(newItem);
+                ownerItemDesigner.AddItemBodyGlyph(newItem);
+            }
+
+            // re start the ComponentAdding/Added events
+            ToolStripDesigner.s_autoAddNewItems = true;
+            //Invalidate the AdornerWindow to refresh selectionglyphs.
+            if (newItem is not null)
+            {
+                if (newItem is ToolStripSeparator)
+                {
+                    parent.PerformLayout();
+                }
+
+                BehaviorService windowService = (BehaviorService)newItem.Site.GetService(typeof(BehaviorService));
+                windowService?.Invalidate();
+
+                // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
+                ISelectionService selSvc = (ISelectionService)newItem.Site.GetService(typeof(ISelectionService));
+                selSvc?.SetSelectedComponents(new object[] { newItem }, SelectionTypes.Replace);
+            }
+
+            return newItem;
+        }
+        catch
+        {
+            host.Container.Add(ToolStripItem);
+            parent.Items.Insert(dummyIndex, ToolStripItem);
+            if (designerTransaction is not null)
+            {
+                designerTransaction.Cancel();
+                designerTransaction = null;
+            }
+        }
+        finally
+        {
+            designerTransaction?.Commit();
+        }
+
+        return newItem;
+    }
+
+    /// <summary>
+    ///  Raised when a component's name changes.  Here we update the AccessibleName Property to match the newName.
+    /// </summary>
+    private void OnComponentRename(object sender, ComponentRenameEventArgs e)
+    {
+        if (e.Component == ToolStripItem)
+        {
+            ToolStripItem.AccessibleName = e.NewName;
+        }
+    }
+
+    /// <summary>
+    ///  This can be used for OVERFLOW !!!
+    /// </summary>
+    private void OnItemPaint(object sender, PaintEventArgs e)
+    {
+        if (ToolStripItem.GetCurrentParent() is ToolStripDropDown
+            && _selectionService is not null && !IsEditorActive
+            && ToolStripItem.Equals(_selectionService.PrimarySelection)
+            && TryGetService(out BehaviorService behaviorService))
+        {
+            Point location = behaviorService.ControlToAdornerWindow((Control)ImmediateParent);
+            Rectangle r = ToolStripItem.Bounds;
+            r.Offset(location);
+            r.Inflate(GLYPHINSET, GLYPHINSET);
+            //this will allow any Glyphs to re-paint
+            //after this control and its designer has painted
+            behaviorService.ProcessPaintMessage(r);
+        }
+    }
+
+    /// <summary>
+    ///  For ToolStripItems that are not MenuItems and are on Dropdown we need ot update Selection Rect.
+    /// </summary>
+    private void OnSelectionChanged(object sender, EventArgs e)
+    {
+        if (!(sender is ISelectionService sSvc))
+        {
+            return;
+        }
+
+        //determine if we are selected
+        ToolStripItem currentSelection = sSvc.PrimarySelection as ToolStripItem;
+        // Accessibility information
+        if (ToolStripItem.AccessibilityObject is ToolStripItem.ToolStripItemAccessibleObject acc)
+        {
+            acc.AddState(AccessibleStates.None);
+            ToolStrip tool = GetMainToolStrip();
+            if (sSvc.GetComponentSelected(ToolStripItem))
+            {
+                ToolStrip owner = ImmediateParent as ToolStrip;
+                int focusIndex = 0;
+                if (owner is not null)
+                {
+                    focusIndex = owner.Items.IndexOf(currentSelection);
+                }
+
+                acc.AddState(AccessibleStates.Selected);
+                if (tool is not null)
+                {
+                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"MSAA: SelectionAdd, tool = {tool}");
+                    PInvoke.NotifyWinEvent(
+                        (uint)AccessibleEvents.SelectionAdd,
+                        owner,
+                        (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                        focusIndex + 1);
+                }
+
+                if (currentSelection == ToolStripItem)
+                {
+                    acc.AddState(AccessibleStates.Focused);
+                    if (tool is not null)
+                    {
+                        PInvoke.NotifyWinEvent(
+                            (uint)AccessibleEvents.Focus,
+                            owner,
+                            (int)OBJECT_IDENTIFIER.OBJID_CLIENT,
+                            focusIndex + 1);
+                    }
+                }
+            }
+        }
+
+        if (currentSelection is not null && currentSelection.Equals(ToolStripItem) && !(ToolStripItem is ToolStripMenuItem))
+        {
+            if (currentSelection.IsOnDropDown)
+            {
+                // If the Item is on DropDown show its DropDown and all Parent Dropdown if not visible..
+                if (TryGetService(out IDesignerHost designerHost) && currentSelection.Owner is ToolStripDropDown parentDropDown)
+                {
+                    bool needRefresh = false;
+                    if (parentDropDown.OwnerItem is ToolStripDropDownItem parentItem)
+                    {
+                        ToolStripMenuItemDesigner parentItemDesigner = (ToolStripMenuItemDesigner)designerHost.GetDesigner(parentItem);
+                        parentItemDesigner?.InitializeDropDown();
+
+                        needRefresh = true;
+                    }
+                    else if (parentDropDown is ContextMenuStrip)
+                    {
+                        // For ContextMenuStrip, we need use different ways to show the menu.
+                        ToolStripDropDownDesigner parentDropDownDesigner = (ToolStripDropDownDesigner)designerHost.GetDesigner(parentDropDown);
+                        parentDropDownDesigner?.ShowMenu(currentSelection);
+
+                        needRefresh = true;
+                    }
+
+                    if (needRefresh)
+                    {
+                        // Refresh SelectionManager to Change Glyph Size.
+                        GetService<SelectionManager>().Refresh();
+
+                        // Invalidate the dropdown area. This is necessary when a different item is
+                        // selected in the same dropdown.
+                        GetService<BehaviorService>().Invalidate(parentDropDown.Bounds);
+                    }
+                }
+            }
+            else if (currentSelection.Owner is not null)
+            {
+                // The selected item could be in a MenuStrip, StatusStrip or ToolStrip. Need invalidate the
+                // BehaviorService to reflect the selection change.
+                if (TryGetService(out BehaviorService behaviorService))
+                {
+                    behaviorService.Invalidate(behaviorService.ControlRectInAdornerWindow(currentSelection.Owner));
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
+    /// </summary>
+    protected override void PreFilterProperties(IDictionary properties)
+    {
+        base.PreFilterProperties(properties);
+        // Handle shadowed properties
+        string[] shadowProps = new string[] { "AutoSize", "AccessibleName", "Visible", "Overflow" };
+
+        PropertyDescriptor prop;
+        Attribute[] empty = Array.Empty<Attribute>();
+        for (int i = 0; i < shadowProps.Length; i++)
+        {
+            prop = (PropertyDescriptor)properties[shadowProps[i]];
+            if (prop is not null)
+            {
+                properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ToolStripItemDesigner), prop, empty);
+            }
+        }
+    }
+
+    // CALLED ONLY IF THE EDIT ACTION WAS ROLLED BACK!!!
+    public void RemoveItem()
+    {
+        dummyItemAdded = false;
+        if (!TryGetService(out IDesignerHost host))
+        {
+            Debug.Fail("Couldn't get designer host!");
+            return;
+        }
+
+        //Remove the dummy Item since the Edit was CANCELLED..
+        ToolStrip parent = (ToolStrip)ImmediateParent;
+        if (parent is ToolStripOverflow)
+        {
+            parent = ParentComponent as ToolStrip;
+        }
+
+        parent.Items.Remove(ToolStripItem);
+        host.DestroyComponent(ToolStripItem);
+    }
+
+    /// <summary>
+    /// Resets the ToolStripItemAutoSize to be the default autosize
+    /// </summary>
+    private void ResetAutoSize() => ShadowProperties[nameof(AutoSize)] = false;
+
+    /// <summary>
+    ///  Restores the AutoSize to be the value set in the property grid.
+    /// </summary>
+    private void RestoreAutoSize() => ToolStripItem.AutoSize = (bool)ShadowProperties[nameof(AutoSize)];
+
+    /// <summary>
+    /// Resets the ToolStrip Visible to be the default value
+    /// </summary>
+    private void ResetVisible() => Visible = true;
+
+    /// <summary>
+    ///  Restore Overflow
+    /// </summary>
+    private void RestoreOverflow() => ToolStripItem.Overflow = (ToolStripItemOverflow)ShadowProperties[nameof(Overflow)];
+
+    /// <summary>
+    ///  Resets Overflow
+    /// </summary>
+    private void ResetOverflow() => ToolStripItem.Overflow = ToolStripItemOverflow.AsNeeded;
+
+    /// <summary>
+    ///  Resets the ToolStripItem AccessibleName to the default
+    /// </summary>
+    private void ResetAccessibleName() => ShadowProperties[nameof(AccessibleName)] = null;
+
+    /// <summary>
+    ///  Restores the AutoSize to be the value set in the property grid.
+    /// </summary>
+    private void RestoreAccessibleName() => ToolStripItem.AccessibleName = (string)ShadowProperties[nameof(AccessibleName)];
+
+    // internal method called to select the next item from the current item.
+    internal void SelectNextItem(ISelectionService service, bool enterKeyPressed, ToolStripDesigner designer)
+    {
+        if (ToolStripItem is ToolStripDropDownItem)
+        {
+            SetSelection(enterKeyPressed);
+        }
+        else
+        {
+            // We are here for simple ToolStripItems...
+
             ToolStrip parent = (ToolStrip)ImmediateParent;
-            // Special case overflow...
             if (parent is ToolStripOverflow)
             {
                 parent = ToolStripItem.Owner;
             }
 
-            ToolStripMenuItemDesigner ownerItemDesigner = null;
+            int currentIndex = parent.Items.IndexOf(ToolStripItem);
+            ToolStripItem nextItem = parent.Items[currentIndex + 1];
 
-            int dummyIndex = parent.Items.IndexOf(ToolStripItem);
-            string name = ToolStripItem.Name;
-            ToolStripItem ownerItem = null;
-
-            // Get the main ToolStrip to Set the Glyph for the new Item once it is MORPHED.
-            if (ToolStripItem.IsOnDropDown)
+            // Set the selection to the next item in the toolstrip...
+            if (TryGetService(out ToolStripKeyboardHandlingService keyboardHandlingService))
             {
-                if (ImmediateParent is ToolStripDropDown parentDropDown)
+                if (nextItem == designer.EditorNode)
                 {
-                    ownerItem = parentDropDown.OwnerItem;
-                    if (ownerItem != null)
-                    {
-                        ownerItemDesigner = (ToolStripMenuItemDesigner)host.GetDesigner(ownerItem);
-                    }
+                    keyboardHandlingService.SelectedDesignerControl = nextItem;
+                    _selectionService.SetSelectedComponents(null, SelectionTypes.Replace);
                 }
-            }
-
-            try
-            {
-                // turn off Adding and Added Transactions..
-                ToolStripDesigner.s_autoAddNewItems = false;
-                SerializationStore serializedData = null;
-
-                if (!TryGetService(out ComponentSerializationService serializationService))
+                else
                 {
-                    return newItem;
-                }
-
-                serializedData = serializationService.CreateStore();
-                serializationService.Serialize(serializedData, Component); //notice the use of component... since we want to preserve the type.
-
-                //Serialize all the DropDownItems for this Item....
-                SerializationStore _serializedDataForDropDownItems = null;
-                ToolStripDropDownItem dropDownItem = ToolStripItem as ToolStripDropDownItem;
-                if (dropDownItem != null && typeof(ToolStripDropDownItem).IsAssignableFrom(t))
-                {
-                    // Hide the DropDown.
-                    dropDownItem.HideDropDown();
-                    _serializedDataForDropDownItems = serializationService.CreateStore();
-                    SerializeDropDownItems(dropDownItem, ref _serializedDataForDropDownItems, serializationService);
-                    //close the SerializationStore to Serialize Items..
-                    _serializedDataForDropDownItems.Close();
-                }
-
-                // close the SerializationStore to Serialize the ToolStripItem
-                serializedData.Close();
-
-                // Remove the currentItem that is getting morphed..
-                if (TryGetService(out IComponentChangeService changeService))
-                {
-                    if (parent.Site != null)
-                    {
-                        changeService.OnComponentChanging(parent, TypeDescriptor.GetProperties(parent)["Items"]);
-                    }
-                    else if (ownerItem != null)
-                    {
-                        changeService.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
-                        changeService.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
-                    }
-                }
-
-                FireComponentChanging(dropDownItem);
-                parent.Items.Remove(ToolStripItem);
-                host.DestroyComponent(ToolStripItem);
-                //Create our new Item
-                ToolStripItem component = (ToolStripItem)host.CreateComponent(t, name);
-                //Since destroying the original item took away its DropDownItems. We need to Deserialize the items again...
-                if (component is ToolStripDropDownItem)
-                {
-                    if (_serializedDataForDropDownItems != null)
-                    {
-                        serializationService.Deserialize(_serializedDataForDropDownItems);
-                    }
-                }
-
-                //Now deserialize the newItem to morph to the old item...
-                serializationService.DeserializeTo(serializedData, host.Container, false, true);
-                // Add the new Item...
-                newItem = (ToolStripItem)host.Container.Components[name];
-                //Set the Image property and DisplayStyle...
-                if (newItem.Image is null && newItem is ToolStripButton)
-                {
-                    Image image = null;
-                    try
-                    {
-                        image = new Icon(typeof(ToolStripButton), "blank").ToBitmap();
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ClientUtils.IsCriticalException(ex))
-                        {
-                            throw;
-                        }
-                    }
-
-                    PropertyDescriptor imageProperty = TypeDescriptor.GetProperties(newItem)["Image"];
-                    Debug.Assert(imageProperty != null, "Could not find 'Image' property in ToolStripItem.");
-                    if (imageProperty != null && image != null)
-                    {
-                        imageProperty.SetValue(newItem, image);
-                    }
-
-                    PropertyDescriptor dispProperty = TypeDescriptor.GetProperties(newItem)["DisplayStyle"];
-                    Debug.Assert(dispProperty != null, "Could not find 'DisplayStyle' property in ToolStripItem.");
-                    dispProperty?.SetValue(newItem, ToolStripItemDisplayStyle.Image);
-
-                    PropertyDescriptor imageTransProperty = TypeDescriptor.GetProperties(newItem)["ImageTransparentColor"];
-                    Debug.Assert(imageTransProperty != null, "Could not find 'DisplayStyle' property in ToolStripItem.");
-                    imageTransProperty?.SetValue(newItem, Color.Magenta);
-                }
-
-                parent.Items.Insert(dummyIndex, newItem);
-                if (changeService != null)
-                {
-                    if (parent.Site != null)
-                    {
-                        changeService.OnComponentChanged(parent, TypeDescriptor.GetProperties(parent)["Items"]);
-                    }
-                    else if (ownerItem != null)
-                    {
-                        changeService.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
-                        changeService.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
-                    }
-                }
-
-                FireComponentChanged(dropDownItem);
-                // Add the Glyph for the DropDown ... We are responsible for the Glyph Addition since BodyGlyphs for DropDownItems are added by us.
-                if (newItem.IsOnDropDown && ownerItemDesigner != null)
-                {
-                    ownerItemDesigner.RemoveItemBodyGlyph(newItem);
-                    ownerItemDesigner.AddItemBodyGlyph(newItem);
-                }
-
-                // re start the ComponentAdding/Added events
-                ToolStripDesigner.s_autoAddNewItems = true;
-                //Invalidate the AdornerWindow to refresh selectionglyphs.
-                if (newItem != null)
-                {
-                    if (newItem is ToolStripSeparator)
-                    {
-                        parent.PerformLayout();
-                    }
-
-                    BehaviorService windowService = (BehaviorService)newItem.Site.GetService(typeof(BehaviorService));
-                    windowService?.Invalidate();
-
-                    // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
-                    ISelectionService selSvc = (ISelectionService)newItem.Site.GetService(typeof(ISelectionService));
-                    selSvc?.SetSelectedComponents(new object[] { newItem }, SelectionTypes.Replace);
-                }
-
-                return newItem;
-            }
-            catch
-            {
-                host.Container.Add(ToolStripItem);
-                parent.Items.Insert(dummyIndex, ToolStripItem);
-                if (designerTransaction != null)
-                {
-                    designerTransaction.Cancel();
-                    designerTransaction = null;
-                }
-            }
-            finally
-            {
-                designerTransaction?.Commit();
-            }
-
-            return newItem;
-        }
-
-        /// <summary>
-        ///  Raised when a component's name changes.  Here we update the AccessibleName Property to match the newName.
-        /// </summary>
-        private void OnComponentRename(object sender, ComponentRenameEventArgs e)
-        {
-            if (e.Component == ToolStripItem)
-            {
-                ToolStripItem.AccessibleName = e.NewName;
-            }
-        }
-
-        /// <summary>
-        ///  This can be used for OVERFLOW !!!
-        /// </summary>
-        private void OnItemPaint(object sender, PaintEventArgs e)
-        {
-            if (ToolStripItem.GetCurrentParent() is ToolStripDropDown
-                && _selectionService != null
-                && !IsEditorActive
-                && ToolStripItem.Equals(_selectionService.PrimarySelection)
-                && TryGetService(out BehaviorService behaviorService))
-            {
-                Point location = behaviorService.ControlToAdornerWindow((Control)ImmediateParent);
-                Rectangle r = ToolStripItem.Bounds;
-                r.Offset(location);
-                r.Inflate(GLYPHINSET, GLYPHINSET);
-                //this will allow any Glyphs to re-paint
-                //after this control and its designer has painted
-                behaviorService.ProcessPaintMessage(r);
-            }
-        }
-
-        /// <summary>
-        ///  For ToolStripItems that are not MenuItems and are on Dropdown we need ot update Selection Rect.
-        /// </summary>
-        private void OnSelectionChanged(object sender, EventArgs e)
-        {
-            if (!(sender is ISelectionService sSvc))
-            {
-                return;
-            }
-
-            //determine if we are selected
-            ToolStripItem currentSelection = sSvc.PrimarySelection as ToolStripItem;
-            // Accessibility information
-            if (ToolStripItem.AccessibilityObject is ToolStripItem.ToolStripItemAccessibleObject acc)
-            {
-                acc.AddState(AccessibleStates.None);
-                ToolStrip tool = GetMainToolStrip();
-                if (sSvc.GetComponentSelected(ToolStripItem))
-                {
-                    ToolStrip owner = ImmediateParent as ToolStrip;
-                    int focusIndex = 0;
-                    if (owner != null)
-                    {
-                        focusIndex = owner.Items.IndexOf(currentSelection);
-                    }
-
-                    acc.AddState(AccessibleStates.Selected);
-                    if (tool != null)
-                    {
-                        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "MSAA: SelectionAdd, tool = " + tool.ToString());
-                        User32.NotifyWinEvent((uint)AccessibleEvents.SelectionAdd, new HandleRef(owner, owner.Handle), User32.OBJID.CLIENT, focusIndex + 1);
-                    }
-
-                    if (currentSelection == ToolStripItem)
-                    {
-                        acc.AddState(AccessibleStates.Focused);
-                        if (tool != null)
-                        {
-                            User32.NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(owner, owner.Handle), User32.OBJID.CLIENT, focusIndex + 1);
-                        }
-                    }
-                }
-            }
-
-            if (currentSelection != null && currentSelection.Equals(ToolStripItem) && !(ToolStripItem is ToolStripMenuItem))
-            {
-                if (currentSelection.IsOnDropDown)
-                {
-                    // If the Item is on DropDown show its DropDown and all Parent Dropdown if not visible..
-                    if (TryGetService(out IDesignerHost designerHost) && currentSelection.Owner is ToolStripDropDown parentDropDown)
-                    {
-                        bool needRefresh = false;
-                        if (parentDropDown.OwnerItem is ToolStripDropDownItem parentItem)
-                        {
-                            ToolStripMenuItemDesigner parentItemDesigner = (ToolStripMenuItemDesigner)designerHost.GetDesigner(parentItem);
-                            parentItemDesigner?.InitializeDropDown();
-
-                            needRefresh = true;
-                        }
-                        else if (parentDropDown is ContextMenuStrip)
-                        {
-                            // For ContextMenuStrip, we need use different ways to show the menu.
-                            ToolStripDropDownDesigner parentDropDownDesigner = (ToolStripDropDownDesigner)designerHost.GetDesigner(parentDropDown);
-                            parentDropDownDesigner?.ShowMenu(currentSelection);
-
-                            needRefresh = true;
-                        }
-
-                        if (needRefresh)
-                        {
-                            // Refresh SelectionManager to Change Glyph Size.
-                            GetService<SelectionManager>().Refresh();
-
-                            // Invalidate the dropdown area. This is necessary when a different item is
-                            // selected in the same dropdown.
-                            GetService<BehaviorService>().Invalidate(parentDropDown.Bounds);
-                        }
-                    }
-                }
-                else if (currentSelection.Owner != null)
-                {
-                    // The selected item could be in a MenuStrip, StatusStrip or ToolStrip. Need invalidate the
-                    // BehaviorService to reflect the selection change.
-                    if (TryGetService(out BehaviorService behaviorService))
-                    {
-                        behaviorService.Invalidate(behaviorService.ControlRectInAdornerWindow(currentSelection.Owner));
-                    }
+                    keyboardHandlingService.SelectedDesignerControl = null;
+                    _selectionService.SetSelectedComponents(new object[] { nextItem });
                 }
             }
         }
+    }
 
-        /// <summary>
-        ///  Allows a designer to filter the set of properties the component it is designing will expose through the TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you are overriding this method you should call the base implementation before you perform your own filtering.
-        /// </summary>
-        protected override void PreFilterProperties(IDictionary properties)
+    // Recursive function to add all the menuItems to the SerializationStore during Morphing..
+    private static void SerializeDropDownItems(ToolStripDropDownItem parent, ref SerializationStore _serializedDataForDropDownItems, ComponentSerializationService _serializationService)
+    {
+        foreach (ToolStripItem item in parent.DropDownItems)
         {
-            base.PreFilterProperties(properties);
-            // Handle shadowed properties
-            string[] shadowProps = new string[] { "AutoSize", "AccessibleName", "Visible", "Overflow" };
-
-            PropertyDescriptor prop;
-            Attribute[] empty = Array.Empty<Attribute>();
-            for (int i = 0; i < shadowProps.Length; i++)
+            // Don't Serialize the DesignerToolStripControlHost...
+            if (!(item is DesignerToolStripControlHost))
             {
-                prop = (PropertyDescriptor)properties[shadowProps[i]];
-                if (prop != null)
+                _serializationService.Serialize(_serializedDataForDropDownItems, item);
+                if (item is ToolStripDropDownItem dropDownItem)
                 {
-                    properties[shadowProps[i]] = TypeDescriptor.CreateProperty(typeof(ToolStripItemDesigner), prop, empty);
+                    SerializeDropDownItems(dropDownItem, ref _serializedDataForDropDownItems, _serializationService);
                 }
             }
         }
+    }
 
-        // CALLED ONLY IF THE EDIT ACTION WAS ROLLED BACK!!!
-        public void RemoveItem()
+    // Sets the Item visibility to honor WYSIWYG
+    internal void SetItemVisible(bool toolStripSelected, ToolStripDesigner designer)
+    {
+        if (toolStripSelected)
         {
-            dummyItemAdded = false;
-            if (!TryGetService(out IDesignerHost host))
+            // Set the Visiblity if different.
+            if (!currentVisible)
             {
-                Debug.Fail("Couldn't get designer host!");
-                return;
-            }
-
-            //Remove the dummy Item since the Edit was CANCELLED..
-            ToolStrip parent = (ToolStrip)ImmediateParent;
-            if (parent is ToolStripOverflow)
-            {
-                parent = ParentComponent as ToolStrip;
-            }
-
-            parent.Items.Remove(ToolStripItem);
-            host.DestroyComponent(ToolStripItem);
-        }
-
-        /// <summary>
-        /// Resets the ToolStripItemAutoSize to be the default autosize
-        /// </summary>
-        private void ResetAutoSize() => ShadowProperties[nameof(AutoSize)] = false;
-
-        /// <summary>
-        ///  Restores the AutoSize to be the value set in the property grid.
-        /// </summary>
-        private void RestoreAutoSize() => ToolStripItem.AutoSize = (bool)ShadowProperties[nameof(AutoSize)];
-
-        /// <summary>
-        /// Resets the ToolStrip Visible to be the default value
-        /// </summary>
-        private void ResetVisible() => Visible = true;
-
-        /// <summary>
-        ///  Restore Overflow
-        /// </summary>
-        private void RestoreOverflow() => ToolStripItem.Overflow = (ToolStripItemOverflow)ShadowProperties[nameof(Overflow)];
-
-        /// <summary>
-        ///  Resets Overflow
-        /// </summary>
-        private void ResetOverflow() => ToolStripItem.Overflow = ToolStripItemOverflow.AsNeeded;
-
-        /// <summary>
-        ///  Resets the ToolStripItem AccessibleName to the default
-        /// </summary>
-        private void ResetAccessibleName() => ShadowProperties[nameof(AccessibleName)] = null;
-
-        /// <summary>
-        ///  Restores the AutoSize to be the value set in the property grid.
-        /// </summary>
-        private void RestoreAccessibleName() => ToolStripItem.AccessibleName = (string)ShadowProperties[nameof(AccessibleName)];
-
-        // internal method called to select the next item from the current item.
-        internal void SelectNextItem(ISelectionService service, bool enterKeyPressed, ToolStripDesigner designer)
-        {
-            if (ToolStripItem is ToolStripDropDownItem dropDownItem)
-            {
-                SetSelection(enterKeyPressed);
-            }
-            else
-            {
-                // We are here for simple ToolStripItems...
-
-                ToolStrip parent = (ToolStrip)ImmediateParent;
-                if (parent is ToolStripOverflow)
+                ToolStripItem.Visible = true;
+                if (designer is not null && !designer.FireSyncSelection)
                 {
-                    parent = ToolStripItem.Owner;
-                }
-
-                int currentIndex = parent.Items.IndexOf(ToolStripItem);
-                ToolStripItem nextItem = parent.Items[currentIndex + 1];
-
-                // Set the selection to the next item in the toolstrip...
-                if (TryGetService(out ToolStripKeyboardHandlingService keyboardHandlingService))
-                {
-                    if (nextItem == designer.EditorNode)
-                    {
-                        keyboardHandlingService.SelectedDesignerControl = nextItem;
-                        _selectionService.SetSelectedComponents(null, SelectionTypes.Replace);
-                    }
-                    else
-                    {
-                        keyboardHandlingService.SelectedDesignerControl = null;
-                        _selectionService.SetSelectedComponents(new object[] { nextItem });
-                    }
+                    designer.FireSyncSelection = true;
                 }
             }
         }
-
-        // Recursive function to add all the menuItems to the SerializationStore during Morphing..
-        private void SerializeDropDownItems(ToolStripDropDownItem parent, ref SerializationStore _serializedDataForDropDownItems, ComponentSerializationService _serializationService)
+        else
         {
-            foreach (ToolStripItem item in parent.DropDownItems)
+            if (!currentVisible)
             {
-                // Don't Serialize the DesignerToolStripControlHost...
-                if (!(item is DesignerToolStripControlHost))
-                {
-                    _serializationService.Serialize(_serializedDataForDropDownItems, item);
-                    if (item is ToolStripDropDownItem dropDownItem)
-                    {
-                        SerializeDropDownItems(dropDownItem, ref _serializedDataForDropDownItems, _serializationService);
-                    }
-                }
+                ToolStripItem.Visible = currentVisible;
             }
         }
+    }
 
-        // Sets the Item visibility to honor WYSIWYG
-        internal void SetItemVisible(bool toolStripSelected, ToolStripDesigner designer)
+    private bool ShouldSerializeVisible() => !Visible;
+
+    /// <summary>
+    /// Since we're shadowing autosize, we get called here to determine whether or not to serialize
+    /// </summary>
+    private bool ShouldSerializeAutoSize() => (ShadowProperties.Contains(nameof(AutoSize)));
+
+    /// <summary>
+    /// Since we're shadowing autosize, we get called here to determine whether or not to serialize
+    /// </summary>
+    private bool ShouldSerializeAccessibleName() => (ShadowProperties[nameof(AccessibleName)] is not null);
+
+    /// <summary>
+    /// Since we're Overflow Size, we get called here to determine whether or not to serialize
+    /// </summary>
+    private bool ShouldSerializeOverflow() => (ShadowProperties[nameof(Overflow)] is not null);
+
+    /// <summary>
+    ///  This Function is called thru the ToolStripEditorManager which is listening for the  F2 command.
+    /// </summary>
+    internal virtual void ShowEditNode(bool clicked)
+    {
+        // ACTIVATION ONLY FOR TOOLSTRIPMENUITEMS
+        if (ToolStripItem is ToolStripMenuItem)
         {
-            if (toolStripSelected)
+            if (_editorNode is null)
             {
-                // Set the Visiblity if different.
-                if (!currentVisible)
-                {
-                    ToolStripItem.Visible = true;
-                    if (designer != null && !designer.FireSyncSelection)
-                    {
-                        designer.FireSyncSelection = true;
-                    }
-                }
+                CreateDummyNode();
             }
-            else
+
+            IDesignerHost designerHost = (IDesignerHost)Component.Site.GetService(typeof(IDesignerHost));
+            ToolStrip parent = ImmediateParent as ToolStrip;
+            Debug.Assert(parent is not null, "ImmediateParent is null for the current ToolStripItem !!");
+            if (parent is not null)
             {
-                if (!currentVisible)
+                ToolStripDesigner parentDesigner = (ToolStripDesigner)designerHost.GetDesigner(parent);
+                BehaviorService behaviorService = GetService<BehaviorService>();
+                Point location = behaviorService.ControlToAdornerWindow(parent);
+
+                //Get the original ToolStripItem bounds.
+                Rectangle origBoundsInAdornerWindow = ToolStripItem.Bounds;
+                origBoundsInAdornerWindow.Offset(location);
+                ToolStripItem.AutoSize = false;
+                _editorNode.SetWidth(ToolStripItem.Text);
+                if (parent.Orientation == Orientation.Horizontal)
                 {
-                    ToolStripItem.Visible = currentVisible;
+                    ToolStripItem.Width = _editorNode.EditorToolStrip.Width + 2;
                 }
-            }
-        }
-
-        private bool ShouldSerializeVisible() => !Visible;
-
-        /// <summary>
-        /// Since we're shadowing autosize, we get called here to determine whether or not to serialize
-        /// </summary>
-        private bool ShouldSerializeAutoSize() => (ShadowProperties.Contains(nameof(AutoSize)));
-
-        /// <summary>
-        /// Since we're shadowing autosize, we get called here to determine whether or not to serialize
-        /// </summary>
-        private bool ShouldSerializeAccessibleName() => (ShadowProperties[nameof(AccessibleName)] != null);
-
-        /// <summary>
-        /// Since we're Overflow Size, we get called here to determine whether or not to serialize
-        /// </summary>
-        private bool ShouldSerializeOverflow() => (ShadowProperties[nameof(Overflow)] != null);
-
-        /// <summary>
-        ///  This Function is called thru the ToolStripEditorManager which is listening for the  F2 command.
-        /// </summary>
-        internal virtual void ShowEditNode(bool clicked)
-        {
-            // ACTIVATION ONLY FOR TOOLSTRIPMENUITEMS
-            if (ToolStripItem is ToolStripMenuItem)
-            {
-                if (_editorNode is null)
+                else
                 {
-                    CreateDummyNode();
+                    ToolStripItem.Height = _editorNode.EditorToolStrip.Height;
                 }
 
-                IDesignerHost designerHost = (IDesignerHost)Component.Site.GetService(typeof(IDesignerHost));
-                ToolStrip parent = ImmediateParent as ToolStrip;
-                Debug.Assert(parent != null, "ImmediateParent is null for the current ToolStripItem !!");
-                if (parent != null)
+                // Refresh the glyphs.
+                if (!dummyItemAdded)
                 {
-                    ToolStripDesigner parentDesigner = (ToolStripDesigner)designerHost.GetDesigner(parent);
-                    BehaviorService behaviorService = GetService<BehaviorService>();
-                    Point location = behaviorService.ControlToAdornerWindow(parent);
+                    behaviorService.SyncSelection();
+                }
 
-                    //Get the original ToolStripItem bounds.
-                    Rectangle origBoundsInAdornerWindow = ToolStripItem.Bounds;
-                    origBoundsInAdornerWindow.Offset(location);
-                    ToolStripItem.AutoSize = false;
-                    _editorNode.SetWidth(ToolStripItem.Text);
+                if (ToolStripItem.Placement != ToolStripItemPlacement.None)
+                {
+                    Rectangle boundsInAdornerWindow = ToolStripItem.Bounds;
+                    boundsInAdornerWindow.Offset(location);
+
+                    //Center it in verticaldirection.
                     if (parent.Orientation == Orientation.Horizontal)
                     {
-                        ToolStripItem.Width = _editorNode.EditorToolStrip.Width + 2;
+                        boundsInAdornerWindow.X++;
+                        boundsInAdornerWindow.Y += (ToolStripItem.Height - _editorNode.EditorToolStrip.Height) / 2;
+                        boundsInAdornerWindow.Y++;
                     }
                     else
                     {
-                        ToolStripItem.Height = _editorNode.EditorToolStrip.Height;
+                        boundsInAdornerWindow.X += (ToolStripItem.Width - _editorNode.EditorToolStrip.Width) / 2;
+                        boundsInAdornerWindow.X++;
                     }
 
-                    // Refresh the glyphs.
-                    if (!dummyItemAdded)
+                    _editorNode.Bounds = boundsInAdornerWindow;
+
+                    // Invalidate the union of the original bounds and the new bounds.
+                    boundsInAdornerWindow = Rectangle.Union(origBoundsInAdornerWindow, boundsInAdornerWindow);
+                    behaviorService.Invalidate(boundsInAdornerWindow);
+
+                    // PLEASE DON'T CHANGE THIS ORDER !!!
+                    if (parentDesigner is not null && parentDesigner.EditManager is not null)
                     {
-                        behaviorService.SyncSelection();
+                        parentDesigner.EditManager.ActivateEditor(ToolStripItem, clicked);
                     }
 
-                    if (ToolStripItem.Placement != ToolStripItemPlacement.None)
+                    SelectionManager selectionManager = GetService<SelectionManager>();
+                    if (bodyGlyph is not null)
                     {
-                        Rectangle boundsInAdornerWindow = ToolStripItem.Bounds;
-                        boundsInAdornerWindow.Offset(location);
-
-                        //Center it in verticaldirection.
-                        if (parent.Orientation == Orientation.Horizontal)
-                        {
-                            boundsInAdornerWindow.X++;
-                            boundsInAdornerWindow.Y += (ToolStripItem.Height - _editorNode.EditorToolStrip.Height) / 2;
-                            boundsInAdornerWindow.Y++;
-                        }
-                        else
-                        {
-                            boundsInAdornerWindow.X += (ToolStripItem.Width - _editorNode.EditorToolStrip.Width) / 2;
-                            boundsInAdornerWindow.X++;
-                        }
-
-                        _editorNode.Bounds = boundsInAdornerWindow;
-
-                        // Invalidate the union of the original bounds and the new bounds.
-                        boundsInAdornerWindow = Rectangle.Union(origBoundsInAdornerWindow, boundsInAdornerWindow);
-                        behaviorService.Invalidate(boundsInAdornerWindow);
-
-                        // PLEASE DON'T CHANGE THIS ORDER !!!
-                        if (parentDesigner != null && parentDesigner.EditManager != null)
-                        {
-                            parentDesigner.EditManager.ActivateEditor(ToolStripItem, clicked);
-                        }
-
-                        SelectionManager selectionManager = GetService<SelectionManager>();
-                        if (bodyGlyph != null)
-                        {
-                            selectionManager.BodyGlyphAdorner.Glyphs.Remove(bodyGlyph);
-                        }
+                        selectionManager.BodyGlyphAdorner.Glyphs.Remove(bodyGlyph);
                     }
-                    else
+                }
+                else
+                {
+                    ToolStripItem.AutoSize = AutoSize;
+                    if (ToolStripItem is ToolStripDropDownItem) //We have no place to show this item... so Hide the DropDown
                     {
-                        ToolStripItem.AutoSize = AutoSize;
-                        if (ToolStripItem is ToolStripDropDownItem) //We have no place to show this item... so Hide the DropDown
+                        if (ToolStripItem is ToolStripDropDownItem ddItem)
                         {
-                            if (ToolStripItem is ToolStripDropDownItem ddItem)
-                            {
-                                ddItem.HideDropDown();
-                            }
-
-                            // And select the parent... since we cannot show the current selection.
-                            _selectionService.SetSelectedComponents(new object[] { ImmediateParent });
+                            ddItem.HideDropDown();
                         }
+
+                        // And select the parent... since we cannot show the current selection.
+                        _selectionService.SetSelectedComponents(new object[] { ImmediateParent });
                     }
                 }
             }
         }
+    }
 
-        // This method is called by the ToolStripDesigner to SetSelections to proper ToolStripItems  after the parent ToolStripItem is committed. Consider this : the ToolStrip would cause the NEXT item on the TOPLEVEL to get selected... while on MenuStrip.. we would want the Child ToolStripItem in the DropDown to get  selected after the TopLevel MenuStripItem is commited.
-        internal virtual bool SetSelection(bool enterKeyPressed) => false;
+    // This method is called by the ToolStripDesigner to SetSelections to proper ToolStripItems  after the parent ToolStripItem is committed. Consider this : the ToolStrip would cause the NEXT item on the TOPLEVEL to get selected... while on MenuStrip.. we would want the Child ToolStripItem in the DropDown to get  selected after the TopLevel MenuStripItem is commited.
+    internal virtual bool SetSelection(bool enterKeyPressed) => false;
 
-        internal override void ShowContextMenu(int x, int y)
+    internal override void ShowContextMenu(int x, int y)
+    {
+        if (!TryGetService(out ToolStripKeyboardHandlingService keyboardService))
         {
-            if (!TryGetService(out ToolStripKeyboardHandlingService keyboardService))
+            return;
+        }
+
+        if (!keyboardService.ContextMenuShownByKeyBoard)
+        {
+            Point newPoint = Point.Empty;
+            if (TryGetService(out BehaviorService behaviorService))
             {
-                return;
+                newPoint = behaviorService.ScreenToAdornerWindow(new Point(x, y));
             }
 
-            if (!keyboardService.ContextMenuShownByKeyBoard)
+            Rectangle itemBounds = GetGlyphBounds();
+            if (itemBounds.Contains(newPoint))
             {
-                Point newPoint = Point.Empty;
-                if (TryGetService(out BehaviorService behaviorService))
-                {
-                    newPoint = behaviorService.ScreenToAdornerWindow(new Point(x, y));
-                }
-
-                Rectangle itemBounds = GetGlyphBounds();
-                if (itemBounds.Contains(newPoint))
-                {
-                    DesignerContextMenu.Show(x, y);
-                }
-            }
-            else
-            {
-                keyboardService.ContextMenuShownByKeyBoard = false;
                 DesignerContextMenu.Show(x, y);
             }
+        }
+        else
+        {
+            keyboardService.ContextMenuShownByKeyBoard = false;
+            DesignerContextMenu.Show(x, y);
         }
     }
 }

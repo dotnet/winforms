@@ -1,50 +1,47 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-#nullable disable
+namespace System.Windows.Forms.Layout;
 
-using System.Collections;
-
-namespace System.Windows.Forms.Layout
+internal partial class TableLayout
 {
-    internal partial class TableLayout
+    private class PreAssignedPositionComparer : IComparer<LayoutInfo>
     {
-        private class PreAssignedPositionComparer : IComparer
+        private static readonly PreAssignedPositionComparer instance = new();
+
+        public static PreAssignedPositionComparer GetInstance
         {
-            private static readonly PreAssignedPositionComparer instance = new PreAssignedPositionComparer();
+            get { return instance; }
+        }
 
-            public static PreAssignedPositionComparer GetInstance
+        public int Compare(LayoutInfo? x, LayoutInfo? y)
+        {
+            if (IComparerHelpers.CompareReturnIfNull(x, y, out int? returnValue))
             {
-                get { return instance; }
+                return (int)returnValue;
             }
 
-            public int Compare(object x, object y)
+            if (x.RowPosition < y.RowPosition)
             {
-                LayoutInfo xInfo = (LayoutInfo)x;
-                LayoutInfo yInfo = (LayoutInfo)y;
-                if (xInfo.RowPosition < yInfo.RowPosition)
-                {
-                    return -1;
-                }
-
-                if (xInfo.RowPosition > yInfo.RowPosition)
-                {
-                    return 1;
-                }
-
-                if (xInfo.ColumnPosition < yInfo.ColumnPosition)
-                {
-                    return -1;
-                }
-
-                if (xInfo.ColumnPosition > yInfo.ColumnPosition)
-                {
-                    return 1;
-                }
-
-                return 0;
+                return -1;
             }
+
+            if (x.RowPosition > y.RowPosition)
+            {
+                return 1;
+            }
+
+            if (x.ColumnPosition < y.ColumnPosition)
+            {
+                return -1;
+            }
+
+            if (x.ColumnPosition > y.ColumnPosition)
+            {
+                return 1;
+            }
+
+            return 0;
         }
     }
 }

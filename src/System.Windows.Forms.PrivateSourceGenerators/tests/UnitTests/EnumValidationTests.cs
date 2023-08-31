@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Collections.Immutable;
 using System.Reflection;
@@ -8,14 +7,14 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Xunit;
 
-namespace System.Windows.Forms.PrivateSourceGenerators.Tests
+namespace System.Windows.Forms.PrivateSourceGenerators.Tests;
+
+public class EnumValidationTests
 {
-    public class EnumValidationTests
+    [Fact]
+    public void SequentialEnum()
     {
-        [Fact]
-        public void SequentialEnum()
-        {
-            string source = @"
+        string source = @"
 namespace People
 {
     enum Names
@@ -37,16 +36,16 @@ namespace People
         }
     }
 }";
-            string expected =
+        string expected =
 @"if (intValue >= 0 && intValue <= 6) return;";
 
-            VerifyGeneratedMethodLines(source, "People.Names", expected);
-        }
+        VerifyGeneratedMethodLines(source, "People.Names", expected);
+    }
 
-        [Fact]
-        public void MultipleCalls_OneValidateMethod()
-        {
-            string source = @"
+    [Fact]
+    public void MultipleCalls_OneValidateMethod()
+    {
+        string source = @"
 namespace People
 {
     enum Names
@@ -79,16 +78,16 @@ namespace People
         }
     }
 }";
-            string expected =
+        string expected =
 @"if (intValue >= 0 && intValue <= 6) return;";
 
-            VerifyGeneratedMethodLines(source, "People.Names", expected);
-        }
+        VerifyGeneratedMethodLines(source, "People.Names", expected);
+    }
 
-        [Fact]
-        public void DuplicateValues()
-        {
-            string source = @"
+    [Fact]
+    public void DuplicateValues()
+    {
+        string source = @"
 namespace People
 {
     enum Names
@@ -108,17 +107,17 @@ namespace People
         }
     }
 }";
-            string expected =
+        string expected =
 @"if (intValue >= 1 && intValue <= 2) return;
 if (intValue == 4) return;";
 
-            VerifyGeneratedMethodLines(source, "People.Names", expected);
-        }
+        VerifyGeneratedMethodLines(source, "People.Names", expected);
+    }
 
-        [Fact]
-        public void ValuesFromConstants()
-        {
-            string source = @"
+    [Fact]
+    public void ValuesFromConstants()
+    {
+        string source = @"
 namespace People
 {
     static class Win32
@@ -144,18 +143,18 @@ namespace People
         }
     }
 }";
-            string expected =
+        string expected =
 @"if (intValue >= 1 && intValue <= 2) return;
 if (intValue == 4) return;
 if (intValue == 6) return;";
 
-            VerifyGeneratedMethodLines(source, "People.Names", expected);
-        }
+        VerifyGeneratedMethodLines(source, "People.Names", expected);
+    }
 
-        [Fact]
-        public void NonSequentialEnum()
-        {
-            string source = @"
+    [Fact]
+    public void NonSequentialEnum()
+    {
+        string source = @"
 namespace People
 {
     enum Names
@@ -177,19 +176,19 @@ namespace People
         }
     }
 }";
-            string expected =
+        string expected =
 @"if (intValue >= 1 && intValue <= 3) return;
 if (intValue >= 6 && intValue <= 7) return;
 if (intValue == 9) return;
 if (intValue == 15) return;";
 
-            VerifyGeneratedMethodLines(source, "People.Names", expected);
-        }
+        VerifyGeneratedMethodLines(source, "People.Names", expected);
+    }
 
-        [Fact]
-        public void SequentialEnumWithPowersOf2()
-        {
-            string source = @"
+    [Fact]
+    public void SequentialEnumWithPowersOf2()
+    {
+        string source = @"
 namespace People
 {
     enum Names
@@ -211,7 +210,7 @@ namespace People
         }
     }
 }";
-            string expected =
+        string expected =
 @"if (intValue >= 1 && intValue <= 2) return;
 if (intValue == 4) return;
 if (intValue == 8) return;
@@ -219,13 +218,13 @@ if (intValue == 16) return;
 if (intValue == 32) return;
 if (intValue == 64) return;";
 
-            VerifyGeneratedMethodLines(source, "People.Names", expected);
-        }
+        VerifyGeneratedMethodLines(source, "People.Names", expected);
+    }
 
-        [Fact]
-        public void SequentialEnumWithPowersOf2_BinaryNotation()
-        {
-            string source = @"
+    [Fact]
+    public void SequentialEnumWithPowersOf2_BinaryNotation()
+    {
+        string source = @"
 namespace People
 {
     enum Names
@@ -247,7 +246,7 @@ namespace People
         }
     }
 }";
-            string expected =
+        string expected =
 @"if (intValue >= 1 && intValue <= 2) return;
 if (intValue == 4) return;
 if (intValue == 8) return;
@@ -255,13 +254,13 @@ if (intValue == 16) return;
 if (intValue == 32) return;
 if (intValue == 64) return;";
 
-            VerifyGeneratedMethodLines(source, "People.Names", expected);
-        }
+        VerifyGeneratedMethodLines(source, "People.Names", expected);
+    }
 
-        [Fact]
-        public void FlagsEnum()
-        {
-            string source = @"
+    [Fact]
+    public void FlagsEnum()
+    {
+        string source = @"
 namespace Paint
 {
     [System.Flags]
@@ -281,66 +280,65 @@ namespace Paint
         }
     }
 }";
-            string expected =
+        string expected =
 @"if ((intValue & 15) == intValue) return;";
 
-            VerifyGeneratedMethodLines(source, "Paint.Colours", expected);
+        VerifyGeneratedMethodLines(source, "Paint.Colours", expected);
+    }
+
+    private void VerifyGeneratedMethodLines(string source, string expectedEnumName, string expectedBody)
+    {
+        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
+
+        List<MetadataReference> references = new List<MetadataReference>();
+        Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+        foreach (Assembly assembly in assemblies)
+        {
+            if (!assembly.IsDynamic)
+            {
+                references.Add(MetadataReference.CreateFromFile(assembly.Location));
+            }
         }
 
-        private void VerifyGeneratedMethodLines(string source, string expectedEnumName, string expectedBody)
+        CSharpCompilation compilation = CSharpCompilation.Create("original", new SyntaxTree[] { syntaxTree }, references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+        ISourceGenerator generator = new EnumValidationGenerator().AsSourceGenerator();
+
+        CSharpGeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
+        driver.RunGeneratorsAndUpdateCompilation(compilation, out Compilation outputCompilation, out ImmutableArray<Diagnostic> diagnostics);
+        Assert.False(diagnostics.Any(d => d.Severity == DiagnosticSeverity.Error), $"Failed: {diagnostics.FirstOrDefault()?.GetMessage()}");
+
+        string output = outputCompilation.SyntaxTrees.Skip(2).First().ToString();
+
+        List<string> lines = output.Split("\r\n").ToList();
+
+        AssertFirstLineAndRemove(lines, "// <auto-generated />");
+        AssertFirstLineAndRemove(lines, "namespace SourceGenerated");
+        AssertFirstLineAndRemove(lines, "{");
+        AssertFirstLineAndRemove(lines, "internal static partial class EnumValidator");
+        AssertFirstLineAndRemove(lines, "{");
+
+        AssertFirstLineAndRemove(lines, "/// <summary>Validates that the enum value passed in is valid for the enum type.</summary>");
+        AssertFirstLineAndRemove(lines, $"public static void Validate({expectedEnumName} enumToValidate, string parameterName = \"value\")");
+        AssertFirstLineAndRemove(lines, "{");
+        AssertFirstLineAndRemove(lines, "int intValue = (int)enumToValidate;");
+
+        foreach (string line in expectedBody.Split("\r\n"))
         {
-            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
+            AssertFirstLineAndRemove(lines, line.Trim());
+        }
 
-            List<MetadataReference> references = new List<MetadataReference>();
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (Assembly assembly in assemblies)
-            {
-                if (!assembly.IsDynamic)
-                {
-                    references.Add(MetadataReference.CreateFromFile(assembly.Location));
-                }
-            }
+        AssertFirstLineAndRemove(lines, $"ReportEnumValidationError(parameterName, intValue, typeof({expectedEnumName}));");
 
-            CSharpCompilation compilation = CSharpCompilation.Create("original", new SyntaxTree[] { syntaxTree }, references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+        AssertFirstLineAndRemove(lines, "}");
 
-            ISourceGenerator generator = new EnumValidationGenerator();
+        static void AssertFirstLineAndRemove(List<string> lines, string expected)
+        {
+            Assert.True(lines.Count > 0);
 
-            CSharpGeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
-            driver.RunGeneratorsAndUpdateCompilation(compilation, out Compilation outputCompilation, out ImmutableArray<Diagnostic> diagnostics);
-            Assert.False(diagnostics.Any(d => d.Severity == DiagnosticSeverity.Error), "Failed: " + diagnostics.FirstOrDefault()?.GetMessage());
-
-            string output = outputCompilation.SyntaxTrees.Skip(1).First().ToString();
-
-            List<string> lines = output.Split("\r\n").ToList();
-
-            AssertFirstLineAndRemove(lines, "// <auto-generated />");
-            AssertFirstLineAndRemove(lines, "namespace SourceGenerated");
-            AssertFirstLineAndRemove(lines, "{");
-            AssertFirstLineAndRemove(lines, "internal static partial class EnumValidator");
-            AssertFirstLineAndRemove(lines, "{");
-
-            AssertFirstLineAndRemove(lines, "/// <summary>Validates that the enum value passed in is valid for the enum type.</summary>");
-            AssertFirstLineAndRemove(lines, $"public static void Validate({expectedEnumName} enumToValidate, string parameterName = \"value\")");
-            AssertFirstLineAndRemove(lines, "{");
-            AssertFirstLineAndRemove(lines, "int intValue = (int)enumToValidate;");
-
-            foreach (string line in expectedBody.Split("\r\n"))
-            {
-                AssertFirstLineAndRemove(lines, line.Trim());
-            }
-
-            AssertFirstLineAndRemove(lines, $"ReportEnumValidationError(parameterName, intValue, typeof({expectedEnumName}));");
-
-            AssertFirstLineAndRemove(lines, "}");
-
-            static void AssertFirstLineAndRemove(List<string> lines, string expected)
-            {
-                Assert.True(lines.Count > 0);
-
-                var line = lines[0].Trim();
-                lines.RemoveAt(0);
-                Assert.Equal(expected, line);
-            }
+            var line = lines[0].Trim();
+            lines.RemoveAt(0);
+            Assert.Equal(expected, line);
         }
     }
 }

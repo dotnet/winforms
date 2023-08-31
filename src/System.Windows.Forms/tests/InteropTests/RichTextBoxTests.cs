@@ -1,14 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
-using Xunit;
+using Windows.Win32.UI.Controls.RichEdit;
 using static Interop.Richedit;
 
 namespace System.Windows.Forms.Interop.Tests;
 
-// Magic numbrs in this file are coming from unmanaged part of the test
+// Magic numbers in this file are coming from unmanaged part of the test
 // at src/System.Windows.Forms/tests/InteropTests/NativeTests/RichTextBoxTests.cpp
 public class RichTextBoxTests
 {

@@ -1,197 +1,166 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 #nullable disable
 
 using System.Collections;
-using System.Diagnostics;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Represents a linked list of integers
+/// </summary>
+internal class DataGridViewIntLinkedList : IEnumerable
 {
-    /// <summary>
-    ///  Represents a linked list of integers
-    /// </summary>
-    internal class DataGridViewIntLinkedList : IEnumerable
+    private DataGridViewIntLinkedListElement _lastAccessedElement;
+    private DataGridViewIntLinkedListElement _headElement;
+    private int _lastAccessedIndex;
+
+    IEnumerator IEnumerable.GetEnumerator()
     {
-        private DataGridViewIntLinkedListElement _lastAccessedElement;
-        private DataGridViewIntLinkedListElement _headElement;
-        private int _lastAccessedIndex;
+        return new DataGridViewIntLinkedListEnumerator(_headElement);
+    }
 
-        IEnumerator IEnumerable.GetEnumerator()
+    public DataGridViewIntLinkedList()
+    {
+        _lastAccessedIndex = -1;
+    }
+
+    public DataGridViewIntLinkedList(DataGridViewIntLinkedList source)
+    {
+        Debug.Assert(source is not null);
+        int elements = source.Count;
+        for (int element = 0; element < elements; element++)
         {
-            return new DataGridViewIntLinkedListEnumerator(_headElement);
+            Add(source[element]);
         }
+    }
 
-        public DataGridViewIntLinkedList()
+    public int this[int index]
+    {
+        get
         {
-            _lastAccessedIndex = -1;
-        }
-
-        public DataGridViewIntLinkedList(DataGridViewIntLinkedList source)
-        {
-            Debug.Assert(source is not null);
-            int elements = source.Count;
-            for (int element = 0; element < elements; element++)
+            Debug.Assert(index >= 0);
+            Debug.Assert(index < Count);
+            if (_lastAccessedIndex == -1 || index < _lastAccessedIndex)
             {
-                Add(source[element]);
-            }
-        }
-
-        public int this[int index]
-        {
-            get
-            {
-                Debug.Assert(index >= 0);
-                Debug.Assert(index < Count);
-                if (_lastAccessedIndex == -1 || index < _lastAccessedIndex)
+                DataGridViewIntLinkedListElement tmp = _headElement;
+                int tmpIndex = index;
+                while (tmpIndex > 0)
                 {
-                    DataGridViewIntLinkedListElement tmp = _headElement;
-                    int tmpIndex = index;
-                    while (tmpIndex > 0)
-                    {
-                        tmp = tmp.Next;
-                        tmpIndex--;
-                    }
-
-                    _lastAccessedElement = tmp;
-                    _lastAccessedIndex = index;
-                    return tmp.Int;
-                }
-                else
-                {
-                    while (_lastAccessedIndex < index)
-                    {
-                        _lastAccessedElement = _lastAccessedElement.Next;
-                        _lastAccessedIndex++;
-                    }
-
-                    return _lastAccessedElement.Int;
-                }
-            }
-            set
-            {
-                Debug.Assert(index >= 0);
-                if (index != _lastAccessedIndex)
-                {
-                    int currentInt = this[index];
-                    Debug.Assert(index == _lastAccessedIndex);
+                    tmp = tmp.Next;
+                    tmpIndex--;
                 }
 
-                _lastAccessedElement.Int = value;
-            }
-        }
-
-        public int Count { get; private set; }
-
-        public int HeadInt
-        {
-            get
-            {
-                Debug.Assert(_headElement is not null);
-                return _headElement.Int;
-            }
-        }
-
-        public void Add(int integer)
-        {
-            DataGridViewIntLinkedListElement newHead = new DataGridViewIntLinkedListElement(integer);
-            if (_headElement is not null)
-            {
-                newHead.Next = _headElement;
-            }
-
-            _headElement = newHead;
-            Count++;
-            _lastAccessedElement = null;
-            _lastAccessedIndex = -1;
-        }
-
-        public void Clear()
-        {
-            _lastAccessedElement = null;
-            _lastAccessedIndex = -1;
-            _headElement = null;
-            Count = 0;
-        }
-
-        public bool Contains(int integer)
-        {
-            int index = 0;
-            DataGridViewIntLinkedListElement tmp = _headElement;
-            while (tmp is not null)
-            {
-                if (tmp.Int == integer)
-                {
-                    _lastAccessedElement = tmp;
-                    _lastAccessedIndex = index;
-                    return true;
-                }
-
-                tmp = tmp.Next;
-                index++;
-            }
-
-            return false;
-        }
-
-        public int IndexOf(int integer)
-        {
-            if (Contains(integer))
-            {
-                return _lastAccessedIndex;
+                _lastAccessedElement = tmp;
+                _lastAccessedIndex = index;
+                return tmp.Int;
             }
             else
             {
-                return -1;
+                while (_lastAccessedIndex < index)
+                {
+                    _lastAccessedElement = _lastAccessedElement.Next;
+                    _lastAccessedIndex++;
+                }
+
+                return _lastAccessedElement.Int;
             }
         }
-
-        public bool Remove(int integer)
+        set
         {
-            DataGridViewIntLinkedListElement tmp1 = null, tmp2 = _headElement;
-            while (tmp2 is not null)
+            Debug.Assert(index >= 0);
+            if (index != _lastAccessedIndex)
             {
-                if (tmp2.Int == integer)
-                {
-                    break;
-                }
-
-                tmp1 = tmp2;
-                tmp2 = tmp2.Next;
+                int currentInt = this[index];
+                Debug.Assert(index == _lastAccessedIndex);
             }
 
-            if (tmp2.Int == integer)
-            {
-                DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
-                if (tmp1 is null)
-                {
-                    _headElement = tmp3;
-                }
-                else
-                {
-                    tmp1.Next = tmp3;
-                }
+            _lastAccessedElement.Int = value;
+        }
+    }
 
-                Count--;
-                _lastAccessedElement = null;
-                _lastAccessedIndex = -1;
+    public int Count { get; private set; }
+
+    public int HeadInt
+    {
+        get
+        {
+            Debug.Assert(_headElement is not null);
+            return _headElement.Int;
+        }
+    }
+
+    public void Add(int integer)
+    {
+        DataGridViewIntLinkedListElement newHead = new DataGridViewIntLinkedListElement(integer);
+        if (_headElement is not null)
+        {
+            newHead.Next = _headElement;
+        }
+
+        _headElement = newHead;
+        Count++;
+        _lastAccessedElement = null;
+        _lastAccessedIndex = -1;
+    }
+
+    public void Clear()
+    {
+        _lastAccessedElement = null;
+        _lastAccessedIndex = -1;
+        _headElement = null;
+        Count = 0;
+    }
+
+    public bool Contains(int integer)
+    {
+        int index = 0;
+        DataGridViewIntLinkedListElement tmp = _headElement;
+        while (tmp is not null)
+        {
+            if (tmp.Int == integer)
+            {
+                _lastAccessedElement = tmp;
+                _lastAccessedIndex = index;
                 return true;
             }
 
-            return false;
+            tmp = tmp.Next;
+            index++;
         }
 
-        public void RemoveAt(int index)
+        return false;
+    }
+
+    public int IndexOf(int integer)
+    {
+        if (Contains(integer))
         {
-            DataGridViewIntLinkedListElement tmp1 = null, tmp2 = _headElement;
-            while (index > 0)
+            return _lastAccessedIndex;
+        }
+        else
+        {
+            return -1;
+        }
+    }
+
+    public bool Remove(int integer)
+    {
+        DataGridViewIntLinkedListElement tmp1 = null, tmp2 = _headElement;
+        while (tmp2 is not null)
+        {
+            if (tmp2.Int == integer)
             {
-                tmp1 = tmp2;
-                tmp2 = tmp2.Next;
-                index--;
+                break;
             }
 
+            tmp1 = tmp2;
+            tmp2 = tmp2.Next;
+        }
+
+        if (tmp2.Int == integer)
+        {
             DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
             if (tmp1 is null)
             {
@@ -205,6 +174,34 @@ namespace System.Windows.Forms
             Count--;
             _lastAccessedElement = null;
             _lastAccessedIndex = -1;
+            return true;
         }
+
+        return false;
+    }
+
+    public void RemoveAt(int index)
+    {
+        DataGridViewIntLinkedListElement tmp1 = null, tmp2 = _headElement;
+        while (index > 0)
+        {
+            tmp1 = tmp2;
+            tmp2 = tmp2.Next;
+            index--;
+        }
+
+        DataGridViewIntLinkedListElement tmp3 = tmp2.Next;
+        if (tmp1 is null)
+        {
+            _headElement = tmp3;
+        }
+        else
+        {
+            tmp1.Next = tmp3;
+        }
+
+        Count--;
+        _lastAccessedElement = null;
+        _lastAccessedIndex = -1;
     }
 }

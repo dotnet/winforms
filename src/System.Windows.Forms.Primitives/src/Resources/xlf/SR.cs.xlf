@@ -22,6 +22,21 @@
         <target state="translated">Analýza textu ({0}) se nezdařila. Byl očekáván text ve formátu {1}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Win32GetThreadsDpiContextFailed">
+        <source>Failed to get thread's DpiAwareness context.</source>
+        <target state="translated">Nepodařilo se načíst kontext DpiAwareness pro vlákno.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Win32SetThreadsDpiContextFailed">
+        <source>Failed to set thread's DpiAwareness context {0}.</source>
+        <target state="translated">Nepodařilo se nastavit kontext DpiAwareness {0} pro vlákno.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Win32SetThreadsDpiHostingBehaviorFailed">
+        <source>Failed to set thread's DPI hosting behavior {0}.</source>
+        <target state="translated">Nepodařilo se nastavit chování hostování DPI {0} pro vlákno.</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>

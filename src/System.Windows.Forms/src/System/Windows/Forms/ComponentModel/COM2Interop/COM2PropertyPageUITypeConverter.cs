@@ -1,102 +1,99 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
-using static Interop;
+using Windows.Win32.System.Com;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop
+namespace System.Windows.Forms.ComponentModel.Com2Interop;
+
+internal sealed unsafe class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
 {
-    internal class Com2PropertyPageUITypeEditor : Com2ExtendedUITypeEditor, ICom2PropertyPageDisplayService
+    private readonly Com2PropertyDescriptor _propertyDescriptor;
+    private readonly Guid _guid;
+
+    public Com2PropertyPageUITypeEditor(
+        Com2PropertyDescriptor propertyDescriptor,
+        Guid guid,
+        UITypeEditor? baseEditor) : base(baseEditor)
     {
-        private readonly Com2PropertyDescriptor _propertyDescriptor;
-        private readonly Guid _guid;
+        _propertyDescriptor = propertyDescriptor;
+        _guid = guid;
+    }
 
-        public Com2PropertyPageUITypeEditor(
-            Com2PropertyDescriptor propertyDescriptor,
-            Guid guid,
-            UITypeEditor? baseEditor) : base(baseEditor)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
+    {
+        HWND parentHandle = PInvoke.GetFocus();
+
+        try
         {
-            _propertyDescriptor = propertyDescriptor;
-            _guid = guid;
+            if (!provider.TryGetService(out ICom2PropertyPageDisplayService? propertyPageService))
+            {
+                propertyPageService ??= this;
+            }
+
+            object? instance = context?.Instance;
+
+            if (instance is not null && !instance.GetType().IsArray)
+            {
+                instance = _propertyDescriptor.TargetObject;
+                if (instance is ICustomTypeDescriptor customTypeDescriptor)
+                {
+                    instance = customTypeDescriptor.GetPropertyOwner(_propertyDescriptor);
+                }
+            }
+
+            Debug.Assert(instance is not null);
+            propertyPageService.ShowPropertyPage(_propertyDescriptor.Name, instance, _propertyDescriptor.DISPID, _guid, parentHandle);
+        }
+        catch (Exception ex)
+        {
+            if (provider.TryGetService(out IUIService? uiService))
+            {
+                uiService.ShowError(ex, SR.ErrorTypeConverterFailed);
+            }
         }
 
-        public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
+        return value;
+    }
+
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
+
+    public void ShowPropertyPage(string title, object component, int dispid, Guid pageGuid, nint parentHandle)
+    {
+        object[] objects = component.GetType().IsArray ? (object[])component : new object[] { component };
+        nint[] addresses = new nint[objects.Length];
+
+        try
         {
-            HWND hWndParent = PInvoke.GetFocus();
-
-            try
+            for (int i = 0; i < addresses.Length; i++)
             {
-                if (!provider.TryGetService(out ICom2PropertyPageDisplayService? propertyPageService))
-                {
-                    propertyPageService ??= this;
-                }
-
-                object? instance = context?.Instance;
-
-                if (instance is not null && !instance.GetType().IsArray)
-                {
-                    instance = _propertyDescriptor.TargetObject;
-                    if (instance is ICustomTypeDescriptor customTypeDescriptor)
-                    {
-                        instance = customTypeDescriptor.GetPropertyOwner(_propertyDescriptor);
-                    }
-                }
-
-                propertyPageService.ShowPropertyPage(_propertyDescriptor.Name, instance, (int)_propertyDescriptor.DISPID, _guid, hWndParent);
-            }
-            catch (Exception ex)
-            {
-                if (provider.TryGetService(out IUIService? uiService))
-                {
-                    uiService?.ShowError(ex, SR.ErrorTypeConverterFailed);
-                }
+                addresses[i] = (nint)ComHelpers.GetComPointer<IUnknown>(objects[i]);
             }
 
-            return value;
+            fixed (void* pObjAddrs = addresses)
+            {
+                PInvoke.OleCreatePropertyFrame(
+                    (HWND)parentHandle,
+                    0,
+                    0,
+                    title,
+                    (uint)addresses.Length,
+                    (IUnknown**)pObjAddrs,
+                    1,
+                    pageGuid,
+                    PInvoke.GetThreadLocale()).ThrowOnFailure();
+            }
         }
-
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
-
-        public unsafe void ShowPropertyPage(string title, object component, int dispid, Guid pageGuid, IntPtr parentHandle)
+        finally
         {
-            object[] objs = component.GetType().IsArray ? (object[])component : new object[] { component };
-            IntPtr[] objAddrs = new IntPtr[objs.Length];
-
-            try
+            for (int i = 0; i < addresses.Length; i++)
             {
-                for (int i = 0; i < objAddrs.Length; i++)
+                if (addresses[i] != 0)
                 {
-                    objAddrs[i] = Marshal.GetIUnknownForObject(objs[i]);
-                }
-
-                fixed (IntPtr* pObjAddrs = objAddrs)
-                {
-                    Oleaut32.OleCreatePropertyFrame(
-                        parentHandle,
-                        0,
-                        0,
-                        title,
-                        (uint)objAddrs.Length,
-                        pObjAddrs,
-                        1,
-                        &pageGuid,
-                        PInvoke.GetThreadLocale(),
-                        0,
-                        IntPtr.Zero);
-                }
-            }
-            finally
-            {
-                for (int i = 0; i < objAddrs.Length; i++)
-                {
-                    if (objAddrs[i] != IntPtr.Zero)
-                    {
-                        Marshal.Release(objAddrs[i]);
-                    }
+                    Marshal.Release(addresses[i]);
                 }
             }
         }

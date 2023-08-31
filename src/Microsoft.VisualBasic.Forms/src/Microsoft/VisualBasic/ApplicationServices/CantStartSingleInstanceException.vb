@@ -1,6 +1,5 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
-' See the LICENSE file in the project root for more information.
 
 Option Strict On
 Option Explicit On
@@ -17,7 +16,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Never)>
     <Serializable()>
-    Public Class CantStartSingleInstanceException : Inherits System.Exception
+    Public Class CantStartSingleInstanceException : Inherits Exception
 
         ''' <summary>
         '''  Creates a new exception
@@ -30,13 +29,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             MyBase.New(message)
         End Sub
 
-        Public Sub New(ByVal message As String, ByVal inner As System.Exception)
+        Public Sub New(ByVal message As String, ByVal inner As Exception)
             MyBase.New(message, inner)
         End Sub
 
         ' Deserialization constructor must be defined since we are serializable
         <EditorBrowsable(EditorBrowsableState.Advanced)>
-        Protected Sub New(ByVal info As System.Runtime.Serialization.SerializationInfo, ByVal context As System.Runtime.Serialization.StreamingContext)
+        <Obsolete("Type or member is obsolete", DiagnosticId:="SYSLIB0051")>
+        Protected Sub New(ByVal info As Runtime.Serialization.SerializationInfo, ByVal context As Runtime.Serialization.StreamingContext)
             MyBase.New(info, context)
         End Sub
     End Class

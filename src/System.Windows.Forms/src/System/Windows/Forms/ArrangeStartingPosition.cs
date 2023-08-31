@@ -1,42 +1,38 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using static Interop;
+namespace System.Windows.Forms;
 
-namespace System.Windows.Forms
+/// <summary>
+///  Specifies the starting position that the system uses to arrange minimized
+///  windows.
+/// </summary>
+[Flags]
+public enum ArrangeStartingPosition
 {
     /// <summary>
-    ///  Specifies the starting position that the system uses to arrange minimized
-    ///  windows.
+    ///  Starts at the lower-left corner of the screen, which is the default position.
     /// </summary>
-    [Flags]
-    public enum ArrangeStartingPosition
-    {
-        /// <summary>
-        ///  Starts at the lower-left corner of the screen, which is the default position.
-        /// </summary>
-        BottomLeft = User32.ARW.BOTTOMLEFT,
+    BottomLeft = MINIMIZEDMETRICS_ARRANGE.ARW_BOTTOMLEFT,
 
-        /// <summary>
-        ///  Starts at the lower-right corner of the screen.
-        /// </summary>
-        BottomRight = User32.ARW.BOTTOMRIGHT,
+    /// <summary>
+    ///  Starts at the lower-right corner of the screen.
+    /// </summary>
+    BottomRight = MINIMIZEDMETRICS_ARRANGE.ARW_BOTTOMRIGHT,
 
-        /// <summary>
-        ///  Hides minimized windows by moving them off the visible area of the
-        ///  screen.
-        /// </summary>
-        Hide = User32.ARW.HIDE,
+    /// <summary>
+    ///  Hides minimized windows by moving them off the visible area of the
+    ///  screen.
+    /// </summary>
+    Hide = PInvoke.ARW_HIDE,
 
-        /// <summary>
-        ///  Starts at the upper-left corner of the screen.
-        /// </summary>
-        TopLeft = User32.ARW.TOPLEFT,
+    /// <summary>
+    ///  Starts at the upper-left corner of the screen.
+    /// </summary>
+    TopLeft = MINIMIZEDMETRICS_ARRANGE.ARW_TOPLEFT,
 
-        /// <summary>
-        ///  Starts at the upper-right corner of the screen.
-        /// </summary>
-        TopRight = User32.ARW.TOPRIGHT,
-    }
+    /// <summary>
+    ///  Starts at the upper-right corner of the screen.
+    /// </summary>
+    TopRight = MINIMIZEDMETRICS_ARRANGE.ARW_TOPRIGHT,
 }

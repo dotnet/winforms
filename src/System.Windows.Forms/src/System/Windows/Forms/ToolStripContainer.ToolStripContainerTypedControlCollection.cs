@@ -1,81 +1,80 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Globalization;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class ToolStripContainer
 {
-    public partial class ToolStripContainer
+    internal class ToolStripContainerTypedControlCollection : ReadOnlyControlCollection
     {
-        internal class ToolStripContainerTypedControlCollection : ReadOnlyControlCollection
+        private readonly ToolStripContainer _owner;
+        private readonly Type _contentPanelType = typeof(ToolStripContentPanel);
+        private readonly Type _panelType = typeof(ToolStripPanel);
+
+        public ToolStripContainerTypedControlCollection(ToolStripContainer c, bool isReadOnly)
+            : base(c, isReadOnly)
         {
-            readonly ToolStripContainer owner;
-            readonly Type contentPanelType = typeof(ToolStripContentPanel);
-            readonly Type panelType = typeof(ToolStripPanel);
+            _owner = c;
+        }
 
-            public ToolStripContainerTypedControlCollection(Control c, bool isReadOnly)
-                : base(c, isReadOnly)
+        public override void Add(Control? value)
+        {
+            if (value is null)
             {
-                owner = c as ToolStripContainer;
+                return;
             }
 
-            public override void Add(Control value)
+            if (IsReadOnly)
             {
-                ArgumentNullException.ThrowIfNull(value);
-
-                if (IsReadOnly)
-                {
-                    throw new NotSupportedException(SR.ToolStripContainerUseContentPanel);
-                }
-
-                Type controlType = value.GetType();
-                if (!contentPanelType.IsAssignableFrom(controlType) && !panelType.IsAssignableFrom(controlType))
-                {
-                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfTypes, contentPanelType.Name, panelType.Name)), value.GetType().Name);
-                }
-
-                base.Add(value);
+                throw new NotSupportedException(SR.ToolStripContainerUseContentPanel);
             }
 
-            public override void Remove(Control value)
+            Type controlType = value.GetType();
+            if (!_contentPanelType.IsAssignableFrom(controlType) && !_panelType.IsAssignableFrom(controlType))
             {
-                if (value is ToolStripPanel || value is ToolStripContentPanel)
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfTypes, _contentPanelType.Name, _panelType.Name)), value.GetType().Name);
+            }
+
+            base.Add(value);
+        }
+
+        public override void Remove(Control? value)
+        {
+            if (value is ToolStripPanel || value is ToolStripContentPanel)
+            {
+                if (!_owner.DesignMode)
                 {
-                    if (!owner.DesignMode)
+                    if (IsReadOnly)
                     {
-                        if (IsReadOnly)
-                        {
-                            throw new NotSupportedException(SR.ReadonlyControlsCollection);
-                        }
+                        throw new NotSupportedException(SR.ReadonlyControlsCollection);
                     }
                 }
-
-                base.Remove(value);
             }
 
-            internal override void SetChildIndexInternal(Control child, int newIndex)
+            base.Remove(value);
+        }
+
+        internal override void SetChildIndexInternal(Control child, int newIndex)
+        {
+            if (child is ToolStripPanel || child is ToolStripContentPanel)
             {
-                if (child is ToolStripPanel || child is ToolStripContentPanel)
+                if (!_owner.DesignMode)
                 {
-                    if (!owner.DesignMode)
+                    if (IsReadOnly)
                     {
-                        if (IsReadOnly)
-                        {
-                            throw new NotSupportedException(SR.ReadonlyControlsCollection);
-                        }
-                    }
-                    else
-                    {
-                        // just no-op it at DT.
-                        return;
+                        throw new NotSupportedException(SR.ReadonlyControlsCollection);
                     }
                 }
-
-                base.SetChildIndexInternal(child, newIndex);
+                else
+                {
+                    // just no-op it at DT.
+                    return;
+                }
             }
+
+            base.SetChildIndexInternal(child, newIndex);
         }
     }
 }

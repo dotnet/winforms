@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -8,648 +7,645 @@ using System.Drawing;
 using System.Windows.Forms.Layout;
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+[SRDescription(nameof(SR.DescriptionStatusStrip))]
+public partial class StatusStrip : ToolStrip
 {
-    [SRDescription(nameof(SR.DescriptionStatusStrip))]
-    public partial class StatusStrip : ToolStrip
+    private const AnchorStyles AllAnchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top;
+    private const AnchorStyles HorizontalAnchor = AnchorStyles.Left | AnchorStyles.Right;
+    private const AnchorStyles VerticalAnchor = AnchorStyles.Top | AnchorStyles.Bottom;
+
+    private BitVector32 state;
+
+    private static readonly int stateSizingGrip = BitVector32.CreateMask();
+    private static readonly int stateCalledSpringTableLayout = BitVector32.CreateMask(stateSizingGrip);
+
+    private const int gripWidth = 12;
+    private RightToLeftLayoutGrip? rtlLayoutGrip;
+    private Orientation lastOrientation = Orientation.Horizontal;
+
+    public StatusStrip()
     {
-        private const AnchorStyles AllAnchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top;
-        private const AnchorStyles HorizontalAnchor = AnchorStyles.Left | AnchorStyles.Right;
-        private const AnchorStyles VerticalAnchor = AnchorStyles.Top | AnchorStyles.Bottom;
+        SuspendLayout();
+        CanOverflow = false;
+        LayoutStyle = ToolStripLayoutStyle.Table;
+        RenderMode = ToolStripRenderMode.System;
+        GripStyle = ToolStripGripStyle.Hidden;
 
-        private BitVector32 state;
+        SetStyle(ControlStyles.ResizeRedraw, true);
+        Stretch = true;
+        state[stateSizingGrip] = true;
+        ResumeLayout(true);
+    }
 
-        private static readonly int stateSizingGrip = BitVector32.CreateMask();
-        private static readonly int stateCalledSpringTableLayout = BitVector32.CreateMask(stateSizingGrip);
+    [DefaultValue(false)]
+    [SRDescription(nameof(SR.ToolStripCanOverflowDescr))]
+    [SRCategory(nameof(SR.CatLayout))]
+    [Browsable(false)]
+    public new bool CanOverflow
+    {
+        get => base.CanOverflow;
+        set => base.CanOverflow = value;
+    }
 
-        private const int gripWidth = 12;
-        private RightToLeftLayoutGrip? rtlLayoutGrip;
-        private Orientation lastOrientation = Orientation.Horizontal;
-
-        public StatusStrip()
+    protected override bool DefaultShowItemToolTips
+    {
+        get
         {
-            SuspendLayout();
-            CanOverflow = false;
-            LayoutStyle = ToolStripLayoutStyle.Table;
-            RenderMode = ToolStripRenderMode.System;
-            GripStyle = ToolStripGripStyle.Hidden;
-
-            SetStyle(ControlStyles.ResizeRedraw, true);
-            Stretch = true;
-            state[stateSizingGrip] = true;
-            ResumeLayout(true);
+            return false;
         }
+    }
 
-        [DefaultValue(false)]
-        [SRDescription(nameof(SR.ToolStripCanOverflowDescr))]
-        [SRCategory(nameof(SR.CatLayout))]
-        [Browsable(false)]
-        public new bool CanOverflow
+    protected override Size DefaultSize
+    {
+        get
         {
-            get => base.CanOverflow;
-            set => base.CanOverflow = value;
+            return new Size(200, 22);
         }
+    }
 
-        protected override bool DefaultShowItemToolTips
+    protected override Padding DefaultPadding
+    {
+        get
         {
-            get
+            if (Orientation == Orientation.Horizontal)
             {
-                return false;
-            }
-        }
-
-        protected override Size DefaultSize
-        {
-            get
-            {
-                return new Size(200, 22);
-            }
-        }
-
-        protected override Padding DefaultPadding
-        {
-            get
-            {
-                if (Orientation == Orientation.Horizontal)
+                if (RightToLeft == RightToLeft.No)
                 {
-                    if (RightToLeft == RightToLeft.No)
-                    {
-                        return new Padding(1, 0, 14, 0);
-                    }
-                    else
-                    {
-                        return new Padding(14, 0, 1, 0);
-                    }
+                    return new Padding(1, 0, 14, 0);
                 }
                 else
                 {
-                    // vertical
-                    // the difference in symmetry here is that the grip does not actually rotate, it remains the same height it
-                    // was before, so the DisplayRectangle needs to shrink up by its height.
-                    return new Padding(1, 3, 1, DefaultSize.Height);
+                    return new Padding(14, 0, 1, 0);
                 }
             }
-        }
-
-        protected override DockStyle DefaultDock
-        {
-            get
+            else
             {
-                return DockStyle.Bottom;
+                // vertical
+                // the difference in symmetry here is that the grip does not actually rotate, it remains the same height it
+                // was before, so the DisplayRectangle needs to shrink up by its height.
+                return new Padding(1, 3, 1, DefaultSize.Height);
             }
         }
+    }
 
-        [DefaultValue(DockStyle.Bottom)]
-        public override DockStyle Dock
+    protected override DockStyle DefaultDock
+    {
+        get
         {
-            get => base.Dock;
-            set => base.Dock = value;
+            return DockStyle.Bottom;
         }
+    }
 
-        [DefaultValue(ToolStripGripStyle.Hidden)]
-        public new ToolStripGripStyle GripStyle
+    [DefaultValue(DockStyle.Bottom)]
+    public override DockStyle Dock
+    {
+        get => base.Dock;
+        set => base.Dock = value;
+    }
+
+    [DefaultValue(ToolStripGripStyle.Hidden)]
+    public new ToolStripGripStyle GripStyle
+    {
+        get => base.GripStyle;
+        set => base.GripStyle = value;
+    }
+
+    [DefaultValue(ToolStripLayoutStyle.Table)]
+    public new ToolStripLayoutStyle LayoutStyle
+    {
+        get => base.LayoutStyle;
+        set => base.LayoutStyle = value;
+    }
+
+    // we do some custom stuff with padding to accomodate size grip.
+    // changing this is not supported at DT
+    [Browsable(false)]
+    public new Padding Padding
+    {
+        get => base.Padding;
+        set => base.Padding = value;
+    }
+
+    [Browsable(false)]
+    public new event EventHandler? PaddingChanged
+    {
+        add => base.PaddingChanged += value;
+        remove => base.PaddingChanged -= value;
+    }
+
+    private Control RTLGrip
+    {
+        get
         {
-            get => base.GripStyle;
-            set => base.GripStyle = value;
+            rtlLayoutGrip ??= new RightToLeftLayoutGrip();
+
+            return rtlLayoutGrip;
         }
+    }
 
-        [DefaultValue(ToolStripLayoutStyle.Table)]
-        public new ToolStripLayoutStyle LayoutStyle
-        {
-            get => base.LayoutStyle;
-            set => base.LayoutStyle = value;
-        }
+    [DefaultValue(false)]
+    [SRDescription(nameof(SR.ToolStripShowItemToolTipsDescr))]
+    [SRCategory(nameof(SR.CatBehavior))]
+    public new bool ShowItemToolTips
+    {
+        get => base.ShowItemToolTips;
+        set => base.ShowItemToolTips = value;
+    }
 
-        // we do some custom stuff with padding to accomodate size grip.
-        // changing this is not supported at DT
-        [Browsable(false)]
-        public new Padding Padding
+    // return whether we should paint the sizing grip.
+    private bool ShowSizingGrip
+    {
+        get
         {
-            get => base.Padding;
-            set => base.Padding = value;
-        }
-
-        [Browsable(false)]
-        public new event EventHandler? PaddingChanged
-        {
-            add => base.PaddingChanged += value;
-            remove => base.PaddingChanged -= value;
-        }
-
-        private Control RTLGrip
-        {
-            get
+            if (SizingGrip && IsHandleCreated)
             {
-                rtlLayoutGrip ??= new RightToLeftLayoutGrip();
-
-                return rtlLayoutGrip;
-            }
-        }
-
-        [DefaultValue(false)]
-        [SRDescription(nameof(SR.ToolStripShowItemToolTipsDescr))]
-        [SRCategory(nameof(SR.CatBehavior))]
-        public new bool ShowItemToolTips
-        {
-            get => base.ShowItemToolTips;
-            set => base.ShowItemToolTips = value;
-        }
-
-        // return whether we should paint the sizing grip.
-        private bool ShowSizingGrip
-        {
-            get
-            {
-                if (SizingGrip && IsHandleCreated)
+                if (DesignMode)
                 {
-                    if (DesignMode)
-                    {
-                        return true;  // we don't care about the state of VS.
-                    }
-
-                    HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
-                    if (!rootHwnd.IsNull)
-                    {
-                        return !PInvoke.IsZoomed(rootHwnd);
-                    }
+                    return true;  // we don't care about the state of VS.
                 }
 
-                return false;
-            }
-        }
-
-        [SRCategory(nameof(SR.CatAppearance))]
-        [DefaultValue(true)]
-        [SRDescription(nameof(SR.StatusStripSizingGripDescr))]
-        public bool SizingGrip
-        {
-            get
-            {
-                return state[stateSizingGrip];
-            }
-            set
-            {
-                if (value != state[stateSizingGrip])
+                HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
+                if (!rootHwnd.IsNull)
                 {
-                    state[stateSizingGrip] = value;
-                    EnsureRightToLeftGrip();
-                    Invalidate(true);
-                }
-            }
-        }
-
-        [Browsable(false)]
-        public Rectangle SizeGripBounds
-        {
-            get
-            {
-                if (SizingGrip)
-                {
-                    Size statusStripSize = Size;
-                    // we can't necessarily make this the height of the status strip, as
-                    // the orientation could change.
-                    int gripHeight = Math.Min(DefaultSize.Height, statusStripSize.Height);
-
-                    if (RightToLeft == RightToLeft.Yes)
-                    {
-                        return new Rectangle(0, statusStripSize.Height - gripHeight, gripWidth, gripHeight);
-                    }
-                    else
-                    {
-                        return new Rectangle(statusStripSize.Width - gripWidth, statusStripSize.Height - gripHeight, gripWidth, gripHeight);
-                    }
-                }
-
-                return Rectangle.Empty;
-            }
-        }
-
-        [DefaultValue(true)]
-        [SRCategory(nameof(SR.CatLayout))]
-        [SRDescription(nameof(SR.ToolStripStretchDescr))]
-        public new bool Stretch
-        {
-            get => base.Stretch;
-            set => base.Stretch = value;
-        }
-
-        private TableLayoutSettings TableLayoutSettings
-        {
-            get { return (TableLayoutSettings)LayoutSettings; }
-        }
-
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new StatusStripAccessibleObject(this);
-        }
-
-        protected internal override ToolStripItem CreateDefaultItem(string? text, Image? image, EventHandler? onClick)
-        {
-            return new ToolStripStatusLabel(text, image, onClick);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (rtlLayoutGrip is not null)
-                {
-                    rtlLayoutGrip.Dispose();
-                    rtlLayoutGrip = null;
+                    return !PInvoke.IsZoomed(rootHwnd);
                 }
             }
 
-            base.Dispose(disposing);
+            return false;
         }
+    }
 
-        // in RTL, we parent a transparent control over the grip to support mirroring.
-        private void EnsureRightToLeftGrip()
+    [SRCategory(nameof(SR.CatAppearance))]
+    [DefaultValue(true)]
+    [SRDescription(nameof(SR.StatusStripSizingGripDescr))]
+    public bool SizingGrip
+    {
+        get
         {
-            if (SizingGrip && RightToLeft == RightToLeft.Yes)
+            return state[stateSizingGrip];
+        }
+        set
+        {
+            if (value != state[stateSizingGrip])
             {
-                RTLGrip.Bounds = SizeGripBounds;
-                if (!Controls.Contains(RTLGrip))
-                {
-                    if (Controls is ReadOnlyControlCollection controlCollection)
-                    {
-                        controlCollection.AddInternal(RTLGrip);
-                    }
-                }
-            }
-            else if (rtlLayoutGrip is not null)
-            {
-                if (Controls.Contains(rtlLayoutGrip))
-                {
-                    if (Controls is ReadOnlyControlCollection controlCollection)
-                    {
-                        controlCollection.RemoveInternal(rtlLayoutGrip);
-                    }
-
-                    rtlLayoutGrip.Dispose();
-                    rtlLayoutGrip = null;
-                }
+                state[stateSizingGrip] = value;
+                EnsureRightToLeftGrip();
+                Invalidate(true);
             }
         }
+    }
 
-        internal override Size GetPreferredSizeCore(Size proposedSize)
+    [Browsable(false)]
+    public Rectangle SizeGripBounds
+    {
+        get
         {
-            if (LayoutStyle == ToolStripLayoutStyle.Table)
+            if (SizingGrip)
             {
-                if (proposedSize.Width == 1)
-                {
-                    proposedSize.Width = int.MaxValue;
-                }
+                Size statusStripSize = Size;
+                // we can't necessarily make this the height of the status strip, as
+                // the orientation could change.
+                int gripHeight = Math.Min(DefaultSize.Height, statusStripSize.Height);
 
-                if (proposedSize.Height == 1)
+                if (RightToLeft == RightToLeft.Yes)
                 {
-                    proposedSize.Height = int.MaxValue;
-                }
-
-                if (Orientation == Orientation.Horizontal)
-                {
-                    return GetPreferredSizeHorizontal(this, proposedSize) + Padding.Size;
+                    return new Rectangle(0, statusStripSize.Height - gripHeight, gripWidth, gripHeight);
                 }
                 else
                 {
-                    return GetPreferredSizeVertical(this) + Padding.Size;
+                    return new Rectangle(statusStripSize.Width - gripWidth, statusStripSize.Height - gripHeight, gripWidth, gripHeight);
                 }
             }
 
-            return base.GetPreferredSizeCore(proposedSize);
+            return Rectangle.Empty;
         }
+    }
 
-        protected override void OnPaintBackground(PaintEventArgs e)
+    [DefaultValue(true)]
+    [SRCategory(nameof(SR.CatLayout))]
+    [SRDescription(nameof(SR.ToolStripStretchDescr))]
+    public new bool Stretch
+    {
+        get => base.Stretch;
+        set => base.Stretch = value;
+    }
+
+    private TableLayoutSettings TableLayoutSettings
+    {
+        get { return (TableLayoutSettings)LayoutSettings!; }
+    }
+
+    protected override AccessibleObject CreateAccessibilityInstance()
+    {
+        return new StatusStripAccessibleObject(this);
+    }
+
+    protected internal override ToolStripItem CreateDefaultItem(string? text, Image? image, EventHandler? onClick)
+    {
+        return new ToolStripStatusLabel(text, image, onClick);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            base.OnPaintBackground(e);
-
-            if (ShowSizingGrip)
+            if (rtlLayoutGrip is not null)
             {
-                Renderer.DrawStatusStripSizingGrip(new ToolStripRenderEventArgs(e.Graphics, this));
+                rtlLayoutGrip.Dispose();
+                rtlLayoutGrip = null;
             }
         }
 
-        protected override void OnLayout(LayoutEventArgs levent)
+        base.Dispose(disposing);
+    }
+
+    // in RTL, we parent a transparent control over the grip to support mirroring.
+    private void EnsureRightToLeftGrip()
+    {
+        if (SizingGrip && RightToLeft == RightToLeft.Yes)
         {
-            state[stateCalledSpringTableLayout] = false;
-            bool inDisplayedItemCollection = false;
-            ToolStripItem? item = levent.AffectedComponent as ToolStripItem;
-            int itemCount = DisplayedItems.Count;
-            if (item is not null)
+            RTLGrip.Bounds = SizeGripBounds;
+            if (!Controls.Contains(RTLGrip))
             {
-                inDisplayedItemCollection = DisplayedItems.Contains(item);
+                if (Controls is ReadOnlyControlCollection controlCollection)
+                {
+                    controlCollection.AddInternal(RTLGrip);
+                }
+            }
+        }
+        else if (rtlLayoutGrip is not null)
+        {
+            if (Controls.Contains(rtlLayoutGrip))
+            {
+                if (Controls is ReadOnlyControlCollection controlCollection)
+                {
+                    controlCollection.RemoveInternal(rtlLayoutGrip);
+                }
+
+                rtlLayoutGrip.Dispose();
+                rtlLayoutGrip = null;
+            }
+        }
+    }
+
+    internal override Size GetPreferredSizeCore(Size proposedSize)
+    {
+        if (LayoutStyle == ToolStripLayoutStyle.Table)
+        {
+            if (proposedSize.Width == 1)
+            {
+                proposedSize.Width = int.MaxValue;
             }
 
+            if (proposedSize.Height == 1)
+            {
+                proposedSize.Height = int.MaxValue;
+            }
+
+            if (Orientation == Orientation.Horizontal)
+            {
+                return GetPreferredSizeHorizontal(this, proposedSize) + Padding.Size;
+            }
+            else
+            {
+                return GetPreferredSizeVertical(this) + Padding.Size;
+            }
+        }
+
+        return base.GetPreferredSizeCore(proposedSize);
+    }
+
+    protected override void OnPaintBackground(PaintEventArgs e)
+    {
+        base.OnPaintBackground(e);
+
+        if (ShowSizingGrip)
+        {
+            Renderer.DrawStatusStripSizingGrip(new ToolStripRenderEventArgs(e.Graphics, this));
+        }
+    }
+
+    protected override void OnLayout(LayoutEventArgs levent)
+    {
+        state[stateCalledSpringTableLayout] = false;
+        bool inDisplayedItemCollection = false;
+        ToolStripItem? item = levent.AffectedComponent as ToolStripItem;
+        int itemCount = DisplayedItems.Count;
+        if (item is not null)
+        {
+            inDisplayedItemCollection = DisplayedItems.Contains(item);
+        }
+
+        if (LayoutStyle == ToolStripLayoutStyle.Table)
+        {
+            OnSpringTableLayoutCore();
+        }
+
+        base.OnLayout(levent);
+
+        if (itemCount != DisplayedItems.Count || (item is not null && (inDisplayedItemCollection != DisplayedItems.Contains(item))))
+        {
+            // calling OnLayout has changed the displayed items collection
+            // the SpringTableLayoutCore requires the count of displayed items to
+            // be accurate.
+            // - so we need to perform layout again.
             if (LayoutStyle == ToolStripLayoutStyle.Table)
             {
                 OnSpringTableLayoutCore();
+                base.OnLayout(levent);
             }
-
-            base.OnLayout(levent);
-
-            if (itemCount != DisplayedItems.Count || (item is not null && (inDisplayedItemCollection != DisplayedItems.Contains(item))))
-            {
-                // calling OnLayout has changed the displayed items collection
-                // the SpringTableLayoutCore requires the count of displayed items to
-                // be accurate.
-                // - so we need to perform layout again.
-                if (LayoutStyle == ToolStripLayoutStyle.Table)
-                {
-                    OnSpringTableLayoutCore();
-                    base.OnLayout(levent);
-                }
-            }
-
-            EnsureRightToLeftGrip();
         }
 
-        internal override bool SupportsUiaProviders => true;
+        EnsureRightToLeftGrip();
+    }
 
-        protected override void SetDisplayedItems()
+    internal override bool SupportsUiaProviders => true;
+
+    protected override void SetDisplayedItems()
+    {
+        if (state[stateCalledSpringTableLayout])
         {
-            if (state[stateCalledSpringTableLayout])
+            // shove all items that don't fit one pixel outside the displayed region
+            Rectangle displayRect = DisplayRectangle;
+            Point noMansLand = displayRect.Location;
+            noMansLand.X += ClientSize.Width + 1;
+            noMansLand.Y += ClientSize.Height + 1;
+            bool overflow = false;
+            Rectangle lastItemBounds = Rectangle.Empty;
+
+            ToolStripItem? lastItem = null;
+            for (int i = 0; i < Items.Count; i++)
             {
-                bool rightToLeft = ((Orientation == Orientation.Horizontal) && (RightToLeft == RightToLeft.Yes));
+                ToolStripItem item = Items[i];
 
-                // shove all items that don't fit one pixel outside the displayed region
-                Rectangle displayRect = DisplayRectangle;
-                Point noMansLand = displayRect.Location;
-                noMansLand.X += ClientSize.Width + 1;
-                noMansLand.Y += ClientSize.Height + 1;
-                bool overflow = false;
-                Rectangle lastItemBounds = Rectangle.Empty;
-
-                ToolStripItem? lastItem = null;
-                for (int i = 0; i < Items.Count; i++)
+                // using spring layout we can get into a situation where there's extra items which arent
+                // visible.
+                if (overflow || ((IArrangedElement)item).ParticipatesInLayout)
                 {
-                    ToolStripItem item = Items[i];
-
-                    // using spring layout we can get into a situation where there's extra items which arent
-                    // visible.
-                    if (overflow || ((IArrangedElement)item).ParticipatesInLayout)
+                    if (overflow || (SizingGrip && item.Bounds.IntersectsWith(SizeGripBounds)))
                     {
-                        if (overflow || (SizingGrip && item.Bounds.IntersectsWith(SizeGripBounds)))
-                        {
-                            // if the item collides with the size grip, set the location to nomansland.
-                            SetItemLocation(item, noMansLand);
-                            item.SetPlacement(ToolStripItemPlacement.None);
-                        }
-                    }
-                    else if (lastItem is not null && (lastItemBounds.IntersectsWith(item.Bounds)))
-                    {
-                        // if it overlaps the previous element, set the location to nomansland.
+                        // if the item collides with the size grip, set the location to nomansland.
                         SetItemLocation(item, noMansLand);
                         item.SetPlacement(ToolStripItemPlacement.None);
                     }
-                    else if (item.Bounds.Width == 1)
+                }
+                else if (lastItem is not null && (lastItemBounds.IntersectsWith(item.Bounds)))
+                {
+                    // if it overlaps the previous element, set the location to nomansland.
+                    SetItemLocation(item, noMansLand);
+                    item.SetPlacement(ToolStripItemPlacement.None);
+                }
+                else if (item.Bounds.Width == 1)
+                {
+                    if (item is ToolStripStatusLabel panel && panel.Spring)
                     {
-                        if (item is ToolStripStatusLabel panel && panel.Spring)
-                        {
-                            // once we get down to one pixel, there can always be a one pixel
-                            // distribution problem with the TLP - there's usually a spare one around.
-                            // so set this off to nomansland as well.
-                            SetItemLocation(item, noMansLand);
-                            item.SetPlacement(ToolStripItemPlacement.None);
-                        }
+                        // once we get down to one pixel, there can always be a one pixel
+                        // distribution problem with the TLP - there's usually a spare one around.
+                        // so set this off to nomansland as well.
+                        SetItemLocation(item, noMansLand);
+                        item.SetPlacement(ToolStripItemPlacement.None);
+                    }
+                }
+
+                if (item.Bounds.Location != noMansLand)
+                {
+                    // set the next item to inspect for collisions
+                    lastItem = item;
+                    lastItemBounds = lastItem.Bounds;
+                }
+                else
+                {
+                    // we can't fit an item, everything else after it should not be displayed
+                    if (((IArrangedElement)item).ParticipatesInLayout)
+                    {
+                        overflow = true;
+                    }
+                }
+            }
+        }
+
+        base.SetDisplayedItems();
+    }
+
+    internal override void ResetRenderMode()
+    {
+        RenderMode = ToolStripRenderMode.System;
+    }
+
+    internal override bool ShouldSerializeRenderMode()
+    {
+        // We should NEVER serialize custom.
+        return (RenderMode != ToolStripRenderMode.System && RenderMode != ToolStripRenderMode.Custom);
+    }
+
+    /// <summary>
+    ///  Override this function if you want to do custom table layouts for the
+    ///  StatusStrip.  The default layoutstyle is tablelayout, and we need to play
+    ///  with the row/column styles
+    /// </summary>
+    protected virtual void OnSpringTableLayoutCore()
+    {
+        if (LayoutStyle == ToolStripLayoutStyle.Table)
+        {
+            state[stateCalledSpringTableLayout] = true;
+
+            SuspendLayout();
+
+            if (lastOrientation != Orientation)
+            {
+                TableLayoutSettings settings = TableLayoutSettings;
+                settings.RowCount = 0;
+                settings.ColumnCount = 0;
+                settings.ColumnStyles.Clear();
+                settings.RowStyles.Clear();
+            }
+
+            lastOrientation = Orientation;
+
+            if (Orientation == Orientation.Horizontal)
+            {
+                //
+                // Horizontal layout
+                //
+                TableLayoutSettings.GrowStyle = TableLayoutPanelGrowStyle.AddColumns;
+
+                int originalColumnCount = TableLayoutSettings.ColumnStyles.Count;
+
+                // iterate through the elements which are going to be displayed.
+                for (int i = 0; i < DisplayedItems.Count; i++)
+                {
+                    if (i >= originalColumnCount)
+                    {
+                        // add if it's necessary.
+                        TableLayoutSettings.ColumnStyles.Add(new ColumnStyle());
                     }
 
-                    if (item.Bounds.Location != noMansLand)
+                    // determine if we "spring" or "autosize" the column
+                    bool spring = (DisplayedItems[i] is ToolStripStatusLabel panel && panel.Spring);
+                    DisplayedItems[i].Anchor = (spring) ? AllAnchor : VerticalAnchor;
+
+                    // spring is achieved by using 100% as the column style
+                    ColumnStyle colStyle = TableLayoutSettings.ColumnStyles[i];
+                    colStyle.Width = 100; // this width is ignored in AutoSize.
+                    colStyle.SizeType = (spring) ? SizeType.Percent : SizeType.AutoSize;
+                }
+
+                if (TableLayoutSettings.RowStyles.Count > 1 || TableLayoutSettings.RowStyles.Count == 0)
+                {
+                    TableLayoutSettings.RowStyles.Clear();
+                    TableLayoutSettings.RowStyles.Add(new RowStyle());
+                }
+
+                TableLayoutSettings.RowCount = 1;
+
+                TableLayoutSettings.RowStyles[0].SizeType = SizeType.Absolute;
+                TableLayoutSettings.RowStyles[0].Height = Math.Max(0, DisplayRectangle.Height);
+                TableLayoutSettings.ColumnCount = DisplayedItems.Count + 1; // add an extra cell so it fills the remaining space
+
+                // don't remove the extra column styles, just set them back to autosize.
+                for (int i = DisplayedItems.Count; i < TableLayoutSettings.ColumnStyles.Count; i++)
+                {
+                    TableLayoutSettings.ColumnStyles[i].SizeType = SizeType.AutoSize;
+                }
+            }
+            else
+            {
+                //
+                // Vertical layout
+                //
+
+                TableLayoutSettings.GrowStyle = TableLayoutPanelGrowStyle.AddRows;
+
+                int originalRowCount = TableLayoutSettings.RowStyles.Count;
+
+                // iterate through the elements which are going to be displayed.
+                for (int i = 0; i < DisplayedItems.Count; i++)
+                {
+                    if (i >= originalRowCount)
                     {
-                        // set the next item to inspect for collisions
-                        lastItem = item;
-                        lastItemBounds = lastItem.Bounds;
+                        // add if it's necessary.
+                        TableLayoutSettings.RowStyles.Add(new RowStyle());
+                    }
+
+                    // determine if we "spring" or "autosize" the row
+                    bool spring = (DisplayedItems[i] is ToolStripStatusLabel panel && panel.Spring);
+                    DisplayedItems[i].Anchor = (spring) ? AllAnchor : HorizontalAnchor;
+
+                    // spring is achieved by using 100% as the row style
+                    RowStyle rowStyle = TableLayoutSettings.RowStyles[i];
+                    rowStyle.Height = 100; // this width is ignored in AutoSize.
+                    rowStyle.SizeType = (spring) ? SizeType.Percent : SizeType.AutoSize;
+                }
+
+                TableLayoutSettings.ColumnCount = 1;
+
+                if (TableLayoutSettings.ColumnStyles.Count > 1 || TableLayoutSettings.ColumnStyles.Count == 0)
+                {
+                    TableLayoutSettings.ColumnStyles.Clear();
+                    TableLayoutSettings.ColumnStyles.Add(new ColumnStyle());
+                }
+
+                TableLayoutSettings.ColumnCount = 1;
+                TableLayoutSettings.ColumnStyles[0].SizeType = SizeType.Absolute;
+                TableLayoutSettings.ColumnStyles[0].Width = Math.Max(0, DisplayRectangle.Width);
+
+                TableLayoutSettings.RowCount = DisplayedItems.Count + 1; // add an extra cell so it fills the remaining space
+
+                // don't remove the extra column styles, just set them back to autosize.
+                for (int i = DisplayedItems.Count; i < TableLayoutSettings.RowStyles.Count; i++)
+                {
+                    TableLayoutSettings.RowStyles[i].SizeType = SizeType.AutoSize;
+                }
+            }
+
+            ResumeLayout(false);
+        }
+    }
+
+    protected override void WndProc(ref Message m)
+    {
+        if ((m.Msg == (int)PInvoke.WM_NCHITTEST) && SizingGrip)
+        {
+            // if we're within the grip bounds tell windows
+            // that we're the bottom right of the window.
+            Rectangle sizeGripBounds = SizeGripBounds;
+
+            if (sizeGripBounds.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
+            {
+                HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
+
+                // if the main window isn't maximized - we should paint a resize grip.
+                // double check that we're at the bottom right hand corner of the window.
+                if (!rootHwnd.IsNull && !PInvoke.IsZoomed(rootHwnd))
+                {
+                    // get the client area of the topmost window.  If we're next to the edge then
+                    // the sizing grip is valid.
+                    PInvoke.GetClientRect(rootHwnd, out RECT rootHwndClientArea);
+
+                    // map the size grip FROM statusStrip coords TO the toplevel window coords.
+                    Point gripLocation;
+                    if (RightToLeft == RightToLeft.Yes)
+                    {
+                        gripLocation = new Point(SizeGripBounds.Left, SizeGripBounds.Bottom);
                     }
                     else
                     {
-                        // we can't fit an item, everything else after it should not be displayed
-                        if (((IArrangedElement)item).ParticipatesInLayout)
+                        gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
+                    }
+
+                    PInvoke.MapWindowPoints(this, rootHwnd, ref gripLocation);
+
+                    int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.Y);
+                    int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.X);
+
+                    if (RightToLeft != RightToLeft.Yes)
+                    {
+                        if ((deltaRightEdge + deltaBottomEdge) < 2)
                         {
-                            overflow = true;
+                            m.ResultInternal = (LRESULT)(nint)PInvoke.HTBOTTOMRIGHT;
+                            return;
                         }
                     }
                 }
             }
-
-            base.SetDisplayedItems();
         }
 
-        internal override void ResetRenderMode()
+        base.WndProc(ref m);
+    }
+
+    // special transparent mirrored window which says it's the bottom left of the form.
+    private class RightToLeftLayoutGrip : Control
+    {
+        public RightToLeftLayoutGrip()
         {
-            RenderMode = ToolStripRenderMode.System;
+            SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            BackColor = Color.Transparent;
         }
 
-        internal override bool ShouldSerializeRenderMode()
+        protected override CreateParams CreateParams
         {
-            // We should NEVER serialize custom.
-            return (RenderMode != ToolStripRenderMode.System && RenderMode != ToolStripRenderMode.Custom);
-        }
-
-        /// <summary>
-        ///  Override this function if you want to do custom table layouts for the
-        ///  StatusStrip.  The default layoutstyle is tablelayout, and we need to play
-        ///  with the row/column styles
-        /// </summary>
-        protected virtual void OnSpringTableLayoutCore()
-        {
-            if (LayoutStyle == ToolStripLayoutStyle.Table)
+            get
             {
-                state[stateCalledSpringTableLayout] = true;
-
-                SuspendLayout();
-
-                if (lastOrientation != Orientation)
-                {
-                    TableLayoutSettings settings = TableLayoutSettings;
-                    settings.RowCount = 0;
-                    settings.ColumnCount = 0;
-                    settings.ColumnStyles.Clear();
-                    settings.RowStyles.Clear();
-                }
-
-                lastOrientation = Orientation;
-
-                if (Orientation == Orientation.Horizontal)
-                {
-                    //
-                    // Horizontal layout
-                    //
-                    TableLayoutSettings.GrowStyle = TableLayoutPanelGrowStyle.AddColumns;
-
-                    int originalColumnCount = TableLayoutSettings.ColumnStyles.Count;
-
-                    // iterate through the elements which are going to be displayed.
-                    for (int i = 0; i < DisplayedItems.Count; i++)
-                    {
-                        if (i >= originalColumnCount)
-                        {
-                            // add if it's necessary.
-                            TableLayoutSettings.ColumnStyles.Add(new ColumnStyle());
-                        }
-
-                        // determine if we "spring" or "autosize" the column
-                        bool spring = (DisplayedItems[i] is ToolStripStatusLabel panel && panel.Spring);
-                        DisplayedItems[i].Anchor = (spring) ? AllAnchor : VerticalAnchor;
-
-                        // spring is achieved by using 100% as the column style
-                        ColumnStyle colStyle = TableLayoutSettings.ColumnStyles[i];
-                        colStyle.Width = 100; // this width is ignored in AutoSize.
-                        colStyle.SizeType = (spring) ? SizeType.Percent : SizeType.AutoSize;
-                    }
-
-                    if (TableLayoutSettings.RowStyles.Count > 1 || TableLayoutSettings.RowStyles.Count == 0)
-                    {
-                        TableLayoutSettings.RowStyles.Clear();
-                        TableLayoutSettings.RowStyles.Add(new RowStyle());
-                    }
-
-                    TableLayoutSettings.RowCount = 1;
-
-                    TableLayoutSettings.RowStyles[0].SizeType = SizeType.Absolute;
-                    TableLayoutSettings.RowStyles[0].Height = Math.Max(0, DisplayRectangle.Height);
-                    TableLayoutSettings.ColumnCount = DisplayedItems.Count + 1; // add an extra cell so it fills the remaining space
-
-                    // don't remove the extra column styles, just set them back to autosize.
-                    for (int i = DisplayedItems.Count; i < TableLayoutSettings.ColumnStyles.Count; i++)
-                    {
-                        TableLayoutSettings.ColumnStyles[i].SizeType = SizeType.AutoSize;
-                    }
-                }
-                else
-                {
-                    //
-                    // Vertical layout
-                    //
-
-                    TableLayoutSettings.GrowStyle = TableLayoutPanelGrowStyle.AddRows;
-
-                    int originalRowCount = TableLayoutSettings.RowStyles.Count;
-
-                    // iterate through the elements which are going to be displayed.
-                    for (int i = 0; i < DisplayedItems.Count; i++)
-                    {
-                        if (i >= originalRowCount)
-                        {
-                            // add if it's necessary.
-                            TableLayoutSettings.RowStyles.Add(new RowStyle());
-                        }
-
-                        // determine if we "spring" or "autosize" the row
-                        bool spring = (DisplayedItems[i] is ToolStripStatusLabel panel && panel.Spring);
-                        DisplayedItems[i].Anchor = (spring) ? AllAnchor : HorizontalAnchor;
-
-                        // spring is achieved by using 100% as the row style
-                        RowStyle rowStyle = TableLayoutSettings.RowStyles[i];
-                        rowStyle.Height = 100; // this width is ignored in AutoSize.
-                        rowStyle.SizeType = (spring) ? SizeType.Percent : SizeType.AutoSize;
-                    }
-
-                    TableLayoutSettings.ColumnCount = 1;
-
-                    if (TableLayoutSettings.ColumnStyles.Count > 1 || TableLayoutSettings.ColumnStyles.Count == 0)
-                    {
-                        TableLayoutSettings.ColumnStyles.Clear();
-                        TableLayoutSettings.ColumnStyles.Add(new ColumnStyle());
-                    }
-
-                    TableLayoutSettings.ColumnCount = 1;
-                    TableLayoutSettings.ColumnStyles[0].SizeType = SizeType.Absolute;
-                    TableLayoutSettings.ColumnStyles[0].Width = Math.Max(0, DisplayRectangle.Width);
-
-                    TableLayoutSettings.RowCount = DisplayedItems.Count + 1; // add an extra cell so it fills the remaining space
-
-                    // don't remove the extra column styles, just set them back to autosize.
-                    for (int i = DisplayedItems.Count; i < TableLayoutSettings.RowStyles.Count; i++)
-                    {
-                        TableLayoutSettings.RowStyles[i].SizeType = SizeType.AutoSize;
-                    }
-                }
-
-                ResumeLayout(false);
+                CreateParams cp = base.CreateParams;
+                cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
+                return cp;
             }
         }
 
         protected override void WndProc(ref Message m)
         {
-            if ((m.Msg == (int)User32.WM.NCHITTEST) && SizingGrip)
+            if (m.MsgInternal == PInvoke.WM_NCHITTEST)
             {
-                // if we're within the grip bounds tell windows
-                // that we're the bottom right of the window.
-                Rectangle sizeGripBounds = SizeGripBounds;
-
-                if (sizeGripBounds.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
+                if (ClientRectangle.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
                 {
-                    HWND rootHwnd = PInvoke.GetAncestor(this, GET_ANCESTOR_FLAGS.GA_ROOT);
-
-                    // if the main window isn't maximized - we should paint a resize grip.
-                    // double check that we're at the bottom right hand corner of the window.
-                    if (!rootHwnd.IsNull && !PInvoke.IsZoomed(rootHwnd))
-                    {
-                        // get the client area of the topmost window.  If we're next to the edge then
-                        // the sizing grip is valid.
-                        PInvoke.GetClientRect(rootHwnd, out RECT rootHwndClientArea);
-
-                        // map the size grip FROM statusStrip coords TO the toplevel window coords.
-                        Point gripLocation;
-                        if (RightToLeft == RightToLeft.Yes)
-                        {
-                            gripLocation = new Point(SizeGripBounds.Left, SizeGripBounds.Bottom);
-                        }
-                        else
-                        {
-                            gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
-                        }
-
-                        PInvoke.MapWindowPoints(this, rootHwnd, ref gripLocation);
-
-                        int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.Y);
-                        int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.X);
-
-                        if (RightToLeft != RightToLeft.Yes)
-                        {
-                            if ((deltaRightEdge + deltaBottomEdge) < 2)
-                            {
-                                m.ResultInternal = (LRESULT)(nint)User32.HT.BOTTOMRIGHT;
-                                return;
-                            }
-                        }
-                    }
+                    m.ResultInternal = (LRESULT)(nint)PInvoke.HTBOTTOMLEFT;
+                    return;
                 }
             }
 
             base.WndProc(ref m);
-        }
-
-        // special transparent mirrored window which says it's the bottom left of the form.
-        private class RightToLeftLayoutGrip : Control
-        {
-            public RightToLeftLayoutGrip()
-            {
-                SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-                BackColor = Color.Transparent;
-            }
-
-            protected override CreateParams CreateParams
-            {
-                get
-                {
-                    CreateParams cp = base.CreateParams;
-                    cp.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_LAYOUTRTL;
-                    return cp;
-                }
-            }
-
-            protected override void WndProc(ref Message m)
-            {
-                if (m.MsgInternal == User32.WM.NCHITTEST)
-                {
-                    if (ClientRectangle.Contains(PointToClient(PARAM.ToPoint(m.LParamInternal))))
-                    {
-                        m.ResultInternal = (LRESULT)(nint)User32.HT.BOTTOMLEFT;
-                        return;
-                    }
-                }
-
-                base.WndProc(ref m);
-            }
         }
     }
 }

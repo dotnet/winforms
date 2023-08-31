@@ -1,38 +1,44 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using Microsoft.CodeAnalysis;
+using System.Collections.Immutable;
 
-namespace System.Windows.Forms.PrivateSourceGenerators
+namespace System.Windows.Forms.PrivateSourceGenerators;
+
+internal sealed record EnumValidationInfo(EnumValidationInfo.EnumTypeInfo EnumType, EquatableArray<int> Values, bool IsFlags)
 {
-    internal sealed class EnumValidationInfo
+    public static EnumValidationInfo FromEnumType(ITypeSymbol enumType, bool isFlags)
     {
-        public ITypeSymbol EnumType { get; }
-        public List<int> Values { get; }
-        public bool IsFlags { get; }
+        var values = GetElementValues(enumType).OrderBy(e => e).Distinct().ToImmutableArray();
+        return new EnumValidationInfo(EnumTypeInfo.FromEnumType(enumType), new EquatableArray<int>(values), isFlags);
+    }
 
-        public EnumValidationInfo(ITypeSymbol enumType, bool isFlags)
+    private static IEnumerable<int> GetElementValues(ITypeSymbol enumType)
+    {
+        foreach (ISymbol member in enumType.GetMembers())
         {
-            EnumType = enumType;
-            IsFlags = isFlags;
-            Values = GetElementValues(enumType).OrderBy(e => e).Distinct().ToList();
+            if (member is IFieldSymbol
+                {
+                    IsStatic: true,
+                    IsConst: true,
+                    ConstantValue: int value
+                })
+            {
+                yield return value;
+            }
+        }
+    }
+
+    public sealed record EnumTypeInfo(string Text)
+    {
+        public static EnumTypeInfo FromEnumType(ITypeSymbol enumType)
+        {
+            return new EnumTypeInfo(enumType.ToString());
         }
 
-        private static IEnumerable<int> GetElementValues(ITypeSymbol enumType)
+        public override string ToString()
         {
-            foreach (ISymbol member in enumType.GetMembers())
-            {
-                if (member is IFieldSymbol
-                    {
-                        IsStatic: true,
-                        IsConst: true,
-                        ConstantValue: int value
-                    })
-                {
-                    yield return value;
-                }
-            }
+            return Text;
         }
     }
 }

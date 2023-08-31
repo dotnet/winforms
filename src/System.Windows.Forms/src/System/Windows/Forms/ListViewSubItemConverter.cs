@@ -1,65 +1,62 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal class ListViewSubItemConverter : ExpandableObjectConverter
 {
-    internal class ListViewSubItemConverter : ExpandableObjectConverter
+    public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
     {
-        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
+        if (destinationType == typeof(InstanceDescriptor))
         {
-            if (destinationType == typeof(InstanceDescriptor))
-            {
-                return true;
-            }
-
-            return base.CanConvertTo(context, destinationType);
+            return true;
         }
 
-        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+        return base.CanConvertTo(context, destinationType);
+    }
+
+    public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+    {
+        ArgumentNullException.ThrowIfNull(destinationType);
+
+        if (destinationType == typeof(InstanceDescriptor) && value is ListViewItem.ListViewSubItem item)
         {
-            ArgumentNullException.ThrowIfNull(destinationType);
+            ConstructorInfo? ctor;
 
-            if (destinationType == typeof(InstanceDescriptor) && value is ListViewItem.ListViewSubItem item)
+            // Subitem has custom style
+            if (item.CustomStyle)
             {
-                ConstructorInfo? ctor;
-
-                // Subitem has custom style
-                if (item.CustomStyle)
+                ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(new Type[]
                 {
-                    ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(new Type[]
-                    {
-                        typeof(ListViewItem),
-                        typeof(string),
-                        typeof(Color),
-                        typeof(Color),
-                        typeof(Font)
-                    });
-                    Debug.Assert(ctor is not null, "Expected the constructor to exist.");
-                    return new InstanceDescriptor(ctor, new object?[]
-                    {
-                        null,
-                        item.Text,
-                        item.ForeColor,
-                        item.BackColor,
-                        item.Font
-                    }, true);
-                }
-
-                // Otherwise, just use the text constructor
-                ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(new Type[] { typeof(ListViewItem), typeof(string) });
+                    typeof(ListViewItem),
+                    typeof(string),
+                    typeof(Color),
+                    typeof(Color),
+                    typeof(Font)
+                });
                 Debug.Assert(ctor is not null, "Expected the constructor to exist.");
-                return new InstanceDescriptor(ctor, new object?[] { null, item.Text }, true);
+                return new InstanceDescriptor(ctor, new object?[]
+                {
+                    null,
+                    item.Text,
+                    item.ForeColor,
+                    item.BackColor,
+                    item.Font
+                }, true);
             }
 
-            return base.ConvertTo(context, culture, value, destinationType);
+            // Otherwise, just use the text constructor
+            ctor = typeof(ListViewItem.ListViewSubItem).GetConstructor(new Type[] { typeof(ListViewItem), typeof(string) });
+            Debug.Assert(ctor is not null, "Expected the constructor to exist.");
+            return new InstanceDescriptor(ctor, new object?[] { null, item.Text }, true);
         }
+
+        return base.ConvertTo(context, culture, value, destinationType);
     }
 }

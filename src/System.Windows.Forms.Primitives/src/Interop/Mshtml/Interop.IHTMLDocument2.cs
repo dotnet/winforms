@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
 
@@ -67,7 +66,7 @@ internal partial class Interop
             string GetNameProp();
             int Write([In, MarshalAs(UnmanagedType.SafeArray)] object[] psarray);
             int WriteLine([In, MarshalAs(UnmanagedType.SafeArray)] object[] psarray);
-            [return: MarshalAs(UnmanagedType.Interface)] object Open(string mimeExtension, object name, object features, object replace);
+            [return: MarshalAs(UnmanagedType.Interface)] object Open(string mimeExtension, object name, object? features, object? replace);
             void Close();
             void Clear();
             bool QueryCommandSupported(string cmdID);

@@ -2,46 +2,45 @@
 using System.ComponentModel.Design.Serialization;
 using System.Collections;
 
-namespace DesignSurfaceExt
+namespace DesignSurfaceExt;
+
+internal class DesignerSerializationServiceImpl : IDesignerSerializationService
 {
-    internal class DesignerSerializationServiceImpl : IDesignerSerializationService
+    private IServiceProvider _serviceProvider;
+
+    public DesignerSerializationServiceImpl(IServiceProvider serviceProvider)
     {
-        private IServiceProvider _serviceProvider;
+        _serviceProvider = serviceProvider;
+    }
 
-        public DesignerSerializationServiceImpl(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
-
-        public System.Collections.ICollection Deserialize(object serializationData)
-        {
-            SerializationStore serializationStore = serializationData as SerializationStore;
-            if (serializationStore != null)
-            {
-                ComponentSerializationService componentSerializationService = _serviceProvider.GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
-                ICollection collection = componentSerializationService.Deserialize(serializationStore);
-                return collection;
-            }
-
-            return Array.Empty<object>();
-        }
-
-        public object Serialize(System.Collections.ICollection objects)
+    public System.Collections.ICollection Deserialize(object serializationData)
+    {
+        SerializationStore serializationStore = serializationData as SerializationStore;
+        if (serializationStore is not null)
         {
             ComponentSerializationService componentSerializationService = _serviceProvider.GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
-            SerializationStore returnObject = null;
-            using (SerializationStore serializationStore = componentSerializationService.CreateStore())
-            {
-                foreach (object obj in objects)
-                {
-                    if (obj is Control)
-                        componentSerializationService.Serialize(serializationStore, obj);
-                }
+            ICollection collection = componentSerializationService.Deserialize(serializationStore);
+            return collection;
+        }
 
-                returnObject = serializationStore;
+        return Array.Empty<object>();
+    }
+
+    public object Serialize(System.Collections.ICollection objects)
+    {
+        ComponentSerializationService componentSerializationService = _serviceProvider.GetService(typeof(ComponentSerializationService)) as ComponentSerializationService;
+        SerializationStore returnObject = null;
+        using (SerializationStore serializationStore = componentSerializationService.CreateStore())
+        {
+            foreach (object obj in objects)
+            {
+                if (obj is Control)
+                    componentSerializationService.Serialize(serializationStore, obj);
             }
 
-            return returnObject;
+            returnObject = serializationStore;
         }
-    }//end_class
-}//end_namespace
+
+        return returnObject;
+    }
+}

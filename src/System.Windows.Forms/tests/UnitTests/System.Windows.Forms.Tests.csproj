@@ -1,12 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <SourceTargetFramework>$(TargetFramework)</SourceTargetFramework>
+    <TargetFramework>$(TargetFramework)-windows7.0</TargetFramework>
+    <DisableTransitiveFrameworkReferences>true</DisableTransitiveFrameworkReferences>
     <AssemblyName>System.Windows.Forms.Tests</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001</NoWarn>
+    <NoWarn>$(NoWarn),1573,1591,1712,WFDEV001,SYSLIB0050,SYSLIB0051</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildAssist\BuildAssist.msbuildproj" />
     <ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />
     <ProjectReference Include="..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\System.Drawing\src\System.Drawing.Facade.csproj" />
@@ -26,7 +31,16 @@
 
   <ItemGroup>
     <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
-    <Reference Include="$(BaseOutputPath)..\System.Drawing.Facade\$(Configuration)\$(TargetFramework)\System.Drawing.dll" />
+    <Reference Include="$(BaseOutputPath)..\System.Drawing.Facade\$(Configuration)\$(SourceTargetFramework)\System.Drawing.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AxInterop.WMPLib">
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\AxInterop.WMPLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.WMPLib">
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\Interop.WMPLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +50,9 @@
     <Content Include="bitmaps\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="..\AxHosts\AxHosts.resx" Link="Resources\AxHosts.resx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <EmbeddedResource Include="bitmaps\10x16_one_entry_32bit.ico">
       <LogicalName>System.Windows.Forms.Design.Tests.CustomPropertyTab</LogicalName>
     </EmbeddedResource>
@@ -45,6 +62,21 @@
     <EmbeddedResource Update="TestResources.resx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestResources\VB6\SimpleControl.vb6">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AxInterop.WMPLib">
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\AxInterop.WMPLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.WMPLib">
+      <HintPath>$(ArtifactsBinDir)\AxHosts\$(Configuration)\net472\Interop.WMPLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

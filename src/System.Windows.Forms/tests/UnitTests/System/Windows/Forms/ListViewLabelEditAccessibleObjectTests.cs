@@ -1,14 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Xunit;
+using static System.Windows.Forms.ListViewItem;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
-public class ListViewLabelEditAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+public class ListViewLabelEditAccessibleObjectTests
 {
     [WinFormsFact]
     public void ListViewLabelEditAccessibleObject_GetPropertyValue_ReturnsExpected()
@@ -51,11 +50,8 @@ public class ListViewLabelEditAccessibleObjectTests : IClassFixture<ThreadExcept
         ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
-        Assert.Equal(listView.AccessibilityObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
-        Assert.Equal(listView.Items[0].AccessibilityObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(listView._listViewSubItem.AccessibilityObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.NotNull(accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
     }
 
     [WinFormsFact]
@@ -160,14 +156,16 @@ public class ListViewLabelEditAccessibleObjectTests : IClassFixture<ThreadExcept
 
         listView.Columns.Add(new ColumnHeader() { Text = "Column 1", Width = 100 });
 
-        ListViewItem item = new("Test");
+        ListViewItem item = new("Test",0);
+        ListViewSubItem subItem = new ListViewSubItem(item, "Test");
+        item.SubItems.Add(subItem);
         listView.Items.Add(item);
-
+        listView._listViewSubItem = subItem;
         listView.CreateControl();
 
         PInvoke.SetFocus(listView);
 
-        PInvoke.SendMessage(listView, (User32.WM)PInvoke.LVM_EDITLABELW, wParam: 0);
+        PInvoke.SendMessage(listView, PInvoke.LVM_EDITLABELW, wParam: 0);
 
         return listView;
     }
@@ -179,7 +177,7 @@ public class ListViewLabelEditAccessibleObjectTests : IClassFixture<ThreadExcept
             if (disposing)
             {
                 // End the label edit because ListView cannot be correctly disposed with an active label edit when AccessibilityObject is created for the ListView
-                PInvoke.SendMessage(this, (User32.WM)PInvoke.LVM_CANCELEDITLABEL);
+                PInvoke.SendMessage(this, PInvoke.LVM_CANCELEDITLABEL);
             }
 
             base.Dispose(disposing);

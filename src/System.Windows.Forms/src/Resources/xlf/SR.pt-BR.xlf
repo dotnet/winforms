@@ -247,6 +247,31 @@
         <target state="translated">&amp;Aplicar</target>
         <note />
       </trans-unit>
+      <trans-unit id="Arg_ArrayPlusOffTooSmall">
+        <source>Destination array is not long enough to copy all the items in the collection. Check array index and length.</source>
+        <target state="translated">A matriz de destino não é longa o suficiente para copiar todos os itens da coleção. Verifique o índice e o tamanho da matriz.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Arg_NonZeroLowerBound">
+        <source>The lower bound of target array must be zero.</source>
+        <target state="translated">O limite inferior da matriz de destino deve ser zero.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Arg_RankMultiDimNotSupported">
+        <source>Only single dimensional arrays are supported for the requested action.</source>
+        <target state="translated">A ação solicitada oferece suporte somente a matrizes unidimensionais.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
+        <source>Non-negative number required.</source>
+        <target state="translated">É necessário um número não negativo.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Argument_IncompatibleArrayType">
+        <source>Target array type is not compatible with the type of items in the collection.</source>
+        <target state="translated">O tipo da matriz de destino não é compatível com o tipo dos itens na coleção.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AutoCompleteFailure">
         <source>autoComplete cannot be initialized with given custom source.</source>
         <target state="translated">Não é possível inicializar o recurso autoComplete com a fonte personalizada especificada.</target>
@@ -2237,6 +2262,11 @@
         <target state="translated">O objeto DataGridViewCell de propriedade não foi definido.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewCellAccessibleObject_OwnerWrongType">
+        <source>DataGridViewCell of type {0} does not provide the Toggle pattern.</source>
+        <target state="translated">DataGridViewCell do tipo {0} não fornece o padrão Toggle.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridViewCellCollection_AtLeastOneCellIsNull">
         <source>At least one of the provided cells is null.</source>
         <target state="translated">Pelo menos uma das células fornecidas é nula.</target>
@@ -2305,6 +2335,11 @@
       <trans-unit id="DataGridViewCheckBoxCellCheckedStateDescription">
         <source>{0} check box checked</source>
         <target state="translated">Caixa de seleção {0} marcada</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewCheckBoxCellIndeterminateStateDescription">
+        <source>{0} check box indeterminate</source>
+        <target state="translated">{0} caixa de seleção indeterminada</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCellUncheckedStateDescription">
@@ -4819,13 +4854,11 @@ depuração just-in-time (JIT) em vez desta caixa de diálogo.
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
         <source>{0}
     Assembly Version: {1}
-    Win32 Version: {2}
-    CodeBase: {3}
+    Location: {2}
 </source>
         <target state="translated">{0}
     Versão do Assembly: {1}
-    Versão do Win32: {2}
-    Base de Código: {3}
+    Localização: {2}
 </target>
         <note />
       </trans-unit>
@@ -4994,6 +5027,11 @@ Se você clicar em Continuar, o aplicativo ignorará esse erro e tentará contin
       <trans-unit id="FDvalidateNamesDescr">
         <source>Controls whether the dialog box ensures that file names do not contain invalid characters or sequences.</source>
         <target state="translated">Controla se a caixa de diálogo assegura que os nomes de arquivos não contém cadeias ou caracteres inválidos.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FailedToLoadCursor">
+        <source>Failed to load cursor. Error '{1}'.</source>
+        <target state="translated">Falha ao carregar o cursor. Erro '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
@@ -5522,11 +5560,6 @@ Deseja substituí-lo?</target>
         <target state="translated">Valor nulo não pode ser convertido no tipo '{1}'.</target>
         <note />
       </trans-unit>
-      <trans-unit id="GridItemDisposed">
-        <source>The GridItem has been disposed and is no longer usable.</source>
-        <target state="translated">O GridItem foi descartado e não pode mais ser usado.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="GridItemNotExpandable">
         <source>The GridItem cannot be expanded.</source>
         <target state="translated">O GridItem não pode ser expandido.</target>
@@ -5809,6 +5842,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="InvalidArgument">
         <source>InvalidArgument=Value of '{1}' is not valid for '{0}'.</source>
         <target state="translated">InvalidArgument=Value '{1}' não é um valor válido para '{0}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidArgumentType">
+        <source>Argument '{0}' must be of type '{1}'.</source>
+        <target state="translated">O argumento '{0}' deve ser do tipo '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">
@@ -6614,11 +6652,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
         <target state="translated">O objeto de acessibilidade atual é somente para a ListView no modo de exibição {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
-        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="translated">O objeto de acessibilidade atual é apenas para ListView no modo de exibição {0}, {1} ou {2}</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectRequiresListView">
@@ -7434,11 +7467,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="OKCaption">
         <source>OK</source>
         <target state="translated">OK</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ObjectDisposed">
-        <source>Disposed '{0}' can no longer be used.</source>
-        <target state="translated">'{0}' descartado não pode mais ser usado.</target>
         <note />
       </trans-unit>
       <trans-unit id="ObjectHasParent">
@@ -8604,6 +8632,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="ResXResourceWriterSaved">
         <source>Resource writer has been saved.  You may not edit it.</source>
         <target state="translated">O gravador de recurso foi salvo. Talvez você não possa editá-lo.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ResourceValueNotFound">
+        <source>The resource value '{0}' was not found.</source>
+        <target state="translated">O valor do recurso '{0}' não foi encontrado.</target>
         <note />
       </trans-unit>
       <trans-unit id="RestartNotSupported">
@@ -11334,7 +11367,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="toStringAlt">
         <source>Alt</source>
         <target state="translated">Alt</target>
-        <note />
+        <note>{Locked="Alt"}</note>
       </trans-unit>
       <trans-unit id="toStringBack">
         <source>Back</source>
@@ -11344,7 +11377,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="toStringControl">
         <source>Ctrl</source>
         <target state="translated">Ctrl</target>
-        <note />
+        <note>{Locked=!de; "Ctrl"}</note>
       </trans-unit>
       <trans-unit id="toStringDefault">
         <source>(default)</source>
@@ -11354,27 +11387,27 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="toStringDelete">
         <source>Del</source>
         <target state="translated">Delete</target>
-        <note />
+        <note>{Locked=!fr,de,it,es; "Del"}</note>
       </trans-unit>
       <trans-unit id="toStringEnd">
         <source>End</source>
         <target state="translated">End</target>
-        <note />
+        <note>{Locked=!fr,de,it,es; "End"}</note>
       </trans-unit>
       <trans-unit id="toStringEnter">
         <source>Enter</source>
         <target state="translated">Enter</target>
-        <note />
+        <note>{Locked=!fr,de,it,es; "Enter"}</note>
       </trans-unit>
       <trans-unit id="toStringHome">
         <source>Home</source>
-        <target state="translated">Início</target>
-        <note />
+        <target state="translated">Home</target>
+        <note>{Locked=!fr,de,es; "Home"}</note>
       </trans-unit>
       <trans-unit id="toStringInsert">
-        <source>Ins</source>
+        <source>Insert</source>
         <target state="translated">Insert</target>
-        <note />
+        <note>{Locked=!fr,de,it,es,zh-Hant; "Insert"}</note>
       </trans-unit>
       <trans-unit id="toStringNone">
         <source>(none)</source>
@@ -11383,18 +11416,18 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">Page Down</target>
-        <note />
+        <target state="translated">PgDn</target>
+        <note>{Locked=!fr,de,it,es; "PgDn"}</note>
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">Page Up</target>
-        <note />
+        <target state="translated">PgUp</target>
+        <note>{Locked=!fr,de,it,es; "PgUp"}</note>
       </trans-unit>
       <trans-unit id="toStringShift">
         <source>Shift</source>
         <target state="translated">Shift</target>
-        <note />
+        <note>{Locked=!fr,de,it,es; "Shift"}</note>
       </trans-unit>
       <trans-unit id="valueChangedEventDescr">
         <source>Occurs when the value of the control changes.</source>

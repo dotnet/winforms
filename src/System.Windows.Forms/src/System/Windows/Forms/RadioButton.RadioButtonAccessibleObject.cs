@@ -1,70 +1,80 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class RadioButton
 {
-    public partial class RadioButton
+    public class RadioButtonAccessibleObject : ControlAccessibleObject
     {
-        public class RadioButtonAccessibleObject : ControlAccessibleObject
+        public RadioButtonAccessibleObject(RadioButton owner) : base(owner)
         {
-            private readonly RadioButton _owningRadioButton;
+        }
 
-            public RadioButtonAccessibleObject(RadioButton owner) : base(owner)
+        public override string DefaultAction
+            => this.TryGetOwnerAs(out RadioButton? owner) && owner.AccessibleDefaultActionDescription is { } description
+                ? description
+                : SR.AccessibleActionCheck;
+
+        public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.RadioButton);
+
+        public override AccessibleStates State
+            => this.TryGetOwnerAs(out RadioButton? owner) && owner.Checked
+                ? AccessibleStates.Checked | base.State
+                : base.State;
+
+        internal override bool IsItemSelected
+            => this.TryGetOwnerAs(out RadioButton? owner) && owner.Checked;
+
+        public override void DoDefaultAction()
+        {
+            if (this.IsOwnerHandleCreated(out RadioButton? owner))
             {
-                _owningRadioButton = owner;
+                owner.PerformClick();
             }
+        }
 
-            public override string DefaultAction
-                => Owner.AccessibleDefaultActionDescription ?? SR.AccessibleActionCheck;
-
-            public override AccessibleRole Role
+        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            => propertyID switch
             {
-                get
+                UiaCore.UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out RadioButton? owner) && owner.Focused,
+                UiaCore.UIA.IsKeyboardFocusablePropertyId
+                    // This is necessary for compatibility with MSAA proxy:
+                    // IsKeyboardFocusable = true regardless the control is enabled/disabled.
+                    => true,
+                _ => base.GetPropertyValue(propertyID)
+            };
+
+        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            => patternId switch
+            {
+                var p when
+                    p == UiaCore.UIA.SelectionItemPatternId => true,
+                _ => base.IsPatternSupported(patternId)
+            };
+
+        public override string? KeyboardShortcut => this.TryGetOwnerAs(out RadioButton? owner)
+            ? ButtonBaseAccessibleObject.GetKeyboardShortcut(owner, owner.UseMnemonic, PreviousLabel)
+            : null;
+
+        public override string? Name
+        {
+            get
+            {
+                if (!this.TryGetOwnerAs(out RadioButton? owner))
                 {
-                    AccessibleRole role = Owner.AccessibleRole;
-                    return role != AccessibleRole.Default
-                        ? role
-                        : AccessibleRole.RadioButton;
+                    return null;
                 }
-            }
 
-            public override AccessibleStates State
-                => _owningRadioButton.Checked
-                    ? AccessibleStates.Checked | base.State
-                    : base.State;
-
-            internal override bool IsItemSelected
-                => _owningRadioButton.Checked;
-
-            public override void DoDefaultAction()
-            {
-                if (_owningRadioButton.IsHandleCreated)
+                if (owner.AccessibleName is { } name)
                 {
-                    _owningRadioButton.PerformClick();
+                    return name;
                 }
+
+                return owner.UseMnemonic ? WindowsFormsUtils.TextWithoutMnemonics(TextLabel) : TextLabel;
             }
-
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                => propertyID switch
-                {
-                    UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId
-                        // This is necessary for compatibility with MSAA proxy:
-                        // IsKeyboardFocusable = true regardless the control is enabled/disabled.
-                        => true,
-                    _ => base.GetPropertyValue(propertyID)
-                };
-
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                => patternId switch
-                {
-                    var p when
-                        p == UiaCore.UIA.SelectionItemPatternId => true,
-                    _ => base.IsPatternSupported(patternId)
-                };
         }
     }
 }

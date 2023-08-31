@@ -1,183 +1,181 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Collections;
 using System.ComponentModel;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class CheckedListBox
 {
-    public partial class CheckedListBox
+    public class CheckedIndexCollection : IList
     {
-        public class CheckedIndexCollection : IList
+        private readonly CheckedListBox _owner;
+
+        internal CheckedIndexCollection(CheckedListBox owner)
         {
-            private readonly CheckedListBox _owner;
+            _owner = owner.OrThrowIfNull();
+        }
 
-            internal CheckedIndexCollection(CheckedListBox owner)
+        /// <summary>
+        ///  Number of current checked items.
+        /// </summary>
+        public int Count
+        {
+            get
             {
-                _owner = owner.OrThrowIfNull();
+                return _owner.CheckedItems.Count;
             }
+        }
 
-            /// <summary>
-            ///  Number of current checked items.
-            /// </summary>
-            public int Count
+        object ICollection.SyncRoot
+        {
+            get
             {
-                get
-                {
-                    return _owner.CheckedItems.Count;
-                }
+                return this;
             }
+        }
 
-            object ICollection.SyncRoot
+        bool ICollection.IsSynchronized
+        {
+            get
             {
-                get
-                {
-                    return this;
-                }
+                return false;
             }
+        }
 
-            bool ICollection.IsSynchronized
+        bool IList.IsFixedSize
+        {
+            get
             {
-                get
-                {
-                    return false;
-                }
+                return true;
             }
+        }
 
-            bool IList.IsFixedSize
+        public bool IsReadOnly
+        {
+            get
             {
-                get
-                {
-                    return true;
-                }
+                return true;
             }
+        }
 
-            public bool IsReadOnly
+        /// <summary>
+        ///  Retrieves the specified checked item.
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public int this[int index]
+        {
+            get
             {
-                get
-                {
-                    return true;
-                }
+                object identifier = InnerArray.GetEntryObject(index, CheckedItemCollection.s_anyMask);
+                return InnerArray.IndexOf(identifier, stateMask: 0);
             }
+        }
 
-            /// <summary>
-            ///  Retrieves the specified checked item.
-            /// </summary>
-            [Browsable(false)]
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public int this[int index]
+        object? IList.this[int index]
+        {
+            get
             {
-                get
-                {
-                    object identifier = InnerArray.GetEntryObject(index, CheckedItemCollection.s_anyMask);
-                    return InnerArray.IndexOf(identifier, stateMask: 0);
-                }
+                return this[index];
             }
-
-            object? IList.this[int index]
-            {
-                get
-                {
-                    return this[index];
-                }
-                set
-                {
-                    throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
-                }
-            }
-
-            int IList.Add(object? value)
+            set
             {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
+        }
 
-            void IList.Clear()
+        int IList.Add(object? value)
+        {
+            throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+        }
+
+        void IList.Clear()
+        {
+            throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+        }
+
+        void IList.Insert(int index, object? value)
+        {
+            throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+        }
+
+        void IList.Remove(object? value)
+        {
+            throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+        }
+
+        void IList.RemoveAt(int index)
+        {
+            throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+        }
+
+        public bool Contains(int index)
+        {
+            return IndexOf(index) != -1;
+        }
+
+        bool IList.Contains(object? index)
+        {
+            if (index is int indexAsInt)
             {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+                return Contains(indexAsInt);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void CopyTo(Array dest, int index)
+        {
+            int cnt = _owner.CheckedItems.Count;
+            for (int i = 0; i < cnt; i++)
+            {
+                dest.SetValue(this[i], i + index);
+            }
+        }
+
+        /// <summary>
+        ///  This is the item array that stores our data.  We share this backing store
+        ///  with the main object collection.
+        /// </summary>
+        private ItemArray InnerArray
+        {
+            get
+            {
+                return ((ObjectCollection)_owner.Items).InnerArray;
+            }
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            int[] indices = new int[Count];
+            CopyTo(indices, 0);
+            return indices.GetEnumerator();
+        }
+
+        public int IndexOf(int index)
+        {
+            if (index >= 0 && index < _owner.Items.Count)
+            {
+                object value = InnerArray.GetEntryObject(index, 0);
+                return _owner.CheckedItems.IndexOfIdentifier(value);
             }
 
-            void IList.Insert(int index, object? value)
+            return -1;
+        }
+
+        int IList.IndexOf(object? index)
+        {
+            if (index is int indexAsInt)
             {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
+                return IndexOf(indexAsInt);
             }
-
-            void IList.Remove(object? value)
+            else
             {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
-            }
-
-            void IList.RemoveAt(int index)
-            {
-                throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
-            }
-
-            public bool Contains(int index)
-            {
-                return IndexOf(index) != -1;
-            }
-
-            bool IList.Contains(object? index)
-            {
-                if (index is int indexAsInt)
-                {
-                    return Contains(indexAsInt);
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            public void CopyTo(Array dest, int index)
-            {
-                int cnt = _owner.CheckedItems.Count;
-                for (int i = 0; i < cnt; i++)
-                {
-                    dest.SetValue(this[i], i + index);
-                }
-            }
-
-            /// <summary>
-            ///  This is the item array that stores our data.  We share this backing store
-            ///  with the main object collection.
-            /// </summary>
-            private ItemArray InnerArray
-            {
-                get
-                {
-                    return ((ObjectCollection)_owner.Items).InnerArray;
-                }
-            }
-
-            public IEnumerator GetEnumerator()
-            {
-                int[] indices = new int[Count];
-                CopyTo(indices, 0);
-                return indices.GetEnumerator();
-            }
-
-            public int IndexOf(int index)
-            {
-                if (index >= 0 && index < _owner.Items.Count)
-                {
-                    object value = InnerArray.GetEntryObject(index, 0);
-                    return _owner.CheckedItems.IndexOfIdentifier(value);
-                }
-
                 return -1;
-            }
-
-            int IList.IndexOf(object? index)
-            {
-                if (index is int indexAsInt)
-                {
-                    return IndexOf(indexAsInt);
-                }
-                else
-                {
-                    return -1;
-                }
             }
         }
     }

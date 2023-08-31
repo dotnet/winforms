@@ -22,6 +22,21 @@
         <target state="translated">A análise do texto esperado Text("{0}") no formato {1}" não teve êxito.</target>
         <note />
       </trans-unit>
+      <trans-unit id="Win32GetThreadsDpiContextFailed">
+        <source>Failed to get thread's DpiAwareness context.</source>
+        <target state="translated">Falha em obter o contexto de DpiAwareness do fio.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Win32SetThreadsDpiContextFailed">
+        <source>Failed to set thread's DpiAwareness context {0}.</source>
+        <target state="translated">Falha na definição do contexto de DpiAwareness do fio {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Win32SetThreadsDpiHostingBehaviorFailed">
+        <source>Failed to set thread's DPI hosting behavior {0}.</source>
+        <target state="translated">Falha em definir o comportamento de alojamento de DPI do fio {0}.</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>

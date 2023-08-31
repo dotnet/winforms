@@ -1,50 +1,49 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
+
+#nullable disable
 
 using System.ComponentModel;
 using System.Drawing.Design;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+internal partial class DesignBindingValueUIHandler
 {
-    internal partial class DesignBindingValueUIHandler
+    private class LocalUIItem : PropertyValueUIItem
     {
-        class LocalUIItem : PropertyValueUIItem
+        private readonly Binding binding;
+
+        internal LocalUIItem(DesignBindingValueUIHandler handler, Binding binding) : base(handler.DataBitmap, new PropertyValueUIItemInvokeHandler(OnPropertyValueUIItemInvoke), GetToolTip(binding))
         {
-            readonly Binding binding;
+            this.binding = binding;
+        }
 
-            internal LocalUIItem(DesignBindingValueUIHandler handler, Binding binding) : base(handler.DataBitmap, new PropertyValueUIItemInvokeHandler(OnPropertyValueUIItemInvoke), GetToolTip(binding))
+        internal Binding Binding
+        {
+            get
             {
-                this.binding = binding;
+                return binding;
             }
+        }
 
-            internal Binding Binding
+        private static string GetToolTip(Binding binding)
+        {
+            string name = "";
+            if (binding.DataSource is IComponent comp)
             {
-                get
+                if (comp.Site is not null)
                 {
-                    return binding;
+                    name = comp.Site.Name;
                 }
             }
 
-            static string GetToolTip(Binding binding)
+            if (name.Length == 0)
             {
-                string name = "";
-                if (binding.DataSource is IComponent comp)
-                {
-                    if (comp.Site != null)
-                    {
-                        name = comp.Site.Name;
-                    }
-                }
-
-                if (name.Length == 0)
-                {
-                    name = "(List)";
-                }
-
-                name += " - " + binding.BindingMemberInfo.BindingMember;
-                return name;
+                name = "(List)";
             }
+
+            return $"{name} - {binding.BindingMemberInfo.BindingMember}";
         }
     }
 }

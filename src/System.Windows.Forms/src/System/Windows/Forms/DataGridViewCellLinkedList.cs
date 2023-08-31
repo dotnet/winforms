@@ -1,199 +1,188 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
-#nullable disable
 
 using System.Collections;
-using System.Diagnostics;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Represents a linked list of <see cref="DataGridViewCell"/> objects
+/// </summary>
+internal class DataGridViewCellLinkedList : IEnumerable
 {
-    /// <summary>
-    ///  Represents a linked list of <see cref="DataGridViewCell"/> objects
-    /// </summary>
-    internal class DataGridViewCellLinkedList : IEnumerable
+    private DataGridViewCellLinkedListElement? _lastAccessedElement;
+    private DataGridViewCellLinkedListElement? _headElement;
+    private int _count;
+    private int _lastAccessedIndex;
+
+    IEnumerator IEnumerable.GetEnumerator() => new DataGridViewCellLinkedListEnumerator(_headElement);
+
+    public DataGridViewCellLinkedList()
     {
-        private DataGridViewCellLinkedListElement lastAccessedElement;
-        private DataGridViewCellLinkedListElement headElement;
-        private int count, lastAccessedIndex;
+        _lastAccessedIndex = -1;
+    }
 
-        IEnumerator IEnumerable.GetEnumerator()
+    public DataGridViewCell this[int index]
+    {
+        get
         {
-            return new DataGridViewCellLinkedListEnumerator(headElement);
-        }
-
-        public DataGridViewCellLinkedList()
-        {
-            lastAccessedIndex = -1;
-        }
-
-        public DataGridViewCell this[int index]
-        {
-            get
+            Debug.Assert(index >= 0);
+            Debug.Assert(index < _count);
+            if (_lastAccessedIndex == -1 || index < _lastAccessedIndex)
             {
-                Debug.Assert(index >= 0);
-                Debug.Assert(index < count);
-                if (lastAccessedIndex == -1 || index < lastAccessedIndex)
+                DataGridViewCellLinkedListElement? tmp = _headElement;
+                int tmpIndex = index;
+                while (tmpIndex > 0)
                 {
-                    DataGridViewCellLinkedListElement tmp = headElement;
-                    int tmpIndex = index;
-                    while (tmpIndex > 0)
-                    {
-                        tmp = tmp.Next;
-                        tmpIndex--;
-                    }
-
-                    lastAccessedElement = tmp;
-                    lastAccessedIndex = index;
-                    return tmp.DataGridViewCell;
-                }
-                else
-                {
-                    while (lastAccessedIndex < index)
-                    {
-                        lastAccessedElement = lastAccessedElement.Next;
-                        lastAccessedIndex++;
-                    }
-
-                    return lastAccessedElement.DataGridViewCell;
-                }
-            }
-        }
-
-        public int Count
-        {
-            get
-            {
-                return count;
-            }
-        }
-
-        public DataGridViewCell HeadCell
-        {
-            get
-            {
-                Debug.Assert(headElement is not null);
-                return headElement.DataGridViewCell;
-            }
-        }
-
-        public void Add(DataGridViewCell dataGridViewCell)
-        {
-            Debug.Assert(dataGridViewCell is not null);
-            Debug.Assert(dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.CellSelect ||
-                         dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect ||
-                         dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect);
-            DataGridViewCellLinkedListElement newHead = new DataGridViewCellLinkedListElement(dataGridViewCell);
-            if (headElement is not null)
-            {
-                newHead.Next = headElement;
-            }
-
-            headElement = newHead;
-            count++;
-            lastAccessedElement = null;
-            lastAccessedIndex = -1;
-        }
-
-        public void Clear()
-        {
-            lastAccessedElement = null;
-            lastAccessedIndex = -1;
-            headElement = null;
-            count = 0;
-        }
-
-        public bool Contains(DataGridViewCell dataGridViewCell)
-        {
-            Debug.Assert(dataGridViewCell is not null);
-            int index = 0;
-            DataGridViewCellLinkedListElement tmp = headElement;
-            while (tmp is not null)
-            {
-                if (tmp.DataGridViewCell == dataGridViewCell)
-                {
-                    lastAccessedElement = tmp;
-                    lastAccessedIndex = index;
-                    return true;
+                    tmp = tmp!.Next;
+                    tmpIndex--;
                 }
 
-                tmp = tmp.Next;
-                index++;
+                _lastAccessedElement = tmp;
+                _lastAccessedIndex = index;
+                return tmp!.DataGridViewCell;
             }
-
-            return false;
-        }
-
-        public bool Remove(DataGridViewCell dataGridViewCell)
-        {
-            Debug.Assert(dataGridViewCell is not null);
-            DataGridViewCellLinkedListElement tmp1 = null, tmp2 = headElement;
-            while (tmp2 is not null)
+            else
             {
-                if (tmp2.DataGridViewCell == dataGridViewCell)
+                while (_lastAccessedIndex < index)
                 {
-                    break;
+                    _lastAccessedElement = _lastAccessedElement!.Next;
+                    _lastAccessedIndex++;
                 }
 
-                tmp1 = tmp2;
-                tmp2 = tmp2.Next;
+                return _lastAccessedElement!.DataGridViewCell;
+            }
+        }
+    }
+
+    public int Count => _count;
+
+    public DataGridViewCell HeadCell
+    {
+        get
+        {
+            Debug.Assert(_headElement is not null);
+            return _headElement.DataGridViewCell;
+        }
+    }
+
+    public void Add(DataGridViewCell dataGridViewCell)
+    {
+        Debug.Assert(dataGridViewCell is not null);
+        Debug.Assert(dataGridViewCell.DataGridView!.SelectionMode == DataGridViewSelectionMode.CellSelect ||
+                     dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect ||
+                     dataGridViewCell.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect);
+        DataGridViewCellLinkedListElement newHead = new DataGridViewCellLinkedListElement(dataGridViewCell);
+        if (_headElement is not null)
+        {
+            newHead.Next = _headElement;
+        }
+
+        _headElement = newHead;
+        _count++;
+        _lastAccessedElement = null;
+        _lastAccessedIndex = -1;
+    }
+
+    public void Clear()
+    {
+        _lastAccessedElement = null;
+        _lastAccessedIndex = -1;
+        _headElement = null;
+        _count = 0;
+    }
+
+    public bool Contains(DataGridViewCell dataGridViewCell)
+    {
+        Debug.Assert(dataGridViewCell is not null);
+        int index = 0;
+        DataGridViewCellLinkedListElement? tmp = _headElement;
+        while (tmp is not null)
+        {
+            if (tmp.DataGridViewCell == dataGridViewCell)
+            {
+                _lastAccessedElement = tmp;
+                _lastAccessedIndex = index;
+                return true;
             }
 
+            tmp = tmp.Next;
+            index++;
+        }
+
+        return false;
+    }
+
+    public bool Remove(DataGridViewCell dataGridViewCell)
+    {
+        Debug.Assert(dataGridViewCell is not null);
+        DataGridViewCellLinkedListElement? tmp1 = null;
+        DataGridViewCellLinkedListElement? tmp2 = _headElement;
+        while (tmp2 is not null)
+        {
             if (tmp2.DataGridViewCell == dataGridViewCell)
             {
-                DataGridViewCellLinkedListElement tmp3 = tmp2.Next;
+                break;
+            }
+
+            tmp1 = tmp2;
+            tmp2 = tmp2.Next;
+        }
+
+        if (tmp2!.DataGridViewCell == dataGridViewCell)
+        {
+            DataGridViewCellLinkedListElement? tmp3 = tmp2.Next;
+            if (tmp1 is null)
+            {
+                _headElement = tmp3;
+            }
+            else
+            {
+                tmp1.Next = tmp3;
+            }
+
+            _count--;
+            _lastAccessedElement = null;
+            _lastAccessedIndex = -1;
+            return true;
+        }
+
+        return false;
+    }
+
+    public int RemoveAllCellsAtBand(bool column, int bandIndex)
+    {
+        int removedCount = 0;
+        DataGridViewCellLinkedListElement? tmp1 = null;
+        DataGridViewCellLinkedListElement? tmp2 = _headElement;
+        while (tmp2 is not null)
+        {
+            if ((column && tmp2.DataGridViewCell.ColumnIndex == bandIndex) ||
+                (!column && tmp2.DataGridViewCell.RowIndex == bandIndex))
+            {
+                DataGridViewCellLinkedListElement? tmp3 = tmp2.Next;
                 if (tmp1 is null)
                 {
-                    headElement = tmp3;
+                    _headElement = tmp3;
                 }
                 else
                 {
                     tmp1.Next = tmp3;
                 }
 
-                count--;
-                lastAccessedElement = null;
-                lastAccessedIndex = -1;
-                return true;
+                tmp2 = tmp3;
+                _count--;
+                _lastAccessedElement = null;
+                _lastAccessedIndex = -1;
+                removedCount++;
             }
-
-            return false;
-        }
-
-        public int RemoveAllCellsAtBand(bool column, int bandIndex)
-        {
-            int removedCount = 0;
-            DataGridViewCellLinkedListElement tmp1 = null, tmp2 = headElement;
-            while (tmp2 is not null)
+            else
             {
-                if ((column && tmp2.DataGridViewCell.ColumnIndex == bandIndex) ||
-                    (!column && tmp2.DataGridViewCell.RowIndex == bandIndex))
-                {
-                    DataGridViewCellLinkedListElement tmp3 = tmp2.Next;
-                    if (tmp1 is null)
-                    {
-                        headElement = tmp3;
-                    }
-                    else
-                    {
-                        tmp1.Next = tmp3;
-                    }
-
-                    tmp2 = tmp3;
-                    count--;
-                    lastAccessedElement = null;
-                    lastAccessedIndex = -1;
-                    removedCount++;
-                }
-                else
-                {
-                    tmp1 = tmp2;
-                    tmp2 = tmp2.Next;
-                }
+                tmp1 = tmp2;
+                tmp2 = tmp2.Next;
             }
-
-            return removedCount;
         }
+
+        return removedCount;
     }
 }

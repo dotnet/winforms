@@ -1,71 +1,71 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
+
+#nullable disable
 
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+internal class ColumnHeaderCollectionEditor : CollectionEditor
 {
-    internal class ColumnHeaderCollectionEditor : CollectionEditor
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ImageCollectionEditor"/> class.
+    /// </summary>
+    public ColumnHeaderCollectionEditor(Type type) : base(type)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ImageCollectionEditor"/> class.
-        /// </summary>
-        public ColumnHeaderCollectionEditor(Type type) : base(type)
+    }
+
+    /// <summary>
+    /// Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
+    /// </summary>
+    protected override string HelpTopic
+    {
+        get => "net.ComponentModel.ColumnHeaderCollectionEditor";
+    }
+
+    /// <summary>
+    /// Sets the specified collection to have the specified array of items.
+    /// </summary>
+    protected override object SetItems(object editValue, object[] value)
+    {
+        if (editValue is ListView.ColumnHeaderCollection list)
         {
+            list.Clear();
+            ColumnHeader[] colHeaders = new ColumnHeader[value.Length];
+            Array.Copy(value, 0, colHeaders, 0, value.Length);
+            list.AddRange(colHeaders);
         }
 
-        /// <summary>
-        /// Gets the help topic to display for the dialog help button or pressing F1. Override to display a different help topic.
-        /// </summary>
-        protected override string HelpTopic
+        return editValue;
+    }
+
+    /// <summary>
+    ///  Removes the item from listview column header collection
+    /// </summary>
+    internal override void OnItemRemoving(object item)
+    {
+        if (Context.Instance is not ListView listview)
         {
-            get => "net.ComponentModel.ColumnHeaderCollectionEditor";
+            return;
         }
 
-        /// <summary>
-        /// Sets the specified collection to have the specified array of items.
-        /// </summary>
-        protected override object SetItems(object editValue, object[] value)
+        if (item is ColumnHeader column)
         {
-            if (editValue is ListView.ColumnHeaderCollection list)
+            IComponentChangeService changeService = Context.GetService<IComponentChangeService>();
+            PropertyDescriptor property = null;
+            if (changeService is not null)
             {
-                list.Clear();
-                ColumnHeader[] colHeaders = new ColumnHeader[value.Length];
-                Array.Copy(value, 0, colHeaders, 0, value.Length);
-                list.AddRange(colHeaders);
+                property = TypeDescriptor.GetProperties(Context.Instance)["Columns"];
+                changeService.OnComponentChanging(Context.Instance, property);
             }
 
-            return editValue;
-        }
+            listview.Columns.Remove(column);
 
-        /// <summary>
-        ///  Removes the item from listview column header collection
-        /// </summary>
-        internal override void OnItemRemoving(object item)
-        {
-            if (Context.Instance is not ListView listview)
+            if (changeService is not null && property is not null)
             {
-                return;
-            }
-
-            if (item is ColumnHeader column)
-            {
-                IComponentChangeService changeService = Context.GetService<IComponentChangeService>();
-                PropertyDescriptor property = null;
-                if (changeService is not null)
-                {
-                    property = TypeDescriptor.GetProperties(Context.Instance)["Columns"];
-                    changeService.OnComponentChanging(Context.Instance, property);
-                }
-
-                listview.Columns.Remove(column);
-
-                if (changeService is not null && property is not null)
-                {
-                    changeService.OnComponentChanged(Context.Instance, property);
-                }
+                changeService.OnComponentChanged(Context.Instance, property);
             }
         }
     }

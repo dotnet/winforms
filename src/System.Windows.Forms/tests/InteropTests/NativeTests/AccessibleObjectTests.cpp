@@ -1,6 +1,5 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 #include "testhelpers.h"
 #include <cassert>
@@ -1586,7 +1585,7 @@ TEST const WCHAR* WINAPI Test_ILegacyIAccessibleProviderGetIAccessible(IUnknown*
 
         // Negative tests
         hr = pLegacyIAccessibleProvider->GetIAccessible(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(E_POINTER, hr);
 
         return S_OK;
     });

@@ -1,56 +1,42 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Collections;
 
-namespace System.Windows.Forms.Design.Behavior
+namespace System.Windows.Forms.Design.Behavior;
+
+public class BehaviorServiceAdornerCollectionEnumerator : object, IEnumerator
 {
-    public class BehaviorServiceAdornerCollectionEnumerator : object, IEnumerator
+    private readonly IEnumerator _baseEnumerator;
+
+    public BehaviorServiceAdornerCollectionEnumerator(BehaviorServiceAdornerCollection mappings)
     {
-        private readonly IEnumerator baseEnumerator;
-        private readonly IEnumerable temp;
+        _baseEnumerator = ((IEnumerable)mappings).GetEnumerator();
+    }
 
-        public BehaviorServiceAdornerCollectionEnumerator(BehaviorServiceAdornerCollection mappings)
-        {
-            temp = mappings;
-            baseEnumerator = temp.GetEnumerator();
-        }
+#nullable disable // explicitly leaving Current as "oblivious" to avoid spurious warnings in foreach over non-generic enumerables
+    public Adorner Current => (Adorner)_baseEnumerator.Current;
 
-        public Adorner Current
-        {
-            get
-            {
-                return ((Adorner)(baseEnumerator.Current));
-            }
-        }
+    object IEnumerator.Current => _baseEnumerator.Current;
+#nullable restore
 
-        object IEnumerator.Current
-        {
-            get
-            {
-                return baseEnumerator.Current;
-            }
-        }
+    public bool MoveNext()
+    {
+        return _baseEnumerator.MoveNext();
+    }
 
-        public bool MoveNext()
-        {
-            return baseEnumerator.MoveNext();
-        }
+    bool IEnumerator.MoveNext()
+    {
+        return _baseEnumerator.MoveNext();
+    }
 
-        bool IEnumerator.MoveNext()
-        {
-            return baseEnumerator.MoveNext();
-        }
+    public void Reset()
+    {
+        _baseEnumerator.Reset();
+    }
 
-        public void Reset()
-        {
-            baseEnumerator.Reset();
-        }
-
-        void IEnumerator.Reset()
-        {
-            baseEnumerator.Reset();
-        }
+    void IEnumerator.Reset()
+    {
+        _baseEnumerator.Reset();
     }
 }

@@ -1,390 +1,401 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+///  Provides a type converter to convert <see cref="Keys"/> objects to and from various
+///  other representations.
+/// </summary>
+public class KeysConverter : TypeConverter, IComparer
 {
-    /// <summary>
-    ///  Provides a type converter to convert <see cref="Keys"/> objects to and from various
-    ///  other representations.
-    /// </summary>
-    public class KeysConverter : TypeConverter, IComparer
+    private Dictionary<CultureInfo, List<string>>? _cultureToDisplayOrder;
+    private Dictionary<CultureInfo, Dictionary<string, Keys>>? _cultureToKeyName;
+    private StandardValuesCollection? _values;
+
+    [MemberNotNull(nameof(_cultureToDisplayOrder))]
+    [MemberNotNull(nameof(_cultureToKeyName))]
+    private void Initialize()
     {
-        private IDictionary<string, Keys>? _keyNames;
-        private List<string>? _displayOrder;
-        private StandardValuesCollection? _values;
+        _cultureToDisplayOrder = new();
+        _cultureToKeyName = new();
+        AddLocalizedKeyNames(CultureInfo.InvariantCulture);
+    }
 
-        [MemberNotNull(nameof(_keyNames))]
-        [MemberNotNull(nameof(_displayOrder))]
-        private void Initialize()
+    private void AddLocalizedKeyNames(CultureInfo cultureInfo)
+    {
+        if (CultureToDisplayOrder.ContainsKey(cultureInfo) && CultureToKeyName.ContainsKey(cultureInfo))
         {
-            _keyNames = new Dictionary<string, Keys>(34);
-            _displayOrder = new List<string>(34);
-
-            AddKey(SR.toStringEnter, Keys.Return);
-            AddKey("F12", Keys.F12);
-            AddKey("F11", Keys.F11);
-            AddKey("F10", Keys.F10);
-            AddKey(SR.toStringEnd, Keys.End);
-            AddKey(SR.toStringControl, Keys.Control);
-            AddKey("F8", Keys.F8);
-            AddKey("F9", Keys.F9);
-            AddKey(SR.toStringAlt, Keys.Alt);
-            AddKey("F4", Keys.F4);
-            AddKey("F5", Keys.F5);
-            AddKey("F6", Keys.F6);
-            AddKey("F7", Keys.F7);
-            AddKey("F1", Keys.F1);
-            AddKey("F2", Keys.F2);
-            AddKey("F3", Keys.F3);
-            AddKey(SR.toStringPageDown, Keys.Next);
-            AddKey(SR.toStringInsert, Keys.Insert);
-            AddKey(SR.toStringHome, Keys.Home);
-            AddKey(SR.toStringDelete, Keys.Delete);
-            AddKey(SR.toStringShift, Keys.Shift);
-            AddKey(SR.toStringPageUp, Keys.Prior);
-            AddKey(SR.toStringBack, Keys.Back);
-
-            //new whidbey keys follow here...
-            // Add string mappings for these values (numbers 0-9) so that the keyboard shortcuts
-            // will be displayed properly in menus.
-            AddKey("0", Keys.D0);
-            AddKey("1", Keys.D1);
-            AddKey("2", Keys.D2);
-            AddKey("3", Keys.D3);
-            AddKey("4", Keys.D4);
-            AddKey("5", Keys.D5);
-            AddKey("6", Keys.D6);
-            AddKey("7", Keys.D7);
-            AddKey("8", Keys.D8);
-            AddKey("9", Keys.D9);
-
-            void AddKey(string key, Keys value)
-            {
-                _keyNames[key] = value;
-                _displayOrder.Add(key);
-            }
+            return;
         }
 
-        /// <summary>
-        ///  Access to a lookup table of name/value pairs for keys.  These are localized
-        ///  names.
-        /// </summary>
-        [MemberNotNull(nameof(_keyNames))]
-        [MemberNotNull(nameof(_displayOrder))]
-        private IDictionary<string, Keys> KeyNames
-        {
-            get
-            {
-                if (_keyNames is null)
-                {
-                    Debug.Assert(_displayOrder is null);
-                    Initialize();
-                }
+        List<string> localizedOrder = new(34);
+        Dictionary<string, Keys> localizedNames = new(34);
 
-#pragma warning disable CS8774 // Member must have a non-null value when exiting: Initialize() inits both _keyNames and _displayOrder.
-                return _keyNames;
-#pragma warning restore CS8774 // Member must have a non-null value when exiting: Initialize() inits both _keyNames and _displayOrder.
-            }
+        AddLocalizedKey(nameof(SR.toStringEnter), Keys.Return);
+        AddKey("F12", Keys.F12);
+        AddKey("F11", Keys.F11);
+        AddKey("F10", Keys.F10);
+        AddLocalizedKey(nameof(SR.toStringEnd), Keys.End);
+        AddLocalizedKey(nameof(SR.toStringControl), Keys.Control);
+        AddKey("F8", Keys.F8);
+        AddKey("F9", Keys.F9);
+        AddLocalizedKey(nameof(SR.toStringAlt), Keys.Alt);
+        AddKey("F4", Keys.F4);
+        AddKey("F5", Keys.F5);
+        AddKey("F6", Keys.F6);
+        AddKey("F7", Keys.F7);
+        AddKey("F1", Keys.F1);
+        AddKey("F2", Keys.F2);
+        AddKey("F3", Keys.F3);
+        AddLocalizedKey(nameof(SR.toStringPageDown), Keys.Next);
+        AddLocalizedKey(nameof(SR.toStringInsert), Keys.Insert);
+        AddLocalizedKey(nameof(SR.toStringHome), Keys.Home);
+        AddLocalizedKey(nameof(SR.toStringDelete), Keys.Delete);
+        AddLocalizedKey(nameof(SR.toStringShift), Keys.Shift);
+        AddLocalizedKey(nameof(SR.toStringPageUp), Keys.Prior);
+        AddLocalizedKey(nameof(SR.toStringBack), Keys.Back);
+        AddLocalizedKey(nameof(SR.toStringNone), Keys.None);
+
+        // new whidbey keys follow here...
+        // Add string mappings for these values (numbers 0-9) so that the keyboard shortcuts
+        // will be displayed properly in menus.
+        AddKey("0", Keys.D0);
+        AddKey("1", Keys.D1);
+        AddKey("2", Keys.D2);
+        AddKey("3", Keys.D3);
+        AddKey("4", Keys.D4);
+        AddKey("5", Keys.D5);
+        AddKey("6", Keys.D6);
+        AddKey("7", Keys.D7);
+        AddKey("8", Keys.D8);
+        AddKey("9", Keys.D9);
+
+        CultureToKeyName.Add(cultureInfo, localizedNames);
+        CultureToDisplayOrder.Add(cultureInfo, localizedOrder);
+
+        void AddKey(string key, Keys value)
+        {
+            localizedNames[key] = value;
+            localizedOrder.Add(key);
         }
 
-        [MemberNotNull(nameof(_keyNames))]
-        [MemberNotNull(nameof(_displayOrder))]
-        private List<string> DisplayOrder
+        void AddLocalizedKey(string keyName, Keys value)
         {
-            get
+            var key = SR.ResourceManager.GetString(keyName, cultureInfo)
+                      ?? throw new InvalidOperationException(string.Format(SR.ResourceValueNotFound, keyName));
+            AddKey(key, value);
+        }
+    }
+
+    /// <summary>
+    ///  Access to a lookup table of name/value pairs for keys.  These are localized
+    ///  names.
+    /// </summary>
+    private Dictionary<CultureInfo, Dictionary<string, Keys>> CultureToKeyName
+    {
+        get
+        {
+            if (_cultureToKeyName is null)
             {
-                if (_displayOrder is null)
+                Initialize();
+            }
+
+            return _cultureToKeyName;
+        }
+    }
+
+    private Dictionary<CultureInfo, List<string>> CultureToDisplayOrder
+    {
+        get
+        {
+            if (_cultureToDisplayOrder is null)
+            {
+                Initialize();
+            }
+
+            return _cultureToDisplayOrder;
+        }
+    }
+
+    /// <summary>
+    ///  Determines if this converter can convert an object in the given source
+    ///  type to the native type of the converter.
+    /// </summary>
+    public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
+        => sourceType == typeof(string) || sourceType == typeof(Enum[]) || base.CanConvertFrom(context, sourceType);
+
+    /// <summary>
+    ///  Gets a value indicating whether this converter can
+    ///  convert an object to the given destination type using the context.
+    /// </summary>
+    public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
+        => destinationType == typeof(Enum[]) || base.CanConvertTo(context, destinationType);
+
+    /// <summary>
+    ///  Compares two key values for equivalence.
+    /// </summary>
+    public int Compare(object? a, object? b)
+    {
+        return string.Compare(ConvertToString(a), ConvertToString(b), false, CultureInfo.InvariantCulture);
+    }
+
+    /// <summary>
+    ///  Converts the given object to the converter's native type.
+    /// </summary>
+    public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
+    {
+        if (value is string valueAsString)
+        {
+            string text = valueAsString.Trim();
+
+            if (text.Length == 0)
+            {
+                return null;
+            }
+
+            IDictionary<string, Keys> keyNames = GetKeyNames(culture);
+
+            // Parse an array of key tokens.
+            string[] tokens = text.Split(new char[] { '+' });
+            for (int i = 0; i < tokens.Length; i++)
+            {
+                tokens[i] = tokens[i].Trim();
+            }
+
+            // Now lookup each key token in our key hashtable.
+            Keys key = 0;
+            bool foundKeyCode = false;
+
+            foreach (string token in tokens)
+            {
+                if (!keyNames.TryGetValue(token, out Keys currentKey))
                 {
-                    Debug.Assert(_keyNames is null);
-                    Initialize();
+                    // Key was not found in our dictionary.  See if it is a valid value in
+                    // the Keys enum.
+                    currentKey = (Keys)Enum.Parse(typeof(Keys), token);
                 }
 
-#pragma warning disable CS8774 // Member must have a non-null value when exiting: Initialize() inits both _keyNames and _displayOrder.
-                return _displayOrder;
-#pragma warning restore CS8774 // Member must have a non-null value when exiting: Initialize() inits both _keyNames and _displayOrder.
+                if ((currentKey & Keys.KeyCode) != 0)
+                {
+                    // We found a match.  If we have previously found a
+                    // key code, then check to see that this guy
+                    // isn't a key code (it is illegal to have, say,
+                    // "A + B"
+                    if (foundKeyCode)
+                    {
+                        throw new FormatException(SR.KeysConverterInvalidKeyCombination);
+                    }
+
+                    foundKeyCode = true;
+                }
+
+                // Now OR the key into our current key
+                key |= currentKey;
             }
+
+            return key;
         }
 
-        /// <summary>
-        ///  Determines if this converter can convert an object in the given source
-        ///  type to the native type of the converter.
-        /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
+        if (value is Enum[] valueAsEnumArray)
         {
-            if (sourceType == typeof(string) || sourceType == typeof(Enum[]))
+            long finalValue = 0;
+            foreach (Enum e in valueAsEnumArray)
             {
-                return true;
+                finalValue |= Convert.ToInt64(e, CultureInfo.InvariantCulture);
             }
 
-            return base.CanConvertFrom(context, sourceType);
+            return Enum.ToObject(typeof(Keys), finalValue);
         }
 
-        /// <summary>
-        ///  Gets a value indicating whether this converter can
-        ///  convert an object to the given destination type using the context.
-        /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
+        return base.ConvertFrom(context, culture, value);
+    }
+
+    /// <summary>
+    ///  Converts the given object to another type.  The most common types to convert
+    ///  are to and from a string object.  The default implementation will make a call
+    ///  to ToString on the object if the object is valid and if the destination
+    ///  type is string.  If this cannot convert to the destination type, this will
+    ///  throw a NotSupportedException.
+    /// </summary>
+    public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
+    {
+        ArgumentNullException.ThrowIfNull(destinationType);
+
+        if (value is not Keys and not int)
         {
-            if (destinationType == typeof(Enum[]))
-            {
-                return true;
-            }
-
-            return base.CanConvertTo(context, destinationType);
-        }
-
-        /// <summary>
-        ///  Compares two key values for equivalence.
-        /// </summary>
-        public int Compare(object? a, object? b)
-        {
-            return string.Compare(ConvertToString(a), ConvertToString(b), false, CultureInfo.InvariantCulture);
-        }
-
-        /// <summary>
-        ///  Converts the given object to the converter's native type.
-        /// </summary>
-        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
-        {
-            if (value is string valueAsString)
-            {
-                string text = valueAsString.Trim();
-
-                if (text.Length == 0)
-                {
-                    return null;
-                }
-                else
-                {
-                    // Parse an array of key tokens.
-                    string[] tokens = text.Split(new char[] { '+' });
-                    for (int i = 0; i < tokens.Length; i++)
-                    {
-                        tokens[i] = tokens[i].Trim();
-                    }
-
-                    // Now lookup each key token in our key hashtable.
-                    Keys key = (Keys)0;
-                    bool foundKeyCode = false;
-
-                    for (int i = 0; i < tokens.Length; i++)
-                    {
-                        if (!KeyNames.TryGetValue(tokens[i], out Keys currentKey))
-                        {
-                            // Key was not found in our dictionary.  See if it is a valid value in
-                            // the Keys enum.
-                            currentKey = (Keys)Enum.Parse(typeof(Keys), tokens[i]);
-                        }
-
-                        if ((currentKey & Keys.KeyCode) != 0)
-                        {
-                            // We found a match.  If we have previously found a
-                            // key code, then check to see that this guy
-                            // isn't a key code (it is illegal to have, say,
-                            // "A + B"
-                            if (foundKeyCode)
-                            {
-                                throw new FormatException(SR.KeysConverterInvalidKeyCombination);
-                            }
-
-                            foundKeyCode = true;
-                        }
-
-                        // Now OR the key into our current key
-                        key |= currentKey;
-                    }
-
-                    return (object)key;
-                }
-            }
-            else if (value is Enum[] valueAsEnumArray)
-            {
-                long finalValue = 0;
-                foreach (Enum e in valueAsEnumArray)
-                {
-                    finalValue |= Convert.ToInt64(e, CultureInfo.InvariantCulture);
-                }
-
-                return Enum.ToObject(typeof(Keys), finalValue);
-            }
-
-            return base.ConvertFrom(context, culture, value);
-        }
-
-        /// <summary>
-        ///  Converts the given object to another type.  The most common types to convert
-        ///  are to and from a string object.  The default implementation will make a call
-        ///  to ToString on the object if the object is valid and if the destination
-        ///  type is string.  If this cannot convert to the destination type, this will
-        ///  throw a NotSupportedException.
-        /// </summary>
-        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
-        {
-            ArgumentNullException.ThrowIfNull(destinationType);
-
-            if (value is Keys || value is int)
-            {
-                bool asString = destinationType == typeof(string);
-                bool asEnum = false;
-                if (!asString)
-                {
-                    asEnum = destinationType == typeof(Enum[]);
-                }
-
-                if (asString || asEnum)
-                {
-                    Keys key = (Keys)value;
-                    bool added = false;
-                    ArrayList terms = new ArrayList();
-                    Keys modifiers = (key & Keys.Modifiers);
-
-                    // First, iterate through and do the modifiers. These are
-                    // additive, so we support things like Ctrl + Alt
-                    for (int i = 0; i < DisplayOrder.Count; i++)
-                    {
-                        string keyString = DisplayOrder[i];
-                        Keys keyValue = _keyNames[keyString];
-                        if (((int)keyValue & (int)modifiers) != 0)
-                        {
-                            if (asString)
-                            {
-                                if (added)
-                                {
-                                    terms.Add("+");
-                                }
-
-                                terms.Add(keyString);
-                            }
-                            else
-                            {
-                                terms.Add(keyValue);
-                            }
-
-                            added = true;
-                        }
-                    }
-
-                    // Now reset and do the key values.  Here, we quit if
-                    // we find a match.
-                    Keys keyOnly = key & Keys.KeyCode;
-                    bool foundKey = false;
-
-                    if (added && asString)
-                    {
-                        terms.Add("+");
-                    }
-
-                    for (int i = 0; i < DisplayOrder.Count; i++)
-                    {
-                        string keyString = DisplayOrder[i];
-                        Keys keyValue = _keyNames[keyString];
-                        if (keyValue.Equals(keyOnly))
-                        {
-                            if (asString)
-                            {
-                                terms.Add(keyString);
-                            }
-                            else
-                            {
-                                terms.Add(keyValue);
-                            }
-
-                            added = true;
-                            foundKey = true;
-                            break;
-                        }
-                    }
-
-                    // Finally, if the key wasn't in our list, add it to
-                    // the end anyway.  Here we just pull the key value out
-                    // of the enum.
-                    if (!foundKey && Enum.IsDefined(typeof(Keys), (int)keyOnly))
-                    {
-                        if (asString)
-                        {
-                            terms.Add(((Enum)keyOnly).ToString());
-                        }
-                        else
-                        {
-                            terms.Add((Enum)keyOnly);
-                        }
-                    }
-
-                    if (asString)
-                    {
-                        StringBuilder b = new StringBuilder(32);
-                        foreach (string t in terms)
-                        {
-                            b.Append(t);
-                        }
-
-                        return b.ToString();
-                    }
-                    else
-                    {
-                        return (Enum[])terms.ToArray(typeof(Enum));
-                    }
-                }
-            }
-
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        /// <summary>
-        ///  Retrieves a collection containing a set of standard values
-        ///  for the data type this validator is designed for.  This
-        ///  will return null if the data type does not support a
-        ///  standard set of values.
-        /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
+        return destinationType == typeof(string)
+            ? GetTermsString((Keys)value)
+            : destinationType == typeof(Enum[])
+                ? GetTermKeys((Keys)value)
+                : base.ConvertTo(context, culture, value, destinationType);
+
+        Enum[] GetTermKeys(Keys key)
         {
-            if (_values is null)
+            List<Enum> termKeys = new();
+            Keys modifiers = key & Keys.Modifiers;
+            IDictionary<string, Keys> keyNames = GetKeyNames(culture);
+            IList<string> displayOrder = GetDisplayOrder(culture);
+
+            if (key != Keys.None)
             {
-                ArrayList list = new ArrayList();
-
-                ICollection<Keys> keys = KeyNames.Values;
-
-                foreach (object o in keys)
+                // First, iterate through and do the modifiers. These are
+                // additive, so we support things like Ctrl + Alt
+                foreach (var keyString in displayOrder)
                 {
-                    list.Add(o);
+                    Keys keyValue = keyNames[keyString];
+                    if (keyValue != Keys.None && modifiers.HasFlag(keyValue))
+                    {
+                        termKeys.Add(keyValue);
+                    }
                 }
-
-                list.Sort(this);
-
-                _values = new StandardValuesCollection(list.ToArray());
             }
 
-            return _values;
+            // Now reset and do the key values. Here, we quit if
+            // we find a match.
+            Keys keyOnly = key & Keys.KeyCode;
+            bool foundKey = false;
+
+            foreach (var keyString in displayOrder)
+            {
+                Keys keyValue = keyNames[keyString];
+                if (keyValue.Equals(keyOnly))
+                {
+                    termKeys.Add(keyValue);
+                    foundKey = true;
+                    break;
+                }
+            }
+
+            // Finally, if the key wasn't in our list, add it to
+            // the end anyway. Here we just pull the key value out
+            // of the enum.
+            if (!foundKey && Enum.IsDefined(typeof(Keys), (int)keyOnly))
+            {
+                termKeys.Add(keyOnly);
+            }
+
+            return termKeys.ToArray();
         }
 
-        /// <summary>
-        ///  Determines if the list of standard values returned from
-        ///  GetStandardValues is an exclusive list.  If the list
-        ///  is exclusive, then no other values are valid, such as
-        ///  in an enum data type.  If the list is not exclusive,
-        ///  then there are other valid values besides the list of
-        ///  standard values GetStandardValues provides.
-        /// </summary>
-        public override bool GetStandardValuesExclusive(ITypeDescriptorContext? context)
+        string GetTermsString(Keys key)
         {
-            return false;
+            StringBuilder termStrings = new(32);
+            Keys modifiers = key & Keys.Modifiers;
+            IDictionary<string, Keys> keyNames = GetKeyNames(culture);
+            IList<string> displayOrder = GetDisplayOrder(culture);
+
+            if (key != Keys.None)
+            {
+                // First, iterate through and do the modifiers. These are
+                // additive, so we support things like Ctrl + Alt
+                foreach (var keyString in displayOrder)
+                {
+                    Keys keyValue = keyNames[keyString];
+                    if (keyValue != Keys.None && modifiers.HasFlag(keyValue))
+                    {
+                        termStrings.Append(keyString).Append('+');
+                    }
+                }
+            }
+
+            // Now reset and do the key values. Here, we quit if
+            // we find a match.
+            Keys keyOnly = key & Keys.KeyCode;
+            bool foundKey = false;
+
+            foreach (var keyString in displayOrder)
+            {
+                Keys keyValue = keyNames[keyString];
+                if (keyValue.Equals(keyOnly))
+                {
+                    termStrings.Append(keyString);
+                    foundKey = true;
+                    break;
+                }
+            }
+
+            // Finally, if the key wasn't in our list, add it to
+            // the end anyway. Here we just pull the key value out
+            // of the enum.
+            if (!foundKey && Enum.IsDefined(typeof(Keys), (int)keyOnly))
+            {
+                termStrings.Append(Enum.GetName(keyOnly));
+            }
+
+            return termStrings.ToString();
+        }
+    }
+
+    private IList<string> GetDisplayOrder(CultureInfo? culture)
+    {
+        // Use CurrentCulture as default to match other TypeConverters.
+        culture ??= CultureInfo.CurrentCulture;
+        if (!CultureToDisplayOrder.ContainsKey(culture))
+        {
+            AddLocalizedKeyNames(culture);
         }
 
-        /// <summary>
-        ///  Determines if this object supports a standard set of values
-        ///  that can be picked from a list.
-        /// </summary>
-        public override bool GetStandardValuesSupported(ITypeDescriptorContext? context)
+        return CultureToDisplayOrder[culture];
+    }
+
+    private IDictionary<string, Keys> GetKeyNames(CultureInfo? culture)
+    {
+        // Use CurrentCulture as default to match other TypeConverters.
+        culture ??= CultureInfo.CurrentCulture;
+        if (!CultureToKeyName.ContainsKey(culture))
         {
-            return true;
+            AddLocalizedKeyNames(culture);
         }
+
+        return CultureToKeyName[culture];
+    }
+
+    /// <summary>
+    ///  Retrieves a collection containing a set of standard values
+    ///  for the data type this validator is designed for.  This
+    ///  will return null if the data type does not support a
+    ///  standard set of values.
+    /// </summary>
+    public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
+    {
+        if (_values is null)
+        {
+            Keys[] list = CultureToKeyName[CultureInfo.CurrentCulture].Values.ToArray();
+            Array.Sort(list, this);
+            _values = new StandardValuesCollection(list);
+        }
+
+        return _values;
+    }
+
+    /// <summary>
+    ///  Determines if the list of standard values returned from
+    ///  GetStandardValues is an exclusive list.  If the list
+    ///  is exclusive, then no other values are valid, such as
+    ///  in an enum data type.  If the list is not exclusive,
+    ///  then there are other valid values besides the list of
+    ///  standard values GetStandardValues provides.
+    /// </summary>
+    public override bool GetStandardValuesExclusive(ITypeDescriptorContext? context)
+    {
+        return false;
+    }
+
+    /// <summary>
+    ///  Determines if this object supports a standard set of values
+    ///  that can be picked from a list.
+    /// </summary>
+    public override bool GetStandardValuesSupported(ITypeDescriptorContext? context)
+    {
+        return true;
     }
 }

@@ -1,92 +1,90 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Runtime.CompilerServices;
 using System.Runtime.ExceptionServices;
 
-namespace System.Windows.Forms.UITests
+namespace System.Windows.Forms.UITests;
+
+internal class DenyExecutionSynchronizationContext : SynchronizationContext
 {
-    internal class DenyExecutionSynchronizationContext : SynchronizationContext
+    private readonly SynchronizationContext _underlyingContext;
+    private readonly Thread _mainThread;
+    private readonly StrongBox<ExceptionDispatchInfo> _failedTransfer;
+
+    public DenyExecutionSynchronizationContext(SynchronizationContext underlyingContext)
+        : this(underlyingContext, mainThread: null, failedTransfer: null)
     {
-        private readonly SynchronizationContext _underlyingContext;
-        private readonly Thread _mainThread;
-        private readonly StrongBox<ExceptionDispatchInfo> _failedTransfer;
+    }
 
-        public DenyExecutionSynchronizationContext(SynchronizationContext underlyingContext)
-            : this(underlyingContext, mainThread: null, failedTransfer: null)
+    private DenyExecutionSynchronizationContext(SynchronizationContext underlyingContext, Thread? mainThread, StrongBox<ExceptionDispatchInfo>? failedTransfer)
+    {
+        _underlyingContext = underlyingContext;
+        _mainThread = mainThread ?? new Thread(MainThreadStart);
+        _failedTransfer = failedTransfer ?? new StrongBox<ExceptionDispatchInfo>();
+    }
+
+    internal SynchronizationContext UnderlyingContext => _underlyingContext;
+
+    internal Thread MainThread => _mainThread;
+
+    private static void MainThreadStart() => throw new InvalidOperationException("This thread should never be started.");
+
+    internal void ThrowIfSwitchOccurred()
+    {
+        if (_failedTransfer.Value is null)
         {
+            return;
         }
 
-        private DenyExecutionSynchronizationContext(SynchronizationContext underlyingContext, Thread? mainThread, StrongBox<ExceptionDispatchInfo>? failedTransfer)
+        _failedTransfer.Value.Throw();
+    }
+
+    public override void Post(SendOrPostCallback d, object? state)
+    {
+        try
         {
-            _underlyingContext = underlyingContext;
-            _mainThread = mainThread ?? new Thread(MainThreadStart);
-            _failedTransfer = failedTransfer ?? new StrongBox<ExceptionDispatchInfo>();
+            if (_failedTransfer.Value is null)
+            {
+                ThrowFailedTransferExceptionForCapture();
+            }
         }
-
-        internal SynchronizationContext UnderlyingContext => _underlyingContext;
-
-        internal Thread MainThread => _mainThread;
-
-        private static void MainThreadStart() => throw new InvalidOperationException("This thread should never be started.");
-
-        internal void ThrowIfSwitchOccurred()
+        catch (InvalidOperationException e)
         {
-            if (_failedTransfer.Value == null)
-            {
-                return;
-            }
-
-            _failedTransfer.Value.Throw();
+            _failedTransfer.Value = ExceptionDispatchInfo.Capture(e);
         }
-
-        public override void Post(SendOrPostCallback d, object? state)
-        {
-            try
-            {
-                if (_failedTransfer.Value == null)
-                {
-                    ThrowFailedTransferExceptionForCapture();
-                }
-            }
-            catch (InvalidOperationException e)
-            {
-                _failedTransfer.Value = ExceptionDispatchInfo.Capture(e);
-            }
 
 #pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
-            (_underlyingContext ?? new SynchronizationContext()).Post(d, state);
+        (_underlyingContext ?? new SynchronizationContext()).Post(d, state);
 #pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
-        }
+    }
 
-        public override void Send(SendOrPostCallback d, object? state)
+    public override void Send(SendOrPostCallback d, object? state)
+    {
+        try
         {
-            try
+            if (_failedTransfer.Value is null)
             {
-                if (_failedTransfer.Value == null)
-                {
-                    ThrowFailedTransferExceptionForCapture();
-                }
+                ThrowFailedTransferExceptionForCapture();
             }
-            catch (InvalidOperationException e)
-            {
-                _failedTransfer.Value = ExceptionDispatchInfo.Capture(e);
-            }
+        }
+        catch (InvalidOperationException e)
+        {
+            _failedTransfer.Value = ExceptionDispatchInfo.Capture(e);
+        }
 
 #pragma warning disable VSTHRD001 // Avoid legacy thread switching APIs
-            (_underlyingContext ?? new SynchronizationContext()).Send(d, state);
+        (_underlyingContext ?? new SynchronizationContext()).Send(d, state);
 #pragma warning restore VSTHRD001 // Avoid legacy thread switching APIs
-        }
+    }
 
-        public override SynchronizationContext CreateCopy()
-        {
-            return new DenyExecutionSynchronizationContext(_underlyingContext.CreateCopy(), _mainThread, _failedTransfer);
-        }
+    public override SynchronizationContext CreateCopy()
+    {
+        return new DenyExecutionSynchronizationContext(_underlyingContext.CreateCopy(), _mainThread, _failedTransfer);
+    }
 
-        private static void ThrowFailedTransferExceptionForCapture()
-        {
-            throw new InvalidOperationException("Tests cannot use SwitchToMainThreadAsync unless they are marked with ApartmentState.STA.");
-        }
+    private static void ThrowFailedTransferExceptionForCapture()
+    {
+        throw new InvalidOperationException("Tests cannot use SwitchToMainThreadAsync unless they are marked with ApartmentState.STA.");
     }
 }

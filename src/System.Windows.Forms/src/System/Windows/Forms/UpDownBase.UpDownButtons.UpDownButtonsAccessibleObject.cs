@@ -1,148 +1,124 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static Interop;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public abstract partial class UpDownBase
 {
-    public abstract partial class UpDownBase
+    internal partial class UpDownButtons
     {
-        internal partial class UpDownButtons
+        internal partial class UpDownButtonsAccessibleObject : ControlAccessibleObject
         {
-            internal partial class UpDownButtonsAccessibleObject : ControlAccessibleObject
+            private int[]? _runtimeId;
+
+            private DirectionButtonAccessibleObject? _upButton;
+            private DirectionButtonAccessibleObject? _downButton;
+
+            public UpDownButtonsAccessibleObject(UpDownButtons owner) : base(owner)
             {
-                private DirectionButtonAccessibleObject? _upButton;
-                private DirectionButtonAccessibleObject? _downButton;
+            }
 
-                private UpDownButtons _owner;
+            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+            {
+                AccessibleObject? element = HitTest((int)x, (int)y);
 
-                public UpDownButtonsAccessibleObject(UpDownButtons owner) : base(owner)
+                if (element is not null)
                 {
-                    _owner = owner;
+                    return element;
                 }
 
-                internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+                return base.ElementProviderFromPoint(x, y);
+            }
+
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(
+                UiaCore.NavigateDirection direction) => direction switch
                 {
-                    AccessibleObject? element = HitTest((int)x, (int)y);
-
-                    if (element is not null)
-                    {
-                        return element;
-                    }
-
-                    return base.ElementProviderFromPoint(x, y);
-                }
-
-                internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(
-                    UiaCore.NavigateDirection direction) => direction switch
-                    {
-                        UiaCore.NavigateDirection.FirstChild => GetChild(0),
-                        UiaCore.NavigateDirection.LastChild => GetChild(1),
-                        _ => base.FragmentNavigate(direction),
-                    };
-
-                internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
-
-                private DirectionButtonAccessibleObject UpButton
-                    => _upButton ??= new DirectionButtonAccessibleObject(this, true);
-
-                private DirectionButtonAccessibleObject DownButton
-                    => _downButton ??= new DirectionButtonAccessibleObject(this, false);
-
-                public override AccessibleObject? GetChild(int index) => index switch
-                {
-                    0 => UpButton,
-                    1 => DownButton,
-                    _ => null,
+                    UiaCore.NavigateDirection.FirstChild => GetChild(0),
+                    UiaCore.NavigateDirection.LastChild => GetChild(1),
+                    _ => base.FragmentNavigate(direction),
                 };
 
-                public override int GetChildCount() => 2;
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
-                public override AccessibleObject? HitTest(int x, int y)
+            private DirectionButtonAccessibleObject UpButton
+                => _upButton ??= new DirectionButtonAccessibleObject(this, true);
+
+            private DirectionButtonAccessibleObject DownButton
+                => _downButton ??= new DirectionButtonAccessibleObject(this, false);
+
+            public override AccessibleObject? GetChild(int index) => index switch
+            {
+                0 => UpButton,
+                1 => DownButton,
+                _ => null,
+            };
+
+            public override int GetChildCount() => 2;
+
+            public override AccessibleObject? HitTest(int x, int y)
+            {
+                if (UpButton.Bounds.Contains(x, y))
                 {
-                    if (UpButton.Bounds.Contains(x, y))
-                    {
-                        return UpButton;
-                    }
-
-                    if (DownButton.Bounds.Contains(x, y))
-                    {
-                        return DownButton;
-                    }
-
-                    return null;
+                    return UpButton;
                 }
 
-                internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
+                if (DownButton.Bounds.Contains(x, y))
                 {
-                    get
-                    {
-                        if (HandleInternal == IntPtr.Zero)
-                        {
-                            return null;
-                        }
-
-                        UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, HandleInternal), out UiaCore.IRawElementProviderSimple provider);
-                        return provider;
-                    }
+                    return DownButton;
                 }
 
-                [AllowNull]
-                public override string Name
-                {
-                    get
-                    {
-                        string? baseName = base.Name;
-                        if (string.IsNullOrEmpty(baseName))
-                        {
-                            return SR.DefaultUpDownButtonsAccessibleName;
-                        }
-
-                        return baseName;
-                    }
-                    set => base.Name = value;
-                }
-
-                public override AccessibleObject Parent => _owner.AccessibilityObject;
-
-                internal void ReleaseChildUiaProviders()
-                {
-                    UiaCore.UiaDisconnectProvider(_upButton);
-                    _upButton = null;
-
-                    UiaCore.UiaDisconnectProvider(_downButton);
-                    _downButton = null;
-                }
-
-                public override AccessibleRole Role
-                {
-                    get
-                    {
-                        AccessibleRole role = Owner.AccessibleRole;
-                        if (role != AccessibleRole.Default)
-                        {
-                            return role;
-                        }
-
-                        return AccessibleRole.SpinButton;
-                    }
-                }
-
-                /// <summary>
-                ///  Gets the runtime ID. We need to provide a unique ID others are implementing this in the same manner first item
-                ///  is static - 0x2a (RuntimeIDFirstItem) second item can be anything, but it's good to supply HWND.
-                /// </summary>
-                internal override int[] RuntimeId
-                    => new int[]
-                    {
-                        RuntimeIDFirstItem,
-                        PARAM.ToInt(_owner.InternalHandle),
-                        _owner.GetHashCode()
-                    };
+                return null;
             }
+
+            internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
+            {
+                get
+                {
+                    if (HandleInternal == IntPtr.Zero)
+                    {
+                        return null;
+                    }
+
+                    UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, HandleInternal), out UiaCore.IRawElementProviderSimple provider);
+                    return provider;
+                }
+            }
+
+            [AllowNull]
+            public override string Name
+            {
+                get
+                {
+                    string? baseName = base.Name;
+                    return string.IsNullOrEmpty(baseName) ? SR.DefaultUpDownButtonsAccessibleName : baseName;
+                }
+                set => base.Name = value;
+            }
+
+            public override AccessibleObject? Parent
+                => this.TryGetOwnerAs(out UpDownButtons? owner) ? owner.AccessibilityObject : null;
+
+            internal void ReleaseChildUiaProviders()
+            {
+                UiaCore.UiaDisconnectProvider(_upButton);
+                _upButton = null;
+
+                UiaCore.UiaDisconnectProvider(_downButton);
+                _downButton = null;
+            }
+
+            public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.SpinButton);
+
+            internal override int[] RuntimeId
+                => _runtimeId ??= !this.TryGetOwnerAs(out UpDownButtons? owner) ? base.RuntimeId : new int[]
+                {
+                    RuntimeIDFirstItem,
+                    PARAM.ToInt(owner.InternalHandle),
+                    owner.GetHashCode()
+                };
         }
     }
 }

@@ -22,6 +22,21 @@
         <target state="translated">未能分析 Text("{0}")，文本格式应为“{1}”。</target>
         <note />
       </trans-unit>
+      <trans-unit id="Win32GetThreadsDpiContextFailed">
+        <source>Failed to get thread's DpiAwareness context.</source>
+        <target state="translated">无法获取线程的 DpiAwareness 上下文。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Win32SetThreadsDpiContextFailed">
+        <source>Failed to set thread's DpiAwareness context {0}.</source>
+        <target state="translated">无法设置线程的 DpiAwareness 上下文 {0}。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Win32SetThreadsDpiHostingBehaviorFailed">
+        <source>Failed to set thread's DPI hosting behavior {0}.</source>
+        <target state="translated">无法设置线程的 DPI 托管行为 {0}。</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -1,85 +1,81 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Runtime.Versioning;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+/// <summary>
+/// Base class for components which provide properties which can be
+/// data bound with the WinForms Designer.
+/// </summary>
+public abstract class BindableComponent : Component, IBindableComponent
 {
+    internal static readonly object s_bindingContextChangedEvent = new();
+
+    private ControlBindingsCollection? _dataBindings;
+    private BindingContext? _bindingContext;
+
     /// <summary>
-    /// Base class for components which provide properties which can be
-    /// data bound with the WinForms Designer.
+    /// Gets or sets the <see cref="BindingContext"/> for this bindable <see cref="Component"/>.
     /// </summary>
-    [RequiresPreviewFeatures]
-    public abstract class BindableComponent : Component, IBindableComponent
+    [Browsable(false)]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [SRCategory(nameof(SR.CatData))]
+    [SRDescription(nameof(SR.BindingComponentBindingContextDescr))]
+    public BindingContext? BindingContext
     {
-        internal static readonly object s_bindingContextChangedEvent = new();
+        get => _bindingContext ??= new BindingContext();
 
-        private ControlBindingsCollection? _dataBindings;
-        private BindingContext? _bindingContext;
-
-        /// <summary>
-        /// Gets or sets the <see cref="BindingContext"/> for this bindable <see cref="Component"/>.
-        /// </summary>
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [SRCategory(nameof(SR.CatData))]
-        [SRDescription(nameof(SR.BindingComponentBindingContextDescr))]
-        public BindingContext? BindingContext
+        set
         {
-            get => _bindingContext ??= new BindingContext();
-
-            set
+            if (!Equals(_bindingContext, value))
             {
-                if (!Equals(_bindingContext, value))
-                {
-                    _bindingContext = value;
-                    OnBindingContextChanged(EventArgs.Empty);
-                }
+                _bindingContext = value;
+                OnBindingContextChanged(EventArgs.Empty);
             }
         }
-
-        /// <summary>
-        /// Occurs when the binding context has changed.
-        /// </summary>
-        [SRCategory(nameof(SR.CatData))]
-        [SRDescription(nameof(SR.BindableComponentBindingContextChangedDescr))]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public event EventHandler BindingContextChanged
-        {
-            add => Events.AddHandler(s_bindingContextChangedEvent, value);
-            remove => Events.RemoveHandler(s_bindingContextChangedEvent, value);
-        }
-
-        /// <summary>
-        ///  Raises the <see cref="BindableComponent.BindingContextChanged"/> event.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnBindingContextChanged(EventArgs e)
-        {
-            if (_bindingContext is not null)
-            {
-                for (int i = 0; i < DataBindings.Count; i++)
-                {
-                    BindingContext.UpdateBinding(BindingContext, DataBindings[i]);
-                }
-            }
-
-            RaiseEvent(s_bindingContextChangedEvent, e);
-        }
-
-        /// <summary>
-        /// Gets the <see cref="ControlBindingsCollection"/> for this bindable <see cref="Component"/>.
-        /// </summary>
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        [RefreshProperties(RefreshProperties.All)]
-        [ParenthesizePropertyName(true)]
-        public ControlBindingsCollection DataBindings
-            => _dataBindings ??= new ControlBindingsCollection(this);
-
-        private protected void RaiseEvent(object key, EventArgs e)
-            => ((EventHandler?)Events[key])?.Invoke(this, e);
     }
+
+    /// <summary>
+    /// Occurs when the binding context has changed.
+    /// </summary>
+    [SRCategory(nameof(SR.CatData))]
+    [SRDescription(nameof(SR.BindableComponentBindingContextChangedDescr))]
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    public event EventHandler BindingContextChanged
+    {
+        add => Events.AddHandler(s_bindingContextChangedEvent, value);
+        remove => Events.RemoveHandler(s_bindingContextChangedEvent, value);
+    }
+
+    /// <summary>
+    ///  Raises the <see cref="BindableComponent.BindingContextChanged"/> event.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Advanced)]
+    protected virtual void OnBindingContextChanged(EventArgs e)
+    {
+        if (_bindingContext is not null)
+        {
+            for (int i = 0; i < DataBindings.Count; i++)
+            {
+                BindingContext.UpdateBinding(BindingContext, DataBindings[i]);
+            }
+        }
+
+        RaiseEvent(s_bindingContextChangedEvent, e);
+    }
+
+    /// <summary>
+    /// Gets the <see cref="ControlBindingsCollection"/> for this bindable <see cref="Component"/>.
+    /// </summary>
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+    [RefreshProperties(RefreshProperties.All)]
+    [ParenthesizePropertyName(true)]
+    public ControlBindingsCollection DataBindings
+        => _dataBindings ??= new ControlBindingsCollection(this);
+
+    private protected void RaiseEvent(object key, EventArgs e)
+        => ((EventHandler?)Events[key])?.Invoke(this, e);
 }

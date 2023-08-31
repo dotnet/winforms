@@ -1,77 +1,74 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using Xunit;
 using Xunit.Abstractions;
 
-namespace System.Windows.Forms.UITests
+namespace System.Windows.Forms.UITests;
+
+public class MDITests : ControlTestBase
 {
-    public class MDITests : ControlTestBase
+    public MDITests(ITestOutputHelper testOutputHelper)
+        : base(testOutputHelper)
     {
-        public MDITests(ITestOutputHelper testOutputHelper)
-            : base(testOutputHelper)
-        {
-        }
+    }
 
-        [WinFormsFact]
-        public async Task MDIForm_ResizeWhenMdiChildrenMinimizedAnchorBottom_DefaultAsync()
+    [WinFormsFact]
+    public async Task MDIForm_ResizeWhenMdiChildrenMinimizedAnchorBottom_DefaultAsync()
+    {
+        await RunTestAsync(form =>
         {
-            await RunTestAsync(form =>
+            using Form childForm = new()
             {
-                using Form childForm = new()
-                {
-                    MdiParent = form,
-                    WindowState = FormWindowState.Minimized
-                };
+                MdiParent = form,
+                WindowState = FormWindowState.Minimized
+            };
 
-                childForm.Show();
+            childForm.Show();
 
-                int childFormMinimizedYPositionFromBottom = form.ClientSize.Height - childForm.Top;
-                form.Height += 100;
+            int childFormMinimizedYPositionFromBottom = form.ClientSize.Height - childForm.Top;
+            form.Height += 100;
 
-                Assert.Equal(childFormMinimizedYPositionFromBottom, form.ClientSize.Height - childForm.Top);
+            Assert.Equal(childFormMinimizedYPositionFromBottom, form.ClientSize.Height - childForm.Top);
 
-                return Task.CompletedTask;
-            });
-        }
+            return Task.CompletedTask;
+        });
+    }
 
-        [WinFormsFact]
-        public async Task MDIForm_ResizeWhenMdiChildrenMinimizedAnchorBottom_FalseAsync()
+    [WinFormsFact]
+    public async Task MDIForm_ResizeWhenMdiChildrenMinimizedAnchorBottom_FalseAsync()
+    {
+        await RunTestAsync(form =>
         {
-            await RunTestAsync(form =>
+            using Form childForm = new()
             {
-                using Form childForm = new()
+                MdiParent = form,
+                WindowState = FormWindowState.Minimized
+            };
+            form.MdiChildrenMinimizedAnchorBottom = false;
+
+            childForm.Show();
+
+            int childFormMinimizedTop = childForm.Top;
+            form.Height += 100;
+
+            Assert.Equal(childFormMinimizedTop, childForm.Top);
+
+            return Task.CompletedTask;
+        });
+    }
+
+    private async Task RunTestAsync(Func<Form, Task> runTest)
+    {
+        await RunFormWithoutControlAsync(
+            testDriverAsync: runTest,
+            createForm: () =>
+            {
+                return new()
                 {
-                    MdiParent = form,
-                    WindowState = FormWindowState.Minimized
+                    IsMdiContainer = true,
+                    ClientSize = new Size(640, 480),
                 };
-                form.MdiChildrenMinimizedAnchorBottom = false;
-
-                childForm.Show();
-
-                int childFormMinimizedTop = childForm.Top;
-                form.Height += 100;
-
-                Assert.Equal(childFormMinimizedTop, childForm.Top);
-
-                return Task.CompletedTask;
             });
-        }
-
-        private async Task RunTestAsync(Func<Form, Task> runTest)
-        {
-            await RunFormWithoutControlAsync(
-                testDriverAsync: runTest,
-                createForm: () =>
-                {
-                    return new()
-                    {
-                        IsMdiContainer = true,
-                        ClientSize = new Size(640, 480),
-                    };
-                });
-        }
     }
 }

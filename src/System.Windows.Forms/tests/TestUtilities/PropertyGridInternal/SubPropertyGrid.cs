@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 #nullable enable
 
@@ -8,14 +7,13 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
-using Xunit;
-using static Interop;
+using Windows.Win32;
 
 namespace System.Windows.Forms.PropertyGridInternal.TestUtilities;
 
 public class SubPropertyGrid<TSelected> : PropertyGrid where TSelected : new()
 {
-    private static readonly User32.WM WM_DELAYEDEXECUTION = User32.RegisterWindowMessageW("WinFormsSubPropertyGridDelayedExecution");
+    private static readonly MessageId WM_DELAYEDEXECUTION = PInvoke.RegisterWindowMessage("WinFormsSubPropertyGridDelayedExecution");
 
     internal PropertyGridView GridView => this.TestAccessor().Dynamic._gridView;
 
@@ -61,7 +59,7 @@ public class SubPropertyGrid<TSelected> : PropertyGrid where TSelected : new()
 
         try
         {
-            User32.PostMessageW(this, WM_DELAYEDEXECUTION, lParam: GCHandle.ToIntPtr(callbackHandle));
+            PInvoke.PostMessage(this, WM_DELAYEDEXECUTION, lParam: GCHandle.ToIntPtr(callbackHandle));
             GridView.PopupEditor(GridView.TestAccessor().Dynamic._selectedRow);
         }
         finally

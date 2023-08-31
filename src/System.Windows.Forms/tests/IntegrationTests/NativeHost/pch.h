@@ -1,6 +1,5 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 #pragma once
 
@@ -16,6 +15,7 @@
 #include <afx.h>
 #include <afxwin.h>
 #include <afxdtctl.h>
+#include <MsHTML.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

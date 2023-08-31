@@ -2271,6 +2271,9 @@ To replace this default dialog please handle the DataError event.</value>
   <data name="DataGridViewCellAccessibleObject_OwnerNotSet" xml:space="preserve">
     <value>The owning DataGridViewCell object has not been set.</value>
   </data>
+  <data name="DataGridViewCellAccessibleObject_OwnerWrongType" xml:space="preserve">
+    <value>DataGridViewCell of type {0} does not provide the Toggle pattern.</value>
+  </data>
   <data name="DataGridViewCellCollection_AtLeastOneCellIsNull" xml:space="preserve">
     <value>At least one of the provided cells is null.</value>
   </data>
@@ -2915,8 +2918,7 @@ just-in-time (JIT) debugging instead of this dialog box.
   <data name="ExDlgMsgLoadedAssembliesEntry" xml:space="preserve">
     <value>{0}
     Assembly Version: {1}
-    Win32 Version: {2}
-    CodeBase: {3}
+    Location: {2}
 </value>
   </data>
   <data name="ExDlgMsgLoadedAssembliesSection" xml:space="preserve">
@@ -3292,9 +3294,6 @@ Do you want to replace it?</value>
   </data>
   <data name="FormWindowStateDescr" xml:space="preserve">
     <value>Determines the initial visual state of the form.</value>
-  </data>
-  <data name="GridItemDisposed" xml:space="preserve">
-    <value>The GridItem has been disposed and is no longer usable.</value>
   </data>
   <data name="GridItemNotExpandable" xml:space="preserve">
     <value>The GridItem cannot be expanded.</value>
@@ -4362,9 +4361,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="NumericUpDownValueDescr" xml:space="preserve">
     <value>The current value of the numeric up-down control.</value>
-  </data>
-  <data name="ObjectDisposed" xml:space="preserve">
-    <value>Disposed '{0}' can no longer be used.</value>
   </data>
   <data name="ObjectHasParent" xml:space="preserve">
     <value>Object already has a parent.</value>
@@ -5938,6 +5934,9 @@ Stack trace where the illegal operation occurred was:
   <data name="DataGridViewCheckBoxCellUncheckedStateDescription" xml:space="preserve">
     <value>{0} check box unchecked</value>
   </data>
+  <data name="DataGridViewCheckBoxCellIndeterminateStateDescription" xml:space="preserve">
+    <value>{0} check box indeterminate</value>
+  </data>
   <data name="ToolStripLabelLinkBehaviorDescr" xml:space="preserve">
     <value>The underlining behavior of the link.</value>
   </data>
@@ -6132,42 +6131,52 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="toStringAlt" xml:space="preserve">
     <value>Alt</value>
+	<comment>{Locked="Alt"}</comment>
   </data>
   <data name="toStringBack" xml:space="preserve">
     <value>Back</value>
   </data>
   <data name="toStringControl" xml:space="preserve">
     <value>Ctrl</value>
+	<comment>{Locked=!de; "Ctrl"}</comment>
   </data>
   <data name="toStringDefault" xml:space="preserve">
     <value>(default)</value>
   </data>
   <data name="toStringDelete" xml:space="preserve">
     <value>Del</value>
+	<comment>{Locked=!fr,de,it,es; "Del"}</comment>
   </data>
   <data name="toStringEnd" xml:space="preserve">
     <value>End</value>
+	<comment>{Locked=!fr,de,it,es; "End"}</comment>
   </data>
   <data name="toStringEnter" xml:space="preserve">
     <value>Enter</value>
+	<comment>{Locked=!fr,de,it,es; "Enter"}</comment>
   </data>
   <data name="toStringHome" xml:space="preserve">
     <value>Home</value>
+	<comment>{Locked=!fr,de,es; "Home"}</comment>
   </data>
   <data name="toStringInsert" xml:space="preserve">
-    <value>Ins</value>
+    <value>Insert</value>
+	<comment>{Locked=!fr,de,it,es,zh-Hant; "Insert"}</comment>
   </data>
   <data name="toStringNone" xml:space="preserve">
     <value>(none)</value>
   </data>
   <data name="toStringPageDown" xml:space="preserve">
     <value>PgDn</value>
+	<comment>{Locked=!fr,de,it,es; "PgDn"}</comment>
   </data>
   <data name="toStringPageUp" xml:space="preserve">
     <value>PgUp</value>
+	<comment>{Locked=!fr,de,it,es; "PgUp"}</comment>
   </data>
   <data name="toStringShift" xml:space="preserve">
     <value>Shift</value>
+	<comment>{Locked=!fr,de,it,es; "Shift"}</comment>
   </data>
   <data name="TrackBarAutoSizeDescr" xml:space="preserve">
     <value>Indicates whether the control will resize itself automatically based on a computation of the default scroll bar dimensions.</value>
@@ -6832,9 +6841,6 @@ Stack trace where the illegal operation occurred was:
   <data name="ListViewItemAccessibilityObjectInvalidViewException" xml:space="preserve">
     <value>The current accessibility object is only for the ListView in {0} view</value>
   </data>
-  <data name="ListViewItemAccessibilityObjectInvalidViewsException" xml:space="preserve">
-    <value>The current accessibility object is only for the ListView in {0}, {1} or {2} view</value>
-  </data>
   <data name="TrackBarLargeDecreaseButtonName" xml:space="preserve">
     <value>Large decrease</value>
   </data>
@@ -6951,5 +6957,29 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="AccessDenied" xml:space="preserve">
     <value>Access denied</value>
+  </data>
+  <data name="ArgumentOutOfRange_NeedNonNegNum" xml:space="preserve">
+    <value>Non-negative number required.</value>
+  </data>
+  <data name="Argument_IncompatibleArrayType" xml:space="preserve">
+    <value>Target array type is not compatible with the type of items in the collection.</value>
+  </data>
+  <data name="Arg_ArrayPlusOffTooSmall" xml:space="preserve">
+    <value>Destination array is not long enough to copy all the items in the collection. Check array index and length.</value>
+  </data>
+  <data name="Arg_NonZeroLowerBound" xml:space="preserve">
+    <value>The lower bound of target array must be zero.</value>
+  </data>
+  <data name="Arg_RankMultiDimNotSupported" xml:space="preserve">
+    <value>Only single dimensional arrays are supported for the requested action.</value>
+  </data>
+  <data name="InvalidArgumentType" xml:space="preserve">
+    <value>Argument '{0}' must be of type '{1}'.</value>
+  </data>
+  <data name="FailedToLoadCursor" xml:space="preserve">
+    <value>Failed to load cursor. Error '{1}'.</value>
+  </data>
+  <data name="ResourceValueNotFound" xml:space="preserve">
+    <value>The resource value '{0}' was not found.</value>
   </data>
 </root>

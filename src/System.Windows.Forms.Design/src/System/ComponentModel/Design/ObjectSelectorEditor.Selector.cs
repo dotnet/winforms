@@ -1,227 +1,217 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using static Interop;
 
-namespace System.ComponentModel.Design
+namespace System.ComponentModel.Design;
+
+public abstract partial class ObjectSelectorEditor
 {
-    public abstract partial class ObjectSelectorEditor
+    public class Selector : TreeView
     {
-        public class Selector : TreeView
+        private readonly ObjectSelectorEditor _editor;
+        private IWindowsFormsEditorService? _editorService;
+        public bool clickSeen;
+
+        /// <summary>
+        ///  Constructor for Selector, takes ObjectSelectorEditor
+        /// </summary>
+        public Selector(ObjectSelectorEditor editor)
         {
-            private readonly ObjectSelectorEditor _editor;
-            private IWindowsFormsEditorService _editorService;
-            public bool clickSeen;
+            CreateHandle();
+            _editor = editor;
 
-            /// <summary>
-            ///  Constructor for Selector, takes ObjectSelectorEditor
-            /// </summary>
-            public Selector(ObjectSelectorEditor editor)
+            BorderStyle = BorderStyle.None;
+            FullRowSelect = !editor.SubObjectSelector;
+            Scrollable = true;
+            CheckBoxes = false;
+            ShowPlusMinus = editor.SubObjectSelector;
+            ShowLines = editor.SubObjectSelector;
+            ShowRootLines = editor.SubObjectSelector;
+
+            AfterSelect += new TreeViewEventHandler(OnAfterSelect);
+        }
+
+        /// <summary>
+        ///  Adds a Node with given label and value to the parent, provided the parent is not null;
+        ///  Otherwise, adds that node to the Nodes TreeNodeCollection. Returns the new node.
+        /// </summary>
+        public SelectorNode AddNode(string? label, object? value, SelectorNode? parent)
+        {
+            SelectorNode newNode = new(label, value);
+
+            if (parent is not null)
             {
-                CreateHandle();
-                _editor = editor;
-
-                BorderStyle = BorderStyle.None;
-                FullRowSelect = !editor.SubObjectSelector;
-                Scrollable = true;
-                CheckBoxes = false;
-                ShowPlusMinus = editor.SubObjectSelector;
-                ShowLines = editor.SubObjectSelector;
-                ShowRootLines = editor.SubObjectSelector;
-
-                AfterSelect += new TreeViewEventHandler(OnAfterSelect);
+                parent.Nodes.Add(newNode);
+            }
+            else
+            {
+                Nodes.Add(newNode);
             }
 
-            /// <summary>
-            ///  Adds a Node with given label and value to the parent, provided the parent is not null;
-            ///  Otherwise, adds that node to the Nodes TreeNodeCollection. Returns the new node.
-            /// </summary>
-            public SelectorNode AddNode(string label, object value, SelectorNode parent)
+            return newNode;
+        }
+
+        /// <summary>
+        ///  Returns true if the given node was selected; false otherwise.
+        /// </summary>
+        private bool ChooseSelectedNodeIfEqual()
+        {
+            if (_editor is not null && _editorService is not null)
             {
-                SelectorNode newNode = new(label, value);
-
-                if (parent is not null)
+                _editor.SetValue(((SelectorNode)SelectedNode).value);
+                if (_editor.EqualsToValue(((SelectorNode)SelectedNode).value))
                 {
-                    parent.Nodes.Add(newNode);
+                    _editorService.CloseDropDown();
+                    return true;
                 }
-                else
-                {
-                    Nodes.Add(newNode);
-                }
-
-                return newNode;
             }
 
-            /// <summary>
-            ///  Returns true if the given node was selected; false otherwise.
-            /// </summary>
-            private bool ChooseSelectedNodeIfEqual()
+            return false;
+        }
+
+        /// <summary>
+        ///  Clears the TreeNodeCollection and sets clickSeen to false.
+        /// </summary>
+        public void Clear()
+        {
+            clickSeen = false;
+            Nodes.Clear();
+        }
+
+        protected void OnAfterSelect(object? sender, TreeViewEventArgs e)
+        {
+            if (clickSeen)
             {
-                if (_editor is not null && _editorService is not null)
-                {
-                    _editor.SetValue(((SelectorNode)SelectedNode).value);
-                    if (_editor.EqualsToValue(((SelectorNode)SelectedNode).value))
+                ChooseSelectedNodeIfEqual();
+                clickSeen = false;
+            }
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            Keys key = e.KeyCode;
+            switch (key)
+            {
+                case Keys.Return:
+                    if (ChooseSelectedNodeIfEqual())
                     {
-                        _editorService.CloseDropDown();
-                        return true;
+                        e.Handled = true;
                     }
-                }
 
+                    break;
+
+                case Keys.Escape:
+                    _editor.SetValue(_editor.prevValue);
+                    e.Handled = true;
+                    _editorService!.CloseDropDown();
+                    break;
+            }
+
+            base.OnKeyDown(e);
+        }
+
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+            switch (e.KeyChar)
+            {
+                case '\r':  // Enter key
+                    e.Handled = true;
+                    break;
+            }
+
+            base.OnKeyPress(e);
+        }
+
+        protected override void OnNodeMouseClick(TreeNodeMouseClickEventArgs e)
+        {
+            // We won't get an OnAfterSelect if it's already selected, so use this instead.
+            if (e.Node == SelectedNode)
+            {
+                ChooseSelectedNodeIfEqual();
+            }
+
+            base.OnNodeMouseClick(e);
+        }
+
+        public bool SetSelection(object? value, TreeNodeCollection? nodes)
+        {
+            nodes ??= Nodes;
+
+            int length = nodes.Count;
+            if (length == 0)
+            {
                 return false;
             }
 
-            /// <summary>
-            ///  Clears the TreeNodeCollection and sets clickSeen to false.
-            /// </summary>
-            public void Clear()
+            TreeNode[] treeNodes = new TreeNode[length];
+            nodes.CopyTo(treeNodes, 0);
+
+            for (int i = 0; i < length; i++)
             {
-                clickSeen = false;
-                Nodes.Clear();
-            }
-
-            protected void OnAfterSelect(object sender, TreeViewEventArgs e)
-            {
-                if (clickSeen)
+                if (((SelectorNode)treeNodes[i]).value == value)
                 {
-                    ChooseSelectedNodeIfEqual();
-                    clickSeen = false;
-                }
-            }
-
-            protected override void OnKeyDown(KeyEventArgs e)
-            {
-                Keys key = e.KeyCode;
-                switch (key)
-                {
-                    case Keys.Return:
-                        if (ChooseSelectedNodeIfEqual())
-                        {
-                            e.Handled = true;
-                        }
-
-                        break;
-
-                    case Keys.Escape:
-                        _editor.SetValue(_editor.prevValue);
-                        e.Handled = true;
-                        _editorService.CloseDropDown();
-                        break;
+                    SelectedNode = treeNodes[i];
+                    return true;
                 }
 
-                base.OnKeyDown(e);
-            }
-
-            protected override void OnKeyPress(KeyPressEventArgs e)
-            {
-                switch (e.KeyChar)
+                if ((treeNodes[i].Nodes is not null) && (treeNodes[i].Nodes.Count != 0))
                 {
-                    case '\r':  // Enter key
-                        e.Handled = true;
-                        break;
-                }
-
-                base.OnKeyPress(e);
-            }
-
-            protected override void OnNodeMouseClick(TreeNodeMouseClickEventArgs e)
-            {
-                // We won't get an OnAfterSelect if it's already selected, so use this instead.
-                if (e.Node == SelectedNode)
-                {
-                    ChooseSelectedNodeIfEqual();
-                }
-
-                base.OnNodeMouseClick(e);
-            }
-
-            public bool SetSelection(object value, TreeNodeCollection nodes)
-            {
-                TreeNode[] treeNodes;
-
-                if (nodes is null)
-                {
-                    treeNodes = new TreeNode[Nodes.Count];
-                    Nodes.CopyTo(treeNodes, 0);
-                }
-                else
-                {
-                    treeNodes = new TreeNode[nodes.Count];
-                    nodes.CopyTo(treeNodes, 0);
-                }
-
-                int length = treeNodes.Length;
-                if (length == 0)
-                {
-                    return false;
-                }
-
-                for (int i = 0; i < length; i++)
-                {
-                    if (((SelectorNode)treeNodes[i]).value == value)
+                    treeNodes[i].Expand();
+                    if (SetSelection(value, treeNodes[i].Nodes))
                     {
-                        SelectedNode = treeNodes[i];
                         return true;
                     }
 
-                    if ((treeNodes[i].Nodes is not null) && (treeNodes[i].Nodes.Count != 0))
+                    treeNodes[i].Collapse();
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        ///  Sets the internal IWindowsFormsEditorService to the given edSvc, and calls SetSelection on the given value
+        /// </summary>
+        public void Start(IWindowsFormsEditorService edSvc, object? value)
+        {
+            _editorService = edSvc;
+            clickSeen = false;
+            SetSelection(value, Nodes);
+        }
+
+        /// <summary>
+        ///  Sets the internal IWindowsFormsEditorService to null
+        /// </summary>
+        public void Stop() => _editorService = null;
+
+        protected override unsafe void WndProc(ref Message m)
+        {
+            switch (m.MsgInternal)
+            {
+                case PInvoke.WM_GETDLGCODE:
+                    m.ResultInternal = (LRESULT)(m.ResultInternal | (int)PInvoke.DLGC_WANTALLKEYS);
+                    return;
+                case PInvoke.WM_MOUSEMOVE:
+                    if (clickSeen)
                     {
-                        treeNodes[i].Expand();
-                        if (SetSelection(value, treeNodes[i].Nodes))
-                        {
-                            return true;
-                        }
-
-                        treeNodes[i].Collapse();
+                        clickSeen = false;
                     }
-                }
 
-                return false;
+                    break;
+                case MessageId.WM_REFLECT_NOTIFY:
+                    NMHDR* nmtv = (NMHDR*)(nint)m.LParamInternal;
+                    if ((int)nmtv->code == (int)ComCtl32.NM.CLICK)
+                    {
+                        clickSeen = true;
+                    }
+
+                    break;
             }
 
-            /// <summary>
-            ///  Sets the internal IWindowsFormsEditorService to the given edSvc, and calls SetSelection on the given value
-            /// </summary>
-            public void Start(IWindowsFormsEditorService edSvc, object value)
-            {
-                _editorService = edSvc;
-                clickSeen = false;
-                SetSelection(value, Nodes);
-            }
-
-            /// <summary>
-            ///  Sets the internal IWindowsFormsEditorService to null
-            /// </summary>
-            public void Stop() => _editorService = null;
-
-            protected override unsafe void WndProc(ref Message m)
-            {
-                switch (m.MsgInternal)
-                {
-                    case User32.WM.GETDLGCODE:
-                        m.ResultInternal = (LRESULT)(m.ResultInternal | (int)User32.DLGC.WANTALLKEYS);
-                        return;
-                    case User32.WM.MOUSEMOVE:
-                        if (clickSeen)
-                        {
-                            clickSeen = false;
-                        }
-
-                        break;
-                    case User32.WM.REFLECT_NOTIFY:
-                        NMHDR* nmtv = (NMHDR*)(nint)m.LParamInternal;
-                        if ((int)nmtv->code == (int)ComCtl32.NM.CLICK)
-                        {
-                            clickSeen = true;
-                        }
-
-                        break;
-                }
-
-                base.WndProc(ref m);
-            }
+            base.WndProc(ref m);
         }
     }
 }

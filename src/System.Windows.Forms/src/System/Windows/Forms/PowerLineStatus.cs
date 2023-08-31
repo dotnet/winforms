@@ -1,13 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public enum PowerLineStatus
 {
-    public enum PowerLineStatus
-    {
-        Offline = 0,
-        Online = 1,
-        Unknown = 255
-    }
+    Offline = 0,
+    Online = 1,
+    Unknown = 255
 }

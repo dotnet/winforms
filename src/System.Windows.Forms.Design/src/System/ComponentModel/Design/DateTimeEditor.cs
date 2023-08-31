@@ -1,37 +1,37 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
+
+#nullable disable
 
 using System.Drawing.Design;
 using System.Windows.Forms.Design;
 
-namespace System.ComponentModel.Design
+namespace System.ComponentModel.Design;
+
+/// <summary>
+///  This date/time editor is a <see cref="UITypeEditor"/> suitable for visually editing
+///  <see cref="DateTime"/> objects.
+/// </summary>
+public partial class DateTimeEditor : UITypeEditor
 {
-    /// <summary>
-    ///  This date/time editor is a <see cref="UITypeEditor"/> suitable for visually editing
-    ///  <see cref="DateTime"/> objects.
-    /// </summary>
-    public partial class DateTimeEditor : UITypeEditor
+    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
     {
-        public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+        if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
         {
-            if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
-            {
-                return value;
-            }
-
-            using (DateTimeUI dateTimeUI = new DateTimeUI())
-            {
-                dateTimeUI.Start(editorService, value);
-                editorService.DropDownControl(dateTimeUI);
-                value = dateTimeUI.Value;
-                dateTimeUI.End();
-            }
-
             return value;
         }
 
-        /// <inheritdoc />
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.DropDown;
+        using (DateTimeUI dateTimeUI = new DateTimeUI())
+        {
+            dateTimeUI.Start(editorService, value);
+            editorService.DropDownControl(dateTimeUI);
+            value = dateTimeUI.Value;
+            dateTimeUI.End();
+        }
+
+        return value;
     }
+
+    /// <inheritdoc />
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.DropDown;
 }

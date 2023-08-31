@@ -1,50 +1,46 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
+namespace System.Windows.Forms;
 
-namespace System.Windows.Forms
+public partial class TreeNode
 {
-    public partial class TreeNode
+    // We need a special way to defer to the TreeView's image
+    // list for indexing purposes.
+    internal partial class TreeNodeImageIndexer : ImageList.Indexer
     {
-        // We need a special way to defer to the TreeView's image
-        // list for indexing purposes.
-        internal partial class TreeNodeImageIndexer : ImageList.Indexer
+        private readonly TreeNode _owner;
+
+        private readonly ImageListType _imageListType;
+
+        public TreeNodeImageIndexer(TreeNode node, ImageListType imageListType)
         {
-            private readonly TreeNode _owner;
+            Debug.Assert(node is not null, $"{nameof(node)} should not be null.");
+            _owner = node;
+            _imageListType = imageListType;
+        }
 
-            private readonly ImageListType _imageListType;
-
-            public TreeNodeImageIndexer(TreeNode node, ImageListType imageListType)
+        public override ImageList? ImageList
+        {
+            get
             {
-                Debug.Assert(node is not null, $"{nameof(node)} should not be null.");
-                _owner = node;
-                _imageListType = imageListType;
-            }
-
-            public override ImageList? ImageList
-            {
-                get
+                if (_owner.TreeView is not null)
                 {
-                    if (_owner.TreeView is not null)
+                    if (_imageListType == ImageListType.State)
                     {
-                        if (_imageListType == ImageListType.State)
-                        {
-                            return _owner.TreeView.StateImageList;
-                        }
-                        else
-                        {
-                            return _owner.TreeView.ImageList;
-                        }
+                        return _owner.TreeView.StateImageList;
                     }
                     else
                     {
-                        return null;
+                        return _owner.TreeView.ImageList;
                     }
                 }
-                set { Debug.Assert(false, "We should never set the image list"); }
+                else
+                {
+                    return null;
+                }
             }
+            set { Debug.Assert(false, "We should never set the image list"); }
         }
     }
 }

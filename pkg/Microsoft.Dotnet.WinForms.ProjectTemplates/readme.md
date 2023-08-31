@@ -8,6 +8,10 @@ We provide the following templates:
 * [Windows Forms control library (C#)](./content/WinFormsControlLibrary-CSharp)
 * [Windows Forms control library (VB)](./content/WinFormsControlLibrary-VisualBasic)
 
+# Item templates are located in the VSProject repo
+* [VB](https://devdiv.visualstudio.com/DevDiv/_git/VS?path=/src/vsproject/Templates/Windows/VisualBasic/ItemTemplates/WindowsForms&version=GBmain&_a=contents)
+* [C#](https://devdiv.visualstudio.com/DevDiv/_git/VS?path=/src/vsproject/Templates/Windows/CSharp/ItemTemplates&version=GBmain&_a=contents)
+
 ## Testing Templates
 
 Before submitting a change to any of the templates please make sure to test them locally.

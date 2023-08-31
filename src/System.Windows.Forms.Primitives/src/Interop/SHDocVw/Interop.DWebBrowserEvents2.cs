@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
 
@@ -45,11 +44,11 @@ internal partial class Interop
             [DispId(250)]
             void BeforeNavigate2(
                 [MarshalAs(UnmanagedType.IDispatch)] object pDisp,
-                ref object URL,
+                ref object? URL,
                 ref object flags,
-                ref object targetFrameName,
+                ref object? targetFrameName,
                 ref object postData,
-                ref object headers,
+                ref object? headers,
                 ref bool cancel);
 
             [DispId(251)]
@@ -60,12 +59,12 @@ internal partial class Interop
             [DispId(252)]
             void NavigateComplete2(
                 [MarshalAs(UnmanagedType.IDispatch)] object pDisp,
-                ref object URL);
+                ref object? URL);
 
             [DispId(259)]
             void DocumentComplete(
                 [MarshalAs(UnmanagedType.IDispatch)] object pDisp,
-                ref object URL);
+                ref object? URL);
 
             [DispId(253)]
             void OnQuit();

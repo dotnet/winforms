@@ -1,213 +1,217 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
-using static Interop;
+using Microsoft.VisualStudio.Shell;
+using Windows.Win32.System.Com;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop
+namespace System.Windows.Forms.ComponentModel.Com2Interop;
+
+/// <summary>
+///  Browsing handler for <see cref="IVsPerPropertyBrowsing"/>.
+/// </summary>
+internal sealed unsafe class Com2IVsPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler<IVsPerPropertyBrowsing>
 {
-    internal class Com2IVsPerPropertyBrowsingHandler : Com2ExtendedBrowsingHandler
+    public static unsafe bool AllowChildProperties(Com2PropertyDescriptor property)
     {
-        public override Type Interface => typeof(VSSDK.IVsPerPropertyBrowsing);
-
-        public static unsafe bool AllowChildProperties(Com2PropertyDescriptor propDesc)
+        using var browsing = TryGetComScope(property.TargetObject, out HRESULT hr);
+        if (hr.Succeeded)
         {
-            if (propDesc.TargetObject is VSSDK.IVsPerPropertyBrowsing browsing)
+            BOOL hide = false;
+            hr = browsing.Value->DisplayChildProperties(property.DISPID, &hide);
+            if (hr == HRESULT.S_OK)
             {
-                BOOL pfHide = false;
-                HRESULT hr = browsing.DisplayChildProperties(propDesc.DISPID, &pfHide);
-                if (hr == HRESULT.S_OK)
-                {
-                    return pfHide;
-                }
-            }
-
-            return false;
-        }
-
-        public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
-        {
-            if (propDesc is null)
-            {
-                return;
-            }
-
-            for (int i = 0; i < propDesc.Length; i++)
-            {
-                propDesc[i].QueryGetDynamicAttributes += OnGetDynamicAttributes;
-                propDesc[i].QueryGetBaseAttributes += OnGetBaseAttributes;
-                propDesc[i].QueryGetDisplayName += OnGetDisplayName;
-                propDesc[i].QueryGetIsReadOnly += OnGetIsReadOnly;
-
-                propDesc[i].QueryShouldSerializeValue += OnShouldSerializeValue;
-                propDesc[i].QueryCanResetValue += OnCanResetPropertyValue;
-                propDesc[i].QueryResetValue += OnResetPropertyValue;
-
-                propDesc[i].QueryGetTypeConverterAndTypeEditor += OnGetTypeConverterAndTypeEditor;
+                return hide;
             }
         }
 
-        private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
-        {
-            if (sender.TargetObject is not VSSDK.IVsPerPropertyBrowsing vsObj)
-            {
-                return;
-            }
+        return false;
+    }
 
-            // Should we localize this?
-            string[] pHelpString = new string[1];
-            HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, PInvoke.GetThreadLocale(), null, pHelpString);
-            if (hr == HRESULT.S_OK && pHelpString[0] is not null)
+    public override void RegisterEvents(Com2PropertyDescriptor[]? properties)
+    {
+        if (properties is null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < properties.Length; i++)
+        {
+            properties[i].QueryGetDynamicAttributes += OnGetDynamicAttributes;
+            properties[i].QueryGetBaseAttributes += OnGetBaseAttributes;
+            properties[i].QueryGetDisplayName += OnGetDisplayName;
+            properties[i].QueryGetIsReadOnly += OnGetIsReadOnly;
+
+            properties[i].QueryShouldSerializeValue += OnShouldSerializeValue;
+            properties[i].QueryCanResetValue += OnCanResetPropertyValue;
+            properties[i].QueryResetValue += OnResetPropertyValue;
+
+            properties[i].QueryGetTypeConverterAndTypeEditor += OnGetTypeConverterAndTypeEditor;
+        }
+    }
+
+    private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent e)
+    {
+        using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Failed)
+        {
+            Debug.Assert(sender.TargetObject is null);
+            return;
+        }
+
+        using BSTR helpString = default;
+        hr = propertyBrowsing.Value->GetLocalizedPropertyInfo(sender.DISPID, PInvoke.GetThreadLocale(), null, &helpString);
+        if (hr == HRESULT.S_OK && !helpString.IsNull)
+        {
+            e.Add(new DescriptionAttribute(helpString.ToString()));
+        }
+    }
+
+    private unsafe void OnGetDynamicAttributes(Com2PropertyDescriptor sender, GetAttributesEvent e)
+    {
+        using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Failed)
+        {
+            Debug.Assert(sender.TargetObject is null);
+            return;
+        }
+
+        hr = HRESULT.S_OK;
+
+        // We want to avoid allowing clients to force a bad property to be browsable so we don't allow things
+        // that are marked as non browsable to become browsable, only the other way around.
+        if (sender.CanShow)
+        {
+            // Should we hide this?
+            BOOL hide = sender.Attributes[typeof(BrowsableAttribute)] is Attribute browsableAttribute
+                && browsableAttribute.Equals(BrowsableAttribute.No);
+            hr = propertyBrowsing.Value->HideProperty(sender.DISPID, &hide);
+            if (hr == HRESULT.S_OK)
             {
-                attrEvent.Add(new DescriptionAttribute(pHelpString[0]));
+                e.Add(hide ? BrowsableAttribute.No : BrowsableAttribute.Yes);
             }
         }
 
-        /// <summary>
-        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing. We
-        ///  hide properties such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
-        /// </summary>
-        private unsafe void OnGetDynamicAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
+        // Should we show this?
+        if (typeof(IDispatch.Interface).IsAssignableFrom(sender.PropertyType) && sender.CanShow)
         {
-            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing vsObj)
+            BOOL display = false;
+            hr = propertyBrowsing.Value->DisplayChildProperties(sender.DISPID, &display);
+            if (hr == HRESULT.S_OK && display)
             {
-                HRESULT hr = HRESULT.S_OK;
-
-                // We want to avoid allowing clients to force a bad property to be browsable so we don't allow things
-                // that are marked as non browsable to become browsable, only the other way around.
-                if (sender.CanShow)
-                {
-                    // Should we hide this?
-                    BOOL hide = sender.Attributes[typeof(BrowsableAttribute)] is Attribute browsableAttribute
-                        && browsableAttribute.Equals(BrowsableAttribute.No);
-                    hr = vsObj.HideProperty(sender.DISPID, &hide);
-                    if (hr == HRESULT.S_OK)
-                    {
-                        attrEvent.Add(hide ? BrowsableAttribute.No : BrowsableAttribute.Yes);
-                    }
-                }
-
-                // should we show this
-                if (typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType) && sender.CanShow)
-                {
-                    BOOL pfDisplay = false;
-                    hr = vsObj.DisplayChildProperties(sender.DISPID, &pfDisplay);
-                    if (hr == HRESULT.S_OK && pfDisplay)
-                    {
-                        attrEvent.Add(BrowsableAttribute.Yes);
-                    }
-                }
-            }
-
-            Debug.Assert(sender.TargetObject is null or VSSDK.IVsPerPropertyBrowsing, $"Object is not {Interface.Name}!");
-        }
-
-        private unsafe void OnCanResetPropertyValue(Com2PropertyDescriptor sender, GetBoolValueEvent boolEvent)
-        {
-            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing target)
-            {
-                BOOL canReset = boolEvent.Value ? true : false;
-                HRESULT hr = target.CanResetPropertyValue(sender.DISPID, &canReset);
-                if (hr.Succeeded)
-                {
-                    boolEvent.Value = canReset;
-                }
-            }
-
-            Debug.Assert(sender.TargetObject is null or VSSDK.IVsPerPropertyBrowsing, $"Object is not {Interface.Name}!");
-        }
-
-        /// <summary>
-        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo (part 2).
-        /// </summary>
-        private void OnGetDisplayName(Com2PropertyDescriptor sender, GetNameItemEvent nameItem)
-        {
-            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing vsObj)
-            {
-                // Get the localized name, if applicable.
-                string[] pNameString = new string[1];
-                HRESULT hr = vsObj.GetLocalizedPropertyInfo(sender.DISPID, PInvoke.GetThreadLocale(), pNameString, null);
-                if (hr == HRESULT.S_OK && pNameString[0] is not null)
-                {
-                    nameItem.Name = pNameString[0];
-                }
-            }
-
-            Debug.Assert(sender.TargetObject is null or VSSDK.IVsPerPropertyBrowsing, $"Object is not {Interface.Name}!");
-        }
-
-        /// <summary>
-        ///  Here is where we handle IVsPerPropertyBrowsing.IsPropertyReadOnly.
-        /// </summary>
-        private unsafe void OnGetIsReadOnly(Com2PropertyDescriptor sender, GetBoolValueEvent gbvevent)
-        {
-            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing vsObj)
-            {
-                // Should we make this read only?
-                BOOL pfResult = false;
-                HRESULT hr = vsObj.IsPropertyReadOnly(sender.DISPID, &pfResult);
-                if (hr == HRESULT.S_OK)
-                {
-                    gbvevent.Value = pfResult;
-                }
+                e.Add(BrowsableAttribute.Yes);
             }
         }
+    }
 
-        /// <summary>
-        ///  Here is where we handle IVsPerPropertyBrowsing.DisplayChildProperties.
-        /// </summary>
-        private unsafe void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent)
+    private unsafe void OnCanResetPropertyValue(Com2PropertyDescriptor sender, GetBoolValueEvent e)
+    {
+        using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Failed)
         {
-            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing browsing)
-            {
-                // We only do this for IDispatch types.
-                if (sender.CanShow && typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType))
-                {
-                    // Should we make this read only?
-                    BOOL result;
-                    HRESULT hr = browsing.DisplayChildProperties(sender.DISPID, &result);
-                    gveevent.TypeConverter = gveevent.TypeConverter is Com2IDispatchConverter
-                        ? new Com2IDispatchConverter(sender, hr == HRESULT.S_OK && result)
-                        : new Com2IDispatchConverter(hr == HRESULT.S_OK && result, gveevent.TypeConverter);
-                }
-            }
-
-            Debug.Assert(sender.TargetObject is null or VSSDK.IVsPerPropertyBrowsing, $"Object is not {Interface.Name}!");
+            Debug.Assert(sender.TargetObject is null);
+            return;
         }
 
-        private unsafe void OnResetPropertyValue(Com2PropertyDescriptor sender, EventArgs e)
+        BOOL canReset = e.Value ? true : false;
+        hr = propertyBrowsing.Value->CanResetPropertyValue(sender.DISPID, &canReset);
+        if (hr.Succeeded)
         {
-            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing target)
-            {
-                Ole32.DispatchID dispid = sender.DISPID;
-                BOOL canReset = false;
-                HRESULT hr = target.CanResetPropertyValue(dispid, &canReset);
-                if (hr.Succeeded)
-                {
-                    target.ResetPropertyValue(dispid);
-                }
-            }
+            e.Value = canReset;
+        }
+    }
 
-            Debug.Assert(sender.TargetObject is null or VSSDK.IVsPerPropertyBrowsing, $"Object is not {Interface.Name}!");
+    private void OnGetDisplayName(Com2PropertyDescriptor sender, GetNameItemEvent e)
+    {
+        using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Failed)
+        {
+            Debug.Assert(sender.TargetObject is null);
+            return;
         }
 
-        private unsafe void OnShouldSerializeValue(Com2PropertyDescriptor sender, GetBoolValueEvent gbvevent)
+        // Get the localized name, if applicable.
+        using BSTR name = default;
+        hr = propertyBrowsing.Value->GetLocalizedPropertyInfo(sender.DISPID, PInvoke.GetThreadLocale(), &name, null);
+        if (hr == HRESULT.S_OK && !name.IsNull)
         {
-            if (sender.TargetObject is VSSDK.IVsPerPropertyBrowsing vsObj)
-            {
-                // By default we say it's default.
-                BOOL pfResult = true;
-                HRESULT hr = vsObj.HasDefaultValue(sender.DISPID, &pfResult);
-                if (hr == HRESULT.S_OK && !pfResult)
-                {
-                    // Specify a default value editor.
-                    gbvevent.Value = true;
-                }
-            }
+            e.Name = name.ToString();
+        }
+    }
 
-            Debug.Assert(sender.TargetObject is null or VSSDK.IVsPerPropertyBrowsing, $"Object is not {Interface.Name}!");
+    private unsafe void OnGetIsReadOnly(Com2PropertyDescriptor sender, GetBoolValueEvent e)
+    {
+        using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Failed)
+        {
+            Debug.Assert(sender.TargetObject is null);
+            return;
+        }
+
+        // Should we make this read only?
+        BOOL readOnly = false;
+        hr = propertyBrowsing.Value->IsPropertyReadOnly(sender.DISPID, &readOnly);
+        if (hr == HRESULT.S_OK)
+        {
+            e.Value = readOnly;
+        }
+    }
+
+    private unsafe void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent e)
+    {
+        using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Failed)
+        {
+            Debug.Assert(sender.TargetObject is null);
+            return;
+        }
+
+        // We only do this for IDispatch types.
+        if (sender.CanShow && typeof(IDispatch.Interface).IsAssignableFrom(sender.PropertyType))
+        {
+            // Should we make this read only?
+            BOOL result;
+            hr = propertyBrowsing.Value->DisplayChildProperties(sender.DISPID, &result);
+            e.TypeConverter = e.TypeConverter is Com2IDispatchConverter
+                ? new Com2IDispatchConverter(sender, hr == HRESULT.S_OK && result)
+                : new Com2IDispatchConverter(hr == HRESULT.S_OK && result, e.TypeConverter);
+        }
+    }
+
+    private unsafe void OnResetPropertyValue(Com2PropertyDescriptor sender, EventArgs e)
+    {
+        using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Failed)
+        {
+            Debug.Assert(sender.TargetObject is null);
+            return;
+        }
+
+        int dispid = sender.DISPID;
+        BOOL canReset = false;
+        hr = propertyBrowsing.Value->CanResetPropertyValue(dispid, &canReset);
+        if (hr.Succeeded)
+        {
+            propertyBrowsing.Value->ResetPropertyValue(dispid);
+        }
+    }
+
+    private unsafe void OnShouldSerializeValue(Com2PropertyDescriptor sender, GetBoolValueEvent e)
+    {
+        using var propertyBrowsing = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Failed)
+        {
+            Debug.Assert(sender.TargetObject is null);
+            return;
+        }
+
+        // By default we say it's default.
+        BOOL isDefault = true;
+        hr = propertyBrowsing.Value->HasDefaultValue(sender.DISPID, &isDefault);
+        if (hr == HRESULT.S_OK && !isDefault)
+        {
+            // Specify a default value editor.
+            e.Value = true;
         }
     }
 }

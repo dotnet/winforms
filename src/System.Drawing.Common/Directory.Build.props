@@ -1,0 +1,12 @@
+﻿<Project>
+  <Import Project="..\..\Directory.Build.props" />
+  <PropertyGroup>
+    <StrongNameKeyId>Open</StrongNameKeyId>
+    <SupportedOSPlatforms>windows</SupportedOSPlatforms>
+    <UsingToolXliff>false</UsingToolXliff>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <!-- Code warnings that weren't enabled in dotnet/runtime but are raised in winforms.
+         TODO: Clean the code up and remove the NoWarns. -->
+    <NoWarn>$(NoWarn);CSIsNull001;CSIsNull002;SA1500;SA1513;CA1812;IDE0005;SA1129;SA1408;SA1507;SA1508;CA2229</NoWarn>
+  </PropertyGroup>
+</Project>

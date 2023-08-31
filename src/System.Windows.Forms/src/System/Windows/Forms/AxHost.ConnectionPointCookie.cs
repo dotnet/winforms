@@ -1,164 +1,134 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using static Interop;
+using Windows.Win32.System.Com;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public abstract partial class AxHost
 {
-    public abstract partial class AxHost
+    public unsafe class ConnectionPointCookie
     {
-        public class ConnectionPointCookie
+        private ConnectionHandle? _connectionHandle;
+
+        /// <summary>
+        ///  Creates a connection point to of the given interface type.
+        ///  which will call on a managed code sink that implements that interface.
+        /// </summary>
+        public ConnectionPointCookie(object source, object sink, Type eventInterface)
+            : this(source, sink, eventInterface, true)
         {
-            private Ole32.IConnectionPoint? _connectionPoint;
-            private uint _cookie;
-            internal int _threadId;
+        }
 
-            /// <summary>
-            ///  Creates a connection point to of the given interface type.
-            ///  which will call on a managed code sink that implements that interface.
-            /// </summary>
-            public ConnectionPointCookie(object source, object sink, Type eventInterface)
-                : this(source, sink, eventInterface, true)
+        internal ConnectionPointCookie(object source, object sink, Type eventInterface, bool throwException)
+        {
+            if (source is not IConnectionPointContainer.Interface cpc)
             {
+                if (throwException)
+                {
+                    throw new InvalidCastException(SR.AXNoConnectionPointContainer);
+                }
+
+                return;
             }
 
-            internal unsafe ConnectionPointCookie(object source, object sink, Type eventInterface, bool throwException)
+            if (sink is null || !eventInterface.IsInstanceOfType(sink))
             {
-                if (source is Ole32.IConnectionPointContainer cpc)
+                if (throwException)
                 {
-                    try
-                    {
-                        Guid tmp = eventInterface.GUID;
-                        if (cpc.FindConnectionPoint(&tmp, out _connectionPoint) != HRESULT.S_OK)
-                        {
-                            _connectionPoint = null;
-                        }
-                    }
-                    catch
-                    {
-                        _connectionPoint = null;
-                    }
+                    throw new InvalidCastException(string.Format(SR.AXNoSinkImplementation, eventInterface.Name));
+                }
 
-                    if (_connectionPoint is null)
-                    {
-                        if (throwException)
-                        {
-                            throw new ArgumentException(string.Format(SR.AXNoEventInterface, eventInterface.Name));
-                        }
-                    }
-                    else if (sink is null || !eventInterface.IsInstanceOfType(sink))
-                    {
-                        if (throwException)
-                        {
-                            throw new InvalidCastException(string.Format(SR.AXNoSinkImplementation, eventInterface.Name));
-                        }
-                    }
-                    else
-                    {
-                        uint tempCookie = 0;
-                        HRESULT hr = _connectionPoint.Advise(sink, &tempCookie);
-                        if (hr == HRESULT.S_OK)
-                        {
-                            _cookie = tempCookie;
-                            _threadId = Environment.CurrentManagedThreadId;
-                        }
-                        else
-                        {
-                            _cookie = 0;
-                            Marshal.ReleaseComObject(_connectionPoint);
-                            _connectionPoint = null;
-                            if (throwException)
-                            {
-                                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.AXNoSinkAdvise, eventInterface.Name), hr));
-                            }
-                        }
-                    }
+                return;
+            }
+
+            IConnectionPoint* connectionPoint = null;
+            try
+            {
+                Guid riid = eventInterface.GUID;
+                HRESULT hr = cpc.FindConnectionPoint(&riid, &connectionPoint);
+            }
+            catch (Exception ex)
+            {
+                Debug.Fail(ex.Message);
+            }
+
+            if (connectionPoint is null)
+            {
+                if (throwException)
+                {
+                    throw new ArgumentException(string.Format(SR.AXNoEventInterface, eventInterface.Name));
+                }
+
+                return;
+            }
+
+            _connectionHandle = new(connectionPoint, sink);
+
+            if (!_connectionHandle.Connected)
+            {
+                _connectionHandle.Dispose();
+                _connectionHandle = null;
+
+                if (throwException)
+                {
+                    throw new ArgumentException(string.Format(SR.AXNoConnectionPoint, eventInterface.Name));
+                }
+            }
+        }
+
+        /// <summary>
+        ///  Disconnect the current connection point. If the object is not connected this method will do nothing.
+        /// </summary>
+        public void Disconnect()
+        {
+            GC.SuppressFinalize(this);
+            _connectionHandle?.Dispose();
+            _connectionHandle = null;
+        }
+
+        // Existing API
+        ~ConnectionPointCookie() { }
+
+        internal bool Connected => _connectionHandle is not null && _connectionHandle.Connected;
+
+        private sealed class ConnectionHandle : AgileComPointer<IConnectionPoint>
+        {
+            private readonly uint _cookie;
+            public bool Connected { get; private set; }
+
+            public ConnectionHandle(IConnectionPoint* connectionPoint, object sink)
+                : base(connectionPoint, takeOwnership: true)
+            {
+                uint cookie = 0;
+                IUnknown* ccw = ComHelpers.TryGetComPointer<IUnknown>(sink, out HRESULT hr);
+                if (hr.Failed || connectionPoint->Advise(ccw, &cookie).Failed)
+                {
+                    Dispose();
                 }
                 else
                 {
-                    if (throwException)
-                    {
-                        throw new InvalidCastException(SR.AXNoConnectionPointContainer);
-                    }
+                    Connected = true;
                 }
 
-                if (_connectionPoint is null || _cookie == 0)
-                {
-                    if (_connectionPoint is not null)
-                    {
-                        Marshal.ReleaseComObject(_connectionPoint);
-                    }
-
-                    if (throwException)
-                    {
-                        throw new ArgumentException(string.Format(SR.AXNoConnectionPoint, eventInterface.Name));
-                    }
-                }
+                _cookie = cookie;
             }
 
-            /// <summary>
-            ///  Disconnect the current connection point.  If the object is not connected,
-            ///  this method will do nothing.
-            /// </summary>
-            public void Disconnect()
+            protected override void Dispose(bool disposing)
             {
-                if (_connectionPoint is not null && _cookie != 0)
+                if (Connected)
                 {
-                    try
+                    using var connectionPoint = TryGetInterface(out HRESULT hr);
+                    if (hr.Succeeded)
                     {
-                        _connectionPoint.Unadvise(_cookie);
-                    }
-                    catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
-                    {
-                    }
-                    finally
-                    {
-                        _cookie = 0;
-                    }
-
-                    try
-                    {
-                        Marshal.ReleaseComObject(_connectionPoint);
-                    }
-                    catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
-                    {
-                    }
-                    finally
-                    {
-                        _connectionPoint = null;
+                        hr = connectionPoint.Value->Unadvise(_cookie);
                     }
                 }
+
+                Connected = false;
+
+                base.Dispose(disposing);
             }
-
-            ~ConnectionPointCookie()
-            {
-                if (_connectionPoint is not null && _cookie != 0)
-                {
-                    if (!AppDomain.CurrentDomain.IsFinalizingForUnload())
-                    {
-                        SynchronizationContext? context = SynchronizationContext.Current;
-                        context?.Post(new SendOrPostCallback(AttemptDisconnect), null);
-                    }
-                }
-            }
-
-            void AttemptDisconnect(object? trash)
-            {
-                if (_threadId == Environment.CurrentManagedThreadId)
-                {
-                    Disconnect();
-                }
-                else
-                {
-                    Debug.Fail("Attempted to disconnect ConnectionPointCookie from the wrong thread (finalizer).");
-                }
-            }
-
-            internal bool Connected => _connectionPoint is not null && _cookie != 0;
         }
     }
 }

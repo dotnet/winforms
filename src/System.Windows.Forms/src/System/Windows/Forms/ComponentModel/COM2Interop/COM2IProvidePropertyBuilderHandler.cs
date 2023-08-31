@@ -1,90 +1,86 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
-using static Interop;
+using Microsoft.VisualStudio.Shell;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop
+namespace System.Windows.Forms.ComponentModel.Com2Interop;
+
+/// <summary>
+///  Browsing handler for <see cref="IProvidePropertyBuilder"/>.
+/// </summary>
+internal sealed unsafe class Com2IProvidePropertyBuilderHandler : Com2ExtendedBrowsingHandler<IProvidePropertyBuilder>
 {
-    internal class Com2IProvidePropertyBuilderHandler : Com2ExtendedBrowsingHandler
+    private bool GetBuilderGuidString(
+        IProvidePropertyBuilder* target,
+        int dispid,
+        [NotNullWhen(true)] ref string? builderGuid,
+        CTLBLDTYPE* builderType)
     {
-        public override Type Interface => typeof(VSSDK.IProvidePropertyBuilder);
-
-        private unsafe bool GetBuilderGuidString(
-            VSSDK.IProvidePropertyBuilder target,
-            Ole32.DispatchID dispid,
-            [NotNullWhen(true)] ref string? strGuidBldr,
-            VSSDK.CTLBLDTYPE* bldrType)
+        VARIANT_BOOL valid = VARIANT_BOOL.VARIANT_FALSE;
+        using BSTR guid = default;
+        if (!target->MapPropertyToBuilder(dispid, builderType, &guid, &valid).Succeeded)
         {
-            BOOL valid = false;
-            var pGuidBldr = new string[1];
-            if (!target.MapPropertyToBuilder(dispid, bldrType, pGuidBldr, &valid).Succeeded)
-            {
-                return false;
-            }
-
-            if (valid && (*bldrType & VSSDK.CTLBLDTYPE.FINTERNALBUILDER) == 0)
-            {
-                Debug.Fail("Property Browser doesn't support standard builders -- NYI");
-                return false;
-            }
-
-            strGuidBldr = pGuidBldr[0] ?? Guid.Empty.ToString();
-            return true;
+            return false;
         }
 
-        public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
+        if (valid == VARIANT_BOOL.VARIANT_TRUE && (*builderType & CTLBLDTYPE.CTLBLDTYPE_FINTERNALBUILDER) == 0)
         {
-            if (propDesc is null)
-            {
-                return;
-            }
-
-            for (int i = 0; i < propDesc.Length; i++)
-            {
-                propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(OnGetBaseAttributes);
-
-                propDesc[i].QueryGetTypeConverterAndTypeEditor += new GetTypeConverterAndTypeEditorEventHandler(OnGetTypeConverterAndTypeEditor);
-            }
+            Debug.Fail("Property Browser doesn't support standard builders -- NYI");
+            return false;
         }
 
-        /// <summary>
-        ///  Here is where we handle IVsPerPropertyBrowsing.GetLocalizedPropertyInfo and IVsPerPropertyBrowsing. We
-        ///  hide properties such as IPerPropertyBrowsing, IProvidePropertyBuilder, etc.
-        /// </summary>
-        private unsafe void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent attrEvent)
+        builderGuid = guid.ToString() ?? Guid.Empty.ToString();
+        return true;
+    }
+
+    public override void RegisterEvents(Com2PropertyDescriptor[]? properties)
+    {
+        if (properties is null)
         {
-            if (sender.TargetObject is not VSSDK.IProvidePropertyBuilder target)
-            {
-                return;
-            }
-
-            string? guidString = null;
-            VSSDK.CTLBLDTYPE bldrType = 0;
-            bool builderValid = GetBuilderGuidString(target, sender.DISPID, ref guidString, &bldrType);
-
-            // We hide IDispatch props by default, we we need to force showing them here
-            if (sender.CanShow && builderValid && typeof(Oleaut32.IDispatch).IsAssignableFrom(sender.PropertyType))
-            {
-                attrEvent.Add(BrowsableAttribute.Yes);
-            }
+            return;
         }
 
-        private unsafe void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent gveevent)
+        for (int i = 0; i < properties.Length; i++)
         {
-            if (sender.TargetObject is VSSDK.IProvidePropertyBuilder propertyBuilder)
-            {
-                string? guidString = null;
-                VSSDK.CTLBLDTYPE pctlBldType = 0;
-                if (GetBuilderGuidString(propertyBuilder, sender.DISPID, ref guidString, &pctlBldType))
-                {
-                    gveevent.TypeEditor = new Com2PropertyBuilderUITypeEditor(sender, guidString, pctlBldType, (UITypeEditor?)gveevent.TypeEditor);
-                }
-            }
+            properties[i].QueryGetBaseAttributes += OnGetBaseAttributes;
+            properties[i].QueryGetTypeConverterAndTypeEditor += OnGetTypeConverterAndTypeEditor;
+        }
+    }
+
+    private void OnGetBaseAttributes(Com2PropertyDescriptor sender, GetAttributesEvent e)
+    {
+        using var propertyBuilder = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Failed)
+        {
+            return;
+        }
+
+        string? builderGuid = null;
+        CTLBLDTYPE builderType = 0;
+        bool builderValid = GetBuilderGuidString(propertyBuilder, sender.DISPID, ref builderGuid, &builderType);
+
+        // We hide IDispatch props by default, we need to force showing them here.
+        if (sender.CanShow && builderValid)
+        {
+            e.Add(BrowsableAttribute.Yes);
+        }
+    }
+
+    private void OnGetTypeConverterAndTypeEditor(Com2PropertyDescriptor sender, GetTypeConverterAndTypeEditorEvent e)
+    {
+        using var propertyBuilder = TryGetComScope(sender.TargetObject, out HRESULT hr);
+        if (hr.Failed)
+        {
+            return;
+        }
+
+        string? builderGuid = null;
+        CTLBLDTYPE builderType = 0;
+        if (GetBuilderGuidString(propertyBuilder, sender.DISPID, ref builderGuid, &builderType))
+        {
+            e.TypeEditor = new Com2PropertyBuilderUITypeEditor(sender, builderGuid, builderType, (UITypeEditor?)e.TypeEditor);
         }
     }
 }

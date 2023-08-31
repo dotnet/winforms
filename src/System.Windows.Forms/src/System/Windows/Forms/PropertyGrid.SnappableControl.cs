@@ -1,51 +1,48 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class PropertyGrid
 {
-    public partial class PropertyGrid
+    internal abstract class SnappableControl : Control
     {
-        internal abstract class SnappableControl : Control
+        protected PropertyGrid OwnerPropertyGrid { get; }
+        internal bool UserSized { get; set; }
+
+        public abstract int GetOptimalHeight(int width);
+        public abstract int SnapHeightRequest(int newHeight);
+
+        public SnappableControl(PropertyGrid ownerPropertyGrid)
         {
-            protected PropertyGrid OwnerPropertyGrid { get; }
-            internal bool UserSized { get; set; }
+            OwnerPropertyGrid = ownerPropertyGrid;
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+        }
 
-            public abstract int GetOptimalHeight(int width);
-            public abstract int SnapHeightRequest(int newHeight);
+        [AllowNull]
+        public override Cursor Cursor
+        {
+            get => Cursors.Default;
+            set => base.Cursor = value;
+        }
 
-            public SnappableControl(PropertyGrid ownerPropertyGrid)
-            {
-                OwnerPropertyGrid = ownerPropertyGrid;
-                SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            }
+        protected override void OnControlAdded(ControlEventArgs ce)
+        {
+        }
 
-            [AllowNull]
-            public override Cursor Cursor
-            {
-                get => Cursors.Default;
-                set => base.Cursor = value;
-            }
+        public Color BorderColor { get; set; } = SystemColors.ControlDark;
 
-            protected override void OnControlAdded(ControlEventArgs ce)
-            {
-            }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            Rectangle r = ClientRectangle;
+            r.Width--;
+            r.Height--;
 
-            public Color BorderColor { get; set; } = SystemColors.ControlDark;
-
-            protected override void OnPaint(PaintEventArgs e)
-            {
-                base.OnPaint(e);
-                Rectangle r = ClientRectangle;
-                r.Width--;
-                r.Height--;
-
-                using var borderPen = BorderColor.GetCachedPenScope();
-                e.Graphics.DrawRectangle(borderPen, r);
-            }
+            using var borderPen = BorderColor.GetCachedPenScope();
+            e.Graphics.DrawRectangle(borderPen, r);
         }
     }
 }

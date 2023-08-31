@@ -1,27 +1,23 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using Xunit;
+namespace System.Windows.Forms.Tests;
 
-namespace System.Windows.Forms.Tests
+// NB: doesn't require thread affinity
+public class DataGridViewColumnStateChangedEventArgsTests
 {
-    // NB: doesn't require thread affinity
-    public class DataGridViewColumnStateChangedEventArgsTests : IClassFixture<ThreadExceptionFixture>
+    [Fact]
+    public void Ctor_DataGridViewColumn_DataGridViewElementStates()
     {
-        [Fact]
-        public void Ctor_DataGridViewColumn_DataGridViewElementStates()
-        {
-            using var dataGridViewColumn = new DataGridViewColumn();
-            var e = new DataGridViewColumnStateChangedEventArgs(dataGridViewColumn, DataGridViewElementStates.Displayed);
-            Assert.Equal(dataGridViewColumn, e.Column);
-            Assert.Equal(DataGridViewElementStates.Displayed, e.StateChanged);
-        }
+        using var dataGridViewColumn = new DataGridViewColumn();
+        var e = new DataGridViewColumnStateChangedEventArgs(dataGridViewColumn, DataGridViewElementStates.Displayed);
+        Assert.Equal(dataGridViewColumn, e.Column);
+        Assert.Equal(DataGridViewElementStates.Displayed, e.StateChanged);
+    }
 
-        [Fact]
-        public void DataGridViewColumnStateChangedEventArgs_Ctor_NullDataGridViewColumn_ThrowsArgumentNullException()
-        {
-            Assert.Throws<ArgumentNullException>(() => new DataGridViewColumnStateChangedEventArgs(null, DataGridViewElementStates.Displayed));
-        }
+    [Fact]
+    public void DataGridViewColumnStateChangedEventArgs_Ctor_NullDataGridViewColumn_ThrowsArgumentNullException()
+    {
+        Assert.Throws<ArgumentNullException>(() => new DataGridViewColumnStateChangedEventArgs(null, DataGridViewElementStates.Displayed));
     }
 }

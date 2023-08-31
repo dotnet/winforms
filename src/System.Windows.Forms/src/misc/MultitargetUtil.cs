@@ -1,61 +1,37 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-namespace System.Resources
+namespace System.Resources;
+
+/// <summary>
+///  Helper class supporting Multitarget type assembly qualified name resolution for ResX API.
+/// </summary>
+internal static class MultitargetUtil
 {
     /// <summary>
-    ///  Helper class supporting Multitarget type assembly qualified name resolution for ResX API.
-    ///  Note: this file is compiled into different assemblies (runtime and VSIP assemblies ...)
+    ///  This method gets the assembly qualified name for the corresponding type, prefering
+    ///  the <paramref name="typeNameConverter"/> if provided.
     /// </summary>
-    internal static class MultitargetUtil
+    public static string? GetAssemblyQualifiedName(Type type, Func<Type, string>? typeNameConverter)
     {
-        /// <summary>
-        ///  This method gets assembly info for the corresponding type. If the delegate
-        ///  is provided it is used to get this information.
-        /// </summary>
-        public static string? GetAssemblyQualifiedName(Type? type, Func<Type, string>? typeNameConverter)
+        if (type is null)
         {
-            string? assemblyQualifiedName = null;
+            return null;
+        }
 
-            if (type is not null)
+        string? assemblyQualifiedName = null;
+
+        if (typeNameConverter is not null)
+        {
+            try
             {
-                if (typeNameConverter is not null)
-                {
-                    try
-                    {
-                        assemblyQualifiedName = typeNameConverter(type);
-                    }
-                    catch (Exception e)
-                    {
-                        if (IsCriticalException(e))
-                        {
-                            throw;
-                        }
-                    }
-                }
-
-                if (string.IsNullOrEmpty(assemblyQualifiedName))
-                {
-                    assemblyQualifiedName = type.AssemblyQualifiedName;
-                }
+                assemblyQualifiedName = typeNameConverter(type);
             }
-
-            return assemblyQualifiedName;
+            catch (Exception e) when (!e.IsCriticalException())
+            {
+            }
         }
 
-        // ExecutionEngineException is obsolete and shouldn't be used (to catch, throw or reference) anymore.
-        // Pragma added to prevent converting the "type is obsolete" warning into build error.
-        private static bool IsCriticalException(Exception ex)
-        {
-            return ex is NullReferenceException
-                    || ex is StackOverflowException
-                    || ex is OutOfMemoryException
-                    || ex is Threading.ThreadAbortException
-                    || ex is ExecutionEngineException
-                    || ex is IndexOutOfRangeException
-                    || ex is AccessViolationException
-                    || ex is Security.SecurityException;
-        }
+        return string.IsNullOrEmpty(assemblyQualifiedName) ? type.AssemblyQualifiedName : assemblyQualifiedName;
     }
 }

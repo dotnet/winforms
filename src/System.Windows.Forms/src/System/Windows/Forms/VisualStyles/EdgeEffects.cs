@@ -1,16 +1,14 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.VisualStyles
+namespace System.Windows.Forms.VisualStyles;
+
+[Flags]
+public enum EdgeEffects
 {
-    [Flags]
-    public enum EdgeEffects
-    {
-        None = 0,
-        FillInterior = (int)DRAW_EDGE_FLAGS.BF_MIDDLE,
-        Flat = (int)DRAW_EDGE_FLAGS.BF_FLAT,
-        Soft = (int)DRAW_EDGE_FLAGS.BF_SOFT,
-        Mono = (int)DRAW_EDGE_FLAGS.BF_MONO,
-    }
+    None = 0,
+    FillInterior = (int)DRAW_EDGE_FLAGS.BF_MIDDLE,
+    Flat = (int)DRAW_EDGE_FLAGS.BF_FLAT,
+    Soft = (int)DRAW_EDGE_FLAGS.BF_SOFT,
+    Mono = (int)DRAW_EDGE_FLAGS.BF_MONO,
 }

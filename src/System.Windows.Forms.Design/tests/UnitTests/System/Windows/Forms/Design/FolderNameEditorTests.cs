@@ -1,109 +1,106 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Windows.Forms.TestUtilities;
-using Xunit;
 
-namespace System.Windows.Forms.Design.Tests
+namespace System.Windows.Forms.Design.Tests;
+
+public class FolderNameEditorTests
 {
-    public class FolderNameEditorTests : IClassFixture<ThreadExceptionFixture>
+    [Fact]
+    public void FolderNameEditor_Ctor_Default()
+    {
+        FileNameEditor editor = new();
+        Assert.False(editor.IsDropDownResizable);
+    }
+
+    [Theory]
+    [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
+    public void FolderNameEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
+    {
+        FolderNameEditor editor = new();
+        Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
+    }
+
+    [Theory]
+    [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
+    public void FolderNameEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
+    {
+        FolderNameEditor editor = new();
+        Assert.False(editor.GetPaintValueSupported(context));
+    }
+
+    [Fact]
+    public void FolderNameEditor_InitializeDialog_Invoke_Nop()
+    {
+        SubFolderNameEditor editor = new();
+        editor.InitializeDialog();
+    }
+
+    public class FolderBrowserTests : FolderNameEditor
     {
         [Fact]
-        public void FolderNameEditor_Ctor_Default()
+        public void FolderBrowser_Ctor_Default()
         {
-            var editor = new FileNameEditor();
-            Assert.False(editor.IsDropDownResizable);
+            FolderBrowser browser = new();
+            Assert.Empty(browser.DirectoryPath);
+            Assert.Empty(browser.Description);
+            Assert.Equal(FolderBrowserStyles.RestrictToFilesystem, browser.Style);
+            Assert.Equal(FolderBrowserFolder.Desktop, browser.StartLocation);
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
-        public void FolderNameEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
+        [NormalizedStringData]
+        public void FolderBrowser_Description_Set_GetReturnsExpected(string value, string expected)
         {
-            var editor = new FolderNameEditor();
-            Assert.Equal(UITypeEditorEditStyle.Modal, editor.GetEditStyle(context));
+            FolderBrowser browser = new()
+            {
+                Description = value
+            };
+            Assert.Equal(expected, browser.Description);
+
+            // Set same.
+            browser.Description = value;
+            Assert.Equal(expected, browser.Description);
         }
 
         [Theory]
-        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
-        public void FolderNameEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
+        [EnumData<FolderBrowserFolder>]
+        [InvalidEnumData<FolderBrowserFolder>]
+        protected void FolderBrowser_StartLocation_Set_GetReturnsExpected(FolderBrowserFolder value)
         {
-            var editor = new FolderNameEditor();
-            Assert.False(editor.GetPaintValueSupported(context));
+            FolderBrowser browser = new()
+            {
+                StartLocation = value
+            };
+            Assert.Equal(value, browser.StartLocation);
+
+            // Set same.
+            browser.StartLocation = value;
+            Assert.Equal(value, browser.StartLocation);
         }
 
-        [Fact]
-        public void FolderNameEditor_InitializeDialog_Invoke_Nop()
+        [Theory]
+        [EnumData<FolderBrowserStyles>]
+        [InvalidEnumData<FolderBrowserStyles>]
+        protected void FolderBrowser_Style_Set_GetReturnsExpected(FolderBrowserStyles value)
         {
-            var editor = new SubFolderNameEditor();
-            editor.InitializeDialog();
+            FolderBrowser browser = new()
+            {
+                Style = value
+            };
+            Assert.Equal(value, browser.Style);
+
+            // Set same.
+            browser.Style = value;
+            Assert.Equal(value, browser.Style);
         }
+    }
 
-        public class FolderBrowserTests : FolderNameEditor
-        {
-            [Fact]
-            public void FolderBrowser_Ctor_Default()
-            {
-                var browser = new FolderBrowser();
-                Assert.Empty(browser.DirectoryPath);
-                Assert.Empty(browser.Description);
-                Assert.Equal(FolderBrowserStyles.RestrictToFilesystem, browser.Style);
-                Assert.Equal(FolderBrowserFolder.Desktop, browser.StartLocation);
-            }
-
-            [Theory]
-            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
-            public void FolderBrowser_Description_Set_GetReturnsExpected(string value, string expected)
-            {
-                var browser = new FolderBrowser
-                {
-                    Description = value
-                };
-                Assert.Equal(expected, browser.Description);
-
-                // Set same.
-                browser.Description = value;
-                Assert.Equal(expected, browser.Description);
-            }
-
-            [Theory]
-            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FolderBrowserFolder))]
-            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FolderBrowserFolder))]
-            protected void FolderBrowser_StartLocation_Set_GetReturnsExpected(FolderBrowserFolder value)
-            {
-                var browser = new FolderBrowser
-                {
-                    StartLocation = value
-                };
-                Assert.Equal(value, browser.StartLocation);
-
-                // Set same.
-                browser.StartLocation = value;
-                Assert.Equal(value, browser.StartLocation);
-            }
-
-            [Theory]
-            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FolderBrowserStyles))]
-            [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FolderBrowserStyles))]
-            protected void FolderBrowser_Style_Set_GetReturnsExpected(FolderBrowserStyles value)
-            {
-                var browser = new FolderBrowser
-                {
-                    Style = value
-                };
-                Assert.Equal(value, browser.Style);
-
-                // Set same.
-                browser.Style = value;
-                Assert.Equal(value, browser.Style);
-            }
-        }
-
-        private class SubFolderNameEditor : FolderNameEditor
-        {
-            public void InitializeDialog() => base.InitializeDialog(null);
-        }
+    private class SubFolderNameEditor : FolderNameEditor
+    {
+        public void InitializeDialog() => base.InitializeDialog(null);
     }
 }

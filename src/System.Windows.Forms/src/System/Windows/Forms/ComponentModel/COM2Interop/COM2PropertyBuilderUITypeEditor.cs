@@ -1,80 +1,78 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing.Design;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
-using static Interop;
+using Microsoft.VisualStudio.Shell;
+using Windows.Win32.System.Variant;
 
-namespace System.Windows.Forms.ComponentModel.Com2Interop
+namespace System.Windows.Forms.ComponentModel.Com2Interop;
+
+internal class Com2PropertyBuilderUITypeEditor : Com2ExtendedUITypeEditor
 {
-    internal class Com2PropertyBuilderUITypeEditor : Com2ExtendedUITypeEditor
+    private readonly Com2PropertyDescriptor _propDesc;
+    private readonly string _guidString;
+    private readonly CTLBLDTYPE _bldrType;
+
+    public Com2PropertyBuilderUITypeEditor(
+        Com2PropertyDescriptor pd,
+        string guidString,
+        CTLBLDTYPE type,
+        UITypeEditor? baseEditor) : base(baseEditor)
     {
-        private readonly Com2PropertyDescriptor _propDesc;
-        private readonly string _guidString;
-        private readonly VSSDK.CTLBLDTYPE _bldrType;
-
-        public Com2PropertyBuilderUITypeEditor(
-            Com2PropertyDescriptor pd,
-            string guidString,
-            VSSDK.CTLBLDTYPE type,
-            UITypeEditor? baseEditor) : base(baseEditor)
-        {
-            _propDesc = pd;
-            _guidString = guidString;
-            _bldrType = type;
-        }
-
-        public override unsafe object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
-        {
-            HWND parentHandle = PInvoke.GetFocus();
-
-            IUIService? uiSvc = (IUIService?)provider.GetService(typeof(IUIService));
-            if (uiSvc is not null)
-            {
-                IWin32Window parent = uiSvc.GetDialogOwnerWindow();
-                if (parent is not null)
-                {
-                    parentHandle = (HWND)parent.Handle;
-                }
-            }
-
-            BOOL useValue = false;
-            object? pValue = value;
-
-            try
-            {
-                object? obj = _propDesc.TargetObject;
-                if (obj is ICustomTypeDescriptor customTypeDescriptor)
-                {
-                    obj = customTypeDescriptor.GetPropertyOwner(_propDesc);
-                }
-
-                Debug.Assert(obj is VSSDK.IProvidePropertyBuilder, "object is not IProvidePropertyBuilder");
-                VSSDK.IProvidePropertyBuilder propBuilder = (VSSDK.IProvidePropertyBuilder)obj;
-
-                if (!propBuilder.ExecuteBuilder(
-                    _propDesc.DISPID,
-                    _guidString,
-                    null,
-                    parentHandle,
-                    ref pValue,
-                    &useValue).Succeeded)
-                {
-                    useValue = false;
-                }
-            }
-            catch (ExternalException ex)
-            {
-                Debug.Fail($"Failed to show property frame: {ex.ErrorCode}");
-            }
-
-            return useValue && (_bldrType & VSSDK.CTLBLDTYPE.FEDITSOBJIDRECTLY) == 0 ? pValue : value;
-        }
-
-        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
+        _propDesc = pd;
+        _guidString = guidString;
+        _bldrType = type;
     }
+
+    public override unsafe object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
+    {
+        HWND parentHandle = PInvoke.GetFocus();
+
+        IUIService? uiSvc = (IUIService?)provider.GetService(typeof(IUIService));
+        if (uiSvc is not null)
+        {
+            IWin32Window parent = uiSvc.GetDialogOwnerWindow();
+            if (parent is not null)
+            {
+                parentHandle = (HWND)parent.Handle;
+            }
+        }
+
+        object? target = _propDesc.TargetObject;
+        if (target is ICustomTypeDescriptor customTypeDescriptor)
+        {
+            target = customTypeDescriptor.GetPropertyOwner(_propDesc);
+        }
+
+        using var propertyBuilder = ComHelpers.TryGetComScope<IProvidePropertyBuilder>(target, out HRESULT hr);
+        Debug.Assert(hr.Succeeded, $"Failed to get IProvidePropertyBuilder: {hr}");
+
+        VARIANT_BOOL useValue = VARIANT_BOOL.VARIANT_FALSE;
+
+        // This is always an out value.
+        using VARIANT variantValue = default;
+
+        using BSTR guidString = new(_guidString);
+        hr = propertyBuilder.Value->ExecuteBuilder(
+            _propDesc.DISPID,
+            &guidString,
+            null,
+            parentHandle,
+            &variantValue,
+            &useValue);
+
+        if (hr.Failed)
+        {
+            useValue = VARIANT_BOOL.VARIANT_FALSE;
+            Debug.Fail($"Failed to show property frame: {hr}");
+        }
+
+        return useValue == VARIANT_BOOL.VARIANT_TRUE && !_bldrType.HasFlag(CTLBLDTYPE.CTLBLDTYPE_FEDITSOBJIDRECTLY)
+            ? variantValue.ToObject()
+            : value;
+    }
+
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
 }

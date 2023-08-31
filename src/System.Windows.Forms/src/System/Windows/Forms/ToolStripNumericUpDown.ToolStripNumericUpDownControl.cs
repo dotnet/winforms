@@ -1,20 +1,18 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+internal partial class ToolStripNumericUpDown
 {
-    internal partial class ToolStripNumericUpDown
+    internal partial class ToolStripNumericUpDownControl : NumericUpDown
     {
-        internal partial class ToolStripNumericUpDownControl : NumericUpDown
-        {
-            public ToolStrip? ParentToolStrip { get; private set; }
+        public ToolStrip? ParentToolStrip { get; private set; }
 
-            public ToolStripNumericUpDown? Owner { get; set; }
+        public ToolStripNumericUpDown? Owner { get; set; }
 
-            internal override bool SupportsUiaProviders => true;
+        internal override bool SupportsUiaProviders => true;
 
-            protected override AccessibleObject CreateAccessibilityInstance() => new ToolStripNumericUpDownAccessibleObject(this, Owner);
-        }
+        protected override AccessibleObject CreateAccessibilityInstance() => new ToolStripNumericUpDownAccessibleObject(this, Owner);
     }
 }

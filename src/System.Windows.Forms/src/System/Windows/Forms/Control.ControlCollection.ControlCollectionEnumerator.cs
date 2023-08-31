@@ -1,72 +1,70 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Collections;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class Control
 {
-    public partial class Control
+    public partial class ControlCollection
     {
-        public partial class ControlCollection
+        // This is the same as WinformsUtils.ArraySubsetEnumerator
+        // however since we're no longer an array, we've gotta employ a
+        // special version of this.
+        private class ControlCollectionEnumerator : IEnumerator
         {
-            // This is the same as WinformsUtils.ArraySubsetEnumerator
-            // however since we're no longer an array, we've gotta employ a
-            // special version of this.
-            private class ControlCollectionEnumerator : IEnumerator
+            private readonly ControlCollection _controls;
+            private int _current;
+            private readonly int _originalCount;
+
+            public ControlCollectionEnumerator(ControlCollection controls)
             {
-                private readonly ControlCollection _controls;
-                private int _current;
-                private readonly int _originalCount;
+                _controls = controls;
+                _originalCount = controls.Count;
+                _current = -1;
+            }
 
-                public ControlCollectionEnumerator(ControlCollection controls)
+            public bool MoveNext()
+            {
+                // We have to use Controls.Count here because someone could have deleted
+                // an item from the array.
+                //
+                // this can happen if someone does:
+                //     foreach (Control c in Controls) { c.Dispose(); }
+                //
+                // We also don't want to iterate past the original size of the collection
+                //
+                // this can happen if someone does
+                //     foreach (Control c in Controls) { c.Controls.Add(new Label()); }
+
+                if (_current < _controls.Count - 1 && _current < _originalCount - 1)
                 {
-                    _controls = controls;
-                    _originalCount = controls.Count;
-                    _current = -1;
+                    _current++;
+                    return true;
                 }
-
-                public bool MoveNext()
+                else
                 {
-                    // We have to use Controls.Count here because someone could have deleted
-                    // an item from the array.
-                    //
-                    // this can happen if someone does:
-                    //     foreach (Control c in Controls) { c.Dispose(); }
-                    //
-                    // We also don't want to iterate past the original size of the collection
-                    //
-                    // this can happen if someone does
-                    //     foreach (Control c in Controls) { c.Controls.Add(new Label()); }
+                    return false;
+                }
+            }
 
-                    if (_current < _controls.Count - 1 && _current < _originalCount - 1)
+            public void Reset()
+            {
+                _current = -1;
+            }
+
+            public object? Current
+            {
+                get
+                {
+                    if (_current == -1)
                     {
-                        _current++;
-                        return true;
+                        return null;
                     }
                     else
                     {
-                        return false;
-                    }
-                }
-
-                public void Reset()
-                {
-                    _current = -1;
-                }
-
-                public object? Current
-                {
-                    get
-                    {
-                        if (_current == -1)
-                        {
-                            return null;
-                        }
-                        else
-                        {
-                            return _controls[_current];
-                        }
+                        return _controls[_current];
                     }
                 }
             }

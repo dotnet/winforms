@@ -1,38 +1,36 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel.Design;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+/// <summary>
+///  Associates DesignerVerb with ToolStripMenuItem.
+/// </summary>
+internal class DesignerVerbToolStripMenuItem : ToolStripMenuItem
 {
-    /// <summary>
-    ///  Associates DesignerVerb with ToolStripMenuItem.
-    /// </summary>
-    internal class DesignerVerbToolStripMenuItem : ToolStripMenuItem
+    private readonly DesignerVerb _verb;
+
+    public DesignerVerbToolStripMenuItem(DesignerVerb verb)
     {
-        readonly DesignerVerb _verb;
+        _verb = verb;
+        Text = verb.Text;
+        RefreshItem();
+    }
 
-        public DesignerVerbToolStripMenuItem(DesignerVerb verb)
+    public void RefreshItem()
+    {
+        if (_verb is not null)
         {
-            _verb = verb;
-            Text = verb.Text;
-            RefreshItem();
+            Visible = _verb.Visible;
+            Enabled = _verb.Enabled;
+            Checked = _verb.Checked;
         }
+    }
 
-        public void RefreshItem()
-        {
-            if (_verb != null)
-            {
-                Visible = _verb.Visible;
-                Enabled = _verb.Enabled;
-                Checked = _verb.Checked;
-            }
-        }
-
-        protected override void OnClick(EventArgs e)
-        {
-            _verb?.Invoke();
-        }
+    protected override void OnClick(EventArgs e)
+    {
+        _verb?.Invoke();
     }
 }

@@ -1,6 +1,5 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -31,9 +30,9 @@ internal partial class Interop
             HRESULT ShowUI(
                 uint dwID,
                 IOleInPlaceActiveObject.Interface activeObject,
-                Ole32.IOleCommandTarget commandTarget,
-                Ole32.IOleInPlaceFrame frame,
-                Ole32.IOleInPlaceUIWindow doc);
+                IOleCommandTarget.Interface commandTarget,
+                IOleInPlaceFrame.Interface frame,
+                IOleInPlaceUIWindow.Interface doc);
 
             [PreserveSig]
             HRESULT HideUI();
@@ -56,7 +55,7 @@ internal partial class Interop
             [PreserveSig]
             HRESULT ResizeBorder(
                 RECT* rect,
-                Ole32.IOleInPlaceUIWindow doc,
+                IOleInPlaceUIWindow.Interface doc,
                 BOOL fFrameWindow);
 
             [PreserveSig]
@@ -72,23 +71,23 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT GetDropTarget(
-                Ole32.IDropTarget pDropTarget,
-                out Ole32.IDropTarget ppDropTarget);
+                IDropTarget.Interface pDropTarget,
+                out IDropTarget.Interface? ppDropTarget);
 
             [PreserveSig]
             HRESULT GetExternal(
-                [MarshalAs(UnmanagedType.Interface)] out object ppDispatch);
+                [MarshalAs(UnmanagedType.Interface)] out object? ppDispatch);
 
             [PreserveSig]
             HRESULT TranslateUrl(
                 uint dwTranslate,
                 [MarshalAs(UnmanagedType.LPWStr)] string strURLIn,
-                [MarshalAs(UnmanagedType.LPWStr)] out string pstrURLOut);
+                [MarshalAs(UnmanagedType.LPWStr)] out string? pstrURLOut);
 
             [PreserveSig]
             HRESULT FilterDataObject(
                 IDataObject pDO,
-                out IDataObject ppDORet);
+                out IDataObject? ppDORet);
         }
     }
 }

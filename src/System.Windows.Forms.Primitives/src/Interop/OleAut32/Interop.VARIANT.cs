@@ -1,23 +1,25 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Primitives.Resources;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Com.StructuredStorage;
 using Windows.Win32.System.Ole;
-using static Windows.Win32.System.Com.VARENUM;
+using static Windows.Win32.System.Variant.VARENUM;
 
-namespace Windows.Win32.System.Com;
+namespace Windows.Win32.System.Variant;
 
 internal unsafe partial struct VARIANT : IDisposable
 {
-    public VARENUM Type => (Anonymous.Anonymous.vt & VT_TYPEMASK);
+    public static VARIANT Empty { get; }
 
-    public bool Byref => (Anonymous.Anonymous.vt & VT_BYREF) != 0;
+    public bool IsEmpty => vt == VT_EMPTY && data.llVal == 0;
+
+    public VARENUM Type => vt & VT_TYPEMASK;
+
+    public bool Byref => vt.HasFlag(VT_BYREF);
 
     [UnscopedRef]
     public ref VARENUM vt => ref Anonymous.Anonymous.vt;
@@ -39,8 +41,11 @@ internal unsafe partial struct VARIANT : IDisposable
         //
         // If the VARTYPE is a VT_VECTOR, the contents are cleared as above and CoTaskMemFree is also called on
         // cabstr.pElems.
-
+        //
         // https://learn.microsoft.com/windows/win32/api/oleauto/nf-oleauto-variantclear#remarks
+        //
+        //     - VT_BSTR (SysFreeString)
+        //     - VT_DISPATCH / VT_UNKOWN (->Release(), if not VT_BYREF)
 
         fixed (void* t = &this)
         {
@@ -103,12 +108,7 @@ internal unsafe partial struct VARIANT : IDisposable
                 if (byRef)
                 {
                     // CLR returns VT_EMPTY | VT_BYREF data as nuint.
-                    if (IntPtr.Size == 8)
-                    {
-                        return (ulong)data;
-                    }
-
-                    return (uint)data;
+                    return IntPtr.Size == 8 ? (ulong)data : (object)(uint)data;
                 }
 
                 return null;
@@ -161,7 +161,7 @@ internal unsafe partial struct VARIANT : IDisposable
             case VT_DECIMAL:
                 return ((DECIMAL*)data)->ToDecimal();
             case VT_BOOL:
-                return (*(VARIANT_BOOL*)data) != VARIANT_BOOL.FALSE;
+                return (*(VARIANT_BOOL*)data) != VARIANT_BOOL.VARIANT_FALSE;
             case VT_VARIANT:
                 // We only support VT_VARIANT | VT_BYREF.
                 if (!byRef)
@@ -223,7 +223,7 @@ internal unsafe partial struct VARIANT : IDisposable
     private static Type GetRecordElementType(IRecordInfo* record)
     {
         Guid guid;
-        record->GetGuid(&guid).ThrowOnFailure();
+        record->GetGuid(&guid);
 
         Type? t = global::System.Type.GetTypeFromCLSID(guid);
         if (t is null || !t.IsValueType)
@@ -242,7 +242,24 @@ internal unsafe partial struct VARIANT : IDisposable
         }
 
         VARENUM arrayType = vt & ~VT_ARRAY;
+
+        if (arrayType == VT_RECORD)
+        {
+            // Exit early so we don't have to consider this in the helper methods.
+            throw new ArgumentException(string.Format(SR.COM2UnhandledVT, arrayType));
+        }
+
         Array array = CreateArrayFromSafeArray(psa, arrayType);
+
+        GCHandle pin = default;
+
+        try
+        {
+            pin = GCHandle.Alloc(array, GCHandleType.Pinned);
+        }
+        catch (ArgumentException)
+        {
+        }
 
         HRESULT hr = PInvoke.SafeArrayLock(psa);
         Debug.Assert(hr == HRESULT.S_OK);
@@ -302,7 +319,7 @@ internal unsafe partial struct VARIANT : IDisposable
                             var result = GetSpan<bool>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
-                                result[i] = data[i] != VARIANT_BOOL.FALSE;
+                                result[i] = data[i] != VARIANT_BOOL.VARIANT_FALSE;
                             }
 
                             break;
@@ -363,14 +380,7 @@ internal unsafe partial struct VARIANT : IDisposable
                             var result = GetSpan<object?>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
-                                if (data[i] == IntPtr.Zero)
-                                {
-                                    result[i] = null;
-                                }
-                                else
-                                {
-                                    result[i] = Marshal.GetObjectForIUnknown(data[i]);
-                                }
+                                result[i] = data[i] == IntPtr.Zero ? null : Marshal.GetObjectForIUnknown(data[i]);
                             }
 
                             break;
@@ -388,8 +398,6 @@ internal unsafe partial struct VARIANT : IDisposable
                             break;
                         }
 
-                    case VT_RECORD:
-                        throw new NotImplementedException();
                     default:
                         throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
                 }
@@ -406,6 +414,11 @@ internal unsafe partial struct VARIANT : IDisposable
         }
         finally
         {
+            if (pin.IsAllocated)
+            {
+                pin.Free();
+            }
+
             hr = PInvoke.SafeArrayUnlock(psa);
             Debug.Assert(hr == HRESULT.S_OK);
         }
@@ -535,7 +548,7 @@ internal unsafe partial struct VARIANT : IDisposable
             case VT_BOOL:
                 {
                     VARIANT_BOOL data = psa->GetValue<VARIANT_BOOL>(indices);
-                    SetValue(array, data != VARIANT_BOOL.FALSE, indices, lowerBounds);
+                    SetValue(array, data != VARIANT_BOOL.VARIANT_FALSE, indices, lowerBounds);
                     break;
                 }
 
@@ -590,8 +603,6 @@ internal unsafe partial struct VARIANT : IDisposable
                     break;
                 }
 
-            case VT_RECORD:
-                throw new NotImplementedException();
             default:
                 throw new ArgumentException(string.Format(SR.COM2UnhandledVT, arrayType));
         }
@@ -603,13 +614,6 @@ internal unsafe partial struct VARIANT : IDisposable
         if (vt == VT_EMPTY)
         {
             throw new InvalidOleVariantTypeException();
-        }
-
-        if (vt == VT_RECORD)
-        {
-            using ComScope<IRecordInfo> record = new(null);
-            PInvoke.SafeArrayGetRecordInfo(psa, record).ThrowOnFailure();
-            elementType = GetRecordElementType(record);
         }
 
         VARENUM arrayVarType = psa->VarType;
@@ -634,62 +638,25 @@ internal unsafe partial struct VARIANT : IDisposable
             throw new SafeArrayTypeMismatchException();
         }
 
-        switch (vt)
+        elementType = vt switch
         {
-            case VT_I1:
-                elementType = typeof(sbyte);
-                break;
-            case VT_UI1:
-                elementType = typeof(byte);
-                break;
-            case VT_I2:
-                elementType = typeof(short);
-                break;
-            case VT_UI2:
-                elementType = typeof(ushort);
-                break;
-            case VT_I4:
-            case VT_INT:
-                elementType = typeof(int);
-                break;
-            case VT_I8:
-                elementType = typeof(long);
-                break;
-            case VT_UI8:
-                elementType = typeof(ulong);
-                break;
-            case VT_UI4:
-            case VT_UINT:
-            case VT_ERROR:
-                elementType = typeof(uint);
-                break;
-            case VT_R4:
-                elementType = typeof(float);
-                break;
-            case VT_R8:
-                elementType = typeof(double);
-                break;
-            case VT_BOOL:
-                elementType = typeof(bool);
-                break;
-            case VT_DECIMAL:
-            case VT_CY:
-                elementType = typeof(decimal);
-                break;
-            case VT_DATE:
-                elementType = typeof(DateTime);
-                break;
-            case VT_BSTR:
-                elementType = typeof(string);
-                break;
-            case VT_DISPATCH:
-            case VT_UNKNOWN:
-            case VT_VARIANT:
-                elementType = typeof(object);
-                break;
-            default:
-                throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt));
-        }
+            VT_I1 => typeof(sbyte),
+            VT_UI1 => typeof(byte),
+            VT_I2 => typeof(short),
+            VT_UI2 => typeof(ushort),
+            VT_I4 or VT_INT => typeof(int),
+            VT_I8 => typeof(long),
+            VT_UI8 => typeof(ulong),
+            VT_UI4 or VT_UINT or VT_ERROR => typeof(uint),
+            VT_R4 => typeof(float),
+            VT_R8 => typeof(double),
+            VT_BOOL => typeof(bool),
+            VT_DECIMAL or VT_CY => typeof(decimal),
+            VT_DATE => typeof(DateTime),
+            VT_BSTR => typeof(string),
+            VT_DISPATCH or VT_UNKNOWN or VT_VARIANT => typeof(object),
+            _ => throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt)),
+        };
 
         if (psa->cDims == 1 && psa->Bounds[0].lLbound == 0)
         {
@@ -700,8 +667,8 @@ internal unsafe partial struct VARIANT : IDisposable
         var lengths = new int[psa->cDims];
         var bounds = new int[psa->cDims];
         int counter = 0;
-        // Copy the lower bounds and count of elements for the dimensions. These
-        // need to copied in reverse order.
+
+        // Copy the lower bounds and count of elements for the dimensions. These need to copied in reverse order.
         for (int i = psa->cDims - 1; i >= 0; i--)
         {
             lengths[counter] = (int)psa->Bounds[i].cElements;
@@ -784,7 +751,7 @@ internal unsafe partial struct VARIANT : IDisposable
                     var result = new bool[data.Length];
                     for (int i = 0; i < data.Length; i++)
                     {
-                        result[i] = data[i] != VARIANT_BOOL.FALSE;
+                        result[i] = data[i] != VARIANT_BOOL.VARIANT_FALSE;
                     }
 
                     return result;
@@ -887,8 +854,144 @@ internal unsafe partial struct VARIANT : IDisposable
         }
     }
 
-    private static Span<T> GetSpan<T>(Array arr)
-        => MemoryMarshal.CreateSpan(ref Unsafe.AsRef<T>(Marshal.UnsafeAddrOfPinnedArrayElement(arr, 0).ToPointer()), arr.Length);
+    private static Span<T> GetSpan<T>(Array array)
+        => MemoryMarshal.CreateSpan(ref Unsafe.AsRef<T>(Marshal.UnsafeAddrOfPinnedArrayElement(array, 0).ToPointer()), array.Length);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator bool(VARIANT value)
+        => value.vt == VT_BOOL ? value.data.boolVal != VARIANT_BOOL.VARIANT_FALSE : ThrowInvalidCast<bool>();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(bool value)
+        => new()
+        {
+            vt = VT_BOOL,
+            data = new() { boolVal = value ? VARIANT_BOOL.VARIANT_TRUE : VARIANT_BOOL.VARIANT_FALSE }
+        };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator short(VARIANT value)
+        => value.vt == VT_I2 ? value.data.iVal : ThrowInvalidCast<short>();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(short value)
+        => new()
+        {
+            vt = VT_I2,
+            data = new() { iVal = value }
+        };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator int(VARIANT value)
+        => value.vt is VT_I4 or VT_INT ? value.data.intVal : ThrowInvalidCast<int>();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(int value)
+        => new()
+        {
+            // Legacy marshalling uses VT_I4, not VT_INT
+            vt = VT_I4,
+            data = new() { intVal = value }
+        };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator uint(VARIANT value)
+        => value.vt is VT_UI4 or VT_UINT ? value.data.uintVal : ThrowInvalidCast<uint>();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(uint value)
+        => new()
+        {
+            // Legacy marshalling uses VT_UI4, not VT_UINT
+            vt = VT_UI4,
+            data = new() { uintVal = value }
+        };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator BSTR(VARIANT value)
+        => value.vt == VT_BSTR ? value.data.bstrVal : ThrowInvalidCast<BSTR>();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(string value)
+        => new()
+        {
+            // Runtime marshalling converts strings to BSTR variants
+            vt = VT_BSTR,
+            data = new() { bstrVal = new(value) }
+        };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(BSTR value)
+        => new()
+        {
+            vt = VT_BSTR,
+            data = new() { bstrVal = value }
+        };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator CY(VARIANT value)
+        => value.vt == VT_CY ? value.data.cyVal : ThrowInvalidCast<CY>();
+
+    public static explicit operator decimal(VARIANT value) => value.vt switch
+    {
+        VT_DECIMAL => value.Anonymous.decVal.ToDecimal(),
+        VT_CY => decimal.FromOACurrency(value.data.cyVal.int64),
+        _ => ThrowInvalidCast<decimal>(),
+    };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(IUnknown* value)
+        => new()
+        {
+            vt = VT_UNKNOWN,
+            data = new() { punkVal = value }
+        };
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator IUnknown*(VARIANT value)
+        => value.vt == VT_UNKNOWN ? value.data.punkVal : throw new InvalidCastException();
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static T ThrowInvalidCast<T>() => throw new InvalidCastException();
+
+    /// <summary>
+    ///  Converts the given object to <see cref="VARIANT"/>.
+    /// </summary>
+    public static VARIANT FromObject(object? value)
+    {
+        if (value is null)
+        {
+            return Empty;
+        }
+
+        if (value is string stringValue)
+        {
+            return (VARIANT)stringValue;
+        }
+        else if (value is bool boolValue)
+        {
+            return (VARIANT)boolValue;
+        }
+        else if (value is short shortValue)
+        {
+            return (VARIANT)shortValue;
+        }
+        else if (value is int intValue)
+        {
+            return (VARIANT)intValue;
+        }
+        else if (value is uint uintValue)
+        {
+            return (VARIANT)uintValue;
+        }
+
+        // Need to fill out to match Marshal behavior so we can remove the call.
+        // https://github.com/dotnet/winforms/issues/8596
+
+        VARIANT variant = default;
+        Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
+        return variant;
+    }
 
     internal partial struct _Anonymous_e__Union
     {

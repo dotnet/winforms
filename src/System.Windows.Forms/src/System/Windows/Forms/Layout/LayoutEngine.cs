@@ -1,52 +1,50 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Drawing;
 
-namespace System.Windows.Forms.Layout
+namespace System.Windows.Forms.Layout;
+
+public abstract class LayoutEngine
 {
-    public abstract class LayoutEngine
+    internal static IArrangedElement CastToArrangedElement(object obj)
     {
-        internal static IArrangedElement CastToArrangedElement(object obj)
+        if (obj is not IArrangedElement element)
         {
-            if (obj is not IArrangedElement element)
-            {
-                throw new NotSupportedException(string.Format(SR.LayoutEngineUnsupportedType, obj.GetType()));
-            }
-
-            return element;
+            throw new NotSupportedException(string.Format(SR.LayoutEngineUnsupportedType, obj.GetType()));
         }
 
-        internal virtual Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
-        {
-            return Size.Empty;
-        }
+        return element;
+    }
 
-        public virtual void InitLayout(object child, BoundsSpecified specified)
-        {
-            ArgumentNullException.ThrowIfNull(child);
+    internal virtual Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
+    {
+        return Size.Empty;
+    }
 
-            InitLayoutCore(CastToArrangedElement(child), specified);
-        }
+    public virtual void InitLayout(object child, BoundsSpecified specified)
+    {
+        ArgumentNullException.ThrowIfNull(child);
 
-        private protected virtual void InitLayoutCore(IArrangedElement element, BoundsSpecified bounds)
-        {
-        }
+        InitLayoutCore(CastToArrangedElement(child), specified);
+    }
 
-        internal virtual void ProcessSuspendedLayoutEventArgs(IArrangedElement container, LayoutEventArgs args)
-        {
-        }
+    private protected virtual void InitLayoutCore(IArrangedElement element, BoundsSpecified bounds)
+    {
+    }
 
-        public virtual bool Layout(object container, LayoutEventArgs layoutEventArgs)
-        {
-            ArgumentNullException.ThrowIfNull(container);
-            return LayoutCore(CastToArrangedElement(container), layoutEventArgs);
-        }
+    internal virtual void ProcessSuspendedLayoutEventArgs(IArrangedElement container, LayoutEventArgs args)
+    {
+    }
 
-        private protected virtual bool LayoutCore(IArrangedElement container, LayoutEventArgs layoutEventArgs)
-        {
-            return false;
-        }
+    public virtual bool Layout(object container, LayoutEventArgs layoutEventArgs)
+    {
+        ArgumentNullException.ThrowIfNull(container);
+        return LayoutCore(CastToArrangedElement(container), layoutEventArgs);
+    }
+
+    private protected virtual bool LayoutCore(IArrangedElement container, LayoutEventArgs layoutEventArgs)
+    {
+        return false;
     }
 }

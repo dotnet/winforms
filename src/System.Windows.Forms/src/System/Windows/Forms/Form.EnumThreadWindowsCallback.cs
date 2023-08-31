@@ -1,61 +1,60 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms;
+
+public partial class Form
 {
-    public partial class Form
+    /// <summary>
+    ///  Class used to temporarily reset the owners of windows owned by this Form before its handle recreation,
+    ///  then setting them back to the new handle after handle recreation.
+    /// </summary>
+    private class EnumThreadWindowsCallback
     {
-        /// <summary>
-        ///  Class used to temporarily reset the owners of windows owned by this Form before its handle recreation,
-        ///  then setting them back to the new handle after handle recreation.
-        /// </summary>
-        private class EnumThreadWindowsCallback
+        private List<HWND>? _ownedWindows;
+
+        private readonly HWND _formHandle;
+
+        internal EnumThreadWindowsCallback(HWND formHandle)
         {
-            private List<HWND>? _ownedWindows;
+            _formHandle = formHandle;
+        }
 
-            private readonly HWND _formHandle;
-
-            internal EnumThreadWindowsCallback(HWND formHandle)
+        internal BOOL Callback(HWND hwnd)
+        {
+            HWND parent = (HWND)PInvoke.GetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
+            if (parent == _formHandle)
             {
-                _formHandle = formHandle;
+                // Enumerated window is owned by this Form.
+                // Store it in a list for further treatment.
+                _ownedWindows ??= new();
+                _ownedWindows.Add(hwnd);
             }
 
-            internal BOOL Callback(HWND hwnd)
-            {
-                HWND parent = (HWND)PInvoke.GetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT);
-                if (parent == _formHandle)
-                {
-                    // Enumerated window is owned by this Form.
-                    // Store it in a list for further treatment.
-                    _ownedWindows ??= new();
-                    _ownedWindows.Add(parent);
-                }
+            return true;
+        }
 
-                return true;
-            }
-
-            // Resets the owner of all the windows owned by this Form before handle recreation.
-            internal void ResetOwners()
+        // Resets the owner of all the windows owned by this Form before handle recreation.
+        internal void ResetOwners()
+        {
+            if (_ownedWindows is not null)
             {
-                if (_ownedWindows is not null)
+                foreach (HWND hwnd in _ownedWindows)
                 {
-                    foreach (HWND hwnd in _ownedWindows)
-                    {
-                        PInvoke.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, 0);
-                    }
+                    nint oldValue = PInvoke.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, 0);
+                    Debug.Assert(oldValue == _formHandle.Value);
                 }
             }
+        }
 
-            // Sets the owner of the windows back to this Form after its handle recreation.
-            internal void SetOwners(IntPtr ownerHwnd)
+        // Sets the owner of the windows back to this Form after its handle recreation.
+        internal void SetOwners(nint ownerHwnd)
+        {
+            if (_ownedWindows is not null)
             {
-                if (_ownedWindows is not null)
+                foreach (HWND hwnd in _ownedWindows)
                 {
-                    foreach (HWND hwnd in _ownedWindows)
-                    {
-                        PInvoke.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
-                    }
+                    PInvoke.SetWindowLong(hwnd, WINDOW_LONG_PTR_INDEX.GWL_HWNDPARENT, ownerHwnd);
                 }
             }
         }

@@ -1,12 +1,11 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
-' See the LICENSE file in the project root for more information.
 
 Imports System.Windows.Forms
 Imports Xunit
 
 Namespace Microsoft.VisualBasic.Forms.Tests
-    Partial Public Class ControlTests : Implements IClassFixture(Of ThreadExceptionFixture)
+    Partial Public Class ControlTests
 
         <WinFormsFact>
         Public Sub Control_Invoke_Action_calls_correct_method()

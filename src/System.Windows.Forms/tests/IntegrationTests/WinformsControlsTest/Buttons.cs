@@ -1,103 +1,123 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using System.Windows.Forms;
+using System.Drawing;
 
-namespace WinformsControlsTest
+namespace WinformsControlsTest;
+
+public partial class Buttons : Form
 {
-    public partial class Buttons : Form
+    private readonly FlatStyle[] _styles =
     {
-        private readonly FlatStyle[] _styles =
+        FlatStyle.Flat,
+        FlatStyle.Popup,
+        FlatStyle.Standard,
+        FlatStyle.System
+    };
+
+    public Buttons()
+    {
+        InitializeComponent();
+    }
+
+    protected override void OnLoad(EventArgs e)
+    {
+        var table = new TableLayoutPanel
         {
-            FlatStyle.Flat,
-            FlatStyle.Popup,
-            FlatStyle.Standard,
-            FlatStyle.System
+            Dock = DockStyle.Fill,
+            ColumnCount = 3,
+            RowCount = 2
         };
 
-        public Buttons()
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        table.RowStyles.Add(new RowStyle(SizeType.Percent, 70.0f));
+        table.RowStyles.Add(new RowStyle(SizeType.Percent, 30.0f));
+        Controls.Add(table);
+
+        var panel = new FlowLayoutPanel
         {
-            InitializeComponent();
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.TopDown
+        };
+        table.Controls.Add(panel, column: 0, row: 0);
+
+        RadioButton radioButton;
+        foreach (FlatStyle style in _styles)
+        {
+            radioButton = new RadioButton
+            {
+                AutoSize = true,
+                FlatStyle = style,
+                Text = style.ToString(),
+                Checked = true
+            };
+
+            panel.Controls.Add(radioButton);
         }
 
-        protected override void OnLoad(EventArgs e)
+        panel = new FlowLayoutPanel
         {
-            var table = new TableLayoutPanel
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.TopDown
+        };
+        table.Controls.Add(panel, column: 1, row: 0);
+
+        CheckBox checkBox;
+        foreach (FlatStyle style in _styles)
+        {
+            checkBox = new CheckBox
             {
-                Dock = DockStyle.Fill,
-                ColumnCount = 3
+                AutoSize = true,
+                FlatStyle = style,
+                Text = style.ToString(),
+                Checked = true
             };
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            Controls.Add(table);
 
-            var panel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                FlowDirection = FlowDirection.TopDown
-            };
-            table.Controls.Add(panel, column: 0, row: 0);
-
-            RadioButton radioButton;
-            foreach (FlatStyle style in _styles)
-            {
-                radioButton = new RadioButton
-                {
-                    AutoSize = true,
-                    FlatStyle = style,
-                    Text = style.ToString(),
-                    Checked = true
-                };
-
-                panel.Controls.Add(radioButton);
-            }
-
-            panel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                FlowDirection = FlowDirection.TopDown
-            };
-            table.Controls.Add(panel, column: 1, row: 0);
-
-            CheckBox checkBox;
-            foreach (FlatStyle style in _styles)
-            {
-                checkBox = new CheckBox
-                {
-                    AutoSize = true,
-                    FlatStyle = style,
-                    Text = style.ToString(),
-                    Checked = true
-                };
-
-                panel.Controls.Add(checkBox);
-            }
-
-            panel = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                FlowDirection = FlowDirection.TopDown
-            };
-            table.Controls.Add(panel, column: 2, row: 0);
-
-            Button button;
-            foreach (FlatStyle style in _styles)
-            {
-                button = new Button
-                {
-                    AutoSize = true,
-                    FlatStyle = style,
-                    Text = style.ToString()
-                };
-
-                toolTip1.SetToolTip(button, $"{style}.");
-
-                panel.Controls.Add(button);
-            }
-
-            base.OnLoad(e);
+            panel.Controls.Add(checkBox);
         }
+
+        panel = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.TopDown
+        };
+        table.Controls.Add(panel, column: 2, row: 0);
+
+        Button button;
+        foreach (FlatStyle style in _styles)
+        {
+            button = new Button
+            {
+                AutoSize = true,
+                FlatStyle = style,
+                Text = style.ToString()
+            };
+
+            toolTip1.SetToolTip(button, $"{style}.");
+
+            panel.Controls.Add(button);
+        }
+
+        table.Controls.Add(
+            new Button
+            {
+                AutoSize = true,
+                Image = SystemIcons.GetStockIcon(StockIconId.DesktopPC).ToBitmap()
+            },
+            column: 0,
+            row: 1);
+
+        table.Controls.Add(
+            new Button
+            {
+                AutoSize = true,
+                Image = Icon.ExtractIcon("regedit.exe", 0, 256).ToBitmap()
+            },
+            column: 1,
+            row: 1);
+
+        base.OnLoad(e);
     }
 }

@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Ole;
 
 internal partial class Interop
 {
@@ -136,19 +136,19 @@ internal partial class Interop
             void Navigate2(
                 ref object URL,
                 ref object flags,
-                ref object targetFrameName,
-                ref object postData,
-                ref object headers);
+                ref object? targetFrameName,
+                ref object? postData,
+                ref object? headers);
 
             [DispId(501)]
-            Ole32.OLECMDF QueryStatusWB(
-                Ole32.OLECMDID cmdID);
+            OLECMDF QueryStatusWB(
+                OLECMDID cmdID);
 
             [DispId(502)]
             [PreserveSig]
             HRESULT ExecWB(
-                Ole32.OLECMDID cmdID,
-                Ole32.OLECMDEXECOPT cmdexecopt,
+                OLECMDID cmdID,
+                OLECMDEXECOPT cmdexecopt,
                 IntPtr pvaIn,
                 IntPtr pvaOut);
 
@@ -159,7 +159,7 @@ internal partial class Interop
                 ref object pvarSize);
 
             [DispId(-525)]
-            Ole32.READYSTATE ReadyState { get; }
+            READYSTATE ReadyState { get; }
 
             [DispId(550)]
             bool Offline { get; set; }

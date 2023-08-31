@@ -1,22 +1,20 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-namespace System.ComponentModel.Design
+namespace System.ComponentModel.Design;
+
+/// <summary>
+///  An enum that defines what type of action happened to the related object's <see cref="DesignerActionListCollection">designer action lists collection</see>.
+/// </summary>
+public enum DesignerActionListsChangedType
 {
     /// <summary>
-    ///  An enum that defines what type of action happened to the related object's <see cref="DesignerActionListCollection">designer action lists collection</see>.
+    ///  Signifies that one or more DesignerActionList was added.
     /// </summary>
-    public enum DesignerActionListsChangedType
-    {
-        /// <summary>
-        ///  Signifies that one or more DesignerActionList was added.
-        /// </summary>
-        ActionListsAdded,
+    ActionListsAdded,
 
-        /// <summary>
-        ///  Signifies that one or more DesignerActionList was removed.
-        /// </summary>
-        ActionListsRemoved
-    }
+    /// <summary>
+    ///  Signifies that one or more DesignerActionList was removed.
+    /// </summary>
+    ActionListsRemoved
 }

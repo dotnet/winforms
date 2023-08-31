@@ -1,355 +1,351 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
+namespace System.ComponentModel;
 
-namespace System.ComponentModel
+internal static class CompModSwitches
 {
-    internal static class CompModSwitches
+    private static TraceSwitch? activeX;
+    private static TraceSwitch? flowLayout;
+    private static TraceSwitch? dataCursor;
+    private static TraceSwitch? dataGridCursor;
+    private static TraceSwitch? dataGridEditing;
+    private static TraceSwitch? dataGridKeys;
+    private static TraceSwitch? dataGridLayout;
+    private static TraceSwitch? dataGridPainting;
+    private static TraceSwitch? dataGridParents;
+    private static TraceSwitch? dataGridScrolling;
+    private static TraceSwitch? dataGridSelection;
+    private static TraceSwitch? dataObject;
+    private static TraceSwitch? dataView;
+    private static TraceSwitch? debugGridView;
+    private static TraceSwitch? dgCaptionPaint;
+    private static TraceSwitch? dgEditColumnEditing;
+    private static TraceSwitch? dgRelationShpRowLayout;
+    private static TraceSwitch? dgRelationShpRowPaint;
+    private static TraceSwitch? dgRowPaint;
+    private static TraceSwitch? dragDrop;
+    private static TraceSwitch? imeMode;
+    private static TraceSwitch? msaa;
+    private static TraceSwitch? msoComponentManager;
+    private static TraceSwitch? layoutPerformance;
+    private static TraceSwitch? layoutSuspendResume;
+    private static TraceSwitch? richLayout;
+    private static TraceSwitch? setBounds;
+
+    private static BooleanSwitch? lifetimeTracing;
+
+    private static TraceSwitch? s_handleLeak;
+    private static BooleanSwitch? s_traceCollect;
+    private static BooleanSwitch? s_commonDesignerServices;
+
+    public static TraceSwitch ActiveX
     {
-        private static TraceSwitch? activeX;
-        private static TraceSwitch? flowLayout;
-        private static TraceSwitch? dataCursor;
-        private static TraceSwitch? dataGridCursor;
-        private static TraceSwitch? dataGridEditing;
-        private static TraceSwitch? dataGridKeys;
-        private static TraceSwitch? dataGridLayout;
-        private static TraceSwitch? dataGridPainting;
-        private static TraceSwitch? dataGridParents;
-        private static TraceSwitch? dataGridScrolling;
-        private static TraceSwitch? dataGridSelection;
-        private static TraceSwitch? dataObject;
-        private static TraceSwitch? dataView;
-        private static TraceSwitch? debugGridView;
-        private static TraceSwitch? dgCaptionPaint;
-        private static TraceSwitch? dgEditColumnEditing;
-        private static TraceSwitch? dgRelationShpRowLayout;
-        private static TraceSwitch? dgRelationShpRowPaint;
-        private static TraceSwitch? dgRowPaint;
-        private static TraceSwitch? dragDrop;
-        private static TraceSwitch? imeMode;
-        private static TraceSwitch? msaa;
-        private static TraceSwitch? msoComponentManager;
-        private static TraceSwitch? layoutPerformance;
-        private static TraceSwitch? layoutSuspendResume;
-        private static TraceSwitch? richLayout;
-        private static TraceSwitch? setBounds;
-
-        private static BooleanSwitch? lifetimeTracing;
-
-        private static TraceSwitch? s_handleLeak;
-        private static BooleanSwitch? s_traceCollect;
-        private static BooleanSwitch? s_commonDesignerServices;
-
-        public static TraceSwitch ActiveX
+        get
         {
-            get
-            {
-                activeX ??= new TraceSwitch("ActiveX", "Debug ActiveX sourcing");
+            activeX ??= new TraceSwitch("ActiveX", "Debug ActiveX sourcing");
 
-                return activeX;
-            }
+            return activeX;
         }
+    }
 
-        public static TraceSwitch DataCursor
+    public static TraceSwitch DataCursor
+    {
+        get
         {
-            get
-            {
-                dataCursor ??= new TraceSwitch("Microsoft.WFC.Data.DataCursor", "DataCursor");
+            dataCursor ??= new TraceSwitch("Microsoft.WFC.Data.DataCursor", "DataCursor");
 
-                return dataCursor;
-            }
+            return dataCursor;
         }
+    }
 
-        public static TraceSwitch DataGridCursor
+    public static TraceSwitch DataGridCursor
+    {
+        get
         {
-            get
-            {
-                dataGridCursor ??= new TraceSwitch("DataGridCursor", "DataGrid cursor tracing");
+            dataGridCursor ??= new TraceSwitch("DataGridCursor", "DataGrid cursor tracing");
 
-                return dataGridCursor;
-            }
+            return dataGridCursor;
         }
+    }
 
-        public static TraceSwitch DataGridEditing
+    public static TraceSwitch DataGridEditing
+    {
+        get
         {
-            get
-            {
-                dataGridEditing ??= new TraceSwitch("DataGridEditing", "DataGrid edit related tracing");
+            dataGridEditing ??= new TraceSwitch("DataGridEditing", "DataGrid edit related tracing");
 
-                return dataGridEditing;
-            }
+            return dataGridEditing;
         }
+    }
 
-        public static TraceSwitch DataGridKeys
+    public static TraceSwitch DataGridKeys
+    {
+        get
         {
-            get
-            {
-                dataGridKeys ??= new TraceSwitch("DataGridKeys", "DataGrid keystroke management tracing");
+            dataGridKeys ??= new TraceSwitch("DataGridKeys", "DataGrid keystroke management tracing");
 
-                return dataGridKeys;
-            }
+            return dataGridKeys;
         }
+    }
 
-        public static TraceSwitch DataGridLayout
+    public static TraceSwitch DataGridLayout
+    {
+        get
         {
-            get
-            {
-                dataGridLayout ??= new TraceSwitch("DataGridLayout", "DataGrid layout tracing");
+            dataGridLayout ??= new TraceSwitch("DataGridLayout", "DataGrid layout tracing");
 
-                return dataGridLayout;
-            }
+            return dataGridLayout;
         }
+    }
 
-        public static TraceSwitch DataGridPainting
+    public static TraceSwitch DataGridPainting
+    {
+        get
         {
-            get
-            {
-                dataGridPainting ??= new TraceSwitch("DataGridPainting", "DataGrid Painting related tracing");
+            dataGridPainting ??= new TraceSwitch("DataGridPainting", "DataGrid Painting related tracing");
 
-                return dataGridPainting;
-            }
+            return dataGridPainting;
         }
+    }
 
-        public static TraceSwitch DataGridParents
+    public static TraceSwitch DataGridParents
+    {
+        get
         {
-            get
-            {
-                dataGridParents ??= new TraceSwitch("DataGridParents", "DataGrid parent rows");
+            dataGridParents ??= new TraceSwitch("DataGridParents", "DataGrid parent rows");
 
-                return dataGridParents;
-            }
+            return dataGridParents;
         }
+    }
 
-        public static TraceSwitch DataGridScrolling
+    public static TraceSwitch DataGridScrolling
+    {
+        get
         {
-            get
-            {
-                dataGridScrolling ??= new TraceSwitch("DataGridScrolling", "DataGrid scrolling");
+            dataGridScrolling ??= new TraceSwitch("DataGridScrolling", "DataGrid scrolling");
 
-                return dataGridScrolling;
-            }
+            return dataGridScrolling;
         }
+    }
 
-        public static TraceSwitch DataGridSelection
+    public static TraceSwitch DataGridSelection
+    {
+        get
         {
-            get
-            {
-                dataGridSelection ??= new TraceSwitch("DataGridSelection", "DataGrid selection management tracing");
+            dataGridSelection ??= new TraceSwitch("DataGridSelection", "DataGrid selection management tracing");
 
-                return dataGridSelection;
-            }
+            return dataGridSelection;
         }
+    }
 
-        public static TraceSwitch DataObject
+    public static TraceSwitch DataObject
+    {
+        get
         {
-            get
-            {
-                dataObject ??= new TraceSwitch("DataObject", "Enable tracing for the DataObject class.");
+            dataObject ??= new TraceSwitch("DataObject", "Enable tracing for the DataObject class.");
 
-                return dataObject;
-            }
+            return dataObject;
         }
+    }
 
-        public static TraceSwitch DataView
+    public static TraceSwitch DataView
+    {
+        get
         {
-            get
-            {
-                dataView ??= new TraceSwitch("DataView", "DataView");
+            dataView ??= new TraceSwitch("DataView", "DataView");
 
-                return dataView;
-            }
+            return dataView;
         }
+    }
 
-        public static TraceSwitch DebugGridView
+    public static TraceSwitch DebugGridView
+    {
+        get
         {
-            get
-            {
-                debugGridView ??= new TraceSwitch("PSDEBUGGRIDVIEW", "Debug PropertyGridView");
+            debugGridView ??= new TraceSwitch("PSDEBUGGRIDVIEW", "Debug PropertyGridView");
 
-                return debugGridView;
-            }
+            return debugGridView;
         }
+    }
 
-        public static TraceSwitch DGCaptionPaint
+    public static TraceSwitch DGCaptionPaint
+    {
+        get
         {
-            get
-            {
-                dgCaptionPaint ??= new TraceSwitch("DGCaptionPaint", "DataGridCaption");
+            dgCaptionPaint ??= new TraceSwitch("DGCaptionPaint", "DataGridCaption");
 
-                return dgCaptionPaint;
-            }
+            return dgCaptionPaint;
         }
+    }
 
-        public static TraceSwitch DGEditColumnEditing
+    public static TraceSwitch DGEditColumnEditing
+    {
+        get
         {
-            get
-            {
-                dgEditColumnEditing ??= new TraceSwitch("DGEditColumnEditing", "Editing related tracing");
+            dgEditColumnEditing ??= new TraceSwitch("DGEditColumnEditing", "Editing related tracing");
 
-                return dgEditColumnEditing;
-            }
+            return dgEditColumnEditing;
         }
+    }
 
-        public static TraceSwitch DGRelationShpRowLayout
+    public static TraceSwitch DGRelationShpRowLayout
+    {
+        get
         {
-            get
-            {
-                dgRelationShpRowLayout ??= new TraceSwitch("DGRelationShpRowLayout", "Relationship row layout");
+            dgRelationShpRowLayout ??= new TraceSwitch("DGRelationShpRowLayout", "Relationship row layout");
 
-                return dgRelationShpRowLayout;
-            }
+            return dgRelationShpRowLayout;
         }
+    }
 
-        public static TraceSwitch DGRelationShpRowPaint
+    public static TraceSwitch DGRelationShpRowPaint
+    {
+        get
         {
-            get
-            {
-                dgRelationShpRowPaint ??= new TraceSwitch("DGRelationShpRowPaint", "Relationship row painting");
+            dgRelationShpRowPaint ??= new TraceSwitch("DGRelationShpRowPaint", "Relationship row painting");
 
-                return dgRelationShpRowPaint;
-            }
+            return dgRelationShpRowPaint;
         }
+    }
 
-        public static TraceSwitch DGRowPaint
+    public static TraceSwitch DGRowPaint
+    {
+        get
         {
-            get
-            {
-                dgRowPaint ??= new TraceSwitch("DGRowPaint", "DataGrid Simple Row painting stuff");
+            dgRowPaint ??= new TraceSwitch("DGRowPaint", "DataGrid Simple Row painting stuff");
 
-                return dgRowPaint;
-            }
+            return dgRowPaint;
         }
+    }
 
-        public static TraceSwitch DragDrop
+    public static TraceSwitch DragDrop
+    {
+        get
         {
-            get
-            {
-                dragDrop ??= new TraceSwitch("DragDrop", "Debug OLEDragDrop support in Controls");
+            dragDrop ??= new TraceSwitch("DragDrop", "Debug OLEDragDrop support in Controls");
 
-                return dragDrop;
-            }
+            return dragDrop;
         }
+    }
 
-        public static TraceSwitch FlowLayout
+    public static TraceSwitch FlowLayout
+    {
+        get
         {
-            get
-            {
-                flowLayout ??= new TraceSwitch("FlowLayout", "Debug flow layout");
+            flowLayout ??= new TraceSwitch("FlowLayout", "Debug flow layout");
 
-                return flowLayout;
-            }
+            return flowLayout;
         }
+    }
 
-        public static TraceSwitch ImeMode
+    public static TraceSwitch ImeMode
+    {
+        get
         {
-            get
-            {
-                imeMode ??= new TraceSwitch("ImeMode", "Debug IME Mode");
+            imeMode ??= new TraceSwitch("ImeMode", "Debug IME Mode");
 
-                return imeMode;
-            }
+            return imeMode;
         }
+    }
 
-        public static TraceSwitch LayoutPerformance
+    public static TraceSwitch LayoutPerformance
+    {
+        get
         {
-            get
-            {
-                layoutPerformance ??= new TraceSwitch("LayoutPerformance", "Tracks layout events which impact performance.");
+            layoutPerformance ??= new TraceSwitch("LayoutPerformance", "Tracks layout events which impact performance.");
 
-                return layoutPerformance;
-            }
+            return layoutPerformance;
         }
+    }
 
-        public static TraceSwitch LayoutSuspendResume
+    public static TraceSwitch LayoutSuspendResume
+    {
+        get
         {
-            get
-            {
-                layoutSuspendResume ??= new TraceSwitch("LayoutSuspendResume", "Tracks SuspendLayout/ResumeLayout.");
+            layoutSuspendResume ??= new TraceSwitch("LayoutSuspendResume", "Tracks SuspendLayout/ResumeLayout.");
 
-                return layoutSuspendResume;
-            }
+            return layoutSuspendResume;
         }
+    }
 
-        public static BooleanSwitch LifetimeTracing
+    public static BooleanSwitch LifetimeTracing
+    {
+        get
         {
-            get
-            {
-                lifetimeTracing ??= new BooleanSwitch("LifetimeTracing", "Track lifetime events. This will cause objects to track the stack at creation and dispose.");
+            lifetimeTracing ??= new BooleanSwitch("LifetimeTracing", "Track lifetime events. This will cause objects to track the stack at creation and dispose.");
 
-                return lifetimeTracing;
-            }
+            return lifetimeTracing;
         }
+    }
 
-        public static TraceSwitch MSAA
+    public static TraceSwitch MSAA
+    {
+        get
         {
-            get
-            {
-                msaa ??= new TraceSwitch("MSAA", "Debug Microsoft Active Accessibility");
+            msaa ??= new TraceSwitch("MSAA", "Debug Microsoft Active Accessibility");
 
-                return msaa;
-            }
+            return msaa;
         }
+    }
 
-        public static TraceSwitch MSOComponentManager
+    public static TraceSwitch MSOComponentManager
+    {
+        get
         {
-            get
-            {
-                msoComponentManager ??= new TraceSwitch("MSOComponentManager", "Debug MSO Component Manager support");
+            msoComponentManager ??= new TraceSwitch("MSOComponentManager", "Debug MSO Component Manager support");
 
-                return msoComponentManager;
-            }
+            return msoComponentManager;
         }
+    }
 
-        public static TraceSwitch RichLayout
+    public static TraceSwitch RichLayout
+    {
+        get
         {
-            get
-            {
-                richLayout ??= new TraceSwitch("RichLayout", "Debug layout in RichControls");
+            richLayout ??= new TraceSwitch("RichLayout", "Debug layout in RichControls");
 
-                return richLayout;
-            }
+            return richLayout;
         }
+    }
 
-        public static TraceSwitch SetBounds
+    public static TraceSwitch SetBounds
+    {
+        get
         {
-            get
-            {
-                setBounds ??= new TraceSwitch("SetBounds", "Trace changes to control size/position.");
+            setBounds ??= new TraceSwitch("SetBounds", "Trace changes to control size/position.");
 
-                return setBounds;
-            }
+            return setBounds;
         }
+    }
 
-        public static TraceSwitch HandleLeak
+    public static TraceSwitch HandleLeak
+    {
+        get
         {
-            get
-            {
-                s_handleLeak ??= new TraceSwitch("HANDLELEAK", "HandleCollector: Track Win32 Handle Leaks");
+            s_handleLeak ??= new TraceSwitch("HANDLELEAK", "HandleCollector: Track Win32 Handle Leaks");
 
-                return s_handleLeak;
-            }
+            return s_handleLeak;
         }
+    }
 
-        public static BooleanSwitch TraceCollect
+    public static BooleanSwitch TraceCollect
+    {
+        get
         {
-            get
-            {
-                s_traceCollect ??= new BooleanSwitch("TRACECOLLECT", "HandleCollector: Trace HandleCollector operations");
+            s_traceCollect ??= new BooleanSwitch("TRACECOLLECT", "HandleCollector: Trace HandleCollector operations");
 
-                return s_traceCollect;
-            }
+            return s_traceCollect;
         }
+    }
 
-        public static BooleanSwitch CommonDesignerServices
+    public static BooleanSwitch CommonDesignerServices
+    {
+        get
         {
-            get
-            {
-                s_commonDesignerServices ??= new BooleanSwitch("CommonDesignerServices", "Assert if any common designer service is not found.");
+            s_commonDesignerServices ??= new BooleanSwitch("CommonDesignerServices", "Assert if any common designer service is not found.");
 
-                return s_commonDesignerServices;
-            }
+            return s_commonDesignerServices;
         }
     }
 }

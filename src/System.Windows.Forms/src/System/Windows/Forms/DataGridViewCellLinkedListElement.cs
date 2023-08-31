@@ -1,45 +1,39 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
-#nullable disable
+namespace System.Windows.Forms;
 
-using System.Diagnostics;
-
-namespace System.Windows.Forms
+/// <summary>
+///  Represents an element in a <see cref="DataGridViewCellLinkedList"/> linked list.
+/// </summary>
+internal class DataGridViewCellLinkedListElement
 {
-    /// <summary>
-    ///  Represents an element in a <see cref="DataGridViewCellLinkedList"/> linked list.
-    /// </summary>
-    internal class DataGridViewCellLinkedListElement
+    private readonly DataGridViewCell dataGridViewCell;
+    private DataGridViewCellLinkedListElement? next;
+
+    public DataGridViewCellLinkedListElement(DataGridViewCell dataGridViewCell)
     {
-        private readonly DataGridViewCell dataGridViewCell;
-        private DataGridViewCellLinkedListElement next;
+        Debug.Assert(dataGridViewCell is not null);
+        this.dataGridViewCell = dataGridViewCell;
+    }
 
-        public DataGridViewCellLinkedListElement(DataGridViewCell dataGridViewCell)
+    public DataGridViewCell DataGridViewCell
+    {
+        get
         {
-            Debug.Assert(dataGridViewCell is not null);
-            this.dataGridViewCell = dataGridViewCell;
+            return dataGridViewCell;
         }
+    }
 
-        public DataGridViewCell DataGridViewCell
+    public DataGridViewCellLinkedListElement? Next
+    {
+        get
         {
-            get
-            {
-                return dataGridViewCell;
-            }
+            return next;
         }
-
-        public DataGridViewCellLinkedListElement Next
+        set
         {
-            get
-            {
-                return next;
-            }
-            set
-            {
-                next = value;
-            }
+            next = value;
         }
     }
 }

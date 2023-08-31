@@ -1,287 +1,291 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using System.Windows.Forms.IntegrationTests.Common;
 using Microsoft.Win32;
 using WindowsFormsApp1;
 using WinformsControlsTest.UserControls;
 
-namespace WinformsControlsTest
+namespace WinformsControlsTest;
+
+[DesignerCategory("code")]
+public partial class MainForm : Form
 {
-    [DesignerCategory("code")]
-    public partial class MainForm : Form
+    public MainForm()
     {
-        public MainForm()
+        this.BringToForeground();
+        InitializeComponent();
+
+        // Init buttons
+        IReadOnlyDictionary<MainFormControlsTabOrder, InitInfo> buttonsInitInfo = GetButtonsInitInfo();
+        Array mainFormControlsTabOrderItems = Enum.GetValues(typeof(MainFormControlsTabOrder));
+
+        foreach (MainFormControlsTabOrder item in mainFormControlsTabOrderItems)
         {
-            this.BringToForeground();
-            InitializeComponent();
-
-            // Init buttons
-            IReadOnlyDictionary<MainFormControlsTabOrder, InitInfo> buttonsInitInfo = GetButtonsInitInfo();
-            Array mainFormControlsTabOrderItems = Enum.GetValues(typeof(MainFormControlsTabOrder));
-
-            foreach (MainFormControlsTabOrder item in mainFormControlsTabOrderItems)
+            InitInfo info = buttonsInitInfo[item];
+            Button button = new Button
             {
-                InitInfo info = buttonsInitInfo[item];
-                Button button = new Button
-                {
-                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
-                    Name = info.Name,
-                    TabIndex = (int)item,
-                    Text = info.Name,
-                    UseVisualStyleBackColor = true
-                };
-                button.Click += info.Click;
-
-                overarchingFlowLayoutPanel.Controls.Add(button);
-            }
-
-            Text = RuntimeInformation.FrameworkDescription;
-
-            SystemEvents.UserPreferenceChanged += (s, e) =>
-            {
-                // The default font gets reset for UserPreferenceCategory.Color
-                // though perhaps it should've been done for UserPreferenceCategory.Window
-                if (e.Category == UserPreferenceCategory.Color)
-                {
-                    UpdateLayout();
-                }
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Name = info.Name,
+                TabIndex = (int)item,
+                Text = info.Name,
+                UseVisualStyleBackColor = true
             };
+            button.Click += info.Click;
+
+            overarchingFlowLayoutPanel.Controls.Add(button);
         }
 
-        private IReadOnlyDictionary<MainFormControlsTabOrder, InitInfo> GetButtonsInitInfo() => new Dictionary<MainFormControlsTabOrder, InitInfo>
+        Text = RuntimeInformation.FrameworkDescription;
+
+        SystemEvents.UserPreferenceChanged += (s, e) =>
         {
+            // The default font gets reset for UserPreferenceCategory.Color
+            // though perhaps it should've been done for UserPreferenceCategory.Window
+            if (e.Category == UserPreferenceCategory.Color)
             {
-                MainFormControlsTabOrder.ButtonsButton,
-                new InitInfo("Buttons", (obj, e) => new Buttons().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.CalendarButton,
-                new InitInfo("Calendar", (obj, e) => new Calendar().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.MultipleControlsButton,
-                new InitInfo("MultipleControls", (obj, e) => new MultipleControls().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.ComboBoxesButton,
-                new InitInfo("ComboBoxes", (obj, e) => new ComboBoxes().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.ComboBoxesWithScrollBarsButton,
-                new InitInfo("ComboBoxes with ScrollBars", (obj, e) => new ComboBoxesWithScrollBars().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.DateTimePickerButton,
-                new InitInfo("DateTimePicker", (obj, e) => new DateTimePicker().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.DialogsButton,
-                new InitInfo("Dialogs", (obj, e) => new Dialogs().ShowDialog(this))
-            },
-            {
-                MainFormControlsTabOrder.DataGridViewButton,
-                new InitInfo("DataGridView", (obj, e) => new DataGridViewTest().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.DataGridViewInVirtualModeButton,
-                new InitInfo("DataGridView in Virtual mode", (obj, e) => new DataGridViewInVirtualModeTest().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.TreeViewButton,
-                new InitInfo("TreeView, ImageList", (obj, e) => new TreeViewTest().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.ContentAlignmentButton,
-                new InitInfo("ContentAlignment", (obj, e) => new DesignTimeAligned().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.MenusButton,
-                new InitInfo("Menus", (obj, e) => new MenuStripAndCheckedListBox().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.PanelsButton,
-                new InitInfo("Panels", (obj, e) => new Panels().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.SplitterButton,
-                new InitInfo("Splitter", (obj, e) => new Splitter().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.MdiParentButton,
-                new InitInfo("MDI Parent", (obj, e) => new MdiParent().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.PropertyGridButton,
-                new InitInfo("PropertyGrid", (obj, e) => new PropertyGrid(new UserControlWithObjectCollectionEditor()).Show(this))
-            },
-            {
-                MainFormControlsTabOrder.ListViewButton,
-                new InitInfo("ListView", (obj, e) => new ListViewTest().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.FontNameEditorButton,
-                new InitInfo("FontNameEditor", (obj, e) => new PropertyGrid(new UserControlWithFontNameEditor()).Show(this))
-            },
-            {
-                MainFormControlsTabOrder.CollectionEditorsButton,
-                new InitInfo("CollectionEditors", (obj, e) => new CollectionEditors().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.RichTextBoxesButton,
-                new InitInfo("RichTextBoxes", (obj, e) => new RichTextBoxes().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.PictureBoxesButton,
-                new InitInfo("PictureBoxes", (obj, e) => new PictureBoxes().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.FormBorderStylesButton,
-                new InitInfo("FormBorderStyles", (obj, e) => new FormBorderStyles().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.FormShowInTaskbarButton,
-                new InitInfo("FormShowInTaskbar", (obj, e) => new FormShowInTaskbar().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.ToggleIconButton,
-                new InitInfo("ToggleFormIcon", (obj, e) => ShowIcon = !ShowIcon)
-            },
-            {
-                MainFormControlsTabOrder.ErrorProviderButton,
-                new InitInfo("ErrorProvider", (obj, e) => new ErrorProviderTest().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.TaskDialogButton,
-                new InitInfo("Task Dialog", (obj, e) => new TaskDialogSamples().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.MessageBoxButton,
-                new InitInfo("MessageBox", (obj, e) => new MessageBoxes().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.ToolStripsButton,
-                new InitInfo("ToolStrips", (obj, e) => new ToolStripTests().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.TrackBarsButton,
-                new InitInfo("TrackBars", (obj, e) => new TrackBars().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.ScrollBarsButton,
-                new InitInfo("ScrollBars", (obj, e) => new ScrollBars().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.ToolTipsButton,
-                new InitInfo("ToolTips", (obj, e) => new ToolTipTests().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.AnchorLayoutButton,
-                new InitInfo("AnchorLayout", (obj, e) => new AnchorLayoutTests().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.DockLayoutButton,
-                new InitInfo("DockLayout", (obj, e) => new DockLayoutTests().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.DragAndDrop,
-                new InitInfo("Drag and Drop", (obj, e) => new DragDrop().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.TextBoxesButton,
-                new InitInfo("TextBoxes", (obj, e) => new TextBoxes().Show(this))
-            },
-            {
-                MainFormControlsTabOrder.MediaPlayerButton,
-                new InitInfo("MediaPlayer", (obj, e) => new MediaPlayer().Show(this))
+                UpdateLayout();
             }
         };
+    }
 
-        protected override void OnShown(EventArgs e)
+    private IReadOnlyDictionary<MainFormControlsTabOrder, InitInfo> GetButtonsInitInfo() => new Dictionary<MainFormControlsTabOrder, InitInfo>
+    {
         {
-            base.OnShown(e);
+            MainFormControlsTabOrder.ButtonsButton,
+            new InitInfo("Buttons", (obj, e) => new Buttons().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.CalendarButton,
+            new InitInfo("Calendar", (obj, e) => new Calendar().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.MultipleControlsButton,
+            new InitInfo("MultipleControls", (obj, e) => new MultipleControls().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.ComboBoxesButton,
+            new InitInfo("ComboBoxes", (obj, e) => new ComboBoxes().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.ComboBoxesWithScrollBarsButton,
+            new InitInfo("ComboBoxes with ScrollBars", (obj, e) => new ComboBoxesWithScrollBars().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.DateTimePickerButton,
+            new InitInfo("DateTimePicker", (obj, e) => new DateTimePicker().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.DialogsButton,
+            new InitInfo("Dialogs", (obj, e) => new Dialogs().ShowDialog(this))
+        },
+        {
+            MainFormControlsTabOrder.DataGridViewButton,
+            new InitInfo("DataGridView", (obj, e) => new DataGridViewTest().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.DataGridViewInVirtualModeButton,
+            new InitInfo("DataGridView in Virtual mode", (obj, e) => new DataGridViewInVirtualModeTest().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.TreeViewButton,
+            new InitInfo("TreeView, ImageList", (obj, e) => new TreeViewTest().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.ContentAlignmentButton,
+            new InitInfo("ContentAlignment", (obj, e) => new DesignTimeAligned().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.MenusButton,
+            new InitInfo("Menus", (obj, e) => new MenuStripAndCheckedListBox().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.PanelsButton,
+            new InitInfo("Panels", (obj, e) => new Panels().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.SplitterButton,
+            new InitInfo("Splitter", (obj, e) => new Splitter().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.MdiParentButton,
+            new InitInfo("MDI Parent", (obj, e) => new MdiParent().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.PropertyGridButton,
+            new InitInfo("PropertyGrid", (obj, e) => new PropertyGrid(new UserControlWithObjectCollectionEditor()).Show(this))
+        },
+        {
+            MainFormControlsTabOrder.ListViewButton,
+            new InitInfo("ListView", (obj, e) => new ListViewTest().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.FontNameEditorButton,
+            new InitInfo("FontNameEditor", (obj, e) => new PropertyGrid(new UserControlWithFontNameEditor()).Show(this))
+        },
+        {
+            MainFormControlsTabOrder.CollectionEditorsButton,
+            new InitInfo("CollectionEditors", (obj, e) => new CollectionEditors().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.RichTextBoxesButton,
+            new InitInfo("RichTextBoxes", (obj, e) => new RichTextBoxes().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.PictureBoxesButton,
+            new InitInfo("PictureBoxes", (obj, e) => new PictureBoxes().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.FormBorderStylesButton,
+            new InitInfo("FormBorderStyles", (obj, e) => new FormBorderStyles().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.FormShowInTaskbarButton,
+            new InitInfo("FormShowInTaskbar", (obj, e) => new FormShowInTaskbar().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.ToggleIconButton,
+            new InitInfo("ToggleFormIcon", (obj, e) => ShowIcon = !ShowIcon)
+        },
+        {
+            MainFormControlsTabOrder.ErrorProviderButton,
+            new InitInfo("ErrorProvider", (obj, e) => new ErrorProviderTest().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.TaskDialogButton,
+            new InitInfo("Task Dialog", (obj, e) => new TaskDialogSamples().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.MessageBoxButton,
+            new InitInfo("MessageBox", (obj, e) => new MessageBoxes().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.ToolStripsButton,
+            new InitInfo("ToolStrips", (obj, e) => new ToolStripTests().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.TrackBarsButton,
+            new InitInfo("TrackBars", (obj, e) => new TrackBars().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.ScrollBarsButton,
+            new InitInfo("ScrollBars", (obj, e) => new ScrollBars().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.ToolTipsButton,
+            new InitInfo("ToolTips", (obj, e) => new ToolTipTests().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.AnchorLayoutButton,
+            new InitInfo("AnchorLayout", (obj, e) => new AnchorLayoutTests().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.DockLayoutButton,
+            new InitInfo("DockLayout", (obj, e) => new DockLayoutTests().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.DragAndDrop,
+            new InitInfo("Drag and Drop", (obj, e) => new DragDrop().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.TextBoxesButton,
+            new InitInfo("TextBoxes", (obj, e) => new TextBoxes().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.MediaPlayerButton,
+            new InitInfo("MediaPlayer", (obj, e) => new MediaPlayer().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.FormOwnerTestButton,
+            new InitInfo("FormOwnerTest", (obj, e) => new FormOwnerTestForm().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.ListBoxTestButton,
+            new InitInfo("ListBoxes", (obj, e) => new ListBoxes().Show(this))
+        }
+    };
 
-            UpdateLayout();
-            overarchingFlowLayoutPanel.Controls[(int)MainFormControlsTabOrder.ButtonsButton].Focus();
+    protected override void OnShown(EventArgs e)
+    {
+        base.OnShown(e);
+
+        UpdateLayout();
+        overarchingFlowLayoutPanel.Controls[(int)MainFormControlsTabOrder.ButtonsButton].Focus();
+    }
+
+    private void UpdateLayout()
+    {
+        MinimumSize = default;
+        Debug.WriteLine($"MessageBoxFont: {SystemFonts.MessageBoxFont}", nameof(MainForm));
+        Debug.WriteLine($"Default font: {Control.DefaultFont}", nameof(MainForm));
+
+        List<Button> buttons = new List<Button>();
+        foreach (Control control in overarchingFlowLayoutPanel.Controls)
+        {
+            if (control is Button button)
+            {
+                buttons.Add(button);
+            }
+            else
+            {
+                Debug.WriteLine($"Why did we get a {control.GetType().Name} instead a {nameof(Button)} on {nameof(MainForm)}?");
+            }
         }
 
-        private void UpdateLayout()
+        // 1. Auto-size all buttons
+        overarchingFlowLayoutPanel.SuspendLayout();
+        foreach (Button button in buttons)
         {
-            MinimumSize = default;
-            Debug.WriteLine($"MessageBoxFont: {SystemFonts.MessageBoxFont}", nameof(MainForm));
-            Debug.WriteLine($"Default font: {Control.DefaultFont}", nameof(MainForm));
-
-            List<Button> buttons = new List<Button>();
-            foreach (Control control in overarchingFlowLayoutPanel.Controls)
-            {
-                if (control is Button button)
-                {
-                    buttons.Add(button);
-                }
-                else
-                {
-                    Debug.WriteLine($"Why did we get a {control.GetType().Name} instead a {nameof(Button)} on {nameof(MainForm)}?");
-                }
-            }
-
-            // 1. Auto-size all buttons
-            overarchingFlowLayoutPanel.SuspendLayout();
-            foreach (Button button in buttons)
-            {
-                button.AutoSize = true;
-            }
-
-            overarchingFlowLayoutPanel.ResumeLayout(true);
-
-            // 2. Find the biggest button
-            Size biggestButton = default;
-            foreach (Button button in buttons)
-            {
-                if (button.Width > biggestButton.Width)
-                {
-                    biggestButton = button.Size;
-                }
-            }
-
-            Debug.WriteLine($"Biggest button size: {biggestButton}", nameof(MainForm));
-
-            // 3. Size all buttons to the biggest button
-            overarchingFlowLayoutPanel.SuspendLayout();
-            foreach (Button button in buttons)
-            {
-                button.AutoSize = false;
-                button.Size = biggestButton;
-            }
-
-            overarchingFlowLayoutPanel.ResumeLayout(true);
-
-            // 4. Calculate the new form size showing all buttons in two vertical columns
-            int padding = overarchingFlowLayoutPanel.Controls[0].Margin.All;
-            ClientSize = new Size(
-                (biggestButton.Width + padding * 2) * 2 + padding * 2 + overarchingFlowLayoutPanel.Location.X * 2,
-                (overarchingFlowLayoutPanel.Controls.Count + 1) / 2 * (biggestButton.Height + padding * 2)
-                    + padding * 2 + overarchingFlowLayoutPanel.Location.Y * 2);
-            MinimumSize = Size;
-            Debug.WriteLine($"Minimum form size: {MinimumSize}", nameof(MainForm));
+            button.AutoSize = true;
         }
 
-        private struct InitInfo
+        overarchingFlowLayoutPanel.ResumeLayout(true);
+
+        // 2. Find the biggest button
+        Size biggestButton = default;
+        foreach (Button button in buttons)
         {
-            public InitInfo(string name, EventHandler handler)
+            if (button.Width > biggestButton.Width)
             {
-                Name = name;
-                Click = handler;
+                biggestButton = button.Size;
             }
-
-            public string Name { get; }
-
-            public EventHandler Click { get; }
         }
+
+        Debug.WriteLine($"Biggest button size: {biggestButton}", nameof(MainForm));
+
+        // 3. Size all buttons to the biggest button
+        overarchingFlowLayoutPanel.SuspendLayout();
+        foreach (Button button in buttons)
+        {
+            button.AutoSize = false;
+            button.Size = biggestButton;
+        }
+
+        overarchingFlowLayoutPanel.ResumeLayout(true);
+
+        // 4. Calculate the new form size showing all buttons in two vertical columns
+        int padding = overarchingFlowLayoutPanel.Controls[0].Margin.All;
+        ClientSize = new Size(
+            (biggestButton.Width + padding * 2) * 2 + padding * 2 + overarchingFlowLayoutPanel.Location.X * 2,
+            (overarchingFlowLayoutPanel.Controls.Count + 1) / 2 * (biggestButton.Height + padding * 2)
+                + padding * 2 + overarchingFlowLayoutPanel.Location.Y * 2);
+        MinimumSize = Size;
+        Debug.WriteLine($"Minimum form size: {MinimumSize}", nameof(MainForm));
+    }
+
+    private struct InitInfo
+    {
+        public InitInfo(string name, EventHandler handler)
+        {
+            Name = name;
+            Click = handler;
+        }
+
+        public string Name { get; }
+
+        public EventHandler Click { get; }
     }
 }

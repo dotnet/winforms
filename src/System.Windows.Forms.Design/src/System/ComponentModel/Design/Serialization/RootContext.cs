@@ -1,38 +1,36 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
 using System.Windows.Forms;
 
-namespace System.ComponentModel.Design.Serialization
+namespace System.ComponentModel.Design.Serialization;
+
+/// <summary>
+///  The root context is added by a type code dom serializer to provide a
+///  definiton of the "root" object.
+/// </summary>
+public sealed class RootContext
 {
     /// <summary>
-    ///  The root context is added by a type code dom serializer to provide a
-    ///  definiton of the "root" object.
+    ///  This object can be placed on the context stack to represent the
+    ///  object that is the root of the serialization hierarchy. In addition
+    ///  to this instance, the RootContext also  contains an expression that
+    ///  can be used to reference the RootContext.
     /// </summary>
-    public sealed class RootContext
+    public RootContext(CodeExpression expression, object value)
     {
-        /// <summary>
-        ///  This object can be placed on the context stack to represent the
-        ///  object that is the root of the serialization hierarchy. In addition
-        ///  to this instance, the RootContext also  contains an expression that
-        ///  can be used to reference the RootContext.
-        /// </summary>
-        public RootContext(CodeExpression expression, object value)
-        {
-            Expression = expression.OrThrowIfNull();
-            Value = value.OrThrowIfNull();
-        }
-
-        /// <summary>
-        ///  The expression representing the root object in the object graph.
-        /// </summary>
-        public CodeExpression Expression { get; }
-
-        /// <summary>
-        ///  The root object of the object graph.
-        /// </summary>
-        public object Value { get; }
+        Expression = expression.OrThrowIfNull();
+        Value = value.OrThrowIfNull();
     }
+
+    /// <summary>
+    ///  The expression representing the root object in the object graph.
+    /// </summary>
+    public CodeExpression Expression { get; }
+
+    /// <summary>
+    ///  The root object of the object graph.
+    /// </summary>
+    public object Value { get; }
 }

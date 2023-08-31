@@ -1,19 +1,17 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Drawing;
 
-namespace Windows.Win32.Foundation
-{
-    internal partial struct RECT
-    {
-        public RECT(Size size)
-        {
-            right = size.Width;
-            bottom = size.Height;
-        }
+namespace Windows.Win32.Foundation;
 
-        public override string ToString() => ((Rectangle)this).ToString();
+internal partial struct RECT
+{
+    public RECT(Size size)
+    {
+        right = size.Width;
+        bottom = size.Height;
     }
+
+    public override string ToString() => ((Rectangle)this).ToString();
 }

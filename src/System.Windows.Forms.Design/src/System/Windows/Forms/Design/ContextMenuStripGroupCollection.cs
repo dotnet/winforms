@@ -1,53 +1,51 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
 
 using System.Collections;
 
-namespace System.Windows.Forms.Design
+namespace System.Windows.Forms.Design;
+
+internal class ContextMenuStripGroupCollection : DictionaryBase
 {
-    internal class ContextMenuStripGroupCollection : DictionaryBase
+    public ContextMenuStripGroupCollection()
     {
-        public ContextMenuStripGroupCollection()
-        {
-        }
+    }
 
-        public ContextMenuStripGroup this[string key]
+    public ContextMenuStripGroup this[string key]
+    {
+        get
         {
-            get
+            if (!InnerHashtable.ContainsKey(key))
             {
-                if (!InnerHashtable.ContainsKey(key))
-                {
-                    InnerHashtable[key] = new ContextMenuStripGroup(key);
-                }
-
-                return InnerHashtable[key] as ContextMenuStripGroup;
-            }
-        }
-
-        public bool ContainsKey(string key)
-        {
-            return InnerHashtable.ContainsKey(key);
-        }
-
-        protected override void OnInsert(object key, object value)
-        {
-            if (!(value is ContextMenuStripGroup))
-            {
-                throw new NotSupportedException();
+                InnerHashtable[key] = new ContextMenuStripGroup(key);
             }
 
-            base.OnInsert(key, value);
+            return (ContextMenuStripGroup)InnerHashtable[key]!;
         }
+    }
 
-        protected override void OnSet(object key, object oldValue, object newValue)
+    public bool ContainsKey(string key)
+    {
+        return InnerHashtable.ContainsKey(key);
+    }
+
+    protected override void OnInsert(object key, object? value)
+    {
+        if (value is not ContextMenuStripGroup)
         {
-            if (!(newValue is ContextMenuStripGroup))
-            {
-                throw new NotSupportedException();
-            }
-
-            base.OnSet(key, oldValue, newValue);
+            throw new NotSupportedException();
         }
+
+        base.OnInsert(key, value);
+    }
+
+    protected override void OnSet(object key, object? oldValue, object? newValue)
+    {
+        if (newValue is not ContextMenuStripGroup)
+        {
+            throw new NotSupportedException();
+        }
+
+        base.OnSet(key, oldValue, newValue);
     }
 }
