@@ -1132,8 +1132,6 @@ public partial class MaskedTextBox : TextBoxBase
         }
     }
 
-    private bool DontHidePassword => _passwordChar == 0 && !UseSystemPasswordChar;
-
     internal override bool SupportsUiaProviders => true;
 
     /// <summary>
@@ -2043,7 +2041,7 @@ public partial class MaskedTextBox : TextBoxBase
             _flagState[IME_ENDING_COMPOSITION] = false;
         }
 
-        if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode) && DontHidePassword)
+        if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode))
         {
             AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
         }
@@ -2084,7 +2082,7 @@ public partial class MaskedTextBox : TextBoxBase
     {
         base.OnMouseDown(e);
 
-        if (IsHandleCreated && IsAccessibilityObjectCreated && DontHidePassword)
+        if (IsHandleCreated && IsAccessibilityObjectCreated)
         {
             // As there is no corresponding windows notification
             // about text selection changed for TextBox assuming
