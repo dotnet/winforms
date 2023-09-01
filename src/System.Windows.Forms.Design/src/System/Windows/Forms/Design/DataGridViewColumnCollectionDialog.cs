@@ -987,10 +987,10 @@ internal class DataGridViewColumnCollectionDialog : Form
             else
             {
 #endif // DGV_DITHERING
-        e.Graphics.DrawImage(listBoxItem!.ToolboxBitmap,
+        e.Graphics.DrawImage(listBoxItem!.ToolboxBitmap!,
                              e.Bounds.X + _OWNERDRAWITEMIMAGEBUFFER,
                              e.Bounds.Y + _OWNERDRAWITEMIMAGEBUFFER,
-                             listBoxItem.ToolboxBitmap.Width,
+                             listBoxItem!.ToolboxBitmap!.Width,
                              listBoxItem.ToolboxBitmap.Height);
 
         Rectangle bounds = e.Bounds;

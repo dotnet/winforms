@@ -2236,7 +2236,7 @@ namespace System.Windows.Forms.Design
                 {
                     try
                     {
-                        ImageList.ImageCollection? images = _picker?._treeViewCtrl?.ImageList.Images;
+                        ImageList.ImageCollection? images = _picker?._treeViewCtrl?.ImageList?.Images;
                         if (images is not null)
                         {
                             images.Add(value, Color.Transparent);

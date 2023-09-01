@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Design;
 
 internal class BindingSourceDesigner : ComponentDesigner
 {
-    private bool _bindingUpdatedByUser = false;
+    private bool _bindingUpdatedByUser;
 
     public bool BindingUpdatedByUser
     {
