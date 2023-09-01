@@ -328,19 +328,19 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
         if (!result)
         {
             Control? associatedControl = GetAssociatedControl(component);
-            if (associatedControl is not null && _toolStripContainer is not null && associatedControl != _toolStripContainer)
+            if (associatedControl is not null
+                && _toolStripContainer is not null
+                && associatedControl != _toolStripContainer
+                && !PInvoke.IsChild(_toolStripContainer, associatedControl))
             {
-                if (!PInvoke.IsChild(_toolStripContainer, associatedControl))
+                Rectangle glyphBounds = childGlyph.Bounds;
+                Rectangle controlBounds = BehaviorService.ControlRectInAdornerWindow(associatedControl);
+                if ((component == _designerHost.RootComponent) || !glyphBounds.IntersectsWith(controlBounds))
                 {
-                    Rectangle glyphBounds = childGlyph.Bounds;
-                    Rectangle controlBounds = BehaviorService.ControlRectInAdornerWindow(associatedControl);
-                    if ((component == _designerHost.RootComponent) || !glyphBounds.IntersectsWith(controlBounds))
-                    {
-                        glyphs.Insert(0, childGlyph);
-                    }
-
-                    result = true;
+                    glyphs.Insert(0, childGlyph);
                 }
+
+                result = true;
             }
         }
 

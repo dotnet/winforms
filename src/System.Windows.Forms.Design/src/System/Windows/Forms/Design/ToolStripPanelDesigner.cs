@@ -167,18 +167,12 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
 
         if (!typeof(ToolStrip).IsAssignableFrom(toolType))
         {
-            ToolStripContainer? parent = _panel?.Parent as ToolStripContainer;
-            if (parent is not null)
+            //ToolStripContainer? parent = _panel?.Parent as ToolStripContainer;
+            if (_panel?.Parent is ToolStripContainer parent
+                && parent.ContentPanel is { } contentPanel
+                && _designerHost?.GetDesigner(contentPanel) is PanelDesigner designer)
             {
-                ToolStripContentPanel contentPanel = parent.ContentPanel;
-                if (contentPanel is not null)
-                {
-                    PanelDesigner? designer = _designerHost?.GetDesigner(contentPanel) as PanelDesigner;
-                    if (designer is not null)
-                    {
-                        InvokeCreateTool(designer, tool);
-                    }
-                }
+                InvokeCreateTool(designer, tool);
             }
         }
         else
@@ -479,7 +473,9 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     /// </summary>
     protected override void OnPaintAdornments(PaintEventArgs paintEvent)
     {
-        if (!ToolStripDesignerUtils.DisplayInformation.TerminalServer && !ToolStripDesignerUtils.DisplayInformation.HighContrast && !ToolStripDesignerUtils.DisplayInformation.LowResolution)
+        if (!ToolStripDesignerUtils.DisplayInformation.TerminalServer
+            && !ToolStripDesignerUtils.DisplayInformation.HighContrast
+            && !ToolStripDesignerUtils.DisplayInformation.LowResolution)
         {
             using (Brush brush = new SolidBrush(Color.FromArgb(50, Color.White)))
             {
