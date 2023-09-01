@@ -206,8 +206,8 @@ internal class DataGridViewDesigner : ControlDesigner
             if (designerVerbs is null)
             {
                 designerVerbs = new DesignerVerbCollection();
-                designerVerbs.Add(new DesignerVerb((SR.DataGridViewEditColumnsVerb), OnEditColumns));
-                designerVerbs.Add(new DesignerVerb((SR.DataGridViewAddColumnVerb), OnAddColumn));
+                designerVerbs.Add(new DesignerVerb(SR.DataGridViewEditColumnsVerb, OnEditColumns));
+                designerVerbs.Add(new DesignerVerb(SR.DataGridViewAddColumnVerb, OnAddColumn));
             }
 
             return designerVerbs;
@@ -434,7 +434,7 @@ internal class DataGridViewDesigner : ControlDesigner
             }
             catch (ArgumentException ex)
             {
-                throw new InvalidOperationException((SR.DataGridViewDataSourceNoLongerValid), ex);
+                throw new InvalidOperationException(SR.DataGridViewDataSourceNoLongerValid, ex);
             }
         }
 
@@ -618,7 +618,7 @@ internal class DataGridViewDesigner : ControlDesigner
             }
             catch (ArgumentException ex)
             {
-                throw new InvalidOperationException((SR.DataGridViewDataSourceNoLongerValid), ex);
+                throw new InvalidOperationException(SR.DataGridViewDataSourceNoLongerValid, ex);
             }
         }
 
@@ -809,7 +809,7 @@ internal class DataGridViewDesigner : ControlDesigner
         // child modal dialog -launching in System Aware mode
         DataGridViewColumnCollectionDialog dialog = DpiHelper.CreateInstanceInSystemAwareContext(() => new DataGridViewColumnCollectionDialog(((DataGridView)Component!).Site!));
         dialog.SetLiveDataGridView((DataGridView)Component);
-        DesignerTransaction? transaction = host?.CreateTransaction((SR.DataGridViewEditColumnsTransactionString));
+        DesignerTransaction? transaction = host?.CreateTransaction(SR.DataGridViewEditColumnsTransactionString);
         DialogResult result = DialogResult.Cancel;
 
         try
@@ -832,7 +832,7 @@ internal class DataGridViewDesigner : ControlDesigner
     public void OnAddColumn(object? sender, EventArgs e)
     {
         IDesignerHost? host = Component.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
-        DesignerTransaction? transaction = host?.CreateTransaction((SR.DataGridViewAddColumnTransactionString));
+        DesignerTransaction? transaction = host?.CreateTransaction(SR.DataGridViewAddColumnTransactionString);
         DialogResult result = DialogResult.Cancel;
 
         // child modal dialog -launching in System Aware mode
@@ -883,7 +883,7 @@ internal class DataGridViewDesigner : ControlDesigner
         {
             DesignerActionItemCollection items = new DesignerActionItemCollection();
             DesignerActionPropertyItem chooseDataSource = new DesignerActionPropertyItem("DataSource", // property name
-                                                               (SR.DataGridViewChooseDataSource));// displayName
+                                                               SR.DataGridViewChooseDataSource);// displayName
             chooseDataSource.RelatedComponent = _owner.Component;
             items.Add(chooseDataSource);
             return items;
@@ -943,11 +943,11 @@ internal class DataGridViewDesigner : ControlDesigner
             DesignerActionItemCollection items = new DesignerActionItemCollection();
             items.Add(new DesignerActionMethodItem(this,
                         "EditColumns",                      // method name
-                        (SR.DataGridViewEditColumnsVerb),   // display name
+                        SR.DataGridViewEditColumnsVerb,   // display name
                         true));                             // promoteToDesignerVerb
             items.Add(new DesignerActionMethodItem(this,
                         "AddColumn",                        // method name
-                        (SR.DataGridViewAddColumnVerb),     // display name
+                        SR.DataGridViewAddColumnVerb,     // display name
                         true));                             // promoteToDesignerVerb
 
             return items;
@@ -983,13 +983,13 @@ internal class DataGridViewDesigner : ControlDesigner
         {
             DesignerActionItemCollection items = new DesignerActionItemCollection();
             items.Add(new DesignerActionPropertyItem("AllowUserToAddRows",
-                                                        (SR.DataGridViewEnableAdding)));
+                                                        SR.DataGridViewEnableAdding));
             items.Add(new DesignerActionPropertyItem("ReadOnly",
-                                                        (SR.DataGridViewEnableEditing)));
+                                                        SR.DataGridViewEnableEditing));
             items.Add(new DesignerActionPropertyItem("AllowUserToDeleteRows",
-                                                        (SR.DataGridViewEnableDeleting)));
+                                                        SR.DataGridViewEnableDeleting));
             items.Add(new DesignerActionPropertyItem("AllowUserToOrderColumns",
-                                                        (SR.DataGridViewEnableColumnReordering)));
+                                                        SR.DataGridViewEnableColumnReordering));
             return items;
         }
 
@@ -1008,37 +1008,39 @@ internal class DataGridViewDesigner : ControlDesigner
             ]
             set
             {
-                if (value != AllowUserToAddRows)
+                if (value == AllowUserToAddRows)
                 {
-                    IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                    return;
+                }
 
-                    DesignerTransaction? transaction;
+                IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
 
-                    if (value)
-                    {
-                        transaction = host?.CreateTransaction((SR.DataGridViewEnableAddingTransactionString));
-                    }
-                    else
-                    {
-                        transaction = host?.CreateTransaction((SR.DataGridViewDisableAddingTransactionString));
-                    }
+                DesignerTransaction? transaction;
 
-                    try
-                    {
-                        IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                        PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component!)["AllowUserToAddRows"];
-                        changeService?.OnComponentChanging(_owner.Component!, prop);
+                if (value)
+                {
+                    transaction = host?.CreateTransaction(SR.DataGridViewEnableAddingTransactionString);
+                }
+                else
+                {
+                    transaction = host?.CreateTransaction(SR.DataGridViewDisableAddingTransactionString);
+                }
 
-                        ((DataGridView)_owner.Component!).AllowUserToAddRows = value;
+                try
+                {
+                    IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component!)["AllowUserToAddRows"];
+                    changeService?.OnComponentChanging(_owner.Component!, prop);
 
-                        changeService?.OnComponentChanged(_owner.Component, prop, null, null);
-                        transaction?.Commit();
-                        transaction = null;
-                    }
-                    finally
-                    {
-                        transaction?.Cancel();
-                    }
+                    ((DataGridView)_owner.Component!).AllowUserToAddRows = value;
+
+                    changeService?.OnComponentChanged(_owner.Component, prop, null, null);
+                    transaction?.Commit();
+                    transaction = null;
+                }
+                finally
+                {
+                    transaction?.Cancel();
                 }
             }
         }
@@ -1058,37 +1060,39 @@ internal class DataGridViewDesigner : ControlDesigner
             ]
             set
             {
-                if (value != AllowUserToDeleteRows)
+                if (value == AllowUserToDeleteRows)
                 {
-                    IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                    return;
+                }
 
-                    DesignerTransaction? transaction;
+                IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
 
-                    if (value)
-                    {
-                        transaction = host?.CreateTransaction((SR.DataGridViewEnableDeletingTransactionString));
-                    }
-                    else
-                    {
-                        transaction = host?.CreateTransaction((SR.DataGridViewDisableDeletingTransactionString));
-                    }
+                DesignerTransaction? transaction;
 
-                    try
-                    {
-                        IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                        PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component!)["AllowUserToDeleteRows"];
-                        changeService?.OnComponentChanging(_owner.Component!, prop);
+                if (value)
+                {
+                    transaction = host?.CreateTransaction(SR.DataGridViewEnableDeletingTransactionString);
+                }
+                else
+                {
+                    transaction = host?.CreateTransaction(SR.DataGridViewDisableDeletingTransactionString);
+                }
 
-                        ((DataGridView)_owner.Component!).AllowUserToDeleteRows = value;
+                try
+                {
+                    IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component!)["AllowUserToDeleteRows"];
+                    changeService?.OnComponentChanging(_owner.Component!, prop);
 
-                        changeService?.OnComponentChanged(_owner.Component, prop, null, null);
-                        transaction?.Commit();
-                        transaction = null;
-                    }
-                    finally
-                    {
-                        transaction?.Cancel();
-                    }
+                    ((DataGridView)_owner.Component!).AllowUserToDeleteRows = value;
+
+                    changeService?.OnComponentChanged(_owner.Component, prop, null, null);
+                    transaction?.Commit();
+                    transaction = null;
+                }
+                finally
+                {
+                    transaction?.Cancel();
                 }
             }
         }
@@ -1108,37 +1112,39 @@ internal class DataGridViewDesigner : ControlDesigner
             ]
             set
             {
-                if (value != AllowUserToOrderColumns)
+                if (value == AllowUserToOrderColumns)
                 {
-                    IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                    return;
+                }
 
-                    DesignerTransaction? transaction;
+                IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
 
-                    if (value)
-                    {
-                        transaction = host?.CreateTransaction(SR.DataGridViewEnableColumnReorderingTransactionString);
-                    }
-                    else
-                    {
-                        transaction = host?.CreateTransaction(SR.DataGridViewDisableColumnReorderingTransactionString);
-                    }
+                DesignerTransaction? transaction;
 
-                    try
-                    {
-                        IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                        PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component!)["AllowUserToReorderColumns"];
-                        changeService?.OnComponentChanging(_owner.Component!, prop);
+                if (value)
+                {
+                    transaction = host?.CreateTransaction(SR.DataGridViewEnableColumnReorderingTransactionString);
+                }
+                else
+                {
+                    transaction = host?.CreateTransaction(SR.DataGridViewDisableColumnReorderingTransactionString);
+                }
 
-                        ((DataGridView)_owner.Component!).AllowUserToOrderColumns = value;
+                try
+                {
+                    IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component!)["AllowUserToReorderColumns"];
+                    changeService?.OnComponentChanging(_owner.Component!, prop);
 
-                        changeService?.OnComponentChanged(_owner.Component, prop, null, null);
-                        transaction?.Commit();
-                        transaction = null;
-                    }
-                    finally
-                    {
-                        transaction?.Cancel();
-                    }
+                    ((DataGridView)_owner.Component!).AllowUserToOrderColumns = value;
+
+                    changeService?.OnComponentChanged(_owner.Component, prop, null, null);
+                    transaction?.Commit();
+                    transaction = null;
+                }
+                finally
+                {
+                    transaction?.Cancel();
                 }
             }
         }
@@ -1158,37 +1164,39 @@ internal class DataGridViewDesigner : ControlDesigner
             ]
             set
             {
-                if (value != ReadOnly)
+                if (value == ReadOnly)
                 {
-                    IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                    return;
+                }
 
-                    DesignerTransaction? transaction;
+                IDesignerHost? host = _owner.Component?.Site?.GetService(typeof(IDesignerHost)) as IDesignerHost;
 
-                    if (value)
-                    {
-                        transaction = host?.CreateTransaction((SR.DataGridViewEnableEditingTransactionString));
-                    }
-                    else
-                    {
-                        transaction = host?.CreateTransaction((SR.DataGridViewDisableEditingTransactionString));
-                    }
+                DesignerTransaction? transaction;
 
-                    try
-                    {
-                        IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                        PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component!)["ReadOnly"];
-                        changeService?.OnComponentChanging(_owner.Component!, prop);
+                if (value)
+                {
+                    transaction = host?.CreateTransaction(SR.DataGridViewEnableEditingTransactionString);
+                }
+                else
+                {
+                    transaction = host?.CreateTransaction(SR.DataGridViewDisableEditingTransactionString);
+                }
 
-                        ((DataGridView)_owner.Component!).ReadOnly = !value;
+                try
+                {
+                    IComponentChangeService? changeService = _owner.Component?.Site?.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(_owner.Component!)["ReadOnly"];
+                    changeService?.OnComponentChanging(_owner.Component!, prop);
 
-                        changeService?.OnComponentChanged(_owner.Component, prop, null, null);
-                        transaction?.Commit();
-                        transaction = null;
-                    }
-                    finally
-                    {
-                        transaction?.Cancel();
-                    }
+                    ((DataGridView)_owner.Component!).ReadOnly = !value;
+
+                    changeService?.OnComponentChanged(_owner.Component, prop, null, null);
+                    transaction?.Commit();
+                    transaction = null;
+                }
+                finally
+                {
+                    transaction?.Cancel();
                 }
             }
         }

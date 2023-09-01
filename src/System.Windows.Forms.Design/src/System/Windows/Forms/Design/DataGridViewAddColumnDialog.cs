@@ -874,34 +874,11 @@ internal class DataGridViewAddColumnDialog : Form
         INameCreationService? nameCreationService,
         DataGridViewColumnCollection liveColumns,
         bool allowDuplicateNameInLiveColumnCollection)
-    {
-        if (columns.Contains(name))
-        {
-            return false;
-        }
-
-        if (container is not null && container.Components[name] is not null)
-        {
-            if (!allowDuplicateNameInLiveColumnCollection || liveColumns is null || !liveColumns.Contains(name))
-            {
-                return false;
-            }
-        }
-
-        if (nameCreationService is not null && !nameCreationService.IsValidName(name))
-        {
-            if (!allowDuplicateNameInLiveColumnCollection || liveColumns is null || !liveColumns.Contains(name))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
+        => ValidName(name, columns, container, nameCreationService, liveColumns, allowDuplicateNameInLiveColumnCollection, out _);
 
     /// <devdoc>
-    ///     A column name is valid if it does not cause any name conflicts in the DataGridViewColumnCollection
-    ///     and the IContainer::Component collection.
+    ///  A column name is valid if it does not cause any name conflicts in the DataGridViewColumnCollection
+    ///  and the IContainer::Component collection.
     /// </devdoc>
     public static bool ValidName(string name,
         DataGridViewColumnCollection columns,
