@@ -6604,7 +6604,7 @@ public unsafe partial class Control :
     /// <summary>
     ///  Determines whether the parent font is set.
     /// </summary>
-    internal bool IsParentFontSet() => ParentInternal is not null && ParentInternal.Font != DefaultFont;
+    internal bool IsParentFontSet() => ParentInternal is not null && ParentInternal.CanAccessProperties && ParentInternal.Font != DefaultFont;
 
     /// <summary>
     ///  Determines whether the font is set.
