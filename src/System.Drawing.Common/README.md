@@ -75,11 +75,11 @@ For more in-depth tutorials and API references, you can check the following reso
 - [Drawing with System.Drawing.Common | Microsoft Learn](https://learn.microsoft.com/dotnet/core/drawing/)
 
 ## Contribution Bar
-- [x] [We consider new features, new APIs and performance changes](../README.md#primary-bar)
-- [x] [We consider PRs that target this library for new source code analyzers](../README.md#secondary-bars)
-- [ ] [We don't accept refactoring changes due to new language features](../README.md#secondary-bars)
+- [x] We consider new features, new APIs and performance changes
+- [x] We consider PRs that target this library for new source code analyzers
+- [ ] We don't accept refactoring changes due to new language features
 
-See the [Help Wanted](https://github.com/dotnet/winforms/milestone/70) issues.
+See the [Help Wanted](https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3Aarea-System.Drawing+label%3A%22help+wanted%22) issues.
 
 ## Feedback
 
