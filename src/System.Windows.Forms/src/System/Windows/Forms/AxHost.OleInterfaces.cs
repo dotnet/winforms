@@ -68,8 +68,6 @@ public abstract partial class AxHost
         // IGetVBAObject methods:
         HRESULT IGetVBAObject.Interface.GetObject(Guid* riid, void** ppvObj, uint dwReserved)
         {
-            s_axHTraceSwitch.TraceVerbose("in GetObject");
-
             if (ppvObj is null || riid is null)
             {
                 return HRESULT.E_INVALIDARG;
@@ -92,7 +90,6 @@ public abstract partial class AxHost
             ENUM_CONTROLS_WHICH_FLAGS dwWhich,
             IEnumUnknown** ppenum)
         {
-            s_axHTraceSwitch.TraceVerbose("in EnumControls");
             *ppenum = ComHelpers.GetComPointer<IEnumUnknown>(
                 _host.GetParentContainer().EnumControls(_host, dwOleContF, dwWhich));
             return HRESULT.S_OK;
@@ -140,21 +137,12 @@ public abstract partial class AxHost
         }
 
         // IOleControlSite methods:
-        HRESULT IOleControlSite.Interface.OnControlInfoChanged()
-        {
-            s_axHTraceSwitch.TraceVerbose("in OnControlInfoChanged");
-            return HRESULT.S_OK;
-        }
+        HRESULT IOleControlSite.Interface.OnControlInfoChanged() => HRESULT.S_OK;
 
-        HRESULT IOleControlSite.Interface.LockInPlaceActive(BOOL fLock)
-        {
-            s_axHTraceSwitch.TraceVerbose("in LockInPlaceActive");
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleControlSite.Interface.LockInPlaceActive(BOOL fLock) => HRESULT.E_NOTIMPL;
 
         HRESULT IOleControlSite.Interface.GetExtendedControl(IDispatch** ppDisp)
         {
-            s_axHTraceSwitch.TraceVerbose($"in GetExtendedControl {_host}");
             if (ppDisp is null)
             {
                 return HRESULT.E_POINTER;
@@ -178,7 +166,7 @@ public abstract partial class AxHost
             }
 
             HRESULT hr = SetupLogPixels(force: false);
-            if (hr < 0)
+            if (hr.Failed)
             {
                 return hr;
             }
@@ -198,7 +186,6 @@ public abstract partial class AxHost
                 }
                 else
                 {
-                    s_axHTraceSwitch.TraceVerbose($"\t dwFlags not supported: {dwFlags}");
                     return HRESULT.E_INVALIDARG;
                 }
             }
@@ -216,13 +203,11 @@ public abstract partial class AxHost
                 }
                 else
                 {
-                    s_axHTraceSwitch.TraceVerbose($"\t dwFlags not supported: {dwFlags}");
                     return HRESULT.E_INVALIDARG;
                 }
             }
             else
             {
-                s_axHTraceSwitch.TraceVerbose($"\t dwFlags not supported: {dwFlags}");
                 return HRESULT.E_INVALIDARG;
             }
 
@@ -265,11 +250,7 @@ public abstract partial class AxHost
         }
 
         // IOleClientSite methods:
-        HRESULT IOleClientSite.Interface.SaveObject()
-        {
-            s_axHTraceSwitch.TraceVerbose("in SaveObject");
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleClientSite.Interface.SaveObject() => HRESULT.E_NOTIMPL;
 
         unsafe HRESULT IOleClientSite.Interface.GetMoniker(uint dwAssign, uint dwWhichMoniker, IMoniker** ppmk)
         {
@@ -278,7 +259,6 @@ public abstract partial class AxHost
                 return HRESULT.E_POINTER;
             }
 
-            Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMoniker");
             *ppmk = null;
             return HRESULT.E_NOTIMPL;
         }
@@ -290,14 +270,12 @@ public abstract partial class AxHost
                 return HRESULT.E_POINTER;
             }
 
-            s_axHTraceSwitch.TraceVerbose("in getContainer");
             *ppContainer = ComHelpers.GetComPointer<IOleContainer>(_host.GetParentContainer());
             return HRESULT.S_OK;
         }
 
         unsafe HRESULT IOleClientSite.Interface.ShowObject()
         {
-            s_axHTraceSwitch.TraceVerbose("in ShowObject");
             if (_host.GetAxState(s_fOwnWindow))
             {
                 Debug.Fail("we can't be in showobject if we own our window...");
@@ -337,24 +315,15 @@ public abstract partial class AxHost
             }
             else if (inPlaceObject.SupportsInterface<IOleInPlaceObjectWindowless>())
             {
-                s_axHTraceSwitch.TraceVerbose("Windowless control.");
                 throw new InvalidOperationException(SR.AXWindowlessControl);
             }
 
             return HRESULT.S_OK;
         }
 
-        HRESULT IOleClientSite.Interface.OnShowWindow(BOOL fShow)
-        {
-            s_axHTraceSwitch.TraceVerbose("in OnShowWindow");
-            return HRESULT.S_OK;
-        }
+        HRESULT IOleClientSite.Interface.OnShowWindow(BOOL fShow) => HRESULT.S_OK;
 
-        HRESULT IOleClientSite.Interface.RequestNewObjectLayout()
-        {
-            s_axHTraceSwitch.TraceVerbose("in RequestNewObjectLayout");
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleClientSite.Interface.RequestNewObjectLayout() => HRESULT.E_NOTIMPL;
 
         // IOleInPlaceSite methods:
 
@@ -371,26 +340,16 @@ public abstract partial class AxHost
                 return HRESULT.E_POINTER;
             }
 
-            s_axHTraceSwitch.TraceVerbose("in GetWindow");
             *phwnd = _host.ParentInternal?.HWND ?? HWND.Null;
             return HRESULT.S_OK;
         }
 
-        HRESULT IOleInPlaceSite.Interface.ContextSensitiveHelp(BOOL fEnterMode)
-        {
-            s_axHTraceSwitch.TraceVerbose("in ContextSensitiveHelp");
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceSite.Interface.ContextSensitiveHelp(BOOL fEnterMode) => HRESULT.E_NOTIMPL;
 
-        HRESULT IOleInPlaceSite.Interface.CanInPlaceActivate()
-        {
-            s_axHTraceSwitch.TraceVerbose("in CanInPlaceActivate");
-            return HRESULT.S_OK;
-        }
+        HRESULT IOleInPlaceSite.Interface.CanInPlaceActivate() => HRESULT.S_OK;
 
         HRESULT IOleInPlaceSite.Interface.OnInPlaceActivate()
         {
-            s_axHTraceSwitch.TraceVerbose("in OnInPlaceActivate");
             _host.SetAxState(s_ownDisposing, false);
             _host.SetAxState(s_rejectSelection, false);
             _host.SetOcState(OC_INPLACE);
@@ -399,7 +358,6 @@ public abstract partial class AxHost
 
         HRESULT IOleInPlaceSite.Interface.OnUIActivate()
         {
-            s_axHTraceSwitch.TraceVerbose($"in OnUIActivate for {_host}");
             _host.SetOcState(OC_UIACTIVE);
             _host.GetParentContainer().OnUIActivate(_host);
             return HRESULT.S_OK;
@@ -449,7 +407,6 @@ public abstract partial class AxHost
 
         HRESULT IOleInPlaceSite.Interface.OnUIDeactivate(BOOL fUndoable)
         {
-            s_axHTraceSwitch.TraceVerbose($"in OnUIDeactivate for {_host}");
             _host.GetParentContainer().OnUIDeactivate(_host);
             if (_host.GetOcState() > OC_INPLACE)
             {
@@ -461,10 +418,9 @@ public abstract partial class AxHost
 
         HRESULT IOleInPlaceSite.Interface.OnInPlaceDeactivate()
         {
-            s_axHTraceSwitch.TraceVerbose("in OnInPlaceDeactivate");
             if (_host.GetOcState() == OC_UIACTIVE)
             {
-                ((IOleInPlaceSite.Interface)this).OnUIDeactivate(fUndoable: false);
+                ((IOleInPlaceSite.Interface)this).OnUIDeactivate(fUndoable: false).AssertSuccess();
             }
 
             _host.GetParentContainer().OnInPlaceDeactivate(_host);
@@ -473,15 +429,10 @@ public abstract partial class AxHost
             return HRESULT.S_OK;
         }
 
-        HRESULT IOleInPlaceSite.Interface.DiscardUndoState()
-        {
-            s_axHTraceSwitch.TraceVerbose("in DiscardUndoState");
-            return HRESULT.S_OK;
-        }
+        HRESULT IOleInPlaceSite.Interface.DiscardUndoState() => HRESULT.S_OK;
 
         HRESULT IOleInPlaceSite.Interface.DeactivateAndUndo()
         {
-            s_axHTraceSwitch.TraceVerbose($"in DeactivateAndUndo for {_host}");
             using var inPlaceObject = _host.GetComScope<IOleInPlaceObject>();
             return inPlaceObject.Value->UIDeactivate();
         }
@@ -504,15 +455,10 @@ public abstract partial class AxHost
 
             if (useRect)
             {
-                s_axHTraceSwitch.TraceVerbose($"in OnPosRectChange{lprcPosRect->ToString()}");
                 RECT clipRect = WebBrowserHelper.GetClipRect();
                 using var inPlaceObject = _host.GetComScope<IOleInPlaceObject>();
                 inPlaceObject.Value->SetObjectRects(lprcPosRect, &clipRect).ThrowOnFailure();
                 _host.MakeDirty();
-            }
-            else
-            {
-                s_axHTraceSwitch.TraceVerbose("Control directly called OnPosRectChange... ignoring the new size");
             }
 
             return HRESULT.S_OK;
@@ -533,8 +479,6 @@ public abstract partial class AxHost
             try
             {
                 AxPropertyDescriptor? prop = null;
-
-                s_axHTraceSwitch.TraceVerbose("in OnChanged");
 
                 if (dispid != PInvoke.DISPID_UNKNOWN)
                 {
@@ -590,10 +534,6 @@ public abstract partial class AxHost
             return HRESULT.S_OK;
         }
 
-        HRESULT IPropertyNotifySink.Interface.OnRequestEdit(int dispid)
-        {
-            s_axHTraceSwitch.TraceVerbose($"in OnRequestEdit for {_host}");
-            return HRESULT.S_OK;
-        }
+        HRESULT IPropertyNotifySink.Interface.OnRequestEdit(int dispid) => HRESULT.S_OK;
     }
 }
