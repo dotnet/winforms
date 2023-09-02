@@ -13,7 +13,7 @@ namespace System.Windows.Forms;
 public class MessageBox
 {
     [ThreadStatic]
-    private static HelpInfo[]? t_helpInfoTable;
+    private static HelpInfo[]? s_helpInfoTable;
 
     // This is meant to be a static class, but predates that feature.
     private MessageBox()
@@ -27,10 +27,10 @@ public class MessageBox
             // Unfortunately, there's no easy way to obtain handle of a message box.
             // We'll have to rely on the fact that modal message loops have to pop off in an orderly way.
 
-            if (t_helpInfoTable is not null && t_helpInfoTable.Length > 0)
+            if (s_helpInfoTable is not null && s_helpInfoTable.Length > 0)
             {
                 // The top of the stack is actually at the end of the array.
-                return t_helpInfoTable[^1];
+                return s_helpInfoTable[^1];
             }
 
             return null;
@@ -77,22 +77,22 @@ public class MessageBox
         // usually there's only going to be one message box shown at a time.  But if
         // someone shows two message boxes (say by launching them via a WM_TIMER message)
         // we've got to gracefully handle the current help info.
-        if (t_helpInfoTable is null)
+        if (s_helpInfoTable is null)
         {
             Debug.Fail("Why are we being called when there's nothing to pop?");
         }
         else
         {
-            if (t_helpInfoTable.Length == 1)
+            if (s_helpInfoTable.Length == 1)
             {
-                t_helpInfoTable = null;
+                s_helpInfoTable = null;
             }
             else
             {
-                int newCount = t_helpInfoTable.Length - 1;
+                int newCount = s_helpInfoTable.Length - 1;
                 HelpInfo[] newTable = new HelpInfo[newCount];
-                Array.Copy(t_helpInfoTable, newTable, newCount);
-                t_helpInfoTable = newTable;
+                Array.Copy(s_helpInfoTable, newTable, newCount);
+                s_helpInfoTable = newTable;
             }
         }
     }
@@ -107,20 +107,20 @@ public class MessageBox
         int lastCount = 0;
         HelpInfo[] newTable;
 
-        if (t_helpInfoTable is null)
+        if (s_helpInfoTable is null)
         {
             newTable = new HelpInfo[lastCount + 1];
         }
         else
         {
             // if we already have a table - allocate a new slot
-            lastCount = t_helpInfoTable.Length;
+            lastCount = s_helpInfoTable.Length;
             newTable = new HelpInfo[lastCount + 1];
-            Array.Copy(t_helpInfoTable, newTable, lastCount);
+            Array.Copy(s_helpInfoTable, newTable, lastCount);
         }
 
         newTable[lastCount] = hpi;
-        t_helpInfoTable = newTable;
+        s_helpInfoTable = newTable;
     }
 
     /// <summary>
@@ -414,28 +414,57 @@ public class MessageBox
     }
 
     /// <summary>
-    /// Displays a message box with specified text, caption, buttons, and icon asynchronously.
+    ///  Displays a message box with specified text, caption, buttons, and icon asynchronously.
     /// </summary>
-    /// <param name="text">The text to display in the message box.</param>
-    /// <param name="caption">The text to display in the title bar of the message box.</param>
-    /// <param name="buttons">One of the MessageBoxButtons values that specifies which buttons to display in the message box.</param>
-    /// <param name="icon">One of the MessageBoxIcon values that specifies which icon to display in the message box.</param>
-    /// <returns>A Task that represents the operation, returning a DialogResult indicating the result of the message box.</returns>
     public static Task<DialogResult> ShowAsync(
-        string text,
-        string caption = "",
+        string? text,
+        string? caption = "",
         MessageBoxButtons buttons = MessageBoxButtons.OK,
-        MessageBoxIcon icon = MessageBoxIcon.None)
+        MessageBoxIcon icon = MessageBoxIcon.None,
+        MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button1,
+        MessageBoxOptions options = MessageBoxOptions.DefaultDesktopOnly,
+        IWin32Window? owner = default,
+        string? helpFilePath = default,
+        HelpNavigator navigator = default,
+        object? param = default)
     {
         var tcs = new TaskCompletionSource<DialogResult>();
 
-        // Use BeginInvoke to show the MessageBox on the UI thread
         void method()
         {
             try
             {
-                var result = MessageBox.Show(text, caption, buttons, icon);
-                tcs.SetResult(result);
+                DialogResult dialogResult;
+
+                if (helpFilePath is not null)
+                {
+                    var hpi = new HelpInfo(helpFilePath, navigator, param);
+
+                    dialogResult = ShowCore(
+                        owner,
+                        text,
+                        caption,
+                        buttons,
+                        icon,
+                        defaultButton,
+                        options,
+                        hpi);
+
+                    tcs.SetResult(dialogResult);
+                }
+                else
+                {
+                    dialogResult = Show(
+                        owner,
+                        text,
+                        caption,
+                        buttons,
+                        icon,
+                        defaultButton,
+                        options);
+
+                    tcs.SetResult(dialogResult);
+                }
             }
             catch (Exception ex)
             {
