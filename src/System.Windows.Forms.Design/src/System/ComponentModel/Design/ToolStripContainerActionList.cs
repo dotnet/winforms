@@ -36,7 +36,7 @@ internal class ToolStripContainerActionList : DesignerActionList
     }
 
     /// <summary>
-    /// Helper function to change the property on the component
+    ///  Helper function to change the property on the component
     /// </summary>
     private void ChangeProperty(Component component, string propertyName, object value)
     {
