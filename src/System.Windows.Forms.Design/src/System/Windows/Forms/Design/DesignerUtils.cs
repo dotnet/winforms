@@ -616,7 +616,7 @@ internal static class DesignerUtils
     ///  Return value should be passed into the Container.Add() method.
     ///  If null is returned, this just means "let container generate a default name based on component type".
     /// </summary>
-    public static string? GetUniqueSiteName(IDesignerHost host, string name)
+    public static string? GetUniqueSiteName(IDesignerHost host, string? name)
     {
         // Item has no explicit name, so let host generate a type-based name instead
         if (string.IsNullOrEmpty(name))

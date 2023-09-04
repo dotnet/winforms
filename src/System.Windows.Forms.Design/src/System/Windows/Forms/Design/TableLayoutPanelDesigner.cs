@@ -576,9 +576,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             //Need to do this after the transaction has been created
             if (localCopy)
             {
-                ArrayList temp = new ArrayList();
-                temp.Add(control);
-                temp = DesignerUtils.CopyDragObjects(temp, Component.Site) as ArrayList;
+                List<IComponent> temp = DesignerUtils.CopyDragObjects(new[] { control }, Component.Site);
                 control = temp[0] as Control;
             }
 
@@ -1924,7 +1922,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                         PropChanging(childProp);
                         foreach (object o in deleteList)
                         {
-                            ArrayList al = new ArrayList();
+                            List<IComponent> al = new();
                             DesignerUtils.GetAssociatedComponents((IComponent)o, host, al);
                             foreach (IComponent comp in al)
                             {
