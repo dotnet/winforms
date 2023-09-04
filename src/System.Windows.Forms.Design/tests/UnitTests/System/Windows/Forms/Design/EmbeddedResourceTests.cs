@@ -61,8 +61,26 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.UserControlToolboxItem
             """;
 
+    private static string s_expectedBitmapNames = """
+            System.Windows.Forms.Design.Behavior.BottomClose
+            System.Windows.Forms.Design.Behavior.BottomOpen
+            System.Windows.Forms.Design.Behavior.LeftClose
+            System.Windows.Forms.Design.Behavior.LeftOpen
+            System.Windows.Forms.Design.Behavior.RightClose
+            System.Windows.Forms.Design.Behavior.RightOpen
+            System.Windows.Forms.Design.Behavior.ToolStripContainer_BottomToolStripPanel
+            System.Windows.Forms.Design.Behavior.ToolStripContainer_LeftToolStripPanel
+            System.Windows.Forms.Design.Behavior.ToolStripContainer_RightToolStripPanel
+            System.Windows.Forms.Design.Behavior.ToolStripContainer_TopToolStripPanel
+            System.Windows.Forms.Design.Behavior.TopClose
+            System.Windows.Forms.Design.Behavior.TopOpen
+            """;
+
     public static TheoryData ExpectedIconNames()
         => s_expectedIconNames.Split(Environment.NewLine).ToTheoryData();
+
+    public static TheoryData ExpectedBitmapNames()
+        => s_expectedBitmapNames.Split(Environment.NewLine).ToTheoryData();
 
     [Theory]
     [MemberData(nameof(ExpectedIconNames))]
@@ -73,6 +91,17 @@ public class EmbeddedResourceTests
 
         using Icon icon = new(stream);
         Assert.NotNull(icon);
+    }
+
+    [Theory]
+    [MemberData(nameof(ExpectedBitmapNames))]
+    public void EmbeddedResource_ResourcesExist_Bitmap(string resourceName)
+    {
+        using Stream stream = assembly.GetManifestResourceStream(resourceName);
+        Assert.NotNull(stream);
+
+        using Bitmap bitmap = new(stream);
+        Assert.NotNull(bitmap);
     }
 
     private const string expectedResourceNames = """
@@ -94,7 +123,8 @@ public class EmbeddedResourceTests
         string[] actual = assembly.GetManifestResourceNames();
         Array.Sort(actual, StringComparer.Ordinal);
 
-        string[] expected = $"{s_expectedIconNames}{Environment.NewLine}{expectedResourceNames}".Split(Environment.NewLine);
+        string resourceNames = s_expectedIconNames + "\r\n" + s_expectedBitmapNames;
+        string[] expected = $"{resourceNames}{Environment.NewLine}{expectedResourceNames}".Split(Environment.NewLine);
         Array.Sort(expected, StringComparer.Ordinal);
 
         AssertExtensions.Equal(expected, actual);
