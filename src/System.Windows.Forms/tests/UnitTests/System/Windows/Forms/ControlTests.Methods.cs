@@ -4382,6 +4382,41 @@ public partial class ControlTests
         Assert.True(control.IsHandleCreated);
     }
 
+    [WinFormsFact]
+    public void Control_IsParentFontSet_ParentFontSet_ReturnsExpected()
+    {
+        using var font = new Font("Segoe UI", 9);
+
+        using var parent = new Control
+        {
+            Font = font
+        };
+
+        using var control = new SubControl
+        {
+            Parent = parent
+        };
+
+        Assert.True(control.IsParentFontSet());
+        Assert.NotSame(Control.DefaultFont, control.Font);
+    }
+
+     [WinFormsFact]
+    public void Control_IsParentFontSet_ParentFontNotSet_ReturnsExpected()
+    {
+        using var font = new Font("Segoe UI", 9);
+
+        using var parent = new Control();
+        using var control = new SubControl
+        {
+            Parent = parent,
+            Font = font
+        };
+
+        Assert.False(control.IsParentFontSet());
+        Assert.Same(font, control.Font);
+    }
+
     public static IEnumerable<object[]> IsInputKey_TestData()
     {
         yield return new object[] { Keys.Tab, false };
