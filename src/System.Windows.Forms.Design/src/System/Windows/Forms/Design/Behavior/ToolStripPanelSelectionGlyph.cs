@@ -16,8 +16,6 @@ internal sealed class ToolStripPanelSelectionGlyph : ControlBodyGlyph
     private Control? _baseParent;
     private bool _isExpanded;
 
-    // imageWidth is the larger dimension
-    // TODO - scale these for HDPI - https://github.com/microsoft/winforms-designer/issues/1166
     private const int ImageWidthOriginal = 50;
     private const int ImageHeightOriginal = 6;
 

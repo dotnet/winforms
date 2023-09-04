@@ -26,14 +26,18 @@ internal class ToolStripContainerActionList : DesignerActionList
         _designerHost = _serviceProvider?.GetService<IDesignerHost>();
     }
 
-    // Helper function to get the property on the component.
+    /// <summary>
+    ///  Helper function to get the property on the component.
+    /// </summary>
     private static object? GetProperty(Component component, string propertyName)
     {
         PropertyDescriptor? getProperty = TypeDescriptor.GetProperties(component)?[propertyName];
         return getProperty?.GetValue(component);
     }
 
-    // Helper function to change the property on the component
+    /// <summary>
+    /// Helper function to change the property on the component
+    /// </summary>
     private void ChangeProperty(Component component, string propertyName, object value)
     {
         if (_designerHost is null)
