@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="0_reparent_controls_transaction">
         <source>{0} Reparent Controls Transaction.</source>
-        <target state="new">{0} Reparent Controls Transaction.</target>
+        <target state="translated">{0} Transacción de controles cambiar primarios.</target>
         <note />
       </trans-unit>
       <trans-unit id="AXNotRegistered">
@@ -917,7 +917,7 @@
       </trans-unit>
       <trans-unit id="DesignerShortcutDockInForm">
         <source>Dock Fill in Form</source>
-        <target state="new">Dock Fill in Form</target>
+        <target state="translated">Acoplar relleno en formulario</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
@@ -927,7 +927,7 @@
       </trans-unit>
       <trans-unit id="DesignerShortcutDockInUserControl">
         <source>Dock Fill in UserControl</source>
-        <target state="new">Dock Fill in UserControl</target>
+        <target state="translated">Acoplar relleno en UserControl</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutHorizontalOrientation">
@@ -937,7 +937,7 @@
       </trans-unit>
       <trans-unit id="DesignerShortcutReparentControls">
         <source>Re-parent Controls</source>
-        <target state="new">Re-parent Controls</target>
+        <target state="translated">Cambiar primario de los controles</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
@@ -1989,52 +1989,52 @@ Presione Ctrl+Entrar para aceptar el texto.</target>
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_Bottom">
         <source>Bottom</source>
-        <target state="new">Bottom</target>
+        <target state="translated">Inferior</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_BottomDesc">
         <source>Toggles the participation of BottomToolStripPanel in runtime dragging of ToolStrip.</source>
-        <target state="new">Toggles the participation of BottomToolStripPanel in runtime dragging of ToolStrip.</target>
+        <target state="translated">Alterna la participación de BottomToolStripPanel en la acción de arrastrar ToolStrip en tiempo de ejecución.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_Left">
         <source>Left</source>
-        <target state="new">Left</target>
+        <target state="translated">Izquierdo</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_LeftDesc">
         <source>Toggles the participation of LeftToolStripPanel in runtime dragging of ToolStrip.</source>
-        <target state="new">Toggles the participation of LeftToolStripPanel in runtime dragging of ToolStrip.</target>
+        <target state="translated">Alterna la participación de LeftToolStripPanel en la acción de arrastrar ToolStrip en tiempo de ejecución.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_Right">
         <source>Right</source>
-        <target state="new">Right</target>
+        <target state="translated">Derecho</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_RightDesc">
         <source>Toggles the participation of RightToolStripPanel  in runtime dragging of ToolStrip.</source>
-        <target state="new">Toggles the participation of RightToolStripPanel  in runtime dragging of ToolStrip.</target>
+        <target state="translated">Alterna la participación de RightToolStripPanel en la acción de arrastrar ToolStrip en tiempo de ejecución.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_Show">
         <source>Show</source>
-        <target state="new">Show</target>
+        <target state="translated">Mostrar</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_Top">
         <source>Top</source>
-        <target state="new">Top</target>
+        <target state="translated">Superior</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_TopDesc">
         <source>Toggles the participation of TopToolStripPanel in runtime dragging of ToolStrip.</source>
-        <target state="new">Toggles the participation of TopToolStripPanel in runtime dragging of ToolStrip.</target>
+        <target state="translated">Alterna la participación de TopToolStripPanel en la acción de arrastrar ToolStrip en tiempo de ejecución.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripContainerActionList_Visible">
         <source>Panel Visibility</source>
-        <target state="new">Panel Visibility</target>
+        <target state="translated">Visibilidad del panel</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripCreatingNewItemTransaction">
@@ -2144,7 +2144,7 @@ Presione Ctrl+Entrar para aceptar el texto.</target>
       </trans-unit>
       <trans-unit id="ToolStripPanelGlyphUnsupportedDock">
         <source>Unsupported Dock</source>
-        <target state="new">Unsupported Dock</target>
+        <target state="translated">Acoplado no compatible</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSelectMenuItem">
