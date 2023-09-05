@@ -205,6 +205,10 @@ public partial class MainForm : Form
         {
             MainFormControlsTabOrder.ListBoxTestButton,
             new InitInfo("ListBoxes", (obj, e) => new ListBoxes().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.PassWordButton,
+            new InitInfo("PassWord", (obj, e) => new PassWord().Show(this))
         }
     };
 
