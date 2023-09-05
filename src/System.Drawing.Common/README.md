@@ -8,22 +8,6 @@ To get started with `System.Drawing.Common`, install it using the NuGet Package 
 
 **NOTE:** If you are developing a **WinForms** application, you **do not** need to install the `System.Drawing.Common` package separately (to this end, you use the `Sdk` attribute for the `Project` element like `<Project Sdk="Microsoft.NET.Sdk">` in the .csproj or the .vbproj file and then specify `<UseWindowsForms>true</UseWindowsForms>`). This package is then automatically included as part of the .NET SDK for WinForms Apps, which means you can start using the `System.Drawing` namespace right away in your WinForms projects.
 
-### NuGet Package Manager
-```
-Install-Package System.Drawing.Common -Version [your_version_here]
-```
-
-### .NET CLI
-```
-dotnet add package System.Drawing.Common --version [your_version_here]
-```
-
-### Prerequisites
-
-- .NET Core 2.0+ (min .NET Core 3.1 for WinForms/WPF Apps)
-- .NET 5+
-- .NET Standard 2.0 or higher
-
 ## Usage
 
 The following examples demonstrate some basic tasks you can accomplish with `System.Drawing.Common`.
