@@ -29,7 +29,7 @@ public sealed partial class TableLayoutSettings
         internal void ApplySettings(TableLayoutSettings settings)
         {
             // apply row,column,rowspan,colspan
-            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(settings.Owner);
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(settings.Owner!);
             if (containerInfo.Container is Control appliedControl && _controlsInfo is not null)
             {
                 // we store the control names, look up the controls

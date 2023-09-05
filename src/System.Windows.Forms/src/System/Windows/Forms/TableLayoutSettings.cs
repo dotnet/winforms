@@ -75,7 +75,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
             SourceGenerated.EnumValidator.Validate(value);
             _borderStyle = value;
             //set the CellBorderWidth according to the current CellBorderStyle.
-            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);
             containerInfo.CellBorderWidth = borderStyleToOffset[(int)value];
             LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.CellBorderStyle);
             Debug.Assert(CellBorderStyle == value, "CellBorderStyle should be the same as we set");
@@ -85,7 +85,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     [DefaultValue(0)]
     internal int CellBorderWidth
     {
-        get { return TableLayout.GetContainerInfo(Owner).CellBorderWidth; }
+        get { return TableLayout.GetContainerInfo(Owner!).CellBorderWidth; }
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     {
         get
         {
-            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);
             return containerInfo.MaxColumns;
         }
         set
@@ -110,7 +110,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnCount), value, 0));
             }
 
-            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);
             containerInfo.MaxColumns = value;
             LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Columns);
             Debug.Assert(ColumnCount == value, "the max columns should equal to the value we set it to");
@@ -129,7 +129,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     {
         get
         {
-            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);
             return containerInfo.MaxRows;
         }
         set
@@ -139,7 +139,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
                 throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
             }
 
-            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);
             containerInfo.MaxRows = value;
             LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Rows);
             Debug.Assert(RowCount == value, "the max rows should equal to the value we set it to");
@@ -159,7 +159,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
             }
             else
             {
-                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);
                 return containerInfo.RowStyles;
             }
         }
@@ -178,7 +178,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
             }
             else
             {
-                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+                TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);
                 return containerInfo.ColumnStyles;
             }
         }
@@ -196,7 +196,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     {
         get
         {
-            return TableLayout.GetContainerInfo(Owner).GrowStyle;
+            return TableLayout.GetContainerInfo(Owner!).GrowStyle;
         }
 
         set
@@ -204,7 +204,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
             //valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
 
-            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
+            TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner!);
             if (containerInfo.GrowStyle != value)
             {
                 containerInfo.GrowStyle = value;
@@ -485,7 +485,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     /// </summary>
     internal IArrangedElement? GetControlFromPosition(int column, int row)
     {
-        return TableLayout.GetControlFromPosition(Owner, column, row);
+        return TableLayout.GetControlFromPosition(Owner!, column, row);
     }
 
     internal TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement? element)
