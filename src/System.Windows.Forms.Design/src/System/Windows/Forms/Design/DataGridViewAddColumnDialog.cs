@@ -918,8 +918,8 @@ internal class DataGridViewAddColumnDialog : Form
 
     private class ListBoxItem
     {
-        private Type _propertyType;
-        private string _propertyName;
+        private readonly Type _propertyType;
+        private readonly string _propertyName;
 
         public ListBoxItem(Type propertyType, string propertyName)
         {

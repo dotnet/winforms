@@ -139,7 +139,7 @@ internal static partial class DpiHelper
         }
     }
 
-    internal static Bitmap ScaleBitmapToSize(Bitmap logicalImage, Size deviceImageSize, bool offset = true)
+    private static Bitmap ScaleBitmapToSize(Bitmap logicalImage, Size deviceImageSize)
     {
         Bitmap deviceImage;
         deviceImage = new Bitmap(deviceImageSize.Width, deviceImageSize.Height, logicalImage.PixelFormat);
@@ -156,10 +156,7 @@ internal static partial class DpiHelper
             // and will appear black even if we cleared the background with transparent color.
             // The apparition of these artifacts depends on the interpolation mode, on the dpi scaling factor, etc.
             // E.g. at 150% DPI, Bicubic produces them and NearestNeighbor is fine, but at 200% DPI NearestNeighbor also shows them.
-            if (offset)
-            {
-                sourceRect.Offset(-0.5f, -0.5f);
-            }
+            sourceRect.Offset(-0.5f, -0.5f);
 
             graphics.DrawImage(logicalImage, destRect, sourceRect, GraphicsUnit.Pixel);
         }
@@ -294,14 +291,14 @@ internal static partial class DpiHelper
     /// <param name="logicalImage">The image to scale from logical units to device units</param>
     /// <param name="targetImageSize">The size to scale image to</param>
     [return: NotNullIfNotNull("logicalImage")]
-    public static Bitmap? CreateResizedBitmap(Bitmap? logicalImage, Size targetImageSize, bool doNotOffset = false)
+    public static Bitmap? CreateResizedBitmap(Bitmap? logicalImage, Size targetImageSize)
     {
         if (logicalImage is null)
         {
             return null;
         }
 
-        return ScaleBitmapToSize(logicalImage, targetImageSize, doNotOffset);
+        return ScaleBitmapToSize(logicalImage, targetImageSize);
     }
 
     /// <summary>
@@ -492,8 +489,8 @@ internal static partial class DpiHelper
     }
 
     /// <summary>
-    /// Create a new button bitmap scaled for the device units.
-    /// Note: original image might be disposed.
+    ///  Create a new button bitmap scaled for the device units.
+    ///  Note: original image might be disposed.
     /// </summary>
     public static Image? ScaleButtonImageLogicalToDevice(Image? buttonImage)
     {
