@@ -1,6 +1,7 @@
 # System.Drawing.Common
 
-The `System.Drawing.Common` package allows .NET Core and .NET 5+ applications to access GDI+ graphics functionality. This package is especially useful for porting .NET Framework applications that rely on the `System.Drawing` namespace.
+The `System.Drawing.Common` package allows .NET Core and .NET 6+ applications to access GDI+ graphics functionality. 
+This package is especially useful for porting .NET Framework applications that rely on the `System.Drawing` namespace.
 
 ## Getting Started
 
@@ -57,13 +58,6 @@ For more in-depth tutorials and API references, you can check the following reso
 - [NuGet Gallery | System.Drawing.Common](https://nuget.org/packages/System.Drawing.Common/)
 - [System.Drawing.Common Namespace | Microsoft Docs](https://docs.microsoft.com/dotnet/api/system.drawing)
 - [Drawing with System.Drawing.Common | Microsoft Learn](https://learn.microsoft.com/dotnet/core/drawing/)
-
-## Contribution Bar
-- [x] We consider new features, new APIs and performance changes
-- [x] We consider PRs that target this library for new source code analyzers
-- [ ] We don't accept refactoring changes due to new language features
-
-See the [Help Wanted](https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3Aarea-System.Drawing+label%3A%22help+wanted%22) issues.
 
 ## Feedback
 
