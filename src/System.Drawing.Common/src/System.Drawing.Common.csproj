@@ -26,11 +26,11 @@ System.Drawing.Icon
 
 Since .NET 7, non-Windows platforms are not supported, even with the runtime configuration switch. See https://aka.ms/systemdrawingnonwindows for more information.
     </PackageDescription>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>package.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\README.md" Pack="true" PackagePath="" />
+    <None Include="package.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <!-- DesignTimeBuild requires all the TargetFramework Derived Properties to not be present in the first property group. -->
