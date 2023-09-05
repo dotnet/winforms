@@ -44,7 +44,6 @@ public abstract partial class AxHost
                     Guid g = GetPropertyPage(_dispid.Value);
                     if (!Guid.Empty.Equals(g))
                     {
-                        s_axPropTraceSwitch.TraceVerbose($"Making property: {Name} browsable because we found an property page.");
                         AddAttribute(new BrowsableAttribute(true));
                     }
                 }
@@ -170,12 +169,10 @@ public abstract partial class AxHost
                 _owner.NoComponentChangeEvents++;
                 return _baseDescriptor.GetValue(component);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 if (!GetFlag(FlagCheckGetter))
                 {
-                    s_axPropTraceSwitch.TraceVerbose(
-                        $"Get failed for : {Name} with exception: {e.Message}. Making property non-browsable.");
                     SetFlag(FlagCheckGetter, true);
                     AddAttribute(new BrowsableAttribute(false));
                     _owner.RefreshAllProperties = true;
@@ -361,14 +358,12 @@ public abstract partial class AxHost
                     // Show any non-browsable property that has an editor through a property page.
                     if (!IsBrowsable)
                     {
-                        s_axPropTraceSwitch.TraceVerbose($"Making property: {Name} browsable because we found an editor.");
                         AddAttribute(new BrowsableAttribute(true));
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                s_axPropTraceSwitch.TraceVerbose($"Could not get the type editor for property: {Name} Exception: {ex}");
             }
             finally
             {

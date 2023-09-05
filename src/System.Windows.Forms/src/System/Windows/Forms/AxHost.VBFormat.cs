@@ -21,7 +21,6 @@ public abstract partial class AxHost
             ushort sFirstWeekOfYear,
             ushort* rcb)
         {
-            s_axHTraceSwitch.TraceVerbose("in Format");
             if (rcb is null)
             {
                 return HRESULT.E_INVALIDARG;
