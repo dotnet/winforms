@@ -41,12 +41,13 @@ public class SerializableTypesTests
         // ensure we can deserialise NET Fx serialised data and continue to match the payload
         ValidateResult(ClassicAxHostState);
 
-        void ValidateResult(string blob)
+        unsafe void ValidateResult(string blob)
         {
             AxHost.State result = BinarySerialization.EnsureDeserialize<AxHost.State>(blob);
-
-            Assert.Null(result.GetPropBag());
-            Assert.Null(state.GetPropBag());
+            using var resultPropBag = result.GetPropBag();
+            Assert.True(resultPropBag.IsNull);
+            using var statePropBag = state.GetPropBag();
+            Assert.True(statePropBag.IsNull);
 
             Assert.Equal(1, result.Type);
             Assert.Equal(1, state.Type);
@@ -57,9 +58,10 @@ public class SerializableTypesTests
             Assert.Equal(licenseKey, result.LicenseKey);
             Assert.Equal(licenseKey, state.LicenseKey);
 
-            var streamOut = result.GetStream() as Ole32.GPStream;
-            Assert.NotNull(streamOut);
-            Stream bufferStream = streamOut.GetDataStream();
+            using var streamOut = result.GetStream();
+            Assert.False(streamOut.IsNull);
+            Assert.True(ComHelpers.TryGetManagedInterface(streamOut.AsUnknown, takeOwnership: false, out Ole32.GPStream managedStream));
+            Stream bufferStream = managedStream.GetDataStream();
             byte[] buffer = new byte[3];
             bufferStream.Read(buffer, 0, buffer.Length);
             Assert.Equal(payload, Encoding.UTF8.GetString(buffer));

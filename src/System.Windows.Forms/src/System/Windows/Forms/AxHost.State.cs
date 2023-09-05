@@ -178,7 +178,8 @@ public abstract partial class AxHost
             _storage = new(storage, takeOwnership: true);
         }
 
-        internal IPropertyBag.Interface? GetPropBag() => _propertyBag;
+        internal ComScope<IPropertyBag> GetPropBag()
+            => _propertyBag is null ? default : ComHelpers.GetComScope<IPropertyBag>(_propertyBag);
 
         internal unsafe ComScope<IStorage> GetStorage()
         {
@@ -190,14 +191,14 @@ public abstract partial class AxHost
             return _storage is null ? default : _storage.GetInterface();
         }
 
-        internal IStream.Interface? GetStream()
+        internal ComScope<IStream> GetStream()
         {
             if (_memoryStream is null)
             {
                 Debug.Assert(_buffer is not null);
                 if (_buffer is null)
                 {
-                    return null;
+                    return default;
                 }
 
                 _memoryStream = new MemoryStream(_buffer);
@@ -207,7 +208,7 @@ public abstract partial class AxHost
                 _memoryStream.Seek(0, SeekOrigin.Begin);
             }
 
-            return new Ole32.GPStream(_memoryStream);
+            return ComHelpers.GetComScope<IStream>(new Ole32.GPStream(_memoryStream));
         }
 
         private void InitializeFromStream(Stream dataStream, bool initializeBufferOnly = false)

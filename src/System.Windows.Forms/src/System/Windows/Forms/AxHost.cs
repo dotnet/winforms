@@ -2784,30 +2784,24 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         SetOcState(OC_RUNNING);
     }
 
-    private void DepersistFromIPropertyBag(IPropertyBag.Interface propBag)
+    private void DepersistFromIPropertyBag(IPropertyBag* propBag)
     {
-        using var pPropBag = ComHelpers.TryGetComScope<IPropertyBag>(propBag, out HRESULT hr);
-        hr.AssertSuccess();
         using var persistPropBag = _iPersistPropBag.GetInterface();
-        persistPropBag.Value->Load(pPropBag, pErrorLog: null).ThrowOnFailure();
+        persistPropBag.Value->Load(propBag, pErrorLog: null).ThrowOnFailure();
     }
 
-    private void DepersistFromIStream(IStream.Interface istream)
+    private void DepersistFromIStream(IStream* istream)
     {
         _storageType = STG_STREAM;
-        using var pStream = ComHelpers.TryGetComScope<IStream>(istream, out HRESULT hr);
-        hr.AssertSuccess();
         using var persistStream = _iPersistStream.GetInterface();
-        persistStream.Value->Load(pStream).ThrowOnFailure();
+        persistStream.Value->Load(istream).ThrowOnFailure();
     }
 
-    private void DepersistFromIStreamInit(IStream.Interface istream)
+    private void DepersistFromIStreamInit(IStream* istream)
     {
         _storageType = STG_STREAMINIT;
-        using var pStream = ComHelpers.TryGetComScope<IStream>(istream, out HRESULT hr);
-        hr.AssertSuccess();
         using var persistStreamInit = _iPersistStreamInit.GetInterface();
-        persistStreamInit.Value->Load(pStream).ThrowOnFailure();
+        persistStreamInit.Value->Load(istream).ThrowOnFailure();
     }
 
     private void DepersistFromIStorage(IStorage* storage)
@@ -2875,7 +2869,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 try
                 {
                     _iPersistStream = new(ComHelpers.GetComPointer<IPersistStream>(_instance), takeOwnership: true);
-                    DepersistFromIStream(_ocxState.GetStream());
+                    using var stream = _ocxState.GetStream();
+                    DepersistFromIStream(stream);
                 }
                 catch (Exception)
                 {
@@ -2888,7 +2883,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                     try
                     {
                         _iPersistStreamInit = new(ComHelpers.GetComPointer<IPersistStreamInit>(persistStreamInit), takeOwnership: true);
-                        DepersistFromIStreamInit(_ocxState.GetStream());
+                        using var stream = _ocxState.GetStream();
+                        DepersistFromIStreamInit(stream);
                     }
                     catch (Exception)
                     {
@@ -2921,7 +2917,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 throw new InvalidOperationException(SR.UnableToInitComponent);
         }
 
-        if (_ocxState.GetPropBag() is { } propBag)
+        using var propBag = _ocxState.GetPropBag();
+        if (!propBag.IsNull)
         {
             try
             {
