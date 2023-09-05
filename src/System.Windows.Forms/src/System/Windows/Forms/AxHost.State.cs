@@ -239,7 +239,7 @@ public abstract partial class AxHost
             }
         }
 
-        internal unsafe State? RefreshStorage(IPersistStorage.Interface iPersistStorage)
+        internal unsafe State? RefreshStorage(IPersistStorage* iPersistStorage)
         {
             Debug.Assert(_storage is not null, "how can we not have a storage object?");
             Debug.Assert(_lockBytes is not null, "how can we have a storage w/o ILockBytes?");
@@ -249,9 +249,9 @@ public abstract partial class AxHost
             }
 
             using var storage = _storage.GetInterface();
-            iPersistStorage.Save(storage, fSameAsLoad: true).ThrowOnFailure();
+            iPersistStorage->Save(storage, fSameAsLoad: true).ThrowOnFailure();
             storage.Value->Commit(0);
-            iPersistStorage.HandsOffStorage().ThrowOnFailure();
+            iPersistStorage->HandsOffStorage().ThrowOnFailure();
             try
             {
                 _buffer = null;
@@ -283,7 +283,7 @@ public abstract partial class AxHost
             }
             finally
             {
-                iPersistStorage.SaveCompleted(storage).ThrowOnFailure();
+                iPersistStorage->SaveCompleted(storage).ThrowOnFailure();
             }
 
             return this;

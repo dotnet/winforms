@@ -137,10 +137,10 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private object? _instance;
     private AgileComPointer<IOleInPlaceActiveObject>? _iOleInPlaceActiveObjectExternal;
-    private IPersistPropertyBag.Interface? _iPersistPropBag;
-    private IPersistStream.Interface? _iPersistStream;
-    private IPersistStreamInit.Interface? _iPersistStreamInit;
-    private IPersistStorage.Interface? _iPersistStorage;
+    private AgileComPointer<IPersistPropertyBag>? _iPersistPropBag;
+    private AgileComPointer<IPersistStream>? _iPersistStream;
+    private AgileComPointer<IPersistStreamInit>? _iPersistStreamInit;
+    private AgileComPointer<IPersistStorage>? _iPersistStorage;
 
     private AboutBoxDelegate? _aboutBoxDelegate;
     private readonly EventHandler _selectionChangeHandler;
@@ -1909,7 +1909,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             {
                 propBag = new PropertyBagStream();
                 using var propertyBag = ComHelpers.GetComScope<IPropertyBag>(propBag);
-                _iPersistPropBag.Save(propertyBag, fClearDirty: true, fSaveAllProperties: true).AssertSuccess();
+                using var persistPropBag = _iPersistPropBag.GetInterface();
+                persistPropBag.Value->Save(propertyBag, fClearDirty: true, fSaveAllProperties: true).AssertSuccess();
             }
 
             MemoryStream? ms = null;
@@ -1922,11 +1923,13 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                     {
                         if (_storageType == STG_STREAM)
                         {
-                            _iPersistStream!.Save(stream, fClearDirty: true).AssertSuccess();
+                            using var persistStream = _iPersistStream!.GetInterface();
+                            persistStream.Value->Save(stream, fClearDirty: true).AssertSuccess();
                         }
                         else
                         {
-                            _iPersistStreamInit!.Save(stream, fClearDirty: true).AssertSuccess();
+                            using var persistStreamInit = _iPersistStreamInit!.GetInterface();
+                            persistStreamInit.Value->Save(stream, fClearDirty: true).AssertSuccess();
                         }
                     }
 
@@ -1935,7 +1938,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                     Debug.Assert(oldOcxState is not null, "we got to have an old state which holds out scribble storage...");
                     if (oldOcxState is not null)
                     {
-                        return oldOcxState.RefreshStorage(_iPersistStorage!);
+                        using var persistStorage = _iPersistStorage!.GetInterface();
+                        return oldOcxState.RefreshStorage(persistStorage);
                     }
 
                     return null;
@@ -2066,13 +2070,25 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         switch (_storageType)
         {
             case STG_STREAM:
-                hr = _iPersistStream!.IsDirty();
+                using (var persistStream = _iPersistStream!.GetInterface())
+                {
+                    hr = persistStream.Value->IsDirty();
+                }
+
                 break;
             case STG_STREAMINIT:
-                hr = _iPersistStreamInit!.IsDirty();
+                using (var persistStreamInit = _iPersistStreamInit!.GetInterface())
+                {
+                    hr = persistStreamInit.Value->IsDirty();
+                }
+
                 break;
             case STG_STORAGE:
-                hr = _iPersistStorage!.IsDirty();
+                using (var persistStorage = _iPersistStorage!.GetInterface())
+                {
+                    hr = persistStorage.Value->IsDirty();
+                }
+
                 break;
             default:
                 Debug.Fail("unknown storage type");
@@ -2772,7 +2788,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     {
         using var pPropBag = ComHelpers.TryGetComScope<IPropertyBag>(propBag, out HRESULT hr);
         hr.AssertSuccess();
-        _iPersistPropBag.Load(pPropBag, pErrorLog: null).ThrowOnFailure();
+        using var persistPropBag = _iPersistPropBag.GetInterface();
+        persistPropBag.Value->Load(pPropBag, pErrorLog: null).ThrowOnFailure();
     }
 
     private void DepersistFromIStream(IStream.Interface istream)
@@ -2780,7 +2797,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         _storageType = STG_STREAM;
         using var pStream = ComHelpers.TryGetComScope<IStream>(istream, out HRESULT hr);
         hr.AssertSuccess();
-        _iPersistStream.Load(pStream).ThrowOnFailure();
+        using var persistStream = _iPersistStream.GetInterface();
+        persistStream.Value->Load(pStream).ThrowOnFailure();
     }
 
     private void DepersistFromIStreamInit(IStream.Interface istream)
@@ -2788,7 +2806,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         _storageType = STG_STREAMINIT;
         using var pStream = ComHelpers.TryGetComScope<IStream>(istream, out HRESULT hr);
         hr.AssertSuccess();
-        _iPersistStreamInit.Load(pStream).ThrowOnFailure();
+        using var persistStreamInit = _iPersistStreamInit.GetInterface();
+        persistStreamInit.Value->Load(pStream).ThrowOnFailure();
     }
 
     private void DepersistFromIStorage(IStorage* storage)
@@ -2799,7 +2818,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         // Since we end up creating an empty storage, we are not able to re-create a valid one and this would fail.
         if (storage is not null)
         {
-            _iPersistStorage.Load(storage).ThrowOnFailure();
+            using var persistStorage = _iPersistStorage.GetInterface();
+            persistStorage.Value->Load(storage).ThrowOnFailure();
         }
     }
 
@@ -2812,17 +2832,17 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             // Must init new:
             if (_instance is IPersistStreamInit.Interface init)
             {
-                _iPersistStreamInit = init;
+                _iPersistStreamInit = new(ComHelpers.GetComPointer<IPersistStreamInit>(init), takeOwnership: true);
                 _storageType = STG_STREAMINIT;
-                _iPersistStreamInit.InitNew().AssertSuccess();
-
+                using var persistStreamInit = _iPersistStreamInit.GetInterface();
+                persistStreamInit.Value->InitNew().AssertSuccess();
                 return;
             }
 
             if (_instance is IPersistStream.Interface persistStream)
             {
                 _storageType = STG_STREAM;
-                _iPersistStream = persistStream;
+                _iPersistStream = new(ComHelpers.GetComPointer<IPersistStream>(persistStream), takeOwnership: true);
                 return;
             }
 
@@ -2830,17 +2850,18 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             {
                 _storageType = STG_STORAGE;
                 _ocxState = new State(this);
-                _iPersistStorage = persistStorage;
+                _iPersistStorage = new(ComHelpers.GetComPointer<IPersistStorage>(persistStorage), takeOwnership: true);
                 using var storage = _ocxState.GetStorage();
-                _iPersistStorage.InitNew(storage).AssertSuccess();
-
+                using var persistStoragePtr = _iPersistStorage.GetInterface();
+                persistStoragePtr.Value->InitNew(storage).AssertSuccess();
                 return;
             }
 
             if (_instance is IPersistPropertyBag.Interface persistPropertyBag)
             {
-                _iPersistPropBag = persistPropertyBag;
-                _iPersistPropBag.InitNew().AssertSuccess();
+                _iPersistPropBag = new(ComHelpers.GetComPointer<IPersistPropertyBag>(persistPropertyBag), takeOwnership: true);
+                using var persistPropBag = _iPersistPropBag.GetInterface();
+                persistPropBag.Value->InitNew().AssertSuccess();
             }
 
             Debug.Fail("no implemented persistence interfaces on object");
@@ -2853,7 +2874,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             case STG_STREAM:
                 try
                 {
-                    _iPersistStream = (IPersistStream.Interface)_instance;
+                    _iPersistStream = new(ComHelpers.GetComPointer<IPersistStream>(_instance), takeOwnership: true);
                     DepersistFromIStream(_ocxState.GetStream());
                 }
                 catch (Exception)
@@ -2866,7 +2887,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 {
                     try
                     {
-                        _iPersistStreamInit = persistStreamInit;
+                        _iPersistStreamInit = new(ComHelpers.GetComPointer<IPersistStreamInit>(persistStreamInit), takeOwnership: true);
                         DepersistFromIStreamInit(_ocxState.GetStream());
                     }
                     catch (Exception)
@@ -2886,7 +2907,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             case STG_STORAGE:
                 try
                 {
-                    _iPersistStorage = (IPersistStorage.Interface)_instance;
+                    _iPersistStorage = new(ComHelpers.GetComPointer<IPersistStorage>(_instance), takeOwnership: true);
                     using var storage = _ocxState.GetStorage();
                     DepersistFromIStorage(storage);
                 }
@@ -2900,12 +2921,12 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 throw new InvalidOperationException(SR.UnableToInitComponent);
         }
 
-        if (_ocxState.GetPropBag() is not null)
+        if (_ocxState.GetPropBag() is { } propBag)
         {
             try
             {
-                _iPersistPropBag = (IPersistPropertyBag.Interface)_instance;
-                DepersistFromIPropertyBag(_ocxState.GetPropBag());
+                _iPersistPropBag = new(ComHelpers.GetComPointer<IPersistPropertyBag>(_instance), takeOwnership: true);
+                DepersistFromIPropertyBag(propBag);
             }
             catch (Exception)
             {
@@ -3503,10 +3524,10 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             {
                 Marshal.ReleaseComObject(_instance);
                 _instance = null;
-                _iOleInPlaceActiveObjectExternal = null;
-                _iPersistStream = null;
-                _iPersistStreamInit = null;
-                _iPersistStorage = null;
+                DisposeHelper.NullAndDispose(ref _iOleInPlaceActiveObjectExternal);
+                DisposeHelper.NullAndDispose(ref _iPersistStream);
+                DisposeHelper.NullAndDispose(ref _iPersistStreamInit);
+                DisposeHelper.NullAndDispose(ref _iPersistStorage);
             }
 
             _axState[s_disposed] = true;
