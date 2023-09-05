@@ -41,10 +41,6 @@ public sealed partial class Application
     private static readonly object s_internalSyncObject = new();
     private static bool s_useWaitCursor;
 
-    private static bool s_useEverettThreadAffinity;
-    private static bool s_checkedThreadAffinity;
-    private const string EverettThreadAffinityValue = "EnableSystemEventsThreadAffinityCompatibility";
-
     /// <summary>
     ///  Events the user can hook into
     /// </summary>
@@ -142,43 +138,6 @@ public sealed partial class Application
 
     internal static string CommonAppDataRegistryKeyName
         => $"Software\\{CompanyName}\\{ProductName}\\{ProductVersion}";
-
-    internal static bool UseEverettThreadAffinity
-    {
-        get
-        {
-            if (!s_checkedThreadAffinity)
-            {
-                s_checkedThreadAffinity = true;
-                try
-                {
-                    // We need access to be able to read from the registry here.  We're not creating a
-                    // registry key, nor are we returning information from the registry to the user.
-                    RegistryKey? key = Registry.LocalMachine.OpenSubKey(CommonAppDataRegistryKeyName);
-                    if (key is not null)
-                    {
-                        object? value = key.GetValue(EverettThreadAffinityValue);
-                        key.Close();
-
-                        if (value is not null && (int)value != 0)
-                        {
-                            s_useEverettThreadAffinity = true;
-                        }
-                    }
-                }
-                catch (Security.SecurityException)
-                {
-                    // Can't read the key: use default value (false)
-                }
-                catch (InvalidCastException)
-                {
-                    // Key is of wrong type: use default value (false)
-                }
-            }
-
-            return s_useEverettThreadAffinity;
-        }
-    }
 
     /// <summary>
     ///  Gets the path for the application data that is shared among all users.

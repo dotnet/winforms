@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using static Interop;
 
@@ -41,7 +41,7 @@ public partial class Control
                 using ComScope<IOleContainer> container = new(null);
                 clientSite.Value->GetContainer(container);
 
-                if (Marshal.GetObjectForIUnknown((nint)container) is Mshtml.IHTMLDocument document)
+                if (ComHelpers.GetObjectForIUnknown((IUnknown*)container) is Mshtml.IHTMLDocument document)
                 {
                     _shimManager ??= new HtmlShimManager();
                     return new HtmlDocument(_shimManager, document);

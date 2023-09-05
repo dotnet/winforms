@@ -8,6 +8,7 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
+using Windows.Win32.System.Com;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -1695,7 +1696,7 @@ public abstract partial class TextBoxBase : Control
                 {
                     Marshal.QueryInterface(editOlePtr, in iiTextDocumentGuid, out iTextDocument);
 
-                    if (Marshal.GetObjectForIUnknown(iTextDocument) is Richedit.ITextDocument textDocument)
+                    if (ComHelpers.GetObjectForIUnknown((IUnknown*)iTextDocument) is Richedit.ITextDocument textDocument)
                     {
                         // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as
                         // much text as possible.
