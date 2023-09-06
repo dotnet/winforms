@@ -17,17 +17,8 @@ public abstract partial class AxHost
         {
             if (obj is AxHost host)
             {
-                try
-                {
-                    s_axHTraceSwitch.TraceVerbose("in AxComponentEditor.EditComponent");
-                    ((IOleControlSite.Interface)host._oleSite).ShowPropertyFrame();
-                    return true;
-                }
-                catch (Exception ex)
-                {
-                    Debug.Fail(ex.ToString());
-                    throw;
-                }
+                ((IOleControlSite.Interface)host._oleSite).ShowPropertyFrame().ThrowOnFailure();
+                return true;
             }
 
             return false;

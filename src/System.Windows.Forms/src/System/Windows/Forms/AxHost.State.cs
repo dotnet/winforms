@@ -103,7 +103,6 @@ public abstract partial class AxHost
                 {
                     try
                     {
-                        s_axHTraceSwitch.TraceVerbose("Loading up property bag from stream...");
                         byte[]? data = enumerator.Value as byte[];
                         if (data is not null)
                         {
@@ -339,9 +338,8 @@ public abstract partial class AxHost
                     _propertyBag.Save(propertyBagBinaryStream);
                     info.AddValue(PropertyBagSerializationName, propertyBagBinaryStream.ToArray());
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    s_axHTraceSwitch.TraceVerbose($"Failed to serialize the property bag into ResX : {e}");
                 }
             }
         }
