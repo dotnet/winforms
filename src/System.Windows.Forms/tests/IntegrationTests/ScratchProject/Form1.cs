@@ -13,18 +13,4 @@ public partial class Form1 : Form
     {
         InitializeComponent();
     }
-
-    private void Form1_Load(object sender, EventArgs e)
-    {
-        //ImageList imageListSmall = new ImageList();
-        //ImageList imageListLarge = new ImageList();
-        //imageListSmall.Images.Add(Bitmap.FromFile("C:\\school\\mySmallImage1.bmp"));
-        //imageListSmall.Images.Add(Bitmap.FromFile("C:\\school\\mySmallImage2.bmp"));
-        //imageListLarge.Images.Add(Bitmap.FromFile("C:\\school\\myLargeImage1.bmp"));
-        //imageListLarge.Images.Add(Bitmap.FromFile("C:\\school\\myLargeImage2.bmp"));
-        //listView1.LargeImageList = imageListLarge;
-        //listView1.SmallImageList = imageListSmall;
-        listView1.Groups[0].Items.Add(listView1.Items[0]);
-        listView1.Groups[1].Items.AddRange(new ListViewItem[] { listView1.Items[1], listView1.Items[2] });
-    }
 }
