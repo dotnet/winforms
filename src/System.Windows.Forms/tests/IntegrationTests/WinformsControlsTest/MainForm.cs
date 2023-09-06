@@ -207,8 +207,8 @@ public partial class MainForm : Form
             new InitInfo("ListBoxes", (obj, e) => new ListBoxes().Show(this))
         },
         {
-            MainFormControlsTabOrder.PassWordButton,
-            new InitInfo("PassWord", (obj, e) => new PassWord().Show(this))
+            MainFormControlsTabOrder.PasswordButton,
+            new InitInfo("Password", (obj, e) => new Password().Show(this))
         }
     };
 

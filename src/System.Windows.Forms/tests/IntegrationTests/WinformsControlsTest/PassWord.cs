@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 namespace WinformsControlsTest;
 
-public partial class PassWord : Form
+public partial class Password : Form
 {
-    public PassWord()
+    public Password()
     {
         InitializeComponent();
     }

@@ -43,5 +43,5 @@ public enum MainFormControlsTabOrder
     MediaPlayerButton,
     FormOwnerTestButton,
     ListBoxTestButton,
-    PassWordButton
+    PasswordButton
 }
