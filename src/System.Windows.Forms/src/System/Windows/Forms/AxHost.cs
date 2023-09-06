@@ -2859,6 +2859,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             case StorageType.PropertyBag:
                 using (var propBag = _ocxState.GetPropBag())
                 {
+                    _storageType = StorageType.PropertyBag;
+
                     if (!propBag.IsNull)
                     {
                         using var persistPropBag = ComHelpers.GetComScope<IPersistPropertyBag>(_instance);
