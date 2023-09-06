@@ -2288,7 +2288,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             (void**)&unknown);
         hr.ThrowOnFailure();
 
-        _instance = Marshal.GetObjectForIUnknown((nint)unknown);
+        _instance = ComHelpers.GetObjectForIUnknown(unknown);
     }
 
     private void CreateWithLicense(string? license, Guid clsid)
@@ -2310,7 +2310,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 hr = factory.Value->CreateInstanceLic(null, null, IID.Get<IUnknown>(), new BSTR(license), (void**)&unknown);
                 hr.ThrowOnFailure();
 
-                _instance = Marshal.GetObjectForIUnknown((nint)unknown);
+                _instance = ComHelpers.GetObjectForIUnknown(unknown);
             }
         }
 
@@ -3728,7 +3728,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         try
         {
-            return Marshal.GetObjectForIUnknown((nint)ifont);
+            return ComHelpers.GetObjectForIUnknown((IUnknown*)ifont);
         }
         catch
         {
@@ -3809,7 +3809,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             FONTDESC fontdesc = GetFONTDESCFromFont(font);
             fontdesc.lpstrName = n;
             PInvoke.OleCreateFontIndirect(in fontdesc, in IID.GetRef<IFontDisp>(), out void* lplpvObj).ThrowOnFailure();
-            return Marshal.GetObjectForIUnknown((nint)lplpvObj);
+            return ComHelpers.GetObjectForIUnknown((IUnknown*)lplpvObj);
         }
     }
 
