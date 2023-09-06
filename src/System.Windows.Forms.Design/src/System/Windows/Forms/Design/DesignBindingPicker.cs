@@ -1929,7 +1929,7 @@ namespace System.Windows.Forms.Design
 
                 foreach (Image image in imageList.Images)
                 {
-                    Bitmap scaledImage = DpiHelper.ScaleBitmapToSize((Bitmap)image, scaledSize);
+                    Bitmap scaledImage = DpiHelper.CreateResizedBitmap((Bitmap)image, scaledSize);
                     copy.Images.Add(scaledImage);
                 }
 
