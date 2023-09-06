@@ -136,7 +136,7 @@
 
   <ItemGroup>
     <Compile Update="MediaPlayer.cs" />
-    <Compile Update="TextBoxTestPassword.cs">
+    <Compile Update="Password.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
