@@ -2,6 +2,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="ru" original="../SR.resx">
     <body>
+      <trans-unit id="0_reparent_controls_transaction">
+        <source>{0} Reparent Controls Transaction.</source>
+        <target state="translated">Транзакция переподчиненных элементов управления {0}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AXNotRegistered">
         <source>Could not create ActiveX control '{0}' because it is not properly registered.</source>
         <target state="translated">Невозможно создать элемент управления ActiveX '{0}', так как он не был должным образом зарегистрирован.</target>
@@ -1120,14 +1125,29 @@
         <target state="translated">Указывает имя, используемое в коде для идентификации объекта.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutDockInForm">
+        <source>Dock Fill in Form</source>
+        <target state="translated">Заполнение дока в форме</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
         <source>Dock in Parent Container</source>
         <target state="translated">Закрепить в родительском контейнере</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutDockInUserControl">
+        <source>Dock Fill in UserControl</source>
+        <target state="translated">Заполнение дока в UserControl</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutHorizontalOrientation">
         <source>Horizontal Splitter Orientation.</source>
         <target state="translated">Горизонтальная ориентация разделителя</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutReparentControls">
+        <source>Re-parent Controls</source>
+        <target state="translated">Повторно указать родителей для элементов управления</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
@@ -2177,6 +2197,56 @@ Press Ctrl+Enter to accept Text.</source>
         <target state="translated">AllowItemReorder и AllowDrop не могут одновременно иметь значение true.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Bottom">
+        <source>Bottom</source>
+        <target state="translated">По нижнему краю</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_BottomDesc">
+        <source>Toggles the participation of BottomToolStripPanel in runtime dragging of ToolStrip.</source>
+        <target state="translated">Включает и выключает участие BottomToolStripPanel в перетаскивании ToolStrip во время выполнения.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Left">
+        <source>Left</source>
+        <target state="translated">По левому краю</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_LeftDesc">
+        <source>Toggles the participation of LeftToolStripPanel in runtime dragging of ToolStrip.</source>
+        <target state="translated">Включает и выключает участие LeftToolStripPanel в перетаскивании ToolStrip во время выполнения.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Right">
+        <source>Right</source>
+        <target state="translated">По правому краю</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_RightDesc">
+        <source>Toggles the participation of RightToolStripPanel  in runtime dragging of ToolStrip.</source>
+        <target state="translated">Включает и выключает участие RightToolStripPanel в перетаскивании ToolStrip во время выполнения.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Show">
+        <source>Show</source>
+        <target state="translated">Показать</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Top">
+        <source>Top</source>
+        <target state="translated">По верхнему краю</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_TopDesc">
+        <source>Toggles the participation of TopToolStripPanel in runtime dragging of ToolStrip.</source>
+        <target state="translated">Включает и выключает участие TopToolStripPanel в перетаскивании ToolStrip во время выполнения.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Visible">
+        <source>Panel Visibility</source>
+        <target state="translated">Видимость панели</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripCreatingNewItemTransaction">
         <source>ToolStrip New Item create Transaction.</source>
         <target state="translated">Новый элемент ToolStrip создает транзакцию.</target>
@@ -2280,6 +2350,11 @@ Press Ctrl+Enter to accept Text.</source>
       <trans-unit id="ToolStripMorphingItemTransaction">
         <source>ToolStripItem Morphing Transaction.</source>
         <target state="translated">Транзакция преобразования ToolStripItem</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripPanelGlyphUnsupportedDock">
+        <source>Unsupported Dock</source>
+        <target state="translated">Неподдерживаемое свойство Dock</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSelectMenuItem">

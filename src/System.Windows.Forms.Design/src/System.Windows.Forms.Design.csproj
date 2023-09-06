@@ -87,6 +87,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\WinForms\Design\*.bmp">
       <LogicalName>System.Windows.Forms.Design.%(FileName).bmp</LogicalName>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\*.bmp">
+      <LogicalName>System.Windows.Forms.Design.Behavior.%(FileName)</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   

@@ -62,8 +62,6 @@ public abstract unsafe partial class AxHost
 
             string name = pszPropName.ToString();
 
-            s_axHTraceSwitch.TraceVerbose($"Reading property {name} from OCXState propertybag.");
-
             if (!_bag.Contains(name))
             {
                 *pVar = default;
@@ -72,7 +70,6 @@ public abstract unsafe partial class AxHost
 
             object? value = _bag[name];
             *pVar = VARIANT.FromObject(value);
-            s_axHTraceSwitch.TraceVerbose($"\tValue={value ?? "<null>"}");
 
             // The EE returns a VT_EMPTY for a null. The problem is that Visual Basic 6 expects the caller to respect
             // the "hint" it gives in the VariantType. For eg., for a VT_BSTR, it expects that the callee will null
@@ -92,7 +89,6 @@ public abstract unsafe partial class AxHost
             string name = pszPropName.ToString();
             object? value = pVar->ToObject();
 
-            s_axHTraceSwitch.TraceVerbose($"Writing property {name} [{*pVar}] into OCXState propertybag.");
             _bag[name] = value;
             return HRESULT.S_OK;
         }

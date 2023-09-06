@@ -2,6 +2,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="cs" original="../SR.resx">
     <body>
+      <trans-unit id="0_reparent_controls_transaction">
+        <source>{0} Reparent Controls Transaction.</source>
+        <target state="translated">Transakce nadřízeného ovládacího prvku {0}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AXNotRegistered">
         <source>Could not create ActiveX control '{0}' because it is not properly registered.</source>
         <target state="translated">Ovládací prvek {0} typu ActiveX nelze vytvořit, protože prvek není správně registrován.</target>
@@ -1120,14 +1125,29 @@
         <target state="translated">Určuje název použitý v kódu k identifikaci objektu.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutDockInForm">
+        <source>Dock Fill in Form</source>
+        <target state="translated">Ukotvit výplň ve formuláři</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
         <source>Dock in Parent Container</source>
         <target state="translated">Ukotvit v nadřazeném kontejneru</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutDockInUserControl">
+        <source>Dock Fill in UserControl</source>
+        <target state="translated">Ukotvit výplň prvku UserControl</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutHorizontalOrientation">
         <source>Horizontal Splitter Orientation.</source>
         <target state="translated">Orientace vodorovného rozdělovače.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutReparentControls">
+        <source>Re-parent Controls</source>
+        <target state="translated">Změnit nadřazenost ovládacích prvků</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
@@ -2177,6 +2197,56 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
         <target state="translated">Vlastnosti AllowItemReorder a AllowDrop nemohou být současně nastaveny na hodnotu True.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Bottom">
+        <source>Bottom</source>
+        <target state="translated">Dolů</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_BottomDesc">
+        <source>Toggles the participation of BottomToolStripPanel in runtime dragging of ToolStrip.</source>
+        <target state="translated">Přepíná účast vlastnosti BottomToolStripPanel při přetahování prvku ToolStrip v době běhu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Left">
+        <source>Left</source>
+        <target state="translated">Vlevo</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_LeftDesc">
+        <source>Toggles the participation of LeftToolStripPanel in runtime dragging of ToolStrip.</source>
+        <target state="translated">Přepíná účast prvku LeftToolStripPanel při přetahování prvku ToolStrip v době běhu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Right">
+        <source>Right</source>
+        <target state="translated">Vpravo</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_RightDesc">
+        <source>Toggles the participation of RightToolStripPanel  in runtime dragging of ToolStrip.</source>
+        <target state="translated">Přepíná účast prvku RightToolStripPanel při přetahování prvku ToolStrip v době běhu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Show">
+        <source>Show</source>
+        <target state="translated">Zobrazit</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Top">
+        <source>Top</source>
+        <target state="translated">Nahoru</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_TopDesc">
+        <source>Toggles the participation of TopToolStripPanel in runtime dragging of ToolStrip.</source>
+        <target state="translated">Přepíná účast prvku TopToolStripPanel při přetahování prvku ToolStrip v době běhu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Visible">
+        <source>Panel Visibility</source>
+        <target state="translated">Viditelnost panelu</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripCreatingNewItemTransaction">
         <source>ToolStrip New Item create Transaction.</source>
         <target state="translated">Transakce vytvoření nové položky prvku ToolStrip.</target>
@@ -2280,6 +2350,11 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
       <trans-unit id="ToolStripMorphingItemTransaction">
         <source>ToolStripItem Morphing Transaction.</source>
         <target state="translated">Transakce morfingu prvku ToolStripItem</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripPanelGlyphUnsupportedDock">
+        <source>Unsupported Dock</source>
+        <target state="translated">Nepodporované ukotvení</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSelectMenuItem">

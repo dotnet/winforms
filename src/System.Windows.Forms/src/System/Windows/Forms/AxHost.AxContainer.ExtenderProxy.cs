@@ -53,7 +53,6 @@ public abstract partial class AxHost
                 ENUM_CONTROLS_WHICH_FLAGS dwWhich,
                 IEnumUnknown** ppenum)
             {
-                s_axHTraceSwitch.TraceVerbose("in EnumControls for proxy");
                 if (ppenum is null)
                 {
                     return HRESULT.E_POINTER;
@@ -68,7 +67,6 @@ public abstract partial class AxHost
 
             HRESULT IGetOleObject.Interface.GetOleObject(Guid* riid, void** ppvObj)
             {
-                s_axHTraceSwitch.TraceVerbose("in GetOleObject for proxy");
                 if (ppvObj is null)
                 {
                     return HRESULT.E_POINTER;
@@ -92,7 +90,6 @@ public abstract partial class AxHost
 
             HRESULT IGetVBAObject.Interface.GetObject(Guid* riid, void** ppvObj, uint dwReserved)
             {
-                s_axHTraceSwitch.TraceVerbose("in GetObject for proxy");
                 if (ppvObj is null || riid is null)
                 {
                     return HRESULT.E_INVALIDARG;
@@ -112,7 +109,6 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getAlign for proxy for {GetControl()}");
                     int result = (int)(GetControl()?.Dock ?? NativeMethods.ActiveX.ALIGN_NO_CHANGE);
                     if (result is < NativeMethods.ActiveX.ALIGN_MIN or > NativeMethods.ActiveX.ALIGN_MAX)
                     {
@@ -123,7 +119,6 @@ public abstract partial class AxHost
                 }
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setAlign for proxy for {GetControl()} {value}");
                     if (GetControl() is { } control)
                     {
                         control.Dock = (DockStyle)value;
@@ -133,14 +128,9 @@ public abstract partial class AxHost
 
             public uint BackColor
             {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getBackColor for proxy for {GetControl()}");
-                    return GetOleColorFromColor(GetControl()?.BackColor ?? default);
-                }
+                get => GetOleColorFromColor(GetControl()?.BackColor ?? default);
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setBackColor for proxy for {GetControl()} {value}");
                     if (GetControl() is { } control)
                     {
                         control.BackColor = GetColorFromOleColor(value);
@@ -150,14 +140,9 @@ public abstract partial class AxHost
 
             public BOOL Enabled
             {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getEnabled for proxy for {GetControl()}");
-                    return GetControl()?.Enabled ?? BOOL.FALSE;
-                }
+                get => GetControl()?.Enabled ?? BOOL.FALSE;
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setEnabled for proxy for {GetControl()} {value}");
                     if (GetControl() is { } control)
                     {
                         control.Enabled = value;
@@ -167,14 +152,9 @@ public abstract partial class AxHost
 
             public uint ForeColor
             {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getForeColor for proxy for {GetControl()}");
-                    return GetOleColorFromColor(GetControl()?.ForeColor ?? default);
-                }
+                get => GetOleColorFromColor(GetControl()?.ForeColor ?? default);
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setForeColor for proxy for {GetControl()} {value}");
                     if (GetControl() is { } control)
                     {
                         control.ForeColor = GetColorFromOleColor(value);
@@ -184,14 +164,9 @@ public abstract partial class AxHost
 
             public int Height
             {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getHeight for proxy for {GetControl()}");
-                    return Pixel2Twip(GetControl()?.Height ?? 0, xDirection: false);
-                }
+                get => Pixel2Twip(GetControl()?.Height ?? 0, xDirection: false);
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setHeight for proxy for {GetControl()} {Twip2Pixel(value, false)}");
                     if (GetControl() is { } control)
                     {
                         control.Height = Twip2Pixel(value, xDirection: false);
@@ -201,14 +176,9 @@ public abstract partial class AxHost
 
             public int Left
             {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getLeft for proxy for {GetControl()}");
-                    return Pixel2Twip(GetControl()?.Left ?? 0, xDirection: true);
-                }
+                get => Pixel2Twip(GetControl()?.Left ?? 0, xDirection: true);
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setLeft for proxy for {GetControl()} {Twip2Pixel(value, true)}");
                     if (GetControl() is { } control)
                     {
                         control.Left = Twip2Pixel(value, xDirection: true);
@@ -220,7 +190,6 @@ public abstract partial class AxHost
             {
                 get
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in getParent for proxy for {GetControl()}");
                     IExtender.Interface? extender = GetContainer() is { } container
                         ? container.GetExtenderProxyForControl(container._parent)
                         : null;
@@ -231,14 +200,9 @@ public abstract partial class AxHost
 
             public short TabIndex
             {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getTabIndex for proxy for {GetControl()}");
-                    return (short)(GetControl()?.TabIndex ?? 0);
-                }
+                get => (short)(GetControl()?.TabIndex ?? 0);
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setTabIndex for proxy for {GetControl()} {value}");
                     if (GetControl() is { } control)
                     {
                         control.TabIndex = value;
@@ -248,14 +212,9 @@ public abstract partial class AxHost
 
             public BOOL TabStop
             {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getTabStop for proxy for {GetControl()}");
-                    return GetControl()?.TabStop ?? BOOL.FALSE;
-                }
+                get => GetControl()?.TabStop ?? BOOL.FALSE;
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setTabStop for proxy for {GetControl()} {value}");
                     if (GetControl() is { } control)
                     {
                         control.TabStop = value;
@@ -265,14 +224,9 @@ public abstract partial class AxHost
 
             public int Top
             {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getTop for proxy for {GetControl()}");
-                    return Pixel2Twip(GetControl()?.Top ?? 0, xDirection: false);
-                }
+                get => Pixel2Twip(GetControl()?.Top ?? 0, xDirection: false);
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setTop for proxy for {GetControl()} {Twip2Pixel(value, false)}");
                     if (GetControl() is { } control)
                     {
                         control.Top = Twip2Pixel(value, xDirection: false);
@@ -282,14 +236,9 @@ public abstract partial class AxHost
 
             public BOOL Visible
             {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getVisible for proxy for {GetControl()}");
-                    return GetControl()?.Visible ?? false;
-                }
+                get => GetControl()?.Visible ?? false;
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setVisible for proxy for {GetControl()} {value}");
                     if (GetControl() is { } control)
                     {
                         control.Visible = value;
@@ -299,14 +248,9 @@ public abstract partial class AxHost
 
             public int Width
             {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getWidth for proxy for {GetControl()}");
-                    return Pixel2Twip(GetControl()?.Width ?? 0, xDirection: true);
-                }
+                get => Pixel2Twip(GetControl()?.Width ?? 0, xDirection: true);
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setWidth for proxy for {GetControl()} {Twip2Pixel(value, true)}");
                     if (GetControl() is { } control)
                     {
                         control.Width = Twip2Pixel(value, xDirection: true);
@@ -314,23 +258,9 @@ public abstract partial class AxHost
                 }
             }
 
-            public BSTR Name
-            {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getName for proxy for {GetControl()}");
-                    return new(GetControl() is { } control ? GetNameForControl(control) : string.Empty);
-                }
-            }
+            public BSTR Name => new(GetControl() is { } control ? GetNameForControl(control) : string.Empty);
 
-            public HWND Hwnd
-            {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getHwnd for proxy for {GetControl()}");
-                    return GetControl()?.HWND ?? HWND.Null;
-                }
-            }
+            public HWND Hwnd => GetControl()?.HWND ?? HWND.Null;
 
             public IUnknown* Container
             {
@@ -343,14 +273,9 @@ public abstract partial class AxHost
 
             public string Text
             {
-                get
-                {
-                    s_axHTraceSwitch.TraceVerbose($"in getText for proxy for {GetControl()}");
-                    return GetControl()?.Text ?? string.Empty;
-                }
+                get => GetControl()?.Text ?? string.Empty;
                 set
                 {
-                    s_axHTraceSwitch.TraceVerbose($"in setText for proxy for {GetControl()}");
                     if (GetControl() is { } control)
                     {
                         control.Text = value;

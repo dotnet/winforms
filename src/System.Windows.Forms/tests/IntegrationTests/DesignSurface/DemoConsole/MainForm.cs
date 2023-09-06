@@ -238,6 +238,8 @@ public partial class MainForm : Form
 
                         FolderBrowserDialog folderBrowserDialog = surface.CreateComponent<FolderBrowserDialog>();
                         SaveFileDialog saveFileDialog = surface.CreateComponent<SaveFileDialog>();
+
+                        ToolStripContainer toolStripContainer = surface.CreateControl<ToolStripContainer>(new Size(200, 180), new Point(250, 280));
                     }
 
                     break;

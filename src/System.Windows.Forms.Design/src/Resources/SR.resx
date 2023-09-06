@@ -120,6 +120,15 @@
   <data name="PlatformNotSupported_WinformsDesigner" xml:space="preserve">
     <value>Winforms Designer is not supported on this platform.</value>
   </data>
+  <data name="DesignerShortcutDockInForm" xml:space="preserve">
+    <value>Dock Fill in Form</value>
+  </data>
+  <data name="DesignerShortcutDockInUserControl" xml:space="preserve">
+    <value>Dock Fill in UserControl</value>
+  </data>
+  <data name="DesignerShortcutReparentControls" xml:space="preserve">
+    <value>Re-parent Controls</value>
+  </data>
   <data name="DesignerOptions_LayoutSettings" xml:space="preserve">
     <value>Layout Settings</value>
   </data>
@@ -564,6 +573,39 @@
   <data name="ToolStripActionList_GripStyleDesc" xml:space="preserve">
     <value>Changes the GripStyle property</value>
   </data>
+  <data name="ToolStripContainerActionList_Show" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="ToolStripContainerActionList_Visible" xml:space="preserve">
+    <value>Panel Visibility</value>
+  </data>
+  <data name="ToolStripContainerActionList_Top" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="ToolStripContainerActionList_TopDesc" xml:space="preserve">
+    <value>Toggles the participation of TopToolStripPanel in runtime dragging of ToolStrip.</value>
+  </data>
+  <data name="ToolStripContainerActionList_Bottom" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="ToolStripContainerActionList_BottomDesc" xml:space="preserve">
+    <value>Toggles the participation of BottomToolStripPanel in runtime dragging of ToolStrip.</value>
+  </data>
+  <data name="ToolStripContainerActionList_Left" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="ToolStripContainerActionList_LeftDesc" xml:space="preserve">
+    <value>Toggles the participation of LeftToolStripPanel in runtime dragging of ToolStrip.</value>
+  </data>
+  <data name="ToolStripContainerActionList_Right" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="ToolStripContainerActionList_RightDesc" xml:space="preserve">
+    <value>Toggles the participation of RightToolStripPanel  in runtime dragging of ToolStrip.</value>
+  </data>
+  <data name="0_reparent_controls_transaction" xml:space="preserve">
+    <value>{0} Reparent Controls Transaction.</value>
+  </data>
   <data name="ToolStripActionList_Layout" xml:space="preserve">
     <value>Layout &amp;&amp; Appearance</value>
   </data>
@@ -578,6 +620,9 @@
   </data>
   <data name="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue" xml:space="preserve">
     <value>AllowItemReorder and AllowDrop cannot both be true.</value>
+  </data>
+  <data name="ToolStripPanelGlyphUnsupportedDock" xml:space="preserve">
+    <value>Unsupported Dock</value>
   </data>
   <data name="ToolStripCreatingNewItemTransaction" xml:space="preserve">
     <value>ToolStrip New Item create Transaction.</value>

@@ -205,7 +205,16 @@ public abstract partial class TextBoxBase
 
         public override string Text
             => Owner is not null && Owner.IsHandleCreated
-                ? Owner.Text
+                ? Owner.PasswordProtect
+                    ? PasswordString
+                    : Owner.Text
+                : string.Empty;
+
+        private string PasswordString
+            => Owner is not null
+                ? new string(Owner is TextBox
+                    ? ((TextBox)Owner).PasswordChar
+                    : ((MaskedTextBox)Owner).PasswordChar, Owner.Text.Length)
                 : string.Empty;
 
         public override int TextLength => Text.Length;

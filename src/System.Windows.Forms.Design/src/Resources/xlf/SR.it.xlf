@@ -2,6 +2,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="it" original="../SR.resx">
     <body>
+      <trans-unit id="0_reparent_controls_transaction">
+        <source>{0} Reparent Controls Transaction.</source>
+        <target state="translated">{0} Associa con un nuovo elemento padre la transazione controlli.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AXNotRegistered">
         <source>Could not create ActiveX control '{0}' because it is not properly registered.</source>
         <target state="translated">Impossibile creare il controllo ActiveX '{0}' perché non è correttamente registrato.</target>
@@ -1120,14 +1125,29 @@
         <target state="translated">Indica il nome utilizzato nel codice per identificare l'oggetto.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutDockInForm">
+        <source>Dock Fill in Form</source>
+        <target state="translated">Ancora riempimento nel form</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
         <source>Dock in Parent Container</source>
         <target state="translated">Ancora nel contenitore padre</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutDockInUserControl">
+        <source>Dock Fill in UserControl</source>
+        <target state="translated">Ancora riempimento in UserControl</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutHorizontalOrientation">
         <source>Horizontal Splitter Orientation.</source>
         <target state="translated">Barra di divisione orizzontale.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutReparentControls">
+        <source>Re-parent Controls</source>
+        <target state="translated">Assegna nuovo elemento padre ai controlli</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
@@ -2177,6 +2197,56 @@ Per accettare testo premere CTRL+INVIO.</target>
         <target state="translated">Le proprietà AllowItemReorder e AllowDrop non possono avere entrambe valore true.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Bottom">
+        <source>Bottom</source>
+        <target state="translated">Inferiore</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_BottomDesc">
+        <source>Toggles the participation of BottomToolStripPanel in runtime dragging of ToolStrip.</source>
+        <target state="translated">Attiva o disattiva la partecipazione di BottomToolStripPanel durante il trascinamento di ToolStrip in fase di esecuzione.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Left">
+        <source>Left</source>
+        <target state="translated">Sinistro</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_LeftDesc">
+        <source>Toggles the participation of LeftToolStripPanel in runtime dragging of ToolStrip.</source>
+        <target state="translated">Attiva o disattiva la partecipazione di LeftToolStripPanel durante il trascinamento di ToolStrip in fase di esecuzione.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Right">
+        <source>Right</source>
+        <target state="translated">Destro</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_RightDesc">
+        <source>Toggles the participation of RightToolStripPanel  in runtime dragging of ToolStrip.</source>
+        <target state="translated">Attiva o disattiva la partecipazione di RightToolStripPanel durante il trascinamento di ToolStrip in fase di esecuzione.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Show">
+        <source>Show</source>
+        <target state="translated">Mostra</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Top">
+        <source>Top</source>
+        <target state="translated">Superiore</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_TopDesc">
+        <source>Toggles the participation of TopToolStripPanel in runtime dragging of ToolStrip.</source>
+        <target state="translated">Attiva o disattiva la partecipazione di TopToolStripPanel durante il trascinamento di ToolStrip in fase di esecuzione.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Visible">
+        <source>Panel Visibility</source>
+        <target state="translated">Visibilità pannello</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripCreatingNewItemTransaction">
         <source>ToolStrip New Item create Transaction.</source>
         <target state="translated">Transazione Crea nuovo elemento del controllo ToolStrip</target>
@@ -2280,6 +2350,11 @@ Per accettare testo premere CTRL+INVIO.</target>
       <trans-unit id="ToolStripMorphingItemTransaction">
         <source>ToolStripItem Morphing Transaction.</source>
         <target state="translated">Transazione Morphing del controllo ToolStripItem.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripPanelGlyphUnsupportedDock">
+        <source>Unsupported Dock</source>
+        <target state="translated">Ancoraggio non supportato</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSelectMenuItem">

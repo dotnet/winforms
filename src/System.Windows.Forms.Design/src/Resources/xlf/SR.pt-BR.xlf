@@ -2,6 +2,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="pt-BR" original="../SR.resx">
     <body>
+      <trans-unit id="0_reparent_controls_transaction">
+        <source>{0} Reparent Controls Transaction.</source>
+        <target state="translated">{0} Transação de Controles de Reassociação ao Pai.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AXNotRegistered">
         <source>Could not create ActiveX control '{0}' because it is not properly registered.</source>
         <target state="translated">Não foi possível criar o controle ActiveX '{0}' porque ele não está registrado corretamente.</target>
@@ -1120,14 +1125,29 @@
         <target state="translated">Indica o nome usado no código para identificar o objeto.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutDockInForm">
+        <source>Dock Fill in Form</source>
+        <target state="translated">Dock Fill no Formulário</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
         <source>Dock in Parent Container</source>
         <target state="translated">Encaixar no Contêiner Pai</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutDockInUserControl">
+        <source>Dock Fill in UserControl</source>
+        <target state="translated">Dock Fill em UserControl</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutHorizontalOrientation">
         <source>Horizontal Splitter Orientation.</source>
         <target state="translated">Orientação Horizontal do Divisor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutReparentControls">
+        <source>Re-parent Controls</source>
+        <target state="translated">Especificar Novamente o Pai dos Controles</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
@@ -2177,6 +2197,56 @@ Pressione Ctrl+Enter para aceitar Texto.</target>
         <target state="translated">AllowItemReorder e AllowDrop não podem ser verdadeiros.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Bottom">
+        <source>Bottom</source>
+        <target state="translated">Inferior</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_BottomDesc">
+        <source>Toggles the participation of BottomToolStripPanel in runtime dragging of ToolStrip.</source>
+        <target state="translated">Alterna a participação de BottomToolStripPanel ao arrastar ToolStrip em tempo de execução.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Left">
+        <source>Left</source>
+        <target state="translated">Esquerda</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_LeftDesc">
+        <source>Toggles the participation of LeftToolStripPanel in runtime dragging of ToolStrip.</source>
+        <target state="translated">Alterna a participação de LeftToolStripPanel ao arrastar ToolStrip em tempo de execução.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Right">
+        <source>Right</source>
+        <target state="translated">Direita</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_RightDesc">
+        <source>Toggles the participation of RightToolStripPanel  in runtime dragging of ToolStrip.</source>
+        <target state="translated">Alterna a participação de RightToolStripPanel ao arrastar ToolStrip em tempo de execução.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Show">
+        <source>Show</source>
+        <target state="translated">Mostrar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Top">
+        <source>Top</source>
+        <target state="translated">Superior</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_TopDesc">
+        <source>Toggles the participation of TopToolStripPanel in runtime dragging of ToolStrip.</source>
+        <target state="translated">Alterna a participação de TopToolStripPanel ao arrastar ToolStrip em tempo de execução.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripContainerActionList_Visible">
+        <source>Panel Visibility</source>
+        <target state="translated">Visibilidade do Painel</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ToolStripCreatingNewItemTransaction">
         <source>ToolStrip New Item create Transaction.</source>
         <target state="translated">Transação de criação de Novo Item de ToolStrip.</target>
@@ -2280,6 +2350,11 @@ Pressione Ctrl+Enter para aceitar Texto.</target>
       <trans-unit id="ToolStripMorphingItemTransaction">
         <source>ToolStripItem Morphing Transaction.</source>
         <target state="translated">Transação de Metamorfose de ToolStripItem.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripPanelGlyphUnsupportedDock">
+        <source>Unsupported Dock</source>
+        <target state="translated">Dock sem suporte</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSelectMenuItem">
