@@ -18,17 +18,13 @@ internal class ToolStripMenuItemCodeDomSerializer : CodeDomSerializer
     /// We implement this for the abstract method on CodeDomSerializer.
     /// </summary>
     public override object? Deserialize(IDesignerSerializationManager manager, object codeObject)
-    {
-        return GetBaseSerializer(manager).Deserialize(manager, codeObject);
-    }
+        => GetBaseSerializer(manager).Deserialize(manager, codeObject);
 
     /// <summary>
     /// This is a small helper method that returns the serializer for base Class
     /// </summary>
     private static CodeDomSerializer GetBaseSerializer(IDesignerSerializationManager manager)
-    {
-        return manager.GetSerializer<CodeDomSerializer>(typeof(Component))!;
-    }
+        => manager.GetSerializer<CodeDomSerializer>(typeof(Component))!;
 
     /// <summary>
     /// We implement this for the abstract method on CodeDomSerializer.  This method

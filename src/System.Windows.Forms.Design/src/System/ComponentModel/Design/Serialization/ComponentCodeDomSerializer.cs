@@ -261,7 +261,11 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                         IContainer? container = manager.GetService<IContainer>();
                         if (container is not null)
                         {
-                            ConstructorInfo? ctor = GetReflectionTypeHelper(manager, value).GetConstructor(BindingFlags.ExactBinding | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly, null, GetContainerConstructor(manager), null);
+                            ConstructorInfo? ctor = GetReflectionTypeHelper(manager, value).GetConstructor(
+                                BindingFlags.ExactBinding | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly,
+                                binder: null,
+                                GetContainerConstructor(manager),
+                                modifiers: null);
 
                             CodeExpression? assignRhs;
                             if (ctor is not null)
