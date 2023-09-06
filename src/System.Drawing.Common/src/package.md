@@ -62,5 +62,5 @@ For more in-depth tutorials and API references, you can check the following reso
 ## Feedback
 
 - Open an issue on the [GitHub repository](https://github.com/dotnet/winforms/issues)
-- Reach out on Twitter with the hashtag #winforms
+- Reach out on Twitter with the [hashtag #winforms](https://twitter.com/search?q=%23winforms)
 - Join our Discord channel: [dotnet/Discord](https://discord.com/invite/dotnet)
