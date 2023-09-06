@@ -1,3 +1,15 @@
+System.Windows.Forms.Design.AxImporter.AxImporter(System.Windows.Forms.Design.AxImporter.Options! options) -> void
+System.Windows.Forms.Design.AxImporter.IReferenceResolver.ResolveActiveXReference(System.Runtime.InteropServices.UCOMITypeLib! typeLib) -> string?
+System.Windows.Forms.Design.AxImporter.IReferenceResolver.ResolveComReference(System.Reflection.AssemblyName! name) -> string?
+System.Windows.Forms.Design.AxImporter.IReferenceResolver.ResolveComReference(System.Runtime.InteropServices.UCOMITypeLib! typeLib) -> string?
+System.Windows.Forms.Design.AxImporter.IReferenceResolver.ResolveManagedReference(string! assemName) -> string?
+System.Windows.Forms.Design.AxImporter.Options.keyContainer -> string?
+System.Windows.Forms.Design.AxImporter.Options.keyFile -> string?
+System.Windows.Forms.Design.AxImporter.Options.keyPair -> System.Reflection.StrongNameKeyPair?
+System.Windows.Forms.Design.AxImporter.Options.outputDirectory -> string?
+System.Windows.Forms.Design.AxImporter.Options.outputName -> string?
+System.Windows.Forms.Design.AxImporter.Options.publicKey -> byte[]?
+System.Windows.Forms.Design.AxImporter.Options.references -> System.Windows.Forms.Design.AxImporter.IReferenceResolver?
 virtual System.ComponentModel.Design.ComponentDesigner.SetTextualDefaultProperty.get -> bool
 *REMOVED*System.ComponentModel.Design.DesignerActionListCollection.AddRange(System.ComponentModel.Design.DesignerActionList?[]! value) -> void
 *REMOVED*~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.Adorner[] value) -> void
