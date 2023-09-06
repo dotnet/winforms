@@ -57,7 +57,7 @@ public partial class TreeView
             }
 
             Point p = owningTreeView.PointToClient(new Point(x, y));
-            TreeNode node = owningTreeView.GetNodeAt(p);
+            TreeNode? node = owningTreeView.GetNodeAt(p);
 
             if (node is not null)
             {
