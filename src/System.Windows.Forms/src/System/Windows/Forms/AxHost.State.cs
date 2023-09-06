@@ -33,17 +33,20 @@ public abstract partial class AxHost
         private const string DataSerializationName = "Data";
 
         // Create on save from IPersistStream.
-        internal State(MemoryStream memoryStream, int storageType, AxHost control, PropertyBagStream? propertyBag)
+        internal State(MemoryStream memoryStream, StorageType storageType, AxHost control)
         {
             Type = storageType;
-            _propertyBag = propertyBag;
             _length = checked((int)memoryStream.Length);
             _memoryStream = memoryStream;
             ManualUpdate = control.GetAxState(s_manualUpdate);
             LicenseKey = control.GetLicenseKey();
         }
 
-        internal State(PropertyBagStream propertyBag) => _propertyBag = propertyBag;
+        internal State(PropertyBagStream propertyBag)
+        {
+            Type = StorageType.PropertyBag;
+            _propertyBag = propertyBag;
+        }
 
         // Construct State using StateConverter information.
         // We do not want to save the memoryStream since it contains
@@ -57,12 +60,12 @@ public abstract partial class AxHost
             CreateStorage();
             ManualUpdate = control.GetAxState(s_manualUpdate);
             LicenseKey = control.GetLicenseKey();
-            Type = STG_STORAGE;
+            Type = StorageType.Storage;
         }
 
         public State(Stream ms, int storageType, bool manualUpdate, string? licKey)
         {
-            Type = storageType;
+            Type = (StorageType)storageType;
             _length = checked((int)ms.Length);
             ManualUpdate = manualUpdate;
             LicenseKey = licKey;
@@ -118,7 +121,7 @@ public abstract partial class AxHost
             }
         }
 
-        internal int Type { get; set; }
+        internal StorageType Type { get; set; }
 
         internal bool ManualUpdate { get; private set; }
 
@@ -217,7 +220,7 @@ public abstract partial class AxHost
 
             if (!initializeBufferOnly)
             {
-                Type = binaryReader.ReadInt32();
+                Type = (StorageType)binaryReader.ReadInt32();
                 int version = binaryReader.ReadInt32();
                 ManualUpdate = binaryReader.ReadBoolean();
                 int cc = binaryReader.ReadInt32();
@@ -294,7 +297,7 @@ public abstract partial class AxHost
         {
             using BinaryWriter binaryWriter = new(stream);
 
-            binaryWriter.Write(Type);
+            binaryWriter.Write((int)Type);
             binaryWriter.Write(VERSION);
             binaryWriter.Write(ManualUpdate);
             if (LicenseKey is { } licenseKey)

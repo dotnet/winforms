@@ -49,8 +49,8 @@ public class SerializableTypesTests
             using var statePropBag = state.GetPropBag();
             Assert.True(statePropBag.IsNull);
 
-            Assert.Equal(1, result.Type);
-            Assert.Equal(1, state.Type);
+            Assert.Equal(AxHost.StorageType.StreamInit, result.Type);
+            Assert.Equal(AxHost.StorageType.StreamInit, state.Type);
 
             Assert.True(result.ManualUpdate);
             Assert.True(state.ManualUpdate);
