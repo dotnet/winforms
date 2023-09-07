@@ -136,9 +136,6 @@
 
   <ItemGroup>
     <Compile Update="MediaPlayer.cs" />
-    <Compile Update="Password.cs">
-      <SubType>Form</SubType>
-    </Compile>
   </ItemGroup>
 
   <Import Project="..\..\..\..\..\pkg\Microsoft.Private.Winforms\sdk\dotnet-wpf\System.Windows.Forms.Analyzers.props" />
