@@ -14,6 +14,8 @@ public partial class ListViewItem
 
         private ListViewItemImageAccessibleObject? _imageAccessibleObject;
 
+        private ListViewLabelEditAccessibleObject? _labelEditAccessibleObject;
+
         public ListViewItemWithImageAccessibleObject(ListViewItem owningItem) : base(owningItem)
         {
         }
@@ -21,14 +23,19 @@ public partial class ListViewItem
         internal override int FirstSubItemIndex => HasImage ? 1 : 0;
 
         private ListViewItemImageAccessibleObject ImageAccessibleObject => _imageAccessibleObject ??= new(_owningItem);
+        private ListViewLabelEditAccessibleObject? LabelEditAccessibleObject =>
+            _labelEditAccessibleObject ??= _owningListView._labelEdit is null
+            ? null
+            : new(_owningListView, _owningListView._labelEdit);
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             switch (direction)
             {
                 case UiaCore.NavigateDirection.FirstChild:
+                    return GetChildCount() > 0 ? GetChild(0) : null;
                 case UiaCore.NavigateDirection.LastChild:
-                    return GetChild(ImageAccessibleObjectIndex);
+                    return GetChildCount() > 0 ? GetChild(GetChildCount() - 1) : null;
             }
 
             return base.FragmentNavigate(direction);
@@ -43,26 +50,48 @@ public partial class ListViewItem
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (_owningListView.View != View)
+            if (_owningListView.View != View || !_owningListView.IsHandleCreated)
             {
                 throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
             }
 
-            return index == ImageAccessibleObjectIndex && HasImage
-                ? ImageAccessibleObject
-                : (AccessibleObject?)null;
+            if (index > GetChildCount() - 1)
+            {
+                return null;
+            }
+
+            if (index == ImageAccessibleObjectIndex && HasImage)
+            {
+                return ImageAccessibleObject;
+            }
+
+            if(index >= ImageAccessibleObjectIndex || !HasImage)
+            {
+                return LabelEditAccessibleObject;
+            }
+
+            return null;
         }
 
         public override int GetChildCount()
         {
-            if (_owningListView.View != View)
+            if (_owningListView.View != View || !_owningListView.IsHandleCreated)
             {
                 throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
             }
 
-            return !_owningListView.IsHandleCreated || !HasImage
-                ? InvalidIndex
-                : 1;
+            int _childCount = 0;
+            if(HasImage)
+            {
+                _childCount++;
+            }
+
+            if(_owningListView._labelEdit is not null && _owningListView._listViewSubItem is null)
+            {
+                _childCount++;
+            }
+
+            return _childCount;
         }
 
         internal override int GetChildIndex(AccessibleObject? child)

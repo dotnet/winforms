@@ -12,7 +12,8 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
     private const string LIST_VIEW_LABEL_EDIT_AUTOMATION_ID = "1";
 
     private readonly ListView _owningListView;
-    private readonly ListViewSubItem _owningListViewSubItem;
+    private readonly ListViewSubItem? _owningListViewSubItem;
+    private readonly ListViewItem? _owingListViewItem;
     private readonly WeakReference<ListViewLabelEditNativeWindow> _labelEdit;
     private readonly ListViewLabelEditUiaTextProvider _textProvider;
     private int[]? _runtimeId;
@@ -20,7 +21,8 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
     public ListViewLabelEditAccessibleObject(ListView owningListView, ListViewLabelEditNativeWindow labelEdit)
     {
         _owningListView = owningListView.OrThrowIfNull();
-        _owningListViewSubItem = owningListView._listViewSubItem.OrThrowIfNull();
+        _owningListViewSubItem = owningListView._listViewSubItem;
+        _owingListViewItem = owningListView._selectedItem;
         _labelEdit = new(labelEdit);
         UseStdAccessibleObjects(labelEdit.Handle);
         _textProvider = new ListViewLabelEditUiaTextProvider(owningListView, labelEdit, this);
@@ -28,15 +30,28 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
 
     private protected override string AutomationId => LIST_VIEW_LABEL_EDIT_AUTOMATION_ID;
 
-    public override AccessibleObject? Parent => _owningListViewSubItem.AccessibilityObject;
+    public override AccessibleObject? Parent => _owningListViewSubItem is null
+        ? _owingListViewItem?.AccessibilityObject
+        : _owningListView.View == View.Tile
+        ? _owingListViewItem?.AccessibilityObject
+        : _owningListViewSubItem?.AccessibilityObject;
 
     internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
     {
-        return direction switch
+        switch (direction)
         {
-            UiaCore.NavigateDirection.Parent => Parent,
-            _ => base.FragmentNavigate(direction),
-        };
+            case UiaCore.NavigateDirection.Parent:
+                return Parent;
+            case UiaCore.NavigateDirection.NextSibling:
+                if(_owningListView.View == View.Tile)
+                {
+                    return _owingListViewItem?.SubItems[1].AccessibilityObject;
+                }
+
+                return null;
+        }
+
+        return base.FragmentNavigate(direction);
     }
 
     internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningListView.AccessibilityObject;
