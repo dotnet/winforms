@@ -17,7 +17,10 @@ public partial class ListViewItem
 
         protected override View View => View.Tile;
 
-        private ListViewLabelEditAccessibleObject? LabelEditAccessibleObject => _labelEditAccessibleObject ??= _owningListView._labelEdit is null ? null : new(_owningListView, _owningListView._labelEdit);
+        private ListViewLabelEditAccessibleObject? LabelEditAccessibleObject
+            => _labelEditAccessibleObject ??= _owningListView._labelEdit is null
+                ? null
+                : new(_owningListView, _owningListView._labelEdit);
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {

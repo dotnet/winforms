@@ -23,10 +23,10 @@ public partial class ListViewItem
         internal override int FirstSubItemIndex => HasImage ? 1 : 0;
 
         private ListViewItemImageAccessibleObject ImageAccessibleObject => _imageAccessibleObject ??= new(_owningItem);
-        private ListViewLabelEditAccessibleObject? LabelEditAccessibleObject =>
-            _labelEditAccessibleObject ??= _owningListView._labelEdit is null
-            ? null
-            : new(_owningListView, _owningListView._labelEdit);
+        private ListViewLabelEditAccessibleObject? LabelEditAccessibleObject
+            => _labelEditAccessibleObject ??= _owningListView._labelEdit is null
+                ? null
+                : new(_owningListView, _owningListView._labelEdit);
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
@@ -50,7 +50,7 @@ public partial class ListViewItem
 
         public override AccessibleObject? GetChild(int index)
         {
-            if (_owningListView.View != View || !_owningListView.IsHandleCreated)
+            if (_owningListView.View != View)
             {
                 throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
             }
@@ -75,12 +75,18 @@ public partial class ListViewItem
 
         public override int GetChildCount()
         {
-            if (_owningListView.View != View || !_owningListView.IsHandleCreated)
+            if (_owningListView.View != View)
             {
                 throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
             }
 
             int _childCount = 0;
+
+            if (!_owningListView.IsHandleCreated)
+            {
+                return InvalidIndex;
+            }
+
             if(HasImage)
             {
                 _childCount++;
@@ -91,7 +97,7 @@ public partial class ListViewItem
                 _childCount++;
             }
 
-            return _childCount;
+            return _childCount > 0 ? _childCount : InvalidIndex;
         }
 
         internal override int GetChildIndex(AccessibleObject? child)
