@@ -65,6 +65,7 @@ public abstract partial class AxHost
 
         public State(Stream ms, int storageType, bool manualUpdate, string? licKey)
         {
+            // Translate by +1 to match our internal storage values
             Type = (StorageType)(storageType + 1);
             _length = checked((int)ms.Length);
             ManualUpdate = manualUpdate;

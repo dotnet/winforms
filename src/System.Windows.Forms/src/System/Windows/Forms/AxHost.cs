@@ -2822,22 +2822,24 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                 break;
             case StorageType.StreamInit:
-                if (ComHelpers.SupportsInterface<IPersistStreamInit>(_instance))
+                using (var persistStreamInit = ComHelpers.TryGetComScope<IPersistStreamInit>(_instance, out HRESULT hr))
                 {
-                    using (var stream = _ocxState.GetStream())
+                    if (hr.Succeeded)
                     {
-                        _storageType = StorageType.StreamInit;
-                        using var persistStreamInit = ComHelpers.GetComScope<IPersistStreamInit>(_instance);
-                        persistStreamInit.Value->Load(stream).AssertSuccess();
-                    }
+                        using (var stream = _ocxState.GetStream())
+                        {
+                            _storageType = StorageType.StreamInit;
+                            persistStreamInit.Value->Load(stream).AssertSuccess();
+                        }
 
-                    GetControlEnabled();
-                }
-                else
-                {
-                    _ocxState.Type = StorageType.Stream;
-                    DepersistControl();
-                    return;
+                        GetControlEnabled();
+                    }
+                    else
+                    {
+                        _ocxState.Type = StorageType.Stream;
+                        DepersistControl();
+                        return;
+                    }
                 }
 
                 break;
