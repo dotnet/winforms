@@ -250,13 +250,13 @@ override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Ima
 override System.Windows.Forms.TreeView.BackgroundImage.set -> void
 override System.Windows.Forms.TreeView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.TreeView.CreateParams.get -> System.Windows.Forms.CreateParams!
-~override System.Windows.Forms.TreeView.OnGotFocus(System.EventArgs e) -> void
+override System.Windows.Forms.TreeView.OnGotFocus(System.EventArgs! e) -> void
 override System.Windows.Forms.TreeView.OnHandleCreated(System.EventArgs! e) -> void
 override System.Windows.Forms.TreeView.OnHandleDestroyed(System.EventArgs! e) -> void
 override System.Windows.Forms.TreeView.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
 override System.Windows.Forms.TreeView.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e) -> void
 override System.Windows.Forms.TreeView.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
-~override System.Windows.Forms.TreeView.OnLostFocus(System.EventArgs e) -> void
+override System.Windows.Forms.TreeView.OnLostFocus(System.EventArgs! e) -> void
 override System.Windows.Forms.TreeView.OnMouseHover(System.EventArgs! e) -> void
 override System.Windows.Forms.TreeView.OnMouseLeave(System.EventArgs! e) -> void
 override System.Windows.Forms.TreeView.Text.get -> string!
@@ -611,7 +611,7 @@ System.Windows.Forms.PictureBox.Load(string! url) -> void
 ~System.Windows.Forms.TreeNode.TreeNode(string text, System.Windows.Forms.TreeNode[] children) -> void
 ~System.Windows.Forms.TreeNode.TreeNode(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
 ~System.Windows.Forms.TreeNode.TreeView.get -> System.Windows.Forms.TreeView
-~System.Windows.Forms.TreeView.GetItemRenderStyles(System.Windows.Forms.TreeNode node, int state) -> System.Windows.Forms.OwnerDrawPropertyBag
+System.Windows.Forms.TreeView.GetItemRenderStyles(System.Windows.Forms.TreeNode? node, int state) -> System.Windows.Forms.OwnerDrawPropertyBag!
 System.Windows.Forms.TreeView.GetNodeAt(int x, int y) -> System.Windows.Forms.TreeNode?
 System.Windows.Forms.TreeView.GetNodeAt(System.Drawing.Point pt) -> System.Windows.Forms.TreeNode?
 System.Windows.Forms.TreeView.HitTest(int x, int y) -> System.Windows.Forms.TreeViewHitTestInfo!
@@ -11528,8 +11528,8 @@ System.Windows.Forms.TreeNodeCollection.Remove(System.Windows.Forms.TreeNode! no
 System.Windows.Forms.TreeNodeConverter
 System.Windows.Forms.TreeNodeConverter.TreeNodeConverter() -> void
 System.Windows.Forms.TreeNodeMouseClickEventArgs
-System.Windows.Forms.TreeNodeMouseClickEventArgs.Node.get -> System.Windows.Forms.TreeNode!
-System.Windows.Forms.TreeNodeMouseClickEventArgs.TreeNodeMouseClickEventArgs(System.Windows.Forms.TreeNode! node, System.Windows.Forms.MouseButtons button, int clicks, int x, int y) -> void
+System.Windows.Forms.TreeNodeMouseClickEventArgs.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeNodeMouseClickEventArgs.TreeNodeMouseClickEventArgs(System.Windows.Forms.TreeNode? node, System.Windows.Forms.MouseButtons button, int clicks, int x, int y) -> void
 System.Windows.Forms.TreeNodeMouseClickEventHandler
 System.Windows.Forms.TreeNodeMouseHoverEventArgs
 System.Windows.Forms.TreeNodeMouseHoverEventArgs.Node.get -> System.Windows.Forms.TreeNode?
