@@ -1,9 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Buffers;
 using System.ComponentModel;
-using Windows.Win32.UI.Shell.Common;
 
 namespace System.Windows.Forms.Design;
 
@@ -52,58 +50,27 @@ public partial class FolderNameEditor
         /// </summary>
         public unsafe DialogResult ShowDialog(IWin32Window? owner)
         {
-            // Get/find an owner HWND for this dialog.
-            HWND hWndOwner = owner is not null ? (HWND)owner.Handle : PInvoke.GetActiveWindow();
-
-            // Get the IDL for the specific start location.
-            PInvoke.SHGetSpecialFolderLocation((int)StartLocation, out ITEMIDLIST* listHandle);
-            if (listHandle is null)
-            {
-                return DialogResult.Cancel;
-            }
-
             uint mergedOptions = (uint)Style | PInvoke.BIF_NEWDIALOGSTYLE;
             if ((mergedOptions & (int)PInvoke.BIF_NEWDIALOGSTYLE) != 0)
             {
                 Application.OleRequired();
             }
 
-            char[] displayName = ArrayPool<char>.Shared.Rent(PInvoke.MAX_PATH + 1);
-            try
-            {
-                fixed (char* pDisplayName = displayName)
-                fixed (char* ptrDescriptionText = _descriptionText)
-                {
-                    var bi = new BROWSEINFOW
-                    {
-                        pidlRoot = listHandle,
-                        hwndOwner = hWndOwner,
-                        pszDisplayName = pDisplayName,
-                        lpszTitle = ptrDescriptionText,
-                        ulFlags = mergedOptions,
-                        lpfn = null,
-                        lParam = 0,
-                        iImage = 0
-                    };
+            string? folder = FolderBrowserHelper.BrowseForFolder(
+                _descriptionText,
+                (int)StartLocation,
+                mergedOptions,
+                owner is not null ? (HWND)owner.Handle : PInvoke.GetActiveWindow(),
+                callback: null,
+                lParam: default);
 
-                    // Show the dialog.
-                    ITEMIDLIST* browseHandle = PInvoke.SHBrowseForFolder(in bi);
-                    if (browseHandle is null)
-                    {
-                        return DialogResult.Cancel;
-                    }
-
-                    // Retrieve the path from the IDList.
-                    PWSTR selectedPath = default;
-                    PInvoke.SHGetPathFromIDList(browseHandle, selectedPath);
-                    DirectoryPath = new string((char*)selectedPath);
-                    return DialogResult.OK;
-                }
-            }
-            finally
+            if (folder is not null)
             {
-                ArrayPool<char>.Shared.Return(displayName);
+                DirectoryPath = folder;
+                return DialogResult.OK;
             }
+
+            return DialogResult.Cancel;
         }
     }
 }
