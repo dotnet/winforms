@@ -11,6 +11,11 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <IsPackable>true</IsPackable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!-- Re-enable baseline package validation when we can control TFMs to validate. 
+    https://github.com/dotnet/sdk/issues/35214
+    The shipped package contains net6 and net7, the current package will contain the current
+    in support versions net8 and net9 after rebranding. -->
+    <DisablePackageBaselineValidation>true</DisablePackageBaselineValidation>
     <!-- This should point to the last stable released version of this package. -->
     <PackageValidationBaselineVersion>7.0.0</PackageValidationBaselineVersion>
     <AddXamarinPlaceholderFilesToPackage>true</AddXamarinPlaceholderFilesToPackage>
