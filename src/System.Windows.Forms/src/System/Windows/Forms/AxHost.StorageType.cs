@@ -5,13 +5,12 @@ namespace System.Windows.Forms;
 
 public abstract partial class AxHost
 {
-    [Flags]
     internal enum StorageType
     {
-        Unknown = -1,
-        Stream = 0,
-        StreamInit = 1,
-        Storage = 2,
-        PropertyBag = 3
+        Unknown,
+        Stream,
+        StreamInit,
+        Storage,
+        PropertyBag
     }
 }

@@ -51,6 +51,8 @@ internal static unsafe partial class ComHelpers
 
     /// <summary>
     ///  Queries for the given interface and releases it.
+    ///  Note that this method should only be used for the purposes of checking if the object supports a given interface.
+    ///  If that interface is needed, it is best try to get the ComScope directly to avoid querying twice.
     /// </summary>
     internal static bool SupportsInterface<T>(object? @object) where T : unmanaged, IComIID
     {

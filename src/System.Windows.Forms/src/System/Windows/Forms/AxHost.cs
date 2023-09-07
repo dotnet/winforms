@@ -2773,10 +2773,10 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         if (_ocxState is null)
         {
             // Must init new:
-            if (ComHelpers.SupportsInterface<IPersistStreamInit>(_instance))
+            using var persistStreamInit = ComHelpers.TryGetComScope<IPersistStreamInit>(_instance, out HRESULT hr);
+            if (hr.Succeeded)
             {
                 _storageType = StorageType.StreamInit;
-                using var persistStreamInit = ComHelpers.GetComScope<IPersistStreamInit>(_instance);
                 persistStreamInit.Value->InitNew().AssertSuccess();
                 return;
             }
@@ -2787,20 +2787,20 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 return;
             }
 
-            if (ComHelpers.SupportsInterface<IPersistStorage>(_instance))
+            using var persistStoragePtr = ComHelpers.TryGetComScope<IPersistStorage>(_instance, out hr);
+            if (hr.Succeeded)
             {
                 _storageType = StorageType.Storage;
                 _ocxState = new State(this);
                 using var storage = _ocxState.GetStorage();
-                using var persistStoragePtr = ComHelpers.GetComScope<IPersistStorage>(_instance);
                 persistStoragePtr.Value->InitNew(storage).AssertSuccess();
                 return;
             }
 
-            if (ComHelpers.SupportsInterface<IPersistPropertyBag>(_instance))
+            using var persistPropBag = ComHelpers.TryGetComScope<IPersistPropertyBag>(_instance, out hr);
+            if (hr.Succeeded)
             {
                 _storageType = StorageType.PropertyBag;
-                using var persistPropBag = ComHelpers.GetComScope<IPersistPropertyBag>(_instance);
                 persistPropBag.Value->InitNew().AssertSuccess();
                 return;
             }

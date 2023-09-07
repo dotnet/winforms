@@ -65,7 +65,7 @@ public abstract partial class AxHost
 
         public State(Stream ms, int storageType, bool manualUpdate, string? licKey)
         {
-            Type = (StorageType)storageType;
+            Type = (StorageType)(storageType + 1);
             _length = checked((int)ms.Length);
             ManualUpdate = manualUpdate;
             LicenseKey = licKey;
@@ -220,7 +220,9 @@ public abstract partial class AxHost
 
             if (!initializeBufferOnly)
             {
-                Type = (StorageType)binaryReader.ReadInt32();
+                // For compatibility, always translate by adding 1 to match our new internal
+                // storage values (unknown = 0, stream = 1, etc.).
+                Type = (StorageType)(binaryReader.ReadInt32() + 1);
                 int version = binaryReader.ReadInt32();
                 ManualUpdate = binaryReader.ReadBoolean();
                 int cc = binaryReader.ReadInt32();
@@ -297,7 +299,9 @@ public abstract partial class AxHost
         {
             using BinaryWriter binaryWriter = new(stream);
 
-            binaryWriter.Write((int)Type);
+            // For compatibility, always translate back to the original storage type values
+            // (unknown = -1, stream = 0, etc.) by subtracting 1 when saving.
+            binaryWriter.Write(((int)Type) - 1);
             binaryWriter.Write(VERSION);
             binaryWriter.Write(ManualUpdate);
             if (LicenseKey is { } licenseKey)
