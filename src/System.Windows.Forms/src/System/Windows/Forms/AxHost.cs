@@ -45,11 +45,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private const int EDITM_OBJECT = 1; // object provided an edit verb and we invoked it
     private const int EDITM_HOST = 2;   // we invoked our own edit verb
 
-    private const int STG_UNKNOWN = -1;
-    private const int STG_STREAM = 0;
-    private const int STG_STREAMINIT = 1;
-    private const int STG_STORAGE = 2;
-
     private readonly uint _subclassCheckMessage
         = PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}_subclassCheck");
 
@@ -102,7 +97,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private BitVector32 _axState;
 
-    private int _storageType = STG_UNKNOWN;
+    private StorageType _storageType = StorageType.Unknown;
     private int _ocState = OC_PASSIVE;
     private OLEMISC _miscStatusBits;
     private int _freezeCount;
@@ -137,10 +132,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private object? _instance;
     private AgileComPointer<IOleInPlaceActiveObject>? _iOleInPlaceActiveObjectExternal;
-    private IPersistPropertyBag.Interface? _iPersistPropBag;
-    private IPersistStream.Interface? _iPersistStream;
-    private IPersistStreamInit.Interface? _iPersistStreamInit;
-    private IPersistStorage.Interface? _iPersistStorage;
 
     private AboutBoxDelegate? _aboutBoxDelegate;
     private readonly EventHandler _selectionChangeHandler;
@@ -1861,7 +1852,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 return;
             }
 
-            if (_storageType != STG_UNKNOWN && _storageType != value.Type)
+            if (_storageType != StorageType.Unknown && _storageType != value.Type)
             {
                 Debug.Fail("Trying to reload with a OcxState that is of a different type.");
                 throw new InvalidOperationException(SR.AXOcxStateLoaded);
@@ -1904,53 +1895,48 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             }
 
             PropertyBagStream? propBag = null;
-
-            if (_iPersistPropBag is not null)
-            {
-                propBag = new PropertyBagStream();
-                using var propertyBag = ComHelpers.GetComScope<IPropertyBag>(propBag);
-                _iPersistPropBag.Save(propertyBag, fClearDirty: true, fSaveAllProperties: true).AssertSuccess();
-            }
-
             MemoryStream? ms = null;
             switch (_storageType)
             {
-                case STG_STREAM:
-                case STG_STREAMINIT:
+                case StorageType.Stream:
+                case StorageType.StreamInit:
                     ms = new MemoryStream();
                     using (var stream = ComHelpers.GetComScope<IStream>(new Interop.Ole32.GPStream(ms)))
                     {
-                        if (_storageType == STG_STREAM)
+                        if (_storageType == StorageType.Stream)
                         {
-                            _iPersistStream!.Save(stream, fClearDirty: true).AssertSuccess();
+                            using var persistStream = ComHelpers.GetComScope<IPersistStream>(_instance);
+                            persistStream.Value->Save(stream, fClearDirty: true).AssertSuccess();
                         }
                         else
                         {
-                            _iPersistStreamInit!.Save(stream, fClearDirty: true).AssertSuccess();
+                            using var persistStreamInit = ComHelpers.GetComScope<IPersistStreamInit>(_instance);
+                            persistStreamInit.Value->Save(stream, fClearDirty: true).AssertSuccess();
                         }
                     }
 
-                    break;
-                case STG_STORAGE:
+                    return new State(ms, _storageType, this);
+                case StorageType.Storage:
                     Debug.Assert(oldOcxState is not null, "we got to have an old state which holds out scribble storage...");
                     if (oldOcxState is not null)
                     {
-                        return oldOcxState.RefreshStorage(_iPersistStorage!);
+                        using var persistStorage = ComHelpers.GetComScope<IPersistStorage>(_instance);
+                        return oldOcxState.RefreshStorage(persistStorage);
                     }
 
                     return null;
+                case StorageType.PropertyBag:
+                    propBag = new PropertyBagStream();
+                    using (var propertyBag = ComHelpers.GetComScope<IPropertyBag>(propBag))
+                    using (var persistPropBag = ComHelpers.GetComScope<IPersistPropertyBag>(_instance))
+                    {
+                        persistPropBag.Value->Save(propertyBag, fClearDirty: true, fSaveAllProperties: true).AssertSuccess();
+                    }
+
+                    return new State(propBag);
                 default:
                     Debug.Fail("unknown storage type.");
                     return null;
-            }
-
-            if (ms is not null)
-            {
-                return new State(ms, _storageType, this, propBag);
-            }
-            else if (propBag is not null)
-            {
-                return new State(propBag);
             }
         }
         catch (Exception)
@@ -2048,7 +2034,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return false;
         }
 
-        Debug.Assert(_storageType != STG_UNKNOWN, "if we are loaded, out storage type must be set!");
+        Debug.Assert(_storageType != StorageType.Unknown, "if we are loaded, out storage type must be set!");
 
         if (_axState[s_valueChanged])
         {
@@ -2065,14 +2051,26 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         HRESULT hr = HRESULT.E_FAIL;
         switch (_storageType)
         {
-            case STG_STREAM:
-                hr = _iPersistStream!.IsDirty();
+            case StorageType.Stream:
+                using (var persistStream = ComHelpers.GetComScope<IPersistStream>(_instance))
+                {
+                    hr = persistStream.Value->IsDirty();
+                }
+
                 break;
-            case STG_STREAMINIT:
-                hr = _iPersistStreamInit!.IsDirty();
+            case StorageType.StreamInit:
+                using (var persistStreamInit = ComHelpers.GetComScope<IPersistStreamInit>(_instance))
+                {
+                    hr = persistStreamInit.Value->IsDirty();
+                }
+
                 break;
-            case STG_STORAGE:
-                hr = _iPersistStorage!.IsDirty();
+            case StorageType.Storage:
+                using (var persistStorage = ComHelpers.GetComScope<IPersistStorage>(_instance))
+                {
+                    hr = persistStorage.Value->IsDirty();
+                }
+
                 break;
             default:
                 Debug.Fail("unknown storage type");
@@ -2768,41 +2766,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         SetOcState(OC_RUNNING);
     }
 
-    private void DepersistFromIPropertyBag(IPropertyBag.Interface propBag)
-    {
-        using var pPropBag = ComHelpers.TryGetComScope<IPropertyBag>(propBag, out HRESULT hr);
-        hr.AssertSuccess();
-        _iPersistPropBag.Load(pPropBag, pErrorLog: null).ThrowOnFailure();
-    }
-
-    private void DepersistFromIStream(IStream.Interface istream)
-    {
-        _storageType = STG_STREAM;
-        using var pStream = ComHelpers.TryGetComScope<IStream>(istream, out HRESULT hr);
-        hr.AssertSuccess();
-        _iPersistStream.Load(pStream).ThrowOnFailure();
-    }
-
-    private void DepersistFromIStreamInit(IStream.Interface istream)
-    {
-        _storageType = STG_STREAMINIT;
-        using var pStream = ComHelpers.TryGetComScope<IStream>(istream, out HRESULT hr);
-        hr.AssertSuccess();
-        _iPersistStreamInit.Load(pStream).ThrowOnFailure();
-    }
-
-    private void DepersistFromIStorage(IStorage* storage)
-    {
-        _storageType = STG_STORAGE;
-
-        // MapPoint control does not create a valid IStorage until some property has changed.
-        // Since we end up creating an empty storage, we are not able to re-create a valid one and this would fail.
-        if (storage is not null)
-        {
-            _iPersistStorage.Load(storage).ThrowOnFailure();
-        }
-    }
-
     private void DepersistControl()
     {
         FreezeEvents(true);
@@ -2810,37 +2773,36 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         if (_ocxState is null)
         {
             // Must init new:
-            if (_instance is IPersistStreamInit.Interface init)
+            using var persistStreamInit = ComHelpers.TryGetComScope<IPersistStreamInit>(_instance, out HRESULT hr);
+            if (hr.Succeeded)
             {
-                _iPersistStreamInit = init;
-                _storageType = STG_STREAMINIT;
-                _iPersistStreamInit.InitNew().AssertSuccess();
-
+                _storageType = StorageType.StreamInit;
+                persistStreamInit.Value->InitNew().AssertSuccess();
                 return;
             }
 
-            if (_instance is IPersistStream.Interface persistStream)
+            if (ComHelpers.SupportsInterface<IPersistStream>(_instance))
             {
-                _storageType = STG_STREAM;
-                _iPersistStream = persistStream;
+                _storageType = StorageType.Stream;
                 return;
             }
 
-            if (_instance is IPersistStorage.Interface persistStorage)
+            using var persistStoragePtr = ComHelpers.TryGetComScope<IPersistStorage>(_instance, out hr);
+            if (hr.Succeeded)
             {
-                _storageType = STG_STORAGE;
+                _storageType = StorageType.Storage;
                 _ocxState = new State(this);
-                _iPersistStorage = persistStorage;
                 using var storage = _ocxState.GetStorage();
-                _iPersistStorage.InitNew(storage).AssertSuccess();
-
+                persistStoragePtr.Value->InitNew(storage).AssertSuccess();
                 return;
             }
 
-            if (_instance is IPersistPropertyBag.Interface persistPropertyBag)
+            using var persistPropBag = ComHelpers.TryGetComScope<IPersistPropertyBag>(_instance, out hr);
+            if (hr.Succeeded)
             {
-                _iPersistPropBag = persistPropertyBag;
-                _iPersistPropBag.InitNew().AssertSuccess();
+                _storageType = StorageType.PropertyBag;
+                persistPropBag.Value->InitNew().AssertSuccess();
+                return;
             }
 
             Debug.Fail("no implemented persistence interfaces on object");
@@ -2850,66 +2812,68 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         // Otherwise, we have state to depersist from:
         switch (_ocxState.Type)
         {
-            case STG_STREAM:
-                try
+            case StorageType.Stream:
+                using (var stream = _ocxState.GetStream())
                 {
-                    _iPersistStream = (IPersistStream.Interface)_instance;
-                    DepersistFromIStream(_ocxState.GetStream());
-                }
-                catch (Exception)
-                {
+                    _storageType = StorageType.Stream;
+                    using var persistStream = ComHelpers.GetComScope<IPersistStream>(_instance);
+                    persistStream.Value->Load(stream).AssertSuccess();
                 }
 
                 break;
-            case STG_STREAMINIT:
-                if (_instance is IPersistStreamInit.Interface persistStreamInit)
+            case StorageType.StreamInit:
+                using (var persistStreamInit = ComHelpers.TryGetComScope<IPersistStreamInit>(_instance, out HRESULT hr))
                 {
-                    try
+                    if (hr.Succeeded)
                     {
-                        _iPersistStreamInit = persistStreamInit;
-                        DepersistFromIStreamInit(_ocxState.GetStream());
-                    }
-                    catch (Exception)
-                    {
-                    }
+                        using (var stream = _ocxState.GetStream())
+                        {
+                            _storageType = StorageType.StreamInit;
+                            persistStreamInit.Value->Load(stream).AssertSuccess();
+                        }
 
-                    GetControlEnabled();
-                }
-                else
-                {
-                    _ocxState.Type = STG_STREAM;
-                    DepersistControl();
-                    return;
+                        GetControlEnabled();
+                    }
+                    else
+                    {
+                        _ocxState.Type = StorageType.Stream;
+                        DepersistControl();
+                        return;
+                    }
                 }
 
                 break;
-            case STG_STORAGE:
-                try
+            case StorageType.Storage:
+                using (var storage = _ocxState.GetStorage())
                 {
-                    _iPersistStorage = (IPersistStorage.Interface)_instance;
-                    using var storage = _ocxState.GetStorage();
-                    DepersistFromIStorage(storage);
+                    _storageType = StorageType.Storage;
+
+                    // MapPoint control does not create a valid IStorage until some property has changed.
+                    // Since we end up creating an empty storage, we are not able to re-create a valid one and this would fail.
+                    if (!storage.IsNull)
+                    {
+                        using var persistStorage = ComHelpers.GetComScope<IPersistStorage>(_instance);
+                        persistStorage.Value->Load(storage).AssertSuccess();
+                    }
                 }
-                catch (Exception)
+
+                break;
+            case StorageType.PropertyBag:
+                using (var propBag = _ocxState.GetPropBag())
                 {
+                    _storageType = StorageType.PropertyBag;
+
+                    if (!propBag.IsNull)
+                    {
+                        using var persistPropBag = ComHelpers.GetComScope<IPersistPropertyBag>(_instance);
+                        persistPropBag.Value->Load(propBag, pErrorLog: null).AssertSuccess();
+                    }
                 }
 
                 break;
             default:
                 Debug.Fail("unknown storage type.");
                 throw new InvalidOperationException(SR.UnableToInitComponent);
-        }
-
-        if (_ocxState.GetPropBag() is not null)
-        {
-            try
-            {
-                _iPersistPropBag = (IPersistPropertyBag.Interface)_instance;
-                DepersistFromIPropertyBag(_ocxState.GetPropBag());
-            }
-            catch (Exception)
-            {
-            }
         }
     }
 
@@ -3503,10 +3467,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             {
                 Marshal.ReleaseComObject(_instance);
                 _instance = null;
-                _iOleInPlaceActiveObjectExternal = null;
-                _iPersistStream = null;
-                _iPersistStreamInit = null;
-                _iPersistStorage = null;
+                DisposeHelper.NullAndDispose(ref _iOleInPlaceActiveObjectExternal);
             }
 
             _axState[s_disposed] = true;
