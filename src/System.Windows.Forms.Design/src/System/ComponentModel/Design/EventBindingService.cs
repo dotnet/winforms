@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.Reflection;
 using System.Windows.Forms;
@@ -16,9 +14,9 @@ namespace System.ComponentModel.Design;
 public abstract partial class EventBindingService : IEventBindingService
 {
     private readonly IServiceProvider _provider;
-    private IComponent _showCodeComponent;
-    private EventDescriptor _showCodeEventDescriptor;
-    private string _showCodeMethodName;
+    private IComponent? _showCodeComponent;
+    private EventDescriptor? _showCodeEventDescriptor;
+    private string? _showCodeMethodName;
 
     /// <summary>
     ///  You must provide a service provider to the binding
@@ -59,7 +57,7 @@ public abstract partial class EventBindingService : IEventBindingService
     /// <summary>
     ///  Gets the requested service from our service provider.
     /// </summary>
-    protected object GetService(Type serviceType) => _provider?.GetService(serviceType);
+    protected object? GetService(Type serviceType) => _provider.GetService(serviceType);
 
     /// <summary>
     ///  Shows the user code.  This method does not show any
@@ -130,29 +128,24 @@ public abstract partial class EventBindingService : IEventBindingService
     ///  For properties that are representing events, this will return the event
     ///  that the property represents.
     /// </summary>
-    EventDescriptor IEventBindingService.GetEvent(PropertyDescriptor property)
+    EventDescriptor? IEventBindingService.GetEvent(PropertyDescriptor property)
     {
-        if (property is EventPropertyDescriptor)
-        {
-            return ((EventPropertyDescriptor)property).Event;
-        }
-
-        return null;
+        return (property as EventPropertyDescriptor)?.Event;
     }
 
     /// <summary>
     ///  Returns true if the given event has a generic argument or return value in its raise method.
     /// </summary>
-    private static bool HasGenericArgument(EventDescriptor ed)
+    private static bool HasGenericArgument([NotNullWhen(true)] EventDescriptor? ed)
     {
         if (ed is null || ed.ComponentType is null)
         {
             return false;
         }
 
-        EventInfo evInfo = ed.ComponentType.GetEvent(ed.Name);
+        EventInfo? evInfo = ed.ComponentType.GetEvent(ed.Name);
 
-        if (evInfo is null || !evInfo.EventHandlerType.IsGenericType)
+        if (evInfo is null || !evInfo.EventHandlerType!.IsGenericType)
         {
             return false;
         }
@@ -191,7 +184,7 @@ public abstract partial class EventBindingService : IEventBindingService
                 continue;
             }
 
-            PropertyDescriptor prop = new EventPropertyDescriptor(events[i], this);
+            PropertyDescriptor prop = new EventPropertyDescriptor(events[i]!, this);
             props.Add(prop);
         }
 
@@ -238,7 +231,7 @@ public abstract partial class EventBindingService : IEventBindingService
         ArgumentNullException.ThrowIfNull(e);
 
         PropertyDescriptor prop = ((IEventBindingService)this).GetEventProperty(e);
-        string methodName = (string)prop.GetValue(component);
+        string? methodName = (string?)prop.GetValue(component);
 
         if (methodName is null)
         {
@@ -258,13 +251,13 @@ public abstract partial class EventBindingService : IEventBindingService
     ///  Displays the user code for the given event.  This will return true if the user
     ///  code could be displayed, or false otherwise.
     /// </summary>
-    private void ShowCodeIdle(object sender, EventArgs e)
+    private void ShowCodeIdle(object? sender, EventArgs e)
     {
         Application.Idle -= new EventHandler(ShowCodeIdle);
 
         try
         {
-            ShowCode(_showCodeComponent, _showCodeEventDescriptor, _showCodeMethodName);
+            ShowCode(_showCodeComponent!, _showCodeEventDescriptor!, _showCodeMethodName!);
         }
         finally
         {
