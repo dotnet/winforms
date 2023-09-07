@@ -487,4 +487,26 @@ internal static partial class DpiHelper
 
         return success;
     }
+
+    /// <summary>
+    ///  Create a new button bitmap scaled for the device units.
+    ///  Note: original image might be disposed.
+    /// </summary>
+    public static Image? ScaleButtonImageLogicalToDevice(Image? buttonImage)
+    {
+        if (buttonImage is null)
+        {
+            return null;
+        }
+
+        Bitmap? buttonBitmap = buttonImage as Bitmap;
+        if (buttonBitmap is null)
+        {
+            return null;
+        }
+
+        Bitmap deviceBitmap = CreateScaledBitmap(buttonBitmap);
+        buttonImage.Dispose();
+        return deviceBitmap;
+    }
 }

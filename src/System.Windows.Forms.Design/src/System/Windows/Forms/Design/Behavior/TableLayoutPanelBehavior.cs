@@ -19,7 +19,7 @@ internal class TableLayoutPanelBehavior : Behavior
     private BehaviorService behaviorService; //used for bounds translation
     private IServiceProvider serviceProvider; //cached to allow our behavior to get services
     private TableLayoutPanelResizeGlyph tableGlyph; //the glyph being resized
-    private DesignerTransaction resizeTransaction; //used to make size adjustements within transaction
+    private DesignerTransaction resizeTransaction; //used to make size adjustments within transaction
     private PropertyDescriptor resizeProp; //cached property descriptor representing either the row or column styles
     private PropertyDescriptor changedProp;  //cached property descriptor that refers to the RowSTyles or ColumnStyles collection.
     private TableLayoutPanel table;

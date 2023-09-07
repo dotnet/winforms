@@ -651,9 +651,134 @@
         <target state="translated">この厳密に型指定されたリソース クラスを使用したリソースの検索。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DataGridViewAddColumnTransactionString">
+        <source>Add Column</source>
+        <target state="new">Add Column</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewAddColumnVerb">
+        <source>&amp;Add Column...</source>
+        <target state="new">&amp;Add Column...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewBoundColumnProperties">
+        <source>Bound Column &amp;Properties</source>
+        <target state="new">Bound Column &amp;Properties</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewChooseDataSource">
+        <source>Choose Data Source:</source>
+        <target state="new">Choose Data Source:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewChooseDataSourceTransactionString">
+        <source>{0} DataSource changed</source>
+        <target state="new">{0} DataSource changed</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewColumnTypePropertyDescription">
+        <source>The DataGridViewColumn type.</source>
+        <target state="new">The DataGridViewColumn type.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewDataSourceNoLongerValid">
+        <source>Unable to create columns for the data source. The data source is no longer valid</source>
+        <target state="new">Unable to create columns for the data source. The data source is no longer valid</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewDisableAddingTransactionString">
+        <source>Disable Adding</source>
+        <target state="new">Disable Adding</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewDisableColumnReorderingTransactionString">
+        <source>Disable Column Reordering</source>
+        <target state="new">Disable Column Reordering</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewDisableDeletingTransactionString">
+        <source>Disable Deleting</source>
+        <target state="new">Disable Deleting</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewDisableEditingTransactionString">
+        <source>Disable Editing</source>
+        <target state="new">Disable Editing</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewDuplicateColumnName">
+        <source>The name {0} is already in use by another column.</source>
+        <target state="new">The name {0} is already in use by another column.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewEditColumnsTransactionString">
+        <source>Edit Columns</source>
+        <target state="new">Edit Columns</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewEditColumnsVerb">
+        <source>&amp;Edit Columns...</source>
+        <target state="new">&amp;Edit Columns...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewEnableAdding">
+        <source>Enable Adding</source>
+        <target state="new">Enable Adding</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewEnableAddingTransactionString">
+        <source>Enable Adding</source>
+        <target state="new">Enable Adding</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewEnableColumnReordering">
+        <source>Enable Column Reordering</source>
+        <target state="new">Enable Column Reordering</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewEnableColumnReorderingTransactionString">
+        <source>Enable Column Reordering</source>
+        <target state="new">Enable Column Reordering</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewEnableDeleting">
+        <source>Enable Deleting</source>
+        <target state="new">Enable Deleting</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewEnableDeletingTransactionString">
+        <source>Enable Deleting</source>
+        <target state="new">Enable Deleting</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewEnableEditing">
+        <source>Enable Editing</source>
+        <target state="new">Enable Editing</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewEnableEditingTransactionString">
+        <source>Enable Editing</source>
+        <target state="new">Enable Editing</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewProperties">
+        <source>&amp;Properties</source>
+        <target state="new">&amp;Properties</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridViewUnboundColumnProperties">
+        <source>Unbound Column &amp;Properties</source>
+        <target state="new">Unbound Column &amp;Properties</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DataGridView_Cancel">
         <source>Cancel</source>
         <target state="translated">キャンセル</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DataGridView_Close">
+        <source>Close</source>
+        <target state="new">Close</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_OK">
@@ -664,6 +789,91 @@
       <trans-unit id="DataSourceLocksItems">
         <source>Items collection cannot be modified when the DataSource property is set.</source>
         <target state="translated">データソース プロパティを設定したときに Items コレクションを変更することはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerAccessibleName">
+        <source>Data binding editor</source>
+        <target state="translated">データ バインディング エディター</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerAddProjDataSourceLabel">
+        <source>Add new Object Data Source...</source>
+        <target state="translated">オブジェクト データ ソースを追加します...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerHelpGenAddDataSrc">
+        <source>Click the 'Add Project Data Source...' link to connect to data.</source>
+        <target state="translated">[プロジェクト データ ソースの追加...] をクリックして、データに接続します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerHelpGenCurrentBinding">
+        <source>Currently data bound to '{0}'.</source>
+        <target state="translated">データは現在 '{0}' にバインドしています。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerHelpGenPickBindSrc">
+        <source>Select a BindingSource to bind to.</source>
+        <target state="translated">バインド先の BindingSource を選択してください。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerHelpGenPickDataSrc">
+        <source>Select a data source under 'Other Data Sources' to connect to data.</source>
+        <target state="translated">[他のデータ ソース] のデータを選択して、データに接続します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerHelpGenPickMember">
+        <source>Select a data member to bind to.</source>
+        <target state="translated">バインドするデータ メンバーを選択します。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerHelpNodeInstances">
+        <source>Contains all form components that implement IList, IListSource or Array.</source>
+        <target state="translated">IList、IListSource または Array を実装するすべてのフォームのコンポーネントを含んでいます。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerHelpNodeNone">
+        <source>Selecting 'None' clears the current data binding.</source>
+        <target state="translated">[なし] を選択すると、現在のデータ バインディングをクリアします。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerHelpNodeOther">
+        <source>Contains all project data sources and local form list instances.</source>
+        <target state="translated">すべてのプロジェクト データ ソースおよびローカルのフォーム一覧インスタンスを含んでいます。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerHelpNodeProject">
+        <source>Contains all project data sources.</source>
+        <target state="translated">すべてのプロジェクト データ ソースを含んでいます。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerHelpNodeProjectGroup">
+        <source>Contains project data sources belonging to this namespace.</source>
+        <target state="translated">名前空間に属するプロジェクト データ ソースを含んでいます。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerNodeInstances">
+        <source>{0} List Instances</source>
+        <target state="translated">{0} 一覧インスタンス</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerNodeNone">
+        <source>None</source>
+        <target state="translated">なし</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerNodeOther">
+        <source>Other Data Sources</source>
+        <target state="translated">他のデータ ソース</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerNodeProject">
+        <source>Project Data Sources</source>
+        <target state="translated">プロジェクト データ ソース</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignBindingPickerTreeViewAccessibleName">
+        <source>Bindable data sources and data members</source>
+        <target state="translated">バインド可能なデータ ソースおよびデータ メンバー</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">

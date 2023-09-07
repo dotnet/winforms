@@ -12,10 +12,7 @@ internal class BindingSourceDesigner : ComponentDesigner
 
     public bool BindingUpdatedByUser
     {
-        set
-        {
-            _bindingUpdatedByUser = value;
-        }
+        set => _bindingUpdatedByUser = value;
     }
 
     public override void Initialize(IComponent component)
@@ -59,25 +56,25 @@ internal class BindingSourceDesigner : ComponentDesigner
 
     private void OnComponentRemoving(object? sender, ComponentEventArgs e)
     {
-        BindingSource? bingSource = Component as BindingSource;
-        if (bingSource is not null && bingSource.DataSource == e.Component)
+        BindingSource? bindingSource = Component as BindingSource;
+        if (bindingSource is not null && bindingSource.DataSource == e.Component)
         {
             IComponentChangeService componentChangeService = GetService<IComponentChangeService>();
-            string previousDataMember = bingSource.DataMember;
+            string previousDataMember = bindingSource.DataMember;
 
-            PropertyDescriptorCollection propertyDescriptorCollection = TypeDescriptor.GetProperties(bingSource);
+            PropertyDescriptorCollection propertyDescriptorCollection = TypeDescriptor.GetProperties(bindingSource);
             PropertyDescriptor? propertyDescriptor = propertyDescriptorCollection?["DataMember"];
 
             if (componentChangeService is not null && propertyDescriptor is not null)
             {
-                componentChangeService.OnComponentChanging(bingSource, propertyDescriptor);
+                componentChangeService.OnComponentChanging(bindingSource, propertyDescriptor);
             }
 
-            bingSource.DataSource = null;
+            bindingSource.DataSource = null;
 
             if (componentChangeService is not null && propertyDescriptor is not null)
             {
-                componentChangeService.OnComponentChanged(bingSource, propertyDescriptor, previousDataMember, string.Empty);
+                componentChangeService.OnComponentChanged(bindingSource, propertyDescriptor, previousDataMember, string.Empty);
             }
         }
     }
