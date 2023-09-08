@@ -39,6 +39,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ComboBoxDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewColumnDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewComboBoxColumnDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DateTimePickerDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FormDocumentDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FlowPanelDesigner))]
