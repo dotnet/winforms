@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.ComponentModel;
-
 namespace System.Windows.Forms.Tests;
 
 public class FolderBrowserDialogTests
@@ -114,14 +112,6 @@ public class FolderBrowserDialogTests
         // Set same.
         dialog.RootFolder = value;
         Assert.Equal(value, dialog.RootFolder);
-    }
-
-    [WinFormsTheory]
-    [InvalidEnumData<Environment.SpecialFolder>]
-    public void FolderBrowserDialog_RootFolder_SetInvalid_ThrowsInvalidEnumArgumentException(Environment.SpecialFolder value)
-    {
-        using var dialog = new FolderBrowserDialog();
-        Assert.Throws<InvalidEnumArgumentException>("value", () => dialog.RootFolder = value);
     }
 
     [WinFormsTheory]

@@ -5210,11 +5210,6 @@ Do you want to replace it?</source>
         <target state="translated">顯示在對話方塊中樹狀檢視控制項上方的字串。這個字串可以用來指定對使用者的指示。</target>
         <note />
       </trans-unit>
-      <trans-unit id="FolderBrowserDialogNoRootFolder">
-        <source>Unable to retrieve the root folder.</source>
-        <target state="translated">無法擷取根資料夾。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">控制是否在使用者巡覽檢視或編輯檔案名稱 (如適用) 之前，停用對話方塊的 [確定] 按鈕。請注意: 停用 [確定] 按鈕無法防止透過 Enter 鍵送出對話方塊。</target>
