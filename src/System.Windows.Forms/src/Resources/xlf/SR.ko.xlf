@@ -5210,11 +5210,6 @@ Do you want to replace it?</source>
         <target state="translated">대화 상자의 tree view 컨트롤 위에 표시되는 문자열입니다. 이 문자열을 사용하여 사용자에게 표시될 지시 사항을 지정할 수 있습니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FolderBrowserDialogNoRootFolder">
-        <source>Unable to retrieve the root folder.</source>
-        <target state="translated">루트 폴더를 검색할 수 없습니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">사용자가 파일 이름 보기 또는 편집으로 이동할 때까지 대화 상자의 확인 버튼을 사용하지 않을지를 제어합니다(해당하는 경우). 참고: 확인 버튼을 사용하지 않아도 Enter 키로 대화 상자를 제출할 수 있습니다.</target>

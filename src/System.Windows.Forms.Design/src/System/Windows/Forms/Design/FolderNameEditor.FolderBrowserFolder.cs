@@ -5,19 +5,26 @@ namespace System.Windows.Forms.Design;
 
 public partial class FolderNameEditor
 {
+    /// <devdoc>
+    ///  <para>
+    ///   <see cref="Environment.SpecialFolder"/> is also a list of CSIDL values. Unfortunately CSIDL_CONNECTIONS,
+    ///   CSIDL_NETWORK, and CSIDL_PRINTERS are not currently defined in that enum and can't be passed to
+    ///   <see cref="Environment.GetFolderPath(Environment.SpecialFolder)"/>.
+    ///  </para>
+    /// </devdoc>
     protected enum FolderBrowserFolder
     {
-        Desktop = 0x0000,
-        Favorites = 0x0006,
-        MyComputer = 0x0011,
-        MyDocuments = 0x0005,
-        MyPictures = 0x0027,
-        NetAndDialUpConnections = 0x0031,
-        NetworkNeighborhood = 0x0012,
-        Printers = 0x0004,
-        Recent = 0x0008,
-        SendTo = 0x0009,
-        StartMenu = 0x000b,
-        Templates = 0x0015
+        Desktop = (int)PInvoke.CSIDL_DESKTOP,
+        Favorites = (int)PInvoke.CSIDL_FAVORITES,
+        MyComputer = (int)PInvoke.CSIDL_DRIVES,
+        MyDocuments = (int)PInvoke.CSIDL_PERSONAL,
+        MyPictures = (int)PInvoke.CSIDL_MYPICTURES,
+        NetAndDialUpConnections = (int)PInvoke.CSIDL_CONNECTIONS,
+        NetworkNeighborhood = (int)PInvoke.CSIDL_NETWORK,
+        Printers = (int)PInvoke.CSIDL_PRINTERS,
+        Recent = (int)PInvoke.CSIDL_RECENT,
+        SendTo = (int)PInvoke.CSIDL_SENDTO,
+        StartMenu = (int)PInvoke.CSIDL_STARTMENU,
+        Templates = (int)PInvoke.CSIDL_TEMPLATES
     }
 }

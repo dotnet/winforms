@@ -28,6 +28,7 @@ CDM_GETSPEC
 CDRF_*
 CHILDID_SELF
 ChildWindowFromPointEx
+CSIDL_*
 CLIENTCREATESTRUCT
 ClientToScreen
 ClipCursor
@@ -644,7 +645,7 @@ SHCreateShellItem
 SHDRAGIMAGE
 ShellExecute
 SHGetKnownFolderPath
-SHGetPathFromIDList
+SHGetPathFromIDListEx
 SHGetSpecialFolderLocation
 ShowCaret
 ShowCursor
