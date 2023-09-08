@@ -3100,9 +3100,6 @@ Do you want to replace it?</value>
   <data name="FolderBrowserDialogDescription" xml:space="preserve">
     <value>The string that is displayed above the tree view control in the dialog box. This string can be used to specify instructions to the user.</value>
   </data>
-  <data name="FolderBrowserDialogNoRootFolder" xml:space="preserve">
-    <value>Unable to retrieve the root folder.</value>
-  </data>
   <data name="FolderBrowserDialogRootFolder" xml:space="preserve">
     <value>The location of the root folder from which to start browsing. Only the specified folder and any subfolders that are beneath it will appear in the dialog box.</value>
   </data>
