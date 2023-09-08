@@ -3,15 +3,19 @@
 
 Option Explicit On
 Option Strict On
+
 Imports System.ComponentModel
 Imports System.Net
+Imports System.Net.Http
 Imports System.Security
 Imports System.Threading
+
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports Microsoft.VisualBasic.CompilerServices.Utils
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
+
 Imports NetInfoAlias = System.Net.NetworkInformation
 
 Namespace Microsoft.VisualBasic.Devices
@@ -21,6 +25,7 @@ Namespace Microsoft.VisualBasic.Devices
     ''' </summary>
     Public Class NetworkAvailableEventArgs
         Inherits EventArgs
+
         Public Sub New(networkAvailable As Boolean)
             IsNetworkAvailable = networkAvailable
         End Sub
@@ -129,6 +134,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
             ' However, it is good practice to verify address before calling address.Host.
             If address Is Nothing Then
+#Disable Warning IDE0002 ' Simplify Member Access
                 Throw ExceptionUtils.GetArgumentNullException("address")
             End If
             Return Ping(address.Host, DEFAULT_PING_TIMEOUT)
@@ -149,10 +155,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             Dim PingMaker As New NetInfoAlias.Ping
             Dim Reply As NetInfoAlias.PingReply = PingMaker.Send(hostNameOrAddress, timeout, PingBuffer)
-            If Reply.Status = NetInfoAlias.IPStatus.Success Then
-                Return True
-            End If
-            Return False
+            Return Reply.Status = NetInfoAlias.IPStatus.Success
         End Function
 
         ''' <summary>
@@ -176,7 +179,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
         Public Sub DownloadFile(address As String, destinationFileName As String)
-            DownloadFile(address, destinationFileName, DEFAULT_USERNAME, DEFAULT_PASSWORD, False, DEFAULT_TIMEOUT, False)
+            Task.Run(Async Function()
+                         Await DownloadFileAsync(address, destinationFileName, DEFAULT_USERNAME, DEFAULT_PASSWORD, False, DEFAULT_TIMEOUT, False).ConfigureAwait(False)
+                     End Function).Wait()
         End Sub
 
         ''' <summary>
@@ -185,7 +190,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="address">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
         Public Sub DownloadFile(address As Uri, destinationFileName As String)
-            DownloadFile(address, destinationFileName, DEFAULT_USERNAME, DEFAULT_PASSWORD, False, DEFAULT_TIMEOUT, False)
+            Task.Run(Async Function()
+                         Await DownloadFileAsync(address, destinationFileName, DEFAULT_USERNAME, DEFAULT_PASSWORD, False, DEFAULT_TIMEOUT, False).ConfigureAwait(False)
+                     End Function).Wait()
         End Sub
 
         ''' <summary>
@@ -196,18 +203,9 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="userName">The name of the user performing the download</param>
         ''' <param name="password">The user's password</param>
         Public Sub DownloadFile(address As String, destinationFileName As String, userName As String, password As String)
-            DownloadFile(address, destinationFileName, userName, password, False, DEFAULT_TIMEOUT, False)
-        End Sub
-
-        ''' <summary>
-        ''' Downloads a file from the network to the specified path
-        ''' </summary>
-        ''' <param name="address">Uri to the remote file</param>
-        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
-        ''' <param name="userName">The name of the user performing the download</param>
-        ''' <param name="password">The user's password</param>
-        Public Sub DownloadFile(address As Uri, destinationFileName As String, userName As String, password As String)
-            DownloadFile(address, destinationFileName, userName, password, False, DEFAULT_TIMEOUT, False)
+            Task.Run(Async Function()
+                         Await DownloadFileAsync(address, destinationFileName, userName, password, False, DEFAULT_TIMEOUT, False).ConfigureAwait(False)
+                     End Function).Wait()
         End Sub
 
         ''' <summary>
@@ -228,7 +226,9 @@ Namespace Microsoft.VisualBasic.Devices
                              connectionTimeout As Integer,
                              overwrite As Boolean)
 
-            DownloadFile(address, destinationFileName, userName, password, showUI, connectionTimeout, overwrite, UICancelOption.ThrowException)
+            Task.Run(Async Function()
+                         Await DownloadFileAsync(address, destinationFileName, userName, password, showUI, connectionTimeout, overwrite, UICancelOption.ThrowException).ConfigureAwait(False)
+                     End Function).Wait()
         End Sub
 
         ''' <summary>
@@ -262,7 +262,9 @@ Namespace Microsoft.VisualBasic.Devices
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
-            DownloadFile(addressUri, destinationFileName, networkCredentials, showUI, connectionTimeout, overwrite, onUserCancel)
+            Task.Run(Async Function()
+                         Await DownloadFileAsync(addressUri, destinationFileName, networkCredentials, showUI, connectionTimeout, overwrite, onUserCancel).ConfigureAwait(False)
+                     End Function).Wait()
         End Sub
 
         ''' <summary>
@@ -275,7 +277,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
         ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
-        Sub DownloadFile(address As Uri,
+        Public Sub DownloadFile(address As Uri,
                      destinationFileName As String,
                      userName As String,
                      password As String,
@@ -283,7 +285,9 @@ Namespace Microsoft.VisualBasic.Devices
                      connectionTimeout As Integer,
                      overwrite As Boolean)
 
-            DownloadFile(address, destinationFileName, userName, password, showUI, connectionTimeout, overwrite, UICancelOption.ThrowException)
+            Task.Run(Async Function()
+                         Await DownloadFileAsync(address, destinationFileName, userName, password, showUI, connectionTimeout, overwrite, UICancelOption.ThrowException).ConfigureAwait(False)
+                     End Function).Wait()
         End Sub
 
         ''' <summary>
@@ -297,7 +301,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
-        Sub DownloadFile(address As Uri,
+        Public Sub DownloadFile(address As Uri,
                      destinationFileName As String,
                      userName As String,
                      password As String,
@@ -309,7 +313,9 @@ Namespace Microsoft.VisualBasic.Devices
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
-            DownloadFile(address, destinationFileName, networkCredentials, showUI, connectionTimeout, overwrite, onUserCancel)
+            Task.Run(Async Function()
+                         Await DownloadFileAsync(address, destinationFileName, networkCredentials, showUI, connectionTimeout, overwrite, onUserCancel).ConfigureAwait(False)
+                     End Function).Wait()
         End Sub
 
         ''' <summary>
@@ -322,15 +328,16 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
-        Sub DownloadFile(address As Uri,
+        Public Sub DownloadFile(address As Uri,
                     destinationFileName As String,
                     networkCredentials As ICredentials,
                     showUI As Boolean,
                     connectionTimeout As Integer,
                     overwrite As Boolean)
 
-            DownloadFile(address, destinationFileName, networkCredentials, showUI, connectionTimeout, overwrite, UICancelOption.ThrowException)
-
+            Task.Run(Async Function()
+                         Await DownloadFileAsync(address, destinationFileName, networkCredentials, showUI, connectionTimeout, overwrite, UICancelOption.ThrowException).ConfigureAwait(False)
+                     End Function).Wait()
         End Sub
 
         ''' <summary>
@@ -344,7 +351,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
-        Sub DownloadFile(address As Uri,
+        Public Sub DownloadFile(address As Uri,
                     destinationFileName As String,
                     networkCredentials As ICredentials,
                     showUI As Boolean,
@@ -359,67 +366,240 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw ExceptionUtils.GetArgumentNullException("address")
             End If
 
-            Using client As New WebClientExtended
-                client.Timeout = connectionTimeout
+            Task.Run(Async Function()
+                         Await DownloadFileAsync(address, destinationFileName, networkCredentials,
+                                            showUI, connectionTimeout, overwrite,
+                                            onUserCancel).ConfigureAwait(False)
+                     End Function).Wait()
+        End Sub
 
-                ' Don't use passive mode if we're showing UI
-                client.UseNonPassiveFtp = showUI
+        ''' <summary>
+        ''' Downloads a file from the network to the specified path
+        ''' </summary>
+        ''' <param name="address">Address to the remote file, http, ftp etc...</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        Public Async Function DownloadFileAsync(address As String, destinationFileName As String) As Task
+            Await DownloadFileAsync(address, destinationFileName, DEFAULT_USERNAME, DEFAULT_PASSWORD, False, DEFAULT_TIMEOUT, False).ConfigureAwait(False)
+        End Function
 
-                'Construct the local file. This will validate the full name and path
-                Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
+        ''' <summary>
+        ''' Downloads a file from the network to the specified path
+        ''' </summary>
+        ''' <param name="address">Uri to the remote file</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        ''' <param name="userName">The name of the user performing the download</param>
+        ''' <param name="password">The user's password</param>
+        Public Async Function DownloadFileAsync(address As Uri, destinationFileName As String, userName As String, password As String) As Task
+            Await DownloadFileAsync(address, destinationFileName, userName, password, False, DEFAULT_TIMEOUT, False).ConfigureAwait(False)
+        End Function
 
-                ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
-                ' have a file and path
-                If System.IO.Directory.Exists(fullFilename) Then
-                    Throw ExceptionUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
-                End If
+        ''' <summary>
+        '''  Downloads a file from the network to the specified path
+        ''' </summary>
+        ''' <param name="address">Address to the remote file, http, ftp etc...</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        ''' <param name="userName">The name of the user performing the download</param>
+        ''' <param name="password">The user's password</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
+        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
+        Public Async Function DownloadFileAsync(address As String,
+                    destinationFileName As String,
+                    userName As String,
+                    password As String,
+                    showUI As Boolean,
+                    connectionTimeout As Integer,
+                    overwrite As Boolean) As Task
 
-                'Throw if the file exists and the user doesn't want to overwrite
-                If IO.File.Exists(fullFilename) And Not overwrite Then
-                    Throw New IO.IOException(GetResourceString(SR.IO_FileExists_Path, destinationFileName))
-                End If
+            Await DownloadFileAsync(address, destinationFileName, userName, password, showUI, connectionTimeout, overwrite, UICancelOption.ThrowException).ConfigureAwait(False)
+        End Function
 
-                ' Set credentials if we have any
-                If networkCredentials IsNot Nothing Then
-                    client.Credentials = networkCredentials
-                End If
+        ''' <summary>
+        '''  Downloads a file from the network to the specified path
+        ''' </summary>
+        ''' <param name="address">Address to the remote file, http, ftp etc...</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        ''' <param name="userName">The name of the user performing the download</param>
+        ''' <param name="password">The user's password</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
+        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
+        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
+        Public Async Function DownloadFileAsync(address As String,
+                    destinationFileName As String,
+                    userName As String,
+                    password As String,
+                    showUI As Boolean,
+                    connectionTimeout As Integer,
+                    overwrite As Boolean,
+                    onUserCancel As UICancelOption) As Task
 
-                Dim dialog As ProgressDialog = Nothing
-                If showUI AndAlso System.Environment.UserInteractive Then
-                    dialog = New ProgressDialog With {
+            ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
+            ' However, it is good practice to verify address before calling Trim.
+            If String.IsNullOrWhiteSpace(address) Then
+                Throw ExceptionUtils.GetArgumentNullException("address")
+            End If
+
+            Dim addressUri As Uri = GetUri(address.Trim())
+
+            ' Get network credentials
+            Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
+
+            Await DownloadFileAsync(addressUri, destinationFileName, networkCredentials, showUI, connectionTimeout, overwrite, onUserCancel).ConfigureAwait(False)
+        End Function
+
+        ''' <summary>
+        ''' Downloads a file from the network to the specified path
+        ''' </summary>
+        ''' <param name="address">Uri to the remote file</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        ''' <param name="userName">The name of the user performing the download</param>
+        ''' <param name="password">The user's password</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
+        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
+        Public Async Function DownloadFileAsync(address As Uri,
+                     destinationFileName As String,
+                     userName As String,
+                     password As String,
+                     showUI As Boolean,
+                     connectionTimeout As Integer,
+                     overwrite As Boolean) As Task
+
+            Await DownloadFileAsync(address, destinationFileName, userName, password, showUI, connectionTimeout, overwrite, UICancelOption.ThrowException).ConfigureAwait(False)
+        End Function
+
+        ''' <summary>
+        ''' Downloads a file from the network to the specified path
+        ''' </summary>
+        ''' <param name="address">Uri to the remote file</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        ''' <param name="userName">The name of the user performing the download</param>
+        ''' <param name="password">The user's password</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
+        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
+        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
+        Public Async Function DownloadFileAsync(address As Uri,
+                     destinationFileName As String,
+                     userName As String,
+                     password As String,
+                     showUI As Boolean,
+                     connectionTimeout As Integer,
+                     overwrite As Boolean,
+                     onUserCancel As UICancelOption) As Task
+
+            ' Get network credentials
+            Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
+
+            Await DownloadFileAsync(address, destinationFileName, networkCredentials, showUI, connectionTimeout, overwrite, onUserCancel).ConfigureAwait(False)
+        End Function
+
+        ''' <summary>
+        ''' Downloads a file from the network to the specified path
+        ''' </summary>
+        ''' <param name="address">Uri to the remote file</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        ''' <param name="networkCredentials">The credentials of the user performing the download</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
+        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
+        ''' <remarks>Calls to all the other overloads will come through here</remarks>
+        Public Async Function DownloadFileAsync(address As Uri,
+                    destinationFileName As String,
+                    networkCredentials As ICredentials,
+                    showUI As Boolean,
+                    connectionTimeout As Integer,
+                    overwrite As Boolean) As Task
+
+            Await DownloadFileAsync(address, destinationFileName, networkCredentials, showUI, connectionTimeout, overwrite, UICancelOption.ThrowException).ConfigureAwait(False)
+        End Function
+
+        ''' <summary>
+        ''' Downloads a file from the network to the specified path
+        ''' </summary>
+        ''' <param name="address">Uri to the remote file</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        ''' <param name="networkCredentials">The credentials of the user performing the download</param>
+        ''' <param name="showUI">Indicates whether or not to show a progress bar</param>
+        ''' <param name="connectionTimeout">Time alloted before giving up on a connection</param>
+        ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
+        ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
+        ''' <remarks>Calls to all the other overloads will come through here</remarks>
+        Public Async Function DownloadFileAsync(address As Uri,
+                    destinationFileName As String,
+                    networkCredentials As ICredentials,
+                    showUI As Boolean,
+                    connectionTimeout As Integer,
+                    overwrite As Boolean,
+                    onUserCancel As UICancelOption) As Task
+            If connectionTimeout <= 0 Then
+                Throw GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
+            End If
+
+            If address Is Nothing Then
+                Throw ExceptionUtils.GetArgumentNullException("address")
+            End If
+
+            Dim client As HttpClient
+            If networkCredentials IsNot Nothing Then
+                Dim clientHandler = New HttpClientHandler With {.Credentials = networkCredentials}
+                client = New HttpClient(clientHandler)
+            Else
+                client = New HttpClient()
+            End If
+            client.Timeout = New TimeSpan(0, 0, 0, 0, connectionTimeout)
+
+            'Construct the local file. This will validate the full name and path
+            Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
+
+            ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
+            ' have a file and path
+            If System.IO.Directory.Exists(fullFilename) Then
+                Throw ExceptionUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
+            End If
+
+            'Throw if the file exists and the user doesn't want to overwrite
+            If IO.File.Exists(fullFilename) And Not overwrite Then
+                Throw New IO.IOException(GetResourceString(SR.IO_FileExists_Path, destinationFileName))
+            End If
+
+            ' Set credentials if we have any
+
+            Dim dialog As ProgressDialog = Nothing
+            If showUI AndAlso System.Environment.UserInteractive Then
+                dialog = New ProgressDialog With {
                         .Text = GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
                         .LabelText = GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
                     }
+            End If
+
+            'Check to see if the target directory exists. If it doesn't, create it
+            Dim targetDirectory As String = System.IO.Path.GetDirectoryName(fullFilename)
+
+            ' Make sure we have a meaningful directory. If we don't, the destinationFileName is suspect
+            If String.IsNullOrEmpty(targetDirectory) Then
+                Throw ExceptionUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
+            End If
+
+            If Not IO.Directory.Exists(targetDirectory) Then
+                IO.Directory.CreateDirectory(targetDirectory)
+            End If
+
+            'Create the copier
+            Dim copier As New HttpClientCopy(client, dialog)
+
+            'Download the file
+            Await copier.DownloadFileAsync(address, fullFilename).ConfigureAwait(False)
+
+            'Handle a dialog cancel
+            If showUI AndAlso System.Environment.UserInteractive Then
+                If onUserCancel = UICancelOption.ThrowException And dialog.UserCanceledTheDialog Then
+                    Throw New OperationCanceledException()
                 End If
+            End If
 
-                'Check to see if the target directory exists. If it doesn't, create it
-                Dim targetDirectory As String = System.IO.Path.GetDirectoryName(fullFilename)
-
-                ' Make sure we have a meaningful directory. If we don't, the destinationFileName is suspect
-                If String.IsNullOrEmpty(targetDirectory) Then
-                    Throw ExceptionUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
-                End If
-
-                If Not IO.Directory.Exists(targetDirectory) Then
-                    IO.Directory.CreateDirectory(targetDirectory)
-                End If
-
-                'Create the copier
-                Dim copier As New WebClientCopy(client, dialog)
-
-                'Download the file
-                copier.DownloadFile(address, fullFilename)
-
-                'Handle a dialog cancel
-                If showUI AndAlso System.Environment.UserInteractive Then
-                    If onUserCancel = UICancelOption.ThrowException And dialog.UserCanceledTheDialog Then
-                        Throw New OperationCanceledException()
-                    End If
-                End If
-
-            End Using
-
-        End Sub
+        End Function
 
         ''' <summary>
         ''' Uploads a file from the local machine to the specified host
@@ -704,20 +884,10 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <returns>A NetworkCredentials</returns>
         Private Shared Function GetNetworkCredentials(userName As String, password As String) As ICredentials
 
-            ' Make sure all nulls are empty strings
-            If userName Is Nothing Then
-                userName = ""
-            End If
-
-            If password Is Nothing Then
-                password = ""
-            End If
-
-            If userName.Length = 0 And password.Length = 0 Then
-                Return Nothing
-            End If
-
-            Return New NetworkCredential(userName, password)
+            Return If(String.IsNullOrWhiteSpace(userName) OrElse String.IsNullOrWhiteSpace(password),
+                      Nothing,
+                      DirectCast(New NetworkCredential(userName, password), ICredentials)
+                     )
         End Function
 
         'Holds the buffer for pinging. We lazy initialize on first use
@@ -806,8 +976,10 @@ Namespace Microsoft.VisualBasic.Devices
         End Function
 
 #Disable Warning BC41004 ' First statement of this 'Sub New' should be an explicit call to 'MyBase.New' or 'MyClass.New' because the constructor in the base class is marked obsolete
+
         Friend Sub New()
         End Sub
+
 #Enable Warning BC41004 ' First statement of this 'Sub New' should be an explicit call to 'MyBase.New' or 'MyClass.New' because the constructor in the base class is marked obsolete
 
         ' The Timeout value to be used by WebClient's WebRequest for Downloading or Uploading a file
@@ -815,6 +987,7 @@ Namespace Microsoft.VisualBasic.Devices
 
         ' Flag used to indicate whether or not we should use passive mode when ftp downloading
         Private _useNonPassiveFtp As Boolean
+
     End Class
 
 End Namespace
