@@ -55,22 +55,17 @@ public partial class ListViewItem
                 throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
             }
 
-            if (index > GetChildCount() - 1)
-            {
-                return null;
-            }
-
             if (index == ImageAccessibleObjectIndex && HasImage)
             {
                 return ImageAccessibleObject;
             }
 
-            if(index >= ImageAccessibleObjectIndex || !HasImage)
+            if (index >= ImageAccessibleObjectIndex || !HasImage)
             {
                 return LabelEditAccessibleObject;
             }
 
-            return null;
+            return (AccessibleObject?)null;
         }
 
         public override int GetChildCount()
@@ -80,14 +75,14 @@ public partial class ListViewItem
                 throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
             }
 
-            int _childCount = 0;
-
             if (!_owningListView.IsHandleCreated)
             {
                 return InvalidIndex;
             }
 
-            if(HasImage)
+            int _childCount = 0;
+
+            if (HasImage)
             {
                 _childCount++;
             }
