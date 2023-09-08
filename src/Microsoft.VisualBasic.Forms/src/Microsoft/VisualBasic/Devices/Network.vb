@@ -209,6 +209,19 @@ Namespace Microsoft.VisualBasic.Devices
         End Sub
 
         ''' <summary>
+        ''' Downloads a file from the network to the specified path
+        ''' </summary>
+        ''' <param name="address">Uri to the remote file</param>
+        ''' <param name="destinationFileName">Name and path of file where download is saved</param>
+        ''' <param name="userName">The name of the user performing the download</param>
+        ''' <param name="password">The user's password</param>
+        Public Sub DownloadFile(address As Uri, destinationFileName As String, userName As String, password As String)
+            Task.Run(Async Function()
+                         Await DownloadFileAsync(address, destinationFileName, userName, password, False, DEFAULT_TIMEOUT, False).ConfigureAwait(False)
+                     End Function).Wait()
+        End Sub
+
+        ''' <summary>
         '''  Downloads a file from the network to the specified path
         ''' </summary>
         ''' <param name="address">Address to the remote file, http, ftp etc...</param>

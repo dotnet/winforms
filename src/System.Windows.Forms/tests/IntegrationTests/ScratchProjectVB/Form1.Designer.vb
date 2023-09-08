@@ -1,4 +1,6 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
+﻿Imports System.ComponentModel
+
+<DesignerCategory("Default")>
 Partial Class Form1
     Inherits Form
 
