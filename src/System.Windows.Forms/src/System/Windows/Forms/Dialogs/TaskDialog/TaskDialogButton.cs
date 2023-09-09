@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -319,19 +317,19 @@ public class TaskDialogButton : TaskDialogControl
         return !(b1 == b2);
     }
 
-    private static ComCtl32.TDCBF GetStandardButtonFlagForResult(TaskDialogResult result) => result switch
+    private static TASKDIALOG_COMMON_BUTTON_FLAGS GetStandardButtonFlagForResult(TaskDialogResult result) => result switch
     {
-        TaskDialogResult.OK => ComCtl32.TDCBF.OK_BUTTON,
-        TaskDialogResult.Cancel => ComCtl32.TDCBF.CANCEL_BUTTON,
-        TaskDialogResult.Abort => ComCtl32.TDCBF.ABORT_BUTTON,
-        TaskDialogResult.Retry => ComCtl32.TDCBF.RETRY_BUTTON,
-        TaskDialogResult.Ignore => ComCtl32.TDCBF.IGNORE_BUTTON,
-        TaskDialogResult.Yes => ComCtl32.TDCBF.YES_BUTTON,
-        TaskDialogResult.No => ComCtl32.TDCBF.NO_BUTTON,
-        TaskDialogResult.Close => ComCtl32.TDCBF.CLOSE_BUTTON,
-        TaskDialogResult.Help => ComCtl32.TDCBF.HELP_BUTTON,
-        TaskDialogResult.TryAgain => ComCtl32.TDCBF.TRYAGAIN_BUTTON,
-        TaskDialogResult.Continue => ComCtl32.TDCBF.CONTINUE_BUTTON,
+        TaskDialogResult.OK => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_OK_BUTTON,
+        TaskDialogResult.Cancel => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CANCEL_BUTTON,
+        TaskDialogResult.Abort => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_ABORT_BUTTON,
+        TaskDialogResult.Retry => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_RETRY_BUTTON,
+        TaskDialogResult.Ignore => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_IGNORE_BUTTON,
+        TaskDialogResult.Yes => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_YES_BUTTON,
+        TaskDialogResult.No => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_NO_BUTTON,
+        TaskDialogResult.Close => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CLOSE_BUTTON,
+        TaskDialogResult.Help => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_HELP_BUTTON,
+        TaskDialogResult.TryAgain => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_TRYAGAIN_BUTTON,
+        TaskDialogResult.Continue => TASKDIALOG_COMMON_BUTTON_FLAGS.TDCBF_CONTINUE_BUTTON,
         _ => default
     };
 
@@ -413,13 +411,10 @@ public class TaskDialogButton : TaskDialogControl
         return text;
     }
 
-    internal ComCtl32.TDCBF GetStandardButtonFlag()
-    {
-        if (!IsStandardButton)
-            throw new InvalidOperationException();
-
-        return GetStandardButtonFlagForResult(_standardButtonResult!.Value);
-    }
+    internal TASKDIALOG_COMMON_BUTTON_FLAGS GetStandardButtonFlag() =>
+        !IsStandardButton ?
+        throw new InvalidOperationException() :
+        GetStandardButtonFlagForResult(_standardButtonResult!.Value);
 
     private protected override void ApplyInitializationCore()
     {

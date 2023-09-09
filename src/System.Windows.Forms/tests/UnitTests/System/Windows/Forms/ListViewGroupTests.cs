@@ -227,10 +227,10 @@ public class ListViewGroupTests
                 group.TitleImageIndex = value.Index;
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
-                var lvgroup = new LVGROUPW
+                var lvgroup = new LVGROUP
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.TITLEIMAGE | LVGF.GROUPID,
+                    cbSize = (uint)sizeof(LVGROUP),
+                    mask = LVGROUP_MASK.LVGF_TITLEIMAGE | LVGROUP_MASK.LVGF_GROUPID,
                 };
 
                 Assert.Equal(1, PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPINFOBYINDEX, 0, ref lvgroup));
@@ -367,10 +367,10 @@ public class ListViewGroupTests
                 group.TitleImageKey = value.Key;
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
-                var lvgroup = new LVGROUPW
+                var lvgroup = new LVGROUP
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.TITLEIMAGE | LVGF.GROUPID
+                    cbSize = (uint)sizeof(LVGROUP),
+                    mask = LVGROUP_MASK.LVGF_TITLEIMAGE | LVGROUP_MASK.LVGF_GROUPID
                 };
 
                 Assert.Equal(1, PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPINFOBYINDEX, 0, ref lvgroup));
@@ -505,10 +505,10 @@ public class ListViewGroupTests
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
 
-                var lvgroup = new LVGROUPW
+                var lvgroup = new LVGROUP
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.SUBTITLE | LVGF.GROUPID,
+                    cbSize = (uint)sizeof(LVGROUP),
+                    mask = LVGROUP_MASK.LVGF_SUBTITLE | LVGROUP_MASK.LVGF_GROUPID,
                     pszSubtitle = buffer,
                     cchSubtitle = 256
                 };
@@ -616,10 +616,10 @@ public class ListViewGroupTests
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
                 char* buffer = stackalloc char[256];
-                var lvgroup = new LVGROUPW
+                var lvgroup = new LVGROUP
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
+                    cbSize = (uint)sizeof(LVGROUP),
+                    mask = LVGROUP_MASK.LVGF_FOOTER | LVGROUP_MASK.LVGF_GROUPID | LVGROUP_MASK.LVGF_ALIGN,
                     pszFooter = buffer,
                     cchFooter = 256
                 };
@@ -760,10 +760,10 @@ public class ListViewGroupTests
 
             Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
             char* buffer = stackalloc char[256];
-            var lvgroup = new LVGROUPW
+            var lvgroup = new LVGROUP
             {
-                cbSize = (uint)sizeof(LVGROUPW),
-                mask = LVGF.FOOTER | LVGF.GROUPID | LVGF.ALIGN,
+                cbSize = (uint)sizeof(LVGROUP),
+                mask = LVGROUP_MASK.LVGF_FOOTER | LVGROUP_MASK.LVGF_GROUPID | LVGROUP_MASK.LVGF_ALIGN,
                 pszFooter = buffer,
                 cchFooter = 256
             };
@@ -876,10 +876,10 @@ public class ListViewGroupTests
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
                 char* buffer = stackalloc char[256];
-                var lvgroup = new LVGROUPW
+                var lvgroup = new LVGROUP
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.HEADER | LVGF.GROUPID | LVGF.ALIGN,
+                    cbSize = (uint)sizeof(LVGROUP),
+                    mask = LVGROUP_MASK.LVGF_HEADER | LVGROUP_MASK.LVGF_GROUPID | LVGROUP_MASK.LVGF_ALIGN,
                     pszHeader = buffer,
                     cchHeader = 256
                 };
@@ -1010,10 +1010,10 @@ public class ListViewGroupTests
 
             Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
             char* buffer = stackalloc char[256];
-            var lvgroup = new LVGROUPW
+            var lvgroup = new LVGROUP
             {
-                cbSize = (uint)sizeof(LVGROUPW),
-                mask = LVGF.HEADER | LVGF.GROUPID | LVGF.ALIGN,
+                cbSize = (uint)sizeof(LVGROUP),
+                mask = LVGROUP_MASK.LVGF_HEADER | LVGROUP_MASK.LVGF_GROUPID | LVGROUP_MASK.LVGF_ALIGN,
                 pszHeader = buffer,
                 cchHeader = 256
             };
@@ -1132,10 +1132,10 @@ public class ListViewGroupTests
                 ListViewGroupCollapsedState expectedCollapsedState = (ListViewGroupCollapsedState)data[1];
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
-                var lvgroup = new LVGROUPW
+                var lvgroup = new LVGROUP
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.STATE | LVGF.GROUPID,
+                    cbSize = (uint)sizeof(LVGROUP),
+                    mask = LVGROUP_MASK.LVGF_STATE | LVGROUP_MASK.LVGF_GROUPID,
                     stateMask = LIST_VIEW_GROUP_STATE_FLAGS.LVGS_COLLAPSIBLE | LIST_VIEW_GROUP_STATE_FLAGS.LVGS_COLLAPSED
                 };
 
@@ -1280,10 +1280,10 @@ public class ListViewGroupTests
                 group.TaskLink = value;
 
                 Assert.Equal(1, (int)PInvoke.SendMessage(listView, PInvoke.LVM_GETGROUPCOUNT));
-                var lvgroup = new LVGROUPW
+                var lvgroup = new LVGROUP
                 {
-                    cbSize = (uint)sizeof(LVGROUPW),
-                    mask = LVGF.TASK | LVGF.GROUPID,
+                    cbSize = (uint)sizeof(LVGROUP),
+                    mask = LVGROUP_MASK.LVGF_TASK | LVGROUP_MASK.LVGF_GROUPID,
                     pszTask = buffer,
                     cchTask = 256
                 };
