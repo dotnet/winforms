@@ -162,8 +162,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Drawing.Common.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScratchProject", "src\System.Windows.Forms\tests\IntegrationTests\ScratchProject\ScratchProject.csproj", "{194D9B0B-421B-4485-B67E-B5A448388D39}"
 EndProject
-Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "ScratchProjectVB", "src\System.Windows.Forms\tests\IntegrationTests\ScratchProjectVB\ScratchProjectVB.vbproj", "{4CDC6808-3922-451C-935B-94E1B3A5100E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

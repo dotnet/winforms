@@ -96,36 +96,6 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
         ''' <summary>
-        ''' Handles the WebClient's DownloadFileCompleted event
-        ''' </summary>
-        ''' <param name="sender"></param>
-        ''' <param name="e"></param>
-        Private Sub m_WebClient_DownloadFileCompleted(sender As Object, e As System.ComponentModel.AsyncCompletedEventArgs) Handles m_WebClient.DownloadFileCompleted
-            Try
-                ' If the download was interrupted by an exception, keep track of the exception, which we'll throw from the main thread
-                If e.Error IsNot Nothing Then
-                    _exceptionEncounteredDuringFileTransfer = e.Error
-                End If
-
-                If Not e.Cancelled AndAlso e.Error Is Nothing Then
-                    InvokeIncrement(100)
-                End If
-            Finally
-                'We don't close the dialog until we receive the WebClient.DownloadFileCompleted event
-                CloseProgressDialog()
-            End Try
-        End Sub
-
-        ''' <summary>
-        ''' Handles event WebClient fires whenever progress of download changes
-        ''' </summary>
-        ''' <param name="sender"></param>
-        ''' <param name="e"></param>
-        Private Sub m_WebClient_DownloadProgressChanged(sender As Object, e As DownloadProgressChangedEventArgs) Handles m_WebClient.DownloadProgressChanged
-            InvokeIncrement(e.ProgressPercentage)
-        End Sub
-
-        ''' <summary>
         ''' Handles the WebClient's UploadFileCompleted event
         ''' </summary>
         ''' <param name="sender"></param>
@@ -218,7 +188,18 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             _cancelTokenRead = _cancelSourceRead.Token
             _cancelSourceWrite = New CancellationTokenSource()
             _cancelTokenWrite = _cancelSourceWrite.Token
-            Using response As HttpResponseMessage = Await _httpClient.GetAsync(address, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(False)
+            Dim response As HttpResponseMessage = Nothing
+            Try
+                response = Await _httpClient.GetAsync(address, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(False)
+            Catch ex As Exception
+                If ex.Message.Contains("The 'file' scheme is not supported.") Then
+                    ' REVIEW I don't see to be able to detect a timeout except this way
+                    Throw New TimeoutException()
+                End If
+                Throw
+            End Try
+            Dim contentLength? As Long = response?.Content.Headers.ContentLength
+            If contentLength.HasValue Then
                 Using responseStream As Stream = Await response.Content.ReadAsStreamAsync().ConfigureAwait(False)
                     Using fileStream As New FileStream(destinationFileName, FileMode.Create, FileAccess.Write, FileShare.None)
 
@@ -230,23 +211,22 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
                             bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenRead).ConfigureAwait(False)
                             Do While bytesRead > 0
-                                Dim contentLength? As Long = response.Content.Headers.ContentLength
-                                If contentLength.HasValue Then
-                                    totalBytesRead += bytesRead
+                                totalBytesRead += bytesRead
 
-                                    Await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), _cancelTokenWrite).ConfigureAwait(False)
-                                    If m_ProgressDialog IsNot Nothing Then
-                                        Dim percentage As Integer = CInt(contentLength.Value / totalBytesRead * 100)
-                                        InvokeIncrement(percentage)
-                                    End If
+                                Await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), _cancelTokenWrite).ConfigureAwait(False)
+                                If m_ProgressDialog IsNot Nothing Then
+                                    Dim percentage As Integer = CInt(contentLength.Value / totalBytesRead * 100)
+                                    InvokeIncrement(percentage)
                                 End If
+                                bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenRead).ConfigureAwait(False)
                             Loop
                         Catch ex As Exception
                             Throw
                         End Try
                     End Using
                 End Using
-            End Using
+            End If
+            respone?.dispose
             CloseProgressDialog()
 
         End Function
