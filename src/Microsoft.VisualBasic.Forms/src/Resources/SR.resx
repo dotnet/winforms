@@ -1,4 +1,5 @@
-﻿<root>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
   <!-- 
     Microsoft ResX Schema 
     
@@ -220,5 +221,8 @@
   </data>
   <data name="EnvVarNotFound_Name" xml:space="preserve">
     <value>Environment variable is not defined: '{0}'.</value>
+  </data>
+  <data name="net_webstatus_Timeout" xml:space="preserve">
+    <value>Timeout.</value>
   </data>
 </root>

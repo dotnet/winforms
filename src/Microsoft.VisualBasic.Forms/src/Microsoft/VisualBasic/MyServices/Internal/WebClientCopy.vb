@@ -193,8 +193,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 response = Await _httpClient.GetAsync(address, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(False)
             Catch ex As Exception
                 If ex.Message.Contains("The 'file' scheme is not supported.") Then
-                    ' REVIEW I don't see to be able to detect a timeout except this way
-                    Throw New TimeoutException()
+                    ' REVIEW I don't see to be able to detect a timeout, except this way
+                    ' SR.net_webstatus_Timeout value is needed
+                    Throw New WebException(SR.net_webstatus_Timeout, WebExceptionStatus.Timeout)
                 End If
                 Throw
             End Try

@@ -177,6 +177,11 @@
         <target state="translated">Przekazywanie: {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="net_webstatus_Timeout">
+        <source>Timeout.</source>
+        <target state="new">Timeout.</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>
