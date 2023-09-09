@@ -15,6 +15,8 @@ using static System.Windows.Forms.ListViewGroup;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 using static Interop.ComCtl32;
+using NMHEADERW = Windows.Win32.UI.Controls.NMHEADERW;
+using NMLVLINK = Windows.Win32.UI.Controls.NMLVLINK;
 
 namespace System.Windows.Forms;
 
@@ -2904,7 +2906,7 @@ public partial class ListView : Control
                             int mask = 0xFF0000;
                             do
                             {
-                                int C = nmcd->clrText & mask;
+                                int C = (int)(nmcd->clrText & mask);
                                 if (C != 0 || (mask == 0x0000FF)) // The color is not 0
                                 // or this is the last option
                                 {
@@ -2920,7 +2922,7 @@ public partial class ListView : Control
                                     }
 
                                     // Copy the adjustment into nmcd->clrText
-                                    nmcd->clrText = (nmcd->clrText & (~mask)) | C;
+                                    nmcd->clrText = (COLORREF)((int)(nmcd->clrText & (~mask)) | C);
                                     clrAdjusted = true;
                                 }
                                 else
@@ -6030,7 +6032,7 @@ public partial class ListView : Control
     {
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
-        if ((int)nmhdr->code == (int)NM.CUSTOMDRAW && UiaCore.UiaClientsAreListening())
+        if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && UiaCore.UiaClientsAreListening())
         {
             // Checking that mouse buttons are not pressed is necessary to avoid
             // multiple annotation of the column header when resizing the column with the mouse
@@ -6041,7 +6043,7 @@ public partial class ListView : Control
         }
 
         // Column header custom draw message handling.
-        if ((int)nmhdr->code == (int)NM.CUSTOMDRAW && OwnerDraw)
+        if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && OwnerDraw)
         {
             try
             {
@@ -6094,13 +6096,13 @@ public partial class ListView : Control
             }
         }
 
-        if ((int)nmhdr->code == (int)NM.RELEASEDCAPTURE && _listViewState[LISTVIEWSTATE_columnClicked])
+        if (nmhdr->code == PInvoke.NM_RELEASEDCAPTURE && _listViewState[LISTVIEWSTATE_columnClicked])
         {
             _listViewState[LISTVIEWSTATE_columnClicked] = false;
             OnColumnClick(new ColumnClickEventArgs(_columnIndex));
         }
 
-        if ((int)nmhdr->code == (int)HDN.BEGINTRACKW)
+        if (nmhdr->code == PInvoke.HDN_BEGINTRACKW)
         {
             _listViewState[LISTVIEWSTATE_headerControlTracking] = true;
 
@@ -6122,7 +6124,7 @@ public partial class ListView : Control
             }
         }
 
-        if ((int)nmhdr->code == (int)HDN.ITEMCHANGINGW)
+        if (nmhdr->code == PInvoke.HDN_ITEMCHANGINGW)
         {
             NMHEADERW* nmheader = (NMHEADERW*)(nint)m.LParamInternal;
 
@@ -6157,7 +6159,7 @@ public partial class ListView : Control
             }
         }
 
-        if (((int)nmhdr->code == (int)HDN.ITEMCHANGEDW) &&
+        if ((nmhdr->code == PInvoke.HDN_ITEMCHANGEDW) &&
             !_listViewState[LISTVIEWSTATE_headerControlTracking])
         {
             NMHEADERW* nmheader = (NMHEADERW*)(nint)m.LParamInternal;
@@ -6213,7 +6215,7 @@ public partial class ListView : Control
             }
         }
 
-        if ((int)nmhdr->code == (int)HDN.ENDTRACKW)
+        if (nmhdr->code == PInvoke.HDN_ENDTRACKW)
         {
             Debug.Assert(_listViewState[LISTVIEWSTATE_headerControlTracking], "HDN_ENDTRACK and HDN_BEGINTRACK are out of sync.");
             _listViewState[LISTVIEWSTATE_headerControlTracking] = false;
@@ -6241,7 +6243,7 @@ public partial class ListView : Control
             }
         }
 
-        if ((int)nmhdr->code == (int)HDN.ENDDRAG)
+        if (nmhdr->code == PInvoke.HDN_ENDDRAG)
         {
             NMHEADERW* header = (NMHEADERW*)(nint)m.LParamInternal;
             if (header->pitem is not null)
@@ -6308,7 +6310,7 @@ public partial class ListView : Control
             }
         }
 
-        if ((int)nmhdr->code == (int)HDN.DIVIDERDBLCLICKW)
+        if (nmhdr->code == PInvoke.HDN_DIVIDERDBLCLICKW)
         {
             // We need to keep track that the user double clicked the column header divider
             // so we know that the column header width is changing.
@@ -6468,13 +6470,13 @@ public partial class ListView : Control
     {
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
-        switch ((int)nmhdr->code)
+        switch (nmhdr->code)
         {
-            case (int)NM.CUSTOMDRAW:
+            case PInvoke.NM_CUSTOMDRAW:
                 CustomDraw(ref m);
                 break;
 
-            case (int)LVN.BEGINLABELEDITW:
+            case PInvoke.LVN_BEGINLABELEDITW:
                 {
                     Debug.Assert(_labelEdit is null,
                         "A new label editing shouldn't start before the previous one ended");
@@ -6509,7 +6511,7 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.COLUMNCLICK:
+            case PInvoke.LVN_COLUMNCLICK:
                 {
                     NMLISTVIEW* nmlv = (NMLISTVIEW*)(nint)m.LParamInternal;
                     _listViewState[LISTVIEWSTATE_columnClicked] = true;
@@ -6517,7 +6519,7 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.LINKCLICK:
+            case PInvoke.LVN_LINKCLICK:
                 {
                     NMLVLINK* pLink = (NMLVLINK*)(nint)m.LParamInternal;
                     int groupID = pLink->iSubItem;
@@ -6533,7 +6535,7 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.ENDLABELEDITW:
+            case PInvoke.LVN_ENDLABELEDITW:
                 {
                     Debug.Assert(_labelEdit is not null, "There is no active label edit to end");
                     if (_labelEdit is null)
@@ -6561,11 +6563,11 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.ITEMACTIVATE:
+            case PInvoke.LVN_ITEMACTIVATE:
                 OnItemActivate(EventArgs.Empty);
                 break;
 
-            case (int)LVN.BEGINDRAG:
+            case PInvoke.LVN_BEGINDRAG:
                 {
                     // The items collection was modified while dragging that means that
                     // we can't reliably give the user the item on which the dragging
@@ -6580,7 +6582,7 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.BEGINRDRAG:
+            case PInvoke.LVN_BEGINRDRAG:
                 {
                     // The items collection was modified while dragging. That means that
                     // we can't reliably give the user the item on which the dragging
@@ -6595,7 +6597,7 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.ITEMCHANGING:
+            case PInvoke.LVN_ITEMCHANGING:
                 {
                     NMLISTVIEW* nmlv = (NMLISTVIEW*)(nint)m.LParamInternal;
                     if ((nmlv->uChanged & LIST_VIEW_ITEM_FLAGS.LVIF_STATE) != 0)
@@ -6616,7 +6618,7 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.ITEMCHANGED:
+            case PInvoke.LVN_ITEMCHANGED:
                 {
                     NMLISTVIEW* nmlv = (NMLISTVIEW*)(nint)m.LParamInternal;
                     // Check for state changes to the selected state...
@@ -6708,15 +6710,15 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)NM.CLICK:
+            case PInvoke.NM_CLICK:
                 WmNmClick();
                 // FALL THROUGH //
-                goto case (int)NM.RCLICK;
+                goto case PInvoke.NM_RCLICK;
 
-            case (int)NM.RCLICK:
+            case PInvoke.NM_RCLICK:
                 int displayIndex = GetIndexOfClickedItem();
 
-                MouseButtons button = (int)nmhdr->code == (int)NM.CLICK ? MouseButtons.Left : MouseButtons.Right;
+                MouseButtons button = nmhdr->code == PInvoke.NM_CLICK ? MouseButtons.Left : MouseButtons.Right;
                 Point pos = Cursor.Position;
                 pos = PointToClient(pos);
 
@@ -6734,12 +6736,12 @@ public partial class ListView : Control
 
                 break;
 
-            case (int)NM.DBLCLK:
+            case PInvoke.NM_DBLCLK:
                 WmNmDblClick();
                 // FALL THROUGH //
-                goto case (int)NM.RDBLCLK;
+                goto case PInvoke.NM_RDBLCLK;
 
-            case (int)NM.RDBLCLK:
+            case PInvoke.NM_RDBLCLK:
                 int index = GetIndexOfClickedItem();
                 if (index != -1)
                 {
@@ -6754,7 +6756,7 @@ public partial class ListView : Control
                 Capture = true;
                 break;
 
-            case (int)LVN.KEYDOWN:
+            case PInvoke.LVN_KEYDOWN:
                 if (GroupsEnabled)
                 {
                     NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)(nint)m.LParamInternal;
@@ -6803,14 +6805,14 @@ public partial class ListView : Control
 
                 break;
 
-            case (int)LVN.ODCACHEHINT:
+            case PInvoke.LVN_ODCACHEHINT:
                 // tell the user to prepare the cache:
                 NMLVCACHEHINT* cacheHint = (NMLVCACHEHINT*)(nint)m.LParamInternal;
                 OnCacheVirtualItems(new CacheVirtualItemsEventArgs(cacheHint->iFrom, cacheHint->iTo));
                 break;
 
             default:
-                if ((int)nmhdr->code == (int)LVN.GETDISPINFOW)
+                if (nmhdr->code == PInvoke.LVN_GETDISPINFOW)
                 {
                     // we use the LVN_GETDISPINFO message only in virtual mode
                     if (VirtualMode && m.LParamInternal != 0)
@@ -6860,7 +6862,7 @@ public partial class ListView : Control
                         }
                     }
                 }
-                else if ((int)nmhdr->code == (int)LVN.ODSTATECHANGED)
+                else if (nmhdr->code == PInvoke.LVN_ODSTATECHANGED)
                 {
                     if (VirtualMode && m.LParamInternal != 0)
                     {
@@ -6876,7 +6878,7 @@ public partial class ListView : Control
                         }
                     }
                 }
-                else if ((int)nmhdr->code == (int)LVN.GETINFOTIPW)
+                else if (nmhdr->code == PInvoke.LVN_GETINFOTIPW)
                 {
                     if (ShowItemToolTips && m.LParamInternal != 0)
                     {
@@ -6898,7 +6900,7 @@ public partial class ListView : Control
                         }
                     }
                 }
-                else if ((int)nmhdr->code == (int)LVN.ODFINDITEMW)
+                else if (nmhdr->code == PInvoke.LVN_ODFINDITEMW)
                 {
                     if (VirtualMode)
                     {

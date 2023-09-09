@@ -1546,15 +1546,15 @@ public partial class DateTimePicker : Control
         if (m.HWnd == Handle)
         {
             NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
-            switch ((DTN)nmhdr->code)
+            switch (nmhdr->code)
             {
-                case DTN.CLOSEUP:
+                case PInvoke.DTN_CLOSEUP:
                     OnCloseUp(EventArgs.Empty);
                     break;
-                case DTN.DATETIMECHANGE:
+                case PInvoke.DTN_DATETIMECHANGE:
                     WmDateTimeChange(ref m);
                     break;
-                case DTN.DROPDOWN:
+                case PInvoke.DTN_DROPDOWN:
                     WmDropDown();
                     break;
             }

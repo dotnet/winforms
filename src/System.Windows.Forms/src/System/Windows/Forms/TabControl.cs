@@ -2051,7 +2051,7 @@ public partial class TabControl : Control
             case PInvoke.WM_NOTIFY:
             case MessageId.WM_REFLECT_NOTIFY:
                 NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
-                switch ((int)nmhdr->code)
+                switch (nmhdr->code)
                 {
                     // new switch added to prevent the TabControl from changing to next TabPage ...
                     //in case of validation cancelled...
@@ -2059,7 +2059,7 @@ public partial class TabControl : Control
                     //If validation not cancelled then tabControlState[State.UISelection] is turned ON to set the focus on to the ...
                     //next TabPage..
 
-                    case (int)TCN.SELCHANGING:
+                    case PInvoke.TCN_SELCHANGING:
                         if (WmSelChanging())
                         {
                             m.ResultInternal = (LRESULT)1;
@@ -2079,7 +2079,7 @@ public partial class TabControl : Control
                         }
 
                         break;
-                    case (int)TCN.SELCHANGE:
+                    case PInvoke.TCN_SELCHANGE:
                         if (WmSelChange())
                         {
                             m.ResultInternal = (LRESULT)1;
@@ -2092,7 +2092,7 @@ public partial class TabControl : Control
                         }
 
                         break;
-                    case (int)TTN.GETDISPINFOW:
+                    case PInvoke.TTN_GETDISPINFOW:
                         // Setting the max width has the added benefit of enabling Multiline tool tips
                         PInvoke.SendMessage(nmhdr->hwndFrom, PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                         WmNeedText(ref m);
@@ -2118,7 +2118,7 @@ public partial class TabControl : Control
 
     private unsafe int SendMessage(uint msg, int wParam, TabPage tabPage)
     {
-        ComCtl32.TCITEMW tcitem = default;
+        TCITEMW tcitem = default;
         string text = tabPage.Text;
         PrefixAmpersands(ref text);
         if (text is not null)

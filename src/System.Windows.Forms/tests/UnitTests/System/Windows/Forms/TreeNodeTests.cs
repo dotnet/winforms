@@ -668,11 +668,11 @@ public class TreeNodeTests
         var item = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-            stateMask = TVIS.STATEIMAGEMASK,
-            hItem = node.Handle
+            stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
-        Assert.Equal((TVIS)expectedValue, item.state);
+        Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expectedValue, item.state);
     }
 
     [WinFormsTheory]
@@ -936,11 +936,11 @@ public class TreeNodeTests
         var item = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-            stateMask = TVIS.STATEIMAGEMASK,
-            hItem = node.Handle
+            stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
-        Assert.Equal((TVIS)expectedValue, item.state);
+        Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expectedValue, item.state);
     }
 
     [WinFormsFact]
@@ -1210,7 +1210,7 @@ public class TreeNodeTests
         var item = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
-            hItem = node.Handle
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, item.iImage);
@@ -1237,7 +1237,7 @@ public class TreeNodeTests
         var item = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
-            hItem = node.Handle
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, item.iImage);
@@ -1268,7 +1268,7 @@ public class TreeNodeTests
         var item = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
-            hItem = node.Handle
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, item.iImage);
@@ -1483,7 +1483,7 @@ public class TreeNodeTests
         var column = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
-            hItem = node.Handle
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal(0, column.iImage);
@@ -1513,7 +1513,7 @@ public class TreeNodeTests
         var column = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
-            hItem = node.Handle
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal(expected, column.iImage);
@@ -1545,7 +1545,7 @@ public class TreeNodeTests
         var column = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
-            hItem = node.Handle
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal(expected, column.iImage);
@@ -1767,15 +1767,15 @@ public class TreeNodeTests
 
     [WinFormsTheory]
     [InlineData(0, false)]
-    [InlineData((int)TVIS.BOLD, false)]
-    [InlineData((int)TVIS.EXPANDED, true)]
-    [InlineData((int)(TVIS.EXPANDED | TVIS.BOLD), true)]
-    [InlineData((int)TVIS.EXPANDEDONCE, false)]
+    [InlineData((int)TREE_VIEW_ITEM_STATE_FLAGS.TVIS_BOLD, false)]
+    [InlineData((int)TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED, true)]
+    [InlineData((int)(TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED | TREE_VIEW_ITEM_STATE_FLAGS.TVIS_BOLD), true)]
+    [InlineData((int)TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDEDONCE, false)]
     public void TreeNode_IsExpanded_GetCustomGetItem_ReturnsExpected(int getItemStateResult, bool expected)
     {
         using var control = new CustomGetItemTreeView
         {
-            GetItemStateResult = (TVIS)getItemStateResult
+            GetItemStateResult = (TREE_VIEW_ITEM_STATE_FLAGS)getItemStateResult
         };
         var node = new TreeNode();
         control.Nodes.Add(node);
@@ -1786,15 +1786,15 @@ public class TreeNodeTests
 
     [WinFormsTheory]
     [InlineData(0, false)]
-    [InlineData((int)TVIS.BOLD, false)]
-    [InlineData((int)TVIS.EXPANDED, true)]
-    [InlineData((int)(TVIS.EXPANDED | TVIS.BOLD), true)]
-    [InlineData((int)TVIS.EXPANDEDONCE, false)]
+    [InlineData((int)TREE_VIEW_ITEM_STATE_FLAGS.TVIS_BOLD, false)]
+    [InlineData((int)TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED, true)]
+    [InlineData((int)(TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED | TREE_VIEW_ITEM_STATE_FLAGS.TVIS_BOLD), true)]
+    [InlineData((int)TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDEDONCE, false)]
     public void TreeNode_IsExpanded_GetInvalidGetItem_ReturnsExpected(int getItemStateResult, bool expected)
     {
         using var control = new InvalidGetItemTreeView
         {
-            GetItemStateResult = (TVIS)getItemStateResult
+            GetItemStateResult = (TREE_VIEW_ITEM_STATE_FLAGS)getItemStateResult
         };
         var node = new TreeNode();
         control.Nodes.Add(node);
@@ -1851,14 +1851,14 @@ public class TreeNodeTests
 
     [WinFormsTheory]
     [InlineData(0, false)]
-    [InlineData((int)TVIS.BOLD, false)]
-    [InlineData((int)TVIS.SELECTED, true)]
-    [InlineData((int)(TVIS.SELECTED | TVIS.BOLD), true)]
+    [InlineData((int)TREE_VIEW_ITEM_STATE_FLAGS.TVIS_BOLD, false)]
+    [InlineData((int)TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED, true)]
+    [InlineData((int)(TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED | TREE_VIEW_ITEM_STATE_FLAGS.TVIS_BOLD), true)]
     public void TreeNode_IsSelected_GetCustomGetItem_ReturnsExpected(int getItemStateResult, bool expected)
     {
         using var control = new CustomGetItemTreeView
         {
-            GetItemStateResult = (TVIS)getItemStateResult
+            GetItemStateResult = (TREE_VIEW_ITEM_STATE_FLAGS)getItemStateResult
         };
         var node = new TreeNode();
         control.Nodes.Add(node);
@@ -1869,14 +1869,14 @@ public class TreeNodeTests
 
     [WinFormsTheory]
     [InlineData(0, false)]
-    [InlineData((int)TVIS.BOLD, false)]
-    [InlineData((int)TVIS.SELECTED, true)]
-    [InlineData((int)(TVIS.SELECTED | TVIS.BOLD), true)]
+    [InlineData((int)TREE_VIEW_ITEM_STATE_FLAGS.TVIS_BOLD, false)]
+    [InlineData((int)TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED, true)]
+    [InlineData((int)(TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED | TREE_VIEW_ITEM_STATE_FLAGS.TVIS_BOLD), true)]
     public void TreeNode_IsSelected_GetInvalidGetItem_ReturnsExpected(int getItemStateResult, bool expected)
     {
         using var control = new InvalidGetItemTreeView
         {
-            GetItemStateResult = (TVIS)getItemStateResult
+            GetItemStateResult = (TREE_VIEW_ITEM_STATE_FLAGS)getItemStateResult
         };
         var node = new TreeNode();
         control.Nodes.Add(node);
@@ -3192,7 +3192,7 @@ public class TreeNodeTests
         var item = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
-            hItem = node.Handle
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, item.iSelectedImage);
@@ -3221,7 +3221,7 @@ public class TreeNodeTests
         var item = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
-            hItem = node.Handle
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, item.iSelectedImage);
@@ -3252,7 +3252,7 @@ public class TreeNodeTests
         var item = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
-            hItem = node.Handle
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, item.iSelectedImage);
@@ -3467,7 +3467,7 @@ public class TreeNodeTests
         var column = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
-            hItem = node.Handle
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal(0, column.iSelectedImage);
@@ -3497,7 +3497,7 @@ public class TreeNodeTests
         var column = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
-            hItem = node.Handle
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal(expected, column.iSelectedImage);
@@ -3529,7 +3529,7 @@ public class TreeNodeTests
         var column = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_SELECTEDIMAGE,
-            hItem = node.Handle
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
         Assert.Equal(expected, column.iSelectedImage);
@@ -3856,11 +3856,11 @@ public class TreeNodeTests
         var item = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-            stateMask = TVIS.STATEIMAGEMASK,
-            hItem = node.Handle
+            stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
-        Assert.Equal((TVIS)expected, item.state);
+        Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expected, item.state);
     }
 
     [WinFormsTheory]
@@ -3886,11 +3886,11 @@ public class TreeNodeTests
         var item = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-            stateMask = TVIS.STATEIMAGEMASK,
-            hItem = node.Handle
+            stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
-        Assert.Equal((TVIS)expected, item.state);
+        Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expected, item.state);
     }
 
     [WinFormsTheory]
@@ -3918,11 +3918,11 @@ public class TreeNodeTests
         var item = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-            stateMask = TVIS.STATEIMAGEMASK,
-            hItem = node.Handle
+            stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
-        Assert.Equal((TVIS)expected, item.state);
+        Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expected, item.state);
     }
 
     [WinFormsTheory]
@@ -4219,11 +4219,11 @@ public class TreeNodeTests
         var column = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-            stateMask = TVIS.STATEIMAGEMASK,
-            hItem = node.Handle
+            stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
-        Assert.Equal((TVIS)0, column.state);
+        Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)0, column.state);
     }
 
     [WinFormsTheory]
@@ -4257,11 +4257,11 @@ public class TreeNodeTests
         var column = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-            stateMask = TVIS.STATEIMAGEMASK,
-            hItem = node.Handle
+            stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
-        Assert.Equal((TVIS)expected, column.state);
+        Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expected, column.state);
     }
 
     [WinFormsTheory]
@@ -4297,11 +4297,11 @@ public class TreeNodeTests
         var column = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-            stateMask = TVIS.STATEIMAGEMASK,
-            hItem = node.Handle
+            stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK,
+            hItem = (HTREEITEM)node.Handle
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref column));
-        Assert.Equal((TVIS)expected, column.state);
+        Assert.Equal((TREE_VIEW_ITEM_STATE_FLAGS)expected, column.state);
     }
 
     [WinFormsTheory]
@@ -4454,7 +4454,7 @@ public class TreeNodeTests
         var item = new TVITEMW
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_TEXT,
-            hItem = node.Handle,
+            hItem = (HTREEITEM)node.Handle,
             cchTextMax = 256,
             pszText = (IntPtr)textBuffer
         };
@@ -4651,7 +4651,7 @@ public class TreeNodeTests
 
     private class CustomGetItemTreeView : TreeView
     {
-        public TVIS GetItemStateResult { get; set; }
+        public TREE_VIEW_ITEM_STATE_FLAGS GetItemStateResult { get; set; }
 
         protected override unsafe void WndProc(ref Message m)
         {
@@ -4672,14 +4672,14 @@ public class TreeNodeTests
     {
         public bool MakeInvalid { get; set; }
 
-        public TVIS GetItemStateResult { get; set; }
+        public TREE_VIEW_ITEM_STATE_FLAGS GetItemStateResult { get; set; }
 
         protected override unsafe void WndProc(ref Message m)
         {
             if (MakeInvalid && m.Msg == (int)PInvoke.TVM_GETITEMW)
             {
                 TVITEMW* pItem = (TVITEMW*)m.LParam;
-                pItem->state = GetItemStateResult;
+                pItem->state = (TREE_VIEW_ITEM_STATE_FLAGS)GetItemStateResult;
                 Assert.Equal(IntPtr.Zero, m.WParam);
                 m.Result = (IntPtr)0;
                 return;

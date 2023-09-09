@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
-
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -14,55 +12,55 @@ public enum TreeViewHitTestLocations
     /// <summary>
     ///  No Information.
     /// </summary>
-    None = (int)ComCtl32.TVHT.NOWHERE,
+    None = (int)TVHITTESTINFO_FLAGS.TVHT_NOWHERE,
 
     /// <summary>
     ///  On Image.
     /// </summary>
-    Image = (int)ComCtl32.TVHT.ONITEMICON,
+    Image = (int)TVHITTESTINFO_FLAGS.TVHT_ONITEMICON,
 
     /// <summary>
     ///  On Label.
     /// </summary>
-    Label = (int)ComCtl32.TVHT.ONITEMLABEL,
+    Label = (int)TVHITTESTINFO_FLAGS.TVHT_ONITEMLABEL,
 
     /// <summary>
     ///  Indent.
     /// </summary>
-    Indent = (int)ComCtl32.TVHT.ONITEMINDENT,
+    Indent = (int)TVHITTESTINFO_FLAGS.TVHT_ONITEMINDENT,
 
     /// <summary>
     ///  AboveClientArea.
     /// </summary>
-    AboveClientArea = (int)ComCtl32.TVHT.ABOVE,
+    AboveClientArea = (int)TVHITTESTINFO_FLAGS.TVHT_ABOVE,
 
     /// <summary>
     ///  BelowClientArea.
     /// </summary>
-    BelowClientArea = (int)ComCtl32.TVHT.BELOW,
+    BelowClientArea = (int)TVHITTESTINFO_FLAGS.TVHT_BELOW,
 
     /// <summary>
     ///  LeftOfClientArea.
     /// </summary>
-    LeftOfClientArea = (int)ComCtl32.TVHT.TOLEFT,
+    LeftOfClientArea = (int)TVHITTESTINFO_FLAGS.TVHT_TOLEFT,
 
     /// <summary>
     ///  RightOfClientArea.
     /// </summary>
-    RightOfClientArea = (int)ComCtl32.TVHT.TORIGHT,
+    RightOfClientArea = (int)TVHITTESTINFO_FLAGS.TVHT_TORIGHT,
 
     /// <summary>
     ///  RightOfNode.
     /// </summary>
-    RightOfLabel = (int)ComCtl32.TVHT.ONITEMRIGHT,
+    RightOfLabel = (int)TVHITTESTINFO_FLAGS.TVHT_ONITEMRIGHT,
 
     /// <summary>
     ///  StateImage.
     /// </summary>
-    StateImage = (int)ComCtl32.TVHT.ONITEMSTATEICON,
+    StateImage = (int)TVHITTESTINFO_FLAGS.TVHT_ONITEMSTATEICON,
 
     /// <summary>
     ///  PlusMinus.
     /// </summary>
-    PlusMinus = (int)ComCtl32.TVHT.ONITEMBUTTON,
+    PlusMinus = (int)TVHITTESTINFO_FLAGS.TVHT_ONITEMBUTTON,
 }

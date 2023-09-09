@@ -456,9 +456,9 @@ public partial class ErrorProvider
                     break;
                 case PInvoke.WM_NOTIFY:
                     NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
-                    if ((int)nmhdr->code == (int)ComCtl32.TTN.SHOW || (int)nmhdr->code == (int)ComCtl32.TTN.POP)
+                    if (nmhdr->code is PInvoke.TTN_SHOW or PInvoke.TTN_POP)
                     {
-                        OnToolTipVisibilityChanging((nint)nmhdr->idFrom, (int)nmhdr->code == (int)ComCtl32.TTN.SHOW);
+                        OnToolTipVisibilityChanging((nint)nmhdr->idFrom, nmhdr->code == PInvoke.TTN_SHOW);
                     }
 
                     break;

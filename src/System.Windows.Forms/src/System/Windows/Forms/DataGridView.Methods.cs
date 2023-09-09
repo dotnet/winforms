@@ -30295,7 +30295,7 @@ public partial class DataGridView
         }
 
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
-        if ((int)nmhdr->code == (int)ComCtl32.TTN.GETDISPINFOW && !DesignMode)
+        if (nmhdr->code == PInvoke.TTN_GETDISPINFOW && !DesignMode)
         {
             string toolTip = ToolTipPrivate;
 

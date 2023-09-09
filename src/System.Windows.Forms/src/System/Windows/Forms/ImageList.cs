@@ -555,7 +555,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
                 height,
                 Color.FromArgb(PInvoke.CLR_NONE),
                 Color.FromArgb(PInvoke.CLR_NONE),
-                (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
+                IMAGE_LIST_DRAW_STYLE.ILD_TRANSPARENT);
         }
         finally
         {
@@ -693,7 +693,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
                         _imageSize.Height,
                         Color.FromArgb(PInvoke.CLR_NONE),
                         Color.FromArgb(PInvoke.CLR_NONE),
-                        (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
+                        IMAGE_LIST_DRAW_STYLE.ILD_TRANSPARENT);
                 }
                 finally
                 {

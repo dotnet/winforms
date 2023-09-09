@@ -3,7 +3,6 @@
 
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.ComponentModel.Design;
 
@@ -203,7 +202,7 @@ public abstract partial class ObjectSelectorEditor
                     break;
                 case MessageId.WM_REFLECT_NOTIFY:
                     NMHDR* nmtv = (NMHDR*)(nint)m.LParamInternal;
-                    if ((int)nmtv->code == (int)ComCtl32.NM.CLICK)
+                    if (nmtv->code == PInvoke.NM_CLICK)
                     {
                         clickSeen = true;
                     }

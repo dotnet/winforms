@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using static Interop;
 using Size = System.Drawing.Size;
 
 namespace System.Windows.Forms.Tests;
@@ -769,7 +768,7 @@ public class TabControlControlCollectionTests
         Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMCOUNT));
 
         char* buffer = stackalloc char[256];
-        ComCtl32.TCITEMW item = default;
+        TCITEMW item = default;
         item.cchTextMax = int.MaxValue;
         item.pszText = buffer;
         item.dwStateMask = (TAB_CONTROL_ITEM_STATE)uint.MaxValue;
@@ -778,7 +777,7 @@ public class TabControlControlCollectionTests
         // Get item 0.
         Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMW, 0, ref item));
         Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Empty(new string(item.pszText));
         Assert.Equal(-1, item.iImage);
@@ -786,7 +785,7 @@ public class TabControlControlCollectionTests
         // Get item 1.
         Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMW, 1, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Equal(expectedText, new string(item.pszText));
         Assert.Equal(1, item.iImage);
@@ -794,7 +793,7 @@ public class TabControlControlCollectionTests
         // Get item 2.
         Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMW, 2, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Empty(new string(item.pszText));
         Assert.Equal(-1, item.iImage);
@@ -837,7 +836,7 @@ public class TabControlControlCollectionTests
         Assert.Equal(3, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMCOUNT));
 
         char* buffer = stackalloc char[256];
-        ComCtl32.TCITEMW item = default;
+        TCITEMW item = default;
         item.cchTextMax = int.MaxValue;
         item.pszText = buffer;
         item.dwStateMask = (TAB_CONTROL_ITEM_STATE)uint.MaxValue;
@@ -846,7 +845,7 @@ public class TabControlControlCollectionTests
         // Get item 0.
         Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMW, 0, ref item));
         Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Empty(new string(item.pszText));
         Assert.Equal(-1, item.iImage);
@@ -854,7 +853,7 @@ public class TabControlControlCollectionTests
         // Get item 1.
         Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMW, 1, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Equal(expectedText, new string(item.pszText));
         Assert.Equal(1, item.iImage);
@@ -862,7 +861,7 @@ public class TabControlControlCollectionTests
         // Get item 2.
         Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMW, 2, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Empty(new string(item.pszText));
         Assert.Equal(-1, item.iImage);
@@ -1477,7 +1476,7 @@ public class TabControlControlCollectionTests
         Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMCOUNT));
 
         char* buffer = stackalloc char[256];
-        ComCtl32.TCITEMW item = default;
+        TCITEMW item = default;
         item.cchTextMax = int.MaxValue;
         item.pszText = buffer;
         item.dwStateMask = (TAB_CONTROL_ITEM_STATE)uint.MaxValue;
@@ -1486,7 +1485,7 @@ public class TabControlControlCollectionTests
         // Get item 0.
         Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMW, 0, ref item));
         Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Empty(new string(item.pszText));
         Assert.Equal(-1, item.iImage);
@@ -1494,7 +1493,7 @@ public class TabControlControlCollectionTests
         // Get item 2.
         Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMW, 1, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Empty(new string(item.pszText));
         Assert.Equal(-1, item.iImage);
@@ -1535,7 +1534,7 @@ public class TabControlControlCollectionTests
         Assert.Equal(2, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMCOUNT));
 
         char* buffer = stackalloc char[256];
-        ComCtl32.TCITEMW item = default;
+        TCITEMW item = default;
         item.cchTextMax = int.MaxValue;
         item.pszText = buffer;
         item.dwStateMask = (TAB_CONTROL_ITEM_STATE)uint.MaxValue;
@@ -1544,7 +1543,7 @@ public class TabControlControlCollectionTests
         // Get item 0.
         Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMW, 0, ref item));
         Assert.Equal(TAB_CONTROL_ITEM_STATE.TCIS_BUTTONPRESSED, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Empty(new string(item.pszText));
         Assert.Equal(-1, item.iImage);
@@ -1552,7 +1551,7 @@ public class TabControlControlCollectionTests
         // Get item 1.
         Assert.Equal(1, (int)PInvoke.SendMessage(owner, PInvoke.TCM_GETITEMW, 1, ref item));
         Assert.Equal((TAB_CONTROL_ITEM_STATE)0, item.dwState);
-        Assert.Equal(IntPtr.Zero, item.lParam);
+        Assert.Equal(IntPtr.Zero, (nint)item.lParam);
         Assert.Equal(int.MaxValue, item.cchTextMax);
         Assert.Empty(new string(item.pszText));
         Assert.Equal(-1, item.iImage);

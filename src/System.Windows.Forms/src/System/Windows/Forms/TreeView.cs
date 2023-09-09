@@ -2076,7 +2076,7 @@ public partial class TreeView : Control
         };
 
         nint hnode = PInvoke.SendMessage(this, PInvoke.TVM_HITTEST, 0, ref tvhip);
-        if (hnode != 0 && ((tvhip.flags & TVHT.ONITEM) != 0))
+        if (hnode != 0 && ((tvhip.flags & TVHITTESTINFO_FLAGS.TVHT_ONITEM) != 0))
         {
             TreeNode? tn = NodeFromHandle(hnode);
             if (tn != _prevHoveredNode && tn is not null)
@@ -2461,7 +2461,7 @@ public partial class TreeView : Control
         }
 
         TreeViewCancelEventArgs e = null;
-        if ((item.state & TVIS.EXPANDED) == 0)
+        if ((item.state & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) == 0)
         {
             e = new TreeViewCancelEventArgs(NodeFromHandle(item.hItem), false, TreeViewAction.Expand);
             OnBeforeExpand(e);
@@ -2489,7 +2489,7 @@ public partial class TreeView : Control
         TreeNode node = NodeFromHandle(item.hItem);
 
         // Note that IsExpanded is invalid for the moment, so we use item item.state to branch.
-        if ((item.state & TVIS.EXPANDED) == 0)
+        if ((item.state & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) == 0)
         {
             e = new TreeViewEventArgs(node, TreeViewAction.Collapse);
             OnAfterCollapse(e);
@@ -2926,7 +2926,7 @@ public partial class TreeView : Control
         };
 
         nint hnode = PInvoke.SendMessage(this, PInvoke.TVM_HITTEST, 0, ref tvhip);
-        if (hnode != 0 && tvhip.flags.HasFlag(TVHT.ONITEM) && NodeFromHandle(hnode) is { } tn && !ShowNodeToolTips)
+        if (hnode != 0 && tvhip.flags.HasFlag(TVHITTESTINFO_FLAGS.TVHT_ONITEM) && NodeFromHandle(hnode) is { } tn && !ShowNodeToolTips)
         {
             Rectangle bounds = tn.Bounds;
             bounds.Location = PointToScreen(bounds.Location);
@@ -2957,7 +2957,7 @@ public partial class TreeView : Control
         };
 
         nint hnode = PInvoke.SendMessage(this, PInvoke.TVM_HITTEST, 0, ref tvhip);
-        if (hnode != 0 && ((tvhip.flags & TVHT.ONITEM) != 0))
+        if (hnode != 0 && ((tvhip.flags & TVHITTESTINFO_FLAGS.TVHT_ONITEM) != 0))
         {
             TreeNode tn = NodeFromHandle(hnode);
             if (ShowNodeToolTips && tn is not null && (!string.IsNullOrEmpty(tn.ToolTipText)))
@@ -2990,7 +2990,7 @@ public partial class TreeView : Control
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
         // Custom draw code is handled separately.
-        if ((int)nmhdr->code == (int)NM.CUSTOMDRAW)
+        if (nmhdr->code == PInvoke.NM_CUSTOMDRAW)
         {
             CustomDraw(ref m);
         }
@@ -2998,34 +2998,34 @@ public partial class TreeView : Control
         {
             NMTREEVIEW* nmtv = (NMTREEVIEW*)(nint)m.LParamInternal;
 
-            switch ((int)nmtv->nmhdr.code)
+            switch (nmtv->nmhdr.code)
             {
-                case (int)TVN.ITEMEXPANDINGW:
+                case PInvoke.TVN_ITEMEXPANDINGW:
                     m.ResultInternal = (LRESULT)TvnExpanding(nmtv);
                     break;
-                case (int)TVN.ITEMEXPANDEDW:
+                case PInvoke.TVN_ITEMEXPANDEDW:
                     TvnExpanded(nmtv);
                     break;
-                case (int)TVN.SELCHANGINGW:
+                case PInvoke.TVN_SELCHANGINGW:
                     m.ResultInternal = (LRESULT)TvnSelecting(nmtv);
                     break;
-                case (int)TVN.SELCHANGEDW:
+                case PInvoke.TVN_SELCHANGEDW:
                     TvnSelected(nmtv);
                     break;
-                case (int)TVN.BEGINDRAGW:
+                case PInvoke.TVN_BEGINDRAGW:
                     TvnBeginDrag(MouseButtons.Left, nmtv);
                     break;
-                case (int)TVN.BEGINRDRAGW:
+                case PInvoke.TVN_BEGINRDRAGW:
                     TvnBeginDrag(MouseButtons.Right, nmtv);
                     break;
-                case (int)TVN.BEGINLABELEDITW:
+                case PInvoke.TVN_BEGINLABELEDITW:
                     m.ResultInternal = (LRESULT)TvnBeginLabelEdit(*(NMTVDISPINFOW*)(nint)m.LParamInternal);
                     break;
-                case (int)TVN.ENDLABELEDITW:
+                case PInvoke.TVN_ENDLABELEDITW:
                     m.ResultInternal = (LRESULT)TvnEndLabelEdit(*(NMTVDISPINFOW*)(nint)m.LParamInternal);
                     break;
-                case (int)NM.CLICK:
-                case (int)NM.RCLICK:
+                case PInvoke.NM_CLICK:
+                case PInvoke.NM_RCLICK:
                     MouseButtons button = MouseButtons.Left;
                     Point pos = PointToClient(Cursor.Position);
                     TVHITTESTINFO tvhip = new()
@@ -3034,16 +3034,16 @@ public partial class TreeView : Control
                     };
 
                     nint hnode = PInvoke.SendMessage(this, PInvoke.TVM_HITTEST, 0, ref tvhip);
-                    if ((int)nmtv->nmhdr.code != (int)NM.CLICK || (tvhip.flags & TVHT.ONITEM) != 0)
+                    if (nmtv->nmhdr.code != PInvoke.NM_CLICK || (tvhip.flags & TVHITTESTINFO_FLAGS.TVHT_ONITEM) != 0)
                     {
-                        button = (int)nmtv->nmhdr.code == (int)NM.CLICK ? MouseButtons.Left : MouseButtons.Right;
+                        button = nmtv->nmhdr.code == PInvoke.NM_CLICK ? MouseButtons.Left : MouseButtons.Right;
                     }
 
                     // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when
                     // LBUTTONUP happens on TVHT_ONITEM. This is a comctl quirk.
                     // We work around that by calling OnMouseUp here.
-                    if ((int)nmtv->nmhdr.code != (int)NM.CLICK
-                        || (tvhip.flags & TVHT.ONITEM) != 0 || FullRowSelect)
+                    if (nmtv->nmhdr.code != PInvoke.NM_CLICK
+                        || (tvhip.flags & TVHITTESTINFO_FLAGS.TVHT_ONITEM) != 0 || FullRowSelect)
                     {
                         if (hnode != 0 && !ValidationCancelled)
                         {
@@ -3053,7 +3053,7 @@ public partial class TreeView : Control
                         }
                     }
 
-                    if ((int)nmtv->nmhdr.code == (int)NM.RCLICK)
+                    if (nmtv->nmhdr.code == PInvoke.NM_RCLICK)
                     {
                         TreeNode treeNode = NodeFromHandle(hnode);
                         if (treeNode is not null && treeNode.ContextMenuStrip is not null)
@@ -3071,8 +3071,8 @@ public partial class TreeView : Control
 
                     if (!_treeViewState[TREEVIEWSTATE_mouseUpFired])
                     {
-                        if ((int)nmtv->nmhdr.code != (int)NM.CLICK
-                        || (tvhip.flags & TVHT.ONITEM) != 0)
+                        if (nmtv->nmhdr.code != PInvoke.NM_CLICK
+                        || (tvhip.flags & TVHITTESTINFO_FLAGS.TVHT_ONITEM) != 0)
                         {
                             // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when
                             // LBUTTONUP happens on TVHT_ONITEM. This is a comctl quirk.
@@ -3201,7 +3201,7 @@ public partial class TreeView : Control
                         {
                             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                             hItem = item->hItem,
-                            stateMask = TVIS.STATEIMAGEMASK
+                            stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK
                         };
 
                         PInvoke.SendMessage(this, PInvoke.TVM_GETITEMW, 0, ref item1);
@@ -3214,15 +3214,15 @@ public partial class TreeView : Control
                 break;
             case PInvoke.WM_NOTIFY:
                 NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
-                switch ((TTN)nmhdr->code)
+                switch (nmhdr->code)
                 {
-                    case TTN.GETDISPINFOW:
+                    case PInvoke.TTN_GETDISPINFOW:
                         // Setting the max width has the added benefit of enabling multiline tool tips
                         PInvoke.SendMessage(nmhdr->hwndFrom, PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                         WmNeedText(ref m);
                         m.ResultInternal = (LRESULT)1;
                         return;
-                    case TTN.SHOW:
+                    case PInvoke.TTN_SHOW:
                         if (WmShowToolTip(ref m))
                         {
                             m.ResultInternal = (LRESULT)1;
@@ -3277,7 +3277,7 @@ public partial class TreeView : Control
 
                 // This gets around the TreeView behavior of temporarily moving the selection
                 // highlight to a node when the user clicks on its checkbox.
-                if ((tvhip.flags & TVHT.ONITEMSTATEICON) != 0)
+                if ((tvhip.flags & TVHITTESTINFO_FLAGS.TVHT_ONITEMSTATEICON) != 0)
                 {
                     // We do not pass the Message to the Control so fire MouseDown.
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, PARAM.ToPoint(m.LParamInternal)));

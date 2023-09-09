@@ -68,7 +68,7 @@ public class MonthCalendarTests : ControlTestBase
             {
                 nmhdr = new NMHDR
                 {
-                    code = unchecked((uint)MCN.SELCHANGE),
+                    code = PInvoke.MCN_SELCHANGE,
                 },
                 stSelStart = date,
                 stSelEnd = date,

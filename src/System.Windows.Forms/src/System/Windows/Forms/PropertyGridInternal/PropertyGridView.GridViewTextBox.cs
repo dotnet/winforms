@@ -293,9 +293,9 @@ internal partial class PropertyGridView
 
                 if (nmhdr->hwndFrom == PropertyGridView.ToolTip.Handle)
                 {
-                    switch ((ComCtl32.TTN)nmhdr->code)
+                    switch (nmhdr->code)
                     {
-                        case ComCtl32.TTN.SHOW:
+                        case PInvoke.TTN_SHOW:
                             PositionTooltip(this, PropertyGridView.ToolTip, ClientRectangle);
                             m.ResultInternal = (LRESULT)1;
                             return true;
