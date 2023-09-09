@@ -214,6 +214,10 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Debug.Assert(address IsNot Nothing, "No address")
             Debug.Assert((Not String.IsNullOrWhiteSpace(destinationFileName)) AndAlso Directory.Exists(Path.GetDirectoryName(Path.GetFullPath(destinationFileName))), "Invalid path")
 
+            _cancelSourceRead = New CancellationTokenSource()
+            _cancelTokenRead = _cancelSourceRead.Token
+            _cancelSourceWrite = New CancellationTokenSource()
+            _cancelTokenWrite = _cancelSourceWrite.Token
             Using response As HttpResponseMessage = Await _httpClient.GetAsync(address, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(False)
                 Using responseStream As Stream = Await response.Content.ReadAsStreamAsync().ConfigureAwait(False)
                     Using fileStream As New FileStream(destinationFileName, FileMode.Create, FileAccess.Write, FileShare.None)
@@ -223,27 +227,20 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                         Dim bytesRead As Integer
                         Try
                             m_ProgressDialog?.ShowProgressDialog() 'returns when the download sequence is over, whether due to success, error, or being canceled
-                            While (Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenRead).ConfigureAwait(False)) > 0
-                                Dim contentLength? As Long = response.Content.Headers.ContentLength
-                                If Not contentLength.HasValue Then
-                                    Continue While
-                                Else
-                                    bytesRead = CInt(contentLength.Value)
-                                    totalBytesRead += bytesRead
 
-                                    Dim cancelTokenWrite As CancellationToken = _cancelSourceWrite.Token
+                            bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenRead).ConfigureAwait(False)
+                            Do While bytesRead > 0
+                                Dim contentLength? As Long = response.Content.Headers.ContentLength
+                                If contentLength.HasValue Then
+                                    totalBytesRead += bytesRead
 
                                     Await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), _cancelTokenWrite).ConfigureAwait(False)
                                     If m_ProgressDialog IsNot Nothing Then
-                                        Dim percentage As Integer = CInt(totalBytesRead / contentLength.Value * 100)
+                                        Dim percentage As Integer = CInt(contentLength.Value / totalBytesRead * 100)
                                         InvokeIncrement(percentage)
                                     End If
                                 End If
-                                _cancelSourceRead = New CancellationTokenSource()
-                                _cancelTokenRead = _cancelSourceRead.Token
-                                _cancelSourceWrite = New CancellationTokenSource()
-                                _cancelTokenWrite = _cancelSourceWrite.Token
-                            End While
+                            Loop
                         Catch ex As Exception
                             Throw
                         End Try
@@ -334,11 +331,11 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             _cancelSourceWrite.Cancel() 'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the WebClient cancels the xfer.
         End Sub
 
-        Private _cancelSourceRead As New CancellationTokenSource()
-        Private _cancelTokenRead As CancellationToken = _cancelSourceRead.Token
+        Private _cancelSourceRead As CancellationTokenSource
+        Private _cancelTokenRead As CancellationToken
 
-        Private _cancelSourceWrite As New CancellationTokenSource()
-        Private _cancelTokenWrite As CancellationToken = _cancelSourceRead.Token
+        Private _cancelSourceWrite As CancellationTokenSource
+        Private _cancelTokenWrite As CancellationToken
 
         ' The WebClient performs the downloading or uploading operations for us
         Private ReadOnly _httpClient As HttpClient
