@@ -1859,7 +1859,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             // Lets update the Lparam to the Handle.
             UpdateNode(TVITEM_MASK.TVIF_PARAM);
 
-            Marshal.FreeHGlobal(tvis.item.pszText);
+            Marshal.FreeCoTaskMem((nint)tvis.item.pszText.Value);
 
             if (editing)
             {
@@ -2094,7 +2094,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// <summary>
     ///  Tell the TreeView to refresh this node
     /// </summary>
-    private void UpdateNode(TVITEM_MASK mask)
+    private unsafe void UpdateNode(TVITEM_MASK mask)
     {
         if (_handle == IntPtr.Zero)
         {
@@ -2154,7 +2154,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         PInvoke.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
         if ((mask & TVITEM_MASK.TVIF_TEXT) != 0)
         {
-            Marshal.FreeHGlobal(item.pszText);
+            Marshal.FreeCoTaskMem((nint)item.pszText.Value);
             if (tv.Scrollable)
             {
                 tv.ForceScrollbarUpdate(false);

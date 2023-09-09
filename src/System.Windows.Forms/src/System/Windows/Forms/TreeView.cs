@@ -2435,7 +2435,7 @@ public partial class TreeView : Control
         return s;
     }
 #nullable disable
-    private unsafe void TvnBeginDrag(MouseButtons buttons, NMTREEVIEW* nmtv)
+    private unsafe void TvnBeginDrag(MouseButtons buttons, NMTREEVIEWW* nmtv)
     {
         TVITEMW item = nmtv->itemNew;
 
@@ -2450,7 +2450,7 @@ public partial class TreeView : Control
         OnItemDrag(new ItemDragEventArgs(buttons, node));
     }
 
-    private unsafe IntPtr TvnExpanding(NMTREEVIEW* nmtv)
+    private unsafe IntPtr TvnExpanding(NMTREEVIEWW* nmtv)
     {
         TVITEMW item = nmtv->itemNew;
 
@@ -2475,7 +2475,7 @@ public partial class TreeView : Control
         return (IntPtr)(e.Cancel ? 1 : 0);
     }
 
-    private unsafe void TvnExpanded(NMTREEVIEW* nmtv)
+    private unsafe void TvnExpanded(NMTREEVIEWW* nmtv)
     {
         TVITEMW item = nmtv->itemNew;
 
@@ -2501,7 +2501,7 @@ public partial class TreeView : Control
         }
     }
 
-    private unsafe IntPtr TvnSelecting(NMTREEVIEW* nmtv)
+    private unsafe IntPtr TvnSelecting(NMTREEVIEWW* nmtv)
     {
         if (_treeViewState[TREEVIEWSTATE_ignoreSelects])
         {
@@ -2534,7 +2534,7 @@ public partial class TreeView : Control
         return (IntPtr)(e.Cancel ? 1 : 0);
     }
 
-    private unsafe void TvnSelected(NMTREEVIEW* nmtv)
+    private unsafe void TvnSelected(NMTREEVIEWW* nmtv)
     {
         // If called from the TreeNodeCollection.Clear() then return.
         if (_nodesCollectionClear)
@@ -2602,7 +2602,7 @@ public partial class TreeView : Control
         }
 
         TreeNode node = NodeFromHandle(nmtvdi.item.hItem);
-        string newText = (nmtvdi.item.pszText == IntPtr.Zero ? null : Marshal.PtrToStringAuto(nmtvdi.item.pszText));
+        string newText = nmtvdi.item.pszText.ToString();
         NodeLabelEditEventArgs e = new NodeLabelEditEventArgs(node, newText);
         OnAfterLabelEdit(e);
         if (newText is not null && !e.CancelEdit && node is not null)
@@ -2976,7 +2976,7 @@ public partial class TreeView : Control
 
         _toolTipBuffer.SetText(tipText);
         ttt->lpszText = _toolTipBuffer.Buffer;
-        ttt->hinst = IntPtr.Zero;
+        ttt->hinst = HINSTANCE.Null;
 
         // RightToLeft reading order
         if (RightToLeft == RightToLeft.Yes)
@@ -2996,9 +2996,9 @@ public partial class TreeView : Control
         }
         else
         {
-            NMTREEVIEW* nmtv = (NMTREEVIEW*)(nint)m.LParamInternal;
+            NMTREEVIEWW* nmtv = (NMTREEVIEWW*)(nint)m.LParamInternal;
 
-            switch (nmtv->nmhdr.code)
+            switch (nmtv->hdr.code)
             {
                 case PInvoke.TVN_ITEMEXPANDINGW:
                     m.ResultInternal = (LRESULT)TvnExpanding(nmtv);
@@ -3034,15 +3034,15 @@ public partial class TreeView : Control
                     };
 
                     nint hnode = PInvoke.SendMessage(this, PInvoke.TVM_HITTEST, 0, ref tvhip);
-                    if (nmtv->nmhdr.code != PInvoke.NM_CLICK || (tvhip.flags & TVHITTESTINFO_FLAGS.TVHT_ONITEM) != 0)
+                    if (nmtv->hdr.code != PInvoke.NM_CLICK || (tvhip.flags & TVHITTESTINFO_FLAGS.TVHT_ONITEM) != 0)
                     {
-                        button = nmtv->nmhdr.code == PInvoke.NM_CLICK ? MouseButtons.Left : MouseButtons.Right;
+                        button = nmtv->hdr.code == PInvoke.NM_CLICK ? MouseButtons.Left : MouseButtons.Right;
                     }
 
                     // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when
                     // LBUTTONUP happens on TVHT_ONITEM. This is a comctl quirk.
                     // We work around that by calling OnMouseUp here.
-                    if (nmtv->nmhdr.code != PInvoke.NM_CLICK
+                    if (nmtv->hdr.code != PInvoke.NM_CLICK
                         || (tvhip.flags & TVHITTESTINFO_FLAGS.TVHT_ONITEM) != 0 || FullRowSelect)
                     {
                         if (hnode != 0 && !ValidationCancelled)
@@ -3053,7 +3053,7 @@ public partial class TreeView : Control
                         }
                     }
 
-                    if (nmtv->nmhdr.code == PInvoke.NM_RCLICK)
+                    if (nmtv->hdr.code == PInvoke.NM_RCLICK)
                     {
                         TreeNode treeNode = NodeFromHandle(hnode);
                         if (treeNode is not null && treeNode.ContextMenuStrip is not null)
@@ -3071,7 +3071,7 @@ public partial class TreeView : Control
 
                     if (!_treeViewState[TREEVIEWSTATE_mouseUpFired])
                     {
-                        if (nmtv->nmhdr.code != PInvoke.NM_CLICK
+                        if (nmtv->hdr.code != PInvoke.NM_CLICK
                         || (tvhip.flags & TVHITTESTINFO_FLAGS.TVHT_ONITEM) != 0)
                         {
                             // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when

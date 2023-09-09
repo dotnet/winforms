@@ -6493,7 +6493,7 @@ public partial class ListView : Control
                     }
                     else
                     {
-                        NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)(nint)m.LParamInternal;
+                        NMLVDISPINFOW* dispInfo = (NMLVDISPINFOW*)(nint)m.LParamInternal;
                         LabelEditEventArgs e = new(dispInfo->item.iItem);
                         OnBeforeLabelEdit(e);
                         cancelEdit = e.CancelEdit;
@@ -6547,15 +6547,15 @@ public partial class ListView : Control
                     _labelEdit = null;
 
                     _listViewState[LISTVIEWSTATE_inLabelEdit] = false;
-                    NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)(nint)m.LParamInternal;
-                    string? text = dispInfo->item.pszText is null ? null : new string(dispInfo->item.pszText);
+                    NMLVDISPINFOW* dispInfo = (NMLVDISPINFOW*)(nint)m.LParamInternal;
+                    string? text = dispInfo->item.pszText.ToString();
                     LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem, text);
                     OnAfterLabelEdit(e);
                     m.ResultInternal = (LRESULT)(nint)(BOOL)e.CancelEdit;
 
                     // from msdn:
                     //   "If the user cancels editing, the pszText member of the LVITEM structure is NULL"
-                    if (!e.CancelEdit && dispInfo->item.pszText is not null)
+                    if (!e.CancelEdit && !dispInfo->item.pszText.IsNull)
                     {
                         Items[dispInfo->item.iItem].Text = text;
                     }
@@ -6604,8 +6604,8 @@ public partial class ListView : Control
                     {
                         // Because the state image mask is 1-based, a value of 1 means unchecked,
                         // anything else means checked.  We convert this to the more standard 0 or 1
-                        CheckState oldState = (CheckState)(((int)(nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
-                        CheckState newState = (CheckState)(((int)(nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                        CheckState oldState = (CheckState)(((int)((LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                        CheckState newState = (CheckState)(((int)((LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
 
                         if (oldState != newState)
                         {
@@ -6626,8 +6626,8 @@ public partial class ListView : Control
                     {
                         // Because the state image mask is 1-based, a value of 1 means unchecked,
                         // anything else means checked.  We convert this to the more standard 0 or 1
-                        CheckState oldValue = (CheckState)(((int)(nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
-                        CheckState newValue = (CheckState)(((int)(nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                        CheckState oldValue = (CheckState)(((int)((LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                        CheckState newValue = (CheckState)(((int)((LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
 
                         if (newValue != oldValue)
                         {
@@ -6659,8 +6659,8 @@ public partial class ListView : Control
                             }
                         }
 
-                        LIST_VIEW_ITEM_STATE_FLAGS oldState = nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED;
-                        LIST_VIEW_ITEM_STATE_FLAGS newState = nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED;
+                        LIST_VIEW_ITEM_STATE_FLAGS oldState = (LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED;
+                        LIST_VIEW_ITEM_STATE_FLAGS newState = (LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED;
                         // Windows common control always fires
                         // this event twice, once with newState, oldState, and again with
                         // oldState, newState.
@@ -6817,7 +6817,7 @@ public partial class ListView : Control
                     // we use the LVN_GETDISPINFO message only in virtual mode
                     if (VirtualMode && m.LParamInternal != 0)
                     {
-                        NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)(nint)m.LParamInternal;
+                        NMLVDISPINFOW* dispInfo = (NMLVDISPINFOW*)(nint)m.LParamInternal;
 
                         RetrieveVirtualItemEventArgs rVI = new RetrieveVirtualItemEventArgs(dispInfo->item.iItem);
                         OnRetrieveVirtualItem(rVI);
@@ -6883,7 +6883,7 @@ public partial class ListView : Control
                     if (ShowItemToolTips && m.LParamInternal != 0)
                     {
                         NMLVGETINFOTIPW* infoTip = (NMLVGETINFOTIPW*)(nint)m.LParamInternal;
-                        ListViewItem lvi = Items[infoTip->item];
+                        ListViewItem lvi = Items[infoTip->iItem];
 
                         // This code is needed to hide the keyboard tooltip before showing the mouse tooltip
                         NotifyAboutLostFocus(FocusedItem);
@@ -6896,7 +6896,8 @@ public partial class ListView : Control
                             // UNICODE. Use char.
                             // we need to copy the null terminator character ourselves
                             char[] charBuf = (lvi.ToolTipText + "\0").ToCharArray();
-                            Marshal.Copy(charBuf, 0, infoTip->lpszText, Math.Min(charBuf.Length, infoTip->cchTextMax));
+                            nint destPtr = new(infoTip->pszText);
+                            Marshal.Copy(charBuf, 0, destPtr, Math.Min(charBuf.Length, infoTip->cchTextMax));
                         }
                     }
                 }
@@ -6918,9 +6919,9 @@ public partial class ListView : Control
                         bool isPrefixSearch = (nmlvif->lvfi.flags & LVFINDINFOW_FLAGS.LVFI_PARTIAL) != 0;
 
                         string text = string.Empty;
-                        if (isTextSearch && nmlvif->lvfi.psz is not null)
+                        if (isTextSearch && !nmlvif->lvfi.psz.IsNull)
                         {
-                            text = new string(nmlvif->lvfi.psz);
+                            text = nmlvif->lvfi.psz.ToString();
                         }
 
                         Point startingPoint = Point.Empty;
