@@ -182,7 +182,7 @@ public sealed class ImageListStreamer : ISerializable, IDisposable
 
         lock (s_syncObject)
         {
-            ComCtl32.InitCommonControls();
+            PInvoke.InitCommonControls();
             _nativeImageList = new ImageList.NativeImageList(new Ole32.GPStream(memoryStream));
         }
 

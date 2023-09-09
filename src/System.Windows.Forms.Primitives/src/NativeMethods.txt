@@ -394,6 +394,7 @@ ImmSetConversionStatus
 ImmSetOpenStatus
 IMN_*
 IMPLTYPEFLAGS
+InitCommonControls
 InitCommonControlsEx
 INITCOMMONCONTROLSEX_ICC
 INPLACE_E_NOTOOLSPACE

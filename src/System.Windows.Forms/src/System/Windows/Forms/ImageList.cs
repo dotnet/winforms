@@ -440,7 +440,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
 
         using (ThemingScope scope = new(Application.UseVisualStyles))
         {
-            ComCtl32.InitCommonControls();
+            PInvoke.InitCommonControls();
 
             _nativeImageList?.Dispose();
             _nativeImageList = new NativeImageList(_imageSize, flags);
