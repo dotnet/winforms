@@ -213,8 +213,9 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                         End Try
                     End Using
                 End Using
-            End Using
-            CloseProgressDialog()
+                End If
+                respone?.dispose
+                CloseProgressDialog()
 
         End Function
 
