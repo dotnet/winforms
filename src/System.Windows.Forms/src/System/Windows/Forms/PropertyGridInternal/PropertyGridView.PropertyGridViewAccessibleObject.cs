@@ -113,8 +113,8 @@ internal partial class PropertyGridView
                 return null;
             }
 
-            GridEntryCollection topLevelGridEntries = owner.TopLevelGridEntries;
-            if (topLevelGridEntries.Count > 0)
+            GridEntryCollection? topLevelGridEntries = owner.TopLevelGridEntries;
+            if (topLevelGridEntries is not null && topLevelGridEntries.Count > 0)
             {
                 GridItem targetEntry = topLevelGridEntries[categoryIndex];
                 if (targetEntry is CategoryGridEntry categoryGridEntry)
@@ -127,7 +127,7 @@ internal partial class PropertyGridView
         }
 
         internal AccessibleObject? GetLastCategory()
-            => !this.TryGetOwnerAs(out PropertyGridView? owner) ? null : GetCategory(owner.TopLevelGridEntries.Count - 1);
+            => !this.TryGetOwnerAs(out PropertyGridView? owner) ? null : GetCategory(owner.TopLevelGridEntries!.Count - 1);
 
         internal AccessibleObject? GetLastChild()
         {
@@ -402,7 +402,7 @@ internal partial class PropertyGridView
                 return null;
             }
 
-            GridEntry gridEntry = owner.SelectedGridEntry;
+            GridEntry? gridEntry = owner.SelectedGridEntry;
             if (gridEntry is not null && gridEntry.HasFocus)
             {
                 return gridEntry.AccessibilityObject;
