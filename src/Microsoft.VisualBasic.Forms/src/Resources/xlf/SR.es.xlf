@@ -178,8 +178,10 @@
         <note />
       </trans-unit>
       <trans-unit id="net_webstatus_Timeout">
-        <source>Timeout.</source>
-        <target state="new">Timeout.</target>
+        <source>The operation has timed out.
+</source>
+        <target state="new">The operation has timed out.
+</target>
         <note />
       </trans-unit>
     </body>

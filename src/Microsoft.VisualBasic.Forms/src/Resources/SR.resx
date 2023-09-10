@@ -223,6 +223,7 @@
     <value>Environment variable is not defined: '{0}'.</value>
   </data>
   <data name="net_webstatus_Timeout" xml:space="preserve">
-    <value>Timeout.</value>
+    <value>The operation has timed out.
+</value>
   </data>
 </root>

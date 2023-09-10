@@ -184,42 +184,43 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Debug.Assert(address IsNot Nothing, "No address")
             Debug.Assert((Not String.IsNullOrWhiteSpace(destinationFileName)) AndAlso Directory.Exists(Path.GetDirectoryName(Path.GetFullPath(destinationFileName))), "Invalid path")
 
-            _cancelSourceRead = New CancellationTokenSource()
-            _cancelTokenRead = _cancelSourceRead.Token
-            _cancelSourceWrite = New CancellationTokenSource()
-            _cancelTokenWrite = _cancelSourceWrite.Token
+            _cancelTokenSourceGet = New CancellationTokenSource()
+            _cancelTokenSourceRead = New CancellationTokenSource()
+            _cancelTokenSourceReadStream = New CancellationTokenSource()
+            _cancelTokenSourceWrite = New CancellationTokenSource()
+
             Dim response As HttpResponseMessage = Nothing
             Try
-                response = Await _httpClient.GetAsync(address, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(False)
-            Catch ex As Exception
-                If ex.Message.Contains("The 'file' scheme is not supported.") Then
-                    ' REVIEW I don't see to be able to detect a timeout, except this way
-                    ' SR.net_webstatus_Timeout value is needed
+                response = Await _httpClient.GetAsync(address, HttpCompletionOption.ResponseHeadersRead, _cancelTokenSourceGet.Token).ConfigureAwait(False)
+            Catch ex As TaskCanceledException
+                If ex.CancellationToken = _cancelTokenSourceRead.Token Then
+                    ' a real cancellation, triggered by the caller
+                    Throw
+                Else
                     Throw New WebException(SR.net_webstatus_Timeout, WebExceptionStatus.Timeout)
                 End If
+            Catch ex As Exception
                 Throw
             End Try
             Dim contentLength? As Long = response?.Content.Headers.ContentLength
             If contentLength.HasValue Then
-                Using responseStream As Stream = Await response.Content.ReadAsStreamAsync().ConfigureAwait(False)
+                Using responseStream As Stream = Await response.Content.ReadAsStreamAsync(_cancelTokenSourceReadStream.Token).ConfigureAwait(False)
                     Using fileStream As New FileStream(destinationFileName, FileMode.Create, FileAccess.Write, FileShare.None)
 
                         Dim buffer(8191) As Byte
                         Dim totalBytesRead As Long = 0
                         Dim bytesRead As Integer
                         Try
-                            m_ProgressDialog?.ShowProgressDialog() 'returns when the download sequence is over, whether due to success, error, or being canceled
-
-                            bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenRead).ConfigureAwait(False)
+                            bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
                             Do While bytesRead > 0
                                 totalBytesRead += bytesRead
 
-                                Await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), _cancelTokenWrite).ConfigureAwait(False)
+                                Await fileStream.WriteAsync(buffer.AsMemory(0, bytesRead), _cancelTokenSourceWrite.Token).ConfigureAwait(False)
                                 If m_ProgressDialog IsNot Nothing Then
                                     Dim percentage As Integer = CInt(contentLength.Value / totalBytesRead * 100)
                                     InvokeIncrement(percentage)
                                 End If
-                                bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenRead).ConfigureAwait(False)
+                                bytesRead = Await responseStream.ReadAsync(buffer.AsMemory(0, buffer.Length), _cancelTokenSourceRead.Token).ConfigureAwait(False)
                             Loop
                         Catch ex As Exception
                             Throw
@@ -227,7 +228,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                     End Using
                 End Using
             End If
-            respone?.dispose
+            response?.Dispose()
             CloseProgressDialog()
 
         End Function
@@ -308,15 +309,17 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         ''' the actual file transfer cancel event comes through and do it there.
         ''' </remarks>
         Private Sub m_ProgressDialog_UserCancelledEvent() Handles m_ProgressDialog.UserHitCancel
-            _cancelSourceRead.Cancel() 'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the WebClient cancels the xfer.
-            _cancelSourceWrite.Cancel() 'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the WebClient cancels the xfer.
+            'cancel the upload/download transfer.  We'll close the ProgressDialog as soon as the WebClient cancels the xfer.
+            _cancelTokenSourceGet.Cancel()
+            _cancelTokenSourceRead.Cancel()
+            _cancelTokenSourceReadStream.Cancel()
+            _cancelTokenSourceWrite.Cancel()
         End Sub
 
-        Private _cancelSourceRead As CancellationTokenSource
-        Private _cancelTokenRead As CancellationToken
-
-        Private _cancelSourceWrite As CancellationTokenSource
-        Private _cancelTokenWrite As CancellationToken
+        Private _cancelTokenSourceGet As CancellationTokenSource
+        Private _cancelTokenSourceRead As CancellationTokenSource
+        Private _cancelTokenSourceReadStream As CancellationTokenSource
+        Private _cancelTokenSourceWrite As CancellationTokenSource
 
         ' The WebClient performs the downloading or uploading operations for us
         Private ReadOnly _httpClient As HttpClient
