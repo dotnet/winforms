@@ -5210,11 +5210,6 @@ Do you want to replace it?</source>
         <target state="translated">Cadena que aparece encima del control de vista de árbol en el cuadro de diálogo. Esta cadena se utiliza para especificar instrucciones al usuario.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FolderBrowserDialogNoRootFolder">
-        <source>Unable to retrieve the root folder.</source>
-        <target state="translated">No se puede recuperar la carpeta raíz.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">Controla si el botón Aceptar del cuadro de diálogo está deshabilitado hasta que el usuario navega por la vista o edita el nombre de archivo (si corresponde). Nota: Deshabilitar el botón Aceptar no impide que la tecla Entrar envíe el cuadro de diálogo.</target>

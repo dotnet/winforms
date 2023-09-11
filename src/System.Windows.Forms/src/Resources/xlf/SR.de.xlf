@@ -5210,11 +5210,6 @@ Möchten Sie sie ersetzen?</target>
         <target state="translated">Die Zeichenfolge, die im Dialogfeld über dem Strukturansicht-Steuerelement angezeigt wird. Sie kann zum Angeben von Benutzeranweisungen verwendet werden.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FolderBrowserDialogNoRootFolder">
-        <source>Unable to retrieve the root folder.</source>
-        <target state="translated">Der Stammordner kann nicht abgerufen werden.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">Steuert, ob die Schaltfläche „OK“ des Dialogfelds deaktiviert ist, bis der Benutzer in der Ansicht navigiert oder den Dateinamen bearbeitet (falls zutreffend). Hinweis: Das Deaktivieren der Schaltfläche „OK“ verhindert nicht, dass das Dialogfeld mit der EINGABETASTE übermittelt wird.</target>
