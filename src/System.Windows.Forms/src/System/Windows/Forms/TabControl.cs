@@ -1930,8 +1930,8 @@ public partial class TabControl : Control
         }
 
         _toolTipBuffer.SetText(tipText);
-        ttt->lpszText = _toolTipBuffer.Buffer;
-        ttt->hinst = IntPtr.Zero;
+        ttt->lpszText = (char*)_toolTipBuffer.Buffer;
+        ttt->hinst = HINSTANCE.Null;
 
         // RightToLeft reading order
         if (RightToLeft == RightToLeft.Yes)

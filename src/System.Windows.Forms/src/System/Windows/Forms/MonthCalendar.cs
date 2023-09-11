@@ -2225,11 +2225,11 @@ public partial class MonthCalendar : Control
     private unsafe void WmCalViewChanged(ref Message m)
     {
         NMVIEWCHANGE* nmmcvm = (NMVIEWCHANGE*)(nint)m.LParamInternal;
-        Debug.Assert(_mcCurView == nmmcvm->uOldView, "Calendar view mode is out of sync with native control");
-        if (_mcCurView != nmmcvm->uNewView)
+        Debug.Assert(_mcCurView == nmmcvm->dwOldView, "Calendar view mode is out of sync with native control");
+        if (_mcCurView != nmmcvm->dwNewView)
         {
             _mcOldView = _mcCurView;
-            _mcCurView = nmmcvm->uNewView;
+            _mcCurView = nmmcvm->dwNewView;
 
             OnCalendarViewChanged(EventArgs.Empty);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);

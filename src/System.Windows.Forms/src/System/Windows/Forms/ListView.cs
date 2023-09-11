@@ -4054,7 +4054,7 @@ public partial class ListView : Control
                 };
 
                 PInvoke.SendMessage(this, PInvoke.LVM_GETITEMW, (WPARAM)0, ref lvItem);
-                Debug.Assert(lvItem.iGroupId != -1, "there is a list view item which is not parented");
+                Debug.Assert((int)lvItem.iGroupId != -1, "there is a list view item which is not parented");
             }
         }
 #endif
@@ -4220,12 +4220,12 @@ public partial class ListView : Control
                 if (GroupsEnabled)
                 {
                     lvItem.mask |= LIST_VIEW_ITEM_FLAGS.LVIF_GROUPID;
-                    lvItem.iGroupId = GetNativeGroupId(li);
+                    lvItem.iGroupId = (LVITEMA_GROUP_ID)GetNativeGroupId(li);
 
 #if DEBUG
                     IntPtr result = PInvoke.SendMessage(this, PInvoke.LVM_ISGROUPVIEWENABLED);
                     Debug.Assert(result != IntPtr.Zero, "Groups not enabled");
-                    result = PInvoke.SendMessage(this, PInvoke.LVM_HASGROUP, (WPARAM)lvItem.iGroupId);
+                    result = PInvoke.SendMessage(this, PInvoke.LVM_HASGROUP, (WPARAM)(int)lvItem.iGroupId);
                     Debug.Assert(result != IntPtr.Zero, $"Doesn't contain group id: {lvItem.iGroupId}");
 #endif
                 }

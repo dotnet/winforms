@@ -1102,11 +1102,11 @@ public partial class ListViewItem : ICloneable, ISerializable
         if (_listView.GroupsEnabled)
         {
             lvItem.mask |= LIST_VIEW_ITEM_FLAGS.LVIF_GROUPID;
-            lvItem.iGroupId = _listView.GetNativeGroupId(this);
+            lvItem.iGroupId = (LVITEMA_GROUP_ID)_listView.GetNativeGroupId(this);
 
             nint result = PInvoke.SendMessage(_listView, PInvoke.LVM_ISGROUPVIEWENABLED);
             Debug.Assert(!updateOwner || result != 0, "Groups not enabled");
-            result = PInvoke.SendMessage(_listView, PInvoke.LVM_HASGROUP, (WPARAM)lvItem.iGroupId);
+            result = PInvoke.SendMessage(_listView, PInvoke.LVM_HASGROUP, (WPARAM)(int)lvItem.iGroupId);
             Debug.Assert(!updateOwner || result != 0, $"Doesn't contain group id: {lvItem.iGroupId}");
         }
 
@@ -1154,7 +1154,7 @@ public partial class ListViewItem : ICloneable, ISerializable
             _group = null;
             foreach (ListViewGroup lvg in ListView!.Groups)
             {
-                if (lvg.ID == lvItem.iGroupId)
+                if (lvg.ID == (int)lvItem.iGroupId)
                 {
                     _group = lvg;
                     break;
