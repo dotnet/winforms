@@ -29,6 +29,8 @@ CDRF_*
 CHILDID_SELF
 ChildWindowFromPointEx
 CSIDL_*
+CHOOSEFONT_FLAGS
+CHOOSECOLOR_FLAGS
 CLIENTCREATESTRUCT
 ClientToScreen
 ClipCursor
@@ -174,6 +176,7 @@ fdex*
 FILETIME
 FillRect
 FindExecutable
+FINDREPLACE_FLAGS
 FindWindow
 FONTDESC
 FormatMessage
@@ -546,15 +549,18 @@ OPEN_FILENAME_FLAGS
 OPEN_FILENAME_FLAGS_EX
 OpenInputDesktop
 OpenThemeData
+PAGESETUPDLG_FLAGS
 PatBlt
 PBM_*
 PBS_*
 PBST_*
+PD_RESULT_*
 PeekMessage
 PostMessage
 PostThreadMessage
 PostQuitMessage
 PRF_*
+PRINTDLGEX_FLAGS
 PROGRESS_CLASS
 PROPERTYKEY
 PropVariantClear

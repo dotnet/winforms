@@ -6,6 +6,7 @@ using System.Drawing.Printing;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using static Interop;
+using Windows.Win32.UI.Controls.Dialogs;
 
 namespace System.Windows.Forms;
 
@@ -159,48 +160,48 @@ public sealed class PageSetupDialog : CommonDialog
     [SRDescription(nameof(SR.PSDshowNetworkDescr))]
     public bool ShowNetwork { get; set; }
 
-    private Comdlg32.PSD GetFlags()
+    private PAGESETUPDLG_FLAGS GetFlags()
     {
-        Comdlg32.PSD flags = Comdlg32.PSD.ENABLEPAGESETUPHOOK;
+        PAGESETUPDLG_FLAGS flags = PAGESETUPDLG_FLAGS.PSD_ENABLEPAGESETUPHOOK;
 
         if (!AllowMargins)
         {
-            flags |= Comdlg32.PSD.DISABLEMARGINS;
+            flags |= PAGESETUPDLG_FLAGS.PSD_DISABLEMARGINS;
         }
 
         if (!AllowOrientation)
         {
-            flags |= Comdlg32.PSD.DISABLEORIENTATION;
+            flags |= PAGESETUPDLG_FLAGS.PSD_DISABLEORIENTATION;
         }
 
         if (!AllowPaper)
         {
-            flags |= Comdlg32.PSD.DISABLEPAPER;
+            flags |= PAGESETUPDLG_FLAGS.PSD_DISABLEPAPER;
         }
 
         if (!AllowPrinter || _printerSettings is null)
         {
-            flags |= Comdlg32.PSD.DISABLEPRINTER;
+            flags |= PAGESETUPDLG_FLAGS.PSD_DISABLEPRINTER;
         }
 
         if (ShowHelp)
         {
-            flags |= Comdlg32.PSD.SHOWHELP;
+            flags |= PAGESETUPDLG_FLAGS.PSD_SHOWHELP;
         }
 
         if (!ShowNetwork)
         {
-            flags |= Comdlg32.PSD.NONETWORKBUTTON;
+            flags |= PAGESETUPDLG_FLAGS.PSD_NONETWORKBUTTON;
         }
 
         if (_minMargins is not null)
         {
-            flags |= Comdlg32.PSD.MINMARGINS;
+            flags |= PAGESETUPDLG_FLAGS.PSD_MINMARGINS;
         }
 
         if (_pageSettings?.Margins is not null)
         {
-            flags |= Comdlg32.PSD.MARGINS;
+            flags |= PAGESETUPDLG_FLAGS.PSD_MARGINS;
         }
 
         return flags;
@@ -262,7 +263,7 @@ public sealed class PageSetupDialog : CommonDialog
             Bottom = data.rtMargin.bottom
         };
 
-        PrinterUnit fromUnit = ((data.Flags & Comdlg32.PSD.INHUNDREDTHSOFMILLIMETERS) != 0)
+        PrinterUnit fromUnit = ((data.Flags & PAGESETUPDLG_FLAGS.PSD_INHUNDREDTHSOFMILLIMETERS) != 0)
                                ? PrinterUnit.HundredthsOfAMillimeter
                                : PrinterUnit.ThousandthsOfAnInch;
 
