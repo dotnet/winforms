@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Controls.Dialogs;
 
 internal partial class Interop
 {
@@ -19,7 +20,7 @@ internal partial class Interop
             IntPtr hDevNames { get; set; }
             IntPtr hDC { get; set; }
 
-            PD Flags { get; set; }
+            PRINTDLGEX_FLAGS Flags { get; set; }
 
             ushort nFromPage { get; set; }
             ushort nToPage { get; set; }
@@ -48,7 +49,7 @@ internal partial class Interop
             public IntPtr _hDevMode;
             public IntPtr _hDevNames;
             public IntPtr _hDC;
-            public PD _flags;
+            public PRINTDLGEX_FLAGS _flags;
             public ushort _nFromPage;
             public ushort _nToPage;
             public ushort _nMinPage;
@@ -68,7 +69,7 @@ internal partial class Interop
             public IntPtr hDevMode { get => _hDevMode; set => _hDevMode = value; }
             public IntPtr hDevNames { get => _hDevNames; set => _hDevNames = value; }
             public IntPtr hDC { get => _hDC; set => _hDC = value; }
-            public PD Flags { get => _flags; set => _flags = value; }
+            public PRINTDLGEX_FLAGS Flags { get => _flags; set => _flags = value; }
             public ushort nFromPage { get => _nFromPage; set => _nFromPage = value; }
             public ushort nToPage { get => _nToPage; set => _nToPage = value; }
             public ushort nMinPage { get => _nMinPage; set => _nMinPage = value; }
@@ -92,7 +93,7 @@ internal partial class Interop
             public IntPtr _hDevMode;
             public IntPtr _hDevNames;
             public IntPtr _hDC;
-            public PD _flags;
+            public PRINTDLGEX_FLAGS _flags;
             public ushort _nFromPage;
             public ushort _nToPage;
             public ushort _nMinPage;
@@ -112,7 +113,7 @@ internal partial class Interop
             public IntPtr hDevMode { get => _hDevMode; set => _hDevMode = value; }
             public IntPtr hDevNames { get => _hDevNames; set => _hDevNames = value; }
             public IntPtr hDC { get => _hDC; set => _hDC = value; }
-            public PD Flags { get => _flags; set => _flags = value; }
+            public PRINTDLGEX_FLAGS Flags { get => _flags; set => _flags = value; }
             public ushort nFromPage { get => _nFromPage; set => _nFromPage = value; }
             public ushort nToPage { get => _nToPage; set => _nToPage = value; }
             public ushort nMinPage { get => _nMinPage; set => _nMinPage = value; }

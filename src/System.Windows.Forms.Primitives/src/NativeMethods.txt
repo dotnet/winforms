@@ -555,6 +555,7 @@ PostMessage
 PostThreadMessage
 PostQuitMessage
 PRF_*
+PRINTDLGEX_FLAGS
 PROGRESS_CLASS
 PROPERTYKEY
 PropVariantClear
