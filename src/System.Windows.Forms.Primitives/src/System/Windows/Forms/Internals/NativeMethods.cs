@@ -48,7 +48,7 @@ internal static class NativeMethods
         public IntPtr lphPropertyPages;
 
         public int nStartPage;
-        public Comdlg32.PD_RESULT dwResultAction;
+        public uint dwResultAction;
     }
 
     public static class ActiveX

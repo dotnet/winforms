@@ -554,6 +554,7 @@ PatBlt
 PBM_*
 PBS_*
 PBST_*
+PD_RESULT_*
 PeekMessage
 PostMessage
 PostThreadMessage

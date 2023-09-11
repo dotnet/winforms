@@ -499,7 +499,7 @@ public sealed class PrintDialog : CommonDialog
             data.Flags &= ~(PRINTDLGEX_FLAGS.PD_SHOWHELP | PRINTDLGEX_FLAGS.PD_NONETWORKBUTTON);
 
             HRESULT hr = UnsafeNativeMethods.PrintDlgEx(data);
-            if (hr.Failed || data.dwResultAction == PD_RESULT.CANCEL)
+            if (hr.Failed || data.dwResultAction == PInvoke.PD_RESULT_CANCEL)
             {
                 return false;
             }
@@ -530,7 +530,7 @@ public sealed class PrintDialog : CommonDialog
             }
 
             // We should return true only if the user pressed the "Print" button while dismissing the dialog.
-            return data.dwResultAction == PD_RESULT.PRINT;
+            return data.dwResultAction == PInvoke.PD_RESULT_PRINT;
         }
         finally
         {
