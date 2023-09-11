@@ -29,6 +29,7 @@ CDRF_*
 CHILDID_SELF
 ChildWindowFromPointEx
 CSIDL_*
+CHOOSEFONT_FLAGS
 CLIENTCREATESTRUCT
 ClientToScreen
 ClipCursor
