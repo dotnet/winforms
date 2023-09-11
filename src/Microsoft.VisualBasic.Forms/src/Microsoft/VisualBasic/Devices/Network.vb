@@ -9,7 +9,6 @@ Imports System.Net
 Imports System.Net.Http
 Imports System.Security
 Imports System.Threading
-Imports System.Windows.Forms
 
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
@@ -41,24 +40,6 @@ Namespace Microsoft.VisualBasic.Devices
     '''  An object that allows easy access to some simple network properties and functionality.
     ''' </summary>
     Public Class Network
-
-        ''' <summary>
-        '''  Posts a message to close the progress dialog
-        ''' </summary>
-        Private Shared Sub CloseProgressDialog(dialog As ProgressDialog)
-            ' Don't invoke unless dialog is up and running
-            If dialog IsNot Nothing Then
-                dialog.IndicateClosing()
-
-                If dialog.IsHandleCreated Then
-                    dialog.BeginInvoke(New MethodInvoker(AddressOf dialog.CloseDialog))
-                Else
-                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
-                    ' the progress dialog was created.
-                    dialog.Close()
-                End If
-            End If
-        End Sub
 
         ''' <summary>
         '''  Event fired when connected to the network
@@ -715,6 +696,8 @@ Namespace Microsoft.VisualBasic.Devices
             End If
 
             Dim client As HttpClient
+
+            ' Set credentials if we have any
             If networkCredentials IsNot Nothing Then
                 Dim clientHandler = New HttpClientHandler With {.Credentials = networkCredentials}
                 client = New HttpClient(clientHandler)
@@ -735,8 +718,6 @@ Namespace Microsoft.VisualBasic.Devices
             If IO.File.Exists(fullFilename) And Not overwrite Then
                 Throw New IO.IOException(GetResourceString(SR.IO_FileExists_Path, destinationFileName))
             End If
-
-            ' Set credentials if we have any
 
             'Check to see if the target directory exists. If it doesn't, create it
             Dim targetDirectory As String = System.IO.Path.GetDirectoryName(fullFilename)
@@ -1018,6 +999,24 @@ Namespace Microsoft.VisualBasic.Devices
                 Return _pingBuffer
             End Get
         End Property
+
+        ''' <summary>
+        '''  Posts a message to close the progress dialog
+        ''' </summary>
+        Private Shared Sub CloseProgressDialog(dialog As ProgressDialog)
+            ' Don't invoke unless dialog is up and running
+            If dialog IsNot Nothing Then
+                dialog.IndicateClosing()
+
+                If dialog.IsHandleCreated Then
+                    dialog.BeginInvoke(New System.Windows.Forms.MethodInvoker(AddressOf dialog.CloseDialog))
+                Else
+                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
+                    ' the progress dialog was created.
+                    dialog.Close()
+                End If
+            End If
+        End Sub
 
         ''' <summary>
         '''  Gets a Uri from a uri string. We also use this function to validate the UriString (remote file address)

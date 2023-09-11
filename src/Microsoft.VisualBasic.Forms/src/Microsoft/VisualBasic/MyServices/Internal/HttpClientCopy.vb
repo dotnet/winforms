@@ -8,7 +8,6 @@ Imports System.IO
 Imports System.Net
 Imports System.Net.Http
 Imports System.Threading
-Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.MyServices.Internal
 
@@ -155,7 +154,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
                 m_ProgressDialog.IndicateClosing()
 
                 If m_ProgressDialog.IsHandleCreated Then
-                    m_ProgressDialog.BeginInvoke(New MethodInvoker(AddressOf m_ProgressDialog.CloseDialog))
+                    m_ProgressDialog.BeginInvoke(New System.Windows.Forms.MethodInvoker(AddressOf m_ProgressDialog.CloseDialog))
                 Else
                     ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
                     ' the progress dialog was created.
