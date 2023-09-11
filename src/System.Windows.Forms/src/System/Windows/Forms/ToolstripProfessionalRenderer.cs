@@ -664,6 +664,15 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
                     using var brush = item.BackColor.GetCachedSolidBrushScope();
                     g.FillRectangle(brush, fillRect);
                 }
+                else if (item.GetType() == typeof(ToolStripMenuItem))
+                {
+                    ToolStripMenuItem? menuItem = item as ToolStripMenuItem;
+                    if (menuItem is not null && menuItem.CheckState == CheckState.Checked)
+                    {
+                        using var pen = ColorTable.ButtonSelectedBorder.GetCachedPenScope();
+                        g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+                    }
+                }
             }
         }
     }
