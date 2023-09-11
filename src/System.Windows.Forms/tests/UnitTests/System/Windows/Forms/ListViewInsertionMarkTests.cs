@@ -4,7 +4,6 @@
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Microsoft.DotNet.RemoteExecutor;
-using static Interop;
 using Point = System.Drawing.Point;
 
 namespace System.Windows.Forms.Tests;
@@ -94,9 +93,9 @@ public class ListViewInsertionMarkTests
             // Set same.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.InsertionMark.AppearsAfterItem = false;
-            var insertMark = new ComCtl32.LVINSERTMARK
+            var insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
@@ -106,9 +105,9 @@ public class ListViewInsertionMarkTests
 
             // Set true.
             control.InsertionMark.AppearsAfterItem = true;
-            insertMark = new ComCtl32.LVINSERTMARK
+            insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000001, (uint)insertMark.dwFlags);
@@ -118,9 +117,9 @@ public class ListViewInsertionMarkTests
 
             // Set false.
             control.InsertionMark.AppearsAfterItem = false;
-            insertMark = new ComCtl32.LVINSERTMARK
+            insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
@@ -145,9 +144,9 @@ public class ListViewInsertionMarkTests
             // Set same.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.InsertionMark.AppearsAfterItem = false;
-            var insertMark = new ComCtl32.LVINSERTMARK
+            var insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
@@ -157,9 +156,9 @@ public class ListViewInsertionMarkTests
 
             // Set true.
             control.InsertionMark.AppearsAfterItem = true;
-            insertMark = new ComCtl32.LVINSERTMARK
+            insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000001, (uint)insertMark.dwFlags);
@@ -169,9 +168,9 @@ public class ListViewInsertionMarkTests
 
             // Set false.
             control.InsertionMark.AppearsAfterItem = false;
-            insertMark = new ComCtl32.LVINSERTMARK
+            insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
@@ -370,9 +369,9 @@ public class ListViewInsertionMarkTests
 
             // Set same.
             control.InsertionMark.Color = Color.Empty;
-            var insertMark = new ComCtl32.LVINSERTMARK
+            var insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
@@ -382,9 +381,9 @@ public class ListViewInsertionMarkTests
 
             // Set different.
             control.InsertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
-            insertMark = new ComCtl32.LVINSERTMARK
+            insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
@@ -467,9 +466,9 @@ public class ListViewInsertionMarkTests
             // Set same.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.InsertionMark.Index = 0;
-            var insertMark = new ComCtl32.LVINSERTMARK
+            var insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
@@ -480,9 +479,9 @@ public class ListViewInsertionMarkTests
             // Set negative one.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.InsertionMark.Index = -1;
-            insertMark = new ComCtl32.LVINSERTMARK
+            insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
@@ -492,9 +491,9 @@ public class ListViewInsertionMarkTests
 
             // Set different.
             control.InsertionMark.Index = index;
-            insertMark = new ComCtl32.LVINSERTMARK
+            insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
@@ -522,9 +521,9 @@ public class ListViewInsertionMarkTests
             // Set same.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.InsertionMark.Index = 0;
-            var insertMark = new ComCtl32.LVINSERTMARK
+            var insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
@@ -535,9 +534,9 @@ public class ListViewInsertionMarkTests
             // Set negative one.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.InsertionMark.Index = -1;
-            insertMark = new ComCtl32.LVINSERTMARK
+            insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(0, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
@@ -547,9 +546,9 @@ public class ListViewInsertionMarkTests
 
             // Set different.
             control.InsertionMark.Index = index;
-            insertMark = new ComCtl32.LVINSERTMARK
+            insertMark = new LVINSERTMARK
             {
-                cbSize = (uint)sizeof(ComCtl32.LVINSERTMARK)
+                cbSize = (uint)sizeof(LVINSERTMARK)
             };
             Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.LVM_GETINSERTMARK, 0, ref insertMark));
             Assert.Equal(0x80000000, (uint)insertMark.dwFlags);
@@ -615,7 +614,7 @@ public class ListViewInsertionMarkTests
                 Point* pPt = (Point*)m.WParam;
                 Assert.Equal(1, pPt->X);
                 Assert.Equal(2, pPt->Y);
-                ComCtl32.LVINSERTMARK* pInsertMark = (ComCtl32.LVINSERTMARK*)m.LParam;
+                LVINSERTMARK* pInsertMark = (LVINSERTMARK*)m.LParam;
                 pInsertMark->iItem = InsertMarkHitTestResult;
                 m.Result = (IntPtr)1;
                 return;

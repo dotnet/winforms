@@ -6,7 +6,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -17,7 +16,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class TreeViewDesigner : ControlDesigner
 {
-    private ComCtl32.TVHITTESTINFO _tvhit;
+    private TVHITTESTINFO _tvhit;
     private DesignerActionListCollection _actionLists;
     private TreeView _treeView;
 
