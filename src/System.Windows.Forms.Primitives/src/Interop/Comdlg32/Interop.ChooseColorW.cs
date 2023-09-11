@@ -6,7 +6,7 @@ using Windows.Win32.UI.Controls.Dialogs;
 
 internal partial class Interop
 {
-    internal partial class Comdlg32
+    internal static partial class Comdlg32
     {
         [DllImport(Libraries.Comdlg32, ExactSpelling = true)]
         public static extern unsafe BOOL ChooseColorW(ref CHOOSECOLORW lppsd);
