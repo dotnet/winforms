@@ -2975,7 +2975,7 @@ public partial class TreeView : Control
         }
 
         _toolTipBuffer.SetText(tipText);
-        ttt->lpszText = _toolTipBuffer.Buffer;
+        ttt->lpszText = (char*)_toolTipBuffer.Buffer;
         ttt->hinst = HINSTANCE.Null;
 
         // RightToLeft reading order

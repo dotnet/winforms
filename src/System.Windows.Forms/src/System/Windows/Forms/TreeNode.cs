@@ -1809,7 +1809,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             TreeNode prev = PrevNode;
             tvis.hInsertAfter = insertFirst || prev is null ? HTREEITEM.TVI_FIRST : prev._handle;
 
-            tvis.item.pszText = Marshal.StringToHGlobalAuto(text);
+            tvis.item.pszText = (char*)Marshal.StringToHGlobalUni(text);
             tvis.item.iImage = (ImageIndexer.ActualIndex == ImageList.Indexer.DefaultIndex) ? tv.ImageIndexer.ActualIndex : ImageIndexer.ActualIndex;
             tvis.item.iSelectedImage = (SelectedImageIndexer.ActualIndex == ImageList.Indexer.DefaultIndex) ? tv.SelectedImageIndexer.ActualIndex : SelectedImageIndexer.ActualIndex;
             tvis.item.mask = TVITEM_MASK.TVIF_TEXT;
@@ -2116,7 +2116,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
         if ((mask & TVITEM_MASK.TVIF_TEXT) != 0)
         {
-            item.pszText = Marshal.StringToHGlobalAuto(text);
+            item.pszText = (char*)Marshal.StringToHGlobalUni(text);
         }
 
         if ((mask & TVITEM_MASK.TVIF_IMAGE) != 0)

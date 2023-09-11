@@ -4214,7 +4214,7 @@ public partial class ListView : Control
                     iImage = li.ImageIndexer.ActualIndex,
                     iIndent = li.IndentCount,
                     lParam = li.ID,
-                    cColumns = _columnHeaders is not null ? Math.Min(MAXTILECOLUMNS, _columnHeaders.Length) : 0,
+                    cColumns = (uint)(_columnHeaders is not null ? Math.Min(MAXTILECOLUMNS, _columnHeaders.Length) : 0),
                 };
 
                 if (GroupsEnabled)
@@ -4238,19 +4238,19 @@ public partial class ListView : Control
                         Marshal.FreeHGlobal(hGlobalColumns);
                     }
 
-                    hGlobalColumns = Marshal.AllocHGlobal(lvItem.cColumns * sizeof(int));
-                    maxColumns = lvItem.cColumns;
+                    hGlobalColumns = Marshal.AllocHGlobal((int)(lvItem.cColumns * sizeof(int)));
+                    maxColumns = (int)lvItem.cColumns;
                 }
 
                 // now build and copy in the column indexes.
-                lvItem.puColumns = hGlobalColumns;
+                lvItem.puColumns = (uint*)hGlobalColumns;
                 int[] columns = new int[lvItem.cColumns];
                 for (int c = 0; c < lvItem.cColumns; c++)
                 {
                     columns[c] = c + 1;
                 }
 
-                Marshal.Copy(columns, 0, lvItem.puColumns, lvItem.cColumns);
+                Marshal.Copy(columns, 0, (nint)lvItem.puColumns, (int)lvItem.cColumns);
 
                 // Inserting an item into a ListView with checkboxes causes one or more
                 // item check events to be fired for the newly added item.

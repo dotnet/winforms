@@ -4456,7 +4456,7 @@ public class TreeNodeTests
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_TEXT,
             hItem = (HTREEITEM)node.Handle,
             cchTextMax = 256,
-            pszText = (IntPtr)textBuffer
+            pszText = textBuffer
         };
         Assert.Equal(1, (int)PInvoke.SendMessage(control, PInvoke.TVM_GETITEMW, 0, ref item));
         Assert.Equal(expected, new string((char*)item.pszText));
