@@ -12,6 +12,7 @@ using RichEdit = Windows.Win32.UI.Controls.RichEdit;
 using static Interop;
 using static Interop.Richedit;
 using Windows.Win32.UI.Controls.RichEdit;
+using Windows.Win32.UI.Controls.Dialogs;
 
 namespace System.Windows.Forms;
 
@@ -1874,21 +1875,21 @@ public partial class RichTextBox : TextBoxBase
         }
 
         // set up the options for the search
-        Comdlg32.FR findOptions = 0;
+        FINDREPLACE_FLAGS findOptions = 0;
         if ((options & RichTextBoxFinds.WholeWord) == RichTextBoxFinds.WholeWord)
         {
-            findOptions |= Comdlg32.FR.WHOLEWORD;
+            findOptions |= FINDREPLACE_FLAGS.FR_WHOLEWORD;
         }
 
         if ((options & RichTextBoxFinds.MatchCase) == RichTextBoxFinds.MatchCase)
         {
-            findOptions |= Comdlg32.FR.MATCHCASE;
+            findOptions |= FINDREPLACE_FLAGS.FR_MATCHCASE;
         }
 
         if ((options & RichTextBoxFinds.Reverse) != RichTextBoxFinds.Reverse)
         {
             // The default for RichEdit 2.0 is to search in reverse
-            findOptions |= Comdlg32.FR.DOWN;
+            findOptions |= FINDREPLACE_FLAGS.FR_DOWN;
         }
 
         // Perform the find, will return ubyte position
