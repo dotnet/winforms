@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Controls.Dialogs;
 
 internal partial class Interop
 {
@@ -17,7 +18,7 @@ internal partial class Interop
             public HINSTANCE hInstance;
             public int rgbResult;
             public IntPtr lpCustColors;
-            public CC Flags;
+            public CHOOSECOLOR_FLAGS Flags;
             public IntPtr lCustData;
             public void* lpfnHook;
             public char* lpTemplateName;
