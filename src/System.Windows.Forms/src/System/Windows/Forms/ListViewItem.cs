@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.Serialization;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms;
 

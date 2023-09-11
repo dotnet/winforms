@@ -30304,10 +30304,10 @@ public partial class DataGridView
                 // Setting the max width has the added benefit of enabling multiline tool tips
                 PInvoke.SendMessage(nmhdr->hwndFrom, PInvoke.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
-                ComCtl32.NMTTDISPINFOW* ttt = (ComCtl32.NMTTDISPINFOW*)(nint)m.LParamInternal;
+                NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)(nint)m.LParamInternal;
                 _toolTipBuffer.SetText(toolTip);
-                ttt->lpszText = _toolTipBuffer.Buffer;
-                ttt->hinst = IntPtr.Zero;
+                ttt->lpszText = (char*)_toolTipBuffer.Buffer;
+                ttt->hinst = HINSTANCE.Null;
 
                 if (RightToLeft == RightToLeft.Yes)
                 {
