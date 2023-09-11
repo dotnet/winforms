@@ -65,7 +65,7 @@ public partial class ListViewItem
                 return LabelEditAccessibleObject;
             }
 
-            return (AccessibleObject?)null;
+            return null;
         }
 
         public override int GetChildCount()
