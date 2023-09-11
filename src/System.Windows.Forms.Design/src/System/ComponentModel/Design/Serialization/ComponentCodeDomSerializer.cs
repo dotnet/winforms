@@ -259,49 +259,50 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                         // the component wants a special IContainer constructor or not.  For that to be valid we must also know
                         // that we can get to an actual IContainer.
                         IContainer? container = manager.GetService<IContainer>();
+                        ConstructorInfo? ctor = null;
                         if (container is not null)
                         {
-                            ConstructorInfo? ctor = GetReflectionTypeHelper(manager, value).GetConstructor(
+                            ctor = GetReflectionTypeHelper(manager, value).GetConstructor(
                                 BindingFlags.ExactBinding | BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly,
                                 binder: null,
                                 GetContainerConstructor(manager),
                                 modifiers: null);
+                        }
 
-                            CodeExpression? assignRhs;
-                            if (ctor is not null)
-                            {
-                                Trace(TraceLevel.Verbose, "Component has IContainer constructor.");
-                                assignRhs = new CodeObjectCreateExpression(typeName, SerializeToExpression(manager, container)!);
-                            }
-                            else
-                            {
-                                // For compat reasons we ignore the isCompleteOld value here.
-                                assignRhs = SerializeCreationExpression(manager, value, out bool isCompleteOld);
-                                Debug.Assert(isCompleteOld == isComplete, "CCDS Differing");
-                            }
+                        CodeExpression? assignRhs = null;
+                        if (ctor is not null)
+                        {
+                            Trace(TraceLevel.Verbose, "Component has IContainer constructor.");
+                            assignRhs = new CodeObjectCreateExpression(typeName, SerializeToExpression(manager, container)!);
+                        }
+                        else
+                        {
+                            // For compat reasons we ignore the isCompleteOld value here.
+                            assignRhs = SerializeCreationExpression(manager, value, out bool isCompleteOld);
+                            Debug.Assert(isCompleteOld == isComplete, "CCDS Differing");
+                        }
 
-                            TraceIf(TraceLevel.Error, assignRhs is null, $"No RHS code assign for object {value}");
-                            if (assignRhs is not null)
+                        TraceIf(TraceLevel.Error, assignRhs is null, $"No RHS code assign for object {value}");
+                        if (assignRhs is not null)
+                        {
+                            if (assignLhs is null)
                             {
-                                if (assignLhs is null)
+                                // We cannot do much more for this object.  If isComplete is true,
+                                // then the RHS now becomes our LHS.  Otherwise, I'm afraid we have
+                                // just failed to serialize this object.
+                                if (isComplete)
                                 {
-                                    // We cannot do much more for this object.  If isComplete is true,
-                                    // then the RHS now becomes our LHS.  Otherwise, I'm afraid we have
-                                    // just failed to serialize this object.
-                                    if (isComplete)
-                                    {
-                                        assignLhs = assignRhs;
-                                    }
-                                    else
-                                    {
-                                        Trace(TraceLevel.Error, "Incomplete serialization of object, abandoning serialization.");
-                                    }
+                                    assignLhs = assignRhs;
                                 }
                                 else
                                 {
-                                    CodeAssignStatement assign = new CodeAssignStatement(assignLhs, assignRhs);
-                                    statements.Add(assign);
+                                    Trace(TraceLevel.Error, "Incomplete serialization of object, abandoning serialization.");
                                 }
+                            }
+                            else
+                            {
+                                CodeAssignStatement assign = new CodeAssignStatement(assignLhs, assignRhs);
+                                statements.Add(assign);
                             }
                         }
                     }
