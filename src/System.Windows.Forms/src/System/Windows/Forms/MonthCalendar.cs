@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms;
 

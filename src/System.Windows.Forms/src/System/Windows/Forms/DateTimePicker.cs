@@ -8,7 +8,6 @@ using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using SourceGenerated;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms;
 
