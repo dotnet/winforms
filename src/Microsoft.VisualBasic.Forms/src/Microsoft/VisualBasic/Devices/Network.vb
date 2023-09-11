@@ -9,6 +9,7 @@ Imports System.Net
 Imports System.Net.Http
 Imports System.Security
 Imports System.Threading
+Imports System.Windows.Forms
 
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
@@ -40,6 +41,24 @@ Namespace Microsoft.VisualBasic.Devices
     '''  An object that allows easy access to some simple network properties and functionality.
     ''' </summary>
     Public Class Network
+
+        ''' <summary>
+        '''  Posts a message to close the progress dialog
+        ''' </summary>
+        Private Shared Sub CloseProgressDialog(dialog As ProgressDialog)
+            ' Don't invoke unless dialog is up and running
+            If dialog IsNot Nothing Then
+                dialog.IndicateClosing()
+
+                If dialog.IsHandleCreated Then
+                    dialog.BeginInvoke(New MethodInvoker(AddressOf dialog.CloseDialog))
+                Else
+                    ' Ensure dialog is closed. If we get here it means the file was copied before the handle for
+                    ' the progress dialog was created.
+                    dialog.Close()
+                End If
+            End If
+        End Sub
 
         ''' <summary>
         '''  Event fired when connected to the network
@@ -269,8 +288,8 @@ Namespace Microsoft.VisualBasic.Devices
                              showUI As Boolean,
                              connectionTimeout As Integer,
                              overwrite As Boolean)
+            Dim dialog As ProgressDialog = Nothing
             Try
-                Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso System.Environment.UserInteractive Then
                     'Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
@@ -291,6 +310,8 @@ Namespace Microsoft.VisualBasic.Devices
                     Throw ex.InnerException
                 End If
                 Throw
+            Finally
+                CloseProgressDialog(dialog)
             End Try
         End Sub
 
@@ -325,8 +346,8 @@ Namespace Microsoft.VisualBasic.Devices
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
+            Dim dialog As ProgressDialog = Nothing
             Try
-                Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso System.Environment.UserInteractive Then
                     'Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
@@ -347,6 +368,8 @@ Namespace Microsoft.VisualBasic.Devices
                     Throw ex.InnerException
                 End If
                 Throw
+            Finally
+                CloseProgressDialog(dialog)
             End Try
         End Sub
 
@@ -368,8 +391,8 @@ Namespace Microsoft.VisualBasic.Devices
                      connectionTimeout As Integer,
                      overwrite As Boolean)
 
+            Dim dialog As ProgressDialog = Nothing
             Try
-                Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso System.Environment.UserInteractive Then
                     'Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
@@ -389,6 +412,8 @@ Namespace Microsoft.VisualBasic.Devices
                     Throw ex.InnerException
                 End If
                 Throw
+            Finally
+                CloseProgressDialog(dialog)
             End Try
         End Sub
 
@@ -415,8 +440,8 @@ Namespace Microsoft.VisualBasic.Devices
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
+            Dim dialog As ProgressDialog = Nothing
             Try
-                Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso System.Environment.UserInteractive Then
                     'Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
@@ -437,6 +462,8 @@ Namespace Microsoft.VisualBasic.Devices
                     Throw ex.InnerException
                 End If
                 Throw
+            Finally
+                CloseProgressDialog(dialog)
             End Try
         End Sub
 
@@ -457,8 +484,8 @@ Namespace Microsoft.VisualBasic.Devices
                     connectionTimeout As Integer,
                     overwrite As Boolean)
 
+            Dim dialog As ProgressDialog = Nothing
             Try
-                Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso System.Environment.UserInteractive Then
                     'Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
@@ -479,6 +506,8 @@ Namespace Microsoft.VisualBasic.Devices
                     Throw ex.InnerException
                 End If
                 Throw
+            Finally
+                CloseProgressDialog(dialog)
             End Try
         End Sub
 
@@ -508,8 +537,8 @@ Namespace Microsoft.VisualBasic.Devices
                 Throw ExceptionUtils.GetArgumentNullException("address")
             End If
 
+            Dim dialog As ProgressDialog = Nothing
             Try
-                Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso System.Environment.UserInteractive Then
                     'Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
@@ -530,6 +559,8 @@ Namespace Microsoft.VisualBasic.Devices
                     Throw ex.InnerException
                 End If
                 Throw
+            Finally
+                CloseProgressDialog(dialog)
             End Try
         End Sub
 
@@ -724,13 +755,6 @@ Namespace Microsoft.VisualBasic.Devices
 
             'Download the file
             Await copier.DownloadFileAsync(address, fullFilename).ConfigureAwait(False)
-
-            'Handle a dialog cancel
-            If dialog IsNot Nothing AndAlso System.Environment.UserInteractive Then
-                If onUserCancel = UICancelOption.ThrowException And dialog.UserCanceledTheDialog Then
-                    Throw New OperationCanceledException()
-                End If
-            End If
 
         End Function
 
