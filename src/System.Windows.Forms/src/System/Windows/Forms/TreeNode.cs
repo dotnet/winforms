@@ -23,7 +23,7 @@ namespace System.Windows.Forms;
 [Serializable]  // This class participates in resx serialization.
 [DefaultProperty(nameof(Text))]
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
-public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable, IHandle<HTREEITEM>
+public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 {
     internal const int SHIFTVAL = 12;
     private const TREE_VIEW_ITEM_STATE_FLAGS CHECKED = (TREE_VIEW_ITEM_STATE_FLAGS)(2 << SHIFTVAL);
@@ -307,7 +307,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable, I
             TVITEMW item = new()
             {
                 mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-                hItem = (HTREEITEM)_handle,
+                hItem = HTREEITEMInternal,
                 stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK
             };
 
@@ -333,7 +333,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable, I
                 TVITEMW item = new()
                 {
                     mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-                    hItem = (HTREEITEM)_handle,
+                    hItem = HTREEITEMInternal,
                     stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK
                 };
 
@@ -1983,7 +1983,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable, I
         TVITEMW item = new()
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-            hItem = (HTREEITEM)_handle,
+            hItem = HTREEITEMInternal,
             stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDEDONCE,
             state = 0
         };
@@ -2099,7 +2099,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable, I
         TVITEMW item = new()
         {
             mask = TVITEM_MASK.TVIF_HANDLE | mask,
-            hItem = (HTREEITEM)_handle
+            hItem = HTREEITEMInternal
         };
 
         if ((mask & TVITEM_MASK.TVIF_TEXT) != 0)
@@ -2173,7 +2173,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable, I
         PInvoke.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
     }
 
-    HTREEITEM IHandle<HTREEITEM>.Handle => HTREEITEMInternal;
+    internal HTREEITEM HTREEITEM => (HTREEITEM)Handle;
     internal HTREEITEM HTREEITEMInternal => (HTREEITEM)_handle;
 
     /// <summary>
