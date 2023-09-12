@@ -381,28 +381,28 @@ internal partial class TableLayout : LayoutEngine
                 //
                 if (currentCol >= maxColumns)
                 {
-                    //we have already passed the boundary. Go to next row
+                    // We have already passed the boundary. Go to next row.
                     currentCol = 0;
                     currentRow++;
                     reservationGrid.AdvanceRow();
                 }
 
-                //set the rowStart and columnStart to fixedElement's specifed position
+                // Set the rowStart and columnStart to fixedElement's specified position.
                 fixedElement!.RowStart = Math.Min(fixedElement.RowPosition, maxRows - 1);
                 fixedElement.ColumnStart = Math.Min(fixedElement.ColumnPosition, maxColumns - 1);
                 if (currentRow > fixedElement.RowStart)
                 {
-                    //we have already passed the specifed position. set the start column to the current column
+                    // We have already passed the specified position. set the start column to the current column.
                     fixedElement.ColumnStart = currentCol;
                 }
                 else if (currentRow == fixedElement.RowStart)
                 {
-                    //set the start column to be the max of the specifed column and current column
+                    // Set the start column to be the max of the specified column and current column.
                     fixedElement.ColumnStart = Math.Max(fixedElement.ColumnStart, currentCol);
                 }
                 else
                 {
-                    //set the start column to the specified column, which we have already done
+                    // Set the start column to the specified column, which we have already done.
                 }
 
                 fixedElement.RowStart = Math.Max(fixedElement.RowStart, currentRow);
