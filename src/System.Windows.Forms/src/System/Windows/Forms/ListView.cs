@@ -2906,23 +2906,23 @@ public partial class ListView : Control
                             int mask = 0xFF0000;
                             do
                             {
-                                int C = (int)(nmcd->clrText & mask);
-                                if (C != 0 || (mask == 0x0000FF)) // The color is not 0
+                                int color = (int)(nmcd->clrText & mask);
+                                if (color != 0 || (mask == 0x0000FF)) // The color is not 0
                                 // or this is the last option
                                 {
                                     int n = 16 - totalshift;
                                     // Make sure the value doesn't overflow
-                                    if (C == mask)
+                                    if (color == mask)
                                     {
-                                        C = ((C >> n) - 1) << n;
+                                        color = ((color >> n) - 1) << n;
                                     }
                                     else
                                     {
-                                        C = ((C >> n) + 1) << n;
+                                        color = ((color >> n) + 1) << n;
                                     }
 
                                     // Copy the adjustment into nmcd->clrText
-                                    nmcd->clrText = (COLORREF)((int)(nmcd->clrText & (~mask)) | C);
+                                    nmcd->clrText = (COLORREF)((int)(nmcd->clrText & (~mask)) | color);
                                     clrAdjusted = true;
                                 }
                                 else

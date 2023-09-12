@@ -23,7 +23,7 @@ namespace System.Windows.Forms;
 [Serializable]  // This class participates in resx serialization.
 [DefaultProperty(nameof(Text))]
 [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]
-public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
+public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable, IHandle<HTREEITEM>
 {
     internal const int SHIFTVAL = 12;
     private const TREE_VIEW_ITEM_STATE_FLAGS CHECKED = (TREE_VIEW_ITEM_STATE_FLAGS)(2 << SHIFTVAL);
@@ -593,25 +593,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  Specifies whether this node is in the expanded state.
     /// </summary>
     [Browsable(false)]
-    public bool IsExpanded
-    {
-        get
-        {
-            return _handle == IntPtr.Zero ? expandOnRealization : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) != 0;
-        }
-    }
+    public bool IsExpanded => _handle == IntPtr.Zero ? expandOnRealization : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) != 0;
 
     /// <summary>
     ///  Specifies whether this node is in the selected state.
     /// </summary>
     [Browsable(false)]
-    public bool IsSelected
-    {
-        get
-        {
-            return _handle == IntPtr.Zero ? false : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED) != 0;
-        }
-    }
+    public bool IsSelected => _handle == IntPtr.Zero ? false : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED) != 0;
 
     /// <summary>
     ///  Specifies whether this node is visible.
@@ -989,7 +977,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             TVITEMW item = new()
             {
-                hItem = (HTREEITEM)Handle,
+                hItem = HTREEITEMInternal,
                 mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                 stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED | TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED
             };
@@ -2178,12 +2166,15 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         TVITEMW item = new()
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
-            hItem = (HTREEITEM)Handle,
+            hItem = HTREEITEMInternal,
             iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex))
         };
 
         PInvoke.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
     }
+
+    HTREEITEM IHandle<HTREEITEM>.Handle => HTREEITEMInternal;
+    internal HTREEITEM HTREEITEMInternal => (HTREEITEM)_handle;
 
     /// <summary>
     ///  ISerializable private implementation
