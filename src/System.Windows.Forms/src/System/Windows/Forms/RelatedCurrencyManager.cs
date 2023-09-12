@@ -14,9 +14,9 @@ namespace System.Windows.Forms;
 /// </summary>
 internal class RelatedCurrencyManager : CurrencyManager
 {
-    private BindingManagerBase parentManager;
-    private string dataField;
-    private PropertyDescriptor fieldInfo;
+    private BindingManagerBase _parentManager;
+    private string _dataField;
+    private PropertyDescriptor _fieldInfo;
     private static readonly List<BindingManagerBase> IgnoreItemChangedTable = new();
 
     internal RelatedCurrencyManager(BindingManagerBase parentManager, string dataField) : base(null)
@@ -29,20 +29,20 @@ internal class RelatedCurrencyManager : CurrencyManager
         Debug.Assert(parentManager is not null, "How could this be a null parentManager.");
 
         // Unwire previous BindingManagerBase
-        UnwireParentManager(this.parentManager);
+        UnwireParentManager(_parentManager);
 
-        this.parentManager = parentManager;
-        this.dataField = dataField;
-        fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
-        if (fieldInfo is null || !typeof(IList).IsAssignableFrom(fieldInfo.PropertyType))
+        _parentManager = parentManager;
+        _dataField = dataField;
+        _fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
+        if (_fieldInfo is null || !typeof(IList).IsAssignableFrom(_fieldInfo.PropertyType))
         {
             throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
         }
 
-        finalType = fieldInfo.PropertyType;
+        finalType = _fieldInfo.PropertyType;
 
         // Wire new BindingManagerBase
-        WireParentManager(this.parentManager);
+        WireParentManager(_parentManager);
 
         ParentManager_CurrentItemChanged(parentManager, EventArgs.Empty);
     }
@@ -88,10 +88,10 @@ internal class RelatedCurrencyManager : CurrencyManager
         }
 
         // Set this accessor (add to the beginning)
-        accessors[0] = fieldInfo;
+        accessors[0] = _fieldInfo;
 
         // Get props
-        return parentManager.GetItemProperties(accessors);
+        return _parentManager.GetItemProperties(accessors);
     }
 
     /// <summary>
@@ -121,8 +121,8 @@ internal class RelatedCurrencyManager : CurrencyManager
     /// </summary>
     protected internal override string GetListName(ArrayList listAccessors)
     {
-        listAccessors.Insert(0, fieldInfo);
-        return parentManager.GetListName(listAccessors);
+        listAccessors.Insert(0, _fieldInfo);
+        return _parentManager.GetListName(listAccessors);
     }
 
     private void ParentManager_MetaDataChanged(object sender, EventArgs e)
@@ -133,7 +133,7 @@ internal class RelatedCurrencyManager : CurrencyManager
 
     private void ParentManager_CurrentItemChanged(object sender, EventArgs e)
     {
-        if (IgnoreItemChangedTable.Contains(parentManager))
+        if (IgnoreItemChangedTable.Contains(_parentManager))
         {
             return;
         }
@@ -151,12 +151,12 @@ internal class RelatedCurrencyManager : CurrencyManager
             OnDataError(ex);
         }
 
-        if (parentManager is CurrencyManager curManager)
+        if (_parentManager is CurrencyManager curManager)
         {
             if (curManager.Count > 0)
             {
                 // Parent list has a current row, so get the related list from the relevant property on that row.
-                SetDataSource(fieldInfo.GetValue(curManager.Current));
+                SetDataSource(_fieldInfo.GetValue(curManager.Current));
                 listposition = (Count > 0 ? 0 : -1);
             }
             else
@@ -191,7 +191,7 @@ internal class RelatedCurrencyManager : CurrencyManager
         else
         {
             // Case where the parent is not a list, but a single object
-            SetDataSource(fieldInfo.GetValue(parentManager.Current));
+            SetDataSource(_fieldInfo.GetValue(_parentManager.Current));
             listposition = (Count > 0 ? 0 : -1);
         }
 
