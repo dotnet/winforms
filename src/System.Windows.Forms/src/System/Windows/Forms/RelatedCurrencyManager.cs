@@ -15,7 +15,6 @@ namespace System.Windows.Forms;
 internal class RelatedCurrencyManager : CurrencyManager
 {
     private BindingManagerBase _parentManager;
-    private string _dataField;
     private PropertyDescriptor _fieldInfo;
     private static readonly List<BindingManagerBase> IgnoreItemChangedTable = new();
 
@@ -32,7 +31,6 @@ internal class RelatedCurrencyManager : CurrencyManager
         UnwireParentManager(_parentManager);
 
         _parentManager = parentManager;
-        _dataField = dataField;
         _fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
         if (_fieldInfo is null || !typeof(IList).IsAssignableFrom(_fieldInfo.PropertyType))
         {
