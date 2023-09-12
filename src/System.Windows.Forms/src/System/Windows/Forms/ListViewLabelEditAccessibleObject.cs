@@ -33,8 +33,8 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
     public override AccessibleObject? Parent => _owningListViewSubItem is null
         ? _owingListViewItem?.AccessibilityObject
         : _owningListView.View == View.Tile
-        ? _owingListViewItem?.AccessibilityObject
-        : _owningListViewSubItem?.AccessibilityObject;
+            ? _owingListViewItem?.AccessibilityObject
+            : _owningListViewSubItem?.AccessibilityObject;
 
     internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
     {
