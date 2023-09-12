@@ -329,6 +329,11 @@ HideCaret
 HIGHCONTRASTW
 HitTestThemeBackground
 HT*
+HTML_HELP_COMMAND
+HtmlHelpW
+HH_AKLINK
+HH_FTS_QUERY
+HH_POPUP
 HWND_*
 IAccessible
 IAutoComplete2
