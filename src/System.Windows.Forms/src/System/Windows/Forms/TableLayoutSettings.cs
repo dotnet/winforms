@@ -35,7 +35,9 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     }
 
     internal TableLayoutSettings(IArrangedElement owner)
-        : base(owner) { }
+        : base(owner)
+    {
+    }
 
     private TableLayoutSettings(SerializationInfo serializationInfo, StreamingContext context)
         : this()
@@ -52,15 +54,9 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         }
     }
 
-    public override LayoutEngine LayoutEngine
-    {
-        get { return TableLayout.Instance; }
-    }
+    public override LayoutEngine LayoutEngine => TableLayout.Instance;
 
-    private TableLayout TableLayout
-    {
-        get { return (TableLayout)LayoutEngine; }
-    }
+    private TableLayout TableLayout => (TableLayout)LayoutEngine;
 
     /// <summary>
     ///  Internal as this is a TableLayoutPanel feature only.
@@ -70,7 +66,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     [SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
     internal TableLayoutPanelCellBorderStyle CellBorderStyle
     {
-        get { return _borderStyle; }
+        get => _borderStyle;
         set
         {
             //valid values are 0x0 to 0x6
@@ -85,10 +81,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     }
 
     [DefaultValue(0)]
-    internal int CellBorderWidth
-    {
-        get { return TableLayout.GetContainerInfo(Owner!).CellBorderWidth; }
-    }
+    internal int CellBorderWidth => TableLayout.GetContainerInfo(Owner!).CellBorderWidth;
 
     /// <summary>
     ///  This sets the maximum number of columns allowed on this table instead of allocating
@@ -196,10 +189,7 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
     [DefaultValue(TableLayoutPanelGrowStyle.AddRows)]
     public TableLayoutPanelGrowStyle GrowStyle
     {
-        get
-        {
-            return TableLayout.GetContainerInfo(Owner!).GrowStyle;
-        }
+        get => TableLayout.GetContainerInfo(Owner!).GrowStyle;
 
         set
         {

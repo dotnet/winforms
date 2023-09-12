@@ -859,17 +859,10 @@ internal partial class TableLayout : LayoutEngine
         return DistributeStyles(containerInfo.CellBorderWidth, containerInfo.RowStyles, containerInfo.Rows, proposedConstraints.Height, dontHonorConstraint);
     }
 
-    private static Size GetElementSize(IArrangedElement element, Size proposedConstraints)
-    {
-        if (CommonProperties.GetAutoSize(element))
-        {
-            return element.GetPreferredSize(proposedConstraints);
-        }
-        else
-        {
-            return CommonProperties.GetSpecifiedBounds(element).Size;
-        }
-    }
+    private static Size GetElementSize(IArrangedElement element, Size proposedConstraints) =>
+        CommonProperties.GetAutoSize(element)
+            ? element.GetPreferredSize(proposedConstraints)
+            : CommonProperties.GetSpecifiedBounds(element).Size;
 
     internal static int SumStrips(Strip[] strips, int start, int span)
     {
@@ -1002,10 +995,8 @@ internal partial class TableLayout : LayoutEngine
     }
 
     //determines whether strip[index]'s style is absolutely sized
-    private static bool IsAbsolutelySized(int index, TableLayoutStyleCollection styles)
-    {
-        return (index < styles.Count) && styles[index].SizeType == SizeType.Absolute;
-    }
+    private static bool IsAbsolutelySized(int index, TableLayoutStyleCollection styles) =>
+        (index < styles.Count) && styles[index].SizeType == SizeType.Absolute;
 
     /// <summary>
     ///  Now that we've allocated minimum and maximum sizes to everyone (the strips), distribute the extra space
@@ -1383,15 +1374,9 @@ internal partial class TableLayout : LayoutEngine
     }
 
     #region ContainerInfo
-    internal static bool HasCachedAssignments(ContainerInfo containerInfo)
-    {
-        return containerInfo.Valid;
-    }
+    internal static bool HasCachedAssignments(ContainerInfo containerInfo) => containerInfo.Valid;
 
-    internal static void ClearCachedAssignments(ContainerInfo containerInfo)
-    {
-        containerInfo.Valid = false;
-    }
+    internal static void ClearCachedAssignments(ContainerInfo containerInfo) => containerInfo.Valid = false;
 
     //we make sure that our containerInfo never returns null. If there is no
     //existing containerInfo, instantiate a new one and store it in the property
