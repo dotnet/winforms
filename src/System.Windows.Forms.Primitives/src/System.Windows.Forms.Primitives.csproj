@@ -53,8 +53,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interop\Hhctrl\" />
-  </ItemGroup>
-
 </Project>
