@@ -7,6 +7,9 @@
     <RootNamespace>Microsoft.VisualBasic.Forms.Tests</RootNamespace>
     <LangVersion>latest</LangVersion>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <UseApplicationFramework>True</UseApplicationFramework>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +28,10 @@
   <ItemGroup>
     <!-- workaround for https://github.com/dotnet/sdk/issues/3254 -->
     <Reference Include="$(BaseOutputPath)..\System.Drawing.Facade\$(Configuration)\$(SourceTargetFramework)\System.Drawing.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="My Project\" />
   </ItemGroup>
 
 </Project>
