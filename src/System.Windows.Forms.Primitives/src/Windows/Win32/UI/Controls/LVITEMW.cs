@@ -14,7 +14,7 @@ internal partial struct LVITEMW
     {
         if (cchTextMax <= text.Length)
         {
-            text = text.Slice(0, cchTextMax - 1);
+            text = text[..(cchTextMax - 1)];
         }
         else
         {
@@ -22,7 +22,7 @@ internal partial struct LVITEMW
         }
 
         // Create a span from the pszText and copy the input text to it
-        Span<char> targetSpan = pszText.AsSpan().Slice(0, text.Length);
+        Span<char> targetSpan = pszText.AsSpan()[..cchTextMax];
         text.CopyTo(targetSpan);
         pszText.Value[text.Length] = '\0';
     }
