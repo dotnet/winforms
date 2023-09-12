@@ -10,18 +10,26 @@ public partial class ListViewItem
 {
     internal class ListViewItemTileAccessibleObject : ListViewItemBaseAccessibleObject
     {
+        private ListViewLabelEditAccessibleObject? _labelEditAccessibleObject;
         public ListViewItemTileAccessibleObject(ListViewItem owningItem) : base(owningItem)
         {
         }
 
         protected override View View => View.Tile;
 
+        private ListViewLabelEditAccessibleObject? LabelEditAccessibleObject
+            => _labelEditAccessibleObject ??= _owningListView._labelEdit is null
+                ? null
+                : new(_owningListView, _owningListView._labelEdit);
+
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
             switch (direction)
             {
                 case UiaCore.NavigateDirection.FirstChild:
-                    return GetChildInternal(1);
+                    return _owningListView._labelEdit is not null
+                        ? LabelEditAccessibleObject
+                        : GetChildInternal(1);
                 case UiaCore.NavigateDirection.LastChild:
                     return GetChildInternal(GetLastChildIndex());
             }
@@ -71,10 +79,10 @@ public partial class ListViewItem
 
             if (_owningItem.SubItems.Count == 1)
             {
-                return 0;
+                return _owningListView._labelEdit is not null ? 1 : 0;
             }
 
-            return GetLastChildIndex();
+            return _owningListView._labelEdit is not null ? GetLastChildIndex() + 1 : GetLastChildIndex();
         }
 
         internal override int GetChildIndex(AccessibleObject? child)

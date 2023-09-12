@@ -37,6 +37,11 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
             SmallImageList = imageCollection,
             LargeImageList = imageCollection
         };
+        if(!control.IsHandleCreated)
+        {
+            Assert.NotEqual(IntPtr.Zero, control.Handle);
+        }
+
         control.Items.Add(listViewItem);
 
         AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
@@ -46,7 +51,7 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
         Assert.IsType<ListViewItemImageAccessibleObject>(firstChild);
         Assert.IsType<ListViewItemImageAccessibleObject>(lastChild);
         Assert.Same(firstChild, lastChild);
-        Assert.False(control.IsHandleCreated);
+        Assert.True(control.IsHandleCreated);
     }
 
     [WinFormsTheory]
