@@ -37,7 +37,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     // ie. nodes which don't use fancy fonts or colors (ie. that use the TreeView settings for these)
     //     will take up less memory than those that do.
     internal OwnerDrawPropertyBag propBag;
-    internal IntPtr _handle;
+    internal HTREEITEM HTREEITEMInternal;
+    internal HTREEITEM HTREEITEM => (HTREEITEM)Handle;
     internal string text;
     internal string name;
 
@@ -293,7 +294,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         set
         {
             CheckedStateInternal = value;
-            if (_handle == IntPtr.Zero)
+            if (HTREEITEMInternal == IntPtr.Zero)
             {
                 return;
             }
@@ -327,7 +328,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         get
         {
 #if DEBUG
-            if (_handle != IntPtr.Zero && !treeView.IsDisposed)
+            if (HTREEITEMInternal != IntPtr.Zero && !treeView.IsDisposed)
             {
                 TreeView tv = TreeView;
                 TVITEMW item = new()
@@ -481,12 +482,12 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            if (_handle == IntPtr.Zero && TreeView is not null)
+            if (HTREEITEMInternal == IntPtr.Zero && TreeView is not null)
             {
                 TreeView.CreateControl(); // force handle creation
             }
 
-            return _handle;
+            return HTREEITEMInternal;
         }
     }
 
@@ -593,13 +594,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  Specifies whether this node is in the expanded state.
     /// </summary>
     [Browsable(false)]
-    public bool IsExpanded => _handle == IntPtr.Zero ? expandOnRealization : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) != 0;
+    public bool IsExpanded => HTREEITEMInternal == IntPtr.Zero ? expandOnRealization : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) != 0;
 
     /// <summary>
     ///  Specifies whether this node is in the selected state.
     /// </summary>
     [Browsable(false)]
-    public bool IsSelected => _handle == IntPtr.Zero ? false : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED) != 0;
+    public bool IsSelected => HTREEITEMInternal == IntPtr.Zero ? false : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED) != 0;
 
     /// <summary>
     ///  Specifies whether this node is visible.
@@ -609,7 +610,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            if (_handle == IntPtr.Zero)
+            if (HTREEITEMInternal == IntPtr.Zero)
             {
                 return false;
             }
@@ -964,7 +965,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            if (_handle == IntPtr.Zero)
+            if (HTREEITEMInternal == IntPtr.Zero)
             {
                 return 0;
             }
@@ -1253,7 +1254,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     public void BeginEdit()
     {
-        if (_handle != IntPtr.Zero)
+        if (HTREEITEMInternal != IntPtr.Zero)
         {
             TreeView tv = TreeView;
             if (tv.LabelEdit == false)
@@ -1266,7 +1267,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 tv.Focus();
             }
 
-            PInvoke.SendMessage(tv, PInvoke.TVM_EDITLABELW, 0, _handle);
+            PInvoke.SendMessage(tv, PInvoke.TVM_EDITLABELW, 0, (LPARAM)HTREEITEMInternal);
         }
     }
 
@@ -1789,13 +1790,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             TVINSERTSTRUCTW tvis = new()
             {
-                hParent = parent._handle
+                hParent = parent.HTREEITEMInternal
             };
 
             tvis.item.mask = InsertMask;
 
             TreeNode prev = PrevNode;
-            tvis.hInsertAfter = insertFirst || prev is null ? HTREEITEM.TVI_FIRST : prev._handle;
+            tvis.hInsertAfter = insertFirst || prev is null ? HTREEITEM.TVI_FIRST : prev.HTREEITEMInternal;
 
             tvis.item.pszText = (char*)Marshal.StringToHGlobalUni(text);
             tvis.item.iImage = (ImageIndexer.ActualIndex == ImageList.Indexer.DefaultIndex) ? tv.ImageIndexer.ActualIndex : ImageIndexer.ActualIndex;
@@ -1841,8 +1842,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 PInvoke.SendMessage(tv, PInvoke.TVM_ENDEDITLABELNOW, (WPARAM)(BOOL)false);
             }
 
-            _handle = PInvoke.SendMessage(tv, PInvoke.TVM_INSERTITEMW, 0, ref tvis);
-            tv._nodesByHandle[_handle] = this;
+            HTREEITEMInternal = (HTREEITEM)PInvoke.SendMessage(tv, PInvoke.TVM_INSERTITEMW, 0, ref tvis);
+            tv._nodesByHandle[HTREEITEMInternal] = this;
 
             // Lets update the Lparam to the Handle.
             UpdateNode(TVITEM_MASK.TVIF_PARAM);
@@ -1851,7 +1852,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             if (editing)
             {
-                PInvoke.PostMessage(tv, PInvoke.TVM_EDITLABELW, default, _handle);
+                PInvoke.PostMessage(tv, PInvoke.TVM_EDITLABELW, default, (LPARAM)HTREEITEMInternal);
             }
 
             PInvoke.InvalidateRect(tv, lpRect: null, bErase: false);
@@ -1932,15 +1933,15 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
         KeyboardToolTipStateMachine.Instance.Unhook(this, tv.KeyboardToolTip);
 
-        if (_handle != IntPtr.Zero)
+        if (HTREEITEMInternal != IntPtr.Zero)
         {
             if (notify && tv.IsHandleCreated)
             {
-                PInvoke.SendMessage(tv, PInvoke.TVM_DELETEITEM, 0, _handle);
+                PInvoke.SendMessage(tv, PInvoke.TVM_DELETEITEM, 0, (LPARAM)HTREEITEMInternal);
             }
 
-            treeView._nodesByHandle.Remove(_handle);
-            _handle = IntPtr.Zero;
+            treeView._nodesByHandle.Remove(HTREEITEMInternal);
+            HTREEITEMInternal = (HTREEITEM)IntPtr.Zero;
         }
 
         ReleaseUiaProvider();
@@ -2084,7 +2085,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     private unsafe void UpdateNode(TVITEM_MASK mask)
     {
-        if (_handle == IntPtr.Zero)
+        if (HTREEITEMInternal == IntPtr.Zero)
         {
             return;
         }
@@ -2136,7 +2137,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
         if ((mask & TVITEM_MASK.TVIF_PARAM) != 0)
         {
-            item.lParam = _handle;
+            item.lParam = (LPARAM)HTREEITEMInternal;
         }
 
         PInvoke.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
@@ -2172,9 +2173,6 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
         PInvoke.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
     }
-
-    internal HTREEITEM HTREEITEM => (HTREEITEM)Handle;
-    internal HTREEITEM HTREEITEMInternal => (HTREEITEM)_handle;
 
     /// <summary>
     ///  ISerializable private implementation
