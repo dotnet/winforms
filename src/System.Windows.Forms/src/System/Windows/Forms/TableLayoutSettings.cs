@@ -62,7 +62,9 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
         get { return (TableLayout)LayoutEngine; }
     }
 
-    /// <summary> internal as this is a TableLayoutPanel feature only </summary>
+    /// <summary>
+    ///  Internal as this is a TableLayoutPanel feature only.
+    /// </summary>
     [DefaultValue(TableLayoutPanelCellBorderStyle.None)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
