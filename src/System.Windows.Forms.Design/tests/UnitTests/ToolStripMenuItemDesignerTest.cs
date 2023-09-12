@@ -3,6 +3,10 @@
 
 using System.Collections;
 using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Windows.Forms.Design.Tests.Mocks;
+
+using Moq;
 
 namespace System.Windows.Forms.Design.Tests;
 
@@ -86,6 +90,55 @@ public class ToolStripMenuItemDesignerTest
         toolStripMenuItemDesigner.HookEvents();
     }
 
+    [Fact]
+    public void PreFilterPropertiesTest()
+    {
+        TestToolStripMenuItemDesigner toolStripMenuItemDesigner = new();
+        ToolStripMenuItem toolStripMenuItem = new();
+
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
+        mockDesignerHost
+            .Setup(h => h.RootComponent)
+            .Returns(toolStripMenuItem);
+        mockDesignerHost
+            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
+            .Returns(() => null);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        toolStripMenuItem.Site = mockSite.Object;
+        toolStripMenuItemDesigner.Initialize(toolStripMenuItem);
+
+        PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(ToolStripMenuItem));
+        Assert.NotNull(properties);
+
+        PropertyDescriptor propertyDescriptor = properties.Find("Visible", true);
+        Dictionary<string, PropertyDescriptor> property = new()
+        {
+            { "Visible", propertyDescriptor }
+        };
+
+        toolStripMenuItemDesigner.PreFilterPropertiesMethod(property);
+    }
+
+    [Fact]
+    public void GetMainToolStripTest()
+    {
+        TestToolStripMenuItemDesigner toolStripMenuItemDesigner = new();
+        ToolStripMenuItem toolStripMenuItem = new();
+
+        Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
+        mockDesignerHost
+            .Setup(h => h.RootComponent)
+            .Returns(toolStripMenuItem);
+        mockDesignerHost
+            .Setup(s => s.GetDesigner(It.IsAny<Control>()))
+            .Returns(() => null);
+        var mockSite = MockSite.CreateMockSiteWithDesignerHost(mockDesignerHost.Object);
+        toolStripMenuItem.Site = mockSite.Object;
+        toolStripMenuItemDesigner.Initialize(toolStripMenuItem);
+
+        Assert.Null(toolStripMenuItemDesigner.GetMainToolStrip());
+    }
+
     private class TestToolStripMenuItemDesigner : ToolStripMenuItemDesigner
     {
         internal IComponent GetParentComponentProperty()
@@ -106,20 +159,6 @@ public class ToolStripMenuItemDesignerTest
         internal void PreFilterPropertiesMethod(IDictionary properties)
         {
             PreFilterProperties(properties);
-        }
-    }
-
-    private class SubToolStripItem : ToolStripItem
-    {
-        public SubToolStripItem() : base()
-        {
-        }
-    }
-
-    private class SubToolStripDropDownItem : ToolStripDropDownItem
-    {
-        public SubToolStripDropDownItem() : base()
-        {
         }
     }
 }
