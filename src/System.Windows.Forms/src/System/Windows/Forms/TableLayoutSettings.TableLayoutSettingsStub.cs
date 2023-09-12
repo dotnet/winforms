@@ -52,7 +52,7 @@ public sealed partial class TableLayoutSettings
                                 name = prop.GetValue(tableControl) as string;
                             }
 
-                            if (WindowsFormsUtils.SafeCompareStrings(name, controlName as string, /* ignoreCase = */ false))
+                            if (WindowsFormsUtils.SafeCompareStrings(name, controlName as string, ignoreCase: false))
                             {
                                 settings.SetRow(tableControl, controlInfo.Row);
                                 settings.SetColumn(tableControl, controlInfo.Column);
