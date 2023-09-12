@@ -467,8 +467,8 @@ public sealed partial class TableLayoutSettings : LayoutSettings, ISerializable
             }
 
             LayoutTransaction.DoLayout(element.Container, element, PropertyNames.TableIndex);
-            Debug.Assert(!colSpecified || GetColumn(element) == column, "column position shoule equal to what we set");
-            Debug.Assert(!rowSpecified || GetRow(element) == row, "row position shoule equal to what we set");
+            Debug.Assert(!colSpecified || GetColumn(element) == column, "column position should equal to what we set");
+            Debug.Assert(!rowSpecified || GetRow(element) == row, "row position should equal to what we set");
         }
     }
 
