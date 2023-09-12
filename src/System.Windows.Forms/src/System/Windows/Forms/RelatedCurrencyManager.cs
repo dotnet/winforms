@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -18,11 +16,14 @@ internal class RelatedCurrencyManager : CurrencyManager
     private PropertyDescriptor _fieldInfo;
     private static readonly List<BindingManagerBase> IgnoreItemChangedTable = new();
 
-    internal RelatedCurrencyManager(BindingManagerBase parentManager, string dataField) : base(null)
+    internal RelatedCurrencyManager(BindingManagerBase parentManager, string dataField)
+        : base(dataSource: null)
     {
         Bind(parentManager, dataField);
     }
 
+    [MemberNotNull(nameof(_parentManager))]
+    [MemberNotNull(nameof(_fieldInfo))]
     internal void Bind(BindingManagerBase parentManager, string dataField)
     {
         Debug.Assert(parentManager is not null, "How could this be a null parentManager.");
@@ -31,7 +32,7 @@ internal class RelatedCurrencyManager : CurrencyManager
         UnwireParentManager(_parentManager);
 
         _parentManager = parentManager;
-        _fieldInfo = parentManager.GetItemProperties().Find(dataField, true);
+        _fieldInfo = parentManager.GetItemProperties().Find(dataField, ignoreCase: true)!;
         if (_fieldInfo is null || !typeof(IList).IsAssignableFrom(_fieldInfo.PropertyType))
         {
             throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
@@ -45,15 +46,15 @@ internal class RelatedCurrencyManager : CurrencyManager
         ParentManager_CurrentItemChanged(parentManager, EventArgs.Empty);
     }
 
-    private void UnwireParentManager(BindingManagerBase bmb)
+    private void UnwireParentManager(BindingManagerBase? bmb)
     {
         if (bmb is not null)
         {
             bmb.CurrentItemChanged -= new EventHandler(ParentManager_CurrentItemChanged);
 
-            if (bmb is CurrencyManager)
+            if (bmb is CurrencyManager currencyManager)
             {
-                (bmb as CurrencyManager).MetaDataChanged -= new EventHandler(ParentManager_MetaDataChanged);
+                currencyManager.MetaDataChanged -= new EventHandler(ParentManager_MetaDataChanged);
             }
         }
     }
@@ -64,14 +65,14 @@ internal class RelatedCurrencyManager : CurrencyManager
         {
             bmb.CurrentItemChanged += new EventHandler(ParentManager_CurrentItemChanged);
 
-            if (bmb is CurrencyManager)
+            if (bmb is CurrencyManager currencyManager)
             {
-                (bmb as CurrencyManager).MetaDataChanged += new EventHandler(ParentManager_MetaDataChanged);
+                currencyManager.MetaDataChanged += new EventHandler(ParentManager_MetaDataChanged);
             }
         }
     }
 
-    internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
+    internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors)
     {
         PropertyDescriptor[] accessors;
 
@@ -97,7 +98,7 @@ internal class RelatedCurrencyManager : CurrencyManager
     /// </summary>
     public override PropertyDescriptorCollection GetItemProperties()
     {
-        return GetItemProperties(null);
+        return GetItemProperties(listAccessors: null);
     }
 
     /// <summary>
@@ -123,13 +124,13 @@ internal class RelatedCurrencyManager : CurrencyManager
         return _parentManager.GetListName(listAccessors);
     }
 
-    private void ParentManager_MetaDataChanged(object sender, EventArgs e)
+    private void ParentManager_MetaDataChanged(object? sender, EventArgs e)
     {
         // Propagate MetaDataChanged events from the parent manager
         base.OnMetaDataChanged(e);
     }
 
-    private void ParentManager_CurrentItemChanged(object sender, EventArgs e)
+    private void ParentManager_CurrentItemChanged(object? sender, EventArgs e)
     {
         if (IgnoreItemChangedTable.Contains(_parentManager))
         {
@@ -149,12 +150,12 @@ internal class RelatedCurrencyManager : CurrencyManager
             OnDataError(ex);
         }
 
-        if (_parentManager is CurrencyManager curManager)
+        if (_parentManager is CurrencyManager currencyManager)
         {
-            if (curManager.Count > 0)
+            if (currencyManager.Count > 0)
             {
                 // Parent list has a current row, so get the related list from the relevant property on that row.
-                SetDataSource(_fieldInfo.GetValue(curManager.Current));
+                SetDataSource(_fieldInfo.GetValue(currencyManager.Current));
                 listposition = (Count > 0 ? 0 : -1);
             }
             else
@@ -171,17 +172,17 @@ internal class RelatedCurrencyManager : CurrencyManager
                 // metadata at design time).
                 // we then call CancelCurrentEdit to remove the dummy row, but making sure to ignore any
                 // OnCurrentItemChanged that results from this action (to avoid infinite recursion)
-                curManager.AddNew();
+                currencyManager.AddNew();
                 try
                 {
-                    IgnoreItemChangedTable.Add(curManager);
-                    curManager.CancelCurrentEdit();
+                    IgnoreItemChangedTable.Add(currencyManager);
+                    currencyManager.CancelCurrentEdit();
                 }
                 finally
                 {
-                    if (IgnoreItemChangedTable.Contains(curManager))
+                    if (IgnoreItemChangedTable.Contains(currencyManager))
                     {
-                        IgnoreItemChangedTable.Remove(curManager);
+                        IgnoreItemChangedTable.Remove(currencyManager);
                     }
                 }
             }
