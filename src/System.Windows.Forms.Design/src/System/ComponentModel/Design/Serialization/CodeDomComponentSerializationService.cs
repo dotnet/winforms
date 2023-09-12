@@ -349,7 +349,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         internal List<object> Deserialize(IServiceProvider provider, IContainer? container = null)
         {
             List<object> collection = new();
-            Deserialize(provider, container, true, true, collection);
+            Deserialize(provider, container, validateRecycledTypes: true, applyDefaults: true, collection);
             return collection;
         }
 
@@ -484,9 +484,9 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 return;
             }
 
-            foreach (KeyValuePair<string, CodeDomComponentSerializationState> de in state)
+            foreach (KeyValuePair<string, CodeDomComponentSerializationState> stateEntry in state)
             {
-                object? code = de.Value.Code;
+                object? code = stateEntry.Value.Code;
 
                 if (code is null)
                 {
@@ -494,38 +494,38 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 }
 
                 CodeDom.Compiler.ICodeGenerator codeGenerator = new Microsoft.CSharp.CSharpCodeProvider().CreateGenerator();
-                using var sw = new StringWriter(CultureInfo.InvariantCulture);
-                Debug.WriteLine($"ComponentSerialization: Stored CodeDom for {de.Key}: ");
+                using var stringWriter = new StringWriter(CultureInfo.InvariantCulture);
+                Debug.WriteLine($"ComponentSerialization: Stored CodeDom for {stateEntry.Key}: ");
                 Debug.Indent();
 
                 if (code is CodeTypeDeclaration codeTypeDeclaration)
                 {
-                    codeGenerator.GenerateCodeFromType(codeTypeDeclaration, sw, null!);
+                    codeGenerator.GenerateCodeFromType(codeTypeDeclaration, stringWriter, o: null);
                 }
                 else if (code is CodeStatementCollection statements)
                 {
                     foreach (CodeStatement statement in statements)
                     {
-                        codeGenerator.GenerateCodeFromStatement(statement, sw, null!);
+                        codeGenerator.GenerateCodeFromStatement(statement, stringWriter, o: null);
                     }
                 }
                 else if (code is CodeStatement codeStatement)
                 {
-                    codeGenerator.GenerateCodeFromStatement(codeStatement, sw, null!);
+                    codeGenerator.GenerateCodeFromStatement(codeStatement, stringWriter, o: null);
                 }
                 else if (code is CodeExpression codeExpression)
                 {
-                    codeGenerator.GenerateCodeFromExpression(codeExpression, sw, null!);
+                    codeGenerator.GenerateCodeFromExpression(codeExpression, stringWriter, o: null);
                 }
                 else
                 {
-                    sw.Write("Unknown code type: ");
-                    sw.WriteLine(code.GetType().Name);
+                    stringWriter.Write("Unknown code type: ");
+                    stringWriter.WriteLine(code.GetType().Name);
                 }
 
                 // spit this line by line so it respects the indent.
-                StringReader sr = new StringReader(sw.ToString());
-                for (string? ln = sr.ReadLine(); ln is not null; ln = sr.ReadLine())
+                StringReader stringReader = new StringReader(stringWriter.ToString());
+                for (string? ln = stringReader.ReadLine(); ln is not null; ln = stringReader.ReadLine())
                 {
                     Debug.WriteLine(ln);
                 }
@@ -716,10 +716,10 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
 
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
 
-                foreach (KeyValuePair<string, object?> de in state)
+                foreach (KeyValuePair<string, object?> stateEntry in state)
                 {
-                    PropertyDescriptor? prop = props[de.Key];
-                    prop?.SetValue(comp, de.Value);
+                    PropertyDescriptor? prop = props[stateEntry.Key];
+                    prop?.SetValue(comp, stateEntry.Value);
                 }
             }
 
@@ -801,9 +801,9 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                     string? typeName = null;
                     foreach (CodeStatement statement in statements)
                     {
-                        if (statement is CodeVariableDeclarationStatement cvds)
+                        if (statement is CodeVariableDeclarationStatement codeVariableDeclaration)
                         {
-                            typeName = cvds.Type.BaseType;
+                            typeName = codeVariableDeclaration.Type.BaseType;
                             break;
                         }
                     }
