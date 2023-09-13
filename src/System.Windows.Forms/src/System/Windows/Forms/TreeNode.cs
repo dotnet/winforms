@@ -978,7 +978,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             TVITEMW item = new()
             {
-                hItem = HTREEITEMInternal,
+                hItem = HTREEITEM,
                 mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
                 stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED | TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED
             };
@@ -2167,7 +2167,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         TVITEMW item = new()
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
-            hItem = HTREEITEMInternal,
+            hItem = HTREEITEM,
             iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex))
         };
 
