@@ -26,25 +26,25 @@ public class DataGridViewCellStyle : ICloneable
     private static readonly int PropTag = PropertyStore.CreateKey();
     private static readonly int PropWrapMode = PropertyStore.CreateKey();
 
-    private DataGridViewCellStyleScopes scope;
-    private readonly PropertyStore propertyStore;          // Contains all properties that are not always set.
-    private DataGridView? dataGridView;
+    private DataGridViewCellStyleScopes _scope;
+    private readonly PropertyStore _propertyStore;          // Contains all properties that are not always set.
+    private DataGridView? _dataGridView;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataGridViewCellStyle"/> class.
     /// </summary>
     public DataGridViewCellStyle()
     {
-        propertyStore = new PropertyStore();
-        scope = DataGridViewCellStyleScopes.None;
+        _propertyStore = new PropertyStore();
+        _scope = DataGridViewCellStyleScopes.None;
     }
 
     public DataGridViewCellStyle(DataGridViewCellStyle dataGridViewCellStyle)
     {
         ArgumentNullException.ThrowIfNull(dataGridViewCellStyle);
 
-        propertyStore = new PropertyStore();
-        scope = DataGridViewCellStyleScopes.None;
+        _propertyStore = new PropertyStore();
+        _scope = DataGridViewCellStyleScopes.None;
         BackColor = dataGridViewCellStyle.BackColor;
         ForeColor = dataGridViewCellStyle.ForeColor;
         SelectionBackColor = dataGridViewCellStyle.SelectionBackColor;
@@ -400,7 +400,7 @@ public class DataGridViewCellStyle : ICloneable
     {
         get
         {
-            return propertyStore;
+            return _propertyStore;
         }
     }
 
@@ -408,11 +408,11 @@ public class DataGridViewCellStyle : ICloneable
     {
         get
         {
-            return scope;
+            return _scope;
         }
         set
         {
-            scope = value;
+            _scope = value;
         }
     }
 
@@ -514,8 +514,8 @@ public class DataGridViewCellStyle : ICloneable
 
     internal void AddScope(DataGridView? dataGridView, DataGridViewCellStyleScopes scope)
     {
-        this.scope |= scope;
-        this.dataGridView = dataGridView;
+        this._scope |= scope;
+        this._dataGridView = dataGridView;
     }
 
     public virtual void ApplyStyle(DataGridViewCellStyle dataGridViewCellStyle)
@@ -660,18 +660,18 @@ public class DataGridViewCellStyle : ICloneable
 
     private void OnPropertyChanged(DataGridViewCellStylePropertyInternal property)
     {
-        if (dataGridView is not null && scope != DataGridViewCellStyleScopes.None)
+        if (_dataGridView is not null && _scope != DataGridViewCellStyleScopes.None)
         {
-            dataGridView.OnCellStyleContentChanged(this, property);
+            _dataGridView.OnCellStyleContentChanged(this, property);
         }
     }
 
     internal void RemoveScope(DataGridViewCellStyleScopes scope)
     {
-        this.scope &= ~scope;
-        if (this.scope == DataGridViewCellStyleScopes.None)
+        this._scope &= ~scope;
+        if (this._scope == DataGridViewCellStyleScopes.None)
         {
-            dataGridView = null;
+            _dataGridView = null;
         }
     }
 
