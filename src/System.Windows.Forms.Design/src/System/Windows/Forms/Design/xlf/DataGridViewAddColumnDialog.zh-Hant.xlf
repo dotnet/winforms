@@ -4,62 +4,62 @@
     <body>
       <trans-unit id="$this.Text">
         <source>Add Column</source>
-        <target state="translated">新增資料行</target>
+        <target state="new">Add Column</target>
         <note />
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add</source>
-        <target state="translated">新增(&amp;A)</target>
+        <target state="new">&amp;Add</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="translated">取消</target>
+        <target state="new">Cancel</target>
         <note />
       </trans-unit>
       <trans-unit id="columnInDataSourceLabel.Text">
         <source>&amp;Columns in the DataSource</source>
-        <target state="translated">DataSource 中的資料行(&amp;C)</target>
+        <target state="new">&amp;Columns in the DataSource</target>
         <note />
       </trans-unit>
       <trans-unit id="dataBoundColumnRadioButton.Text">
         <source>Data&amp;bound column</source>
-        <target state="translated">已繫結資料的資料行(&amp;B)</target>
+        <target state="new">Data&amp;bound column</target>
         <note />
       </trans-unit>
       <trans-unit id="frozenCheckBox.Text">
         <source>&amp;Frozen</source>
-        <target state="translated">凍結(&amp;F)</target>
+        <target state="new">&amp;Frozen</target>
         <note />
       </trans-unit>
       <trans-unit id="headerTextLabel.Text">
         <source>&amp;Header text:</source>
-        <target state="translated">標題文字(&amp;H):</target>
+        <target state="new">&amp;Header text:</target>
         <note />
       </trans-unit>
       <trans-unit id="nameLabel.Text">
         <source>&amp;Name:</source>
-        <target state="translated">名稱(&amp;N):</target>
+        <target state="new">&amp;Name:</target>
         <note />
       </trans-unit>
       <trans-unit id="readOnlyCheckBox.Text">
         <source>&amp;Read Only</source>
-        <target state="translated">唯讀(&amp;R)</target>
+        <target state="new">&amp;Read Only</target>
         <note />
       </trans-unit>
       <trans-unit id="typeLabel.Text">
         <source>&amp;Type:</source>
-        <target state="translated">類型(&amp;T):</target>
+        <target state="new">&amp;Type:</target>
         <note />
       </trans-unit>
       <trans-unit id="unboundColumnRadioButton.Text">
         <source>&amp;Unbound column</source>
-        <target state="translated">未繫結的資料行(&amp;U)</target>
+        <target state="new">&amp;Unbound column</target>
         <note />
       </trans-unit>
       <trans-unit id="visibleCheckBox.Text">
         <source>&amp;Visible</source>
-        <target state="translated">可見(&amp;V)</target>
+        <target state="new">&amp;Visible</target>
         <note />
       </trans-unit>
     </body>

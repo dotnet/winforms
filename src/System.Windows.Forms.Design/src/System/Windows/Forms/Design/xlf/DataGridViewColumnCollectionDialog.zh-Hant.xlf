@@ -4,17 +4,17 @@
     <body>
       <trans-unit id="$this.Text">
         <source>Edit Columns</source>
-        <target state="translated">編輯資料行</target>
+        <target state="new">Edit Columns</target>
         <note />
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add...</source>
-        <target state="translated">新增(&amp;A)...</target>
+        <target state="new">&amp;Add...</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="translated">取消</target>
+        <target state="new">Cancel</target>
         <note />
       </trans-unit>
       <trans-unit id="deleteButton.Text">
@@ -24,17 +24,17 @@
       </trans-unit>
       <trans-unit id="moveDown.AccessibleName">
         <source>Move column down</source>
-        <target state="translated">將資料行下移</target>
+        <target state="new">Move column down</target>
         <note />
       </trans-unit>
       <trans-unit id="moveUp.AccessibleName">
         <source>Move column up</source>
-        <target state="translated">將資料行上移</target>
+        <target state="new">Move column up</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="translated">確定</target>
+        <target state="new">OK</target>
         <note />
       </trans-unit>
       <trans-unit id="propertyGridLabel.Text">
@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="selectedColumnsLabel.Text">
         <source>Selected &amp;Columns:</source>
-        <target state="translated">選取的資料行(&amp;C):</target>
+        <target state="new">Selected &amp;Columns:</target>
         <note />
       </trans-unit>
     </body>

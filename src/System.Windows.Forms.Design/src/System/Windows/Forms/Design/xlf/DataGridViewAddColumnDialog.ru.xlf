@@ -4,62 +4,62 @@
     <body>
       <trans-unit id="$this.Text">
         <source>Add Column</source>
-        <target state="translated">Добавить столбец</target>
+        <target state="new">Add Column</target>
         <note />
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add</source>
-        <target state="translated">&amp;Добавить</target>
+        <target state="new">&amp;Add</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="translated">Отмена</target>
+        <target state="new">Cancel</target>
         <note />
       </trans-unit>
       <trans-unit id="columnInDataSourceLabel.Text">
         <source>&amp;Columns in the DataSource</source>
-        <target state="translated">&amp;Столбцы в DataSource</target>
+        <target state="new">&amp;Columns in the DataSource</target>
         <note />
       </trans-unit>
       <trans-unit id="dataBoundColumnRadioButton.Text">
         <source>Data&amp;bound column</source>
-        <target state="translated">&amp;Столбец со связанными &amp;данными</target>
+        <target state="new">Data&amp;bound column</target>
         <note />
       </trans-unit>
       <trans-unit id="frozenCheckBox.Text">
         <source>&amp;Frozen</source>
-        <target state="translated">&amp;Заблокирован</target>
+        <target state="new">&amp;Frozen</target>
         <note />
       </trans-unit>
       <trans-unit id="headerTextLabel.Text">
         <source>&amp;Header text:</source>
-        <target state="translated">Текст &amp;заголовка:</target>
+        <target state="new">&amp;Header text:</target>
         <note />
       </trans-unit>
       <trans-unit id="nameLabel.Text">
         <source>&amp;Name:</source>
-        <target state="translated">&amp;Имя:</target>
+        <target state="new">&amp;Name:</target>
         <note />
       </trans-unit>
       <trans-unit id="readOnlyCheckBox.Text">
         <source>&amp;Read Only</source>
-        <target state="translated">&amp;Только для чтения</target>
+        <target state="new">&amp;Read Only</target>
         <note />
       </trans-unit>
       <trans-unit id="typeLabel.Text">
         <source>&amp;Type:</source>
-        <target state="translated">&amp;Тип:</target>
+        <target state="new">&amp;Type:</target>
         <note />
       </trans-unit>
       <trans-unit id="unboundColumnRadioButton.Text">
         <source>&amp;Unbound column</source>
-        <target state="translated">&amp;Непривязанный столбец</target>
+        <target state="new">&amp;Unbound column</target>
         <note />
       </trans-unit>
       <trans-unit id="visibleCheckBox.Text">
         <source>&amp;Visible</source>
-        <target state="translated">&amp;Видимый</target>
+        <target state="new">&amp;Visible</target>
         <note />
       </trans-unit>
     </body>

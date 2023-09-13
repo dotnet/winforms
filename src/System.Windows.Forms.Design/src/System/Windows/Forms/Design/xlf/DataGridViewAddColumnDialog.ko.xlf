@@ -4,62 +4,62 @@
     <body>
       <trans-unit id="$this.Text">
         <source>Add Column</source>
-        <target state="translated">열 추가</target>
+        <target state="new">Add Column</target>
         <note />
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add</source>
-        <target state="translated">추가(&amp;A)</target>
+        <target state="new">&amp;Add</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="translated">취소</target>
+        <target state="new">Cancel</target>
         <note />
       </trans-unit>
       <trans-unit id="columnInDataSourceLabel.Text">
         <source>&amp;Columns in the DataSource</source>
-        <target state="translated">DataSource의 열(&amp;C)</target>
+        <target state="new">&amp;Columns in the DataSource</target>
         <note />
       </trans-unit>
       <trans-unit id="dataBoundColumnRadioButton.Text">
         <source>Data&amp;bound column</source>
-        <target state="translated">데이터 바인딩된 열(&amp;B)</target>
+        <target state="new">Data&amp;bound column</target>
         <note />
       </trans-unit>
       <trans-unit id="frozenCheckBox.Text">
         <source>&amp;Frozen</source>
-        <target state="translated">고정(&amp;F)</target>
+        <target state="new">&amp;Frozen</target>
         <note />
       </trans-unit>
       <trans-unit id="headerTextLabel.Text">
         <source>&amp;Header text:</source>
-        <target state="translated">머리글 텍스트(&amp;H):</target>
+        <target state="new">&amp;Header text:</target>
         <note />
       </trans-unit>
       <trans-unit id="nameLabel.Text">
         <source>&amp;Name:</source>
-        <target state="translated">이름(&amp;N):</target>
+        <target state="new">&amp;Name:</target>
         <note />
       </trans-unit>
       <trans-unit id="readOnlyCheckBox.Text">
         <source>&amp;Read Only</source>
-        <target state="translated">읽기 전용(&amp;R)</target>
+        <target state="new">&amp;Read Only</target>
         <note />
       </trans-unit>
       <trans-unit id="typeLabel.Text">
         <source>&amp;Type:</source>
-        <target state="translated">유형(&amp;T):</target>
+        <target state="new">&amp;Type:</target>
         <note />
       </trans-unit>
       <trans-unit id="unboundColumnRadioButton.Text">
         <source>&amp;Unbound column</source>
-        <target state="translated">바인딩되지 않은 열(&amp;U)</target>
+        <target state="new">&amp;Unbound column</target>
         <note />
       </trans-unit>
       <trans-unit id="visibleCheckBox.Text">
         <source>&amp;Visible</source>
-        <target state="translated">표시(&amp;V)</target>
+        <target state="new">&amp;Visible</target>
         <note />
       </trans-unit>
     </body>

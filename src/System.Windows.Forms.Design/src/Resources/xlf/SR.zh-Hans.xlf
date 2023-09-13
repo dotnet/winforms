@@ -793,87 +793,87 @@
       </trans-unit>
       <trans-unit id="DesignBindingPickerAccessibleName">
         <source>Data binding editor</source>
-        <target state="translated">数据绑定编辑器</target>
+        <target state="new">Data binding editor</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerAddProjDataSourceLabel">
         <source>Add new Object Data Source...</source>
-        <target state="translated">添加新的对象数据源...</target>
+        <target state="new">Add new Object Data Source...</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenAddDataSrc">
         <source>Click the 'Add Project Data Source...' link to connect to data.</source>
-        <target state="translated">单击“添加项目数据源...”链接以连接到数据。</target>
+        <target state="new">Click the 'Add Project Data Source...' link to connect to data.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenCurrentBinding">
         <source>Currently data bound to '{0}'.</source>
-        <target state="translated">数据当前绑定到“{0}”。</target>
+        <target state="new">Currently data bound to '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenPickBindSrc">
         <source>Select a BindingSource to bind to.</source>
-        <target state="translated">选择要绑定到的 BindingSource。</target>
+        <target state="new">Select a BindingSource to bind to.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenPickDataSrc">
         <source>Select a data source under 'Other Data Sources' to connect to data.</source>
-        <target state="translated">选择“其他数据源”下的某个数据源以连接到数据。</target>
+        <target state="new">Select a data source under 'Other Data Sources' to connect to data.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenPickMember">
         <source>Select a data member to bind to.</source>
-        <target state="translated">选择要绑定到的数据成员。</target>
+        <target state="new">Select a data member to bind to.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeInstances">
         <source>Contains all form components that implement IList, IListSource or Array.</source>
-        <target state="translated">包含实现 IList、IListSource 或数组的所有窗体组件。</target>
+        <target state="new">Contains all form components that implement IList, IListSource or Array.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeNone">
         <source>Selecting 'None' clears the current data binding.</source>
-        <target state="translated">选择“无”将清除当前数据绑定。</target>
+        <target state="new">Selecting 'None' clears the current data binding.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeOther">
         <source>Contains all project data sources and local form list instances.</source>
-        <target state="translated">包含所有项目数据源和本地窗体列表实例。</target>
+        <target state="new">Contains all project data sources and local form list instances.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeProject">
         <source>Contains all project data sources.</source>
-        <target state="translated">包含所有项目数据源。</target>
+        <target state="new">Contains all project data sources.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeProjectGroup">
         <source>Contains project data sources belonging to this namespace.</source>
-        <target state="translated">包含属于此命名空间的项目数据源。</target>
+        <target state="new">Contains project data sources belonging to this namespace.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeInstances">
         <source>{0} List Instances</source>
-        <target state="translated">{0} 列表实例</target>
+        <target state="new">{0} List Instances</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeNone">
         <source>None</source>
-        <target state="translated">无</target>
+        <target state="new">None</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeOther">
         <source>Other Data Sources</source>
-        <target state="translated">其他数据源</target>
+        <target state="new">Other Data Sources</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeProject">
         <source>Project Data Sources</source>
-        <target state="translated">项目数据源</target>
+        <target state="new">Project Data Sources</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerTreeViewAccessibleName">
         <source>Bindable data sources and data members</source>
-        <target state="translated">可绑定数据源和数据成员</target>
+        <target state="new">Bindable data sources and data members</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
