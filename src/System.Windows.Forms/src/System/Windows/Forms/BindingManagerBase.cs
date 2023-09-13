@@ -71,7 +71,7 @@ public abstract class BindingManagerBase
 
     internal abstract PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors);
 
-    public virtual PropertyDescriptorCollection GetItemProperties() => GetItemProperties(null);
+    public virtual PropertyDescriptorCollection GetItemProperties() => GetItemProperties(listAccessors: null);
 
     protected internal virtual PropertyDescriptorCollection? GetItemProperties(ArrayList dataSources, ArrayList listAccessors)
     {
