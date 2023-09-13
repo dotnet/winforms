@@ -431,8 +431,8 @@ internal class DataGridViewColumnCollectionDialog : Form
         // has the same type in destColumn and in srcColumn.
         if (!srcColumn.DefaultCellStyle.IsNullValueDefault)
         {
-            object srcNullValue = srcColumn.DefaultCellStyle.NullValue;
-            object destNullValue = destColumn.DefaultCellStyle.NullValue;
+            object? srcNullValue = srcColumn.DefaultCellStyle.NullValue;
+            object? destNullValue = destColumn.DefaultCellStyle.NullValue;
 
             if (srcNullValue is not null && destNullValue is not null && srcNullValue.GetType() == destNullValue.GetType())
             {

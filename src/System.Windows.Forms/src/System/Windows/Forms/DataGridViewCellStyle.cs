@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
@@ -30,7 +28,7 @@ public class DataGridViewCellStyle : ICloneable
 
     private DataGridViewCellStyleScopes scope;
     private readonly PropertyStore propertyStore;          // Contains all properties that are not always set.
-    private DataGridView dataGridView;
+    private DataGridView? dataGridView;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataGridViewCellStyle"/> class.
@@ -142,14 +140,14 @@ public class DataGridViewCellStyle : ICloneable
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public object DataSourceNullValue
+    public object? DataSourceNullValue
     {
-        get => Properties.TryGetObject(PropDataSourceNullValue, out object value)
+        get => Properties.TryGetObject(PropDataSourceNullValue, out object? value)
             ? value
             : DBNull.Value;
         set
         {
-            object oldDataSourceNullValue = DataSourceNullValue;
+            object? oldDataSourceNullValue = DataSourceNullValue;
 
             if ((oldDataSourceNullValue == value) ||
                 (oldDataSourceNullValue is not null && oldDataSourceNullValue.Equals(value)))
@@ -157,7 +155,7 @@ public class DataGridViewCellStyle : ICloneable
                 return;
             }
 
-            if (value == System.DBNull.Value &&
+            if (value == DBNull.Value &&
                 Properties.ContainsObject(PropDataSourceNullValue))
             {
                 Properties.RemoveObject(PropDataSourceNullValue);
@@ -169,18 +167,19 @@ public class DataGridViewCellStyle : ICloneable
 
             Debug.Assert((oldDataSourceNullValue is null && DataSourceNullValue is not null) ||
                          (oldDataSourceNullValue is not null && DataSourceNullValue is null) ||
-                         (oldDataSourceNullValue != DataSourceNullValue && !oldDataSourceNullValue.Equals(DataSourceNullValue)));
+                         (oldDataSourceNullValue != DataSourceNullValue && !oldDataSourceNullValue!.Equals(DataSourceNullValue)));
 
             OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
         }
     }
 
     [SRCategory(nameof(SR.CatAppearance))]
+    [AllowNull]
     public Font Font
     {
         get
         {
-            return (Font)Properties.GetObject(PropFont);
+            return (Font)Properties.GetObject(PropFont)!;
         }
         set
         {
@@ -225,11 +224,12 @@ public class DataGridViewCellStyle : ICloneable
     [Editor($"System.Windows.Forms.Design.FormatStringEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [SRCategory(nameof(SR.CatBehavior))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [AllowNull]
     public string Format
     {
         get
         {
-            object format = Properties.GetObject(PropFormat);
+            object? format = Properties.GetObject(PropFormat);
             if (format is null)
             {
                 return string.Empty;
@@ -256,14 +256,15 @@ public class DataGridViewCellStyle : ICloneable
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [AllowNull]
     public IFormatProvider FormatProvider
     {
         get
         {
-            object formatProvider = Properties.GetObject(PropFormatProvider);
+            object? formatProvider = Properties.GetObject(PropFormatProvider);
             if (formatProvider is null)
             {
-                return System.Globalization.CultureInfo.CurrentCulture;
+                return Globalization.CultureInfo.CurrentCulture;
             }
             else
             {
@@ -272,7 +273,7 @@ public class DataGridViewCellStyle : ICloneable
         }
         set
         {
-            object originalFormatProvider = Properties.GetObject(PropFormatProvider);
+            object? originalFormatProvider = Properties.GetObject(PropFormatProvider);
             Properties.SetObject(PropFormatProvider, value);
             if (value != originalFormatProvider)
             {
@@ -287,7 +288,7 @@ public class DataGridViewCellStyle : ICloneable
     {
         get
         {
-            if (!Properties.TryGetObject(PropDataSourceNullValue, out object value))
+            if (!Properties.TryGetObject(PropDataSourceNullValue, out object? value))
             {
                 return true;
             }
@@ -309,7 +310,7 @@ public class DataGridViewCellStyle : ICloneable
     {
         get
         {
-            if (!Properties.TryGetObject(PropNullValue, out object nullValue))
+            if (!Properties.TryGetObject(PropNullValue, out object? nullValue))
             {
                 return true;
             }
@@ -321,14 +322,14 @@ public class DataGridViewCellStyle : ICloneable
     [DefaultValue("")]
     [TypeConverter(typeof(StringConverter))]
     [SRCategory(nameof(SR.CatData))]
-    public object NullValue
+    public object? NullValue
     {
-        get => Properties.TryGetObject(PropNullValue, out object value)
+        get => Properties.TryGetObject(PropNullValue, out object? value)
             ? value
             : string.Empty;
         set
         {
-            object oldNullValue = NullValue;
+            object? oldNullValue = NullValue;
 
             if ((oldNullValue == value) ||
                 (oldNullValue is not null && oldNullValue.Equals(value)))
@@ -347,7 +348,7 @@ public class DataGridViewCellStyle : ICloneable
 
             Debug.Assert((oldNullValue is null && NullValue is not null) ||
                          (oldNullValue is not null && NullValue is null) ||
-                         (oldNullValue != NullValue && !oldNullValue.Equals(NullValue)));
+                         (oldNullValue != NullValue && !oldNullValue!.Equals(NullValue)));
 
             OnPropertyChanged(DataGridViewCellStylePropertyInternal.Other);
         }
@@ -461,7 +462,7 @@ public class DataGridViewCellStyle : ICloneable
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public object Tag
+    public object? Tag
     {
         get
         {
@@ -511,7 +512,7 @@ public class DataGridViewCellStyle : ICloneable
         }
     }
 
-    internal void AddScope(DataGridView dataGridView, DataGridViewCellStyleScopes scope)
+    internal void AddScope(DataGridView? dataGridView, DataGridViewCellStyleScopes scope)
     {
         this.scope |= scope;
         this.dataGridView = dataGridView;
@@ -592,7 +593,7 @@ public class DataGridViewCellStyle : ICloneable
         return new DataGridViewCellStyle(this);
     }
 
-    public override bool Equals(object o)
+    public override bool Equals(object? o)
     {
         if (o is DataGridViewCellStyle dgvcs)
         {
