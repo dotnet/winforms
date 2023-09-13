@@ -83,7 +83,7 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
     /// <summary>
     ///  Returns a code dom serializer
     /// </summary>
-    private static object? GetCodeDomSerializer(IDesignerSerializationManager manager, object? currentSerializer, Type? objectType, Type serializerType)
+    private static LocalizationCodeDomSerializer? GetCodeDomSerializer(IDesignerSerializationManager manager, object? currentSerializer, Type? objectType)
     {
         if (currentSerializer is null)
         {
@@ -112,12 +112,9 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
 
         // Compute a localization model based on the property, localization mode,
         // and what (if any) serializer already exists
-        CodeDomLocalizationModel model = CodeDomLocalizationModel.None;
-        object? modelObj = manager.Context[typeof(CodeDomLocalizationModel)];
-
-        if (modelObj is not null)
+        if (!manager.TryGetContext(out CodeDomLocalizationModel model))
         {
-            model = (CodeDomLocalizationModel)modelObj;
+            model = CodeDomLocalizationModel.None;
         }
 
         //Nifty, but this causes everything to be loc'd because our provider
@@ -137,7 +134,7 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
     /// <summary>
     ///  Returns a code dom serializer for members.
     /// </summary>
-    private ResourcePropertyMemberCodeDomSerializer? GetMemberCodeDomSerializer(IDesignerSerializationManager manager, MemberCodeDomSerializer? currentSerializer, Type? objectType, Type serializerType)
+    private ResourcePropertyMemberCodeDomSerializer? GetMemberCodeDomSerializer(IDesignerSerializationManager manager, MemberCodeDomSerializer? currentSerializer, Type? objectType)
     {
         CodeDomLocalizationModel model = _model;
 
@@ -170,9 +167,7 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
         }
 
         // Fish the property out of the context to see if the property is localizable.
-        PropertyDescriptor? serializingProperty = manager.Context[typeof(PropertyDescriptor)] as PropertyDescriptor;
-
-        if (serializingProperty is null || !serializingProperty.IsLocalizable)
+        if (!manager.TryGetContext(out PropertyDescriptor? serializingProperty) || !serializingProperty.IsLocalizable)
         {
             model = CodeDomLocalizationModel.None;
         }
@@ -197,11 +192,11 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
     {
         if (serializerType == typeof(CodeDomSerializer))
         {
-            return GetCodeDomSerializer(manager, currentSerializer, objectType, serializerType);
+            return GetCodeDomSerializer(manager, currentSerializer, objectType);
         }
         else if (serializerType == typeof(MemberCodeDomSerializer))
         {
-            return GetMemberCodeDomSerializer(manager, (MemberCodeDomSerializer?)currentSerializer, objectType, serializerType);
+            return GetMemberCodeDomSerializer(manager, (MemberCodeDomSerializer?)currentSerializer, objectType);
         }
 
         return null; // don't understand this type of serializer.

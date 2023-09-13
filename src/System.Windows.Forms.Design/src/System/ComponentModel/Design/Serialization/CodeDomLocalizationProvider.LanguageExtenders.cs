@@ -20,7 +20,6 @@ public sealed partial class CodeDomLocalizationProvider
         private readonly IServiceProvider _serviceProvider;
         private readonly IDesignerHost? _host;
         private IComponent? _lastRoot;
-        private readonly TypeConverter.StandardValuesCollection? _supportedCultures;
         private bool _localizable;
         private CultureInfo _language;
         private CultureInfo? _loadLanguage;
@@ -29,12 +28,12 @@ public sealed partial class CodeDomLocalizationProvider
         public LanguageExtenders(IServiceProvider serviceProvider, CultureInfo?[]? supportedCultures)
         {
             _serviceProvider = serviceProvider;
-            _host = serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
+            _host = serviceProvider.GetService<IDesignerHost>();
             _language = CultureInfo.InvariantCulture;
 
             if (supportedCultures is not null)
             {
-                _supportedCultures = new TypeConverter.StandardValuesCollection(supportedCultures);
+                SupportedCultures = new TypeConverter.StandardValuesCollection(supportedCultures);
             }
         }
 
@@ -42,26 +41,12 @@ public sealed partial class CodeDomLocalizationProvider
         ///  A collection of custom supported cultures.  This can be null, indicating that the
         ///  type converter should use the default set of supported cultures.
         /// </summary>
-        internal TypeConverter.StandardValuesCollection? SupportedCultures
-        {
-            get
-            {
-                return _supportedCultures;
-            }
-        }
+        internal TypeConverter.StandardValuesCollection? SupportedCultures { get; }
 
         /// <summary>
         ///  Returns the current default language for the thread.
         /// </summary>
-        private CultureInfo ThreadDefaultLanguage
-        {
-            get
-            {
-                _defaultLanguage ??= Application.CurrentCulture;
-
-                return _defaultLanguage;
-            }
-        }
+        private CultureInfo ThreadDefaultLanguage => _defaultLanguage ??= Application.CurrentCulture;
 
         /// <summary>
         ///  Broadcasts a global change, indicating that all objects on the designer have changed.
@@ -168,10 +153,8 @@ public sealed partial class CodeDomLocalizationProvider
                 SetLocalizable(o, true);
             }
 
-            if (_serviceProvider is not null && _host is not null)
+            if (_host is not null)
             {
-                IDesignerLoaderService? ls = _serviceProvider.GetService(typeof(IDesignerLoaderService)) as IDesignerLoaderService;
-
                 // Only reload if we're not in the process of loading!
                 if (_host.Loading)
                 {
@@ -181,14 +164,14 @@ public sealed partial class CodeDomLocalizationProvider
                 {
                     bool reloadSuccessful = false;
 
-                    if (ls is not null)
+                    if (_serviceProvider.TryGetService(out IDesignerLoaderService? ls))
                     {
                         reloadSuccessful = ls.Reload();
                     }
 
                     if (!reloadSuccessful)
                     {
-                        IUIService? uis = (IUIService?)_serviceProvider.GetService(typeof(IUIService));
+                        IUIService? uis = _serviceProvider.GetService<IUIService>();
 
                         uis?.ShowMessage(SR.LocalizationProviderManualReload);
                     }
@@ -225,7 +208,7 @@ public sealed partial class CodeDomLocalizationProvider
         /// </summary>
         private bool ShouldSerializeLanguage(IComponent o)
         {
-            return (_language is not null && _language != CultureInfo.InvariantCulture);
+            return _language != CultureInfo.InvariantCulture;
         }
 
         /// <summary>

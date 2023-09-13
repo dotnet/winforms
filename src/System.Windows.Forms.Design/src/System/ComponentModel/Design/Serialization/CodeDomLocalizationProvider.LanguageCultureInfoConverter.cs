@@ -31,20 +31,11 @@ public sealed partial class CodeDomLocalizationProvider
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
             StandardValuesCollection? values = null;
+            ExtenderProvidedPropertyAttribute? attr = context?.PropertyDescriptor?.GetAttribute<ExtenderProvidedPropertyAttribute>();
 
-            if (context?.PropertyDescriptor is not null)
+            if (attr?.Provider is LanguageExtenders provider)
             {
-                ExtenderProvidedPropertyAttribute? attr = context.PropertyDescriptor.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
-
-                if (attr is not null)
-                {
-                    LanguageExtenders? provider = attr.Provider as LanguageExtenders;
-
-                    if (provider is not null)
-                    {
-                        values = provider.SupportedCultures;
-                    }
-                }
+                values = provider.SupportedCultures;
             }
 
             values ??= base.GetStandardValues(context);
