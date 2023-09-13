@@ -793,87 +793,87 @@
       </trans-unit>
       <trans-unit id="DesignBindingPickerAccessibleName">
         <source>Data binding editor</source>
-        <target state="translated">Datenbindungs-Editor</target>
+        <target state="new">Data binding editor</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerAddProjDataSourceLabel">
         <source>Add new Object Data Source...</source>
-        <target state="translated">Objektdatenquelle hinzufügen...</target>
+        <target state="new">Add new Object Data Source...</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenAddDataSrc">
         <source>Click the 'Add Project Data Source...' link to connect to data.</source>
-        <target state="translated">Klicken Sie auf den Link "Projektdatenquelle hinzufügen", um eine Datenverbindung aufzubauen.</target>
+        <target state="new">Click the 'Add Project Data Source...' link to connect to data.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenCurrentBinding">
         <source>Currently data bound to '{0}'.</source>
-        <target state="translated">Derzeit sind Daten an {0} gebunden.</target>
+        <target state="new">Currently data bound to '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenPickBindSrc">
         <source>Select a BindingSource to bind to.</source>
-        <target state="translated">Wählen Sie eine BindingSource aus, an die eine Bindung hergestellt werden soll.</target>
+        <target state="new">Select a BindingSource to bind to.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenPickDataSrc">
         <source>Select a data source under 'Other Data Sources' to connect to data.</source>
-        <target state="translated">Wählen Sie unter "Weitere Datenquellen" eine Datenquelle für die Datenverbindung aus.</target>
+        <target state="new">Select a data source under 'Other Data Sources' to connect to data.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenPickMember">
         <source>Select a data member to bind to.</source>
-        <target state="translated">Wählen Sie einen Datenmember, an den eine Bindung hergestellt werden soll.</target>
+        <target state="new">Select a data member to bind to.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeInstances">
         <source>Contains all form components that implement IList, IListSource or Array.</source>
-        <target state="translated">Enthält alle Formularkomponenten, die IList, IListSource oder Array implementieren.</target>
+        <target state="new">Contains all form components that implement IList, IListSource or Array.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeNone">
         <source>Selecting 'None' clears the current data binding.</source>
-        <target state="translated">Mit der Auswahl von "Keine" wird die aktuelle Datenbindung gelöscht.</target>
+        <target state="new">Selecting 'None' clears the current data binding.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeOther">
         <source>Contains all project data sources and local form list instances.</source>
-        <target state="translated">Enthält alle Projektdatenquellen und lokalen Formularlisteninstanzen.</target>
+        <target state="new">Contains all project data sources and local form list instances.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeProject">
         <source>Contains all project data sources.</source>
-        <target state="translated">Enthält alle Projektdatenquellen.</target>
+        <target state="new">Contains all project data sources.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeProjectGroup">
         <source>Contains project data sources belonging to this namespace.</source>
-        <target state="translated">Enthält Projektdatenquellen, die zu diesem Namespace gehören.</target>
+        <target state="new">Contains project data sources belonging to this namespace.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeInstances">
         <source>{0} List Instances</source>
-        <target state="translated">{0}-Listeninstanzen</target>
+        <target state="new">{0} List Instances</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeNone">
         <source>None</source>
-        <target state="translated">Keine</target>
+        <target state="new">None</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeOther">
         <source>Other Data Sources</source>
-        <target state="translated">Weitere Datenquellen</target>
+        <target state="new">Other Data Sources</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeProject">
         <source>Project Data Sources</source>
-        <target state="translated">Projektdatenquellen</target>
+        <target state="new">Project Data Sources</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerTreeViewAccessibleName">
         <source>Bindable data sources and data members</source>
-        <target state="translated">Bindbare Datenquellen und Datenmember</target>
+        <target state="new">Bindable data sources and data members</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
