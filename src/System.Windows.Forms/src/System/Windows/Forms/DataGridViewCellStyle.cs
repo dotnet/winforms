@@ -118,10 +118,7 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color BackColor
     {
-        get
-        {
-            return Properties.GetColor(PropBackColor);
-        }
+        get => Properties.GetColor(PropBackColor);
         set
         {
             Color c = BackColor;
@@ -177,10 +174,7 @@ public class DataGridViewCellStyle : ICloneable
     [AllowNull]
     public Font Font
     {
-        get
-        {
-            return (Font)Properties.GetObject(PropFont)!;
-        }
+        get => (Font)Properties.GetObject(PropFont)!;
         set
         {
             Font f = Font;
@@ -201,10 +195,7 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color ForeColor
     {
-        get
-        {
-            return Properties.GetColor(PropForeColor);
-        }
+        get => Properties.GetColor(PropForeColor);
         set
         {
             Color c = ForeColor;
@@ -396,33 +387,18 @@ public class DataGridViewCellStyle : ICloneable
         }
     }
 
-    internal PropertyStore Properties
-    {
-        get
-        {
-            return _propertyStore;
-        }
-    }
+    internal PropertyStore Properties => _propertyStore;
 
     internal DataGridViewCellStyleScopes Scope
     {
-        get
-        {
-            return _scope;
-        }
-        set
-        {
-            _scope = value;
-        }
+        get => _scope;
+        set => _scope = value;
     }
 
     [SRCategory(nameof(SR.CatAppearance))]
     public Color SelectionBackColor
     {
-        get
-        {
-            return Properties.GetColor(PropSelectionBackColor);
-        }
+        get => Properties.GetColor(PropSelectionBackColor);
         set
         {
             Color c = SelectionBackColor;
@@ -441,10 +417,7 @@ public class DataGridViewCellStyle : ICloneable
     [SRCategory(nameof(SR.CatAppearance))]
     public Color SelectionForeColor
     {
-        get
-        {
-            return Properties.GetColor(PropSelectionForeColor);
-        }
+        get => Properties.GetColor(PropSelectionForeColor);
         set
         {
             Color c = SelectionForeColor;
@@ -464,10 +437,7 @@ public class DataGridViewCellStyle : ICloneable
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public object? Tag
     {
-        get
-        {
-            return Properties.GetObject(PropTag);
-        }
+        get => Properties.GetObject(PropTag);
         set
         {
             if (value is not null || Properties.ContainsObject(PropTag))
@@ -514,8 +484,8 @@ public class DataGridViewCellStyle : ICloneable
 
     internal void AddScope(DataGridView? dataGridView, DataGridViewCellStyleScopes scope)
     {
-        this._scope |= scope;
-        this._dataGridView = dataGridView;
+        _scope |= scope;
+        _dataGridView = dataGridView;
     }
 
     public virtual void ApplyStyle(DataGridViewCellStyle dataGridViewCellStyle)
@@ -588,22 +558,12 @@ public class DataGridViewCellStyle : ICloneable
         }
     }
 
-    public virtual DataGridViewCellStyle Clone()
-    {
-        return new DataGridViewCellStyle(this);
-    }
+    public virtual DataGridViewCellStyle Clone() => new(this);
 
-    public override bool Equals(object? o)
-    {
-        if (o is DataGridViewCellStyle dgvcs)
-        {
-            return GetDifferencesFrom(dgvcs) == DataGridViewCellStyleDifferences.None;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    public override bool Equals(object? o) =>
+        o is DataGridViewCellStyle dgvcs
+            ? GetDifferencesFrom(dgvcs) == DataGridViewCellStyleDifferences.None
+            : false;
 
     internal DataGridViewCellStyleDifferences GetDifferencesFrom(DataGridViewCellStyle dgvcs)
     {
@@ -681,10 +641,7 @@ public class DataGridViewCellStyle : ICloneable
         return found;
     }
 
-    private bool ShouldSerializeFont()
-    {
-        return Properties.ContainsObjectThatIsNotNull(PropFont);
-    }
+    private bool ShouldSerializeFont() => Properties.ContainsObjectThatIsNotNull(PropFont);
 
     private bool ShouldSerializeForeColor()
     {
@@ -692,15 +649,10 @@ public class DataGridViewCellStyle : ICloneable
         return found;
     }
 
-    private bool ShouldSerializeFormatProvider()
-    {
-        return Properties.ContainsObjectThatIsNotNull(PropFormatProvider);
-    }
+    private bool ShouldSerializeFormatProvider() =>
+        Properties.ContainsObjectThatIsNotNull(PropFormatProvider);
 
-    private bool ShouldSerializePadding()
-    {
-        return Padding != Padding.Empty;
-    }
+    private bool ShouldSerializePadding() => Padding != Padding.Empty;
 
     private bool ShouldSerializeSelectionBackColor()
     {
@@ -850,10 +802,7 @@ public class DataGridViewCellStyle : ICloneable
         return sb.ToString();
     }
 
-    object ICloneable.Clone()
-    {
-        return Clone();
-    }
+    object ICloneable.Clone() => Clone();
 
     internal enum DataGridViewCellStylePropertyInternal
     {
