@@ -16,10 +16,8 @@ internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
     private readonly MemberCodeDomSerializer _serializer;
     private CultureInfo? _localizationLanguage;
 
-    internal ResourcePropertyMemberCodeDomSerializer(MemberCodeDomSerializer serializer, CodeDomLocalizationProvider.LanguageExtenders extender, CodeDomLocalizationModel model)
+    internal ResourcePropertyMemberCodeDomSerializer(MemberCodeDomSerializer serializer, CodeDomLocalizationModel model)
     {
-        Debug.Assert(extender is not null, "Extender should have been created by now.");
-
         _serializer = serializer;
         _model = model;
     }

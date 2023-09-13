@@ -200,7 +200,7 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
 
         if (newSerializer is null)
         {
-            newSerializer = new ResourcePropertyMemberCodeDomSerializer((MemberCodeDomSerializer)currentSerializer, _extender, model);
+            newSerializer = new ResourcePropertyMemberCodeDomSerializer((MemberCodeDomSerializer)currentSerializer, model);
 
             if (model == CodeDomLocalizationModel.None)
             {
