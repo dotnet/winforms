@@ -19,7 +19,7 @@ internal partial class Interop
             public int dxOffset;
             public PFA wAlignment;
             public short cTabCount;
-            public fixed int rgxTabs[MAX_TAB_STOPS];
+            public fixed int rgxTabs[(int)PInvoke.MAX_TAB_STOPS];
         }
     }
 }

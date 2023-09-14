@@ -1230,7 +1230,7 @@ public partial class RichTextBox : TextBoxBase
         set
         {
             // Verify the argument, and throw an error if is bad
-            if (value is not null && value.Length > MAX_TAB_STOPS)
+            if (value is not null && value.Length > PInvoke.MAX_TAB_STOPS)
             {
                 throw new ArgumentOutOfRangeException(nameof(value), SR.SelTabCountRange);
             }
