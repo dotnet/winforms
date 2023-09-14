@@ -33,9 +33,9 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
         {
             suspendedComponents = new(container.Components.Count);
 
-            foreach (IComponent comp in container.Components)
+            foreach (IComponent component in container.Components)
             {
-                if (comp is Control control)
+                if (component is Control control)
                 {
                     control.SuspendLayout();
 
@@ -64,13 +64,13 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
             //resume all suspended comps we found earlier
             if (suspendedComponents is not null)
             {
-                foreach (Control c in suspendedComponents)
+                foreach (Control control in suspendedComponents)
                 {
                     // .NET Framework 4.0 (Dev10 #462211): Controls in design time may change their size due to incorrectly
                     // calculated anchor info.
                     // UNDONE: c.ResumeLayout(false) because it regressed layouts with Dock property
                     // see Dev11 bug 117530 DTS Winforms: Upgraded project -Control location and size are changed in the designer gen'd code
-                    c.ResumeLayout(performLayout: true);
+                    control.ResumeLayout(performLayout: true);
                 }
             }
         }
@@ -96,9 +96,10 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
         bool inheritedChildren = false;
         bool nonInheritedChildren = false;
 
-        foreach (Control c in parent.Controls)
+        foreach (Control control in parent.Controls)
         {
-            if (TypeDescriptorHelper.TryGetAttribute(c, out InheritanceAttribute? ia) && ia.InheritanceLevel != InheritanceLevel.NotInherited)
+            if (TypeDescriptorHelper.TryGetAttribute(control, out InheritanceAttribute? inheritanceAttribute)
+                && inheritanceAttribute.InheritanceLevel != InheritanceLevel.NotInherited)
             {
                 inheritedChildren = true;
             }
@@ -123,12 +124,13 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
             return false;
         }
 
-        foreach (Control c in parent.Controls)
+        foreach (Control control in parent.Controls)
         {
-            if (c.Site is not null && c.Site.DesignMode)
+            if (control.Site is not null && control.Site.DesignMode)
             {
                 // We only emit Size/Location information for controls that are sited and not inherited readonly.
-                if (TypeDescriptorHelper.TryGetAttribute(c, out InheritanceAttribute? ia) && ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
+                if (TypeDescriptorHelper.TryGetAttribute(control, out InheritanceAttribute? inheritanceAttribute)
+                    && inheritanceAttribute.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
                 {
                     return true;
                 }
@@ -221,7 +223,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
         {
             // Object name
             string? name;
-            IMultitargetHelperService? mthelperSvc = host.GetService<IMultitargetHelperService>();
+            IMultitargetHelperService? multiTargetHelper = host.GetService<IMultitargetHelperService>();
 
             if (control == host.RootComponent)
             {
@@ -250,7 +252,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
                     {
                         SerializeResourceInvariant(manager, $">>{componentName}.Name", componentName);
 
-                        string? componentTypeName = mthelperSvc is null ? component.GetType().AssemblyQualifiedName : mthelperSvc.GetAssemblyQualifiedName(component.GetType());
+                        string? componentTypeName = multiTargetHelper is null ? component.GetType().AssemblyQualifiedName : multiTargetHelper.GetAssemblyQualifiedName(component.GetType());
                         SerializeResourceInvariant(manager, $">>{componentName}.Type", componentTypeName);
                     }
                 }
@@ -270,7 +272,7 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
             SerializeResourceInvariant(manager, $">>{name}.Name", manager.GetName(value));
 
             // Object type
-            SerializeResourceInvariant(manager, $">>{name}.Type", mthelperSvc is null ? control.GetType().AssemblyQualifiedName : mthelperSvc.GetAssemblyQualifiedName(control.GetType()));
+            SerializeResourceInvariant(manager, $">>{name}.Type", multiTargetHelper is null ? control.GetType().AssemblyQualifiedName : multiTargetHelper.GetAssemblyQualifiedName(control.GetType()));
 
             // Parent
             Control? parent = control.Parent;
@@ -414,9 +416,9 @@ internal class ControlCodeDomSerializer : CodeDomSerializer
                     continue;
                 }
 
-                InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(child)[typeof(InheritanceAttribute)]!;
+                InheritanceAttribute inheritanceAttribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(child)[typeof(InheritanceAttribute)]!;
 
-                if (attr.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
+                if (inheritanceAttribute.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
                 {
                     continue;
                 }

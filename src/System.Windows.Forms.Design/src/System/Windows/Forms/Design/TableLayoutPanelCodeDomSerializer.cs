@@ -38,23 +38,23 @@ internal class TableLayoutPanelCodeDomSerializer : CodeDomSerializer
 
         // Now push our layout settings stuff into the resx if we are not inherited read only and
         // are in a localizable Form.
-        TableLayoutPanel? tlp = value as TableLayoutPanel;
-        Debug.Assert(tlp is not null, "Huh? We were expecting to be serializing a TableLayoutPanel here.");
+        TableLayoutPanel? panel = value as TableLayoutPanel;
+        Debug.Assert(panel is not null, "Huh? We were expecting to be serializing a TableLayoutPanel here.");
 
-        if (tlp is not null)
+        if (panel is not null)
         {
-            if (!TypeDescriptorHelper.TryGetAttribute(tlp, out InheritanceAttribute? ia) || ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
+            if (!TypeDescriptorHelper.TryGetAttribute(panel, out InheritanceAttribute? ia) || ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
             {
                 IDesignerHost? host = manager.GetService<IDesignerHost>();
 
                 if (IsLocalizable(host))
                 {
-                    PropertyDescriptor? lsProp = TypeDescriptor.GetProperties(tlp)[LayoutSettingsPropName];
-                    object? val = lsProp?.GetValue(tlp);
+                    PropertyDescriptor? lsProp = TypeDescriptor.GetProperties(panel)[LayoutSettingsPropName];
+                    object? val = lsProp?.GetValue(panel);
 
                     if (val is not null)
                     {
-                        string key = $"{manager.GetName(tlp)}.{LayoutSettingsPropName}";
+                        string key = $"{manager.GetName(panel)}.{LayoutSettingsPropName}";
                         SerializeResourceInvariant(manager, key, val);
                     }
                 }
