@@ -31,7 +31,7 @@ Namespace Microsoft.VisualBasic.Forms.Tests
         End Function
 
         ''' <summary>
-        ''' This gets a master test folder using a predefinded Guid
+        ''' This gets a master test folder using a predefined Guid
         ''' So all temp directories and files end up in 1 place
         ''' </summary>
         ''' <returns></returns>
