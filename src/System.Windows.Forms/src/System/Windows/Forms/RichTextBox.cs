@@ -853,7 +853,7 @@ public partial class RichTextBox : TextBoxBase
             // SendMessage will force the handle to be created if it hasn't already. Normally,
             // we would cache property values until the handle is created - but for this property,
             // it's far more simple to just create the handle.
-            PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (uint)SCF.SELECTION, ref cf);
+            PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, PInvoke.SCF_SELECTION, ref cf);
         }
     }
 
@@ -889,7 +889,7 @@ public partial class RichTextBox : TextBoxBase
             cf.crTextColor = ColorTranslator.ToWin32(value);
 
             // Set the format information.
-            PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref cf);
+            PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref cf);
         }
     }
 
@@ -948,7 +948,7 @@ public partial class RichTextBox : TextBoxBase
                     cf2.crBackColor = ColorTranslator.ToWin32(value);
                 }
 
-                PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref cf2);
+                PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref cf2);
             }
         }
     }
@@ -2152,7 +2152,7 @@ public partial class RichTextBox : TextBoxBase
         cf.dwMask = CFM_MASK.CFM_COLOR;
         cf.dwEffects = 0;
         cf.crTextColor = ColorTranslator.ToWin32(value);
-        return SetCharFormat(SCF.ALL, cf);
+        return SetCharFormat(PInvoke.SCF_ALL, cf);
     }
 
     private unsafe CHARFORMAT2W GetCharFormat(bool fSelection)
@@ -2162,7 +2162,7 @@ public partial class RichTextBox : TextBoxBase
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
 
-        PInvoke.SendMessage(this, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)(fSelection ? SCF.SELECTION : SCF.DEFAULT), ref cf);
+        PInvoke.SendMessage(this, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)(fSelection ? PInvoke.SCF_SELECTION : PInvoke.SCF_DEFAULT), ref cf);
         return cf;
     }
 
@@ -2762,15 +2762,15 @@ public partial class RichTextBox : TextBoxBase
             }
 
             // Set the format information.
-            return PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref cf) != 0;
+            return PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref cf) != 0;
         }
 
         return false;
     }
 
-    private bool SetCharFormat(SCF charRange, CHARFORMAT2W cf)
+    private bool SetCharFormat(uint charRange, CHARFORMAT2W cf)
     {
-        return PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)(uint)charRange, ref cf) != 0;
+        return PInvoke.SendMessage(this, PInvoke.EM_SETCHARFORMAT, (WPARAM)charRange, ref cf) != 0;
     }
 
     private unsafe void SetCharFormatFont(bool selectionOnly, Font value)
@@ -2817,7 +2817,7 @@ public partial class RichTextBox : TextBoxBase
         PInvoke.SendMessage(
             this,
             PInvoke.EM_SETCHARFORMAT,
-            (WPARAM)(uint)(selectionOnly ? SCF.SELECTION : SCF.ALL),
+            (WPARAM)(uint)(selectionOnly ? PInvoke.SCF_SELECTION : PInvoke.SCF_ALL),
             ref charFormat);
     }
 

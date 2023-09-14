@@ -197,7 +197,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
             dwEffects = CFE_EFFECTS.CFE_LINK,
         };
 
-        PInvoke.SendMessage(control, PInvoke.EM_SETCHARFORMAT, (WPARAM)(uint)Richedit.SCF.SELECTION, ref format);
+        PInvoke.SendMessage(control, PInvoke.EM_SETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format);
 
         control.Select(0, 0);
     }

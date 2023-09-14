@@ -1605,7 +1605,7 @@ public class RichTextBoxTests
         using (var font = new Font(familyName, emSize, style, unit, gdiCharSet))
         {
             control.Font = font;
-            result = PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format);
+            result = PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_ALL, ref format);
             Assert.NotEqual(0, result);
             Assert.Equal(familyName, format.FaceName.ToString());
             Assert.Equal(expectedYHeight, format.yHeight);
@@ -1622,7 +1622,7 @@ public class RichTextBoxTests
             dwMask = (CFM_MASK)int.MaxValue
         };
 
-        result = PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format1);
+        result = PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_ALL, ref format1);
         Assert.NotEqual(0, result);
         Assert.Equal(Control.DefaultFont.Name, format1.FaceName.ToString());
         Assert.Equal((int)(Control.DefaultFont.SizeInPoints * 20), (int)format1.yHeight);
@@ -1748,7 +1748,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_ALL, ref format));
         Assert.Equal(0x785634, format.crTextColor);
     }
 
@@ -1763,7 +1763,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_ALL, ref format));
         Assert.Equal(0x785634, format.crTextColor);
 
         // Set different.
@@ -1772,7 +1772,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_ALL, ref format));
         Assert.Equal(0x907856, format.crTextColor);
     }
 
@@ -3779,7 +3779,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(PARAFORMAT)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(expected, (int)format.wAlignment);
     }
 
@@ -3852,7 +3852,7 @@ public class RichTextBoxTests
     {
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = new CHARFORMAT2W
             {
                 dwMask = (CFM_MASK)mask,
@@ -3872,7 +3872,7 @@ public class RichTextBoxTests
     {
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = new CHARFORMAT2W
             {
                 dwMask = (CFM_MASK)mask,
@@ -3974,7 +3974,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(0x785634, format.crBackColor);
     }
 
@@ -4236,7 +4236,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(PARAFORMAT)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(expectedOffset, (int)format.dxOffset);
         Assert.Equal(expected, (int)format.wNumbering);
     }
@@ -4336,7 +4336,7 @@ public class RichTextBoxTests
     {
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = new CHARFORMAT2W
             {
                 dwMask = (CFM_MASK)mask,
@@ -4430,7 +4430,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(900, format.yOffset);
     }
 
@@ -4526,7 +4526,7 @@ public class RichTextBoxTests
     {
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = new CHARFORMAT2W
             {
                 dwMask = (CFM_MASK)mask,
@@ -4619,7 +4619,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(0x785634, format.crTextColor);
     }
 
@@ -4746,7 +4746,7 @@ public class RichTextBoxTests
 
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = result
         };
 
@@ -4786,7 +4786,7 @@ public class RichTextBoxTests
 
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = result
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -4934,7 +4934,7 @@ public class RichTextBoxTests
             cbSize = (uint)sizeof(CHARFORMAT2W),
             dwMask = (CFM_MASK)int.MaxValue
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal("Arial", format.FaceName.ToString());
         Assert.Equal(expectedYHeight, (int)format.yHeight);
         Assert.Equal(CFE_EFFECTS.CFE_AUTOBACKCOLOR | CFE_EFFECTS.CFE_AUTOCOLOR | (CFE_EFFECTS)expectedEffects, format.dwEffects);
@@ -5154,7 +5154,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(PARAFORMAT)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(expected, format.dxOffset);
     }
 
@@ -5345,7 +5345,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(PARAFORMAT)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(expected, format.dxStartIndent);
     }
 
@@ -5643,7 +5643,7 @@ public class RichTextBoxTests
     {
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = new CHARFORMAT2W
             {
                 dwMask = (CFM_MASK)mask,
@@ -5743,7 +5743,7 @@ public class RichTextBoxTests
             cbSize = (uint)sizeof(CHARFORMAT2W),
             dwMask = CFM_MASK.CFM_PROTECTED
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(value, (format.dwEffects & CFE_EFFECTS.CFE_PROTECTED) != 0);
     }
 
@@ -5929,7 +5929,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(PARAFORMAT)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(expected, format.dxRightIndent);
     }
 
@@ -6376,7 +6376,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(PARAFORMAT)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(3, format.cTabCount);
         Assert.Equal(15, format.rgxTabs[0]);
         Assert.Equal(30, format.rgxTabs[1]);
@@ -6384,7 +6384,7 @@ public class RichTextBoxTests
 
         // Set null or empty.
         control.SelectionTabs = nullOrEmptyValue;
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(0, format.cTabCount);
     }
 

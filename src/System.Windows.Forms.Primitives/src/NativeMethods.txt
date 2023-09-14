@@ -600,6 +600,7 @@ RPC_E_CHANGED_MODE
 SAFEARRAY
 SafeArrayGetRecordInfo
 SC_*
+SCF_*
 SCROLLBAR_COMMAND
 ScrollWindow
 ScrollWindowEx

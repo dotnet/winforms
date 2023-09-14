@@ -48,7 +48,7 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
         PInvoke.SendMessage(
             control,
             PInvoke.EM_SETCHARFORMAT,
-            (WPARAM)(uint)Interop.Richedit.SCF.SELECTION,
+            (WPARAM)PInvoke.SCF_SELECTION,
             ref format);
 
         control.Select(0, 0);
