@@ -47,6 +47,7 @@ CoGetClassObject
 COLOR_*
 CombineRgn
 COMDLG_FILTERSPEC
+CommandStateChangeConstants
 CommDlgExtendedError
 COPYDATASTRUCT
 CopyImage
