@@ -6900,7 +6900,7 @@ public class RichTextBoxTests
                     Assert.Equal(expectedText, control.Text);
 
                     // verify the old behaviour via StreamOut(SF.TEXT | SF.UNICODE)
-                    string textOldWay = control.TestAccessor().Dynamic.StreamOut(SF.TEXT | SF.UNICODE);
+                    string textOldWay = control.TestAccessor().Dynamic.StreamOut(PInvoke.SF_TEXT | PInvoke.SF_UNICODE);
                     Assert.Equal(oldWayExpectedText, textOldWay);
 
                     // verify against RichEdit20W

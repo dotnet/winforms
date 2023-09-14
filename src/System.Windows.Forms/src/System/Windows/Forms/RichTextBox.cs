@@ -616,12 +616,12 @@ public partial class RichTextBox : TextBoxBase
         {
             if (IsHandleCreated)
             {
-                return StreamOut(SF.RTF);
+                return StreamOut(PInvoke.SF_RTF);
             }
             else if (_textPlain is not null)
             {
                 ForceHandleCreate();
-                return StreamOut(SF.RTF);
+                return StreamOut(PInvoke.SF_RTF);
             }
             else
             {
@@ -639,7 +639,7 @@ public partial class RichTextBox : TextBoxBase
 
             ForceHandleCreate();
             _textRtf = value;
-            StreamIn(value, SF.RTF);
+            StreamIn(value, PInvoke.SF_RTF);
             if (CanRaiseTextChangedEvent)
             {
                 OnTextChanged(EventArgs.Empty);
@@ -1126,14 +1126,14 @@ public partial class RichTextBox : TextBoxBase
         get
         {
             ForceHandleCreate();
-            return StreamOut(SF.F_SELECTION | SF.RTF);
+            return StreamOut(PInvoke.SFF_SELECTION | PInvoke.SF_RTF);
         }
         set
         {
             ForceHandleCreate();
             value ??= string.Empty;
 
-            StreamIn(value, SF.F_SELECTION | SF.RTF);
+            StreamIn(value, PInvoke.SFF_SELECTION | PInvoke.SF_RTF);
         }
     }
 
@@ -1277,7 +1277,7 @@ public partial class RichTextBox : TextBoxBase
         {
             ForceHandleCreate();
             value ??= string.Empty;
-            StreamIn(value, SF.F_SELECTION | SF.TEXT | SF.UNICODE);
+            StreamIn(value, PInvoke.SFF_SELECTION | PInvoke.SF_TEXT | PInvoke.SF_UNICODE);
         }
     }
 
@@ -1388,7 +1388,7 @@ public partial class RichTextBox : TextBoxBase
                     _textPlain = null;
                     value ??= string.Empty;
 
-                    StreamIn(value, SF.TEXT | SF.UNICODE);
+                    StreamIn(value, PInvoke.SF_TEXT | PInvoke.SF_UNICODE);
                     // reset Modified
                     PInvoke.SendMessage(this, PInvoke.EM_SETMODIFY);
                 }
@@ -2352,18 +2352,18 @@ public partial class RichTextBox : TextBoxBase
 
         SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
-        SF flags;
+        uint flags;
         switch (fileType)
         {
             case RichTextBoxStreamType.RichText:
-                flags = SF.RTF;
+                flags = PInvoke.SF_RTF;
                 break;
             case RichTextBoxStreamType.PlainText:
                 Rtf = string.Empty;
-                flags = SF.TEXT;
+                flags = PInvoke.SF_TEXT;
                 break;
             case RichTextBoxStreamType.UnicodePlainText:
-                flags = SF.UNICODE | SF.TEXT;
+                flags = PInvoke.SF_UNICODE | PInvoke.SF_TEXT;
                 break;
             default:
                 throw new ArgumentException(SR.InvalidFileType);
@@ -2674,23 +2674,23 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     public void SaveFile(Stream data, RichTextBoxStreamType fileType)
     {
-        SF flags;
+        uint flags;
         switch (fileType)
         {
             case RichTextBoxStreamType.RichText:
-                flags = SF.RTF;
+                flags = PInvoke.SF_RTF;
                 break;
             case RichTextBoxStreamType.PlainText:
-                flags = SF.TEXT;
+                flags = PInvoke.SF_TEXT;
                 break;
             case RichTextBoxStreamType.UnicodePlainText:
-                flags = SF.UNICODE | SF.TEXT;
+                flags = PInvoke.SF_UNICODE | PInvoke.SF_TEXT;
                 break;
             case RichTextBoxStreamType.RichNoOleObjs:
-                flags = SF.RTFNOOBJS;
+                flags = PInvoke.SF_RTFNOOBJS;
                 break;
             case RichTextBoxStreamType.TextTextOleObjs:
-                flags = SF.TEXTIZED;
+                flags = PInvoke.SF_TEXTIZED;
                 break;
             default:
                 throw new InvalidEnumArgumentException(nameof(fileType), (int)fileType, typeof(RichTextBoxStreamType));
@@ -2842,12 +2842,12 @@ public partial class RichTextBox : TextBoxBase
         return (int)(((((double)v) / 20.0) / 72.0) * logP);
     }
 
-    private void StreamIn(string str, SF flags)
+    private void StreamIn(string str, uint flags)
     {
         if (str.Length == 0)
         {
             // Destroy the selection if callers was setting selection text
-            if ((SF.F_SELECTION & flags) != 0)
+            if ((PInvoke.SFF_SELECTION & flags) != 0)
             {
                 PInvoke.SendMessage(this, PInvoke.WM_CLEAR);
                 ProtectedError = false;
@@ -2869,7 +2869,7 @@ public partial class RichTextBox : TextBoxBase
 
         // Get the string into a byte array
         byte[] encodedBytes;
-        if ((flags & SF.UNICODE) != 0)
+        if ((flags & PInvoke.SF_UNICODE) != 0)
         {
             encodedBytes = Encoding.Unicode.GetBytes(str);
         }
@@ -2885,10 +2885,10 @@ public partial class RichTextBox : TextBoxBase
         StreamIn(_editStream, flags);
     }
 
-    private void StreamIn(Stream data, SF flags)
+    private void StreamIn(Stream data, uint flags)
     {
         // Clear out the selection only if we are replacing all the text.
-        if ((flags & SF.F_SELECTION) == 0)
+        if ((flags & PInvoke.SFF_SELECTION) == 0)
         {
             CHARRANGE range = default;
             PInvoke.SendMessage(this, PInvoke.EM_EXSETSEL, 0, ref range);
@@ -2902,7 +2902,7 @@ public partial class RichTextBox : TextBoxBase
             // If SF_RTF is requested then check for the RTF tag at the start
             // of the file.  We don't load if the tag is not there.
 
-            if ((flags & SF.RTF) != 0)
+            if ((flags & PInvoke.SF_RTF) != 0)
             {
                 long streamStart = _editStream.Position;
                 byte[] bytes = new byte[SZ_RTF_TAG.Length];
@@ -2924,7 +2924,7 @@ public partial class RichTextBox : TextBoxBase
             // set up structure to do stream operation
             EDITSTREAM es = default;
 
-            if ((flags & SF.UNICODE) != 0)
+            if ((flags & PInvoke.SF_UNICODE) != 0)
             {
                 cookieVal = INPUT | UNICODE;
             }
@@ -2933,7 +2933,7 @@ public partial class RichTextBox : TextBoxBase
                 cookieVal = INPUT | ANSI;
             }
 
-            if ((flags & SF.RTF) != 0)
+            if ((flags & PInvoke.SF_RTF) != 0)
             {
                 cookieVal |= RTF;
             }
@@ -2982,7 +2982,7 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
-    private string StreamOut(SF flags)
+    private string StreamOut(uint flags)
     {
         Stream stream = new MemoryStream();
         StreamOut(stream, flags, false);
@@ -2995,7 +2995,7 @@ public partial class RichTextBox : TextBoxBase
             byte[] bytes = new byte[streamLength];
             stream.Read(bytes, 0, streamLength);
 
-            if ((flags & SF.UNICODE) != 0)
+            if ((flags & PInvoke.SF_UNICODE) != 0)
             {
                 result = Encoding.Unicode.GetString(bytes, 0, bytes.Length);
             }
@@ -3018,7 +3018,7 @@ public partial class RichTextBox : TextBoxBase
         return result;
     }
 
-    private void StreamOut(Stream data, SF flags, bool includeCrLfs)
+    private void StreamOut(Stream data, uint flags, bool includeCrLfs)
     {
         // set up the EDITSTREAM structure for the callback.
         _editStream = data;
@@ -3028,9 +3028,9 @@ public partial class RichTextBox : TextBoxBase
             int cookieVal = 0;
             EDITSTREAM es = default;
 
-            cookieVal = (flags & SF.UNICODE) != 0 ? OUTPUT | UNICODE : OUTPUT | ANSI;
+            cookieVal = (flags & PInvoke.SF_UNICODE) != 0 ? OUTPUT | UNICODE : OUTPUT | ANSI;
 
-            if ((flags & SF.RTF) != 0)
+            if ((flags & PInvoke.SF_RTF) != 0)
             {
                 cookieVal |= RTF;
             }
@@ -3381,7 +3381,7 @@ public partial class RichTextBox : TextBoxBase
 
                         case PInvoke.EM_STREAMIN:
                             // Don't allow STREAMIN to replace protected selection
-                            if ((unchecked((SF)(long)enprotected.wParam) & SF.F_SELECTION) != 0)
+                            if ((unchecked((uint)(long)enprotected.wParam) & PInvoke.SFF_SELECTION) != 0)
                             {
                                 break;
                             }

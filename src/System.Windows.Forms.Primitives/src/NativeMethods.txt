@@ -604,6 +604,8 @@ SCF_*
 SCROLLBAR_COMMAND
 ScrollWindow
 ScrollWindowEx
+SF_*
+SFF_*
 S_FALSE
 S_OK
 SafeArrayCreate
