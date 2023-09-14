@@ -185,7 +185,7 @@ public partial class RichTextBox : TextBoxBase
                     this,
                     PInvoke.EM_SETOPTIONS,
                     (WPARAM)(int)(value ? ECOOP.OR : ECOOP.XOR),
-                    (LPARAM)(int)ECO.AUTOWORDSELECTION);
+                    (LPARAM)(int)PInvoke.ECO_AUTOWORDSELECTION);
             }
         }
     }
@@ -1327,7 +1327,7 @@ public partial class RichTextBox : TextBoxBase
                         this,
                         PInvoke.EM_SETOPTIONS,
                         (WPARAM)(int)(value ? ECOOP.OR : ECOOP.XOR),
-                        (LPARAM)(int)ECO.SELECTIONBAR);
+                        (LPARAM)(int)PInvoke.ECO_SELECTIONBAR);
                 }
             }
         }
@@ -2525,7 +2525,7 @@ public partial class RichTextBox : TextBoxBase
                 this,
                 PInvoke.EM_SETOPTIONS,
                 (WPARAM)(int)ECOOP.OR,
-                (LPARAM)(int)ECO.SELECTIONBAR);
+                (LPARAM)(int)PInvoke.ECO_SELECTIONBAR);
         }
 
         if (_languageOption != LanguageOption)
