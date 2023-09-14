@@ -571,7 +571,7 @@ public sealed partial class NotifyIcon : Component
             NOTIFYICONDATAW data = new()
             {
                 cbSize = (uint)sizeof(NOTIFYICONDATAW),
-                uFlags = NIF.INFO,
+                uFlags = NOTIFY_ICON_DATA_FLAGS.NIF_INFO,
                 uID = _id,
                 uTimeoutOrVersion = (uint)timeout
             };
@@ -643,7 +643,7 @@ public sealed partial class NotifyIcon : Component
             {
                 cbSize = (uint)sizeof(NOTIFYICONDATAW),
                 uCallbackMessage = WM_TRAYMOUSEMESSAGE,
-                uFlags = NIF.MESSAGE,
+                uFlags = NOTIFY_ICON_DATA_FLAGS.NIF_MESSAGE,
                 uID = _id
             };
 
@@ -658,11 +658,11 @@ public sealed partial class NotifyIcon : Component
             data.hWnd = _window.Handle;
             if (_icon is not null)
             {
-                data.uFlags |= NIF.ICON;
+                data.uFlags |= NOTIFY_ICON_DATA_FLAGS.NIF_ICON;
                 data.hIcon = _icon.Handle;
             }
 
-            data.uFlags |= NIF.TIP;
+            data.uFlags |= NOTIFY_ICON_DATA_FLAGS.NIF_TIP;
             data.Tip = _text;
 
             if (showIconInTray && _icon is not null)

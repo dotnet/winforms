@@ -13,7 +13,7 @@ internal static partial class Interop
             public uint cbSize;
             public IntPtr hWnd;
             public uint uID;
-            public NIF uFlags;
+            public NOTIFY_ICON_DATA_FLAGS uFlags;
             public uint uCallbackMessage;
             public IntPtr hIcon;
             public fixed char _szTip[128];
