@@ -1271,7 +1271,7 @@ public partial class RichTextBox : TextBoxBase
         get
         {
             ForceHandleCreate();
-            return GetTextEx(GT.SELECTION);
+            return GetTextEx(GETTEXTEX_FLAGS.GT_SELECTION);
         }
         set
         {
@@ -3067,7 +3067,7 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
-    private unsafe string GetTextEx(GT flags = GT.DEFAULT)
+    private unsafe string GetTextEx(GETTEXTEX_FLAGS flags = GETTEXTEX_FLAGS.GT_DEFAULT)
     {
         Debug.Assert(IsHandleCreated);
 
@@ -3081,7 +3081,7 @@ public partial class RichTextBox : TextBoxBase
             flags = GTL.DEFAULT
         };
 
-        if (flags.HasFlag(GT.USECRLF))
+        if (flags.HasFlag(GETTEXTEX_FLAGS.GT_USECRLF))
         {
             gtl.flags |= GTL.USECRLF;
         }
@@ -3113,7 +3113,7 @@ public partial class RichTextBox : TextBoxBase
             // (see: GT_DEFAULT, https://docs.microsoft.com/windows/win32/api/richedit/ns-richedit-gettextex#members),
             // whereas previously we would normalise to '\n'. Unfortunately we can only ask for '\r\n' line endings via GT.USECRLF,
             // but unable to ask for '\n'. Unless GT.USECRLF was set, convert '\r' with '\n' to retain the original behaviour.
-            if (!flags.HasFlag(GT.USECRLF))
+            if (!flags.HasFlag(GETTEXTEX_FLAGS.GT_USECRLF))
             {
                 int index = 0;
                 while (index < actualLength)

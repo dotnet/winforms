@@ -6985,7 +6985,7 @@ public class RichTextBoxTests
 
         control.Text = text;
 
-        string textOldWay = control.TestAccessor().Dynamic.GetTextEx(GT.USECRLF);
+        string textOldWay = control.TestAccessor().Dynamic.GetTextEx(GETTEXTEX_FLAGS.GT_USECRLF);
         Assert.Equal(expected, textOldWay);
     }
 

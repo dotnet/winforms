@@ -91,7 +91,7 @@ public class RichTextBoxTests
         RichTextBox_GetTextEx(out var value);
 
         Assert.Equal(132u, value.cb);
-        Assert.Equal(GT.RAWTEXT, value.flags);
+        Assert.Equal(GETTEXTEX_FLAGS.GT_RAWTEXT, value.flags);
         Assert.Equal(432u, value.codepage);
         Assert.Equal((IntPtr)22, value.lpDefaultChar);
         Assert.Equal((IntPtr)6578, value.lpUsedDefChar);

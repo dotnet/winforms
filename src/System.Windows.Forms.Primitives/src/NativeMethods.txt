@@ -278,6 +278,7 @@ GetSystemPowerStatus
 GetTextAlign
 GetTextColor
 GetTextExtentPoint32W
+GETTEXTEX_FLAGS
 GetTextMetrics
 GetThemeAppProperties
 GetThemeBackgroundContentRect
