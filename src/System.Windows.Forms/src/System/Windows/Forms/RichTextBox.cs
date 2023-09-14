@@ -3437,8 +3437,8 @@ public partial class RichTextBox : TextBoxBase
         if (ImeMode == ImeMode.Hangul || ImeMode == ImeMode.HangulFull)
         {
             // Is the IME CompositionWindow open?
-            ICM compMode = (ICM)(int)PInvoke.SendMessage(this, PInvoke.EM_GETIMECOMPMODE);
-            if (compMode != ICM.NOTOPEN)
+            LRESULT compMode = PInvoke.SendMessage(this, PInvoke.EM_GETIMECOMPMODE);
+            if (compMode != PInvoke.ICM_NOTOPEN)
             {
                 int textLength = PInvoke.GetWindowTextLength(this);
                 if (selStart == selEnd && textLength == MaxLength)

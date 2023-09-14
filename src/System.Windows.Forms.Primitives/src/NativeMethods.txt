@@ -346,6 +346,7 @@ IAccessible
 IAutoComplete2
 IClassFactory
 IClassFactory2
+ICM_*
 ICM_MODE
 ICON_*
 IDC_*
