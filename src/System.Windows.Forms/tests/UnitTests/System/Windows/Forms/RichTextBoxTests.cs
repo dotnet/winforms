@@ -10154,9 +10154,9 @@ public class RichTextBoxTests
         yield return new object[] { -1, -2, -1, 1 };
         yield return new object[] { -1, 0, -1, 1 };
         yield return new object[] { -1, 1, -1, 1 };
-        yield return new object[] { -1, -1, (int)SEL.EMPTY, 1 };
-        yield return new object[] { -1, -1, (int)SEL.TEXT, 1 };
-        yield return new object[] { 0, 1, (int)SEL.TEXT, 1 };
+        yield return new object[] { -1, -1, (int)RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE.SEL_EMPTY, 1 };
+        yield return new object[] { -1, -1, (int)RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE.SEL_TEXT, 1 };
+        yield return new object[] { 0, 1, (int)RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE.SEL_TEXT, 1 };
     }
 
     [WinFormsTheory]
@@ -10183,7 +10183,7 @@ public class RichTextBoxTests
                 cpMin = min,
                 cpMax = max
             },
-            seltyp = (SEL)selectionType
+            seltyp = (RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE)selectionType
         };
         var m = new Message
         {
@@ -10417,7 +10417,7 @@ public class RichTextBoxTests
                 cpMin = min,
                 cpMax = max
             },
-            seltyp = (SEL)selectionType
+            seltyp = (RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE)selectionType
         };
         var m = new Message
         {

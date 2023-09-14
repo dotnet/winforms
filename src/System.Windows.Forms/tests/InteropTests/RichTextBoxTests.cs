@@ -146,7 +146,7 @@ public class RichTextBoxTests
         Assert.Equal(132u, value.nmhdr.code);
         Assert.Equal((HWND)765, value.nmhdr.hwndFrom);
         Assert.Equal(432u, value.nmhdr.idFrom);
-        Assert.Equal(SEL.MULTICHAR, value.seltyp);
+        Assert.Equal(RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE.SEL_MULTICHAR, value.seltyp);
         Assert.Equal(109, value.chrg.cpMin);
         Assert.Equal(1577, value.chrg.cpMax);
     }
