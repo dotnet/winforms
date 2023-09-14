@@ -128,7 +128,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
         }
 
-        return cdStore.Deserialize(_provider!);
+        return cdStore.Deserialize(_provider);
     }
 
     /// <summary>
@@ -144,7 +144,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
         }
 
-        return cdStore.Deserialize(_provider!, container);
+        return cdStore.Deserialize(_provider, container);
     }
 
     /// <summary>
@@ -346,14 +346,14 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         /// <summary>
         ///  Deserializes the saved bits.
         /// </summary>
-        internal List<object> Deserialize(IServiceProvider provider, IContainer? container = null)
+        internal List<object> Deserialize(IServiceProvider? provider, IContainer? container = null)
         {
             List<object> collection = new();
             Deserialize(provider, container, validateRecycledTypes: true, applyDefaults: true, collection);
             return collection;
         }
 
-        private void Deserialize(IServiceProvider provider, IContainer? container, bool validateRecycledTypes, bool applyDefaults, List<object>? objects)
+        private void Deserialize(IServiceProvider? provider, IContainer? container, bool validateRecycledTypes, bool applyDefaults, List<object>? objects)
         {
             PassThroughSerializationManager delegator = new PassThroughSerializationManager(new LocalDesignerSerializationManager(this, new LocalServices(this, provider)));
             if (container is not null)
@@ -361,7 +361,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 delegator.Manager.Container = container;
             }
 
-            if (provider.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
+            if (provider?.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
             {
                 foreach (IDesignerSerializationProvider serProvider in hostManager.SerializationProviders)
                 {
