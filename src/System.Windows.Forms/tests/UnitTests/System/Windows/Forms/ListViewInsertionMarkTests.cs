@@ -13,7 +13,7 @@ public class ListViewInsertionMarkTests
     [WinFormsFact]
     public void ListViewInsertionMark_AppearsAfterItem_Get_ReturnsExpected()
     {
-        using var control = new ListView();
+        using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
         Assert.False(insertionMark.AppearsAfterItem);
         Assert.False(control.IsHandleCreated);
@@ -23,7 +23,7 @@ public class ListViewInsertionMarkTests
     [BoolData]
     public void ListViewInsertionMark_AppearsAfterItem_Set_GetReturnsExpected(bool value)
     {
-        using var control = new ListView();
+        using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
 
         insertionMark.AppearsAfterItem = value;
@@ -45,7 +45,7 @@ public class ListViewInsertionMarkTests
     [BoolData]
     public void ListViewInsertionMark_AppearsAfterItem_SetWithHandle_GetReturnsExpected(bool value)
     {
-        using var control = new ListView();
+        using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -87,13 +87,13 @@ public class ListViewInsertionMarkTests
         {
             Application.EnableVisualStyles();
 
-            using var control = new ListView();
+            using ListView control = new();
             ListViewInsertionMark insertionMark = control.InsertionMark;
 
             // Set same.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.InsertionMark.AppearsAfterItem = false;
-            var insertMark = new LVINSERTMARK
+            LVINSERTMARK insertMark = new()
             {
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
@@ -137,14 +137,14 @@ public class ListViewInsertionMarkTests
         {
             Application.EnableVisualStyles();
 
-            using var control = new ListView();
+            using ListView control = new();
             ListViewInsertionMark insertionMark = control.InsertionMark;
             control.InsertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
 
             // Set same.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.InsertionMark.AppearsAfterItem = false;
-            var insertMark = new LVINSERTMARK
+            LVINSERTMARK insertMark = new()
             {
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
@@ -183,7 +183,7 @@ public class ListViewInsertionMarkTests
     [WinFormsFact]
     public void ListViewInsertionMark_Bounds_GetWithoutHandle_ReturnsEqual()
     {
-        using var control = new ListView();
+        using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
         Assert.Equal(Rectangle.Empty, insertionMark.Bounds);
         Assert.Equal(insertionMark.Bounds, insertionMark.Bounds);
@@ -193,7 +193,7 @@ public class ListViewInsertionMarkTests
     [WinFormsFact]
     public void ListViewInsertionMark_Bounds_GetWithHandle_ReturnsEqual()
     {
-        using var control = new ListView();
+        using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -221,7 +221,7 @@ public class ListViewInsertionMarkTests
     [MemberData(nameof(Bounds_GetCustomInsertMarkRect_TestData))]
     public void ListViewInsertionMark_Bounds_GetCustomGetInsertMarkRect_ReturnsExpected(object getInsertMarkRectResult, Rectangle expected)
     {
-        using var control = new CustomGetInsertMarkRectListView
+        using CustomGetInsertMarkRectListView control = new()
         {
             GetInsertMarkRectResult = (RECT)getInsertMarkRectResult
         };
@@ -251,7 +251,7 @@ public class ListViewInsertionMarkTests
     [WinFormsFact]
     public void ListViewInsertionMark_Bounds_GetInvalidGetInsertMarkRect_ReturnsExpected()
     {
-        using var control = new InvalidGetInsertMarkRectListView();
+        using InvalidGetInsertMarkRectListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
@@ -280,7 +280,7 @@ public class ListViewInsertionMarkTests
     [WinFormsFact]
     public void ListViewInsertionMark_Color_GetWithoutHandle_ReturnsExpected()
     {
-        using var control = new ListView();
+        using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
         Assert.NotEqual(Color.Empty, insertionMark.Color);
         Assert.Equal(insertionMark.Color, insertionMark.Color);
@@ -290,7 +290,7 @@ public class ListViewInsertionMarkTests
     [WinFormsFact]
     public void ListViewInsertionMark_Color_GetWithHandle_ReturnsExpected()
     {
-        using var control = new ListView();
+        using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -312,7 +312,7 @@ public class ListViewInsertionMarkTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorTheoryData))]
     public void ListViewInsertionMark_Color_SetWithoutHandle_ReturnsExpected(Color value)
     {
-        using var control = new ListView();
+        using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
 
         insertionMark.Color = value;
@@ -329,7 +329,7 @@ public class ListViewInsertionMarkTests
     [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorTheoryData))]
     public void ListViewInsertionMark_Color_SetWithHandle_ReturnsExpected(Color value)
     {
-        using var control = new ListView();
+        using ListView control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -363,13 +363,13 @@ public class ListViewInsertionMarkTests
         {
             Application.EnableVisualStyles();
 
-            using var control = new ListView();
+            using ListView control = new();
             ListViewInsertionMark insertionMark = control.InsertionMark;
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
             // Set same.
             control.InsertionMark.Color = Color.Empty;
-            var insertMark = new LVINSERTMARK
+            LVINSERTMARK insertMark = new()
             {
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
@@ -396,7 +396,7 @@ public class ListViewInsertionMarkTests
     [WinFormsFact]
     public void ListViewInsertionMark_Index_Get_ReturnsExpected()
     {
-        using var control = new ListView();
+        using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
         Assert.Equal(0, insertionMark.Index);
         Assert.False(control.IsHandleCreated);
@@ -406,7 +406,7 @@ public class ListViewInsertionMarkTests
     [IntegerData<int>]
     public void ListViewInsertionMark_Index_SetWithoutHandle_GetReturnsExpected(int value)
     {
-        using var control = new ListView();
+        using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
 
         insertionMark.Index = value;
@@ -423,7 +423,7 @@ public class ListViewInsertionMarkTests
     [IntegerData<int>]
     public void ListViewInsertionMark_Index_SetWithHandle_GetReturnsExpected(int value)
     {
-        using var control = new ListView();
+        using ListView control = new();
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
         control.Invalidated += (sender, e) => invalidatedCallCount++;
@@ -460,13 +460,13 @@ public class ListViewInsertionMarkTests
             int index = int.Parse(indexString);
             Application.EnableVisualStyles();
 
-            using var control = new ListView();
+            using ListView control = new();
             ListViewInsertionMark insertionMark = control.InsertionMark;
 
             // Set same.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.InsertionMark.Index = 0;
-            var insertMark = new LVINSERTMARK
+            LVINSERTMARK insertMark = new()
             {
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
@@ -514,14 +514,14 @@ public class ListViewInsertionMarkTests
             int index = int.Parse(indexString);
             Application.EnableVisualStyles();
 
-            using var control = new ListView();
+            using ListView control = new();
             ListViewInsertionMark insertionMark = control.InsertionMark;
             insertionMark.Color = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
 
             // Set same.
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.InsertionMark.Index = 0;
-            var insertMark = new LVINSERTMARK
+            LVINSERTMARK insertMark = new()
             {
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
@@ -561,7 +561,7 @@ public class ListViewInsertionMarkTests
     [WinFormsFact]
     public void ListViewInsertionMark_NearestIndex_NoSuchPointWithoutHandle_ReturnsInvalid()
     {
-        using var control = new ListView();
+        using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
         Assert.True(insertionMark.NearestIndex(new Point(-10, -11)) >= -1);
         Assert.True(control.IsHandleCreated);
@@ -570,7 +570,7 @@ public class ListViewInsertionMarkTests
     [WinFormsFact]
     public void ListViewInsertionMark_NearestIndex_NoSuchPointWithHandle_ReturnsInvalid()
     {
-        using var control = new ListView();
+        using ListView control = new();
         ListViewInsertionMark insertionMark = control.InsertionMark;
         Assert.NotEqual(IntPtr.Zero, control.Handle);
         int invalidatedCallCount = 0;
@@ -594,7 +594,7 @@ public class ListViewInsertionMarkTests
     [InlineData(1)]
     public void ListViewInsertionMark_NearestIndex_InvokeCustomInsertMarkHitTest_ReturnsExpected(int result)
     {
-        using var control = new CustomInsertMarkHitTestListView
+        using CustomInsertMarkHitTestListView control = new()
         {
             InsertMarkHitTestResult = result
         };

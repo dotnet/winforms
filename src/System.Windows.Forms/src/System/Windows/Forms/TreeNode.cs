@@ -37,8 +37,6 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     // ie. nodes which don't use fancy fonts or colors (ie. that use the TreeView settings for these)
     //     will take up less memory than those that do.
     internal OwnerDrawPropertyBag propBag;
-    internal HTREEITEM HTREEITEMInternal;
-    internal HTREEITEM HTREEITEM => (HTREEITEM)Handle;
     internal string text;
     internal string name;
 
@@ -478,7 +476,10 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  has not yet been created, this will force handle creation.
     /// </summary>
     [Browsable(false)]
-    public IntPtr Handle
+    public IntPtr Handle => (nint)HTREEITEM;
+
+    internal HTREEITEM HTREEITEMInternal { get; private set; }
+    internal HTREEITEM HTREEITEM
     {
         get
         {

@@ -6,8 +6,8 @@ namespace Windows.Win32.UI.Controls;
 internal partial struct LVITEMW
 {
     /// <summary>
-    /// Set the new text. The text length is limited by <see cref="cchTextMax"/>.
-    /// A value of <see cref="cchTextMax"/> will be updated to the length of <paramref name="text"/> + 1.
+    ///  Set the new text. The text length is limited by <see cref="cchTextMax"/>.
+    ///  A value of <see cref="cchTextMax"/> will be updated to the length of <paramref name="text"/> + 1.
     /// </summary>
     /// <param name="text">The text to set.</param>
     public unsafe void UpdateText(ReadOnlySpan<char> text)
