@@ -774,7 +774,7 @@ public partial class RichTextBox : TextBoxBase
             // check if alignment has been set yet
             if ((PFM.NUMBERING & pf.dwMask) != 0)
             {
-                if (pf.wNumbering == PFN.BULLET)
+                if (pf.wNumbering == PARAFORMAT_NUMBERING.PFN_BULLET)
                 {
                     selectionBullet = RichTextBoxSelectionAttribute.All;
                 }
@@ -804,7 +804,7 @@ public partial class RichTextBox : TextBoxBase
             }
             else
             {
-                pf.wNumbering = PFN.BULLET;
+                pf.wNumbering = PARAFORMAT_NUMBERING.PFN_BULLET;
                 pf.dxOffset = Pixel2Twip(_bulletIndent, true);
             }
 

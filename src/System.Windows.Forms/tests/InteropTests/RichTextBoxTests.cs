@@ -113,7 +113,7 @@ public class RichTextBoxTests
 
         Assert.Equal(132u, value.cbSize);
         Assert.Equal(PFM.ALIGNMENT, value.dwMask);
-        Assert.Equal(PFN.UCROMAN, value.wNumbering);
+        Assert.Equal(PARAFORMAT_NUMBERING.PFN_UCROMAN, value.wNumbering);
         Assert.Equal(6578, value.wReserved);
         Assert.Equal(109, value.dxStartIndent);
         Assert.Equal(432, value.dxRightIndent);

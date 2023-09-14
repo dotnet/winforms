@@ -4058,17 +4058,17 @@ public class RichTextBoxTests
     public static IEnumerable<object[]> SelectionBullet_CustomGetParamFormat_TestData()
     {
         yield return new object[] { 0, 0, false };
-        yield return new object[] { 0, PFN.BULLET, false };
-        yield return new object[] { PFM.NUMBERING, PFN.BULLET, true };
+        yield return new object[] { 0, PARAFORMAT_NUMBERING.PFN_BULLET, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_BULLET, true };
         yield return new object[] { PFM.NUMBERING, 0, false };
-        yield return new object[] { PFM.NUMBERING, PFN.ARABIC, false };
-        yield return new object[] { PFM.NUMBERING, PFN.LCLETTER, false };
-        yield return new object[] { PFM.NUMBERING, PFN.LCROMAN, false };
-        yield return new object[] { PFM.NUMBERING, PFN.UCLETTER, false };
-        yield return new object[] { PFM.NUMBERING, PFN.UCROMAN, false };
-        yield return new object[] { PFM.NUMBERING, PFN.UCROMAN + 1, false };
-        yield return new object[] { PFM.NUMBERING | PFM.ALIGNMENT, PFN.BULLET, true };
-        yield return new object[] { PFM.ALIGNMENT, PFN.BULLET, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_ARABIC, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_LCLETTER, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_LCROMAN, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_UCLETTER, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_UCROMAN, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_UCROMAN + 1, false };
+        yield return new object[] { PFM.NUMBERING | PFM.ALIGNMENT, PARAFORMAT_NUMBERING.PFN_BULLET, true };
+        yield return new object[] { PFM.ALIGNMENT, PARAFORMAT_NUMBERING.PFN_BULLET, false };
     }
 
     [WinFormsTheory]
@@ -4080,7 +4080,7 @@ public class RichTextBoxTests
             GetParaFormatResult = new PARAFORMAT
             {
                 dwMask = (PFM)mask,
-                wNumbering = (PFN)numbering
+                wNumbering = (PARAFORMAT_NUMBERING)numbering
             }
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
