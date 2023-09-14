@@ -844,7 +844,7 @@ public partial class RichTextBox : TextBoxBase
             CHARFORMAT2W cf = new()
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W),
-                dwMask = CFM.OFFSET,
+                dwMask = CFM_MASK.CFM_OFFSET,
                 yOffset = Pixel2Twip(value, false)
             };
 
@@ -873,7 +873,7 @@ public partial class RichTextBox : TextBoxBase
             ForceHandleCreate();
             CHARFORMAT2W cf = GetCharFormat(true);
             // if the effects member contains valid info
-            if ((cf.dwMask & CFM.COLOR) != 0)
+            if ((cf.dwMask & CFM_MASK.CFM_COLOR) != 0)
             {
                 selColor = ColorTranslator.FromOle(cf.crTextColor);
             }
@@ -884,7 +884,7 @@ public partial class RichTextBox : TextBoxBase
         {
             ForceHandleCreate();
             CHARFORMAT2W cf = GetCharFormat(true);
-            cf.dwMask = CFM.COLOR;
+            cf.dwMask = CFM_MASK.CFM_COLOR;
             cf.dwEffects = 0;
             cf.crTextColor = ColorTranslator.ToWin32(value);
 
@@ -914,7 +914,7 @@ public partial class RichTextBox : TextBoxBase
                 {
                     selColor = BackColor;
                 }
-                else if ((cf2.dwMask & CFM.BACKCOLOR) != 0)
+                else if ((cf2.dwMask & CFM_MASK.CFM_BACKCOLOR) != 0)
                 {
                     selColor = ColorTranslator.FromOle(cf2.crBackColor);
                 }
@@ -944,7 +944,7 @@ public partial class RichTextBox : TextBoxBase
                 }
                 else
                 {
-                    cf2.dwMask = CFM.BACKCOLOR;
+                    cf2.dwMask = CFM_MASK.CFM_BACKCOLOR;
                     cf2.crBackColor = ColorTranslator.ToWin32(value);
                 }
 
@@ -1103,12 +1103,12 @@ public partial class RichTextBox : TextBoxBase
         get
         {
             ForceHandleCreate();
-            return GetCharFormat(CFM.PROTECTED, CFE_EFFECTS.CFE_PROTECTED) == RichTextBoxSelectionAttribute.All;
+            return GetCharFormat(CFM_MASK.CFM_PROTECTED, CFE_EFFECTS.CFE_PROTECTED) == RichTextBoxSelectionAttribute.All;
         }
         set
         {
             ForceHandleCreate();
-            SetCharFormat(CFM.PROTECTED, value ? CFE_EFFECTS.CFE_PROTECTED : 0, RichTextBoxSelectionAttribute.All);
+            SetCharFormat(CFM_MASK.CFM_PROTECTED, value ? CFE_EFFECTS.CFE_PROTECTED : 0, RichTextBoxSelectionAttribute.All);
         }
     }
 
@@ -2143,13 +2143,13 @@ public partial class RichTextBox : TextBoxBase
     private bool InternalSetForeColor(Color value)
     {
         CHARFORMAT2W cf = GetCharFormat(false);
-        if ((cf.dwMask & CFM.COLOR) != 0
+        if ((cf.dwMask & CFM_MASK.CFM_COLOR) != 0
             && ColorTranslator.ToWin32(value) == cf.crTextColor)
         {
             return true;
         }
 
-        cf.dwMask = CFM.COLOR;
+        cf.dwMask = CFM_MASK.CFM_COLOR;
         cf.dwEffects = 0;
         cf.crTextColor = ColorTranslator.ToWin32(value);
         return SetCharFormat(SCF.ALL, cf);
@@ -2166,7 +2166,7 @@ public partial class RichTextBox : TextBoxBase
         return cf;
     }
 
-    private RichTextBoxSelectionAttribute GetCharFormat(CFM mask, CFE_EFFECTS effect)
+    private RichTextBoxSelectionAttribute GetCharFormat(CFM_MASK mask, CFE_EFFECTS effect)
     {
         RichTextBoxSelectionAttribute charFormat = RichTextBoxSelectionAttribute.None;
 
@@ -2193,13 +2193,13 @@ public partial class RichTextBox : TextBoxBase
         ForceHandleCreate();
 
         CHARFORMAT2W cf = GetCharFormat(selectionOnly);
-        if ((cf.dwMask & CFM.FACE) == 0)
+        if ((cf.dwMask & CFM_MASK.CFM_FACE) == 0)
         {
             return null;
         }
 
         float fontSize = 13;
-        if ((cf.dwMask & CFM.SIZE) != 0)
+        if ((cf.dwMask & CFM_MASK.CFM_SIZE) != 0)
         {
             fontSize = (float)cf.yHeight / (float)20.0;
             if (fontSize == 0 && cf.yHeight > 0)
@@ -2209,22 +2209,22 @@ public partial class RichTextBox : TextBoxBase
         }
 
         FontStyle style = FontStyle.Regular;
-        if ((cf.dwMask & CFM.BOLD) != 0 && (cf.dwEffects & CFE_EFFECTS.CFE_BOLD) != 0)
+        if ((cf.dwMask & CFM_MASK.CFM_BOLD) != 0 && (cf.dwEffects & CFE_EFFECTS.CFE_BOLD) != 0)
         {
             style |= FontStyle.Bold;
         }
 
-        if ((cf.dwMask & CFM.ITALIC) != 0 && (cf.dwEffects & CFE_EFFECTS.CFE_ITALIC) != 0)
+        if ((cf.dwMask & CFM_MASK.CFM_ITALIC) != 0 && (cf.dwEffects & CFE_EFFECTS.CFE_ITALIC) != 0)
         {
             style |= FontStyle.Italic;
         }
 
-        if ((cf.dwMask & CFM.STRIKEOUT) != 0 && (cf.dwEffects & CFE_EFFECTS.CFE_STRIKEOUT) != 0)
+        if ((cf.dwMask & CFM_MASK.CFM_STRIKEOUT) != 0 && (cf.dwEffects & CFE_EFFECTS.CFE_STRIKEOUT) != 0)
         {
             style |= FontStyle.Strikeout;
         }
 
-        if ((cf.dwMask & CFM.UNDERLINE) != 0 && (cf.dwEffects & CFE_EFFECTS.CFE_UNDERLINE) != 0)
+        if ((cf.dwMask & CFM_MASK.CFM_UNDERLINE) != 0 && (cf.dwEffects & CFE_EFFECTS.CFE_UNDERLINE) != 0)
         {
             style |= FontStyle.Underline;
         }
@@ -2738,7 +2738,7 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
-    private unsafe bool SetCharFormat(CFM mask, CFE_EFFECTS effect, RichTextBoxSelectionAttribute charFormat)
+    private unsafe bool SetCharFormat(CFM_MASK mask, CFE_EFFECTS effect, RichTextBoxSelectionAttribute charFormat)
     {
         // check to see if the control has been created
         if (IsHandleCreated)
@@ -2777,9 +2777,9 @@ public partial class RichTextBox : TextBoxBase
     {
         ForceHandleCreate();
 
-        CFM dwMask = CFM.FACE | CFM.SIZE | CFM.BOLD |
-            CFM.ITALIC | CFM.STRIKEOUT | CFM.UNDERLINE |
-            CFM.CHARSET;
+        CFM_MASK dwMask = CFM_MASK.CFM_FACE | CFM_MASK.CFM_SIZE | CFM_MASK.CFM_BOLD |
+            CFM_MASK.CFM_ITALIC | CFM_MASK.CFM_STRIKEOUT | CFM_MASK.CFM_UNDERLINE |
+            CFM_MASK.CFM_CHARSET;
 
         CFE_EFFECTS dwEffects = 0;
         if (value.Bold)
@@ -3366,7 +3366,7 @@ public partial class RichTextBox : TextBoxBase
                         case PInvoke.EM_SETCHARFORMAT:
                             // Allow change of protected style
                             CHARFORMAT2W* charFormat = (CHARFORMAT2W*)enprotected.lParam;
-                            if ((charFormat->dwMask & CFM.PROTECTED) != 0)
+                            if ((charFormat->dwMask & CFM_MASK.CFM_PROTECTED) != 0)
                             {
                                 m.ResultInternal = (LRESULT)0;
                                 return;

@@ -41,7 +41,7 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
         var format = new Interop.Richedit.CHARFORMAT2W
         {
             cbSize = (uint)sizeof(Interop.Richedit.CHARFORMAT2W),
-            dwMask = Interop.Richedit.CFM.LINK,
+            dwMask = CFM_MASK.CFM_LINK,
             dwEffects = CFE_EFFECTS.CFE_LINK,
         };
 

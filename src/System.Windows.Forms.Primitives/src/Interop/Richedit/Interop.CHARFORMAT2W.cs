@@ -14,7 +14,7 @@ internal partial class Interop
             private const int LF_FACESIZE = 32;
 
             public uint cbSize;
-            public CFM dwMask;
+            public CFM_MASK dwMask;
             public CFE_EFFECTS dwEffects;
             public int yHeight;
             public int yOffset;
