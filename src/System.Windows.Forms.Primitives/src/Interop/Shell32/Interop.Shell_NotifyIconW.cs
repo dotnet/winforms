@@ -8,6 +8,6 @@ internal static partial class Interop
     internal static partial class Shell32
     {
         [DllImport(Libraries.Shell32, CharSet = CharSet.Unicode, ExactSpelling = true)]
-        public static extern BOOL Shell_NotifyIconW(NIM dwMessage, ref NOTIFYICONDATAW lpData);
+        public static extern BOOL Shell_NotifyIconW(NOTIFY_ICON_MESSAGE dwMessage, ref NOTIFYICONDATAW lpData);
     }
 }

@@ -600,7 +600,7 @@ public sealed partial class NotifyIcon : Component
                     break;
             }
 
-            Shell32.Shell_NotifyIconW(NIM.MODIFY, ref data);
+            Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_MODIFY, ref data);
         }
     }
 
@@ -669,17 +669,17 @@ public sealed partial class NotifyIcon : Component
             {
                 if (!_added)
                 {
-                    Shell_NotifyIconW(NIM.ADD, ref data);
+                    Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_ADD, ref data);
                     _added = true;
                 }
                 else
                 {
-                    Shell_NotifyIconW(NIM.MODIFY, ref data);
+                    Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_MODIFY, ref data);
                 }
             }
             else if (_added)
             {
-                Shell_NotifyIconW(NIM.DELETE, ref data);
+                Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_DELETE, ref data);
                 _added = false;
             }
         }
