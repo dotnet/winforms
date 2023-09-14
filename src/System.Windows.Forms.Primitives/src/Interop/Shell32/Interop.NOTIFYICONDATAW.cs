@@ -22,7 +22,7 @@ internal static partial class Interop
             public fixed char _szInfo[256];
             public uint uTimeoutOrVersion;
             public fixed char _szInfoTitle[64];
-            public NIIF dwInfoFlags;
+            public NOTIFY_ICON_INFOTIP_FLAGS dwInfoFlags;
 
             private Span<char> szTip
             {

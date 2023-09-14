@@ -587,16 +587,16 @@ public sealed partial class NotifyIcon : Component
             switch (tipIcon)
             {
                 case ToolTipIcon.Info:
-                    data.dwInfoFlags = NIIF.INFO;
+                    data.dwInfoFlags = NOTIFY_ICON_INFOTIP_FLAGS.NIIF_INFO;
                     break;
                 case ToolTipIcon.Warning:
-                    data.dwInfoFlags = NIIF.WARNING;
+                    data.dwInfoFlags = NOTIFY_ICON_INFOTIP_FLAGS.NIIF_WARNING;
                     break;
                 case ToolTipIcon.Error:
-                    data.dwInfoFlags = NIIF.ERROR;
+                    data.dwInfoFlags = NOTIFY_ICON_INFOTIP_FLAGS.NIIF_ERROR;
                     break;
                 case ToolTipIcon.None:
-                    data.dwInfoFlags = NIIF.NONE;
+                    data.dwInfoFlags = NOTIFY_ICON_INFOTIP_FLAGS.NIIF_NONE;
                     break;
             }
 
