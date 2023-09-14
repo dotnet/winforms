@@ -184,7 +184,7 @@ public partial class RichTextBox : TextBoxBase
                 PInvoke.SendMessage(
                     this,
                     PInvoke.EM_SETOPTIONS,
-                    (WPARAM)(int)(value ? ECOOP.OR : ECOOP.XOR),
+                    (WPARAM)(int)(value ? PInvoke.ECOOP_OR : PInvoke.ECOOP_XOR),
                     (LPARAM)(int)PInvoke.ECO_AUTOWORDSELECTION);
             }
         }
@@ -1326,7 +1326,7 @@ public partial class RichTextBox : TextBoxBase
                     PInvoke.SendMessage(
                         this,
                         PInvoke.EM_SETOPTIONS,
-                        (WPARAM)(int)(value ? ECOOP.OR : ECOOP.XOR),
+                        (WPARAM)(int)(value ? PInvoke.ECOOP_OR : PInvoke.ECOOP_XOR),
                         (LPARAM)(int)PInvoke.ECO_SELECTIONBAR);
                 }
             }
@@ -2524,7 +2524,7 @@ public partial class RichTextBox : TextBoxBase
             PInvoke.PostMessage(
                 this,
                 PInvoke.EM_SETOPTIONS,
-                (WPARAM)(int)ECOOP.OR,
+                (WPARAM)(int)PInvoke.ECOOP_OR,
                 (LPARAM)(int)PInvoke.ECO_SELECTIONBAR);
         }
 
@@ -3294,12 +3294,12 @@ public partial class RichTextBox : TextBoxBase
         }
 
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
-        switch ((EN)nmhdr->code)
+        switch (nmhdr->code)
         {
-            case EN.LINK:
+            case PInvoke.EN_LINK:
                 EnLinkMsgHandler(ref m);
                 break;
-            case EN.DROPFILES:
+            case PInvoke.EN_DROPFILES:
                 HDROP endropfiles = (HDROP)((ENDROPFILES*)m.LParamInternal)->hDrop;
 
                 // Only look at the first file.
@@ -3336,7 +3336,7 @@ public partial class RichTextBox : TextBoxBase
                 m.ResultInternal = (LRESULT)1;
                 break;
 
-            case EN.REQUESTRESIZE:
+            case PInvoke.EN_REQUESTRESIZE:
                 if (!CallOnContentsResized)
                 {
                     REQRESIZE* reqResize = (REQRESIZE*)(nint)m.LParamInternal;
@@ -3350,12 +3350,12 @@ public partial class RichTextBox : TextBoxBase
 
                 break;
 
-            case EN.SELCHANGE:
+            case PInvoke.EN_SELCHANGE:
                 SELCHANGE* selChange = (SELCHANGE*)(nint)m.LParamInternal;
                 WmSelectionChange(*selChange);
                 break;
 
-            case EN.PROTECTED:
+            case PInvoke.EN_PROTECTED:
                 {
                     ENPROTECTED enprotected;
 

@@ -563,7 +563,7 @@ public class RichTextBoxTests
         Assert.Equal(0, createdCallCount);
 
         // Call EM_SETOPTIONS.
-        PInvoke.SendMessage(control, PInvoke.EM_SETOPTIONS, (WPARAM)(int)ECOOP.OR, (LPARAM)(int)PInvoke.ECO_AUTOWORDSELECTION);
+        PInvoke.SendMessage(control, PInvoke.EM_SETOPTIONS, (WPARAM)(int)PInvoke.ECOOP_OR, (LPARAM)(int)PInvoke.ECO_AUTOWORDSELECTION);
         Assert.False(control.AutoWordSelection);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -6577,7 +6577,7 @@ public class RichTextBoxTests
         Assert.Equal(0, createdCallCount);
 
         // Call EM_SETOPTIONS.
-        PInvoke.SendMessage(control, PInvoke.EM_SETOPTIONS, (WPARAM)(int)ECOOP.OR, (LPARAM)(nint)PInvoke.ECO_SELECTIONBAR);
+        PInvoke.SendMessage(control, PInvoke.EM_SETOPTIONS, (WPARAM)(int)PInvoke.ECOOP_OR, (LPARAM)(nint)PInvoke.ECO_SELECTIONBAR);
         Assert.False(control.ShowSelectionMargin);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -10084,11 +10084,11 @@ public class RichTextBoxTests
     {
         foreach (IntPtr hWnd in new IntPtr[] { IntPtr.Zero, (IntPtr)1 })
         {
-            yield return new object[] { hWnd, (int)Richedit.EN.LINK };
-            yield return new object[] { hWnd, (int)Richedit.EN.DROPFILES };
-            yield return new object[] { hWnd, (int)Richedit.EN.REQUESTRESIZE };
-            yield return new object[] { hWnd, (int)Richedit.EN.SELCHANGE };
-            yield return new object[] { hWnd, (int)Richedit.EN.PROTECTED };
+            yield return new object[] { hWnd, (int)PInvoke.EN_LINK };
+            yield return new object[] { hWnd, (int)PInvoke.EN_DROPFILES };
+            yield return new object[] { hWnd, (int)PInvoke.EN_REQUESTRESIZE };
+            yield return new object[] { hWnd, (int)PInvoke.EN_SELCHANGE };
+            yield return new object[] { hWnd, (int)PInvoke.EN_PROTECTED };
             yield return new object[] { hWnd, 0 };
         }
     }
@@ -10129,7 +10129,7 @@ public class RichTextBoxTests
         {
             nmhdr = new NMHDR
             {
-                code = (int)Richedit.EN.DROPFILES
+                code = (int)PInvoke.EN_DROPFILES
             }
         };
         var m = new Message
@@ -10176,7 +10176,7 @@ public class RichTextBoxTests
         {
             nmhdr = new NMHDR
             {
-                code = (int)Richedit.EN.SELCHANGE
+                code = (int)PInvoke.EN_SELCHANGE
             },
             chrg = new CHARRANGE
             {
@@ -10228,7 +10228,7 @@ public class RichTextBoxTests
         IntPtr ptr = Marshal.AllocCoTaskMem(100);
         try
         {
-            Marshal.WriteInt32(ptr, IntPtr.Size * 2, (int)Richedit.EN.PROTECTED);
+            Marshal.WriteInt32(ptr, IntPtr.Size * 2, (int)PInvoke.EN_PROTECTED);
             Marshal.WriteInt32(ptr, IntPtr.Size * 2 + IntPtr.Size, (int)PInvoke.EM_SETCHARFORMAT);
             Marshal.WriteIntPtr(ptr, IntPtr.Size * 2 + IntPtr.Size + 4 + IntPtr.Size, (IntPtr)(&format));
             var m = new Message
@@ -10303,7 +10303,7 @@ public class RichTextBoxTests
         {
             nmhdr = new NMHDR
             {
-                code = (int)Richedit.EN.DROPFILES
+                code = (int)PInvoke.EN_DROPFILES
             }
         };
         var m = new Message
@@ -10364,7 +10364,7 @@ public class RichTextBoxTests
         {
             nmhdr = new NMHDR
             {
-                code = (int)Richedit.EN.REQUESTRESIZE
+                code = (int)PInvoke.EN_REQUESTRESIZE
             },
             rc = result
         };
@@ -10410,7 +10410,7 @@ public class RichTextBoxTests
         {
             nmhdr = new NMHDR
             {
-                code = (int)Richedit.EN.SELCHANGE
+                code = (int)PInvoke.EN_SELCHANGE
             },
             chrg = new CHARRANGE
             {
@@ -10464,7 +10464,7 @@ public class RichTextBoxTests
         IntPtr ptr = Marshal.AllocCoTaskMem(100);
         try
         {
-            Marshal.WriteInt32(ptr, IntPtr.Size * 2, (int)Richedit.EN.PROTECTED);
+            Marshal.WriteInt32(ptr, IntPtr.Size * 2, (int)PInvoke.EN_PROTECTED);
             Marshal.WriteInt32(ptr, IntPtr.Size * 2 + IntPtr.Size, (int)PInvoke.EM_SETCHARFORMAT);
             Marshal.WriteIntPtr(ptr, IntPtr.Size * 2 + IntPtr.Size + 4 + IntPtr.Size, (IntPtr)(&format));
             var m = new Message
