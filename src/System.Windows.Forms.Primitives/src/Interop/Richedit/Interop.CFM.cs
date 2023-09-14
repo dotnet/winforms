@@ -1,5 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
+using Windows.Win32.UI.Controls.RichEdit;
 
 internal partial class Interop
 {
@@ -38,7 +39,7 @@ internal partial class Interop
             COOKIE = 0x01000000,
             LCID = 0x02000000,
             BACKCOLOR = 0x04000000,
-            SUBSCRIPT = CFE.SUBSCRIPT | CFE.SUPERSCRIPT,
+            SUBSCRIPT = CFE_EFFECTS.CFE_SUBSCRIPT | CFE_EFFECTS.CFE_SUPERSCRIPT,
             SUPERSCRIPT = CFM.SUBSCRIPT,
         }
     }

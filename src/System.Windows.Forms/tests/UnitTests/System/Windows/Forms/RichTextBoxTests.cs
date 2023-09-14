@@ -1580,11 +1580,11 @@ public class RichTextBoxTests
     public static IEnumerable<object[]> Font_GetCharFormat_TestData()
     {
         yield return new object[] { "Arial", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 1, 165, 0 };
-        yield return new object[] { "Arial", 8.25f, FontStyle.Bold, GraphicsUnit.Point, 1, 165, CFE.BOLD };
-        yield return new object[] { "Arial", 8.25f, FontStyle.Italic, GraphicsUnit.Point, 1, 165, CFE.ITALIC };
-        yield return new object[] { "Arial", 8.25f, FontStyle.Strikeout, GraphicsUnit.Point, 1, 165, CFE.STRIKEOUT };
-        yield return new object[] { "Arial", 8.25f, FontStyle.Underline, GraphicsUnit.Point, 1, 165, CFE.UNDERLINE };
-        yield return new object[] { "Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10, 165, CFE.BOLD | CFE.ITALIC | CFE.UNDERLINE | CFE.STRIKEOUT };
+        yield return new object[] { "Arial", 8.25f, FontStyle.Bold, GraphicsUnit.Point, 1, 165, CFE_EFFECTS.CFE_BOLD };
+        yield return new object[] { "Arial", 8.25f, FontStyle.Italic, GraphicsUnit.Point, 1, 165, CFE_EFFECTS.CFE_ITALIC };
+        yield return new object[] { "Arial", 8.25f, FontStyle.Strikeout, GraphicsUnit.Point, 1, 165, CFE_EFFECTS.CFE_STRIKEOUT };
+        yield return new object[] { "Arial", 8.25f, FontStyle.Underline, GraphicsUnit.Point, 1, 165, CFE_EFFECTS.CFE_UNDERLINE };
+        yield return new object[] { "Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10, 165, CFE_EFFECTS.CFE_BOLD | CFE_EFFECTS.CFE_ITALIC | CFE_EFFECTS.CFE_UNDERLINE | CFE_EFFECTS.CFE_STRIKEOUT };
     }
 
     [WinFormsTheory]
@@ -1609,7 +1609,7 @@ public class RichTextBoxTests
             Assert.NotEqual(0, result);
             Assert.Equal(familyName, format.FaceName.ToString());
             Assert.Equal(expectedYHeight, format.yHeight);
-            Assert.Equal(CFE.AUTOBACKCOLOR | CFE.AUTOCOLOR | (CFE)expectedEffects, format.dwEffects);
+            Assert.Equal(CFE_EFFECTS.CFE_AUTOBACKCOLOR | CFE_EFFECTS.CFE_AUTOCOLOR | (CFE_EFFECTS)expectedEffects, format.dwEffects);
             Assert.Equal(0, format.bPitchAndFamily);
 
             // Set null.
@@ -1626,8 +1626,8 @@ public class RichTextBoxTests
         Assert.NotEqual(0, result);
         Assert.Equal(Control.DefaultFont.Name, format1.FaceName.ToString());
         Assert.Equal((int)(Control.DefaultFont.SizeInPoints * 20), (int)format1.yHeight);
-        Assert.True(format1.dwEffects.HasFlag(CFE.AUTOBACKCOLOR));
-        Assert.True(format1.dwEffects.HasFlag(CFE.AUTOCOLOR));
+        Assert.True(format1.dwEffects.HasFlag(CFE_EFFECTS.CFE_AUTOBACKCOLOR));
+        Assert.True(format1.dwEffects.HasFlag(CFE_EFFECTS.CFE_AUTOCOLOR));
         Assert.Equal(0, format1.bPitchAndFamily);
     }
 
@@ -3837,12 +3837,12 @@ public class RichTextBoxTests
     public static IEnumerable<object[]> SelectionBackColor_CustomGetCharFormat_TestData()
     {
         yield return new object[] { 0, 0, 0x78563412, Color.Empty };
-        yield return new object[] { 0, CFE.AUTOBACKCOLOR, 0x78563412, Color.Red };
-        yield return new object[] { 0, CFE.AUTOBACKCOLOR | CFE.ALLCAPS, 0x78563412, Color.Red };
+        yield return new object[] { 0, CFE_EFFECTS.CFE_AUTOBACKCOLOR, 0x78563412, Color.Red };
+        yield return new object[] { 0, CFE_EFFECTS.CFE_AUTOBACKCOLOR | CFE_EFFECTS.CFE_ALLCAPS, 0x78563412, Color.Red };
         yield return new object[] { CFM.BACKCOLOR, 0, 0x78563412, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
         yield return new object[] { CFM.BACKCOLOR, 0, 0x785634, Color.FromArgb(0xFF, 0x34, 0x56, 0x78) };
         yield return new object[] { CFM.BACKCOLOR | CFM.ANIMATION, 0, 0x78563412, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { CFM.BACKCOLOR, CFE.AUTOBACKCOLOR, 0x78563412, Color.Red };
+        yield return new object[] { CFM.BACKCOLOR, CFE_EFFECTS.CFE_AUTOBACKCOLOR, 0x78563412, Color.Red };
         yield return new object[] { CFM.ALLCAPS, 0, 0x78563412, Color.Empty };
     }
 
@@ -3856,7 +3856,7 @@ public class RichTextBoxTests
             GetCharFormatResult = new CHARFORMAT2W
             {
                 dwMask = (CFM)mask,
-                dwEffects = (CFE)effects,
+                dwEffects = (CFE_EFFECTS)effects,
                 crBackColor = backColor
             },
             BackColor = Color.Red
@@ -3876,7 +3876,7 @@ public class RichTextBoxTests
             GetCharFormatResult = new CHARFORMAT2W
             {
                 dwMask = (CFM)mask,
-                dwEffects = (CFE)effects,
+                dwEffects = (CFE_EFFECTS)effects,
                 crBackColor = backColor
             },
             BackColor = Color.Red
@@ -4712,20 +4712,20 @@ public class RichTextBoxTests
         yield return new object[] { CFM.SIZE, 0, 250, arial, "Arial", 12.5f, FontStyle.Regular };
         yield return new object[] { CFM.SIZE | CFM.ALLCAPS, 0, 250, arial, "Arial", 12.5f, FontStyle.Regular };
 
-        yield return new object[] { CFM.BOLD, CFE.BOLD, 0, arial, "Arial", 13, FontStyle.Bold };
-        yield return new object[] { CFM.BOLD, CFE.BOLD | CFE.ALLCAPS, 0, arial, "Arial", 13, FontStyle.Bold };
+        yield return new object[] { CFM.BOLD, CFE_EFFECTS.CFE_BOLD, 0, arial, "Arial", 13, FontStyle.Bold };
+        yield return new object[] { CFM.BOLD, CFE_EFFECTS.CFE_BOLD | CFE_EFFECTS.CFE_ALLCAPS, 0, arial, "Arial", 13, FontStyle.Bold };
 
-        yield return new object[] { CFM.ITALIC, CFE.ITALIC, 0, arial, "Arial", 13, FontStyle.Italic };
-        yield return new object[] { CFM.ITALIC, CFE.ITALIC | CFE.ALLCAPS, 0, arial, "Arial", 13, FontStyle.Italic };
+        yield return new object[] { CFM.ITALIC, CFE_EFFECTS.CFE_ITALIC, 0, arial, "Arial", 13, FontStyle.Italic };
+        yield return new object[] { CFM.ITALIC, CFE_EFFECTS.CFE_ITALIC | CFE_EFFECTS.CFE_ALLCAPS, 0, arial, "Arial", 13, FontStyle.Italic };
 
-        yield return new object[] { CFM.STRIKEOUT, CFE.STRIKEOUT, 0, arial, "Arial", 13, FontStyle.Strikeout };
-        yield return new object[] { CFM.STRIKEOUT, CFE.STRIKEOUT | CFE.STRIKEOUT, 0, arial, "Arial", 13, FontStyle.Strikeout };
+        yield return new object[] { CFM.STRIKEOUT, CFE_EFFECTS.CFE_STRIKEOUT, 0, arial, "Arial", 13, FontStyle.Strikeout };
+        yield return new object[] { CFM.STRIKEOUT, CFE_EFFECTS.CFE_STRIKEOUT | CFE_EFFECTS.CFE_STRIKEOUT, 0, arial, "Arial", 13, FontStyle.Strikeout };
 
-        yield return new object[] { CFM.UNDERLINE, CFE.UNDERLINE, 0, arial, "Arial", 13, FontStyle.Underline };
-        yield return new object[] { CFM.UNDERLINE, CFE.UNDERLINE | CFE.UNDERLINE, 0, arial, "Arial", 13, FontStyle.Underline };
+        yield return new object[] { CFM.UNDERLINE, CFE_EFFECTS.CFE_UNDERLINE, 0, arial, "Arial", 13, FontStyle.Underline };
+        yield return new object[] { CFM.UNDERLINE, CFE_EFFECTS.CFE_UNDERLINE | CFE_EFFECTS.CFE_UNDERLINE, 0, arial, "Arial", 13, FontStyle.Underline };
 
-        yield return new object[] { CFM.ALLCAPS, CFE.BOLD, 0, arial, "Arial", 13, FontStyle.Regular };
-        yield return new object[] { CFM.ALLCAPS, CFE.BOLD | CFE.ALLCAPS, 0, arial, "Arial", 13, FontStyle.Regular };
+        yield return new object[] { CFM.ALLCAPS, CFE_EFFECTS.CFE_BOLD, 0, arial, "Arial", 13, FontStyle.Regular };
+        yield return new object[] { CFM.ALLCAPS, CFE_EFFECTS.CFE_BOLD | CFE_EFFECTS.CFE_ALLCAPS, 0, arial, "Arial", 13, FontStyle.Regular };
     }
 
     [WinFormsTheory]
@@ -4735,7 +4735,7 @@ public class RichTextBoxTests
         var result = new CHARFORMAT2W
         {
             dwMask = CFM.FACE | (CFM)mask,
-            dwEffects = (CFE)effects,
+            dwEffects = (CFE_EFFECTS)effects,
             yHeight = yHeight,
             bCharSet = 2
         };
@@ -4914,11 +4914,11 @@ public class RichTextBoxTests
     public static IEnumerable<object[]> SelectionFont_GetCharFormat_TestData()
     {
         yield return new object[] { new Font("Arial", 8.25f), 165, 0 };
-        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold), 165, CFE.BOLD };
-        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Italic), 165, CFE.ITALIC };
-        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Strikeout), 165, CFE.STRIKEOUT };
-        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Underline), 165, CFE.UNDERLINE };
-        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10), 165, CFE.BOLD | CFE.ITALIC | CFE.UNDERLINE | CFE.STRIKEOUT };
+        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold), 165, CFE_EFFECTS.CFE_BOLD };
+        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Italic), 165, CFE_EFFECTS.CFE_ITALIC };
+        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Strikeout), 165, CFE_EFFECTS.CFE_STRIKEOUT };
+        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Underline), 165, CFE_EFFECTS.CFE_UNDERLINE };
+        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10), 165, CFE_EFFECTS.CFE_BOLD | CFE_EFFECTS.CFE_ITALIC | CFE_EFFECTS.CFE_UNDERLINE | CFE_EFFECTS.CFE_STRIKEOUT };
     }
 
     [WinFormsTheory]
@@ -4937,7 +4937,7 @@ public class RichTextBoxTests
         Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
         Assert.Equal("Arial", format.FaceName.ToString());
         Assert.Equal(expectedYHeight, (int)format.yHeight);
-        Assert.Equal(CFE.AUTOBACKCOLOR | CFE.AUTOCOLOR | (CFE)expectedEffects, format.dwEffects);
+        Assert.Equal(CFE_EFFECTS.CFE_AUTOBACKCOLOR | CFE_EFFECTS.CFE_AUTOCOLOR | (CFE_EFFECTS)expectedEffects, format.dwEffects);
         Assert.Equal(0, format.bPitchAndFamily);
     }
 
@@ -5628,13 +5628,13 @@ public class RichTextBoxTests
     public static IEnumerable<object[]> SelectionProtected_CustomGetCharFormat_TestData()
     {
         yield return new object[] { 0, 0, false };
-        yield return new object[] { 0, CFE.PROTECTED, false };
-        yield return new object[] { 0, CFE.PROTECTED | CFE.ALLCAPS, false };
+        yield return new object[] { 0, CFE_EFFECTS.CFE_PROTECTED, false };
+        yield return new object[] { 0, CFE_EFFECTS.CFE_PROTECTED | CFE_EFFECTS.CFE_ALLCAPS, false };
         yield return new object[] { CFM.PROTECTED, 0, false };
-        yield return new object[] { CFM.PROTECTED, CFE.PROTECTED, true };
-        yield return new object[] { CFM.PROTECTED, CFE.PROTECTED | CFE.ALLCAPS, true };
-        yield return new object[] { CFM.PROTECTED, CFE.ALLCAPS, false };
-        yield return new object[] { CFM.ALLCAPS, CFE.PROTECTED, false };
+        yield return new object[] { CFM.PROTECTED, CFE_EFFECTS.CFE_PROTECTED, true };
+        yield return new object[] { CFM.PROTECTED, CFE_EFFECTS.CFE_PROTECTED | CFE_EFFECTS.CFE_ALLCAPS, true };
+        yield return new object[] { CFM.PROTECTED, CFE_EFFECTS.CFE_ALLCAPS, false };
+        yield return new object[] { CFM.ALLCAPS, CFE_EFFECTS.CFE_PROTECTED, false };
     }
 
     [WinFormsTheory]
@@ -5647,7 +5647,7 @@ public class RichTextBoxTests
             GetCharFormatResult = new CHARFORMAT2W
             {
                 dwMask = (CFM)mask,
-                dwEffects = (CFE)effects
+                dwEffects = (CFE_EFFECTS)effects
             }
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -5744,7 +5744,7 @@ public class RichTextBoxTests
             dwMask = CFM.PROTECTED
         };
         Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
-        Assert.Equal(value, (format.dwEffects & CFE.PROTECTED) != 0);
+        Assert.Equal(value, (format.dwEffects & CFE_EFFECTS.CFE_PROTECTED) != 0);
     }
 
     [WinFormsTheory]

@@ -910,7 +910,7 @@ public partial class RichTextBox : TextBoxBase
             {
                 CHARFORMAT2W cf2 = GetCharFormat(true);
                 // If the effects member contains valid info
-                if ((cf2.dwEffects & CFE.AUTOBACKCOLOR) != 0)
+                if ((cf2.dwEffects & CFE_EFFECTS.CFE_AUTOBACKCOLOR) != 0)
                 {
                     selColor = BackColor;
                 }
@@ -940,7 +940,7 @@ public partial class RichTextBox : TextBoxBase
 
                 if (value == Color.Empty)
                 {
-                    cf2.dwEffects = CFE.AUTOBACKCOLOR;
+                    cf2.dwEffects = CFE_EFFECTS.CFE_AUTOBACKCOLOR;
                 }
                 else
                 {
@@ -1103,12 +1103,12 @@ public partial class RichTextBox : TextBoxBase
         get
         {
             ForceHandleCreate();
-            return GetCharFormat(CFM.PROTECTED, CFE.PROTECTED) == RichTextBoxSelectionAttribute.All;
+            return GetCharFormat(CFM.PROTECTED, CFE_EFFECTS.CFE_PROTECTED) == RichTextBoxSelectionAttribute.All;
         }
         set
         {
             ForceHandleCreate();
-            SetCharFormat(CFM.PROTECTED, value ? CFE.PROTECTED : 0, RichTextBoxSelectionAttribute.All);
+            SetCharFormat(CFM.PROTECTED, value ? CFE_EFFECTS.CFE_PROTECTED : 0, RichTextBoxSelectionAttribute.All);
         }
     }
 
@@ -2166,7 +2166,7 @@ public partial class RichTextBox : TextBoxBase
         return cf;
     }
 
-    private RichTextBoxSelectionAttribute GetCharFormat(CFM mask, CFE effect)
+    private RichTextBoxSelectionAttribute GetCharFormat(CFM mask, CFE_EFFECTS effect)
     {
         RichTextBoxSelectionAttribute charFormat = RichTextBoxSelectionAttribute.None;
 
@@ -2209,22 +2209,22 @@ public partial class RichTextBox : TextBoxBase
         }
 
         FontStyle style = FontStyle.Regular;
-        if ((cf.dwMask & CFM.BOLD) != 0 && (cf.dwEffects & CFE.BOLD) != 0)
+        if ((cf.dwMask & CFM.BOLD) != 0 && (cf.dwEffects & CFE_EFFECTS.CFE_BOLD) != 0)
         {
             style |= FontStyle.Bold;
         }
 
-        if ((cf.dwMask & CFM.ITALIC) != 0 && (cf.dwEffects & CFE.ITALIC) != 0)
+        if ((cf.dwMask & CFM.ITALIC) != 0 && (cf.dwEffects & CFE_EFFECTS.CFE_ITALIC) != 0)
         {
             style |= FontStyle.Italic;
         }
 
-        if ((cf.dwMask & CFM.STRIKEOUT) != 0 && (cf.dwEffects & CFE.STRIKEOUT) != 0)
+        if ((cf.dwMask & CFM.STRIKEOUT) != 0 && (cf.dwEffects & CFE_EFFECTS.CFE_STRIKEOUT) != 0)
         {
             style |= FontStyle.Strikeout;
         }
 
-        if ((cf.dwMask & CFM.UNDERLINE) != 0 && (cf.dwEffects & CFE.UNDERLINE) != 0)
+        if ((cf.dwMask & CFM.UNDERLINE) != 0 && (cf.dwEffects & CFE_EFFECTS.CFE_UNDERLINE) != 0)
         {
             style |= FontStyle.Underline;
         }
@@ -2738,7 +2738,7 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
-    private unsafe bool SetCharFormat(CFM mask, CFE effect, RichTextBoxSelectionAttribute charFormat)
+    private unsafe bool SetCharFormat(CFM mask, CFE_EFFECTS effect, RichTextBoxSelectionAttribute charFormat)
     {
         // check to see if the control has been created
         if (IsHandleCreated)
@@ -2781,25 +2781,25 @@ public partial class RichTextBox : TextBoxBase
             CFM.ITALIC | CFM.STRIKEOUT | CFM.UNDERLINE |
             CFM.CHARSET;
 
-        CFE dwEffects = 0;
+        CFE_EFFECTS dwEffects = 0;
         if (value.Bold)
         {
-            dwEffects |= CFE.BOLD;
+            dwEffects |= CFE_EFFECTS.CFE_BOLD;
         }
 
         if (value.Italic)
         {
-            dwEffects |= CFE.ITALIC;
+            dwEffects |= CFE_EFFECTS.CFE_ITALIC;
         }
 
         if (value.Strikeout)
         {
-            dwEffects |= CFE.STRIKEOUT;
+            dwEffects |= CFE_EFFECTS.CFE_STRIKEOUT;
         }
 
         if (value.Underline)
         {
-            dwEffects |= CFE.UNDERLINE;
+            dwEffects |= CFE_EFFECTS.CFE_UNDERLINE;
         }
 
         LOGFONTW logFont = LOGFONTW.FromFont(value);

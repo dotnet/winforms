@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Controls.RichEdit;
 using Xunit.Abstractions;
 using static Interop;
 
@@ -193,7 +194,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
         {
             cbSize = (uint)sizeof(Richedit.CHARFORMAT2W),
             dwMask = Richedit.CFM.LINK,
-            dwEffects = Richedit.CFE.LINK,
+            dwEffects = CFE_EFFECTS.CFE_LINK,
         };
 
         PInvoke.SendMessage(control, PInvoke.EM_SETCHARFORMAT, (WPARAM)(uint)Richedit.SCF.SELECTION, ref format);

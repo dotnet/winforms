@@ -3,6 +3,7 @@
 
 using Windows.Win32;
 using Windows.Win32.Foundation;
+using Windows.Win32.UI.Controls.RichEdit;
 
 namespace WinformsControlsTest;
 
@@ -41,7 +42,7 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
         {
             cbSize = (uint)sizeof(Interop.Richedit.CHARFORMAT2W),
             dwMask = Interop.Richedit.CFM.LINK,
-            dwEffects = Interop.Richedit.CFE.LINK,
+            dwEffects = CFE_EFFECTS.CFE_LINK,
         };
 
         PInvoke.SendMessage(

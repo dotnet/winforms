@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Controls.RichEdit;
 
 internal partial class Interop
 {
@@ -14,7 +15,7 @@ internal partial class Interop
 
             public uint cbSize;
             public CFM dwMask;
-            public CFE dwEffects;
+            public CFE_EFFECTS dwEffects;
             public int yHeight;
             public int yOffset;
             public int crTextColor;
