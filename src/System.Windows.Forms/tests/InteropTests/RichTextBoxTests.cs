@@ -102,7 +102,7 @@ public class RichTextBoxTests
     {
         RichTextBox_GetTextLengthEx(out var value);
 
-        Assert.Equal(GTL.NUMBYTES, value.flags);
+        Assert.Equal(GETTEXTLENGTHEX_FLAGS.GTL_NUMBYTES, value.flags);
         Assert.Equal(432u, value.codepage);
     }
 

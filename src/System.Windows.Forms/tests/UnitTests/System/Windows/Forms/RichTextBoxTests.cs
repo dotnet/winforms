@@ -6760,7 +6760,7 @@ public class RichTextBoxTests
             if (m.Msg == (int)PInvoke.EM_GETTEXTLENGTHEX)
             {
                 GETTEXTLENGTHEX* gtl = (GETTEXTLENGTHEX*)m.WParam;
-                Assert.Equal(GTL.NUMCHARS, gtl->flags);
+                Assert.Equal(GETTEXTLENGTHEX_FLAGS.GTL_NUMCHARS, gtl->flags);
                 Assert.Equal(1200u, gtl->codepage);
                 Assert.Equal(IntPtr.Zero, m.LParam);
                 m.Result = GetTextLengthExResult;

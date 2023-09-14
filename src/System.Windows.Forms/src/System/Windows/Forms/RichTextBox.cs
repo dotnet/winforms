@@ -1417,7 +1417,7 @@ public partial class RichTextBox : TextBoxBase
         {
             GETTEXTLENGTHEX gtl = new()
             {
-                flags = GTL.NUMCHARS,
+                flags = GETTEXTLENGTHEX_FLAGS.GTL_NUMCHARS,
                 codepage = 1200u /* CP_UNICODE */
             };
 
@@ -3078,12 +3078,12 @@ public partial class RichTextBox : TextBoxBase
         GETTEXTLENGTHEX gtl = new GETTEXTLENGTHEX
         {
             codepage = UNICODE,
-            flags = GTL.DEFAULT
+            flags = GETTEXTLENGTHEX_FLAGS.GTL_DEFAULT
         };
 
         if (flags.HasFlag(GETTEXTEX_FLAGS.GT_USECRLF))
         {
-            gtl.flags |= GTL.USECRLF;
+            gtl.flags |= GETTEXTLENGTHEX_FLAGS.GTL_USECRLF;
         }
 
         GETTEXTLENGTHEX* pGtl = &gtl;

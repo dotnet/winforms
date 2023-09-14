@@ -279,6 +279,7 @@ GetTextAlign
 GetTextColor
 GetTextExtentPoint32W
 GETTEXTEX_FLAGS
+GETTEXTLENGTHEX_FLAGS
 GetTextMetrics
 GetThemeAppProperties
 GetThemeBackgroundContentRect
