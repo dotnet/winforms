@@ -2460,12 +2460,12 @@ public partial class RichTextBox : TextBoxBase
             this,
             PInvoke.EM_SETEVENTMASK,
             0,
-            (nint)(ENM.PROTECTED | ENM.SELCHANGE |
-                     ENM.DROPFILES | ENM.REQUESTRESIZE |
-                     ENM.IMECHANGE | ENM.CHANGE |
-                     ENM.UPDATE | ENM.SCROLL |
-                     ENM.KEYEVENTS | ENM.MOUSEEVENTS |
-                     ENM.SCROLLEVENTS | ENM.LINK));
+            (nint)(PInvoke.ENM_PROTECTED | PInvoke.ENM_SELCHANGE |
+                     PInvoke.ENM_DROPFILES | PInvoke.ENM_REQUESTRESIZE |
+                     PInvoke.ENM_IMECHANGE | PInvoke.ENM_CHANGE |
+                     PInvoke.ENM_UPDATE | PInvoke.ENM_SCROLL |
+                     PInvoke.ENM_KEYEVENTS | PInvoke.ENM_MOUSEEVENTS |
+                     PInvoke.ENM_SCROLLEVENTS | PInvoke.ENM_LINK));
 
         int rm = _rightMargin;
         _rightMargin = 0;

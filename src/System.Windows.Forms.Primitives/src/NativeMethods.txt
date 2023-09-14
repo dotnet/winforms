@@ -160,6 +160,7 @@ ELEMDESC
 Ellipse
 EM_*
 EN_*
+ENM_*
 EnableMenuItem
 EnableScrollBar
 EnableWindow
