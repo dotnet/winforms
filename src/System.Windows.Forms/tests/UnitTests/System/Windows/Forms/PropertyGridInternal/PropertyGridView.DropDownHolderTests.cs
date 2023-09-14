@@ -11,9 +11,9 @@ public class PropertyGridView_DropDownHolderTests
     [WinFormsFact]
     public void DropDownHolder_AccessibilityObject_Constructor_initializes_correctly()
     {
-        using PropertyGridView propertyGridView = new PropertyGridView(null, null);
+        using PropertyGridView propertyGridView = new(null, null);
         propertyGridView.BackColor = Color.Green;
-        using PropertyGridView.DropDownHolder dropDownHolder = new PropertyGridView.DropDownHolder(propertyGridView);
+        using DropDownHolder dropDownHolder = new(propertyGridView);
 
         Assert.Equal(Color.Green, dropDownHolder.BackColor);
     }
@@ -21,17 +21,17 @@ public class PropertyGridView_DropDownHolderTests
     [WinFormsFact]
     public void DropDownHolder_SupportsUiaProviders_returns_true()
     {
-        using PropertyGridView propertyGridView = new PropertyGridView(null, null);
-        using PropertyGridView.DropDownHolder dropDownHolder = new PropertyGridView.DropDownHolder(propertyGridView);
+        using PropertyGridView propertyGridView = new(null, null);
+        using DropDownHolder dropDownHolder = new(propertyGridView);
         Assert.True(dropDownHolder.SupportsUiaProviders);
     }
 
     [WinFormsFact]
     public void DropDownHolder_CreateAccessibilityObject_creates_DropDownHolderAccessibleObject()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
-        using PropertyGridView.DropDownHolder dropDownHolder = new PropertyGridView.DropDownHolder(propertyGridView);
+        using PropertyGrid propertyGrid = new();
+        using PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        using DropDownHolder dropDownHolder = new(propertyGridView);
 
         AccessibleObject accessibleObject = dropDownHolder.AccessibilityObject;
         Assert.Equal("DropDownHolderAccessibleObject", accessibleObject.GetType().Name);
@@ -40,12 +40,12 @@ public class PropertyGridView_DropDownHolderTests
     [WinFormsFact]
     public void DropDownHolder_SetDropDownControl_control_notnull()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
-        using DropDownHolder dropDownHolder = new DropDownHolder(propertyGridView);
+        using PropertyGrid propertyGrid = new();
+        using PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        using DropDownHolder dropDownHolder = new(propertyGridView);
         dropDownHolder.Visible = true;
 
-        GridViewListBox listBox = new GridViewListBox(propertyGridView);
+        using GridViewListBox listBox = new(propertyGridView);
         dropDownHolder.SetDropDownControl(listBox, resizable: false);
 
         // Verify the control's Dock style, visibility, and enabled state.
@@ -57,9 +57,9 @@ public class PropertyGridView_DropDownHolderTests
     [WinFormsFact]
     public void DropDownHolder_SetDropDownControl_control_null()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
-        using DropDownHolder dropDownHolder = new DropDownHolder(propertyGridView);
+        using PropertyGrid propertyGrid = new();
+        using PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        using DropDownHolder dropDownHolder = new(propertyGridView);
 
         dropDownHolder.SetDropDownControl(null, resizable: false);
         Assert.False(dropDownHolder.Enabled);
@@ -68,10 +68,10 @@ public class PropertyGridView_DropDownHolderTests
     [WinFormsFact]
     public void DropDownHolder_SetDropDownControl_Control_Height_verify()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
-        using DropDownHolder dropDownHolder = new DropDownHolder(propertyGridView);
-        GridViewListBox listBox = new GridViewListBox(propertyGridView);
+        using PropertyGrid propertyGrid = new();
+        using PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        using DropDownHolder dropDownHolder = new(propertyGridView);
+        using GridViewListBox listBox = new(propertyGridView);
 
         // Compare the height of the item with the default height of the control,
         // The control display height is displayed according to the higher one.
@@ -88,11 +88,11 @@ public class PropertyGridView_DropDownHolderTests
     [WinFormsFact]
     public void DropDownHolder_SetDropDownControl_resizable_true()
     {
-        using PropertyGrid propertyGrid = new PropertyGrid();
-        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
-        using DropDownHolder dropDownHolder = new DropDownHolder(propertyGridView);
+        using PropertyGrid propertyGrid = new();
+        using PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        using DropDownHolder dropDownHolder = new(propertyGridView);
+        using GridViewListBox listBox = new(propertyGridView);
 
-        GridViewListBox listBox = new GridViewListBox(propertyGridView);
         listBox.Height = 100;
         int DropDownHolderBorder = 1;
         int resizeBarSize = SystemInformation.HorizontalScrollBarHeight + 1;
