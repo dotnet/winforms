@@ -523,12 +523,10 @@ Namespace Microsoft.VisualBasic.Devices
                 dialog?.ShowProgressDialog()
                 t.Wait()
             Catch ex As Exception
-                If Not dialog.UserCanceledTheDialog Then
-                    If ex.InnerException IsNot Nothing Then
-                        Throw ex.InnerException
-                    End If
-                    Throw
+                If ex.InnerException IsNot Nothing Then
+                    Throw ex.InnerException
                 End If
+                Throw
             Finally
                 CloseProgressDialog(dialog)
             End Try
