@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
 using static Interop.Comdlg32;
+using Windows.Win32.UI.Controls.Dialogs;
 using static Windows.Win32.System.Memory.GLOBAL_ALLOC_FLAGS;
 
 namespace System.Windows.Forms;
@@ -19,7 +20,7 @@ namespace System.Windows.Forms;
 // The only event this dialog has is HelpRequested, which isn't very useful
 public sealed class PrintDialog : CommonDialog
 {
-    private const PD printRangeMask = PD.ALLPAGES | PD.PAGENUMS | PD.SELECTION | PD.CURRENTPAGE;
+    private const PRINTDLGEX_FLAGS printRangeMask = PRINTDLGEX_FLAGS.PD_ALLPAGES | PRINTDLGEX_FLAGS.PD_PAGENUMS | PRINTDLGEX_FLAGS.PD_SELECTION | PRINTDLGEX_FLAGS.PD_CURRENTPAGE;
 
     // If PrintDocument is not null, settings == printDocument.PrinterSettings
     private PrinterSettings? _printerSettings;
@@ -202,57 +203,57 @@ public sealed class PrintDialog : CommonDialog
     [SRDescription(nameof(SR.PDuseEXDialog))]
     public bool UseEXDialog { get; set; }
 
-    private PD GetFlags()
+    private PRINTDLGEX_FLAGS GetFlags()
     {
-        PD flags = PD.ALLPAGES;
+        PRINTDLGEX_FLAGS flags = PRINTDLGEX_FLAGS.PD_ALLPAGES;
 
         // Only set this flag when using PRINTDLG and PrintDlg,
         // and not when using PrintDlgEx and PRINTDLGEX.
         if (!UseEXDialog)
         {
-            flags |= PD.ENABLEPRINTHOOK;
+            flags |= PRINTDLGEX_FLAGS.PD_ENABLEPRINTHOOK;
         }
 
         if (!_allowCurrentPage)
         {
-            flags |= PD.NOCURRENTPAGE;
+            flags |= PRINTDLGEX_FLAGS.PD_NOCURRENTPAGE;
         }
 
         if (!_allowPages)
         {
-            flags |= PD.NOPAGENUMS;
+            flags |= PRINTDLGEX_FLAGS.PD_NOPAGENUMS;
         }
 
         if (!_allowPrintToFile)
         {
-            flags |= PD.DISABLEPRINTTOFILE;
+            flags |= PRINTDLGEX_FLAGS.PD_DISABLEPRINTTOFILE;
         }
 
         if (!_allowSelection)
         {
-            flags |= PD.NOSELECTION;
+            flags |= PRINTDLGEX_FLAGS.PD_NOSELECTION;
         }
 
-        flags |= (PD)PrinterSettings.PrintRange;
+        flags |= (PRINTDLGEX_FLAGS)PrinterSettings.PrintRange;
 
         if (_printToFile)
         {
-            flags |= PD.PRINTTOFILE;
+            flags |= PRINTDLGEX_FLAGS.PD_PRINTTOFILE;
         }
 
         if (_showHelp)
         {
-            flags |= PD.SHOWHELP;
+            flags |= PRINTDLGEX_FLAGS.PD_SHOWHELP;
         }
 
         if (!_showNetwork)
         {
-            flags |= PD.NONETWORKBUTTON;
+            flags |= PRINTDLGEX_FLAGS.PD_NONETWORKBUTTON;
         }
 
         if (PrinterSettings.Collate)
         {
-            flags |= PD.COLLATE;
+            flags |= PRINTDLGEX_FLAGS.PD_COLLATE;
         }
 
         return flags;
@@ -400,7 +401,7 @@ public sealed class PrintDialog : CommonDialog
 
             UpdatePrinterSettings(data.hDevMode, data.hDevNames, (short)data.nCopies, data.Flags, _printerSettings!, PageSettings);
 
-            PrintToFile = (data.Flags & PD.PRINTTOFILE) != 0;
+            PrintToFile = (data.Flags & PRINTDLGEX_FLAGS.PD_PRINTTOFILE) != 0;
             PrinterSettings.PrintToFile = PrintToFile;
 
             if (AllowSomePages)
@@ -413,10 +414,10 @@ public sealed class PrintDialog : CommonDialog
             // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
             // to print, and the PD_COLLATE flag in the Flags member indicates
             // whether the user wants to print them collated.
-            if ((data.Flags & PD.USEDEVMODECOPIESANDCOLLATE) == 0)
+            if ((data.Flags & PRINTDLGEX_FLAGS.PD_USEDEVMODECOPIESANDCOLLATE) == 0)
             {
                 PrinterSettings.Copies = (short)data.nCopies;
-                PrinterSettings.Collate = (data.Flags & PD.COLLATE) == PD.COLLATE;
+                PrinterSettings.Collate = (data.Flags & PRINTDLGEX_FLAGS.PD_COLLATE) == PRINTDLGEX_FLAGS.PD_COLLATE;
             }
 
             return true;
@@ -495,17 +496,17 @@ public sealed class PrintDialog : CommonDialog
 
             // The flags NativeMethods.PD_SHOWHELP and NativeMethods.PD_NONETWORKBUTTON don't work with
             // PrintDlgEx. So we have to strip them out.
-            data.Flags &= ~(PD.SHOWHELP | PD.NONETWORKBUTTON);
+            data.Flags &= ~(PRINTDLGEX_FLAGS.PD_SHOWHELP | PRINTDLGEX_FLAGS.PD_NONETWORKBUTTON);
 
             HRESULT hr = UnsafeNativeMethods.PrintDlgEx(data);
-            if (hr.Failed || data.dwResultAction == PD_RESULT.CANCEL)
+            if (hr.Failed || data.dwResultAction == PInvoke.PD_RESULT_CANCEL)
             {
                 return false;
             }
 
             UpdatePrinterSettings(data.hDevMode, data.hDevNames, (short)data.nCopies, data.Flags, PrinterSettings, PageSettings);
 
-            PrintToFile = (data.Flags & PD.PRINTTOFILE) != 0;
+            PrintToFile = (data.Flags & PRINTDLGEX_FLAGS.PD_PRINTTOFILE) != 0;
             PrinterSettings.PrintToFile = PrintToFile;
             if (AllowSomePages)
             {
@@ -522,14 +523,14 @@ public sealed class PrintDialog : CommonDialog
             // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
             // to print, and the PD_COLLATE flag in the Flags member indicates
             // whether the user wants to print them collated.
-            if ((data.Flags & PD.USEDEVMODECOPIESANDCOLLATE) == 0)
+            if ((data.Flags & PRINTDLGEX_FLAGS.PD_USEDEVMODECOPIESANDCOLLATE) == 0)
             {
                 PrinterSettings.Copies = (short)(data.nCopies);
-                PrinterSettings.Collate = (data.Flags & PD.COLLATE) == PD.COLLATE;
+                PrinterSettings.Collate = (data.Flags & PRINTDLGEX_FLAGS.PD_COLLATE) == PRINTDLGEX_FLAGS.PD_COLLATE;
             }
 
             // We should return true only if the user pressed the "Print" button while dismissing the dialog.
-            return data.dwResultAction == PD_RESULT.PRINT;
+            return data.dwResultAction == PInvoke.PD_RESULT_PRINT;
         }
         finally
         {
@@ -553,7 +554,7 @@ public sealed class PrintDialog : CommonDialog
     // Due to the nature of PRINTDLGEX vs PRINTDLG, separate but similar methods
     // are required for updating the settings from the structure utilized by the dialog.
     // Take information from print dialog and put in PrinterSettings
-    private static void UpdatePrinterSettings(IntPtr hDevMode, IntPtr hDevNames, short copies, PD flags, PrinterSettings settings, PageSettings? pageSettings)
+    private static void UpdatePrinterSettings(IntPtr hDevMode, IntPtr hDevNames, short copies, PRINTDLGEX_FLAGS flags, PrinterSettings settings, PageSettings? pageSettings)
     {
         // Mode
         settings.SetHdevmode(hDevMode);

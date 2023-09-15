@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ColumnHeaderCollectionEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataMemberFieldConverter))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewCellStyleEditor))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataSourceListEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FormatStringEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.HelpNamespaceEditor))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ImageCollectionEditor))]
@@ -36,6 +37,9 @@ using System.Runtime.CompilerServices;
 // internal designers
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ButtonBaseDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.ComboBoxDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewColumnDesigner))]
+[assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DataGridViewComboBoxColumnDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.DateTimePickerDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FormDocumentDesigner))]
 [assembly: TypeForwardedTo(typeof(System.Windows.Forms.Design.FlowPanelDesigner))]

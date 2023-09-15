@@ -430,10 +430,10 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         {
             for (int j = 0; j < bindingsCount; j++)
             {
-                if (errBindings[j].Control is not null)
+                if (errBindings[j].Control is Control control)
                 {
                     // Ignore everything but bindings to Controls
-                    SetError(errBindings[j].Control, "");
+                    SetError(control, string.Empty);
                 }
             }
         }
@@ -480,7 +480,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
         for (int j = 0; j < bindingsCount; j++)
         {
             // Ignore everything but bindings to Controls
-            if (errBindings[j].Control is null)
+            if (errBindings[j].Control is not Control control)
             {
                 continue;
             }
@@ -490,7 +490,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
 
             error ??= string.Empty;
 
-            if (!controlError.TryGetValue(dataBinding.Control, out string? outputError))
+            if (!controlError.TryGetValue(control, out string? outputError))
             {
                 outputError = string.Empty;
             }
@@ -505,7 +505,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
                 outputError = string.Concat(outputError, "\r\n", error);
             }
 
-            controlError[dataBinding.Control] = outputError;
+            controlError[control] = outputError;
         }
 
         foreach (KeyValuePair<Control, string> entry in controlError)

@@ -5210,11 +5210,6 @@ Voulez-vous le remplacer ?</target>
         <target state="translated">Chaîne affichée au-dessus du contrôle TreeView dans la boîte de dialogue. Cette chaîne peut être utilisée pour spécifier des instructions à l'utilisateur.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FolderBrowserDialogNoRootFolder">
-        <source>Unable to retrieve the root folder.</source>
-        <target state="translated">Impossible de récupérer le dossier racine.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">Contrôle si le bouton OK de la boîte de dialogue est désactivé jusqu'à ce que l'utilisateur navigue dans la vue ou modifie le nom de fichier (le cas échéant). Remarque : La désactivation du bouton OK n'empêche pas la soumission de la boîte de dialogue par la touche Entrée.</target>

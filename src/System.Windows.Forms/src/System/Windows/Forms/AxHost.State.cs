@@ -33,17 +33,20 @@ public abstract partial class AxHost
         private const string DataSerializationName = "Data";
 
         // Create on save from IPersistStream.
-        internal State(MemoryStream memoryStream, int storageType, AxHost control, PropertyBagStream? propertyBag)
+        internal State(MemoryStream memoryStream, StorageType storageType, AxHost control)
         {
             Type = storageType;
-            _propertyBag = propertyBag;
             _length = checked((int)memoryStream.Length);
             _memoryStream = memoryStream;
             ManualUpdate = control.GetAxState(s_manualUpdate);
             LicenseKey = control.GetLicenseKey();
         }
 
-        internal State(PropertyBagStream propertyBag) => _propertyBag = propertyBag;
+        internal State(PropertyBagStream propertyBag)
+        {
+            Type = StorageType.PropertyBag;
+            _propertyBag = propertyBag;
+        }
 
         // Construct State using StateConverter information.
         // We do not want to save the memoryStream since it contains
@@ -57,12 +60,13 @@ public abstract partial class AxHost
             CreateStorage();
             ManualUpdate = control.GetAxState(s_manualUpdate);
             LicenseKey = control.GetLicenseKey();
-            Type = STG_STORAGE;
+            Type = StorageType.Storage;
         }
 
         public State(Stream ms, int storageType, bool manualUpdate, string? licKey)
         {
-            Type = storageType;
+            // Translate by +1 to match our internal storage values
+            Type = (StorageType)(storageType + 1);
             _length = checked((int)ms.Length);
             ManualUpdate = manualUpdate;
             LicenseKey = licKey;
@@ -118,7 +122,7 @@ public abstract partial class AxHost
             }
         }
 
-        internal int Type { get; set; }
+        internal StorageType Type { get; set; }
 
         internal bool ManualUpdate { get; private set; }
 
@@ -178,7 +182,8 @@ public abstract partial class AxHost
             _storage = new(storage, takeOwnership: true);
         }
 
-        internal IPropertyBag.Interface? GetPropBag() => _propertyBag;
+        internal ComScope<IPropertyBag> GetPropBag()
+            => _propertyBag is null ? default : ComHelpers.GetComScope<IPropertyBag>(_propertyBag);
 
         internal unsafe ComScope<IStorage> GetStorage()
         {
@@ -190,14 +195,14 @@ public abstract partial class AxHost
             return _storage is null ? default : _storage.GetInterface();
         }
 
-        internal IStream.Interface? GetStream()
+        internal ComScope<IStream> GetStream()
         {
             if (_memoryStream is null)
             {
                 Debug.Assert(_buffer is not null);
                 if (_buffer is null)
                 {
-                    return null;
+                    return default;
                 }
 
                 _memoryStream = new MemoryStream(_buffer);
@@ -207,7 +212,7 @@ public abstract partial class AxHost
                 _memoryStream.Seek(0, SeekOrigin.Begin);
             }
 
-            return new Ole32.GPStream(_memoryStream);
+            return ComHelpers.GetComScope<IStream>(new Ole32.GPStream(_memoryStream));
         }
 
         private void InitializeFromStream(Stream dataStream, bool initializeBufferOnly = false)
@@ -216,7 +221,9 @@ public abstract partial class AxHost
 
             if (!initializeBufferOnly)
             {
-                Type = binaryReader.ReadInt32();
+                // For compatibility, always translate by adding 1 to match our new internal
+                // storage values (unknown = 0, stream = 1, etc.).
+                Type = (StorageType)(binaryReader.ReadInt32() + 1);
                 int version = binaryReader.ReadInt32();
                 ManualUpdate = binaryReader.ReadBoolean();
                 int cc = binaryReader.ReadInt32();
@@ -239,7 +246,7 @@ public abstract partial class AxHost
             }
         }
 
-        internal unsafe State? RefreshStorage(IPersistStorage.Interface iPersistStorage)
+        internal unsafe State? RefreshStorage(IPersistStorage* iPersistStorage)
         {
             Debug.Assert(_storage is not null, "how can we not have a storage object?");
             Debug.Assert(_lockBytes is not null, "how can we have a storage w/o ILockBytes?");
@@ -249,9 +256,9 @@ public abstract partial class AxHost
             }
 
             using var storage = _storage.GetInterface();
-            iPersistStorage.Save(storage, fSameAsLoad: true).ThrowOnFailure();
+            iPersistStorage->Save(storage, fSameAsLoad: true).ThrowOnFailure();
             storage.Value->Commit(0);
-            iPersistStorage.HandsOffStorage().ThrowOnFailure();
+            iPersistStorage->HandsOffStorage().ThrowOnFailure();
             try
             {
                 _buffer = null;
@@ -283,7 +290,7 @@ public abstract partial class AxHost
             }
             finally
             {
-                iPersistStorage.SaveCompleted(storage).ThrowOnFailure();
+                iPersistStorage->SaveCompleted(storage).ThrowOnFailure();
             }
 
             return this;
@@ -293,7 +300,9 @@ public abstract partial class AxHost
         {
             using BinaryWriter binaryWriter = new(stream);
 
-            binaryWriter.Write(Type);
+            // For compatibility, always translate back to the original storage type values
+            // (unknown = -1, stream = 0, etc.) by subtracting 1 when saving.
+            binaryWriter.Write(((int)Type) - 1);
             binaryWriter.Write(VERSION);
             binaryWriter.Write(ManualUpdate);
             if (LicenseKey is { } licenseKey)

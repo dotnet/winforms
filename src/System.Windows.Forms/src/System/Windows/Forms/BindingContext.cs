@@ -348,7 +348,7 @@ public partial class BindingContext : ICollection
     {
         ArgumentNullException.ThrowIfNull(binding);
 
-        BindingManagerBase oldManager = binding.BindingManagerBase;
+        BindingManagerBase? oldManager = binding.BindingManagerBase;
         oldManager?.Bindings.Remove(binding);
 
         if (newBindingContext is not null)
@@ -360,7 +360,7 @@ public partial class BindingContext : ICollection
                 CheckPropertyBindingCycles(newBindingContext, binding);
             }
 
-            BindingManagerBase newManager = newBindingContext.EnsureListManager(binding.DataSource, binding.BindingMemberInfo.BindingPath);
+            BindingManagerBase newManager = newBindingContext.EnsureListManager(binding.DataSource!, binding.BindingMemberInfo.BindingPath);
             newManager.Bindings.Add(binding);
         }
     }

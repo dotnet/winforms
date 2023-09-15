@@ -246,7 +246,7 @@ internal partial class ResourceCodeDomSerializer : CodeDomSerializer
     /// <summary>
     ///  This performs the actual work of serialization between Serialize and SerializeInvariant.
     /// </summary>
-    private object Serialize(IDesignerSerializationManager manager, object? value, bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant)
+    private CodeExpression Serialize(IDesignerSerializationManager manager, object? value, bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant)
     {
         using (TraceScope("ResourceCodeDomSerializer::Serialize"))
         {

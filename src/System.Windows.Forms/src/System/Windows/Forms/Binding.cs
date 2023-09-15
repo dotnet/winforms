@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 
@@ -14,14 +12,14 @@ namespace System.Windows.Forms;
 [TypeConverter(typeof(ListBindingConverter))]
 public partial class Binding
 {
-    private BindingManagerBase _bindingManagerBase;
+    private BindingManagerBase? _bindingManagerBase;
 
-    private readonly BindToObject _bindToObject;
+    private readonly BindToObject? _bindToObject;
 
-    private PropertyDescriptor _propInfo;
-    private PropertyDescriptor _propIsNullInfo;
-    private EventDescriptor _validateInfo;
-    private TypeConverter _propInfoConverter;
+    private PropertyDescriptor? _propInfo;
+    private PropertyDescriptor? _propIsNullInfo;
+    private EventDescriptor? _validateInfo;
+    private TypeConverter? _propInfoConverter;
 
     private bool _formattingEnabled;
     private bool _modified;
@@ -33,42 +31,117 @@ public partial class Binding
 
     // formatting stuff
     private string _formatString = string.Empty;
-    private IFormatProvider _formatInfo;
-    private object _nullValue;
-    private object _dsNullValue = Formatter.GetDefaultDataSourceNullValue(null);
+    private IFormatProvider? _formatInfo;
+    private object? _nullValue;
+    private object? _dsNullValue = Formatter.GetDefaultDataSourceNullValue(null);
     private bool _dsNullValueSet;
-    private ConvertEventHandler _onParse;
-    private ConvertEventHandler _onFormat;
+    private ConvertEventHandler? _onParse;
+    private ConvertEventHandler? _onFormat;
 
     // binding stuff
     private ControlUpdateMode _controlUpdateMode = ControlUpdateMode.OnPropertyChanged;
-    private BindingCompleteEventHandler _onComplete;
+    private BindingCompleteEventHandler? _onComplete;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="Binding"/> class
     ///  that binds a property on the owning control to a property on a data source.
     /// </summary>
-    public Binding(string propertyName, object dataSource, string dataMember) : this(propertyName, dataSource, dataMember, false, 0, null, string.Empty, null)
+    public Binding(string propertyName, object? dataSource, string? dataMember)
+        : this(
+              propertyName,
+              dataSource,
+              dataMember,
+              formattingEnabled: false,
+              0,
+              nullValue: null,
+              formatString: string.Empty,
+              formatInfo: null)
     {
     }
 
-    public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled) : this(propertyName, dataSource, dataMember, formattingEnabled, 0, null, string.Empty, null)
+    public Binding(
+        string propertyName,
+        object? dataSource,
+        string? dataMember,
+        bool formattingEnabled)
+        : this(
+              propertyName,
+              dataSource,
+              dataMember,
+              formattingEnabled,
+              0,
+              nullValue: null,
+              formatString: string.Empty,
+              formatInfo: null)
     {
     }
 
-    public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, null, string.Empty, null)
+    public Binding(
+        string propertyName,
+        object? dataSource,
+        string? dataMember,
+        bool formattingEnabled,
+        DataSourceUpdateMode dataSourceUpdateMode)
+        : this(
+              propertyName,
+              dataSource,
+              dataMember,
+              formattingEnabled,
+              dataSourceUpdateMode,
+              nullValue: null,
+              formatString: string.Empty,
+              formatInfo: null)
     {
     }
 
-    public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, string.Empty, null)
+    public Binding(
+        string propertyName,
+        object? dataSource,
+        string? dataMember,
+        bool formattingEnabled,
+        DataSourceUpdateMode dataSourceUpdateMode,
+        object? nullValue)
+        : this(
+              propertyName,
+              dataSource,
+              dataMember,
+              formattingEnabled,
+              dataSourceUpdateMode,
+              nullValue,
+              formatString: string.Empty,
+              formatInfo: null)
     {
     }
 
-    public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString) : this(propertyName, dataSource, dataMember, formattingEnabled, dataSourceUpdateMode, nullValue, formatString, null)
+    public Binding(
+        string propertyName,
+        object? dataSource,
+        string? dataMember,
+        bool formattingEnabled,
+        DataSourceUpdateMode dataSourceUpdateMode,
+        object? nullValue,
+        string formatString)
+        : this(
+              propertyName,
+              dataSource,
+              dataMember,
+              formattingEnabled,
+              dataSourceUpdateMode,
+              nullValue,
+              formatString,
+              formatInfo: null)
     {
     }
 
-    public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, IFormatProvider formatInfo)
+    public Binding(
+        string propertyName,
+        object? dataSource,
+        string? dataMember,
+        bool formattingEnabled,
+        DataSourceUpdateMode dataSourceUpdateMode,
+        object? nullValue,
+        string formatString,
+        IFormatProvider? formatInfo)
     {
         DataSource = dataSource;
         BindingMemberInfo = new BindingMemberInfo(dataMember);
@@ -91,7 +164,7 @@ public partial class Binding
     {
     }
 
-    public object DataSource { get; }
+    public object? DataSource { get; }
 
     public BindingMemberInfo BindingMemberInfo { get; }
 
@@ -99,22 +172,22 @@ public partial class Binding
     ///  Gets the control to which the binding belongs.
     /// </summary>
     [DefaultValue(null)]
-    public IBindableComponent BindableComponent { get; private set; }
+    public IBindableComponent? BindableComponent { get; private set; }
 
     /// <summary>
     ///  Gets the control to which the binding belongs.
     /// </summary>
     [DefaultValue(null)]
-    public Control Control => BindableComponent as Control;
+    public Control? Control => BindableComponent as Control;
 
     /// <summary>
     ///  Is the bindable component in a 'created' (ready-to-use) state? For controls,
     ///  this depends on whether the window handle has been created yet. For everything
     ///  else, we'll assume they are always in a created state.
     /// </summary>
-    internal static bool IsComponentCreated(IBindableComponent component)
+    internal static bool IsComponentCreated(IBindableComponent? component)
     {
-        return !(component is Control control) || control.Created;
+        return component is not Control control || control.Created;
     }
 
     /// <summary>
@@ -122,7 +195,7 @@ public partial class Binding
     /// </summary>
     internal bool ComponentCreated => IsComponentCreated(BindableComponent);
 
-    private void FormLoaded(object sender, EventArgs e)
+    private void FormLoaded(object? sender, EventArgs e)
     {
         Debug.Assert(sender == BindableComponent, "which other control can send us the Load event?");
         // update the binding
@@ -133,7 +206,7 @@ public partial class Binding
     {
         if (BindableComponent != value)
         {
-            IBindableComponent oldTarget = BindableComponent;
+            IBindableComponent? oldTarget = BindableComponent;
             BindTarget(false);
             BindableComponent = value;
             BindTarget(true);
@@ -168,7 +241,7 @@ public partial class Binding
     ///  Gets the <see cref="Forms.BindingManagerBase"/> of this binding that
     ///  allows enumeration of a set of bindings.
     /// </summary>
-    public BindingManagerBase BindingManagerBase
+    public BindingManagerBase? BindingManagerBase
     {
         get => _bindingManagerBase;
         internal set
@@ -187,7 +260,7 @@ public partial class Binding
                     newCurrencyManager.MetaDataChanged += new EventHandler(binding_MetaDataChanged);
                 }
 
-                _bindToObject.SetBindingManagerBase(value);
+                _bindToObject!.SetBindingManagerBase(value);
                 CheckBinding();
             }
         }
@@ -199,19 +272,19 @@ public partial class Binding
     [DefaultValue("")]
     public string PropertyName { get; } = string.Empty;
 
-    public event BindingCompleteEventHandler BindingComplete
+    public event BindingCompleteEventHandler? BindingComplete
     {
         add => _onComplete += value;
         remove => _onComplete -= value;
     }
 
-    public event ConvertEventHandler Parse
+    public event ConvertEventHandler? Parse
     {
         add => _onParse += value;
         remove => _onParse -= value;
     }
 
-    public event ConvertEventHandler Format
+    public event ConvertEventHandler? Format
     {
         add => _onFormat += value;
         remove => _onFormat -= value;
@@ -239,7 +312,7 @@ public partial class Binding
     }
 
     [DefaultValue(null)]
-    public IFormatProvider FormatInfo
+    public IFormatProvider? FormatInfo
     {
         get => _formatInfo;
         set
@@ -273,7 +346,7 @@ public partial class Binding
         }
     }
 
-    public object NullValue
+    public object? NullValue
     {
         get => _nullValue;
         set
@@ -285,7 +358,7 @@ public partial class Binding
 
                 // If data member is currently DBNull, force update of bound
                 // control property so that it displays the new NullValue
-                if (IsBinding && Formatter.IsNullData(_bindToObject.GetValue(), _dsNullValue))
+                if (IsBinding && Formatter.IsNullData(_bindToObject!.GetValue(), _dsNullValue))
                 {
                     PushData();
                 }
@@ -293,7 +366,7 @@ public partial class Binding
         }
     }
 
-    public object DataSourceNullValue
+    public object? DataSourceNullValue
     {
         get => _dsNullValue;
         set
@@ -302,7 +375,7 @@ public partial class Binding
             if (!object.Equals(_dsNullValue, value))
             {
                 // Save old Value
-                object oldValue = _dsNullValue;
+                object? oldValue = _dsNullValue;
 
                 // Set value
                 _dsNullValue = value;
@@ -314,7 +387,7 @@ public partial class Binding
                 // control property to refresh itself from the data source property.
                 if (IsBinding)
                 {
-                    object dsValue = _bindToObject.GetValue();
+                    object? dsValue = _bindToObject!.GetValue();
 
                     // Check previous DataSourceNullValue for null
                     if (Formatter.IsNullData(dsValue, oldValue))
@@ -358,11 +431,16 @@ public partial class Binding
 
     private void BindTarget(bool bind)
     {
+        if (BindableComponent is null)
+        {
+            return;
+        }
+
         if (bind)
         {
             if (IsBinding)
             {
-                if (_propInfo is not null && BindableComponent is not null)
+                if (_propInfo is not null)
                 {
                     EventHandler handler = new EventHandler(Target_PropertyChanged);
                     _propInfo.AddValueChanged(BindableComponent, handler);
@@ -377,7 +455,7 @@ public partial class Binding
         }
         else
         {
-            if (_propInfo is not null && BindableComponent is not null)
+            if (_propInfo is not null)
             {
                 EventHandler handler = new EventHandler(Target_PropertyChanged);
                 _propInfo.RemoveValueChanged(BindableComponent, handler);
@@ -391,7 +469,7 @@ public partial class Binding
         }
     }
 
-    private void binding_MetaDataChanged(object sender, EventArgs e)
+    private void binding_MetaDataChanged(object? sender, EventArgs e)
     {
         Debug.Assert(sender == _bindingManagerBase, "we should only receive notification from our binding manager base");
         CheckBinding();
@@ -399,7 +477,7 @@ public partial class Binding
 
     private void CheckBinding()
     {
-        _bindToObject.CheckBinding();
+        _bindToObject!.CheckBinding();
 
         if (BindableComponent is not null && !string.IsNullOrEmpty(PropertyName))
         {
@@ -409,9 +487,9 @@ public partial class Binding
 
             // Check Properties
             string propertyNameIsNull = PropertyName + "IsNull";
-            Type propType = null;
-            PropertyDescriptor tempPropInfo = null;
-            PropertyDescriptor tempPropIsNullInfo = null;
+            Type? propType = null;
+            PropertyDescriptor? tempPropInfo = null;
+            PropertyDescriptor? tempPropIsNullInfo = null;
             PropertyDescriptorCollection propInfos;
 
             // If the control is being inherited, then get the properties for
@@ -420,7 +498,7 @@ public partial class Binding
             // those of its designer.  Normally we want that, but for
             // inherited controls we don't because an inherited control should
             // "act" like a runtime control.
-            InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(BindableComponent)[typeof(InheritanceAttribute)];
+            InheritanceAttribute? attr = (InheritanceAttribute?)TypeDescriptor.GetAttributes(BindableComponent)[typeof(InheritanceAttribute)];
             if (attr is not null && attr.InheritanceLevel != InheritanceLevel.NotInherited)
             {
                 propInfos = TypeDescriptor.GetProperties(controlClass);
@@ -471,12 +549,12 @@ public partial class Binding
             }
 
             // Check events
-            EventDescriptor tempValidateInfo = null;
+            EventDescriptor? tempValidateInfo = null;
             string validateName = "Validating";
             EventDescriptorCollection eventInfos = TypeDescriptor.GetEvents(BindableComponent);
             for (int i = 0; i < eventInfos.Count; i++)
             {
-                if (tempValidateInfo is null && string.Equals(eventInfos[i].Name, validateName, StringComparison.OrdinalIgnoreCase))
+                if (tempValidateInfo is null && string.Equals(eventInfos[i]!.Name, validateName, StringComparison.OrdinalIgnoreCase))
                 {
                     tempValidateInfo = eventInfos[i];
                     break;
@@ -504,7 +582,7 @@ public partial class Binding
 
         return comp.Site?.DesignMode ?? false;
     }
-
+#nullable disable
     private object GetDataSourceNullValue(Type type)
     {
         return _dsNullValueSet ? _dsNullValue : Formatter.GetDefaultDataSourceNullValue(type);

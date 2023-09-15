@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Design;
 internal class DataGridViewCellStyleBuilder : Form
 {
     /// <summary>
-    /// Required designer variable.
+    ///  Required designer variable.
     /// </summary>
     private PropertyGrid _cellStyleProperties;
     private GroupBox _previewGroupBox;
@@ -29,7 +29,7 @@ internal class DataGridViewCellStyleBuilder : Form
     private DataGridViewCellStyle? _cellStyle;
     private ITypeDescriptorContext? _context;
 
-    public DataGridViewCellStyleBuilder(IServiceProvider serviceProvider, IComponent comp)
+    public DataGridViewCellStyleBuilder(IServiceProvider serviceProvider, IComponent component)
     {
         // Required for Windows Form Designer support
         InitializeComponent();
@@ -39,7 +39,7 @@ internal class DataGridViewCellStyleBuilder : Form
 
         _listenerDataGridView = new DataGridView();
 
-        _cellStyleProperties.Site = new DataGridViewComponentPropertyGridSite(serviceProvider, comp);
+        _cellStyleProperties.Site = new DataGridViewComponentPropertyGridSite(serviceProvider, component);
     }
 
     private void InitializeGrids()
@@ -77,7 +77,7 @@ internal class DataGridViewCellStyleBuilder : Form
             _cellStyleProperties.SelectedObject = _cellStyle;
             ListenerDataGridViewDefaultCellStyleChanged(null, EventArgs.Empty);
             _listenerDataGridView.DefaultCellStyle = _cellStyle;
-            _listenerDataGridView.DefaultCellStyleChanged += new EventHandler(ListenerDataGridViewDefaultCellStyleChanged);
+            _listenerDataGridView.DefaultCellStyleChanged += ListenerDataGridViewDefaultCellStyleChanged;
         }
     }
 
@@ -95,7 +95,7 @@ internal class DataGridViewCellStyleBuilder : Form
 
     #region Windows Form Designer generated code
     /// <summary>
-    /// Required method for Designer support - do not modify the contents of this method with the code editor.
+    ///  Required method for Designer support - do not modify the contents of this method with the code editor.
     /// </summary>
     [MemberNotNull(nameof(_cellStyleProperties))]
     [MemberNotNull(nameof(_sampleViewTableLayoutPanel))]
@@ -181,7 +181,7 @@ internal class DataGridViewCellStyleBuilder : Form
         _sampleDataGridView.Name = "sampleDataGridView";
         _sampleDataGridView.ReadOnly = true;
         _sampleDataGridView.RowHeadersVisible = false;
-        _sampleDataGridView.CellStateChanged += new DataGridViewCellStateChangedEventHandler(sampleDataGridView_CellStateChanged);
+        _sampleDataGridView.CellStateChanged += sampleDataGridView_CellStateChanged;
         // selectedLabel
         resources.ApplyResources(_selectedLabel, "selectedLabel");
         _selectedLabel.Margin = new Padding(0);
@@ -245,9 +245,9 @@ internal class DataGridViewCellStyleBuilder : Form
         Name = "DataGridViewCellStyleBuilder";
         ShowIcon = false;
         ShowInTaskbar = false;
-        HelpButtonClicked += new CancelEventHandler(DataGridViewCellStyleBuilder_HelpButtonClicked);
-        HelpRequested += new HelpEventHandler(DataGridViewCellStyleBuilder_HelpRequested);
-        Load += new EventHandler(DataGridViewCellStyleBuilder_Load);
+        HelpButtonClicked += DataGridViewCellStyleBuilder_HelpButtonClicked;
+        HelpRequested += DataGridViewCellStyleBuilder_HelpRequested;
+        Load += DataGridViewCellStyleBuilder_Load;
         _sampleViewTableLayoutPanel.ResumeLayout(false);
         _sampleViewTableLayoutPanel.PerformLayout();
         _sampleViewGridsTableLayoutPanel.ResumeLayout(false);
@@ -310,8 +310,8 @@ internal class DataGridViewCellStyleBuilder : Form
         _sampleDataGridViewSelected.Columns[0].Width = _sampleDataGridViewSelected.Width;
 
         // sync the Layout event for both sample DataGridView's so that when the sample DataGridView's are laid out we know to change the size of their cells
-        _sampleDataGridView.Layout += new LayoutEventHandler(sampleDataGridView_Layout);
-        _sampleDataGridViewSelected.Layout += new LayoutEventHandler(sampleDataGridView_Layout);
+        _sampleDataGridView.Layout += sampleDataGridView_Layout;
+        _sampleDataGridViewSelected.Layout += sampleDataGridView_Layout;
     }
 
     private void sampleDataGridView_CellStateChanged(object? sender, DataGridViewCellStateChangedEventArgs e)

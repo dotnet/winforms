@@ -13,6 +13,15 @@ internal static unsafe partial class ComHelpers
     //  using var stream = GetComScope<IStream>(obj, out bool success);
 
     /// <summary>
+    ///  Returns <see langword="true"/> if built-in COM interop is supported. When using AOT or trimming this will
+    ///  return <see langword="false"/>.
+    /// </summary>
+    internal static bool BuiltInComSupported { get; }
+        = AppContext.TryGetSwitch("System.Runtime.InteropServices.BuiltInComInterop.IsSupported", out bool supported)
+            ? supported
+            : true;
+
+    /// <summary>
     ///  Gets a pointer for the specified <typeparamref name="T"/> for the given <paramref name="object"/>. Throws if
     ///  the desired pointer can not be obtained.
     /// </summary>
@@ -51,6 +60,8 @@ internal static unsafe partial class ComHelpers
 
     /// <summary>
     ///  Queries for the given interface and releases it.
+    ///  Note that this method should only be used for the purposes of checking if the object supports a given interface.
+    ///  If that interface is needed, it is best try to get the ComScope directly to avoid querying twice.
     /// </summary>
     internal static bool SupportsInterface<T>(object? @object) where T : unmanaged, IComIID
     {
@@ -180,8 +191,7 @@ internal static unsafe partial class ComHelpers
                 return true;
             }
 
-            // Fall back to Marshal.
-            @interface = (TWrapper)Marshal.GetObjectForIUnknown((nint)unknown);
+            @interface = (TWrapper)GetObjectForIUnknown(unknown);
             return true;
         }
         catch (Exception ex)
@@ -213,6 +223,31 @@ internal static unsafe partial class ComHelpers
         return ccw.Value == unknown;
     }
 
+    /// <summary>
+    ///  <see cref="ComWrappers"/> capable wrapper for <see cref="Marshal.GetObjectForIUnknown(nint)"/>.
+    /// </summary>
+    /// <exception cref="ArgumentNullException"><paramref name="unknown"/> is <see langword="null"/>.</exception>
+    internal static object GetObjectForIUnknown(IUnknown* unknown)
+    {
+        if (unknown is null)
+        {
+            throw new ArgumentNullException(nameof(unknown));
+        }
+
+        if (BuiltInComSupported)
+        {
+            return Marshal.GetObjectForIUnknown((nint)unknown);
+        }
+        else
+        {
+            // Analagous to ComInterfaceMarshaller<object>.ConvertToManaged(unknown), but we need our own strategy.
+            return Interop.WinFormsComStrategy.Instance.GetOrCreateObjectForComInstance((nint)unknown, CreateObjectFlags.Unwrap);
+        }
+    }
+
+    /// <summary>
+    ///  <see cref="IUnknown"/> vtable population hook for CsWin32's generated <see cref="IVTable"/> implementation.
+    /// </summary>
     static partial void PopulateIUnknownImpl<TComInterface>(IUnknown.Vtbl* vtable)
         where TComInterface : unmanaged
     {

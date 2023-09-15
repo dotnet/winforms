@@ -6416,7 +6416,7 @@ public partial class TextBoxBaseTests
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
 
-        Assert.Throws<ArgumentNullException>("pUnk", () => control.ScrollToCaret());
+        Assert.Throws<ArgumentNullException>("unknown", () => control.ScrollToCaret());
     }
 
     private class CustomGetOleInterfaceTextBox : TextBox

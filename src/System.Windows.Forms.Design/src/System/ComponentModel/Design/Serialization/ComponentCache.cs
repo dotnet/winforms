@@ -242,7 +242,7 @@ internal sealed class ComponentCache : IDisposable
         }
 
         public object? Component; // pointer back to the component that generated this entry
-        public CodeStatementCollection? Statements;
+        public CodeStatementCollection Statements = new();
 
         public ICollection<ResourceEntry>? Metadata => _metadata;
 
