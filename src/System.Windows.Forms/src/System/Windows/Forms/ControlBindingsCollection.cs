@@ -57,9 +57,8 @@ public class ControlBindingsCollection : BindingsCollection
     ///  isn't a valid column given this DataSource.Table's schema.
     ///  Fires the CollectionChangedEvent.
     /// </summary>
-    public Binding Add(string propertyName, object dataSource, string? dataMember)
-    {
-        return Add(
+    public Binding Add(string propertyName, object dataSource, string? dataMember) =>
+        Add(
             propertyName,
             dataSource,
             dataMember,
@@ -68,42 +67,37 @@ public class ControlBindingsCollection : BindingsCollection
             nullValue: null,
             formatString: string.Empty,
             formatInfo: null);
-    }
 
     public Binding Add(
         string propertyName,
         object dataSource,
         string? dataMember,
-        bool formattingEnabled)
-    {
-        return Add(
-            propertyName,
-            dataSource,
-            dataMember,
-            formattingEnabled,
-            DefaultDataSourceUpdateMode,
-            nullValue: null,
-            formatString: string.Empty,
-            formatInfo: null);
-    }
+        bool formattingEnabled) =>
+            Add(
+                propertyName,
+                dataSource,
+                dataMember,
+                formattingEnabled,
+                DefaultDataSourceUpdateMode,
+                nullValue: null,
+                formatString: string.Empty,
+                formatInfo: null);
 
     public Binding Add(
         string propertyName,
         object dataSource,
         string? dataMember,
         bool formattingEnabled,
-        DataSourceUpdateMode updateMode)
-    {
-        return Add(
-            propertyName,
-            dataSource,
-            dataMember,
-            formattingEnabled,
-            updateMode,
-            nullValue: null,
-            formatString: string.Empty,
-            formatInfo: null);
-    }
+        DataSourceUpdateMode updateMode) =>
+            Add(
+                propertyName,
+                dataSource,
+                dataMember,
+                formattingEnabled,
+                updateMode,
+                nullValue: null,
+                formatString: string.Empty,
+                formatInfo: null);
 
     public Binding Add(
         string propertyName,
@@ -111,18 +105,16 @@ public class ControlBindingsCollection : BindingsCollection
         string? dataMember,
         bool formattingEnabled,
         DataSourceUpdateMode updateMode,
-        object? nullValue)
-    {
-        return Add(
-            propertyName,
-            dataSource,
-            dataMember,
-            formattingEnabled,
-            updateMode,
-            nullValue,
-            formatString: string.Empty,
-            formatInfo: null);
-    }
+        object? nullValue) =>
+            Add(
+                propertyName,
+                dataSource,
+                dataMember,
+                formattingEnabled,
+                updateMode,
+                nullValue,
+                formatString: string.Empty,
+                formatInfo: null);
 
     public Binding Add(
         string propertyName,
@@ -131,18 +123,16 @@ public class ControlBindingsCollection : BindingsCollection
         bool formattingEnabled,
         DataSourceUpdateMode updateMode,
         object? nullValue,
-        string formatString)
-    {
-        return Add(
-            propertyName,
-            dataSource,
-            dataMember,
-            formattingEnabled,
-            updateMode,
-            nullValue,
-            formatString,
-            formatInfo: null);
-    }
+        string formatString) =>
+            Add(
+                propertyName,
+                dataSource,
+                dataMember,
+                formattingEnabled,
+                updateMode,
+                nullValue,
+                formatString,
+                formatInfo: null);
 
     public Binding Add(
         string propertyName,
