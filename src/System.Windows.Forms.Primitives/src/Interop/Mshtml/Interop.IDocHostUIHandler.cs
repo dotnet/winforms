@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using Windows.Win32.System.Ole;
+using MsHtml = Windows.Win32.Web.MsHtml;
 
 internal partial class Interop
 {
@@ -24,7 +25,7 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT GetHostInfo(
-                DOCHOSTUIINFO* pInfo);
+                MsHtml.DOCHOSTUIINFO* pInfo);
 
             [PreserveSig]
             HRESULT ShowUI(
