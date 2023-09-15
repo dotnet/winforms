@@ -4,62 +4,62 @@
     <body>
       <trans-unit id="$this.Text">
         <source>Add Column</source>
-        <target state="new">Add Column</target>
+        <target state="translated">Dodaj kolumnę</target>
         <note />
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add</source>
-        <target state="new">&amp;Add</target>
+        <target state="translated">&amp;Dodaj</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">Anuluj</target>
         <note />
       </trans-unit>
       <trans-unit id="columnInDataSourceLabel.Text">
         <source>&amp;Columns in the DataSource</source>
-        <target state="new">&amp;Columns in the DataSource</target>
+        <target state="translated">K&amp;olumny w elemencie DataSource</target>
         <note />
       </trans-unit>
       <trans-unit id="dataBoundColumnRadioButton.Text">
         <source>Data&amp;bound column</source>
-        <target state="new">Data&amp;bound column</target>
+        <target state="translated">Ko&amp;lumna związana z danymi</target>
         <note />
       </trans-unit>
       <trans-unit id="frozenCheckBox.Text">
         <source>&amp;Frozen</source>
-        <target state="new">&amp;Frozen</target>
+        <target state="translated">&amp;Zamrożony</target>
         <note />
       </trans-unit>
       <trans-unit id="headerTextLabel.Text">
         <source>&amp;Header text:</source>
-        <target state="new">&amp;Header text:</target>
+        <target state="translated">T&amp;ekst nagłówka:</target>
         <note />
       </trans-unit>
       <trans-unit id="nameLabel.Text">
         <source>&amp;Name:</source>
-        <target state="new">&amp;Name:</target>
+        <target state="translated">&amp;Nazwa:</target>
         <note />
       </trans-unit>
       <trans-unit id="readOnlyCheckBox.Text">
         <source>&amp;Read Only</source>
-        <target state="new">&amp;Read Only</target>
+        <target state="translated">Tylko do od&amp;czytu</target>
         <note />
       </trans-unit>
       <trans-unit id="typeLabel.Text">
         <source>&amp;Type:</source>
-        <target state="new">&amp;Type:</target>
+        <target state="translated">&amp;Typ:</target>
         <note />
       </trans-unit>
       <trans-unit id="unboundColumnRadioButton.Text">
         <source>&amp;Unbound column</source>
-        <target state="new">&amp;Unbound column</target>
+        <target state="translated">Kol&amp;umna niepowiązana</target>
         <note />
       </trans-unit>
       <trans-unit id="visibleCheckBox.Text">
         <source>&amp;Visible</source>
-        <target state="new">&amp;Visible</target>
+        <target state="translated">&amp;Widoczna</target>
         <note />
       </trans-unit>
     </body>

@@ -4,47 +4,47 @@
     <body>
       <trans-unit id="$this.Text">
         <source>Edit Columns</source>
-        <target state="new">Edit Columns</target>
+        <target state="translated">列の編集</target>
         <note />
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add...</source>
-        <target state="new">&amp;Add...</target>
+        <target state="translated">追加(&amp;A)...</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">キャンセル</target>
         <note />
       </trans-unit>
       <trans-unit id="deleteButton.Text">
         <source>&amp;Remove</source>
-        <target state="new">&amp;Remove</target>
+        <target state="translated">削除(&amp;R)</target>
         <note />
       </trans-unit>
       <trans-unit id="moveDown.AccessibleName">
         <source>Move column down</source>
-        <target state="new">Move column down</target>
+        <target state="translated">列を下に移動</target>
         <note />
       </trans-unit>
       <trans-unit id="moveUp.AccessibleName">
         <source>Move column up</source>
-        <target state="new">Move column up</target>
+        <target state="translated">列を上に移動</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">OK</target>
         <note />
       </trans-unit>
       <trans-unit id="propertyGridLabel.Text">
         <source>&amp;Properties</source>
-        <target state="new">&amp;Properties</target>
+        <target state="translated">プロパティ(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="selectedColumnsLabel.Text">
         <source>Selected &amp;Columns:</source>
-        <target state="new">Selected &amp;Columns:</target>
+        <target state="translated">選択された列(&amp;C):</target>
         <note />
       </trans-unit>
     </body>

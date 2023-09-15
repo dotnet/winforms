@@ -653,122 +653,122 @@
       </trans-unit>
       <trans-unit id="DataGridViewAddColumnTransactionString">
         <source>Add Column</source>
-        <target state="new">Add Column</target>
+        <target state="translated">加入資料行</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewAddColumnVerb">
         <source>&amp;Add Column...</source>
-        <target state="new">&amp;Add Column...</target>
+        <target state="translated">新增資料行(&amp;A)...</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewBoundColumnProperties">
         <source>Bound Column &amp;Properties</source>
-        <target state="new">Bound Column &amp;Properties</target>
+        <target state="translated">繫結的資料行屬性(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewChooseDataSource">
         <source>Choose Data Source:</source>
-        <target state="new">Choose Data Source:</target>
+        <target state="translated">選擇資料來源:</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewChooseDataSourceTransactionString">
         <source>{0} DataSource changed</source>
-        <target state="new">{0} DataSource changed</target>
+        <target state="translated">{0} DataSource 已變更</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewColumnTypePropertyDescription">
         <source>The DataGridViewColumn type.</source>
-        <target state="new">The DataGridViewColumn type.</target>
+        <target state="translated">DataGridViewColumn 類型。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataSourceNoLongerValid">
         <source>Unable to create columns for the data source. The data source is no longer valid</source>
-        <target state="new">Unable to create columns for the data source. The data source is no longer valid</target>
+        <target state="translated">無法建立資料來源資料行。資料來源已無效</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableAddingTransactionString">
         <source>Disable Adding</source>
-        <target state="new">Disable Adding</target>
+        <target state="translated">停用加入</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableColumnReorderingTransactionString">
         <source>Disable Column Reordering</source>
-        <target state="new">Disable Column Reordering</target>
+        <target state="translated">停用資料行重新調整順序</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableDeletingTransactionString">
         <source>Disable Deleting</source>
-        <target state="new">Disable Deleting</target>
+        <target state="translated">停用刪除</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableEditingTransactionString">
         <source>Disable Editing</source>
-        <target state="new">Disable Editing</target>
+        <target state="translated">停用編輯</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDuplicateColumnName">
         <source>The name {0} is already in use by another column.</source>
-        <target state="new">The name {0} is already in use by another column.</target>
+        <target state="translated">名稱 {0} 正被另一個資料行使用中。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditColumnsTransactionString">
         <source>Edit Columns</source>
-        <target state="new">Edit Columns</target>
+        <target state="translated">編輯資料行</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditColumnsVerb">
         <source>&amp;Edit Columns...</source>
-        <target state="new">&amp;Edit Columns...</target>
+        <target state="translated">編輯資料行(&amp;E)...</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableAdding">
         <source>Enable Adding</source>
-        <target state="new">Enable Adding</target>
+        <target state="translated">啟用加入</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableAddingTransactionString">
         <source>Enable Adding</source>
-        <target state="new">Enable Adding</target>
+        <target state="translated">啟用加入</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableColumnReordering">
         <source>Enable Column Reordering</source>
-        <target state="new">Enable Column Reordering</target>
+        <target state="translated">啟用資料行重新調整順序</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableColumnReorderingTransactionString">
         <source>Enable Column Reordering</source>
-        <target state="new">Enable Column Reordering</target>
+        <target state="translated">啟用資料行重新調整順序</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableDeleting">
         <source>Enable Deleting</source>
-        <target state="new">Enable Deleting</target>
+        <target state="translated">啟用刪除</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableDeletingTransactionString">
         <source>Enable Deleting</source>
-        <target state="new">Enable Deleting</target>
+        <target state="translated">啟用刪除</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableEditing">
         <source>Enable Editing</source>
-        <target state="new">Enable Editing</target>
+        <target state="translated">啟用編輯</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableEditingTransactionString">
         <source>Enable Editing</source>
-        <target state="new">Enable Editing</target>
+        <target state="translated">啟用編輯</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewProperties">
         <source>&amp;Properties</source>
-        <target state="new">&amp;Properties</target>
+        <target state="translated">屬性(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewUnboundColumnProperties">
         <source>Unbound Column &amp;Properties</source>
-        <target state="new">Unbound Column &amp;Properties</target>
+        <target state="translated">未繫結的資料行屬性(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_Cancel">
@@ -778,7 +778,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_Close">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">關閉</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_OK">
@@ -793,87 +793,87 @@
       </trans-unit>
       <trans-unit id="DesignBindingPickerAccessibleName">
         <source>Data binding editor</source>
-        <target state="new">Data binding editor</target>
+        <target state="translated">資料繫結編輯器</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerAddProjDataSourceLabel">
         <source>Add new Object Data Source...</source>
-        <target state="new">Add new Object Data Source...</target>
+        <target state="translated">新增物件資料來源...</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenAddDataSrc">
         <source>Click the 'Add Project Data Source...' link to connect to data.</source>
-        <target state="new">Click the 'Add Project Data Source...' link to connect to data.</target>
+        <target state="translated">按一下 [加入專案資料來源...] 連結可連接至資料。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenCurrentBinding">
         <source>Currently data bound to '{0}'.</source>
-        <target state="new">Currently data bound to '{0}'.</target>
+        <target state="translated">目前資料是繫結至 '{0}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenPickBindSrc">
         <source>Select a BindingSource to bind to.</source>
-        <target state="new">Select a BindingSource to bind to.</target>
+        <target state="translated">選取要繫結的目標 BindingSource。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenPickDataSrc">
         <source>Select a data source under 'Other Data Sources' to connect to data.</source>
-        <target state="new">Select a data source under 'Other Data Sources' to connect to data.</target>
+        <target state="translated">在 [其他資料來源] 下選取要連接到資料的資料來源。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpGenPickMember">
         <source>Select a data member to bind to.</source>
-        <target state="new">Select a data member to bind to.</target>
+        <target state="translated">選取要繫結的目標資料成員。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeInstances">
         <source>Contains all form components that implement IList, IListSource or Array.</source>
-        <target state="new">Contains all form components that implement IList, IListSource or Array.</target>
+        <target state="translated">含有實作 IList、IListSource 或 Array 的所有表單元件。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeNone">
         <source>Selecting 'None' clears the current data binding.</source>
-        <target state="new">Selecting 'None' clears the current data binding.</target>
+        <target state="translated">選取 [無] 會清除目前的資料繫結。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeOther">
         <source>Contains all project data sources and local form list instances.</source>
-        <target state="new">Contains all project data sources and local form list instances.</target>
+        <target state="translated">含有所有專案資料來源和本機表單清單的執行個體。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeProject">
         <source>Contains all project data sources.</source>
-        <target state="new">Contains all project data sources.</target>
+        <target state="translated">含有所有專案資料來源。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerHelpNodeProjectGroup">
         <source>Contains project data sources belonging to this namespace.</source>
-        <target state="new">Contains project data sources belonging to this namespace.</target>
+        <target state="translated">含有屬於這個命名空間的專案資料來源。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeInstances">
         <source>{0} List Instances</source>
-        <target state="new">{0} List Instances</target>
+        <target state="translated">{0} List 執行個體</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeNone">
         <source>None</source>
-        <target state="new">None</target>
+        <target state="translated">無</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeOther">
         <source>Other Data Sources</source>
-        <target state="new">Other Data Sources</target>
+        <target state="translated">其他資料來源</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeProject">
         <source>Project Data Sources</source>
-        <target state="new">Project Data Sources</target>
+        <target state="translated">專案資料來源</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerTreeViewAccessibleName">
         <source>Bindable data sources and data members</source>
-        <target state="new">Bindable data sources and data members</target>
+        <target state="translated">可繫結的資料來源和資料成員</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
