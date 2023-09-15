@@ -12,7 +12,7 @@ internal partial class Interop
         {
             public NMHDR nmhdr;
             public CHARRANGE chrg;
-            public SEL seltyp;
+            public RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE seltyp;
         }
     }
 }
