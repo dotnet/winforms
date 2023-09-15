@@ -287,7 +287,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         ''' Downloads a file from the network to the specified path
         ''' </summary>
-        ''' <param name="address">Uri to the remote file</param>
+        ''' <param name="addressUri">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
         ''' <param name="userName">The name of the user performing the download</param>
         ''' <param name="password">The user's password</param>
@@ -295,7 +295,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <param name="onUserCancel">Indicates what to do if user cancels dialog (either throw or do nothing)</param>
-        Private Shared Async Function DownloadFileAsync(address As Uri,
+        Private Shared Async Function DownloadFileAsync(addressUri As Uri,
                                             destinationFileName As String,
                                             userName As String,
                                             password As String,
@@ -307,7 +307,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' Get network credentials
             Dim networkCredentials As ICredentials = GetNetworkCredentials(userName, password)
 
-            Await DownloadFileAsync(address, destinationFileName, networkCredentials,
+            Await DownloadFileAsync(addressUri, destinationFileName, networkCredentials,
                                     dialog, connectionTimeout, overwrite,
                                     onUserCancel).ConfigureAwait(False)
         End Function
@@ -316,21 +316,21 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         ''' Downloads a file from the network to the specified path
         ''' </summary>
-        ''' <param name="address">Uri to the remote file</param>
+        ''' <param name="addressUri">Uri to the remote file</param>
         ''' <param name="destinationFileName">Name and path of file where download is saved</param>
         ''' <param name="networkCredentials">The credentials of the user performing the download</param>
         ''' <param name="dialog">A ProgressDialog or Nothing</param>
         ''' <param name="connectionTimeout">Time allotted before giving up on a connection</param>
         ''' <param name="overwrite">Indicates whether or not the file should be overwritten if local file already exists</param>
         ''' <remarks>Calls to all the other overloads will come through here</remarks>
-        Private Shared Async Function DownloadFileAsync(address As Uri,
+        Private Shared Async Function DownloadFileAsync(addressUri As Uri,
                                             destinationFileName As String,
                                             networkCredentials As ICredentials,
                                             dialog As ProgressDialog,
                                             connectionTimeout As Integer,
                                             overwrite As Boolean) As Task
 
-            Await DownloadFileAsync(address, destinationFileName, networkCredentials,
+            Await DownloadFileAsync(addressUri, destinationFileName, networkCredentials,
                                     dialog, connectionTimeout, overwrite,
                                     UICancelOption.ThrowException).ConfigureAwait(False)
         End Function
