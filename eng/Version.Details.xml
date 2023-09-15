@@ -21,7 +21,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="Microsoft.Windows.Compatibility" Version="7.0.5">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>87c3030c1336643637eb14bdf6aeeb185063b027</Sha>
+      <Sha>ecb34f85ec92e1b3c814edf7da83337e199e7f66</Sha>
     </Dependency>
     <Dependency Name="System.CodeDom" Version="7.0.0">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
