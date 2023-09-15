@@ -104,11 +104,11 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
     {
         ArgumentNullException.ThrowIfNull(method);
 
-        object[] attrs = method.GetCustomAttributes(typeof(DesignerSerializationVisibilityAttribute), true);
-        if (attrs.Length > 0)
+        object[] attributes = method.GetCustomAttributes(typeof(DesignerSerializationVisibilityAttribute), true);
+        if (attributes.Length > 0)
         {
-            DesignerSerializationVisibilityAttribute vis = (DesignerSerializationVisibilityAttribute)attrs[0];
-            if (vis is { Visibility: DesignerSerializationVisibility.Hidden })
+            DesignerSerializationVisibilityAttribute visibility = (DesignerSerializationVisibilityAttribute)attributes[0];
+            if (visibility is { Visibility: DesignerSerializationVisibility.Hidden })
             {
                 Trace(TraceLevel.Verbose, $"Member {method.Name} does not support serialization.");
                 return false;
@@ -137,19 +137,19 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
             //      If the collection has no add method, but is marked with PersistContents, we will enumerate the collection and serialize each element.
             // Check to see if there is a CodePropertyReferenceExpression on the stack.  If there is, we can use it as a guide for serialization.
             CodeExpression? target;
-            if (manager.TryGetContext(out ExpressionContext? ctx) && ctx.PresetValue == value &&
-                manager.TryGetContext(out PropertyDescriptor? prop) && prop.PropertyType == ctx.ExpressionType)
+            if (manager.TryGetContext(out ExpressionContext? context) && context.PresetValue == value &&
+                manager.TryGetContext(out PropertyDescriptor? property) && property.PropertyType == context.ExpressionType)
             {
                 // We only want to give out an expression target if  this is our context (we find this out by comparing types above) and if the context type is not an array.  If it is an array, we will  just return the array create expression.
-                target = ctx.Expression;
+                target = context.Expression;
                 Trace(TraceLevel.Verbose, "Valid context and property descriptor found on context stack.");
             }
             else
             {
                 // This context is either the wrong context or doesn't match the property descriptor we found.
                 target = null;
-                ctx = null;
-                prop = null;
+                context = null;
+                property = null;
                 Trace(TraceLevel.Verbose, "No valid context.  We can only serialize if this is an array.");
             }
 
@@ -157,7 +157,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
             if (value is ICollection collection)
             {
                 ICollection subset = collection;
-                Type collectionType = ctx?.ExpressionType ?? collection.GetType();
+                Type collectionType = context?.ExpressionType ?? collection.GetType();
                 bool isArray = typeof(Array).IsAssignableFrom(collectionType);
                 // If we don't have a target expression and this isn't an array, let's try to create one.
                 if (target is null && !isArray)
@@ -171,7 +171,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
 
                 if (target is not null || isArray)
                 {
-                    if (prop is InheritedPropertyDescriptor inheritedDesc && !isArray)
+                    if (property is InheritedPropertyDescriptor inheritedDesc && !isArray)
                     {
                         subset = GetCollectionDelta(inheritedDesc.OriginalValue as ICollection, collection);
                     }
@@ -181,27 +181,27 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                     // See if we should emit a clear for this collection.
                     if (target is not null && ShouldClearCollection(manager, collection))
                     {
-                        CodeStatementCollection? resultCol = result as CodeStatementCollection;
+                        CodeStatementCollection? resultCollection = result as CodeStatementCollection;
                         // If non empty collection is being serialized, but no statements were generated, there is no need to clear.
-                        if (collection.Count > 0 && (result is null || (resultCol is not null && resultCol.Count == 0)))
+                        if (collection.Count > 0 && (result is null || (resultCollection is not null && resultCollection.Count == 0)))
                         {
                             return null;
                         }
 
-                        if (resultCol is null)
+                        if (resultCollection is null)
                         {
-                            resultCol = new CodeStatementCollection();
-                            if (result is CodeStatement resultStmt)
+                            resultCollection = new CodeStatementCollection();
+                            if (result is CodeStatement resultStatement)
                             {
-                                resultCol.Add(resultStmt);
+                                resultCollection.Add(resultStatement);
                             }
 
-                            result = resultCol;
+                            result = resultCollection;
                         }
 
                         CodeMethodInvokeExpression clearMethod = new CodeMethodInvokeExpression(target, "Clear");
-                        CodeExpressionStatement clearStmt = new CodeExpressionStatement(clearMethod);
-                        resultCol.Insert(0, clearStmt);
+                        CodeExpressionStatement clearStatement = new CodeExpressionStatement(clearMethod);
+                        resultCollection.Insert(0, clearStatement);
                     }
                 }
             }
@@ -417,11 +417,11 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
 
                     CodeExpression? expression = null;
                     // If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the array element type.
-                    ExpressionContext? newCtx = null;
-                    if (manager.TryGetContext(out ExpressionContext? ctx))
+                    ExpressionContext? newContext = null;
+                    if (manager.TryGetContext(out ExpressionContext? context))
                     {
-                        newCtx = new ExpressionContext(ctx.Expression, elementType, ctx.Owner);
-                        manager.Context.Push(newCtx);
+                        newContext = new ExpressionContext(context.Expression, elementType, context.Owner);
+                        manager.Context.Push(newContext);
                     }
 
                     try
@@ -430,9 +430,9 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                     }
                     finally
                     {
-                        if (newCtx is not null)
+                        if (newContext is not null)
                         {
-                            Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
+                            Debug.Assert(manager.Context.Current == newContext, "Context stack corrupted.");
                             manager.Context.Pop();
                         }
                     }
@@ -504,7 +504,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                         {
                             Method = methodRef
                         };
-                        CodeExpression? serializedObj = null;
+                        CodeExpression? serializedObject = null;
 
                         // If there is an expression context on the stack at this point,
                         // we need to fix up the ExpressionType on it to be the element type.
@@ -518,7 +518,7 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
 
                         try
                         {
-                            serializedObj = SerializeToExpression(manager, o);
+                            serializedObject = SerializeToExpression(manager, o);
                         }
                         finally
                         {
@@ -531,12 +531,12 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
 
                         if (o is not null && !elementType.IsAssignableFrom(o.GetType()) && o.GetType().IsPrimitive)
                         {
-                            serializedObj = new CodeCastExpression(elementType, serializedObj!);
+                            serializedObject = new CodeCastExpression(elementType, serializedObject!);
                         }
 
-                        if (serializedObj is not null)
+                        if (serializedObject is not null)
                         {
-                            statement.Parameters.Add(serializedObj);
+                            statement.Parameters.Add(serializedObject);
                             statements.Add(statement);
                         }
                     }
@@ -583,38 +583,38 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                     Debug.Assert(genCode, "Why didn't GetCollectionDelta calculate the same thing?");
                     if (genCode)
                     {
-                        CodeExpression? exp = null;
+                        CodeExpression? expression = null;
                         // If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the element type.
-                        ExpressionContext? newCtx = null;
+                        ExpressionContext? newContext = null;
 
                         if (manager.TryGetContext(out ExpressionContext? ctx))
                         {
-                            newCtx = new ExpressionContext(ctx.Expression, elementType, ctx.Owner);
-                            manager.Context.Push(newCtx);
+                            newContext = new ExpressionContext(ctx.Expression, elementType, ctx.Owner);
+                            manager.Context.Push(newContext);
                         }
 
                         try
                         {
-                            exp = SerializeToExpression(manager, o);
+                            expression = SerializeToExpression(manager, o);
                         }
                         finally
                         {
-                            if (newCtx is not null)
+                            if (newContext is not null)
                             {
-                                Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
+                                Debug.Assert(manager.Context.Current == newContext, "Context stack corrupted.");
                                 manager.Context.Pop();
                             }
                         }
 
-                        if (exp is not null)
+                        if (expression is not null)
                         {
                             // Check to see if we need a cast
                             if (o is not null && !elementType.IsAssignableFrom(o.GetType()))
                             {
-                                exp = new CodeCastExpression(elementType, exp);
+                                expression = new CodeCastExpression(elementType, expression);
                             }
 
-                            arrayList.Add(exp);
+                            arrayList.Add(expression);
                         }
                     }
                 }
@@ -628,9 +628,9 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                     {
                         CreateType = elementTypeRef
                     };
-                    foreach (CodeExpression exp in arrayList)
+                    foreach (CodeExpression expression in arrayList)
                     {
-                        arrayCreate.Initializers.Add(exp);
+                        arrayCreate.Initializers.Add(expression);
                     }
 
                     CodeMethodReferenceExpression methodRef = new CodeMethodReferenceExpression(targetExpression!, "AddRange");
@@ -653,16 +653,16 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
     private bool ShouldClearCollection(IDesignerSerializationManager manager, ICollection collection)
     {
         bool shouldClear = false;
-        PropertyDescriptor? clearProp = manager.Properties["ClearCollections"];
-        if (clearProp is not null && clearProp.TryGetValue(manager, out bool b) && b)
+        PropertyDescriptor? clearProperty = manager.Properties["ClearCollections"];
+        if (clearProperty is not null && clearProperty.TryGetValue(manager, out bool b) && b)
         {
             shouldClear = true;
         }
 
         if (!shouldClear)
         {
-            PropertyDescriptor? prop = manager.GetContext<PropertyDescriptor>();
-            if (manager.TryGetContext(out SerializeAbsoluteContext? absolute) && absolute.ShouldSerialize(prop))
+            PropertyDescriptor? property = manager.GetContext<PropertyDescriptor>();
+            if (manager.TryGetContext(out SerializeAbsoluteContext? absolute) && absolute.ShouldSerialize(property))
             {
                 shouldClear = true;
             }
