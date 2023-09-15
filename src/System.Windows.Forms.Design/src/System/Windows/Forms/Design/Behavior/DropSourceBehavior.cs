@@ -209,16 +209,16 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
 
     // Yeah this is recursive, but we also need to resite all
     // the children of this control, and their children, and their children...
-    private void SetDesignerHost(Control c)
+    private void SetDesignerHost(Control control)
     {
-        foreach (Control control in c.Controls)
+        foreach (Control childControl in control.Controls)
         {
-            SetDesignerHost(control);
+            SetDesignerHost(childControl);
         }
 
-        if (c.Site is not null && !(c.Site is INestedSite) && _destHost is not null)
+        if (control.Site is not null && !(control.Site is INestedSite) && _destHost is not null)
         {
-            _destHost.Container.Add(c);
+            _destHost.Container.Add(control);
         }
     }
 
@@ -332,19 +332,19 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         _dragAssistanceManager?.OnMouseUp();
 
         // If we are dropping between hosts, we want to set the selection in the new host to be the components that we are dropping. ... or if we are copying
-        ISelectionService selSvc = null;
+        ISelectionService selectionService = null;
         if (performCopy || (_srcHost != _destHost && _destHost is not null))
         {
-            selSvc = (ISelectionService)_serviceProviderTarget.GetService(typeof(ISelectionService));
+            selectionService = (ISelectionService)_serviceProviderTarget.GetService(typeof(ISelectionService));
         }
 
         try
         {
             if (_dragComponents is not null && _dragComponents.Length > 0)
             {
-                DesignerTransaction transSource = null;
-                DesignerTransaction transTarget = null;
-                string transDesc;
+                DesignerTransaction transactionSource = null;
+                DesignerTransaction transactionTarget = null;
+                string transactionDescription;
                 if (_dragComponents.Length == 1)
                 {
                     string name = TypeDescriptor.GetComponentName(_dragComponents[0].dragComponent);
@@ -353,22 +353,22 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                         name = _dragComponents[0].dragComponent.GetType().Name;
                     }
 
-                    transDesc = string.Format(performCopy ? SR.BehaviorServiceCopyControl : SR.BehaviorServiceMoveControl, name);
+                    transactionDescription = string.Format(performCopy ? SR.BehaviorServiceCopyControl : SR.BehaviorServiceMoveControl, name);
                 }
                 else
                 {
-                    transDesc = string.Format(performCopy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, _dragComponents.Length);
+                    transactionDescription = string.Format(performCopy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, _dragComponents.Length);
                 }
 
                 // We don't want to create a transaction in the source, if we are doing a cross-form copy
                 if (_srcHost is not null && !(_srcHost != _destHost && _destHost is not null && performCopy))
                 {
-                    transSource = _srcHost.CreateTransaction(transDesc);
+                    transactionSource = _srcHost.CreateTransaction(transactionDescription);
                 }
 
                 if (_srcHost != _destHost && _destHost is not null)
                 {
-                    transTarget = _destHost.CreateTransaction(transDesc);
+                    transactionTarget = _destHost.CreateTransaction(transactionDescription);
                 }
 
                 try
@@ -432,17 +432,17 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                     }
 
                     // check permission to do that
-                    PropertyDescriptor propLoc = TypeDescriptor.GetProperties(primaryComponent)["Location"];
-                    if (primaryComponent is not null && propLoc is not null)
+                    PropertyDescriptor location = TypeDescriptor.GetProperties(primaryComponent)["Location"];
+                    if (primaryComponent is not null && location is not null)
                     {
                         try
                         {
-                            componentChangeSvcTarget.OnComponentChanging(primaryComponent, propLoc);
+                            componentChangeSvcTarget.OnComponentChanging(primaryComponent, location);
                         }
 
-                        catch (CheckoutException coEx)
+                        catch (CheckoutException checkoutException)
                         {
-                            if (coEx == CheckoutException.Canceled)
+                            if (checkoutException == CheckoutException.Canceled)
                             {
                                 return;
                             }
@@ -454,7 +454,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                     // everything is fine, carry on...
                     SetLocationPropertyAndChildIndex(_primaryComponentIndex, dragTarget, initialDropPoint,
                                                         _shareParent ? _dragComponents[_primaryComponentIndex].zorderIndex : 0, allowSetChildIndexOnDrop);
-                    selSvc?.SetSelectedComponents(new object[] { _dragComponents[_primaryComponentIndex].dragComponent }, SelectionTypes.Primary | SelectionTypes.Replace);
+                    selectionService?.SetSelectedComponents(new object[] { _dragComponents[_primaryComponentIndex].dragComponent }, SelectionTypes.Primary | SelectionTypes.Replace);
 
                     for (int i = 0; i < _dragComponents.Length; i++)
                     {
@@ -469,7 +469,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                                                         initialDropPoint.Y + _dragComponents[i].positionOffset.Y);
                         SetLocationPropertyAndChildIndex(i, dragTarget, dropPoint,
                                                             _shareParent ? _dragComponents[i].zorderIndex : 0, allowSetChildIndexOnDrop);
-                        selSvc?.SetSelectedComponents(new object[] { _dragComponents[i].dragComponent }, SelectionTypes.Add);
+                        selectionService?.SetSelectedComponents(new object[] { _dragComponents[i].dragComponent }, SelectionTypes.Add);
                     }
 
                     if ((!localDrag || performCopy) && componentChangeSvcSource is not null && componentChangeSvcTarget is not null)
@@ -517,24 +517,24 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
 
                     // We need to CleanupDrag BEFORE we commit the transaction.  The reason is that cleaning up can potentially cause a layout, and then any changes that happen due to the layout would be in a separate UndoUnit. We want the D&D to be undoable in one step.
                     CleanupDrag(false);
-                    if (transSource is not null)
+                    if (transactionSource is not null)
                     {
-                        transSource.Commit();
-                        transSource = null;
+                        transactionSource.Commit();
+                        transactionSource = null;
                     }
 
-                    if (transTarget is not null)
+                    if (transactionTarget is not null)
                     {
-                        transTarget.Commit();
-                        transTarget = null;
+                        transactionTarget.Commit();
+                        transactionTarget = null;
                     }
                 }
 
                 finally
                 {
-                    transSource?.Cancel();
+                    transactionSource?.Cancel();
 
-                    transTarget?.Cancel();
+                    transactionTarget?.Cancel();
                 }
             }
         }
@@ -552,8 +552,8 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
             // Even though we call CleanupDrag(false) twice (see above), this method guards against doing the wrong thing.
             CleanupDrag(false);
             // if selSvs is not null, then we either did a copy, or moved between forms, so use it to set the right info
-            _statusCommandUiTarget?.SetStatusInformation(selSvc is null ? _dragComponents[_primaryComponentIndex].dragComponent as Component :
-                                                                        selSvc.PrimarySelection as Component);
+            _statusCommandUiTarget?.SetStatusInformation(selectionService is null ? _dragComponents[_primaryComponentIndex].dragComponent as Component :
+                                                                        selectionService.PrimarySelection as Component);
         }
 
         // clear the last feedback loc
@@ -824,11 +824,11 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         }
     }
 
-    private void GetParentSnapInfo(Control parentControl, BehaviorService bhvSvc)
+    private void GetParentSnapInfo(Control parentControl, BehaviorService behaviorService)
     {
         // Clear out whatever value we might have had stored off
         _parentGridSize = Size.Empty;
-        if (bhvSvc is not null && !bhvSvc.UseSnapLines)
+        if (behaviorService is not null && !behaviorService.UseSnapLines)
         {
             PropertyDescriptor snapProp = TypeDescriptor.GetProperties(parentControl)["SnapToGrid"];
             if (snapProp is not null && (bool)snapProp.GetValue(parentControl))
@@ -840,7 +840,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                     if (_dragComponents[_primaryComponentIndex].dragComponent is Control)
                     {
                         _parentGridSize = (Size)gridProp.GetValue(parentControl);
-                        _parentLocation = bhvSvc.MapAdornerWindowPoint(parentControl.Handle, Point.Empty);
+                        _parentLocation = behaviorService.MapAdornerWindowPoint(parentControl.Handle, Point.Empty);
                         if (parentControl.Parent is not null && parentControl.Parent.IsMirrored)
                         {
                             _parentLocation.Offset(-parentControl.Width, 0);
@@ -855,10 +855,10 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
     {
         // find our body glyph adorner offered by the behavior service we don't want to disable the transparent body glyphs
         Adorner bodyGlyphAdorner = null;
-        SelectionManager selMgr = (SelectionManager)serviceProvider.GetService(typeof(SelectionManager));
-        if (selMgr is not null)
+        SelectionManager selectionManager = (SelectionManager)serviceProvider.GetService(typeof(SelectionManager));
+        if (selectionManager is not null)
         {
-            bodyGlyphAdorner = selMgr.BodyGlyphAdorner;
+            bodyGlyphAdorner = selectionManager.BodyGlyphAdorner;
         }
 
         //disable all adorners except for body glyph adorner
@@ -876,7 +876,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
 
         if (hostChange)
         {
-            selMgr.OnBeginDrag(new BehaviorDragDropEventArgs(_dragObjects));
+            selectionManager.OnBeginDrag(new BehaviorDragDropEventArgs(_dragObjects));
         }
     }
 
