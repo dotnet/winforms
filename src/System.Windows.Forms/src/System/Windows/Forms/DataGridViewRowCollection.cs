@@ -37,67 +37,28 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     /* IList interface implementation */
 
-    int IList.Add(object? value)
-    {
-        return Add((DataGridViewRow)value!);
-    }
+    int IList.Add(object? value) => Add((DataGridViewRow)value!);
 
-    void IList.Clear()
-    {
-        Clear();
-    }
+    void IList.Clear() => Clear();
 
-    bool IList.Contains(object? value)
-    {
-        return _items.Contains(value);
-    }
+    bool IList.Contains(object? value) => _items.Contains(value);
 
-    int IList.IndexOf(object? value)
-    {
-        return _items.IndexOf((DataGridViewRow)value!);
-    }
+    int IList.IndexOf(object? value) => _items.IndexOf((DataGridViewRow)value!);
 
-    void IList.Insert(int index, object? value)
-    {
-        Insert(index, (DataGridViewRow)value!);
-    }
+    void IList.Insert(int index, object? value) => Insert(index, (DataGridViewRow)value!);
 
-    void IList.Remove(object? value)
-    {
-        Remove((DataGridViewRow)value!);
-    }
+    void IList.Remove(object? value) => Remove((DataGridViewRow)value!);
 
-    void IList.RemoveAt(int index)
-    {
-        RemoveAt(index);
-    }
+    void IList.RemoveAt(int index) => RemoveAt(index);
 
-    bool IList.IsFixedSize
-    {
-        get
-        {
-            return false;
-        }
-    }
+    bool IList.IsFixedSize => false;
 
-    bool IList.IsReadOnly
-    {
-        get
-        {
-            return false;
-        }
-    }
+    bool IList.IsReadOnly => false;
 
     object? IList.this[int index]
     {
-        get
-        {
-            return this[index];
-        }
-        set
-        {
-            throw new NotSupportedException();
-        }
+        get => this[index];
+        set => throw new NotSupportedException();
     }
 
     /* ICollection interface implementation */
@@ -107,36 +68,15 @@ public partial class DataGridViewRowCollection : ICollection, IList
         ((ICollection)_items).CopyTo(array, index);
     }
 
-    int ICollection.Count
-    {
-        get
-        {
-            return Count;
-        }
-    }
+    int ICollection.Count => Count;
 
-    bool ICollection.IsSynchronized
-    {
-        get
-        {
-            return false;
-        }
-    }
+    bool ICollection.IsSynchronized => false;
 
-    object ICollection.SyncRoot
-    {
-        get
-        {
-            return this;
-        }
-    }
+    object ICollection.SyncRoot => this;
 
     /* IEnumerator interface implementation */
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return new UnsharingRowEnumerator(this);
-    }
+    IEnumerator IEnumerable.GetEnumerator() => new UnsharingRowEnumerator(this);
 
     public DataGridViewRowCollection(DataGridView dataGridView)
     {
@@ -147,21 +87,9 @@ public partial class DataGridViewRowCollection : ICollection, IList
         _items = new RowList(this);
     }
 
-    public int Count
-    {
-        get
-        {
-            return _items.Count;
-        }
-    }
+    public int Count => _items.Count;
 
-    internal bool IsCollectionChangedListenedTo
-    {
-        get
-        {
-            return (_onCollectionChanged is not null);
-        }
-    }
+    internal bool IsCollectionChangedListenedTo => _onCollectionChanged is not null;
 
     protected ArrayList List
     {
@@ -179,26 +107,11 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
     }
 
-    internal ArrayList SharedList
-    {
-        get
-        {
-            return ArrayList.Adapter(_items);
-        }
-    }
+    internal ArrayList SharedList => ArrayList.Adapter(_items);
 
-    public DataGridViewRow SharedRow(int rowIndex)
-    {
-        return (DataGridViewRow)SharedList[rowIndex]!;
-    }
+    public DataGridViewRow SharedRow(int rowIndex) => (DataGridViewRow)SharedList[rowIndex]!;
 
-    protected DataGridView DataGridView
-    {
-        get
-        {
-            return _dataGridView;
-        }
-    }
+    protected DataGridView DataGridView => _dataGridView;
 
     /// <summary>
     ///  Retrieves the DataGridViewRow with the specified index.
