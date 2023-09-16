@@ -27,14 +27,9 @@ public class DataGridViewImageColumn : DataGridViewColumn
             AlignmentInternal = DataGridViewContentAlignment.MiddleCenter
         };
 
-        if (valuesAreIcons)
-        {
-            defaultCellStyle.NullValue = DataGridViewImageCell.ErrorIcon;
-        }
-        else
-        {
-            defaultCellStyle.NullValue = DataGridViewImageCell.ErrorBitmap;
-        }
+        defaultCellStyle.NullValue = valuesAreIcons
+            ? DataGridViewImageCell.ErrorIcon
+            : DataGridViewImageCell.ErrorBitmap;
 
         DefaultCellStyle = defaultCellStyle;
     }
@@ -260,15 +255,9 @@ public class DataGridViewImageColumn : DataGridViewColumn
             return false;
         }
 
-        object defaultNullValue;
-        if (templateCell.ValueIsIcon)
-        {
-            defaultNullValue = DataGridViewImageCell.ErrorIcon;
-        }
-        else
-        {
-            defaultNullValue = DataGridViewImageCell.ErrorBitmap;
-        }
+        object defaultNullValue = templateCell.ValueIsIcon
+            ? DataGridViewImageCell.ErrorIcon
+            : DataGridViewImageCell.ErrorBitmap;
 
         DataGridViewCellStyle defaultCellStyle = DefaultCellStyle;
 
