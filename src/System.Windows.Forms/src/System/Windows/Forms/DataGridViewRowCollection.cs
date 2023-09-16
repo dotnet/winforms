@@ -53,7 +53,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     int IList.IndexOf(object value)
     {
-        return items.IndexOf(value);
+        return items.IndexOf((DataGridViewRow)value);
     }
 
     void IList.Insert(int index, object value)
@@ -103,7 +103,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     void ICollection.CopyTo(Array array, int index)
     {
-        items.CopyTo(array, index);
+        ((ICollection)items).CopyTo(array, index);
     }
 
     int ICollection.Count
@@ -174,7 +174,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                 DataGridViewRow dataGridViewRow = this[rowIndex];
             }
 
-            return items;
+            return ArrayList.Adapter(items);
         }
     }
 
@@ -182,7 +182,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
     {
         get
         {
-            return items;
+            return ArrayList.Adapter(items);
         }
     }
 
