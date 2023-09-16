@@ -21,18 +21,21 @@ public partial class DataGridViewRowCollection : ICollection, IList
 {
 #if DEBUG
     // set to false when the cached row heights are dirty and should not be accessed.
-    private bool cachedRowHeightsAccessAllowed = true;
+    private bool _cachedRowHeightsAccessAllowed = true;
 
     // set to false when the cached row counts are dirty and should not be accessed.
-    private bool cachedRowCountsAccessAllowed = true;
+    private bool _cachedRowCountsAccessAllowed = true;
 #endif
 
-    private CollectionChangeEventHandler onCollectionChanged;
-    private readonly RowList items;
-    private readonly List<DataGridViewElementStates> rowStates;
-    private int rowCountsVisible, rowCountsVisibleFrozen, rowCountsVisibleSelected;
-    private int rowsHeightVisible, rowsHeightVisibleFrozen;
-    private readonly DataGridView dataGridView;
+    private CollectionChangeEventHandler _onCollectionChanged;
+    private readonly RowList _items;
+    private readonly List<DataGridViewElementStates> _rowStates;
+    private int _rowCountsVisible;
+    private int _rowCountsVisibleFrozen;
+    private int _rowCountsVisibleSelected;
+    private int _rowsHeightVisible;
+    private int _rowsHeightVisibleFrozen;
+    private readonly DataGridView _dataGridView;
 
     /* IList interface implementation */
 
@@ -48,12 +51,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     bool IList.Contains(object value)
     {
-        return items.Contains(value);
+        return _items.Contains(value);
     }
 
     int IList.IndexOf(object value)
     {
-        return items.IndexOf((DataGridViewRow)value);
+        return _items.IndexOf((DataGridViewRow)value);
     }
 
     void IList.Insert(int index, object value)
@@ -103,7 +106,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     void ICollection.CopyTo(Array array, int index)
     {
-        ((ICollection)items).CopyTo(array, index);
+        ((ICollection)_items).CopyTo(array, index);
     }
 
     int ICollection.Count
@@ -141,16 +144,16 @@ public partial class DataGridViewRowCollection : ICollection, IList
     {
         InvalidateCachedRowCounts();
         InvalidateCachedRowsHeights();
-        this.dataGridView = dataGridView;
-        rowStates = new List<DataGridViewElementStates>();
-        items = new RowList(this);
+        _dataGridView = dataGridView;
+        _rowStates = new List<DataGridViewElementStates>();
+        _items = new RowList(this);
     }
 
     public int Count
     {
         get
         {
-            return items.Count;
+            return _items.Count;
         }
     }
 
@@ -158,7 +161,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
     {
         get
         {
-            return (onCollectionChanged is not null);
+            return (_onCollectionChanged is not null);
         }
     }
 
@@ -174,7 +177,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                 DataGridViewRow dataGridViewRow = this[rowIndex];
             }
 
-            return ArrayList.Adapter(items);
+            return ArrayList.Adapter(_items);
         }
     }
 
@@ -182,7 +185,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
     {
         get
         {
-            return ArrayList.Adapter(items);
+            return ArrayList.Adapter(_items);
         }
     }
 
@@ -195,7 +198,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
     {
         get
         {
-            return dataGridView;
+            return _dataGridView;
         }
     }
 
@@ -253,8 +256,8 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     public event CollectionChangeEventHandler CollectionChanged
     {
-        add => onCollectionChanged += value;
-        remove => onCollectionChanged -= value;
+        add => _onCollectionChanged += value;
+        remove => _onCollectionChanged -= value;
     }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -319,11 +322,11 @@ public partial class DataGridViewRowCollection : ICollection, IList
         DataGridViewElementStates rowState = dataGridViewRow.State;
         DataGridView.OnAddingRow(dataGridViewRow, rowState, true /*checkFrozenState*/);   // will throw an exception if the addition is illegal
 
-        dataGridViewRow.DataGridView = dataGridView;
+        dataGridViewRow.DataGridView = _dataGridView;
         int columnIndex = 0;
         foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
         {
-            dataGridViewCell.DataGridView = dataGridView;
+            dataGridViewCell.DataGridView = _dataGridView;
             Debug.Assert(dataGridViewCell.OwningRow == dataGridViewRow);
             dataGridViewCell.OwningColumn = DataGridView.Columns[columnIndex];
             columnIndex++;
@@ -337,11 +340,11 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         int index = SharedList.Add(dataGridViewRow);
         Debug.Assert((rowState & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
-        rowStates.Add(rowState);
+        _rowStates.Add(rowState);
 #if DEBUG
         DataGridView._dataStoreAccessAllowed = false;
-        cachedRowHeightsAccessAllowed = false;
-        cachedRowCountsAccessAllowed = false;
+        _cachedRowHeightsAccessAllowed = false;
+        _cachedRowCountsAccessAllowed = false;
 #endif
         if (values is not null || !RowIsSharable(index) || RowHasValueOrToolTipText(dataGridViewRow) || IsCollectionChangedListenedTo)
         {
@@ -434,11 +437,11 @@ public partial class DataGridViewRowCollection : ICollection, IList
         Debug.Assert(rowTemplate.Cells.Count == DataGridView.Columns.Count);
         DataGridViewElementStates rowTemplateState = rowTemplate.State;
         Debug.Assert((rowTemplateState & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
-        rowTemplate.DataGridView = dataGridView;
+        rowTemplate.DataGridView = _dataGridView;
         int columnIndex = 0;
         foreach (DataGridViewCell dataGridViewCell in rowTemplate.Cells)
         {
-            dataGridViewCell.DataGridView = dataGridView;
+            dataGridViewCell.DataGridView = _dataGridView;
             Debug.Assert(dataGridViewCell.OwningRow == rowTemplate);
             dataGridViewCell.OwningColumn = DataGridView.Columns[columnIndex];
             columnIndex++;
@@ -446,7 +449,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         if (rowTemplate.HasHeaderCell)
         {
-            rowTemplate.HeaderCell.DataGridView = dataGridView;
+            rowTemplate.HeaderCell.DataGridView = _dataGridView;
             rowTemplate.HeaderCell.OwningRow = rowTemplate;
         }
 
@@ -504,7 +507,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         int columnIndex = 0;
         foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
         {
-            dataGridViewCell.DataGridView = dataGridView;
+            dataGridViewCell.DataGridView = _dataGridView;
             Debug.Assert(dataGridViewCell.OwningRow == dataGridViewRow);
             if (dataGridViewCell.ColumnIndex == -1)
             {
@@ -522,15 +525,15 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         int index = SharedList.Add(dataGridViewRow);
         Debug.Assert((dataGridViewRow.State & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
-        rowStates.Add(dataGridViewRow.State);
-        Debug.Assert(rowStates.Count == SharedList.Count);
+        _rowStates.Add(dataGridViewRow.State);
+        Debug.Assert(_rowStates.Count == SharedList.Count);
 #if DEBUG
         DataGridView._dataStoreAccessAllowed = false;
-        cachedRowHeightsAccessAllowed = false;
-        cachedRowCountsAccessAllowed = false;
+        _cachedRowHeightsAccessAllowed = false;
+        _cachedRowCountsAccessAllowed = false;
 #endif
 
-        dataGridViewRow.DataGridView = dataGridView;
+        dataGridViewRow.DataGridView = _dataGridView;
         if (!RowIsSharable(index) || RowHasValueOrToolTipText(dataGridViewRow) || IsCollectionChangedListenedTo)
         {
             dataGridViewRow.Index = index;
@@ -580,16 +583,16 @@ public partial class DataGridViewRowCollection : ICollection, IList
         if (rowTemplate.Index == -1 && !IsCollectionChangedListenedTo && !newRow)
         {
             Debug.Assert(DataGridView is not null);
-            DataGridViewElementStates rowState = rowStates[indexSource] & ~dgvesRemove;
+            DataGridViewElementStates rowState = _rowStates[indexSource] & ~dgvesRemove;
             rowState |= dgvesAdd;
             DataGridView.OnAddingRow(rowTemplate, rowState, true /*checkFrozenState*/);   // will throw an exception if the addition is illegal
 
             index = SharedList.Add(rowTemplate);
-            rowStates.Add(rowState);
+            _rowStates.Add(rowState);
 #if DEBUG
             DataGridView._dataStoreAccessAllowed = false;
-            cachedRowHeightsAccessAllowed = false;
-            cachedRowCountsAccessAllowed = false;
+            _cachedRowHeightsAccessAllowed = false;
+            _cachedRowCountsAccessAllowed = false;
 #endif
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, rowTemplate), index, 1);
             return index;
@@ -648,7 +651,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new ArgumentOutOfRangeException(nameof(count), SR.DataGridViewRowCollection_CountOutOfRange);
         }
 
-        DataGridViewElementStates rowTemplateState = rowStates[indexSource] & ~dgvesRemove;
+        DataGridViewElementStates rowTemplateState = _rowStates[indexSource] & ~dgvesRemove;
         rowTemplateState |= dgvesAdd;
 
         return AddCopiesPrivate(SharedRow(indexSource), rowTemplateState, count);
@@ -656,22 +659,22 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     private int AddCopiesPrivate(DataGridViewRow rowTemplate, DataGridViewElementStates rowTemplateState, int count)
     {
-        int index, indexStart = items.Count;
+        int index, indexStart = _items.Count;
         if (rowTemplate.Index == -1)
         {
             DataGridView.OnAddingRow(rowTemplate, rowTemplateState, true /*checkFrozenState*/);   // Done once only, continue to check if this is OK - will throw an exception if the addition is illegal.
             for (int i = 0; i < count - 1; i++)
             {
                 SharedList.Add(rowTemplate);
-                rowStates.Add(rowTemplateState);
+                _rowStates.Add(rowTemplateState);
             }
 
             index = SharedList.Add(rowTemplate);
-            rowStates.Add(rowTemplateState);
+            _rowStates.Add(rowTemplateState);
 #if DEBUG
             DataGridView._dataStoreAccessAllowed = false;
-            cachedRowHeightsAccessAllowed = false;
-            cachedRowCountsAccessAllowed = false;
+            _cachedRowHeightsAccessAllowed = false;
+            _cachedRowCountsAccessAllowed = false;
 #endif
             DataGridView.OnAddedRow_PreNotification(index);   // Only calling this once instead of 'count' times. Continue to check if this is OK.
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null), indexStart, count);
@@ -695,15 +698,15 @@ public partial class DataGridViewRowCollection : ICollection, IList
                     for (int i = 1; i < count - 1; i++)
                     {
                         SharedList.Add(rowTemplate2);
-                        rowStates.Add(rowTemplateState);
+                        _rowStates.Add(rowTemplateState);
                     }
 
                     index = SharedList.Add(rowTemplate2);
-                    rowStates.Add(rowTemplateState);
+                    _rowStates.Add(rowTemplateState);
 #if DEBUG
                     DataGridView._dataStoreAccessAllowed = false;
-                    cachedRowHeightsAccessAllowed = false;
-                    cachedRowCountsAccessAllowed = false;
+                    _cachedRowHeightsAccessAllowed = false;
+                    _cachedRowCountsAccessAllowed = false;
 #endif
                     DataGridView.OnAddedRow_PreNotification(index);   // Only calling this once instead of 'count-1' times. Continue to check if this is OK.
                 }
@@ -745,7 +748,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         DataGridViewRow dataGridViewRow = (DataGridViewRow)rowTemplate.Clone();
         dataGridViewRow.State = DataGridViewElementStates.None;
-        dataGridViewRow.DataGridView = dataGridView;
+        dataGridViewRow.DataGridView = _dataGridView;
         DataGridViewCellCollection dgvcc = dataGridViewRow.Cells;
         int columnIndex = 0;
         foreach (DataGridViewCell dataGridViewCell in dgvcc)
@@ -755,7 +758,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                 dataGridViewCell.Value = dataGridViewCell.DefaultNewRowValue;
             }
 
-            dataGridViewCell.DataGridView = dataGridView;
+            dataGridViewCell.DataGridView = _dataGridView;
             dataGridViewCell.OwningColumn = DataGridView.Columns[columnIndex];
             columnIndex++;
         }
@@ -763,7 +766,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         DataGridViewElementStates rowState = rowTemplate.State & ~(DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed);
         if (dataGridViewRow.HasHeaderCell)
         {
-            dataGridViewRow.HeaderCell.DataGridView = dataGridView;
+            dataGridViewRow.HeaderCell.DataGridView = _dataGridView;
             dataGridViewRow.HeaderCell.OwningRow = dataGridViewRow;
         }
 
@@ -771,11 +774,11 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
 #if DEBUG
         DataGridView._dataStoreAccessAllowed = false;
-        cachedRowHeightsAccessAllowed = false;
-        cachedRowCountsAccessAllowed = false;
+        _cachedRowHeightsAccessAllowed = false;
+        _cachedRowCountsAccessAllowed = false;
 #endif
         Debug.Assert(dataGridViewRow.Index == -1);
-        rowStates.Add(rowState);
+        _rowStates.Add(rowState);
         return SharedList.Add(dataGridViewRow);
     }
 
@@ -809,7 +812,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new InvalidOperationException(SR.DataGridViewRowCollection_NoColumns);
         }
 
-        int indexStart = items.Count;
+        int indexStart = _items.Count;
 
         // OnAddingRows checks for Selected flag of each row and their dimension.
         DataGridView.OnAddingRows(dataGridViewRows, true /*checkFrozenStates*/);   // will throw an exception if the addition is illegal
@@ -820,7 +823,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             int columnIndex = 0;
             foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
             {
-                dataGridViewCell.DataGridView = dataGridView;
+                dataGridViewCell.DataGridView = _dataGridView;
                 Debug.Assert(dataGridViewCell.OwningRow == dataGridViewRow);
                 dataGridViewCell.OwningColumn = DataGridView.Columns[columnIndex];
                 columnIndex++;
@@ -828,24 +831,24 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
             if (dataGridViewRow.HasHeaderCell)
             {
-                dataGridViewRow.HeaderCell.DataGridView = dataGridView;
+                dataGridViewRow.HeaderCell.DataGridView = _dataGridView;
                 dataGridViewRow.HeaderCell.OwningRow = dataGridViewRow;
             }
 
             int index = SharedList.Add(dataGridViewRow);
             Debug.Assert((dataGridViewRow.State & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
-            rowStates.Add(dataGridViewRow.State);
+            _rowStates.Add(dataGridViewRow.State);
 #if DEBUG
             DataGridView._dataStoreAccessAllowed = false;
-            cachedRowHeightsAccessAllowed = false;
-            cachedRowCountsAccessAllowed = false;
+            _cachedRowHeightsAccessAllowed = false;
+            _cachedRowCountsAccessAllowed = false;
 #endif
             dataGridViewRow.Index = index;
             Debug.Assert(dataGridViewRow.State == SharedRowState(index));
-            dataGridViewRow.DataGridView = dataGridView;
+            dataGridViewRow.DataGridView = _dataGridView;
         }
 
-        Debug.Assert(rowStates.Count == SharedList.Count);
+        Debug.Assert(_rowStates.Count == SharedList.Count);
 
         DataGridView.OnAddedRows_PreNotification(dataGridViewRows);
         OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null), indexStart, dataGridViewRows.Length);
@@ -878,7 +881,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     internal void ClearInternal(bool recreateNewRow)
     {
-        int rowCount = items.Count;
+        int rowCount = _items.Count;
         if (rowCount > 0)
         {
             DataGridView.OnClearingRows();
@@ -889,18 +892,18 @@ public partial class DataGridViewRowCollection : ICollection, IList
             }
 
             SharedList.Clear();
-            rowStates.Clear();
+            _rowStates.Clear();
 #if DEBUG
             DataGridView._dataStoreAccessAllowed = false;
-            cachedRowHeightsAccessAllowed = false;
-            cachedRowCountsAccessAllowed = false;
+            _cachedRowHeightsAccessAllowed = false;
+            _cachedRowCountsAccessAllowed = false;
 #endif
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null), 0, rowCount, true, false, recreateNewRow, new Point(-1, -1));
         }
         else if (recreateNewRow &&
                  DataGridView.Columns.Count != 0 &&
                  DataGridView.AllowUserToAddRowsInternal &&
-                 items.Count == 0) // accessing AllowUserToAddRowsInternal can trigger a nested call to ClearInternal. Rows count needs to be checked again.
+                 _items.Count == 0) // accessing AllowUserToAddRowsInternal can trigger a nested call to ClearInternal. Rows count needs to be checked again.
         {
             DataGridView.AddNewRow(false);
         }
@@ -911,12 +914,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
     /// </summary>
     public virtual bool Contains(DataGridViewRow dataGridViewRow)
     {
-        return items.IndexOf(dataGridViewRow) != -1;
+        return _items.IndexOf(dataGridViewRow) != -1;
     }
 
     public void CopyTo(DataGridViewRow[] array, int index)
     {
-        items.CopyTo(array, index);
+        _items.CopyTo(array, index);
     }
 
     // returns the row collection index for the n'th visible row
@@ -953,26 +956,26 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(includeFilter)));
         }
 #if DEBUG
-        Debug.Assert(cachedRowCountsAccessAllowed);
+        Debug.Assert(_cachedRowCountsAccessAllowed);
 #endif
         switch (includeFilter)
         {
             case DataGridViewElementStates.Visible:
-                if (rowCountsVisible == 0)
+                if (_rowCountsVisible == 0)
                 {
                     return -1;
                 }
 
                 break;
             case DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen:
-                if (rowCountsVisibleFrozen == 0)
+                if (_rowCountsVisibleFrozen == 0)
                 {
                     return -1;
                 }
 
                 break;
             case DataGridViewElementStates.Visible | DataGridViewElementStates.Selected:
-                if (rowCountsVisibleSelected == 0)
+                if (_rowCountsVisibleSelected == 0)
                 {
                     return -1;
                 }
@@ -981,12 +984,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
 
         int index = 0;
-        while (index < items.Count && !((GetRowState(index) & includeFilter) == includeFilter))
+        while (index < _items.Count && !((GetRowState(index) & includeFilter) == includeFilter))
         {
             index++;
         }
 
-        return (index < items.Count) ? index : -1;
+        return (index < _items.Count) ? index : -1;
     }
 
     public int GetFirstRow(DataGridViewElementStates includeFilter,
@@ -1009,26 +1012,26 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(excludeFilter)));
         }
 #if DEBUG
-        Debug.Assert(cachedRowCountsAccessAllowed);
+        Debug.Assert(_cachedRowCountsAccessAllowed);
 #endif
         switch (includeFilter)
         {
             case DataGridViewElementStates.Visible:
-                if (rowCountsVisible == 0)
+                if (_rowCountsVisible == 0)
                 {
                     return -1;
                 }
 
                 break;
             case DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen:
-                if (rowCountsVisibleFrozen == 0)
+                if (_rowCountsVisibleFrozen == 0)
                 {
                     return -1;
                 }
 
                 break;
             case DataGridViewElementStates.Visible | DataGridViewElementStates.Selected:
-                if (rowCountsVisibleSelected == 0)
+                if (_rowCountsVisibleSelected == 0)
                 {
                     return -1;
                 }
@@ -1037,12 +1040,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
 
         int index = 0;
-        while (index < items.Count && (!((GetRowState(index) & includeFilter) == includeFilter) || !((GetRowState(index) & excludeFilter) == 0)))
+        while (index < _items.Count && (!((GetRowState(index) & includeFilter) == includeFilter) || !((GetRowState(index) & excludeFilter) == 0)))
         {
             index++;
         }
 
-        return (index < items.Count) ? index : -1;
+        return (index < _items.Count) ? index : -1;
     }
 
     public int GetLastRow(DataGridViewElementStates includeFilter)
@@ -1053,26 +1056,26 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(includeFilter)));
         }
 #if DEBUG
-        Debug.Assert(cachedRowCountsAccessAllowed);
+        Debug.Assert(_cachedRowCountsAccessAllowed);
 #endif
         switch (includeFilter)
         {
             case DataGridViewElementStates.Visible:
-                if (rowCountsVisible == 0)
+                if (_rowCountsVisible == 0)
                 {
                     return -1;
                 }
 
                 break;
             case DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen:
-                if (rowCountsVisibleFrozen == 0)
+                if (_rowCountsVisibleFrozen == 0)
                 {
                     return -1;
                 }
 
                 break;
             case DataGridViewElementStates.Visible | DataGridViewElementStates.Selected:
-                if (rowCountsVisibleSelected == 0)
+                if (_rowCountsVisibleSelected == 0)
                 {
                     return -1;
                 }
@@ -1080,7 +1083,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                 break;
         }
 
-        int index = items.Count - 1;
+        int index = _items.Count - 1;
         while (index >= 0 && !((GetRowState(index) & includeFilter) == includeFilter))
         {
             index--;
@@ -1118,12 +1121,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
 
         int index = indexStart + 1;
-        while (index < items.Count && !((GetRowState(index) & includeFilter) == includeFilter))
+        while (index < _items.Count && !((GetRowState(index) & includeFilter) == includeFilter))
         {
             index++;
         }
 
-        return (index < items.Count) ? index : -1;
+        return (index < _items.Count) ? index : -1;
     }
 
     public int GetNextRow(int indexStart,
@@ -1153,12 +1156,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
 
         int index = indexStart + 1;
-        while (index < items.Count && (!((GetRowState(index) & includeFilter) == includeFilter) || !((GetRowState(index) & excludeFilter) == 0)))
+        while (index < _items.Count && (!((GetRowState(index) & includeFilter) == includeFilter) || !((GetRowState(index) & excludeFilter) == 0)))
         {
             index++;
         }
 
-        return (index < items.Count) ? index : -1;
+        return (index < _items.Count) ? index : -1;
     }
 
     public int GetPreviousRow(int indexStart, DataGridViewElementStates includeFilter)
@@ -1169,9 +1172,9 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(includeFilter)));
         }
 
-        if (indexStart > items.Count)
+        if (indexStart > _items.Count)
         {
-            throw new ArgumentOutOfRangeException(nameof(indexStart), indexStart, string.Format(SR.InvalidHighBoundArgumentEx, nameof(indexStart), indexStart, items.Count));
+            throw new ArgumentOutOfRangeException(nameof(indexStart), indexStart, string.Format(SR.InvalidHighBoundArgumentEx, nameof(indexStart), indexStart, _items.Count));
         }
 
         int index = indexStart - 1;
@@ -1204,9 +1207,9 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(excludeFilter)));
         }
 
-        if (indexStart > items.Count)
+        if (indexStart > _items.Count)
         {
-            throw new ArgumentOutOfRangeException(nameof(indexStart), indexStart, string.Format(SR.InvalidHighBoundArgumentEx, nameof(indexStart), indexStart, items.Count));
+            throw new ArgumentOutOfRangeException(nameof(indexStart), indexStart, string.Format(SR.InvalidHighBoundArgumentEx, nameof(indexStart), indexStart, _items.Count));
         }
 
         int index = indexStart - 1;
@@ -1226,37 +1229,37 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(includeFilter)));
         }
 #if DEBUG
-        Debug.Assert(cachedRowCountsAccessAllowed);
+        Debug.Assert(_cachedRowCountsAccessAllowed);
 #endif
         // cache returned value and reuse it as long as none
         // of the row's state has changed.
         switch (includeFilter)
         {
             case DataGridViewElementStates.Visible:
-                if (rowCountsVisible != -1)
+                if (_rowCountsVisible != -1)
                 {
-                    return rowCountsVisible;
+                    return _rowCountsVisible;
                 }
 
                 break;
             case DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen:
-                if (rowCountsVisibleFrozen != -1)
+                if (_rowCountsVisibleFrozen != -1)
                 {
-                    return rowCountsVisibleFrozen;
+                    return _rowCountsVisibleFrozen;
                 }
 
                 break;
             case DataGridViewElementStates.Visible | DataGridViewElementStates.Selected:
-                if (rowCountsVisibleSelected != -1)
+                if (_rowCountsVisibleSelected != -1)
                 {
-                    return rowCountsVisibleSelected;
+                    return _rowCountsVisibleSelected;
                 }
 
                 break;
         }
 
         int rowCount = 0;
-        for (int rowIndex = 0; rowIndex < items.Count; rowIndex++)
+        for (int rowIndex = 0; rowIndex < _items.Count; rowIndex++)
         {
             if ((GetRowState(rowIndex) & includeFilter) == includeFilter)
             {
@@ -1267,13 +1270,13 @@ public partial class DataGridViewRowCollection : ICollection, IList
         switch (includeFilter)
         {
             case DataGridViewElementStates.Visible:
-                rowCountsVisible = rowCount;
+                _rowCountsVisible = rowCount;
                 break;
             case DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen:
-                rowCountsVisibleFrozen = rowCount;
+                _rowCountsVisibleFrozen = rowCount;
                 break;
             case DataGridViewElementStates.Visible | DataGridViewElementStates.Selected:
-                rowCountsVisibleSelected = rowCount;
+                _rowCountsVisibleSelected = rowCount;
                 break;
         }
 
@@ -1288,7 +1291,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         for (int i = 0; i < Count; i++)
         {
             int index = DisplayIndexToRowIndex(i);
-            if (index != -1 && items[index] == row)
+            if (index != -1 && _items[index] == row)
             {
                 return i;
             }
@@ -1322,44 +1325,44 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(includeFilter)));
         }
 #if DEBUG
-        Debug.Assert(cachedRowHeightsAccessAllowed);
+        Debug.Assert(_cachedRowHeightsAccessAllowed);
 #endif
         // cache returned value and reuse it as long as none
         // of the row's state/thickness has changed.
         switch (includeFilter)
         {
             case DataGridViewElementStates.Visible:
-                if (rowsHeightVisible != -1)
+                if (_rowsHeightVisible != -1)
                 {
-                    return rowsHeightVisible;
+                    return _rowsHeightVisible;
                 }
 
                 break;
             case DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen:
-                if (rowsHeightVisibleFrozen != -1)
+                if (_rowsHeightVisibleFrozen != -1)
                 {
-                    return rowsHeightVisibleFrozen;
+                    return _rowsHeightVisibleFrozen;
                 }
 
                 break;
         }
 
         int rowsHeight = 0;
-        for (int rowIndex = 0; rowIndex < items.Count; rowIndex++)
+        for (int rowIndex = 0; rowIndex < _items.Count; rowIndex++)
         {
             if ((GetRowState(rowIndex) & includeFilter) == includeFilter)
             {
-                rowsHeight += ((DataGridViewRow)items[rowIndex]).GetHeight(rowIndex);
+                rowsHeight += ((DataGridViewRow)_items[rowIndex]).GetHeight(rowIndex);
             }
         }
 
         switch (includeFilter)
         {
             case DataGridViewElementStates.Visible:
-                rowsHeightVisible = rowsHeight;
+                _rowsHeightVisible = rowsHeight;
                 break;
             case DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen:
-                rowsHeightVisibleFrozen = rowsHeight;
+                _rowsHeightVisibleFrozen = rowsHeight;
                 break;
         }
 
@@ -1377,7 +1380,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         {
             if ((GetRowState(rowIndex) & includeFilter) == includeFilter)
             {
-                rowsHeight += ((DataGridViewRow)items[rowIndex]).GetHeight(rowIndex);
+                rowsHeight += ((DataGridViewRow)_items[rowIndex]).GetHeight(rowIndex);
             }
         }
 
@@ -1388,14 +1391,14 @@ public partial class DataGridViewRowCollection : ICollection, IList
     private bool GetRowsHeightExceedLimit(DataGridViewElementStates includeFilter, int fromRowIndex, int toRowIndex, int heightLimit)
     {
         Debug.Assert(toRowIndex >= fromRowIndex);
-        Debug.Assert(toRowIndex == items.Count || (GetRowState(toRowIndex) & includeFilter) == includeFilter);
+        Debug.Assert(toRowIndex == _items.Count || (GetRowState(toRowIndex) & includeFilter) == includeFilter);
 
         int rowsHeight = 0;
         for (int rowIndex = fromRowIndex; rowIndex < toRowIndex; rowIndex++)
         {
             if ((GetRowState(rowIndex) & includeFilter) == includeFilter)
             {
-                rowsHeight += ((DataGridViewRow)items[rowIndex]).GetHeight(rowIndex);
+                rowsHeight += ((DataGridViewRow)_items[rowIndex]).GetHeight(rowIndex);
                 if (rowsHeight > heightLimit)
                 {
                     return true;
@@ -1408,7 +1411,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     public virtual DataGridViewElementStates GetRowState(int rowIndex)
     {
-        if (rowIndex < 0 || rowIndex >= items.Count)
+        if (rowIndex < 0 || rowIndex >= _items.Count)
         {
             throw new ArgumentOutOfRangeException(nameof(rowIndex), SR.DataGridViewRowCollection_RowIndexOutOfRange);
         }
@@ -1427,7 +1430,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     public int IndexOf(DataGridViewRow dataGridViewRow)
     {
-        return items.IndexOf(dataGridViewRow);
+        return _items.IndexOf(dataGridViewRow);
     }
 
     public virtual void Insert(int rowIndex, params object[] values)
@@ -1512,11 +1515,11 @@ public partial class DataGridViewRowCollection : ICollection, IList
         Debug.Assert(rowTemplate.Cells.Count == DataGridView.Columns.Count);
         DataGridViewElementStates rowTemplateState = rowTemplate.State;
         Debug.Assert((rowTemplateState & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
-        rowTemplate.DataGridView = dataGridView;
+        rowTemplate.DataGridView = _dataGridView;
         int columnIndex = 0;
         foreach (DataGridViewCell dataGridViewCell in rowTemplate.Cells)
         {
-            dataGridViewCell.DataGridView = dataGridView;
+            dataGridViewCell.DataGridView = _dataGridView;
             Debug.Assert(dataGridViewCell.OwningRow == rowTemplate);
             dataGridViewCell.OwningColumn = DataGridView.Columns[columnIndex];
             columnIndex++;
@@ -1524,7 +1527,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         if (rowTemplate.HasHeaderCell)
         {
-            rowTemplate.HeaderCell.DataGridView = dataGridView;
+            rowTemplate.HeaderCell.DataGridView = _dataGridView;
             rowTemplate.HeaderCell.OwningRow = rowTemplate;
         }
 
@@ -1603,7 +1606,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         int columnIndex = 0;
         foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
         {
-            dataGridViewCell.DataGridView = dataGridView;
+            dataGridViewCell.DataGridView = _dataGridView;
             Debug.Assert(dataGridViewCell.OwningRow == dataGridViewRow);
             if (dataGridViewCell.ColumnIndex == -1)
             {
@@ -1621,15 +1624,15 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         SharedList.Insert(rowIndex, dataGridViewRow);
         Debug.Assert((dataGridViewRow.State & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
-        rowStates.Insert(rowIndex, dataGridViewRow.State);
-        Debug.Assert(rowStates.Count == SharedList.Count);
+        _rowStates.Insert(rowIndex, dataGridViewRow.State);
+        Debug.Assert(_rowStates.Count == SharedList.Count);
 #if DEBUG
         DataGridView._dataStoreAccessAllowed = false;
-        cachedRowHeightsAccessAllowed = false;
-        cachedRowCountsAccessAllowed = false;
+        _cachedRowHeightsAccessAllowed = false;
+        _cachedRowCountsAccessAllowed = false;
 #endif
 
-        dataGridViewRow.DataGridView = dataGridView;
+        dataGridViewRow.DataGridView = _dataGridView;
         if (!RowIsSharable(rowIndex) || RowHasValueOrToolTipText(dataGridViewRow) || IsCollectionChangedListenedTo)
         {
             dataGridViewRow.Index = rowIndex;
@@ -1701,12 +1704,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
                 for (int i = 0; i < count; i++)
                 {
                     SharedList.Insert(indexDestination + i, rowTemplate);
-                    rowStates.Insert(indexDestination + i, rowTemplateState);
+                    _rowStates.Insert(indexDestination + i, rowTemplateState);
                 }
 #if DEBUG
                 DataGridView._dataStoreAccessAllowed = false;
-                cachedRowHeightsAccessAllowed = false;
-                cachedRowCountsAccessAllowed = false;
+                _cachedRowHeightsAccessAllowed = false;
+                _cachedRowCountsAccessAllowed = false;
 #endif
                 // Only calling this once instead of 'count' times. Continue to check if this is OK.
                 DataGridView.OnInsertedRow_PreNotification(indexDestination, count);
@@ -1720,20 +1723,20 @@ public partial class DataGridViewRowCollection : ICollection, IList
             {
                 DataGridView.OnInsertingRow(indexDestination, rowTemplate, rowTemplateState, ref newCurrentCell, true, 1, false /*force*/); // will throw an exception if the insertion is illegal
                 SharedList.Insert(indexDestination, rowTemplate);
-                rowStates.Insert(indexDestination, rowTemplateState);
+                _rowStates.Insert(indexDestination, rowTemplateState);
 #if DEBUG
                 DataGridView._dataStoreAccessAllowed = false;
-                cachedRowHeightsAccessAllowed = false;
-                cachedRowCountsAccessAllowed = false;
+                _cachedRowHeightsAccessAllowed = false;
+                _cachedRowCountsAccessAllowed = false;
 #endif
                 OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, SharedRow(indexDestination)), indexDestination, count, false, true, false, newCurrentCell);
             }
         }
         else
         {
-            // Sets this.DataGridView.dataStoreAccessAllowed to false
+            // Sets DataGridView.dataStoreAccessAllowed to false
             InsertDuplicateRow(indexDestination, rowTemplate, true, ref newCurrentCell);
-            Debug.Assert(rowStates.Count == SharedList.Count);
+            Debug.Assert(_rowStates.Count == SharedList.Count);
             if (count > 1)
             {
                 DataGridView.OnInsertedRow_PreNotification(indexDestination, 1);
@@ -1745,12 +1748,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
                     for (int i = 1; i < count; i++)
                     {
                         SharedList.Insert(indexDestination + i, rowTemplate2);
-                        rowStates.Insert(indexDestination + i, rowTemplateState);
+                        _rowStates.Insert(indexDestination + i, rowTemplateState);
                     }
 #if DEBUG
                     DataGridView._dataStoreAccessAllowed = false;
-                    cachedRowHeightsAccessAllowed = false;
-                    cachedRowCountsAccessAllowed = false;
+                    _cachedRowHeightsAccessAllowed = false;
+                    _cachedRowCountsAccessAllowed = false;
 #endif
                     // Only calling this once instead of 'count-1' times. Continue to check if this is OK.
                     DataGridView.OnInsertedRow_PreNotification(indexDestination + 1, count - 1);
@@ -1762,7 +1765,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                     for (int i = 1; i < count; i++)
                     {
                         InsertDuplicateRow(indexDestination + i, rowTemplate, false, ref newCurrentCell);
-                        Debug.Assert(rowStates.Count == SharedList.Count);
+                        Debug.Assert(_rowStates.Count == SharedList.Count);
                         UnshareRow(indexDestination + i);
                         DataGridView.OnInsertedRow_PreNotification(indexDestination + i, 1);
                     }
@@ -1793,12 +1796,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         DataGridViewRow dataGridViewRow = (DataGridViewRow)rowTemplate.Clone();
         dataGridViewRow.State = DataGridViewElementStates.None;
-        dataGridViewRow.DataGridView = dataGridView;
+        dataGridViewRow.DataGridView = _dataGridView;
         DataGridViewCellCollection dgvcc = dataGridViewRow.Cells;
         int columnIndex = 0;
         foreach (DataGridViewCell dataGridViewCell in dgvcc)
         {
-            dataGridViewCell.DataGridView = dataGridView;
+            dataGridViewCell.DataGridView = _dataGridView;
             dataGridViewCell.OwningColumn = DataGridView.Columns[columnIndex];
             columnIndex++;
         }
@@ -1806,7 +1809,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         DataGridViewElementStates rowState = rowTemplate.State & ~(DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed);
         if (dataGridViewRow.HasHeaderCell)
         {
-            dataGridViewRow.HeaderCell.DataGridView = dataGridView;
+            dataGridViewRow.HeaderCell.DataGridView = _dataGridView;
             dataGridViewRow.HeaderCell.OwningRow = dataGridViewRow;
         }
 
@@ -1814,12 +1817,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         Debug.Assert(dataGridViewRow.Index == -1);
         SharedList.Insert(indexDestination, dataGridViewRow);
-        rowStates.Insert(indexDestination, rowState);
-        Debug.Assert(rowStates.Count == SharedList.Count);
+        _rowStates.Insert(indexDestination, rowState);
+        Debug.Assert(_rowStates.Count == SharedList.Count);
 #if DEBUG
         DataGridView._dataStoreAccessAllowed = false;
-        cachedRowHeightsAccessAllowed = false;
-        cachedRowCountsAccessAllowed = false;
+        _cachedRowHeightsAccessAllowed = false;
+        _cachedRowCountsAccessAllowed = false;
 #endif
     }
 
@@ -1877,7 +1880,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             int columnIndex = 0;
             foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
             {
-                dataGridViewCell.DataGridView = dataGridView;
+                dataGridViewCell.DataGridView = _dataGridView;
                 Debug.Assert(dataGridViewCell.OwningRow == dataGridViewRow);
                 if (dataGridViewCell.ColumnIndex == -1)
                 {
@@ -1895,17 +1898,17 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
             SharedList.Insert(rowIndexInserted, dataGridViewRow);
             Debug.Assert((dataGridViewRow.State & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
-            rowStates.Insert(rowIndexInserted, dataGridViewRow.State);
-            Debug.Assert(rowStates.Count == SharedList.Count);
+            _rowStates.Insert(rowIndexInserted, dataGridViewRow.State);
+            Debug.Assert(_rowStates.Count == SharedList.Count);
 #if DEBUG
             DataGridView._dataStoreAccessAllowed = false;
-            cachedRowHeightsAccessAllowed = false;
-            cachedRowCountsAccessAllowed = false;
+            _cachedRowHeightsAccessAllowed = false;
+            _cachedRowCountsAccessAllowed = false;
 #endif
 
             dataGridViewRow.Index = rowIndexInserted;
             Debug.Assert(dataGridViewRow.State == SharedRowState(rowIndexInserted));
-            dataGridViewRow.DataGridView = dataGridView;
+            dataGridViewRow.DataGridView = _dataGridView;
             rowIndexInserted++;
         }
 
@@ -1929,23 +1932,23 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
         else if (includeFilter == DataGridViewElementStates.Frozen)
         {
-            rowCountsVisibleFrozen = -1;
+            _rowCountsVisibleFrozen = -1;
         }
         else if (includeFilter == DataGridViewElementStates.Selected)
         {
-            rowCountsVisibleSelected = -1;
+            _rowCountsVisibleSelected = -1;
         }
 
 #if DEBUG
-        cachedRowCountsAccessAllowed = true;
+        _cachedRowCountsAccessAllowed = true;
 #endif
     }
 
     internal void InvalidateCachedRowCounts()
     {
-        rowCountsVisible = rowCountsVisibleFrozen = rowCountsVisibleSelected = -1;
+        _rowCountsVisible = _rowCountsVisibleFrozen = _rowCountsVisibleSelected = -1;
 #if DEBUG
-        cachedRowCountsAccessAllowed = true;
+        _cachedRowCountsAccessAllowed = true;
 #endif
     }
 
@@ -1964,25 +1967,25 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
         else if (includeFilter == DataGridViewElementStates.Frozen)
         {
-            rowsHeightVisibleFrozen = -1;
+            _rowsHeightVisibleFrozen = -1;
         }
 
 #if DEBUG
-        cachedRowHeightsAccessAllowed = true;
+        _cachedRowHeightsAccessAllowed = true;
 #endif
     }
 
     internal void InvalidateCachedRowsHeights()
     {
-        rowsHeightVisible = rowsHeightVisibleFrozen = -1;
+        _rowsHeightVisible = _rowsHeightVisibleFrozen = -1;
 #if DEBUG
-        cachedRowHeightsAccessAllowed = true;
+        _cachedRowHeightsAccessAllowed = true;
 #endif
     }
 
     protected virtual void OnCollectionChanged(CollectionChangeEventArgs e)
     {
-        onCollectionChanged?.Invoke(this, e);
+        _onCollectionChanged?.Invoke(this, e);
     }
 
     private void OnCollectionChanged(CollectionChangeEventArgs e,
@@ -2107,7 +2110,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                     bool deletedRowFrozen = (rowStates & DataGridViewElementStates.Frozen) != 0;
 
                     // Can't do this earlier since it would break UpdateRowCaches
-                    this.rowStates.RemoveAt(rowIndex);
+                    _rowStates.RemoveAt(rowIndex);
                     SharedList.RemoveAt(rowIndex);
 #if DEBUG
                     DataGridView._dataStoreAccessAllowed = false;
@@ -2306,14 +2309,14 @@ public partial class DataGridViewRowCollection : ICollection, IList
         UpdateRowCaches(index, ref dataGridViewRow, false /*adding*/);
         if (dataGridViewRow.Index != -1)
         {
-            rowStates[index] = dataGridViewRow.State;
+            _rowStates[index] = dataGridViewRow.State;
             // Only detach unshared rows, since a shared row has never been accessed by the user
             dataGridViewRow.DetachFromDataGridView();
         }
 
         // Note: cannot set dataGridViewRow.DataGridView to null because this row may be shared and still be used.
-        // Note that OnCollectionChanged takes care of calling this.items.RemoveAt(index) &
-        // this.rowStates.RemoveAt(index). Can't do it here since OnCollectionChanged uses the arrays.
+        // Note that OnCollectionChanged takes care of calling _items.RemoveAt(index) &
+        // _rowStates.RemoveAt(index). Can't do it here since OnCollectionChanged uses the arrays.
         OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, dataGridViewRow), index, 1, true, false, false, newCurrentCell);
     }
 
@@ -2350,7 +2353,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         DataGridViewCellCollection cells = dataGridViewRow.Cells;
         foreach (DataGridViewCell dataGridViewCell in cells)
         {
-            if ((dataGridViewCell.State & ~(dataGridViewCell.CellStateFromColumnRowStates(rowStates[index]))) != 0)
+            if ((dataGridViewCell.State & ~(dataGridViewCell.CellStateFromColumnRowStates(_rowStates[index]))) != 0)
             {
                 return false;
             }
@@ -2367,7 +2370,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         if (dataGridViewRow.Index == -1)
         {
             // row is shared
-            if (((rowStates[rowIndex] & state) != 0) != value)
+            if (((_rowStates[rowIndex] & state) != 0) != value)
             {
                 if (state == DataGridViewElementStates.Frozen ||
                     state == DataGridViewElementStates.Visible ||
@@ -2378,11 +2381,11 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
                 if (value)
                 {
-                    rowStates[rowIndex] = rowStates[rowIndex] | state;
+                    _rowStates[rowIndex] = _rowStates[rowIndex] | state;
                 }
                 else
                 {
-                    rowStates[rowIndex] = rowStates[rowIndex] & ~state;
+                    _rowStates[rowIndex] = _rowStates[rowIndex] & ~state;
                 }
 
                 dataGridViewRow.OnSharedStateChanged(rowIndex, state);
@@ -2440,15 +2443,15 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     internal DataGridViewElementStates SharedRowState(int rowIndex)
     {
-        return rowStates[rowIndex];
+        return _rowStates[rowIndex];
     }
 
     internal void Sort(IComparer customComparer, bool ascending)
     {
-        if (items.Count > 0)
+        if (_items.Count > 0)
         {
             RowComparer rowComparer = new RowComparer(this, customComparer, ascending);
-            items.CustomSort(rowComparer);
+            _items.CustomSort(rowComparer);
             // Caller takes care of the dataGridView invalidation
         }
     }
@@ -2488,8 +2491,8 @@ public partial class DataGridViewRowCollection : ICollection, IList
             }
         }
 
-        (items[rowIndex1], items[rowIndex2]) = (items[rowIndex2], items[rowIndex1]);
-        (this.rowStates[rowIndex1], this.rowStates[rowIndex2]) = (this.rowStates[rowIndex2], this.rowStates[rowIndex1]);
+        (_items[rowIndex1], _items[rowIndex2]) = (_items[rowIndex2], _items[rowIndex1]);
+        (_rowStates[rowIndex1], _rowStates[rowIndex2]) = (_rowStates[rowIndex2], _rowStates[rowIndex1]);
     }
 
     // This function only adjusts the row's RowIndex and State properties - no more.
@@ -2501,16 +2504,16 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     private void UpdateRowCaches(int rowIndex, ref DataGridViewRow dataGridViewRow, bool adding)
     {
-        if (rowCountsVisible != -1 || rowCountsVisibleFrozen != -1 || rowCountsVisibleSelected != -1 ||
-            rowsHeightVisible != -1 || rowsHeightVisibleFrozen != -1)
+        if (_rowCountsVisible != -1 || _rowCountsVisibleFrozen != -1 || _rowCountsVisibleSelected != -1 ||
+            _rowsHeightVisible != -1 || _rowsHeightVisibleFrozen != -1)
         {
             DataGridViewElementStates rowStates = GetRowState(rowIndex);
             if ((rowStates & DataGridViewElementStates.Visible) != 0)
             {
                 int rowCountIncrement = adding ? 1 : -1;
                 int rowHeightIncrement = 0;
-                if (rowsHeightVisible != -1 ||
-                    (rowsHeightVisibleFrozen != -1 &&
+                if (_rowsHeightVisible != -1 ||
+                    (_rowsHeightVisibleFrozen != -1 &&
                      ((rowStates & (DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)) == (DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen))))
                 {
                     // dataGridViewRow may become unshared in GetHeight call
@@ -2518,44 +2521,44 @@ public partial class DataGridViewRowCollection : ICollection, IList
                     dataGridViewRow = SharedRow(rowIndex);
                 }
 
-                if (rowCountsVisible != -1)
+                if (_rowCountsVisible != -1)
                 {
-                    rowCountsVisible += rowCountIncrement;
+                    _rowCountsVisible += rowCountIncrement;
                 }
 
-                if (rowsHeightVisible != -1)
+                if (_rowsHeightVisible != -1)
                 {
                     Debug.Assert(rowHeightIncrement != 0);
-                    rowsHeightVisible += rowHeightIncrement;
+                    _rowsHeightVisible += rowHeightIncrement;
                 }
 
                 if ((rowStates & (DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)) == (DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen))
                 {
-                    if (rowCountsVisibleFrozen != -1)
+                    if (_rowCountsVisibleFrozen != -1)
                     {
-                        rowCountsVisibleFrozen += rowCountIncrement;
+                        _rowCountsVisibleFrozen += rowCountIncrement;
                     }
 
-                    if (rowsHeightVisibleFrozen != -1)
+                    if (_rowsHeightVisibleFrozen != -1)
                     {
                         Debug.Assert(rowHeightIncrement != 0);
-                        rowsHeightVisibleFrozen += rowHeightIncrement;
+                        _rowsHeightVisibleFrozen += rowHeightIncrement;
                     }
                 }
 
                 if ((rowStates & (DataGridViewElementStates.Visible | DataGridViewElementStates.Selected)) == (DataGridViewElementStates.Visible | DataGridViewElementStates.Selected))
                 {
-                    if (rowCountsVisibleSelected != -1)
+                    if (_rowCountsVisibleSelected != -1)
                     {
-                        rowCountsVisibleSelected += rowCountIncrement;
+                        _rowCountsVisibleSelected += rowCountIncrement;
                     }
                 }
             }
         }
 
 #if DEBUG
-        cachedRowCountsAccessAllowed = true;
-        cachedRowHeightsAccessAllowed = true;
+        _cachedRowCountsAccessAllowed = true;
+        _cachedRowHeightsAccessAllowed = true;
 #endif
     }
 }
