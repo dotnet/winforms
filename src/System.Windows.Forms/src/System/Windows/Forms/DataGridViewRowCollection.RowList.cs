@@ -5,12 +5,12 @@ namespace System.Windows.Forms;
 
 public partial class DataGridViewRowCollection
 {
-    private class RowArrayList : List<DataGridViewRow>
+    private class RowList : List<DataGridViewRow>
     {
         private readonly DataGridViewRowCollection _owner;
         private RowComparer? _rowComparer;
 
-        public RowArrayList(DataGridViewRowCollection owner)
+        public RowList(DataGridViewRowCollection owner)
         {
             _owner = owner;
         }

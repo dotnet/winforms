@@ -28,7 +28,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 #endif
 
     private CollectionChangeEventHandler onCollectionChanged;
-    private readonly RowArrayList items;
+    private readonly RowList items;
     private readonly List<DataGridViewElementStates> rowStates;
     private int rowCountsVisible, rowCountsVisibleFrozen, rowCountsVisibleSelected;
     private int rowsHeightVisible, rowsHeightVisibleFrozen;
@@ -143,7 +143,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         InvalidateCachedRowsHeights();
         this.dataGridView = dataGridView;
         rowStates = new List<DataGridViewElementStates>();
-        items = new RowArrayList(this);
+        items = new RowList(this);
     }
 
     public int Count
@@ -2488,13 +2488,8 @@ public partial class DataGridViewRowCollection : ICollection, IList
             }
         }
 
-        object item = items[rowIndex1];
-        items[rowIndex1] = items[rowIndex2];
-        items[rowIndex2] = item;
-
-        DataGridViewElementStates rowStates = this.rowStates[rowIndex1];
-        this.rowStates[rowIndex1] = this.rowStates[rowIndex2];
-        this.rowStates[rowIndex2] = rowStates;
+        (items[rowIndex1], items[rowIndex2]) = (items[rowIndex2], items[rowIndex1]);
+        (this.rowStates[rowIndex1], this.rowStates[rowIndex2]) = (this.rowStates[rowIndex2], this.rowStates[rowIndex1]);
     }
 
     // This function only adjusts the row's RowIndex and State properties - no more.
