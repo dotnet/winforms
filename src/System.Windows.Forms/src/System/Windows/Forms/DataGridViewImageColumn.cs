@@ -109,10 +109,7 @@ public class DataGridViewImageColumn : DataGridViewColumn
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Icon? Icon
     {
-        get
-        {
-            return _icon;
-        }
+        get => _icon;
         set
         {
             _icon = value;
@@ -125,10 +122,7 @@ public class DataGridViewImageColumn : DataGridViewColumn
     [SRDescription(nameof(SR.DataGridViewImageColumn_ImageDescr))]
     public Image? Image
     {
-        get
-        {
-            return _image;
-        }
+        get => _image;
         set
         {
             _image = value;
@@ -136,13 +130,7 @@ public class DataGridViewImageColumn : DataGridViewColumn
         }
     }
 
-    private DataGridViewImageCell? ImageCellTemplate
-    {
-        get
-        {
-            return (DataGridViewImageCell?)CellTemplate;
-        }
-    }
+    private DataGridViewImageCell? ImageCellTemplate => (DataGridViewImageCell?)CellTemplate;
 
     [DefaultValue(DataGridViewImageCellLayout.Normal)]
     [SRCategory(nameof(SR.CatAppearance))]
@@ -299,8 +287,6 @@ public class DataGridViewImageColumn : DataGridViewColumn
                 !defaultCellStyle.Padding.Equals(Padding.Empty));
     }
 
-    public override string ToString()
-    {
-        return $"DataGridViewImageColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewImageColumn {{ Name={Name}, Index={Index} }}";
 }
