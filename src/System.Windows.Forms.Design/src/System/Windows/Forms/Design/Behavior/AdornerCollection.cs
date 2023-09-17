@@ -13,14 +13,14 @@ namespace System.Windows.Forms.Design.Behavior;
 /// <seealso cref="BehaviorServiceAdornerCollection"/>
 public sealed class BehaviorServiceAdornerCollection : CollectionBase
 {
-    private readonly BehaviorService behaviorService;
+    private readonly BehaviorService _behaviorService;
 
     /// <summary>
     ///  Initializes a new instance of <see cref="BehaviorServiceAdornerCollection"/>.
     /// </summary>
     public BehaviorServiceAdornerCollection(BehaviorService behaviorService)
     {
-        this.behaviorService = behaviorService;
+        this._behaviorService = behaviorService;
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ public sealed class BehaviorServiceAdornerCollection : CollectionBase
     /// <seealso cref="AddRange(Adorner[])"/>
     public int Add(Adorner value)
     {
-        value.BehaviorService = behaviorService;
+        value.BehaviorService = _behaviorService;
         return List.Add(value);
     }
 
