@@ -18,10 +18,10 @@ internal abstract class SelectionUIHandler
     // actually moving components around.  The selection UI service
     // dictates when this happens.
     //
-    private Rectangle dragOffset = Rectangle.Empty;         // this gets added to a component's x, y, width, height
-    private Control[]? dragControls;                         // the set of controls we're dragging
-    private BoundsInfo[]? originalCoords;                    // the saved coordinates of the components we're dragging.
-    private SelectionRules rules;                           // the rules of the current drag.
+    private Rectangle _dragOffset = Rectangle.Empty;        // this gets added to a component's x, y, width, height
+    private Control[]? _dragControls;                       // the set of controls we're dragging
+    private BoundsInfo[]? _originalCoordinates;             // the saved coordinates of the components we're dragging.
+    private SelectionRules _rules;                          // the rules of the current drag.
 
     private const int MinControlWidth = 3;
     private const int MinControlHeight = 3;
@@ -36,16 +36,16 @@ internal abstract class SelectionUIHandler
     /// </summary>
     public virtual bool BeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
     {
-        dragOffset = default;
-        originalCoords = null;
-        this.rules = rules;
+        _dragOffset = default;
+        _originalCoordinates = null;
+        _rules = rules;
 
-        dragControls = new Control[components.Length];
+        _dragControls = new Control[components.Length];
         for (int i = 0; i < components.Length; i++)
         {
             Debug.Assert(components[i] is IComponent, "Selection UI handler only deals with IComponents");
-            dragControls[i] = GetControl((IComponent)components[i]);
-            Debug.Assert(dragControls[i] is not null, "Everyone must have a control");
+            _dragControls[i] = GetControl((IComponent)components[i]);
+            Debug.Assert(_dragControls[i] is not null, "Everyone must have a control");
         }
 
         // allow the cliprect to go just beyond the window by one grid.  This helps with round off
@@ -126,9 +126,9 @@ internal abstract class SelectionUIHandler
     /// </summary>
     public virtual void DragMoved(object[] components, Rectangle offset)
     {
-        dragOffset = offset;
+        _dragOffset = offset;
         MoveControls(components, false, false);
-        Debug.Assert(originalCoords is not null, "We are keying off of originalCoords, but MoveControls didn't set it");
+        Debug.Assert(_originalCoordinates is not null, "We are keying off of originalCoords, but MoveControls didn't set it");
     }
 
     /// <summary>
@@ -210,9 +210,9 @@ internal abstract class SelectionUIHandler
     /// </summary>
     private void MoveControls(object[] components, bool cancel, bool finalMove)
     {
-        Control[] controls = dragControls!;
-        Rectangle offset = dragOffset;
-        BoundsInfo[] bounds = originalCoords!;
+        Control[] controls = _dragControls!;
+        Rectangle offset = _dragOffset;
+        BoundsInfo[] bounds = _originalCoordinates!;
         Point adjustedLoc = default;
 
         // Erase the clipping and other state if this is the final move.
@@ -220,9 +220,9 @@ internal abstract class SelectionUIHandler
         if (finalMove)
         {
             Cursor.Clip = Rectangle.Empty;
-            dragOffset = Rectangle.Empty;
-            dragControls = null;
-            originalCoords = null;
+            _dragOffset = Rectangle.Empty;
+            _dragControls = null;
+            _originalCoordinates = null;
         }
 
         // If we haven't started to move yet, there's nothing to do.
@@ -253,15 +253,15 @@ internal abstract class SelectionUIHandler
         // the user cancels out of moving them.  So, we create a "BoundsInfo" object for
         // each control that saves this state.
         //
-        if (originalCoords is null && !finalMove)
+        if (_originalCoordinates is null && !finalMove)
         {
-            originalCoords = new BoundsInfo[controls.Length];
+            _originalCoordinates = new BoundsInfo[controls.Length];
             for (int i = 0; i < controls.Length; i++)
             {
-                originalCoords[i] = new BoundsInfo(controls[i]);
+                _originalCoordinates[i] = new BoundsInfo(controls[i]);
             }
 
-            bounds = originalCoords;
+            bounds = _originalCoordinates;
         }
 
         // Two passes here.  First pass suspends all parent layout and updates the
@@ -302,7 +302,7 @@ internal abstract class SelectionUIHandler
 
             Rectangle oldBounds = controls[i].Bounds;
 
-            if ((rules & SelectionRules.Moveable) == 0)
+            if ((_rules & SelectionRules.Moveable) == 0)
             {
                 // We use the minimum size of either a grid snap or 1
                 //
@@ -349,31 +349,31 @@ internal abstract class SelectionUIHandler
             // Now apply the correct values to newBounds -- we only want to apply the new value if our
             // selection rules dictate so.
             //
-            if ((rules & SelectionRules.Moveable) != 0)
+            if ((_rules & SelectionRules.Moveable) != 0)
             {
                 newBounds.X = tempNewBounds.X;
                 newBounds.Y = tempNewBounds.Y;
             }
             else
             {
-                if ((rules & SelectionRules.TopSizeable) != 0)
+                if ((_rules & SelectionRules.TopSizeable) != 0)
                 {
                     newBounds.Y = tempNewBounds.Y;
                     newBounds.Height = tempNewBounds.Height;
                 }
 
-                if ((rules & SelectionRules.BottomSizeable) != 0)
+                if ((_rules & SelectionRules.BottomSizeable) != 0)
                 {
                     newBounds.Height = tempNewBounds.Height;
                 }
 
-                if ((rules & SelectionRules.LeftSizeable) != 0)
+                if ((_rules & SelectionRules.LeftSizeable) != 0)
                 {
                     newBounds.X = tempNewBounds.X;
                     newBounds.Width = tempNewBounds.Width;
                 }
 
-                if ((rules & SelectionRules.RightSizeable) != 0)
+                if ((_rules & SelectionRules.RightSizeable) != 0)
                 {
                     newBounds.Width = tempNewBounds.Width;
                 }
