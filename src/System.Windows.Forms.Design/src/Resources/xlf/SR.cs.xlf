@@ -653,122 +653,122 @@
       </trans-unit>
       <trans-unit id="DataGridViewAddColumnTransactionString">
         <source>Add Column</source>
-        <target state="new">Add Column</target>
+        <target state="translated">Přidat sloupec</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewAddColumnVerb">
         <source>&amp;Add Column...</source>
-        <target state="new">&amp;Add Column...</target>
+        <target state="translated">&amp;Přidat sloupec...</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewBoundColumnProperties">
         <source>Bound Column &amp;Properties</source>
-        <target state="new">Bound Column &amp;Properties</target>
+        <target state="translated">Svázat vlastnosti &amp;sloupce</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewChooseDataSource">
         <source>Choose Data Source:</source>
-        <target state="new">Choose Data Source:</target>
+        <target state="translated">Vyberte zdroj dat:</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewChooseDataSourceTransactionString">
         <source>{0} DataSource changed</source>
-        <target state="new">{0} DataSource changed</target>
+        <target state="translated">Zdroj dat (DataSource) {0} se změnil.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewColumnTypePropertyDescription">
         <source>The DataGridViewColumn type.</source>
-        <target state="new">The DataGridViewColumn type.</target>
+        <target state="translated">Typ objektu DataGridViewColumn.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataSourceNoLongerValid">
         <source>Unable to create columns for the data source. The data source is no longer valid</source>
-        <target state="new">Unable to create columns for the data source. The data source is no longer valid</target>
+        <target state="translated">Pro zdroj dat nelze vytvořit sloupce. Zdroj dat již není platný</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableAddingTransactionString">
         <source>Disable Adding</source>
-        <target state="new">Disable Adding</target>
+        <target state="translated">Zakázat přidávání</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableColumnReorderingTransactionString">
         <source>Disable Column Reordering</source>
-        <target state="new">Disable Column Reordering</target>
+        <target state="translated">Zakázat změnu pořadí sloupců</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableDeletingTransactionString">
         <source>Disable Deleting</source>
-        <target state="new">Disable Deleting</target>
+        <target state="translated">Zakázat odstraňování</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableEditingTransactionString">
         <source>Disable Editing</source>
-        <target state="new">Disable Editing</target>
+        <target state="translated">Zakázat úpravy</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDuplicateColumnName">
         <source>The name {0} is already in use by another column.</source>
-        <target state="new">The name {0} is already in use by another column.</target>
+        <target state="translated">Název {0} je již použit pro jiný sloupec.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditColumnsTransactionString">
         <source>Edit Columns</source>
-        <target state="new">Edit Columns</target>
+        <target state="translated">Upravit sloupce</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditColumnsVerb">
         <source>&amp;Edit Columns...</source>
-        <target state="new">&amp;Edit Columns...</target>
+        <target state="translated">&amp;Upravit sloupce...</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableAdding">
         <source>Enable Adding</source>
-        <target state="new">Enable Adding</target>
+        <target state="translated">Povolit přidávání</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableAddingTransactionString">
         <source>Enable Adding</source>
-        <target state="new">Enable Adding</target>
+        <target state="translated">Povolit přidávání</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableColumnReordering">
         <source>Enable Column Reordering</source>
-        <target state="new">Enable Column Reordering</target>
+        <target state="translated">Povolit změnu pořadí sloupců</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableColumnReorderingTransactionString">
         <source>Enable Column Reordering</source>
-        <target state="new">Enable Column Reordering</target>
+        <target state="translated">Povolit změnu pořadí sloupců</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableDeleting">
         <source>Enable Deleting</source>
-        <target state="new">Enable Deleting</target>
+        <target state="translated">Povolit odstraňování</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableDeletingTransactionString">
         <source>Enable Deleting</source>
-        <target state="new">Enable Deleting</target>
+        <target state="translated">Povolit odstraňování</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableEditing">
         <source>Enable Editing</source>
-        <target state="new">Enable Editing</target>
+        <target state="translated">Povolit úpravy</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableEditingTransactionString">
         <source>Enable Editing</source>
-        <target state="new">Enable Editing</target>
+        <target state="translated">Povolit úpravy</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewProperties">
         <source>&amp;Properties</source>
-        <target state="new">&amp;Properties</target>
+        <target state="translated">&amp;Vlastnosti</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewUnboundColumnProperties">
         <source>Unbound Column &amp;Properties</source>
-        <target state="new">Unbound Column &amp;Properties</target>
+        <target state="translated">&amp;Vlastnosti nevázaného sloupce</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_Cancel">
@@ -778,7 +778,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_Close">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Zavřít</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_OK">
@@ -853,12 +853,12 @@
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeInstances">
         <source>{0} List Instances</source>
-        <target state="translated">Počet instancí seznamu: {0}</target>
+        <target state="translated">{0} - instance seznamu</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeNone">
         <source>None</source>
-        <target state="translated">Žádné</target>
+        <target state="translated">Žádný</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeOther">
