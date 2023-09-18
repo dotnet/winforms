@@ -134,7 +134,7 @@ internal class FormatStringDialog : Form
         _formatControl1.FormatType = formatType;
 
         // push the information from FormatString/FormatInfo/NullValue into the FormattingUserControl
-        FormatControl.FormatTypeClass formatTypeItem = _formatControl1.FormatTypeItem;
+        FormatControl.FormatTypeClass? formatTypeItem = _formatControl1.FormatTypeItem;
 
         if (formatTypeItem is not null)
         {
@@ -258,7 +258,7 @@ internal class FormatStringDialog : Form
 
     private void PushChanges()
     {
-        FormatControl.FormatTypeClass formatTypeItem = _formatControl1.FormatTypeItem;
+        FormatControl.FormatTypeClass? formatTypeItem = _formatControl1.FormatTypeItem;
 
         if (formatTypeItem is null)
         {
