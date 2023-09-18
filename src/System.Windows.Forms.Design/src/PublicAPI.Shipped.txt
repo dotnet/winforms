@@ -243,20 +243,20 @@ System.ComponentModel.Design.Serialization.BasicDesignerLoader.SetBaseComponentC
 ~System.Drawing.Design.ToolboxItemCollection.this[int index].get -> System.Drawing.Design.ToolboxItem
 ~System.Drawing.Design.ToolboxItemCollection.ToolboxItemCollection(System.Drawing.Design.ToolboxItem[] value) -> void
 ~System.Drawing.Design.ToolboxItemCollection.ToolboxItemCollection(System.Drawing.Design.ToolboxItemCollection value) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Add(System.Windows.Forms.Design.Behavior.Adorner value) -> int
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.Adorner[] value) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection value) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.BehaviorServiceAdornerCollection(System.Windows.Forms.Design.Behavior.Adorner[] value) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.BehaviorServiceAdornerCollection(System.Windows.Forms.Design.Behavior.BehaviorService behaviorService) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.BehaviorServiceAdornerCollection(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection value) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Contains(System.Windows.Forms.Design.Behavior.Adorner value) -> bool
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.CopyTo(System.Windows.Forms.Design.Behavior.Adorner[] array, int index) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.GetEnumerator() -> System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.IndexOf(System.Windows.Forms.Design.Behavior.Adorner value) -> int
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Insert(int index, System.Windows.Forms.Design.Behavior.Adorner value) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Remove(System.Windows.Forms.Design.Behavior.Adorner value) -> void
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.this[int index].get -> System.Windows.Forms.Design.Behavior.Adorner
-~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.this[int index].set -> void
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Add(System.Windows.Forms.Design.Behavior.Adorner! value) -> int
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(params System.Windows.Forms.Design.Behavior.Adorner![]! value) -> void
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection! value) -> void
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.BehaviorServiceAdornerCollection(System.Windows.Forms.Design.Behavior.Adorner![]! value) -> void
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.BehaviorServiceAdornerCollection(System.Windows.Forms.Design.Behavior.BehaviorService? behaviorService) -> void
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.BehaviorServiceAdornerCollection(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection! value) -> void
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Contains(System.Windows.Forms.Design.Behavior.Adorner! value) -> bool
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.CopyTo(System.Windows.Forms.Design.Behavior.Adorner![]! array, int index) -> void
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.GetEnumerator() -> System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator!
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.IndexOf(System.Windows.Forms.Design.Behavior.Adorner! value) -> int
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Insert(int index, System.Windows.Forms.Design.Behavior.Adorner! value) -> void
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Remove(System.Windows.Forms.Design.Behavior.Adorner! value) -> void
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.this[int index].get -> System.Windows.Forms.Design.Behavior.Adorner!
+System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.this[int index].set -> void
 ~System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollectionEnumerator.Current.get -> System.Windows.Forms.Design.Behavior.Adorner
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.Add(System.Windows.Forms.Design.Behavior.Glyph value) -> int
 ~System.Windows.Forms.Design.Behavior.GlyphCollection.AddRange(System.Windows.Forms.Design.Behavior.Glyph[] value) -> void
