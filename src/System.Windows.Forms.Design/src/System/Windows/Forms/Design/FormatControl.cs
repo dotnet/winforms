@@ -16,7 +16,7 @@ internal partial class FormatControl : UserControl
     private const int ScientificIndex = 4;
     private const int CustomIndex = 5;
 
-    private TextBox customStringTextBox = new();
+    private TextBox _customStringTextBox = new();
 
     // static because we want this value to be the same across a
     // VS session
@@ -212,10 +212,10 @@ internal partial class FormatControl : UserControl
                 }
 
             case CustomIndex:
-                Debug.Assert(customStringTextBox.Visible);
+                Debug.Assert(_customStringTextBox.Visible);
                 if (IsMnemonic(charCode, secondRowLabel.Text))
                 {
-                    customStringTextBox.Focus();
+                    _customStringTextBox.Focus();
                     return true;
                 }
                 else
@@ -231,7 +231,7 @@ internal partial class FormatControl : UserControl
     public void ResetFormattingInfo()
     {
         decimalPlacesUpDown.ValueChanged -= new EventHandler(decimalPlacesUpDown_ValueChanged);
-        customStringTextBox.TextChanged -= new EventHandler(customStringTextBox_TextChanged);
+        _customStringTextBox.TextChanged -= new EventHandler(customStringTextBox_TextChanged);
         dateTimeFormatsListBox.SelectedIndexChanged -= new EventHandler(dateTimeFormatsListBox_SelectedIndexChanged);
         formatTypeListBox.SelectedIndexChanged -= new EventHandler(formatTypeListBox_SelectedIndexChanged);
 
@@ -239,10 +239,10 @@ internal partial class FormatControl : UserControl
         nullValueTextBox.Text = string.Empty;
         dateTimeFormatsListBox.SelectedIndex = -1;
         formatTypeListBox.SelectedIndex = -1;
-        customStringTextBox.Text = string.Empty;
+        _customStringTextBox.Text = string.Empty;
 
         decimalPlacesUpDown.ValueChanged += new EventHandler(decimalPlacesUpDown_ValueChanged);
-        customStringTextBox.TextChanged += new EventHandler(customStringTextBox_TextChanged);
+        _customStringTextBox.TextChanged += new EventHandler(customStringTextBox_TextChanged);
         dateTimeFormatsListBox.SelectedIndexChanged += new EventHandler(dateTimeFormatsListBox_SelectedIndexChanged);
         formatTypeListBox.SelectedIndexChanged += new EventHandler(formatTypeListBox_SelectedIndexChanged);
     }
@@ -258,7 +258,7 @@ internal partial class FormatControl : UserControl
             nullValueTextBox.Visible = false;
             thirdRowLabel.Visible = false;
             dateTimeFormatsListBox.Visible = false;
-            customStringTextBox.Visible = false;
+            _customStringTextBox.Visible = false;
             decimalPlacesUpDown.Visible = false;
             return;
         }
@@ -284,28 +284,28 @@ internal partial class FormatControl : UserControl
             thirdRowLabel.Visible = true;
             tableLayoutPanel1.SetColumn(thirdRowLabel, 0);
             tableLayoutPanel1.SetColumnSpan(thirdRowLabel, 2);
-            customStringTextBox.Visible = true;
+            _customStringTextBox.Visible = true;
 
             if (tableLayoutPanel1.Controls.Contains(dateTimeFormatsListBox))
             {
                 tableLayoutPanel1.Controls.Remove(dateTimeFormatsListBox);
             }
 
-            tableLayoutPanel1.Controls.Add(customStringTextBox, 1, 1);
+            tableLayoutPanel1.Controls.Add(_customStringTextBox, 1, 1);
         }
         else
         {
             thirdRowLabel.Visible = false;
-            customStringTextBox.Visible = false;
+            _customStringTextBox.Visible = false;
         }
 
         if (formatType.ListBoxVisible)
         {
             secondRowLabel.Text = SR.BindingFormattingDialogType;
 
-            if (tableLayoutPanel1.Controls.Contains(customStringTextBox))
+            if (tableLayoutPanel1.Controls.Contains(_customStringTextBox))
             {
-                tableLayoutPanel1.Controls.Remove(customStringTextBox);
+                tableLayoutPanel1.Controls.Remove(_customStringTextBox);
             }
 
             dateTimeFormatsListBox.Visible = true;
@@ -325,12 +325,12 @@ internal partial class FormatControl : UserControl
 
     private void UpdateCustomStringTextBox()
     {
-        customStringTextBox = new TextBox();
-        customStringTextBox.AccessibleDescription = SR.BindingFormattingDialogCustomFormatAccessibleDescription;
-        customStringTextBox.Margin = new Padding(0, 3, 0, 3);
-        customStringTextBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        customStringTextBox.TabIndex = 3;
-        customStringTextBox.TextChanged += new EventHandler(customStringTextBox_TextChanged);
+        _customStringTextBox = new TextBox();
+        _customStringTextBox.AccessibleDescription = SR.BindingFormattingDialogCustomFormatAccessibleDescription;
+        _customStringTextBox.Margin = new Padding(0, 3, 0, 3);
+        _customStringTextBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _customStringTextBox.TabIndex = 3;
+        _customStringTextBox.TextChanged += new EventHandler(customStringTextBox_TextChanged);
     }
 
     private void UpdateFormatTypeListBoxHeight()
@@ -362,8 +362,8 @@ internal partial class FormatControl : UserControl
         tableLayoutPanel1.SuspendLayout();
 
         // set up the customStringTextBox
-        tableLayoutPanel1.Controls.Add(customStringTextBox, 1, 1);
-        customStringTextBox.Visible = false;
+        tableLayoutPanel1.Controls.Add(_customStringTextBox, 1, 1);
+        _customStringTextBox.Visible = false;
 
         // set the thirdRowLabel
         thirdRowLabel.MaximumSize = new Drawing.Size(tableLayoutPanel1.Width, 0);
