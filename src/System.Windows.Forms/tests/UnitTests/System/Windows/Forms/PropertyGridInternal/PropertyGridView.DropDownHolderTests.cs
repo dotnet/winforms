@@ -30,7 +30,7 @@ public class PropertyGridView_DropDownHolderTests
     public void DropDownHolder_CreateAccessibilityObject_creates_DropDownHolderAccessibleObject()
     {
         using PropertyGrid propertyGrid = new();
-        using PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
         using DropDownHolder dropDownHolder = new(propertyGridView);
 
         AccessibleObject accessibleObject = dropDownHolder.AccessibilityObject;
@@ -41,7 +41,7 @@ public class PropertyGridView_DropDownHolderTests
     public void DropDownHolder_SetDropDownControl_control_notnull()
     {
         using PropertyGrid propertyGrid = new();
-        using PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
         using DropDownHolder dropDownHolder = new(propertyGridView);
         dropDownHolder.Visible = true;
 
@@ -58,7 +58,7 @@ public class PropertyGridView_DropDownHolderTests
     public void DropDownHolder_SetDropDownControl_control_null()
     {
         using PropertyGrid propertyGrid = new();
-        using PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
         using DropDownHolder dropDownHolder = new(propertyGridView);
 
         dropDownHolder.SetDropDownControl(null, resizable: false);
@@ -69,7 +69,7 @@ public class PropertyGridView_DropDownHolderTests
     public void DropDownHolder_SetDropDownControl_Control_Height_verify()
     {
         using PropertyGrid propertyGrid = new();
-        using PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
         using DropDownHolder dropDownHolder = new(propertyGridView);
         using GridViewListBox listBox = new(propertyGridView);
 
@@ -89,7 +89,7 @@ public class PropertyGridView_DropDownHolderTests
     public void DropDownHolder_SetDropDownControl_resizable_true()
     {
         using PropertyGrid propertyGrid = new();
-        using PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+        PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
         using DropDownHolder dropDownHolder = new(propertyGridView);
         using GridViewListBox listBox = new(propertyGridView);
 
