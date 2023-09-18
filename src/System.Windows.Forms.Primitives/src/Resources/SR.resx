@@ -138,4 +138,7 @@
   <data name="Win32SetThreadsDpiHostingBehaviorFailed" xml:space="preserve">
     <value>Failed to set thread's DPI hosting behavior {0}.</value>
   </data>
+  <data name="FolderBrowserDialogNoRootFolder" xml:space="preserve">
+    <value>Unable to retrieve the root folder.</value>
+  </data>
 </root>

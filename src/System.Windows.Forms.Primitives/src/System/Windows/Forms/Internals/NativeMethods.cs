@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using static Interop;
+using Windows.Win32.UI.Controls.Dialogs;
 
 namespace System.Windows.Forms;
 
@@ -22,7 +22,7 @@ internal static class NativeMethods
         public IntPtr hDevNames;
         public IntPtr hDC;
 
-        public Comdlg32.PD Flags;
+        public PRINTDLGEX_FLAGS Flags;
         public int Flags2;
 
         public int ExclusionFlags;
@@ -47,7 +47,7 @@ internal static class NativeMethods
         public IntPtr lphPropertyPages;
 
         public int nStartPage;
-        public Comdlg32.PD_RESULT dwResultAction;
+        public uint dwResultAction;
     }
 
     public static class ActiveX

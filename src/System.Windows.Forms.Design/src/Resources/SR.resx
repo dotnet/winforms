@@ -120,6 +120,15 @@
   <data name="PlatformNotSupported_WinformsDesigner" xml:space="preserve">
     <value>Winforms Designer is not supported on this platform.</value>
   </data>
+  <data name="DesignerShortcutDockInForm" xml:space="preserve">
+    <value>Dock Fill in Form</value>
+  </data>
+  <data name="DesignerShortcutDockInUserControl" xml:space="preserve">
+    <value>Dock Fill in UserControl</value>
+  </data>
+  <data name="DesignerShortcutReparentControls" xml:space="preserve">
+    <value>Re-parent Controls</value>
+  </data>
   <data name="DesignerOptions_LayoutSettings" xml:space="preserve">
     <value>Layout Settings</value>
   </data>
@@ -564,6 +573,39 @@
   <data name="ToolStripActionList_GripStyleDesc" xml:space="preserve">
     <value>Changes the GripStyle property</value>
   </data>
+  <data name="ToolStripContainerActionList_Show" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="ToolStripContainerActionList_Visible" xml:space="preserve">
+    <value>Panel Visibility</value>
+  </data>
+  <data name="ToolStripContainerActionList_Top" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="ToolStripContainerActionList_TopDesc" xml:space="preserve">
+    <value>Toggles the participation of TopToolStripPanel in runtime dragging of ToolStrip.</value>
+  </data>
+  <data name="ToolStripContainerActionList_Bottom" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="ToolStripContainerActionList_BottomDesc" xml:space="preserve">
+    <value>Toggles the participation of BottomToolStripPanel in runtime dragging of ToolStrip.</value>
+  </data>
+  <data name="ToolStripContainerActionList_Left" xml:space="preserve">
+    <value>Left</value>
+  </data>
+  <data name="ToolStripContainerActionList_LeftDesc" xml:space="preserve">
+    <value>Toggles the participation of LeftToolStripPanel in runtime dragging of ToolStrip.</value>
+  </data>
+  <data name="ToolStripContainerActionList_Right" xml:space="preserve">
+    <value>Right</value>
+  </data>
+  <data name="ToolStripContainerActionList_RightDesc" xml:space="preserve">
+    <value>Toggles the participation of RightToolStripPanel  in runtime dragging of ToolStrip.</value>
+  </data>
+  <data name="0_reparent_controls_transaction" xml:space="preserve">
+    <value>{0} Reparent Controls Transaction.</value>
+  </data>
   <data name="ToolStripActionList_Layout" xml:space="preserve">
     <value>Layout &amp;&amp; Appearance</value>
   </data>
@@ -578,6 +620,9 @@
   </data>
   <data name="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue" xml:space="preserve">
     <value>AllowItemReorder and AllowDrop cannot both be true.</value>
+  </data>
+  <data name="ToolStripPanelGlyphUnsupportedDock" xml:space="preserve">
+    <value>Unsupported Dock</value>
   </data>
   <data name="ToolStripCreatingNewItemTransaction" xml:space="preserve">
     <value>ToolStrip New Item create Transaction.</value>
@@ -1449,4 +1494,131 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="ChooseIconDisplayName" xml:space="preserve">
     <value>Choose Icon...</value>
   </data>
+  <data name="DataGridView_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="DataGridViewDuplicateColumnName" xml:space="preserve">
+    <value>The name {0} is already in use by another column.</value>
+  </data>
+  <data name="DataGridViewEditColumnsVerb" xml:space="preserve">
+    <value>&amp;Edit Columns...</value>
+  </data>
+  <data name="DataGridViewAddColumnVerb" xml:space="preserve">
+    <value>&amp;Add Column...</value>
+  </data>
+  <data name="DataGridViewDataSourceNoLongerValid" xml:space="preserve">
+    <value>Unable to create columns for the data source. The data source is no longer valid</value>
+  </data>
+  <data name="DataGridViewEditColumnsTransactionString" xml:space="preserve">
+    <value>Edit Columns</value>
+  </data>
+  <data name="DataGridViewAddColumnTransactionString" xml:space="preserve">
+    <value>Add Column</value>
+  </data>
+  <data name="DataGridViewChooseDataSourceTransactionString" xml:space="preserve">
+    <value>{0} DataSource changed</value>
+  </data>
+  <data name="DataGridViewChooseDataSource" xml:space="preserve">
+    <value>Choose Data Source:</value>
+  </data>
+  <data name="DataGridViewEnableAdding" xml:space="preserve">
+    <value>Enable Adding</value>
+  </data>
+  <data name="DataGridViewEnableEditing" xml:space="preserve">
+    <value>Enable Editing</value>
+  </data>
+  <data name="DataGridViewEnableDeleting" xml:space="preserve">
+    <value>Enable Deleting</value>
+  </data>
+  <data name="DataGridViewEnableColumnReordering" xml:space="preserve">
+    <value>Enable Column Reordering</value>
+  </data>
+  <data name="DataGridViewEnableAddingTransactionString" xml:space="preserve">
+    <value>Enable Adding</value>
+  </data>
+  <data name="DataGridViewDisableAddingTransactionString" xml:space="preserve">
+    <value>Disable Adding</value>
+  </data>
+  <data name="DataGridViewEnableDeletingTransactionString" xml:space="preserve">
+    <value>Enable Deleting</value>
+  </data>
+  <data name="DataGridViewDisableDeletingTransactionString" xml:space="preserve">
+    <value>Disable Deleting</value>
+  </data>
+  <data name="DataGridViewEnableColumnReorderingTransactionString" xml:space="preserve">
+    <value>Enable Column Reordering</value>
+  </data>
+  <data name="DataGridViewDisableColumnReorderingTransactionString" xml:space="preserve">
+    <value>Disable Column Reordering</value>
+  </data>
+  <data name="DataGridViewEnableEditingTransactionString" xml:space="preserve">
+    <value>Enable Editing</value>
+  </data>
+  <data name="DataGridViewDisableEditingTransactionString" xml:space="preserve">
+    <value>Disable Editing</value>
+  </data>
+  <data name="DataGridViewProperties" xml:space="preserve">
+    <value>&amp;Properties</value>
+  </data>
+  <data name="DataGridViewUnboundColumnProperties" xml:space="preserve">
+    <value>Unbound Column &amp;Properties</value>
+  </data>
+  <data name="DataGridViewBoundColumnProperties" xml:space="preserve">
+    <value>Bound Column &amp;Properties</value>
+  </data>
+  <data name="DataGridViewColumnTypePropertyDescription" xml:space="preserve">
+    <value>The DataGridViewColumn type.</value>
+  </data>
+  <data name="DesignBindingPickerAddProjDataSourceLabel" xml:space="preserve">
+    <value>Add new Object Data Source...</value>
+  </data>
+  <data name="DesignBindingPickerTreeViewAccessibleName" xml:space="preserve">
+    <value>Bindable data sources and data members</value>
+  </data>
+  <data name="DesignBindingPickerAccessibleName" xml:space="preserve">
+    <value>Data binding editor</value>
+  </data>
+  <data name="DesignBindingPickerHelpGenCurrentBinding" xml:space="preserve">
+    <value>Currently data bound to '{0}'.</value>
+  </data>
+  <data name="DesignBindingPickerHelpGenPickMember" xml:space="preserve">
+    <value>Select a data member to bind to.</value>
+  </data>
+  <data name="DesignBindingPickerHelpGenPickBindSrc" xml:space="preserve">
+    <value>Select a BindingSource to bind to.</value>
+  </data>
+  <data name="DesignBindingPickerHelpGenPickDataSrc" xml:space="preserve">
+    <value>Select a data source under 'Other Data Sources' to connect to data.</value>
+  </data>
+  <data name="DesignBindingPickerHelpGenAddDataSrc" xml:space="preserve">
+    <value>Click the 'Add Project Data Source...' link to connect to data.</value>
+  </data>
+  <data name="DesignBindingPickerNodeNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="DesignBindingPickerHelpNodeNone" xml:space="preserve">
+    <value>Selecting 'None' clears the current data binding.</value>
+  </data>
+  <data name="DesignBindingPickerNodeOther" xml:space="preserve">
+    <value>Other Data Sources</value>
+  </data>
+  <data name="DesignBindingPickerHelpNodeOther" xml:space="preserve">
+    <value>Contains all project data sources and local form list instances.</value>
+  </data>
+  <data name="DesignBindingPickerNodeInstances" xml:space="preserve">
+    <value>{0} List Instances</value>
+  </data>
+  <data name="DesignBindingPickerHelpNodeInstances" xml:space="preserve">
+    <value>Contains all form components that implement IList, IListSource or Array.</value>
+  </data>
+  <data name="DesignBindingPickerNodeProject" xml:space="preserve">
+    <value>Project Data Sources</value>
+  </data>
+  <data name="DesignBindingPickerHelpNodeProject" xml:space="preserve">
+    <value>Contains all project data sources.</value>
+  </data>
+  <data name="DesignBindingPickerHelpNodeProjectGroup" xml:space="preserve">
+    <value>Contains project data sources belonging to this namespace.</value>
+  </data>
+
 </root>

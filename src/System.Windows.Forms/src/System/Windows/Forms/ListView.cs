@@ -115,7 +115,7 @@ public partial class ListView : Control
     private MouseButtons _downButton;
     private int _itemCount;
     private int _columnIndex;
-    private ListViewItem? _selectedItem;
+    internal ListViewItem? _selectedItem;
     private int _topIndex;
     private bool _hoveredAlready;
 

@@ -382,7 +382,7 @@ public partial class ComponentEditorForm : Form
             return;
         }
 
-        int newPage = _selector.SelectedNode.Index;
+        int newPage = _selector.SelectedNode!.Index;
         Debug.Assert((newPage >= 0) && (newPage < _pageSites.Length),
                      "Invalid page selected");
 

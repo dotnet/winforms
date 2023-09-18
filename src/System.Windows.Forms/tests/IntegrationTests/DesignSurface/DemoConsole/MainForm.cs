@@ -238,6 +238,8 @@ public partial class MainForm : Form
 
                         FolderBrowserDialog folderBrowserDialog = surface.CreateComponent<FolderBrowserDialog>();
                         SaveFileDialog saveFileDialog = surface.CreateComponent<SaveFileDialog>();
+
+                        ToolStripContainer toolStripContainer = surface.CreateControl<ToolStripContainer>(new Size(200, 180), new Point(250, 280));
                     }
 
                     break;
@@ -256,6 +258,10 @@ public partial class MainForm : Form
                         BindingSource bindingSource = surface.CreateComponent<BindingSource>();
                         bindingSource.DataSource = new List<string> { "a1", "b2", "c3", "d4", "e5", "f6" };
                         listBox.DataSource = bindingSource;
+                        DataGridView dataGridView = surface.CreateControl<DataGridView>(new Size(200, 150), new Point(470, 220));
+                        DataGridViewComboBoxColumn comboBoxColumn = surface.CreateComponent<DataGridViewComboBoxColumn>();
+                        comboBoxColumn.HeaderText = "Column1";
+                        dataGridView.Columns.AddRange([comboBoxColumn]);
                     }
 
                     break;

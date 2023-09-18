@@ -151,13 +151,13 @@ internal unsafe partial struct VARIANT : IDisposable
                 return Marshal.PtrToStringAnsi(*(IntPtr*)data);
             case VT_DISPATCH:
             case VT_UNKNOWN:
-                IntPtr pInterface = *(IntPtr*)data;
-                if (pInterface == IntPtr.Zero)
+                IUnknown* pInterface = *(IUnknown**)data;
+                if (pInterface is null)
                 {
                     return null;
                 }
 
-                return Marshal.GetObjectForIUnknown(pInterface);
+                return ComHelpers.GetObjectForIUnknown(pInterface);
             case VT_DECIMAL:
                 return ((DECIMAL*)data)->ToDecimal();
             case VT_BOOL:
@@ -380,7 +380,7 @@ internal unsafe partial struct VARIANT : IDisposable
                             var result = GetSpan<object?>(array);
                             for (int i = 0; i < data.Length; i++)
                             {
-                                result[i] = data[i] == IntPtr.Zero ? null : Marshal.GetObjectForIUnknown(data[i]);
+                                result[i] = data[i] == IntPtr.Zero ? null : ComHelpers.GetObjectForIUnknown((IUnknown*)data[i]);
                             }
 
                             break;
@@ -590,7 +590,7 @@ internal unsafe partial struct VARIANT : IDisposable
                     }
                     else
                     {
-                        SetValue(array, Marshal.GetObjectForIUnknown(data), indices, lowerBounds);
+                        SetValue(array, ComHelpers.GetObjectForIUnknown((IUnknown*)data), indices, lowerBounds);
                     }
 
                     break;

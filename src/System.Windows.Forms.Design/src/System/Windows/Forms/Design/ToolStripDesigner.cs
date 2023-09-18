@@ -44,7 +44,7 @@ internal class ToolStripDesigner : ControlDesigner
     private ToolStripActionList _actionLists; // Action List on Chrome...
     private ToolStripAdornerWindowService _toolStripAdornerWindowService; // Add the Adorner Service for OverFlow DropDown...
     private IDesignerHost _host; //get private copy of the DesignerHost
-    private IComponentChangeService _componentChangeSvc;
+    private IComponentChangeService _componentChangeService;
     private bool _undoingCalled;
     private IToolboxService _toolboxService;
     private ContextMenuStrip _toolStripContextMenu;
@@ -1391,7 +1391,7 @@ internal class ToolStripDesigner : ControlDesigner
         AutoResizeHandles = true;
         if (TryGetService(out _host))
         {
-            _componentChangeSvc = (IComponentChangeService)_host.GetService(typeof(IComponentChangeService));
+            _componentChangeService = (IComponentChangeService)_host.GetService(typeof(IComponentChangeService));
         }
 
         // initialize new Manager For Editing ToolStrips
@@ -1483,18 +1483,18 @@ internal class ToolStripDesigner : ControlDesigner
             {
                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(parentPanel)["Controls"];
 
-                _componentChangeSvc?.OnComponentChanging(parentPanel, controlsProp);
+                _componentChangeService?.OnComponentChanging(parentPanel, controlsProp);
 
                 parentPanel.Join(ToolStrip, parentPanel.Rows.Length);
 
-                _componentChangeSvc?.OnComponentChanged(parentPanel, controlsProp, parentPanel.Controls, parentPanel.Controls);
+                _componentChangeService?.OnComponentChanged(parentPanel, controlsProp, parentPanel.Controls, parentPanel.Controls);
 
                 //Try to fire ComponentChange on the Location Property for ToolStrip.
                 PropertyDescriptor locationProp = TypeDescriptor.GetProperties(ToolStrip)["Location"];
-                if (_componentChangeSvc is not null)
+                if (_componentChangeService is not null)
                 {
-                    _componentChangeSvc.OnComponentChanging(ToolStrip, locationProp);
-                    _componentChangeSvc.OnComponentChanged(ToolStrip, locationProp);
+                    _componentChangeService.OnComponentChanging(ToolStrip, locationProp);
+                    _componentChangeService.OnComponentChanged(ToolStrip, locationProp);
                 }
             }
         }

@@ -25,10 +25,6 @@ namespace System.Windows.Forms;
 [Designer($"System.Windows.Forms.Design.AxHostDesigner, {AssemblyRef.SystemDesign}")]
 public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICustomTypeDescriptor
 {
-    private static readonly TraceSwitch s_axHTraceSwitch = new("AxHTrace", "ActiveX handle tracing");
-    private static readonly TraceSwitch s_axPropTraceSwitch = new("AxPropTrace", "ActiveX property tracing");
-    private static readonly TraceSwitch s_axHostSwitch = new("AxHost", "ActiveX host creation");
-
 #if DEBUG
     private static readonly BooleanSwitch s_axAlwaysSaveSwitch = new(
         "AxAlwaysSave",
@@ -48,11 +44,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     private const int EDITM_NONE = 0;   // object not being edited
     private const int EDITM_OBJECT = 1; // object provided an edit verb and we invoked it
     private const int EDITM_HOST = 2;   // we invoked our own edit verb
-
-    private const int STG_UNKNOWN = -1;
-    private const int STG_STREAM = 0;
-    private const int STG_STREAMINIT = 1;
-    private const int STG_STORAGE = 2;
 
     private readonly uint _subclassCheckMessage
         = PInvoke.RegisterWindowMessage($"{Application.WindowMessagesVersion}_subclassCheck");
@@ -106,7 +97,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private BitVector32 _axState;
 
-    private int _storageType = STG_UNKNOWN;
+    private StorageType _storageType = StorageType.Unknown;
     private int _ocState = OC_PASSIVE;
     private OLEMISC _miscStatusBits;
     private int _freezeCount;
@@ -141,10 +132,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private object? _instance;
     private AgileComPointer<IOleInPlaceActiveObject>? _iOleInPlaceActiveObjectExternal;
-    private IPersistPropertyBag.Interface? _iPersistPropBag;
-    private IPersistStream.Interface? _iPersistStream;
-    private IPersistStreamInit.Interface? _iPersistStreamInit;
-    private IPersistStorage.Interface? _iPersistStorage;
 
     private AboutBoxDelegate? _aboutBoxDelegate;
     private readonly EventHandler _selectionChangeHandler;
@@ -1005,8 +992,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         if (GetOcState() >= OC_UIACTIVE && !selectionService.GetComponentSelected(this))
         {
             // Need to deactivate.
-            HRESULT hr = UiDeactivate();
-            Debug.Assert(hr.Succeeded, $"Failed to UiDeactivate: {hr}");
+            UiDeactivate().AssertSuccess();
         }
 
         if (!selectionService.GetComponentSelected(this))
@@ -1089,14 +1075,13 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         if (s_logPixelsX == -1 || force)
         {
             using var dc = GetDcScope.ScreenDC;
-            if (dc == IntPtr.Zero)
+            if (dc.IsNull)
             {
                 return HRESULT.E_FAIL;
             }
 
             s_logPixelsX = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSX);
             s_logPixelsY = PInvoke.GetDeviceCaps(dc, GET_DEVICE_CAPS_INDEX.LOGPIXELSY);
-            s_axHTraceSwitch.TraceVerbose($"log pixels are: {s_logPixelsX} {s_logPixelsY}");
         }
 
         return HRESULT.S_OK;
@@ -1151,7 +1136,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private unsafe Size SetExtent(int width, int height)
     {
-        s_axHTraceSwitch.TraceVerbose($"setting extent to {width} {height}");
         Size size = new(width, height);
         bool resetExtents = !IsUserMode();
         Pixel2hiMetric(ref size);
@@ -1293,7 +1277,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
 
         // We were resubclassed, we need to resublass ourselves.
-        s_axHostSwitch.TraceVerbose("The control subclassed itself w/o calling the old wndproc.");
         Debug.Assert(!OwnWindow(), "Why are we here if we own our window?");
         WindowReleaseHandle();
         PInvoke.SetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC, currentWndproc);
@@ -1323,7 +1306,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     {
         if (_axState[s_inTransition])
         {
-            s_axHTraceSwitch.TraceVerbose("Recursively entering TransitionDownTo...");
             return;
         }
 
@@ -1340,9 +1322,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                         SetOcState(OC_UIACTIVE);
                         break;
                     case OC_UIACTIVE:
-                        HRESULT hr = UiDeactivate();
-                        Debug.Assert(hr.Succeeded, $"Failed in UiDeactivate: {hr}");
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose && GetOcState() == OC_INPLACE, "failed transition");
+                        UiDeactivate().AssertSuccess();
                         SetOcState(OC_INPLACE);
                         break;
                     case OC_INPLACE:
@@ -1356,7 +1336,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                             InPlaceDeactivate();
                         }
 
-                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose && GetOcState() == OC_RUNNING, "failed transition");
                         SetOcState(OC_RUNNING);
                         break;
                     case OC_RUNNING:
@@ -1387,7 +1366,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     {
         if (_axState[s_inTransition])
         {
-            s_axHTraceSwitch.TraceVerbose("Recursively entering TransitionUpTo...");
             return;
         }
 
@@ -1397,7 +1375,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
             while (state > GetOcState())
             {
-                s_axHTraceSwitch.TraceVerbose($"Transitioning up from: {GetOcState()} to: {state}");
                 switch (GetOcState())
                 {
                     case OC_PASSIVE:
@@ -1522,7 +1499,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private void UiActivate()
     {
-        s_axHTraceSwitch.TraceVerbose($"calling uiActivate for {ToString()}");
         Debug.Assert(CanUIActivate, "we have to be able to uiactivate");
         if (CanUIActivate)
         {
@@ -1549,7 +1525,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         // if the ctl didn't call showobject, we need to do it for it...
         if (!IsHandleCreated)
         {
-            s_axHTraceSwitch.TraceVerbose("Naughty control didn't call showObject...");
             try
             {
                 ((IOleClientSite.Interface)_oleSite).ShowObject();
@@ -1604,7 +1579,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                     }
                     catch
                     {
-                        s_axHTraceSwitch.TraceVerbose("Could not make ctl visible by using INPLACE. Will try SHOW");
                         MakeVisibleWithShow();
                     }
                 }
@@ -1668,7 +1642,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         DoVerb((int)OLEIVERB.OLEIVERB_HIDE);
         if (GetOcState() < OC_INPLACE)
         {
-            s_axHTraceSwitch.TraceVerbose("Naughty control inplace deactivated on a hide verb...");
             Debug.Assert(!IsHandleCreated, "if we are inplace deactivated we should not have a window.");
 
             // Set a flag saying that we need the window to be created if create handle is ever called.
@@ -1708,8 +1681,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     public override unsafe bool PreProcessMessage(ref Message msg)
     {
-        s_controlKeyboardRouting.TraceVerbose($"AxHost.PreProcessMessage {msg}");
-
         if (!IsUserMode())
         {
             return false;
@@ -1748,7 +1719,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
             if (hr == HRESULT.S_OK)
             {
-                s_controlKeyboardRouting.TraceVerbose($"\t Message translated by control to {msg}");
                 return true;
             }
             else if (hr == HRESULT.S_FALSE)
@@ -1763,17 +1733,9 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                     _ignoreDialogKeys = false;
                 }
             }
-            else if (_axState[s_siteProcessedInputKey])
-            {
-                s_controlKeyboardRouting.TraceVerbose(
-                    $"\t Message processed by site. Calling base.PreProcessMessage() {msg}");
-                return base.PreProcessMessage(ref msg);
-            }
             else
             {
-                s_controlKeyboardRouting.TraceVerbose(
-                    $"\t Message not processed by site. Returning false. {msg}");
-                return false;
+                return _axState[s_siteProcessedInputKey] ? base.PreProcessMessage(ref msg) : false;
             }
         }
         finally
@@ -1788,7 +1750,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     protected internal override unsafe bool ProcessMnemonic(char charCode)
     {
-        s_controlKeyboardRouting.TraceVerbose($"In AxHost.ProcessMnemonic: {(int)charCode}");
         if (!CanSelect)
         {
             return false;
@@ -1825,7 +1786,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         if (PInvoke.IsAccelerator(new HandleRef<HACCEL>(this, ctlInfo.hAccel), ctlInfo.cAccel, &msg, lpwCmd: null))
         {
             oleControl.Value->OnMnemonic(&msg).AssertSuccess();
-            s_controlKeyboardRouting.TraceVerbose($"\t Processed mnemonic {msg}");
 
             try
             {
@@ -1892,7 +1852,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 return;
             }
 
-            if (_storageType != STG_UNKNOWN && _storageType != value.Type)
+            if (_storageType != StorageType.Unknown && _storageType != value.Type)
             {
                 Debug.Fail("Trying to reload with a OcxState that is of a different type.");
                 throw new InvalidOperationException(SR.AXOcxStateLoaded);
@@ -1935,58 +1895,52 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             }
 
             PropertyBagStream? propBag = null;
-
-            if (_iPersistPropBag is not null)
-            {
-                propBag = new PropertyBagStream();
-                using var propertyBag = ComHelpers.GetComScope<IPropertyBag>(propBag);
-                _iPersistPropBag.Save(propertyBag, fClearDirty: true, fSaveAllProperties: true);
-            }
-
             MemoryStream? ms = null;
             switch (_storageType)
             {
-                case STG_STREAM:
-                case STG_STREAMINIT:
+                case StorageType.Stream:
+                case StorageType.StreamInit:
                     ms = new MemoryStream();
                     using (var stream = ComHelpers.GetComScope<IStream>(new Interop.Ole32.GPStream(ms)))
                     {
-                        if (_storageType == STG_STREAM)
+                        if (_storageType == StorageType.Stream)
                         {
-                            _iPersistStream!.Save(stream, true);
+                            using var persistStream = ComHelpers.GetComScope<IPersistStream>(_instance);
+                            persistStream.Value->Save(stream, fClearDirty: true).AssertSuccess();
                         }
                         else
                         {
-                            _iPersistStreamInit!.Save(stream, true);
+                            using var persistStreamInit = ComHelpers.GetComScope<IPersistStreamInit>(_instance);
+                            persistStreamInit.Value->Save(stream, fClearDirty: true).AssertSuccess();
                         }
                     }
 
-                    break;
-                case STG_STORAGE:
+                    return new State(ms, _storageType, this);
+                case StorageType.Storage:
                     Debug.Assert(oldOcxState is not null, "we got to have an old state which holds out scribble storage...");
                     if (oldOcxState is not null)
                     {
-                        return oldOcxState.RefreshStorage(_iPersistStorage!);
+                        using var persistStorage = ComHelpers.GetComScope<IPersistStorage>(_instance);
+                        return oldOcxState.RefreshStorage(persistStorage);
                     }
 
                     return null;
+                case StorageType.PropertyBag:
+                    propBag = new PropertyBagStream();
+                    using (var propertyBag = ComHelpers.GetComScope<IPropertyBag>(propBag))
+                    using (var persistPropBag = ComHelpers.GetComScope<IPersistPropertyBag>(_instance))
+                    {
+                        persistPropBag.Value->Save(propertyBag, fClearDirty: true, fSaveAllProperties: true).AssertSuccess();
+                    }
+
+                    return new State(propBag);
                 default:
                     Debug.Fail("unknown storage type.");
                     return null;
             }
-
-            if (ms is not null)
-            {
-                return new State(ms, _storageType, this, propBag);
-            }
-            else if (propBag is not null)
-            {
-                return new State(propBag);
-            }
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            s_axHTraceSwitch.TraceVerbose($"Could not create new OCX State: {e}");
         }
         finally
         {
@@ -2080,7 +2034,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return false;
         }
 
-        Debug.Assert(_storageType != STG_UNKNOWN, "if we are loaded, out storage type must be set!");
+        Debug.Assert(_storageType != StorageType.Unknown, "if we are loaded, out storage type must be set!");
 
         if (_axState[s_valueChanged])
         {
@@ -2097,14 +2051,26 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         HRESULT hr = HRESULT.E_FAIL;
         switch (_storageType)
         {
-            case STG_STREAM:
-                hr = _iPersistStream!.IsDirty();
+            case StorageType.Stream:
+                using (var persistStream = ComHelpers.GetComScope<IPersistStream>(_instance))
+                {
+                    hr = persistStream.Value->IsDirty();
+                }
+
                 break;
-            case STG_STREAMINIT:
-                hr = _iPersistStreamInit!.IsDirty();
+            case StorageType.StreamInit:
+                using (var persistStreamInit = ComHelpers.GetComScope<IPersistStreamInit>(_instance))
+                {
+                    hr = persistStreamInit.Value->IsDirty();
+                }
+
                 break;
-            case STG_STORAGE:
-                hr = _iPersistStorage!.IsDirty();
+            case StorageType.Storage:
+                using (var persistStorage = ComHelpers.GetComScope<IPersistStorage>(_instance))
+                {
+                    hr = persistStorage.Value->IsDirty();
+                }
+
                 break;
             default:
                 Debug.Fail("unknown storage type");
@@ -2135,22 +2101,16 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         switch (dispid)
         {
             case PInvoke.DISPID_AMBIENT_USERMODE:
-                s_axHTraceSwitch.TraceVerbose("asked for usermode");
                 return IsUserMode();
             case PInvoke.DISPID_AMBIENT_AUTOCLIP:
-                s_axHTraceSwitch.TraceVerbose("asked for autoclip");
                 return true;
             case PInvoke.DISPID_AMBIENT_MESSAGEREFLECT:
-                s_axHTraceSwitch.TraceVerbose("asked for message reflect");
                 return true;
             case PInvoke.DISPID_AMBIENT_UIDEAD:
-                s_axHTraceSwitch.TraceVerbose("asked for uidead");
                 return false;
             case PInvoke.DISPID_AMBIENT_DISPLAYASDEFAULT:
-                s_axHTraceSwitch.TraceVerbose("asked for displayasdefault");
                 return false;
             case PInvoke.DISPID_AMBIENT_FONT:
-                s_axHTraceSwitch.TraceVerbose("asked for font");
                 if (richParent is not null)
                 {
                     return GetIFontFromFont(richParent.Font);
@@ -2158,10 +2118,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                 return null;
             case PInvoke.DISPID_AMBIENT_SHOWGRABHANDLES:
-                s_axHTraceSwitch.TraceVerbose("asked for showGrabHandles");
                 return false;
             case PInvoke.DISPID_AMBIENT_SHOWHATCHING:
-                s_axHTraceSwitch.TraceVerbose("asked for showHatching");
                 return false;
             case PInvoke.DISPID_AMBIENT_BACKCOLOR:
                 if (richParent is not null)
@@ -2180,10 +2138,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             case PInvoke.DISPID_AMBIENT_DISPLAYNAME:
                 return AxContainer.GetNameForControl(this) ?? string.Empty;
             case PInvoke.DISPID_AMBIENT_LOCALEID:
-                s_axHTraceSwitch.TraceVerbose("asked for localeid");
                 return PInvoke.GetThreadLocale();
             case PInvoke.DISPID_AMBIENT_RIGHTTOLEFT:
-                s_axHTraceSwitch.TraceVerbose("asked for right to left");
                 Control? control = this;
                 while (control is not null)
                 {
@@ -2205,7 +2161,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                 return null;
             default:
-                s_axHTraceSwitch.TraceVerbose($"unsupported ambient {dispid}");
                 return null;
         }
     }
@@ -2215,7 +2170,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         Control? parent = ParentInternal;
         RECT posRect = Bounds;
         using var pClientSite = ComHelpers.TryGetComScope<IOleClientSite>(_oleSite, out HRESULT hr);
-        Debug.Assert(hr.Succeeded);
+        hr.AssertSuccess();
         using var oleObject = GetComScope<IOleObject>();
         oleObject.Value->DoVerb(
             verb,
@@ -2230,8 +2185,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private void FreezeEvents(bool freeze)
     {
-        s_axHTraceSwitch.TraceVerbose($"freezing {freeze}");
-
         using var oleControl = GetComScope<IOleControl>();
 
         if (freeze)
@@ -2250,7 +2203,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private HRESULT UiDeactivate()
     {
-        s_axHTraceSwitch.TraceVerbose($"calling uiDeactivate for {ToString()}");
         bool ownDispose = _axState[s_ownDisposing];
         _axState[s_ownDisposing] = true;
         try
@@ -2325,7 +2277,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private void CreateWithoutLicense(Guid clsid)
     {
-        s_axHTraceSwitch.TraceVerbose($"Creating object without license: {clsid}");
         IUnknown* unknown;
         HRESULT hr = PInvoke.CoCreateInstance(
             &clsid,
@@ -2335,16 +2286,13 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             (void**)&unknown);
         hr.ThrowOnFailure();
 
-        _instance = Marshal.GetObjectForIUnknown((nint)unknown);
-        s_axHTraceSwitch.TraceVerbose($"\t{(_instance is not null)}");
+        _instance = ComHelpers.GetObjectForIUnknown(unknown);
     }
 
     private void CreateWithLicense(string? license, Guid clsid)
     {
         if (license is not null)
         {
-            s_axHTraceSwitch.TraceVerbose($"Creating object with license: {clsid}");
-
             using ComScope<IClassFactory2> factory = new(null);
 
             HRESULT hr = PInvoke.CoGetClassObject(
@@ -2360,8 +2308,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 hr = factory.Value->CreateInstanceLic(null, null, IID.Get<IUnknown>(), new BSTR(license), (void**)&unknown);
                 hr.ThrowOnFailure();
 
-                _instance = Marshal.GetObjectForIUnknown((nint)unknown);
-                s_axHTraceSwitch.TraceVerbose($"\t{(_instance is not null)}");
+                _instance = ComHelpers.GetObjectForIUnknown(unknown);
             }
         }
 
@@ -2390,7 +2337,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             throw;
         }
 
-        s_axHTraceSwitch.TraceVerbose("created");
         SetOcState(OC_LOADED);
     }
 
@@ -2476,7 +2422,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public void InvokeEditMode()
     {
-        s_axHTraceSwitch.TraceVerbose($"invoking EditMode for {ToString()}");
         Debug.Assert((_flags & AxFlags.PreventEditMode) == 0, "edit mode should have been disabled");
         if (_editMode != EDITM_NONE)
         {
@@ -2632,7 +2577,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         {
             if (attributes is null && _attribsStash is null)
             {
-                s_axHTraceSwitch.TraceVerbose("Returning stashed values for : <null>");
                 return _propsStash;
             }
             else if (attributes is not null && _attribsStash is not null && attributes.Length == _attribsStash.Length)
@@ -2650,7 +2594,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                 if (attribsEqual)
                 {
-                    s_axHTraceSwitch.TraceVerbose($"Returning stashed values for : {attributes.Length}");
                     return _propsStash;
                 }
             }
@@ -2699,13 +2642,11 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 {
                     if (propInfo is not null)
                     {
-                        s_axPropTraceSwitch.TraceVerbose($"Added AxPropertyDescriptor for: {propName}");
                         prop = new AxPropertyDescriptor(baseProps[i], this);
                         ((AxPropertyDescriptor)prop).UpdateAttributes();
                     }
                     else
                     {
-                        s_axPropTraceSwitch.TraceVerbose($"Added PropertyDescriptor for: {propName}");
                         prop = baseProps[i];
                     }
 
@@ -2720,7 +2661,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                     if ((propInfo is null && axPropDesc is not null) || (propInfo is not null && axPropDesc is null))
                     {
                         Debug.Fail($"Duplicate property with same name: {propName}");
-                        s_axPropTraceSwitch.TraceVerbose($"Duplicate property with same name: {propName}");
                     }
                     else
                     {
@@ -2770,7 +2710,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
 
         // Update our stashed values.
-        s_axHTraceSwitch.TraceVerbose($"Updating stashed values for : {attributes?.Length.ToString() ?? "<null>"}");
         _propsStash = new PropertyDescriptorCollection(returnProperties.ToArray());
         _attribsStash = attributes;
 
@@ -2827,41 +2766,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         SetOcState(OC_RUNNING);
     }
 
-    private void DepersistFromIPropertyBag(IPropertyBag.Interface propBag)
-    {
-        using var pPropBag = ComHelpers.TryGetComScope<IPropertyBag>(propBag, out HRESULT hr);
-        Debug.Assert(hr.Succeeded);
-        _iPersistPropBag.Load(pPropBag, pErrorLog: null).ThrowOnFailure();
-    }
-
-    private void DepersistFromIStream(IStream.Interface istream)
-    {
-        _storageType = STG_STREAM;
-        using var pStream = ComHelpers.TryGetComScope<IStream>(istream, out HRESULT hr);
-        Debug.Assert(hr.Succeeded);
-        _iPersistStream.Load(pStream).ThrowOnFailure();
-    }
-
-    private void DepersistFromIStreamInit(IStream.Interface istream)
-    {
-        _storageType = STG_STREAMINIT;
-        using var pStream = ComHelpers.TryGetComScope<IStream>(istream, out HRESULT hr);
-        Debug.Assert(hr.Succeeded);
-        _iPersistStreamInit.Load(pStream).ThrowOnFailure();
-    }
-
-    private void DepersistFromIStorage(IStorage* storage)
-    {
-        _storageType = STG_STORAGE;
-
-        // MapPoint control does not create a valid IStorage until some property has changed.
-        // Since we end up creating an empty storage, we are not able to re-create a valid one and this would fail.
-        if (storage is not null)
-        {
-            _iPersistStorage.Load(storage).ThrowOnFailure();
-        }
-    }
-
     private void DepersistControl()
     {
         FreezeEvents(true);
@@ -2869,53 +2773,36 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         if (_ocxState is null)
         {
             // Must init new:
-            if (_instance is IPersistStreamInit.Interface init)
+            using var persistStreamInit = ComHelpers.TryGetComScope<IPersistStreamInit>(_instance, out HRESULT hr);
+            if (hr.Succeeded)
             {
-                _iPersistStreamInit = init;
-                _storageType = STG_STREAMINIT;
-                HRESULT hr = _iPersistStreamInit.InitNew();
-                if (hr.Failed)
-                {
-                    s_axHTraceSwitch.TraceVerbose(
-                        $"Failure trying to IPersistStreamInit.InitNew(). Is this good? {hr}");
-                }
-
+                _storageType = StorageType.StreamInit;
+                persistStreamInit.Value->InitNew().AssertSuccess();
                 return;
             }
 
-            if (_instance is IPersistStream.Interface persistStream)
+            if (ComHelpers.SupportsInterface<IPersistStream>(_instance))
             {
-                _storageType = STG_STREAM;
-                _iPersistStream = persistStream;
+                _storageType = StorageType.Stream;
                 return;
             }
 
-            if (_instance is IPersistStorage.Interface persistStorage)
+            using var persistStoragePtr = ComHelpers.TryGetComScope<IPersistStorage>(_instance, out hr);
+            if (hr.Succeeded)
             {
-                _storageType = STG_STORAGE;
+                _storageType = StorageType.Storage;
                 _ocxState = new State(this);
-                _iPersistStorage = persistStorage;
                 using var storage = _ocxState.GetStorage();
-                HRESULT hr = _iPersistStorage.InitNew(storage);
-                if (hr.Failed)
-                {
-                    s_axHTraceSwitch.TraceVerbose(
-                        $"Failure trying to IPersistStorage.InitNew(). Is this good? {hr}");
-                }
-
+                persistStoragePtr.Value->InitNew(storage).AssertSuccess();
                 return;
             }
 
-            if (_instance is IPersistPropertyBag.Interface persistPropertyBag)
+            using var persistPropBag = ComHelpers.TryGetComScope<IPersistPropertyBag>(_instance, out hr);
+            if (hr.Succeeded)
             {
-                s_axHTraceSwitch.TraceVerbose($"{this} supports IPersistPropertyBag.");
-                _iPersistPropBag = persistPropertyBag;
-                HRESULT hr = _iPersistPropBag.InitNew();
-                if (hr.Failed)
-                {
-                    s_axHTraceSwitch.TraceVerbose(
-                        $"Exception thrown trying to IPersistPropertyBag.InitNew(). Is this good? {hr}");
-                }
+                _storageType = StorageType.PropertyBag;
+                persistPropBag.Value->InitNew().AssertSuccess();
+                return;
             }
 
             Debug.Fail("no implemented persistence interfaces on object");
@@ -2925,74 +2812,68 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         // Otherwise, we have state to depersist from:
         switch (_ocxState.Type)
         {
-            case STG_STREAM:
-                try
+            case StorageType.Stream:
+                using (var stream = _ocxState.GetStream())
                 {
-                    _iPersistStream = (IPersistStream.Interface)_instance;
-                    DepersistFromIStream(_ocxState.GetStream());
-                }
-                catch (Exception e)
-                {
-                    s_axHTraceSwitch.TraceVerbose(
-                        $"Exception thrown trying to IPersistStream.DepersistFromIStream(). Is this good? {e}");
+                    _storageType = StorageType.Stream;
+                    using var persistStream = ComHelpers.GetComScope<IPersistStream>(_instance);
+                    persistStream.Value->Load(stream).AssertSuccess();
                 }
 
                 break;
-            case STG_STREAMINIT:
-                if (_instance is IPersistStreamInit.Interface persistStreamInit)
+            case StorageType.StreamInit:
+                using (var persistStreamInit = ComHelpers.TryGetComScope<IPersistStreamInit>(_instance, out HRESULT hr))
                 {
-                    try
+                    if (hr.Succeeded)
                     {
-                        _iPersistStreamInit = persistStreamInit;
-                        DepersistFromIStreamInit(_ocxState.GetStream());
-                    }
-                    catch (Exception e)
-                    {
-                        s_axHTraceSwitch.TraceVerbose(
-                            $"Exception thrown trying to IPersistStreamInit.DepersistFromIStreamInit(). Is this good? {e}");
-                    }
+                        using (var stream = _ocxState.GetStream())
+                        {
+                            _storageType = StorageType.StreamInit;
+                            persistStreamInit.Value->Load(stream).AssertSuccess();
+                        }
 
-                    GetControlEnabled();
-                }
-                else
-                {
-                    _ocxState.Type = STG_STREAM;
-                    DepersistControl();
-                    return;
+                        GetControlEnabled();
+                    }
+                    else
+                    {
+                        _ocxState.Type = StorageType.Stream;
+                        DepersistControl();
+                        return;
+                    }
                 }
 
                 break;
-            case STG_STORAGE:
-                try
+            case StorageType.Storage:
+                using (var storage = _ocxState.GetStorage())
                 {
-                    _iPersistStorage = (IPersistStorage.Interface)_instance;
-                    using var storage = _ocxState.GetStorage();
-                    DepersistFromIStorage(storage);
+                    _storageType = StorageType.Storage;
+
+                    // MapPoint control does not create a valid IStorage until some property has changed.
+                    // Since we end up creating an empty storage, we are not able to re-create a valid one and this would fail.
+                    if (!storage.IsNull)
+                    {
+                        using var persistStorage = ComHelpers.GetComScope<IPersistStorage>(_instance);
+                        persistStorage.Value->Load(storage).AssertSuccess();
+                    }
                 }
-                catch (Exception e)
+
+                break;
+            case StorageType.PropertyBag:
+                using (var propBag = _ocxState.GetPropBag())
                 {
-                    s_axHTraceSwitch.TraceVerbose(
-                        $"Exception thrown trying to IPersistStorage.DepersistFromIStorage(). Is this good? {e}");
+                    _storageType = StorageType.PropertyBag;
+
+                    if (!propBag.IsNull)
+                    {
+                        using var persistPropBag = ComHelpers.GetComScope<IPersistPropertyBag>(_instance);
+                        persistPropBag.Value->Load(propBag, pErrorLog: null).AssertSuccess();
+                    }
                 }
 
                 break;
             default:
                 Debug.Fail("unknown storage type.");
                 throw new InvalidOperationException(SR.UnableToInitComponent);
-        }
-
-        if (_ocxState.GetPropBag() is not null)
-        {
-            try
-            {
-                _iPersistPropBag = (IPersistPropertyBag.Interface)_instance;
-                DepersistFromIPropertyBag(_ocxState.GetPropBag());
-            }
-            catch (Exception e)
-            {
-                s_axHTraceSwitch.TraceVerbose(
-                    $"Exception thrown trying to IPersistPropertyBag.DepersistFromIPropertyBag(). Is this good? {e}");
-            }
         }
     }
 
@@ -3024,7 +2905,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         {
             try
             {
-                s_axHTraceSwitch.TraceVerbose("Creating sink for events...");
                 CreateSink();
                 _oleSite.StartEvents();
             }
@@ -3129,8 +3009,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 dispidInitialProperty = dispid
             };
 
-            hr = PInvoke.OleCreatePropertyFrameIndirect(&parameters);
-            Debug.Assert(hr.Succeeded);
+            PInvoke.OleCreatePropertyFrameIndirect(&parameters).AssertSuccess();
         }
     }
 
@@ -3177,7 +3056,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
             HWND handle = ContainingControl is null ? HWND.Null : ContainingControl.HWND;
             IUnknown* unknown = ComHelpers.GetComPointer<IUnknown>(_instance);
-            hr = PInvoke.OleCreatePropertyFrame(
+            PInvoke.OleCreatePropertyFrame(
                 handle,
                 0,
                 0,
@@ -3188,7 +3067,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 uuids.pElems,
                 PInvoke.GetThreadLocale(),
                 0,
-                (void*)null);
+                (void*)null).AssertSuccess();
         }
         finally
         {
@@ -3282,13 +3161,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 break;
 
             case PInvoke.WM_DESTROY:
-#if DEBUG
-                if (!OwnWindow())
-                {
-                    s_axHTraceSwitch.TraceVerbose(
-                        $"WM_DESTROY control is destroying the window from under us... {GetType()}");
-                }
-#endif
                 // If we are currently in a state of InPlaceActive or above, we should first reparent the ActiveX
                 // control to our parking window before we transition to a state below InPlaceActive. Otherwise we
                 // face all sorts of problems when we try to transition back to a state >= InPlaceActive.
@@ -3344,13 +3216,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 break;
 
             case PInvoke.WM_NCDESTROY:
-#if DEBUG
-                if (!OwnWindow())
-                {
-                    s_axHTraceSwitch.TraceVerbose(
-                        $"WM_NCDESTROY control is destroying the window from under us...{GetType()}");
-                }
-#endif
                 // Need to detach it now.
                 DetachAndForward(ref m);
                 break;
@@ -3402,7 +3267,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private void AttachWindow(HWND hwnd)
     {
-        s_axHTraceSwitch.TraceVerbose($"attaching window for {ToString()} {hwnd}");
         if (!_axState[s_fFakingWindow])
         {
             WindowAssignHandle(hwnd, _axState[s_assignUniqueID]);
@@ -3412,12 +3276,10 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         // Get the latest bounds set by the user.
         Size setExtent = Size;
-        s_axHTraceSwitch.TraceVerbose($"SetBounds {setExtent}");
 
         // Get the default bounds set by the ActiveX control.
         UpdateBounds();
         Size ocxExtent = GetExtent();
-        s_axHTraceSwitch.TraceVerbose($"OcxBounds {ocxExtent}");
 
         Point location = Location;
 
@@ -3519,7 +3381,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         HRESULT hr = iqa.QuickActivate(&qaContainer, &qaControl);
         if (!hr.Succeeded)
         {
-            s_axHTraceSwitch.TraceVerbose($"Failed to QuickActivate: {hr}");
             DisposeAxControl();
             return false;
         }
@@ -3606,10 +3467,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             {
                 Marshal.ReleaseComObject(_instance);
                 _instance = null;
-                _iOleInPlaceActiveObjectExternal = null;
-                _iPersistStream = null;
-                _iPersistStreamInit = null;
-                _iPersistStorage = null;
+                DisposeHelper.NullAndDispose(ref _iOleInPlaceActiveObjectExternal);
             }
 
             _axState[s_disposed] = true;
@@ -3680,7 +3538,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
         else
         {
-            s_axHTraceSwitch.TraceVerbose($"calling upon {container} to create a container");
             _container = container.CreateAxContainer();
             _container.AddControl(this);
             _containingControl = container;
@@ -3832,7 +3689,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
         try
         {
-            return Marshal.GetObjectForIUnknown((nint)ifont);
+            return ComHelpers.GetObjectForIUnknown((IUnknown*)ifont);
         }
         catch
         {
@@ -3864,7 +3721,6 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             }
         }
 
-        s_axHTraceSwitch.TraceVerbose($"Failed to create IFrom from font: {font}");
         return null;
     }
 
@@ -3887,9 +3743,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 ? f
                 : new(f.Name, f.SizeInPoints, f.Style, GraphicsUnit.Point, f.GdiCharSet, f.GdiVerticalFont);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            s_axHTraceSwitch.TraceVerbose($"Could not create font. {e.Message}");
             return DefaultFont;
         }
     }
@@ -3915,7 +3770,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             FONTDESC fontdesc = GetFONTDESCFromFont(font);
             fontdesc.lpstrName = n;
             PInvoke.OleCreateFontIndirect(in fontdesc, in IID.GetRef<IFontDisp>(), out void* lplpvObj).ThrowOnFailure();
-            return Marshal.GetObjectForIUnknown((nint)lplpvObj);
+            return ComHelpers.GetObjectForIUnknown((IUnknown*)lplpvObj);
         }
     }
 
@@ -3976,9 +3831,8 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 GraphicsUnit.Point,
                 (byte)(short)dispatch.Value->GetProperty(PInvoke.DISPID_FONT_CHARSET));
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            s_axHTraceSwitch.TraceVerbose($"Could not create font from IFontDisp: {e.Message}");
             return DefaultFont;
         }
     }

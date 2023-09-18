@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.Globalization;
 
@@ -21,7 +19,7 @@ public abstract partial class EventBindingService
     private class EventPropertyDescriptor : PropertyDescriptor
     {
         private readonly EventBindingService _eventService;
-        private TypeConverter _converter;
+        private TypeConverter? _converter;
 
         /// <summary>
         ///  Creates a new EventPropertyDescriptor.
@@ -50,15 +48,7 @@ public abstract partial class EventBindingService
         /// <summary>
         ///  Retrieves the type converter for this property.
         /// </summary>
-        public override TypeConverter Converter
-        {
-            get
-            {
-                _converter ??= new EventConverter(Event);
-
-                return _converter;
-            }
-        }
+        public override TypeConverter Converter => _converter ??= new EventConverter(Event);
 
         /// <summary>
         ///  Retrieves the event descriptor we are representing.
@@ -68,7 +58,7 @@ public abstract partial class EventBindingService
         /// <summary>
         ///  Indicates whether this property is read only.
         /// </summary>
-        public override bool IsReadOnly => Attributes[typeof(ReadOnlyAttribute)].Equals(ReadOnlyAttribute.Yes);
+        public override bool IsReadOnly => Attributes[typeof(ReadOnlyAttribute)]!.Equals(ReadOnlyAttribute.Yes);
 
         /// <summary>
         ///  Retrieves the type of the property.
@@ -80,29 +70,22 @@ public abstract partial class EventBindingService
         ///  invoking the getXXX method.  An exception in the getXXX
         ///  method will pass through.
         /// </summary>
-        public override object GetValue(object component)
+        public override object? GetValue(object? component)
         {
             ArgumentNullException.ThrowIfNull(component);
 
             // We must locate the sited component, because we store data on the dictionary
             // service for the component.
-            ISite site = null;
-
-            if (component is IComponent)
-            {
-                site = ((IComponent)component).Site;
-            }
+            ISite? site = (component as IComponent)?.Site;
 
             if (site is null)
             {
-                if (_eventService._provider.GetService(typeof(IReferenceService)) is IReferenceService rs)
-                {
-                    IComponent baseComponent = rs.GetComponent(component);
+                IReferenceService? rs = _eventService._provider.GetService<IReferenceService>();
+                IComponent? baseComponent = rs?.GetComponent(component);
 
-                    if (baseComponent is not null)
-                    {
-                        site = baseComponent.Site;
-                    }
+                if (baseComponent is not null)
+                {
+                    site = baseComponent.Site;
                 }
             }
 
@@ -112,7 +95,7 @@ public abstract partial class EventBindingService
                 return null;
             }
 
-            IDictionaryService ds = (IDictionaryService)site.GetService(typeof(IDictionaryService));
+            IDictionaryService? ds = site.GetService<IDictionaryService>();
 
             if (ds is null)
             {
@@ -120,7 +103,7 @@ public abstract partial class EventBindingService
                 return null;
             }
 
-            return (string)ds.GetValue(new ReferenceEventClosure(component, this));
+            return (string?)ds.GetValue(new ReferenceEventClosure(component, this));
         }
 
         /// <summary>
@@ -141,7 +124,7 @@ public abstract partial class EventBindingService
         ///  property so that getXXX following a setXXX should return the value
         ///  passed in if no exception was thrown in the setXXX call.
         /// </summary>
-        public override void SetValue(object component, object value)
+        public override void SetValue(object? component, object? value)
         {
             // Argument, state checking.  Is it ok to set this event?
             if (IsReadOnly)
@@ -152,15 +135,15 @@ public abstract partial class EventBindingService
                 };
             }
 
-            if (value is not null and not string)
+            string? name = value as string;
+
+            if (value is not null && name is null)
             {
                 throw new ArgumentException(string.Format(SR.EventBindingServiceBadArgType, Name, nameof(String)))
                 {
                     HelpLink = SR.EventBindingServiceBadArgType
                 };
             }
-
-            string name = (string)value;
 
             if (name is not null && name.Length == 0)
             {
@@ -169,16 +152,11 @@ public abstract partial class EventBindingService
 
             // Obtain the site for the component.  Note that this can be a site
             // to a parent component if we can get to the reference service.
-            ISite site = null;
+            ISite? site = (component as IComponent)?.Site;
 
-            if (component is IComponent component1)
+            if (site is null && _eventService._provider.TryGetService(out IReferenceService? referenceService))
             {
-                site = component1.Site;
-            }
-
-            if (site is null && _eventService._provider.TryGetService(out IReferenceService referenceService))
-            {
-                IComponent baseComponent = referenceService.GetComponent(component);
+                IComponent? baseComponent = referenceService.GetComponent(component!);
 
                 if (baseComponent is not null)
                 {
@@ -195,7 +173,7 @@ public abstract partial class EventBindingService
             }
 
             // The dictionary service is where we store the actual event method name.
-            if (!site.TryGetService(out IDictionaryService dictionaryService))
+            if (!site.TryGetService(out IDictionaryService? dictionaryService))
             {
                 throw new InvalidOperationException(string.Format(SR.EventBindingServiceMissingService, nameof(IDictionaryService)))
                 {
@@ -204,8 +182,8 @@ public abstract partial class EventBindingService
             }
 
             // Get the old method name, ensure that they are different, and then continue.
-            ReferenceEventClosure key = new(component, this);
-            string oldName = (string)dictionaryService.GetValue(key);
+            ReferenceEventClosure key = new(component!, this);
+            string? oldName = (string?)dictionaryService.GetValue(key);
 
             if (ReferenceEquals(oldName, name))
             {
@@ -226,9 +204,9 @@ public abstract partial class EventBindingService
             // If there is a designer host, create a transaction so there is a
             // nice name for this change.  We don't want a name like
             // "Change property 'Click', because to users, this isn't a property.
-            DesignerTransaction transaction = null;
+            DesignerTransaction? transaction = null;
 
-            if (site.TryGetService(out IDesignerHost host))
+            if (site.TryGetService(out IDesignerHost? host))
             {
                 transaction = host.CreateTransaction(string.Format(SR.EventBindingServiceSetValue, site.Name, name));
             }
@@ -238,12 +216,12 @@ public abstract partial class EventBindingService
                 // The names are different.  Fire a changing event to make
                 // sure it's OK to perform the change.
 
-                if (site.TryGetService(out IComponentChangeService changeService))
+                if (site.TryGetService(out IComponentChangeService? changeService))
                 {
                     try
                     {
-                        changeService.OnComponentChanging(component, this);
-                        changeService.OnComponentChanging(component, Event);
+                        changeService.OnComponentChanging(component!, this);
+                        changeService.OnComponentChanging(component!, Event);
                     }
                     catch (CheckoutException coEx) when (coEx == CheckoutException.Canceled)
                     {
@@ -256,20 +234,20 @@ public abstract partial class EventBindingService
                 // the new one actually succeeded.
                 if (name is not null)
                 {
-                    _eventService.UseMethod((IComponent)component, Event, name);
+                    _eventService.UseMethod((IComponent)component!, Event, name);
                 }
 
                 if (oldName is not null)
                 {
-                    _eventService.FreeMethod((IComponent)component, Event, oldName);
+                    _eventService.FreeMethod((IComponent)component!, Event, oldName);
                 }
 
                 dictionaryService.SetValue(key, name);
 
                 if (changeService is not null)
                 {
-                    changeService.OnComponentChanged(component, Event);
-                    changeService.OnComponentChanged(component, this, oldName, name);
+                    changeService.OnComponentChanged(component!, Event);
+                    changeService.OnComponentChanged(component!, this, oldName, name);
                 }
 
                 OnValueChanged(component, EventArgs.Empty);
@@ -278,10 +256,7 @@ public abstract partial class EventBindingService
             }
             finally
             {
-                if (transaction is not null)
-                {
-                    ((IDisposable)transaction).Dispose();
-                }
+                ((IDisposable?)transaction)?.Dispose();
             }
         }
 
@@ -316,7 +291,7 @@ public abstract partial class EventBindingService
             ///  Determines if this converter can convert an object in the given source
             ///  type to the native type of the converter.
             /// </summary>
-            public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+            public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
             {
                 if (sourceType == typeof(string))
                 {
@@ -329,7 +304,7 @@ public abstract partial class EventBindingService
             /// <summary>
             ///  Determines if this converter can convert an object to the given destination type.
             /// </summary>
-            public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+            public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
             {
                 if (destinationType == typeof(string))
                 {
@@ -342,24 +317,14 @@ public abstract partial class EventBindingService
             /// <summary>
             ///  Converts the given object to the converter's native type.
             /// </summary>
-            public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+            public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object? value)
             {
-                if (value is null)
+                return value switch
                 {
-                    return value;
-                }
-
-                if (value is string)
-                {
-                    if (((string)value).Length == 0)
-                    {
-                        return null;
-                    }
-
-                    return value;
-                }
-
-                return base.ConvertFrom(context, culture, value);
+                    null or string { Length: 0 } => null,
+                    string => value,
+                    _ => base.ConvertFrom(context, culture, value)
+                };
             }
 
             /// <summary>
@@ -369,7 +334,7 @@ public abstract partial class EventBindingService
             ///  type is string.  If this cannot convert to the destination type, this will
             ///  throw a NotSupportedException.
             /// </summary>
-            public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+            public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
             {
                 if (destinationType == typeof(string))
                 {
@@ -385,26 +350,16 @@ public abstract partial class EventBindingService
             ///  will return null if the data type does not support a
             ///  standard set of values.
             /// </summary>
-            public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+            public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
             {
                 // We cannot cache this because it depends on the contents of the source file.
-                string[] eventMethods = null;
+                string[]? eventMethods = null;
 
-                if (context is not null)
+                if (context.TryGetService(out IEventBindingService? ebs))
                 {
-                    IEventBindingService ebs = (IEventBindingService)context.GetService(typeof(IEventBindingService));
-
-                    if (ebs is not null)
-                    {
-                        ICollection methods = ebs.GetCompatibleMethods(_evt);
-                        eventMethods = new string[methods.Count];
-                        int i = 0;
-
-                        foreach (string s in methods)
-                        {
-                            eventMethods[i++] = s;
-                        }
-                    }
+                    ICollection methods = ebs.GetCompatibleMethods(_evt);
+                    eventMethods = new string[methods.Count];
+                    methods.CopyTo(eventMethods, 0);
                 }
 
                 return new StandardValuesCollection(eventMethods);
@@ -418,13 +373,13 @@ public abstract partial class EventBindingService
             ///  then there are other valid values besides the list of
             ///  standard values GetStandardValues provides.
             /// </summary>
-            public override bool GetStandardValuesExclusive(ITypeDescriptorContext context) => false;
+            public override bool GetStandardValuesExclusive(ITypeDescriptorContext? context) => false;
 
             /// <summary>
             ///  Determines if this object supports a standard set of values
             ///  that can be picked from a list.
             /// </summary>
-            public override bool GetStandardValuesSupported(ITypeDescriptorContext context) => true;
+            public override bool GetStandardValuesSupported(ITypeDescriptorContext? context) => true;
         }
 
         /// <summary>
@@ -448,7 +403,7 @@ public abstract partial class EventBindingService
                 return _reference.GetHashCode() * _propertyDescriptor.GetHashCode();
             }
 
-            public override bool Equals(object otherClosure)
+            public override bool Equals(object? otherClosure)
             {
                 if (otherClosure is ReferenceEventClosure typedClosure)
                 {

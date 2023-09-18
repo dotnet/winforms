@@ -61,7 +61,7 @@ public abstract partial class ObjectSelectorEditor
         {
             if (_editor is not null && _editorService is not null)
             {
-                _editor.SetValue(((SelectorNode)SelectedNode).value);
+                _editor.SetValue(((SelectorNode)SelectedNode!).value);
                 if (_editor.EqualsToValue(((SelectorNode)SelectedNode).value))
                 {
                     _editorService.CloseDropDown();

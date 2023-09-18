@@ -91,7 +91,7 @@ public class RichTextBoxTests
         RichTextBox_GetTextEx(out var value);
 
         Assert.Equal(132u, value.cb);
-        Assert.Equal(GT.RAWTEXT, value.flags);
+        Assert.Equal(GETTEXTEX_FLAGS.GT_RAWTEXT, value.flags);
         Assert.Equal(432u, value.codepage);
         Assert.Equal((IntPtr)22, value.lpDefaultChar);
         Assert.Equal((IntPtr)6578, value.lpUsedDefChar);
@@ -102,7 +102,7 @@ public class RichTextBoxTests
     {
         RichTextBox_GetTextLengthEx(out var value);
 
-        Assert.Equal(GTL.NUMBYTES, value.flags);
+        Assert.Equal(GETTEXTLENGTHEX_FLAGS.GTL_NUMBYTES, value.flags);
         Assert.Equal(432u, value.codepage);
     }
 
@@ -113,7 +113,7 @@ public class RichTextBoxTests
 
         Assert.Equal(132u, value.cbSize);
         Assert.Equal(PFM.ALIGNMENT, value.dwMask);
-        Assert.Equal(PFN.UCROMAN, value.wNumbering);
+        Assert.Equal(PARAFORMAT_NUMBERING.PFN_UCROMAN, value.wNumbering);
         Assert.Equal(6578, value.wReserved);
         Assert.Equal(109, value.dxStartIndent);
         Assert.Equal(432, value.dxRightIndent);
@@ -146,7 +146,7 @@ public class RichTextBoxTests
         Assert.Equal(132u, value.nmhdr.code);
         Assert.Equal((HWND)765, value.nmhdr.hwndFrom);
         Assert.Equal(432u, value.nmhdr.idFrom);
-        Assert.Equal(SEL.MULTICHAR, value.seltyp);
+        Assert.Equal(RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE.SEL_MULTICHAR, value.seltyp);
         Assert.Equal(109, value.chrg.cpMin);
         Assert.Equal(1577, value.chrg.cpMax);
     }

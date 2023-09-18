@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="zh-Hans" original="../DataGridViewAddColumnDialog.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>Add Column</source>
+        <target state="translated">添加列</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="addButton.Text">
+        <source>&amp;Add</source>
+        <target state="translated">添加(&amp;A)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="cancelButton.Text">
+        <source>Cancel</source>
+        <target state="translated">取消</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="columnInDataSourceLabel.Text">
+        <source>&amp;Columns in the DataSource</source>
+        <target state="translated">DataSource 中的列(&amp;C)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="dataBoundColumnRadioButton.Text">
+        <source>Data&amp;bound column</source>
+        <target state="translated">数据绑定列(&amp;B)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="frozenCheckBox.Text">
+        <source>&amp;Frozen</source>
+        <target state="translated">冻结(&amp;F)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="headerTextLabel.Text">
+        <source>&amp;Header text:</source>
+        <target state="translated">页眉文本(&amp;H):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="nameLabel.Text">
+        <source>&amp;Name:</source>
+        <target state="translated">名称(&amp;N):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="readOnlyCheckBox.Text">
+        <source>&amp;Read Only</source>
+        <target state="translated">只读(&amp;R)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="typeLabel.Text">
+        <source>&amp;Type:</source>
+        <target state="translated">类型(&amp;T):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="unboundColumnRadioButton.Text">
+        <source>&amp;Unbound column</source>
+        <target state="translated">未绑定列(&amp;U)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="visibleCheckBox.Text">
+        <source>&amp;Visible</source>
+        <target state="translated">可见(&amp;V)</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

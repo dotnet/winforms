@@ -74,14 +74,14 @@
   <ItemGroup>
     <!-- Set TargetingPackVersion -->
     <FrameworkReference Update="Microsoft.NETCore.App"
-      Condition=" '$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)'!='' And $(TargetFramework.StartsWith('$(RedistTargetFrameworkName)')) ">
-    <TargetingPackVersion>$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)</TargetingPackVersion>
+      Condition=" '$(VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion)'!='' And $(TargetFramework.StartsWith('$(RedistTargetFrameworkName)')) ">
+    <TargetingPackVersion>$(VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion)</TargetingPackVersion>
     </FrameworkReference>
   </ItemGroup>
 
   <PropertyGroup>
-    <!-- Set RuntimeFrameworkVersion to VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion from Core Setup to prevent large SDK cycle -->
-    <RuntimeFrameworkVersion Condition="'$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)'!='' And $(TargetFramework.StartsWith('$(RedistTargetFrameworkName)')) ">$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)</RuntimeFrameworkVersion>
+    <!-- Set RuntimeFrameworkVersion to VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion from Core Setup to prevent large SDK cycle -->
+    <RuntimeFrameworkVersion Condition="'$(VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion)'!='' And $(TargetFramework.StartsWith('$(RedistTargetFrameworkName)')) ">$(VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion)</RuntimeFrameworkVersion>
 
     <!-- If TargetFramework is not net8.x, then reset RuntimeFrameworkVersion -->
     <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('$(RedistTargetFrameworkName)'))" />

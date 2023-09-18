@@ -4,8 +4,8 @@
 ~override System.Windows.Forms.ControlBindingsCollection.RemoveCore(System.Windows.Forms.Binding dataBinding) -> void
 ~override System.Windows.Forms.CurrencyManager.Current.get -> object
 ~override System.Windows.Forms.CurrencyManager.GetItemProperties() -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.DataGridView.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
+override System.Windows.Forms.DataGridView.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
 ~override System.Windows.Forms.DataGridView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridView.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
 ~override System.Windows.Forms.DataGridView.Font.get -> System.Drawing.Font
@@ -248,20 +248,20 @@
 ~override System.Windows.Forms.TreeNode.ToString() -> string
 override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.TreeView.BackgroundImage.set -> void
-~override System.Windows.Forms.TreeView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.TreeView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.TreeView.CreateParams.get -> System.Windows.Forms.CreateParams!
 ~override System.Windows.Forms.TreeView.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnKeyDown(System.Windows.Forms.KeyEventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnKeyUp(System.Windows.Forms.KeyEventArgs e) -> void
+override System.Windows.Forms.TreeView.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.TreeView.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.TreeView.OnKeyDown(System.Windows.Forms.KeyEventArgs! e) -> void
+override System.Windows.Forms.TreeView.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e) -> void
+override System.Windows.Forms.TreeView.OnKeyUp(System.Windows.Forms.KeyEventArgs! e) -> void
 ~override System.Windows.Forms.TreeView.OnLostFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnMouseHover(System.EventArgs e) -> void
-~override System.Windows.Forms.TreeView.OnMouseLeave(System.EventArgs e) -> void
-~override System.Windows.Forms.TreeView.Text.get -> string
-~override System.Windows.Forms.TreeView.Text.set -> void
-~override System.Windows.Forms.TreeView.ToString() -> string
+override System.Windows.Forms.TreeView.OnMouseHover(System.EventArgs! e) -> void
+override System.Windows.Forms.TreeView.OnMouseLeave(System.EventArgs! e) -> void
+override System.Windows.Forms.TreeView.Text.get -> string!
+override System.Windows.Forms.TreeView.Text.set -> void
+override System.Windows.Forms.TreeView.ToString() -> string!
 ~static System.Windows.Forms.AxHost.GetFontFromIFont(object font) -> System.Drawing.Font
 ~static System.Windows.Forms.AxHost.GetFontFromIFontDisp(object font) -> System.Drawing.Font
 ~static System.Windows.Forms.AxHost.GetIFontDispFromFont(System.Drawing.Font font) -> object
@@ -288,25 +288,25 @@ override System.Windows.Forms.TreeView.CreateParams.get -> System.Windows.Forms.
 ~System.Windows.Forms.AxHost.RaiseOnMouseMove(object o1, object o2, object o3, object o4) -> void
 ~System.Windows.Forms.AxHost.RaiseOnMouseUp(object o1, object o2, object o3, object o4) -> void
 ~System.Windows.Forms.AxHost.ShowPropertyPages(System.Windows.Forms.Control control) -> void
-~System.Windows.Forms.Binding.BindableComponent.get -> System.Windows.Forms.IBindableComponent
-~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember) -> void
-~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled) -> void
-~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode) -> void
-~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object nullValue) -> void
-~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString) -> void
-~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, System.IFormatProvider formatInfo) -> void
-~System.Windows.Forms.Binding.BindingManagerBase.get -> System.Windows.Forms.BindingManagerBase
-~System.Windows.Forms.Binding.Control.get -> System.Windows.Forms.Control
-~System.Windows.Forms.Binding.DataSource.get -> object
-~System.Windows.Forms.Binding.DataSourceNullValue.get -> object
-~System.Windows.Forms.Binding.DataSourceNullValue.set -> void
-~System.Windows.Forms.Binding.FormatInfo.get -> System.IFormatProvider
-~System.Windows.Forms.Binding.FormatInfo.set -> void
-~System.Windows.Forms.Binding.FormatString.get -> string
-~System.Windows.Forms.Binding.FormatString.set -> void
-~System.Windows.Forms.Binding.NullValue.get -> object
-~System.Windows.Forms.Binding.NullValue.set -> void
-~System.Windows.Forms.Binding.PropertyName.get -> string
+System.Windows.Forms.Binding.BindableComponent.get -> System.Windows.Forms.IBindableComponent?
+System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember) -> void
+System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember, bool formattingEnabled) -> void
+System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode) -> void
+System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object? nullValue) -> void
+System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object? nullValue, string! formatString) -> void
+System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object? nullValue, string! formatString, System.IFormatProvider? formatInfo) -> void
+System.Windows.Forms.Binding.BindingManagerBase.get -> System.Windows.Forms.BindingManagerBase?
+System.Windows.Forms.Binding.Control.get -> System.Windows.Forms.Control?
+System.Windows.Forms.Binding.DataSource.get -> object?
+System.Windows.Forms.Binding.DataSourceNullValue.get -> object?
+System.Windows.Forms.Binding.DataSourceNullValue.set -> void
+System.Windows.Forms.Binding.FormatInfo.get -> System.IFormatProvider?
+System.Windows.Forms.Binding.FormatInfo.set -> void
+System.Windows.Forms.Binding.FormatString.get -> string!
+System.Windows.Forms.Binding.FormatString.set -> void
+System.Windows.Forms.Binding.NullValue.get -> object?
+System.Windows.Forms.Binding.NullValue.set -> void
+System.Windows.Forms.Binding.PropertyName.get -> string!
 ~System.Windows.Forms.BindingSource.BindingSource(object dataSource, string dataMember) -> void
 ~System.Windows.Forms.BindingSource.BindingSource(System.ComponentModel.IContainer container) -> void
 ~System.Windows.Forms.BindingSource.Current.get -> object
@@ -331,11 +331,11 @@ override System.Windows.Forms.TreeView.CreateParams.get -> System.Windows.Forms.
 ~System.Windows.Forms.ControlBindingsCollection.Remove(System.Windows.Forms.Binding binding) -> void
 ~System.Windows.Forms.ControlBindingsCollection.this[string propertyName].get -> System.Windows.Forms.Binding
 ~System.Windows.Forms.CurrencyManager.List.get -> System.Collections.IList
-~System.Windows.Forms.DataGridView.AdvancedCellBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
-~System.Windows.Forms.DataGridView.AdvancedColumnHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
-~System.Windows.Forms.DataGridView.AdvancedRowHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
-~System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyle.set -> void
+System.Windows.Forms.DataGridView.AdvancedCellBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
+System.Windows.Forms.DataGridView.AdvancedColumnHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
+System.Windows.Forms.DataGridView.AdvancedRowHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
+System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyle.set -> void
 ~System.Windows.Forms.DataGridView.ColumnHeadersDefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
 ~System.Windows.Forms.DataGridView.ColumnHeadersDefaultCellStyle.set -> void
 ~System.Windows.Forms.DataGridView.Columns.get -> System.Windows.Forms.DataGridViewColumnCollection
@@ -612,27 +612,27 @@ override System.Windows.Forms.TreeView.CreateParams.get -> System.Windows.Forms.
 ~System.Windows.Forms.TreeNode.TreeNode(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
 ~System.Windows.Forms.TreeNode.TreeView.get -> System.Windows.Forms.TreeView
 ~System.Windows.Forms.TreeView.GetItemRenderStyles(System.Windows.Forms.TreeNode node, int state) -> System.Windows.Forms.OwnerDrawPropertyBag
-~System.Windows.Forms.TreeView.GetNodeAt(int x, int y) -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeView.GetNodeAt(System.Drawing.Point pt) -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeView.HitTest(int x, int y) -> System.Windows.Forms.TreeViewHitTestInfo
-~System.Windows.Forms.TreeView.HitTest(System.Drawing.Point pt) -> System.Windows.Forms.TreeViewHitTestInfo
+System.Windows.Forms.TreeView.GetNodeAt(int x, int y) -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeView.GetNodeAt(System.Drawing.Point pt) -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeView.HitTest(int x, int y) -> System.Windows.Forms.TreeViewHitTestInfo!
+System.Windows.Forms.TreeView.HitTest(System.Drawing.Point pt) -> System.Windows.Forms.TreeViewHitTestInfo!
 System.Windows.Forms.TreeView.ImageKey.get -> string!
 System.Windows.Forms.TreeView.ImageKey.set -> void
 System.Windows.Forms.TreeView.ImageList.get -> System.Windows.Forms.ImageList?
 System.Windows.Forms.TreeView.ImageList.set -> void
 System.Windows.Forms.TreeView.Nodes.get -> System.Windows.Forms.TreeNodeCollection!
-~System.Windows.Forms.TreeView.PathSeparator.get -> string
-~System.Windows.Forms.TreeView.PathSeparator.set -> void
-~System.Windows.Forms.TreeView.SelectedImageKey.get -> string
-~System.Windows.Forms.TreeView.SelectedImageKey.set -> void
-~System.Windows.Forms.TreeView.SelectedNode.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeView.SelectedNode.set -> void
+System.Windows.Forms.TreeView.PathSeparator.get -> string!
+System.Windows.Forms.TreeView.PathSeparator.set -> void
+System.Windows.Forms.TreeView.SelectedImageKey.get -> string!
+System.Windows.Forms.TreeView.SelectedImageKey.set -> void
+System.Windows.Forms.TreeView.SelectedNode.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeView.SelectedNode.set -> void
 System.Windows.Forms.TreeView.StateImageList.get -> System.Windows.Forms.ImageList?
 System.Windows.Forms.TreeView.StateImageList.set -> void
-~System.Windows.Forms.TreeView.TopNode.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeView.TopNode.set -> void
-~System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer
-~System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
+System.Windows.Forms.TreeView.TopNode.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeView.TopNode.set -> void
+System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer?
+System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
 ~virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void
 ~virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs cevent) -> void
 ~virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs cevent) -> void
@@ -668,7 +668,7 @@ System.Windows.Forms.TreeView.StateImageList.set -> void
 ~virtual System.Windows.Forms.BindingSource.this[int index].get -> object
 ~virtual System.Windows.Forms.BindingSource.this[int index].set -> void
 ~virtual System.Windows.Forms.DataGridView.AdjustColumnHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder, bool isFirstDisplayedColumn, bool isLastVisibleColumn) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
-~virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
+virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
 ~virtual System.Windows.Forms.DataGridView.CreateColumnsInstance() -> System.Windows.Forms.DataGridViewColumnCollection
 ~virtual System.Windows.Forms.DataGridView.CreateRowsInstance() -> System.Windows.Forms.DataGridViewRowCollection
 ~virtual System.Windows.Forms.DataGridView.GetClipboardContent() -> System.Windows.Forms.DataObject
@@ -911,22 +911,22 @@ System.Windows.Forms.TreeView.StateImageList.set -> void
 ~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.set -> void
 ~virtual System.Windows.Forms.TreeNode.Deserialize(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Windows.Forms.TreeNode.Serialize(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-~virtual System.Windows.Forms.TreeView.OnAfterCheck(System.Windows.Forms.TreeViewEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnAfterCollapse(System.Windows.Forms.TreeViewEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnAfterExpand(System.Windows.Forms.TreeViewEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnAfterLabelEdit(System.Windows.Forms.NodeLabelEditEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnAfterSelect(System.Windows.Forms.TreeViewEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnBeforeCheck(System.Windows.Forms.TreeViewCancelEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnBeforeCollapse(System.Windows.Forms.TreeViewCancelEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnBeforeExpand(System.Windows.Forms.TreeViewCancelEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnBeforeLabelEdit(System.Windows.Forms.NodeLabelEditEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnBeforeSelect(System.Windows.Forms.TreeViewCancelEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnDrawNode(System.Windows.Forms.DrawTreeNodeEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnItemDrag(System.Windows.Forms.ItemDragEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnNodeMouseClick(System.Windows.Forms.TreeNodeMouseClickEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnNodeMouseDoubleClick(System.Windows.Forms.TreeNodeMouseClickEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnNodeMouseHover(System.Windows.Forms.TreeNodeMouseHoverEventArgs e) -> void
-~virtual System.Windows.Forms.TreeView.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.TreeView.OnAfterCheck(System.Windows.Forms.TreeViewEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnAfterCollapse(System.Windows.Forms.TreeViewEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnAfterExpand(System.Windows.Forms.TreeViewEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnAfterLabelEdit(System.Windows.Forms.NodeLabelEditEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnAfterSelect(System.Windows.Forms.TreeViewEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnBeforeCheck(System.Windows.Forms.TreeViewCancelEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnBeforeCollapse(System.Windows.Forms.TreeViewCancelEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnBeforeExpand(System.Windows.Forms.TreeViewCancelEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnBeforeLabelEdit(System.Windows.Forms.NodeLabelEditEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnBeforeSelect(System.Windows.Forms.TreeViewCancelEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnDrawNode(System.Windows.Forms.DrawTreeNodeEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnItemDrag(System.Windows.Forms.ItemDragEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnNodeMouseClick(System.Windows.Forms.TreeNodeMouseClickEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnNodeMouseDoubleClick(System.Windows.Forms.TreeNodeMouseClickEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnNodeMouseHover(System.Windows.Forms.TreeNodeMouseHoverEventArgs! e) -> void
+virtual System.Windows.Forms.TreeView.OnRightToLeftLayoutChanged(System.EventArgs! e) -> void
 abstract System.Windows.Forms.BindingManagerBase.AddNew() -> void
 abstract System.Windows.Forms.BindingManagerBase.CancelCurrentEdit() -> void
 abstract System.Windows.Forms.BindingManagerBase.Count.get -> int
@@ -4423,17 +4423,17 @@ System.Windows.Forms.BindableComponent.BindingContext.set -> void
 System.Windows.Forms.BindableComponent.BindingContextChanged -> System.EventHandler!
 System.Windows.Forms.BindableComponent.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection!
 System.Windows.Forms.Binding
-System.Windows.Forms.Binding.BindingComplete -> System.Windows.Forms.BindingCompleteEventHandler
+System.Windows.Forms.Binding.BindingComplete -> System.Windows.Forms.BindingCompleteEventHandler?
 System.Windows.Forms.Binding.BindingMemberInfo.get -> System.Windows.Forms.BindingMemberInfo
 System.Windows.Forms.Binding.ControlUpdateMode.get -> System.Windows.Forms.ControlUpdateMode
 System.Windows.Forms.Binding.ControlUpdateMode.set -> void
 System.Windows.Forms.Binding.DataSourceUpdateMode.get -> System.Windows.Forms.DataSourceUpdateMode
 System.Windows.Forms.Binding.DataSourceUpdateMode.set -> void
-System.Windows.Forms.Binding.Format -> System.Windows.Forms.ConvertEventHandler
+System.Windows.Forms.Binding.Format -> System.Windows.Forms.ConvertEventHandler?
 System.Windows.Forms.Binding.FormattingEnabled.get -> bool
 System.Windows.Forms.Binding.FormattingEnabled.set -> void
 System.Windows.Forms.Binding.IsBinding.get -> bool
-System.Windows.Forms.Binding.Parse -> System.Windows.Forms.ConvertEventHandler
+System.Windows.Forms.Binding.Parse -> System.Windows.Forms.ConvertEventHandler?
 System.Windows.Forms.Binding.ReadValue() -> void
 System.Windows.Forms.Binding.WriteValue() -> void
 System.Windows.Forms.BindingCompleteContext
@@ -5307,24 +5307,24 @@ System.Windows.Forms.DataFormats.Format.Name.get -> string!
 System.Windows.Forms.DataGridView
 System.Windows.Forms.DataGridView.AllowUserToAddRows.get -> bool
 System.Windows.Forms.DataGridView.AllowUserToAddRows.set -> void
-System.Windows.Forms.DataGridView.AllowUserToAddRowsChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AllowUserToAddRowsChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.AllowUserToDeleteRows.get -> bool
 System.Windows.Forms.DataGridView.AllowUserToDeleteRows.set -> void
-System.Windows.Forms.DataGridView.AllowUserToDeleteRowsChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AllowUserToDeleteRowsChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.AllowUserToOrderColumns.get -> bool
 System.Windows.Forms.DataGridView.AllowUserToOrderColumns.set -> void
-System.Windows.Forms.DataGridView.AllowUserToOrderColumnsChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AllowUserToOrderColumnsChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.AllowUserToResizeColumns.get -> bool
 System.Windows.Forms.DataGridView.AllowUserToResizeColumns.set -> void
-System.Windows.Forms.DataGridView.AllowUserToResizeColumnsChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AllowUserToResizeColumnsChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.AllowUserToResizeRows.get -> bool
 System.Windows.Forms.DataGridView.AllowUserToResizeRows.set -> void
-System.Windows.Forms.DataGridView.AllowUserToResizeRowsChanged -> System.EventHandler
-System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyleChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AllowUserToResizeRowsChanged -> System.EventHandler?
+System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyleChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.AreAllCellsSelected(bool includeInvisibleCells) -> bool
 System.Windows.Forms.DataGridView.AutoGenerateColumns.get -> bool
 System.Windows.Forms.DataGridView.AutoGenerateColumns.set -> void
-System.Windows.Forms.DataGridView.AutoGenerateColumnsChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AutoGenerateColumnsChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.AutoResizeColumn(int columnIndex) -> void
 System.Windows.Forms.DataGridView.AutoResizeColumn(int columnIndex, System.Windows.Forms.DataGridViewAutoSizeColumnMode autoSizeColumnMode) -> void
 System.Windows.Forms.DataGridView.AutoResizeColumn(int columnIndex, System.Windows.Forms.DataGridViewAutoSizeColumnMode autoSizeColumnMode, bool fixedHeight) -> void
@@ -5349,16 +5349,16 @@ System.Windows.Forms.DataGridView.AutoResizeRows(System.Windows.Forms.DataGridVi
 System.Windows.Forms.DataGridView.AutoSizeColumnModeChanged -> System.Windows.Forms.DataGridViewAutoSizeColumnModeEventHandler
 System.Windows.Forms.DataGridView.AutoSizeColumnsMode.get -> System.Windows.Forms.DataGridViewAutoSizeColumnsMode
 System.Windows.Forms.DataGridView.AutoSizeColumnsMode.set -> void
-System.Windows.Forms.DataGridView.AutoSizeColumnsModeChanged -> System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventHandler
+System.Windows.Forms.DataGridView.AutoSizeColumnsModeChanged -> System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventHandler?
 System.Windows.Forms.DataGridView.AutoSizeRowsMode.get -> System.Windows.Forms.DataGridViewAutoSizeRowsMode
 System.Windows.Forms.DataGridView.AutoSizeRowsMode.set -> void
-System.Windows.Forms.DataGridView.AutoSizeRowsModeChanged -> System.Windows.Forms.DataGridViewAutoSizeModeEventHandler
-System.Windows.Forms.DataGridView.BackColorChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.AutoSizeRowsModeChanged -> System.Windows.Forms.DataGridViewAutoSizeModeEventHandler?
+System.Windows.Forms.DataGridView.BackColorChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.BackgroundColor.get -> System.Drawing.Color
 System.Windows.Forms.DataGridView.BackgroundColor.set -> void
-System.Windows.Forms.DataGridView.BackgroundColorChanged -> System.EventHandler
-System.Windows.Forms.DataGridView.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.DataGridView.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.BackgroundColorChanged -> System.EventHandler?
+System.Windows.Forms.DataGridView.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.DataGridView.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.DataGridView.BorderStyle.set -> void
 System.Windows.Forms.DataGridView.BorderStyleChanged -> System.EventHandler
@@ -11546,18 +11546,18 @@ System.Windows.Forms.TreeNodeStates.Marked = 128 -> System.Windows.Forms.TreeNod
 System.Windows.Forms.TreeNodeStates.Selected = 1 -> System.Windows.Forms.TreeNodeStates
 System.Windows.Forms.TreeNodeStates.ShowKeyboardCues = 512 -> System.Windows.Forms.TreeNodeStates
 System.Windows.Forms.TreeView
-System.Windows.Forms.TreeView.AfterCheck -> System.Windows.Forms.TreeViewEventHandler
-System.Windows.Forms.TreeView.AfterCollapse -> System.Windows.Forms.TreeViewEventHandler
-System.Windows.Forms.TreeView.AfterExpand -> System.Windows.Forms.TreeViewEventHandler
-System.Windows.Forms.TreeView.AfterLabelEdit -> System.Windows.Forms.NodeLabelEditEventHandler
-System.Windows.Forms.TreeView.AfterSelect -> System.Windows.Forms.TreeViewEventHandler
+System.Windows.Forms.TreeView.AfterCheck -> System.Windows.Forms.TreeViewEventHandler?
+System.Windows.Forms.TreeView.AfterCollapse -> System.Windows.Forms.TreeViewEventHandler?
+System.Windows.Forms.TreeView.AfterExpand -> System.Windows.Forms.TreeViewEventHandler?
+System.Windows.Forms.TreeView.AfterLabelEdit -> System.Windows.Forms.NodeLabelEditEventHandler?
+System.Windows.Forms.TreeView.AfterSelect -> System.Windows.Forms.TreeViewEventHandler?
 System.Windows.Forms.TreeView.BackgroundImageChanged -> System.EventHandler?
 System.Windows.Forms.TreeView.BackgroundImageLayoutChanged -> System.EventHandler?
-System.Windows.Forms.TreeView.BeforeCheck -> System.Windows.Forms.TreeViewCancelEventHandler
-System.Windows.Forms.TreeView.BeforeCollapse -> System.Windows.Forms.TreeViewCancelEventHandler
-System.Windows.Forms.TreeView.BeforeExpand -> System.Windows.Forms.TreeViewCancelEventHandler
-System.Windows.Forms.TreeView.BeforeLabelEdit -> System.Windows.Forms.NodeLabelEditEventHandler
-System.Windows.Forms.TreeView.BeforeSelect -> System.Windows.Forms.TreeViewCancelEventHandler
+System.Windows.Forms.TreeView.BeforeCheck -> System.Windows.Forms.TreeViewCancelEventHandler?
+System.Windows.Forms.TreeView.BeforeCollapse -> System.Windows.Forms.TreeViewCancelEventHandler?
+System.Windows.Forms.TreeView.BeforeExpand -> System.Windows.Forms.TreeViewCancelEventHandler?
+System.Windows.Forms.TreeView.BeforeLabelEdit -> System.Windows.Forms.NodeLabelEditEventHandler?
+System.Windows.Forms.TreeView.BeforeSelect -> System.Windows.Forms.TreeViewCancelEventHandler?
 System.Windows.Forms.TreeView.BeginUpdate() -> void
 System.Windows.Forms.TreeView.BorderStyle.get -> System.Windows.Forms.BorderStyle
 System.Windows.Forms.TreeView.BorderStyle.set -> void
@@ -11566,7 +11566,7 @@ System.Windows.Forms.TreeView.CheckBoxes.set -> void
 System.Windows.Forms.TreeView.CollapseAll() -> void
 System.Windows.Forms.TreeView.DrawMode.get -> System.Windows.Forms.TreeViewDrawMode
 System.Windows.Forms.TreeView.DrawMode.set -> void
-System.Windows.Forms.TreeView.DrawNode -> System.Windows.Forms.DrawTreeNodeEventHandler
+System.Windows.Forms.TreeView.DrawNode -> System.Windows.Forms.DrawTreeNodeEventHandler?
 System.Windows.Forms.TreeView.EndUpdate() -> void
 System.Windows.Forms.TreeView.ExpandAll() -> void
 System.Windows.Forms.TreeView.FullRowSelect.get -> bool
@@ -11580,21 +11580,21 @@ System.Windows.Forms.TreeView.ImageIndex.get -> int
 System.Windows.Forms.TreeView.ImageIndex.set -> void
 System.Windows.Forms.TreeView.Indent.get -> int
 System.Windows.Forms.TreeView.Indent.set -> void
-System.Windows.Forms.TreeView.ItemDrag -> System.Windows.Forms.ItemDragEventHandler
+System.Windows.Forms.TreeView.ItemDrag -> System.Windows.Forms.ItemDragEventHandler?
 System.Windows.Forms.TreeView.ItemHeight.get -> int
 System.Windows.Forms.TreeView.ItemHeight.set -> void
 System.Windows.Forms.TreeView.LabelEdit.get -> bool
 System.Windows.Forms.TreeView.LabelEdit.set -> void
 System.Windows.Forms.TreeView.LineColor.get -> System.Drawing.Color
 System.Windows.Forms.TreeView.LineColor.set -> void
-System.Windows.Forms.TreeView.NodeMouseClick -> System.Windows.Forms.TreeNodeMouseClickEventHandler
-System.Windows.Forms.TreeView.NodeMouseDoubleClick -> System.Windows.Forms.TreeNodeMouseClickEventHandler
-System.Windows.Forms.TreeView.NodeMouseHover -> System.Windows.Forms.TreeNodeMouseHoverEventHandler
+System.Windows.Forms.TreeView.NodeMouseClick -> System.Windows.Forms.TreeNodeMouseClickEventHandler?
+System.Windows.Forms.TreeView.NodeMouseDoubleClick -> System.Windows.Forms.TreeNodeMouseClickEventHandler?
+System.Windows.Forms.TreeView.NodeMouseHover -> System.Windows.Forms.TreeNodeMouseHoverEventHandler?
 System.Windows.Forms.TreeView.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.TreeView.Padding.set -> void
-System.Windows.Forms.TreeView.PaddingChanged -> System.EventHandler
-System.Windows.Forms.TreeView.Paint -> System.Windows.Forms.PaintEventHandler
-System.Windows.Forms.TreeView.RightToLeftLayoutChanged -> System.EventHandler
+System.Windows.Forms.TreeView.PaddingChanged -> System.EventHandler?
+System.Windows.Forms.TreeView.Paint -> System.Windows.Forms.PaintEventHandler?
+System.Windows.Forms.TreeView.RightToLeftLayoutChanged -> System.EventHandler?
 System.Windows.Forms.TreeView.Scrollable.get -> bool
 System.Windows.Forms.TreeView.Scrollable.set -> void
 System.Windows.Forms.TreeView.SelectedImageIndex.get -> int
@@ -11610,7 +11610,7 @@ System.Windows.Forms.TreeView.ShowRootLines.set -> void
 System.Windows.Forms.TreeView.Sort() -> void
 System.Windows.Forms.TreeView.Sorted.get -> bool
 System.Windows.Forms.TreeView.Sorted.set -> void
-System.Windows.Forms.TreeView.TextChanged -> System.EventHandler
+System.Windows.Forms.TreeView.TextChanged -> System.EventHandler?
 System.Windows.Forms.TreeView.TreeView() -> void
 System.Windows.Forms.TreeView.VisibleCount.get -> int
 System.Windows.Forms.TreeViewAction

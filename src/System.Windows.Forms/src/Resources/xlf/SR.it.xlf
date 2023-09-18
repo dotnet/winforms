@@ -5210,11 +5210,6 @@ Sostituirlo?</target>
         <target state="translated">Stringa visualizzata sopra il controllo TreeView nella finestra di dialogo. Può essere utilizzata per specificare istruzioni all'utente.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FolderBrowserDialogNoRootFolder">
-        <source>Unable to retrieve the root folder.</source>
-        <target state="translated">Impossibile recuperare la cartella radice.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">Controlla se il pulsante OK della finestra di dialogo è disabilitato finché l'utente non passa alla visualizzazione o modifica il nome file (se applicabile). La disabilitazione del pulsante OK non impedisce l'invio della finestra di dialogo tramite il tasto INVIO.</target>

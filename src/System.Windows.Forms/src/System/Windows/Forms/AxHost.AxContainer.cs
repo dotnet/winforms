@@ -36,7 +36,6 @@ public abstract partial class AxHost
 
         internal AxContainer(ContainerControl parent)
         {
-            s_axHTraceSwitch.TraceVerbose($"in constructor.  Parent created : {parent.Created}");
             _parent = parent;
             if (parent.Created)
             {
@@ -95,7 +94,6 @@ public abstract partial class AxHost
             {
                 if (control != _parent && !GetComponents().Contains(control))
                 {
-                    s_axHTraceSwitch.TraceVerbose("!parent || !belongs NYI");
                     AxContainer? container = FindContainerForControl(control);
                     if (container is not null)
                     {
@@ -103,7 +101,6 @@ public abstract partial class AxHost
                     }
                     else
                     {
-                        s_axHTraceSwitch.TraceVerbose("unable to find proxy, returning null");
                         return null;
                     }
                 }
@@ -115,7 +112,6 @@ public abstract partial class AxHost
                 _extenderCache.Add(control, extender);
             }
 
-            s_axHTraceSwitch.TraceVerbose($"found proxy {extender}");
             return extender;
         }
 
@@ -146,15 +142,6 @@ public abstract partial class AxHost
                             changeService.ComponentRemoved += OnComponentRemoved;
                         }
                     }
-                }
-                else
-                {
-#if DEBUG
-                    if (control.Site is { } site && _associatedContainer != site.Container)
-                    {
-                        s_axHTraceSwitch.TraceVerbose("mismatch between assoc container & added control");
-                    }
-#endif
                 }
             }
         }
@@ -343,7 +330,6 @@ public abstract partial class AxHost
             }
 
             Debug.Assert(_parent.Site is null, "Parent is sited but we could not find IContainer");
-            s_axHTraceSwitch.TraceVerbose("Did not find a container in FillComponentsTable");
 
             if (_containerCache.Count > 0)
             {
@@ -512,7 +498,6 @@ public abstract partial class AxHost
             // The ShDocVw control repeatedly calls OnUIActivate() with the same site.
             // This causes the assert below to fire.
             Debug.Assert(_siteUIActive is null, "Object did not call OnUIDeactivate");
-            s_axHTraceSwitch.TraceVerbose($"active Object is now {site}");
             _siteUIActive = site;
             if (site.ContainingControl is { } container)
             {
@@ -522,7 +507,6 @@ public abstract partial class AxHost
 
         internal void ControlCreated(AxHost invoker)
         {
-            s_axHTraceSwitch.TraceVerbose($"in controlCreated for {invoker} fAC: {_formAlreadyCreated}");
             if (_formAlreadyCreated)
             {
                 if (invoker.IsUserMode() && invoker.AwaitingDefreezing())
@@ -578,7 +562,6 @@ public abstract partial class AxHost
             uint* pchEaten,
             IMoniker** ppmkOut)
         {
-            s_axHTraceSwitch.TraceVerbose("in ParseDisplayName");
             if (ppmkOut is not null)
             {
                 *ppmkOut = null;
@@ -593,8 +576,6 @@ public abstract partial class AxHost
             {
                 return HRESULT.E_POINTER;
             }
-
-            s_axHTraceSwitch.TraceVerbose("in EnumObjects");
 
             if (((OLECONTF)grfFlags).HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
             {
@@ -620,11 +601,7 @@ public abstract partial class AxHost
             return HRESULT.S_OK;
         }
 
-        HRESULT IOleContainer.Interface.LockContainer(BOOL fLock)
-        {
-            s_axHTraceSwitch.TraceVerbose("in LockContainer");
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleContainer.Interface.LockContainer(BOOL fLock) => HRESULT.E_NOTIMPL;
 
         // IOleInPlaceFrame methods:
         HRESULT IOleInPlaceFrame.Interface.GetWindow(HWND* phwnd)
@@ -634,34 +611,17 @@ public abstract partial class AxHost
                 return HRESULT.E_POINTER;
             }
 
-            s_axHTraceSwitch.TraceVerbose("in GetWindow");
             *phwnd = _parent.HWND;
             return HRESULT.S_OK;
         }
 
-        HRESULT IOleInPlaceFrame.Interface.ContextSensitiveHelp(BOOL fEnterMode)
-        {
-            s_axHTraceSwitch.TraceVerbose("in ContextSensitiveHelp");
-            return HRESULT.S_OK;
-        }
+        HRESULT IOleInPlaceFrame.Interface.ContextSensitiveHelp(BOOL fEnterMode) => HRESULT.S_OK;
 
-        HRESULT IOleInPlaceFrame.Interface.GetBorder(RECT* lprectBorder)
-        {
-            s_axHTraceSwitch.TraceVerbose("in GetBorder");
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.GetBorder(RECT* lprectBorder) => HRESULT.E_NOTIMPL;
 
-        HRESULT IOleInPlaceFrame.Interface.RequestBorderSpace(RECT* pborderwidths)
-        {
-            s_axHTraceSwitch.TraceVerbose("in RequestBorderSpace");
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.RequestBorderSpace(RECT* pborderwidths) => HRESULT.E_NOTIMPL;
 
-        HRESULT IOleInPlaceFrame.Interface.SetBorderSpace(RECT* pborderwidths)
-        {
-            s_axHTraceSwitch.TraceVerbose("in SetBorderSpace");
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.SetBorderSpace(RECT* pborderwidths) => HRESULT.E_NOTIMPL;
 
         internal void OnExitEditMode(AxHost ctl)
         {
@@ -676,7 +636,6 @@ public abstract partial class AxHost
 
         HRESULT IOleInPlaceFrame.Interface.SetActiveObject(IOleInPlaceActiveObject* pActiveObject, PCWSTR pszObjName)
         {
-            s_axHTraceSwitch.TraceVerbose($"in SetActiveObject {pszObjName.ToString() ?? "<null>"}");
             if (_siteUIActive is { } activeHost
                 && activeHost._iOleInPlaceActiveObjectExternal is { } existing
                 && !existing.MatchesOriginalPointer(pActiveObject))
@@ -728,12 +687,10 @@ public abstract partial class AxHost
 
             if (host is null)
             {
-                s_axHTraceSwitch.TraceVerbose("control w/o a valid site called setactiveobject");
                 _controlInEditMode = null;
             }
             else
             {
-                s_axHTraceSwitch.TraceVerbose($"resolved to {host}");
                 if (!host.IsUserMode())
                 {
                     _controlInEditMode = host;
@@ -746,41 +703,17 @@ public abstract partial class AxHost
             return HRESULT.S_OK;
         }
 
-        HRESULT IOleInPlaceFrame.Interface.InsertMenus(HMENU hmenuShared, OLEMENUGROUPWIDTHS* lpMenuWidths)
-        {
-            s_axHTraceSwitch.TraceVerbose("in InsertMenus");
-            return HRESULT.S_OK;
-        }
+        HRESULT IOleInPlaceFrame.Interface.InsertMenus(HMENU hmenuShared, OLEMENUGROUPWIDTHS* lpMenuWidths) => HRESULT.S_OK;
 
-        HRESULT IOleInPlaceFrame.Interface.SetMenu(HMENU hmenuShared, nint holemenu, HWND hwndActiveObject)
-        {
-            s_axHTraceSwitch.TraceVerbose("in SetMenu");
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.SetMenu(HMENU hmenuShared, nint holemenu, HWND hwndActiveObject) => HRESULT.E_NOTIMPL;
 
-        HRESULT IOleInPlaceFrame.Interface.RemoveMenus(HMENU hmenuShared)
-        {
-            s_axHTraceSwitch.TraceVerbose("in RemoveMenus");
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.RemoveMenus(HMENU hmenuShared) => HRESULT.E_NOTIMPL;
 
-        HRESULT IOleInPlaceFrame.Interface.SetStatusText(PCWSTR pszStatusText)
-        {
-            s_axHTraceSwitch.TraceVerbose("in SetStatusText");
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.SetStatusText(PCWSTR pszStatusText) => HRESULT.E_NOTIMPL;
 
-        HRESULT IOleInPlaceFrame.Interface.EnableModeless(BOOL fEnable)
-        {
-            s_axHTraceSwitch.TraceVerbose("in EnableModeless");
-            return HRESULT.E_NOTIMPL;
-        }
+        HRESULT IOleInPlaceFrame.Interface.EnableModeless(BOOL fEnable) => HRESULT.E_NOTIMPL;
 
-        HRESULT IOleInPlaceFrame.Interface.TranslateAccelerator(MSG* lpmsg, ushort wID)
-        {
-            s_axHTraceSwitch.TraceVerbose("in IOleInPlaceFrame.TranslateAccelerator");
-            return HRESULT.S_FALSE;
-        }
+        HRESULT IOleInPlaceFrame.Interface.TranslateAccelerator(MSG* lpmsg, ushort wID) => HRESULT.S_FALSE;
 
         HRESULT IOleInPlaceUIWindow.Interface.GetWindow(HWND* phwnd)
             => ((IOleInPlaceFrame.Interface)this).GetWindow(phwnd);

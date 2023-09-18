@@ -5211,11 +5211,6 @@ Do you want to replace it?</source>
         <target state="translated">Строка, отображаемая над иерархическим представлением структуры дерева в данном диалоговом окне. Эта строка служит для задания инструкций для пользователя.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FolderBrowserDialogNoRootFolder">
-        <source>Unable to retrieve the root folder.</source>
-        <target state="translated">Не удалось извлечь корневую папку.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
         <target state="translated">Определяет, отключена ли кнопка "ОК" в диалоговом окне, пока пользователь не перейдет в представление или не изменит имя файла (если применимо). Примечание. Отключение кнопки "ОК" не блокирует отправку сообщения из диалогового окна при нажатии клавиши ВВОД.</target>

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Controls.Dialogs;
 
 internal partial class Interop
 {
@@ -18,7 +19,7 @@ internal partial class Interop
             public IntPtr hDC;
             public LOGFONTW* lpLogFont;
             public int iPointSize;
-            public CF Flags;
+            public CHOOSEFONT_FLAGS Flags;
             public int rgbColors;
             public IntPtr lCustData;
             public void* lpfnHook;

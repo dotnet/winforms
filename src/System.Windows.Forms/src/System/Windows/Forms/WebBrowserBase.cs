@@ -865,7 +865,7 @@ public unsafe partial class WebBrowserBase : Control
 
             hr.ThrowOnFailure();
 
-            _activeXInstance = Marshal.GetObjectForIUnknown((nint)unknown);
+            _activeXInstance = ComHelpers.GetObjectForIUnknown((IUnknown*)unknown);
 
             Debug.Assert(_activeXInstance is not null, "w/o an exception being thrown we must have an object...");
 

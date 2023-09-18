@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
@@ -18,14 +16,14 @@ internal class TableLayoutPanelCodeDomSerializer : CodeDomSerializer
 {
     private const string LayoutSettingsPropName = "LayoutSettings";
 
-    public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
+    public override object? Deserialize(IDesignerSerializationManager manager, object codeObject)
     {
         return GetBaseSerializer(manager).Deserialize(manager, codeObject);
     }
 
     private static CodeDomSerializer GetBaseSerializer(IDesignerSerializationManager manager)
     {
-        return (CodeDomSerializer)manager.GetSerializer(typeof(TableLayoutPanel).BaseType, typeof(CodeDomSerializer));
+        return manager.GetSerializer<CodeDomSerializer>(typeof(TableLayoutPanel).BaseType)!;
     }
 
     /// <summary>
@@ -33,32 +31,30 @@ internal class TableLayoutPanelCodeDomSerializer : CodeDomSerializer
     ///  serializer. All we want to do is if we are in a localizable form, we want to push a
     ///  'LayoutSettings' entry into the resx.
     /// </summary>
-    public override object Serialize(IDesignerSerializationManager manager, object value)
+    public override object? Serialize(IDesignerSerializationManager manager, object value)
     {
         // First call the base serializer to serialize the object.
-        object codeObject = GetBaseSerializer(manager).Serialize(manager, value);
+        object? codeObject = GetBaseSerializer(manager).Serialize(manager, value);
 
         // Now push our layout settings stuff into the resx if we are not inherited read only and
         // are in a localizable Form.
-        TableLayoutPanel tlp = value as TableLayoutPanel;
-        Debug.Assert(tlp is not null, "Huh? We were expecting to be serializing a TableLayoutPanel here.");
+        TableLayoutPanel? panel = value as TableLayoutPanel;
+        Debug.Assert(panel is not null, "Huh? We were expecting to be serializing a TableLayoutPanel here.");
 
-        if (tlp is not null)
+        if (panel is not null)
         {
-            InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(tlp)[typeof(InheritanceAttribute)];
-
-            if (ia is null || ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
+            if (!TypeDescriptorHelper.TryGetAttribute(panel, out InheritanceAttribute? ia) || ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)
             {
-                IDesignerHost host = (IDesignerHost)manager.GetService(typeof(IDesignerHost));
+                IDesignerHost? host = manager.GetService<IDesignerHost>();
 
                 if (IsLocalizable(host))
                 {
-                    PropertyDescriptor lsProp = TypeDescriptor.GetProperties(tlp)[LayoutSettingsPropName];
-                    object val = lsProp?.GetValue(tlp);
+                    PropertyDescriptor? lsProp = TypeDescriptor.GetProperties(panel)[LayoutSettingsPropName];
+                    object? val = lsProp?.GetValue(panel);
 
                     if (val is not null)
                     {
-                        string key = $"{manager.GetName(tlp)}.{LayoutSettingsPropName}";
+                        string key = $"{manager.GetName(panel)}.{LayoutSettingsPropName}";
                         SerializeResourceInvariant(manager, key, val);
                     }
                 }
@@ -68,15 +64,13 @@ internal class TableLayoutPanelCodeDomSerializer : CodeDomSerializer
         return codeObject;
     }
 
-    private static bool IsLocalizable(IDesignerHost host)
+    private static bool IsLocalizable([NotNullWhen(true)] IDesignerHost? host)
     {
         if (host is not null)
         {
-            PropertyDescriptor prop = TypeDescriptor.GetProperties(host.RootComponent)["Localizable"];
-
-            if (prop is not null && prop.PropertyType == typeof(bool))
+            if (TypeDescriptorHelper.TryGetPropertyValue(host.RootComponent, "Localizable", out bool b))
             {
-                return (bool)prop.GetValue(host.RootComponent);
+                return b;
             }
         }
 

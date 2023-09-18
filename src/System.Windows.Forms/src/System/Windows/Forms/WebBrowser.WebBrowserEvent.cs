@@ -23,13 +23,13 @@ public partial class WebBrowser
 
         public bool AllowNavigation { get; set; }
 
-        public void CommandStateChange(SHDocVw.CSC command, bool enable)
+        public void CommandStateChange(CommandStateChangeConstants command, bool enable)
         {
-            if (command == SHDocVw.CSC.NAVIGATEBACK)
+            if (command == CommandStateChangeConstants.CSC_NAVIGATEBACK)
             {
                 _parent.CanGoBackInternal = enable;
             }
-            else if (command == SHDocVw.CSC.NAVIGATEFORWARD)
+            else if (command == CommandStateChangeConstants.CSC_NAVIGATEFORWARD)
             {
                 _parent.CanGoForwardInternal = enable;
             }

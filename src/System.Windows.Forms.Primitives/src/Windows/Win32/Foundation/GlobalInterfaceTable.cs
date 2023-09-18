@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Runtime.InteropServices.Marshalling;
 using Windows.Win32.System.Com;
 
 namespace Windows.Win32.Foundation;
@@ -8,7 +9,7 @@ namespace Windows.Win32.Foundation;
 /// <summary>
 ///  Wrapper for the COM global interface table.
 /// </summary>
-internal static unsafe class GlobalInterfaceTable
+internal static unsafe partial class GlobalInterfaceTable
 {
     private static readonly IGlobalInterfaceTable* s_globalInterfaceTable;
 
@@ -65,4 +66,15 @@ internal static unsafe class GlobalInterfaceTable
         Debug.WriteLineIf(hr.Failed, $"{nameof(GlobalInterfaceTable)}: Failed to revoke interface.");
         return hr;
     }
+
+    /// <summary>
+    ///  Creates a new instance of an <see cref="IIUnknownStrategy"/> for <see cref="StrategyBasedComWrappers"/>
+    ///  that uses the Global Interface Table.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   The returned instance should not be cached.
+    ///  </para>
+    /// </remarks>
+    public static IIUnknownStrategy CreateUnknownStrategy() => new UnknownStrategy();
 }

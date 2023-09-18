@@ -539,7 +539,7 @@ internal static class Formatter
             : typeConverter;
     }
 
-    public static object? GetDefaultDataSourceNullValue(Type type)
+    public static object? GetDefaultDataSourceNullValue(Type? type)
     {
         return (type is not null && !type.IsValueType)
             ? null
