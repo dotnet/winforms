@@ -26,6 +26,8 @@ CBS_*
 CCM_*
 CDM_GETSPEC
 CDRF_*
+CFE_EFFECTS
+CFM_MASK
 CHILDID_SELF
 ChildWindowFromPointEx
 CSIDL_*
@@ -47,6 +49,7 @@ CoGetClassObject
 COLOR_*
 CombineRgn
 COMDLG_FILTERSPEC
+CommandStateChangeConstants
 CommDlgExtendedError
 COPYDATASTRUCT
 CopyImage
@@ -113,6 +116,7 @@ DispatchMessage
 DISPID_*
 DISPPARAMS
 DLGC_*
+DOCHOSTUIINFO
 DoDragDrop
 DPI_AWARENESS_CONTEXT_*
 DPI_HOSTING_BEHAVIOR
@@ -152,10 +156,13 @@ E_NOTIMPL
 E_OUTOFMEMORY
 E_POINTER
 EC_*
+ECO_*
+ECOOP_*
 ELEMDESC
 Ellipse
 EM_*
 EN_*
+ENM_*
 EnableMenuItem
 EnableScrollBar
 EnableWindow
@@ -273,6 +280,8 @@ GetSystemPowerStatus
 GetTextAlign
 GetTextColor
 GetTextExtentPoint32W
+GETTEXTEX_FLAGS
+GETTEXTLENGTHEX_FLAGS
 GetTextMetrics
 GetThemeAppProperties
 GetThemeBackgroundContentRect
@@ -339,6 +348,7 @@ IAccessible
 IAutoComplete2
 IClassFactory
 IClassFactory2
+ICM_*
 ICM_MODE
 ICON_*
 IDC_*
@@ -451,6 +461,7 @@ KillTimer
 LB_*
 LBN_*
 LBS_*
+LF_FACESIZE
 LineTo
 LIST_ITEM_FLAGS
 LIST_ITEM_STATE_FLAGS
@@ -492,6 +503,7 @@ LVTILEVIEWINFO_MASK
 MA_*
 MapVirtualKey
 MapWindowPoints
+MAX_TAB_STOPS
 MEASUREITEMSTRUCT
 MEMBERID_NIL
 MessageBeep
@@ -555,6 +567,7 @@ OPEN_FILENAME_FLAGS_EX
 OpenInputDesktop
 OpenThemeData
 PAGESETUPDLG_FLAGS
+PARAFORMAT_NUMBERING
 PatBlt
 PBM_*
 PBS_*
@@ -585,14 +598,18 @@ ReleaseStgMedium
 RestoreDC
 RevokeDragDrop
 REGDB_E_CLASSNOTREG
+RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE
 RoundRect
 RPC_E_CHANGED_MODE
 SAFEARRAY
 SafeArrayGetRecordInfo
 SC_*
+SCF_*
 SCROLLBAR_COMMAND
 ScrollWindow
 ScrollWindowEx
+SF_*
+SFF_*
 S_FALSE
 S_OK
 SafeArrayCreate
