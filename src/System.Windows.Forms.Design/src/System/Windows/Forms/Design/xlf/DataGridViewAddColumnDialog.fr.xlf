@@ -44,12 +44,12 @@
       </trans-unit>
       <trans-unit id="readOnlyCheckBox.Text">
         <source>&amp;Read Only</source>
-        <target state="translated">&amp;Lecture seule</target>
+        <target state="translated">Lecture &amp;seule</target>
         <note />
       </trans-unit>
       <trans-unit id="typeLabel.Text">
         <source>&amp;Type:</source>
-        <target state="translated">T&amp;ype :</target>
+        <target state="translated">&amp;Type :</target>
         <note />
       </trans-unit>
       <trans-unit id="unboundColumnRadioButton.Text">

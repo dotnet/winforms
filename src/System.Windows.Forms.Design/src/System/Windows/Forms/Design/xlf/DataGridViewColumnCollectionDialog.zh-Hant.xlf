@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add...</source>
-        <target state="translated">新增(&amp;A)...</target>
+        <target state="translated">加入(&amp;A)...</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
@@ -19,17 +19,17 @@
       </trans-unit>
       <trans-unit id="deleteButton.Text">
         <source>&amp;Remove</source>
-        <target state="new">&amp;Remove</target>
+        <target state="translated">移除(&amp;R)</target>
         <note />
       </trans-unit>
       <trans-unit id="moveDown.AccessibleName">
         <source>Move column down</source>
-        <target state="translated">將資料行下移</target>
+        <target state="translated">向下移動資料行</target>
         <note />
       </trans-unit>
       <trans-unit id="moveUp.AccessibleName">
         <source>Move column up</source>
-        <target state="translated">將資料行上移</target>
+        <target state="translated">向上移動資料行</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
@@ -39,7 +39,7 @@
       </trans-unit>
       <trans-unit id="propertyGridLabel.Text">
         <source>&amp;Properties</source>
-        <target state="new">&amp;Properties</target>
+        <target state="translated">屬性(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="selectedColumnsLabel.Text">
