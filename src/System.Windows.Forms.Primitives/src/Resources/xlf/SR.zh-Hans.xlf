@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="FolderBrowserDialogNoRootFolder">
         <source>Unable to retrieve the root folder.</source>
-        <target state="new">Unable to retrieve the root folder.</target>
+        <target state="translated">无法检索根文件夹。</target>
         <note />
       </trans-unit>
       <trans-unit id="General_MissingService">

@@ -50,8 +50,8 @@ override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
 ~override System.Windows.Forms.DataGridViewButtonColumn.ToString() -> string
 ~override System.Windows.Forms.DataGridViewCell.ToString() -> string
 ~override System.Windows.Forms.DataGridViewCellCollection.List.get -> System.Collections.ArrayList
-~override System.Windows.Forms.DataGridViewCellStyle.Equals(object o) -> bool
-~override System.Windows.Forms.DataGridViewCellStyle.ToString() -> string
+override System.Windows.Forms.DataGridViewCellStyle.Equals(object? o) -> bool
+override System.Windows.Forms.DataGridViewCellStyle.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ContentClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ContentDoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
@@ -288,25 +288,25 @@ override System.Windows.Forms.TreeView.ToString() -> string!
 ~System.Windows.Forms.AxHost.RaiseOnMouseMove(object o1, object o2, object o3, object o4) -> void
 ~System.Windows.Forms.AxHost.RaiseOnMouseUp(object o1, object o2, object o3, object o4) -> void
 ~System.Windows.Forms.AxHost.ShowPropertyPages(System.Windows.Forms.Control control) -> void
-~System.Windows.Forms.Binding.BindableComponent.get -> System.Windows.Forms.IBindableComponent
-~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember) -> void
-~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled) -> void
-~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode) -> void
-~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object nullValue) -> void
-~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString) -> void
-~System.Windows.Forms.Binding.Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, System.IFormatProvider formatInfo) -> void
-~System.Windows.Forms.Binding.BindingManagerBase.get -> System.Windows.Forms.BindingManagerBase
-~System.Windows.Forms.Binding.Control.get -> System.Windows.Forms.Control
-~System.Windows.Forms.Binding.DataSource.get -> object
-~System.Windows.Forms.Binding.DataSourceNullValue.get -> object
-~System.Windows.Forms.Binding.DataSourceNullValue.set -> void
-~System.Windows.Forms.Binding.FormatInfo.get -> System.IFormatProvider
-~System.Windows.Forms.Binding.FormatInfo.set -> void
-~System.Windows.Forms.Binding.FormatString.get -> string
-~System.Windows.Forms.Binding.FormatString.set -> void
-~System.Windows.Forms.Binding.NullValue.get -> object
-~System.Windows.Forms.Binding.NullValue.set -> void
-~System.Windows.Forms.Binding.PropertyName.get -> string
+System.Windows.Forms.Binding.BindableComponent.get -> System.Windows.Forms.IBindableComponent?
+System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember) -> void
+System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember, bool formattingEnabled) -> void
+System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode) -> void
+System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object? nullValue) -> void
+System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object? nullValue, string! formatString) -> void
+System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode dataSourceUpdateMode, object? nullValue, string! formatString, System.IFormatProvider? formatInfo) -> void
+System.Windows.Forms.Binding.BindingManagerBase.get -> System.Windows.Forms.BindingManagerBase?
+System.Windows.Forms.Binding.Control.get -> System.Windows.Forms.Control?
+System.Windows.Forms.Binding.DataSource.get -> object?
+System.Windows.Forms.Binding.DataSourceNullValue.get -> object?
+System.Windows.Forms.Binding.DataSourceNullValue.set -> void
+System.Windows.Forms.Binding.FormatInfo.get -> System.IFormatProvider?
+System.Windows.Forms.Binding.FormatInfo.set -> void
+System.Windows.Forms.Binding.FormatString.get -> string!
+System.Windows.Forms.Binding.FormatString.set -> void
+System.Windows.Forms.Binding.NullValue.get -> object?
+System.Windows.Forms.Binding.NullValue.set -> void
+System.Windows.Forms.Binding.PropertyName.get -> string!
 ~System.Windows.Forms.BindingSource.BindingSource(object dataSource, string dataMember) -> void
 ~System.Windows.Forms.BindingSource.BindingSource(System.ComponentModel.IContainer container) -> void
 ~System.Windows.Forms.BindingSource.Current.get -> object
@@ -401,19 +401,19 @@ System.Windows.Forms.DataGridView.AlternatingRowsDefaultCellStyle.set -> void
 ~System.Windows.Forms.DataGridViewCellCollection.this[int index].set -> void
 ~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].get -> System.Windows.Forms.DataGridViewCell
 ~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].set -> void
-~System.Windows.Forms.DataGridViewCellStyle.DataGridViewCellStyle(System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle) -> void
-~System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.get -> object
-~System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.set -> void
-~System.Windows.Forms.DataGridViewCellStyle.Font.get -> System.Drawing.Font
-~System.Windows.Forms.DataGridViewCellStyle.Font.set -> void
-~System.Windows.Forms.DataGridViewCellStyle.Format.get -> string
-~System.Windows.Forms.DataGridViewCellStyle.Format.set -> void
-~System.Windows.Forms.DataGridViewCellStyle.FormatProvider.get -> System.IFormatProvider
-~System.Windows.Forms.DataGridViewCellStyle.FormatProvider.set -> void
-~System.Windows.Forms.DataGridViewCellStyle.NullValue.get -> object
-~System.Windows.Forms.DataGridViewCellStyle.NullValue.set -> void
-~System.Windows.Forms.DataGridViewCellStyle.Tag.get -> object
-~System.Windows.Forms.DataGridViewCellStyle.Tag.set -> void
+System.Windows.Forms.DataGridViewCellStyle.DataGridViewCellStyle(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
+System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.get -> object?
+System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.set -> void
+System.Windows.Forms.DataGridViewCellStyle.Font.get -> System.Drawing.Font!
+System.Windows.Forms.DataGridViewCellStyle.Font.set -> void
+System.Windows.Forms.DataGridViewCellStyle.Format.get -> string!
+System.Windows.Forms.DataGridViewCellStyle.Format.set -> void
+System.Windows.Forms.DataGridViewCellStyle.FormatProvider.get -> System.IFormatProvider!
+System.Windows.Forms.DataGridViewCellStyle.FormatProvider.set -> void
+System.Windows.Forms.DataGridViewCellStyle.NullValue.get -> object?
+System.Windows.Forms.DataGridViewCellStyle.NullValue.set -> void
+System.Windows.Forms.DataGridViewCellStyle.Tag.get -> object?
+System.Windows.Forms.DataGridViewCellStyle.Tag.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.get -> object
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.IndeterminateValue.get -> object
@@ -852,8 +852,8 @@ virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -
 ~virtual System.Windows.Forms.DataGridViewCellCollection.Contains(System.Windows.Forms.DataGridViewCell dataGridViewCell) -> bool
 ~virtual System.Windows.Forms.DataGridViewCellCollection.Insert(int index, System.Windows.Forms.DataGridViewCell dataGridViewCell) -> void
 ~virtual System.Windows.Forms.DataGridViewCellCollection.Remove(System.Windows.Forms.DataGridViewCell cell) -> void
-~virtual System.Windows.Forms.DataGridViewCellStyle.ApplyStyle(System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle) -> void
-~virtual System.Windows.Forms.DataGridViewCellStyle.Clone() -> System.Windows.Forms.DataGridViewCellStyle
+virtual System.Windows.Forms.DataGridViewCellStyle.ApplyStyle(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
+virtual System.Windows.Forms.DataGridViewCellStyle.Clone() -> System.Windows.Forms.DataGridViewCellStyle!
 ~virtual System.Windows.Forms.DataGridViewCheckBoxCell.EditingCellFormattedValue.get -> object
 ~virtual System.Windows.Forms.DataGridViewCheckBoxCell.EditingCellFormattedValue.set -> void
 ~virtual System.Windows.Forms.DataGridViewCheckBoxCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
@@ -4423,17 +4423,17 @@ System.Windows.Forms.BindableComponent.BindingContext.set -> void
 System.Windows.Forms.BindableComponent.BindingContextChanged -> System.EventHandler!
 System.Windows.Forms.BindableComponent.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection!
 System.Windows.Forms.Binding
-System.Windows.Forms.Binding.BindingComplete -> System.Windows.Forms.BindingCompleteEventHandler
+System.Windows.Forms.Binding.BindingComplete -> System.Windows.Forms.BindingCompleteEventHandler?
 System.Windows.Forms.Binding.BindingMemberInfo.get -> System.Windows.Forms.BindingMemberInfo
 System.Windows.Forms.Binding.ControlUpdateMode.get -> System.Windows.Forms.ControlUpdateMode
 System.Windows.Forms.Binding.ControlUpdateMode.set -> void
 System.Windows.Forms.Binding.DataSourceUpdateMode.get -> System.Windows.Forms.DataSourceUpdateMode
 System.Windows.Forms.Binding.DataSourceUpdateMode.set -> void
-System.Windows.Forms.Binding.Format -> System.Windows.Forms.ConvertEventHandler
+System.Windows.Forms.Binding.Format -> System.Windows.Forms.ConvertEventHandler?
 System.Windows.Forms.Binding.FormattingEnabled.get -> bool
 System.Windows.Forms.Binding.FormattingEnabled.set -> void
 System.Windows.Forms.Binding.IsBinding.get -> bool
-System.Windows.Forms.Binding.Parse -> System.Windows.Forms.ConvertEventHandler
+System.Windows.Forms.Binding.Parse -> System.Windows.Forms.ConvertEventHandler?
 System.Windows.Forms.Binding.ReadValue() -> void
 System.Windows.Forms.Binding.WriteValue() -> void
 System.Windows.Forms.BindingCompleteContext

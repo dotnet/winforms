@@ -75,7 +75,7 @@ internal class DataGridViewCellStyleBuilder : Form
         {
             _cellStyle = new DataGridViewCellStyle(value);
             _cellStyleProperties.SelectedObject = _cellStyle;
-            ListenerDataGridViewDefaultCellStyleChanged(null, EventArgs.Empty);
+            ListenerDataGridViewDefaultCellStyleChanged(sender: null, EventArgs.Empty);
             _listenerDataGridView.DefaultCellStyle = _cellStyle;
             _listenerDataGridView.DefaultCellStyleChanged += ListenerDataGridViewDefaultCellStyleChanged;
         }
@@ -88,7 +88,7 @@ internal class DataGridViewCellStyleBuilder : Form
 
     private void ListenerDataGridViewDefaultCellStyleChanged(object? sender, EventArgs e)
     {
-        DataGridViewCellStyle cellStyleTmp = new DataGridViewCellStyle(_cellStyle);
+        DataGridViewCellStyle cellStyleTmp = new DataGridViewCellStyle(_cellStyle!);
         _sampleDataGridView.DefaultCellStyle = cellStyleTmp;
         _sampleDataGridViewSelected.DefaultCellStyle = cellStyleTmp;
     }

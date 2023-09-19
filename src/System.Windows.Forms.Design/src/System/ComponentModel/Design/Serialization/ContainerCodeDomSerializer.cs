@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.CodeDom;
 
 namespace System.ComponentModel.Design.Serialization;
@@ -14,34 +12,26 @@ namespace System.ComponentModel.Design.Serialization;
 internal class ContainerCodeDomSerializer : CodeDomSerializer
 {
     private const string _containerName = "components";
-    private static ContainerCodeDomSerializer s_defaultSerializer;
+    private static ContainerCodeDomSerializer? s_defaultSerializer;
 
     /// <summary>
     ///  Retrieves a default static instance of this serializer.
     /// </summary>
-    internal static new ContainerCodeDomSerializer Default
-    {
-        get
-        {
-            s_defaultSerializer ??= new ContainerCodeDomSerializer();
-
-            return s_defaultSerializer;
-        }
-    }
+    internal static new ContainerCodeDomSerializer Default => s_defaultSerializer ??= new ContainerCodeDomSerializer();
 
     /// <summary>
     ///  We override this so we can always provide the correct container as a reference.
     /// </summary>
-    protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
+    protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object?[]? parameters, string? name, bool addToContainer)
     {
         if (typeof(IContainer).IsAssignableFrom(type))
         {
-            object obj = manager.GetService(typeof(IContainer));
+            object? obj = manager.GetService(typeof(IContainer));
 
             if (obj is not null)
             {
                 Trace(TraceLevel.Verbose, "Returning IContainer service as container");
-                manager.SetName(obj, name);
+                manager.SetName(obj, name!);
                 return obj;
             }
         }
@@ -59,7 +49,7 @@ internal class ContainerCodeDomSerializer : CodeDomSerializer
         CodeStatementCollection statements = new CodeStatementCollection();
         CodeExpression lhs;
 
-        if (manager.Context[typeof(CodeTypeDeclaration)] is CodeTypeDeclaration typeDecl && manager.Context[typeof(RootContext)] is RootContext rootCtx)
+        if (manager.TryGetContext(out CodeTypeDeclaration? typeDecl) && manager.TryGetContext(out RootContext? rootCtx))
         {
             CodeMemberField field = new CodeMemberField(typeof(IContainer), _containerName)
             {

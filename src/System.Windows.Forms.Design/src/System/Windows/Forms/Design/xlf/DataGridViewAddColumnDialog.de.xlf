@@ -34,12 +34,12 @@
       </trans-unit>
       <trans-unit id="headerTextLabel.Text">
         <source>&amp;Header text:</source>
-        <target state="translated">&amp;Headertext:</target>
+        <target state="translated">H&amp;eadertext:</target>
         <note />
       </trans-unit>
       <trans-unit id="nameLabel.Text">
         <source>&amp;Name:</source>
-        <target state="translated">N&amp;ame:</target>
+        <target state="translated">&amp;Name:</target>
         <note />
       </trans-unit>
       <trans-unit id="readOnlyCheckBox.Text">
@@ -54,12 +54,12 @@
       </trans-unit>
       <trans-unit id="unboundColumnRadioButton.Text">
         <source>&amp;Unbound column</source>
-        <target state="translated">U&amp;ngebundene Spalte</target>
+        <target state="translated">Un&amp;gebundene Spalte</target>
         <note />
       </trans-unit>
       <trans-unit id="visibleCheckBox.Text">
         <source>&amp;Visible</source>
-        <target state="translated">&amp;Sichtbar</target>
+        <target state="translated">Sicht&amp;bar</target>
         <note />
       </trans-unit>
     </body>

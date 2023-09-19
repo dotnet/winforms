@@ -8,8 +8,8 @@ abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.CodeDo
 abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Parse() -> System.CodeDom.CodeCompileUnit!
 abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.TypeResolutionService.get -> System.ComponentModel.Design.ITypeResolutionService?
 abstract System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.Write(System.CodeDom.CodeCompileUnit! unit) -> void
-~abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value, System.ComponentModel.MemberDescriptor descriptor, System.CodeDom.CodeStatementCollection statements) -> void
-~abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.ShouldSerialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value, System.ComponentModel.MemberDescriptor descriptor) -> bool
+abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! value, System.ComponentModel.MemberDescriptor! descriptor, System.CodeDom.CodeStatementCollection! statements) -> void
+abstract System.ComponentModel.Design.Serialization.MemberCodeDomSerializer.ShouldSerialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! value, System.ComponentModel.MemberDescriptor! descriptor) -> bool
 abstract System.Windows.Forms.Design.MaskDescriptor.Mask.get -> string?
 abstract System.Windows.Forms.Design.MaskDescriptor.Name.get -> string?
 abstract System.Windows.Forms.Design.MaskDescriptor.Sample.get -> string?

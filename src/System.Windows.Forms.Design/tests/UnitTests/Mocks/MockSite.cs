@@ -42,6 +42,18 @@ namespace System.Windows.Forms.Design.Tests.Mocks
             mockSite
                 .Setup(s => s.GetService(typeof(INestedContainer)))
                 .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(ToolStripMenuItem)))
+                .Returns(null);
+
+            Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
+
+            mockSite
+                .Setup(s => s.GetService(typeof(IServiceProvider)))
+                .Returns(mockServiceProvider.Object);
+            mockSite
+                .Setup(s => s.GetService(typeof(ToolStripAdornerWindowService)))
+                .Returns(null);
 
             Mock<ISelectionService> mockSelectionService = new(MockBehavior.Strict);
 
