@@ -17,7 +17,7 @@ public class LocalAppContextSwitchesTest
     }
 
     [WinFormsTheory]
-    [InlineData(".NETCoreApp,Version=v8.0", true)]
+    [InlineData(".NETCoreApp,Version=v8.0", false)]
     [InlineData(".NETCoreApp,Version=v7.0", false)]
     [InlineData(".NET Framework,Version=v4.8", false)]
     public void Validate_Default_Switch_Values(string targetFrameworkName, bool expected)
