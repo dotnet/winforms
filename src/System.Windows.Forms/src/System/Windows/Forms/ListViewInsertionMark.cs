@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms;
 
@@ -130,7 +129,7 @@ public sealed class ListViewInsertionMark
         LVINSERTMARK lvInsertMark = new()
         {
             cbSize = (uint)sizeof(LVINSERTMARK),
-            dwFlags = _appearsAfterItem ? LVIM.AFTER : LVIM.BEFORE,
+            dwFlags = (LIST_VIEW_INSERT_MARK_FLAGS)(_appearsAfterItem ? PInvoke.LVIM_AFTER : PInvoke.LVIM_BEFORE),
             iItem = _index
         };
 

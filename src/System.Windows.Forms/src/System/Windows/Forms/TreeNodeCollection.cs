@@ -296,7 +296,7 @@ public class TreeNodeCollection : IList
     {
         ArgumentNullException.ThrowIfNull(node);
 
-        if (node._handle != IntPtr.Zero)
+        if (node.HTREEITEMInternal != IntPtr.Zero)
         {
             throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), nameof(node));
         }
@@ -433,7 +433,7 @@ public class TreeNodeCollection : IList
     /// </summary>
     public virtual void Insert(int index, TreeNode node)
     {
-        if (node._handle != IntPtr.Zero)
+        if (node.HTREEITEMInternal != IntPtr.Zero)
         {
             throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), nameof(node));
         }

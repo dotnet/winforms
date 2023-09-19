@@ -2305,11 +2305,11 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
         {
             case (int)(MessageId.WM_REFLECT_NOTIFY):
                 var nmhdr = (NMHDR*)(nint)message.LParamInternal;
-                if ((int)nmhdr->code == (int)TTN.SHOW && !_trackPosition)
+                if (nmhdr->code == PInvoke.TTN_SHOW && !_trackPosition)
                 {
                     WmShow();
                 }
-                else if ((int)nmhdr->code == (int)TTN.POP)
+                else if (nmhdr->code == PInvoke.TTN_POP)
                 {
                     WmPop();
                     _window?.DefWndProc(ref message);

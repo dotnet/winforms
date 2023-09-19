@@ -12400,16 +12400,16 @@ public unsafe partial class Control :
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
         if (!ReflectMessage(nmhdr->hwndFrom, ref m))
         {
-            switch ((ComCtl32.TTN)nmhdr->code)
+            switch (nmhdr->code)
             {
-                case ComCtl32.TTN.SHOW:
+                case PInvoke.TTN_SHOW:
                     m.ResultInternal = PInvoke.SendMessage(
                         nmhdr->hwndFrom,
                         MessageId.WM_REFLECT | m.MsgInternal,
                         m.WParamInternal,
                         m.LParamInternal);
                     return;
-                case ComCtl32.TTN.POP:
+                case PInvoke.TTN_POP:
                     PInvoke.SendMessage(
                         nmhdr->hwndFrom,
                         MessageId.WM_REFLECT | m.MsgInternal,
