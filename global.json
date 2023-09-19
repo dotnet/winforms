@@ -1,6 +1,6 @@
 {
   "tools": {
-    "dotnet": "8.0.100-preview.7.23376.3",
+    "dotnet": "9.0.0-alpha.1.23466.6",
     "runtimes": {
       "dotnet/x64": [
         "$(VSRedistCommonNetCoreSharedFrameworkx6490PackageVersion)"
@@ -11,7 +11,7 @@
     }
   },
   "sdk": {
-    "version": "8.0.100-preview.7.23376.3"
+    "version": "9.0.0-alpha.1.23466.6"
   },
   "msbuild-sdks": {
     "Microsoft.DotNet.Arcade.Sdk": "8.0.0-beta.23463.1",
