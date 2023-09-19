@@ -3447,7 +3447,7 @@ public partial class TreeView : Control
 
                 break;
             case PInvoke.WM_GETOBJECT:
-                if (m.LParamInternal == PInvoke.UiaRootObjectId && SupportsUiaProviders && !IsAccessibilityObjectCreated)
+                if (m.LParamInternal == PInvoke.UiaRootObjectId && SupportsUiaProviders && !IsAccessibilityObjectCreated && Focused)
                 {
                     base.WndProc(ref m);
                     SelectedNode?.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
