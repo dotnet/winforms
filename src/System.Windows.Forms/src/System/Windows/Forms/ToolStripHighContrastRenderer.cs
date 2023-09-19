@@ -180,7 +180,7 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
             e.Graphics.DrawRectangle(SystemPens.ButtonHighlight, 0, 0, e.Item.Width - 1, e.Item.Height - 1);
         }
 
-        if (e.Item is ToolStripMenuItem menuItem && (menuItem.CheckState == CheckState.Checked || menuItem.Selected))
+        if (e.Item is ToolStripMenuItem menuItem && (menuItem.Checked || menuItem.Selected))
         {
             Graphics g = e.Graphics;
             Rectangle bounds = new Rectangle(Point.Empty, menuItem.Size);
@@ -235,10 +235,10 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
         // background. In that case, set the text color to highlight as well.
         if ((typeof(ToolStripButton).IsAssignableFrom(e.Item.GetType()) &&
             ((ToolStripButton)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image &&
-            ((ToolStripButton)e.Item).Checked)||
+            ((ToolStripButton)e.Item).Checked) ||
             (typeof(ToolStripMenuItem).IsAssignableFrom(e.Item.GetType()) &&
             ((ToolStripMenuItem)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image &&
-            ((ToolStripMenuItem)e.Item).CheckState == CheckState.Checked))
+            ((ToolStripMenuItem)e.Item).Checked))
         {
             e.TextColor = SystemColors.HighlightText;
         }
