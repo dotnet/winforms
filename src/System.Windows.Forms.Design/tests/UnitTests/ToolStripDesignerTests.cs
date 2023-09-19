@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Design.Tests;
 public class ToolStripDesignerTests
 {
     [WinFormsFact]
-    public void ToolStripDesigner_AssociatedComponentsTest()
+    public void ToolStripDesigner_InitialStateTest()
     {
         using ToolStripDesigner toolStripDesigner = new();
         using ToolStrip toolStrip = new();
@@ -45,7 +45,7 @@ public class ToolStripDesignerTests
         Assert.False(toolStripDesigner.CacheItems);
         Assert.False(toolStripDesigner.DontCloseOverflow);
         Assert.IsType<Rectangle>(toolStripDesigner.DragBoxFromMouseDown);
-        Assert.Equal(new Rectangle(0, 0, 0, 0), toolStripDesigner.DragBoxFromMouseDown);
+        Assert.Equal(Rectangle.Empty, toolStripDesigner.DragBoxFromMouseDown);
         Assert.False(toolStripDesigner.EditingCollection);
         Assert.NotNull(toolStripDesigner.EditManager);
         Assert.Null(toolStripDesigner.Editor);
