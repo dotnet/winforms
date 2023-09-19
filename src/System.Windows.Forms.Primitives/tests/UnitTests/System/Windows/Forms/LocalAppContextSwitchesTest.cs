@@ -31,7 +31,6 @@ public class LocalAppContextSwitchesTest
             testAccessor.s_targetFrameworkName = new FrameworkName(targetFrameworkName);
 
             Assert.Equal(expected, LocalAppContextSwitches.TrackBarModernRendering);
-            Assert.Equal(expected, LocalAppContextSwitches.AnchorLayoutV2);
             Assert.Equal(expected, LocalAppContextSwitches.ScaleTopLevelFormMinMaxSizeForDpi);
             Assert.Equal(expected, LocalAppContextSwitches.ServicePointManagerCheckCrl);
         }
