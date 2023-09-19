@@ -271,10 +271,7 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         }
     }
 
-    private bool ShouldSerializeLinkVisited()
-    {
-        return _linkVisitedSet = true;
-    }
+    private bool ShouldSerializeLinkVisited() => _linkVisitedSet = true;
 
     [DefaultValue(true)]
     public bool TrackVisitedState
@@ -780,15 +777,11 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         }
     }
 
-    protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
-    {
-        return LinkBoundsContainPoint(e.X, e.Y, e.RowIndex);
-    }
+    protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e) =>
+        LinkBoundsContainPoint(e.X, e.Y, e.RowIndex);
 
-    protected override bool MouseLeaveUnsharesRow(int rowIndex)
-    {
-        return LinkState != LinkState.Normal;
-    }
+    protected override bool MouseLeaveUnsharesRow(int rowIndex) =>
+        LinkState != LinkState.Normal;
 
     protected override bool MouseMoveUnsharesRow(DataGridViewCellMouseEventArgs e)
     {
@@ -810,10 +803,8 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         return false;
     }
 
-    protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
-    {
-        return TrackVisitedState && LinkBoundsContainPoint(e.X, e.Y, e.RowIndex);
-    }
+    protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e) =>
+        TrackVisitedState && LinkBoundsContainPoint(e.X, e.Y, e.RowIndex);
 
     protected override void OnKeyUp(KeyEventArgs e, int rowIndex)
     {
@@ -1172,8 +1163,6 @@ public partial class DataGridViewLinkCell : DataGridViewCell
         return resultBounds;
     }
 
-    public override string ToString()
-    {
-        return $"DataGridViewLinkCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewLinkCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
 }
