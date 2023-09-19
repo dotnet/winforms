@@ -3,11 +3,11 @@
 
 using System.Runtime.InteropServices;
 
-internal static partial class Interop
+namespace Windows.Win32;
+
+// https://github.com/microsoft/CsWin32/issues/882
+internal static partial class PInvoke
 {
-    internal static partial class Shell32
-    {
-        [DllImport(Libraries.Shell32, CharSet = CharSet.Unicode, ExactSpelling = true)]
-        public static extern BOOL Shell_NotifyIconW(NOTIFY_ICON_MESSAGE dwMessage, ref NOTIFYICONDATAW lpData);
-    }
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
+    public static extern BOOL Shell_NotifyIconW(NOTIFY_ICON_MESSAGE dwMessage, ref NOTIFYICONDATAW lpData);
 }
