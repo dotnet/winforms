@@ -10,6 +10,8 @@
     <CLSCompliant>true</CLSCompliant>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <IsPackable>true</IsPackable>
+    <IsShipping>true</IsShipping>
+    <IsShippingPackage>true</IsShippingPackage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <!-- Re-enable baseline package validation when we can control TFMs to validate. 
     https://github.com/dotnet/sdk/issues/35214
