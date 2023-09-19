@@ -31,7 +31,7 @@
 
   <!-- Turn OFF Trimming for non .NET core projects -->
   <PropertyGroup>
-    <IsTrimmable Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))"></IsTrimmable>
+    <IsTrimmable Condition="!$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">false</IsTrimmable>
   </PropertyGroup>
 
   <!-- Mark all projects located under **\tests\* folders as non-shipping -->
