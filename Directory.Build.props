@@ -28,7 +28,7 @@
                                   ($(MSBuildProjectName.EndsWith('.Analyzers')) or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
                                   >true</IsAnalyzerProject>
 
-    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+    <EnableTrimAnalyzer Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</EnableTrimAnalyzer>
     <EnableTrimAnalyzer Condition="$(IsTestProject) or $(IsAnalyzerProject) or $(MSBuildProjectDirectory.Contains('\tests\'))">false</EnableTrimAnalyzer>
   </PropertyGroup>
 

@@ -41,7 +41,6 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
   <!-- DesignTimeBuild requires all the TargetFramework Derived Properties to not be present in the first property group. -->
   <PropertyGroup Condition="$([MSBuild]::GetTargetFrameworkIdentifier('$(TargetFramework)')) == '.NETStandard'">
     <IncludeInternalObsoleteAttribute>true</IncludeInternalObsoleteAttribute>
-    <EnableTrimAnalyzer>false</EnableTrimAnalyzer>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">

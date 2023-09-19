@@ -26,7 +26,7 @@
 
   <!-- Turn on single-file publishing analysis for everything except the test projects -->
   <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
-    <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+    <EnableSingleFileAnalyzer Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</EnableSingleFileAnalyzer>
   </PropertyGroup>
 
   <!-- Mark all projects located under **\tests\* folders as non-shipping -->
