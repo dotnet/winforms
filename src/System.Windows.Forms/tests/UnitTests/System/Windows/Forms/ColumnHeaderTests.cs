@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -441,7 +440,7 @@ public class ColumnHeaderTests
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         header.ImageIndex = value;
-        var column = new ComCtl32.LVCOLUMNW
+        var column = new LVCOLUMNW
         {
             mask = LVCOLUMNW_MASK.LVCF_IMAGE
         };
@@ -470,7 +469,7 @@ public class ColumnHeaderTests
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         header.ImageIndex = value;
-        var column = new ComCtl32.LVCOLUMNW
+        var column = new LVCOLUMNW
         {
             mask = LVCOLUMNW_MASK.LVCF_IMAGE | LVCOLUMNW_MASK.LVCF_FMT,
             fmt = LVCOLUMNW_FORMAT.LVCFMT_IMAGE
@@ -661,7 +660,7 @@ public class ColumnHeaderTests
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         header.ImageKey = value;
-        var column = new ComCtl32.LVCOLUMNW
+        var column = new LVCOLUMNW
         {
             mask = LVCOLUMNW_MASK.LVCF_IMAGE
         };
@@ -692,7 +691,7 @@ public class ColumnHeaderTests
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         header.ImageKey = value;
-        var column = new ComCtl32.LVCOLUMNW
+        var column = new LVCOLUMNW
         {
             mask = LVCOLUMNW_MASK.LVCF_IMAGE | LVCOLUMNW_MASK.LVCF_FMT,
             fmt = LVCOLUMNW_FORMAT.LVCFMT_IMAGE
@@ -1007,7 +1006,7 @@ public class ColumnHeaderTests
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         header.Text = value;
         char* buffer = stackalloc char[256];
-        var column = new ComCtl32.LVCOLUMNW
+        var column = new LVCOLUMNW
         {
             mask = LVCOLUMNW_MASK.LVCF_TEXT,
             pszText = buffer,
@@ -1198,7 +1197,7 @@ public class ColumnHeaderTests
 
         Assert.NotEqual(IntPtr.Zero, listView.Handle);
         listView.Columns[columnIndex].TextAlign = value;
-        var column = new ComCtl32.LVCOLUMNW
+        var column = new LVCOLUMNW
         {
             mask = LVCOLUMNW_MASK.LVCF_FMT
         };

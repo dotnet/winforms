@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms;
 

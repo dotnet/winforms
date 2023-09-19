@@ -26,8 +26,8 @@ namespace System.Windows.Forms;
 public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 {
     internal const int SHIFTVAL = 12;
-    private const TVIS CHECKED = (TVIS)(2 << SHIFTVAL);
-    private const TVIS UNCHECKED = (TVIS)(1 << SHIFTVAL);
+    private const TREE_VIEW_ITEM_STATE_FLAGS CHECKED = (TREE_VIEW_ITEM_STATE_FLAGS)(2 << SHIFTVAL);
+    private const TREE_VIEW_ITEM_STATE_FLAGS UNCHECKED = (TREE_VIEW_ITEM_STATE_FLAGS)(1 << SHIFTVAL);
     private const int ALLOWEDIMAGES = 14;
 
     //the threshold value used to optimize AddRange and Clear operations for a big number of nodes
@@ -37,7 +37,6 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     // ie. nodes which don't use fancy fonts or colors (ie. that use the TreeView settings for these)
     //     will take up less memory than those that do.
     internal OwnerDrawPropertyBag propBag;
-    internal IntPtr _handle;
     internal string text;
     internal string name;
 
@@ -293,7 +292,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         set
         {
             CheckedStateInternal = value;
-            if (_handle == IntPtr.Zero)
+            if (HTREEITEMInternal == IntPtr.Zero)
             {
                 return;
             }
@@ -307,8 +306,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             TVITEMW item = new()
             {
                 mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-                hItem = _handle,
-                stateMask = TVIS.STATEIMAGEMASK
+                hItem = HTREEITEMInternal,
+                stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK
             };
 
             item.state |= value ? CHECKED : UNCHECKED;
@@ -327,14 +326,14 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         get
         {
 #if DEBUG
-            if (_handle != IntPtr.Zero && !treeView.IsDisposed)
+            if (HTREEITEMInternal != IntPtr.Zero && !treeView.IsDisposed)
             {
                 TreeView tv = TreeView;
                 TVITEMW item = new()
                 {
                     mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-                    hItem = _handle,
-                    stateMask = TVIS.STATEIMAGEMASK
+                    hItem = HTREEITEMInternal,
+                    stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK
                 };
 
                 PInvoke.SendMessage(tv, PInvoke.TVM_GETITEMW, 0, ref item);
@@ -477,16 +476,19 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  has not yet been created, this will force handle creation.
     /// </summary>
     [Browsable(false)]
-    public IntPtr Handle
+    public IntPtr Handle => (nint)HTREEITEM;
+
+    internal HTREEITEM HTREEITEMInternal { get; private set; }
+    internal HTREEITEM HTREEITEM
     {
         get
         {
-            if (_handle == IntPtr.Zero && TreeView is not null)
+            if (HTREEITEMInternal == IntPtr.Zero && TreeView is not null)
             {
                 TreeView.CreateControl(); // force handle creation
             }
 
-            return _handle;
+            return HTREEITEMInternal;
         }
     }
 
@@ -593,35 +595,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  Specifies whether this node is in the expanded state.
     /// </summary>
     [Browsable(false)]
-    public bool IsExpanded
-    {
-        get
-        {
-            if (_handle == IntPtr.Zero)
-            {
-                return expandOnRealization;
-            }
-
-            return (State & TVIS.EXPANDED) != 0;
-        }
-    }
+    public bool IsExpanded => HTREEITEMInternal == IntPtr.Zero ? expandOnRealization : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) != 0;
 
     /// <summary>
     ///  Specifies whether this node is in the selected state.
     /// </summary>
     [Browsable(false)]
-    public bool IsSelected
-    {
-        get
-        {
-            if (_handle == IntPtr.Zero)
-            {
-                return false;
-            }
-
-            return (State & TVIS.SELECTED) != 0;
-        }
-    }
+    public bool IsSelected => HTREEITEMInternal == IntPtr.Zero ? false : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED) != 0;
 
     /// <summary>
     ///  Specifies whether this node is visible.
@@ -631,7 +611,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            if (_handle == IntPtr.Zero)
+            if (HTREEITEMInternal == IntPtr.Zero)
             {
                 return false;
             }
@@ -982,11 +962,11 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// <summary>
     ///  Retrieve state bits for this node
     /// </summary>
-    internal TVIS State
+    internal TREE_VIEW_ITEM_STATE_FLAGS State
     {
         get
         {
-            if (_handle == IntPtr.Zero)
+            if (HTREEITEMInternal == IntPtr.Zero)
             {
                 return 0;
             }
@@ -999,9 +979,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             TVITEMW item = new()
             {
-                hItem = Handle,
+                hItem = HTREEITEM,
                 mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-                stateMask = TVIS.SELECTED | TVIS.EXPANDED
+                stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED | TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED
             };
 
             PInvoke.SendMessage(tv, PInvoke.TVM_GETITEMW, 0, ref item);
@@ -1275,7 +1255,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     public void BeginEdit()
     {
-        if (_handle != IntPtr.Zero)
+        if (HTREEITEMInternal != IntPtr.Zero)
         {
             TreeView tv = TreeView;
             if (tv.LabelEdit == false)
@@ -1288,7 +1268,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 tv.Focus();
             }
 
-            PInvoke.SendMessage(tv, PInvoke.TVM_EDITLABELW, 0, _handle);
+            PInvoke.SendMessage(tv, PInvoke.TVM_EDITLABELW, 0, (LPARAM)HTREEITEMInternal);
         }
     }
 
@@ -1476,7 +1456,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     private void DoCollapse(TreeView tv)
     {
-        if ((State & TVIS.EXPANDED) != 0)
+        if ((State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) != 0)
         {
             TreeViewCancelEventArgs e = new TreeViewCancelEventArgs(this, false, TreeViewAction.Collapse);
             tv.OnBeforeCollapse(e);
@@ -1811,22 +1791,15 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             TVINSERTSTRUCTW tvis = new()
             {
-                hParent = parent._handle
+                hParent = parent.HTREEITEMInternal
             };
 
             tvis.item.mask = InsertMask;
 
             TreeNode prev = PrevNode;
-            if (insertFirst || prev is null)
-            {
-                tvis.hInsertAfter = (IntPtr)TVI.FIRST;
-            }
-            else
-            {
-                tvis.hInsertAfter = prev._handle;
-            }
+            tvis.hInsertAfter = insertFirst || prev is null ? HTREEITEM.TVI_FIRST : prev.HTREEITEMInternal;
 
-            tvis.item.pszText = Marshal.StringToHGlobalAuto(text);
+            tvis.item.pszText = (char*)Marshal.StringToHGlobalUni(text);
             tvis.item.iImage = (ImageIndexer.ActualIndex == ImageList.Indexer.DefaultIndex) ? tv.ImageIndexer.ActualIndex : ImageIndexer.ActualIndex;
             tvis.item.iSelectedImage = (SelectedImageIndexer.ActualIndex == ImageList.Indexer.DefaultIndex) ? tv.SelectedImageIndexer.ActualIndex : SelectedImageIndexer.ActualIndex;
             tvis.item.mask = TVITEM_MASK.TVIF_TEXT;
@@ -1837,14 +1810,14 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             if (tv.CheckBoxes)
             {
                 tvis.item.mask |= TVITEM_MASK.TVIF_STATE;
-                tvis.item.stateMask |= TVIS.STATEIMAGEMASK;
+                tvis.item.stateMask |= TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK;
                 tvis.item.state |= CheckedInternal ? CHECKED : UNCHECKED;
             }
             else if (tv.StateImageList is not null && StateImageIndexer.ActualIndex >= 0)
             {
                 tvis.item.mask |= TVITEM_MASK.TVIF_STATE;
-                tvis.item.stateMask = TVIS.STATEIMAGEMASK;
-                tvis.item.state = (TVIS)((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
+                tvis.item.stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK;
+                tvis.item.state = (TREE_VIEW_ITEM_STATE_FLAGS)((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
             }
 
             if (tvis.item.iImage >= 0)
@@ -1870,17 +1843,17 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 PInvoke.SendMessage(tv, PInvoke.TVM_ENDEDITLABELNOW, (WPARAM)(BOOL)false);
             }
 
-            _handle = PInvoke.SendMessage(tv, PInvoke.TVM_INSERTITEMW, 0, ref tvis);
-            tv._nodesByHandle[_handle] = this;
+            HTREEITEMInternal = (HTREEITEM)PInvoke.SendMessage(tv, PInvoke.TVM_INSERTITEMW, 0, ref tvis);
+            tv._nodesByHandle[HTREEITEMInternal] = this;
 
             // Lets update the Lparam to the Handle.
             UpdateNode(TVITEM_MASK.TVIF_PARAM);
 
-            Marshal.FreeHGlobal(tvis.item.pszText);
+            Marshal.FreeCoTaskMem((nint)tvis.item.pszText.Value);
 
             if (editing)
             {
-                PInvoke.PostMessage(tv, PInvoke.TVM_EDITLABELW, default, _handle);
+                PInvoke.PostMessage(tv, PInvoke.TVM_EDITLABELW, default, (LPARAM)HTREEITEMInternal);
             }
 
             PInvoke.InvalidateRect(tv, lpRect: null, bErase: false);
@@ -1961,15 +1934,15 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
         KeyboardToolTipStateMachine.Instance.Unhook(this, tv.KeyboardToolTip);
 
-        if (_handle != IntPtr.Zero)
+        if (HTREEITEMInternal != IntPtr.Zero)
         {
             if (notify && tv.IsHandleCreated)
             {
-                PInvoke.SendMessage(tv, PInvoke.TVM_DELETEITEM, 0, _handle);
+                PInvoke.SendMessage(tv, PInvoke.TVM_DELETEITEM, 0, (LPARAM)HTREEITEMInternal);
             }
 
-            treeView._nodesByHandle.Remove(_handle);
-            _handle = IntPtr.Zero;
+            treeView._nodesByHandle.Remove(HTREEITEMInternal);
+            HTREEITEMInternal = (HTREEITEM)IntPtr.Zero;
         }
 
         ReleaseUiaProvider();
@@ -2012,8 +1985,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         TVITEMW item = new()
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
-            hItem = _handle,
-            stateMask = TVIS.EXPANDEDONCE,
+            hItem = HTREEITEMInternal,
+            stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDEDONCE,
             state = 0
         };
 
@@ -2111,9 +2084,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// <summary>
     ///  Tell the TreeView to refresh this node
     /// </summary>
-    private void UpdateNode(TVITEM_MASK mask)
+    private unsafe void UpdateNode(TVITEM_MASK mask)
     {
-        if (_handle == IntPtr.Zero)
+        if (HTREEITEMInternal == IntPtr.Zero)
         {
             return;
         }
@@ -2128,12 +2101,12 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         TVITEMW item = new()
         {
             mask = TVITEM_MASK.TVIF_HANDLE | mask,
-            hItem = _handle
+            hItem = HTREEITEMInternal
         };
 
         if ((mask & TVITEM_MASK.TVIF_TEXT) != 0)
         {
-            item.pszText = Marshal.StringToHGlobalAuto(text);
+            item.pszText = (char*)Marshal.StringToHGlobalUni(text);
         }
 
         if ((mask & TVITEM_MASK.TVIF_IMAGE) != 0)
@@ -2152,26 +2125,26 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
         if ((mask & TVITEM_MASK.TVIF_STATE) != 0)
         {
-            item.stateMask = TVIS.STATEIMAGEMASK;
+            item.stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK;
 
             // ActualIndex == -1 means "don't use custom image list"
             // so just leave item.state set to zero, that tells the unmanaged control
             // to use no state image for this node.
             if (StateImageIndexer.ActualIndex != ImageList.Indexer.DefaultIndex)
             {
-                item.state = (TVIS)((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
+                item.state = (TREE_VIEW_ITEM_STATE_FLAGS)((StateImageIndexer.ActualIndex + 1) << SHIFTVAL);
             }
         }
 
         if ((mask & TVITEM_MASK.TVIF_PARAM) != 0)
         {
-            item.lParam = _handle;
+            item.lParam = (LPARAM)HTREEITEMInternal;
         }
 
         PInvoke.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
         if ((mask & TVITEM_MASK.TVIF_TEXT) != 0)
         {
-            Marshal.FreeHGlobal(item.pszText);
+            Marshal.FreeCoTaskMem((nint)item.pszText.Value);
             if (tv.Scrollable)
             {
                 tv.ForceScrollbarUpdate(false);
@@ -2195,7 +2168,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         TVITEMW item = new()
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
-            hItem = Handle,
+            hItem = HTREEITEM,
             iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex))
         };
 

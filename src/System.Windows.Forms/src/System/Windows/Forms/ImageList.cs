@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Imaging;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -440,7 +439,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
 
         using (ThemingScope scope = new(Application.UseVisualStyles))
         {
-            ComCtl32.InitCommonControls();
+            PInvoke.InitCommonControls();
 
             _nativeImageList?.Dispose();
             _nativeImageList = new NativeImageList(_imageSize, flags);
@@ -555,7 +554,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
                 height,
                 Color.FromArgb(PInvoke.CLR_NONE),
                 Color.FromArgb(PInvoke.CLR_NONE),
-                (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
+                IMAGE_LIST_DRAW_STYLE.ILD_TRANSPARENT);
         }
         finally
         {
@@ -693,7 +692,7 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
                         _imageSize.Height,
                         Color.FromArgb(PInvoke.CLR_NONE),
                         Color.FromArgb(PInvoke.CLR_NONE),
-                        (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
+                        IMAGE_LIST_DRAW_STYLE.ILD_TRANSPARENT);
                 }
                 finally
                 {

@@ -20,6 +20,9 @@ internal readonly partial struct LPARAM
     public static explicit operator LPARAM(uint value) => new((nint)(nuint)value);
 
     public static explicit operator HWND(LPARAM value) => (HWND)value.Value;
+    public static explicit operator LPARAM(HTREEITEM value) => (LPARAM)value.Value;
+
+    public static explicit operator HTREEITEM(LPARAM value) => (HTREEITEM)value.Value;
     public static explicit operator LPARAM(HWND value) => (LPARAM)value.Value;
 
     public static explicit operator LPARAM(Color value) => (LPARAM)ColorTranslator.ToWin32(value);

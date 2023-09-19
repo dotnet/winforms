@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="$this.Text">
         <source>Add Column</source>
-        <target state="translated">列を追加</target>
+        <target state="translated">列の追加</target>
         <note />
       </trans-unit>
       <trans-unit id="addButton.Text">
@@ -49,7 +49,7 @@
       </trans-unit>
       <trans-unit id="typeLabel.Text">
         <source>&amp;Type:</source>
-        <target state="translated">型(&amp;T):</target>
+        <target state="translated">種類(&amp;T):</target>
         <note />
       </trans-unit>
       <trans-unit id="unboundColumnRadioButton.Text">
@@ -59,7 +59,7 @@
       </trans-unit>
       <trans-unit id="visibleCheckBox.Text">
         <source>&amp;Visible</source>
-        <target state="translated">表示(&amp;V)</target>
+        <target state="translated">可視(&amp;V)</target>
         <note />
       </trans-unit>
     </body>

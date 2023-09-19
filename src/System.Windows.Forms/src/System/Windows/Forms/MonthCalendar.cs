@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms;
 
@@ -2225,11 +2224,11 @@ public partial class MonthCalendar : Control
     private unsafe void WmCalViewChanged(ref Message m)
     {
         NMVIEWCHANGE* nmmcvm = (NMVIEWCHANGE*)(nint)m.LParamInternal;
-        Debug.Assert(_mcCurView == nmmcvm->uOldView, "Calendar view mode is out of sync with native control");
-        if (_mcCurView != nmmcvm->uNewView)
+        Debug.Assert(_mcCurView == nmmcvm->dwOldView, "Calendar view mode is out of sync with native control");
+        if (_mcCurView != nmmcvm->dwNewView)
         {
             _mcOldView = _mcCurView;
-            _mcCurView = nmmcvm->uNewView;
+            _mcCurView = nmmcvm->dwNewView;
 
             OnCalendarViewChanged(EventArgs.Empty);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
@@ -2284,19 +2283,19 @@ public partial class MonthCalendar : Control
         {
             NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
-            switch ((MCN)nmhdr->code)
+            switch (nmhdr->code)
             {
-                case MCN.SELECT:
+                case PInvoke.MCN_SELECT:
                     WmDateSelected(ref m);
                     break;
-                case MCN.SELCHANGE:
+                case PInvoke.MCN_SELCHANGE:
                     WmDateChanged(ref m);
                     break;
-                case MCN.GETDAYSTATE:
+                case PInvoke.MCN_GETDAYSTATE:
                     WmDateBold(ref m);
                     UpdateDisplayRange();
                     break;
-                case MCN.VIEWCHANGE:
+                case PInvoke.MCN_VIEWCHANGE:
                     WmCalViewChanged(ref m);
                     break;
             }

@@ -19,7 +19,7 @@
       </trans-unit>
       <trans-unit id="columnInDataSourceLabel.Text">
         <source>&amp;Columns in the DataSource</source>
-        <target state="translated">&amp;Colonne nel DataSource</target>
+        <target state="translated">&amp;Colonne in DataSource</target>
         <note />
       </trans-unit>
       <trans-unit id="dataBoundColumnRadioButton.Text">
@@ -34,7 +34,7 @@
       </trans-unit>
       <trans-unit id="headerTextLabel.Text">
         <source>&amp;Header text:</source>
-        <target state="translated">Testo intesta&amp;zione:</target>
+        <target state="translated">T&amp;esto intestazione:</target>
         <note />
       </trans-unit>
       <trans-unit id="nameLabel.Text">
@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="readOnlyCheckBox.Text">
         <source>&amp;Read Only</source>
-        <target state="translated">&amp;Sola lettura</target>
+        <target state="translated">S&amp;ola lettura</target>
         <note />
       </trans-unit>
       <trans-unit id="typeLabel.Text">
@@ -54,7 +54,7 @@
       </trans-unit>
       <trans-unit id="unboundColumnRadioButton.Text">
         <source>&amp;Unbound column</source>
-        <target state="translated">&amp;Colonna non associata</target>
+        <target state="translated">Co&amp;lonne non associate</target>
         <note />
       </trans-unit>
       <trans-unit id="visibleCheckBox.Text">

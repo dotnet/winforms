@@ -5418,11 +5418,11 @@ internal sealed partial class PropertyGridView :
 
         if (nmhdr->hwndFrom == ToolTip.Handle)
         {
-            switch ((ComCtl32.TTN)nmhdr->code)
+            switch (nmhdr->code)
             {
-                case ComCtl32.TTN.POP:
+                case PInvoke.TTN_POP:
                     break;
-                case ComCtl32.TTN.SHOW:
+                case PInvoke.TTN_SHOW:
                     // We want to move the tooltip over where our text would be.
                     Point mouseLoc = Cursor.Position;
                     mouseLoc = PointToClient(mouseLoc);
