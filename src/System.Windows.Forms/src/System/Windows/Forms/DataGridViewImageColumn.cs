@@ -67,23 +67,10 @@ public class DataGridViewImageColumn : DataGridViewColumn
     [AllowNull]
     public string Description
     {
-        get
-        {
-            if (CellTemplate is null)
-            {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
-            }
-
-            return ImageCellTemplate!.Description;
-        }
+        get => ImageCellTemplate.Description;
         set
         {
-            if (CellTemplate is null)
-            {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
-            }
-
-            ImageCellTemplate!.Description = value;
+            ImageCellTemplate.Description = value;
             if (DataGridView is not null)
             {
                 DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
@@ -125,12 +112,7 @@ public class DataGridViewImageColumn : DataGridViewColumn
         }
     }
 
-    private DataGridViewImageCell? ImageCellTemplate => (DataGridViewImageCell?)CellTemplate;
-
-    [DefaultValue(DataGridViewImageCellLayout.Normal)]
-    [SRCategory(nameof(SR.CatAppearance))]
-    [SRDescription(nameof(SR.DataGridViewImageColumn_ImageLayoutDescr))]
-    public DataGridViewImageCellLayout ImageLayout
+    private DataGridViewImageCell ImageCellTemplate
     {
         get
         {
@@ -139,7 +121,18 @@ public class DataGridViewImageColumn : DataGridViewColumn
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            DataGridViewImageCellLayout imageLayout = ImageCellTemplate!.ImageLayout;
+            return (DataGridViewImageCell)CellTemplate;
+        }
+    }
+
+    [DefaultValue(DataGridViewImageCellLayout.Normal)]
+    [SRCategory(nameof(SR.CatAppearance))]
+    [SRDescription(nameof(SR.DataGridViewImageColumn_ImageLayoutDescr))]
+    public DataGridViewImageCellLayout ImageLayout
+    {
+        get
+        {
+            DataGridViewImageCellLayout imageLayout = ImageCellTemplate.ImageLayout;
             if (imageLayout == DataGridViewImageCellLayout.NotSet)
             {
                 imageLayout = DataGridViewImageCellLayout.Normal;
@@ -175,20 +168,12 @@ public class DataGridViewImageColumn : DataGridViewColumn
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ValuesAreIcons
     {
-        get
-        {
-            if (ImageCellTemplate is null)
-            {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
-            }
-
-            return ImageCellTemplate.ValueIsIcon;
-        }
+        get => ImageCellTemplate.ValueIsIcon;
         set
         {
             if (ValuesAreIcons != value)
             {
-                ImageCellTemplate!.ValueIsIconInternal = value;
+                ImageCellTemplate.ValueIsIconInternal = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
