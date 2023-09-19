@@ -54,6 +54,9 @@ namespace System.Windows.Forms.Design.Tests.Mocks
             mockSite
                 .Setup(s => s.GetService(typeof(ToolStripAdornerWindowService)))
                 .Returns(null);
+            mockSite
+                .Setup(s => s.GetService(typeof(DesignerOptionService)))
+                .Returns(mockServiceProvider.Object);
 
             Mock<ISelectionService> mockSelectionService = new(MockBehavior.Strict);
 
@@ -72,12 +75,6 @@ namespace System.Windows.Forms.Design.Tests.Mocks
             mockSite
                 .Setup(s => s.GetService(typeof(UndoEngine)))
                 .Returns(null);
-
-            Mock<IServiceProvider> mockServiceProvider = new(MockBehavior.Strict);
-
-            mockSite
-                .Setup(s => s.GetService(typeof(DesignerOptionService)))
-                .Returns(mockServiceProvider.Object);
 
             return mockSite;
         }
