@@ -1251,6 +1251,7 @@ public partial class DataGridViewRow : DataGridViewBand
 
             if (string.IsNullOrEmpty(errorText) &&
                 DataGridView.DataSource is not null &&
+                DataGridView.DataConnection is not null &&
                 rowIndex != DataGridView.NewRowIndex)
             {
                 errorText = DataGridView.DataConnection.GetError(rowIndex);
