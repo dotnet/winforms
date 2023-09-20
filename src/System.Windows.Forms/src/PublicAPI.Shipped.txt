@@ -213,9 +213,9 @@ override System.Windows.Forms.DataGridViewRow.ToString() -> string!
 ~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlWindow.Equals(object obj) -> bool
 ~override System.Windows.Forms.PictureBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.PictureBox.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.PictureBox.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.PictureBox.Font.set -> void
+override System.Windows.Forms.PictureBox.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.PictureBox.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.PictureBox.Font.set -> void
 ~override System.Windows.Forms.PictureBox.OnEnabledChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.PictureBox.OnHandleCreated(System.EventArgs e) -> void
 ~override System.Windows.Forms.PictureBox.OnHandleDestroyed(System.EventArgs e) -> void
@@ -555,15 +555,15 @@ System.Windows.Forms.DataGridViewRow.SetValues(params object![]! values) -> bool
 ~System.Windows.Forms.HtmlWindow.StatusBarText.set -> void
 ~System.Windows.Forms.HtmlWindow.Url.get -> System.Uri
 ~System.Windows.Forms.HtmlWindow.WindowFrameElement.get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.PictureBox.ErrorImage.get -> System.Drawing.Image
-~System.Windows.Forms.PictureBox.ErrorImage.set -> void
-~System.Windows.Forms.PictureBox.Image.get -> System.Drawing.Image
-~System.Windows.Forms.PictureBox.Image.set -> void
-~System.Windows.Forms.PictureBox.ImageLocation.get -> string
-~System.Windows.Forms.PictureBox.ImageLocation.set -> void
-~System.Windows.Forms.PictureBox.InitialImage.get -> System.Drawing.Image
-~System.Windows.Forms.PictureBox.InitialImage.set -> void
-~System.Windows.Forms.PictureBox.Load(string url) -> void
+System.Windows.Forms.PictureBox.ErrorImage.get -> System.Drawing.Image?
+System.Windows.Forms.PictureBox.ErrorImage.set -> void
+System.Windows.Forms.PictureBox.Image.get -> System.Drawing.Image?
+System.Windows.Forms.PictureBox.Image.set -> void
+System.Windows.Forms.PictureBox.ImageLocation.get -> string?
+System.Windows.Forms.PictureBox.ImageLocation.set -> void
+System.Windows.Forms.PictureBox.InitialImage.get -> System.Drawing.Image?
+System.Windows.Forms.PictureBox.InitialImage.set -> void
+System.Windows.Forms.PictureBox.Load(string! url) -> void
 ~System.Windows.Forms.PictureBox.LoadAsync(string url) -> void
 ~System.Windows.Forms.PropertyGrid.BrowsableAttributes.get -> System.ComponentModel.AttributeCollection
 ~System.Windows.Forms.PropertyGrid.BrowsableAttributes.set -> void
@@ -8776,13 +8776,13 @@ System.Windows.Forms.PictureBox.BorderStyle.set -> void
 System.Windows.Forms.PictureBox.CancelAsync() -> void
 System.Windows.Forms.PictureBox.CausesValidation.get -> bool
 System.Windows.Forms.PictureBox.CausesValidation.set -> void
-System.Windows.Forms.PictureBox.CausesValidationChanged -> System.EventHandler
+System.Windows.Forms.PictureBox.CausesValidationChanged -> System.EventHandler?
 System.Windows.Forms.PictureBox.Enter -> System.EventHandler
-System.Windows.Forms.PictureBox.FontChanged -> System.EventHandler
-System.Windows.Forms.PictureBox.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.PictureBox.FontChanged -> System.EventHandler?
+System.Windows.Forms.PictureBox.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.PictureBox.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.PictureBox.ImeMode.set -> void
-System.Windows.Forms.PictureBox.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.PictureBox.ImeModeChanged -> System.EventHandler?
 System.Windows.Forms.PictureBox.KeyDown -> System.Windows.Forms.KeyEventHandler
 System.Windows.Forms.PictureBox.KeyPress -> System.Windows.Forms.KeyPressEventHandler
 System.Windows.Forms.PictureBox.KeyUp -> System.Windows.Forms.KeyEventHandler
