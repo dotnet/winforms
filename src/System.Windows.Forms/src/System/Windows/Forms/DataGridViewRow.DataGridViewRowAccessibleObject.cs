@@ -308,7 +308,7 @@ public partial class DataGridViewRow
                 dataGridView.CurrentCell is not null &&
                 dataGridView.CurrentCell.RowIndex == _owningDataGridViewRow.Index)
             {
-                return _owningDataGridViewRow.DataGridView.CurrentCell.AccessibilityObject;
+                return dataGridView.CurrentCell.AccessibilityObject;
             }
             else
             {

@@ -39,7 +39,7 @@ public partial class DataGridView
             switch (direction)
             {
                 case UiaCore.NavigateDirection.Parent:
-                    DataGridViewCell currentCell = owner.CurrentCell;
+                    DataGridViewCell? currentCell = owner.CurrentCell;
                     if (currentCell is not null && owner.IsCurrentCellInEditMode)
                     {
                         return owner.AccessibilityObject;

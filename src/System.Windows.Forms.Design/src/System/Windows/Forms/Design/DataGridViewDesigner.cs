@@ -78,7 +78,7 @@ internal class DataGridViewDesigner : ControlDesigner
         }
     }
 
-    public object DataSource
+    public object? DataSource
     {
         get
         {
@@ -891,7 +891,7 @@ internal class DataGridViewDesigner : ControlDesigner
 
         [AttributeProvider(typeof(IListSource))]
         [Editor($"System.Windows.Forms.Design.DataSourceListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
-        public object DataSource
+        public object? DataSource
         {
             [
                 SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode") // DAP calls this method thru Reflection.

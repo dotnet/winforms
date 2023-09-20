@@ -666,7 +666,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 _dataGridViewState1[State1_AllowUserToAddRows] = value;
                 if (DataSource is not null)
                 {
-                    DataConnection.ResetCachedAllowUserToAddRowsInternal();
+                    DataConnection!.ResetCachedAllowUserToAddRowsInternal();
                 }
 
                 OnAllowUserToAddRowsChanged(EventArgs.Empty);
@@ -684,7 +684,7 @@ public partial class DataGridView : Control, ISupportInitialize
             }
             else
             {
-                return AllowUserToAddRows && DataConnection.AllowAdd;
+                return AllowUserToAddRows && DataConnection!.AllowAdd;
             }
         }
     }
@@ -726,7 +726,7 @@ public partial class DataGridView : Control, ISupportInitialize
             }
             else
             {
-                return AllowUserToDeleteRows && DataConnection.AllowRemove;
+                return AllowUserToDeleteRows && DataConnection!.AllowRemove;
             }
         }
     }
@@ -1133,7 +1133,7 @@ public partial class DataGridView : Control, ISupportInitialize
     }
 
     private bool ShouldSerializeBackgroundColor() => !BackgroundColor.Equals(s_defaultBackgroundColor);
-#nullable disable
+
     [DefaultValue(BorderStyle.FixedSingle)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_BorderStyleDescr))]
@@ -1166,7 +1166,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewBorderStyleChangedDescr))]
-    public event EventHandler BorderStyleChanged
+    public event EventHandler? BorderStyleChanged
     {
         add => Events.AddHandler(s_borderStyleChangedEvent, value);
         remove => Events.RemoveHandler(s_borderStyleChangedEvent, value);
@@ -1392,7 +1392,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_CellBorderStyleChangedDescr))]
-    public event EventHandler CellBorderStyleChanged
+    public event EventHandler? CellBorderStyleChanged
     {
         add => Events.AddHandler(s_cellBorderStyleChangedEvent, value);
         remove => Events.RemoveHandler(s_cellBorderStyleChangedEvent, value);
@@ -1593,7 +1593,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_ColumnHeadersBorderStyleChangedDescr))]
-    public event EventHandler ColumnHeadersBorderStyleChanged
+    public event EventHandler? ColumnHeadersBorderStyleChanged
     {
         add => Events.AddHandler(s_columnHeadersBorderStyleChangedEvent, value);
         remove => Events.RemoveHandler(s_columnHeadersBorderStyleChangedEvent, value);
@@ -1602,6 +1602,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ColumnHeadersDefaultCellStyleDescr))]
     [AmbientValue(null)]
+    [AllowNull]
     public DataGridViewCellStyle ColumnHeadersDefaultCellStyle
     {
         get
@@ -1615,10 +1616,7 @@ public partial class DataGridView : Control, ISupportInitialize
             DataGridViewCellStyle cs = ColumnHeadersDefaultCellStyle;
             cs.RemoveScope(DataGridViewCellStyleScopes.ColumnHeaders);
             _columnHeadersDefaultCellStyle = value;
-            if (value is not null)
-            {
-                _columnHeadersDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.ColumnHeaders);
-            }
+            _columnHeadersDefaultCellStyle?.AddScope(this, DataGridViewCellStyleScopes.ColumnHeaders);
 
             // Update ambient font flag depending on cell style font
             _dataGridViewState1[State1_AmbientColumnHeadersFont] = value?.Font == base.Font;
@@ -1656,7 +1654,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewColumnHeadersDefaultCellStyleChangedDescr))]
-    public event EventHandler ColumnHeadersDefaultCellStyleChanged
+    public event EventHandler? ColumnHeadersDefaultCellStyleChanged
     {
         add => Events.AddHandler(s_columnHeadersDefaultCellStyleChangedEvent, value);
         remove => Events.RemoveHandler(s_columnHeadersDefaultCellStyleChangedEvent, value);
@@ -1696,7 +1694,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewColumnHeadersHeightChangedDescr))]
-    public event EventHandler ColumnHeadersHeightChanged
+    public event EventHandler? ColumnHeadersHeightChanged
     {
         add => Events.AddHandler(s_columnHeadersHeightChangedEvent, value);
         remove => Events.RemoveHandler(s_columnHeadersHeightChangedEvent, value);
@@ -1735,7 +1733,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_ColumnHeadersHeightSizeModeChangedDescr))]
-    public event DataGridViewAutoSizeModeEventHandler ColumnHeadersHeightSizeModeChanged
+    public event DataGridViewAutoSizeModeEventHandler? ColumnHeadersHeightSizeModeChanged
     {
         add => Events.AddHandler(s_columnHeadersHeightSizeModeChangedEvent, value);
         remove => Events.RemoveHandler(s_columnHeadersHeightSizeModeChangedEvent, value);
@@ -1807,7 +1805,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public DataGridViewCell CurrentCell
+    public DataGridViewCell? CurrentCell
     {
         get
         {
@@ -1946,7 +1944,7 @@ public partial class DataGridView : Control, ISupportInitialize
     }
 
     [Browsable(false)]
-    public DataGridViewRow CurrentRow
+    public DataGridViewRow? CurrentRow
     {
         get
         {
@@ -1978,7 +1976,7 @@ public partial class DataGridView : Control, ISupportInitialize
         }
     }
 
-    internal DataGridViewDataConnection DataConnection { get; private set; }
+    internal DataGridViewDataConnection? DataConnection { get; private set; }
 
     [DefaultValue("")]
     [SRCategory(nameof(SR.CatData))]
@@ -2012,7 +2010,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewDataMemberChangedDescr))]
-    public event EventHandler DataMemberChanged
+    public event EventHandler? DataMemberChanged
     {
         add => Events.AddHandler(s_dataMemberChangedEvent, value);
         remove => Events.RemoveHandler(s_dataMemberChangedEvent, value);
@@ -2023,7 +2021,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [RefreshProperties(RefreshProperties.Repaint)]
     [AttributeProvider(typeof(IListSource))]
     [SRDescription(nameof(SR.DataGridViewDataSourceDescr))]
-    public object DataSource
+    public object? DataSource
     {
         get
         {
@@ -2078,7 +2076,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewDataSourceChangedDescr))]
-    public event EventHandler DataSourceChanged
+    public event EventHandler? DataSourceChanged
     {
         add => Events.AddHandler(s_dataSourceChangedEvent, value);
         remove => Events.RemoveHandler(s_dataSourceChangedEvent, value);
@@ -2087,6 +2085,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_DefaultCellStyleDescr))]
     [AmbientValue(null)]
+    [AllowNull]
     public DataGridViewCellStyle DefaultCellStyle
     {
         get
@@ -2158,10 +2157,7 @@ public partial class DataGridView : Control, ISupportInitialize
             DataGridViewCellStyle cs = DefaultCellStyle;
             cs.RemoveScope(DataGridViewCellStyleScopes.DataGridView);
             _defaultCellStyle = value;
-            if (value is not null)
-            {
-                _defaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.DataGridView);
-            }
+            _defaultCellStyle?.AddScope(this, DataGridViewCellStyleScopes.DataGridView);
 
             // Update ambient font flag depending on cell style font
             _dataGridViewState1[State1_AmbientFont] = value?.Font == base.Font;
@@ -2200,7 +2196,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewDefaultCellStyleChangedDescr))]
-    public event EventHandler DefaultCellStyleChanged
+    public event EventHandler? DefaultCellStyleChanged
     {
         add => Events.AddHandler(s_defaultCellStyleChangedEvent, value);
         remove => Events.RemoveHandler(s_defaultCellStyleChangedEvent, value);
@@ -2329,7 +2325,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_EditModeChangedDescr))]
-    public event EventHandler EditModeChanged
+    public event EventHandler? EditModeChanged
     {
         add => Events.AddHandler(s_editModeChangedEvent, value);
         remove => Events.RemoveHandler(s_editModeChangedEvent, value);
@@ -2395,9 +2391,9 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public Control EditingControl { get; private set; }
+    public Control? EditingControl { get; private set; }
 
-    internal AccessibleObject EditingControlAccessibleObject
+    internal AccessibleObject? EditingControlAccessibleObject
     {
         get
         {
@@ -2453,7 +2449,7 @@ public partial class DataGridView : Control, ISupportInitialize
             }
         }
     }
-
+#nullable disable
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public DataGridViewCell FirstDisplayedCell
