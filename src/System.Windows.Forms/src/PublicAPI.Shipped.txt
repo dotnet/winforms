@@ -177,13 +177,13 @@ override System.Windows.Forms.DataGridViewCellStyle.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewLinkColumn.CellTemplate.set -> void
 ~override System.Windows.Forms.DataGridViewLinkColumn.Clone() -> object
 ~override System.Windows.Forms.DataGridViewLinkColumn.ToString() -> string
-~override System.Windows.Forms.DataGridViewRow.Clone() -> object
-~override System.Windows.Forms.DataGridViewRow.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~override System.Windows.Forms.DataGridViewRow.ContextMenuStrip.set -> void
-~override System.Windows.Forms.DataGridViewRow.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~override System.Windows.Forms.DataGridViewRow.DefaultCellStyle.set -> void
-~override System.Windows.Forms.DataGridViewRow.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~override System.Windows.Forms.DataGridViewRow.ToString() -> string
+override System.Windows.Forms.DataGridViewRow.Clone() -> object!
+override System.Windows.Forms.DataGridViewRow.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+override System.Windows.Forms.DataGridViewRow.ContextMenuStrip.set -> void
+override System.Windows.Forms.DataGridViewRow.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+override System.Windows.Forms.DataGridViewRow.DefaultCellStyle.set -> void
+override System.Windows.Forms.DataGridViewRow.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+override System.Windows.Forms.DataGridViewRow.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridViewRowHeaderCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format) -> object
@@ -480,18 +480,18 @@ System.Windows.Forms.DataGridViewCellStyle.Tag.set -> void
 ~System.Windows.Forms.DataGridViewImageColumn.Image.set -> void
 ~System.Windows.Forms.DataGridViewLinkColumn.Text.get -> string
 ~System.Windows.Forms.DataGridViewLinkColumn.Text.set -> void
-~System.Windows.Forms.DataGridViewRow.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
-~System.Windows.Forms.DataGridViewRow.Cells.get -> System.Windows.Forms.DataGridViewCellCollection
-~System.Windows.Forms.DataGridViewRow.CreateCells(System.Windows.Forms.DataGridView dataGridView) -> void
-~System.Windows.Forms.DataGridViewRow.CreateCells(System.Windows.Forms.DataGridView dataGridView, params object[] values) -> void
-~System.Windows.Forms.DataGridViewRow.DataBoundItem.get -> object
-~System.Windows.Forms.DataGridViewRow.ErrorText.get -> string
-~System.Windows.Forms.DataGridViewRow.ErrorText.set -> void
-~System.Windows.Forms.DataGridViewRow.GetContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip
-~System.Windows.Forms.DataGridViewRow.GetErrorText(int rowIndex) -> string
-~System.Windows.Forms.DataGridViewRow.HeaderCell.get -> System.Windows.Forms.DataGridViewRowHeaderCell
-~System.Windows.Forms.DataGridViewRow.HeaderCell.set -> void
-~System.Windows.Forms.DataGridViewRow.SetValues(params object[] values) -> bool
+System.Windows.Forms.DataGridViewRow.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject!
+System.Windows.Forms.DataGridViewRow.Cells.get -> System.Windows.Forms.DataGridViewCellCollection!
+System.Windows.Forms.DataGridViewRow.CreateCells(System.Windows.Forms.DataGridView! dataGridView) -> void
+System.Windows.Forms.DataGridViewRow.CreateCells(System.Windows.Forms.DataGridView! dataGridView, params object![]! values) -> void
+System.Windows.Forms.DataGridViewRow.DataBoundItem.get -> object?
+System.Windows.Forms.DataGridViewRow.ErrorText.get -> string!
+System.Windows.Forms.DataGridViewRow.ErrorText.set -> void
+System.Windows.Forms.DataGridViewRow.GetContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip?
+System.Windows.Forms.DataGridViewRow.GetErrorText(int rowIndex) -> string!
+System.Windows.Forms.DataGridViewRow.HeaderCell.get -> System.Windows.Forms.DataGridViewRowHeaderCell!
+System.Windows.Forms.DataGridViewRow.HeaderCell.set -> void
+System.Windows.Forms.DataGridViewRow.SetValues(params object![]! values) -> bool
 ~System.Windows.Forms.DataGridViewRowCollection.CopyTo(System.Windows.Forms.DataGridViewRow[] array, int index) -> void
 ~System.Windows.Forms.DataGridViewRowCollection.DataGridView.get -> System.Windows.Forms.DataGridView
 ~System.Windows.Forms.DataGridViewRowCollection.DataGridViewRowCollection(System.Windows.Forms.DataGridView dataGridView) -> void
@@ -877,13 +877,13 @@ virtual System.Windows.Forms.DataGridViewCellStyle.Clone() -> System.Windows.For
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.ValueMember.get -> string
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.ValueMember.set -> void
-~virtual System.Windows.Forms.DataGridViewRow.AdjustRowHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedRow, bool isLastVisibleRow) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
-~virtual System.Windows.Forms.DataGridViewRow.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~virtual System.Windows.Forms.DataGridViewRow.CreateCellsInstance() -> System.Windows.Forms.DataGridViewCellCollection
-~virtual System.Windows.Forms.DataGridViewRow.DrawFocus(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, System.Windows.Forms.DataGridViewCellStyle cellStyle, bool cellsPaintSelectionBackground) -> void
-~virtual System.Windows.Forms.DataGridViewRow.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, bool isFirstDisplayedRow, bool isLastVisibleRow) -> void
-~virtual System.Windows.Forms.DataGridViewRow.PaintCells(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, bool isFirstDisplayedRow, bool isLastVisibleRow, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
-~virtual System.Windows.Forms.DataGridViewRow.PaintHeader(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, bool isFirstDisplayedRow, bool isLastVisibleRow, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+virtual System.Windows.Forms.DataGridViewRow.AdjustRowHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStylePlaceholder, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedRow, bool isLastVisibleRow) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
+virtual System.Windows.Forms.DataGridViewRow.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+virtual System.Windows.Forms.DataGridViewRow.CreateCellsInstance() -> System.Windows.Forms.DataGridViewCellCollection!
+virtual System.Windows.Forms.DataGridViewRow.DrawFocus(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle bounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, System.Windows.Forms.DataGridViewCellStyle! cellStyle, bool cellsPaintSelectionBackground) -> void
+virtual System.Windows.Forms.DataGridViewRow.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, bool isFirstDisplayedRow, bool isLastVisibleRow) -> void
+virtual System.Windows.Forms.DataGridViewRow.PaintCells(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, bool isFirstDisplayedRow, bool isLastVisibleRow, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+virtual System.Windows.Forms.DataGridViewRow.PaintHeader(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, bool isFirstDisplayedRow, bool isLastVisibleRow, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.Add(params object[] values) -> int
 ~virtual System.Windows.Forms.DataGridViewRowCollection.Add(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> int
 ~virtual System.Windows.Forms.DataGridViewRowCollection.AddRange(params System.Windows.Forms.DataGridViewRow[] dataGridViewRows) -> void
