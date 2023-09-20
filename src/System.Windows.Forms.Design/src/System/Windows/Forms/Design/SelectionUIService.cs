@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -22,11 +20,11 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     private const int HITTEST_DEFAULT = HITTEST_CONTAINER_SELECTOR | HITTEST_NORMAL_SELECTION;
 
     // These are used during a drag operation, either through our own handle drag or through ISelectionUIService
-    private ISelectionUIHandler _dragHandler; // the current drag handler
-    private object[] _dragComponents; // the controls being dragged
+    private ISelectionUIHandler? _dragHandler; // the current drag handler
+    private object[]? _dragComponents; // the controls being dragged
     private SelectionRules _dragRules; // movement constraints for the drag
     private bool _dragMoved;
-    private object _containerDrag; // object being dragged during a container drag
+    private object? _containerDrag; // object being dragged during a container drag
     // These are used during a drag of a selection grab handle
     private bool _ignoreCaptureChanged;
     private int _mouseDragHitTest; // where the hit occurred that caused the drag
@@ -35,7 +33,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     private Point _lastMoveScreenCoord = Point.Empty;
     private bool _ctrlSelect; // was the CTRL key down when the drag began
     private bool _mouseDragging; // Are we actually doing a drag?
-    private ContainerSelectorActiveEventHandler _containerSelectorActive; // the event we fire when user interacts with container selector
+    private ContainerSelectorActiveEventHandler? _containerSelectorActive; // the event we fire when user interacts with container selector
     private Dictionary<object, SelectionUIItem> _selectionItems;
     private readonly Dictionary<object, ISelectionUIHandler> _selectionHandlers; // Component UI handlers
 
@@ -43,9 +41,9 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     private bool _batchMode;
     private bool _batchChanged;
     private bool _batchSync;
-    private readonly ISelectionService _selSvc;
+    private readonly ISelectionService? _selSvc;
     private readonly IDesignerHost _host;
-    private DesignerTransaction _dragTransaction;
+    private DesignerTransaction? _dragTransaction;
 
     /// <summary>
     ///  Creates a new selection manager object.  The selection manager manages all selection of all designers under the current form file.
@@ -62,7 +60,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         // Not really any reason for this, except that it can be handy when using Spy++
         Text = "SelectionUIOverlay";
 
-        _selSvc = (ISelectionService)host.GetService(typeof(ISelectionService));
+        _selSvc = host.GetService<ISelectionService>();
         if (_selSvc is not null)
         {
             _selSvc.SelectionChanged += new EventHandler(OnSelectionChanged);
@@ -114,7 +112,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// </summary>
     private void DisplayError(Exception e)
     {
-        IUIService uis = (IUIService)_host.GetService(typeof(IUIService));
+        IUIService? uis = _host.GetService<IUIService>();
         if (uis is not null)
         {
             uis.ShowError(e);
@@ -122,7 +120,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         else
         {
             string message = e.Message;
-            if (message is null || message.Length == 0)
+            if (string.IsNullOrEmpty(message))
             {
                 message = e.ToString();
             }
@@ -212,7 +210,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
 
             if ((flags & HITTEST_NORMAL_SELECTION) != 0)
             {
-                if (!(item is ContainerSelectionUIItem) && (item.GetRules() & SelectionRules.Visible) != SelectionRules.None)
+                if (item is not ContainerSelectionUIItem && (item.GetRules() & SelectionRules.Visible) != SelectionRules.None)
                 {
                     int hitTest = item.GetHitTest(pt);
                     if (hitTest != SelectionUIItem.NOHIT)
@@ -233,8 +231,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         return new HitTestInfo(SelectionUIItem.NOHIT, null);
     }
 
-    private ISelectionUIHandler GetHandler(object component)
-        => _selectionHandlers.TryGetValue(component, out ISelectionUIHandler value) ? value : null;
+    private ISelectionUIHandler? GetHandler(object component)
+        => _selectionHandlers.TryGetValue(component, out ISelectionUIHandler? value) ? value : null;
 
     /// <summary>
     ///  This method returns a well-formed name for a drag transaction based on the rules it is given.
@@ -251,12 +249,12 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
             }
             else
             {
-                string name = string.Empty;
+                string? name = string.Empty;
                 if (objects.Length > 0)
                 {
-                    if (objects[0] is IComponent comp && comp.Site is not null)
+                    if (objects[0] is IComponent { Site: { } site })
                     {
-                        name = comp.Site.Name;
+                        name = site.Name;
                     }
                     else
                     {
@@ -275,12 +273,12 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
             }
             else
             {
-                string name = string.Empty;
+                string? name = string.Empty;
                 if (objects.Length > 0)
                 {
-                    if (objects[0] is IComponent comp && comp.Site is not null)
+                    if (objects[0] is IComponent { Site: { } site })
                     {
-                        name = comp.Site.Name;
+                        name = site.Name;
                     }
                     else
                     {
@@ -302,7 +300,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// <summary>
     ///  Called by the designer host when it is entering or leaving a batch operation.  Here we queue up selection notification and we turn off our UI.
     /// </summary>
-    private void OnTransactionClosed(object sender, DesignerTransactionCloseEventArgs e)
+    private void OnTransactionClosed(object? sender, DesignerTransactionCloseEventArgs e)
     {
         if (e.LastTransaction)
         {
@@ -324,7 +322,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// <summary>
     ///  Called by the designer host when it is entering or leaving a batch operation. Here we queue up selection notification and we turn off our UI.
     /// </summary>
-    private void OnTransactionOpened(object sender, EventArgs e)
+    private void OnTransactionOpened(object? sender, EventArgs e)
     {
         _batchMode = true;
     }
@@ -343,7 +341,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// <summary>
     ///  Called whenever a component changes.  Here we update our selection information so that the selection rectangles are all up to date.
     /// </summary>
-    private void OnComponentChanged(object sender, ComponentChangedEventArgs ccevent)
+    private void OnComponentChanged(object? sender, ComponentChangedEventArgs ccevent)
     {
         if (!_batchMode)
         {
@@ -358,10 +356,10 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// <summary>
     ///  called by the formcore when someone has removed a component.  This will remove any selection on the component without disturbing the rest of the selection
     /// </summary>
-    private void OnComponentRemove(object sender, ComponentEventArgs ce)
+    private void OnComponentRemove(object? sender, ComponentEventArgs ce)
     {
-        _selectionHandlers.Remove(ce.Component);
-        _selectionItems.Remove(ce.Component);
+        _selectionHandlers.Remove(ce.Component!);
+        _selectionItems.Remove(ce.Component!);
         ((ISelectionUIService)this).SyncComponent(ce.Component);
     }
 
@@ -376,15 +374,15 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// <summary>
     ///  Called when the selection changes.  We sync up the UI with the selection at this point.
     /// </summary>
-    private void OnSelectionChanged(object sender, EventArgs e)
+    private void OnSelectionChanged(object? sender, EventArgs e)
     {
-        ICollection selection = _selSvc.GetSelectedComponents();
+        ICollection selection = _selSvc!.GetSelectedComponents();
         Dictionary<object, SelectionUIItem> newSelection = new(selection.Count);
         bool shapeChanged = false;
         foreach (object comp in selection)
         {
             bool create = true;
-            if (_selectionItems.TryGetValue(comp, out SelectionUIItem existingItem))
+            if (_selectionItems.TryGetValue(comp, out SelectionUIItem? existingItem))
             {
                 if (existingItem is ContainerSelectionUIItem item)
                 {
@@ -424,7 +422,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// <summary>
     ///  User setting requires that we repaint.
     /// </summary>
-    private void OnSystemSettingChanged(object sender, EventArgs e) => Invalidate();
+    private void OnSystemSettingChanged(object? sender, EventArgs e) => Invalidate();
 
     /// <summary>
     ///  User setting requires that we repaint.
@@ -475,11 +473,11 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         base.OnDoubleClick(devent);
         if (_selSvc is not null)
         {
-            object selComp = _selSvc.PrimarySelection;
+            object? selComp = _selSvc.PrimarySelection;
             Debug.Assert(selComp is not null, "Illegal selection on double-click");
             if (selComp is not null)
             {
-                ISelectionUIHandler handler = GetHandler(selComp);
+                ISelectionUIHandler? handler = GetHandler(selComp);
                 handler?.OnSelectionDoubleClick((IComponent)selComp);
             }
         }
@@ -501,7 +499,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
                 int hitTest = hti.hitTest;
                 if ((hitTest & SelectionUIItem.CONTAINER_SELECTOR) != 0)
                 {
-                    _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit._component }, SelectionTypes.Auto);
+                    _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit!._component }, SelectionTypes.Auto);
                     // Then do a drag...
                     SelectionRules rules = SelectionRules.Moveable;
                     if (((ISelectionUIService)this).BeginDrag(rules, anchor.X, anchor.Y))
@@ -518,7 +516,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
                     _ctrlSelect = (ModifierKeys & Keys.Control) != Keys.None;
                     if (!_ctrlSelect)
                     {
-                        _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit._component }, SelectionTypes.Primary);
+                        _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit!._component }, SelectionTypes.Primary);
                     }
 
                     if ((hitTest & SelectionUIItem.MOVE_MASK) != 0)
@@ -699,12 +697,12 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
             if (_ctrlSelect && !_mouseDragging && _selSvc is not null)
             {
                 HitTestInfo hti = GetHitTest(screenCoord, HITTEST_DEFAULT);
-                _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit._component }, SelectionTypes.Primary);
+                _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit!._component }, SelectionTypes.Primary);
             }
 
             if (_mouseDragging)
             {
-                object oldContainerDrag = _containerDrag;
+                object? oldContainerDrag = _containerDrag;
                 bool oldDragMoved = _dragMoved;
                 EndMouseDrag(screenCoord);
                 if (((ISelectionUIService)this).Dragging)
@@ -777,7 +775,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
                 continue;
             }
 
-            Cursor cursor = item.GetCursorAtPoint(clientCoords);
+            Cursor? cursor = item.GetCursorAtPoint(clientCoords);
             if (cursor is not null)
             {
                 Cursor = cursor == Cursors.Default ? null : cursor;
@@ -789,7 +787,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         {
             if (item is ContainerSelectionUIItem)
             {
-                Cursor cursor = item.GetCursorAtPoint(clientCoords);
+                Cursor? cursor = item.GetCursorAtPoint(clientCoords);
                 if (cursor is not null)
                 {
                     Cursor = cursor == Cursors.Default ? null : cursor;
@@ -868,7 +866,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// <summary>
     ///  Adds an event handler to the ContainerSelectorActive event. This event is fired whenever the user interacts with the container selector in a manor that would indicate that the selector should continued to be displayed. Since the container selector normally will vanish after a timeout, designers should listen to this event and reset the timeout when this event occurs.
     /// </summary>
-    event ContainerSelectorActiveEventHandler ISelectionUIService.ContainerSelectorActive
+    event ContainerSelectorActiveEventHandler? ISelectionUIService.ContainerSelectorActive
     {
         add => _containerSelectorActive += value;
         remove => _containerSelectorActive -= value;
@@ -879,7 +877,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// </summary>
     void ISelectionUIService.AssignSelectionUIHandler(object component, ISelectionUIHandler handler)
     {
-        if (_selectionHandlers.TryGetValue(component, out ISelectionUIHandler oldHandler))
+        if (_selectionHandlers.TryGetValue(component, out ISelectionUIHandler? oldHandler))
         {
             // The collection editors do not dispose objects from the collection before setting a new collection. This causes items that are common to the old and new collections to come through this code path  again, causing the exception to fire. So, we check to see if the SelectionUIHandler is same, and bail out in that case.
             if (handler == oldHandler)
@@ -904,7 +902,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
 
     void ISelectionUIService.ClearSelectionUIHandler(object component, ISelectionUIHandler handler)
     {
-        _selectionHandlers.TryGetValue(component, out ISelectionUIHandler oldHandler);
+        _selectionHandlers.TryGetValue(component, out ISelectionUIHandler? oldHandler);
         if (oldHandler == handler)
         {
             _selectionHandlers.Remove(component);
@@ -946,8 +944,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         }
 
         // We allow all components with the same UI handler as the primary selection to participate in the drag.
-        ISelectionUIHandler primaryHandler = null;
-        object primary = _selSvc.PrimarySelection;
+        ISelectionUIHandler? primaryHandler = null;
+        object? primary = _selSvc.PrimarySelection;
         if (primary is not null)
         {
             primaryHandler = GetHandler(primary);
@@ -1037,14 +1035,14 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         Debug.Assert(_dragComponents is not null, "We should have a set of drag controls here");
         if ((_dragRules & SelectionRules.Moveable) == SelectionRules.None && (_dragRules & (SelectionRules.TopSizeable | SelectionRules.LeftSizeable)) == SelectionRules.None)
         {
-            newOffset = new Rectangle(0, 0, offset.Width, offset.Height);
+            newOffset = offset with { X = 0, Y = 0 };
         }
 
         if ((_dragRules & SelectionRules.AllSizeable) == SelectionRules.None)
         {
             if (newOffset.IsEmpty)
             {
-                newOffset = new Rectangle(offset.X, offset.Y, 0, 0);
+                newOffset = offset with { Width = 0, Height = 0 };
             }
             else
             {
@@ -1069,8 +1067,8 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     void ISelectionUIService.EndDrag(bool cancel)
     {
         _containerDrag = null;
-        ISelectionUIHandler handler = _dragHandler;
-        object[] components = _dragComponents;
+        ISelectionUIHandler? handler = _dragHandler;
+        object[] components = _dragComponents!;
         // Clean these out so that even if we throw an exception we don't die.
         _dragHandler = null;
         _dragComponents = null;
@@ -1081,10 +1079,10 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         }
 
         // Typically, the handler will be changing a bunch of component properties here. Optimize this by enclosing it within a batch call.
-        DesignerTransaction trans = null;
+        DesignerTransaction? trans = null;
         try
         {
-            IComponent comp = components[0] as IComponent;
+            IComponent? comp = components[0] as IComponent;
             if (components.Length > 1 || (components.Length == 1 && comp is not null && comp.Site is null))
             {
                 trans = _host.CreateTransaction(string.Format(SR.DragDropMoveComponents, components.Length));
@@ -1093,7 +1091,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
             {
                 if (comp is not null)
                 {
-                    trans = _host.CreateTransaction(string.Format(SR.DragDropMoveComponent, comp.Site.Name));
+                    trans = _host.CreateTransaction(string.Format(SR.DragDropMoveComponent, comp.Site!.Name));
                 }
             }
 
@@ -1129,7 +1127,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// </summary>
     object[] ISelectionUIService.FilterSelection(object[] components, SelectionRules selectionRules)
     {
-        object[] selection = null;
+        object[]? selection = null;
         if (components is null)
         {
             return Array.Empty<object>();
@@ -1141,7 +1139,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
             List<object> list = new();
             foreach (object comp in components)
             {
-                if (_selectionItems.TryGetValue(comp, out SelectionUIItem item) && item is not ContainerSelectionUIItem)
+                if (_selectionItems.TryGetValue(comp, out SelectionUIItem? item) && item is not ContainerSelectionUIItem)
                 {
                     if ((item.GetRules() & selectionRules) == selectionRules)
                     {
@@ -1182,9 +1180,9 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// <summary>
     ///  Determines if the component is currently "container" selected. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
     /// </summary>
-    bool ISelectionUIService.GetContainerSelected(object component)
+    bool ISelectionUIService.GetContainerSelected([NotNullWhen(true)] object? component)
         => (component is not null
-        && _selectionItems.TryGetValue(component, out SelectionUIItem value)
+        && _selectionItems.TryGetValue(component, out SelectionUIItem? value)
         && value is ContainerSelectionUIItem);
 
     /// <summary>
@@ -1192,7 +1190,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// </summary>
     SelectionRules ISelectionUIService.GetSelectionRules(object component)
     {
-        if (!_selectionItems.TryGetValue(component, out SelectionUIItem selection))
+        if (!_selectionItems.TryGetValue(component, out SelectionUIItem? selection))
         {
             Debug.Fail("The component is not currently selected.");
             throw new InvalidOperationException();
@@ -1205,7 +1203,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     ///  Allows you to configure the style of the selection frame that a component uses.  This is useful if your component supports different modes of operation (such as an in-place editing mode and a static design mode).  Where possible, you should leave the selection style as is and use the design-time hit testing feature of the IDesigner interface to provide features at design time.  The value of style must be one of the  SelectionStyle enum values. The selection style is only valid for the duration that the component is selected.
     /// </summary>
     SelectionStyles ISelectionUIService.GetSelectionStyle(object component)
-        => !_selectionItems.TryGetValue(component, out SelectionUIItem item) ? SelectionStyles.None : item.Style;
+        => !_selectionItems.TryGetValue(component, out SelectionUIItem? item) ? SelectionStyles.None : item.Style;
 
     /// <summary>
     ///  Changes the container selection status of the given component. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
@@ -1214,7 +1212,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     {
         if (selected)
         {
-            _selectionItems.TryGetValue(component, out SelectionUIItem existingItem);
+            _selectionItems.TryGetValue(component, out SelectionUIItem? existingItem);
             if (existingItem is not ContainerSelectionUIItem)
             {
                 existingItem?.Dispose();
@@ -1230,13 +1228,13 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
         }
         else
         {
-            if (!_selectionItems.TryGetValue(component, out SelectionUIItem existingItem) || existingItem is ContainerSelectionUIItem)
+            if (!_selectionItems.TryGetValue(component, out SelectionUIItem? existingItem) || existingItem is ContainerSelectionUIItem)
             {
                 _selectionItems.Remove(component);
                 existingItem?.Dispose();
 
                 UpdateWindowRegion();
-                existingItem.Invalidate();
+                existingItem?.Invalidate();
             }
         }
     }
@@ -1246,7 +1244,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// </summary>
     void ISelectionUIService.SetSelectionStyle(object component, SelectionStyles style)
     {
-        _selectionItems.TryGetValue(component, out SelectionUIItem selUI);
+        _selectionItems.TryGetValue(component, out SelectionUIItem? selUI);
         if (_selSvc is not null && _selSvc.GetComponentSelected(component))
         {
             selUI = new SelectionUIItem(this, component);
@@ -1293,7 +1291,7 @@ internal sealed partial class SelectionUIService : Control, ISelectionUIService
     /// <summary>
     ///  This should be called when a component's property changed, that the designer thinks should result in a selection UI change. This method simply re-queries all currently selected components for their bounds and updates the selection handles for any that have changed.
     /// </summary>
-    void ISelectionUIService.SyncComponent(object component)
+    void ISelectionUIService.SyncComponent(object? component)
     {
         if (_batchMode)
         {

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 
@@ -23,7 +21,7 @@ public partial class DataGridViewRow : DataGridViewBand
 
     private const int DefaultMinRowThickness = 3;
 
-    private DataGridViewCellCollection _rowCells;
+    private DataGridViewCellCollection? _rowCells;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataGridViewRow"/> class.
@@ -39,7 +37,7 @@ public partial class DataGridViewRow : DataGridViewBand
     {
         get
         {
-            AccessibleObject result = (AccessibleObject)Properties.GetObject(s_propRowAccessibilityObject);
+            AccessibleObject? result = (AccessibleObject?)Properties.GetObject(s_propRowAccessibilityObject);
             if (result is null)
             {
                 result = CreateAccessibilityInstance();
@@ -57,7 +55,7 @@ public partial class DataGridViewRow : DataGridViewBand
     [DefaultValue(null)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_RowContextMenuStripDescr))]
-    public override ContextMenuStrip ContextMenuStrip
+    public override ContextMenuStrip? ContextMenuStrip
     {
         get => base.ContextMenuStrip;
         set => base.ContextMenuStrip = value;
@@ -65,7 +63,7 @@ public partial class DataGridViewRow : DataGridViewBand
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public object DataBoundItem
+    public object? DataBoundItem
     {
         get
         {
@@ -88,6 +86,7 @@ public partial class DataGridViewRow : DataGridViewBand
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_RowDefaultCellStyleDescr))]
+    [AllowNull]
     public override DataGridViewCellStyle DefaultCellStyle
     {
         get => base.DefaultCellStyle;
@@ -165,8 +164,8 @@ public partial class DataGridViewRow : DataGridViewBand
     {
         get
         {
-            object errorText = Properties.GetObject(s_propRowErrorText);
-            return (string)errorText ?? string.Empty;
+            object? errorText = Properties.GetObject(s_propRowErrorText);
+            return (string?)errorText ?? string.Empty;
         }
         set
         {
@@ -213,6 +212,7 @@ public partial class DataGridViewRow : DataGridViewBand
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
     public DataGridViewRowHeaderCell HeaderCell
     {
         get => (DataGridViewRowHeaderCell)base.HeaderCellCore;
@@ -363,7 +363,8 @@ public partial class DataGridViewRow : DataGridViewBand
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public virtual DataGridViewAdvancedBorderStyle AdjustRowHeaderBorderStyle(DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput,
+    public virtual DataGridViewAdvancedBorderStyle AdjustRowHeaderBorderStyle(
+        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput,
         DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder,
         bool singleVerticalBorderAdded,
         bool singleHorizontalBorderAdded,
@@ -610,14 +611,14 @@ public partial class DataGridViewRow : DataGridViewBand
     {
         Debug.Assert(inheritedCellStyle is not null);
 
-        DataGridViewCellStyle cellStyle = null;
+        DataGridViewCellStyle? cellStyle = null;
         if (HeaderCell.HasStyle)
         {
             cellStyle = HeaderCell.Style;
             Debug.Assert(cellStyle is not null);
         }
 
-        DataGridViewCellStyle rowHeadersStyle = DataGridView.RowHeadersDefaultCellStyle;
+        DataGridViewCellStyle rowHeadersStyle = DataGridView!.RowHeadersDefaultCellStyle;
         Debug.Assert(rowHeadersStyle is not null);
 
         DataGridViewCellStyle dataGridViewStyle = DataGridView.DefaultCellStyle;
@@ -772,7 +773,7 @@ public partial class DataGridViewRow : DataGridViewBand
         {
             inheritedCellStyle.Tag = cellStyle.Tag;
         }
-        else if (rowHeadersStyle.Tag is not null)
+        else if (rowHeadersStyle?.Tag is not null)
         {
             inheritedCellStyle.Tag = rowHeadersStyle.Tag;
         }
@@ -785,7 +786,7 @@ public partial class DataGridViewRow : DataGridViewBand
         {
             inheritedCellStyle.PaddingInternal = cellStyle.Padding;
         }
-        else if (rowHeadersStyle.Padding != Padding.Empty)
+        else if (rowHeadersStyle is not null && rowHeadersStyle.Padding != Padding.Empty)
         {
             inheritedCellStyle.PaddingInternal = rowHeadersStyle.Padding;
         }
@@ -801,7 +802,7 @@ public partial class DataGridViewRow : DataGridViewBand
         Debug.Assert(rowIndex >= 0);
         Debug.Assert(DataGridView is not null);
 
-        DataGridViewCellStyle rowStyle = null;
+        DataGridViewCellStyle? rowStyle = null;
         if (HasDefaultCellStyle)
         {
             rowStyle = DefaultCellStyle;
@@ -1057,7 +1058,7 @@ public partial class DataGridViewRow : DataGridViewBand
         }
         else
         {
-            dataGridViewRow = (DataGridViewRow)Activator.CreateInstance(thisType);
+            dataGridViewRow = (DataGridViewRow)Activator.CreateInstance(thisType)!;
         }
 
         if (dataGridViewRow is not null)
@@ -1076,7 +1077,7 @@ public partial class DataGridViewRow : DataGridViewBand
             dataGridViewRow.CloneCells(this);
         }
 
-        return dataGridViewRow;
+        return dataGridViewRow!;
     }
 
     private void CloneCells(DataGridViewRow rowTemplate)
@@ -1178,7 +1179,8 @@ public partial class DataGridViewRow : DataGridViewBand
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected internal virtual void DrawFocus(Graphics graphics,
+    protected internal virtual void DrawFocus(
+        Graphics graphics,
         Rectangle clipBounds,
         Rectangle bounds,
         int rowIndex,
@@ -1207,9 +1209,9 @@ public partial class DataGridViewRow : DataGridViewBand
         ControlPaint.DrawFocusRectangle(graphics, bounds, Color.Empty, backColor);
     }
 
-    public ContextMenuStrip GetContextMenuStrip(int rowIndex)
+    public ContextMenuStrip? GetContextMenuStrip(int rowIndex)
     {
-        ContextMenuStrip contextMenuStrip = ContextMenuStripInternal;
+        ContextMenuStrip? contextMenuStrip = ContextMenuStripInternal;
         if (DataGridView is not null)
         {
             if (rowIndex == -1)
@@ -1412,7 +1414,8 @@ public partial class DataGridViewRow : DataGridViewBand
         DataGridView.OnDataGridViewElementStateChanging(this, sharedRowIndex, elementState);
     }
 
-    protected internal virtual void Paint(Graphics graphics,
+    protected internal virtual void Paint(
+        Graphics graphics,
         Rectangle clipBounds,
         Rectangle rowBounds,
         int rowIndex,
@@ -1487,7 +1490,8 @@ public partial class DataGridViewRow : DataGridViewBand
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected internal virtual void PaintCells(Graphics graphics,
+    protected internal virtual void PaintCells(
+        Graphics graphics,
         Rectangle clipBounds,
         Rectangle rowBounds,
         int rowIndex,
@@ -1515,7 +1519,7 @@ public partial class DataGridViewRow : DataGridViewBand
         DataGridViewElementStates cellState = DataGridViewElementStates.None;
         DataGridViewCell cell;
         DataGridViewCellStyle inheritedCellStyle = new DataGridViewCellStyle();
-        DataGridViewColumn dataGridViewColumnNext = null;
+        DataGridViewColumn? dataGridViewColumnNext = null;
         DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new(), dgvabsEffective;
 
         // first paint the potential visible frozen cells
@@ -1593,7 +1597,7 @@ public partial class DataGridViewRow : DataGridViewBand
 
                 dataBounds.Width += dataGridView.FirstDisplayedScrollingColumnHiddenWidth;
 
-                Region clipRegion = null;
+                Region? clipRegion = null;
                 if (dataGridView.FirstDisplayedScrollingColumnHiddenWidth > 0)
                 {
                     clipRegion = graphics.Clip;
@@ -1679,7 +1683,8 @@ public partial class DataGridViewRow : DataGridViewBand
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected internal virtual void PaintHeader(Graphics graphics,
+    protected internal virtual void PaintHeader(
+        Graphics graphics,
         Rectangle clipBounds,
         Rectangle rowBounds,
         int rowIndex,

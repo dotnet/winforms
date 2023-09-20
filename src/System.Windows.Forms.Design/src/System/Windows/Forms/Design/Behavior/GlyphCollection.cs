@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms.Design.Behavior;
@@ -40,7 +38,7 @@ public class GlyphCollection : CollectionBase
     /// </summary>
     public Glyph this[int index]
     {
-        get => (Glyph)List[index];
+        get => (Glyph)List[index]!;
         set => List[index] = value;
     }
 
