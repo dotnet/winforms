@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop.Shell32;
 
 namespace System.Windows.Forms;
 
@@ -599,7 +598,7 @@ public sealed partial class NotifyIcon : Component
                     break;
             }
 
-            Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_MODIFY, ref data);
+            PInvoke.Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_MODIFY, ref data);
         }
     }
 
@@ -668,17 +667,17 @@ public sealed partial class NotifyIcon : Component
             {
                 if (!_added)
                 {
-                    Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_ADD, ref data);
+                    PInvoke.Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_ADD, ref data);
                     _added = true;
                 }
                 else
                 {
-                    Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_MODIFY, ref data);
+                    PInvoke.Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_MODIFY, ref data);
                 }
             }
             else if (_added)
             {
-                Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_DELETE, ref data);
+                PInvoke.Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_DELETE, ref data);
                 _added = false;
             }
         }
