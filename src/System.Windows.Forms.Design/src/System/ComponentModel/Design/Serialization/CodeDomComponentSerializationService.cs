@@ -565,7 +565,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 throw new NotSupportedException();
             }
 
-            private void PopulateCompleteStatements(object? data, string name, CodeStatementCollection completeStatements)
+            private static void PopulateCompleteStatements(object? data, string name, CodeStatementCollection completeStatements, Dictionary<string, List<CodeExpression>> expressions)
             {
                 if (data is null)
                 {
@@ -583,10 +583,10 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 else if (data is CodeExpression expression)
                 {
                     // we handle expressions a little differently since they don't have a LHS or RHS they won't show up correctly in the statement table. We will deserialize them explicitly.
-                    if (!_expressions!.TryGetValue(name, out List<CodeExpression>? exps))
+                    if (!expressions.TryGetValue(name, out List<CodeExpression>? exps))
                     {
                         exps = new();
-                        _expressions[name] = exps;
+                        expressions[name] = exps;
                     }
 
                     exps.Add(expression);
@@ -609,8 +609,8 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 {
                     if (objectState.TryGetValue(name, out CodeDomComponentSerializationState? state))
                     {
-                        PopulateCompleteStatements(state.Code, name, completeStatements);
-                        PopulateCompleteStatements(state.Ctx, name, completeStatements);
+                        PopulateCompleteStatements(state.Code, name, completeStatements, _expressions);
+                        PopulateCompleteStatements(state.Ctx, name, completeStatements, _expressions);
                     }
                 }
 
