@@ -15,8 +15,9 @@ internal sealed partial class DesignerActionPanel
 
         protected override Font GetFont() => new(ActionPanel.Font, FontStyle.Bold);
 
-        public new sealed class Info(DesignerActionList list, DesignerActionItem item) : LineInfo(list, item)
+        public new sealed class Info(DesignerActionList list, DesignerActionTextItem item) : StandardLineInfo(list)
         {
+            public override DesignerActionTextItem Item { get; } = item;
             public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             {
                 return new HeaderLine(serviceProvider, actionPanel);

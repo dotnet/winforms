@@ -59,17 +59,19 @@ internal sealed partial class DesignerActionPanel
             return ActionPanel.Font;
         }
 
-        internal override void UpdateActionItem(DesignerActionList? actionList, DesignerActionItem? actionItem, ToolTip toolTip, ref int currentTabIndex)
+        internal override void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex)
         {
-            _textItem = (DesignerActionTextItem)actionItem!;
+            Info info = (Info)lineInfo;
+            _textItem = info.Item;
             _label.Text = StripAmpersands(_textItem.DisplayName);
             _label.Font = GetFont();
             _label.TabIndex = currentTabIndex++;
             toolTip.SetToolTip(_label, _textItem.Description);
         }
 
-        public sealed class Info(DesignerActionList list, DesignerActionItem item) : LineInfo(list, item)
+        public sealed class Info(DesignerActionList list, DesignerActionTextItem item) : StandardLineInfo(list)
         {
+            public override DesignerActionTextItem Item { get; } = item;
             public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             {
                 return new TextLine(serviceProvider, actionPanel);

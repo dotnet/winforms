@@ -473,7 +473,7 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        public new sealed class Info(DesignerActionList list, DesignerActionItem item) : LineInfo(list, item)
+        public new sealed class Info(DesignerActionList list, DesignerActionPropertyItem item) : PropertyLineInfo(list, item)
         {
             public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             {

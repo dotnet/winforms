@@ -10,16 +10,14 @@ internal sealed partial class DesignerActionPanel
 {
     private sealed class SeparatorLine : Line
     {
-        private readonly bool _isSubSeparator;
-
         private SeparatorLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel, bool isSubSeparator) : base(serviceProvider, actionPanel)
         {
-            _isSubSeparator = isSubSeparator;
+            IsSubSeparator = isSubSeparator;
         }
 
         public override string FocusId => string.Empty;
 
-        public bool IsSubSeparator => _isSubSeparator;
+        public bool IsSubSeparator { get; }
 
         public sealed override void Focus() => Debug.Fail("Should never try to focus a SeparatorLine");
 
@@ -33,14 +31,14 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        internal override void UpdateActionItem(DesignerActionList? actionList, DesignerActionItem? actionItem, ToolTip toolTip, ref int currentTabIndex)
+        internal override void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex)
         {
         }
 
-        public sealed class Info(bool isSubSeparator = false) : LineInfo(null, null)
+        public sealed class Info(bool isSubSeparator = false) : LineInfo
         {
             private readonly bool _isSubSeparator = isSubSeparator;
-
+            public override DesignerActionItem? Item => null;
             public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             {
                 return new SeparatorLine(serviceProvider, actionPanel, _isSubSeparator);

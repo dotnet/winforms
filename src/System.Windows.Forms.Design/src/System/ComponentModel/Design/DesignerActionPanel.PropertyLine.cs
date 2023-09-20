@@ -20,28 +20,13 @@ internal sealed partial class DesignerActionPanel
         {
         }
 
-        public sealed override string FocusId
-        {
-            get => $"PROPERTY:{_actionList!.GetType().FullName}.{PropertyItem!.MemberName}";
-        }
+        public sealed override string FocusId => $"PROPERTY:{_actionList!.GetType().FullName}.{PropertyItem!.MemberName}";
 
-        protected PropertyDescriptor PropertyDescriptor
-        {
-            get
-            {
-                return _propDesc ??= TypeDescriptor.GetProperties(_actionList!)[PropertyItem!.MemberName]!;
-            }
-        }
+        protected PropertyDescriptor PropertyDescriptor => _propDesc ??= TypeDescriptor.GetProperties(_actionList!)[PropertyItem!.MemberName]!;
 
         protected DesignerActionPropertyItem? PropertyItem { get; private set; }
 
-        protected ITypeDescriptorContext TypeDescriptorContext
-        {
-            get
-            {
-                return _typeDescriptorContext ??= new TypeDescriptorContext(ServiceProvider, PropertyDescriptor, _actionList!);
-            }
-        }
+        protected ITypeDescriptorContext TypeDescriptorContext => _typeDescriptorContext ??= new TypeDescriptorContext(ServiceProvider, PropertyDescriptor, _actionList!);
 
         protected object? Value { get; private set; }
 
@@ -105,13 +90,14 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        internal sealed override void UpdateActionItem(DesignerActionList? actionList, DesignerActionItem? actionItem, ToolTip toolTip, ref int currentTabIndex)
+        internal sealed override void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex)
         {
-            _actionList = actionList;
-            PropertyItem = (DesignerActionPropertyItem?)actionItem;
+            PropertyLineInfo info = (PropertyLineInfo)lineInfo;
+            _actionList = info.List;
+            PropertyItem = info.Item;
             _propDesc = null;
             _typeDescriptorContext = null;
-            Value = PropertyDescriptor.GetValue(actionList);
+            Value = PropertyDescriptor.GetValue(info.List);
             OnPropertyTaskItemUpdated(toolTip, ref currentTabIndex);
             _pushingValue = true;
             try
@@ -122,6 +108,11 @@ internal sealed partial class DesignerActionPanel
             {
                 _pushingValue = false;
             }
+        }
+
+        public abstract class PropertyLineInfo(DesignerActionList list, DesignerActionPropertyItem item) : StandardLineInfo(list)
+        {
+            public override DesignerActionPropertyItem Item { get; } = item;
         }
     }
 }

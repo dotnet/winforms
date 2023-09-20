@@ -61,7 +61,7 @@ internal sealed partial class DesignerActionPanel
             _checkBox.Checked = (bool)Value!;
         }
 
-        public sealed class Info(DesignerActionList list, DesignerActionItem item) : LineInfo(list, item)
+        public sealed class Info(DesignerActionList list, DesignerActionPropertyItem item) : PropertyLineInfo(list, item)
         {
             public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             {

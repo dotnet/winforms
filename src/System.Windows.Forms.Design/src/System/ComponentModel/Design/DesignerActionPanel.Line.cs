@@ -57,6 +57,6 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        internal abstract void UpdateActionItem(DesignerActionList? actionList, DesignerActionItem? actionItem, ToolTip toolTip, ref int currentTabIndex);
+        internal abstract void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex);
     }
 }

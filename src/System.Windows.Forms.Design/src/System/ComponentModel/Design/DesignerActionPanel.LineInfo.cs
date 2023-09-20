@@ -7,16 +7,15 @@ internal sealed partial class DesignerActionPanel
 {
     private abstract class LineInfo
     {
-        public readonly DesignerActionItem? Item;
-        public readonly DesignerActionList? List;
-
-        protected LineInfo(DesignerActionList? list, DesignerActionItem? item)
-        {
-            Item = item;
-            List = list;
-        }
+        public abstract DesignerActionItem? Item { get; }
 
         public abstract Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel);
         public abstract Type LineType { get; }
+    }
+
+    private abstract class StandardLineInfo(DesignerActionList list) : LineInfo
+    {
+        public abstract override DesignerActionItem Item { get; }
+        public DesignerActionList List { get; } = list;
     }
 }

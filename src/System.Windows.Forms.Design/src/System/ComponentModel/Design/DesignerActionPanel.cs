@@ -203,9 +203,9 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         remove => Events.RemoveHandler(s_eventFormDeactivate, value);
     }
 
-    private static void AddToCategories(LineInfo lineInfo, Dictionary<string, Dictionary<DesignerActionList, List<LineInfo>>> categories)
+    private static void AddToCategories(StandardLineInfo lineInfo, Dictionary<string, Dictionary<DesignerActionList, List<LineInfo>>> categories)
     {
-        string? categoryName = lineInfo.Item!.Category;
+        string? categoryName = lineInfo.Item.Category;
         categoryName ??= string.Empty;
 
         if (!categories.TryGetValue(categoryName, out Dictionary<DesignerActionList, List<LineInfo>>? category))
@@ -214,10 +214,10 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             categories.Add(categoryName, category);
         }
 
-        if (!category.TryGetValue(lineInfo.List!, out List<LineInfo>? categoryList))
+        if (!category.TryGetValue(lineInfo.List, out List<LineInfo>? categoryList))
         {
             categoryList = new List<LineInfo>();
-            category.Add(lineInfo.List!, categoryList);
+            category.Add(lineInfo.List, categoryList);
         }
 
         categoryList.Add(lineInfo);
@@ -561,7 +561,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
                             continue;
                         }
 
-                        LineInfo? lineInfo = ProcessTaskItem(list, item);
+                        StandardLineInfo? lineInfo = ProcessTaskItem(list, item);
                         if (lineInfo is null)
                         {
                             continue;
@@ -584,10 +584,10 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
                         if (relatedComponent is not null)
                         {
-                            IEnumerable<LineInfo>? relatedLineInfos = ProcessRelatedTaskItems(relatedComponent);
+                            IEnumerable<StandardLineInfo>? relatedLineInfos = ProcessRelatedTaskItems(relatedComponent);
                             if (relatedLineInfos is not null)
                             {
-                                foreach (LineInfo relatedLineInfo in relatedLineInfos)
+                                foreach (StandardLineInfo relatedLineInfo in relatedLineInfos)
                                 {
                                     AddToCategories(relatedLineInfo, categories);
                                 }
@@ -599,7 +599,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         }
     }
 
-    private IEnumerable<LineInfo> ProcessRelatedTaskItems(IComponent relatedComponent)
+    private IEnumerable<StandardLineInfo> ProcessRelatedTaskItems(IComponent relatedComponent)
     {
         // Add the related tasks
         Debug.Assert(relatedComponent is not null);
@@ -622,7 +622,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             }
         }
 
-        List<LineInfo> lineInfos = new List<LineInfo>();
+        List<StandardLineInfo> lineInfos = new List<StandardLineInfo>();
 
         if (relatedLists is not null)
         {
@@ -639,7 +639,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
                             {
                                 if (relatedItem.AllowAssociate)
                                 {
-                                    LineInfo? lineInfo = ProcessTaskItem(relatedList, relatedItem);
+                                    StandardLineInfo? lineInfo = ProcessTaskItem(relatedList, relatedItem);
                                     if (lineInfo is not null)
                                     {
                                         lineInfos.Add(lineInfo);
@@ -655,11 +655,11 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         return lineInfos;
     }
 
-    private LineInfo? ProcessTaskItem(DesignerActionList list, DesignerActionItem item)
+    private StandardLineInfo? ProcessTaskItem(DesignerActionList list, DesignerActionItem item)
     {
-        if (item is DesignerActionMethodItem)
+        if (item is DesignerActionMethodItem methodItem)
         {
-            return new MethodLine.Info(list, item);
+            return new MethodLine.Info(list, methodItem);
         }
         else if (item is DesignerActionPropertyItem pti)
         {
@@ -673,37 +673,37 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             bool standardValuesSupported = pd.Converter.GetStandardValuesSupported(context);
             if (pd.TryGetEditor(out UITypeEditor? _))
             {
-                return new EditorPropertyLine.Info(list, item);
+                return new EditorPropertyLine.Info(list, pti);
             }
             else if (pd.PropertyType == typeof(bool))
             {
                 if (IsReadOnlyProperty(pd))
                 {
-                    return new TextBoxPropertyLine.Info(list, item);
+                    return new TextBoxPropertyLine.Info(list, pti);
                 }
                 else
                 {
-                    return new CheckBoxPropertyLine.Info(list, item);
+                    return new CheckBoxPropertyLine.Info(list, pti);
                 }
             }
             else if (standardValuesSupported)
             {
-                return new EditorPropertyLine.Info(list, item);
+                return new EditorPropertyLine.Info(list, pti);
             }
             else
             {
-                return new TextBoxPropertyLine.Info(list, item);
+                return new TextBoxPropertyLine.Info(list, pti);
             }
         }
-        else if (item is DesignerActionTextItem)
+        else if (item is DesignerActionTextItem textItem)
         {
             if (item is DesignerActionHeaderItem)
             {
-                return new HeaderLine.Info(list, item);
+                return new HeaderLine.Info(list, textItem);
             }
             else
             {
-                return new TextLine.Info(list, item);
+                return new TextLine.Info(list, textItem);
             }
         }
         else
@@ -860,7 +860,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
                     if (oldLine.GetType() == newLineInfo.LineType)
                     {
-                        oldLine.UpdateActionItem(newLineInfo.List, newLineInfo.Item, _toolTip, ref currentTabIndex);
+                        oldLine.UpdateActionItem(newLineInfo, _toolTip, ref currentTabIndex);
                         updated = true;
                     }
                     else
@@ -879,7 +879,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
                     Control[] controls = newControlList.ToArray();
                     Controls.AddRange(controls);
 
-                    newLine.UpdateActionItem(newLineInfo.List, newLineInfo.Item, _toolTip, ref currentTabIndex);
+                    newLine.UpdateActionItem(newLineInfo, _toolTip, ref currentTabIndex);
                     _lines.Insert(i, newLine);
                 }
             }

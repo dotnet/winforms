@@ -110,9 +110,10 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        internal override void UpdateActionItem(DesignerActionList? actionList, DesignerActionItem? actionItem, ToolTip toolTip, ref int currentTabIndex)
+        internal override void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex)
         {
-            _panelHeaderItem = (DesignerActionPanelHeaderItem)actionItem!;
+            Info info = (Info)lineInfo;
+            _panelHeaderItem = info.Item;
 
             _titleLabel.Text = _panelHeaderItem.DisplayName;
             _titleLabel.TabIndex = currentTabIndex++;
@@ -124,8 +125,9 @@ internal sealed partial class DesignerActionPanel
             OnParentControlFontChanged(null, EventArgs.Empty);
         }
 
-        public sealed class Info(DesignerActionItem item) : LineInfo(null, item)
+        public sealed class Info(DesignerActionPanelHeaderItem item) : LineInfo
         {
+            public override DesignerActionPanelHeaderItem Item { get; } = item;
             public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             {
                 return new PanelHeaderLine(serviceProvider, actionPanel);
