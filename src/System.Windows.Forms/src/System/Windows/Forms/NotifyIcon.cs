@@ -3,8 +3,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
-using static Interop.Shell32;
 
 namespace System.Windows.Forms;
 
@@ -571,7 +569,7 @@ public sealed partial class NotifyIcon : Component
             NOTIFYICONDATAW data = new()
             {
                 cbSize = (uint)sizeof(NOTIFYICONDATAW),
-                uFlags = NIF.INFO,
+                uFlags = NOTIFY_ICON_DATA_FLAGS.NIF_INFO,
                 uID = _id,
                 uTimeoutOrVersion = (uint)timeout
             };
@@ -587,20 +585,20 @@ public sealed partial class NotifyIcon : Component
             switch (tipIcon)
             {
                 case ToolTipIcon.Info:
-                    data.dwInfoFlags = NIIF.INFO;
+                    data.dwInfoFlags = NOTIFY_ICON_INFOTIP_FLAGS.NIIF_INFO;
                     break;
                 case ToolTipIcon.Warning:
-                    data.dwInfoFlags = NIIF.WARNING;
+                    data.dwInfoFlags = NOTIFY_ICON_INFOTIP_FLAGS.NIIF_WARNING;
                     break;
                 case ToolTipIcon.Error:
-                    data.dwInfoFlags = NIIF.ERROR;
+                    data.dwInfoFlags = NOTIFY_ICON_INFOTIP_FLAGS.NIIF_ERROR;
                     break;
                 case ToolTipIcon.None:
-                    data.dwInfoFlags = NIIF.NONE;
+                    data.dwInfoFlags = NOTIFY_ICON_INFOTIP_FLAGS.NIIF_NONE;
                     break;
             }
 
-            Shell32.Shell_NotifyIconW(NIM.MODIFY, ref data);
+            PInvoke.Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_MODIFY, ref data);
         }
     }
 
@@ -643,7 +641,7 @@ public sealed partial class NotifyIcon : Component
             {
                 cbSize = (uint)sizeof(NOTIFYICONDATAW),
                 uCallbackMessage = WM_TRAYMOUSEMESSAGE,
-                uFlags = NIF.MESSAGE,
+                uFlags = NOTIFY_ICON_DATA_FLAGS.NIF_MESSAGE,
                 uID = _id
             };
 
@@ -658,28 +656,28 @@ public sealed partial class NotifyIcon : Component
             data.hWnd = _window.Handle;
             if (_icon is not null)
             {
-                data.uFlags |= NIF.ICON;
+                data.uFlags |= NOTIFY_ICON_DATA_FLAGS.NIF_ICON;
                 data.hIcon = _icon.Handle;
             }
 
-            data.uFlags |= NIF.TIP;
+            data.uFlags |= NOTIFY_ICON_DATA_FLAGS.NIF_TIP;
             data.Tip = _text;
 
             if (showIconInTray && _icon is not null)
             {
                 if (!_added)
                 {
-                    Shell_NotifyIconW(NIM.ADD, ref data);
+                    PInvoke.Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_ADD, ref data);
                     _added = true;
                 }
                 else
                 {
-                    Shell_NotifyIconW(NIM.MODIFY, ref data);
+                    PInvoke.Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_MODIFY, ref data);
                 }
             }
             else if (_added)
             {
-                Shell_NotifyIconW(NIM.DELETE, ref data);
+                PInvoke.Shell_NotifyIconW(NOTIFY_ICON_MESSAGE.NIM_DELETE, ref data);
                 _added = false;
             }
         }
