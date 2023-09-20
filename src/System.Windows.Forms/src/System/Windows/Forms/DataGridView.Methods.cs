@@ -45,7 +45,7 @@ public partial class DataGridView
         {
             AccessibilityNotifyClients(AccessibleEvents.Focus, objectID, childID);
 
-            DataGridViewCell currentCell = CurrentCell;
+            DataGridViewCell? currentCell = CurrentCell;
             if (currentCell is not null && currentCell.IsParentAccessibilityObjectCreated)
             {
                 currentCell.AccessibilityObject.SetFocus();
