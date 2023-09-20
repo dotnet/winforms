@@ -1,9 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
-using System.Collections;
 using System.Drawing;
 
 namespace System.Windows.Forms.Layout;
@@ -42,7 +39,7 @@ internal partial class TableLayout : LayoutEngine
     private static readonly int _containerInfoProperty = PropertyStore.CreateKey();
     private static readonly int _layoutInfoProperty = PropertyStore.CreateKey();
 
-    private static readonly string[] _propertiesWhichInvalidateCache = new string[]
+    private static readonly string?[] _propertiesWhichInvalidateCache = new string?[]
     {
        //suspend layout before changing one of the above property will cause the AffectedProperty of LayoutEventArgs to be set to null
 
@@ -67,7 +64,7 @@ internal partial class TableLayout : LayoutEngine
     {
         ContainerInfo containerInfo = GetContainerInfo(container);
 
-        foreach (string propertyName in _propertiesWhichInvalidateCache)
+        foreach (string? propertyName in _propertiesWhichInvalidateCache)
         {
             if (object.ReferenceEquals(args.AffectedProperty, propertyName))
             {
@@ -100,7 +97,7 @@ internal partial class TableLayout : LayoutEngine
         ProcessSuspendedLayoutEventArgs(container, args);
 
         ContainerInfo containerInfo = GetContainerInfo(container);
-        EnsureRowAndColumnAssignments(container, containerInfo, /* doNotCache = */false);
+        EnsureRowAndColumnAssignments(container, containerInfo, doNotCache: false);
 
         int cellBorderWidth = containerInfo.CellBorderWidth;
 
@@ -111,7 +108,7 @@ internal partial class TableLayout : LayoutEngine
         containerSize.Width = Math.Max(containerSize.Width, 1);
         containerSize.Height = Math.Max(containerSize.Height, 1);
 
-        Size usedSpace = ApplyStyles(containerInfo, containerSize, /*measureOnly=*/false);
+        Size usedSpace = ApplyStyles(containerInfo, containerSize, measureOnly: false);
         ExpandLastElement(containerInfo, usedSpace, containerSize);
         RectangleF displayRect = (RectangleF)container.DisplayRectangle;
         displayRect.Inflate(-(cellBorderWidth / 2.0f), -(cellBorderWidth) / 2.0f);
@@ -173,7 +170,7 @@ internal partial class TableLayout : LayoutEngine
 
         //notice we always assign rows and columns here since the user may change the properties of the table while the layout is
         //suspended, so we have no way to know whether the cache is invalid or not here.
-        EnsureRowAndColumnAssignments(container, tempInfo, /* doNotCache = */ true);
+        EnsureRowAndColumnAssignments(container, tempInfo, doNotCache: true);
 
         //deduct the padding for cell border before doing layout
         Size cellBorderSize = new Size(cellBorderWidth, cellBorderWidth);
@@ -190,7 +187,7 @@ internal partial class TableLayout : LayoutEngine
             ClearCachedAssignments(containerInfo);
         }
 
-        prefSize = ApplyStyles(tempInfo, proposedConstraints, /*measureOnly=*/true);
+        prefSize = ApplyStyles(tempInfo, proposedConstraints, measureOnly: true);
         //prefSize = MeasureStyles(tempInfo);
 
         //restores the old strip size
@@ -306,7 +303,7 @@ internal partial class TableLayout : LayoutEngine
         else
         {
             // No rows or columns specified, just do a vertical stack.
-            xAssignRowsAndColumns(containerInfo, childrenInfo, /* numCols = */  Math.Max(minColumn, 1), /* numRows = */ int.MaxValue, growStyle);
+            xAssignRowsAndColumns(containerInfo, childrenInfo, maxColumns: Math.Max(minColumn, 1), maxRows: int.MaxValue, growStyle);
         }
     }
 
@@ -337,10 +334,10 @@ internal partial class TableLayout : LayoutEngine
         LayoutInfo[] fixedChildrenInfo = containerInfo.FixedChildrenInfo;
 
         //the element at the head of the absolutely positioned element queue
-        LayoutInfo fixedElement = GetNextLayoutInfo(fixedChildrenInfo, ref fixedElementIndex, /*absolutelyPositioned*/true);
+        LayoutInfo? fixedElement = GetNextLayoutInfo(fixedChildrenInfo, ref fixedElementIndex, absolutelyPositioned: true);
 
         //the element at the head of the non-absolutely positioned element queue
-        LayoutInfo flowElement = GetNextLayoutInfo(childrenInfo, ref flowElementIndex, /*absolutelyPositioned*/false);
+        LayoutInfo? flowElement = GetNextLayoutInfo(childrenInfo, ref flowElementIndex, absolutelyPositioned: false);
 
         while (fixedElement is not null || flowElement is not null)
         {
@@ -375,7 +372,7 @@ internal partial class TableLayout : LayoutEngine
 
                 //reserve spaces in the reservationGrid
                 reservationGrid.ReserveAll(flowElement, rowStop, colStop);
-                flowElement = GetNextLayoutInfo(childrenInfo, ref flowElementIndex, /*absolutelyPositioned*/false);
+                flowElement = GetNextLayoutInfo(childrenInfo, ref flowElementIndex, absolutelyPositioned: false);
             }
             else
             {
@@ -384,28 +381,28 @@ internal partial class TableLayout : LayoutEngine
                 //
                 if (currentCol >= maxColumns)
                 {
-                    //we have already passed the boundary. Go to next row
+                    // We have already passed the boundary. Go to next row.
                     currentCol = 0;
                     currentRow++;
                     reservationGrid.AdvanceRow();
                 }
 
-                //set the rowStart and columnStart to fixedElement's specifed position
-                fixedElement.RowStart = Math.Min(fixedElement.RowPosition, maxRows - 1);
+                // Set the rowStart and columnStart to fixedElement's specified position.
+                fixedElement!.RowStart = Math.Min(fixedElement.RowPosition, maxRows - 1);
                 fixedElement.ColumnStart = Math.Min(fixedElement.ColumnPosition, maxColumns - 1);
                 if (currentRow > fixedElement.RowStart)
                 {
-                    //we have already passed the specifed position. set the start column to the current column
+                    // We have already passed the specified position. set the start column to the current column.
                     fixedElement.ColumnStart = currentCol;
                 }
                 else if (currentRow == fixedElement.RowStart)
                 {
-                    //set the start column to be the max of the specifed column and current column
+                    // Set the start column to be the max of the specified column and current column.
                     fixedElement.ColumnStart = Math.Max(fixedElement.ColumnStart, currentCol);
                 }
                 else
                 {
-                    //set the start column to the specified column, which we have already done
+                    // Set the start column to the specified column, which we have already done.
                 }
 
                 fixedElement.RowStart = Math.Max(fixedElement.RowStart, currentRow);
@@ -442,7 +439,7 @@ internal partial class TableLayout : LayoutEngine
                 //reserve space in the reservation grid
                 reservationGrid.ReserveAll(fixedElement, rowStop, colStop);
 
-                fixedElement = GetNextLayoutInfo(fixedChildrenInfo, ref fixedElementIndex, /*absolutelyPositioned*/true);
+                fixedElement = GetNextLayoutInfo(fixedChildrenInfo, ref fixedElementIndex, absolutelyPositioned: true);
             }
 
             currentCol = colStop;
@@ -491,7 +488,7 @@ internal partial class TableLayout : LayoutEngine
     ///  GetNextLayoutInfo: part of xAssignRowsAndColumns.
     ///  helper function that walks through the collection picking out the next flow element or fixed element.
     /// </summary>
-    private static LayoutInfo GetNextLayoutInfo(LayoutInfo[] layoutInfo, ref int index, bool absolutelyPositioned)
+    private static LayoutInfo? GetNextLayoutInfo(LayoutInfo[] layoutInfo, ref int index, bool absolutelyPositioned)
     {
         for (int i = ++index; i < layoutInfo.Length; i++)
         {
@@ -650,16 +647,16 @@ internal partial class TableLayout : LayoutEngine
     }
 
     //allocate space for all absolutely sized strips. Set the size of the rest of the strips to 0.
-    private static void InitializeStrips(Strip[] strips, IList styles)
+    private static void InitializeStrips(Strip[] strips, TableLayoutStyleCollection styles)
     {
         Strip strip;
         for (int i = 0; i < strips.Length; i++)
         {
-            TableLayoutStyle style = i < styles.Count ? (TableLayoutStyle)styles[i] : null;
+            TableLayoutStyle? style = i < styles.Count ? styles[i] : null;
             strip = strips[i];
             if (style is not null && style.SizeType == SizeType.Absolute)
             {
-                strip.MinSize = (int)Math.Round((double)((TableLayoutStyle)styles[i]).Size);
+                strip.MinSize = (int)Math.Round((double)styles[i].Size);
                 strip.MaxSize = strip.MinSize;
             }
             else
@@ -862,17 +859,10 @@ internal partial class TableLayout : LayoutEngine
         return DistributeStyles(containerInfo.CellBorderWidth, containerInfo.RowStyles, containerInfo.Rows, proposedConstraints.Height, dontHonorConstraint);
     }
 
-    private static Size GetElementSize(IArrangedElement element, Size proposedConstraints)
-    {
-        if (CommonProperties.GetAutoSize(element))
-        {
-            return element.GetPreferredSize(proposedConstraints);
-        }
-        else
-        {
-            return CommonProperties.GetSpecifiedBounds(element).Size;
-        }
-    }
+    private static Size GetElementSize(IArrangedElement element, Size proposedConstraints) =>
+        CommonProperties.GetAutoSize(element)
+            ? element.GetPreferredSize(proposedConstraints)
+            : CommonProperties.GetSpecifiedBounds(element).Size;
 
     internal static int SumStrips(Strip[] strips, int start, int span)
     {
@@ -889,13 +879,13 @@ internal partial class TableLayout : LayoutEngine
     /// <summary>
     ///  Sets the minimum size for each element
     /// </summary>
-    private static void DistributeSize(IList styles, Strip[] strips, int start, int stop, int min, int max, int cellBorderWidth)
+    private static void DistributeSize(TableLayoutStyleCollection styles, Strip[] strips, int start, int stop, int min, int max, int cellBorderWidth)
     {
         xDistributeSize(styles, strips, start, stop, min, MinSizeProxy.GetInstance, cellBorderWidth);
         xDistributeSize(styles, strips, start, stop, max, MaxSizeProxy.GetInstance, cellBorderWidth);
     }
 
-    private static void xDistributeSize(IList styles, Strip[] strips, int start, int stop, int desiredLength, SizeProxy sizeProxy, int cellBorderWidth)
+    private static void xDistributeSize(TableLayoutStyleCollection styles, Strip[] strips, int start, int stop, int desiredLength, SizeProxy sizeProxy, int cellBorderWidth)
     {
         int currentLength = 0;   //total length allocated so far
         int numUninitializedStrips = 0;  //number of strips whose Size is 0 and is not absolutely positioned
@@ -932,7 +922,7 @@ internal partial class TableLayout : LayoutEngine
             int lastPercent;
             for (lastPercent = stop - 1; lastPercent >= start; lastPercent--)
             {
-                if (lastPercent < styles.Count && ((TableLayoutStyle)styles[lastPercent]).SizeType == SizeType.Percent)
+                if (lastPercent < styles.Count && styles[lastPercent].SizeType == SizeType.Percent)
                 {
                     break;
                 }
@@ -1005,16 +995,14 @@ internal partial class TableLayout : LayoutEngine
     }
 
     //determines whether strip[index]'s style is absolutely sized
-    private static bool IsAbsolutelySized(int index, IList styles)
-    {
-        return (index < styles.Count) && ((TableLayoutStyle)styles[index]).SizeType == SizeType.Absolute;
-    }
+    private static bool IsAbsolutelySized(int index, TableLayoutStyleCollection styles) =>
+        (index < styles.Count) && styles[index].SizeType == SizeType.Absolute;
 
     /// <summary>
     ///  Now that we've allocated minimum and maximum sizes to everyone (the strips), distribute the extra space
     ///  as according to the Row/Column styles.
     /// </summary>
-    private static int DistributeStyles(int cellBorderWidth, IList styles, Strip[] strips, int maxSize, bool dontHonorConstraint)
+    private static int DistributeStyles(int cellBorderWidth, TableLayoutStyleCollection styles, Strip[] strips, int maxSize, bool dontHonorConstraint)
     {
         int usedSpace = 0;
         //first, allocate the minimum space required for each element
@@ -1035,7 +1023,7 @@ internal partial class TableLayout : LayoutEngine
             Strip strip = strips[i];
             if (i < styles.Count)
             {
-                TableLayoutStyle style = (TableLayoutStyle)styles[i];
+                TableLayoutStyle style = styles[i];
                 switch (style.SizeType)
                 {
                     case SizeType.Absolute:
@@ -1103,10 +1091,10 @@ internal partial class TableLayout : LayoutEngine
                 for (int i = 0; i < strips.Length; i++)
                 {
                     Strip strip = strips[i];
-                    SizeType sizeType = i < styles.Count ? ((TableLayoutStyle)styles[i]).SizeType : SizeType.AutoSize;
+                    SizeType sizeType = i < styles.Count ? styles[i].SizeType : SizeType.AutoSize;
                     if (sizeType == SizeType.Percent)
                     {
-                        TableLayoutStyle style = (TableLayoutStyle)styles[i];
+                        TableLayoutStyle style = styles[i];
 
                         // cast to int / (take the floor) so we know we don't accidentally go over our limit.
                         // the rest will be distributed later.
@@ -1127,7 +1115,7 @@ internal partial class TableLayout : LayoutEngine
                 for (int i = 0; i < strips.Length; i++)
                 {
                     Strip strip = strips[i];
-                    SizeType sizeType = i < styles.Count ? ((TableLayoutStyle)styles[i]).SizeType : SizeType.AutoSize;
+                    SizeType sizeType = i < styles.Count ? styles[i].SizeType : SizeType.AutoSize;
 
                     // Performing the inverse calculation for GetPreferredSize:
                     //
@@ -1138,7 +1126,7 @@ internal partial class TableLayout : LayoutEngine
                     // we'll take the max of the total widths as the one for our preferred size.
                     if (sizeType == SizeType.Percent)
                     {
-                        TableLayoutStyle style = (TableLayoutStyle)styles[i];
+                        TableLayoutStyle style = styles[i];
 
                         int totalWidth = (int)Math.Round(((strip.MinSize * totalPercent) / style.Size));
                         maxPercentWidth = Math.Max(maxPercentWidth, totalWidth);
@@ -1161,7 +1149,7 @@ internal partial class TableLayout : LayoutEngine
             for (int i = 0; i < strips.Length; i++)
             {
                 Strip strip = strips[i];
-                SizeType sizeType = i < styles.Count ? ((TableLayoutStyle)styles[i]).SizeType : SizeType.AutoSize;
+                SizeType sizeType = i < styles.Count ? styles[i].SizeType : SizeType.AutoSize;
                 if (sizeType == SizeType.AutoSize)
                 {
                     int delta = Math.Min(strip.MaxSize - strip.MinSize, remainingSpace);
@@ -1190,10 +1178,9 @@ internal partial class TableLayout : LayoutEngine
         bool isContainerRTL = false;
         Rectangle displayRect = Rectangle.Truncate(displayRectF);
 
-        if (containerInfo.Container is Control)
+        if (containerInfo.Container is Control containerAsControl)
         {
-            Control control = containerInfo.Container as Control;
-            isContainerRTL = control.RightToLeft == RightToLeft.Yes;
+            isContainerRTL = containerAsControl.RightToLeft == RightToLeft.Yes;
         }
 
         LayoutInfo[] childrenInfo = containerInfo.ChildrenInfo;
@@ -1301,7 +1288,7 @@ internal partial class TableLayout : LayoutEngine
         Debug_VerifyNoOverlapping(containerInfo.Container);
     }
 
-    internal static IArrangedElement GetControlFromPosition(IArrangedElement container, int column, int row)
+    internal static IArrangedElement? GetControlFromPosition(IArrangedElement container, int column, int row)
     {
         if (row < 0)
         {
@@ -1325,7 +1312,7 @@ internal partial class TableLayout : LayoutEngine
         if (!containerInfo.Valid)
         {
             //hasn't performed layout yet. assign rows and columns first
-            EnsureRowAndColumnAssignments(container, containerInfo, /* doNotCache = */ true);
+            EnsureRowAndColumnAssignments(container, containerInfo, doNotCache: true);
         }
 
         for (int i = 0; i < children.Count; i++)
@@ -1342,7 +1329,7 @@ internal partial class TableLayout : LayoutEngine
         return null;
     }
 
-    internal static TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement container, IArrangedElement child)
+    internal static TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement? container, IArrangedElement? child)
     {
         if (container is null || child is null)
         {
@@ -1361,7 +1348,7 @@ internal partial class TableLayout : LayoutEngine
         if (!containerInfo.Valid)
         {
             //hasn't performed layout yet. assign rows and columns first
-            EnsureRowAndColumnAssignments(container, containerInfo, /* doNotCache = */ true);
+            EnsureRowAndColumnAssignments(container, containerInfo, doNotCache: true);
         }
 
         LayoutInfo layoutInfo = GetLayoutInfo(child);
@@ -1370,7 +1357,7 @@ internal partial class TableLayout : LayoutEngine
 
     internal static LayoutInfo GetLayoutInfo(IArrangedElement element)
     {
-        LayoutInfo layoutInfo = (LayoutInfo)element.Properties.GetObject(_layoutInfoProperty);
+        LayoutInfo? layoutInfo = (LayoutInfo?)element.Properties.GetObject(_layoutInfoProperty);
         if (layoutInfo is null)
         {
             layoutInfo = new LayoutInfo(element);
@@ -1387,22 +1374,16 @@ internal partial class TableLayout : LayoutEngine
     }
 
     #region ContainerInfo
-    internal static bool HasCachedAssignments(ContainerInfo containerInfo)
-    {
-        return containerInfo.Valid;
-    }
+    internal static bool HasCachedAssignments(ContainerInfo containerInfo) => containerInfo.Valid;
 
-    internal static void ClearCachedAssignments(ContainerInfo containerInfo)
-    {
-        containerInfo.Valid = false;
-    }
+    internal static void ClearCachedAssignments(ContainerInfo containerInfo) => containerInfo.Valid = false;
 
     //we make sure that our containerInfo never returns null. If there is no
     //existing containerInfo, instantiate a new one and store it in the property
     //store.
     internal static ContainerInfo GetContainerInfo(IArrangedElement container)
     {
-        ContainerInfo containerInfo = (ContainerInfo)container.Properties.GetObject(_containerInfoProperty);
+        ContainerInfo? containerInfo = (ContainerInfo?)container.Properties.GetObject(_containerInfoProperty);
         if (containerInfo is null)
         {
             containerInfo = new ContainerInfo(container);
@@ -1455,9 +1436,9 @@ internal partial class TableLayout : LayoutEngine
 
         AssignRowsAndColumns(containerInfo);
 
-        Debug.Assert((containerInfo.Columns is null && cols is null) || containerInfo.Columns.Length == cols.Length,
+        Debug.Assert((containerInfo.Columns is null && cols is null) || containerInfo.Columns!.Length == cols.Length,
             "Cached assignment info is invalid: Number of required columns has changed.");
-        Debug.Assert((containerInfo.Rows is null && rows is null) || containerInfo.Rows.Length == rows.Length,
+        Debug.Assert((containerInfo.Rows is null && rows is null) || containerInfo.Rows!.Length == rows.Length,
             "Cached assignment info is invalid: Number of required rows has changed.");
 
         foreach (LayoutInfo layoutInfo in childrenInfo)
@@ -1470,8 +1451,8 @@ internal partial class TableLayout : LayoutEngine
         // Restore the information in row and column strips. Note that whenever we do a AssignRowAndColumns()
         // we instantiate new row and column strip collections, we have to restore the value back later.
 
-        containerInfo.Rows = rows;
-        containerInfo.Columns = cols;
+        containerInfo.Rows = rows!;
+        containerInfo.Columns = cols!;
 #endif // DEBUG
     }
 
