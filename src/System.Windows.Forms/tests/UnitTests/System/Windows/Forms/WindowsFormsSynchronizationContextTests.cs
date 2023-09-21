@@ -148,4 +148,16 @@ public partial class WindowsFormsSynchronizationContextTests
         context.Post(callback, state);
         Assert.Equal(0, callCount);
     }
+
+    [WinFormsFact]
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/9965")]
+    public void WindowsFormsSynchronizationContext_Send_NoDynamicInvoke()
+    {
+        string stackTrace = null;
+        var context = new WindowsFormsSynchronizationContext();
+        context.Send(_ => { stackTrace = Environment.StackTrace; }, null);
+
+        Assert.NotNull(stackTrace);
+        Assert.DoesNotContain("System.Delegate.DynamicInvokeImpl", stackTrace);
+    }
 }
