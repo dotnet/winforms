@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Windows.Forms.Automation;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -18,7 +19,7 @@ public class ListViewLabelEditAccessibleObjectTests
 
         Assert.Equal(accessibilityObject.RuntimeId, accessibilityObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId));
         PInvoke.GetWindowRect(labelEdit, out RECT r);
-        Assert.Equal((Rectangle)r, accessibilityObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId));
+        Assert.Equal(UiaTextProvider.BoundingRectangleAsArray((Rectangle)r), accessibilityObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId));
         Assert.Equal(Environment.ProcessId, accessibilityObject.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
         Assert.Equal(UiaCore.UIA.EditControlTypeId, accessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
         Assert.Equal(accessibilityObject.Name, accessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
