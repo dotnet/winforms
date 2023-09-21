@@ -666,7 +666,7 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
                 }
                 else if (item is ToolStripMenuItem menuItem && menuItem.CheckState == CheckState.Checked)
                 {
-                    using var pen = ColorTable.MenuItemSelected.GetCachedPenScope();
+                    using var pen = ColorTable.MenuItemBorder.GetCachedPenScope();
                     g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                 }
             }
