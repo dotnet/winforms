@@ -168,7 +168,7 @@ public sealed unsafe partial class HtmlElement
                 {
                     hr = child.Value->QueryInterface(IID.Get<IHTMLElement>(), (void**)&iHtmlElement);
                     hr.AssertSuccess();
-                } 
+                }
             }
 
             return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;

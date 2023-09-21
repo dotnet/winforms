@@ -90,7 +90,7 @@ internal class HtmlToClrEventProxy : StandardDispatch, IManagedWrapper<IDispatch
             default:
                 *pid = PInvoke.DISPID_UNKNOWN;
                 return HRESULT.S_FALSE;
-        } 
+        }
     }
 
     protected override unsafe HRESULT GetMemberName(int id, BSTR* pbstrName)
