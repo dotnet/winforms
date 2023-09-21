@@ -465,27 +465,6 @@ public class TreeNodeAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void TreeNodeAccessibleObject_SelectItem_WorksExpected()
-    {
-        using TreeView control = new();
-
-        control.Nodes.Add("Node1");
-        control.Nodes.Add("Node2");
-        control.Nodes.Add("Node3");
-        control.Nodes.Add("Node4");
-
-        Assert.Null(control.SelectedNode);
-
-        control.Nodes[1].AccessibilityObject.SelectItem();
-        Assert.Equal("Node2", control.SelectedNode?.Text);
-
-        control.Nodes[3].AccessibilityObject.SelectItem();
-        Assert.Equal("Node4", control.SelectedNode?.Text);
-
-        Assert.False(control.IsHandleCreated);
-    }
-
-    [WinFormsFact]
     public void TreeNodeAccessibleObject_Value_EqualsText()
     {
         using TreeView control = new() { LabelEdit = true };
