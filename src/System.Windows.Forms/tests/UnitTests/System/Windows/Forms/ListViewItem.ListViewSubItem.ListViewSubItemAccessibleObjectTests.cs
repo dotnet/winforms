@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Windows.Forms.Automation;
 using static System.Windows.Forms.ListViewItem.ListViewSubItem;
 using static Interop;
 
@@ -925,7 +926,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         ListViewSubItemAccessibleObject listViewSubItemAccessibleObject = new(listViewSubItem, listViewItem);
         object actual = listViewSubItemAccessibleObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId);
 
-        Assert.Equal(listViewSubItem.AccessibilityObject.BoundingRectangle, actual);
+        Assert.Equal(UiaTextProvider.BoundingRectangleAsArray(listViewSubItem.AccessibilityObject.BoundingRectangle), actual);
         Assert.False(listView.IsHandleCreated);
     }
 
