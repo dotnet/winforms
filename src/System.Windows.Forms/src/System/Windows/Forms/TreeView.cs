@@ -3447,7 +3447,9 @@ public partial class TreeView : Control
 
                 break;
             case PInvoke.WM_GETOBJECT:
-                // Adding these steps is to fix a bug, please refer to this PR. https://github.com/dotnet/winforms/pull/9925
+                // When TreeView is the first control in TabOrder on a form, selection will not be announced when the forms is first opened
+                // because TreeView's AccessibilityObject has not been created yet. We create this object proactively to support that case.
+                // You can also refer to this PR. https://github.com/dotnet/winforms/pull/9925
                 if (m.LParamInternal == PInvoke.UiaRootObjectId && SupportsUiaProviders && !IsAccessibilityObjectCreated && Focused)
                 {
                     base.WndProc(ref m);
