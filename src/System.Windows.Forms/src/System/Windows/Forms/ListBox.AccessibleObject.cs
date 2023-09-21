@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Windows.Forms.Automation;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -122,7 +123,7 @@ public partial class ListBox
             switch (propertyID)
             {
                 case UiaCore.UIA.BoundingRectanglePropertyId:
-                    return BoundingRectangle;
+                    return UiaTextProvider.BoundingRectangleAsArray(BoundingRectangle);
                 case UiaCore.UIA.ControlTypePropertyId:
                     // If we don't set a default role for the accessible object
                     // it will be retrieved from Windows.
