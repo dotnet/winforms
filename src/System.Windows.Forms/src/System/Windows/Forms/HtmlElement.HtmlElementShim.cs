@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
-using static Interop.Mshtml;
+using Windows.Win32.System.Com;
+using Windows.Win32.Web.MsHtml;
 
 namespace System.Windows.Forms;
 
@@ -16,34 +16,34 @@ public sealed partial class HtmlElement
     ///              on our an instance of HTMLElementEvents2.  The HTMLElementEvents2 class then fires the event.
     ///
     /// </summary>
-    internal class HtmlElementShim : HtmlShim
+    internal unsafe class HtmlElementShim : HtmlShim
     {
         private static readonly Type[] s_dispInterfaceTypes =
         {
-            typeof(DHTMLElementEvents2),
-            typeof(DHTMLAnchorEvents2),
-            typeof(DHTMLAreaEvents2),
-            typeof(DHTMLButtonElementEvents2),
-            typeof(DHTMLControlElementEvents2),
-            typeof(DHTMLFormElementEvents2),
-            typeof(DHTMLFrameSiteEvents2),
-            typeof(DHTMLImgEvents2),
-            typeof(DHTMLInputFileElementEvents2),
-            typeof(DHTMLInputImageEvents2),
-            typeof(DHTMLInputTextElementEvents2),
-            typeof(DHTMLLabelEvents2),
-            typeof(DHTMLLinkElementEvents2),
-            typeof(DHTMLMapEvents2),
-            typeof(DHTMLMarqueeElementEvents2),
-            typeof(DHTMLOptionButtonElementEvents2),
-            typeof(DHTMLSelectElementEvents2),
-            typeof(DHTMLStyleElementEvents2),
-            typeof(DHTMLTableEvents2),
-            typeof(DHTMLTextContainerEvents2),
-            typeof(DHTMLScriptEvents2)
+            typeof(Interop.Mshtml.DHTMLElementEvents2),
+            typeof(Interop.Mshtml.DHTMLAnchorEvents2),
+            typeof(Interop.Mshtml.DHTMLAreaEvents2),
+            typeof(Interop.Mshtml.DHTMLButtonElementEvents2),
+            typeof(Interop.Mshtml.DHTMLControlElementEvents2),
+            typeof(Interop.Mshtml.DHTMLFormElementEvents2),
+            typeof(Interop.Mshtml.DHTMLFrameSiteEvents2),
+            typeof(Interop.Mshtml.DHTMLImgEvents2),
+            typeof(Interop.Mshtml.DHTMLInputFileElementEvents2),
+            typeof(Interop.Mshtml.DHTMLInputImageEvents2),
+            typeof(Interop.Mshtml.DHTMLInputTextElementEvents2),
+            typeof(Interop.Mshtml.DHTMLLabelEvents2),
+            typeof(Interop.Mshtml.DHTMLLinkElementEvents2),
+            typeof(Interop.Mshtml.DHTMLMapEvents2),
+            typeof(Interop.Mshtml.DHTMLMarqueeElementEvents2),
+            typeof(Interop.Mshtml.DHTMLOptionButtonElementEvents2),
+            typeof(Interop.Mshtml.DHTMLSelectElementEvents2),
+            typeof(Interop.Mshtml.DHTMLStyleElementEvents2),
+            typeof(Interop.Mshtml.DHTMLTableEvents2),
+            typeof(Interop.Mshtml.DHTMLTextContainerEvents2),
+            typeof(Interop.Mshtml.DHTMLScriptEvents2)
         };
 
-        private readonly IHTMLWindow2? _associatedWindow;
+        private readonly AgileComPointer<IHTMLWindow2>? _associatedWindow;
         private AxHost.ConnectionPointCookie? _cookie;   // To hook up events from the native HtmlElement
         private HtmlElement _htmlElement;
 
@@ -63,9 +63,28 @@ public sealed partial class HtmlElement
             }
         }
 
-        public override IHTMLWindow2? AssociatedWindow => _associatedWindow;
+        public override IHTMLWindow2.Interface? AssociatedWindow
+        {
+            get
+            {
+                if (_associatedWindow is null)
+                {
+                    return null;
+                }
 
-        public IHTMLElement NativeHtmlElement => _htmlElement.NativeHtmlElement;
+                using var window = _associatedWindow.GetInterface();
+                return (IHTMLWindow2.Interface?)ComHelpers.GetObjectForIUnknown(window.AsUnknown);
+            }
+        }
+
+        public IHTMLElement.Interface NativeHtmlElement
+        {
+            get
+            {
+                using var htmlElement = _htmlElement.NativeHtmlElement.GetInterface();
+                return (IHTMLElement.Interface)ComHelpers.GetObjectForIUnknown(htmlElement.AsUnknown);
+            }
+        }
 
         internal HtmlElement Element => _htmlElement;
 
@@ -77,7 +96,11 @@ public sealed partial class HtmlElement
             // our EventHandler properly.
 
             HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
-            ((IHTMLElement2)NativeHtmlElement).AttachEvent(eventName, proxy);
+            using var htmlElement2 = _htmlElement.GetHtmlElement<IHTMLElement2>();
+            using BSTR name = new(eventName);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
+            VARIANT_BOOL result;
+            htmlElement2.Value->attachEvent(name, dispatch, &result).ThrowOnFailure();
         }
 
         public override void ConnectToEvents()
@@ -105,7 +128,10 @@ public sealed partial class HtmlElement
             HtmlToClrEventProxy? proxy = RemoveEventProxy(eventHandler);
             if (proxy is not null)
             {
-                ((IHTMLElement2)NativeHtmlElement).DetachEvent(eventName, proxy);
+                using var htmlElement2 = _htmlElement.GetHtmlElement<IHTMLElement2>();
+                using BSTR name = new(eventName);
+                using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
+                htmlElement2.Value->detachEvent(name, dispatch).ThrowOnFailure();
             }
         }
 
@@ -123,11 +149,7 @@ public sealed partial class HtmlElement
             base.Dispose(disposing);
             if (disposing)
             {
-                if (_htmlElement?.NativeHtmlElement is not null)
-                {
-                    Marshal.FinalReleaseComObject(_htmlElement.NativeHtmlElement);
-                }
-
+                _htmlElement?.NativeHtmlElement?.Dispose();
                 _htmlElement = null!;
             }
         }

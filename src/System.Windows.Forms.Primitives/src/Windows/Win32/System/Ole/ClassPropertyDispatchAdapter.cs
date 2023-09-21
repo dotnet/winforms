@@ -307,13 +307,7 @@ internal unsafe class ClassPropertyDispatchAdapter
     // {
     //     int dispid = info.GetCustomAttribute<DispIdAttribute>()?.Value ?? Interop.DISPID_UNKNOWN;
     //     string name = info.Name;
-    //     FDEX_PROP_FLAGS flags =
-    //         FDEX_PROP_FLAGS.fdexPropCanGet
-    //         | FDEX_PROP_FLAGS.fdexPropCanPut
-    //         | FDEX_PROP_FLAGS.fdexPropCannotPutRef
-    //         | FDEX_PROP_FLAGS.fdexPropCannotCall
-    //         | FDEX_PROP_FLAGS.fdexPropCannotConstruct
-    //         | FDEX_PROP_FLAGS.fdexPropCannotSourceEvents;
+    //     FDEX_PROP_FLAGS flags = IDispatch.GetFieldProperty();
     //
     //     return (name, dispid, flags);
     // }
@@ -322,14 +316,7 @@ internal unsafe class ClassPropertyDispatchAdapter
     {
         int dispid = info.GetCustomAttribute<DispIdAttribute>()?.Value ?? PInvoke.DISPID_UNKNOWN;
         string name = info.Name;
-        FDEX_PROP_FLAGS flags =
-            (info.CanRead ? FDEX_PROP_FLAGS.fdexPropCanGet : FDEX_PROP_FLAGS.fdexPropCannotGet)
-            | (info.CanWrite ? FDEX_PROP_FLAGS.fdexPropCanPut : FDEX_PROP_FLAGS.fdexPropCannotPut)
-            | FDEX_PROP_FLAGS.fdexPropCannotPutRef
-            | FDEX_PROP_FLAGS.fdexPropCannotCall
-            | FDEX_PROP_FLAGS.fdexPropCannotConstruct
-            | FDEX_PROP_FLAGS.fdexPropCannotSourceEvents;
-
+        FDEX_PROP_FLAGS flags = IDispatch.GetPropertyFlags(info.CanRead, info.CanWrite);
         return (name, dispid, flags);
     }
 

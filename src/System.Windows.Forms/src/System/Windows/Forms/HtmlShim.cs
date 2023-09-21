@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using static Interop.Mshtml;
+using Windows.Win32.Web.MsHtml;
 
 namespace System.Windows.Forms;
 
@@ -46,7 +46,7 @@ internal abstract class HtmlShim : IDisposable
         return proxy;
     }
 
-    public abstract IHTMLWindow2? AssociatedWindow { get; }
+    public abstract IHTMLWindow2.Interface? AssociatedWindow { get; }
 
     ///  create connectionpoint cookie
     public abstract void ConnectToEvents();
