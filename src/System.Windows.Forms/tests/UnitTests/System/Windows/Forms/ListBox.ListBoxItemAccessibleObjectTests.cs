@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Windows.Forms.Automation;
 using System.Windows.Forms.IntegrationTests.Common;
 using static Interop;
 
@@ -87,7 +88,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         object actual = itemAccessibleObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId);
 
-        Assert.Equal(itemAccessibleObject.BoundingRectangle, actual);
+        Assert.Equal(UiaTextProvider.BoundingRectangleAsArray(itemAccessibleObject.BoundingRectangle), actual);
         Assert.False(listBox.IsHandleCreated);
     }
 

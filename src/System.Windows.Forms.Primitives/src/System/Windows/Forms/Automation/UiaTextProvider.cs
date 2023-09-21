@@ -95,6 +95,15 @@ internal abstract class UiaTextProvider : ITextProvider
         return doubles;
     }
 
+    /// <summary>
+    ///  Bounding rectangles are represented by a VT_ARRAY of doubles in a native VARIANT
+    ///  in accessibility interfaces. This method does the conversion. Accessibility will then convert it to an UiaRect.
+    ///  https://learn.microsoft.com/windows/win32/api/uiautomationcore/nf-uiautomationcore-irawelementproviderfragment-get_boundingrectangle
+    ///  https://learn.microsoft.com/windows/win32/api/uiautomationcore/ns-uiautomationcore-uiarect
+    /// </summary>
+    internal static double[] BoundingRectangleAsArray(Rectangle bounds)
+        => new double[] { bounds.X, bounds.Y, bounds.Width, bounds.Height };
+
     public int SendInput(int inputs, ref INPUT input, int size)
     {
         Span<INPUT> currentInput = stackalloc INPUT[1];
