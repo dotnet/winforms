@@ -427,7 +427,7 @@ public unsafe partial class AccessibleObject :
         {
             UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
             UiaCore.UIA.AutomationIdPropertyId => AutomationId,
-            UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
+            UiaCore.UIA.BoundingRectanglePropertyId => UiaTextProvider.BoundingRectangleAsArray(Bounds),
             UiaCore.UIA.FrameworkIdPropertyId => "WinForm",
             UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId),
             UiaCore.UIA.IsGridItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridItemPatternId),
