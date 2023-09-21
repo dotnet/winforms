@@ -3447,6 +3447,7 @@ public partial class TreeView : Control
 
                 break;
             case PInvoke.WM_GETOBJECT:
+                // Adding these steps is to fix a bug, please refer to this PR. https://github.com/dotnet/winforms/pull/9925
                 if (m.LParamInternal == PInvoke.UiaRootObjectId && SupportsUiaProviders && !IsAccessibilityObjectCreated && Focused)
                 {
                     base.WndProc(ref m);
