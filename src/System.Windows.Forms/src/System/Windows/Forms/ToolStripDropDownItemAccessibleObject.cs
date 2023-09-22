@@ -79,11 +79,11 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
         }
     }
 
-    internal override UiaCore.ExpandCollapseState ExpandCollapseState
+    internal override ExpandCollapseState ExpandCollapseState
     {
         get
         {
-            return _owner.DropDown.Visible ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+            return _owner.DropDown.Visible ? ExpandCollapseState.ExpandCollapseState_Expanded : ExpandCollapseState.ExpandCollapseState_Collapsed;
         }
     }
 
@@ -107,7 +107,7 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
         // Do not expose child items when the submenu is collapsed to prevent Narrator from announcing
         // invisible menu items when Narrator is in item's mode (CAPSLOCK + Arrow Left/Right) or
         // in scan mode (CAPSLOCK + Space)
-        if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+        if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Collapsed)
         {
             return 0;
         }

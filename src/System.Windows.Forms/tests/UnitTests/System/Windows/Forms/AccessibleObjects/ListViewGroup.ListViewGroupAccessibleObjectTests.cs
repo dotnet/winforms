@@ -727,9 +727,9 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
         }
 
-        Assert.Equal(ExpandCollapseState.Expanded, lvgroup1.AccessibilityObject.ExpandCollapseState);
-        Assert.Equal(ExpandCollapseState.Collapsed, lvgroup2.AccessibilityObject.ExpandCollapseState);
-        Assert.Equal(ExpandCollapseState.Expanded, listView.DefaultGroup.AccessibilityObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Expanded, lvgroup1.AccessibilityObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Collapsed, lvgroup2.AccessibilityObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Expanded, listView.DefaultGroup.AccessibilityObject.ExpandCollapseState);
         Assert.Equal(createHandle, listView.IsHandleCreated);
     }
 
@@ -762,24 +762,24 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         KeyboardSimulator.KeyPress(listView, Keys.Left);
 
         Assert.Equal(ListViewGroupCollapsedState.Collapsed, listViewGroup.GetNativeCollapsedState());
-        Assert.Equal(ExpandCollapseState.Collapsed, listViewGroup.AccessibilityObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Collapsed, listViewGroup.AccessibilityObject.ExpandCollapseState);
 
         KeyboardSimulator.KeyPress(listView, Keys.Left);
 
         // The second left key pressing should not change Collapsed state
         Assert.Equal(ListViewGroupCollapsedState.Collapsed, listViewGroup.GetNativeCollapsedState());
-        Assert.Equal(ExpandCollapseState.Collapsed, listViewGroup.AccessibilityObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Collapsed, listViewGroup.AccessibilityObject.ExpandCollapseState);
 
         KeyboardSimulator.KeyPress(listView, Keys.Right);
 
         Assert.Equal(ListViewGroupCollapsedState.Expanded, listViewGroup.GetNativeCollapsedState());
-        Assert.Equal(ExpandCollapseState.Expanded, listViewGroup.AccessibilityObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Expanded, listViewGroup.AccessibilityObject.ExpandCollapseState);
 
         KeyboardSimulator.KeyPress(listView, Keys.Right);
 
         // The second right key pressing should not change Expanded state
         Assert.Equal(ListViewGroupCollapsedState.Expanded, listViewGroup.GetNativeCollapsedState());
-        Assert.Equal(ExpandCollapseState.Expanded, listViewGroup.AccessibilityObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Expanded, listViewGroup.AccessibilityObject.ExpandCollapseState);
     }
 
     [WinFormsTheory]

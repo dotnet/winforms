@@ -14,13 +14,13 @@ internal partial class PropertyDescriptorGridEntry
         {
         }
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => GetPropertyGridView() is { } propertyGridView
                 && this.TryGetOwnerAs(out PropertyDescriptorGridEntry? owner)
                 && owner == propertyGridView.SelectedGridEntry
                 && (owner.InternalExpanded || propertyGridView.DropDownVisible)
-                    ? UiaCore.ExpandCollapseState.Expanded
-                    : UiaCore.ExpandCollapseState.Collapsed;
+                    ? ExpandCollapseState.ExpandCollapseState_Expanded
+                    : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         public override AccessibleObject? GetChild(int index)
         {
@@ -134,7 +134,7 @@ internal partial class PropertyDescriptorGridEntry
 
         internal override void Collapse()
         {
-            if (ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
+            if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Expanded)
             {
                 ExpandOrCollapse();
             }
@@ -142,7 +142,7 @@ internal partial class PropertyDescriptorGridEntry
 
         internal override void Expand()
         {
-            if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+            if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Collapsed)
             {
                 ExpandOrCollapse();
             }

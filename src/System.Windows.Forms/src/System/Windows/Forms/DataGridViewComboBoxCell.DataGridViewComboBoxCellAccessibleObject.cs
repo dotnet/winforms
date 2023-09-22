@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -35,7 +34,7 @@ public partial class DataGridViewComboBoxCell
                 _ => base.IsPatternSupported(patternId)
             };
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
         {
             get
             {
@@ -46,10 +45,10 @@ public partial class DataGridViewComboBoxCell
 
                 if (Owner.Properties.GetObject(s_propComboBoxCellEditingComboBox) is DataGridViewComboBoxEditingControl comboBox && comboBox.IsHandleCreated)
                 {
-                    return comboBox.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+                    return comboBox.DroppedDown ? ExpandCollapseState.ExpandCollapseState_Expanded : ExpandCollapseState.ExpandCollapseState_Collapsed;
                 }
 
-                return UiaCore.ExpandCollapseState.Collapsed;
+                return ExpandCollapseState.ExpandCollapseState_Collapsed;
             }
         }
 

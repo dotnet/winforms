@@ -571,7 +571,7 @@ public unsafe partial class AccessibleObject :
     {
     }
 
-    internal virtual UiaCore.ExpandCollapseState ExpandCollapseState => UiaCore.ExpandCollapseState.Collapsed;
+    internal virtual UIA.ExpandCollapseState ExpandCollapseState => UIA.ExpandCollapseState.ExpandCollapseState_Collapsed;
 
     internal virtual void Toggle()
     {
@@ -887,7 +887,7 @@ public unsafe partial class AccessibleObject :
 
     void UiaCore.IExpandCollapseProvider.Collapse() => Collapse();
 
-    UiaCore.ExpandCollapseState UiaCore.IExpandCollapseProvider.ExpandCollapseState => ExpandCollapseState;
+    UIA.ExpandCollapseState UiaCore.IExpandCollapseProvider.ExpandCollapseState => ExpandCollapseState;
 
     void UiaCore.IInvokeProvider.Invoke() => Invoke();
 

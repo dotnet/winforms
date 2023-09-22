@@ -266,37 +266,37 @@ public class AccessibleObjectTests : InteropTestBase
     public void AccessibleObject_IValueProviderCollapse_Invoke_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IValueProviderCollapse_InvokeAfterExpand_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderExpand(o, ExpandCollapseState.Collapsed));
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderExpand(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IExpandCollapseProviderExpand_Invoke_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IExpandCollapseProviderExpand_InvokeAfterCollapse_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IExpandCollapseProviderExpandCollapseState_Get_ReturnsExpected()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderGetExpandCollapseState(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderGetExpandCollapseState(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]

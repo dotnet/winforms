@@ -2566,8 +2566,8 @@ public partial class ComboBox : ListControl
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                UiaCore.ExpandCollapseState.Collapsed,
-                UiaCore.ExpandCollapseState.Expanded);
+                ExpandCollapseState.ExpandCollapseState_Collapsed,
+                ExpandCollapseState.ExpandCollapseState_Expanded);
 
             if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
             {
@@ -3057,8 +3057,8 @@ public partial class ComboBox : ListControl
             // Notify Collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                UiaCore.ExpandCollapseState.Expanded,
-                UiaCore.ExpandCollapseState.Collapsed);
+                ExpandCollapseState.ExpandCollapseState_Expanded,
+                ExpandCollapseState.ExpandCollapseState_Collapsed);
         }
 
         // Collapsing the DropDown, so reset the flag.

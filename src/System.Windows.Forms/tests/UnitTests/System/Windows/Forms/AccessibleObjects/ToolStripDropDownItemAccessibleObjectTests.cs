@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -54,8 +55,8 @@ public class ToolStripDropDownItemAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(false, ((int)ExpandCollapseState.Collapsed))]
-    [InlineData(true, ((int)ExpandCollapseState.Expanded))]
+    [InlineData(false, ((int)ExpandCollapseState.ExpandCollapseState_Collapsed))]
+    [InlineData(true, ((int)ExpandCollapseState.ExpandCollapseState_Expanded))]
     public void ToolStripDropDownItemAccessibleObject_ExpandCollapseState_ReturnsExpected(bool visible, int expected)
     {
         using SubToolStripDropDownItem control = new();

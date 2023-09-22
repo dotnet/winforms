@@ -59,10 +59,10 @@ public partial class ComboBox
 
         internal override void Collapse() => ComboBoxDefaultAction(false);
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => this.IsOwnerHandleCreated(out ComboBox? owner) && owner.DroppedDown
-                ? UiaCore.ExpandCollapseState.Expanded
-                : UiaCore.ExpandCollapseState.Collapsed;
+                ? ExpandCollapseState.ExpandCollapseState_Expanded
+                : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         internal override string? get_accNameInternal(object childID)
         {

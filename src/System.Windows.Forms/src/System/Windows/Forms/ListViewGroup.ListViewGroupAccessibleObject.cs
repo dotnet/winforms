@@ -88,10 +88,10 @@ public partial class ListViewGroup
         public override string DefaultAction
             => SR.AccessibleActionDoubleClick;
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => _owningGroup.CollapsedState == ListViewGroupCollapsedState.Collapsed
-                ? UiaCore.ExpandCollapseState.Collapsed
-                : UiaCore.ExpandCollapseState.Expanded;
+                ? ExpandCollapseState.ExpandCollapseState_Collapsed
+                : ExpandCollapseState.ExpandCollapseState_Expanded;
 
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             => _owningListView.AccessibilityObject;

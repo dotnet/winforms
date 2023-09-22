@@ -400,7 +400,7 @@ public class TreeNodeAccessibleObjectTests
         using TreeView control = new();
         TreeNode node = new(control);
 
-        Assert.Equal(UiaCore.ExpandCollapseState.LeafNode, node.AccessibilityObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_LeafNode, node.AccessibilityObject.ExpandCollapseState);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -418,9 +418,9 @@ public class TreeNodeAccessibleObjectTests
             node.Expand();
         }
 
-        UiaCore.ExpandCollapseState expected = isExpanded
-                ? UiaCore.ExpandCollapseState.Expanded
-                : UiaCore.ExpandCollapseState.Collapsed;
+        ExpandCollapseState expected = isExpanded
+                ? ExpandCollapseState.ExpandCollapseState_Expanded
+                : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         Assert.Equal(expected, node.AccessibilityObject.ExpandCollapseState);
         Assert.False(control.IsHandleCreated);

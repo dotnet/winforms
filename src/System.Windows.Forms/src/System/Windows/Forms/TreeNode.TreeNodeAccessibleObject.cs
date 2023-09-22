@@ -44,13 +44,13 @@ public partial class TreeNode
                         : SR.AccessibleActionCheck;
                 }
 
-                UiaCore.ExpandCollapseState expandCollapseState = ExpandCollapseState;
-                if (expandCollapseState == UiaCore.ExpandCollapseState.LeafNode)
+                ExpandCollapseState expandCollapseState = ExpandCollapseState;
+                if (expandCollapseState == ExpandCollapseState.ExpandCollapseState_LeafNode)
                 {
                     return string.Empty;
                 }
 
-                return expandCollapseState == UiaCore.ExpandCollapseState.Expanded
+                return expandCollapseState == ExpandCollapseState.ExpandCollapseState_Expanded
                     ? SR.AccessibleActionCollapse
                     : SR.AccessibleActionExpand;
             }
@@ -160,11 +160,11 @@ public partial class TreeNode
                     state |= AccessibleStates.Invisible | AccessibleStates.Offscreen;
                 }
 
-                if (ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
+                if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Expanded)
                 {
                     state |= AccessibleStates.Expanded;
                 }
-                else if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+                else if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Collapsed)
                 {
                     state |= AccessibleStates.Collapsed;
                 }
@@ -205,18 +205,18 @@ public partial class TreeNode
             _owningTreeNode.Collapse();
         }
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
         {
             get
             {
                 if (_owningTreeNode.Nodes.Count == 0)
                 {
-                    return UiaCore.ExpandCollapseState.LeafNode;
+                    return ExpandCollapseState.ExpandCollapseState_LeafNode;
                 }
 
                 return _owningTreeNode.IsExpanded
-                    ? UiaCore.ExpandCollapseState.Expanded
-                    : UiaCore.ExpandCollapseState.Collapsed;
+                    ? ExpandCollapseState.ExpandCollapseState_Expanded
+                    : ExpandCollapseState.ExpandCollapseState_Collapsed;
             }
         }
 

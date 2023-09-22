@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -31,10 +30,10 @@ internal partial class DetailsButton
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId == UIA_PATTERN_ID.UIA_ExpandCollapsePatternId || base.IsPatternSupported(patternId);
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => _ownerItem.Expanded
-                ? UiaCore.ExpandCollapseState.Expanded
-                : UiaCore.ExpandCollapseState.Collapsed;
+                ? ExpandCollapseState.ExpandCollapseState_Expanded
+                : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         internal override void Expand()
         {

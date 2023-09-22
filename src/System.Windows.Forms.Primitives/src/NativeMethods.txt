@@ -177,6 +177,7 @@ EnumThreadWindows
 EnumWindows
 ES_*
 EVENTMSG
+ExpandCollapseState
 EXTLOGFONTW
 ExtTextOut
 FDAP

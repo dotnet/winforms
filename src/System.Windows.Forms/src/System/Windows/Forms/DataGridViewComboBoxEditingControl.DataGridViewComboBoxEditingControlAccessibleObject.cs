@@ -57,10 +57,10 @@ public partial class DataGridViewComboBoxEditingControl
             _ => base.IsPatternSupported(patternId)
         };
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => this.TryGetOwnerAs(out DataGridViewComboBoxEditingControl? owner) && owner.DroppedDown
-                ? UiaCore.ExpandCollapseState.Expanded
-                : UiaCore.ExpandCollapseState.Collapsed;
+                ? ExpandCollapseState.ExpandCollapseState_Expanded
+                : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         /// <summary>
         ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.

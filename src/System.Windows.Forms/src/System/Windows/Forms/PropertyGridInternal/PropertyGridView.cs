@@ -813,8 +813,8 @@ internal sealed partial class PropertyGridView :
                     gridEntry.AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
                     gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                         UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                        UiaCore.ExpandCollapseState.Expanded,
-                        UiaCore.ExpandCollapseState.Collapsed);
+                        ExpandCollapseState.ExpandCollapseState_Expanded,
+                        ExpandCollapseState.ExpandCollapseState_Collapsed);
                 }
             }
         }
@@ -4658,8 +4658,8 @@ internal sealed partial class PropertyGridView :
 
         if (_selectedGridEntry is not null && IsAccessibilityObjectCreated)
         {
-            var oldExpandedState = value ? UiaCore.ExpandCollapseState.Collapsed : UiaCore.ExpandCollapseState.Expanded;
-            var newExpandedState = value ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+            var oldExpandedState = value ? ExpandCollapseState.ExpandCollapseState_Collapsed : ExpandCollapseState.ExpandCollapseState_Expanded;
+            var newExpandedState = value ? ExpandCollapseState.ExpandCollapseState_Expanded : ExpandCollapseState.ExpandCollapseState_Collapsed;
             _selectedGridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
                 oldExpandedState,
