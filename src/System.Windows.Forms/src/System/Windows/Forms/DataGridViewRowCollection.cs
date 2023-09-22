@@ -107,9 +107,9 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
     }
 
-    internal ArrayList SharedList => ArrayList.Adapter(_items);
+    internal List<DataGridViewRow> SharedList => _items;
 
-    public DataGridViewRow SharedRow(int rowIndex) => (DataGridViewRow)SharedList[rowIndex]!;
+    public DataGridViewRow SharedRow(int rowIndex) => SharedList[rowIndex];
 
     protected DataGridView DataGridView => _dataGridView;
 
@@ -249,7 +249,8 @@ public partial class DataGridViewRowCollection : ICollection, IList
             dataGridViewRow.HeaderCell.OwningRow = dataGridViewRow;
         }
 
-        int index = SharedList.Add(dataGridViewRow);
+        SharedList.Add(dataGridViewRow);
+        int index = SharedList.Count - 1;
         Debug.Assert((rowState & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
         _rowStates.Add(rowState);
 #if DEBUG
@@ -434,7 +435,8 @@ public partial class DataGridViewRowCollection : ICollection, IList
             dataGridViewRow.HeaderCell.OwningRow = dataGridViewRow;
         }
 
-        int index = SharedList.Add(dataGridViewRow);
+        SharedList.Add(dataGridViewRow);
+        int index = SharedList.Count - 1;
         Debug.Assert((dataGridViewRow.State & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
         _rowStates.Add(dataGridViewRow.State);
         Debug.Assert(_rowStates.Count == SharedList.Count);
@@ -502,7 +504,8 @@ public partial class DataGridViewRowCollection : ICollection, IList
             rowState |= dgvesAdd;
             DataGridView.OnAddingRow(rowTemplate, rowState, checkFrozenState: true);   // will throw an exception if the addition is illegal
 
-            index = SharedList.Add(rowTemplate);
+            SharedList.Add(rowTemplate);
+            index = SharedList.Count - 1;
             _rowStates.Add(rowState);
 #if DEBUG
             DataGridView._dataStoreAccessAllowed = false;
@@ -588,7 +591,8 @@ public partial class DataGridViewRowCollection : ICollection, IList
                 _rowStates.Add(rowTemplateState);
             }
 
-            index = SharedList.Add(rowTemplate);
+            SharedList.Add(rowTemplate);
+            index = SharedList.Count - 1;
             _rowStates.Add(rowTemplateState);
 #if DEBUG
             DataGridView._dataStoreAccessAllowed = false;
@@ -620,7 +624,8 @@ public partial class DataGridViewRowCollection : ICollection, IList
                         _rowStates.Add(rowTemplateState);
                     }
 
-                    index = SharedList.Add(rowTemplate2);
+                    SharedList.Add(rowTemplate2);
+                    index = SharedList.Count - 1;
                     _rowStates.Add(rowTemplateState);
 #if DEBUG
                     DataGridView._dataStoreAccessAllowed = false;
@@ -698,7 +703,9 @@ public partial class DataGridViewRowCollection : ICollection, IList
 #endif
         Debug.Assert(dataGridViewRow.Index == -1);
         _rowStates.Add(rowState);
-        return SharedList.Add(dataGridViewRow);
+        SharedList.Add(dataGridViewRow);
+
+        return SharedList.Count - 1;
     }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -754,7 +761,8 @@ public partial class DataGridViewRowCollection : ICollection, IList
                 dataGridViewRow.HeaderCell.OwningRow = dataGridViewRow;
             }
 
-            int index = SharedList.Add(dataGridViewRow);
+            SharedList.Add(dataGridViewRow);
+            int index = SharedList.Count - 1;
             Debug.Assert((dataGridViewRow.State & (DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed)) == 0);
             _rowStates.Add(dataGridViewRow.State);
 #if DEBUG
