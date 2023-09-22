@@ -162,6 +162,7 @@
       "IHTMLDocument3.put_dir",
       "IHTMLDocument4.focus",
       "IHTMLDocument4.fireEvent",
+      "IHTMLDocument4.hasFocus",
       "IHTMLFramesCollection2.get_length",
       "IHTMLFramesCollection2.item",
       "IHTMLLocation.get_href",

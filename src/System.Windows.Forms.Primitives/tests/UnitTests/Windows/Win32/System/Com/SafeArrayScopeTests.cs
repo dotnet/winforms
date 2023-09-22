@@ -4,37 +4,36 @@
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 
-namespace System.Windows.Forms.Primitives.Tests.Windows.Win32.System.Com
+namespace System.Windows.Forms.Primitives.Tests.Windows.Win32.System.Com;
+
+public class SafeArrayScopeTests
 {
-    public class SafeArrayScopeTests
+    [Fact]
+    public void Construct_Success()
     {
-        [Fact]
-        public void Construct_Success()
+        SAFEARRAYBOUND bound = new()
         {
-            SAFEARRAYBOUND bound = new()
-            {
-                cElements = 1,
-                lLbound = 0
-            };
+            cElements = 1,
+            lLbound = 0
+        };
 
-            using SafeArrayScope scope = new(VARENUM.VT_BSTR, 1, bound);
-            Assert.False(scope.IsNull);
-        }
+        using SafeArrayScope scope = new(VARENUM.VT_BSTR, 1, bound);
+        Assert.False(scope.IsNull);
+    }
 
-        [Fact]
-        public void Dispose_Success()
+    [Fact]
+    public void Dispose_Success()
+    {
+        SAFEARRAYBOUND bound = new()
         {
-            SAFEARRAYBOUND bound = new()
-            {
-                cElements = 1,
-                lLbound = 0
-            };
+            cElements = 1,
+            lLbound = 0
+        };
 
-            SafeArrayScope scope = new(VARENUM.VT_BSTR, 1, bound);
-            Assert.False(scope.IsNull);
+        SafeArrayScope scope = new(VARENUM.VT_BSTR, 1, bound);
+        Assert.False(scope.IsNull);
 
-            scope.Dispose();
-            Assert.True(scope.IsNull);
-        }
+        scope.Dispose();
+        Assert.True(scope.IsNull);
     }
 }

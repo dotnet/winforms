@@ -298,10 +298,10 @@ public sealed unsafe partial class HtmlDocument
     {
         get
         {
-            using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
-            using ComScope<IHTMLDocument4> htmlDoc4 = htmlDoc2.TryQuery<IHTMLDocument4>(out HRESULT hr);
-            hr.ThrowOnFailure();
-            return htmlDoc4.Value->hasFocus();
+            using var htmlDoc4 = GetHtmlDocument<IHTMLDocument4>();
+            VARIANT_BOOL focused = default;
+            htmlDoc4.Value->hasFocus(&focused).ThrowOnFailure();
+            return focused;
         }
     }
 

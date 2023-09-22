@@ -1130,10 +1130,24 @@ public unsafe partial class WebBrowser : WebBrowserBase
     /// </summary>
     protected override void AttachInterfaces(object nativeActiveXObject)
     {
-        if (nativeActiveXObject is not null)
+        if (nativeActiveXObject is null)
         {
-            _axIWebBrowser2 = new(ComHelpers.GetComPointer<IWebBrowser2>(nativeActiveXObject), takeOwnership: true);
+            return;
         }
+
+        IWebBrowser2* webBrowser2 = ComHelpers.GetComPointer<IWebBrowser2>(nativeActiveXObject);
+        if (_axIWebBrowser2 is not null)
+        {
+            if (_axIWebBrowser2.MatchesOriginalPointer(webBrowser2))
+            {
+                webBrowser2->Release();
+                return;
+            }
+
+            DetachInterfaces();
+        }
+
+        _axIWebBrowser2 = new(webBrowser2, takeOwnership: true);
     }
 
     /// <summary>

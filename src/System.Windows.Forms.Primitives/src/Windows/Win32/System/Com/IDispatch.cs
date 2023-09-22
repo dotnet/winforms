@@ -158,24 +158,18 @@ internal unsafe partial struct IDispatch
     // }
 
     internal static FDEX_PROP_FLAGS GetMethodFlags()
-    {
-        return
-            FDEX_PROP_FLAGS.fdexPropCannotGet
+        => FDEX_PROP_FLAGS.fdexPropCannotGet
             | FDEX_PROP_FLAGS.fdexPropCannotPut
             | FDEX_PROP_FLAGS.fdexPropCannotPutRef
             | FDEX_PROP_FLAGS.fdexPropCanCall
             | FDEX_PROP_FLAGS.fdexPropCannotConstruct
             | FDEX_PROP_FLAGS.fdexPropCannotSourceEvents;
-    }
 
     internal static FDEX_PROP_FLAGS GetPropertyFlags(bool canRead, bool canWrite)
-    {
-        return
-            (canRead ? FDEX_PROP_FLAGS.fdexPropCanGet : FDEX_PROP_FLAGS.fdexPropCannotGet)
+        => (canRead ? FDEX_PROP_FLAGS.fdexPropCanGet : FDEX_PROP_FLAGS.fdexPropCannotGet)
             | (canWrite ? FDEX_PROP_FLAGS.fdexPropCanPut : FDEX_PROP_FLAGS.fdexPropCannotPut)
             | FDEX_PROP_FLAGS.fdexPropCannotPutRef
             | FDEX_PROP_FLAGS.fdexPropCannotCall
             | FDEX_PROP_FLAGS.fdexPropCannotConstruct
             | FDEX_PROP_FLAGS.fdexPropCannotSourceEvents;
-    }
 }
