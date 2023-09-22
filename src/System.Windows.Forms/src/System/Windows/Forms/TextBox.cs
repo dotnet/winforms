@@ -691,11 +691,6 @@ public partial class TextBox : TextBoxBase
         bool returnValue = base.ProcessCmdKey(ref m, keyData);
         if (!returnValue && ShortcutsEnabled && (keyData == (Keys.Control | Keys.A)))
         {
-            if (Multiline)
-            {
-                return returnValue;
-            }
-
             SelectAll();
             return true;
         }
