@@ -689,7 +689,7 @@ public partial class TextBox : TextBoxBase
     protected override bool ProcessCmdKey(ref Message m, Keys keyData)
     {
         bool returnValue = base.ProcessCmdKey(ref m, keyData);
-        if (!returnValue && Multiline && ShortcutsEnabled && (keyData == (Keys.Control | Keys.A)))
+        if (!returnValue && ShortcutsEnabled && (keyData == (Keys.Control | Keys.A)))
         {
             SelectAll();
             return true;
