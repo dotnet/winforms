@@ -276,7 +276,7 @@ internal class UiaTextRange : ITextRangeProvider
 
     double[] ITextRangeProvider.GetBoundingRectangles()
     {
-        if (_enclosingElement.GetPropertyValue(UIA.BoundingRectanglePropertyId) is not Rectangle ownerBounds)
+        if (_enclosingElement.GetPropertyValue(UIA.BoundingRectanglePropertyId) is not double[] ownerBounds || !ownerBounds.Length.Equals(4))
         {
             return Array.Empty<double>();
         }
@@ -287,8 +287,7 @@ internal class UiaTextRange : ITextRangeProvider
 
         if (text.Length == 0)
         {
-            rectangles.Add(ownerBounds);
-            return UiaTextProvider.RectListToDoubleArray(rectangles);
+            return ownerBounds;
         }
 
         // If this is an end of a line.
@@ -312,7 +311,7 @@ internal class UiaTextRange : ITextRangeProvider
         ValidateEndpoints();
 
         // Get the mapping from client coordinates to screen coordinates.
-        Point mapClientToScreen = new Point(ownerBounds.X, ownerBounds.Y);
+        Point mapClientToScreen = new Point((int)ownerBounds[0], (int)ownerBounds[1]);
 
         // Clip the rectangles to the edit control's formatting rectangle.
         Rectangle clippingRectangle = _provider.BoundingRectangle;
