@@ -1144,7 +1144,7 @@ public unsafe partial class WebBrowser : WebBrowserBase
                 return;
             }
 
-            DetachInterfaces();
+            DisposeHelper.NullAndDispose(ref _axIWebBrowser2);
         }
 
         _axIWebBrowser2 = new(webBrowser2, takeOwnership: true);
