@@ -58,14 +58,8 @@ public class ToolboxItem : ISerializable
     /// </summary>
     public AssemblyName? AssemblyName
     {
-        get
-        {
-            return (AssemblyName?)Properties["AssemblyName"];
-        }
-        set
-        {
-            Properties["AssemblyName"] = value;
-        }
+        get => (AssemblyName?)Properties["AssemblyName"];
+        set => Properties["AssemblyName"] = value;
     }
 
     /// <summary>
@@ -79,10 +73,7 @@ public class ToolboxItem : ISerializable
             AssemblyName[]? names = (AssemblyName[]?)Properties["DependentAssemblies"];
             return (AssemblyName[]?)names?.Clone();
         }
-        set
-        {
-            Properties["DependentAssemblies"] = value?.Clone();
-        }
+        set => Properties["DependentAssemblies"] = value?.Clone();
     }
 
     /// <summary>
@@ -91,14 +82,8 @@ public class ToolboxItem : ISerializable
     /// </summary>
     public Bitmap? Bitmap
     {
-        get
-        {
-            return (Bitmap?)Properties["Bitmap"];
-        }
-        set
-        {
-            Properties["Bitmap"] = value;
-        }
+        get => (Bitmap?)Properties["Bitmap"];
+        set => Properties["Bitmap"] = value;
     }
 
     /// <summary>
@@ -107,14 +92,8 @@ public class ToolboxItem : ISerializable
     /// </summary>
     public Bitmap? OriginalBitmap
     {
-        get
-        {
-            return (Bitmap?)Properties["OriginalBitmap"];
-        }
-        set
-        {
-            Properties["OriginalBitmap"] = value;
-        }
+        get => (Bitmap?)Properties["OriginalBitmap"];
+        set => Properties["OriginalBitmap"] = value;
     }
 
     /// <summary>
@@ -123,14 +102,8 @@ public class ToolboxItem : ISerializable
     /// </summary>
     public string? Company
     {
-        get
-        {
-            return (string?)Properties["Company"];
-        }
-        set
-        {
-            Properties["Company"] = value;
-        }
+        get => (string?)Properties["Company"];
+        set => Properties["Company"] = value;
     }
 
     /// <summary>
@@ -144,14 +117,8 @@ public class ToolboxItem : ISerializable
     /// </summary>
     public string? Description
     {
-        get
-        {
-            return (string?)Properties["Description"];
-        }
-        set
-        {
-            Properties["Description"] = value;
-        }
+        get => (string?)Properties["Description"];
+        set => Properties["Description"] = value;
     }
 
     /// <summary>
@@ -160,14 +127,8 @@ public class ToolboxItem : ISerializable
     [AllowNull]
     public string DisplayName
     {
-        get
-        {
-            return (string)Properties["DisplayName"]!;
-        }
-        set
-        {
-            Properties["DisplayName"] = value;
-        }
+        get => (string)Properties["DisplayName"]!;
+        set => Properties["DisplayName"] = value;
     }
 
     /// <summary>
@@ -177,14 +138,8 @@ public class ToolboxItem : ISerializable
     [AllowNull]
     public ICollection Filter
     {
-        get
-        {
-            return (ICollection)Properties["Filter"]!;
-        }
-        set
-        {
-            Properties["Filter"] = value;
-        }
+        get => (ICollection)Properties["Filter"]!;
+        set => Properties["Filter"] = value;
     }
 
     /// <summary>
@@ -194,14 +149,8 @@ public class ToolboxItem : ISerializable
     /// </summary>
     public bool IsTransient
     {
-        get
-        {
-            return (bool)Properties["IsTransient"]!;
-        }
-        set
-        {
-            Properties["IsTransient"] = value;
-        }
+        get => (bool)Properties["IsTransient"]!;
+        set => Properties["IsTransient"] = value;
     }
 
     /// <summary>
@@ -225,14 +174,8 @@ public class ToolboxItem : ISerializable
     [AllowNull]
     public string TypeName
     {
-        get
-        {
-            return (string)Properties["TypeName"]!;
-        }
-        set
-        {
-            Properties["TypeName"] = value;
-        }
+        get => (string)Properties["TypeName"]!;
+        set => Properties["TypeName"] = value;
     }
 
     /// <summary>
