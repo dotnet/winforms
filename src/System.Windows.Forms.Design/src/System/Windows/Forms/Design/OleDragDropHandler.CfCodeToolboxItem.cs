@@ -92,29 +92,26 @@ internal partial class OleDragDropHandler
 
             // Parent and locate each Control
             defaultValues ??= new Dictionary<string, object>();
-            if (defaultValues["Parent"] is Control parentControl)
+            if (defaultValues["Parent"] is Control parentControl && host.GetDesigner(parentControl) is ParentControlDesigner parentControlDesigner)
             {
-                if (host.GetDesigner(parentControl) is ParentControlDesigner parentControlDesigner)
+                // Determine bounds of all controls
+                Rectangle bounds = Rectangle.Empty;
+
+                foreach (IComponent component in components)
                 {
-                    // Determine bounds of all controls
-                    Rectangle bounds = Rectangle.Empty;
-
-                    foreach (IComponent component in components)
+                    if (component is Control { Parent: null } childControl && childControl != parentControl)
                     {
-                        if (component is Control { Parent: null } childControl && childControl != parentControl)
-                        {
-                            bounds = bounds.IsEmpty ? childControl.Bounds : Rectangle.Union(bounds, childControl.Bounds);
-                        }
+                        bounds = bounds.IsEmpty ? childControl.Bounds : Rectangle.Union(bounds, childControl.Bounds);
                     }
+                }
 
-                    defaultValues.Remove("Size"); // don't care about the drag size
-                    foreach (IComponent component in components)
+                defaultValues.Remove("Size"); // don't care about the drag size
+                foreach (IComponent component in components)
+                {
+                    if (component is Control { Parent: null } childControl and not Form { TopLevel: true }) // Don't add top-level forms
                     {
-                        if (component is Control { Parent: null } childControl and not Form { TopLevel: true }) // Don't add top-level forms
-                        {
-                            defaultValues["Offset"] = new Size(childControl.Bounds.X - bounds.X, childControl.Bounds.Y - bounds.Y);
-                            parentControlDesigner.AddControl(childControl, defaultValues);
-                        }
+                        defaultValues["Offset"] = new Size(childControl.Bounds.X - bounds.X, childControl.Bounds.Y - bounds.Y);
+                        parentControlDesigner.AddControl(childControl, defaultValues);
                     }
                 }
             }
