@@ -518,7 +518,7 @@ this is the third line.";
     {
         Mock<IRawElementProviderSimple> enclosingElementMock = new Mock<IRawElementProviderSimple>(MockBehavior.Strict);
         Rectangle expected = new Rectangle(10, 33, 96, 19);
-        enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(expected);
+        enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new double[] { 10, 33, 96, 19 });
         IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
         providerMock.Setup(p => p.Text).Returns("");
@@ -549,7 +549,7 @@ this is the third line.";
     public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsExpected_for_Endline()
     {
         Mock<IRawElementProviderSimple> enclosingElementMock = new Mock<IRawElementProviderSimple>(MockBehavior.Strict);
-        enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
+        enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new double[] {10, 33, 96, 19 });
         IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
         providerMock.Setup(p => p.Text).Returns("abc");
@@ -616,7 +616,7 @@ test text with several lines
 and numbers 12345";
 
         Mock<IRawElementProviderSimple> enclosingElementMock = new Mock<IRawElementProviderSimple>(MockBehavior.Strict);
-        enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(27, 128, 128, 155));
+        enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new double[] {27, 128, 128, 155 });
 
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
         providerMock.Setup(m => m.IsReadingRTL).Returns(false);
@@ -683,7 +683,7 @@ test text with several lines
 and numbers 12345";
 
         Mock<IRawElementProviderSimple> enclosingElementMock = new Mock<IRawElementProviderSimple>(MockBehavior.Strict);
-        enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(27, 128, 128, 155));
+        enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new double[] { 27, 128, 128, 155 });
 
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
         providerMock.Setup(m => m.IsReadingRTL).Returns(true);
