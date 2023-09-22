@@ -150,6 +150,7 @@ public partial class WindowsFormsSynchronizationContextTests
     }
 
     [WinFormsFact]
+    [ActiveIssue("https://github.com/dotnet/winforms/issues/9965")]
     public void WindowsFormsSynchronizationContext_Send_NoDynamicInvoke()
     {
         string stackTrace = null;
