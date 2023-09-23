@@ -815,28 +815,20 @@ public partial class PictureBox : Control, ISupportInitialize
     /// <summary>
     ///  Be sure not to re-serialized initial image if it's the default.
     /// </summary>
-    private bool ShouldSerializeInitialImage()
-    {
-        return !_pictureBoxState[UseDefaultInitialImageState];
-    }
+    private bool ShouldSerializeInitialImage() => !_pictureBoxState[UseDefaultInitialImageState];
 
     /// <summary>
     ///  Be sure not to re-serialized error image if it's the default.
     /// </summary>
-    private bool ShouldSerializeErrorImage()
-    {
-        return !_pictureBoxState[UseDefaultErrorImageState];
-    }
+    private bool ShouldSerializeErrorImage() => !_pictureBoxState[UseDefaultErrorImageState];
 
     /// <summary>
     ///  Be sure not to serialize image if it wasn't directly specified
     ///  through the Image property (e.g., if it's a download, or an initial
     ///  or error image)
     /// </summary>
-    private bool ShouldSerializeImage()
-    {
-        return (_imageInstallationType == ImageInstallationType.DirectlySpecified) && (Image is not null);
-    }
+    private bool ShouldSerializeImage() =>
+        (_imageInstallationType == ImageInstallationType.DirectlySpecified) && (Image is not null);
 
     /// <summary>
     ///  Indicates how the image is displayed.
@@ -1120,15 +1112,11 @@ public partial class PictureBox : Control, ISupportInitialize
         base.OnHandleCreated(e);
     }
 
-    protected virtual void OnLoadCompleted(AsyncCompletedEventArgs e)
-    {
+    protected virtual void OnLoadCompleted(AsyncCompletedEventArgs e) =>
         ((AsyncCompletedEventHandler?)(Events[s_loadCompletedKey]))?.Invoke(this, e);
-    }
 
-    protected virtual void OnLoadProgressChanged(ProgressChangedEventArgs e)
-    {
+    protected virtual void OnLoadProgressChanged(ProgressChangedEventArgs e) =>
         ((ProgressChangedEventHandler?)(Events[s_loadProgressChangedKey]))?.Invoke(this, e);
-    }
 
     /// <summary>
     ///  Overridden onPaint to make sure that the image is painted correctly.
