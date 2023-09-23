@@ -1154,7 +1154,11 @@ public partial class DataGridView : Control, ISupportInitialize
                     _borderStyle = value;
                     if (!AutoSize)
                     {
-                        PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
+                        PerformLayoutPrivate(
+                            useRowShortcut: false,
+                            computeVisibleRows: false,
+                            invalidInAdjustFillingColumns: true,
+                            repositionEditingControl: true);
                     }
 
                     Invalidate();
@@ -1507,7 +1511,7 @@ public partial class DataGridView : Control, ISupportInitialize
                     while (value > Columns.Count)
                     {
                         int currentColumnCount = Columns.Count;
-                        Columns.Add(null /*columnName*/, null /*headerText*/);
+                        Columns.Add(columnName: null, headerText: null);
                         if (Columns.Count <= currentColumnCount)
                         {
                             // Column addition failed. We stop the loop.
@@ -1687,7 +1691,7 @@ public partial class DataGridView : Control, ISupportInitialize
             }
             else if (_columnHeadersHeight != value)
             {
-                SetColumnHeadersHeightInternal(value, true /*invalidInAdjustFillingColumns*/);
+                SetColumnHeadersHeightInternal(value, invalidInAdjustFillingColumns: true);
             }
         }
     }
@@ -1780,7 +1784,11 @@ public partial class DataGridView : Control, ISupportInitialize
                     DisplayedBandsInfo.EnsureDirtyState();
                     if (!AutoSize)
                     {
-                        PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
+                        PerformLayoutPrivate(
+                            useRowShortcut: false,
+                            computeVisibleRows: false,
+                            invalidInAdjustFillingColumns: true,
+                            repositionEditingControl: true);
                     }
 
                     InvalidateInside();
@@ -1828,7 +1836,12 @@ public partial class DataGridView : Control, ISupportInitialize
                 if (value is null)
                 {
                     ClearSelection();
-                    if (!SetCurrentCellAddressCore(-1, -1, true /*setAnchorCellAddress*/, true /*validateCurrentCell*/, false /*throughMouseClick*/))
+                    if (!SetCurrentCellAddressCore(
+                        columnIndex: -1,
+                        rowIndex: -1,
+                        setAnchorCellAddress: true,
+                        validateCurrentCell: true,
+                        throughMouseClick: false))
                     {
                         // Edited value couldn't be committed or aborted
                         throw new InvalidOperationException(SR.DataGridView_CellChangeCannotBeCommittedOrAborted);
@@ -1857,8 +1870,13 @@ public partial class DataGridView : Control, ISupportInitialize
                         return;
                     }
 
-                    ClearSelection(value.ColumnIndex, value.RowIndex, true /*selectExceptionElement*/);
-                    if (!SetCurrentCellAddressCore(value.ColumnIndex, value.RowIndex, true, false, false))
+                    ClearSelection(value.ColumnIndex, value.RowIndex, selectExceptionElement: true);
+                    if (!SetCurrentCellAddressCore(
+                        value.ColumnIndex,
+                        value.RowIndex,
+                        setAnchorCellAddress: true,
+                        validateCurrentCell: false,
+                        throughMouseClick: false))
                     {
                         throw new InvalidOperationException(SR.DataGridView_CellChangeCannotBeCommittedOrAborted);
                     }
@@ -2449,10 +2467,10 @@ public partial class DataGridView : Control, ISupportInitialize
             }
         }
     }
-#nullable disable
+
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public DataGridViewCell FirstDisplayedCell
+    public DataGridViewCell? FirstDisplayedCell
     {
         get
         {
@@ -2662,8 +2680,10 @@ public partial class DataGridView : Control, ISupportInitialize
             }
 
             if (_ptCurrentCell.X >= 0 &&
-                !CommitEdit(DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.Scroll,
-                            false /*forCurrentCellChange*/, false /*forCurrentRowChange*/))
+                !CommitEdit(
+                    DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.Scroll,
+                    forCurrentCellChange: false,
+                    forCurrentRowChange: false))
             {
                 // Could not commit edited cell value - return silently
                 // Microsoft: should we throw an error here?
@@ -2675,7 +2695,11 @@ public partial class DataGridView : Control, ISupportInitialize
                 return;
             }
 
-            bool success = ScrollColumnIntoView(value, -1, /*committed*/ true, false /*forCurrentCellChange*/);
+            bool success = ScrollColumnIntoView(
+                columnIndex: value,
+                rowIndex: -1,
+                committed: true,
+                forCurrentCellChange: false);
             Debug.Assert(success);
 
             Debug.Assert(DisplayedBandsInfo.FirstDisplayedScrollingCol >= 0);
@@ -2737,8 +2761,10 @@ public partial class DataGridView : Control, ISupportInitialize
             }
 
             if (_ptCurrentCell.X >= 0 &&
-                !CommitEdit(DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.Scroll,
-                            false /*forCurrentCellChange*/, false /*forCurrentRowChange*/))
+                !CommitEdit(
+                    DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.Commit | DataGridViewDataErrorContexts.Scroll,
+                    forCurrentCellChange: false,
+                    forCurrentRowChange: false))
             {
                 // Could not commit edited cell value - return silently
                 // Microsoft: should we throw an error here?
@@ -2760,7 +2786,11 @@ public partial class DataGridView : Control, ISupportInitialize
             }
             else
             {
-                bool success = ScrollRowIntoView(-1, value, /*committed*/ true, false /*forCurrentCellChange*/);
+                bool success = ScrollRowIntoView(
+                    columnIndex: -1,
+                    rowIndex: value,
+                    committed: true,
+                    forCurrentCellChange: false);
                 Debug.Assert(success);
             }
         }
@@ -2777,7 +2807,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public new event EventHandler ForeColorChanged
+    public new event EventHandler? ForeColorChanged
     {
         add => base.ForeColorChanged += value;
         remove => base.ForeColorChanged -= value;
@@ -2785,6 +2815,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
+    [AllowNull]
     public override Font Font
     {
         get => base.Font;
@@ -2793,7 +2824,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public new event EventHandler FontChanged
+    public new event EventHandler? FontChanged
     {
         add => base.FontChanged += value;
         remove => base.FontChanged -= value;
@@ -2824,7 +2855,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewOnGridColorChangedDescr))]
-    public event EventHandler GridColorChanged
+    public event EventHandler? GridColorChanged
     {
         add => Events.AddHandler(s_gridColorChangedEvent, value);
         remove => Events.RemoveHandler(s_gridColorChangedEvent, value);
@@ -3013,7 +3044,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     internal bool InEndEdit => _dataGridViewOper[OperationInEndEdit];
 
-    private DataGridViewCellStyle InheritedEditingCellStyle
+    private DataGridViewCellStyle? InheritedEditingCellStyle
         => _ptCurrentCell.X == -1 ? null : CurrentCellInternal.GetInheritedStyleInternal(_ptCurrentCell.Y);
 
     internal bool InInitialization => _dataGridViewState2[State2_Initializing];
@@ -3118,11 +3149,11 @@ public partial class DataGridView : Control, ISupportInitialize
             && dataGridViewCell.OwningColumn.Visible;
     }
 
-    internal ToolTip KeyboardToolTip
+    internal ToolTip? KeyboardToolTip
     {
         get
         {
-            if (Properties.TryGetObject(s_propToolTip, out ToolTip toolTip))
+            if (Properties.TryGetObject(s_propToolTip, out ToolTip? toolTip))
             {
                 return toolTip;
             }
@@ -3177,7 +3208,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewOnMultiSelectChangedDescr))]
-    public event EventHandler MultiSelectChanged
+    public event EventHandler? MultiSelectChanged
     {
         add => Events.AddHandler(s_multiselectChangedEvent, value);
         remove => Events.RemoveHandler(s_multiselectChangedEvent, value);
@@ -3215,7 +3246,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public new event EventHandler PaddingChanged
+    public new event EventHandler? PaddingChanged
     {
         add => base.PaddingChanged += value;
         remove => base.PaddingChanged -= value;
@@ -3303,7 +3334,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewOnReadOnlyChangedDescr))]
-    public event EventHandler ReadOnlyChanged
+    public event EventHandler? ReadOnlyChanged
     {
         add => Events.AddHandler(s_readOnlyChangedEvent, value);
         remove => Events.RemoveHandler(s_readOnlyChangedEvent, value);
@@ -3492,7 +3523,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_RowHeadersBorderStyleChangedDescr))]
-    public event EventHandler RowHeadersBorderStyleChanged
+    public event EventHandler? RowHeadersBorderStyleChanged
     {
         add => Events.AddHandler(s_rowHeadersBorderStyleChangedEvent, value);
         remove => Events.RemoveHandler(s_rowHeadersBorderStyleChangedEvent, value);
@@ -3501,6 +3532,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_RowHeadersDefaultCellStyleDescr))]
     [AmbientValue(null)]
+    [AllowNull]
     public DataGridViewCellStyle RowHeadersDefaultCellStyle
     {
         get
@@ -3516,7 +3548,7 @@ public partial class DataGridView : Control, ISupportInitialize
             _rowHeadersDefaultCellStyle = value;
             if (value is not null)
             {
-                _rowHeadersDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.RowHeaders);
+                _rowHeadersDefaultCellStyle!.AddScope(this, DataGridViewCellStyleScopes.RowHeaders);
             }
 
             // Update ambient font flag depending on cell style font
@@ -3533,7 +3565,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewRowHeadersDefaultCellStyleChangedDescr))]
-    public event EventHandler RowHeadersDefaultCellStyleChanged
+    public event EventHandler? RowHeadersDefaultCellStyleChanged
     {
         add => Events.AddHandler(s_rowHeadersDefaultCellStyleChangedEvent, value);
         remove => Events.RemoveHandler(s_rowHeadersDefaultCellStyleChangedEvent, value);
@@ -3569,11 +3601,15 @@ public partial class DataGridView : Control, ISupportInitialize
                     DisplayedBandsInfo.EnsureDirtyState();
                     if (!AutoSize)
                     {
-                        PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
+                        PerformLayoutPrivate(
+                            useRowShortcut: false,
+                            computeVisibleRows: false,
+                            invalidInAdjustFillingColumns: true,
+                            repositionEditingControl: true);
                     }
 
                     InvalidateInside();
-                    OnRowHeadersGlobalAutoSize(value /*expandingRows*/);
+                    OnRowHeadersGlobalAutoSize(expandingRows: value);
                 }
             }
         }
@@ -3629,7 +3665,11 @@ public partial class DataGridView : Control, ISupportInitialize
                 {
                     if (_layout.RowHeadersVisible)
                     {
-                        PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
+                        PerformLayoutPrivate(
+                            useRowShortcut: false,
+                            computeVisibleRows: false,
+                            invalidInAdjustFillingColumns: true,
+                            repositionEditingControl: true);
                         InvalidateInside();
                     }
                 }
@@ -3641,7 +3681,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewRowHeadersWidthChangedDescr))]
-    public event EventHandler RowHeadersWidthChanged
+    public event EventHandler? RowHeadersWidthChanged
     {
         add => Events.AddHandler(s_rowHeadersWidthChangedEvent, value);
         remove => Events.RemoveHandler(s_rowHeadersWidthChangedEvent, value);
@@ -3682,7 +3722,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_RowHeadersWidthSizeModeChangedDescr))]
-    public event DataGridViewAutoSizeModeEventHandler RowHeadersWidthSizeModeChanged
+    public event DataGridViewAutoSizeModeEventHandler? RowHeadersWidthSizeModeChanged
     {
         add => Events.AddHandler(s_rowHeadersWidthSizeModeChangedEvent, value);
         remove => Events.RemoveHandler(s_rowHeadersWidthSizeModeChangedEvent, value);
@@ -3701,6 +3741,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_RowsDefaultCellStyleDescr))]
+    [AllowNull]
     public DataGridViewCellStyle RowsDefaultCellStyle
     {
         get
@@ -3720,7 +3761,7 @@ public partial class DataGridView : Control, ISupportInitialize
             _rowsDefaultCellStyle = value;
             if (value is not null)
             {
-                _rowsDefaultCellStyle.AddScope(this, DataGridViewCellStyleScopes.Rows);
+                _rowsDefaultCellStyle!.AddScope(this, DataGridViewCellStyleScopes.Rows);
             }
 
             DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(RowsDefaultCellStyle);
@@ -3734,7 +3775,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewRowsDefaultCellStyleChangedDescr))]
-    public event EventHandler RowsDefaultCellStyleChanged
+    public event EventHandler? RowsDefaultCellStyleChanged
     {
         add => Events.AddHandler(s_rowsDefaultCellStyleChangedEvent, value);
         remove => Events.RemoveHandler(s_rowsDefaultCellStyleChangedEvent, value);
@@ -3744,6 +3785,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [Browsable(true)]
     [SRDescription(nameof(SR.DataGridView_RowTemplateDescr))]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+    [AllowNull]
     public DataGridViewRow RowTemplate
     {
         get
@@ -3754,7 +3796,7 @@ public partial class DataGridView : Control, ISupportInitialize
         }
         set
         {
-            DataGridViewRow dataGridViewRow = value;
+            DataGridViewRow? dataGridViewRow = value;
             if (dataGridViewRow is not null)
             {
                 if (dataGridViewRow.DataGridView is not null)
@@ -3829,7 +3871,11 @@ public partial class DataGridView : Control, ISupportInitialize
 
                     if (!AutoSize)
                     {
-                        PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
+                        PerformLayoutPrivate(
+                            useRowShortcut: false,
+                            computeVisibleRows: false,
+                            invalidInAdjustFillingColumns: true,
+                            repositionEditingControl: true);
                     }
 
                     Invalidate();
@@ -4016,7 +4062,7 @@ public partial class DataGridView : Control, ISupportInitialize
                             // There is no reason to keep the tool tip activated
                             // deactivate it
                             ToolTipPrivate = string.Empty;
-                            _toolTipControl.Activate(false /*activate*/);
+                            _toolTipControl.Activate(activate: false);
                         }
                     }
                     else
@@ -4064,14 +4110,14 @@ public partial class DataGridView : Control, ISupportInitialize
                         {
                             // The tool tip hasn't yet been activated
                             // activate it now
-                            _toolTipControl.Activate(!string.IsNullOrEmpty(ToolTipPrivate) /*activate*/);
+                            _toolTipControl.Activate(activate: !string.IsNullOrEmpty(ToolTipPrivate));
                         }
                         else
                         {
                             // There is no reason to keep the tool tip activated
                             // deactivate it
                             ToolTipPrivate = string.Empty;
-                            _toolTipControl.Activate(false /*activate*/);
+                            _toolTipControl.Activate(activate: false);
                         }
                     }
                     else
@@ -4164,13 +4210,13 @@ public partial class DataGridView : Control, ISupportInitialize
                         // there is no reason to keep the tool tip activated
                         // deactivate it
                         ToolTipPrivate = string.Empty;
-                        _toolTipControl.Activate(false /*activate*/);
+                        _toolTipControl.Activate(activate: false);
                     }
 
                     if (!value && (ShowCellErrors || ShowCellToolTips))
                     {
                         // reset the tool tip
-                        _toolTipControl.Activate(!string.IsNullOrEmpty(ToolTipPrivate));
+                        _toolTipControl.Activate(activate: !string.IsNullOrEmpty(ToolTipPrivate));
                     }
                 }
 
@@ -4203,7 +4249,7 @@ public partial class DataGridView : Control, ISupportInitialize
     }
 
     [Browsable(false)]
-    public DataGridViewColumn SortedColumn { get; private set; }
+    public DataGridViewColumn? SortedColumn { get; private set; }
 
     [Browsable(false)]
     public SortOrder SortOrder { get; private set; }
@@ -4232,6 +4278,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Bindable(false)]
+    [AllowNull]
     public override string Text
     {
         get => base.Text;
@@ -4240,7 +4287,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler TextChanged
+    public new event EventHandler? TextChanged
     {
         add => base.TextChanged += value;
         remove => base.TextChanged -= value;
@@ -4282,6 +4329,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
     public DataGridViewHeaderCell TopLeftHeaderCell
     {
         get
@@ -4291,7 +4339,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 TopLeftHeaderCell = new DataGridViewTopLeftHeaderCell();
             }
 
-            return _topLeftHeaderCell;
+            return _topLeftHeaderCell!;
         }
         set
         {
@@ -4304,7 +4352,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 }
 
                 _topLeftHeaderCell = value;
-                if (value is not null)
+                if (_topLeftHeaderCell is not null)
                 {
                     _topLeftHeaderCell.DataGridView = this;
                 }
@@ -4329,7 +4377,7 @@ public partial class DataGridView : Control, ISupportInitialize
         {
             if (_dataGridViewState1[State1_CustomCursorSet])
             {
-                return _oldCursor;
+                return _oldCursor!;
             }
             else
             {
@@ -4436,7 +4484,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewAutoSizeColumnModeChangedDescr))]
-    public event DataGridViewAutoSizeColumnModeEventHandler AutoSizeColumnModeChanged
+    public event DataGridViewAutoSizeColumnModeEventHandler? AutoSizeColumnModeChanged
     {
         add => Events.AddHandler(s_autosizeColumnModeChangedEvent, value);
         remove => Events.RemoveHandler(s_autosizeColumnModeChangedEvent, value);
@@ -4444,7 +4492,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_CancelRowEditDescr))]
-    public event QuestionEventHandler CancelRowEdit
+    public event QuestionEventHandler? CancelRowEdit
     {
         add => Events.AddHandler(s_cancelRowEditEvent, value);
         remove => Events.RemoveHandler(s_cancelRowEditEvent, value);
@@ -4452,7 +4500,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.DataGridView_CellBeginEditDescr))]
-    public event DataGridViewCellCancelEventHandler CellBeginEdit
+    public event DataGridViewCellCancelEventHandler? CellBeginEdit
     {
         add => Events.AddHandler(s_cellBeginEditEvent, value);
         remove => Events.RemoveHandler(s_cellBeginEditEvent, value);
@@ -4460,7 +4508,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_CellClickDescr))]
-    public event DataGridViewCellEventHandler CellClick
+    public event DataGridViewCellEventHandler? CellClick
     {
         add => Events.AddHandler(s_cellClickEvent, value);
         remove => Events.RemoveHandler(s_cellClickEvent, value);
@@ -4468,7 +4516,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_CellContentClick))]
-    public event DataGridViewCellEventHandler CellContentClick
+    public event DataGridViewCellEventHandler? CellContentClick
     {
         add => Events.AddHandler(s_cellContentClickEvent, value);
         remove => Events.RemoveHandler(s_cellContentClickEvent, value);
@@ -4476,7 +4524,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_CellContentDoubleClick))]
-    public event DataGridViewCellEventHandler CellContentDoubleClick
+    public event DataGridViewCellEventHandler? CellContentDoubleClick
     {
         add => Events.AddHandler(s_cellContentDoubleClickEvent, value);
         remove => Events.RemoveHandler(s_cellContentDoubleClickEvent, value);
@@ -4485,7 +4533,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_CellContextMenuStripChanged))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public event DataGridViewCellEventHandler CellContextMenuStripChanged
+    public event DataGridViewCellEventHandler? CellContextMenuStripChanged
     {
         add => Events.AddHandler(s_cellContextMenuStripChangedEvent, value);
         remove => Events.RemoveHandler(s_cellContextMenuStripChangedEvent, value);
@@ -4494,7 +4542,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_CellContextMenuStripNeeded))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public event DataGridViewCellContextMenuStripNeededEventHandler CellContextMenuStripNeeded
+    public event DataGridViewCellContextMenuStripNeededEventHandler? CellContextMenuStripNeeded
     {
         add => Events.AddHandler(s_cellContextMenuStripNeededEvent, value);
         remove => Events.RemoveHandler(s_cellContextMenuStripNeededEvent, value);
@@ -4502,7 +4550,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_CellDoubleClickDescr))]
-    public event DataGridViewCellEventHandler CellDoubleClick
+    public event DataGridViewCellEventHandler? CellDoubleClick
     {
         add => Events.AddHandler(s_cellDoubleClickEvent, value);
         remove => Events.RemoveHandler(s_cellDoubleClickEvent, value);
@@ -4510,7 +4558,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.DataGridView_CellEndEditDescr))]
-    public event DataGridViewCellEventHandler CellEndEdit
+    public event DataGridViewCellEventHandler? CellEndEdit
     {
         add => Events.AddHandler(s_cellEndEditEvent, value);
         remove => Events.RemoveHandler(s_cellEndEditEvent, value);
@@ -4518,7 +4566,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatFocus))]
     [SRDescription(nameof(SR.DataGridView_CellEnterDescr))]
-    public event DataGridViewCellEventHandler CellEnter
+    public event DataGridViewCellEventHandler? CellEnter
     {
         add => Events.AddHandler(s_cellEnterEvent, value);
         remove => Events.RemoveHandler(s_cellEnterEvent, value);
@@ -4526,7 +4574,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_CellErrorTextChangedDescr))]
-    public event DataGridViewCellEventHandler CellErrorTextChanged
+    public event DataGridViewCellEventHandler? CellErrorTextChanged
     {
         add => Events.AddHandler(s_cellErrorTextChangedEvent, value);
         remove => Events.RemoveHandler(s_cellErrorTextChangedEvent, value);
@@ -4535,7 +4583,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.DataGridView_CellErrorTextNeededDescr))]
-    public event DataGridViewCellErrorTextNeededEventHandler CellErrorTextNeeded
+    public event DataGridViewCellErrorTextNeededEventHandler? CellErrorTextNeeded
     {
         add => Events.AddHandler(s_cellErrorTextNeededEvent, value);
         remove => Events.RemoveHandler(s_cellErrorTextNeededEvent, value);
@@ -4543,7 +4591,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatDisplay))]
     [SRDescription(nameof(SR.DataGridView_CellFormattingDescr))]
-    public event DataGridViewCellFormattingEventHandler CellFormatting
+    public event DataGridViewCellFormattingEventHandler? CellFormatting
     {
         add => Events.AddHandler(s_cellFormattingEvent, value);
         remove => Events.RemoveHandler(s_cellFormattingEvent, value);
@@ -4551,7 +4599,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatFocus))]
     [SRDescription(nameof(SR.DataGridView_CellLeaveDescr))]
-    public event DataGridViewCellEventHandler CellLeave
+    public event DataGridViewCellEventHandler? CellLeave
     {
         add => Events.AddHandler(s_cellLeaveEvent, value);
         remove => Events.RemoveHandler(s_cellLeaveEvent, value);
@@ -4559,7 +4607,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_CellMouseClickDescr))]
-    public event DataGridViewCellMouseEventHandler CellMouseClick
+    public event DataGridViewCellMouseEventHandler? CellMouseClick
     {
         add => Events.AddHandler(s_cellMouseClickEvent, value);
         remove => Events.RemoveHandler(s_cellMouseClickEvent, value);
@@ -4567,7 +4615,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_CellMouseDoubleClickDescr))]
-    public event DataGridViewCellMouseEventHandler CellMouseDoubleClick
+    public event DataGridViewCellMouseEventHandler? CellMouseDoubleClick
     {
         add => Events.AddHandler(s_cellMouseDoubleClickEvent, value);
         remove => Events.RemoveHandler(s_cellMouseDoubleClickEvent, value);
@@ -4575,7 +4623,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_CellMouseDownDescr))]
-    public event DataGridViewCellMouseEventHandler CellMouseDown
+    public event DataGridViewCellMouseEventHandler? CellMouseDown
     {
         add => Events.AddHandler(s_cellMouseDownEvent, value);
         remove => Events.RemoveHandler(s_cellMouseDownEvent, value);
@@ -4583,7 +4631,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_CellMouseEnterDescr))]
-    public event DataGridViewCellEventHandler CellMouseEnter
+    public event DataGridViewCellEventHandler? CellMouseEnter
     {
         add => Events.AddHandler(s_cellMouseEnterEvent, value);
         remove => Events.RemoveHandler(s_cellMouseEnterEvent, value);
@@ -4591,7 +4639,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_CellMouseLeaveDescr))]
-    public event DataGridViewCellEventHandler CellMouseLeave
+    public event DataGridViewCellEventHandler? CellMouseLeave
     {
         add => Events.AddHandler(s_cellMouseLeaveEvent, value);
         remove => Events.RemoveHandler(s_cellMouseLeaveEvent, value);
@@ -4599,7 +4647,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_CellMouseMoveDescr))]
-    public event DataGridViewCellMouseEventHandler CellMouseMove
+    public event DataGridViewCellMouseEventHandler? CellMouseMove
     {
         add => Events.AddHandler(s_cellMouseMoveEvent, value);
         remove => Events.RemoveHandler(s_cellMouseMoveEvent, value);
@@ -4607,7 +4655,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_CellMouseUpDescr))]
-    public event DataGridViewCellMouseEventHandler CellMouseUp
+    public event DataGridViewCellMouseEventHandler? CellMouseUp
     {
         add => Events.AddHandler(s_cellMouseUpEvent, value);
         remove => Events.RemoveHandler(s_cellMouseUpEvent, value);
@@ -4615,7 +4663,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatDisplay))]
     [SRDescription(nameof(SR.DataGridView_CellPaintingDescr))]
-    public event DataGridViewCellPaintingEventHandler CellPainting
+    public event DataGridViewCellPaintingEventHandler? CellPainting
     {
         add => Events.AddHandler(s_cellPaintingEvent, value);
         remove => Events.RemoveHandler(s_cellPaintingEvent, value);
@@ -4623,7 +4671,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatDisplay))]
     [SRDescription(nameof(SR.DataGridView_CellParsingDescr))]
-    public event DataGridViewCellParsingEventHandler CellParsing
+    public event DataGridViewCellParsingEventHandler? CellParsing
     {
         add => Events.AddHandler(s_cellParsingEvent, value);
         remove => Events.RemoveHandler(s_cellParsingEvent, value);
@@ -4631,7 +4679,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_CellStateChangedDescr))]
-    public event DataGridViewCellStateChangedEventHandler CellStateChanged
+    public event DataGridViewCellStateChangedEventHandler? CellStateChanged
     {
         add => Events.AddHandler(s_cellStateChangedEvent, value);
         remove => Events.RemoveHandler(s_cellStateChangedEvent, value);
@@ -4639,7 +4687,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_CellStyleChangedDescr))]
-    public event DataGridViewCellEventHandler CellStyleChanged
+    public event DataGridViewCellEventHandler? CellStyleChanged
     {
         add => Events.AddHandler(s_cellStyleChangedEvent, value);
         remove => Events.RemoveHandler(s_cellStyleChangedEvent, value);
@@ -4647,7 +4695,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_CellStyleContentChangedDescr))]
-    public event DataGridViewCellStyleContentChangedEventHandler CellStyleContentChanged
+    public event DataGridViewCellStyleContentChangedEventHandler? CellStyleContentChanged
     {
         add => Events.AddHandler(s_cellStyleContentChangedEvent, value);
         remove => Events.RemoveHandler(s_cellStyleContentChangedEvent, value);
@@ -4655,7 +4703,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_CellToolTipTextChangedDescr))]
-    public event DataGridViewCellEventHandler CellToolTipTextChanged
+    public event DataGridViewCellEventHandler? CellToolTipTextChanged
     {
         add => Events.AddHandler(s_cellTooltipTextChangedEvent, value);
         remove => Events.RemoveHandler(s_cellTooltipTextChangedEvent, value);
@@ -4664,7 +4712,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_CellToolTipTextNeededDescr))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public event DataGridViewCellToolTipTextNeededEventHandler CellToolTipTextNeeded
+    public event DataGridViewCellToolTipTextNeededEventHandler? CellToolTipTextNeeded
     {
         add => Events.AddHandler(s_cellTooltipTextNeededEvent, value);
         remove => Events.RemoveHandler(s_cellTooltipTextNeededEvent, value);
@@ -4672,7 +4720,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatFocus))]
     [SRDescription(nameof(SR.DataGridView_CellValidatedDescr))]
-    public event DataGridViewCellEventHandler CellValidated
+    public event DataGridViewCellEventHandler? CellValidated
     {
         add => Events.AddHandler(s_cellValidatedEvent, value);
         remove => Events.RemoveHandler(s_cellValidatedEvent, value);
@@ -4680,7 +4728,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatFocus))]
     [SRDescription(nameof(SR.DataGridView_CellValidatingDescr))]
-    public event DataGridViewCellValidatingEventHandler CellValidating
+    public event DataGridViewCellValidatingEventHandler? CellValidating
     {
         add => Events.AddHandler(s_cellValidatingEvent, value);
         remove => Events.RemoveHandler(s_cellValidatingEvent, value);
@@ -4688,7 +4736,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_CellValueChangedDescr))]
-    public event DataGridViewCellEventHandler CellValueChanged
+    public event DataGridViewCellEventHandler? CellValueChanged
     {
         add => Events.AddHandler(s_cellValueChangedEvent, value);
         remove => Events.RemoveHandler(s_cellValueChangedEvent, value);
@@ -4697,7 +4745,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.DataGridView_CellValueNeededDescr))]
-    public event DataGridViewCellValueEventHandler CellValueNeeded
+    public event DataGridViewCellValueEventHandler? CellValueNeeded
     {
         add => Events.AddHandler(s_cellValueNeededEvent, value);
         remove => Events.RemoveHandler(s_cellValueNeededEvent, value);
@@ -4706,7 +4754,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.DataGridView_CellValuePushedDescr))]
-    public event DataGridViewCellValueEventHandler CellValuePushed
+    public event DataGridViewCellValueEventHandler? CellValuePushed
     {
         add => Events.AddHandler(s_cellValuePushedEvent, value);
         remove => Events.RemoveHandler(s_cellValuePushedEvent, value);
@@ -4714,7 +4762,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_ColumnAddedDescr))]
-    public event DataGridViewColumnEventHandler ColumnAdded
+    public event DataGridViewColumnEventHandler? ColumnAdded
     {
         add => Events.AddHandler(s_columnAddedEvent, value);
         remove => Events.RemoveHandler(s_columnAddedEvent, value);
@@ -4722,7 +4770,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_ColumnContextMenuStripChangedDescr))]
-    public event DataGridViewColumnEventHandler ColumnContextMenuStripChanged
+    public event DataGridViewColumnEventHandler? ColumnContextMenuStripChanged
     {
         add => Events.AddHandler(s_columnContextMenuStripChangedEvent, value);
         remove => Events.RemoveHandler(s_columnContextMenuStripChangedEvent, value);
@@ -4730,7 +4778,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_ColumnDataPropertyNameChangedDescr))]
-    public event DataGridViewColumnEventHandler ColumnDataPropertyNameChanged
+    public event DataGridViewColumnEventHandler? ColumnDataPropertyNameChanged
     {
         add => Events.AddHandler(s_columnDataPropertyNameChangedEvent, value);
         remove => Events.RemoveHandler(s_columnDataPropertyNameChangedEvent, value);
@@ -4738,7 +4786,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleChangedDescr))]
-    public event DataGridViewColumnEventHandler ColumnDefaultCellStyleChanged
+    public event DataGridViewColumnEventHandler? ColumnDefaultCellStyleChanged
     {
         add => Events.AddHandler(s_columnDefaultCellStyleChangedEvent, value);
         remove => Events.RemoveHandler(s_columnDefaultCellStyleChangedEvent, value);
@@ -4746,7 +4794,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_ColumnDisplayIndexChangedDescr))]
-    public event DataGridViewColumnEventHandler ColumnDisplayIndexChanged
+    public event DataGridViewColumnEventHandler? ColumnDisplayIndexChanged
     {
         add => Events.AddHandler(s_columnDisplayIndexChangedEvent, value);
         remove => Events.RemoveHandler(s_columnDisplayIndexChangedEvent, value);
@@ -4754,7 +4802,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_ColumnDividerDoubleClickDescr))]
-    public event DataGridViewColumnDividerDoubleClickEventHandler ColumnDividerDoubleClick
+    public event DataGridViewColumnDividerDoubleClickEventHandler? ColumnDividerDoubleClick
     {
         add => Events.AddHandler(s_columnDividerDoubleClickEvent, value);
         remove => Events.RemoveHandler(s_columnDividerDoubleClickEvent, value);
@@ -4762,7 +4810,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_ColumnDividerWidthChangedDescr))]
-    public event DataGridViewColumnEventHandler ColumnDividerWidthChanged
+    public event DataGridViewColumnEventHandler? ColumnDividerWidthChanged
     {
         add => Events.AddHandler(s_columnDividerWidthChangedEvent, value);
         remove => Events.RemoveHandler(s_columnDividerWidthChangedEvent, value);
@@ -4770,7 +4818,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_ColumnHeaderMouseClickDescr))]
-    public event DataGridViewCellMouseEventHandler ColumnHeaderMouseClick
+    public event DataGridViewCellMouseEventHandler? ColumnHeaderMouseClick
     {
         add => Events.AddHandler(s_columnHeaderMouseClickEvent, value);
         remove => Events.RemoveHandler(s_columnHeaderMouseClickEvent, value);
@@ -4778,7 +4826,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_ColumnHeaderMouseDoubleClickDescr))]
-    public event DataGridViewCellMouseEventHandler ColumnHeaderMouseDoubleClick
+    public event DataGridViewCellMouseEventHandler? ColumnHeaderMouseDoubleClick
     {
         add => Events.AddHandler(s_columnHeaderMouseDoubleClickEvent, value);
         remove => Events.RemoveHandler(s_columnHeaderMouseDoubleClickEvent, value);
@@ -4786,7 +4834,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_ColumnHeaderCellChangedDescr))]
-    public event DataGridViewColumnEventHandler ColumnHeaderCellChanged
+    public event DataGridViewColumnEventHandler? ColumnHeaderCellChanged
     {
         add => Events.AddHandler(s_columnHeaderCellChangedEvent, value);
         remove => Events.RemoveHandler(s_columnHeaderCellChangedEvent, value);
@@ -4794,7 +4842,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_ColumnMinimumWidthChangedDescr))]
-    public event DataGridViewColumnEventHandler ColumnMinimumWidthChanged
+    public event DataGridViewColumnEventHandler? ColumnMinimumWidthChanged
     {
         add => Events.AddHandler(s_columnMinimumWidthChangedEvent, value);
         remove => Events.RemoveHandler(s_columnMinimumWidthChangedEvent, value);
@@ -4802,7 +4850,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_ColumnNameChangedDescr))]
-    public event DataGridViewColumnEventHandler ColumnNameChanged
+    public event DataGridViewColumnEventHandler? ColumnNameChanged
     {
         add => Events.AddHandler(s_columnNameChangedEvent, value);
         remove => Events.RemoveHandler(s_columnNameChangedEvent, value);
@@ -4810,7 +4858,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_ColumnRemovedDescr))]
-    public event DataGridViewColumnEventHandler ColumnRemoved
+    public event DataGridViewColumnEventHandler? ColumnRemoved
     {
         add => Events.AddHandler(s_columnRemovedEvent, value);
         remove => Events.RemoveHandler(s_columnRemovedEvent, value);
@@ -4818,7 +4866,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridViewColumnSortModeChangedDescr))]
-    public event DataGridViewColumnEventHandler ColumnSortModeChanged
+    public event DataGridViewColumnEventHandler? ColumnSortModeChanged
     {
         add => Events.AddHandler(s_columnSortModeChangedEvent, value);
         remove => Events.RemoveHandler(s_columnSortModeChangedEvent, value);
@@ -4826,7 +4874,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_ColumnStateChangedDescr))]
-    public event DataGridViewColumnStateChangedEventHandler ColumnStateChanged
+    public event DataGridViewColumnStateChangedEventHandler? ColumnStateChanged
     {
         add => Events.AddHandler(s_columnStateChangedEvent, value);
         remove => Events.RemoveHandler(s_columnStateChangedEvent, value);
@@ -4834,7 +4882,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_ColumnToolTipTextChangedDescr))]
-    public event DataGridViewColumnEventHandler ColumnToolTipTextChanged
+    public event DataGridViewColumnEventHandler? ColumnToolTipTextChanged
     {
         add => Events.AddHandler(s_columnTooltipTextChangedEvent, value);
         remove => Events.RemoveHandler(s_columnTooltipTextChangedEvent, value);
@@ -4842,7 +4890,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_ColumnWidthChangedDescr))]
-    public event DataGridViewColumnEventHandler ColumnWidthChanged
+    public event DataGridViewColumnEventHandler? ColumnWidthChanged
     {
         add => Events.AddHandler(s_columnWidthChangedEvent, value);
         remove => Events.RemoveHandler(s_columnWidthChangedEvent, value);
@@ -4850,7 +4898,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_CurrentCellChangedDescr))]
-    public event EventHandler CurrentCellChanged
+    public event EventHandler? CurrentCellChanged
     {
         add => Events.AddHandler(s_currentCellChangedEvent, value);
         remove => Events.RemoveHandler(s_currentCellChangedEvent, value);
@@ -4859,7 +4907,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatBehavior))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.DataGridView_CurrentCellDirtyStateChangedDescr))]
-    public event EventHandler CurrentCellDirtyStateChanged
+    public event EventHandler? CurrentCellDirtyStateChanged
     {
         add => Events.AddHandler(s_currentCellDirtyStateChangedEvent, value);
         remove => Events.RemoveHandler(s_currentCellDirtyStateChangedEvent, value);
@@ -4867,7 +4915,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.DataGridView_DataBindingCompleteDescr))]
-    public event DataGridViewBindingCompleteEventHandler DataBindingComplete
+    public event DataGridViewBindingCompleteEventHandler? DataBindingComplete
     {
         add => Events.AddHandler(s_dataBindingCompleteEvent, value);
         remove => Events.RemoveHandler(s_dataBindingCompleteEvent, value);
@@ -4875,7 +4923,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_DataErrorDescr))]
-    public event DataGridViewDataErrorEventHandler DataError
+    public event DataGridViewDataErrorEventHandler? DataError
     {
         add => Events.AddHandler(s_dataErrorEvent, value);
         remove => Events.RemoveHandler(s_dataErrorEvent, value);
@@ -4884,7 +4932,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.DataGridView_DefaultValuesNeededDescr))]
-    public event DataGridViewRowEventHandler DefaultValuesNeeded
+    public event DataGridViewRowEventHandler? DefaultValuesNeeded
     {
         add => Events.AddHandler(s_defaultValuesNeededEvent, value);
         remove => Events.RemoveHandler(s_defaultValuesNeededEvent, value);
@@ -4892,7 +4940,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_EditingControlShowingDescr))]
-    public event DataGridViewEditingControlShowingEventHandler EditingControlShowing
+    public event DataGridViewEditingControlShowingEventHandler? EditingControlShowing
     {
         add => Events.AddHandler(s_editingControlShowingEvent, value);
         remove => Events.RemoveHandler(s_editingControlShowingEvent, value);
@@ -4900,7 +4948,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.DataGridView_NewRowNeededDescr))]
-    public event DataGridViewRowEventHandler NewRowNeeded
+    public event DataGridViewRowEventHandler? NewRowNeeded
     {
         add => Events.AddHandler(s_newRowNeededEvent, value);
         remove => Events.RemoveHandler(s_newRowNeededEvent, value);
@@ -4908,7 +4956,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_RowContextMenuStripChangedDescr))]
-    public event DataGridViewRowEventHandler RowContextMenuStripChanged
+    public event DataGridViewRowEventHandler? RowContextMenuStripChanged
     {
         add => Events.AddHandler(s_rowContextMenuStripChangedEvent, value);
         remove => Events.RemoveHandler(s_rowContextMenuStripChangedEvent, value);
@@ -4917,7 +4965,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.DataGridView_RowContextMenuStripNeededDescr))]
-    public event DataGridViewRowContextMenuStripNeededEventHandler RowContextMenuStripNeeded
+    public event DataGridViewRowContextMenuStripNeededEventHandler? RowContextMenuStripNeeded
     {
         add => Events.AddHandler(s_rowContextMenuStripNeededEvent, value);
         remove => Events.RemoveHandler(s_rowContextMenuStripNeededEvent, value);
@@ -4925,7 +4973,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_RowDefaultCellStyleChangedDescr))]
-    public event DataGridViewRowEventHandler RowDefaultCellStyleChanged
+    public event DataGridViewRowEventHandler? RowDefaultCellStyleChanged
     {
         add => Events.AddHandler(s_rowDefaultCellStyleChangedEvent, value);
         remove => Events.RemoveHandler(s_rowDefaultCellStyleChangedEvent, value);
@@ -4934,7 +4982,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.DataGridView_RowDirtyStateNeededDescr))]
-    public event QuestionEventHandler RowDirtyStateNeeded
+    public event QuestionEventHandler? RowDirtyStateNeeded
     {
         add => Events.AddHandler(s_rowDirtyStateNeededEvent, value);
         remove => Events.RemoveHandler(s_rowDirtyStateNeededEvent, value);
@@ -4942,7 +4990,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_RowDividerDoubleClickDescr))]
-    public event DataGridViewRowDividerDoubleClickEventHandler RowDividerDoubleClick
+    public event DataGridViewRowDividerDoubleClickEventHandler? RowDividerDoubleClick
     {
         add => Events.AddHandler(s_rowDividerDoubleClickEvent, value);
         remove => Events.RemoveHandler(s_rowDividerDoubleClickEvent, value);
@@ -4950,7 +4998,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_RowDividerHeightChangedDescr))]
-    public event DataGridViewRowEventHandler RowDividerHeightChanged
+    public event DataGridViewRowEventHandler? RowDividerHeightChanged
     {
         add => Events.AddHandler(s_rowDividerHeightChangedEvent, value);
         remove => Events.RemoveHandler(s_rowDividerHeightChangedEvent, value);
@@ -4958,7 +5006,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatFocus))]
     [SRDescription(nameof(SR.DataGridView_RowEnterDescr))]
-    public event DataGridViewCellEventHandler RowEnter
+    public event DataGridViewCellEventHandler? RowEnter
     {
         add => Events.AddHandler(s_rowEnterEvent, value);
         remove => Events.RemoveHandler(s_rowEnterEvent, value);
@@ -4966,7 +5014,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_RowErrorTextChangedDescr))]
-    public event DataGridViewRowEventHandler RowErrorTextChanged
+    public event DataGridViewRowEventHandler? RowErrorTextChanged
     {
         add => Events.AddHandler(s_rowErrorTextChangedEvent, value);
         remove => Events.RemoveHandler(s_rowErrorTextChangedEvent, value);
@@ -4975,7 +5023,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.DataGridView_RowErrorTextNeededDescr))]
-    public event DataGridViewRowErrorTextNeededEventHandler RowErrorTextNeeded
+    public event DataGridViewRowErrorTextNeededEventHandler? RowErrorTextNeeded
     {
         add => Events.AddHandler(s_rowErrorTextNeededEvent, value);
         remove => Events.RemoveHandler(s_rowErrorTextNeededEvent, value);
@@ -4983,7 +5031,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_RowHeaderMouseClickDescr))]
-    public event DataGridViewCellMouseEventHandler RowHeaderMouseClick
+    public event DataGridViewCellMouseEventHandler? RowHeaderMouseClick
     {
         add => Events.AddHandler(s_rowHeaderMouseClickEvent, value);
         remove => Events.RemoveHandler(s_rowHeaderMouseClickEvent, value);
@@ -4991,7 +5039,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatMouse))]
     [SRDescription(nameof(SR.DataGridView_RowHeaderMouseDoubleClickDescr))]
-    public event DataGridViewCellMouseEventHandler RowHeaderMouseDoubleClick
+    public event DataGridViewCellMouseEventHandler? RowHeaderMouseDoubleClick
     {
         add => Events.AddHandler(s_rowHeaderMouseDoubleClickEvent, value);
         remove => Events.RemoveHandler(s_rowHeaderMouseDoubleClickEvent, value);
@@ -4999,7 +5047,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_RowHeaderCellChangedDescr))]
-    public event DataGridViewRowEventHandler RowHeaderCellChanged
+    public event DataGridViewRowEventHandler? RowHeaderCellChanged
     {
         add => Events.AddHandler(s_rowHeaderCellChangedEvent, value);
         remove => Events.RemoveHandler(s_rowHeaderCellChangedEvent, value);
@@ -5007,7 +5055,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_RowHeightChangedDescr))]
-    public event DataGridViewRowEventHandler RowHeightChanged
+    public event DataGridViewRowEventHandler? RowHeightChanged
     {
         add => Events.AddHandler(s_rowHeightChangedEvent, value);
         remove => Events.RemoveHandler(s_rowHeightChangedEvent, value);
@@ -5016,7 +5064,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.DataGridView_RowHeightInfoNeededDescr))]
-    public event DataGridViewRowHeightInfoNeededEventHandler RowHeightInfoNeeded
+    public event DataGridViewRowHeightInfoNeededEventHandler? RowHeightInfoNeeded
     {
         add => Events.AddHandler(s_rowHeightInfoNeededEvent, value);
         remove => Events.RemoveHandler(s_rowHeightInfoNeededEvent, value);
@@ -5035,7 +5083,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.DataGridView_RowHeightInfoPushedDescr))]
-    public event DataGridViewRowHeightInfoPushedEventHandler RowHeightInfoPushed
+    public event DataGridViewRowHeightInfoPushedEventHandler? RowHeightInfoPushed
     {
         add => Events.AddHandler(s_rowHeightInfoPushedEvent, value);
         remove => Events.RemoveHandler(s_rowHeightInfoPushedEvent, value);
@@ -5043,7 +5091,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatFocus))]
     [SRDescription(nameof(SR.DataGridView_RowLeaveDescr))]
-    public event DataGridViewCellEventHandler RowLeave
+    public event DataGridViewCellEventHandler? RowLeave
     {
         add => Events.AddHandler(s_rowLeaveEvent, value);
         remove => Events.RemoveHandler(s_rowLeaveEvent, value);
@@ -5051,7 +5099,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridView_RowMinimumHeightChangedDescr))]
-    public event DataGridViewRowEventHandler RowMinimumHeightChanged
+    public event DataGridViewRowEventHandler? RowMinimumHeightChanged
     {
         add => Events.AddHandler(s_rowMinimumHeightChangeEvent, value);
         remove => Events.RemoveHandler(s_rowMinimumHeightChangeEvent, value);
@@ -5059,7 +5107,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatDisplay))]
     [SRDescription(nameof(SR.DataGridView_RowPostPaintDescr))]
-    public event DataGridViewRowPostPaintEventHandler RowPostPaint
+    public event DataGridViewRowPostPaintEventHandler? RowPostPaint
     {
         add => Events.AddHandler(s_rowPostPaintEvent, value);
         remove => Events.RemoveHandler(s_rowPostPaintEvent, value);
@@ -5077,7 +5125,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatDisplay))]
     [SRDescription(nameof(SR.DataGridView_RowPrePaintDescr))]
-    public event DataGridViewRowPrePaintEventHandler RowPrePaint
+    public event DataGridViewRowPrePaintEventHandler? RowPrePaint
     {
         add => Events.AddHandler(s_rowPrePaintEvent, value);
         remove => Events.RemoveHandler(s_rowPrePaintEvent, value);
@@ -5095,7 +5143,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_RowsAddedDescr))]
-    public event DataGridViewRowsAddedEventHandler RowsAdded
+    public event DataGridViewRowsAddedEventHandler? RowsAdded
     {
         add => Events.AddHandler(s_rowsAddedEvent, value);
         remove => Events.RemoveHandler(s_rowsAddedEvent, value);
@@ -5103,7 +5151,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_RowsRemovedDescr))]
-    public event DataGridViewRowsRemovedEventHandler RowsRemoved
+    public event DataGridViewRowsRemovedEventHandler? RowsRemoved
     {
         add => Events.AddHandler(s_rowsRemovedEvent, value);
         remove => Events.RemoveHandler(s_rowsRemovedEvent, value);
@@ -5111,7 +5159,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_RowStateChangedDescr))]
-    public event DataGridViewRowStateChangedEventHandler RowStateChanged
+    public event DataGridViewRowStateChangedEventHandler? RowStateChanged
     {
         add => Events.AddHandler(s_rowStateChangedEvent, value);
         remove => Events.RemoveHandler(s_rowStateChangedEvent, value);
@@ -5120,7 +5168,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatBehavior))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.DataGridView_RowUnsharedDescr))]
-    public event DataGridViewRowEventHandler RowUnshared
+    public event DataGridViewRowEventHandler? RowUnshared
     {
         add => Events.AddHandler(s_rowUnsharedEvent, value);
         remove => Events.RemoveHandler(s_rowUnsharedEvent, value);
@@ -5128,7 +5176,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatFocus))]
     [SRDescription(nameof(SR.DataGridView_RowValidatedDescr))]
-    public event DataGridViewCellEventHandler RowValidated
+    public event DataGridViewCellEventHandler? RowValidated
     {
         add => Events.AddHandler(s_rowValidatedEvent, value);
         remove => Events.RemoveHandler(s_rowValidatedEvent, value);
@@ -5136,7 +5184,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatFocus))]
     [SRDescription(nameof(SR.DataGridView_RowValidatingDescr))]
-    public event DataGridViewCellCancelEventHandler RowValidating
+    public event DataGridViewCellCancelEventHandler? RowValidating
     {
         add => Events.AddHandler(s_rowValidatingEvent, value);
         remove => Events.RemoveHandler(s_rowValidatingEvent, value);
@@ -5144,7 +5192,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_ScrollDescr))]
-    public event ScrollEventHandler Scroll
+    public event ScrollEventHandler? Scroll
     {
         add => Events.AddHandler(s_scrollEvent, value);
         remove => Events.RemoveHandler(s_scrollEvent, value);
@@ -5152,7 +5200,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_SelectionChangedDescr))]
-    public event EventHandler SelectionChanged
+    public event EventHandler? SelectionChanged
     {
         add => Events.AddHandler(s_selectionChangedEvent, value);
         remove => Events.RemoveHandler(s_selectionChangedEvent, value);
@@ -5161,7 +5209,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRCategory(nameof(SR.CatData))]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [SRDescription(nameof(SR.DataGridView_SortCompareDescr))]
-    public event DataGridViewSortCompareEventHandler SortCompare
+    public event DataGridViewSortCompareEventHandler? SortCompare
     {
         add => Events.AddHandler(s_sortCompareEvent, value);
         remove => Events.RemoveHandler(s_sortCompareEvent, value);
@@ -5169,7 +5217,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.DataGridView_SortedDescr))]
-    public event EventHandler Sorted
+    public event EventHandler? Sorted
     {
         add => Events.AddHandler(s_sortedEvent, value);
         remove => Events.RemoveHandler(s_sortedEvent, value);
@@ -5177,7 +5225,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler StyleChanged
+    public new event EventHandler? StyleChanged
     {
         add => base.StyleChanged += value;
         remove => base.StyleChanged -= value;
@@ -5185,7 +5233,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_UserAddedRowDescr))]
-    public event DataGridViewRowEventHandler UserAddedRow
+    public event DataGridViewRowEventHandler? UserAddedRow
     {
         add => Events.AddHandler(s_userAddedRowEvent, value);
         remove => Events.RemoveHandler(s_userAddedRowEvent, value);
@@ -5193,7 +5241,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_UserDeletedRowDescr))]
-    public event DataGridViewRowEventHandler UserDeletedRow
+    public event DataGridViewRowEventHandler? UserDeletedRow
     {
         add => Events.AddHandler(s_userDeletedRowEvent, value);
         remove => Events.RemoveHandler(s_userDeletedRowEvent, value);
@@ -5201,7 +5249,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAction))]
     [SRDescription(nameof(SR.DataGridView_UserDeletingRowDescr))]
-    public event DataGridViewRowCancelEventHandler UserDeletingRow
+    public event DataGridViewRowCancelEventHandler? UserDeletingRow
     {
         add => Events.AddHandler(s_userDeletingRowEvent, value);
         remove => Events.RemoveHandler(s_userDeletingRowEvent, value);
@@ -5245,9 +5293,13 @@ public partial class DataGridView : Control, ISupportInitialize
                 {
                     // Resetting SelectionMode to its acceptable default value. We don't want the control to ever end up in an invalid state.
                     SelectionMode = DefaultSelectionMode; // DataGridViewSelectionMode.RowHeaderSelect
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_SelectionModeReset,
-                                                                     string.Format(SR.DataGridView_SelectionModeAndSortModeClash, (selectionMode).ToString()),
-                                                                     (DefaultSelectionMode).ToString()));
+                    throw new InvalidOperationException(
+                        string.Format(
+                            SR.DataGridView_SelectionModeReset,
+                            string.Format(
+                                SR.DataGridView_SelectionModeAndSortModeClash,
+                                (selectionMode).ToString()),
+                                (DefaultSelectionMode).ToString()));
                 }
             }
         }

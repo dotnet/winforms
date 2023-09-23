@@ -8,8 +8,8 @@ override System.Windows.Forms.DataGridView.BackgroundImage.get -> System.Drawing
 override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
 ~override System.Windows.Forms.DataGridView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridView.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
-~override System.Windows.Forms.DataGridView.Font.get -> System.Drawing.Font
-~override System.Windows.Forms.DataGridView.Font.set -> void
+override System.Windows.Forms.DataGridView.Font.get -> System.Drawing.Font!
+override System.Windows.Forms.DataGridView.Font.set -> void
 ~override System.Windows.Forms.DataGridView.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridView.OnBindingContextChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnCursorChanged(System.EventArgs e) -> void
@@ -40,8 +40,8 @@ override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
 ~override System.Windows.Forms.DataGridView.OnRightToLeftChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnValidating(System.ComponentModel.CancelEventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnVisibleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.DataGridView.Text.get -> string
-~override System.Windows.Forms.DataGridView.Text.set -> void
+override System.Windows.Forms.DataGridView.Text.get -> string!
+override System.Windows.Forms.DataGridView.Text.set -> void
 ~override System.Windows.Forms.DataGridViewButtonColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
 ~override System.Windows.Forms.DataGridViewButtonColumn.CellTemplate.set -> void
 ~override System.Windows.Forms.DataGridViewButtonColumn.Clone() -> object
@@ -350,30 +350,30 @@ System.Windows.Forms.DataGridView.DefaultCellStyle.get -> System.Windows.Forms.D
 System.Windows.Forms.DataGridView.DefaultCellStyle.set -> void
 System.Windows.Forms.DataGridView.EditingControl.get -> System.Windows.Forms.Control?
 System.Windows.Forms.DataGridView.EditingPanel.get -> System.Windows.Forms.Panel!
-~System.Windows.Forms.DataGridView.FirstDisplayedCell.get -> System.Windows.Forms.DataGridViewCell
-~System.Windows.Forms.DataGridView.FirstDisplayedCell.set -> void
+System.Windows.Forms.DataGridView.FirstDisplayedCell.get -> System.Windows.Forms.DataGridViewCell?
+System.Windows.Forms.DataGridView.FirstDisplayedCell.set -> void
 ~System.Windows.Forms.DataGridView.HitTest(int x, int y) -> System.Windows.Forms.DataGridView.HitTestInfo
-~System.Windows.Forms.DataGridView.HorizontalScrollBar.get -> System.Windows.Forms.ScrollBar
+System.Windows.Forms.DataGridView.HorizontalScrollBar.get -> System.Windows.Forms.ScrollBar!
 ~System.Windows.Forms.DataGridView.InvalidateCell(System.Windows.Forms.DataGridViewCell dataGridViewCell) -> void
-~System.Windows.Forms.DataGridView.RowHeadersDefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridView.RowHeadersDefaultCellStyle.set -> void
-~System.Windows.Forms.DataGridView.Rows.get -> System.Windows.Forms.DataGridViewRowCollection
-~System.Windows.Forms.DataGridView.RowsDefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridView.RowsDefaultCellStyle.set -> void
-~System.Windows.Forms.DataGridView.RowTemplate.get -> System.Windows.Forms.DataGridViewRow
-~System.Windows.Forms.DataGridView.RowTemplate.set -> void
-~System.Windows.Forms.DataGridView.SelectedCells.get -> System.Windows.Forms.DataGridViewSelectedCellCollection
-~System.Windows.Forms.DataGridView.SelectedColumns.get -> System.Windows.Forms.DataGridViewSelectedColumnCollection
-~System.Windows.Forms.DataGridView.SelectedRows.get -> System.Windows.Forms.DataGridViewSelectedRowCollection
-~System.Windows.Forms.DataGridView.SortedColumn.get -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridView.this[int columnIndex, int rowIndex].get -> System.Windows.Forms.DataGridViewCell
-~System.Windows.Forms.DataGridView.this[int columnIndex, int rowIndex].set -> void
-~System.Windows.Forms.DataGridView.this[string columnName, int rowIndex].get -> System.Windows.Forms.DataGridViewCell
-~System.Windows.Forms.DataGridView.this[string columnName, int rowIndex].set -> void
-~System.Windows.Forms.DataGridView.TopLeftHeaderCell.get -> System.Windows.Forms.DataGridViewHeaderCell
-~System.Windows.Forms.DataGridView.TopLeftHeaderCell.set -> void
-~System.Windows.Forms.DataGridView.UserSetCursor.get -> System.Windows.Forms.Cursor
-~System.Windows.Forms.DataGridView.VerticalScrollBar.get -> System.Windows.Forms.ScrollBar
+System.Windows.Forms.DataGridView.RowHeadersDefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+System.Windows.Forms.DataGridView.RowHeadersDefaultCellStyle.set -> void
+System.Windows.Forms.DataGridView.Rows.get -> System.Windows.Forms.DataGridViewRowCollection!
+System.Windows.Forms.DataGridView.RowsDefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+System.Windows.Forms.DataGridView.RowsDefaultCellStyle.set -> void
+System.Windows.Forms.DataGridView.RowTemplate.get -> System.Windows.Forms.DataGridViewRow!
+System.Windows.Forms.DataGridView.RowTemplate.set -> void
+System.Windows.Forms.DataGridView.SelectedCells.get -> System.Windows.Forms.DataGridViewSelectedCellCollection!
+System.Windows.Forms.DataGridView.SelectedColumns.get -> System.Windows.Forms.DataGridViewSelectedColumnCollection!
+System.Windows.Forms.DataGridView.SelectedRows.get -> System.Windows.Forms.DataGridViewSelectedRowCollection!
+System.Windows.Forms.DataGridView.SortedColumn.get -> System.Windows.Forms.DataGridViewColumn?
+System.Windows.Forms.DataGridView.this[int columnIndex, int rowIndex].get -> System.Windows.Forms.DataGridViewCell!
+System.Windows.Forms.DataGridView.this[int columnIndex, int rowIndex].set -> void
+System.Windows.Forms.DataGridView.this[string! columnName, int rowIndex].get -> System.Windows.Forms.DataGridViewCell!
+System.Windows.Forms.DataGridView.this[string! columnName, int rowIndex].set -> void
+System.Windows.Forms.DataGridView.TopLeftHeaderCell.get -> System.Windows.Forms.DataGridViewHeaderCell!
+System.Windows.Forms.DataGridView.TopLeftHeaderCell.set -> void
+System.Windows.Forms.DataGridView.UserSetCursor.get -> System.Windows.Forms.Cursor!
+System.Windows.Forms.DataGridView.VerticalScrollBar.get -> System.Windows.Forms.ScrollBar!
 ~System.Windows.Forms.DataGridViewButtonColumn.Text.get -> string
 ~System.Windows.Forms.DataGridViewButtonColumn.Text.set -> void
 ~System.Windows.Forms.DataGridViewCell.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
@@ -5346,7 +5346,7 @@ System.Windows.Forms.DataGridView.AutoResizeRows() -> void
 System.Windows.Forms.DataGridView.AutoResizeRows(int rowIndexStart, int rowsCount, System.Windows.Forms.DataGridViewAutoSizeRowMode autoSizeRowMode, bool fixedWidth) -> void
 System.Windows.Forms.DataGridView.AutoResizeRows(System.Windows.Forms.DataGridViewAutoSizeRowsMode autoSizeRowsMode) -> void
 System.Windows.Forms.DataGridView.AutoResizeRows(System.Windows.Forms.DataGridViewAutoSizeRowsMode autoSizeRowsMode, bool fixedWidth) -> void
-System.Windows.Forms.DataGridView.AutoSizeColumnModeChanged -> System.Windows.Forms.DataGridViewAutoSizeColumnModeEventHandler
+System.Windows.Forms.DataGridView.AutoSizeColumnModeChanged -> System.Windows.Forms.DataGridViewAutoSizeColumnModeEventHandler?
 System.Windows.Forms.DataGridView.AutoSizeColumnsMode.get -> System.Windows.Forms.DataGridViewAutoSizeColumnsMode
 System.Windows.Forms.DataGridView.AutoSizeColumnsMode.set -> void
 System.Windows.Forms.DataGridView.AutoSizeColumnsModeChanged -> System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventHandler?
@@ -5363,58 +5363,58 @@ System.Windows.Forms.DataGridView.BorderStyle.get -> System.Windows.Forms.Border
 System.Windows.Forms.DataGridView.BorderStyle.set -> void
 System.Windows.Forms.DataGridView.BorderStyleChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.CancelEdit() -> bool
-System.Windows.Forms.DataGridView.CancelRowEdit -> System.Windows.Forms.QuestionEventHandler
-System.Windows.Forms.DataGridView.CellBeginEdit -> System.Windows.Forms.DataGridViewCellCancelEventHandler
+System.Windows.Forms.DataGridView.CancelRowEdit -> System.Windows.Forms.QuestionEventHandler?
+System.Windows.Forms.DataGridView.CellBeginEdit -> System.Windows.Forms.DataGridViewCellCancelEventHandler?
 System.Windows.Forms.DataGridView.CellBorderStyle.get -> System.Windows.Forms.DataGridViewCellBorderStyle
 System.Windows.Forms.DataGridView.CellBorderStyle.set -> void
 System.Windows.Forms.DataGridView.CellBorderStyleChanged -> System.EventHandler?
-System.Windows.Forms.DataGridView.CellClick -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellContentClick -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellContentDoubleClick -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellContextMenuStripChanged -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellContextMenuStripNeeded -> System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler
-System.Windows.Forms.DataGridView.CellDoubleClick -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellEndEdit -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellEnter -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellErrorTextChanged -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellErrorTextNeeded -> System.Windows.Forms.DataGridViewCellErrorTextNeededEventHandler
-System.Windows.Forms.DataGridView.CellFormatting -> System.Windows.Forms.DataGridViewCellFormattingEventHandler
-System.Windows.Forms.DataGridView.CellLeave -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellMouseClick -> System.Windows.Forms.DataGridViewCellMouseEventHandler
-System.Windows.Forms.DataGridView.CellMouseDoubleClick -> System.Windows.Forms.DataGridViewCellMouseEventHandler
-System.Windows.Forms.DataGridView.CellMouseDown -> System.Windows.Forms.DataGridViewCellMouseEventHandler
-System.Windows.Forms.DataGridView.CellMouseEnter -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellMouseLeave -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellMouseMove -> System.Windows.Forms.DataGridViewCellMouseEventHandler
-System.Windows.Forms.DataGridView.CellMouseUp -> System.Windows.Forms.DataGridViewCellMouseEventHandler
-System.Windows.Forms.DataGridView.CellPainting -> System.Windows.Forms.DataGridViewCellPaintingEventHandler
-System.Windows.Forms.DataGridView.CellParsing -> System.Windows.Forms.DataGridViewCellParsingEventHandler
-System.Windows.Forms.DataGridView.CellStateChanged -> System.Windows.Forms.DataGridViewCellStateChangedEventHandler
-System.Windows.Forms.DataGridView.CellStyleChanged -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellStyleContentChanged -> System.Windows.Forms.DataGridViewCellStyleContentChangedEventHandler
-System.Windows.Forms.DataGridView.CellToolTipTextChanged -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellToolTipTextNeeded -> System.Windows.Forms.DataGridViewCellToolTipTextNeededEventHandler
-System.Windows.Forms.DataGridView.CellValidated -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellValidating -> System.Windows.Forms.DataGridViewCellValidatingEventHandler
-System.Windows.Forms.DataGridView.CellValueChanged -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.CellValueNeeded -> System.Windows.Forms.DataGridViewCellValueEventHandler
-System.Windows.Forms.DataGridView.CellValuePushed -> System.Windows.Forms.DataGridViewCellValueEventHandler
+System.Windows.Forms.DataGridView.CellClick -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellContentClick -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellContentDoubleClick -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellContextMenuStripChanged -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellContextMenuStripNeeded -> System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler?
+System.Windows.Forms.DataGridView.CellDoubleClick -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellEndEdit -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellEnter -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellErrorTextChanged -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellErrorTextNeeded -> System.Windows.Forms.DataGridViewCellErrorTextNeededEventHandler?
+System.Windows.Forms.DataGridView.CellFormatting -> System.Windows.Forms.DataGridViewCellFormattingEventHandler?
+System.Windows.Forms.DataGridView.CellLeave -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellMouseClick -> System.Windows.Forms.DataGridViewCellMouseEventHandler?
+System.Windows.Forms.DataGridView.CellMouseDoubleClick -> System.Windows.Forms.DataGridViewCellMouseEventHandler?
+System.Windows.Forms.DataGridView.CellMouseDown -> System.Windows.Forms.DataGridViewCellMouseEventHandler?
+System.Windows.Forms.DataGridView.CellMouseEnter -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellMouseLeave -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellMouseMove -> System.Windows.Forms.DataGridViewCellMouseEventHandler?
+System.Windows.Forms.DataGridView.CellMouseUp -> System.Windows.Forms.DataGridViewCellMouseEventHandler?
+System.Windows.Forms.DataGridView.CellPainting -> System.Windows.Forms.DataGridViewCellPaintingEventHandler?
+System.Windows.Forms.DataGridView.CellParsing -> System.Windows.Forms.DataGridViewCellParsingEventHandler?
+System.Windows.Forms.DataGridView.CellStateChanged -> System.Windows.Forms.DataGridViewCellStateChangedEventHandler?
+System.Windows.Forms.DataGridView.CellStyleChanged -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellStyleContentChanged -> System.Windows.Forms.DataGridViewCellStyleContentChangedEventHandler?
+System.Windows.Forms.DataGridView.CellToolTipTextChanged -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellToolTipTextNeeded -> System.Windows.Forms.DataGridViewCellToolTipTextNeededEventHandler?
+System.Windows.Forms.DataGridView.CellValidated -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellValidating -> System.Windows.Forms.DataGridViewCellValidatingEventHandler?
+System.Windows.Forms.DataGridView.CellValueChanged -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.CellValueNeeded -> System.Windows.Forms.DataGridViewCellValueEventHandler?
+System.Windows.Forms.DataGridView.CellValuePushed -> System.Windows.Forms.DataGridViewCellValueEventHandler?
 System.Windows.Forms.DataGridView.ClearSelection() -> void
 System.Windows.Forms.DataGridView.ClearSelection(int columnIndexException, int rowIndexException, bool selectExceptionElement) -> void
 System.Windows.Forms.DataGridView.ClipboardCopyMode.get -> System.Windows.Forms.DataGridViewClipboardCopyMode
 System.Windows.Forms.DataGridView.ClipboardCopyMode.set -> void
-System.Windows.Forms.DataGridView.ColumnAdded -> System.Windows.Forms.DataGridViewColumnEventHandler
-System.Windows.Forms.DataGridView.ColumnContextMenuStripChanged -> System.Windows.Forms.DataGridViewColumnEventHandler
+System.Windows.Forms.DataGridView.ColumnAdded -> System.Windows.Forms.DataGridViewColumnEventHandler?
+System.Windows.Forms.DataGridView.ColumnContextMenuStripChanged -> System.Windows.Forms.DataGridViewColumnEventHandler?
 System.Windows.Forms.DataGridView.ColumnCount.get -> int
 System.Windows.Forms.DataGridView.ColumnCount.set -> void
-System.Windows.Forms.DataGridView.ColumnDataPropertyNameChanged -> System.Windows.Forms.DataGridViewColumnEventHandler
-System.Windows.Forms.DataGridView.ColumnDefaultCellStyleChanged -> System.Windows.Forms.DataGridViewColumnEventHandler
-System.Windows.Forms.DataGridView.ColumnDisplayIndexChanged -> System.Windows.Forms.DataGridViewColumnEventHandler
-System.Windows.Forms.DataGridView.ColumnDividerDoubleClick -> System.Windows.Forms.DataGridViewColumnDividerDoubleClickEventHandler
-System.Windows.Forms.DataGridView.ColumnDividerWidthChanged -> System.Windows.Forms.DataGridViewColumnEventHandler
-System.Windows.Forms.DataGridView.ColumnHeaderCellChanged -> System.Windows.Forms.DataGridViewColumnEventHandler
-System.Windows.Forms.DataGridView.ColumnHeaderMouseClick -> System.Windows.Forms.DataGridViewCellMouseEventHandler
-System.Windows.Forms.DataGridView.ColumnHeaderMouseDoubleClick -> System.Windows.Forms.DataGridViewCellMouseEventHandler
+System.Windows.Forms.DataGridView.ColumnDataPropertyNameChanged -> System.Windows.Forms.DataGridViewColumnEventHandler?
+System.Windows.Forms.DataGridView.ColumnDefaultCellStyleChanged -> System.Windows.Forms.DataGridViewColumnEventHandler?
+System.Windows.Forms.DataGridView.ColumnDisplayIndexChanged -> System.Windows.Forms.DataGridViewColumnEventHandler?
+System.Windows.Forms.DataGridView.ColumnDividerDoubleClick -> System.Windows.Forms.DataGridViewColumnDividerDoubleClickEventHandler?
+System.Windows.Forms.DataGridView.ColumnDividerWidthChanged -> System.Windows.Forms.DataGridViewColumnEventHandler?
+System.Windows.Forms.DataGridView.ColumnHeaderCellChanged -> System.Windows.Forms.DataGridViewColumnEventHandler?
+System.Windows.Forms.DataGridView.ColumnHeaderMouseClick -> System.Windows.Forms.DataGridViewCellMouseEventHandler?
+System.Windows.Forms.DataGridView.ColumnHeaderMouseDoubleClick -> System.Windows.Forms.DataGridViewCellMouseEventHandler?
 System.Windows.Forms.DataGridView.ColumnHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewHeaderBorderStyle
 System.Windows.Forms.DataGridView.ColumnHeadersBorderStyle.set -> void
 System.Windows.Forms.DataGridView.ColumnHeadersBorderStyleChanged -> System.EventHandler?
@@ -5427,19 +5427,19 @@ System.Windows.Forms.DataGridView.ColumnHeadersHeightSizeMode.set -> void
 System.Windows.Forms.DataGridView.ColumnHeadersHeightSizeModeChanged -> System.Windows.Forms.DataGridViewAutoSizeModeEventHandler?
 System.Windows.Forms.DataGridView.ColumnHeadersVisible.get -> bool
 System.Windows.Forms.DataGridView.ColumnHeadersVisible.set -> void
-System.Windows.Forms.DataGridView.ColumnMinimumWidthChanged -> System.Windows.Forms.DataGridViewColumnEventHandler
-System.Windows.Forms.DataGridView.ColumnNameChanged -> System.Windows.Forms.DataGridViewColumnEventHandler
-System.Windows.Forms.DataGridView.ColumnRemoved -> System.Windows.Forms.DataGridViewColumnEventHandler
-System.Windows.Forms.DataGridView.ColumnSortModeChanged -> System.Windows.Forms.DataGridViewColumnEventHandler
-System.Windows.Forms.DataGridView.ColumnStateChanged -> System.Windows.Forms.DataGridViewColumnStateChangedEventHandler
-System.Windows.Forms.DataGridView.ColumnToolTipTextChanged -> System.Windows.Forms.DataGridViewColumnEventHandler
-System.Windows.Forms.DataGridView.ColumnWidthChanged -> System.Windows.Forms.DataGridViewColumnEventHandler
+System.Windows.Forms.DataGridView.ColumnMinimumWidthChanged -> System.Windows.Forms.DataGridViewColumnEventHandler?
+System.Windows.Forms.DataGridView.ColumnNameChanged -> System.Windows.Forms.DataGridViewColumnEventHandler?
+System.Windows.Forms.DataGridView.ColumnRemoved -> System.Windows.Forms.DataGridViewColumnEventHandler?
+System.Windows.Forms.DataGridView.ColumnSortModeChanged -> System.Windows.Forms.DataGridViewColumnEventHandler?
+System.Windows.Forms.DataGridView.ColumnStateChanged -> System.Windows.Forms.DataGridViewColumnStateChangedEventHandler?
+System.Windows.Forms.DataGridView.ColumnToolTipTextChanged -> System.Windows.Forms.DataGridViewColumnEventHandler?
+System.Windows.Forms.DataGridView.ColumnWidthChanged -> System.Windows.Forms.DataGridViewColumnEventHandler?
 System.Windows.Forms.DataGridView.CommitEdit(System.Windows.Forms.DataGridViewDataErrorContexts context) -> bool
 System.Windows.Forms.DataGridView.CurrentCellAddress.get -> System.Drawing.Point
-System.Windows.Forms.DataGridView.CurrentCellChanged -> System.EventHandler
-System.Windows.Forms.DataGridView.CurrentCellDirtyStateChanged -> System.EventHandler
-System.Windows.Forms.DataGridView.DataBindingComplete -> System.Windows.Forms.DataGridViewBindingCompleteEventHandler
-System.Windows.Forms.DataGridView.DataError -> System.Windows.Forms.DataGridViewDataErrorEventHandler
+System.Windows.Forms.DataGridView.CurrentCellChanged -> System.EventHandler?
+System.Windows.Forms.DataGridView.CurrentCellDirtyStateChanged -> System.EventHandler?
+System.Windows.Forms.DataGridView.DataBindingComplete -> System.Windows.Forms.DataGridViewBindingCompleteEventHandler?
+System.Windows.Forms.DataGridView.DataError -> System.Windows.Forms.DataGridViewDataErrorEventHandler?
 System.Windows.Forms.DataGridView.DataGridView() -> void
 System.Windows.Forms.DataGridView.DataGridViewAccessibleObject
 System.Windows.Forms.DataGridView.DataGridViewAccessibleObject.DataGridViewAccessibleObject(System.Windows.Forms.DataGridView! owner) -> void
@@ -5455,10 +5455,10 @@ System.Windows.Forms.DataGridView.DataGridViewTopRowAccessibleObject.Owner.set -
 System.Windows.Forms.DataGridView.DataMemberChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.DataSourceChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.DefaultCellStyleChanged -> System.EventHandler?
-System.Windows.Forms.DataGridView.DefaultValuesNeeded -> System.Windows.Forms.DataGridViewRowEventHandler
+System.Windows.Forms.DataGridView.DefaultValuesNeeded -> System.Windows.Forms.DataGridViewRowEventHandler?
 System.Windows.Forms.DataGridView.DisplayedColumnCount(bool includePartialColumns) -> int
 System.Windows.Forms.DataGridView.DisplayedRowCount(bool includePartialRow) -> int
-System.Windows.Forms.DataGridView.EditingControlShowing -> System.Windows.Forms.DataGridViewEditingControlShowingEventHandler
+System.Windows.Forms.DataGridView.EditingControlShowing -> System.Windows.Forms.DataGridViewEditingControlShowingEventHandler?
 System.Windows.Forms.DataGridView.EditMode.get -> System.Windows.Forms.DataGridViewEditMode
 System.Windows.Forms.DataGridView.EditMode.set -> void
 System.Windows.Forms.DataGridView.EditModeChanged -> System.EventHandler?
@@ -5471,15 +5471,15 @@ System.Windows.Forms.DataGridView.FirstDisplayedScrollingColumnIndex.get -> int
 System.Windows.Forms.DataGridView.FirstDisplayedScrollingColumnIndex.set -> void
 System.Windows.Forms.DataGridView.FirstDisplayedScrollingRowIndex.get -> int
 System.Windows.Forms.DataGridView.FirstDisplayedScrollingRowIndex.set -> void
-System.Windows.Forms.DataGridView.FontChanged -> System.EventHandler
-System.Windows.Forms.DataGridView.ForeColorChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.FontChanged -> System.EventHandler?
+System.Windows.Forms.DataGridView.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.GetCellCount(System.Windows.Forms.DataGridViewElementStates includeFilter) -> int
 System.Windows.Forms.DataGridView.GetCellDisplayRectangle(int columnIndex, int rowIndex, bool cutOverflow) -> System.Drawing.Rectangle
 System.Windows.Forms.DataGridView.GetColumnDisplayRectangle(int columnIndex, bool cutOverflow) -> System.Drawing.Rectangle
 System.Windows.Forms.DataGridView.GetRowDisplayRectangle(int rowIndex, bool cutOverflow) -> System.Drawing.Rectangle
 System.Windows.Forms.DataGridView.GridColor.get -> System.Drawing.Color
 System.Windows.Forms.DataGridView.GridColor.set -> void
-System.Windows.Forms.DataGridView.GridColorChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.GridColorChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.HitTestInfo
 System.Windows.Forms.DataGridView.HitTestInfo.ColumnIndex.get -> int
 System.Windows.Forms.DataGridView.HitTestInfo.ColumnX.get -> int
@@ -5496,12 +5496,12 @@ System.Windows.Forms.DataGridView.IsCurrentCellInEditMode.get -> bool
 System.Windows.Forms.DataGridView.IsCurrentRowDirty.get -> bool
 System.Windows.Forms.DataGridView.MultiSelect.get -> bool
 System.Windows.Forms.DataGridView.MultiSelect.set -> void
-System.Windows.Forms.DataGridView.MultiSelectChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.MultiSelectChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.NewRowIndex.get -> int
-System.Windows.Forms.DataGridView.NewRowNeeded -> System.Windows.Forms.DataGridViewRowEventHandler
+System.Windows.Forms.DataGridView.NewRowNeeded -> System.Windows.Forms.DataGridViewRowEventHandler?
 System.Windows.Forms.DataGridView.Padding.get -> System.Windows.Forms.Padding
 System.Windows.Forms.DataGridView.Padding.set -> void
-System.Windows.Forms.DataGridView.PaddingChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.PaddingChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.ProcessAKey(System.Windows.Forms.Keys keyData) -> bool
 System.Windows.Forms.DataGridView.ProcessControlShiftF10Keys(System.Windows.Forms.Keys keyData) -> bool
 System.Windows.Forms.DataGridView.ProcessDeleteKey(System.Windows.Forms.Keys keyData) -> bool
@@ -5523,53 +5523,53 @@ System.Windows.Forms.DataGridView.ProcessUpKey(System.Windows.Forms.Keys keyData
 System.Windows.Forms.DataGridView.ProcessZeroKey(System.Windows.Forms.Keys keyData) -> bool
 System.Windows.Forms.DataGridView.ReadOnly.get -> bool
 System.Windows.Forms.DataGridView.ReadOnly.set -> void
-System.Windows.Forms.DataGridView.ReadOnlyChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.ReadOnlyChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.RefreshEdit() -> bool
-System.Windows.Forms.DataGridView.RowContextMenuStripChanged -> System.Windows.Forms.DataGridViewRowEventHandler
-System.Windows.Forms.DataGridView.RowContextMenuStripNeeded -> System.Windows.Forms.DataGridViewRowContextMenuStripNeededEventHandler
+System.Windows.Forms.DataGridView.RowContextMenuStripChanged -> System.Windows.Forms.DataGridViewRowEventHandler?
+System.Windows.Forms.DataGridView.RowContextMenuStripNeeded -> System.Windows.Forms.DataGridViewRowContextMenuStripNeededEventHandler?
 System.Windows.Forms.DataGridView.RowCount.get -> int
 System.Windows.Forms.DataGridView.RowCount.set -> void
-System.Windows.Forms.DataGridView.RowDefaultCellStyleChanged -> System.Windows.Forms.DataGridViewRowEventHandler
-System.Windows.Forms.DataGridView.RowDirtyStateNeeded -> System.Windows.Forms.QuestionEventHandler
-System.Windows.Forms.DataGridView.RowDividerDoubleClick -> System.Windows.Forms.DataGridViewRowDividerDoubleClickEventHandler
-System.Windows.Forms.DataGridView.RowDividerHeightChanged -> System.Windows.Forms.DataGridViewRowEventHandler
-System.Windows.Forms.DataGridView.RowEnter -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.RowErrorTextChanged -> System.Windows.Forms.DataGridViewRowEventHandler
-System.Windows.Forms.DataGridView.RowErrorTextNeeded -> System.Windows.Forms.DataGridViewRowErrorTextNeededEventHandler
-System.Windows.Forms.DataGridView.RowHeaderCellChanged -> System.Windows.Forms.DataGridViewRowEventHandler
-System.Windows.Forms.DataGridView.RowHeaderMouseClick -> System.Windows.Forms.DataGridViewCellMouseEventHandler
-System.Windows.Forms.DataGridView.RowHeaderMouseDoubleClick -> System.Windows.Forms.DataGridViewCellMouseEventHandler
+System.Windows.Forms.DataGridView.RowDefaultCellStyleChanged -> System.Windows.Forms.DataGridViewRowEventHandler?
+System.Windows.Forms.DataGridView.RowDirtyStateNeeded -> System.Windows.Forms.QuestionEventHandler?
+System.Windows.Forms.DataGridView.RowDividerDoubleClick -> System.Windows.Forms.DataGridViewRowDividerDoubleClickEventHandler?
+System.Windows.Forms.DataGridView.RowDividerHeightChanged -> System.Windows.Forms.DataGridViewRowEventHandler?
+System.Windows.Forms.DataGridView.RowEnter -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.RowErrorTextChanged -> System.Windows.Forms.DataGridViewRowEventHandler?
+System.Windows.Forms.DataGridView.RowErrorTextNeeded -> System.Windows.Forms.DataGridViewRowErrorTextNeededEventHandler?
+System.Windows.Forms.DataGridView.RowHeaderCellChanged -> System.Windows.Forms.DataGridViewRowEventHandler?
+System.Windows.Forms.DataGridView.RowHeaderMouseClick -> System.Windows.Forms.DataGridViewCellMouseEventHandler?
+System.Windows.Forms.DataGridView.RowHeaderMouseDoubleClick -> System.Windows.Forms.DataGridViewCellMouseEventHandler?
 System.Windows.Forms.DataGridView.RowHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewHeaderBorderStyle
 System.Windows.Forms.DataGridView.RowHeadersBorderStyle.set -> void
-System.Windows.Forms.DataGridView.RowHeadersBorderStyleChanged -> System.EventHandler
-System.Windows.Forms.DataGridView.RowHeadersDefaultCellStyleChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.RowHeadersBorderStyleChanged -> System.EventHandler?
+System.Windows.Forms.DataGridView.RowHeadersDefaultCellStyleChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.RowHeadersVisible.get -> bool
 System.Windows.Forms.DataGridView.RowHeadersVisible.set -> void
 System.Windows.Forms.DataGridView.RowHeadersWidth.get -> int
 System.Windows.Forms.DataGridView.RowHeadersWidth.set -> void
-System.Windows.Forms.DataGridView.RowHeadersWidthChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.RowHeadersWidthChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.RowHeadersWidthSizeMode.get -> System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode
 System.Windows.Forms.DataGridView.RowHeadersWidthSizeMode.set -> void
-System.Windows.Forms.DataGridView.RowHeadersWidthSizeModeChanged -> System.Windows.Forms.DataGridViewAutoSizeModeEventHandler
-System.Windows.Forms.DataGridView.RowHeightChanged -> System.Windows.Forms.DataGridViewRowEventHandler
-System.Windows.Forms.DataGridView.RowHeightInfoNeeded -> System.Windows.Forms.DataGridViewRowHeightInfoNeededEventHandler
-System.Windows.Forms.DataGridView.RowHeightInfoPushed -> System.Windows.Forms.DataGridViewRowHeightInfoPushedEventHandler
-System.Windows.Forms.DataGridView.RowLeave -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.RowMinimumHeightChanged -> System.Windows.Forms.DataGridViewRowEventHandler
-System.Windows.Forms.DataGridView.RowPostPaint -> System.Windows.Forms.DataGridViewRowPostPaintEventHandler
-System.Windows.Forms.DataGridView.RowPrePaint -> System.Windows.Forms.DataGridViewRowPrePaintEventHandler
-System.Windows.Forms.DataGridView.RowsAdded -> System.Windows.Forms.DataGridViewRowsAddedEventHandler
-System.Windows.Forms.DataGridView.RowsDefaultCellStyleChanged -> System.EventHandler
-System.Windows.Forms.DataGridView.RowsRemoved -> System.Windows.Forms.DataGridViewRowsRemovedEventHandler
-System.Windows.Forms.DataGridView.RowStateChanged -> System.Windows.Forms.DataGridViewRowStateChangedEventHandler
-System.Windows.Forms.DataGridView.RowUnshared -> System.Windows.Forms.DataGridViewRowEventHandler
-System.Windows.Forms.DataGridView.RowValidated -> System.Windows.Forms.DataGridViewCellEventHandler
-System.Windows.Forms.DataGridView.RowValidating -> System.Windows.Forms.DataGridViewCellCancelEventHandler
-System.Windows.Forms.DataGridView.Scroll -> System.Windows.Forms.ScrollEventHandler
+System.Windows.Forms.DataGridView.RowHeadersWidthSizeModeChanged -> System.Windows.Forms.DataGridViewAutoSizeModeEventHandler?
+System.Windows.Forms.DataGridView.RowHeightChanged -> System.Windows.Forms.DataGridViewRowEventHandler?
+System.Windows.Forms.DataGridView.RowHeightInfoNeeded -> System.Windows.Forms.DataGridViewRowHeightInfoNeededEventHandler?
+System.Windows.Forms.DataGridView.RowHeightInfoPushed -> System.Windows.Forms.DataGridViewRowHeightInfoPushedEventHandler?
+System.Windows.Forms.DataGridView.RowLeave -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.RowMinimumHeightChanged -> System.Windows.Forms.DataGridViewRowEventHandler?
+System.Windows.Forms.DataGridView.RowPostPaint -> System.Windows.Forms.DataGridViewRowPostPaintEventHandler?
+System.Windows.Forms.DataGridView.RowPrePaint -> System.Windows.Forms.DataGridViewRowPrePaintEventHandler?
+System.Windows.Forms.DataGridView.RowsAdded -> System.Windows.Forms.DataGridViewRowsAddedEventHandler?
+System.Windows.Forms.DataGridView.RowsDefaultCellStyleChanged -> System.EventHandler?
+System.Windows.Forms.DataGridView.RowsRemoved -> System.Windows.Forms.DataGridViewRowsRemovedEventHandler?
+System.Windows.Forms.DataGridView.RowStateChanged -> System.Windows.Forms.DataGridViewRowStateChangedEventHandler?
+System.Windows.Forms.DataGridView.RowUnshared -> System.Windows.Forms.DataGridViewRowEventHandler?
+System.Windows.Forms.DataGridView.RowValidated -> System.Windows.Forms.DataGridViewCellEventHandler?
+System.Windows.Forms.DataGridView.RowValidating -> System.Windows.Forms.DataGridViewCellCancelEventHandler?
+System.Windows.Forms.DataGridView.Scroll -> System.Windows.Forms.ScrollEventHandler?
 System.Windows.Forms.DataGridView.ScrollBars.get -> System.Windows.Forms.ScrollBars
 System.Windows.Forms.DataGridView.ScrollBars.set -> void
 System.Windows.Forms.DataGridView.SelectAll() -> void
-System.Windows.Forms.DataGridView.SelectionChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.SelectionChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.SelectionMode.get -> System.Windows.Forms.DataGridViewSelectionMode
 System.Windows.Forms.DataGridView.SelectionMode.set -> void
 System.Windows.Forms.DataGridView.ShowCellErrors.get -> bool
@@ -5580,21 +5580,21 @@ System.Windows.Forms.DataGridView.ShowEditingIcon.get -> bool
 System.Windows.Forms.DataGridView.ShowEditingIcon.set -> void
 System.Windows.Forms.DataGridView.ShowRowErrors.get -> bool
 System.Windows.Forms.DataGridView.ShowRowErrors.set -> void
-System.Windows.Forms.DataGridView.SortCompare -> System.Windows.Forms.DataGridViewSortCompareEventHandler
-System.Windows.Forms.DataGridView.Sorted -> System.EventHandler
+System.Windows.Forms.DataGridView.SortCompare -> System.Windows.Forms.DataGridViewSortCompareEventHandler?
+System.Windows.Forms.DataGridView.Sorted -> System.EventHandler?
 System.Windows.Forms.DataGridView.SortOrder.get -> System.Windows.Forms.SortOrder
 System.Windows.Forms.DataGridView.StandardTab.get -> bool
 System.Windows.Forms.DataGridView.StandardTab.set -> void
-System.Windows.Forms.DataGridView.StyleChanged -> System.EventHandler
-System.Windows.Forms.DataGridView.TextChanged -> System.EventHandler
+System.Windows.Forms.DataGridView.StyleChanged -> System.EventHandler?
+System.Windows.Forms.DataGridView.TextChanged -> System.EventHandler?
 System.Windows.Forms.DataGridView.UpdateCellErrorText(int columnIndex, int rowIndex) -> void
 System.Windows.Forms.DataGridView.UpdateCellValue(int columnIndex, int rowIndex) -> void
 System.Windows.Forms.DataGridView.UpdateRowErrorText(int rowIndex) -> void
 System.Windows.Forms.DataGridView.UpdateRowErrorText(int rowIndexStart, int rowIndexEnd) -> void
 System.Windows.Forms.DataGridView.UpdateRowHeightInfo(int rowIndex, bool updateToEnd) -> void
-System.Windows.Forms.DataGridView.UserAddedRow -> System.Windows.Forms.DataGridViewRowEventHandler
-System.Windows.Forms.DataGridView.UserDeletedRow -> System.Windows.Forms.DataGridViewRowEventHandler
-System.Windows.Forms.DataGridView.UserDeletingRow -> System.Windows.Forms.DataGridViewRowCancelEventHandler
+System.Windows.Forms.DataGridView.UserAddedRow -> System.Windows.Forms.DataGridViewRowEventHandler?
+System.Windows.Forms.DataGridView.UserDeletedRow -> System.Windows.Forms.DataGridViewRowEventHandler?
+System.Windows.Forms.DataGridView.UserDeletingRow -> System.Windows.Forms.DataGridViewRowCancelEventHandler?
 System.Windows.Forms.DataGridView.VerticalScrollingOffset.get -> int
 System.Windows.Forms.DataGridView.VirtualMode.get -> bool
 System.Windows.Forms.DataGridView.VirtualMode.set -> void
