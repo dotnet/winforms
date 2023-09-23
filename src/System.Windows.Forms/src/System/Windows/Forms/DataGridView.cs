@@ -491,10 +491,9 @@ public partial class DataGridView : Control, ISupportInitialize
     /// <summary>
     ///  Scaling row header width and column header height.
     /// </summary>
-    private int ScaleToCurrentDpi(int value)
-    {
-        return DpiHelper.IsScalingRequirementMet ? LogicalToDeviceUnits(value) : value;
-    }
+    private int ScaleToCurrentDpi(int value) => DpiHelper.IsScalingRequirementMet
+        ? LogicalToDeviceUnits(value)
+        : value;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -655,10 +654,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_AllowUserToAddRowsDescr))]
     public bool AllowUserToAddRows
     {
-        get
-        {
-            return _dataGridViewState1[State1_AllowUserToAddRows];
-        }
+        get => _dataGridViewState1[State1_AllowUserToAddRows];
         set
         {
             if (AllowUserToAddRows != value)
@@ -674,20 +670,9 @@ public partial class DataGridView : Control, ISupportInitialize
         }
     }
 
-    internal bool AllowUserToAddRowsInternal
-    {
-        get
-        {
-            if (DataSource is null)
-            {
-                return AllowUserToAddRows;
-            }
-            else
-            {
-                return AllowUserToAddRows && DataConnection!.AllowAdd;
-            }
-        }
-    }
+    internal bool AllowUserToAddRowsInternal => DataSource is null
+        ? AllowUserToAddRows
+        : AllowUserToAddRows && DataConnection!.AllowAdd;
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewOnAllowUserToAddRowsChangedDescr))]
@@ -702,10 +687,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_AllowUserToDeleteRowsDescr))]
     public bool AllowUserToDeleteRows
     {
-        get
-        {
-            return _dataGridViewState1[State1_AllowUserToDeleteRows];
-        }
+        get => _dataGridViewState1[State1_AllowUserToDeleteRows];
         set
         {
             if (AllowUserToDeleteRows != value)
@@ -716,20 +698,9 @@ public partial class DataGridView : Control, ISupportInitialize
         }
     }
 
-    internal bool AllowUserToDeleteRowsInternal
-    {
-        get
-        {
-            if (DataSource is null)
-            {
-                return AllowUserToDeleteRows;
-            }
-            else
-            {
-                return AllowUserToDeleteRows && DataConnection!.AllowRemove;
-            }
-        }
-    }
+    internal bool AllowUserToDeleteRowsInternal => DataSource is null
+        ? AllowUserToDeleteRows
+        : AllowUserToDeleteRows && DataConnection!.AllowRemove;
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.DataGridViewOnAllowUserToDeleteRowsChangedDescr))]
@@ -775,10 +746,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_AllowUserToResizeColumnsDescr))]
     public bool AllowUserToResizeColumns
     {
-        get
-        {
-            return _dataGridViewState2[State2_AllowUserToResizeColumns];
-        }
+        get => _dataGridViewState2[State2_AllowUserToResizeColumns];
         set
         {
             if (AllowUserToResizeColumns != value)
@@ -806,10 +774,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_AllowUserToResizeRowsDescr))]
     public bool AllowUserToResizeRows
     {
-        get
-        {
-            return _dataGridViewState2[State2_AllowUserToResizeRows];
-        }
+        get => _dataGridViewState2[State2_AllowUserToResizeRows];
         set
         {
             if (AllowUserToResizeRows != value)
@@ -867,31 +832,16 @@ public partial class DataGridView : Control, ISupportInitialize
         remove => Events.RemoveHandler(s_alternatingRowsDefaultCellStyleChangedEvent, value);
     }
 
-    internal static bool ApplyVisualStylesToInnerCells
-    {
-        get
-        {
-            return Application.RenderWithVisualStyles;
-        }
-    }
+    internal static bool ApplyVisualStylesToInnerCells => Application.RenderWithVisualStyles;
 
-    internal bool ApplyVisualStylesToHeaderCells
-    {
-        get
-        {
-            return Application.RenderWithVisualStyles && EnableHeadersVisualStyles;
-        }
-    }
+    internal bool ApplyVisualStylesToHeaderCells => Application.RenderWithVisualStyles && EnableHeadersVisualStyles;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DefaultValue(true)]
     public bool AutoGenerateColumns
     {
-        get
-        {
-            return _dataGridViewState1[State1_AutoGenerateColumns];
-        }
+        get => _dataGridViewState1[State1_AutoGenerateColumns];
         set
         {
             if (_dataGridViewState1[State1_AutoGenerateColumns] != value)
@@ -915,10 +865,7 @@ public partial class DataGridView : Control, ISupportInitialize
     /// </summary>
     public override bool AutoSize
     {
-        get
-        {
-            return _dataGridViewState1[State1_IsAutoSized];
-        }
+        get => _dataGridViewState1[State1_IsAutoSized];
         set
         {
             base.AutoSize = value;
@@ -935,11 +882,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_AutoSizeColumnsModeDescr))]
     public DataGridViewAutoSizeColumnsMode AutoSizeColumnsMode
     {
-        get
-        {
-            return _autoSizeColumnsMode;
-        }
-
+        get => _autoSizeColumnsMode;
         set
         {
             switch (value)
@@ -1009,10 +952,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_AutoSizeRowsModeDescr))]
     public DataGridViewAutoSizeRowsMode AutoSizeRowsMode
     {
-        get
-        {
-            return _autoSizeRowsMode;
-        }
+        get => _autoSizeRowsMode;
         set
         {
             switch (value)
@@ -1139,10 +1079,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_BorderStyleDescr))]
     public BorderStyle BorderStyle
     {
-        get
-        {
-            return _borderStyle;
-        }
+        get => _borderStyle;
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x2
@@ -1404,10 +1341,7 @@ public partial class DataGridView : Control, ISupportInitialize
 
     internal bool CellMouseDownInContentBounds
     {
-        get
-        {
-            return _dataGridViewState2[State2_CellMouseDownInContentBounds];
-        }
+        get => _dataGridViewState2[State2_CellMouseDownInContentBounds];
         set
         {
             _dataGridViewState2[State2_CellMouseDownInContentBounds] = value;
@@ -1450,10 +1384,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_ClipboardCopyModeDescr))]
     public DataGridViewClipboardCopyMode ClipboardCopyMode
     {
-        get
-        {
-            return _clipboardCopyMode;
-        }
+        get => _clipboardCopyMode;
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
@@ -1468,10 +1399,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public int ColumnCount
     {
-        get
-        {
-            return Columns.Count;
-        }
+        get => Columns.Count;
         set
         {
             if (value < 0)
@@ -1669,10 +1597,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_ColumnHeadersHeightDescr))]
     public int ColumnHeadersHeight
     {
-        get
-        {
-            return _columnHeadersHeight;
-        }
+        get => _columnHeadersHeight;
         set
         {
             if (value < MinimumColumnHeadersHeight)
@@ -1704,10 +1629,9 @@ public partial class DataGridView : Control, ISupportInitialize
         remove => Events.RemoveHandler(s_columnHeadersHeightChangedEvent, value);
     }
 
-    private bool ShouldSerializeColumnHeadersHeight()
-    {
-        return ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize && ColumnHeadersHeight != DefaultColumnHeadersHeight;
-    }
+    private bool ShouldSerializeColumnHeadersHeight() =>
+        ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize &&
+        ColumnHeadersHeight != DefaultColumnHeadersHeight;
 
     /// <summary>
     ///  Gets or sets a value that determines the behavior for adjusting the column headers height.
@@ -1718,10 +1642,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_ColumnHeadersHeightSizeModeDescr))]
     public DataGridViewColumnHeadersHeightSizeMode ColumnHeadersHeightSizeMode
     {
-        get
-        {
-            return _columnHeadersHeightSizeMode;
-        }
+        get => _columnHeadersHeightSizeMode;
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x2
@@ -1752,10 +1673,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridViewColumnHeadersVisibleDescr))]
     public bool ColumnHeadersVisible
     {
-        get
-        {
-            return _dataGridViewState1[State1_ColumnHeadersVisible];
-        }
+        get => _dataGridViewState1[State1_ColumnHeadersVisible];
         set
         {
             if (ColumnHeadersVisible != value)
@@ -1886,13 +1804,7 @@ public partial class DataGridView : Control, ISupportInitialize
     }
 
     [Browsable(false)]
-    public Point CurrentCellAddress
-    {
-        get
-        {
-            return _ptCurrentCell;
-        }
-    }
+    public Point CurrentCellAddress => _ptCurrentCell;
 
     private DataGridViewCell CurrentCellInternal
     {
@@ -2002,17 +1914,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridViewDataMemberDescr))]
     public string DataMember
     {
-        get
-        {
-            if (DataConnection is null)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return DataConnection.DataMember;
-            }
-        }
+        get => DataConnection is null ? string.Empty : DataConnection.DataMember;
         set
         {
             if (value != DataMember)
@@ -2041,17 +1943,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridViewDataSourceDescr))]
     public object? DataSource
     {
-        get
-        {
-            if (DataConnection is null)
-            {
-                return null;
-            }
-            else
-            {
-                return DataConnection.DataSource;
-            }
-        }
+        get => DataConnection?.DataSource;
         set
         {
             if (value != DataSource)
@@ -2220,29 +2112,11 @@ public partial class DataGridView : Control, ISupportInitialize
         remove => Events.RemoveHandler(s_defaultCellStyleChangedEvent, value);
     }
 
-    private static SolidBrush DefaultForeBrush
-    {
-        get
-        {
-            return (SolidBrush)SystemBrushes.WindowText;
-        }
-    }
+    private static SolidBrush DefaultForeBrush => (SolidBrush)SystemBrushes.WindowText;
 
-    private static Color DefaultGridColor
-    {
-        get
-        {
-            return SystemColors.WindowFrame;
-        }
-    }
+    private static Color DefaultGridColor => SystemColors.WindowFrame;
 
-    private static SolidBrush DefaultHeadersBackBrush
-    {
-        get
-        {
-            return (SolidBrush)SystemBrushes.Control;
-        }
-    }
+    private static SolidBrush DefaultHeadersBackBrush => (SolidBrush)SystemBrushes.Control;
 
     private DataGridViewCellStyle DefaultRowHeadersDefaultCellStyle
     {
@@ -2266,29 +2140,11 @@ public partial class DataGridView : Control, ISupportInitialize
         }
     }
 
-    private static SolidBrush DefaultSelectionBackBrush
-    {
-        get
-        {
-            return (SolidBrush)SystemBrushes.Highlight;
-        }
-    }
+    private static SolidBrush DefaultSelectionBackBrush => (SolidBrush)SystemBrushes.Highlight;
 
-    private static SolidBrush DefaultSelectionForeBrush
-    {
-        get
-        {
-            return (SolidBrush)SystemBrushes.HighlightText;
-        }
-    }
+    private static SolidBrush DefaultSelectionForeBrush => (SolidBrush)SystemBrushes.HighlightText;
 
-    protected override Size DefaultSize
-    {
-        get
-        {
-            return new Size(240, 150);
-        }
-    }
+    protected override Size DefaultSize => new(240, 150);
 
     internal DisplayedBandsData DisplayedBandsInfo { get; }
 
@@ -2324,10 +2180,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_EditModeDescr))]
     public DataGridViewEditMode EditMode
     {
-        get
-        {
-            return _editMode;
-        }
+        get => _editMode;
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x4
@@ -2349,13 +2202,7 @@ public partial class DataGridView : Control, ISupportInitialize
         remove => Events.RemoveHandler(s_editModeChangedEvent, value);
     }
 
-    internal Point MouseEnteredCellAddress
-    {
-        get
-        {
-            return _ptMouseEnteredCell;
-        }
-    }
+    internal Point MouseEnteredCellAddress => _ptMouseEnteredCell;
 
     private bool MouseOverEditingControl
     {
@@ -2411,13 +2258,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public Control? EditingControl { get; private set; }
 
-    internal AccessibleObject? EditingControlAccessibleObject
-    {
-        get
-        {
-            return EditingControl?.AccessibilityObject;
-        }
-    }
+    internal AccessibleObject? EditingControlAccessibleObject => EditingControl?.AccessibilityObject;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2453,10 +2294,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_EnableHeadersVisualStylesDescr))]
     public bool EnableHeadersVisualStyles
     {
-        get
-        {
-            return _dataGridViewState2[State2_EnableHeadersVisualStyles];
-        }
+        get => _dataGridViewState2[State2_EnableHeadersVisualStyles];
         set
         {
             if (_dataGridViewState2[State2_EnableHeadersVisualStyles] != value)
@@ -2637,10 +2475,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int FirstDisplayedScrollingColumnIndex
     {
-        get
-        {
-            return DisplayedBandsInfo.FirstDisplayedScrollingCol;
-        }
+        get => DisplayedBandsInfo.FirstDisplayedScrollingCol;
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
@@ -2718,10 +2553,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int FirstDisplayedScrollingRowIndex
     {
-        get
-        {
-            return DisplayedBandsInfo.FirstDisplayedScrollingRow;
-        }
+        get => DisplayedBandsInfo.FirstDisplayedScrollingRow;
         set
         {
             ArgumentOutOfRangeException.ThrowIfNegative(value);
@@ -3580,10 +3412,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridViewRowHeadersVisibleDescr))]
     public bool RowHeadersVisible
     {
-        get
-        {
-            return _dataGridViewState1[State1_RowHeadersVisible];
-        }
+        get => _dataGridViewState1[State1_RowHeadersVisible];
         set
         {
             if (RowHeadersVisible != value)
@@ -3620,10 +3449,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_RowHeadersWidthDescr))]
     public int RowHeadersWidth
     {
-        get
-        {
-            return _rowHeaderWidth;
-        }
+        get => _rowHeaderWidth;
         set
         {
             if (value < MinimumRowHeadersWidth)
@@ -3814,10 +3640,7 @@ public partial class DataGridView : Control, ISupportInitialize
         }
     }
 
-    private bool ShouldSerializeRowTemplate()
-    {
-        return _rowTemplate is not null;
-    }
+    private bool ShouldSerializeRowTemplate() => _rowTemplate is not null;
 
     internal DataGridViewRow RowTemplateClone
     {
@@ -3838,10 +3661,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_ScrollBarsDescr))]
     public ScrollBars ScrollBars
     {
-        get
-        {
-            return _scrollBars;
-        }
+        get => _scrollBars;
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x3
@@ -4002,10 +3822,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_SelectionModeDescr))]
     public DataGridViewSelectionMode SelectionMode
     {
-        get
-        {
-            return _selectionMode;
-        }
+        get => _selectionMode;
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x4
@@ -4036,10 +3853,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_ShowCellErrorsDescr))]
     public bool ShowCellErrors
     {
-        get
-        {
-            return _dataGridViewState2[State2_ShowCellErrors];
-        }
+        get => _dataGridViewState2[State2_ShowCellErrors];
         set
         {
             if (_dataGridViewState2[State2_ShowCellErrors] != value)
@@ -4092,10 +3906,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_ShowCellToolTipsDescr))]
     public bool ShowCellToolTips
     {
-        get
-        {
-            return _dataGridViewState2[State2_ShowCellToolTips];
-        }
+        get => _dataGridViewState2[State2_ShowCellToolTips];
         set
         {
             if (_dataGridViewState2[State2_ShowCellToolTips] != value)
@@ -4147,10 +3958,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_ShowEditingIconDescr))]
     public bool ShowEditingIcon
     {
-        get
-        {
-            return _dataGridViewState2[State2_ShowEditingIcon];
-        }
+        get => _dataGridViewState2[State2_ShowEditingIcon];
         set
         {
             if (ShowEditingIcon != value)
@@ -4186,10 +3994,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_ShowRowErrorsDescr))]
     public bool ShowRowErrors
     {
-        get
-        {
-            return _dataGridViewState2[State2_ShowRowErrors];
-        }
+        get => _dataGridViewState2[State2_ShowRowErrors];
         set
         {
             if (ShowRowErrors != value)
@@ -4228,25 +4033,15 @@ public partial class DataGridView : Control, ISupportInitialize
         }
     }
 
-    internal bool SingleHorizontalBorderAdded
-    {
-        get
-        {
-            return !_layout.ColumnHeadersVisible &&
-                (AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single ||
-                 CellBorderStyle == DataGridViewCellBorderStyle.SingleHorizontal);
-        }
-    }
+    internal bool SingleHorizontalBorderAdded =>
+        !_layout.ColumnHeadersVisible &&
+        (AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single ||
+            CellBorderStyle == DataGridViewCellBorderStyle.SingleHorizontal);
 
-    internal bool SingleVerticalBorderAdded
-    {
-        get
-        {
-            return !_layout.RowHeadersVisible &&
-                (AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single ||
-                 CellBorderStyle == DataGridViewCellBorderStyle.SingleVertical);
-        }
-    }
+    internal bool SingleVerticalBorderAdded =>
+        !_layout.RowHeadersVisible &&
+        (AdvancedCellBorderStyle.All == DataGridViewAdvancedCellBorderStyle.Single ||
+            CellBorderStyle == DataGridViewCellBorderStyle.SingleVertical);
 
     [Browsable(false)]
     public DataGridViewColumn? SortedColumn { get; private set; }
@@ -4260,10 +4055,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridView_StandardTabDescr))]
     public bool StandardTab
     {
-        get
-        {
-            return _dataGridViewState1[State1_StandardTab];
-        }
+        get => _dataGridViewState1[State1_StandardTab];
         set
         {
             if (_dataGridViewState1[State1_StandardTab] != value)
@@ -4371,27 +4163,13 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public Cursor UserSetCursor
-    {
-        get
-        {
-            if (_dataGridViewState1[State1_CustomCursorSet])
-            {
-                return _oldCursor!;
-            }
-            else
-            {
-                return Cursor;
-            }
-        }
-    }
+    public Cursor UserSetCursor => _dataGridViewState1[State1_CustomCursorSet]
+        ? _oldCursor!
+        : Cursor;
 
     internal int VerticalOffset
     {
-        get
-        {
-            return VerticalScrollingOffset;
-        }
+        get => VerticalScrollingOffset;
         set
         {
             if (value < 0)
@@ -4421,13 +4199,7 @@ public partial class DataGridView : Control, ISupportInitialize
         }
     }
 
-    protected ScrollBar VerticalScrollBar
-    {
-        get
-        {
-            return _vertScrollBar;
-        }
-    }
+    protected ScrollBar VerticalScrollBar => _vertScrollBar;
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -4453,10 +4225,7 @@ public partial class DataGridView : Control, ISupportInitialize
     [SRDescription(nameof(SR.DataGridViewVirtualModeDescr))]
     public bool VirtualMode
     {
-        get
-        {
-            return _dataGridViewState1[State1_VirtualMode];
-        }
+        get => _dataGridViewState1[State1_VirtualMode];
         set
         {
             if (_dataGridViewState1[State1_VirtualMode] != value)
@@ -4467,18 +4236,10 @@ public partial class DataGridView : Control, ISupportInitialize
         }
     }
 
-    private bool VisibleCellExists
-    {
-        get
-        {
-            if (Columns.GetFirstColumn(DataGridViewElementStates.Visible) is null)
-            {
-                return false;
-            }
-
-            return Rows.GetFirstRow(DataGridViewElementStates.Visible) != -1;
-        }
-    }
+    private bool VisibleCellExists =>
+        Columns.GetFirstColumn(DataGridViewElementStates.Visible) is null
+            ? false
+            : Rows.GetFirstRow(DataGridViewElementStates.Visible) != -1;
 
     // Events start here
 
