@@ -27,11 +27,11 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
 
     private const int DATAGRIDVIEWTEXTBOXCELL_maxInputLength = 32767;
 
-    private byte flagsState;  // see DATAGRIDVIEWTEXTBOXCELL_ consts above
+    private byte _flagsState;  // see DATAGRIDVIEWTEXTBOXCELL_ consts above
 
-    private static readonly Type defaultFormattedValueType = typeof(string);
-    private static readonly Type defaultValueType = typeof(object);
-    private static readonly Type cellType = typeof(DataGridViewTextBoxCell);
+    private static readonly Type s_defaultFormattedValueType = typeof(string);
+    private static readonly Type s_defaultValueType = typeof(object);
+    private static readonly Type s_cellType = typeof(DataGridViewTextBoxCell);
 
     public DataGridViewTextBoxCell()
     {
@@ -63,7 +63,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
         get
         {
             // we return string for the formatted type
-            return defaultFormattedValueType;
+            return s_defaultFormattedValueType;
         }
     }
 
@@ -105,7 +105,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
                 return valueType;
             }
 
-            return defaultValueType;
+            return s_defaultValueType;
         }
     }
 
@@ -119,7 +119,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
     {
         DataGridViewTextBoxCell dataGridViewCell;
         Type thisType = GetType();
-        if (thisType == cellType) //performance improvement
+        if (thisType == s_cellType) //performance improvement
         {
             dataGridViewCell = new DataGridViewTextBoxCell();
         }
@@ -572,7 +572,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
 
         if (throughMouseClick)
         {
-            flagsState |= (byte)DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick;
+            _flagsState |= (byte)DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick;
         }
     }
 
@@ -583,7 +583,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
             return;
         }
 
-        flagsState = (byte)(flagsState & ~DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick);
+        _flagsState = (byte)(_flagsState & ~DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick);
     }
 
     protected override void OnMouseClick(DataGridViewCellMouseEventArgs e)
@@ -597,9 +597,9 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
         Point ptCurrentCell = DataGridView.CurrentCellAddress;
         if (ptCurrentCell.X == e.ColumnIndex && ptCurrentCell.Y == e.RowIndex && e.Button == MouseButtons.Left)
         {
-            if ((flagsState & DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick) != 0x00)
+            if ((_flagsState & DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick) != 0x00)
             {
-                flagsState = (byte)(flagsState & ~DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick);
+                _flagsState = (byte)(_flagsState & ~DATAGRIDVIEWTEXTBOXCELL_ignoreNextMouseClick);
             }
             else if (DataGridView.EditMode != DataGridViewEditMode.EditProgrammatically)
             {
