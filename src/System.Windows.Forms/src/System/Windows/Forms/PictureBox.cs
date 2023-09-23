@@ -605,11 +605,11 @@ public partial class PictureBox : Control, ISupportInitialize
             PostCompleted(error, cancelled: false);
         }
     }
-#nullable disable
+
     private void StartLoadViaWebRequest()
     {
 #pragma warning disable SYSLIB0014 // Type or member is obsolete
-        WebRequest req = WebRequest.Create(CalculateUri(_imageLocation));
+        WebRequest req = WebRequest.Create(CalculateUri(_imageLocation!));
 #pragma warning restore SYSLIB0014 // Type or member is obsolete
 
         Task.Run(() =>
@@ -619,25 +619,25 @@ public partial class PictureBox : Control, ISupportInitialize
         });
     }
 
-    private void PostCompleted(Exception error, bool cancelled)
+    private void PostCompleted(Exception? error, bool cancelled)
     {
-        AsyncOperation temp = _currentAsyncLoadOperation;
+        AsyncOperation? temp = _currentAsyncLoadOperation;
         _currentAsyncLoadOperation = null;
-        temp?.PostOperationCompleted(_loadCompletedDelegate, new AsyncCompletedEventArgs(error, cancelled, null));
+        temp?.PostOperationCompleted(_loadCompletedDelegate!, new AsyncCompletedEventArgs(error, cancelled, null));
     }
 
-    private void LoadCompletedDelegate(object arg)
+    private void LoadCompletedDelegate(object? arg)
     {
-        AsyncCompletedEventArgs e = (AsyncCompletedEventArgs)arg;
+        AsyncCompletedEventArgs e = (AsyncCompletedEventArgs)arg!;
 
-        Image img = ErrorImage;
+        Image? img = ErrorImage;
         ImageInstallationType installType = ImageInstallationType.ErrorOrInitial;
         if (!e.Cancelled && e.Error is null)
         {
             // successful completion
             try
             {
-                img = Image.FromStream(_tempDownloadStream);
+                img = Image.FromStream(_tempDownloadStream!);
                 installType = ImageInstallationType.FromUrl;
             }
             catch (Exception error)
@@ -660,19 +660,19 @@ public partial class PictureBox : Control, ISupportInitialize
         OnLoadCompleted(e);
     }
 
-    private void LoadProgressDelegate(object arg) => OnLoadProgressChanged((ProgressChangedEventArgs)arg);
+    private void LoadProgressDelegate(object? arg) => OnLoadProgressChanged((ProgressChangedEventArgs)arg!);
 
     private void GetResponseCallback(IAsyncResult result)
     {
         if (_pictureBoxState[CancellationPendingState])
         {
-            PostCompleted(null, true);
+            PostCompleted(error: null, cancelled: true);
             return;
         }
 
         try
         {
-            WebRequest req = (WebRequest)result.AsyncState;
+            WebRequest req = (WebRequest)result.AsyncState!;
             WebResponse webResponse = req.EndGetResponse(result);
 
             _contentLength = (int)webResponse.ContentLength;
@@ -682,7 +682,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
             // Continue on with asynchronous reading.
             responseStream.BeginRead(
-                _readBuffer,
+                _readBuffer!,
                 0,
                 ReadBlockSize,
                 new AsyncCallback(ReadCallBack),
@@ -692,7 +692,7 @@ public partial class PictureBox : Control, ISupportInitialize
         {
             // Since this is on a non-UI thread, we catch any exceptions and
             // pass them back as data to the UI-thread.
-            PostCompleted(error, false);
+            PostCompleted(error, cancelled: false);
         }
     }
 
@@ -700,11 +700,11 @@ public partial class PictureBox : Control, ISupportInitialize
     {
         if (_pictureBoxState[CancellationPendingState])
         {
-            PostCompleted(null, true);
+            PostCompleted(error: null, cancelled: true);
             return;
         }
 
-        Stream responseStream = (Stream)result.AsyncState;
+        Stream responseStream = (Stream)result.AsyncState!;
         try
         {
             int bytesRead = responseStream.EndRead(result);
@@ -712,10 +712,10 @@ public partial class PictureBox : Control, ISupportInitialize
             if (bytesRead > 0)
             {
                 _totalBytesRead += bytesRead;
-                _tempDownloadStream.Write(_readBuffer, 0, bytesRead);
+                _tempDownloadStream!.Write(_readBuffer!, 0, bytesRead);
 
                 responseStream.BeginRead(
-                    _readBuffer,
+                    _readBuffer!,
                     0,
                     ReadBlockSize,
                     new AsyncCallback(ReadCallBack),
@@ -725,22 +725,24 @@ public partial class PictureBox : Control, ISupportInitialize
                 if (_contentLength != -1)
                 {
                     int progress = (int)(100 * (((float)_totalBytesRead) / ((float)_contentLength)));
-                    _currentAsyncLoadOperation?.Post(_loadProgressDelegate,
-                                new ProgressChangedEventArgs(progress, null));
+                    _currentAsyncLoadOperation?.Post(
+                        _loadProgressDelegate!,
+                        new ProgressChangedEventArgs(progress, null));
                 }
             }
             else
             {
-                _tempDownloadStream.Seek(0, SeekOrigin.Begin);
-                _currentAsyncLoadOperation?.Post(_loadProgressDelegate,
-                                new ProgressChangedEventArgs(100, null));
+                _tempDownloadStream!.Seek(0, SeekOrigin.Begin);
+                _currentAsyncLoadOperation?.Post(
+                    _loadProgressDelegate!,
+                    new ProgressChangedEventArgs(100, null));
 
-                PostCompleted(null, false);
+                PostCompleted(error: null, cancelled: false);
 
                 // Do this so any exception that Close() throws will be
                 // dealt with ok.
                 Stream rs = responseStream;
-                responseStream = null;
+                responseStream = null!;
                 rs.Close();
             }
         }
@@ -748,7 +750,7 @@ public partial class PictureBox : Control, ISupportInitialize
         {
             // Since this is on a non-UI thread, we catch any exceptions and
             // pass them back as data to the UI-thread.
-            PostCompleted(error, false);
+            PostCompleted(error, cancelled: false);
             responseStream?.Close();
         }
     }
@@ -763,7 +765,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAsynchronous))]
     [SRDescription(nameof(SR.PictureBoxLoadCompletedDescr))]
-    public event AsyncCompletedEventHandler LoadCompleted
+    public event AsyncCompletedEventHandler? LoadCompleted
     {
         add => Events.AddHandler(s_loadCompletedKey, value);
         remove => Events.RemoveHandler(s_loadCompletedKey, value);
@@ -771,7 +773,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatAsynchronous))]
     [SRDescription(nameof(SR.PictureBoxLoadProgressChangedDescr))]
-    public event ProgressChangedEventHandler LoadProgressChanged
+    public event ProgressChangedEventHandler? LoadProgressChanged
     {
         add => Events.AddHandler(s_loadProgressChangedKey, value);
         remove => Events.RemoveHandler(s_loadProgressChangedKey, value);
@@ -804,7 +806,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler RightToLeftChanged
+    public new event EventHandler? RightToLeftChanged
     {
         add => base.RightToLeftChanged += value;
         remove => base.RightToLeftChanged -= value;
@@ -878,7 +880,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     [SRCategory(nameof(SR.CatPropertyChanged))]
     [SRDescription(nameof(SR.PictureBoxOnSizeModeChangedDescr))]
-    public event EventHandler SizeModeChanged
+    public event EventHandler? SizeModeChanged
     {
         add => Events.AddHandler(EVENT_SIZEMODECHANGED, value);
 
@@ -897,7 +899,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler TabStopChanged
+    public new event EventHandler? TabStopChanged
     {
         add => base.TabStopChanged += value;
         remove => base.TabStopChanged -= value;
@@ -913,7 +915,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler TabIndexChanged
+    public new event EventHandler? TabIndexChanged
     {
         add => base.TabIndexChanged += value;
         remove => base.TabIndexChanged -= value;
@@ -922,6 +924,7 @@ public partial class PictureBox : Control, ISupportInitialize
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
     [Bindable(false)]
+    [AllowNull]
     public override string Text
     {
         get => base.Text;
@@ -930,7 +933,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler TextChanged
+    public new event EventHandler? TextChanged
     {
         add => base.TextChanged += value;
         remove => base.TextChanged -= value;
@@ -938,7 +941,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler Enter
+    public new event EventHandler? Enter
     {
         add => base.Enter += value;
         remove => base.Enter -= value;
@@ -946,7 +949,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event KeyEventHandler KeyUp
+    public new event KeyEventHandler? KeyUp
     {
         add => base.KeyUp += value;
         remove => base.KeyUp -= value;
@@ -954,7 +957,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event KeyEventHandler KeyDown
+    public new event KeyEventHandler? KeyDown
     {
         add => base.KeyDown += value;
         remove => base.KeyDown -= value;
@@ -962,7 +965,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event KeyPressEventHandler KeyPress
+    public new event KeyPressEventHandler? KeyPress
     {
         add => base.KeyPress += value;
         remove => base.KeyPress -= value;
@@ -970,7 +973,7 @@ public partial class PictureBox : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public new event EventHandler Leave
+    public new event EventHandler? Leave
     {
         add => base.Leave += value;
         remove => base.Leave -= value;
@@ -1071,7 +1074,7 @@ public partial class PictureBox : Control, ISupportInitialize
         Animate();
     }
 
-    private void OnFrameChanged(object o, EventArgs e)
+    private void OnFrameChanged(object? o, EventArgs e)
     {
         if (Disposing || IsDisposed)
         {
@@ -1119,12 +1122,12 @@ public partial class PictureBox : Control, ISupportInitialize
 
     protected virtual void OnLoadCompleted(AsyncCompletedEventArgs e)
     {
-        ((AsyncCompletedEventHandler)(Events[s_loadCompletedKey]))?.Invoke(this, e);
+        ((AsyncCompletedEventHandler?)(Events[s_loadCompletedKey]))?.Invoke(this, e);
     }
 
     protected virtual void OnLoadProgressChanged(ProgressChangedEventArgs e)
     {
-        ((ProgressChangedEventHandler)(Events[s_loadProgressChangedKey]))?.Invoke(this, e);
+        ((ProgressChangedEventHandler?)(Events[s_loadProgressChangedKey]))?.Invoke(this, e);
     }
 
     /// <summary>
@@ -1166,7 +1169,7 @@ public partial class PictureBox : Control, ISupportInitialize
         }
 
         // Windows draws the border for us (see CreateParams)
-        base.OnPaint(pe);
+        base.OnPaint(pe!);
     }
 
     protected override void OnVisibleChanged(EventArgs e)

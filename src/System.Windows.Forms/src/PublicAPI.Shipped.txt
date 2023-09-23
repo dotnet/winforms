@@ -212,20 +212,20 @@ override System.Windows.Forms.DataGridViewRow.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewTextBoxCell.ValueType.get -> System.Type
 ~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlWindow.Equals(object obj) -> bool
-~override System.Windows.Forms.PictureBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.PictureBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.PictureBox.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.PictureBox.Font.get -> System.Drawing.Font!
 override System.Windows.Forms.PictureBox.Font.set -> void
-~override System.Windows.Forms.PictureBox.OnEnabledChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.PictureBox.OnHandleCreated(System.EventArgs e) -> void
-~override System.Windows.Forms.PictureBox.OnHandleDestroyed(System.EventArgs e) -> void
-~override System.Windows.Forms.PictureBox.OnPaint(System.Windows.Forms.PaintEventArgs pe) -> void
-~override System.Windows.Forms.PictureBox.OnParentChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.PictureBox.OnResize(System.EventArgs e) -> void
-~override System.Windows.Forms.PictureBox.OnVisibleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.PictureBox.Text.get -> string
-~override System.Windows.Forms.PictureBox.Text.set -> void
-~override System.Windows.Forms.PictureBox.ToString() -> string
+override System.Windows.Forms.PictureBox.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.PictureBox.OnHandleCreated(System.EventArgs! e) -> void
+override System.Windows.Forms.PictureBox.OnHandleDestroyed(System.EventArgs! e) -> void
+override System.Windows.Forms.PictureBox.OnPaint(System.Windows.Forms.PaintEventArgs! pe) -> void
+override System.Windows.Forms.PictureBox.OnParentChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.PictureBox.OnResize(System.EventArgs! e) -> void
+override System.Windows.Forms.PictureBox.OnVisibleChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.PictureBox.Text.get -> string!
+override System.Windows.Forms.PictureBox.Text.set -> void
+override System.Windows.Forms.PictureBox.ToString() -> string!
 ~override System.Windows.Forms.PropertyGrid.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.PropertyGrid.BackgroundImage.set -> void
 ~override System.Windows.Forms.PropertyGrid.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -564,7 +564,7 @@ System.Windows.Forms.PictureBox.ImageLocation.set -> void
 System.Windows.Forms.PictureBox.InitialImage.get -> System.Drawing.Image?
 System.Windows.Forms.PictureBox.InitialImage.set -> void
 System.Windows.Forms.PictureBox.Load(string! url) -> void
-~System.Windows.Forms.PictureBox.LoadAsync(string url) -> void
+System.Windows.Forms.PictureBox.LoadAsync(string! url) -> void
 ~System.Windows.Forms.PropertyGrid.BrowsableAttributes.get -> System.ComponentModel.AttributeCollection
 ~System.Windows.Forms.PropertyGrid.BrowsableAttributes.set -> void
 ~System.Windows.Forms.PropertyGrid.Controls.get -> System.Windows.Forms.Control.ControlCollection
@@ -893,9 +893,9 @@ virtual System.Windows.Forms.DataGridViewRow.PaintHeader(System.Drawing.Graphics
 ~virtual System.Windows.Forms.DataGridViewRowCollection.InsertRange(int rowIndex, params System.Windows.Forms.DataGridViewRow[] dataGridViewRows) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewRowCollection.Remove(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-~virtual System.Windows.Forms.PictureBox.OnLoadCompleted(System.ComponentModel.AsyncCompletedEventArgs e) -> void
-~virtual System.Windows.Forms.PictureBox.OnLoadProgressChanged(System.ComponentModel.ProgressChangedEventArgs e) -> void
-~virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.PictureBox.OnLoadCompleted(System.ComponentModel.AsyncCompletedEventArgs! e) -> void
+virtual System.Windows.Forms.PictureBox.OnLoadProgressChanged(System.ComponentModel.ProgressChangedEventArgs! e) -> void
+virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.PropertyGrid.CreatePropertyTab(System.Type tabType) -> System.Windows.Forms.Design.PropertyTab
 ~virtual System.Windows.Forms.PropertyGrid.DefaultTabType.get -> System.Type
 ~virtual System.Windows.Forms.PropertyGrid.OnPropertySortChanged(System.EventArgs e) -> void
@@ -8777,32 +8777,32 @@ System.Windows.Forms.PictureBox.CancelAsync() -> void
 System.Windows.Forms.PictureBox.CausesValidation.get -> bool
 System.Windows.Forms.PictureBox.CausesValidation.set -> void
 System.Windows.Forms.PictureBox.CausesValidationChanged -> System.EventHandler?
-System.Windows.Forms.PictureBox.Enter -> System.EventHandler
+System.Windows.Forms.PictureBox.Enter -> System.EventHandler?
 System.Windows.Forms.PictureBox.FontChanged -> System.EventHandler?
 System.Windows.Forms.PictureBox.ForeColorChanged -> System.EventHandler?
 System.Windows.Forms.PictureBox.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.PictureBox.ImeMode.set -> void
 System.Windows.Forms.PictureBox.ImeModeChanged -> System.EventHandler?
-System.Windows.Forms.PictureBox.KeyDown -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.PictureBox.KeyPress -> System.Windows.Forms.KeyPressEventHandler
-System.Windows.Forms.PictureBox.KeyUp -> System.Windows.Forms.KeyEventHandler
-System.Windows.Forms.PictureBox.Leave -> System.EventHandler
+System.Windows.Forms.PictureBox.KeyDown -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.PictureBox.KeyPress -> System.Windows.Forms.KeyPressEventHandler?
+System.Windows.Forms.PictureBox.KeyUp -> System.Windows.Forms.KeyEventHandler?
+System.Windows.Forms.PictureBox.Leave -> System.EventHandler?
 System.Windows.Forms.PictureBox.Load() -> void
 System.Windows.Forms.PictureBox.LoadAsync() -> void
-System.Windows.Forms.PictureBox.LoadCompleted -> System.ComponentModel.AsyncCompletedEventHandler
-System.Windows.Forms.PictureBox.LoadProgressChanged -> System.ComponentModel.ProgressChangedEventHandler
+System.Windows.Forms.PictureBox.LoadCompleted -> System.ComponentModel.AsyncCompletedEventHandler?
+System.Windows.Forms.PictureBox.LoadProgressChanged -> System.ComponentModel.ProgressChangedEventHandler?
 System.Windows.Forms.PictureBox.PictureBox() -> void
-System.Windows.Forms.PictureBox.RightToLeftChanged -> System.EventHandler
+System.Windows.Forms.PictureBox.RightToLeftChanged -> System.EventHandler?
 System.Windows.Forms.PictureBox.SizeMode.get -> System.Windows.Forms.PictureBoxSizeMode
 System.Windows.Forms.PictureBox.SizeMode.set -> void
-System.Windows.Forms.PictureBox.SizeModeChanged -> System.EventHandler
+System.Windows.Forms.PictureBox.SizeModeChanged -> System.EventHandler?
 System.Windows.Forms.PictureBox.TabIndex.get -> int
 System.Windows.Forms.PictureBox.TabIndex.set -> void
-System.Windows.Forms.PictureBox.TabIndexChanged -> System.EventHandler
+System.Windows.Forms.PictureBox.TabIndexChanged -> System.EventHandler?
 System.Windows.Forms.PictureBox.TabStop.get -> bool
 System.Windows.Forms.PictureBox.TabStop.set -> void
-System.Windows.Forms.PictureBox.TabStopChanged -> System.EventHandler
-System.Windows.Forms.PictureBox.TextChanged -> System.EventHandler
+System.Windows.Forms.PictureBox.TabStopChanged -> System.EventHandler?
+System.Windows.Forms.PictureBox.TextChanged -> System.EventHandler?
 System.Windows.Forms.PictureBox.WaitOnLoad.get -> bool
 System.Windows.Forms.PictureBox.WaitOnLoad.set -> void
 System.Windows.Forms.PictureBoxSizeMode
