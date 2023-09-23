@@ -179,6 +179,19 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
         {
             e.Graphics.DrawRectangle(SystemPens.ButtonHighlight, 0, 0, e.Item.Width - 1, e.Item.Height - 1);
         }
+
+        if (e.Item is ToolStripMenuItem menuItem && (menuItem.Checked || menuItem.Selected))
+        {
+            Graphics g = e.Graphics;
+            Rectangle bounds = new Rectangle(Point.Empty, menuItem.Size);
+
+            g.FillRectangle(SystemBrushes.Highlight, bounds);
+            g.DrawRectangle(SystemPens.ControlLight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+            if (menuItem.Selected)
+            {
+                DrawHightContrastDashedBorder(g, menuItem);
+            }
+        }
     }
 
     protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e)
@@ -218,11 +231,14 @@ internal class ToolStripHighContrastRenderer : ToolStripSystemRenderer
             }
         }
 
-        // ToolstripButtons that are checked are rendered with a highlight
+        // ToolstripButtons and ToolstripMenuItems that are checked are rendered with a highlight
         // background. In that case, set the text color to highlight as well.
-        if (typeof(ToolStripButton).IsAssignableFrom(e.Item.GetType()) &&
+        if ((typeof(ToolStripButton).IsAssignableFrom(e.Item.GetType()) &&
             ((ToolStripButton)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image &&
-            ((ToolStripButton)e.Item).Checked)
+            ((ToolStripButton)e.Item).Checked) ||
+            (typeof(ToolStripMenuItem).IsAssignableFrom(e.Item.GetType()) &&
+            ((ToolStripMenuItem)e.Item).DisplayStyle != ToolStripItemDisplayStyle.Image &&
+            ((ToolStripMenuItem)e.Item).Checked))
         {
             e.TextColor = SystemColors.HighlightText;
         }

@@ -97,6 +97,11 @@ public partial class TreeNode
                 _ => base.FragmentNavigate(direction),
             };
 
+        internal override void SelectItem()
+        {
+            _owningTreeView.SelectedNode = _owningTreeNode;
+        }
+
         internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             => propertyID switch
             {

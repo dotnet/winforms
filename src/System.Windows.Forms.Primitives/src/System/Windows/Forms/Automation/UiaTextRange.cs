@@ -3,6 +3,9 @@
 
 using System.ComponentModel;
 using System.Drawing;
+#if DEBUG
+using Windows.Win32.System.Variant;
+#endif
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop.UiaCore;
 
@@ -273,7 +276,7 @@ internal class UiaTextRange : ITextRangeProvider
 
     double[] ITextRangeProvider.GetBoundingRectangles()
     {
-        if (_enclosingElement.GetPropertyValue(UIA.BoundingRectanglePropertyId) is not Rectangle ownerBounds)
+        if (_enclosingElement.GetPropertyValue(UIA.BoundingRectanglePropertyId) is not double[] ownerBounds || !ownerBounds.Length.Equals(4))
         {
             return Array.Empty<double>();
         }
@@ -284,8 +287,7 @@ internal class UiaTextRange : ITextRangeProvider
 
         if (text.Length == 0)
         {
-            rectangles.Add(ownerBounds);
-            return UiaTextProvider.RectListToDoubleArray(rectangles);
+            return ownerBounds;
         }
 
         // If this is an end of a line.
@@ -296,7 +298,7 @@ internal class UiaTextRange : ITextRangeProvider
             PInvoke.GetCaretPos(out Point endlinePoint);
             endlinePoint = _provider.PointToScreen(endlinePoint);
             Rectangle endlineRectangle = new Rectangle(endlinePoint.X, endlinePoint.Y + 2, UiaTextProvider.EndOfLineWidth, Math.Abs(_provider.Logfont.lfHeight) + 1);
-            return new double[] { endlineRectangle.X, endlineRectangle.Y, endlineRectangle.Width, endlineRectangle.Height };
+            return UiaTextProvider.BoundingRectangleAsArray(endlineRectangle);
         }
 
         // Return zero rectangles for a degenerate-range. We don't return an empty,
@@ -309,7 +311,7 @@ internal class UiaTextRange : ITextRangeProvider
         ValidateEndpoints();
 
         // Get the mapping from client coordinates to screen coordinates.
-        Point mapClientToScreen = new Point(ownerBounds.X, ownerBounds.Y);
+        Point mapClientToScreen = new Point((int)ownerBounds[0], (int)ownerBounds[1]);
 
         // Clip the rectangles to the edit control's formatting rectangle.
         Rectangle clippingRectangle = _provider.BoundingRectangle;
@@ -569,16 +571,19 @@ internal class UiaTextRange : ITextRangeProvider
 
     private static bool IsApostrophe(char ch) => ch == '\'' || ch == (char)0x2019; // Unicode Right Single Quote Mark
 
+    /// <devdoc>
+    ///  Attribute values and their types are defined here - https://learn.microsoft.com/windows/win32/winauto/uiauto-textattribute-ids
+    /// </devdoc>
     private object? GetAttributeValue(TextAttributeIdentifier textAttributeIdentifier)
     {
-        return textAttributeIdentifier switch
+        object? value = textAttributeIdentifier switch
         {
-            TextAttributeIdentifier.BackgroundColorAttributeId => GetBackgroundColor(),
+            TextAttributeIdentifier.BackgroundColorAttributeId => (int)(uint)GetBackgroundColor(),
             TextAttributeIdentifier.CapStyleAttributeId => GetCapStyle(_provider.WindowStyle),
             TextAttributeIdentifier.FontNameAttributeId => GetFontName(_provider.Logfont),
             TextAttributeIdentifier.FontSizeAttributeId => GetFontSize(_provider.Logfont),
             TextAttributeIdentifier.FontWeightAttributeId => GetFontWeight(_provider.Logfont),
-            TextAttributeIdentifier.ForegroundColorAttributeId => GetForegroundColor(),
+            TextAttributeIdentifier.ForegroundColorAttributeId => (int)(uint)GetForegroundColor(),
             TextAttributeIdentifier.HorizontalTextAlignmentAttributeId => GetHorizontalTextAlignment(_provider.WindowStyle),
             TextAttributeIdentifier.IsItalicAttributeId => GetItalic(_provider.Logfont),
             TextAttributeIdentifier.IsReadOnlyAttributeId => GetReadOnly(),
@@ -586,6 +591,20 @@ internal class UiaTextRange : ITextRangeProvider
             TextAttributeIdentifier.UnderlineStyleAttributeId => GetUnderlineStyle(_provider.Logfont),
             _ => UiaGetReservedNotSupportedValue()
         };
+
+#if DEBUG
+        if (value?.GetType() is { } type && type.IsValueType && !type.IsPrimitive && !type.IsEnum)
+        {
+            // Check to make sure we can actually convert this to a VARIANT, throw otherwise.
+            using VARIANT variant = default;
+            unsafe
+            {
+                Runtime.InteropServices.Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
+            }
+        }
+#endif
+
+        return value;
     }
 
     /// <summary>
