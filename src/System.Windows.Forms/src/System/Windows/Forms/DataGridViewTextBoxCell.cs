@@ -44,17 +44,11 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
     /// <returns>
     ///  AccessibleObject for this DataGridViewTextBoxCell instance.
     /// </returns>
-    protected override AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewTextBoxCellAccessibleObject(this);
-    }
+    protected override AccessibleObject CreateAccessibilityInstance() => new DataGridViewTextBoxCellAccessibleObject(this);
 
     private DataGridViewTextBoxEditingControl? EditingTextBox
     {
-        get
-        {
-            return (DataGridViewTextBoxEditingControl?)Properties.GetObject(PropTextBoxCellEditingTextBox);
-        }
+        get => (DataGridViewTextBoxEditingControl?)Properties.GetObject(PropTextBoxCellEditingTextBox);
         set
         {
             if (value is not null || Properties.ContainsObject(PropTextBoxCellEditingTextBox))
@@ -615,10 +609,10 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
     }
 
     [MemberNotNullWhen(true, nameof(EditingTextBox))]
-    private bool OwnsEditingTextBox(int rowIndex)
-    {
-        return rowIndex != -1 && EditingTextBox is not null && rowIndex == ((IDataGridViewEditingControl)EditingTextBox).EditingControlRowIndex;
-    }
+    private bool OwnsEditingTextBox(int rowIndex) =>
+        rowIndex != -1 &&
+        EditingTextBox is not null &&
+        rowIndex == ((IDataGridViewEditingControl)EditingTextBox).EditingControlRowIndex;
 
     protected override void Paint(
         Graphics graphics,
