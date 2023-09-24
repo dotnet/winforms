@@ -52,7 +52,7 @@ internal class DataGridViewColumnCollectionDialog : Form
     private bool _formIsDirty;
     private TableLayoutPanel? _overarchingTableLayoutPanel;
     private TableLayoutPanel? _addRemoveTableLayoutPanel;
-    private Dictionary<DataGridViewColumn, bool>? _userAddedColumns;
+    private HashSet<DataGridViewColumn>? _userAddedColumns;
 
     private readonly IServiceProvider _serviceProvider;
 
@@ -103,7 +103,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         {
             _selectedColumns.SelectedIndex = _columnsPrivateCopy.IndexOf(e.Element as DataGridViewColumn);
             ListBoxItem lbi = (ListBoxItem)_selectedColumns.SelectedItem!;
-            _userAddedColumns![lbi.DataGridViewColumn] = true;
+            _userAddedColumns!.Add(lbi.DataGridViewColumn);
             _columnsNames![lbi.DataGridViewColumn] = lbi.DataGridViewColumn.Name;
         }
 
@@ -139,7 +139,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
             _columnsNames!.Remove(listBoxItem.DataGridViewColumn, out string? columnSiteName);
 
-            bool hasUserAddedColumn = _userAddedColumns!.Remove(listBoxItem.DataGridViewColumn, out bool userAddedColumn);
+            bool userAddedColumn = _userAddedColumns!.Remove(listBoxItem.DataGridViewColumn);
 
             if (listBoxItem.DataGridViewColumnDesigner is not null)
             {
@@ -159,9 +159,9 @@ internal class DataGridViewColumnCollectionDialog : Form
                 _columnsNames[newColumn] = columnSiteName;
             }
 
-            if (hasUserAddedColumn)
+            if (userAddedColumn)
             {
-                _userAddedColumns[newColumn] = userAddedColumn;
+                _userAddedColumns.Add(newColumn);
             }
 
             // properties like DataGridViewColumn::Frozen are dependent on the DisplayIndex
@@ -233,9 +233,9 @@ internal class DataGridViewColumnCollectionDialog : Form
                 newColumn.ContextMenuStrip = _columnsPrivateCopy[i].ContextMenuStrip;
 
                 newColumns[i] = newColumn;
-                if (_userAddedColumns!.TryGetValue(_columnsPrivateCopy[i], out bool boolValue))
+                if (_userAddedColumns!.Contains(_columnsPrivateCopy[i]))
                 {
-                    userAddedColumnsInfo[i] = boolValue;
+                    userAddedColumnsInfo[i] = true;
                 }
 
                 if (_columnsNames is not null && _columnsNames.TryGetValue(_columnsPrivateCopy[i], out string? compName))
@@ -1121,7 +1121,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         _columnsNames = new Dictionary<DataGridViewColumn, string?>(_columnsPrivateCopy.Count);
         _columnsPrivateCopy.Clear();
 
-        _userAddedColumns = new Dictionary<DataGridViewColumn, bool>(_liveDataGridView.Columns.Count);
+        _userAddedColumns = new HashSet<DataGridViewColumn>(_liveDataGridView.Columns.Count);
 
         // Set ColumnCollectionChanging to true so:
         // 1. the column collection changed event handler does not execute PopulateSelectedColumns over and over again.
@@ -1146,7 +1146,10 @@ internal class DataGridViewColumnCollectionDialog : Form
                     _columnsNames[col] = liveCol.Site.Name;
                 }
 
-                _userAddedColumns[col] = IsColumnAddedByUser(_liveDataGridView.Columns[i]);
+                if (IsColumnAddedByUser(liveCol))
+                {
+                    _userAddedColumns.Add(col);
+                }
             }
         }
         finally
