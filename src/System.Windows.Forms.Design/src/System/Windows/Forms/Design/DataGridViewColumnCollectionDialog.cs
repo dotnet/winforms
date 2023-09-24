@@ -41,11 +41,6 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     // static because we can only have one instance of the DataGridViewColumnCollectionDialog running at a time
     private static Bitmap? _selectedColumnsItemBitmap;
-    private static Type _iTypeResolutionServiceType = typeof(ITypeResolutionService);
-    private static Type _iComponentChangeServiceType = typeof(IComponentChangeService);
-    private static Type _iHelpServiceType = typeof(IHelpService);
-    private static Type _iUIServiceType = typeof(IUIService);
-    private static Type _toolboxBitmapAttributeType = typeof(ToolboxBitmapAttribute);
 
     private bool _columnCollectionChanging;
 
@@ -119,7 +114,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         DataGridViewColumn newColumn = (DataGridViewColumn)Activator.CreateInstance(newType)!;
 
-        ITypeResolutionService? tr = _liveDataGridView?.Site?.GetService(_iTypeResolutionServiceType) as ITypeResolutionService;
+        ITypeResolutionService? tr = _liveDataGridView?.Site?.GetService<ITypeResolutionService>();
         ComponentDesigner newColumnDesigner = DataGridViewAddColumnDialog.GetComponentDesignerForType(tr, newType)!;
 
         CopyDataGridViewColumnProperties(currentColumn /*srcColumn*/, newColumn /*destColumn*/);
@@ -186,7 +181,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         try
         {
-            IComponentChangeService? changeService = _liveDataGridView!.Site?.GetService(_iComponentChangeServiceType) as IComponentChangeService;
+            IComponentChangeService? changeService = _liveDataGridView!.Site?.GetService<IComponentChangeService>();
             PropertyDescriptor? prop = TypeDescriptor.GetProperties(_liveDataGridView)["Columns"];
             IContainer? currentContainer = _liveDataGridView.Site?.Container;
 
@@ -284,7 +279,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         }
         catch (InvalidOperationException ex)
         {
-            IUIService? uiService = _liveDataGridView?.Site?.GetService(typeof(IUIService)) as IUIService;
+            IUIService? uiService = _liveDataGridView?.Site?.GetService<IUIService>();
             DataGridViewDesigner.ShowErrorDialog(uiService, ex, _liveDataGridView);
             DialogResult = DialogResult.Cancel;
         }
@@ -793,7 +788,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private void DataGridViewColumnCollectionDialog_HelpRequestHandled()
     {
-        IHelpService? helpService = _liveDataGridView?.Site?.GetService(_iHelpServiceType) as IHelpService;
+        IHelpService? helpService = _liveDataGridView?.Site?.GetService<IHelpService>();
         helpService?.ShowHelpFromKeyword("vs.DataGridViewColumnCollectionDialog");
     }
 
@@ -801,12 +796,11 @@ internal class DataGridViewColumnCollectionDialog : Form
     {
         // get the Dialog Font
         //
-        Font uiFont = Control.DefaultFont;
-        IUIService? uiService = _liveDataGridView?.Site?.GetService(_iUIServiceType) as IUIService;
+        IUIService? uiService = _liveDataGridView?.Site?.GetService<IUIService>();
         object? font = uiService?.Styles["DialogFont"];
-        if (uiService is not null && font is Font fontValue)
+        if (font is not Font uiFont)
         {
-            uiFont = fontValue;
+            uiFont = Control.DefaultFont;
         }
 
         Font = uiFont;
@@ -860,7 +854,7 @@ internal class DataGridViewColumnCollectionDialog : Form
             _addColumnDialog.StartPosition = FormStartPosition.CenterParent;
         }
 
-        _addColumnDialog.Start(insertIndex, false /*persistChangesToDesigner*/);
+        _addColumnDialog.Start(insertIndex, persistChangesToDesigner: false);
 
         _addColumnDialog.ShowDialog(this);
     }
@@ -880,7 +874,7 @@ internal class DataGridViewColumnCollectionDialog : Form
         }
 
         _selectedColumns.Items.Clear();
-        ITypeResolutionService? tr = _liveDataGridView?.Site?.GetService(_iTypeResolutionServiceType) as ITypeResolutionService;
+        ITypeResolutionService? tr = _liveDataGridView?.Site?.GetService<ITypeResolutionService>();
 
         for (int i = 0; i < _columnsPrivateCopy.Count; i++)
         {
@@ -1097,11 +1091,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     internal void SetLiveDataGridView(DataGridView dataGridView)
     {
-        IComponentChangeService? newComponentChangeService = null;
-        if (dataGridView.Site is not null)
-        {
-            newComponentChangeService = dataGridView.Site.GetService(_iComponentChangeServiceType) as IComponentChangeService;
-        }
+        IComponentChangeService? newComponentChangeService = dataGridView.Site?.GetService<IComponentChangeService>();
 
         if (newComponentChangeService != _compChangeService)
         {
@@ -1229,12 +1219,9 @@ internal class DataGridViewColumnCollectionDialog : Form
                 TypeDescriptor.CreateAssociation(DataGridViewColumn, DataGridViewColumnDesigner);
             }
 
-#pragma warning disable IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
-            ToolboxBitmapAttribute? attr = TypeDescriptor.GetAttributes(column!)[_toolboxBitmapAttributeType!] as ToolboxBitmapAttribute;
-#pragma warning restore IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
-            if (attr is not null)
+            if (TypeDescriptorHelper.TryGetAttribute(column, out ToolboxBitmapAttribute? attr))
             {
-                ToolboxBitmap = attr.GetImage(column, false /*large*/);
+                ToolboxBitmap = attr.GetImage(column, large: false);
             }
             else
             {
@@ -1313,11 +1300,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor? pd)
         {
-            if (pd is null)
-            {
-                return DataGridViewColumn;
-            }
-            else if (pd is ColumnTypePropertyDescriptor)
+            if (pd is ColumnTypePropertyDescriptor)
             {
                 return this;
             }
@@ -1368,29 +1351,11 @@ internal class DataGridViewColumnCollectionDialog : Form
             }
         }
 
-        public override Type ComponentType
-        {
-            get
-            {
-                return typeof(ListBoxItem);
-            }
-        }
+        public override Type ComponentType => typeof(ListBoxItem);
 
-        public override bool IsReadOnly
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool IsReadOnly => false;
 
-        public override Type PropertyType
-        {
-            get
-            {
-                return typeof(Type);
-            }
-        }
+        public override Type PropertyType => typeof(Type);
 
         public override bool CanResetValue(object component)
         {
