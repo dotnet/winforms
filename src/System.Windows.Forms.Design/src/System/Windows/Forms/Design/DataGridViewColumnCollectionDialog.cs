@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 
@@ -33,7 +32,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
     private readonly DataGridView _dataGridViewPrivateCopy;
     private readonly DataGridViewColumnCollection _columnsPrivateCopy;
-    private Hashtable? _columnsNames;
+    private Dictionary<DataGridViewColumn, string?>? _columnsNames;
     private DataGridViewAddColumnDialog? _addColumnDialog;
 
     private const int _OWNERDRAWHORIZONTALBUFFER = 3;
@@ -53,7 +52,7 @@ internal class DataGridViewColumnCollectionDialog : Form
     private bool _formIsDirty;
     private TableLayoutPanel? _overarchingTableLayoutPanel;
     private TableLayoutPanel? _addRemoveTableLayoutPanel;
-    private Hashtable? _userAddedColumns;
+    private Dictionary<DataGridViewColumn, bool>? _userAddedColumns;
 
     private readonly IServiceProvider _serviceProvider;
 
@@ -138,19 +137,9 @@ internal class DataGridViewColumnCollectionDialog : Form
             // scrub the TypeDescriptor associations
             ListBoxItem listBoxItem = (ListBoxItem)_selectedColumns.SelectedItem;
 
-            bool? userAddedColumn = (bool)_userAddedColumns![listBoxItem.DataGridViewColumn]!;
+            _columnsNames!.Remove(listBoxItem.DataGridViewColumn, out string? columnSiteName);
 
-            string columnSiteName = string.Empty;
-            if (_columnsNames!.Contains(listBoxItem.DataGridViewColumn))
-            {
-                columnSiteName = (string)_columnsNames[listBoxItem.DataGridViewColumn]!;
-                _columnsNames.Remove(listBoxItem.DataGridViewColumn);
-            }
-
-            if (_userAddedColumns.Contains(listBoxItem.DataGridViewColumn))
-            {
-                _userAddedColumns.Remove(listBoxItem.DataGridViewColumn);
-            }
+            bool hasUserAddedColumn = _userAddedColumns!.Remove(listBoxItem.DataGridViewColumn, out bool userAddedColumn);
 
             if (listBoxItem.DataGridViewColumnDesigner is not null)
             {
@@ -170,7 +159,10 @@ internal class DataGridViewColumnCollectionDialog : Form
                 _columnsNames[newColumn] = columnSiteName;
             }
 
-            _userAddedColumns[newColumn] = userAddedColumn;
+            if (hasUserAddedColumn)
+            {
+                _userAddedColumns[newColumn] = userAddedColumn;
+            }
 
             // properties like DataGridViewColumn::Frozen are dependent on the DisplayIndex
             FixColumnCollectionDisplayIndices();
@@ -233,7 +225,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
             DataGridViewColumn[] newColumns = new DataGridViewColumn[_columnsPrivateCopy.Count];
             bool[] userAddedColumnsInfo = new bool[_columnsPrivateCopy.Count];
-            string[] compNames = new string[_columnsPrivateCopy.Count];
+            string?[] compNames = new string?[_columnsPrivateCopy.Count];
             for (int i = 0; i < _columnsPrivateCopy.Count; i++)
             {
                 DataGridViewColumn newColumn = (DataGridViewColumn)_columnsPrivateCopy[i].Clone();
@@ -241,17 +233,14 @@ internal class DataGridViewColumnCollectionDialog : Form
                 newColumn.ContextMenuStrip = _columnsPrivateCopy[i].ContextMenuStrip;
 
                 newColumns[i] = newColumn;
-                object? boolObject = _userAddedColumns![_columnsPrivateCopy[i]];
-                if (boolObject is not null && boolObject is bool boolValue)
+                if (_userAddedColumns!.TryGetValue(_columnsPrivateCopy[i], out bool boolValue))
                 {
                     userAddedColumnsInfo[i] = boolValue;
                 }
 
-                if (_columnsNames is not null)
+                if (_columnsNames is not null && _columnsNames.TryGetValue(_columnsPrivateCopy[i], out string? compName))
                 {
-#pragma warning disable CS8601 // Possible null reference assignment.
-                    compNames[i] = _columnsNames[_columnsPrivateCopy[i]] as string;
-#pragma warning restore CS8601 // Possible null reference assignment.
+                    compNames[i] = compName;
                 }
             }
 
@@ -260,9 +249,10 @@ internal class DataGridViewColumnCollectionDialog : Form
             {
                 for (int i = 0; i < newColumns.Length; i++)
                 {
-                    if (!string.IsNullOrEmpty(compNames[i]) && ValidateName(currentContainer, compNames[i], newColumns[i]))
+                    string? compName = compNames[i];
+                    if (!string.IsNullOrEmpty(compName) && ValidateName(currentContainer, compName, newColumns[i]))
                     {
-                        currentContainer.Add(newColumns[i], compNames[i]);
+                        currentContainer.Add(newColumns[i], compName);
                     }
                     else
                     {
@@ -1128,10 +1118,10 @@ internal class DataGridViewColumnCollectionDialog : Form
         _dataGridViewPrivateCopy.AutoSizeColumnsMode = dataGridView.AutoSizeColumnsMode;
         _dataGridViewPrivateCopy.DataSource = dataGridView.DataSource;
         _dataGridViewPrivateCopy.DataMember = dataGridView.DataMember;
-        _columnsNames = new Hashtable(_columnsPrivateCopy.Count);
+        _columnsNames = new Dictionary<DataGridViewColumn, string?>(_columnsPrivateCopy.Count);
         _columnsPrivateCopy.Clear();
 
-        _userAddedColumns = new Hashtable(_liveDataGridView.Columns.Count);
+        _userAddedColumns = new Dictionary<DataGridViewColumn, bool>(_liveDataGridView.Columns.Count);
 
         // Set ColumnCollectionChanging to true so:
         // 1. the column collection changed event handler does not execute PopulateSelectedColumns over and over again.
@@ -1294,7 +1284,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
                 // We should look into speeding this up w/ our own DataGridViewColumnTypes...
                 //
-                Hashtable hash = new Hashtable();
+                Dictionary<string, PropertyDescriptor> hash = new();
                 for (int i = 0; i < props.Count; i++)
                 {
                     hash.Add(props[i].Name, props[i]);
