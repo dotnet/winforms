@@ -475,17 +475,18 @@ public sealed partial class ImageList
             }
 
             // Check the last cached item
-            if (IsValidIndex(_lastAccessedIndex))
+            int i = _lastAccessedIndex;
+            if (IsValidIndex(i))
             {
-                if ((_imageInfoCollection[_lastAccessedIndex] is not null) &&
-                    (WindowsFormsUtils.SafeCompareStrings(_imageInfoCollection[_lastAccessedIndex].Name, key, ignoreCase: true)))
+                if ((_imageInfoCollection[i] is not null) &&
+                    (WindowsFormsUtils.SafeCompareStrings(_imageInfoCollection[i].Name, key, ignoreCase: true)))
                 {
-                    return _lastAccessedIndex;
+                    return i;
                 }
             }
 
             // Search for the item
-            for (int i = 0; i < Count; i++)
+            for (i = 0; i < Count; i++)
             {
                 if ((_imageInfoCollection[i] is not null) &&
                         (WindowsFormsUtils.SafeCompareStrings(_imageInfoCollection[i].Name, key, ignoreCase: true)))
