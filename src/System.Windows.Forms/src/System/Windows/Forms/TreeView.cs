@@ -1662,11 +1662,11 @@ public partial class TreeView : Control
     /// <summary>
     ///  Defined so that a  tree node can use it
     /// </summary>
-    internal bool TreeViewBeforeCheck(TreeNode node, TreeViewAction actionTaken)
+    internal bool TreeViewBeforeCheck(TreeNode? node, TreeViewAction actionTaken)
     {
         TreeViewCancelEventArgs viewCancelEventArgs = new TreeViewCancelEventArgs(node, false, actionTaken);
         OnBeforeCheck(viewCancelEventArgs);
-        return (viewCancelEventArgs.Cancel);
+        return viewCancelEventArgs.Cancel;
     }
 
     internal void TreeViewAfterCheck(TreeNode node, TreeViewAction actionTaken)
@@ -1735,7 +1735,7 @@ public partial class TreeView : Control
         }
     }
 
-    private static void NotifyAboutGotFocus(TreeNode treeNode)
+    private static void NotifyAboutGotFocus(TreeNode? treeNode)
     {
         if (treeNode is not null)
         {
@@ -2433,7 +2433,7 @@ public partial class TreeView : Control
 
         return s;
     }
-#nullable disable
+
     private unsafe void TvnBeginDrag(MouseButtons buttons, NMTREEVIEWW* nmtv)
     {
         TVITEMW item = nmtv->itemNew;
@@ -2444,7 +2444,7 @@ public partial class TreeView : Control
             return;
         }
 
-        TreeNode node = NodeFromHandle(item.hItem);
+        TreeNode? node = NodeFromHandle(item.hItem);
 
         OnItemDrag(new ItemDragEventArgs(buttons, node));
     }
@@ -2459,7 +2459,7 @@ public partial class TreeView : Control
             return IntPtr.Zero;
         }
 
-        TreeViewCancelEventArgs e = null;
+        TreeViewCancelEventArgs? e = null;
         if ((item.state & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) == 0)
         {
             e = new TreeViewCancelEventArgs(NodeFromHandle(item.hItem), false, TreeViewAction.Expand);
@@ -2485,7 +2485,7 @@ public partial class TreeView : Control
         }
 
         TreeViewEventArgs e;
-        TreeNode node = NodeFromHandle(item.hItem);
+        TreeNode? node = NodeFromHandle(item.hItem);
 
         // Note that IsExpanded is invalid for the moment, so we use item item.state to branch.
         if ((item.state & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) == 0)
@@ -2513,7 +2513,7 @@ public partial class TreeView : Control
             return IntPtr.Zero;
         }
 
-        TreeNode node = NodeFromHandle(nmtv->itemNew.hItem);
+        TreeNode? node = NodeFromHandle(nmtv->itemNew.hItem);
 
         TreeViewAction action = TreeViewAction.Unknown;
         switch (nmtv->action)
@@ -2543,7 +2543,7 @@ public partial class TreeView : Control
 
         if (nmtv->itemNew.hItem != IntPtr.Zero)
         {
-            TreeNode node = NodeFromHandle(nmtv->itemNew.hItem);
+            TreeNode? node = NodeFromHandle(nmtv->itemNew.hItem);
             TreeViewAction action = TreeViewAction.Unknown;
             switch (nmtv->action)
             {
@@ -2579,7 +2579,7 @@ public partial class TreeView : Control
             return IntPtr.Zero;
         }
 
-        TreeNode editingNode = NodeFromHandle(nmtvdi.item.hItem);
+        TreeNode? editingNode = NodeFromHandle(nmtvdi.item.hItem);
         NodeLabelEditEventArgs e = new NodeLabelEditEventArgs(editingNode);
         OnBeforeLabelEdit(e);
         if (!e.CancelEdit)
@@ -2600,7 +2600,7 @@ public partial class TreeView : Control
             return (IntPtr)1;
         }
 
-        TreeNode node = NodeFromHandle(nmtvdi.item.hItem);
+        TreeNode? node = NodeFromHandle(nmtvdi.item.hItem);
         string newText = nmtvdi.item.pszText.ToString();
         NodeLabelEditEventArgs e = new NodeLabelEditEventArgs(node, newText);
         OnAfterLabelEdit(e);
@@ -2712,7 +2712,7 @@ public partial class TreeView : Control
             case NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT:
                 // get the node
                 Debug.Assert(nmtvcd->nmcd.dwItemSpec != 0, "Invalid node handle in ITEMPREPAINT");
-                TreeNode node = NodeFromHandle((nint)nmtvcd->nmcd.dwItemSpec);
+                TreeNode? node = NodeFromHandle((nint)nmtvcd->nmcd.dwItemSpec);
 
                 if (node is null)
                 {
@@ -2848,14 +2848,14 @@ public partial class TreeView : Control
                             {
                                 g.FillRectangle(SystemBrushes.Highlight, bounds);
                                 ControlPaint.DrawFocusRectangle(g, bounds, color, SystemColors.Highlight);
-                                TextRenderer.DrawText(g, e.Node.Text, font, bounds, color, TextFormatFlags.Default);
+                                TextRenderer.DrawText(g, e.Node!.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                             else
                             {
                                 using var brush = BackColor.GetCachedSolidBrushScope();
                                 g.FillRectangle(brush, bounds);
 
-                                TextRenderer.DrawText(g, e.Node.Text, font, bounds, color, TextFormatFlags.Default);
+                                TextRenderer.DrawText(g, e.Node!.Text, font, bounds, color, TextFormatFlags.Default);
                             }
                         }
                     }
@@ -2877,9 +2877,9 @@ public partial class TreeView : Control
     ///  Generates colors for each item. This can be overridden to provide colors on a per state/per node
     ///  basis, rather than using the ForeColor/BackColor/NodeFont properties on TreeNode.
     /// </summary>
-    protected OwnerDrawPropertyBag GetItemRenderStyles(TreeNode node, int state)
+    protected OwnerDrawPropertyBag GetItemRenderStyles(TreeNode? node, int state)
     {
-        OwnerDrawPropertyBag retval = new OwnerDrawPropertyBag();
+        OwnerDrawPropertyBag retval = new();
         if (node is null || node.propBag is null)
         {
             return retval;
@@ -2900,7 +2900,7 @@ public partial class TreeView : Control
         return retval;
     }
 
-    internal override unsafe ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string caption, ToolTip tooltip)
+    internal override unsafe ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
     {
         // The "ShowNodeToolTips" flag is required so that when the user hovers over the TreeNode,
         // their own tooltip is displayed, not the TreeView tooltip.
@@ -2909,7 +2909,9 @@ public partial class TreeView : Control
         bool isExternalTooltip = ShowNodeToolTips && tooltip != KeyboardToolTip;
         ComCtl32.ToolInfoWrapper<Control> wrapper = new(this, flags, isExternalTooltip ? null : caption);
         if (isExternalTooltip)
+        {
             wrapper.Info.lpszText = (char*)(-1);
+        }
 
         return wrapper;
     }
@@ -2948,7 +2950,7 @@ public partial class TreeView : Control
     private unsafe void WmNeedText(ref Message m)
     {
         NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)(nint)m.LParamInternal;
-        string tipText = _controlToolTipText;
+        string? tipText = _controlToolTipText;
 
         TVHITTESTINFO tvhip = new()
         {
@@ -2958,7 +2960,7 @@ public partial class TreeView : Control
         nint hnode = PInvoke.SendMessage(this, PInvoke.TVM_HITTEST, 0, ref tvhip);
         if (hnode != 0 && ((tvhip.flags & TVHITTESTINFO_FLAGS.TVHT_ONITEM) != 0))
         {
-            TreeNode tn = NodeFromHandle(hnode);
+            TreeNode? tn = NodeFromHandle(hnode);
             if (ShowNodeToolTips && tn is not null && (!string.IsNullOrEmpty(tn.ToolTipText)))
             {
                 tipText = tn.ToolTipText;
@@ -3054,7 +3056,7 @@ public partial class TreeView : Control
 
                     if (nmtv->hdr.code == PInvoke.NM_RCLICK)
                     {
-                        TreeNode treeNode = NodeFromHandle(hnode);
+                        TreeNode? treeNode = NodeFromHandle(hnode);
                         if (treeNode is not null && treeNode.ContextMenuStrip is not null)
                         {
                             ShowContextMenu(treeNode);
@@ -3121,9 +3123,9 @@ public partial class TreeView : Control
     }
 
     // Need to send TVM_SELECTITEM to reset the node-highlighting while the contextMenuStrip is being closed so that the treeView reselects the SelectedNode.
-    private void ContextMenuStripClosing(object sender, ToolStripDropDownClosingEventArgs e)
+    private void ContextMenuStripClosing(object? sender, ToolStripDropDownClosingEventArgs e)
     {
-        ContextMenuStrip strip = sender as ContextMenuStrip;
+        ContextMenuStrip strip = (ContextMenuStrip)sender!;
         // Unhook the Event.
         strip.Closing -= new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
         PInvoke.SendMessage(this, PInvoke.TVM_SELECTITEM, (WPARAM)(uint)PInvoke.TVGN_DROPHILITE);
@@ -3205,7 +3207,7 @@ public partial class TreeView : Control
 
                         PInvoke.SendMessage(this, PInvoke.TVM_GETITEMW, 0, ref item1);
 
-                        TreeNode node = NodeFromHandle(item->hItem);
+                        TreeNode node = NodeFromHandle(item->hItem)!;
                         node.CheckedStateInternal = (((int)item1.state >> TreeNode.SHIFTVAL) > 1);
                     }
                 }
@@ -3282,7 +3284,7 @@ public partial class TreeView : Control
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, PARAM.ToPoint(m.LParamInternal)));
                     if (!ValidationCancelled && CheckBoxes)
                     {
-                        TreeNode node = NodeFromHandle(_mouseDownNode);
+                        TreeNode? node = NodeFromHandle(_mouseDownNode);
                         bool eventReturn = TreeViewBeforeCheck(node, TreeViewAction.ByMouse);
                         if (!eventReturn && node is not null)
                         {
@@ -3424,7 +3426,7 @@ public partial class TreeView : Control
                 else
                 {
                     // this is the Shift + F10 Case....
-                    TreeNode treeNode = SelectedNode;
+                    TreeNode? treeNode = SelectedNode;
                     if (treeNode is not null && treeNode.ContextMenuStrip is not null)
                     {
                         Point client;
