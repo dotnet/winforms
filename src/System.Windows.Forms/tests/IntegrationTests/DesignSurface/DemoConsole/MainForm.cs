@@ -259,7 +259,7 @@ public partial class MainForm : Form
                         bindingSource.DataSource = new List<string> { "a1", "b2", "c3", "d4", "e5", "f6" };
                         listBox.DataSource = bindingSource;
                         DataGridView dataGridView = surface.CreateControl<DataGridView>(new Size(200, 150), new Point(470, 220));
-                        DataGridViewComboBoxColumn comboBoxColumn = new DataGridViewComboBoxColumn();
+                        DataGridViewComboBoxColumn comboBoxColumn = surface.CreateComponent<DataGridViewComboBoxColumn>();
                         comboBoxColumn.HeaderText = "Column1";
                         dataGridView.Columns.AddRange([comboBoxColumn]);
                     }
