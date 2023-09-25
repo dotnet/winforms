@@ -1,7 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 using static Interop.UiaCore;
@@ -698,6 +700,60 @@ public class AccessibleObjectTests : InteropTestBase
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IScrollItemProviderScrollIntoView(o));
+        }
+    }
+
+    [Fact]
+    public void AccessibleObject_IAccessible_NoGettersWithParameters()
+    {
+        Type type = typeof(Accessibility.IAccessible);
+        var members = type.GetMembers();
+
+        List<string> memberNames = new();
+        List<string> getterNames = new();
+
+        foreach (var member in members)
+        {
+            memberNames.Add(member.Name);
+            if (member is PropertyInfo property && property.GetGetMethod() is MethodInfo getter && getter.GetParameters() is var parameters && parameters.Length > 0)
+            {
+                getterNames.Add(getter.Name);
+                Assert.Equal(getter.Name, $"get_{member.Name}");
+            }
+        }
+
+        Assert.Equal(35, memberNames.Count);
+        Assert.Equal(10, getterNames.Count);
+        Assert.Contains("get_accChild", getterNames);
+    }
+
+    [WinFormsFact]
+    public unsafe void AccessibleObject_IDispatch()
+    {
+        AccessibleObject accessible = new();
+        using var dispatch = ComHelpers.TryGetComScope<IDispatch>(accessible);
+        dispatch.Value->GetIDOfName("accChild", out int dispId).ThrowOnFailure();
+        Assert.Equal(0x00010002, dispId);
+
+        // We only ever get IUnknown type info in Core. This isn't necessary to replicate, it is meant
+        // to show the minbar.
+        using ComScope<ITypeInfo> typeInfo = new(null);
+        dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo).ThrowOnFailure();
+        HRESULT hr = typeInfo.Value->GetIDOfName("accChild", out int memberId);
+        Assert.Equal(HRESULT.DISP_E_UNKNOWNNAME, hr);
+        hr = typeInfo.Value->GetIDOfName("get_accChild", out memberId);
+        Assert.Equal(HRESULT.DISP_E_UNKNOWNNAME, hr);
+
+        TYPEATTR* typeattr = default;
+        typeInfo.Value->GetTypeAttr(&typeattr).ThrowOnFailure();
+        try
+        {
+            Assert.Equal(3, typeattr->cFuncs);
+            Assert.Equal(IUnknown.IID_Guid, typeattr->guid);
+        }
+        finally
+        {
+            typeInfo.Value->ReleaseTypeAttr(typeattr);
         }
     }
 

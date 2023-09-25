@@ -7,12 +7,13 @@
     <IncludePdbInPackage>false</IncludePdbInPackage>
     <PublishWindowsPdb>false</PublishWindowsPdb>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="Accessibility.il" />
+  </ItemGroup>
   
   <ItemGroup>
     <!-- Reference the version project in order to disassemble its version information to link to this assembly -->
-    <ProjectReference Include="..\ver\Accessibility-version.csproj"
-                      ReferenceOutputAssembly="false"
-                      OutputItemType="ILResourceReference" />
+    <ProjectReference Include="..\ver\Accessibility-version.csproj" ReferenceOutputAssembly="false" OutputItemType="ILResourceReference" />
   </ItemGroup>
 
   <Target Name="CompileDesignTime" />

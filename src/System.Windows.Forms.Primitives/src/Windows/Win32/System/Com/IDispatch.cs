@@ -128,4 +128,17 @@ internal unsafe partial struct IDispatch
 
         return hr;
     }
+
+    /// <inheritdoc cref="GetIDsOfNames(Guid*, PWSTR*, uint, uint, int*)"/>
+    internal HRESULT GetIDOfName(string name, out int dispId)
+    {
+        int id = 0;
+
+        fixed (char* n = name)
+        {
+            HRESULT result = GetIDsOfNames(IID.NULL(), (PWSTR*)&n, 1u, PInvoke.GetThreadLocale(), &id);
+            dispId = id;
+            return result;
+        }
+    }
 }
