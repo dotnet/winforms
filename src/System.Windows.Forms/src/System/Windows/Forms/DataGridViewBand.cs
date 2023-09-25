@@ -532,7 +532,7 @@ public class DataGridViewBand : DataGridViewElement, ICloneable, IDisposable
         }
         set
         {
-            if (!Enum.IsDefined(typeof(DataGridViewTriState), value))
+            if (!Enum.IsDefined(value))
             {
                 throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewTriState));
             }

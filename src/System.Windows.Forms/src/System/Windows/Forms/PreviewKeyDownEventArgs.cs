@@ -35,7 +35,7 @@ public class PreviewKeyDownEventArgs : EventArgs
         get
         {
             Keys keyGenerated = KeyData & Keys.KeyCode;
-            if (!Enum.IsDefined(typeof(Keys), (int)keyGenerated))
+            if (!Enum.IsDefined(keyGenerated))
             {
                 return Keys.None;
             }
