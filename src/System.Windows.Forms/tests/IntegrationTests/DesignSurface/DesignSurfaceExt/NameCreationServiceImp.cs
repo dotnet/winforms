@@ -24,9 +24,7 @@ internal class NameCreationServiceImp : INameCreationService
         int i = 0;
         while (i < cc.Count)
         {
-            Component comp = cc[i] as Component;
-
-            if (comp.GetType() == type)
+            if (cc[i] is Component comp && comp.GetType() == type)
             {
                 count++;
 
