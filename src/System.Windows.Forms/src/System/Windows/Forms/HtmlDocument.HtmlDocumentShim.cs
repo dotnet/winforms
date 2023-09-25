@@ -38,18 +38,7 @@ public sealed unsafe partial class HtmlDocument
             }
         }
 
-        public override IHTMLWindow2.Interface? AssociatedWindow
-        {
-            get
-            {
-                if (_associatedWindow is null)
-                {
-                    return null;
-                }
-
-                return (IHTMLWindow2.Interface?)_associatedWindow.GetManagedObject();
-            }
-        }
+        public override IHTMLWindow2.Interface? AssociatedWindow => (IHTMLWindow2.Interface?)_associatedWindow?.GetManagedObject();
 
         public IHTMLDocument2.Interface NativeHtmlDocument2 => (IHTMLDocument2.Interface)_htmlDocument.NativeHtmlDocument2.GetManagedObject();
 

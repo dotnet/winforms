@@ -63,18 +63,7 @@ public sealed partial class HtmlElement
             }
         }
 
-        public override IHTMLWindow2.Interface? AssociatedWindow
-        {
-            get
-            {
-                if (_associatedWindow is null)
-                {
-                    return null;
-                }
-
-                return (IHTMLWindow2.Interface?)_associatedWindow.GetManagedObject();
-            }
-        }
+        public override IHTMLWindow2.Interface? AssociatedWindow => (IHTMLWindow2.Interface?)_associatedWindow?.GetManagedObject();
 
         public IHTMLElement.Interface NativeHtmlElement => (IHTMLElement.Interface)_htmlElement.NativeHtmlElement.GetManagedObject();
 
