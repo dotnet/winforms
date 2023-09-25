@@ -1,8 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
-using FDEX_PROP_FLAGS = Windows.Win32.System.Ole.FDEX_PROP_FLAGS;
+using static Windows.Win32.System.Ole.FDEX_PROP_FLAGS;
 
 namespace Windows.Win32.System.Com;
 
@@ -149,27 +150,27 @@ internal unsafe partial struct IDispatch
     // private static FDEX_PROP_FLAGS GetFieldFlags()
     // {
     //     return
-    //         FDEX_PROP_FLAGS.fdexPropCanGet
-    //         | FDEX_PROP_FLAGS.fdexPropCanPut
-    //         | FDEX_PROP_FLAGS.fdexPropCannotPutRef
-    //         | FDEX_PROP_FLAGS.fdexPropCannotCall
-    //         | FDEX_PROP_FLAGS.fdexPropCannotConstruct
-    //         | FDEX_PROP_FLAGS.fdexPropCannotSourceEvents;
+    //         fdexPropCanGet
+    //         | fdexPropCanPut
+    //         | fdexPropCannotPutRef
+    //         | fdexPropCannotCall
+    //         | fdexPropCannotConstruct
+    //         | fdexPropCannotSourceEvents;
     // }
 
     internal static FDEX_PROP_FLAGS GetMethodFlags()
-        => FDEX_PROP_FLAGS.fdexPropCannotGet
-            | FDEX_PROP_FLAGS.fdexPropCannotPut
-            | FDEX_PROP_FLAGS.fdexPropCannotPutRef
-            | FDEX_PROP_FLAGS.fdexPropCanCall
-            | FDEX_PROP_FLAGS.fdexPropCannotConstruct
-            | FDEX_PROP_FLAGS.fdexPropCannotSourceEvents;
+        => fdexPropCannotGet
+            | fdexPropCannotPut
+            | fdexPropCannotPutRef
+            | fdexPropCanCall
+            | fdexPropCannotConstruct
+            | fdexPropCannotSourceEvents;
 
     internal static FDEX_PROP_FLAGS GetPropertyFlags(bool canRead, bool canWrite)
-        => (canRead ? FDEX_PROP_FLAGS.fdexPropCanGet : FDEX_PROP_FLAGS.fdexPropCannotGet)
-            | (canWrite ? FDEX_PROP_FLAGS.fdexPropCanPut : FDEX_PROP_FLAGS.fdexPropCannotPut)
-            | FDEX_PROP_FLAGS.fdexPropCannotPutRef
-            | FDEX_PROP_FLAGS.fdexPropCannotCall
-            | FDEX_PROP_FLAGS.fdexPropCannotConstruct
-            | FDEX_PROP_FLAGS.fdexPropCannotSourceEvents;
+        => (canRead ? fdexPropCanGet : fdexPropCannotGet)
+            | (canWrite ? fdexPropCanPut : fdexPropCannotPut)
+            | fdexPropCannotPutRef
+            | fdexPropCannotCall
+            | fdexPropCannotConstruct
+            | fdexPropCannotSourceEvents;
 }

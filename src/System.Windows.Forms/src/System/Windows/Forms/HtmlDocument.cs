@@ -176,9 +176,9 @@ public sealed unsafe partial class HtmlDocument
             try
             {
                 using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
-                VARIANT color = default;
+                using VARIANT color = default;
                 htmlDoc2.Value->get_bgColor(&color).ThrowOnFailure();
-                return ColorFromObject(color.ToObject());
+                return ColorFromVARIANT(color);
             }
             catch (Exception ex) when (!ex.IsCriticalException())
             {
@@ -201,9 +201,9 @@ public sealed unsafe partial class HtmlDocument
             try
             {
                 using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
-                VARIANT color = default;
+                using VARIANT color = default;
                 htmlDoc2.Value->get_fgColor(&color).ThrowOnFailure();
-                return ColorFromObject(color.ToObject());
+                return ColorFromVARIANT(color);
             }
             catch (Exception ex) when (!ex.IsCriticalException())
             {
@@ -226,9 +226,9 @@ public sealed unsafe partial class HtmlDocument
             try
             {
                 using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
-                VARIANT color = default;
+                using VARIANT color = default;
                 htmlDoc2.Value->get_linkColor(&color).ThrowOnFailure();
-                return ColorFromObject(color.ToObject());
+                return ColorFromVARIANT(color);
             }
             catch (Exception ex) when (!ex.IsCriticalException())
             {
@@ -251,9 +251,9 @@ public sealed unsafe partial class HtmlDocument
             try
             {
                 using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
-                VARIANT color = default;
+                using VARIANT color = default;
                 htmlDoc2.Value->get_alinkColor(&color).ThrowOnFailure();
-                return ColorFromObject(color.ToObject());
+                return ColorFromVARIANT(color);
             }
             catch (Exception ex) when (!ex.IsCriticalException())
             {
@@ -276,9 +276,9 @@ public sealed unsafe partial class HtmlDocument
             try
             {
                 using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
-                VARIANT color = default;
+                using VARIANT color = default;
                 htmlDoc2.Value->get_vlinkColor(&color).ThrowOnFailure();
-                return ColorFromObject(color.ToObject());
+                return ColorFromVARIANT(color);
             }
             catch (Exception ex) when (!ex.IsCriticalException())
             {
@@ -305,14 +305,7 @@ public sealed unsafe partial class HtmlDocument
         }
     }
 
-    public object DomDocument
-    {
-        get
-        {
-            using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
-            return ComHelpers.GetObjectForIUnknown(htmlDoc2.AsUnknown);
-        }
-    }
+    public object DomDocument => NativeHtmlDocument2.GetManagedObject();
 
     public string Cookie
     {
@@ -422,24 +415,13 @@ public sealed unsafe partial class HtmlDocument
 
     public void Write(string text)
     {
-        SAFEARRAYBOUND saBound = new()
-        {
-            cElements = 1,
-            lLbound = 0
-        };
-
-        using SafeArrayScope scope = new(VARENUM.VT_BSTR, 1, saBound);
+        using SafeArrayScope<string> scope = new(1);
         if (scope.IsNull)
         {
             return;
         }
 
-        Span<int> indices = stackalloc int[] { 0 };
-        using BSTR bstrText = new(text);
-        fixed (int* pIndices = indices)
-        {
-            PInvoke.SafeArrayPutElement(scope.Value, pIndices, &bstrText);
-        }
+        scope[0] = text;
 
         using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
         htmlDoc2.Value->write(scope.Value).ThrowOnFailure();
@@ -657,12 +639,13 @@ public sealed unsafe partial class HtmlDocument
         remove => DocumentShim!.RemoveHandler(s_eventStop, value);
     }
 
-    private static Color ColorFromObject(object? oColor)
+    private static Color ColorFromVARIANT(VARIANT vColor)
     {
         try
         {
-            if (oColor is string strColor)
+            if (vColor.Type == VARENUM.VT_BSTR)
             {
+                string strColor = (string)vColor.ToObject()!;
                 int index = strColor.IndexOf('#');
                 if (index >= 0)
                 {
@@ -677,10 +660,10 @@ public sealed unsafe partial class HtmlDocument
                     return Color.FromName(strColor);
                 }
             }
-            else if (oColor is int intColor)
+            else if (vColor.Type is VARENUM.VT_I4 or VARENUM.VT_INT)
             {
                 // The actual color is non-transparent. So set alpha = 255.
-                return Color.FromArgb(255, Color.FromArgb(intColor));
+                return Color.FromArgb(255, Color.FromArgb(vColor.data.intVal));
             }
         }
         catch (Exception ex) when (!ex.IsCriticalException())
@@ -716,12 +699,7 @@ public sealed unsafe partial class HtmlDocument
 
     public static bool operator !=(HtmlDocument? left, HtmlDocument? right) => !(left == right);
 
-    public override int GetHashCode()
-    {
-        using var htmlDoc2 = _htmlDocument2.GetInterface();
-        using var unknown = htmlDoc2.TryQuery<IUnknown>(out HRESULT hr);
-        return hr.Succeeded ? (int)unknown.Value : 0;
-    }
+    public override int GetHashCode() => _htmlDocument2.GetHashCode();
 
     public override bool Equals(object? obj) => this == (HtmlDocument?)obj;
 }

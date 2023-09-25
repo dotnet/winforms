@@ -96,6 +96,7 @@
       "IHTMLElement.setAttribute",
       "IHTMLElement.scrollIntoView",
       "IHTMLElement2.attachEvent",
+      "IHTMLElement2.blur",
       "IHTMLElement2.detachEvent",
       "IHTMLElement2.focus",
       "IHTMLElement2.get_canHaveChildren",

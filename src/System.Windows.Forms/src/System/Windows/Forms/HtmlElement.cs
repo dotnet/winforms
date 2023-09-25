@@ -497,14 +497,7 @@ public sealed unsafe partial class HtmlElement
         }
     }
 
-    public object DomElement
-    {
-        get
-        {
-            using var htmlElement = NativeHtmlElement.GetInterface();
-            return ComHelpers.GetObjectForIUnknown(htmlElement.AsUnknown);
-        }
-    }
+    public object DomElement => NativeHtmlElement.GetManagedObject();
 
     public HtmlElement AppendChild(HtmlElement newElement)
     {
@@ -641,7 +634,7 @@ public sealed unsafe partial class HtmlElement
     public void RemoveFocus()
     {
         using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
-        htmlElement2.Value->blur();
+        htmlElement2.Value->blur().ThrowOnFailure();
     }
 
     public void RaiseEvent(string eventName)
@@ -829,12 +822,7 @@ public sealed unsafe partial class HtmlElement
 
     public static bool operator !=(HtmlElement left, HtmlElement right) => !(left == right);
 
-    public override int GetHashCode()
-    {
-        using var htmlElement = _htmlElement.GetInterface();
-        using var unknown = htmlElement.TryQuery<IUnknown>(out HRESULT hr);
-        return hr.Succeeded ? (int)unknown.Value : 0;
-    }
+    public override int GetHashCode() => _htmlElement.GetHashCode();
 
     public override bool Equals(object obj) => this == (obj as HtmlElement);
 }

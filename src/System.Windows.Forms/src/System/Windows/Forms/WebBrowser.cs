@@ -357,9 +357,9 @@ public unsafe partial class WebBrowser : WebBrowserBase
             {
                 using var htmlDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(htmlDocument.DomDocument);
                 Debug.Assert(!htmlDocument2.IsNull, "The HtmlDocument object must implement IHTMLDocument2.");
-                BSTR title = default;
+                using BSTR title = default;
                 htmlDocument2.Value->get_title(&title).AssertSuccess();
-                documentTitle = title.ToStringAndFree();
+                documentTitle = title.ToString();
             }
 
             return documentTitle;
@@ -382,9 +382,9 @@ public unsafe partial class WebBrowser : WebBrowserBase
             {
                 using var htmlDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(htmlDocument.DomDocument);
                 Debug.Assert(!htmlDocument2.IsNull, "The HtmlDocument object must implement IHTMLDocument2.");
-                BSTR mimeType = default;
+                using BSTR mimeType = default;
                 htmlDocument2.Value->get_mimeType(&mimeType).AssertSuccess();
-                docType = mimeType.ToStringAndFree();
+                docType = mimeType.ToString();
             }
 
             return docType;
@@ -1135,19 +1135,8 @@ public unsafe partial class WebBrowser : WebBrowserBase
             return;
         }
 
-        IWebBrowser2* webBrowser2 = ComHelpers.GetComPointer<IWebBrowser2>(nativeActiveXObject);
-        if (_axIWebBrowser2 is not null)
-        {
-            if (_axIWebBrowser2.MatchesOriginalPointer(webBrowser2))
-            {
-                webBrowser2->Release();
-                return;
-            }
-
-            DisposeHelper.NullAndDispose(ref _axIWebBrowser2);
-        }
-
-        _axIWebBrowser2 = new(webBrowser2, takeOwnership: true);
+        DisposeHelper.NullAndDispose(ref _axIWebBrowser2);
+        _axIWebBrowser2 = new(ComHelpers.GetComPointer<IWebBrowser2>(nativeActiveXObject), takeOwnership: true);
     }
 
     /// <summary>

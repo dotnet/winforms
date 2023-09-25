@@ -72,19 +72,11 @@ public sealed partial class HtmlElement
                     return null;
                 }
 
-                using var window = _associatedWindow.GetInterface();
-                return (IHTMLWindow2.Interface?)ComHelpers.GetObjectForIUnknown(window.AsUnknown);
+                return (IHTMLWindow2.Interface?)_associatedWindow.GetManagedObject();
             }
         }
 
-        public IHTMLElement.Interface NativeHtmlElement
-        {
-            get
-            {
-                using var htmlElement = _htmlElement.NativeHtmlElement.GetInterface();
-                return (IHTMLElement.Interface)ComHelpers.GetObjectForIUnknown(htmlElement.AsUnknown);
-            }
-        }
+        public IHTMLElement.Interface NativeHtmlElement => (IHTMLElement.Interface)_htmlElement.NativeHtmlElement.GetManagedObject();
 
         internal HtmlElement Element => _htmlElement;
 

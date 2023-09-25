@@ -99,12 +99,5 @@ public sealed unsafe class HtmlHistory : IDisposable
         omHistory.Value->go(&loc).ThrowOnFailure();
     }
 
-    public object DomHistory
-    {
-        get
-        {
-            using var omHistory = NativeOmHistory.GetInterface();
-            return ComHelpers.GetObjectForIUnknown(omHistory.AsUnknown);
-        }
-    }
+    public object DomHistory => NativeOmHistory.GetManagedObject();
 }

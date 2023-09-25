@@ -151,21 +151,23 @@ internal class HtmlToClrEventProxy : StandardDispatch, IManagedWrapper<IDispatch
             case EventNamePropertyDispId:
                 if (flags.HasFlag(DISPATCH_FLAGS.DISPATCH_PROPERTYGET))
                 {
-                    if (result is not null)
+                    if (result is null)
                     {
-                        *result = (VARIANT)EventName;
+                        return HRESULT.DISP_E_PARAMNOTOPTIONAL;
                     }
 
+                    *result = (VARIANT)EventName;
                     return HRESULT.S_OK;
                 }
 
                 return HRESULT.DISP_E_MEMBERNOTFOUND;
             case GetEventNameDispId:
-                if (result is not null)
+                if (result is null)
                 {
-                    *result = (VARIANT)EventName;
+                    return HRESULT.DISP_E_PARAMNOTOPTIONAL;
                 }
 
+                *result = (VARIANT)EventName;
                 return HRESULT.S_OK;
             default:
                 return HRESULT.DISP_E_MEMBERNOTFOUND;

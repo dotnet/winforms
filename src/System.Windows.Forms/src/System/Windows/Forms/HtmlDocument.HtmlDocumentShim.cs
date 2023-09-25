@@ -47,19 +47,11 @@ public sealed unsafe partial class HtmlDocument
                     return null;
                 }
 
-                using var window = _associatedWindow.GetInterface();
-                return (IHTMLWindow2.Interface?)ComHelpers.GetObjectForIUnknown(window.AsUnknown);
+                return (IHTMLWindow2.Interface?)_associatedWindow.GetManagedObject();
             }
         }
 
-        public IHTMLDocument2.Interface NativeHtmlDocument2
-        {
-            get
-            {
-                using var htmlDoc2 = _htmlDocument.NativeHtmlDocument2.GetInterface();
-                return (IHTMLDocument2.Interface)ComHelpers.GetObjectForIUnknown(htmlDoc2.AsUnknown);
-            }
-        }
+        public IHTMLDocument2.Interface NativeHtmlDocument2 => (IHTMLDocument2.Interface)_htmlDocument.NativeHtmlDocument2.GetManagedObject();
 
         internal HtmlDocument Document => _htmlDocument;
 

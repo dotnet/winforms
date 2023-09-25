@@ -494,12 +494,7 @@ public sealed unsafe partial class HtmlWindow
 
     public static bool operator !=(HtmlWindow left, HtmlWindow right) => !(left == right);
 
-    public override int GetHashCode()
-    {
-        using var htmlWindow2 = _htmlWindow2.GetInterface();
-        using var unknown = htmlWindow2.TryQuery<IUnknown>(out HRESULT hr);
-        return hr.Succeeded ? (int)unknown.Value : 0;
-    }
+    public override int GetHashCode() => _htmlWindow2.GetHashCode();
 
     public override bool Equals(object obj) => this == (HtmlWindow)obj;
 }

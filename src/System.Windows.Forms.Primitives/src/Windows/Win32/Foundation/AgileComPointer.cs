@@ -28,7 +28,30 @@ internal unsafe class AgileComPointer<TInterface> :
     where TInterface : unmanaged, IComIID
 {
     private uint _cookie;
-    private readonly TInterface* _originalPointer;
+    private readonly IUnknown* _originalPointer;
+
+#if DEBUG
+    public AgileComPointer(TInterface* @interface, bool takeOwnership, bool trackDisposal = true)
+        : base(trackDisposal)
+#else
+    public AgileComPointer(TInterface* @interface, bool takeOwnership)
+#endif
+    {
+        _cookie = GlobalInterfaceTable.RegisterInterface(@interface);
+        fixed (IUnknown** ppUnknown = &_originalPointer)
+        {
+            ((IUnknown*)@interface)->QueryInterface(IID.Get<IUnknown>(), (void**)ppUnknown).ThrowOnFailure();
+        }
+
+        _originalPointer->Release();
+
+        if (takeOwnership)
+        {
+            // The GIT will add a ref to the given interface, release to effectively give ownership to the GIT.
+            uint count = ((IUnknown*)@interface)->Release();
+            Debug.Assert(count >= 0);
+        }
+    }
 
     /// <summary>
     ///  Returns <see langword="true"/> if the given <paramref name="interface"/> is the same pointer this
@@ -42,24 +65,6 @@ internal unsafe class AgileComPointer<TInterface> :
     /// </remarks>
     public bool MatchesOriginalPointer(TInterface* @interface)
         => _cookie != 0 && @interface == _originalPointer;
-
-#if DEBUG
-    public AgileComPointer(TInterface* @interface, bool takeOwnership, bool trackDisposal = true)
-        : base(trackDisposal)
-#else
-    public AgileComPointer(TInterface* @interface, bool takeOwnership)
-#endif
-    {
-        _cookie = GlobalInterfaceTable.RegisterInterface(@interface);
-        _originalPointer = @interface;
-
-        if (takeOwnership)
-        {
-            // The GIT will add a ref to the given interface, release to effectively give ownership to the GIT.
-            uint count = ((IUnknown*)@interface)->Release();
-            Debug.Assert(count >= 0);
-        }
-    }
 
     /// <summary>
     ///  Gets the default interface. Throws if failed.
@@ -97,6 +102,14 @@ internal unsafe class AgileComPointer<TInterface> :
         var scope = GlobalInterfaceTable.GetInterface<TAsInterface>(_cookie, out hr);
         return scope;
     }
+
+    public object GetManagedObject()
+    {
+        using var scope = GetInterface();
+        return ComHelpers.GetObjectForIUnknown(scope.AsUnknown);
+    }
+
+    public override int GetHashCode() => HashCode.Combine((nint)_originalPointer);
 
     ~AgileComPointer()
     {

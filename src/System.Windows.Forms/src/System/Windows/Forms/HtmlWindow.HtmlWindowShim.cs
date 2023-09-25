@@ -34,14 +34,7 @@ public sealed partial class HtmlWindow
 
         public override IHTMLWindow2.Interface AssociatedWindow => NativeHtmlWindow;
 
-        public IHTMLWindow2.Interface NativeHtmlWindow
-        {
-            get
-            {
-                using var htmlWindow = _htmlWindow.NativeHtmlWindow.GetInterface();
-                return (IHTMLWindow2.Interface)ComHelpers.GetObjectForIUnknown(htmlWindow.AsUnknown);
-            }
-        }
+        public IHTMLWindow2.Interface NativeHtmlWindow => (IHTMLWindow2.Interface)_htmlWindow.NativeHtmlWindow.GetManagedObject();
 
         ///  Support IHtmlDocument3.AttachHandler
         public override void AttachEventHandler(string eventName, EventHandler eventHandler)
