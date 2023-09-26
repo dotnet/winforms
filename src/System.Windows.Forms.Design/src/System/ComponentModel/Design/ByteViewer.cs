@@ -117,36 +117,30 @@ public class ByteViewer : TableLayoutPanel
     }
 
     /// <summary>
-    ///  Calculates an index for a cell in the HEX grid
+    ///  Calculates an index for the first cell of a given row in the HEX grid
     /// </summary>
-    private int CellToIndex(int column, int row)
+    private int RowToIndex(int row)
     {
-        return row * _columnCount + column;
+        return row * _columnCount;
     }
 
     /// <summary>
     ///  Copies the line from main data buffer to a line buffer
     /// </summary>
-    private byte[] ComposeLineBuffer(int startLine, int line)
+    private ReadOnlySpan<byte> ComposeLineBuffer(int startLine, int line)
     {
-        byte[] lineBuffer;
-
-        int offset = startLine * _columnCount;
+        int offset = RowToIndex(startLine);
+        int length;
         if (offset + (line + 1) * _columnCount > _dataBuf!.Length)
         {
-            lineBuffer = new byte[_dataBuf.Length % _columnCount];
+            length = _dataBuf.Length % _columnCount;
         }
         else
         {
-            lineBuffer = new byte[_columnCount];
+            length = _columnCount;
         }
 
-        for (int i = 0; i < lineBuffer.Length; i++)
-        {
-            lineBuffer[i] = _dataBuf[offset + CellToIndex(i, line)];
-        }
-
-        return lineBuffer;
+        return _dataBuf.AsSpan(offset + RowToIndex(line), length);
     }
 
     /// <summary>
@@ -156,10 +150,12 @@ public class ByteViewer : TableLayoutPanel
     {
         Font font = ADDRESS_FONT;
 
-        string hexString = ((startLine + line) * _columnCount).ToString("X8", CultureInfo.InvariantCulture);
+        Span<char> hexChars = stackalloc char[8];
+        bool success = RowToIndex(startLine + line).TryFormat(hexChars, out int charCount, "X8", CultureInfo.InvariantCulture);
+        Debug.Assert(success && charCount == 8);
 
         using var foreground = new SolidBrush(ForeColor);
-        g.DrawString(hexString, font, foreground, ADDRESS_START_X, LINE_START_Y + line * CELL_HEIGHT);
+        g.DrawString(hexChars, font, foreground, ADDRESS_START_X, LINE_START_Y + line * CELL_HEIGHT);
     }
 
     /// <summary>
@@ -202,43 +198,48 @@ public class ByteViewer : TableLayoutPanel
     /// <summary>
     ///  Draws the "DUMP" part in the HEXDUMP view
     /// </summary>
-    private void DrawDump(Graphics g, byte[] lineBuffer, int line)
+    private void DrawDump(Graphics g, ReadOnlySpan<byte> lineBuffer, int line, Span<char> charsBuffer)
     {
-        string stringToDraw = string.Create(lineBuffer.Length, lineBuffer, static (span, lineBuffer) =>
+        Debug.Assert(charsBuffer.Length >= lineBuffer.Length);
+        Span<char> charsToDraw = charsBuffer[..lineBuffer.Length];
+        for (int i = 0; i < lineBuffer.Length; i++)
         {
-            for (int i = 0; i < lineBuffer.Length; i++)
-            {
-                char c = Convert.ToChar(lineBuffer[i]);
-                span[i] = CharIsPrintable(c) ? c : '.';
-            }
-        });
+            char c = Convert.ToChar(lineBuffer[i]);
+            charsToDraw[i] = CharIsPrintable(c) ? c : '.';
+        }
 
         Font font = HEXDUMP_FONT;
 
         using Brush foreground = new SolidBrush(ForeColor);
-        g.DrawString(stringToDraw, font, foreground, DUMP_START_X, LINE_START_Y + line * CELL_HEIGHT);
+        g.DrawString(charsToDraw, font, foreground, DUMP_START_X, LINE_START_Y + line * CELL_HEIGHT);
     }
 
     /// <summary>
     ///  Draws the "HEX" part in the HEXDUMP view
     /// </summary>
     /// <internalonly/>
-    private void DrawHex(Graphics g, byte[] lineBuffer, int line)
+    private void DrawHex(Graphics g, ReadOnlySpan<byte> lineBuffer, int line, Span<char> charsBuffer)
     {
         Font font = HEXDUMP_FONT;
 
-        StringBuilder result = new StringBuilder(lineBuffer.Length * 3 + 1);
+        Debug.Assert(charsBuffer.Length >= lineBuffer.Length * 3 + 1);
+        int charsWritten = 0;
         for (int i = 0; i < lineBuffer.Length; i++)
         {
-            result.Append($"{lineBuffer[i]:X2} ");
+            lineBuffer[i].TryFormat(charsBuffer.Slice(charsWritten, 2), out _, "X2");
+            charsWritten += 2;
+
             if (i == _columnCount / 2 - 1)
             {
-                result.Append(' ');  // Add one extra in the middle.
+                charsBuffer[charsWritten] = ' ';  // Add one extra in the middle.
+                charsWritten++;
             }
         }
 
+        ReadOnlySpan<char> result = charsBuffer[..charsWritten];
+
         using Brush foreground = new SolidBrush(ForeColor);
-        g.DrawString(result.ToString(), font, foreground, HEX_START_X + BORDER_GAP, LINE_START_Y + line * CELL_HEIGHT);
+        g.DrawString(result, font, foreground, HEX_START_X + BORDER_GAP, LINE_START_Y + line * CELL_HEIGHT);
 
         /* ISSUE a-gregka: If perf problem, could be done this way to eliminate drawing twice on repaint
            The current solution good enough for a dialog box
@@ -256,12 +257,20 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     private void DrawLines(Graphics g, int startLine, int linesCount)
     {
+        if (linesCount == 0)
+        {
+            return;
+        }
+
+        int maxLength = _columnCount * 3 + 1;
+        using BufferScope<char> charsBufferScope = new(maxLength);
+        Span<char> charsBuffer = charsBufferScope;
         for (int i = 0; i < linesCount; i++)
         {
-            byte[] lineBuffer = ComposeLineBuffer(startLine, i);
+            ReadOnlySpan<byte> lineBuffer = ComposeLineBuffer(startLine, i);
             DrawAddress(g, startLine, i);
-            DrawHex(g, lineBuffer, i);
-            DrawDump(g, lineBuffer, i);
+            DrawHex(g, lineBuffer, i, charsBuffer);
+            DrawDump(g, lineBuffer, i, charsBuffer);
         }
     }
 
@@ -341,9 +350,9 @@ public class ByteViewer : TableLayoutPanel
 
                 for (int i = 0; i < size; i += 2)
                 {
-                    char[] unicodeChars = new char[1];
-                    Encoding.Unicode.GetChars(_dataBuf, i, 2, unicodeChars, 0);
-                    if (CharIsPrintable(unicodeChars[0]))
+                    char unicodeChar = default;
+                    Encoding.Unicode.GetChars(_dataBuf.AsSpan(i, 2), new Span<char>(ref unicodeChar));
+                    if (CharIsPrintable(unicodeChar))
                     {
                         unicodeCount++;
                     }
@@ -425,14 +434,7 @@ public class ByteViewer : TableLayoutPanel
         }
 
         text[size] = '\0';
-
-        for (int i = 0; i < size; i++)
-        {
-            if (text[i] == '\0')
-            {
-                text[i] = (char)0x0B;
-            }
-        }
+        text.AsSpan(0, size).Replace('\0', (char)0x0B);
 
         _edit.Text = new string(text);
     }
@@ -442,14 +444,12 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     private void InitUnicode()
     {
-        char[] text = new char[_dataBuf!.Length / 2 + 1];
-        Encoding.Unicode.GetChars(_dataBuf, 0, _dataBuf.Length, text, 0);
-        for (int i = 0; i < text.Length; i++)
-            if (text[i] == '\0')
-                text[i] = (char)0x0B;
-
-        text[text.Length - 1] = '\0';
-        _edit.Text = new string(text);
+        _edit.Text = string.Create(_dataBuf!.Length / 2 + 1, _dataBuf, static (text, dataBuf) =>
+        {
+            Encoding.Unicode.GetChars(dataBuf.AsSpan(), text);
+            text.Replace('\0', (char)0x0B);
+            text[^1] = '\0';
+        });
     }
 
     /// <summary>
@@ -613,17 +613,8 @@ public class ByteViewer : TableLayoutPanel
             return;
         }
 
-        FileStream currentFile = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-        try
-        {
-            currentFile.Write(_dataBuf, 0, _dataBuf.Length);
-            currentFile.Close();
-        }
-        catch
-        {
-            currentFile.Close();
-            throw;
-        }
+        using FileStream currentFile = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+        currentFile.Write(_dataBuf.AsSpan());
     }
 
     /// <summary>
@@ -707,20 +698,11 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     public virtual void SetFile(string path)
     {
-        FileStream currentFile = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
-        try
-        {
-            int length = (int)currentFile.Length;
-            byte[] buf = new byte[length + 1];
-            currentFile.Read(buf, 0, length);
-            SetBytes(buf);
-            currentFile.Close();
-        }
-        catch
-        {
-            currentFile.Close();
-            throw;
-        }
+        using FileStream currentFile = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+        int length = (int)currentFile.Length;
+        byte[] buf = new byte[length + 1];
+        currentFile.Read(buf.AsSpan(0, length));
+        SetBytes(buf);
     }
 
     /// <summary>
