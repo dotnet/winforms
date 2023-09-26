@@ -65,7 +65,7 @@ internal static partial class DpiHelper
             out PROCESS_DPI_AWARENESS processDpiAwareness);
 
         Debug.Assert(result.Succeeded, $"Failed to get ProcessDpi HRESULT: {result}");
-        Debug.Assert(Enum.IsDefined(typeof(PROCESS_DPI_AWARENESS), processDpiAwareness));
+        Debug.Assert(Enum.IsDefined(processDpiAwareness));
 
         return result.Succeeded && processDpiAwareness switch
         {

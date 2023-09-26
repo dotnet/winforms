@@ -46,7 +46,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
     {
         set
         {
-            Debug.Assert(Enum.IsDefined(typeof(ButtonState), value));
+            Debug.Assert(Enum.IsDefined(value));
             if (ButtonState != value)
             {
                 Properties.SetInteger(s_propButtonState, (int)value);

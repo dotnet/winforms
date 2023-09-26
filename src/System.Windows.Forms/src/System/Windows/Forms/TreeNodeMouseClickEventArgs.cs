@@ -9,10 +9,21 @@ namespace System.Windows.Forms;
 /// </summary>
 public class TreeNodeMouseClickEventArgs : MouseEventArgs
 {
-    public TreeNodeMouseClickEventArgs(TreeNode node, MouseButtons button, int clicks, int x, int y) : base(button, clicks, x, y, 0)
+    public TreeNodeMouseClickEventArgs(
+        TreeNode? node,
+        MouseButtons button,
+        int clicks,
+        int x,
+        int y)
+        : base(
+            button,
+            clicks,
+            x,
+            y,
+            0)
     {
         Node = node;
     }
 
-    public TreeNode Node { get; }
+    public TreeNode? Node { get; }
 }

@@ -2024,15 +2024,17 @@ namespace System.Windows.Forms.Design
             ///  node of selection, retrieves data source and data member info for the
             ///  caller, and closes the dropdown.
             /// </summary>
-            public void SetSelectedItem(TreeNode node)
+            public void SetSelectedItem(TreeNode? node)
             {
-                if (!(Parent is DesignBindingPicker picker))
+                if (Parent is not DesignBindingPicker picker)
                 {
                     return;
                 }
 
                 var pickerNode = node as BindingPickerNode;
-                picker._selectedItem = pickerNode is not null && pickerNode.CanSelect && pickerNode.Error is null ? pickerNode.OnSelect() : null;
+                picker._selectedItem = pickerNode is not null && pickerNode.CanSelect && pickerNode.Error is null
+                    ? pickerNode.OnSelect()
+                    : null;
 
                 if (picker._selectedItem is not null)
                 {
