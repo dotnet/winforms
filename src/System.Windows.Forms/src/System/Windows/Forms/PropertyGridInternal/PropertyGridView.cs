@@ -1329,7 +1329,7 @@ internal sealed partial class PropertyGridView :
             {
                 object[] values = gridEntry.GetPropertyValueList();
 
-                if (values is null || index >= (values.Length - 1))
+                if (index >= (values.Length - 1))
                 {
                     index = 0;
                 }
@@ -1338,7 +1338,7 @@ internal sealed partial class PropertyGridView :
                     index++;
                 }
 
-                CommitValue(values![index]);
+                CommitValue(values[index]);
                 SelectRow(_selectedRow);
                 Refresh();
                 return;
@@ -1760,7 +1760,7 @@ internal sealed partial class PropertyGridView :
             object value = gridEntry.PropertyValue;
             string textValue = gridEntry.TypeConverter.ConvertToString(gridEntry, value);
 
-            if (values is null || values.Length == 0)
+            if (values.Length == 0)
             {
                 return -1;
             }
@@ -2503,10 +2503,6 @@ internal sealed partial class PropertyGridView :
     {
         object value = entry.PropertyValue;
         object[] values = entry.GetPropertyValueList();
-        if (values is null)
-        {
-            return false;
-        }
 
         for (int i = 0; i < values.Length; i++)
         {
