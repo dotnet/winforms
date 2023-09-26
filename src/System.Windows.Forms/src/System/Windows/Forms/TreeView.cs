@@ -2828,7 +2828,7 @@ public partial class TreeView : Control
                     using (Graphics g = nmtvcd->nmcd.hdc.CreateGraphics())
                     {
                         Rectangle bounds = node.Bounds;
-                        Size textSize = TextRenderer.MeasureText(node.Text, node.TreeView.Font);
+                        Size textSize = TextRenderer.MeasureText(node.Text, node.TreeView!.Font);
                         Point textLoc = new Point(bounds.X - 1, bounds.Y); // required to center the text
                         bounds = new Rectangle(textLoc, new Size(textSize.Width, bounds.Height));
 

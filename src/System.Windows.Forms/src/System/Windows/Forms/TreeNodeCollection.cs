@@ -45,7 +45,7 @@ public class TreeNodeCollection : IList
 
             ArgumentNullException.ThrowIfNull(value);
 
-            TreeView tv = _owner.treeView;
+            TreeView tv = _owner.treeView!;
             TreeNode actual = _owner.childNodes[index];
 
             if (value.treeView is not null && value.treeView.Handle != tv.Handle)
@@ -216,7 +216,7 @@ public class TreeNodeCollection : IList
             return;
         }
 
-        TreeView tv = _owner.TreeView;
+        TreeView? tv = _owner.TreeView;
         if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
         {
             tv.BeginUpdate();
@@ -305,7 +305,7 @@ public class TreeNodeCollection : IList
         _owner.CheckParentingCycle(node);
 
         // If the TreeView is sorted, index is ignored
-        TreeView tv = _owner.TreeView;
+        TreeView? tv = _owner.TreeView;
 
         if (tv is not null)
         {
@@ -442,7 +442,7 @@ public class TreeNodeCollection : IList
         _owner.CheckParentingCycle(node);
 
         // If the TreeView is sorted, index is ignored
-        TreeView tv = _owner.TreeView;
+        TreeView? tv = _owner.TreeView;
 
         if (tv is not null)
         {
