@@ -2606,7 +2606,7 @@ public partial class TreeView : Control
         OnAfterLabelEdit(e);
         if (newText is not null && !e.CancelEdit && node is not null)
         {
-            node.text = newText;
+            node._text = newText;
             if (Scrollable)
             {
                 ForceScrollbarUpdate(true);
@@ -2880,7 +2880,7 @@ public partial class TreeView : Control
     protected OwnerDrawPropertyBag GetItemRenderStyles(TreeNode? node, int state)
     {
         OwnerDrawPropertyBag retval = new();
-        if (node is null || node.propBag is null)
+        if (node is null || node._propBag is null)
         {
             return retval;
         }
@@ -2892,11 +2892,11 @@ public partial class TreeView : Control
             NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_HOT |
             NMCUSTOMDRAW_DRAW_STATE_FLAGS.CDIS_DISABLED)) == 0)
         {
-            retval.ForeColor = node.propBag.ForeColor;
-            retval.BackColor = node.propBag.BackColor;
+            retval.ForeColor = node._propBag.ForeColor;
+            retval.BackColor = node._propBag.BackColor;
         }
 
-        retval.Font = node.propBag.Font;
+        retval.Font = node._propBag.Font;
         return retval;
     }
 
