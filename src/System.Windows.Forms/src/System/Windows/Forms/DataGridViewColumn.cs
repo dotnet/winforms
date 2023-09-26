@@ -64,10 +64,8 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     /// </summary>
     /// <param name="value"> initial value</param>
     /// <returns> scaled metric</returns>
-    private static int ScaleToCurrentDpi(int value)
-    {
-        return DpiHelper.IsScalingRequirementMet ? DpiHelper.LogicalToDeviceUnits(value) : value;
-    }
+    private static int ScaleToCurrentDpi(int value) =>
+        DpiHelper.IsScalingRequirementMet ? DpiHelper.LogicalToDeviceUnits(value) : value;
 
     [SRCategory(nameof(SR.CatLayout))]
     [DefaultValue(DataGridViewAutoSizeColumnMode.NotSet)]
@@ -75,10 +73,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [RefreshProperties(RefreshProperties.Repaint)]
     public DataGridViewAutoSizeColumnMode AutoSizeMode
     {
-        get
-        {
-            return _autoSizeMode;
-        }
+        get => _autoSizeMode;
         set
         {
             switch (value)
@@ -183,10 +178,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [AllowNull]
     public string DataPropertyName
     {
-        get
-        {
-            return _dataPropertyName;
-        }
+        get => _dataPropertyName;
         set
         {
             value ??= string.Empty;
@@ -241,10 +233,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int DisplayIndex
     {
-        get
-        {
-            return _displayIndex;
-        }
+        get => _displayIndex;
         set
         {
             if (_displayIndex != value)
@@ -296,10 +285,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     internal bool DisplayIndexHasChanged
     {
-        get
-        {
-            return (_flags & DisplayIndexHasChangedInternal) != 0;
-        }
+        get => (_flags & DisplayIndexHasChangedInternal) != 0;
         set
         {
             if (value)
@@ -337,14 +323,8 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [SRDescription(nameof(SR.DataGridView_ColumnDividerWidthDescr))]
     public int DividerWidth
     {
-        get
-        {
-            return DividerThickness;
-        }
-        set
-        {
-            DividerThickness = value;
-        }
+        get => DividerThickness;
+        set => DividerThickness = value;
     }
 
     [SRCategory(nameof(SR.CatLayout))]
@@ -352,10 +332,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [SRDescription(nameof(SR.DataGridViewColumn_FillWeightDescr))]
     public float FillWeight
     {
-        get
-        {
-            return _fillWeight;
-        }
+        get => _fillWeight;
         set
         {
             if (value <= 0)
@@ -405,10 +382,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [AllowNull]
     public DataGridViewColumnHeaderCell HeaderCell
     {
-        get
-        {
-            return (DataGridViewColumnHeaderCell)base.HeaderCellCore;
-        }
+        get => (DataGridViewColumnHeaderCell)base.HeaderCellCore;
         set => base.HeaderCellCore = value;
     }
 
@@ -447,21 +421,13 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         }
     }
 
-    private bool ShouldSerializeHeaderText()
-    {
-        return HasHeaderCell && ((DataGridViewColumnHeaderCell)HeaderCell).ContainsLocalValue;
-    }
+    private bool ShouldSerializeHeaderText() =>
+        HasHeaderCell && ((DataGridViewColumnHeaderCell)HeaderCell).ContainsLocalValue;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public DataGridViewAutoSizeColumnMode InheritedAutoSizeMode
-    {
-        get
-        {
-            return GetInheritedAutoSizeMode(DataGridView);
-        }
-    }
+    public DataGridViewAutoSizeColumnMode InheritedAutoSizeMode => GetInheritedAutoSizeMode(DataGridView);
 
     [Browsable(false)]
     public override DataGridViewCellStyle? InheritedStyle
@@ -609,10 +575,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     internal bool IsBrowsableInternal
     {
-        get
-        {
-            return (_flags & ColumnIsBrowsableInternal) != 0;
-        }
+        get => (_flags & ColumnIsBrowsableInternal) != 0;
         set
         {
             if (value)
