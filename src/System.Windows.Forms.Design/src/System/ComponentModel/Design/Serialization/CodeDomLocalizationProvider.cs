@@ -134,7 +134,10 @@ public sealed partial class CodeDomLocalizationProvider : IDisposable, IDesigner
     /// <summary>
     ///  Returns a code dom serializer for members.
     /// </summary>
-    private ResourcePropertyMemberCodeDomSerializer? GetMemberCodeDomSerializer(IDesignerSerializationManager manager, MemberCodeDomSerializer? currentSerializer, Type? objectType)
+    private ResourcePropertyMemberCodeDomSerializer? GetMemberCodeDomSerializer(
+        IDesignerSerializationManager manager,
+        MemberCodeDomSerializer? currentSerializer,
+        Type? objectType)
     {
         CodeDomLocalizationModel model = _model;
 

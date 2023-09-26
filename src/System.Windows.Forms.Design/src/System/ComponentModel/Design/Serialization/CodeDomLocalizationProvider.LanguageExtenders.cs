@@ -153,28 +153,30 @@ public sealed partial class CodeDomLocalizationProvider
                 SetLocalizable(o, true);
             }
 
-            if (_host is not null)
+            if (_host is null)
             {
-                // Only reload if we're not in the process of loading!
-                if (_host.Loading)
+                return;
+            }
+
+            // Only reload if we're not in the process of loading!
+            if (_host.Loading)
+            {
+                _loadLanguage = language;
+            }
+            else
+            {
+                bool reloadSuccessful = false;
+
+                if (_serviceProvider.TryGetService(out IDesignerLoaderService? ls))
                 {
-                    _loadLanguage = language;
+                    reloadSuccessful = ls.Reload();
                 }
-                else
+
+                if (!reloadSuccessful)
                 {
-                    bool reloadSuccessful = false;
+                    IUIService? uis = _serviceProvider.GetService<IUIService>();
 
-                    if (_serviceProvider.TryGetService(out IDesignerLoaderService? ls))
-                    {
-                        reloadSuccessful = ls.Reload();
-                    }
-
-                    if (!reloadSuccessful)
-                    {
-                        IUIService? uis = _serviceProvider.GetService<IUIService>();
-
-                        uis?.ShowMessage(SR.LocalizationProviderManualReload);
-                    }
+                    uis?.ShowMessage(SR.LocalizationProviderManualReload);
                 }
             }
         }
@@ -206,34 +208,22 @@ public sealed partial class CodeDomLocalizationProvider
         /// <summary>
         ///  Gets a value indicating whether the specified object should have its design-time localization support persisted.
         /// </summary>
-        private bool ShouldSerializeLanguage(IComponent o)
-        {
-            return _language != CultureInfo.InvariantCulture;
-        }
+        private bool ShouldSerializeLanguage(IComponent o) => _language != CultureInfo.InvariantCulture;
 
         /// <summary>
         ///  Gets a value indicating whether the specified object should have its design-time localization support persisted.
         /// </summary>
-        private bool ShouldSerializeLocalizable(IComponent o)
-        {
-            return (_localizable);
-        }
+        private bool ShouldSerializeLocalizable(IComponent o) => _localizable;
 
         /// <summary>
         ///  Resets the localizable property to the 'defaultLocalizable' value.
         /// </summary>
-        private void ResetLocalizable(IComponent o)
-        {
-            SetLocalizable(o, false);
-        }
+        private void ResetLocalizable(IComponent o) => SetLocalizable(o, false);
 
         /// <summary>
         ///  Resets the language for the specified object.
         /// </summary>
-        private void ResetLanguage(IComponent o)
-        {
-            SetLanguage(o, CultureInfo.InvariantCulture);
-        }
+        private void ResetLanguage(IComponent o) => SetLanguage(o, CultureInfo.InvariantCulture);
 
         /// <summary>
         ///  We only extend the root component.
