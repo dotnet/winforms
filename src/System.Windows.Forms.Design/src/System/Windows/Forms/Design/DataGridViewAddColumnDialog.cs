@@ -1,10 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Collections;
 using System.ComponentModel.Design.Serialization;
 using System.ComponentModel.Design;
 using System.ComponentModel;
-using System.Globalization;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design;
@@ -42,15 +42,6 @@ internal class DataGridViewAddColumnDialog : Form
     private int _initialDataGridViewColumnsCount = -1;
     private bool _persistChangesToDesigner;
 
-    private static Type dataGridViewColumnType = typeof(DataGridViewColumn);
-    private static Type iDesignerType = typeof(IDesigner);
-    private static Type iTypeDiscoveryServiceType = typeof(ITypeDiscoveryService);
-    private static Type iComponentChangeServiceType = typeof(IComponentChangeService);
-    private static Type iHelpServiceType = typeof(IHelpService);
-    private static Type iUIServiceType = typeof(IUIService);
-    private static Type iDesignerHostType = typeof(IDesignerHost);
-    private static Type iNameCreationServiceType = typeof(INameCreationService);
-    private static Type dataGridViewColumnDesignTimeVisibleAttributeType = typeof(DataGridViewColumnDesignTimeVisibleAttribute);
     private TableLayoutPanel _okCancelTableLayoutPanel;
     private TableLayoutPanel _checkBoxesTableLayoutPanel;
     private TableLayoutPanel _overarchingTableLayoutPanel;
@@ -68,7 +59,7 @@ internal class DataGridViewAddColumnDialog : Form
             uiFont = (Font)uiService.Styles["DialogFont"]!;
         }
 
-        this.Font = uiFont;
+        Font = uiFont;
 
         //
         // Required for Windows Form Designer support
@@ -126,7 +117,7 @@ internal class DataGridViewAddColumnDialog : Form
             column.DataPropertyName = ((ListBoxItem)_dataColumns.SelectedItem!).PropertyName;
         }
 
-        if (this._persistChangesToDesigner)
+        if (_persistChangesToDesigner)
         {
             try
             {
@@ -140,7 +131,7 @@ internal class DataGridViewAddColumnDialog : Form
             }
             catch (InvalidOperationException ex)
             {
-                IUIService? uiService = _liveDataGridView.Site?.GetService(typeof(IUIService)) as IUIService;
+                IUIService? uiService = _liveDataGridView.Site?.GetService<IUIService>();
                 DataGridViewDesigner.ShowErrorDialog(uiService, ex, _liveDataGridView);
                 return;
             }
@@ -152,35 +143,29 @@ internal class DataGridViewAddColumnDialog : Form
         pd?.SetValue(column, true);
 
         // pick a new Column name
-        this._nameTextBox.Text = this._headerTextBox.Text = this.AssignName();
-        this._nameTextBox.Focus();
+        _nameTextBox.Text = _headerTextBox.Text = AssignName();
+        _nameTextBox.Focus();
     }
 
     private string AssignName()
     {
         int colId = 1;
         // string columnName = (SR.DataGridView_ColumnName, colId.ToString());
-        string columnName = "Column" + colId.ToString(CultureInfo.InvariantCulture);
+        string columnName;
 
-        IDesignerHost? host = null;
-        IContainer? container = null;
+        IDesignerHost? host = _liveDataGridView.Site?.GetService<IDesignerHost>();
+        IContainer? container = host?.Container;
 
-        host = _liveDataGridView.Site?.GetService(iDesignerHostType) as IDesignerHost;
-        if (host is not null)
+        do
         {
-            container = host.Container;
+            columnName = $"Column{colId++}";
         }
-
         while (!ValidName(columnName,
                             _dataGridViewColumns,
                             container,
-                            null /*nameCreationService*/,
+                            nameCreationService: null,
                             _liveDataGridView.Columns,
-                            !_persistChangesToDesigner))
-        {
-            colId++;
-            columnName = $"Column{colId.ToString(CultureInfo.InvariantCulture)}";
-        }
+                            !_persistChangesToDesigner));
 
         return columnName;
     }
@@ -198,15 +183,15 @@ internal class DataGridViewAddColumnDialog : Form
             _dataBoundColumnRadioButton.Enabled = true;
             _dataBoundColumnRadioButton.Checked = true;
             _dataBoundColumnRadioButton.Focus();
-            _headerTextBox.Text = _nameTextBox.Text = AssignName();
         }
         else
         {
             _dataBoundColumnRadioButton.Enabled = false;
             _unboundColumnRadioButton.Checked = true;
             _nameTextBox.Focus();
-            _headerTextBox.Text = _nameTextBox.Text = AssignName();
         }
+
+        _headerTextBox.Text = _nameTextBox.Text = AssignName();
     }
 
     /// <summary>
@@ -222,11 +207,10 @@ internal class DataGridViewAddColumnDialog : Form
         AttributeCollection? attributes = TypeDescriptor.GetAttributes(type);
         for (int i = 0; i < attributes.Count; i++)
         {
-            DesignerAttribute? attribute = attributes[i] as DesignerAttribute;
-            if (attribute is not null)
+            if (attributes[i] is DesignerAttribute attribute)
             {
                 Type? daType = Type.GetType(attribute.DesignerBaseTypeName);
-                if (daType is not null && daType == iDesignerType)
+                if (daType == typeof(IDesigner))
                 {
                     designerAttribute = attribute;
                     break;
@@ -309,7 +293,7 @@ internal class DataGridViewAddColumnDialog : Form
         //
         // overarchingTableLayoutPanel
         //
-        resources.ApplyResources(this._overarchingTableLayoutPanel, "overarchingTableLayoutPanel");
+        resources.ApplyResources(_overarchingTableLayoutPanel, "overarchingTableLayoutPanel");
         _overarchingTableLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
         _overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 14F));
         _overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
@@ -534,8 +518,7 @@ internal class DataGridViewAddColumnDialog : Form
             try
             {
                 Debug.Assert(_initialDataGridViewColumnsCount != -1, "did you forget to set the initialDataGridViewColumnsCount when you started the dialog?");
-                IComponentChangeService? changeService = _liveDataGridView.Site?.GetService(iComponentChangeServiceType) as IComponentChangeService;
-                if (changeService is null)
+                if (!_liveDataGridView.Site.TryGetService(out IComponentChangeService? changeService))
                 {
                     return;
                 }
@@ -577,7 +560,7 @@ internal class DataGridViewAddColumnDialog : Form
 #if DEBUG
         else
         {
-            Debug.Assert(this._initialDataGridViewColumnsCount == -1, "did you forget to reset the _initialDataGridViewColumnsCount when you started the dialog?");
+            Debug.Assert(_initialDataGridViewColumnsCount == -1, "did you forget to reset the _initialDataGridViewColumnsCount when you started the dialog?");
         }
 #endif // DEBUG
 
@@ -599,7 +582,7 @@ internal class DataGridViewAddColumnDialog : Form
 
     private void DataGridViewAddColumnDialog_HelpRequestHandled()
     {
-        IHelpService? helpService = _liveDataGridView.Site?.GetService(iHelpServiceType) as IHelpService;
+        IHelpService? helpService = _liveDataGridView.Site?.GetService<IHelpService>();
         helpService?.ShowHelpFromKeyword("vs.DataGridViewAddColumnDialog");
     }
 
@@ -647,17 +630,14 @@ internal class DataGridViewAddColumnDialog : Form
 
     private void nameTextBox_Validating(object? sender, CancelEventArgs e)
     {
-        IDesignerHost? host = null;
         INameCreationService? nameCreationService = null;
         IContainer? container = null;
 
-        host = _liveDataGridView.Site?.GetService(iDesignerHostType) as IDesignerHost;
-        if (host is not null)
+        if (_liveDataGridView.Site.TryGetService(out IDesignerHost? host))
         {
             container = host.Container;
+            nameCreationService = _liveDataGridView.Site.GetService<INameCreationService>();
         }
-
-        nameCreationService = _liveDataGridView.Site?.GetService(iNameCreationServiceType) as INameCreationService;
 
         string errorString = string.Empty;
         if (!ValidName(_nameTextBox.Text,
@@ -668,7 +648,7 @@ internal class DataGridViewAddColumnDialog : Form
                        !_persistChangesToDesigner,
                        out errorString))
         {
-            IUIService? uiService = _liveDataGridView.Site?.GetService(iUIServiceType) as IUIService;
+            IUIService? uiService = _liveDataGridView.Site?.GetService<IUIService>();
             DataGridViewDesigner.ShowErrorDialog(uiService, errorString, _liveDataGridView);
             e.Cancel = true;
         }
@@ -678,24 +658,23 @@ internal class DataGridViewAddColumnDialog : Form
     {
         _columnTypesCombo.Items.Clear();
 
-        IDesignerHost? host = _liveDataGridView.Site?.GetService(iDesignerHostType) as IDesignerHost;
-        if (host is null)
+        if (!_liveDataGridView.Site.TryGetService(out IDesignerHost? host))
         {
             return;
         }
 
-        ITypeDiscoveryService? discoveryService = host.GetService(iTypeDiscoveryServiceType) as ITypeDiscoveryService;
+        ITypeDiscoveryService? discoveryService = host.GetService<ITypeDiscoveryService>();
 
         if (discoveryService is null)
         {
             return;
         }
 
-        ICollection<object> columnTypes = (ICollection<object>)DesignerUtils.FilterGenericTypes(discoveryService.GetTypes(dataGridViewColumnType, false /*excludeGlobalTypes*/));
+        ICollection columnTypes = DesignerUtils.FilterGenericTypes(discoveryService.GetTypes(typeof(DataGridViewColumn), excludeGlobalTypes: false));
 
         foreach (Type type in columnTypes)
         {
-            if (type == dataGridViewColumnType)
+            if (type == typeof(DataGridViewColumn))
             {
                 continue;
             }
@@ -710,10 +689,7 @@ internal class DataGridViewAddColumnDialog : Form
                 continue;
             }
 
-#pragma warning disable IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
-            DataGridViewColumnDesignTimeVisibleAttribute? attribute = TypeDescriptor.GetAttributes(type)[dataGridViewColumnDesignTimeVisibleAttributeType] as DataGridViewColumnDesignTimeVisibleAttribute;
-#pragma warning restore IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
-            if (attribute is not null && !attribute.Visible)
+            if (TypeDescriptorHelper.TryGetAttribute(type, out DataGridViewColumnDesignTimeVisibleAttribute? attribute) && !attribute.Visible)
             {
                 continue;
             }
@@ -750,17 +726,18 @@ internal class DataGridViewAddColumnDialog : Form
             {
                 for (int i = 0; i < propertyDescriptorCollection.Count; i++)
                 {
-                    if (typeof(IList<object>).IsAssignableFrom(propertyDescriptorCollection[i].PropertyType))
+                    PropertyDescriptor propertyDescriptor = propertyDescriptorCollection[i];
+                    if (typeof(IList<object>).IsAssignableFrom(propertyDescriptor.PropertyType))
                     {
                         // we have an IList. It could be a byte[] in which case we want to generate an Image column
                         TypeConverter imageTypeConverter = TypeDescriptor.GetConverter(typeof(Image));
-                        if (!imageTypeConverter.CanConvertFrom(propertyDescriptorCollection[i].PropertyType))
+                        if (!imageTypeConverter.CanConvertFrom(propertyDescriptor.PropertyType))
                         {
                             continue;
                         }
                     }
 
-                    _dataColumns.Items.Add(new ListBoxItem(propertyDescriptorCollection[i].PropertyType, propertyDescriptorCollection[i].Name));
+                    _dataColumns.Items.Add(new ListBoxItem(propertyDescriptor.PropertyType, propertyDescriptor.Name));
                 }
             }
         }
@@ -797,17 +774,9 @@ internal class DataGridViewAddColumnDialog : Form
             {
                 case Keys.Enter:
                     // Validate the name before adding the column.
-                    IDesignerHost? host = null;
-                    INameCreationService? nameCreationService = null;
-                    IContainer? container = null;
-
-                    host = _liveDataGridView.Site?.GetService(iDesignerHostType) as IDesignerHost;
-                    if (host is not null)
-                    {
-                        container = host.Container;
-                    }
-
-                    nameCreationService = _liveDataGridView.Site?.GetService(iNameCreationServiceType) as INameCreationService;
+                    IDesignerHost? host = _liveDataGridView.Site?.GetService<IDesignerHost>();
+                    IContainer? container = host?.Container;
+                    INameCreationService? nameCreationService = _liveDataGridView.Site?.GetService<INameCreationService>();
 
                     string errorString = string.Empty;
                     if (ValidName(_nameTextBox.Text,
@@ -823,7 +792,7 @@ internal class DataGridViewAddColumnDialog : Form
                     }
                     else
                     {
-                        IUIService? uiService = _liveDataGridView.Site?.GetService(iUIServiceType) as IUIService;
+                        IUIService? uiService = _liveDataGridView.Site?.GetService<IUIService>();
                         DataGridViewDesigner.ShowErrorDialog(uiService, errorString, _liveDataGridView);
                     }
 
@@ -880,7 +849,7 @@ internal class DataGridViewAddColumnDialog : Form
             }
         }
 
-        Debug.Assert(false, "we should have found a type by now");
+        Debug.Fail("we should have found a type by now");
 
         return -1;
     }
@@ -935,56 +904,28 @@ internal class DataGridViewAddColumnDialog : Form
 
     private class ListBoxItem
     {
-        private readonly Type _propertyType;
-        private readonly string _propertyName;
-
         public ListBoxItem(Type propertyType, string propertyName)
         {
-            _propertyType = propertyType;
-            _propertyName = propertyName;
+            PropertyType = propertyType;
+            PropertyName = propertyName;
         }
 
-        public Type PropertyType
-        {
-            get
-            {
-                return _propertyType;
-            }
-        }
+        public Type PropertyType { get; }
 
-        public string PropertyName
-        {
-            get
-            {
-                return _propertyName;
-            }
-        }
+        public string PropertyName { get; }
 
-        public override string ToString()
-        {
-            return _propertyName;
-        }
+        public override string ToString() => PropertyName;
     }
 
     private class ComboBoxItem
     {
-        private Type _columnType;
         public ComboBoxItem(Type columnType)
         {
-            this._columnType = columnType;
+            ColumnType = columnType;
         }
 
-        public override string ToString()
-        {
-            return _columnType.Name;
-        }
+        public override string ToString() => ColumnType.Name;
 
-        public Type ColumnType
-        {
-            get
-            {
-                return _columnType;
-            }
-        }
+        public Type ColumnType { get; }
     }
 }
