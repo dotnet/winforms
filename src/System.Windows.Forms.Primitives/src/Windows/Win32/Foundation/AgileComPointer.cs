@@ -75,10 +75,7 @@ internal unsafe class AgileComPointer<TInterface> :
     ///  <see cref="AgileComPointer{TInterface}"/> was created from.
     /// </summary>
     public bool IsSameNativeObject(AgileComPointer<TInterface> other)
-    {
-        using var otherInterface = other.GetInterface();
-        return IsSameNativeObject(otherInterface.Value);
-    }
+        => _originalObject == other._originalObject;
 
     /// <summary>
     ///  Gets the default interface. Throws if failed.
