@@ -2318,6 +2318,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
     }
 
+    [MemberNotNull(nameof(_instance))]
     private void CreateInstance()
     {
         Debug.Assert(_instance is null, "instance must be null");
@@ -2440,7 +2441,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         {
         }
     }
-#nullable disable
+
     //
     // ICustomTypeDescriptor implementation.
     //
@@ -2462,7 +2463,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  the type name is used.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    string ICustomTypeDescriptor.GetClassName()
+    string? ICustomTypeDescriptor.GetClassName()
     {
         return null;
     }
@@ -2472,7 +2473,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  the default is used.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    string ICustomTypeDescriptor.GetComponentName()
+    string? ICustomTypeDescriptor.GetComponentName()
     {
         return null;
     }
@@ -2482,21 +2483,21 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [RequiresUnreferencedCode(TrimmingConstants.AttributesRequiresUnreferencedCodeMessage)]
-    TypeConverter ICustomTypeDescriptor.GetConverter()
+    TypeConverter? ICustomTypeDescriptor.GetConverter()
     {
         return null;
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [RequiresUnreferencedCode(TrimmingConstants.EventDescriptorRequiresUnreferencedCodeMessage)]
-    EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
+    EventDescriptor? ICustomTypeDescriptor.GetDefaultEvent()
     {
         return TypeDescriptor.GetDefaultEvent(this, true);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [RequiresUnreferencedCode(TrimmingConstants.PropertyDescriptorPropertyTypeMessage)]
-    PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
+    PropertyDescriptor? ICustomTypeDescriptor.GetDefaultProperty()
     {
         return TypeDescriptor.GetDefaultProperty(this, true);
     }
@@ -2506,7 +2507,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [RequiresUnreferencedCode(TrimmingConstants.EditorRequiresUnreferencedCode)]
-    object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
+    object? ICustomTypeDescriptor.GetEditor(Type editorBaseType)
     {
         if (editorBaseType != typeof(ComponentEditor))
         {
@@ -2532,10 +2533,10 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [RequiresUnreferencedCode(TrimmingConstants.FilterRequiresUnreferencedCodeMessage)]
-    EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
+    EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[]? attributes)
         => TypeDescriptor.GetEvents(this, attributes, noCustomTypeDesc: true);
 
-    private void OnIdle(object sender, EventArgs e)
+    private void OnIdle(object? sender, EventArgs e)
     {
         if (_axState[s_refreshProperties])
         {
@@ -2565,7 +2566,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         }
     }
 
-    private PropertyDescriptorCollection FillProperties(Attribute[] attributes)
+    private PropertyDescriptorCollection FillProperties(Attribute[]? attributes)
     {
         if (RefreshAllProperties)
         {
@@ -2628,9 +2629,9 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 }
 
                 string propName = baseProps[i].Name;
-                PropertyDescriptor prop = null;
+                PropertyDescriptor? prop = null;
 
-                _propertyInfos.TryGetValue(propName, out PropertyInfo propInfo);
+                _propertyInfos.TryGetValue(propName, out PropertyInfo? propInfo);
 
                 // We do not support "write-only" properties that some activex controls support.
                 if (propInfo is not null && !propInfo.CanRead)
@@ -2655,9 +2656,9 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
                 }
                 else
                 {
-                    _properties.TryGetValue(propName, out PropertyDescriptor propDesc);
+                    _properties.TryGetValue(propName, out PropertyDescriptor? propDesc);
                     Debug.Assert(propDesc is not null, $"Cannot find cached entry for: {propName}");
-                    AxPropertyDescriptor axPropDesc = propDesc as AxPropertyDescriptor;
+                    AxPropertyDescriptor? axPropDesc = propDesc as AxPropertyDescriptor;
                     if ((propInfo is null && axPropDesc is not null) || (propInfo is not null && axPropDesc is null))
                     {
                         Debug.Fail($"Duplicate property with same name: {propName}");
@@ -2674,7 +2675,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             // Filter only the Browsable attribute, since that is the only one we mess with.
             if (attributes is not null)
             {
-                Attribute browse = null;
+                Attribute? browse = null;
                 foreach (Attribute attribute in attributes)
                 {
                     if (attribute is BrowsableAttribute)
@@ -2685,12 +2686,12 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
                 if (browse is not null)
                 {
-                    List<PropertyDescriptor> removeList = null;
+                    List<PropertyDescriptor>? removeList = null;
 
                     foreach (PropertyDescriptor prop in returnProperties)
                     {
                         if (prop is AxPropertyDescriptor
-                            && prop.TryGetAttribute(out BrowsableAttribute browsableAttribute)
+                            && prop.TryGetAttribute(out BrowsableAttribute? browsableAttribute)
                             && !browsableAttribute.Equals(browse))
                         {
                             removeList ??= new();
@@ -2725,18 +2726,18 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [RequiresUnreferencedCode($"{TrimmingConstants.PropertyDescriptorPropertyTypeMessage} {TrimmingConstants.FilterRequiresUnreferencedCodeMessage}")]
-    PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
+    PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[]? attributes)
     {
         return FillProperties(attributes);
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
+    object? ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor? pd)
     {
         return this;
     }
 
-    private AxPropertyDescriptor GetPropertyDescriptorFromDispid(int dispid)
+    private AxPropertyDescriptor? GetPropertyDescriptorFromDispid(int dispid)
     {
         Debug.Assert(dispid != PInvoke.DISPID_UNKNOWN, "Wrong dispid sent to GetPropertyDescriptorFromDispid");
 
@@ -2881,7 +2882,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  Returns the IUnknown pointer to the enclosed ActiveX control.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public object GetOcx()
+    public object? GetOcx()
     {
         return _instance;
     }
@@ -3016,7 +3017,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public void MakeDirty()
     {
-        if (Site.TryGetService(out IComponentChangeService changeService))
+        if (Site.TryGetService(out IComponentChangeService? changeService))
         {
             changeService.OnComponentChanging(this);
             changeService.OnComponentChanged(this);
@@ -3033,7 +3034,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         ShowPropertyPages(ParentInternal);
     }
 
-    public unsafe void ShowPropertyPages(Control control)
+    public unsafe void ShowPropertyPages(Control? control)
     {
         if (!CanShowPropertyPages())
         {
@@ -3047,9 +3048,9 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
             return;
         }
 
-        IDesignerHost host = (IDesignerHost)Site?.GetService(typeof(IDesignerHost));
+        IDesignerHost? host = (IDesignerHost?)Site?.GetService(typeof(IDesignerHost));
 
-        DesignerTransaction transaction = null;
+        DesignerTransaction? transaction = null;
         try
         {
             transaction = host?.CreateTransaction(SR.AXEditProperties);
@@ -3353,7 +3354,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         qaContainer.dwAppearance = 0;
         qaContainer.lcid = (int)PInvoke.GetThreadLocale();
 
-        Control parent = ParentInternal;
+        Control? parent = ParentInternal;
 
         if (parent is not null)
         {
@@ -3527,7 +3528,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         {
             // ContainingControl can be null if the AxHost is still not parented to a ContainerControl.
             // Use a temporary container until one gets created.
-            if (_newParent is null)
+            if (_newParent is null || _axContainer is null)
             {
                 _newParent = new ContainerControl();
                 _axContainer = _newParent.CreateAxContainer();
@@ -3558,28 +3559,28 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  Maps from a System.Drawing.Image to an OLE IPicture
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static object GetIPictureFromPicture(Image image)
+    protected static object? GetIPictureFromPicture(Image? image)
         => image is null ? null : IPicture.CreateObjectFromImage(image);
 
     /// <summary>
     ///  Maps from a System.Drawing.Cursor to an OLE IPicture
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static object GetIPictureFromCursor(Cursor cursor)
+    protected static object? GetIPictureFromCursor(Cursor? cursor)
         => cursor is null ? null : IPicture.CreateObjectFromIcon(Icon.FromHandle(cursor.Handle), copy: true);
 
     /// <summary>
     ///  Maps from a System.Drawing.Image to an OLE IPictureDisp
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static object GetIPictureDispFromPicture(Image image)
+    protected static object? GetIPictureDispFromPicture(Image? image)
         => image is null ? null : IPictureDisp.CreateObjectFromImage(image);
 
     /// <summary>
     ///  Maps from an OLE IPicture to a System.Drawing.Image
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static Image GetPictureFromIPicture(object picture)
+    protected static Image? GetPictureFromIPicture(object? picture)
     {
         if (picture is null)
         {
@@ -3603,7 +3604,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  Maps from an OLE IPictureDisp to a System.Drawing.Image
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static unsafe Image GetPictureFromIPictureDisp(object picture)
+    protected static unsafe Image? GetPictureFromIPictureDisp(object? picture)
     {
         if (picture is null)
         {
@@ -3634,7 +3635,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         {
             s_fontTable = new();
         }
-        else if (s_fontTable.TryGetValue(font, out object cachedFDesc))
+        else if (s_fontTable.TryGetValue(font, out object? cachedFDesc))
         {
             return (FONTDESC)cachedFDesc;
         }
@@ -3679,7 +3680,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  Maps from a System.Drawing.Font object to an OLE IFont
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static object GetIFontFromFont(Font font)
+    protected static object? GetIFontFromFont(Font? font)
     {
         IFont* ifont = GetIFontPointerFromFont(font);
         if (ifont is null)
@@ -3698,7 +3699,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
         return null;
     }
 
-    private protected static IFont* GetIFontPointerFromFont(Font font)
+    private protected static IFont* GetIFontPointerFromFont(Font? font)
     {
         if (font is null)
         {
@@ -3728,7 +3729,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  Maps from an OLE IFont to a System.Drawing.Font object
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static Font GetFontFromIFont(object font)
+    protected static Font? GetFontFromIFont(object? font)
     {
         if (font is null)
         {
@@ -3753,7 +3754,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  Maps from a System.Drawing.Font object to an OLE IFontDisp
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static object GetIFontDispFromFont(Font font)
+    protected static object? GetIFontDispFromFont(Font? font)
     {
         if (font is null)
         {
@@ -3778,7 +3779,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
     ///  Maps from an IFontDisp to a System.Drawing.Font object
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    protected static Font GetFontFromIFontDisp(object font)
+    protected static Font? GetFontFromIFontDisp(object? font)
     {
         if (font is null)
         {
@@ -3857,7 +3858,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private static int Convert2int(object o, bool xDirection)
     {
-        o = ((Array)o).GetValue(0);
+        o = ((Array)o).GetValue(0)!;
 
         // User controls & other visual basic related controls give us coordinates as floats in twips
         // but MFC controls give us integers as pixels.
@@ -3868,7 +3869,7 @@ public abstract unsafe partial class AxHost : Control, ISupportInitialize, ICust
 
     private static short Convert2short(object o)
     {
-        o = ((Array)o).GetValue(0);
+        o = ((Array)o).GetValue(0)!;
         return Convert.ToInt16(o, CultureInfo.InvariantCulture);
     }
 
