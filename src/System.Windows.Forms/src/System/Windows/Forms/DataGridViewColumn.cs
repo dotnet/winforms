@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 
@@ -36,18 +34,20 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     private string _dataPropertyName = string.Empty;
 
     // needed for IComponent
-    private EventHandler _disposed;
+    private EventHandler? _disposed;
 
     private static readonly int s_propDataGridViewColumnValueType = PropertyStore.CreateKey();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataGridViewColumn"/> class.
     /// </summary>
-    public DataGridViewColumn() : this((DataGridViewCell)null)
+    public DataGridViewColumn()
+        : this(cellTemplate: null)
     {
     }
 
-    public DataGridViewColumn(DataGridViewCell cellTemplate) : base()
+    public DataGridViewColumn(DataGridViewCell? cellTemplate)
+        : base()
     {
         _fillWeight = DefaultFillWeight;
         _usedFillWeight = DefaultFillWeight;
@@ -152,23 +152,23 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     // TypeConverter of the PropertyDescriptor attached to this column
     // in databound cases. Null otherwise.
-    internal TypeConverter BoundColumnConverter { get; set; }
+    internal TypeConverter? BoundColumnConverter { get; set; }
 
     internal int BoundColumnIndex { get; set; } = -1;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public virtual DataGridViewCell CellTemplate { get; set; }
+    public virtual DataGridViewCell? CellTemplate { get; set; }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public Type CellType => CellTemplate?.GetType();
+    public Type? CellType => CellTemplate?.GetType();
 
     [DefaultValue(null)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_ColumnContextMenuStripDescr))]
-    public override ContextMenuStrip ContextMenuStrip
+    public override ContextMenuStrip? ContextMenuStrip
     {
         get => base.ContextMenuStrip;
         set => base.ContextMenuStrip = value;
@@ -180,6 +180,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [Editor($"System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
     [SRDescription(nameof(SR.DataGridView_ColumnDataPropertyNameDescr))]
     [SRCategory(nameof(SR.CatData))]
+    [AllowNull]
     public string DataPropertyName
     {
         get
@@ -201,6 +202,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [Browsable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))]
+    [AllowNull]
     public override DataGridViewCellStyle DefaultCellStyle
     {
         get => base.DefaultCellStyle;
@@ -324,7 +326,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public event EventHandler Disposed
+    public event EventHandler? Disposed
     {
         add => _disposed += value;
         remove => _disposed -= value;
@@ -400,6 +402,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
     public DataGridViewColumnHeaderCell HeaderCell
     {
         get
@@ -412,6 +415,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ColumnHeaderTextDescr))]
     [Localizable(true)]
+    [AllowNull]
     public string HeaderText
     {
         get
@@ -460,11 +464,11 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     }
 
     [Browsable(false)]
-    public override DataGridViewCellStyle InheritedStyle
+    public override DataGridViewCellStyle? InheritedStyle
     {
         get
         {
-            DataGridViewCellStyle columnStyle = null;
+            DataGridViewCellStyle? columnStyle = null;
             if (HasDefaultCellStyle)
             {
                 columnStyle = DefaultCellStyle;
@@ -621,7 +625,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
             }
         }
     }
-
+#nullable disable
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool IsDataBound

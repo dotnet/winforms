@@ -84,11 +84,11 @@ override System.Windows.Forms.DataGridViewCellStyle.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewCheckBoxColumn.DefaultCellStyle.set -> void
 ~override System.Windows.Forms.DataGridViewCheckBoxColumn.ToString() -> string
 ~override System.Windows.Forms.DataGridViewColumn.Clone() -> object
-~override System.Windows.Forms.DataGridViewColumn.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~override System.Windows.Forms.DataGridViewColumn.ContextMenuStrip.set -> void
-~override System.Windows.Forms.DataGridViewColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~override System.Windows.Forms.DataGridViewColumn.DefaultCellStyle.set -> void
-~override System.Windows.Forms.DataGridViewColumn.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle
+override System.Windows.Forms.DataGridViewColumn.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+override System.Windows.Forms.DataGridViewColumn.ContextMenuStrip.set -> void
+override System.Windows.Forms.DataGridViewColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+override System.Windows.Forms.DataGridViewColumn.DefaultCellStyle.set -> void
+override System.Windows.Forms.DataGridViewColumn.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle?
 ~override System.Windows.Forms.DataGridViewColumn.ToString() -> string
 ~override System.Windows.Forms.DataGridViewColumnCollection.List.get -> System.Collections.ArrayList
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.Clone() -> object
@@ -426,14 +426,14 @@ System.Windows.Forms.DataGridViewCellStyle.Tag.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxColumn.IndeterminateValue.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxColumn.TrueValue.get -> object
 ~System.Windows.Forms.DataGridViewCheckBoxColumn.TrueValue.set -> void
-~System.Windows.Forms.DataGridViewColumn.CellType.get -> System.Type
-~System.Windows.Forms.DataGridViewColumn.DataGridViewColumn(System.Windows.Forms.DataGridViewCell cellTemplate) -> void
-~System.Windows.Forms.DataGridViewColumn.DataPropertyName.get -> string
-~System.Windows.Forms.DataGridViewColumn.DataPropertyName.set -> void
-~System.Windows.Forms.DataGridViewColumn.HeaderCell.get -> System.Windows.Forms.DataGridViewColumnHeaderCell
-~System.Windows.Forms.DataGridViewColumn.HeaderCell.set -> void
-~System.Windows.Forms.DataGridViewColumn.HeaderText.get -> string
-~System.Windows.Forms.DataGridViewColumn.HeaderText.set -> void
+System.Windows.Forms.DataGridViewColumn.CellType.get -> System.Type?
+System.Windows.Forms.DataGridViewColumn.DataGridViewColumn(System.Windows.Forms.DataGridViewCell? cellTemplate) -> void
+System.Windows.Forms.DataGridViewColumn.DataPropertyName.get -> string!
+System.Windows.Forms.DataGridViewColumn.DataPropertyName.set -> void
+System.Windows.Forms.DataGridViewColumn.HeaderCell.get -> System.Windows.Forms.DataGridViewColumnHeaderCell!
+System.Windows.Forms.DataGridViewColumn.HeaderCell.set -> void
+System.Windows.Forms.DataGridViewColumn.HeaderText.get -> string!
+System.Windows.Forms.DataGridViewColumn.HeaderText.set -> void
 ~System.Windows.Forms.DataGridViewColumn.Name.get -> string
 ~System.Windows.Forms.DataGridViewColumn.Name.set -> void
 ~System.Windows.Forms.DataGridViewColumn.Site.get -> System.ComponentModel.ISite
@@ -857,8 +857,8 @@ virtual System.Windows.Forms.DataGridViewCellStyle.Clone() -> System.Windows.For
 ~virtual System.Windows.Forms.DataGridViewCheckBoxCell.EditingCellFormattedValue.get -> object
 ~virtual System.Windows.Forms.DataGridViewCheckBoxCell.EditingCellFormattedValue.set -> void
 ~virtual System.Windows.Forms.DataGridViewCheckBoxCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
-~virtual System.Windows.Forms.DataGridViewColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
-~virtual System.Windows.Forms.DataGridViewColumn.CellTemplate.set -> void
+virtual System.Windows.Forms.DataGridViewColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
+virtual System.Windows.Forms.DataGridViewColumn.CellTemplate.set -> void
 ~virtual System.Windows.Forms.DataGridViewColumnCollection.Add(string columnName, string headerText) -> int
 ~virtual System.Windows.Forms.DataGridViewColumnCollection.Add(System.Windows.Forms.DataGridViewColumn dataGridViewColumn) -> int
 ~virtual System.Windows.Forms.DataGridViewColumnCollection.AddRange(params System.Windows.Forms.DataGridViewColumn[] dataGridViewColumns) -> void
@@ -1412,7 +1412,7 @@ override System.Windows.Forms.DataGridViewRowHeaderCell.DataGridViewRowHeaderCel
 override System.Windows.Forms.DataGridViewTextBoxCell.DetachEditingControl() -> void
 override System.Windows.Forms.DataGridViewTextBoxCell.OnEnter(int rowIndex, bool throughMouseClick) -> void
 override System.Windows.Forms.DataGridViewTextBoxCell.OnLeave(int rowIndex, bool throughMouseClick) -> void
-override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell!
+override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
 override System.Windows.Forms.DataGridViewTextBoxColumn.CellTemplate.set -> void
 override System.Windows.Forms.DataGridViewTextBoxColumn.ToString() -> string!
 override System.Windows.Forms.DataGridViewTextBoxEditingControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
@@ -5863,7 +5863,7 @@ System.Windows.Forms.DataGridViewColumn.AutoSizeMode.set -> void
 System.Windows.Forms.DataGridViewColumn.DataGridViewColumn() -> void
 System.Windows.Forms.DataGridViewColumn.DisplayIndex.get -> int
 System.Windows.Forms.DataGridViewColumn.DisplayIndex.set -> void
-System.Windows.Forms.DataGridViewColumn.Disposed -> System.EventHandler
+System.Windows.Forms.DataGridViewColumn.Disposed -> System.EventHandler?
 System.Windows.Forms.DataGridViewColumn.DividerWidth.get -> int
 System.Windows.Forms.DataGridViewColumn.DividerWidth.set -> void
 System.Windows.Forms.DataGridViewColumn.FillWeight.get -> float
