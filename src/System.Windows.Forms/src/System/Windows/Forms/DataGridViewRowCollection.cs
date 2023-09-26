@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -27,7 +25,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
     private bool _cachedRowCountsAccessAllowed = true;
 #endif
 
-    private CollectionChangeEventHandler _onCollectionChanged;
+    private CollectionChangeEventHandler? _onCollectionChanged;
     private readonly RowList _items;
     private readonly List<DataGridViewElementStates> _rowStates;
     private int _rowCountsVisible;
@@ -39,9 +37,9 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     /* IList interface implementation */
 
-    int IList.Add(object value)
+    int IList.Add(object? value)
     {
-        return Add((DataGridViewRow)value);
+        return Add((DataGridViewRow)value!);
     }
 
     void IList.Clear()
@@ -49,24 +47,24 @@ public partial class DataGridViewRowCollection : ICollection, IList
         Clear();
     }
 
-    bool IList.Contains(object value)
+    bool IList.Contains(object? value)
     {
         return _items.Contains(value);
     }
 
-    int IList.IndexOf(object value)
+    int IList.IndexOf(object? value)
     {
-        return _items.IndexOf((DataGridViewRow)value);
+        return _items.IndexOf((DataGridViewRow)value!);
     }
 
-    void IList.Insert(int index, object value)
+    void IList.Insert(int index, object? value)
     {
-        Insert(index, (DataGridViewRow)value);
+        Insert(index, (DataGridViewRow)value!);
     }
 
-    void IList.Remove(object value)
+    void IList.Remove(object? value)
     {
-        Remove((DataGridViewRow)value);
+        Remove((DataGridViewRow)value!);
     }
 
     void IList.RemoveAt(int index)
@@ -90,7 +88,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
     }
 
-    object IList.this[int index]
+    object? IList.this[int index]
     {
         get
         {
@@ -191,7 +189,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
     public DataGridViewRow SharedRow(int rowIndex)
     {
-        return (DataGridViewRow)SharedList[rowIndex];
+        return (DataGridViewRow)SharedList[rowIndex]!;
     }
 
     protected DataGridView DataGridView
@@ -254,7 +252,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
     }
 
-    public event CollectionChangeEventHandler CollectionChanged
+    public event CollectionChangeEventHandler? CollectionChanged
     {
         add => _onCollectionChanged += value;
         remove => _onCollectionChanged -= value;
@@ -273,10 +271,10 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
         }
 
-        return AddInternal(false /*newRow*/, null);
+        return AddInternal(newRow: false, values: null);
     }
 
-    internal int AddInternal(bool newRow, object[] values)
+    internal int AddInternal(bool newRow, object[]? values)
     {
         Debug.Assert(DataGridView is not null);
 
@@ -320,7 +318,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
 
         DataGridViewElementStates rowState = dataGridViewRow.State;
-        DataGridView.OnAddingRow(dataGridViewRow, rowState, true /*checkFrozenState*/);   // will throw an exception if the addition is illegal
+        DataGridView.OnAddingRow(dataGridViewRow, rowState, checkFrozenState: true);   // will throw an exception if the addition is illegal
 
         dataGridViewRow.DataGridView = _dataGridView;
         int columnIndex = 0;
@@ -377,7 +375,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
         }
 
-        return AddInternal(false /*newRow*/, values);
+        return AddInternal(newRow: false, values);
     }
 
     /// <summary>
@@ -502,7 +500,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         DataGridView.CompleteCellsCollection(dataGridViewRow);
         Debug.Assert(dataGridViewRow.Cells.Count == DataGridView.Columns.Count);
-        DataGridView.OnAddingRow(dataGridViewRow, dataGridViewRow.State, true /*checkFrozenState*/);   // will throw an exception if the addition is illegal
+        DataGridView.OnAddingRow(dataGridViewRow, dataGridViewRow.State, checkFrozenState: true);   // will throw an exception if the addition is illegal
 
         int columnIndex = 0;
         foreach (DataGridViewCell dataGridViewCell in dataGridViewRow.Cells)
@@ -556,10 +554,14 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new InvalidOperationException(SR.DataGridView_ForbiddenOperationInEventHandler);
         }
 
-        return AddCopyInternal(indexSource, DataGridViewElementStates.None, DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed, false /*newRow*/);
+        return AddCopyInternal(indexSource, DataGridViewElementStates.None, DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed, newRow: false);
     }
 
-    internal int AddCopyInternal(int indexSource, DataGridViewElementStates dgvesAdd, DataGridViewElementStates dgvesRemove, bool newRow)
+    internal int AddCopyInternal(
+        int indexSource,
+        DataGridViewElementStates dgvesAdd,
+        DataGridViewElementStates dgvesRemove,
+        bool newRow)
     {
         Debug.Assert(DataGridView is not null);
 
@@ -585,7 +587,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             Debug.Assert(DataGridView is not null);
             DataGridViewElementStates rowState = _rowStates[indexSource] & ~dgvesRemove;
             rowState |= dgvesAdd;
-            DataGridView.OnAddingRow(rowTemplate, rowState, true /*checkFrozenState*/);   // will throw an exception if the addition is illegal
+            DataGridView.OnAddingRow(rowTemplate, rowState, checkFrozenState: true);   // will throw an exception if the addition is illegal
 
             index = SharedList.Add(rowTemplate);
             _rowStates.Add(rowState);
@@ -639,7 +641,11 @@ public partial class DataGridViewRowCollection : ICollection, IList
         return AddCopiesInternal(indexSource, count, DataGridViewElementStates.None, DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed);
     }
 
-    internal int AddCopiesInternal(int indexSource, int count, DataGridViewElementStates dgvesAdd, DataGridViewElementStates dgvesRemove)
+    internal int AddCopiesInternal(
+        int indexSource,
+        int count,
+        DataGridViewElementStates dgvesAdd,
+        DataGridViewElementStates dgvesRemove)
     {
         if (indexSource < 0 || Count <= indexSource)
         {
@@ -662,7 +668,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         int index, indexStart = _items.Count;
         if (rowTemplate.Index == -1)
         {
-            DataGridView.OnAddingRow(rowTemplate, rowTemplateState, true /*checkFrozenState*/);   // Done once only, continue to check if this is OK - will throw an exception if the addition is illegal.
+            DataGridView.OnAddingRow(rowTemplate, rowTemplateState, checkFrozenState: true);   // Done once only, continue to check if this is OK - will throw an exception if the addition is illegal.
             for (int i = 0; i < count - 1; i++)
             {
                 SharedList.Add(rowTemplate);
@@ -687,14 +693,14 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
         else
         {
-            index = AddDuplicateRow(rowTemplate, false /*newRow*/);
+            index = AddDuplicateRow(rowTemplate, newRow: false);
             if (count > 1)
             {
                 DataGridView.OnAddedRow_PreNotification(index);
                 if (RowIsSharable(index))
                 {
                     DataGridViewRow rowTemplate2 = SharedRow(index);
-                    DataGridView.OnAddingRow(rowTemplate2, rowTemplateState, true /*checkFrozenState*/);   // done only once, continue to check if this is OK - will throw an exception if the addition is illegal
+                    DataGridView.OnAddingRow(rowTemplate2, rowTemplateState, checkFrozenState: true);   // done only once, continue to check if this is OK - will throw an exception if the addition is illegal
                     for (int i = 1; i < count - 1; i++)
                     {
                         SharedList.Add(rowTemplate2);
@@ -715,7 +721,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                     UnshareRow(index);
                     for (int i = 1; i < count; i++)
                     {
-                        index = AddDuplicateRow(rowTemplate, false /*newRow*/);
+                        index = AddDuplicateRow(rowTemplate, newRow: false);
                         UnshareRow(index);
                         DataGridView.OnAddedRow_PreNotification(index);
                     }
@@ -770,7 +776,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             dataGridViewRow.HeaderCell.OwningRow = dataGridViewRow;
         }
 
-        DataGridView.OnAddingRow(dataGridViewRow, rowState, true /*checkFrozenState*/);   // will throw an exception if the addition is illegal
+        DataGridView.OnAddingRow(dataGridViewRow, rowState, checkFrozenState: true);   // will throw an exception if the addition is illegal
 
 #if DEBUG
         DataGridView._dataStoreAccessAllowed = false;
@@ -815,7 +821,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         int indexStart = _items.Count;
 
         // OnAddingRows checks for Selected flag of each row and their dimension.
-        DataGridView.OnAddingRows(dataGridViewRows, true /*checkFrozenStates*/);   // will throw an exception if the addition is illegal
+        DataGridView.OnAddingRows(dataGridViewRows, checkFrozenStates: true);   // will throw an exception if the addition is illegal
 
         foreach (DataGridViewRow dataGridViewRow in dataGridViewRows)
         {
@@ -864,7 +870,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         if (DataGridView.DataSource is not null)
         {
-            if (DataGridView.DataConnection.List is IBindingList list && list.AllowRemove && list.SupportsChangeNotification)
+            if (DataGridView.DataConnection!.List is IBindingList list && list.AllowRemove && list.SupportsChangeNotification)
             {
                 ((IList)list).Clear();
             }
@@ -1700,7 +1706,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             if (count > 1)
             {
                 // Done once only, continue to check if this is OK - will throw an exception if the insertion is illegal.
-                DataGridView.OnInsertingRow(indexDestination, rowTemplate, rowTemplateState, ref newCurrentCell, true, count, false /*force*/);
+                DataGridView.OnInsertingRow(indexDestination, rowTemplate, rowTemplateState, ref newCurrentCell, firstInsertion: true, count, force: false);
                 for (int i = 0; i < count; i++)
                 {
                     SharedList.Insert(indexDestination + i, rowTemplate);
@@ -1721,7 +1727,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             }
             else
             {
-                DataGridView.OnInsertingRow(indexDestination, rowTemplate, rowTemplateState, ref newCurrentCell, true, 1, false /*force*/); // will throw an exception if the insertion is illegal
+                DataGridView.OnInsertingRow(indexDestination, rowTemplate, rowTemplateState, ref newCurrentCell, firstInsertion: true, insertionCount: 1, force: false); // will throw an exception if the insertion is illegal
                 SharedList.Insert(indexDestination, rowTemplate);
                 _rowStates.Insert(indexDestination, rowTemplateState);
 #if DEBUG
@@ -1744,7 +1750,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                 {
                     DataGridViewRow rowTemplate2 = SharedRow(indexDestination);
                     // Done once only, continue to check if this is OK - will throw an exception if the insertion is illegal.
-                    DataGridView.OnInsertingRow(indexDestination + 1, rowTemplate2, rowTemplateState, ref newCurrentCell, false, count - 1, false /*force*/);
+                    DataGridView.OnInsertingRow(indexDestination + 1, rowTemplate2, rowTemplateState, ref newCurrentCell, false, count - 1, force: false);
                     for (int i = 1; i < count; i++)
                     {
                         SharedList.Insert(indexDestination + i, rowTemplate2);
@@ -1813,7 +1819,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             dataGridViewRow.HeaderCell.OwningRow = dataGridViewRow;
         }
 
-        DataGridView.OnInsertingRow(indexDestination, dataGridViewRow, rowState, ref newCurrentCell, firstInsertion, 1, false /*force*/);   // will throw an exception if the insertion is illegal
+        DataGridView.OnInsertingRow(indexDestination, dataGridViewRow, rowState, ref newCurrentCell, firstInsertion, 1, force: false);   // will throw an exception if the insertion is illegal
 
         Debug.Assert(dataGridViewRow.Index == -1);
         SharedList.Insert(indexDestination, dataGridViewRow);
@@ -1994,7 +2000,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
     {
         Debug.Assert(e.Action != CollectionChangeAction.Remove);
         Point newCurrentCell = new Point(-1, -1);
-        DataGridViewRow dataGridViewRow = (DataGridViewRow)e.Element;
+        DataGridViewRow? dataGridViewRow = (DataGridViewRow?)e.Element;
         int originalIndex = 0;
         if (dataGridViewRow is not null && e.Action == CollectionChangeAction.Add)
         {
@@ -2020,7 +2026,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                                      bool recreateNewRow,
                                      Point newCurrentCell)
     {
-        DataGridViewRow dataGridViewRow = (DataGridViewRow)e.Element;
+        DataGridViewRow? dataGridViewRow = (DataGridViewRow?)e.Element;
         int originalIndex = 0;
         if (dataGridViewRow is not null && e.Action == CollectionChangeAction.Add)
         {
@@ -2038,11 +2044,12 @@ public partial class DataGridViewRowCollection : ICollection, IList
         OnCollectionChanged_PostNotification(e.Action, rowIndex, rowCount, dataGridViewRow, changeIsDeletion, changeIsInsertion, recreateNewRow, newCurrentCell);
     }
 
-    private void OnCollectionChanged_PreNotification(CollectionChangeAction cca,
-                                                     int rowIndex,
-                                                     int rowCount,
-                                                     ref DataGridViewRow dataGridViewRow,
-                                                     bool changeIsInsertion)
+    private void OnCollectionChanged_PreNotification(
+        CollectionChangeAction cca,
+        int rowIndex,
+        int rowCount,
+        [AllowNull] ref DataGridViewRow dataGridViewRow,
+        bool changeIsInsertion)
     {
         Debug.Assert(DataGridView is not null);
         bool useRowShortcut = false;
@@ -2164,14 +2171,15 @@ public partial class DataGridViewRowCollection : ICollection, IList
         DataGridView.ResetUIState(useRowShortcut, computeVisibleRows);
     }
 
-    private void OnCollectionChanged_PostNotification(CollectionChangeAction cca,
-                                                      int rowIndex,
-                                                      int rowCount,
-                                                      DataGridViewRow dataGridViewRow,
-                                                      bool changeIsDeletion,
-                                                      bool changeIsInsertion,
-                                                      bool recreateNewRow,
-                                                      Point newCurrentCell)
+    private void OnCollectionChanged_PostNotification(
+        CollectionChangeAction cca,
+        int rowIndex,
+        int rowCount,
+        DataGridViewRow dataGridViewRow,
+        bool changeIsDeletion,
+        bool changeIsInsertion,
+        bool recreateNewRow,
+        Point newCurrentCell)
     {
         Debug.Assert(DataGridView is not null);
         if (changeIsDeletion)
@@ -2272,9 +2280,9 @@ public partial class DataGridViewRowCollection : ICollection, IList
 
         if (DataGridView.DataSource is not null)
         {
-            if (DataGridView.DataConnection.List is IBindingList list && list.AllowRemove && list.SupportsChangeNotification)
+            if (DataGridView.DataConnection!.List is IBindingList bindingList && bindingList.AllowRemove && bindingList.SupportsChangeNotification)
             {
-                ((IList)list).RemoveAt(index);
+                bindingList.RemoveAt(index);
             }
             else
             {
@@ -2283,7 +2291,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         }
         else
         {
-            RemoveAtInternal(index, false /*force*/);
+            RemoveAtInternal(index, force: false);
         }
     }
 
@@ -2306,7 +2314,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         dataGridViewRow = SharedRow(index);
         Debug.Assert(DataGridView is not null);
         DataGridView.OnRemovingRow(index, out newCurrentCell, force);
-        UpdateRowCaches(index, ref dataGridViewRow, false /*adding*/);
+        UpdateRowCaches(index, ref dataGridViewRow, adding: false);
         if (dataGridViewRow.Index != -1)
         {
             _rowStates[index] = dataGridViewRow.State;
@@ -2502,7 +2510,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
         SharedRow(rowIndex).State = SharedRowState(rowIndex);
     }
 
-    private void UpdateRowCaches(int rowIndex, ref DataGridViewRow dataGridViewRow, bool adding)
+    private void UpdateRowCaches(int rowIndex, [AllowNull] ref DataGridViewRow dataGridViewRow, bool adding)
     {
         if (_rowCountsVisible != -1 || _rowCountsVisibleFrozen != -1 || _rowCountsVisibleSelected != -1 ||
             _rowsHeightVisible != -1 || _rowsHeightVisibleFrozen != -1)
@@ -2517,7 +2525,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
                      ((rowStates & (DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen)) == (DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen))))
                 {
                     // dataGridViewRow may become unshared in GetHeight call
-                    rowHeightIncrement = adding ? dataGridViewRow.GetHeight(rowIndex) : -dataGridViewRow.GetHeight(rowIndex);
+                    rowHeightIncrement = adding ? dataGridViewRow!.GetHeight(rowIndex) : -dataGridViewRow!.GetHeight(rowIndex);
                     dataGridViewRow = SharedRow(rowIndex);
                 }
 
