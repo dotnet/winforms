@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Globalization;
 using System.Text;
@@ -45,7 +43,7 @@ public class ByteViewer : TableLayoutPanel
     private TextBox _edit;
     private readonly int _columnCount = DEFAULT_COLUMN_COUNT;
     private int _rowCount = DEFAULT_ROW_COUNT;
-    private byte[] _dataBuf;
+    private byte[]? _dataBuf;
     private int _startLine;
     private int _displayLinesCount;
     private int _linesCount;
@@ -134,7 +132,7 @@ public class ByteViewer : TableLayoutPanel
         byte[] lineBuffer;
 
         int offset = startLine * _columnCount;
-        if (offset + (line + 1) * _columnCount > _dataBuf.Length)
+        if (offset + (line + 1) * _columnCount > _dataBuf!.Length)
         {
             lineBuffer = new byte[_dataBuf.Length % _columnCount];
         }
@@ -368,18 +366,12 @@ public class ByteViewer : TableLayoutPanel
     /// <summary>
     ///  Gets the bytes in the buffer.
     /// </summary>
-    public virtual byte[] GetBytes()
-    {
-        return _dataBuf;
-    }
+    public virtual byte[]? GetBytes() => _dataBuf;
 
     /// <summary>
     ///  Gets the display mode for the control.
     /// </summary>
-    public virtual DisplayMode GetDisplayMode()
-    {
-        return _displayMode;
-    }
+    public virtual DisplayMode GetDisplayMode() => _displayMode;
 
     // Stole this code from  XmlScanner
     private static int GetEncodingIndex(int c1)
@@ -424,7 +416,7 @@ public class ByteViewer : TableLayoutPanel
         int size;
         fixed (byte* pDataBuff = _dataBuf)
         {
-            size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, _dataBuf.Length, null, 0);
+            size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, _dataBuf!.Length, null, 0);
             text = new char[size + 1];
             fixed (char* pText = text)
             {
@@ -450,7 +442,7 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     private void InitUnicode()
     {
-        char[] text = new char[_dataBuf.Length / 2 + 1];
+        char[] text = new char[_dataBuf!.Length / 2 + 1];
         Encoding.Unicode.GetChars(_dataBuf, 0, _dataBuf.Length, text, 0);
         for (int i = 0; i < text.Length; i++)
             if (text[i] == '\0')
@@ -463,6 +455,8 @@ public class ByteViewer : TableLayoutPanel
     /// <summary>
     ///  Initializes the UI components of a control
     /// </summary>
+    [MemberNotNull(nameof(_edit))]
+    [MemberNotNull(nameof(_scrollBar))]
     private void InitUI()
     {
         SCROLLBAR_HEIGHT = SystemInformation.HorizontalScrollBarHeight;
@@ -501,7 +495,7 @@ public class ByteViewer : TableLayoutPanel
     private void InitState()
     {
         // calculate number of lines required (being careful to count 1 for the last partial line)
-        _linesCount = (_dataBuf.Length + _columnCount - 1) / _columnCount;
+        _linesCount = (_dataBuf!.Length + _columnCount - 1) / _columnCount;
 
         _startLine = 0;
         if (_linesCount > _rowCount)
@@ -635,7 +629,7 @@ public class ByteViewer : TableLayoutPanel
     /// <summary>
     ///  Scroll event handler.
     /// </summary>
-    protected virtual void ScrollChanged(object source, EventArgs e)
+    protected virtual void ScrollChanged(object? source, EventArgs e)
     {
         _startLine = _scrollBar.Value;
 
@@ -692,19 +686,12 @@ public class ByteViewer : TableLayoutPanel
             case DisplayMode.Hexdump:
                 SuspendLayout();
                 _edit.Hide();
-                if (_linesCount > _rowCount)
+                if (_linesCount > _rowCount && !_scrollBar.Visible)
                 {
-                    if (!_scrollBar.Visible)
-                    {
-                        _scrollBar.Show();
-                        ResumeLayout();
-                        _scrollBar.Invalidate();
-                        _scrollBar.Select();
-                    }
-                    else
-                    {
-                        ResumeLayout();
-                    }
+                    _scrollBar.Show();
+                    ResumeLayout();
+                    _scrollBar.Invalidate();
+                    _scrollBar.Select();
                 }
                 else
                 {
@@ -741,7 +728,7 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     public virtual void SetStartLine(int line)
     {
-        if (line < 0 || line >= _linesCount || line > _dataBuf.Length / _columnCount)
+        if (line < 0 || line >= _linesCount || line > _dataBuf?.Length / _columnCount)
         {
             _startLine = 0;
         }
