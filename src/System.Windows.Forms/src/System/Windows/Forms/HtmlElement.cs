@@ -7,11 +7,11 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
-using static Interop.Mshtml;
+using Windows.Win32.Web.MsHtml;
 
 namespace System.Windows.Forms;
 
-public sealed partial class HtmlElement
+public sealed unsafe partial class HtmlElement
 {
     internal static readonly object s_eventClick = new();
     internal static readonly object s_eventDoubleClick = new();
@@ -33,12 +33,16 @@ public sealed partial class HtmlElement
     internal static readonly object s_eventMouseOver = new();
     internal static readonly object s_eventMouseUp = new();
 
-    private readonly IHTMLElement _htmlElement;
+    private readonly AgileComPointer<IHTMLElement> _htmlElement;
     private readonly HtmlShimManager _shimManager;
 
-    internal HtmlElement(HtmlShimManager shimManager, IHTMLElement element)
+    internal HtmlElement(HtmlShimManager shimManager, IHTMLElement* element)
     {
-        _htmlElement = element;
+#if DEBUG
+        _htmlElement = new(element, takeOwnership: true, trackDisposal: false);
+#else
+        _htmlElement = new(element, takeOwnership: true);
+#endif
         Debug.Assert(NativeHtmlElement is not null, "The element object should implement IHTMLElement");
 
         _shimManager = shimManager;
@@ -48,7 +52,13 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return NativeHtmlElement.GetAll() is IHTMLElementCollection iHTMLElementCollection ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
+            using var htmlElement = NativeHtmlElement.GetInterface();
+            using ComScope<IDispatch> dispatch = new(null);
+            htmlElement.Value->get_all(dispatch).ThrowOnFailure();
+            IHTMLElementCollection* htmlElementCollection;
+            return dispatch.Value->QueryInterface(IID.Get<IHTMLElementCollection>(), (void**)&htmlElementCollection).Succeeded
+                ? new(_shimManager, htmlElementCollection)
+                : new(_shimManager);
         }
     }
 
@@ -56,7 +66,13 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return NativeHtmlElement.GetChildren() is IHTMLElementCollection iHTMLElementCollection ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
+            using var htmlElement = NativeHtmlElement.GetInterface();
+            using ComScope<IDispatch> dispatch = new(null);
+            htmlElement.Value->get_children(dispatch).ThrowOnFailure();
+            IHTMLElementCollection* htmlElementCollection;
+            return dispatch.Value->QueryInterface(IID.Get<IHTMLElementCollection>(), (void**)&htmlElementCollection).Succeeded
+                ? new(_shimManager, htmlElementCollection)
+                : new(_shimManager);
         }
     }
 
@@ -64,7 +80,10 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return ((IHTMLElement2)NativeHtmlElement).CanHaveChildren();
+            using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+            VARIANT_BOOL canHaveChildren = default;
+            htmlElement2.Value->get_canHaveChildren(&canHaveChildren).ThrowOnFailure();
+            return canHaveChildren;
         }
     }
 
@@ -72,9 +91,17 @@ public sealed partial class HtmlElement
     {
         get
         {
-            IHTMLElement2 htmlElement2 = (IHTMLElement2)NativeHtmlElement;
-            return new Rectangle(htmlElement2.ClientLeft(), htmlElement2.ClientTop(),
-                htmlElement2.ClientWidth(), htmlElement2.ClientHeight());
+            using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+            int clientLeft;
+            int clientTop;
+            int clientWidth;
+            int clientHeight;
+            htmlElement2.Value->get_clientLeft(&clientLeft).ThrowOnFailure();
+            htmlElement2.Value->get_clientTop(&clientTop).ThrowOnFailure();
+            htmlElement2.Value->get_clientWidth(&clientWidth).ThrowOnFailure();
+            htmlElement2.Value->get_clientHeight(&clientHeight).ThrowOnFailure();
+
+            return new(clientLeft, clientTop, clientWidth, clientHeight);
         }
     }
 
@@ -82,7 +109,11 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return NativeHtmlElement.GetDocument() is IHTMLDocument iHTMLDocument ? new HtmlDocument(_shimManager, iHTMLDocument) : null;
+            using var nativeHtmlElement = NativeHtmlElement.GetInterface();
+            using ComScope<IDispatch> dispatch = new(null);
+            nativeHtmlElement.Value->get_document(dispatch).ThrowOnFailure();
+            using var htmlDocument = dispatch.TryQuery<IHTMLDocument>(out HRESULT hr);
+            return hr.Succeeded ? new HtmlDocument(_shimManager, htmlDocument) : null;
         }
     }
 
@@ -90,11 +121,15 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return !(((IHTMLElement3)NativeHtmlElement).GetDisabled());
+            using var htmlElement3 = GetHtmlElement<IHTMLElement3>();
+            VARIANT_BOOL disabled = default;
+            htmlElement3.Value->get_disabled(&disabled).ThrowOnFailure();
+            return !disabled;
         }
         set
         {
-            ((IHTMLElement3)NativeHtmlElement).SetDisabled(!value);
+            using var htmlElement3 = GetHtmlElement<IHTMLElement3>();
+            htmlElement3.Value->put_disabled(!value).ThrowOnFailure();
         }
     }
 
@@ -122,11 +157,18 @@ public sealed partial class HtmlElement
     {
         get
         {
-            IHTMLElement iHtmlElement = null;
-
-            if (NativeHtmlElement is IHTMLDOMNode iHtmlDomNode)
+            IHTMLElement* iHtmlElement = null;
+            using var htmlElement = NativeHtmlElement.GetInterface();
+            using var node = htmlElement.TryQuery<IHTMLDOMNode>(out HRESULT hr);
+            if (hr.Succeeded)
             {
-                iHtmlElement = iHtmlDomNode.FirstChild() as IHTMLElement;
+                using ComScope<IHTMLDOMNode> child = new(null);
+                node.Value->get_firstChild(child).ThrowOnFailure();
+                if (!child.IsNull)
+                {
+                    hr = child.Value->QueryInterface(IID.Get<IHTMLElement>(), (void**)&iHtmlElement);
+                    hr.AssertSuccess();
+                }
             }
 
             return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
@@ -137,11 +179,16 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return NativeHtmlElement.GetId();
+            using var nativeHtmlElement = NativeHtmlElement.GetInterface();
+            using BSTR id = default;
+            nativeHtmlElement.Value->get_id(&id).ThrowOnFailure();
+            return id.ToString();
         }
         set
         {
-            NativeHtmlElement.SetId(value);
+            using var nativeHtmlElement = NativeHtmlElement.GetInterface();
+            using BSTR newValue = new(value);
+            nativeHtmlElement.Value->put_id(newValue).ThrowOnFailure();
         }
     }
 
@@ -149,13 +196,18 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return NativeHtmlElement.GetInnerHTML();
+            using var nativeHtmlElement = NativeHtmlElement.GetInterface();
+            using BSTR innerHtml = default;
+            nativeHtmlElement.Value->get_innerHTML(&innerHtml).ThrowOnFailure();
+            return innerHtml.ToString();
         }
         set
         {
             try
             {
-                NativeHtmlElement.SetInnerHTML(value);
+                using var nativeHtmlElement = NativeHtmlElement.GetInterface();
+                using BSTR newValue = new(value);
+                nativeHtmlElement.Value->put_innerHTML(newValue).ThrowOnFailure();
             }
             catch (COMException ex)
             {
@@ -173,13 +225,18 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return NativeHtmlElement.GetInnerText();
+            using var nativeHtmlElement = NativeHtmlElement.GetInterface();
+            using BSTR innerText = default;
+            nativeHtmlElement.Value->get_innerText(&innerText).ThrowOnFailure();
+            return innerText.ToString();
         }
         set
         {
             try
             {
-                NativeHtmlElement.SetInnerText(value);
+                using var nativeHtmlElement = NativeHtmlElement.GetInterface();
+                using BSTR newValue = new(value);
+                nativeHtmlElement.Value->put_innerText(newValue).ThrowOnFailure();
             }
             catch (COMException ex)
             {
@@ -205,23 +262,35 @@ public sealed partial class HtmlElement
         }
     }
 
-    private IHTMLElement NativeHtmlElement
+    internal AgileComPointer<IHTMLElement> NativeHtmlElement => _htmlElement;
+
+    /// <summary>
+    ///  Helper method to get IHTMLElementX interface of interest. Throws if failure occurs.
+    /// </summary>
+    private ComScope<T> GetHtmlElement<T>() where T : unmanaged, IComIID
     {
-        get
-        {
-            return _htmlElement;
-        }
+        using var htmlElement = NativeHtmlElement.GetInterface();
+        var scope = htmlElement.TryQuery<T>(out HRESULT hr);
+        hr.ThrowOnFailure();
+        return scope;
     }
 
     public HtmlElement NextSibling
     {
         get
         {
-            IHTMLElement iHtmlElement = null;
-
-            if (NativeHtmlElement is IHTMLDOMNode iHtmlDomNode)
+            IHTMLElement* iHtmlElement = null;
+            using var htmlElement = NativeHtmlElement.GetInterface();
+            using var node = htmlElement.TryQuery<IHTMLDOMNode>(out HRESULT hr);
+            if (hr.Succeeded)
             {
-                iHtmlElement = iHtmlDomNode.NextSibling() as IHTMLElement;
+                using ComScope<IHTMLDOMNode> sibling = new(null);
+                node.Value->get_nextSibling(sibling).ThrowOnFailure();
+                if (!sibling.IsNull)
+                {
+                    hr = sibling.Value->QueryInterface(IID.Get<IHTMLElement>(), (void**)&iHtmlElement);
+                    hr.AssertSuccess();
+                }
             }
 
             return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
@@ -232,8 +301,18 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return new Rectangle(NativeHtmlElement.GetOffsetLeft(), NativeHtmlElement.GetOffsetTop(),
-                NativeHtmlElement.GetOffsetWidth(), NativeHtmlElement.GetOffsetHeight());
+            using var nativeHtmlElement = NativeHtmlElement.GetInterface();
+            int offsetLeft;
+            int offsetTop;
+            int offsetWidth;
+            int offsetHeight;
+
+            nativeHtmlElement.Value->get_offsetLeft(&offsetLeft).ThrowOnFailure();
+            nativeHtmlElement.Value->get_offsetTop(&offsetTop).ThrowOnFailure();
+            nativeHtmlElement.Value->get_offsetWidth(&offsetWidth).ThrowOnFailure();
+            nativeHtmlElement.Value->get_offsetHeight(&offsetHeight).ThrowOnFailure();
+
+            return new(offsetLeft, offsetTop, offsetWidth, offsetHeight);
         }
     }
 
@@ -241,7 +320,9 @@ public sealed partial class HtmlElement
     {
         get
         {
-            IHTMLElement iHtmlElement = NativeHtmlElement.GetOffsetParent();
+            using var nativeHtmlElement = NativeHtmlElement.GetInterface();
+            IHTMLElement* iHtmlElement;
+            nativeHtmlElement.Value->get_offsetParent(&iHtmlElement).ThrowOnFailure();
             return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
         }
     }
@@ -250,13 +331,18 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return NativeHtmlElement.GetOuterHTML();
+            using var nativeHtmlElement = NativeHtmlElement.GetInterface();
+            using BSTR outerHtml = default;
+            nativeHtmlElement.Value->get_outerHTML(&outerHtml).ThrowOnFailure();
+            return outerHtml.ToString();
         }
         set
         {
             try
             {
-                NativeHtmlElement.SetOuterHTML(value);
+                using var nativeHtmlElement = NativeHtmlElement.GetInterface();
+                using BSTR newValue = new(value);
+                nativeHtmlElement.Value->put_outerHTML(newValue).ThrowOnFailure();
             }
             catch (COMException ex)
             {
@@ -274,13 +360,18 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return NativeHtmlElement.GetOuterText();
+            using var htmlElement = NativeHtmlElement.GetInterface();
+            using BSTR outerText = default;
+            htmlElement.Value->get_outerText(&outerText).ThrowOnFailure();
+            return outerText.ToString();
         }
         set
         {
             try
             {
-                NativeHtmlElement.SetOuterText(value);
+                using var htmlElement = NativeHtmlElement.GetInterface();
+                using BSTR newValue = new(value);
+                htmlElement.Value->put_outerText(newValue).ThrowOnFailure();
             }
             catch (COMException ex)
             {
@@ -298,7 +389,9 @@ public sealed partial class HtmlElement
     {
         get
         {
-            IHTMLElement iHtmlElement = NativeHtmlElement.GetParentElement();
+            using var htmlElement = NativeHtmlElement.GetInterface();
+            IHTMLElement* iHtmlElement;
+            htmlElement.Value->get_parentElement(&iHtmlElement).ThrowOnFailure();
             return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
         }
     }
@@ -307,9 +400,18 @@ public sealed partial class HtmlElement
     {
         get
         {
-            IHTMLElement2 htmlElement2 = (IHTMLElement2)NativeHtmlElement;
-            return new Rectangle(htmlElement2.GetScrollLeft(), htmlElement2.GetScrollTop(),
-                htmlElement2.GetScrollWidth(), htmlElement2.GetScrollHeight());
+            using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+            int scrollLeft;
+            int scrollTop;
+            int scrollWidth;
+            int scrollHeight;
+
+            htmlElement2.Value->get_scrollLeft(&scrollLeft).ThrowOnFailure();
+            htmlElement2.Value->get_scrollTop(&scrollTop).ThrowOnFailure();
+            htmlElement2.Value->get_scrollWidth(&scrollWidth).ThrowOnFailure();
+            htmlElement2.Value->get_scrollHeight(&scrollHeight).ThrowOnFailure();
+
+            return new(scrollLeft, scrollTop, scrollWidth, scrollHeight);
         }
     }
 
@@ -317,11 +419,15 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return ((IHTMLElement2)NativeHtmlElement).GetScrollLeft();
+            using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+            int scrollLeft;
+            htmlElement2.Value->get_scrollLeft(&scrollLeft).ThrowOnFailure();
+            return scrollLeft;
         }
         set
         {
-            ((IHTMLElement2)NativeHtmlElement).SetScrollLeft(value);
+            using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+            htmlElement2.Value->put_scrollLeft(value).ThrowOnFailure();
         }
     }
 
@@ -329,31 +435,38 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return ((IHTMLElement2)NativeHtmlElement).GetScrollTop();
+            using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+            int scrollTop;
+            htmlElement2.Value->get_scrollTop(&scrollTop).ThrowOnFailure();
+            return scrollTop;
         }
         set
         {
-            ((IHTMLElement2)NativeHtmlElement).SetScrollTop(value);
+            using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+            htmlElement2.Value->put_scrollTop(value).ThrowOnFailure();
         }
     }
 
-    private HtmlShimManager ShimManager
-    {
-        get
-        {
-            return _shimManager;
-        }
-    }
+    private HtmlShimManager ShimManager => _shimManager;
 
     public string Style
     {
         get
         {
-            return NativeHtmlElement.GetStyle().GetCssText();
+            using var htmlElement = NativeHtmlElement.GetInterface();
+            using ComScope<IHTMLStyle> style = new(null);
+            htmlElement.Value->get_style(style).ThrowOnFailure();
+            using BSTR cssText = default;
+            style.Value->get_cssText(&cssText).ThrowOnFailure();
+            return cssText.ToString();
         }
         set
         {
-            NativeHtmlElement.GetStyle().SetCssText(value);
+            using var htmlElement = NativeHtmlElement.GetInterface();
+            using ComScope<IHTMLStyle> style = new(null);
+            htmlElement.Value->get_style(style).ThrowOnFailure();
+            using BSTR newValue = new(value);
+            style.Value->put_cssText(newValue).ThrowOnFailure();
         }
     }
 
@@ -361,7 +474,10 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return NativeHtmlElement.GetTagName();
+            using var htmlElement = NativeHtmlElement.GetInterface();
+            using BSTR tagName = default;
+            htmlElement.Value->get_tagName(&tagName).ThrowOnFailure();
+            return tagName.ToString();
         }
     }
 
@@ -369,21 +485,19 @@ public sealed partial class HtmlElement
     {
         get
         {
-            return ((IHTMLElement2)NativeHtmlElement).GetTabIndex();
+            using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+            short tabIndex;
+            htmlElement2.Value->get_tabIndex(&tabIndex).ThrowOnFailure();
+            return tabIndex;
         }
         set
         {
-            ((IHTMLElement2)NativeHtmlElement).SetTabIndex(value);
+            using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+            htmlElement2.Value->put_tabIndex(value).ThrowOnFailure();
         }
     }
 
-    public object DomElement
-    {
-        get
-        {
-            return NativeHtmlElement;
-        }
-    }
+    public object DomElement => NativeHtmlElement.GetManagedObject();
 
     public HtmlElement AppendChild(HtmlElement newElement)
     {
@@ -404,7 +518,8 @@ public sealed partial class HtmlElement
     {
         try
         {
-            ((IHTMLElement2)NativeHtmlElement).Focus();
+            using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+            htmlElement2.Value->focus().ThrowOnFailure();
         }
         catch (COMException ex)
         {
@@ -419,33 +534,43 @@ public sealed partial class HtmlElement
 
     public string GetAttribute(string attributeName)
     {
-        object oAttributeValue = NativeHtmlElement.GetAttribute(attributeName, 0);
-        return oAttributeValue is null ? "" : oAttributeValue.ToString();
+        using var htmlElement = NativeHtmlElement.GetInterface();
+        using BSTR name = new(attributeName);
+        using VARIANT attributeValue = default;
+        htmlElement.Value->getAttribute(name, 0, &attributeValue).ThrowOnFailure();
+        return attributeValue.Type == VARENUM.VT_NULL || attributeValue.ToObject() is not string validString
+            ? string.Empty
+            : validString;
     }
 
     public HtmlElementCollection GetElementsByTagName(string tagName)
     {
-        IHTMLElementCollection iHTMLElementCollection = ((IHTMLElement2)NativeHtmlElement).GetElementsByTagName(tagName);
+        using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+        using BSTR name = new(tagName);
+        IHTMLElementCollection* iHTMLElementCollection;
+        htmlElement2.Value->getElementsByTagName(name, &iHTMLElementCollection).ThrowOnFailure();
         return iHTMLElementCollection is not null ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
     }
 
     public HtmlElement InsertAdjacentElement(HtmlElementInsertionOrientation orient, HtmlElement newElement)
     {
-        IHTMLElement iHtmlElement = ((IHTMLElement2)NativeHtmlElement).InsertAdjacentElement(orient.ToString(),
-            (IHTMLElement)newElement.DomElement);
-        return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
+        using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+        using BSTR where = new(orient.ToString());
+        using var htmlElement = NativeHtmlElement.GetInterface();
+        using var insertedElement = ComHelpers.GetComScope<IHTMLElement>(newElement.DomElement);
+        IHTMLElement* adjElement;
+        htmlElement2.Value->insertAdjacentElement(where, insertedElement, &adjElement).ThrowOnFailure();
+        return adjElement is not null ? new HtmlElement(_shimManager, adjElement) : null;
     }
 
-    public object InvokeMember(string methodName)
-    {
-        return InvokeMember(methodName, null);
-    }
+    public object InvokeMember(string methodName) => InvokeMember(methodName, null);
 
     public unsafe object InvokeMember(string methodName, params object[] parameter)
     {
         try
         {
-            using var scriptObject = ComHelpers.TryGetComScope<IDispatch>(NativeHtmlElement, out HRESULT hr);
+            using var htmlElement = NativeHtmlElement.GetInterface();
+            using var scriptDispatch = htmlElement.TryQuery<IDispatch>(out HRESULT hr);
             if (hr.Failed)
             {
                 return null;
@@ -455,7 +580,7 @@ public sealed partial class HtmlElement
 
             fixed (char* n = methodName)
             {
-                hr = scriptObject.Value->GetIDsOfNames(IID.NULL(), (PWSTR*)&n, 1, PInvoke.GetThreadLocale(), &dispid);
+                hr = scriptDispatch.Value->GetIDsOfNames(IID.NULL(), (PWSTR*)&n, 1, PInvoke.GetThreadLocale(), &dispid);
                 if (!hr.Succeeded || dispid == PInvoke.DISPID_UNKNOWN)
                 {
                     return null;
@@ -481,7 +606,7 @@ public sealed partial class HtmlElement
 
                 VARIANT result = default;
                 EXCEPINFO excepInfo = default;
-                hr = scriptObject.Value->Invoke(
+                hr = scriptDispatch.Value->Invoke(
                     dispid,
                     IID.NULL(),
                     PInvoke.GetThreadLocale(),
@@ -508,25 +633,34 @@ public sealed partial class HtmlElement
 
     public void RemoveFocus()
     {
-        ((IHTMLElement2)NativeHtmlElement).Blur();
+        using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
+        htmlElement2.Value->blur().ThrowOnFailure();
     }
 
-    // PM review done
     public void RaiseEvent(string eventName)
     {
-        ((IHTMLElement3)NativeHtmlElement).FireEvent(eventName, IntPtr.Zero);
+        using var htmlElement3 = GetHtmlElement<IHTMLElement3>();
+        using BSTR name = new(eventName);
+        VARIANT eventObj = default;
+        VARIANT_BOOL canceled = default;
+        htmlElement3.Value->fireEvent(name, &eventObj, &canceled).ThrowOnFailure();
     }
 
     public void ScrollIntoView(bool alignWithTop)
     {
-        NativeHtmlElement.ScrollIntoView(alignWithTop);
+        using var htmlElement = NativeHtmlElement.GetInterface();
+        using var variantAlignWithTop = (VARIANT)alignWithTop;
+        htmlElement.Value->scrollIntoView(variantAlignWithTop).ThrowOnFailure();
     }
 
     public void SetAttribute(string attributeName, string value)
     {
         try
         {
-            NativeHtmlElement.SetAttribute(attributeName, value, 0);
+            using var htmlElement = NativeHtmlElement.GetInterface();
+            using BSTR name = new(attributeName);
+            using var variantValue = (VARIANT)value;
+            htmlElement.Value->setAttribute(name, variantValue, 0).ThrowOnFailure();
         }
         catch (COMException comException)
         {
@@ -676,15 +810,13 @@ public sealed partial class HtmlElement
             return true;
         }
 
-        // Neither are null. Get the IUnknowns and compare them.
-        using var leftUnknown = ComHelpers.GetComScope<IUnknown>(left.NativeHtmlElement);
-        using var rightUnknown = ComHelpers.GetComScope<IUnknown>(right.NativeHtmlElement);
-        return leftUnknown.Value == rightUnknown.Value;
+        // Neither are null. Compare their native pointers.
+        return left.NativeHtmlElement.IsSameNativeObject(right.NativeHtmlElement);
     }
 
     public static bool operator !=(HtmlElement left, HtmlElement right) => !(left == right);
 
-    public override int GetHashCode() => _htmlElement?.GetHashCode() ?? 0;
+    public override int GetHashCode() => _htmlElement.GetHashCode();
 
     public override bool Equals(object obj) => this == (obj as HtmlElement);
 }

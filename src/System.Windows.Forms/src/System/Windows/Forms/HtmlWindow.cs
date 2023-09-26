@@ -4,12 +4,12 @@
 #nullable disable
 
 using System.Drawing;
-using Windows.Win32.System.Com;
-using static Interop.Mshtml;
+using Windows.Win32.System.Variant;
+using Windows.Win32.Web.MsHtml;
 
 namespace System.Windows.Forms;
 
-public sealed partial class HtmlWindow
+public sealed unsafe partial class HtmlWindow
 {
     internal static readonly object s_eventError = new();
     internal static readonly object s_eventGotFocus = new();
@@ -20,28 +20,34 @@ public sealed partial class HtmlWindow
     internal static readonly object s_eventUnload = new();
 
     private readonly HtmlShimManager _shimManager;
-    private readonly IHTMLWindow2 _htmlWindow2;
+    private readonly AgileComPointer<IHTMLWindow2> _htmlWindow2;
 
-    internal HtmlWindow(HtmlShimManager shimManager, IHTMLWindow2 win)
+    internal HtmlWindow(HtmlShimManager shimManager, IHTMLWindow2* window)
     {
-        _htmlWindow2 = win;
+#if DEBUG
+        _htmlWindow2 = new(window, takeOwnership: true, trackDisposal: false);
+#else
+        _htmlWindow2 = new(window, takeOwnership: true);
+#endif
         Debug.Assert(NativeHtmlWindow is not null, "The window object should implement IHTMLWindow2");
 
         _shimManager = shimManager;
     }
 
-    internal IHTMLWindow2 NativeHtmlWindow
+    internal AgileComPointer<IHTMLWindow2> NativeHtmlWindow => _htmlWindow2;
+
+    /// <summary>
+    ///  Helper method to get IHTMLWindowX interface of interest. Throws if failure occurs.
+    /// </summary>
+    private ComScope<T> GetHtmlWindow<T>() where T : unmanaged, IComIID
     {
-        get
-        {
-            return _htmlWindow2;
-        }
+        using var htmlWindow2 = NativeHtmlWindow.GetInterface();
+        var scope = htmlWindow2.TryQuery<T>(out HRESULT hr);
+        hr.ThrowOnFailure();
+        return scope;
     }
 
-    private HtmlShimManager ShimManager
-    {
-        get { return _shimManager; }
-    }
+    private HtmlShimManager ShimManager => _shimManager;
 
     private HtmlWindowShim WindowShim
     {
@@ -67,7 +73,11 @@ public sealed partial class HtmlWindow
     {
         get
         {
-            return NativeHtmlWindow.GetDocument() is IHTMLDocument iHTMLDocument ? new HtmlDocument(ShimManager, iHTMLDocument) : null;
+            using var htmlWindow = NativeHtmlWindow.GetInterface();
+            using ComScope<IHTMLDocument2> htmlDoc2 = new(null);
+            htmlWindow.Value->get_document(htmlDoc2).ThrowOnFailure();
+            using var htmlDoc = htmlDoc2.TryQuery<IHTMLDocument>(out HRESULT hr);
+            return hr.Succeeded ? new HtmlDocument(ShimManager, htmlDoc) : null;
         }
     }
 
@@ -83,8 +93,10 @@ public sealed partial class HtmlWindow
     {
         get
         {
-            IHTMLFramesCollection2 iHTMLFramesCollection2 = NativeHtmlWindow.GetFrames();
-            return (iHTMLFramesCollection2 is not null) ? new HtmlWindowCollection(ShimManager, iHTMLFramesCollection2) : null;
+            using var htmlWindow = NativeHtmlWindow.GetInterface();
+            IHTMLFramesCollection2* iHTMLFramesCollection2;
+            htmlWindow.Value->get_frames(&iHTMLFramesCollection2).ThrowOnFailure();
+            return iHTMLFramesCollection2 is not null ? new HtmlWindowCollection(ShimManager, iHTMLFramesCollection2) : null;
         }
     }
 
@@ -92,7 +104,9 @@ public sealed partial class HtmlWindow
     {
         get
         {
-            IOmHistory iOmHistory = NativeHtmlWindow.GetHistory();
+            using var htmlWindow = NativeHtmlWindow.GetInterface();
+            IOmHistory* iOmHistory;
+            htmlWindow.Value->get_history(&iOmHistory).ThrowOnFailure();
             return iOmHistory is not null ? new HtmlHistory(iOmHistory) : null;
         }
     }
@@ -101,7 +115,10 @@ public sealed partial class HtmlWindow
     {
         get
         {
-            return NativeHtmlWindow.GetClosed();
+            using var htmlWindow = NativeHtmlWindow.GetInterface();
+            VARIANT_BOOL closed;
+            htmlWindow.Value->get_closed(&closed).ThrowOnFailure();
+            return closed;
         }
     }
 
@@ -112,11 +129,16 @@ public sealed partial class HtmlWindow
     {
         get
         {
-            return NativeHtmlWindow.GetName();
+            using var htmlWindow = NativeHtmlWindow.GetInterface();
+            using BSTR name = default;
+            htmlWindow.Value->get_name(&name).ThrowOnFailure();
+            return name.ToString();
         }
         set
         {
-            NativeHtmlWindow.SetName(value);
+            using var htmlWindow = NativeHtmlWindow.GetInterface();
+            using BSTR newValue = new(value);
+            htmlWindow.Value->put_name(newValue).ThrowOnFailure();
         }
     }
 
@@ -124,7 +146,13 @@ public sealed partial class HtmlWindow
     {
         get
         {
-            return (NativeHtmlWindow.GetOpener() is IHTMLWindow2 iHTMLWindow2) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+            using var htmlWindow = NativeHtmlWindow.GetInterface();
+            using VARIANT variantDispatch = default;
+            htmlWindow.Value->get_opener(&variantDispatch).ThrowOnFailure();
+            IHTMLWindow2* htmlWindow2;
+            return variantDispatch.data.pdispVal->QueryInterface(IID.Get<IHTMLWindow2>(), (void**)&htmlWindow2).Succeeded
+                ? new HtmlWindow(ShimManager, htmlWindow2)
+                : null;
         }
     }
 
@@ -132,7 +160,9 @@ public sealed partial class HtmlWindow
     {
         get
         {
-            IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.GetParent();
+            using var htmlWindow = NativeHtmlWindow.GetInterface();
+            IHTMLWindow2* iHTMLWindow2;
+            htmlWindow.Value->get_parent(&iHTMLWindow2).ThrowOnFailure();
             return (iHTMLWindow2 is not null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
         }
     }
@@ -141,8 +171,12 @@ public sealed partial class HtmlWindow
     {
         get
         {
-            return new Point(((IHTMLWindow3)NativeHtmlWindow).GetScreenLeft(),
-                    ((IHTMLWindow3)NativeHtmlWindow).GetScreenTop());
+            using var htmlWindow3 = GetHtmlWindow<IHTMLWindow3>();
+            int x;
+            int y;
+            htmlWindow3.Value->get_screenLeft(&x).ThrowOnFailure();
+            htmlWindow3.Value->get_screenTop(&y).ThrowOnFailure();
+            return new(x, y);
         }
     }
 
@@ -153,8 +187,17 @@ public sealed partial class HtmlWindow
     {
         get
         {
-            IHTMLElement bodyElement = NativeHtmlWindow.GetDocument().GetBody();
-            return new Size(bodyElement.GetOffsetWidth(), bodyElement.GetOffsetHeight());
+            using var htmlWindow = NativeHtmlWindow.GetInterface();
+            using ComScope<IHTMLDocument2> htmlDoc2 = new(null);
+            htmlWindow.Value->get_document(htmlDoc2).ThrowOnFailure();
+            using ComScope<IHTMLElement> bodyElement = new(null);
+            htmlDoc2.Value->get_body(bodyElement).ThrowOnFailure();
+
+            int offsetWidth;
+            int offsetHeight;
+            bodyElement.Value->get_offsetWidth(&offsetWidth).ThrowOnFailure();
+            bodyElement.Value->get_offsetHeight(&offsetHeight).ThrowOnFailure();
+            return new(offsetWidth, offsetHeight);
         }
         set
         {
@@ -166,11 +209,16 @@ public sealed partial class HtmlWindow
     {
         get
         {
-            return NativeHtmlWindow.GetStatus();
+            using var htmlWindow = NativeHtmlWindow.GetInterface();
+            using BSTR status = default;
+            htmlWindow.Value->get_status(&status).ThrowOnFailure();
+            return status.ToString();
         }
         set
         {
-            NativeHtmlWindow.SetStatus(value);
+            using var htmlWindow = NativeHtmlWindow.GetInterface();
+            using BSTR newValue = new(value);
+            htmlWindow.Value->put_status(newValue).ThrowOnFailure();
         }
     }
 
@@ -178,9 +226,18 @@ public sealed partial class HtmlWindow
     {
         get
         {
-            IHTMLLocation iHtmlLocation = NativeHtmlWindow.GetLocation();
-            string stringLocation = (iHtmlLocation is null) ? "" : iHtmlLocation.GetHref();
-            return string.IsNullOrEmpty(stringLocation) ? null : new Uri(stringLocation);
+            using var htmlWindow = NativeHtmlWindow.GetInterface();
+            using ComScope<IHTMLLocation> location = new(null);
+            htmlWindow.Value->get_location(location).ThrowOnFailure();
+            if (location.IsNull)
+            {
+                return null;
+            }
+
+            using BSTR href = default;
+            location.Value->get_href(&href).ThrowOnFailure();
+            string hrefString = href.ToString();
+            return string.IsNullOrEmpty(hrefString) ? null : new(hrefString);
         }
     }
 
@@ -188,13 +245,21 @@ public sealed partial class HtmlWindow
     {
         get
         {
-            return (((IHTMLWindow4)NativeHtmlWindow).frameElement() is IHTMLElement htmlElement) ? new HtmlElement(ShimManager, htmlElement) : null;
+            using var htmlWindow4 = GetHtmlWindow<IHTMLWindow4>();
+            using ComScope<IHTMLFrameBase> htmlFrameBase = new(null);
+            htmlWindow4.Value->get_frameElement(htmlFrameBase).ThrowOnFailure();
+            IHTMLElement* htmlElement;
+            return htmlFrameBase.Value->QueryInterface(IID.Get<IHTMLElement>(), (void**)&htmlElement).Succeeded
+                ? new HtmlElement(ShimManager, htmlElement)
+                : null;
         }
     }
 
     public void Alert(string message)
     {
-        NativeHtmlWindow.Alert(message);
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        using BSTR bstrMessage = new(message);
+        htmlWindow.Value->alert(bstrMessage).ThrowOnFailure();
     }
 
     public void AttachEventHandler(string eventName, EventHandler eventHandler)
@@ -204,12 +269,17 @@ public sealed partial class HtmlWindow
 
     public void Close()
     {
-        NativeHtmlWindow.Close();
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        htmlWindow.Value->close().ThrowOnFailure();
     }
 
     public bool Confirm(string message)
     {
-        return NativeHtmlWindow.Confirm(message);
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        using BSTR bstrMessage = new(message);
+        VARIANT_BOOL confirmed;
+        htmlWindow.Value->confirm(bstrMessage, &confirmed).ThrowOnFailure();
+        return confirmed;
     }
 
     public void DetachEventHandler(string eventName, EventHandler eventHandler)
@@ -219,7 +289,8 @@ public sealed partial class HtmlWindow
 
     public void Focus()
     {
-        NativeHtmlWindow.Focus();
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        htmlWindow.Value->focus().ThrowOnFailure();
     }
 
     /// <summary>
@@ -227,7 +298,8 @@ public sealed partial class HtmlWindow
     /// </summary>
     public void MoveTo(int x, int y)
     {
-        NativeHtmlWindow.MoveTo(x, y);
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        htmlWindow.Value->moveTo(x, y).ThrowOnFailure();
     }
 
     /// <summary>
@@ -235,12 +307,15 @@ public sealed partial class HtmlWindow
     /// </summary>
     public void MoveTo(Point point)
     {
-        NativeHtmlWindow.MoveTo(point.X, point.Y);
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        htmlWindow.Value->moveTo(point.X, point.Y).ThrowOnFailure();
     }
 
     public void Navigate(Uri url)
     {
-        NativeHtmlWindow.Navigate(url.ToString());
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        using BSTR bstrUrl = new(url.ToString());
+        htmlWindow.Value->navigate(bstrUrl).ThrowOnFailure();
     }
 
     ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
@@ -249,7 +324,9 @@ public sealed partial class HtmlWindow
     ///  break.
     public void Navigate(string urlString)
     {
-        NativeHtmlWindow.Navigate(urlString);
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        using BSTR url = new(urlString);
+        htmlWindow.Value->navigate(url).ThrowOnFailure();
     }
 
     ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
@@ -258,8 +335,13 @@ public sealed partial class HtmlWindow
     ///  break.
     public HtmlWindow Open(string urlString, string target, string windowOptions, bool replaceEntry)
     {
-        IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, target, windowOptions, replaceEntry);
-        return (iHTMLWindow2 is not null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        using BSTR url = new(urlString);
+        using BSTR bstrTarget = new(target);
+        using BSTR options = new(windowOptions);
+        IHTMLWindow2* htmlWindow2;
+        htmlWindow.Value->open(url, bstrTarget, options, replaceEntry, &htmlWindow2).ThrowOnFailure();
+        return htmlWindow2 is not null ? new HtmlWindow(ShimManager, htmlWindow2) : null;
     }
 
     public HtmlWindow Open(Uri url, string target, string windowOptions, bool replaceEntry)
@@ -273,8 +355,13 @@ public sealed partial class HtmlWindow
     ///  break.
     public HtmlWindow OpenNew(string urlString, string windowOptions)
     {
-        IHTMLWindow2 iHTMLWindow2 = NativeHtmlWindow.Open(urlString, "_blank", windowOptions, true);
-        return (iHTMLWindow2 is not null) ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        using BSTR url = new(urlString);
+        using BSTR target = new("_blank");
+        using BSTR options = new(windowOptions);
+        IHTMLWindow2* iHTMLWindow2;
+        htmlWindow.Value->open(url, target, options, VARIANT_BOOL.VARIANT_TRUE, &iHTMLWindow2).ThrowOnFailure();
+        return iHTMLWindow2 is not null ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
     }
 
     public HtmlWindow OpenNew(Uri url, string windowOptions)
@@ -284,12 +371,18 @@ public sealed partial class HtmlWindow
 
     public string Prompt(string message, string defaultInputValue)
     {
-        return NativeHtmlWindow.Prompt(message, defaultInputValue).ToString();
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        using BSTR bstrMessage = new(message);
+        using BSTR input = new(defaultInputValue);
+        using VARIANT result = default;
+        htmlWindow.Value->prompt(bstrMessage, input, &result).ThrowOnFailure();
+        return (string)result.ToObject();
     }
 
     public void RemoveFocus()
     {
-        NativeHtmlWindow.Blur();
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        htmlWindow.Value->blur().ThrowOnFailure();
     }
 
     /// <summary>
@@ -297,7 +390,8 @@ public sealed partial class HtmlWindow
     /// </summary>
     public void ResizeTo(int width, int height)
     {
-        NativeHtmlWindow.ResizeTo(width, height);
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        htmlWindow.Value->resizeTo(width, height).ThrowOnFailure();
     }
 
     /// <summary>
@@ -305,7 +399,8 @@ public sealed partial class HtmlWindow
     /// </summary>
     public void ResizeTo(Size size)
     {
-        NativeHtmlWindow.ResizeTo(size.Width, size.Height);
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        htmlWindow.Value->resizeTo(size.Width, size.Height).ThrowOnFailure();
     }
 
     /// <summary>
@@ -313,7 +408,8 @@ public sealed partial class HtmlWindow
     /// </summary>
     public void ScrollTo(int x, int y)
     {
-        NativeHtmlWindow.ScrollTo(x, y);
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        htmlWindow.Value->scrollTo(x, y).ThrowOnFailure();
     }
 
     /// <summary>
@@ -321,7 +417,8 @@ public sealed partial class HtmlWindow
     /// </summary>
     public void ScrollTo(Point point)
     {
-        NativeHtmlWindow.ScrollTo(point.X, point.Y);
+        using var htmlWindow = NativeHtmlWindow.GetInterface();
+        htmlWindow.Value->scrollTo(point.X, point.Y).ThrowOnFailure();
     }
 
     //
@@ -384,15 +481,13 @@ public sealed partial class HtmlWindow
             return true;
         }
 
-        // Neither are null. Get the IUnknowns and compare them.
-        using var leftUnknown = ComHelpers.GetComScope<IUnknown>(left.NativeHtmlWindow);
-        using var rightUnknown = ComHelpers.GetComScope<IUnknown>(right.NativeHtmlWindow);
-        return leftUnknown.Value == rightUnknown.Value;
+        // Neither are null. Compare their native pointers.
+        return left.NativeHtmlWindow.IsSameNativeObject(right.NativeHtmlWindow);
     }
 
     public static bool operator !=(HtmlWindow left, HtmlWindow right) => !(left == right);
 
-    public override int GetHashCode() => _htmlWindow2?.GetHashCode() ?? 0;
+    public override int GetHashCode() => _htmlWindow2.GetHashCode();
 
     public override bool Equals(object obj) => this == (HtmlWindow)obj;
 }

@@ -1,34 +1,35 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop.Mshtml;
+using Windows.Win32.System.Variant;
+using Windows.Win32.Web.MsHtml;
 
 namespace System.Windows.Forms;
 
-public sealed class HtmlHistory : IDisposable
+public sealed unsafe class HtmlHistory : IDisposable
 {
-    private IOmHistory htmlHistory;
-    private bool disposed;
+    private AgileComPointer<IOmHistory> _htmlHistory;
+    private bool _disposed;
 
-    internal HtmlHistory(IOmHistory history)
+    internal HtmlHistory(IOmHistory* history)
     {
-        htmlHistory = history;
+        _htmlHistory = new(history, takeOwnership: true);
         Debug.Assert(NativeOmHistory is not null, "The history object should implement IOmHistory");
     }
 
-    private IOmHistory NativeOmHistory
+    private AgileComPointer<IOmHistory> NativeOmHistory
     {
         get
         {
-            ObjectDisposedException.ThrowIf(disposed, this);
-            return htmlHistory;
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            return _htmlHistory;
         }
     }
 
     public void Dispose()
     {
-        htmlHistory = null!;
-        disposed = true;
+        DisposeHelper.NullAndDispose(ref _htmlHistory!);
+        _disposed = true;
         GC.SuppressFinalize(this);
     }
 
@@ -36,7 +37,8 @@ public sealed class HtmlHistory : IDisposable
     {
         get
         {
-            return (int)NativeOmHistory.GetLength();
+            using var omHistory = NativeOmHistory.GetInterface();
+            return omHistory.Value->length;
         }
     }
 
@@ -48,8 +50,9 @@ public sealed class HtmlHistory : IDisposable
         }
         else if (numberBack > 0)
         {
-            object oNumForward = (object)(-numberBack);
-            NativeOmHistory.Go(ref oNumForward);
+            var oNumForward = (VARIANT)(-numberBack);
+            using var omHistory = NativeOmHistory.GetInterface();
+            omHistory.Value->go(&oNumForward).ThrowOnFailure();
         }
     }
 
@@ -61,18 +64,16 @@ public sealed class HtmlHistory : IDisposable
         }
         else if (numberForward > 0)
         {
-            object oNumForward = (object)numberForward;
-            NativeOmHistory.Go(ref oNumForward);
+            var oNumForward = (VARIANT)numberForward;
+            using var omHistory = NativeOmHistory.GetInterface();
+            omHistory.Value->go(&oNumForward).ThrowOnFailure();
         }
     }
 
     /// <summary>
     ///  Go to a specific Uri in the history
     /// </summary>
-    public void Go(Uri url)
-    {
-        Go(url.ToString());
-    }
+    public void Go(Uri url) => Go(url.ToString());
 
     /// <summary>
     ///  Go to a specific url(string) in the history
@@ -83,8 +84,9 @@ public sealed class HtmlHistory : IDisposable
     ///  break.
     public void Go(string urlString)
     {
-        object loc = (object)urlString;
-        NativeOmHistory.Go(ref loc);
+        using var loc = (VARIANT)urlString;
+        using var omHistory = NativeOmHistory.GetInterface();
+        omHistory.Value->go(&loc).ThrowOnFailure();
     }
 
     /// <summary>
@@ -92,15 +94,10 @@ public sealed class HtmlHistory : IDisposable
     /// </summary>
     public void Go(int relativePosition)
     {
-        object loc = (object)relativePosition;
-        NativeOmHistory.Go(ref loc);
+        var loc = (VARIANT)relativePosition;
+        using var omHistory = NativeOmHistory.GetInterface();
+        omHistory.Value->go(&loc).ThrowOnFailure();
     }
 
-    public object DomHistory
-    {
-        get
-        {
-            return NativeOmHistory;
-        }
-    }
+    public object DomHistory => NativeOmHistory.GetManagedObject();
 }
