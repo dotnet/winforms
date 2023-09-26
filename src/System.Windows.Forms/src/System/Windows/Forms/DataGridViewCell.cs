@@ -1206,19 +1206,19 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public virtual void DetachEditingControl()
     {
-        DataGridView? dgv = DataGridView;
-        if (dgv is null || dgv.EditingControl is null)
+        DataGridView? dataGridView = DataGridView;
+        if (dataGridView is null || dataGridView.EditingControl is null)
         {
             throw new InvalidOperationException();
         }
 
-        if (dgv.EditingControl.ParentInternal is not null)
+        if (dataGridView.EditingControl.ParentInternal is not null)
         {
-            if (dgv.EditingControl.ContainsFocus)
+            if (dataGridView.EditingControl.ContainsFocus)
             {
-                if (dgv.GetContainerControl() is ContainerControl cc && (dgv.EditingControl == cc.ActiveControl || dgv.EditingControl.Contains(cc.ActiveControl)))
+                if (dataGridView.GetContainerControl() is ContainerControl cc && (dataGridView.EditingControl == cc.ActiveControl || dataGridView.EditingControl.Contains(cc.ActiveControl)))
                 {
-                    dgv.Focus();
+                    dataGridView.Focus();
                 }
                 else
                 {
@@ -1229,31 +1229,31 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 }
             }
 
-            Debug.Assert(dgv.EditingControl.ParentInternal == dgv.EditingPanel);
-            Debug.Assert(dgv.EditingPanel.Controls.Contains(dgv.EditingControl));
-            dgv.EditingPanel.Controls.Remove(dgv.EditingControl);
-            Debug.Assert(dgv.EditingControl.ParentInternal is null);
+            Debug.Assert(dataGridView.EditingControl.ParentInternal == dataGridView.EditingPanel);
+            Debug.Assert(dataGridView.EditingPanel.Controls.Contains(dataGridView.EditingControl));
+            dataGridView.EditingPanel.Controls.Remove(dataGridView.EditingControl);
+            Debug.Assert(dataGridView.EditingControl.ParentInternal is null);
 
             if (AccessibleRestructuringNeeded)
             {
-                dgv.EditingControlAccessibleObject!.SetParent(null);
+                dataGridView.EditingControlAccessibleObject!.SetParent(null);
                 AccessibilityObject.SetDetachableChild(null);
 
-                AccessibilityObject.RaiseStructureChangedEvent(UiaCore.StructureChangeType.ChildRemoved, dgv.EditingControlAccessibleObject.RuntimeId);
+                AccessibilityObject.RaiseStructureChangedEvent(UiaCore.StructureChangeType.ChildRemoved, dataGridView.EditingControlAccessibleObject.RuntimeId);
             }
         }
 
-        if (dgv.EditingPanel.ParentInternal is not null)
+        if (dataGridView.EditingPanel.ParentInternal is not null)
         {
-            Debug.Assert(dgv.EditingPanel.ParentInternal == dgv);
-            Debug.Assert(dgv.Controls.Contains(dgv.EditingPanel));
-            ((DataGridView.DataGridViewControlCollection)dgv.Controls).RemoveInternal(dgv.EditingPanel);
-            Debug.Assert(dgv.EditingPanel.ParentInternal is null);
+            Debug.Assert(dataGridView.EditingPanel.ParentInternal == dataGridView);
+            Debug.Assert(dataGridView.Controls.Contains(dataGridView.EditingPanel));
+            ((DataGridView.DataGridViewControlCollection)dataGridView.Controls).RemoveInternal(dataGridView.EditingPanel);
+            Debug.Assert(dataGridView.EditingPanel.ParentInternal is null);
         }
 
-        Debug.Assert(dgv.EditingControl.ParentInternal is null);
-        Debug.Assert(dgv.EditingPanel.ParentInternal is null);
-        Debug.Assert(dgv.EditingPanel.Controls.Count == 0);
+        Debug.Assert(dataGridView.EditingControl.ParentInternal is null);
+        Debug.Assert(dataGridView.EditingPanel.ParentInternal is null);
+        Debug.Assert(dataGridView.EditingPanel.Controls.Count == 0);
 
         // Since the tooltip is removed when the editing control is shown,
         // the CurrentMouseLocation is reset to DATAGRIDVIEWCELL_flagAreaNotSet

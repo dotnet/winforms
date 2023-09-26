@@ -136,13 +136,13 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public override void DetachEditingControl()
     {
-        DataGridView? dgv = DataGridView;
-        if (dgv is null || dgv.EditingControl is null)
+        DataGridView? dataGridView = DataGridView;
+        if (dataGridView is null || dataGridView.EditingControl is null)
         {
             throw new InvalidOperationException();
         }
 
-        if (dgv.EditingControl is TextBox textBox)
+        if (dataGridView.EditingControl is TextBox textBox)
         {
             textBox.ClearUndo();
         }
