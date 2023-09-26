@@ -3585,10 +3585,7 @@ public partial class DataGridView : Control, ISupportInitialize
             DataGridViewCellStyle cs = RowsDefaultCellStyle;
             cs.RemoveScope(DataGridViewCellStyleScopes.Rows);
             _rowsDefaultCellStyle = value;
-            if (value is not null)
-            {
-                _rowsDefaultCellStyle!.AddScope(this, DataGridViewCellStyleScopes.Rows);
-            }
+            _rowsDefaultCellStyle?.AddScope(this, DataGridViewCellStyleScopes.Rows);
 
             DataGridViewCellStyleDifferences dgvcsc = cs.GetDifferencesFrom(RowsDefaultCellStyle);
             if (dgvcsc != DataGridViewCellStyleDifferences.None)
