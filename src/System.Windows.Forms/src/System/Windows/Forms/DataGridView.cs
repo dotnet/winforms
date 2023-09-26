@@ -4160,8 +4160,8 @@ public partial class DataGridView : Control, ISupportInitialize
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public Cursor UserSetCursor => _dataGridViewState1[State1_CustomCursorSet]
-        ? _oldCursor!
+    public Cursor? UserSetCursor => _dataGridViewState1[State1_CustomCursorSet]
+        ? _oldCursor
         : Cursor;
 
     internal int VerticalOffset

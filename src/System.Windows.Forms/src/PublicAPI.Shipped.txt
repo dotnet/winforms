@@ -372,7 +372,7 @@ System.Windows.Forms.DataGridView.this[string! columnName, int rowIndex].get -> 
 System.Windows.Forms.DataGridView.this[string! columnName, int rowIndex].set -> void
 System.Windows.Forms.DataGridView.TopLeftHeaderCell.get -> System.Windows.Forms.DataGridViewHeaderCell!
 System.Windows.Forms.DataGridView.TopLeftHeaderCell.set -> void
-System.Windows.Forms.DataGridView.UserSetCursor.get -> System.Windows.Forms.Cursor!
+System.Windows.Forms.DataGridView.UserSetCursor.get -> System.Windows.Forms.Cursor?
 System.Windows.Forms.DataGridView.VerticalScrollBar.get -> System.Windows.Forms.ScrollBar!
 ~System.Windows.Forms.DataGridViewButtonColumn.Text.get -> string
 ~System.Windows.Forms.DataGridViewButtonColumn.Text.set -> void
