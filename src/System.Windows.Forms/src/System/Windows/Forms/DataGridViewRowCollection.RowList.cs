@@ -1,18 +1,16 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
-
 namespace System.Windows.Forms;
 
 public partial class DataGridViewRowCollection
 {
-    private class RowArrayList : ArrayList
+    private class RowList : List<DataGridViewRow>
     {
         private readonly DataGridViewRowCollection _owner;
         private RowComparer? _rowComparer;
 
-        public RowArrayList(DataGridViewRowCollection owner)
+        public RowList(DataGridViewRowCollection owner)
         {
             _owner = owner;
         }

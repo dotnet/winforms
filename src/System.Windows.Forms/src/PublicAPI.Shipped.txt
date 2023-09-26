@@ -492,13 +492,13 @@ System.Windows.Forms.DataGridViewRow.GetErrorText(int rowIndex) -> string!
 System.Windows.Forms.DataGridViewRow.HeaderCell.get -> System.Windows.Forms.DataGridViewRowHeaderCell!
 System.Windows.Forms.DataGridViewRow.HeaderCell.set -> void
 System.Windows.Forms.DataGridViewRow.SetValues(params object![]! values) -> bool
-~System.Windows.Forms.DataGridViewRowCollection.CopyTo(System.Windows.Forms.DataGridViewRow[] array, int index) -> void
-~System.Windows.Forms.DataGridViewRowCollection.DataGridView.get -> System.Windows.Forms.DataGridView
-~System.Windows.Forms.DataGridViewRowCollection.DataGridViewRowCollection(System.Windows.Forms.DataGridView dataGridView) -> void
-~System.Windows.Forms.DataGridViewRowCollection.IndexOf(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> int
-~System.Windows.Forms.DataGridViewRowCollection.List.get -> System.Collections.ArrayList
-~System.Windows.Forms.DataGridViewRowCollection.SharedRow(int rowIndex) -> System.Windows.Forms.DataGridViewRow
-~System.Windows.Forms.DataGridViewRowCollection.this[int index].get -> System.Windows.Forms.DataGridViewRow
+System.Windows.Forms.DataGridViewRowCollection.CopyTo(System.Windows.Forms.DataGridViewRow![]! array, int index) -> void
+System.Windows.Forms.DataGridViewRowCollection.DataGridView.get -> System.Windows.Forms.DataGridView!
+System.Windows.Forms.DataGridViewRowCollection.DataGridViewRowCollection(System.Windows.Forms.DataGridView! dataGridView) -> void
+System.Windows.Forms.DataGridViewRowCollection.IndexOf(System.Windows.Forms.DataGridViewRow! dataGridViewRow) -> int
+System.Windows.Forms.DataGridViewRowCollection.List.get -> System.Collections.ArrayList!
+System.Windows.Forms.DataGridViewRowCollection.SharedRow(int rowIndex) -> System.Windows.Forms.DataGridViewRow!
+System.Windows.Forms.DataGridViewRowCollection.this[int index].get -> System.Windows.Forms.DataGridViewRow!
 ~System.Windows.Forms.HtmlElement.All.get -> System.Windows.Forms.HtmlElementCollection
 ~System.Windows.Forms.HtmlElement.AppendChild(System.Windows.Forms.HtmlElement newElement) -> System.Windows.Forms.HtmlElement
 ~System.Windows.Forms.HtmlElement.AttachEventHandler(string eventName, System.EventHandler eventHandler) -> void
@@ -884,15 +884,15 @@ virtual System.Windows.Forms.DataGridViewRow.DrawFocus(System.Drawing.Graphics! 
 virtual System.Windows.Forms.DataGridViewRow.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, bool isFirstDisplayedRow, bool isLastVisibleRow) -> void
 virtual System.Windows.Forms.DataGridViewRow.PaintCells(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, bool isFirstDisplayedRow, bool isLastVisibleRow, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 virtual System.Windows.Forms.DataGridViewRow.PaintHeader(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle rowBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates rowState, bool isFirstDisplayedRow, bool isLastVisibleRow, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
-~virtual System.Windows.Forms.DataGridViewRowCollection.Add(params object[] values) -> int
-~virtual System.Windows.Forms.DataGridViewRowCollection.Add(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> int
-~virtual System.Windows.Forms.DataGridViewRowCollection.AddRange(params System.Windows.Forms.DataGridViewRow[] dataGridViewRows) -> void
-~virtual System.Windows.Forms.DataGridViewRowCollection.Contains(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> bool
-~virtual System.Windows.Forms.DataGridViewRowCollection.Insert(int rowIndex, params object[] values) -> void
-~virtual System.Windows.Forms.DataGridViewRowCollection.Insert(int rowIndex, System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-~virtual System.Windows.Forms.DataGridViewRowCollection.InsertRange(int rowIndex, params System.Windows.Forms.DataGridViewRow[] dataGridViewRows) -> void
-~virtual System.Windows.Forms.DataGridViewRowCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridViewRowCollection.Remove(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
+virtual System.Windows.Forms.DataGridViewRowCollection.Add(params object![]! values) -> int
+virtual System.Windows.Forms.DataGridViewRowCollection.Add(System.Windows.Forms.DataGridViewRow! dataGridViewRow) -> int
+virtual System.Windows.Forms.DataGridViewRowCollection.AddRange(params System.Windows.Forms.DataGridViewRow![]! dataGridViewRows) -> void
+virtual System.Windows.Forms.DataGridViewRowCollection.Contains(System.Windows.Forms.DataGridViewRow! dataGridViewRow) -> bool
+virtual System.Windows.Forms.DataGridViewRowCollection.Insert(int rowIndex, params object![]! values) -> void
+virtual System.Windows.Forms.DataGridViewRowCollection.Insert(int rowIndex, System.Windows.Forms.DataGridViewRow! dataGridViewRow) -> void
+virtual System.Windows.Forms.DataGridViewRowCollection.InsertRange(int rowIndex, params System.Windows.Forms.DataGridViewRow![]! dataGridViewRows) -> void
+virtual System.Windows.Forms.DataGridViewRowCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridViewRowCollection.Remove(System.Windows.Forms.DataGridViewRow! dataGridViewRow) -> void
 virtual System.Windows.Forms.PictureBox.OnLoadCompleted(System.ComponentModel.AsyncCompletedEventArgs! e) -> void
 virtual System.Windows.Forms.PictureBox.OnLoadProgressChanged(System.ComponentModel.ProgressChangedEventArgs! e) -> void
 virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs! e) -> void
@@ -6108,7 +6108,7 @@ System.Windows.Forms.DataGridViewRowCancelEventArgs.Row.get -> System.Windows.Fo
 System.Windows.Forms.DataGridViewRowCancelEventArgs.Row.set -> void
 System.Windows.Forms.DataGridViewRowCancelEventHandler
 System.Windows.Forms.DataGridViewRowCollection
-System.Windows.Forms.DataGridViewRowCollection.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler
+System.Windows.Forms.DataGridViewRowCollection.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler?
 System.Windows.Forms.DataGridViewRowCollection.Count.get -> int
 System.Windows.Forms.DataGridViewRowCollection.GetFirstRow(System.Windows.Forms.DataGridViewElementStates includeFilter) -> int
 System.Windows.Forms.DataGridViewRowCollection.GetFirstRow(System.Windows.Forms.DataGridViewElementStates includeFilter, System.Windows.Forms.DataGridViewElementStates excludeFilter) -> int
