@@ -114,6 +114,7 @@ public class EmbeddedResourceTests
             System.Windows.Forms.Design.BorderSidesEditor.resources
             System.Windows.Forms.Design.colordlg.data
             System.Windows.Forms.Design.DataGridViewAddColumnDialog.resources
+            System.Windows.Forms.Design.DataGridViewCellStyleBuilder.resources
             System.Windows.Forms.Design.DataGridViewColumnCollectionDialog.resources
             System.Windows.Forms.Design.FormatControl.resources
             System.Windows.Forms.Design.LinkAreaEditor.resources
