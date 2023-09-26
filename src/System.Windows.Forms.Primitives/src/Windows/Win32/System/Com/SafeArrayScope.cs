@@ -22,12 +22,11 @@ internal unsafe ref struct SafeArrayScope<T>
     public SafeArrayScope(uint size)
     {
         VARENUM vt = VARENUM.VT_EMPTY;
-        Type type = typeof(T);
-        if (type == typeof(string))
+        if (typeof(T) == typeof(string))
         {
             vt = VARENUM.VT_BSTR;
         }
-        else if (type == typeof(int))
+        else if (typeof(T) == typeof(int))
         {
             vt = VARENUM.VT_I4;
         }
@@ -54,8 +53,7 @@ internal unsafe ref struct SafeArrayScope<T>
         {
             Span<int> indices = stackalloc int[] { i };
 
-            Type type = typeof(T);
-            if (type == typeof(string))
+            if (typeof(T) == typeof(string))
             {
                 using BSTR result = default;
                 fixed (int* pIndices = indices)
@@ -66,7 +64,7 @@ internal unsafe ref struct SafeArrayScope<T>
                 string resultString = result.ToString();
                 return (T)(object)resultString;
             }
-            else if (type == typeof(int))
+            else if (typeof(T) == typeof(int))
             {
                 int result = default;
                 fixed (int* pIndices = indices)

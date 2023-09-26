@@ -4,7 +4,6 @@
 #nullable disable
 
 using System.Drawing;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.Web.MsHtml;
 
@@ -482,14 +481,8 @@ public sealed unsafe partial class HtmlWindow
             return true;
         }
 
-        // Neither are null. Get the IUnknowns and compare them.
-        using var leftHtmlWindow = left.NativeHtmlWindow.GetInterface();
-        using var rightHtmlWindow = right.NativeHtmlWindow.GetInterface();
-        using var leftUnknown = leftHtmlWindow.TryQuery<IUnknown>(out HRESULT hr);
-        hr.AssertSuccess();
-        using var rightUnknown = rightHtmlWindow.TryQuery<IUnknown>(out hr);
-        hr.AssertSuccess();
-        return leftUnknown.Value == rightUnknown.Value;
+        // Neither are null. Compare their native pointers.
+        return left.NativeHtmlWindow.IsSameNativeObject(right.NativeHtmlWindow);
     }
 
     public static bool operator !=(HtmlWindow left, HtmlWindow right) => !(left == right);

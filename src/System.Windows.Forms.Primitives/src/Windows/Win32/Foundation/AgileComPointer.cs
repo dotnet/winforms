@@ -28,7 +28,7 @@ internal unsafe class AgileComPointer<TInterface> :
     where TInterface : unmanaged, IComIID
 {
     private uint _cookie;
-    private readonly IUnknown* _originalPointer;
+    private readonly IUnknown* _originalObject;
 
 #if DEBUG
     public AgileComPointer(TInterface* @interface, bool takeOwnership, bool trackDisposal = true)
@@ -38,12 +38,12 @@ internal unsafe class AgileComPointer<TInterface> :
 #endif
     {
         _cookie = GlobalInterfaceTable.RegisterInterface(@interface);
-        fixed (IUnknown** ppUnknown = &_originalPointer)
+        fixed (IUnknown** ppUnknown = &_originalObject)
         {
             ((IUnknown*)@interface)->QueryInterface(IID.Get<IUnknown>(), (void**)ppUnknown).ThrowOnFailure();
         }
 
-        _originalPointer->Release();
+        _originalObject->Release();
 
         if (takeOwnership)
         {
@@ -63,8 +63,22 @@ internal unsafe class AgileComPointer<TInterface> :
     ///   object.
     ///  </para>
     /// </remarks>
-    public bool MatchesOriginalPointer(TInterface* @interface)
-        => _cookie != 0 && @interface == _originalPointer;
+    public bool IsSameNativeObject(TInterface* @interface)
+    {
+        using ComScope<IUnknown> unknownScope = new(null);
+        ((IUnknown*)@interface)->QueryInterface(IID.Get<IUnknown>(), unknownScope);
+        return _cookie != 0 && unknownScope.Value == _originalObject;
+    }
+
+    /// <summary>
+    ///  Returns <see langword="true"/> if <paramref name="other"/> has the same pointer this
+    ///  <see cref="AgileComPointer{TInterface}"/> was created from.
+    /// </summary>
+    public bool IsSameNativeObject(AgileComPointer<TInterface> other)
+    {
+        using var otherInterface = other.GetInterface();
+        return IsSameNativeObject(otherInterface.Value);
+    }
 
     /// <summary>
     ///  Gets the default interface. Throws if failed.
@@ -103,13 +117,17 @@ internal unsafe class AgileComPointer<TInterface> :
         return scope;
     }
 
+    /// <summary>
+    ///  Gets the managed object using the pointer
+    ///  this <see cref="AgileComPointer{TInterface}"/> was created from.
+    /// </summary>
     public object GetManagedObject()
     {
         using var scope = GetInterface();
         return ComHelpers.GetObjectForIUnknown(scope.AsUnknown);
     }
 
-    public override int GetHashCode() => HashCode.Combine((nint)_originalPointer);
+    public override int GetHashCode() => HashCode.Combine((nint)_originalObject);
 
     ~AgileComPointer()
     {

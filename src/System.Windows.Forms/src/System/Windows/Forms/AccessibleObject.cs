@@ -2050,7 +2050,7 @@ public unsafe partial class AccessibleObject :
 
         // Check to see if this object already wraps the given pointer.
         if (SystemIAccessible is { } systemAccessible
-            && systemAccessible.MatchesOriginalPointer(accessible))
+            && systemAccessible.IsSameNativeObject(accessible))
         {
             accessible->Release();
             return this;

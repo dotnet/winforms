@@ -476,7 +476,7 @@ public sealed unsafe partial class HtmlDocument
 
     public HtmlDocument? OpenNew(bool replaceInHistory)
     {
-        using var name = (VARIANT)(replaceInHistory ? "replace" : "");
+        using var name = (VARIANT)(replaceInHistory ? "replace" : string.Empty);
         using BSTR url = new("text/html");
 
         using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
@@ -687,14 +687,8 @@ public sealed unsafe partial class HtmlDocument
             return true;
         }
 
-        // Neither are null.  Get the IUnknowns and compare them.
-        using var leftHtmlDoc2 = left.NativeHtmlDocument2.GetInterface();
-        using var rightHtmlDoc2 = right!.NativeHtmlDocument2.GetInterface();
-        using var leftUnknown = leftHtmlDoc2.TryQuery<IUnknown>(out HRESULT hr);
-        hr.AssertSuccess();
-        using var rightUnknown = rightHtmlDoc2.TryQuery<IUnknown>(out hr);
-        hr.AssertSuccess();
-        return leftUnknown.Value == rightUnknown.Value;
+        // Neither are null. Compare their native pointers.
+        return left.NativeHtmlDocument2.IsSameNativeObject(right!.NativeHtmlDocument2);
     }
 
     public static bool operator !=(HtmlDocument? left, HtmlDocument? right) => !(left == right);

@@ -638,7 +638,7 @@ public abstract partial class AxHost
         {
             if (_siteUIActive is { } activeHost
                 && activeHost._iOleInPlaceActiveObjectExternal is { } existing
-                && !existing.MatchesOriginalPointer(pActiveObject))
+                && !existing.IsSameNativeObject(pActiveObject))
             {
                 // Release the field before disposing to avoid accessing it during disposal on callbacks.
                 activeHost._iOleInPlaceActiveObjectExternal = null;

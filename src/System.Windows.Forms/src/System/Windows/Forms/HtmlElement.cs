@@ -539,7 +539,7 @@ public sealed unsafe partial class HtmlElement
         using VARIANT attributeValue = default;
         htmlElement.Value->getAttribute(name, 0, &attributeValue).ThrowOnFailure();
         return attributeValue.Type == VARENUM.VT_NULL || attributeValue.ToObject() is not string validString
-            ? ""
+            ? string.Empty
             : validString;
     }
 
@@ -810,14 +810,8 @@ public sealed unsafe partial class HtmlElement
             return true;
         }
 
-        // Neither are null. Get the IUnknowns and compare them.
-        using var leftHtmlElement = left.NativeHtmlElement.GetInterface();
-        using var rightHtmlElement = right.NativeHtmlElement.GetInterface();
-        using var leftUnknown = leftHtmlElement.TryQuery<IUnknown>(out HRESULT hr);
-        hr.AssertSuccess();
-        using var rightUnknown = rightHtmlElement.TryQuery<IUnknown>(out hr);
-        hr.AssertSuccess();
-        return leftUnknown.Value == rightUnknown.Value;
+        // Neither are null. Compare their native pointers.
+        return left.NativeHtmlElement.IsSameNativeObject(right.NativeHtmlElement);
     }
 
     public static bool operator !=(HtmlElement left, HtmlElement right) => !(left == right);
