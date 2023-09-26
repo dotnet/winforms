@@ -37,19 +37,24 @@ internal unsafe class AgileComPointer<TInterface> :
     public AgileComPointer(TInterface* @interface, bool takeOwnership)
 #endif
     {
-        _cookie = GlobalInterfaceTable.RegisterInterface(@interface);
-        fixed (IUnknown** ppUnknown = &_originalObject)
+        try
         {
-            ((IUnknown*)@interface)->QueryInterface(IID.Get<IUnknown>(), (void**)ppUnknown).ThrowOnFailure();
+            _cookie = GlobalInterfaceTable.RegisterInterface(@interface);
+            fixed (IUnknown** ppUnknown = &_originalObject)
+            {
+                ((IUnknown*)@interface)->QueryInterface(IID.Get<IUnknown>(), (void**)ppUnknown).ThrowOnFailure();
+            }
+
+            _originalObject->Release();
         }
-
-        _originalObject->Release();
-
-        if (takeOwnership)
+        finally
         {
-            // The GIT will add a ref to the given interface, release to effectively give ownership to the GIT.
-            uint count = ((IUnknown*)@interface)->Release();
-            Debug.Assert(count >= 0);
+            if (takeOwnership)
+            {
+                // The GIT will add a ref to the given interface, release to effectively give ownership to the GIT.
+                uint count = ((IUnknown*)@interface)->Release();
+                Debug.Assert(count >= 0);
+            }
         }
     }
 
