@@ -720,23 +720,23 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     {
         get
         {
-            DataGridViewCellStyle? dgvcs = (DataGridViewCellStyle?)Properties.GetObject(s_propCellStyle);
-            if (dgvcs is null)
+            DataGridViewCellStyle? dataGridViewCellStyle = (DataGridViewCellStyle?)Properties.GetObject(s_propCellStyle);
+            if (dataGridViewCellStyle is null)
             {
-                dgvcs = new DataGridViewCellStyle();
-                dgvcs.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
-                Properties.SetObject(s_propCellStyle, dgvcs);
+                dataGridViewCellStyle = new DataGridViewCellStyle();
+                dataGridViewCellStyle.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
+                Properties.SetObject(s_propCellStyle, dataGridViewCellStyle);
             }
 
-            return dgvcs;
+            return dataGridViewCellStyle;
         }
         set
         {
-            DataGridViewCellStyle? dgvcs = null;
+            DataGridViewCellStyle? dataGridViewCellStyle = null;
             if (HasStyle)
             {
-                dgvcs = Style;
-                dgvcs.RemoveScope(DataGridViewCellStyleScopes.Cell);
+                dataGridViewCellStyle = Style;
+                dataGridViewCellStyle.RemoveScope(DataGridViewCellStyleScopes.Cell);
             }
 
             if (value is not null || Properties.ContainsObject(s_propCellStyle))
@@ -746,9 +746,9 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 Properties.SetObject(s_propCellStyle, value);
             }
 
-            if (((dgvcs is not null && value is null) ||
-                (dgvcs is null && value is not null) ||
-                (dgvcs is not null && value is not null && !dgvcs.Equals(Style))) && DataGridView is not null)
+            if (((dataGridViewCellStyle is not null && value is null) ||
+                (dataGridViewCellStyle is null && value is not null) ||
+                (dataGridViewCellStyle is not null && value is not null && !dataGridViewCellStyle.Equals(Style))) && DataGridView is not null)
             {
                 DataGridView.OnCellStyleChanged(this);
             }
