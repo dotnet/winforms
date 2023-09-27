@@ -305,7 +305,6 @@ public class MenuCommandService : IMenuCommandService, IDisposable
             }
 
             // look for duplicate, prepare the result table
-            //TODO: isn't 'result' too big if there are duplicates?
             DesignerVerb[] result = new DesignerVerb[buildVerbs.Count];
             int j = 0;
             for (int i = 0; i < verbsOrder.Count; i++)
