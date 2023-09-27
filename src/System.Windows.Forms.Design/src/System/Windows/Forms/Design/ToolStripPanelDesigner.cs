@@ -163,7 +163,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
             return null;
         }
 
-        Type toolType = tool.GetType(_designerHost);
+        Type? toolType = tool.GetType(_designerHost);
 
         if (!typeof(ToolStrip).IsAssignableFrom(toolType))
         {

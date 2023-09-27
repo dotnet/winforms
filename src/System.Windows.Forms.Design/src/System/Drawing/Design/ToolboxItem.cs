@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -25,9 +23,9 @@ public class ToolboxItem : ISerializable
     private static int s_iconHeight = ICON_DIMENSION;
 
     private bool _locked;
-    private LockableDictionary _properties;
-    private ToolboxComponentsCreatedEventHandler _componentsCreatedEvent;
-    private ToolboxComponentsCreatingEventHandler _componentsCreatingEvent;
+    private LockableDictionary? _properties;
+    private ToolboxComponentsCreatedEventHandler? _componentsCreatedEvent;
+    private ToolboxComponentsCreatingEventHandler? _componentsCreatingEvent;
 
     /// <summary>
     ///  Initializes a new instance of the ToolboxItem class.
@@ -49,7 +47,7 @@ public class ToolboxItem : ISerializable
     /// <summary>
     ///  Initializes a new instance of the ToolboxItem class using the specified type.
     /// </summary>
-    public ToolboxItem(Type toolType) : this()
+    public ToolboxItem(Type? toolType) : this()
     {
         Initialize(toolType);
     }
@@ -58,139 +56,90 @@ public class ToolboxItem : ISerializable
     ///  The assembly name for this toolbox item. The assembly name describes the assembly
     ///  information needed to load the toolbox item's type.
     /// </summary>
-    public AssemblyName AssemblyName
+    public AssemblyName? AssemblyName
     {
-        get
-        {
-            return (AssemblyName)Properties["AssemblyName"];
-        }
-        set
-        {
-            Properties["AssemblyName"] = value;
-        }
+        get => (AssemblyName?)Properties["AssemblyName"];
+        set => Properties["AssemblyName"] = value;
     }
 
     /// <summary>
     ///  The assembly name for this toolbox item. The assembly name describes the assembly
     ///  information needed to load the toolbox item's type.
     /// </summary>
-    public AssemblyName[] DependentAssemblies
+    public AssemblyName[]? DependentAssemblies
     {
         get
         {
-            AssemblyName[] names = (AssemblyName[])Properties["DependentAssemblies"];
-            return names is not null ? (AssemblyName[])names.Clone() : null;
+            AssemblyName[]? names = (AssemblyName[]?)Properties["DependentAssemblies"];
+            return (AssemblyName[]?)names?.Clone();
         }
-        set
-        {
-            Properties["DependentAssemblies"] = value?.Clone();
-        }
+        set => Properties["DependentAssemblies"] = value?.Clone();
     }
 
     /// <summary>
     ///  Gets or sets the bitmap that will be used on the toolbox for this item.
     ///  Use this property on the design surface as this bitmap is scaled according to the current the DPI setting.
     /// </summary>
-    public Bitmap Bitmap
+    public Bitmap? Bitmap
     {
-        get
-        {
-            return (Bitmap)Properties["Bitmap"];
-        }
-        set
-        {
-            Properties["Bitmap"] = value;
-        }
+        get => (Bitmap?)Properties["Bitmap"];
+        set => Properties["Bitmap"] = value;
     }
 
     /// <summary>
     ///  Gets or sets the original bitmap that will be used on the toolbox for this item.
     ///  This bitmap should be 16x16 pixel and should be used in the Visual Studio toolbox, not on the design surface.
     /// </summary>
-    public Bitmap OriginalBitmap
+    public Bitmap? OriginalBitmap
     {
-        get
-        {
-            return (Bitmap)Properties["OriginalBitmap"];
-        }
-        set
-        {
-            Properties["OriginalBitmap"] = value;
-        }
+        get => (Bitmap?)Properties["OriginalBitmap"];
+        set => Properties["OriginalBitmap"] = value;
     }
 
     /// <summary>
     ///  Gets or sets the company name for this <see cref="ToolboxItem"/>.
     ///  This defaults to the companyname attribute retrieved from type.Assembly, if set.
     /// </summary>
-    public string Company
+    public string? Company
     {
-        get
-        {
-            return (string)Properties["Company"];
-        }
-        set
-        {
-            Properties["Company"] = value;
-        }
+        get => (string?)Properties["Company"];
+        set => Properties["Company"] = value;
     }
 
     /// <summary>
     ///  The Component Type is ".Net Component" -- unless otherwise specified by a derived toolboxitem
     /// </summary>
-    public virtual string ComponentType
-    {
-        get
-        {
-            return SR.DotNET_ComponentType;
-        }
-    }
+    public virtual string ComponentType => SR.DotNET_ComponentType;
 
     /// <summary>
     ///  Description is a free-form, multiline capable text description that will be displayed in the tooltip
     ///  for the toolboxItem.  It defaults to the path of the assembly that contains the item, but can be overridden.
     /// </summary>
-    public string Description
+    public string? Description
     {
-        get
-        {
-            return (string)Properties["Description"];
-        }
-        set
-        {
-            Properties["Description"] = value;
-        }
+        get => (string?)Properties["Description"];
+        set => Properties["Description"] = value;
     }
 
     /// <summary>
     ///  Gets or sets the display name for this <see cref="ToolboxItem"/>.
     /// </summary>
+    [AllowNull]
     public string DisplayName
     {
-        get
-        {
-            return (string)Properties["DisplayName"];
-        }
-        set
-        {
-            Properties["DisplayName"] = value;
-        }
+        get => (string)Properties["DisplayName"]!;
+        set => Properties["DisplayName"] = value;
     }
 
     /// <summary>
     ///  Gets or sets the filter for this toolbox item.  The filter is a collection of
     ///  ToolboxItemFilterAttribute objects.
     /// </summary>
+    [AllowNull]
     public ICollection Filter
     {
-        get
-        {
-            return (ICollection)Properties["Filter"];
-        }
-        set
-        {
-            Properties["Filter"] = value;
-        }
+        get => (ICollection)Properties["Filter"]!;
+        set => Properties["Filter"] = value;
     }
 
     /// <summary>
@@ -200,27 +149,15 @@ public class ToolboxItem : ISerializable
     /// </summary>
     public bool IsTransient
     {
-        get
-        {
-            return (bool)Properties["IsTransient"];
-        }
-        set
-        {
-            Properties["IsTransient"] = value;
-        }
+        get => (bool)Properties["IsTransient"]!;
+        set => Properties["IsTransient"] = value;
     }
 
     /// <summary>
     ///  Determines if this toolbox item is locked.  Once locked, a toolbox item will
     ///  not accept any changes to its properties.
     /// </summary>
-    public virtual bool Locked
-    {
-        get
-        {
-            return _locked;
-        }
-    }
+    public virtual bool Locked => _locked;
 
     /// <summary>
     ///  The properties dictionary is a set of name/value pairs.  The keys are property
@@ -229,29 +166,16 @@ public class ToolboxItem : ISerializable
     ///  Values in the properties dictionary are validated through ValidateProperty
     ///  and default values are obtained from GetDefaultProperty.
     /// </summary>
-    public IDictionary Properties
-    {
-        get
-        {
-            _properties ??= new LockableDictionary(this, 8 /* # of properties we have */);
-
-            return _properties;
-        }
-    }
+    public IDictionary Properties => _properties ??= new LockableDictionary(this, 8 /* # of properties we have */);
 
     /// <summary>
     ///  Gets or sets the fully qualified name of the type this toolbox item will create.
     /// </summary>
+    [AllowNull]
     public string TypeName
     {
-        get
-        {
-            return (string)Properties["TypeName"];
-        }
-        set
-        {
-            Properties["TypeName"] = value;
-        }
+        get => (string)Properties["TypeName"]!;
+        set => Properties["TypeName"] = value;
     }
 
     /// <summary>
@@ -259,15 +183,12 @@ public class ToolboxItem : ISerializable
     ///  overridden in a derived toolboxitem. This can be overridden to
     ///  return an empty string to suppress its display in the toolbox tooltip.
     /// </summary>
-    public virtual string Version
-    {
-        get => AssemblyName?.Version?.ToString() ?? string.Empty;
-    }
+    public virtual string Version => AssemblyName?.Version?.ToString() ?? string.Empty;
 
     /// <summary>
     ///  Occurs when components are created.
     /// </summary>
-    public event ToolboxComponentsCreatedEventHandler ComponentsCreated
+    public event ToolboxComponentsCreatedEventHandler? ComponentsCreated
     {
         add => _componentsCreatedEvent += value;
         remove => _componentsCreatedEvent -= value;
@@ -276,7 +197,7 @@ public class ToolboxItem : ISerializable
     /// <summary>
     ///  Occurs before components are created.
     /// </summary>
-    public event ToolboxComponentsCreatingEventHandler ComponentsCreating
+    public event ToolboxComponentsCreatingEventHandler? ComponentsCreating
     {
         add => _componentsCreatingEvent += value;
         remove => _componentsCreatingEvent -= value;
@@ -298,19 +219,16 @@ public class ToolboxItem : ISerializable
     ///  Creates objects from the type contained in this toolbox item.
     /// </summary>
     /// <returns></returns>
-    public IComponent[] CreateComponents()
-    {
-        return CreateComponents(null);
-    }
+    public IComponent[]? CreateComponents() => CreateComponents(null);
 
     /// <summary>
     ///  Creates objects from the type contained in this toolbox item.  If designerHost is non-null
     ///  this will also add them to the designer.
     /// </summary>
-    public IComponent[] CreateComponents(IDesignerHost host)
+    public IComponent[]? CreateComponents(IDesignerHost? host)
     {
         OnComponentsCreating(new ToolboxComponentsCreatingEventArgs(host));
-        IComponent[] comps = CreateComponentsCore(host, new Hashtable());
+        IComponent[]? comps = CreateComponentsCore(host, new Hashtable());
         if (comps is not null && comps.Length > 0)
         {
             OnComponentsCreated(new ToolboxComponentsCreatedEventArgs(comps));
@@ -324,10 +242,10 @@ public class ToolboxItem : ISerializable
     ///  this will also add them to the designer.
     /// </summary>
     /// <returns></returns>
-    public IComponent[] CreateComponents(IDesignerHost host, IDictionary defaultValues)
+    public IComponent[]? CreateComponents(IDesignerHost? host, IDictionary? defaultValues)
     {
         OnComponentsCreating(new ToolboxComponentsCreatingEventArgs(host));
-        IComponent[] comps = CreateComponentsCore(host, defaultValues);
+        IComponent[]? comps = CreateComponentsCore(host, defaultValues);
         if (comps is not null && comps.Length > 0)
         {
             OnComponentsCreated(new ToolboxComponentsCreatedEventArgs(comps));
@@ -340,10 +258,10 @@ public class ToolboxItem : ISerializable
     ///  Creates objects from the type contained in this toolbox item.  If designerHost is non-null
     ///  this will also add them to the designer.
     /// </summary>
-    protected virtual IComponent[] CreateComponentsCore(IDesignerHost host)
+    protected virtual IComponent[]? CreateComponentsCore(IDesignerHost? host)
     {
         List<IComponent> comps = new();
-        Type createType = GetType(host, AssemblyName, TypeName, true);
+        Type? createType = GetType(host, AssemblyName, TypeName, true);
         if (createType is not null)
         {
             if (host is not null)
@@ -352,7 +270,7 @@ public class ToolboxItem : ISerializable
             }
             else if (typeof(IComponent).IsAssignableFrom(createType))
             {
-                comps.Add((IComponent)TypeDescriptor.CreateInstance(provider: null, createType, argTypes: null, args: null));
+                comps.Add((IComponent)TypeDescriptor.CreateInstance(provider: null, createType, argTypes: null, args: null)!);
             }
         }
 
@@ -363,9 +281,9 @@ public class ToolboxItem : ISerializable
     ///  Creates objects from the type contained in this toolbox item.  If designerHost is non-null
     ///  this will also add them to the designer.
     /// </summary>
-    protected virtual IComponent[] CreateComponentsCore(IDesignerHost host, IDictionary defaultValues)
+    protected virtual IComponent[]? CreateComponentsCore(IDesignerHost? host, IDictionary? defaultValues)
     {
-        IComponent[] components = CreateComponentsCore(host);
+        IComponent[]? components = CreateComponentsCore(host);
 
         if (host is not null && components is not null)
         {
@@ -405,7 +323,7 @@ public class ToolboxItem : ISerializable
         // into the property dictionary we'll duplicate stuff people
         // have serialized by hand.
 
-        string[] propertyNames = null;
+        string[]? propertyNames = null;
         foreach (SerializationEntry entry in info)
         {
             if (entry.Name.Equals("PropertyNames"))
@@ -449,7 +367,7 @@ public class ToolboxItem : ISerializable
         }
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (this == obj)
         {
@@ -461,7 +379,7 @@ public class ToolboxItem : ISerializable
             return false;
         }
 
-        if (!(obj.GetType() == GetType()))
+        if (obj.GetType() != GetType())
         {
             return false;
         }
@@ -473,7 +391,7 @@ public class ToolboxItem : ISerializable
               DisplayName == otherItem.DisplayName;
     }
 
-    private static bool AreAssemblyNamesEqual(AssemblyName name1, AssemblyName name2)
+    private static bool AreAssemblyNamesEqual(AssemblyName? name1, AssemblyName? name2)
     {
         return name1 == name2 ||
                (name1 is not null && name2 is not null && name1.FullName == name2.FullName);
@@ -485,7 +403,7 @@ public class ToolboxItem : ISerializable
     ///  Filters a property value before returning it.  This allows a property to always clone values,
     ///  or to provide a default value when none exists.
     /// </summary>
-    protected virtual object FilterPropertyValue(string propertyName, object value)
+    protected virtual object? FilterPropertyValue(string propertyName, object? value)
     {
         switch (propertyName)
         {
@@ -522,10 +440,7 @@ public class ToolboxItem : ISerializable
     ///  The designer host is used to access an implementation of ITypeResolutionService.
     ///  However, the loaded type is not added to the list of references in the designer host.
     /// </summary>
-    public Type GetType(IDesignerHost host)
-    {
-        return GetType(host, AssemblyName, TypeName, false);
-    }
+    public Type? GetType(IDesignerHost? host) => GetType(host, AssemblyName, TypeName, false);
 
     /// <summary>
     ///  This utility function can be used to load a type given a name.  AssemblyName and
@@ -534,19 +449,13 @@ public class ToolboxItem : ISerializable
     ///  to the designer host's set of references.
     /// </summary>
     [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Single-file case is handled")]
-    protected virtual Type GetType(IDesignerHost host, AssemblyName assemblyName, string typeName, bool reference)
+    protected virtual Type? GetType(IDesignerHost? host, AssemblyName? assemblyName, string typeName, bool reference)
     {
-        ITypeResolutionService ts = null;
-        Type type = null;
+        Type? type = null;
 
         ArgumentNullException.ThrowIfNull(typeName);
 
-        if (host is not null)
-        {
-            ts = host.GetService(typeof(ITypeResolutionService)) as ITypeResolutionService;
-        }
-
-        if (ts is not null)
+        if (host.TryGetService(out ITypeResolutionService? ts))
         {
             if (reference)
             {
@@ -572,7 +481,7 @@ public class ToolboxItem : ISerializable
             {
                 if (assemblyName is not null)
                 {
-                    Assembly a = ts.GetAssembly(assemblyName);
+                    Assembly? a = ts.GetAssembly(assemblyName);
                     if (a is not null)
                     {
                         type = a.GetType(typeName);
@@ -582,16 +491,31 @@ public class ToolboxItem : ISerializable
                 type ??= ts.GetType(typeName);
             }
         }
-        else
+        else if (!string.IsNullOrEmpty(typeName))
         {
-            if (!string.IsNullOrEmpty(typeName))
+            if (assemblyName is not null)
             {
-                if (assemblyName is not null)
+                Assembly? a = null;
+                try
                 {
-                    Assembly a = null;
+                    a = Assembly.Load(assemblyName);
+                }
+                catch (FileNotFoundException)
+                {
+                }
+                catch (BadImageFormatException)
+                {
+                }
+                catch (IOException)
+                {
+                }
+
+#pragma warning disable SYSLIB0044 // Type or member is obsolete. Ref https://github.com/dotnet/winforms/issues/7308
+                if (a is null && !string.IsNullOrEmpty(assemblyName.CodeBase))
+                {
                     try
                     {
-                        a = Assembly.Load(assemblyName);
+                        a = Assembly.LoadFrom(assemblyName.CodeBase);
                     }
                     catch (FileNotFoundException)
                     {
@@ -602,34 +526,16 @@ public class ToolboxItem : ISerializable
                     catch (IOException)
                     {
                     }
-
-#pragma warning disable SYSLIB0044 // Type or member is obsolete. Ref https://github.com/dotnet/winforms/issues/7308
-                    if (a is null && !string.IsNullOrEmpty(assemblyName.CodeBase))
-                    {
-                        try
-                        {
-                            a = Assembly.LoadFrom(assemblyName.CodeBase);
-                        }
-                        catch (FileNotFoundException)
-                        {
-                        }
-                        catch (BadImageFormatException)
-                        {
-                        }
-                        catch (IOException)
-                        {
-                        }
-                    }
+                }
 #pragma warning restore SYSLIB0044 // Type or member is obsolete
 
-                    if (a is not null)
-                    {
-                        type = a.GetType(typeName);
-                    }
+                if (a is not null)
+                {
+                    type = a.GetType(typeName);
                 }
-
-                type ??= Type.GetType(typeName, false);
             }
+
+            type ??= Type.GetType(typeName, false);
         }
 
         return type;
@@ -638,7 +544,7 @@ public class ToolboxItem : ISerializable
     /// <summary>
     ///  Initializes a toolbox item with a given type.  A locked toolbox item cannot be initialized.
     /// </summary>
-    public virtual void Initialize(Type type)
+    public virtual void Initialize(Type? type)
     {
         CheckUnlocked();
 
@@ -648,27 +554,25 @@ public class ToolboxItem : ISerializable
             AssemblyName assemblyName = type.Assembly.GetName(true);
 
             Dictionary<string, AssemblyName> parents = new Dictionary<string, AssemblyName>();
-            Type parentType = type;
-            while (parentType is not null)
+            Type? parentType = type;
+
+            do
             {
                 AssemblyName policiedName = parentType.Assembly.GetName(true);
 
-                AssemblyName aname = GetNonRetargetedAssemblyName(type, policiedName);
+                AssemblyName? aname = GetNonRetargetedAssemblyName(type, policiedName);
 
-                if (aname is not null && !parents.ContainsKey(aname.FullName))
+                if (aname is not null)
                 {
-                    parents[aname.FullName] = aname;
+                    parents.TryAdd(aname.FullName, aname);
                 }
 
                 parentType = parentType.BaseType;
             }
+            while (parentType is not null);
 
             AssemblyName[] parentAssemblies = new AssemblyName[parents.Count];
-            int i = 0;
-            foreach (AssemblyName an in parents.Values)
-            {
-                parentAssemblies[i++] = an;
-            }
+            parents.Values.CopyTo(parentAssemblies, 0);
 
             DependentAssemblies = parentAssemblies;
 
@@ -680,25 +584,20 @@ public class ToolboxItem : ISerializable
             if (!type.Assembly.ReflectionOnly)
             {
                 object[] companyattrs = type.Assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), true);
-                if (companyattrs is not null && companyattrs.Length > 0)
+                if (companyattrs is [AssemblyCompanyAttribute { Company: not null } company, ..])
                 {
-                    if (companyattrs[0] is AssemblyCompanyAttribute company && company.Company is not null)
-                    {
-                        Company = company.Company;
-                    }
+                    Company = company.Company;
                 }
 
                 //set the description based off the description attribute of the given type.
-                DescriptionAttribute descattr = (DescriptionAttribute)TypeDescriptor.GetAttributes(type)[typeof(DescriptionAttribute)];
-                if (descattr is not null)
+                if (TypeDescriptorHelper.TryGetAttribute(type, out DescriptionAttribute? descattr))
                 {
                     Description = descattr.Description;
                 }
 
-                ToolboxBitmapAttribute attr = (ToolboxBitmapAttribute)TypeDescriptor.GetAttributes(type)[typeof(ToolboxBitmapAttribute)];
-                if (attr is not null)
+                if (TypeDescriptorHelper.TryGetAttribute(type, out ToolboxBitmapAttribute? attr))
                 {
-                    Bitmap itemBitmap = attr.GetImage(type, false) as Bitmap;
+                    Bitmap? itemBitmap = attr.GetImage(type, false) as Bitmap;
                     if (itemBitmap is not null)
                     {
                         // Original bitmap is used when adding the item to the Visual Studio toolbox
@@ -738,7 +637,7 @@ public class ToolboxItem : ISerializable
         }
     }
 
-    private static AssemblyName GetNonRetargetedAssemblyName(Type type, AssemblyName policiedAssemblyName)
+    private static AssemblyName? GetNonRetargetedAssemblyName(Type type, AssemblyName policiedAssemblyName)
     {
         Debug.Assert(type is not null);
         if (policiedAssemblyName is null)
@@ -847,7 +746,7 @@ public class ToolboxItem : ISerializable
     ///  Called as a helper to ValidatePropertyValue to validate that an object
     ///  is of a given type.
     /// </summary>
-    protected void ValidatePropertyType(string propertyName, object value, Type expectedType, bool allowNull)
+    protected void ValidatePropertyType(string propertyName, object? value, Type expectedType, bool allowNull)
     {
         if (!allowNull)
         {
@@ -865,7 +764,8 @@ public class ToolboxItem : ISerializable
     ///  to change the value of an object before committing it, our reject it by throwing an
     ///  exception.
     /// </summary>
-    protected virtual object ValidatePropertyValue(string propertyName, object value)
+    [return: NotNullIfNotNull(nameof(value))]
+    protected virtual object? ValidatePropertyValue(string propertyName, object? value)
     {
         switch (propertyName)
         {
@@ -874,9 +774,6 @@ public class ToolboxItem : ISerializable
                 break;
 
             case "Bitmap":
-                ValidatePropertyType(propertyName, value, typeof(Bitmap), true);
-                break;
-
             case "OriginalBitmap":
                 ValidatePropertyType(propertyName, value, typeof(Bitmap), true);
                 break;
@@ -886,43 +783,13 @@ public class ToolboxItem : ISerializable
             case "DisplayName":
             case "TypeName":
                 ValidatePropertyType(propertyName, value, typeof(string), true);
-                value ??= string.Empty;
-
-                break;
+                return value ?? string.Empty;
 
             case "Filter":
                 ValidatePropertyType(propertyName, value, typeof(ICollection), true);
 
-                int filterCount = 0;
-                ICollection col = (ICollection)value;
-
-                if (col is not null)
-                {
-                    foreach (object f in col)
-                    {
-                        if (f is ToolboxItemFilterAttribute)
-                        {
-                            filterCount++;
-                        }
-                    }
-                }
-
-                ToolboxItemFilterAttribute[] filter = new ToolboxItemFilterAttribute[filterCount];
-
-                if (col is not null)
-                {
-                    filterCount = 0;
-                    foreach (object f in col)
-                    {
-                        if (f is ToolboxItemFilterAttribute tfa)
-                        {
-                            filter[filterCount++] = tfa;
-                        }
-                    }
-                }
-
-                value = filter;
-                break;
+                ICollection? col = (ICollection?)value;
+                return col?.OfType<ToolboxItemFilterAttribute>().ToArray() ?? Array.Empty<ToolboxItemFilterAttribute>();
 
             case "DependentAssemblies":
                 ValidatePropertyType(propertyName, value, typeof(AssemblyName[]), true);
@@ -949,28 +816,16 @@ public class ToolboxItem : ISerializable
             _item = item;
         }
 
-        public override bool IsFixedSize
-        {
-            get
-            {
-                return _item.Locked;
-            }
-        }
+        public override bool IsFixedSize => _item.Locked;
 
-        public override bool IsReadOnly
-        {
-            get
-            {
-                return _item.Locked;
-            }
-        }
+        public override bool IsReadOnly => _item.Locked;
 
-        public override object this[object key]
+        public override object? this[object key]
         {
             get
             {
                 string propertyName = GetPropertyName(key);
-                object value = base[propertyName];
+                object? value = base[propertyName];
 
                 return _item.FilterPropertyValue(propertyName, value);
             }
@@ -983,7 +838,7 @@ public class ToolboxItem : ISerializable
             }
         }
 
-        public override void Add(object key, object value)
+        public override void Add(object key, object? value)
         {
             string propertyName = GetPropertyName(key);
             value = _item.ValidatePropertyValue(propertyName, value);
@@ -1001,9 +856,9 @@ public class ToolboxItem : ISerializable
         {
             ArgumentNullException.ThrowIfNull(key);
 
-            return !(key is string propertyName) || propertyName.Length == 0
-                ? throw new ArgumentException(SR.ToolboxItemInvalidKey, nameof(key))
-                : propertyName;
+            return key is string { Length: > 0 } propertyName
+                ? propertyName
+                : throw new ArgumentException(SR.ToolboxItemInvalidKey, nameof(key));
         }
 
         public override void Remove(object key)

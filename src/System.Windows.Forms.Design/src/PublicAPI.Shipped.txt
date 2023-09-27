@@ -40,8 +40,8 @@ override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnEndL
 override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
 override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
 ~override System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
-~override System.Drawing.Design.ToolboxItem.Equals(object obj) -> bool
-~override System.Drawing.Design.ToolboxItem.ToString() -> string
+override System.Drawing.Design.ToolboxItem.Equals(object? obj) -> bool
+override System.Drawing.Design.ToolboxItem.ToString() -> string!
 override System.Windows.Forms.Design.AnchorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
 override System.Windows.Forms.Design.AnchorEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.Windows.Forms.Design.ComponentDocumentDesigner.Initialize(System.ComponentModel.IComponent component) -> void
@@ -212,31 +212,31 @@ System.ComponentModel.Design.Serialization.BasicDesignerLoader.SetBaseComponentC
 ~System.Drawing.Design.IToolboxUser.ToolPicked(System.Drawing.Design.ToolboxItem tool) -> void
 ~System.Drawing.Design.ToolboxComponentsCreatingEventArgs.DesignerHost.get -> System.ComponentModel.Design.IDesignerHost
 ~System.Drawing.Design.ToolboxComponentsCreatingEventArgs.ToolboxComponentsCreatingEventArgs(System.ComponentModel.Design.IDesignerHost host) -> void
-~System.Drawing.Design.ToolboxItem.AssemblyName.get -> System.Reflection.AssemblyName
-~System.Drawing.Design.ToolboxItem.AssemblyName.set -> void
-~System.Drawing.Design.ToolboxItem.Bitmap.get -> System.Drawing.Bitmap
-~System.Drawing.Design.ToolboxItem.Bitmap.set -> void
-~System.Drawing.Design.ToolboxItem.Company.get -> string
-~System.Drawing.Design.ToolboxItem.Company.set -> void
-~System.Drawing.Design.ToolboxItem.CreateComponents() -> System.ComponentModel.IComponent[]
-~System.Drawing.Design.ToolboxItem.CreateComponents(System.ComponentModel.Design.IDesignerHost host) -> System.ComponentModel.IComponent[]
-~System.Drawing.Design.ToolboxItem.CreateComponents(System.ComponentModel.Design.IDesignerHost host, System.Collections.IDictionary defaultValues) -> System.ComponentModel.IComponent[]
-~System.Drawing.Design.ToolboxItem.DependentAssemblies.get -> System.Reflection.AssemblyName[]
-~System.Drawing.Design.ToolboxItem.DependentAssemblies.set -> void
-~System.Drawing.Design.ToolboxItem.Description.get -> string
-~System.Drawing.Design.ToolboxItem.Description.set -> void
-~System.Drawing.Design.ToolboxItem.DisplayName.get -> string
-~System.Drawing.Design.ToolboxItem.DisplayName.set -> void
-~System.Drawing.Design.ToolboxItem.Filter.get -> System.Collections.ICollection
-~System.Drawing.Design.ToolboxItem.Filter.set -> void
-~System.Drawing.Design.ToolboxItem.GetType(System.ComponentModel.Design.IDesignerHost host) -> System.Type
-~System.Drawing.Design.ToolboxItem.OriginalBitmap.get -> System.Drawing.Bitmap
-~System.Drawing.Design.ToolboxItem.OriginalBitmap.set -> void
-~System.Drawing.Design.ToolboxItem.Properties.get -> System.Collections.IDictionary
-~System.Drawing.Design.ToolboxItem.ToolboxItem(System.Type toolType) -> void
-~System.Drawing.Design.ToolboxItem.TypeName.get -> string
-~System.Drawing.Design.ToolboxItem.TypeName.set -> void
-~System.Drawing.Design.ToolboxItem.ValidatePropertyType(string propertyName, object value, System.Type expectedType, bool allowNull) -> void
+System.Drawing.Design.ToolboxItem.AssemblyName.get -> System.Reflection.AssemblyName?
+System.Drawing.Design.ToolboxItem.AssemblyName.set -> void
+System.Drawing.Design.ToolboxItem.Bitmap.get -> System.Drawing.Bitmap?
+System.Drawing.Design.ToolboxItem.Bitmap.set -> void
+System.Drawing.Design.ToolboxItem.Company.get -> string?
+System.Drawing.Design.ToolboxItem.Company.set -> void
+System.Drawing.Design.ToolboxItem.CreateComponents() -> System.ComponentModel.IComponent![]?
+System.Drawing.Design.ToolboxItem.CreateComponents(System.ComponentModel.Design.IDesignerHost? host) -> System.ComponentModel.IComponent![]?
+System.Drawing.Design.ToolboxItem.CreateComponents(System.ComponentModel.Design.IDesignerHost? host, System.Collections.IDictionary? defaultValues) -> System.ComponentModel.IComponent![]?
+System.Drawing.Design.ToolboxItem.DependentAssemblies.get -> System.Reflection.AssemblyName![]?
+System.Drawing.Design.ToolboxItem.DependentAssemblies.set -> void
+System.Drawing.Design.ToolboxItem.Description.get -> string?
+System.Drawing.Design.ToolboxItem.Description.set -> void
+System.Drawing.Design.ToolboxItem.DisplayName.get -> string!
+System.Drawing.Design.ToolboxItem.DisplayName.set -> void
+System.Drawing.Design.ToolboxItem.Filter.get -> System.Collections.ICollection!
+System.Drawing.Design.ToolboxItem.Filter.set -> void
+System.Drawing.Design.ToolboxItem.GetType(System.ComponentModel.Design.IDesignerHost? host) -> System.Type?
+System.Drawing.Design.ToolboxItem.OriginalBitmap.get -> System.Drawing.Bitmap?
+System.Drawing.Design.ToolboxItem.OriginalBitmap.set -> void
+System.Drawing.Design.ToolboxItem.Properties.get -> System.Collections.IDictionary!
+System.Drawing.Design.ToolboxItem.ToolboxItem(System.Type? toolType) -> void
+System.Drawing.Design.ToolboxItem.TypeName.get -> string!
+System.Drawing.Design.ToolboxItem.TypeName.set -> void
+System.Drawing.Design.ToolboxItem.ValidatePropertyType(string! propertyName, object? value, System.Type! expectedType, bool allowNull) -> void
 ~System.Drawing.Design.ToolboxItemCollection.Contains(System.Drawing.Design.ToolboxItem value) -> bool
 ~System.Drawing.Design.ToolboxItemCollection.CopyTo(System.Drawing.Design.ToolboxItem[] array, int index) -> void
 ~System.Drawing.Design.ToolboxItemCollection.IndexOf(System.Drawing.Design.ToolboxItem value) -> int
@@ -347,18 +347,18 @@ virtual System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnCompo
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.GetInitializeMethod(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration, object value) -> System.CodeDom.CodeMemberMethod
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.GetInitializeMethods(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration) -> System.CodeDom.CodeMemberMethod[]
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object root, System.Collections.ICollection members) -> System.CodeDom.CodeTypeDeclaration
-~virtual System.Drawing.Design.ToolboxItem.ComponentType.get -> string
-~virtual System.Drawing.Design.ToolboxItem.CreateComponentsCore(System.ComponentModel.Design.IDesignerHost host) -> System.ComponentModel.IComponent[]
-~virtual System.Drawing.Design.ToolboxItem.CreateComponentsCore(System.ComponentModel.Design.IDesignerHost host, System.Collections.IDictionary defaultValues) -> System.ComponentModel.IComponent[]
-~virtual System.Drawing.Design.ToolboxItem.Deserialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-~virtual System.Drawing.Design.ToolboxItem.FilterPropertyValue(string propertyName, object value) -> object
-~virtual System.Drawing.Design.ToolboxItem.GetType(System.ComponentModel.Design.IDesignerHost host, System.Reflection.AssemblyName assemblyName, string typeName, bool reference) -> System.Type
-~virtual System.Drawing.Design.ToolboxItem.Initialize(System.Type type) -> void
-~virtual System.Drawing.Design.ToolboxItem.OnComponentsCreated(System.Drawing.Design.ToolboxComponentsCreatedEventArgs args) -> void
-~virtual System.Drawing.Design.ToolboxItem.OnComponentsCreating(System.Drawing.Design.ToolboxComponentsCreatingEventArgs args) -> void
-~virtual System.Drawing.Design.ToolboxItem.Serialize(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-~virtual System.Drawing.Design.ToolboxItem.ValidatePropertyValue(string propertyName, object value) -> object
-~virtual System.Drawing.Design.ToolboxItem.Version.get -> string
+virtual System.Drawing.Design.ToolboxItem.ComponentType.get -> string!
+virtual System.Drawing.Design.ToolboxItem.CreateComponentsCore(System.ComponentModel.Design.IDesignerHost? host) -> System.ComponentModel.IComponent![]?
+virtual System.Drawing.Design.ToolboxItem.CreateComponentsCore(System.ComponentModel.Design.IDesignerHost? host, System.Collections.IDictionary? defaultValues) -> System.ComponentModel.IComponent![]?
+virtual System.Drawing.Design.ToolboxItem.Deserialize(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
+virtual System.Drawing.Design.ToolboxItem.FilterPropertyValue(string! propertyName, object? value) -> object?
+virtual System.Drawing.Design.ToolboxItem.GetType(System.ComponentModel.Design.IDesignerHost? host, System.Reflection.AssemblyName? assemblyName, string! typeName, bool reference) -> System.Type?
+virtual System.Drawing.Design.ToolboxItem.Initialize(System.Type? type) -> void
+virtual System.Drawing.Design.ToolboxItem.OnComponentsCreated(System.Drawing.Design.ToolboxComponentsCreatedEventArgs! args) -> void
+virtual System.Drawing.Design.ToolboxItem.OnComponentsCreating(System.Drawing.Design.ToolboxComponentsCreatingEventArgs! args) -> void
+virtual System.Drawing.Design.ToolboxItem.Serialize(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
+virtual System.Drawing.Design.ToolboxItem.ValidatePropertyValue(string! propertyName, object? value) -> object?
+virtual System.Drawing.Design.ToolboxItem.Version.get -> string!
 ~virtual System.Windows.Forms.Design.ComponentDocumentDesigner.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
 ~virtual System.Windows.Forms.Design.ComponentTray.AddComponent(System.ComponentModel.IComponent component) -> void
 ~virtual System.Windows.Forms.Design.ComponentTray.CanCreateComponentFromTool(System.Drawing.Design.ToolboxItem tool) -> bool
@@ -844,8 +844,8 @@ System.Drawing.Design.ToolboxComponentsCreatingEventArgs
 System.Drawing.Design.ToolboxComponentsCreatingEventHandler
 System.Drawing.Design.ToolboxItem
 System.Drawing.Design.ToolboxItem.CheckUnlocked() -> void
-System.Drawing.Design.ToolboxItem.ComponentsCreated -> System.Drawing.Design.ToolboxComponentsCreatedEventHandler
-System.Drawing.Design.ToolboxItem.ComponentsCreating -> System.Drawing.Design.ToolboxComponentsCreatingEventHandler
+System.Drawing.Design.ToolboxItem.ComponentsCreated -> System.Drawing.Design.ToolboxComponentsCreatedEventHandler?
+System.Drawing.Design.ToolboxItem.ComponentsCreating -> System.Drawing.Design.ToolboxComponentsCreatingEventHandler?
 System.Drawing.Design.ToolboxItem.IsTransient.get -> bool
 System.Drawing.Design.ToolboxItem.IsTransient.set -> void
 System.Drawing.Design.ToolboxItem.ToolboxItem() -> void

@@ -167,7 +167,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
             return null;
         }
 
-        Type toolType = tool.GetType(_designerHost);
+        Type? toolType = tool.GetType(_designerHost);
 
         if (typeof(StatusStrip).IsAssignableFrom(toolType))
         {

@@ -51,7 +51,7 @@ internal static class ServiceExtensions
     /// <param name="service">If found, contains the service object when this method returns; otherwise, <see langword="null"/>.</param>
     /// <returns>A service object of type <typeparamref name="T"/> or <see langword="null"/> if there is no such service.</returns>
     public static bool TryGetService<T>(
-        this IDesignerHost? designerHost,
+        [NotNullWhen(true)] this IDesignerHost? designerHost,
         [NotNullWhen(true)] out T? service)
         where T : class
         => (service = designerHost?.GetService(typeof(T)) as T) is not null;
