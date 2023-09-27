@@ -57,23 +57,14 @@ public class DataGridViewCellCollection : BaseCollection, IList
         _owner = dataGridViewRow;
     }
 
-    protected override ArrayList List
-    {
-        get
-        {
-            return ArrayList.Adapter(_items);
-        }
-    }
+    protected override ArrayList List => ArrayList.Adapter(_items);
 
     /// <summary>
     ///  Retrieves the DataGridViewCell with the specified index.
     /// </summary>
     public DataGridViewCell this[int index]
     {
-        get
-        {
-            return _items[index];
-        }
+        get => _items[index];
         set
         {
             DataGridViewCell dataGridViewCell = value.OrThrowIfNull();
@@ -269,10 +260,7 @@ public class DataGridViewCellCollection : BaseCollection, IList
         return index != -1;
     }
 
-    public int IndexOf(DataGridViewCell dataGridViewCell)
-    {
-        return _items.IndexOf(dataGridViewCell);
-    }
+    public int IndexOf(DataGridViewCell dataGridViewCell) => _items.IndexOf(dataGridViewCell);
 
     public virtual void Insert(int index, DataGridViewCell dataGridViewCell)
     {
