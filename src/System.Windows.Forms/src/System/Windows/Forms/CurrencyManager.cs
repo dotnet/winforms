@@ -126,50 +126,19 @@ public class CurrencyManager : BindingManagerBase
     /// <summary>
     ///  Gets the number of items in the list.
     /// </summary>
-    public override int Count
-    {
-        get
-        {
-            if (_list is null)
-            {
-                return 0;
-            }
-            else
-            {
-                return _list.Count;
-            }
-        }
-    }
+    public override int Count => _list is null ? 0 : _list.Count;
 
     /// <summary>
     ///  Gets the current item in the list.
     /// </summary>
-    public override object? Current
-    {
-        get
-        {
-            return this[Position];
-        }
-    }
+    public override object? Current => this[Position];
 
-    internal override Type? BindType
-    {
-        get
-        {
-            return ListBindingHelper.GetListItemType(List);
-        }
-    }
+    internal override Type? BindType => ListBindingHelper.GetListItemType(List);
 
     /// <summary>
     ///  Gets the data source of the list.
     /// </summary>
-    internal override object? DataSource
-    {
-        get
-        {
-            return _dataSource;
-        }
-    }
+    internal override object? DataSource => _dataSource;
 
     private protected override void SetDataSource(object? dataSource)
     {
@@ -223,22 +192,10 @@ public class CurrencyManager : BindingManagerBase
     /// <summary>
     ///  Gets a value indicating whether the list is bound to a data source.
     /// </summary>
-    internal override bool IsBinding
-    {
-        get
-        {
-            return _bound;
-        }
-    }
+    internal override bool IsBinding => _bound;
 
     // The DataGridView needs this.
-    internal bool ShouldBind
-    {
-        get
-        {
-            return _shouldBind;
-        }
-    }
+    internal bool ShouldBind => _shouldBind;
 
     /// <summary>
     ///  Gets the list as an object.
@@ -261,10 +218,7 @@ public class CurrencyManager : BindingManagerBase
     /// </summary>
     public override int Position
     {
-        get
-        {
-            return listposition;
-        }
+        get => listposition;
         set
         {
             if (listposition == -1)
