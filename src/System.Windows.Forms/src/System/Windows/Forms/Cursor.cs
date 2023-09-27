@@ -26,6 +26,9 @@ public sealed class Cursor : IDisposable, ISerializable, IHandle<HICON>, IHandle
     private HCURSOR _handle;
     private readonly bool _freeHandle;
 
+    /// <summary>
+    ///  If created by the <see cref="Cursors"/> class, this is the property name that created it.
+    /// </summary>
     internal string? CursorsProperty { get; }
 
     internal unsafe Cursor(PCWSTR nResourceId, string cursorsProperty)
