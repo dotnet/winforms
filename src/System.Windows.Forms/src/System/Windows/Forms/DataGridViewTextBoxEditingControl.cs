@@ -36,6 +36,7 @@ public partial class DataGridViewTextBoxEditingControl : TextBox, IDataGridViewE
         }
     }
 
+    [AllowNull]
     public virtual object EditingControlFormattedValue
     {
         get
@@ -44,7 +45,7 @@ public partial class DataGridViewTextBoxEditingControl : TextBox, IDataGridViewE
         }
         set
         {
-            Text = (string)value;
+            Text = (string?)value;
         }
     }
 
