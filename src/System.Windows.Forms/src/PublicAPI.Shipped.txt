@@ -49,7 +49,7 @@ override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
 ~override System.Windows.Forms.DataGridViewButtonColumn.DefaultCellStyle.set -> void
 ~override System.Windows.Forms.DataGridViewButtonColumn.ToString() -> string
 ~override System.Windows.Forms.DataGridViewCell.ToString() -> string
-~override System.Windows.Forms.DataGridViewCellCollection.List.get -> System.Collections.ArrayList
+override System.Windows.Forms.DataGridViewCellCollection.List.get -> System.Collections.ArrayList!
 override System.Windows.Forms.DataGridViewCellStyle.Equals(object? o) -> bool
 override System.Windows.Forms.DataGridViewCellStyle.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.Clone() -> object
@@ -393,14 +393,14 @@ System.Windows.Forms.DataGridView.EditingPanel.get -> System.Windows.Forms.Panel
 ~System.Windows.Forms.DataGridViewCell.ToolTipText.set -> void
 ~System.Windows.Forms.DataGridViewCell.Value.get -> object
 ~System.Windows.Forms.DataGridViewCell.Value.set -> void
-~System.Windows.Forms.DataGridViewCellCollection.CopyTo(System.Windows.Forms.DataGridViewCell[] array, int index) -> void
-~System.Windows.Forms.DataGridViewCellCollection.DataGridViewCellCollection(System.Windows.Forms.DataGridViewRow dataGridViewRow) -> void
-~System.Windows.Forms.DataGridViewCellCollection.IndexOf(System.Windows.Forms.DataGridViewCell dataGridViewCell) -> int
-~System.Windows.Forms.DataGridViewCellCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
-~System.Windows.Forms.DataGridViewCellCollection.this[int index].get -> System.Windows.Forms.DataGridViewCell
-~System.Windows.Forms.DataGridViewCellCollection.this[int index].set -> void
-~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].get -> System.Windows.Forms.DataGridViewCell
-~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].set -> void
+System.Windows.Forms.DataGridViewCellCollection.CopyTo(System.Windows.Forms.DataGridViewCell![]! array, int index) -> void
+System.Windows.Forms.DataGridViewCellCollection.DataGridViewCellCollection(System.Windows.Forms.DataGridViewRow! dataGridViewRow) -> void
+System.Windows.Forms.DataGridViewCellCollection.IndexOf(System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> int
+System.Windows.Forms.DataGridViewCellCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs! e) -> void
+System.Windows.Forms.DataGridViewCellCollection.this[int index].get -> System.Windows.Forms.DataGridViewCell!
+System.Windows.Forms.DataGridViewCellCollection.this[int index].set -> void
+System.Windows.Forms.DataGridViewCellCollection.this[string! columnName].get -> System.Windows.Forms.DataGridViewCell!
+System.Windows.Forms.DataGridViewCellCollection.this[string! columnName].set -> void
 System.Windows.Forms.DataGridViewCellStyle.DataGridViewCellStyle(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
 System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.get -> object?
 System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.set -> void
@@ -847,11 +847,11 @@ virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -
 ~virtual System.Windows.Forms.DataGridViewCell.SetValue(int rowIndex, object value) -> bool
 ~virtual System.Windows.Forms.DataGridViewCell.ValueType.get -> System.Type
 ~virtual System.Windows.Forms.DataGridViewCell.ValueType.set -> void
-~virtual System.Windows.Forms.DataGridViewCellCollection.Add(System.Windows.Forms.DataGridViewCell dataGridViewCell) -> int
-~virtual System.Windows.Forms.DataGridViewCellCollection.AddRange(params System.Windows.Forms.DataGridViewCell[] dataGridViewCells) -> void
-~virtual System.Windows.Forms.DataGridViewCellCollection.Contains(System.Windows.Forms.DataGridViewCell dataGridViewCell) -> bool
-~virtual System.Windows.Forms.DataGridViewCellCollection.Insert(int index, System.Windows.Forms.DataGridViewCell dataGridViewCell) -> void
-~virtual System.Windows.Forms.DataGridViewCellCollection.Remove(System.Windows.Forms.DataGridViewCell cell) -> void
+virtual System.Windows.Forms.DataGridViewCellCollection.Add(System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> int
+virtual System.Windows.Forms.DataGridViewCellCollection.AddRange(params System.Windows.Forms.DataGridViewCell![]! dataGridViewCells) -> void
+virtual System.Windows.Forms.DataGridViewCellCollection.Contains(System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> bool
+virtual System.Windows.Forms.DataGridViewCellCollection.Insert(int index, System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> void
+virtual System.Windows.Forms.DataGridViewCellCollection.Remove(System.Windows.Forms.DataGridViewCell! cell) -> void
 virtual System.Windows.Forms.DataGridViewCellStyle.ApplyStyle(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
 virtual System.Windows.Forms.DataGridViewCellStyle.Clone() -> System.Windows.Forms.DataGridViewCellStyle!
 ~virtual System.Windows.Forms.DataGridViewCheckBoxCell.EditingCellFormattedValue.get -> object
@@ -5724,7 +5724,7 @@ System.Windows.Forms.DataGridViewCellCancelEventArgs.DataGridViewCellCancelEvent
 System.Windows.Forms.DataGridViewCellCancelEventArgs.RowIndex.get -> int
 System.Windows.Forms.DataGridViewCellCancelEventHandler
 System.Windows.Forms.DataGridViewCellCollection
-System.Windows.Forms.DataGridViewCellCollection.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler
+System.Windows.Forms.DataGridViewCellCollection.CollectionChanged -> System.ComponentModel.CollectionChangeEventHandler?
 System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs
 System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
 System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip.set -> void
