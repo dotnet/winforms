@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
@@ -14,8 +12,8 @@ namespace System.Windows.Forms;
 /// </summary>
 public class CurrencyManager : BindingManagerBase
 {
-    private object _dataSource;
-    private IList _list;
+    private object? _dataSource;
+    private IList? _list;
 
     private bool _bound;
     private bool _shouldBind = true;
@@ -27,15 +25,15 @@ public class CurrencyManager : BindingManagerBase
 
     private bool _inChangeRecordState;
     private bool _suspendPushDataInCurrentChanged;
-    private ItemChangedEventHandler _onItemChanged;
-    private ListChangedEventHandler _onListChanged;
+    private ItemChangedEventHandler? _onItemChanged;
+    private ListChangedEventHandler? _onListChanged;
     private readonly ItemChangedEventArgs _resetEvent = new(-1);
-    private EventHandler _onMetaDataChangedHandler;
+    private EventHandler? _onMetaDataChangedHandler;
 
     /// <summary>
     ///  Gets the type of the list.
     /// </summary>
-    protected Type finalType;
+    protected Type? finalType;
 
     /// <summary>
     ///  Occurs when the
@@ -43,19 +41,19 @@ public class CurrencyManager : BindingManagerBase
     ///  altered.
     /// </summary>
     [SRCategory(nameof(SR.CatData))]
-    public event ItemChangedEventHandler ItemChanged
+    public event ItemChangedEventHandler? ItemChanged
     {
         add => _onItemChanged += value;
         remove => _onItemChanged -= value;
     }
 
-    public event ListChangedEventHandler ListChanged
+    public event ListChangedEventHandler? ListChanged
     {
         add => _onListChanged += value;
         remove => _onListChanged -= value;
     }
 
-    internal CurrencyManager(object dataSource)
+    internal CurrencyManager(object? dataSource)
     {
         SetDataSource(dataSource);
     }
@@ -68,9 +66,9 @@ public class CurrencyManager : BindingManagerBase
     {
         get
         {
-            if (_list is IBindingList)
+            if (_list is IBindingList bindingList)
             {
-                return ((IBindingList)_list).AllowNew;
+                return bindingList.AllowNew;
             }
 
             if (_list is null)
@@ -90,9 +88,9 @@ public class CurrencyManager : BindingManagerBase
     {
         get
         {
-            if (_list is IBindingList)
+            if (_list is IBindingList bindingList)
             {
-                return ((IBindingList)_list).AllowEdit;
+                return bindingList.AllowEdit;
             }
 
             if (_list is null)
@@ -111,9 +109,9 @@ public class CurrencyManager : BindingManagerBase
     {
         get
         {
-            if (_list is IBindingList)
+            if (_list is IBindingList bindingList)
             {
-                return ((IBindingList)_list).AllowRemove;
+                return bindingList.AllowRemove;
             }
 
             if (_list is null)
@@ -146,7 +144,7 @@ public class CurrencyManager : BindingManagerBase
     /// <summary>
     ///  Gets the current item in the list.
     /// </summary>
-    public override object Current
+    public override object? Current
     {
         get
         {
@@ -154,7 +152,7 @@ public class CurrencyManager : BindingManagerBase
         }
     }
 
-    internal override Type BindType
+    internal override Type? BindType
     {
         get
         {
@@ -165,7 +163,7 @@ public class CurrencyManager : BindingManagerBase
     /// <summary>
     ///  Gets the data source of the list.
     /// </summary>
-    internal override object DataSource
+    internal override object? DataSource
     {
         get
         {
@@ -173,7 +171,7 @@ public class CurrencyManager : BindingManagerBase
         }
     }
 
-    private protected override void SetDataSource(object dataSource)
+    private protected override void SetDataSource(object? dataSource)
     {
         if (_dataSource != dataSource)
         {
@@ -182,23 +180,23 @@ public class CurrencyManager : BindingManagerBase
             _list = null;
             finalType = null;
 
-            object tempList = dataSource;
+            object? tempList = dataSource;
             if (tempList is Array)
             {
                 finalType = tempList.GetType();
                 tempList = (Array)tempList;
             }
 
-            if (tempList is IListSource)
+            if (tempList is IListSource listSource)
             {
-                tempList = ((IListSource)tempList).GetList();
+                tempList = listSource.GetList();
             }
 
-            if (tempList is IList)
+            if (tempList is IList list)
             {
                 finalType ??= tempList.GetType();
 
-                _list = (IList)tempList;
+                _list = list;
                 WireEvents(_list);
                 if (_list.Count > 0)
                 {
@@ -245,7 +243,7 @@ public class CurrencyManager : BindingManagerBase
     /// <summary>
     ///  Gets the list as an object.
     /// </summary>
-    public IList List
+    public IList? List
     {
         get
         {
@@ -254,7 +252,6 @@ public class CurrencyManager : BindingManagerBase
             // dataGrid to listen for MetaDataChanged events from the IBindingList
             // (basically we would have to wrap all calls to CurrencyManager::List with
             // a try/catch block.)
-            //
             return _list;
         }
     }
@@ -280,26 +277,29 @@ public class CurrencyManager : BindingManagerBase
                 value = 0;
             }
 
-            int count = _list.Count;
+            int count = _list!.Count;
             if (value >= count)
             {
                 value = count - 1;
             }
 
-            ChangeRecordState(value, listposition != value, true, true, false);       // true for endCurrentEdit
-                                                                                      // true for firingPositionChange notification
-                                                                                      // data will be pulled from controls anyway.
+            ChangeRecordState(
+                value,
+                validating: listposition != value,
+                endCurrentEdit: true,
+                firePositionChange: true,
+                pullData: false);
         }
     }
 
     /// <summary>
     ///  Gets or sets the object at the specified index.
     /// </summary>
-    internal object this[int index]
+    internal object? this[int index]
     {
         get
         {
-            if (index < 0 || index >= _list.Count)
+            if (index < 0 || index >= _list!.Count)
             {
                 throw new IndexOutOfRangeException(string.Format(SR.ListManagerNoValue, index.ToString(CultureInfo.CurrentCulture)));
             }
@@ -308,7 +308,7 @@ public class CurrencyManager : BindingManagerBase
         }
         set
         {
-            if (index < 0 || index >= _list.Count)
+            if (index < 0 || index >= _list!.Count)
             {
                 throw new IndexOutOfRangeException(string.Format(SR.ListManagerNoValue, index.ToString(CultureInfo.CurrentCulture)));
             }
@@ -329,8 +329,12 @@ public class CurrencyManager : BindingManagerBase
             throw new NotSupportedException(SR.CurrencyManagerCantAddNew);
         }
 
-        ChangeRecordState(_list.Count - 1, (Position != _list.Count - 1), (Position != _list.Count - 1), true, true);  // true for firingPositionChangeNotification
-                                                                                                                    // true for pulling data from the controls
+        ChangeRecordState(
+            _list.Count - 1,
+            validating: (Position != _list.Count - 1),
+            endCurrentEdit: (Position != _list.Count - 1),
+            firePositionChange: true,
+            pullData: true);
     }
 
     /// <summary>
@@ -340,7 +344,7 @@ public class CurrencyManager : BindingManagerBase
     {
         if (Count > 0)
         {
-            object item = (Position >= 0 && Position < _list.Count) ? _list[Position] : null;
+            object? item = (Position >= 0 && Position < _list!.Count) ? _list[Position] : null;
 
             if (item is IEditableObject iEditableItem)
             {
@@ -359,7 +363,7 @@ public class CurrencyManager : BindingManagerBase
             }
         }
     }
-
+#nullable disable
     private void ChangeRecordState(int newPosition, bool validating, bool endCurrentEdit, bool firePositionChange, bool pullData)
     {
         if (newPosition == -1 && _list.Count == 0)

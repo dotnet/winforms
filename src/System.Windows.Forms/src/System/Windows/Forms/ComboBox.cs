@@ -3144,7 +3144,7 @@ public partial class ComboBox : ListControl
             newItems = new object[DataManager.Count];
             for (int i = 0; i < newItems.Length; i++)
             {
-                newItems[i] = DataManager[i];
+                newItems[i] = DataManager[i]!;
             }
         }
         else if (savedItems is not null)
