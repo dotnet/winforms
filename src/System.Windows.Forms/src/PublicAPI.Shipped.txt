@@ -148,12 +148,12 @@ override System.Windows.Forms.DataGridViewColumn.InheritedStyle.get -> System.Wi
 ~override System.Windows.Forms.DataGridViewImageCell.ToString() -> string
 ~override System.Windows.Forms.DataGridViewImageCell.ValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewImageCell.ValueType.set -> void
-~override System.Windows.Forms.DataGridViewImageColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
-~override System.Windows.Forms.DataGridViewImageColumn.CellTemplate.set -> void
-~override System.Windows.Forms.DataGridViewImageColumn.Clone() -> object
-~override System.Windows.Forms.DataGridViewImageColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~override System.Windows.Forms.DataGridViewImageColumn.DefaultCellStyle.set -> void
-~override System.Windows.Forms.DataGridViewImageColumn.ToString() -> string
+override System.Windows.Forms.DataGridViewImageColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
+override System.Windows.Forms.DataGridViewImageColumn.CellTemplate.set -> void
+override System.Windows.Forms.DataGridViewImageColumn.Clone() -> object!
+override System.Windows.Forms.DataGridViewImageColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+override System.Windows.Forms.DataGridViewImageColumn.DefaultCellStyle.set -> void
+override System.Windows.Forms.DataGridViewImageColumn.ToString() -> string!
 override System.Windows.Forms.DataGridViewLinkCell.Clone() -> object!
 override System.Windows.Forms.DataGridViewLinkCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DataGridViewLinkCell.EditType.get -> System.Type?
@@ -472,12 +472,12 @@ System.Windows.Forms.DataGridViewColumn.HeaderText.set -> void
 ~System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.set -> void
 ~System.Windows.Forms.DataGridViewImageCell.Description.get -> string
 ~System.Windows.Forms.DataGridViewImageCell.Description.set -> void
-~System.Windows.Forms.DataGridViewImageColumn.Description.get -> string
-~System.Windows.Forms.DataGridViewImageColumn.Description.set -> void
-~System.Windows.Forms.DataGridViewImageColumn.Icon.get -> System.Drawing.Icon
-~System.Windows.Forms.DataGridViewImageColumn.Icon.set -> void
-~System.Windows.Forms.DataGridViewImageColumn.Image.get -> System.Drawing.Image
-~System.Windows.Forms.DataGridViewImageColumn.Image.set -> void
+System.Windows.Forms.DataGridViewImageColumn.Description.get -> string!
+System.Windows.Forms.DataGridViewImageColumn.Description.set -> void
+System.Windows.Forms.DataGridViewImageColumn.Icon.get -> System.Drawing.Icon?
+System.Windows.Forms.DataGridViewImageColumn.Icon.set -> void
+System.Windows.Forms.DataGridViewImageColumn.Image.get -> System.Drawing.Image?
+System.Windows.Forms.DataGridViewImageColumn.Image.set -> void
 ~System.Windows.Forms.DataGridViewLinkColumn.Text.get -> string
 ~System.Windows.Forms.DataGridViewLinkColumn.Text.set -> void
 System.Windows.Forms.DataGridViewRow.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject!
