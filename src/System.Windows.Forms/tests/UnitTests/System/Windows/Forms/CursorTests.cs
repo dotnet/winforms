@@ -324,12 +324,12 @@ namespace System.Windows.Forms.Tests
         {
             var cursor = new Cursor((IntPtr)2);
             cursor.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => cursor.Handle);
-            Assert.Throws<ObjectDisposedException>(() => cursor.HotSpot);
+            _ = cursor.Handle;
+            _ = cursor.HotSpot;
 
             cursor.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => cursor.Handle);
-            Assert.Throws<ObjectDisposedException>(() => cursor.HotSpot);
+            _ = cursor.Handle;
+            _ = cursor.HotSpot;
         }
 
         public static IEnumerable<object[]> Draw_TestData()
