@@ -361,6 +361,21 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     /// </summary>
     private new FlowLayoutPanel Control => base.Control as FlowLayoutPanel;
 
+    // per VSWhidbey #424850 adding this to this class...
+    protected override InheritanceAttribute InheritanceAttribute
+    {
+        get
+        {
+            if ((base.InheritanceAttribute == InheritanceAttribute.Inherited)
+                || (base.InheritanceAttribute == InheritanceAttribute.InheritedReadOnly))
+            {
+                return InheritanceAttribute.InheritedReadOnly;
+            }
+
+            return base.InheritanceAttribute;
+        }
+    }
+
     /// <summary>
     ///  Shadows the FlowDirection property.  We do this so that we can update the areas
     ///  covered by glyphs correctly. VSWhidbey# 232910.
@@ -620,7 +635,6 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         else
         {
             // We are doing a copy, so let's copy the controls.
-            //List<IComponent> tempList = new();
             ArrayList tempList = new ArrayList();
             tempList.AddRange(_dragControls);
 
