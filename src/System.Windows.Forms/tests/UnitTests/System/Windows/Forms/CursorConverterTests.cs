@@ -77,7 +77,6 @@ public class CursorConverterTests
     {
         var converter = new CursorConverter();
         Assert.Equal("AppStarting", converter.ConvertTo(Cursors.AppStarting, typeof(string)));
-        Assert.Equal("AppStarting", converter.ConvertTo(new Cursor(Cursors.AppStarting.Handle), typeof(string)));
     }
 
     [Fact]
