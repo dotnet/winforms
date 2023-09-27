@@ -136,12 +136,12 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         return !IsRtl
             ? direction
             : direction switch
-        {
-            FlowDirection.LeftToRight => FlowDirection.RightToLeft,
-            FlowDirection.RightToLeft => FlowDirection.LeftToRight,
-            FlowDirection.TopDown or FlowDirection.BottomUp => direction,
-            _ => direction,
-        };
+            {
+                FlowDirection.LeftToRight => FlowDirection.RightToLeft,
+                FlowDirection.RightToLeft => FlowDirection.LeftToRight,
+                FlowDirection.TopDown or FlowDirection.BottomUp => direction,
+                _ => direction,
+            };
     }
 
     private bool IsRtl => Control.RightToLeft == RightToLeft.Yes;
@@ -356,6 +356,48 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         return string.Format(performCopy ? SR.BehaviorServiceCopyControls : SR.BehaviorServiceMoveControls, _dragControls.Count);
     }
 
+    /// <summary>
+    ///  Simply returns the designer's control as a FlowLayoutPanel
+    /// </summary>
+    private new FlowLayoutPanel Control => base.Control as FlowLayoutPanel;
+
+    // per VSWhidbey #424850 adding this to this class...
+    protected override InheritanceAttribute InheritanceAttribute
+    {
+        get
+        {
+            if ((base.InheritanceAttribute == InheritanceAttribute.Inherited)
+                || (base.InheritanceAttribute == InheritanceAttribute.InheritedReadOnly))
+            {
+                return InheritanceAttribute.InheritedReadOnly;
+            }
+
+            return base.InheritanceAttribute;
+        }
+    }
+
+    /// <summary>
+    ///  Shadows the FlowDirection property.  We do this so that we can update the areas
+    ///  covered by glyphs correctly. VSWhidbey# 232910.
+    /// </summary>
+    private FlowDirection FlowDirection
+    {
+        get
+        {
+            return Control.FlowDirection;
+        }
+        set
+        {
+            if (value != Control.FlowDirection)
+            {
+                // Since we don't know which control is going to go where,
+                // we just invalidate the area corresponding to the ClientRectangle in the adornerWindow
+                BehaviorService.Invalidate(BehaviorService.ControlRectInAdornerWindow(Control));
+                Control.FlowDirection = value;
+            }
+        }
+    }
+
     private void DrawIBarBeforeRectangle(Rectangle bounds)
     {
         switch (RTLTranslateFlowDirection(FlowLayoutPanel.FlowDirection))
@@ -395,7 +437,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     }
 
     private void EraseIBar()
-        => ReDrawIBar(Point.Empty, Point.Empty);
+       => ReDrawIBar(Point.Empty, Point.Empty);
 
     /// <summary>
     ///  Given two points, we'll draw an I-Bar. Note that we only erase at our
@@ -593,7 +635,6 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         else
         {
             // We are doing a copy, so let's copy the controls.
-            //List<IComponent> tempList = new();
             ArrayList tempList = new ArrayList();
             tempList.AddRange(_dragControls);
 
