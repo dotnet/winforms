@@ -18,7 +18,7 @@ public class DataGridViewTextBoxColumn : DataGridViewColumn
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public override DataGridViewCell CellTemplate
+    public override DataGridViewCell? CellTemplate
     {
         get => base.CellTemplate;
         set
@@ -50,7 +50,7 @@ public class DataGridViewTextBoxColumn : DataGridViewColumn
         {
             if (MaxInputLength != value)
             {
-                TextBoxCellTemplate.MaxInputLength = value;
+                TextBoxCellTemplate!.MaxInputLength = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
@@ -75,7 +75,7 @@ public class DataGridViewTextBoxColumn : DataGridViewColumn
         set => base.SortMode = value;
     }
 
-    private DataGridViewTextBoxCell TextBoxCellTemplate => (DataGridViewTextBoxCell)CellTemplate;
+    private DataGridViewTextBoxCell? TextBoxCellTemplate => (DataGridViewTextBoxCell?)CellTemplate;
 
     public override string ToString()
     {

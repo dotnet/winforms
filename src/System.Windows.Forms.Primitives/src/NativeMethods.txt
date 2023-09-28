@@ -381,6 +381,15 @@ IFontDisp
 IGetOleObject
 IGetVBAObject
 IGlobalInterfaceTable
+IHTMLDocument
+IHTMLDocument2
+IHTMLDocument3
+IHTMLDocument4
+IHTMLElement2
+IHTMLElement3
+IHTMLElementCollection
+IHTMLWindow3
+IHTMLWindow4
 IMAGE_LIST_WRITE_STREAM_FLAGS
 ImageList_Add
 ImageList_Create
@@ -462,6 +471,7 @@ IVBFormat
 IVBGetControl
 IViewObject
 IViewObject2
+IWebBrowser2
 KF_*
 KillTimer
 LB_*

@@ -167,7 +167,7 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
             return null;
         }
 
-        Type toolType = tool.GetType(_designerHost);
+        Type? toolType = tool.GetType(_designerHost);
 
         if (typeof(StatusStrip).IsAssignableFrom(toolType))
         {
@@ -257,8 +257,11 @@ internal class ToolStripContainerDesigner : ParentControlDesigner
                 {
                     foreach (object comp in selComponents)
                     {
-                        ToolStripContainer container = ContainerParent((Control)comp)!;
-                        addGlyphs = container == _toolStripContainer;
+                        if (comp is Control control)
+                        {
+                            ToolStripContainer? container = ContainerParent(control);
+                            addGlyphs = container == _toolStripContainer;
+                        }
                     }
                 }
 

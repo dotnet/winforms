@@ -72,10 +72,9 @@ internal partial class OleDragDropHandler
             }
         }
 
-        protected override IComponent[]? CreateComponentsCore(IDesignerHost host, IDictionary? defaultValues)
+        protected override IComponent[]? CreateComponentsCore(IDesignerHost? host, IDictionary? defaultValues)
         {
-            IDesignerSerializationService? ds = host.GetService<IDesignerSerializationService>();
-            if (ds is null || _serializationData is null)
+            if (!host.TryGetService(out IDesignerSerializationService? ds) || _serializationData is null)
             {
                 return null;
             }
@@ -85,7 +84,7 @@ internal partial class OleDragDropHandler
             List<IComponent> components = new();
             foreach (object item in objects)
             {
-                if (item is not null and IComponent component)
+                if (item is IComponent component)
                 {
                     components.Add(component);
                 }
@@ -93,36 +92,26 @@ internal partial class OleDragDropHandler
 
             // Parent and locate each Control
             defaultValues ??= new Dictionary<string, object>();
-            Control? parentControl = defaultValues["Parent"] as Control;
-            if (parentControl is not null)
+            if (defaultValues["Parent"] is Control parentControl && host.GetDesigner(parentControl) is ParentControlDesigner parentControlDesigner)
             {
-                ParentControlDesigner? parentControlDesigner = host.GetDesigner(parentControl) as ParentControlDesigner;
-                if (parentControlDesigner is not null)
+                // Determine bounds of all controls
+                Rectangle bounds = Rectangle.Empty;
+
+                foreach (IComponent component in components)
                 {
-                    // Determine bounds of all controls
-                    Rectangle bounds = Rectangle.Empty;
-
-                    foreach (IComponent component in components)
+                    if (component is Control { Parent: null } childControl && childControl != parentControl)
                     {
-                        Control? childControl = component as Control;
-                        if (childControl is not null && childControl != parentControl && childControl.Parent is null)
-                        {
-                            bounds = bounds.IsEmpty ? childControl.Bounds : Rectangle.Union(bounds, childControl.Bounds);
-                        }
+                        bounds = bounds.IsEmpty ? childControl.Bounds : Rectangle.Union(bounds, childControl.Bounds);
                     }
+                }
 
-                    defaultValues.Remove("Size"); // don't care about the drag size
-                    foreach (IComponent component in components)
+                defaultValues.Remove("Size"); // don't care about the drag size
+                foreach (IComponent component in components)
+                {
+                    if (component is Control { Parent: null } childControl and not Form { TopLevel: true }) // Don't add top-level forms
                     {
-                        Control? childControl = component as Control;
-                        Form? form = childControl as Form;
-                        if (childControl is not null
-                            && !(form is not null && form.TopLevel) // Don't add top-level forms
-                            && childControl.Parent is null)
-                        {
-                            defaultValues["Offset"] = new Size(childControl.Bounds.X - bounds.X, childControl.Bounds.Y - bounds.Y);
-                            parentControlDesigner.AddControl(childControl, defaultValues);
-                        }
+                        defaultValues["Offset"] = new Size(childControl.Bounds.X - bounds.X, childControl.Bounds.Y - bounds.Y);
+                        parentControlDesigner.AddControl(childControl, defaultValues);
                     }
                 }
             }
@@ -137,7 +126,7 @@ internal partial class OleDragDropHandler
             {
                 foreach (IComponent component in components)
                 {
-                    ComponentTray.TrayControl trayControl = ComponentTray.GetTrayControlFromComponent(component);
+                    ComponentTray.TrayControl? trayControl = ComponentTray.GetTrayControlFromComponent(component);
 
                     if (trayControl is not null)
                     {
@@ -155,6 +144,6 @@ internal partial class OleDragDropHandler
             return components.ToArray();
         }
 
-        protected override IComponent[]? CreateComponentsCore(IDesignerHost host) => CreateComponentsCore(host, null);
+        protected override IComponent[]? CreateComponentsCore(IDesignerHost? host) => CreateComponentsCore(host, null);
     }
 }

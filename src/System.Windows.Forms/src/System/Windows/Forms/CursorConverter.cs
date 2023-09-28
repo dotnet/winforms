@@ -86,30 +86,9 @@ public class CursorConverter : TypeConverter
         {
             if (destinationType == typeof(string))
             {
-                PropertyInfo[] props = GetProperties();
-                int bestMatch = -1;
-
-                for (int i = 0; i < props.Length; i++)
+                if (cursor.CursorsProperty is string propertyName)
                 {
-                    PropertyInfo prop = props[i];
-                    object[]? tempIndex = null;
-                    Cursor? c = (Cursor?)prop.GetValue(null, tempIndex);
-                    if (c == cursor)
-                    {
-                        if (ReferenceEquals(c, value))
-                        {
-                            return prop.Name;
-                        }
-                        else
-                        {
-                            bestMatch = i;
-                        }
-                    }
-                }
-
-                if (bestMatch != -1)
-                {
-                    return props[bestMatch].Name;
+                    return propertyName;
                 }
 
                 // We throw here because we cannot meaningfully convert a custom

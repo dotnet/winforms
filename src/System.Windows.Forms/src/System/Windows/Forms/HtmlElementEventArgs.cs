@@ -3,7 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop.Mshtml;
+using Windows.Win32.Web.MsHtml;
 
 namespace System.Windows.Forms;
 
@@ -11,7 +11,7 @@ public sealed class HtmlElementEventArgs : EventArgs
 {
     private readonly HtmlShimManager _shimManager;
 
-    internal HtmlElementEventArgs(HtmlShimManager shimManager, IHTMLEventObj eventObj)
+    internal HtmlElementEventArgs(HtmlShimManager shimManager, Interop.Mshtml.IHTMLEventObj eventObj)
     {
         NativeHTMLEventObj = eventObj;
         Debug.Assert(NativeHTMLEventObj is not null, "The event object should implement IHTMLEventObj");
@@ -19,7 +19,7 @@ public sealed class HtmlElementEventArgs : EventArgs
         _shimManager = shimManager;
     }
 
-    private IHTMLEventObj NativeHTMLEventObj { get; }
+    private Interop.Mshtml.IHTMLEventObj NativeHTMLEventObj { get; }
 
     public MouseButtons MouseButtonsPressed
     {
@@ -101,23 +101,23 @@ public sealed class HtmlElementEventArgs : EventArgs
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public HtmlElement? FromElement
+    public unsafe HtmlElement? FromElement
     {
         get
         {
-            IHTMLElement htmlElement = NativeHTMLEventObj.GetFromElement();
-            return htmlElement is null ? null : new HtmlElement(_shimManager, htmlElement);
+            IHTMLElement.Interface htmlElement = NativeHTMLEventObj.GetFromElement();
+            return htmlElement is null ? null : new HtmlElement(_shimManager, ComHelpers.GetComPointer<IHTMLElement>(htmlElement));
         }
     }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public HtmlElement? ToElement
+    public unsafe HtmlElement? ToElement
     {
         get
         {
-            IHTMLElement htmlElement = NativeHTMLEventObj.GetToElement();
-            return htmlElement is null ? null : new HtmlElement(_shimManager, htmlElement);
+            IHTMLElement.Interface htmlElement = NativeHTMLEventObj.GetToElement();
+            return htmlElement is null ? null : new HtmlElement(_shimManager, ComHelpers.GetComPointer<IHTMLElement>(htmlElement));
         }
     }
 }
