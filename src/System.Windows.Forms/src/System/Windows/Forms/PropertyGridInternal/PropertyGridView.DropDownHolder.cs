@@ -551,7 +551,7 @@ internal partial class PropertyGridView
         /// <summary>
         ///  Set the control to host in this <see cref="DropDownHolder"/>.
         /// </summary>
-        public void SetDropDownControl(Control control, bool resizable)
+        public void SetDropDownControl(Control? control, bool resizable)
         {
             _resizable = resizable;
             Font = _gridView.Font;

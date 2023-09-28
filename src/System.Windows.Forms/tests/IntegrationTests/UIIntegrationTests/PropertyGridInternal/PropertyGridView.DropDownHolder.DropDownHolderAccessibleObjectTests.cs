@@ -22,8 +22,9 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
             grid.SelectedEntry = grid[nameof(Button.AccessibleRole)];
 
             grid.PopupEditorAndClose(() =>
-                Assert.Equal(grid.SelectedEntry.AccessibilityObject,
-                    grid.GridView.DropDownControlHolder.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent)));
+                Assert.Equal(
+                    grid.SelectedEntry.AccessibilityObject,
+                    grid.GridView.DropDownControlHolder!.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent)));
 
             return Task.CompletedTask;
         });
@@ -37,7 +38,7 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
             grid.SelectedEntry = grid[nameof(Button.AccessibleRole)];
 
             grid.PopupEditorAndClose(() =>
-                Assert.Null(grid.GridView.DropDownControlHolder.AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling)));
+                Assert.Null(grid.GridView.DropDownControlHolder!.AccessibilityObject.FragmentNavigate(NavigateDirection.PreviousSibling)));
 
             return Task.CompletedTask;
         });
@@ -51,8 +52,9 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
             grid.SelectedEntry = grid[nameof(Button.AccessibleRole)];
 
             grid.PopupEditorAndClose(() =>
-                Assert.Equal(grid.GridView.EditAccessibleObject,
-                    grid.GridView.DropDownControlHolder.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling)));
+                Assert.Equal(
+                    grid.GridView.EditAccessibleObject,
+                    grid.GridView.DropDownControlHolder!.AccessibilityObject.FragmentNavigate(NavigateDirection.NextSibling)));
 
             return Task.CompletedTask;
         });
@@ -67,9 +69,11 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
 
             grid.PopupEditorAndClose(() =>
             {
-                Assert.Equal(grid.GridView.DropDownListBoxAccessibleObject,
-                    grid.GridView.DropDownControlHolder.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
-                Assert.Equal(grid.GridView.DropDownListBoxAccessibleObject,
+                Assert.Equal(
+                    grid.GridView.DropDownListBoxAccessibleObject,
+                    grid.GridView.DropDownControlHolder!.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Equal(
+                    grid.GridView.DropDownListBoxAccessibleObject,
                     grid.GridView.DropDownControlHolder.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
             });
 
@@ -86,7 +90,7 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
 
             grid.PopupEditorAndClose(() =>
             {
-                Assert.Null(grid.GridView.DropDownControlHolder.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
+                Assert.Null(grid.GridView.DropDownControlHolder!.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
                 Assert.Null(grid.GridView.DropDownControlHolder.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
             });
 

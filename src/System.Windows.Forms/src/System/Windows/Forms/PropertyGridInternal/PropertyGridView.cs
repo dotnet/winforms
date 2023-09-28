@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -55,13 +53,13 @@ internal sealed partial class PropertyGridView :
 
     private static Point InvalidPosition { get; } = new(int.MinValue, int.MinValue);
 
-    private Font _boldFont;
+    private Font? _boldFont;
     private Color _grayTextColor;
 
     // For backwards compatibility of default colors
     private bool _grayTextColorModified;
 
-    private GridEntryCollection _allGridEntries;
+    private GridEntryCollection? _allGridEntries;
 
     // Row information
     public int TotalProperties { get; private set; } = -1;
@@ -73,37 +71,37 @@ internal sealed partial class PropertyGridView :
 
     // current selected row and tooltip.
     private int _selectedRow = -1;
-    private GridEntry _selectedGridEntry;
+    private GridEntry? _selectedGridEntry;
     private int _tipInfo = -1;
 
     // Editors & controls
-    private GridViewTextBox _editTextBox;
-    private DropDownButton _dropDownButton;
-    private DropDownButton _dialogButton;
-    private GridViewListBox _listBox;
-    private DropDownHolder _dropDownHolder;
+    private GridViewTextBox? _editTextBox;
+    private DropDownButton? _dropDownButton;
+    private DropDownButton? _dialogButton;
+    private GridViewListBox? _listBox;
+    private DropDownHolder? _dropDownHolder;
     private Rectangle _lastClientRect = Rectangle.Empty;
-    private Control _currentEditor;
-    private ScrollBar _scrollBar;
-    private GridToolTip _toolTip;
-    private GridErrorDialog _errorDialog;
+    private Control? _currentEditor;
+    private ScrollBar? _scrollBar;
+    private GridToolTip? _toolTip;
+    private GridErrorDialog? _errorDialog;
 
     private Flags _flags = Flags.NeedsRefresh | Flags.IsNewSelection | Flags.NeedUpdateUIBasedOnFont;
     private ErrorState _errorState = ErrorState.None;
 
     private Point _location = new(1, 1);
 
-    private string _originalTextValue;          // original text, in case of ESC
+    private string? _originalTextValue;          // original text, in case of ESC
     private int _cumulativeVerticalWheelDelta;
     private long _rowSelectTime;
     private Point _rowSelectPos = Point.Empty;  // the position that we clicked on a row to test for double clicks
     private Point _lastMouseDown = InvalidPosition;
     private int _lastMouseMove;
-    private GridEntry _lastClickedEntry;
+    private GridEntry? _lastClickedEntry;
 
-    private IServiceProvider _serviceProvider;
-    private IHelpService _topHelpService;
-    private IHelpService _helpService;
+    private IServiceProvider? _serviceProvider;
+    private IHelpService? _topHelpService;
+    private IHelpService? _helpService;
 
     private readonly EventHandler _valueClick;
     private readonly EventHandler _labelClick;
@@ -114,7 +112,7 @@ internal sealed partial class PropertyGridView :
 
     private int _cachedRowHeight = -1;
 
-    private GridPositionData _positionData;
+    private GridPositionData? _positionData;
 
     public PropertyGridView(IServiceProvider serviceProvider, PropertyGrid propertyGrid)
         : base()
@@ -193,7 +191,7 @@ internal sealed partial class PropertyGridView :
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   The visisbility of this button is primarily driven through associated <see cref="UITypeEditor"/>s for
+    ///   The visibility of this button is primarily driven through associated <see cref="UITypeEditor"/>s for
     ///   the selected row's <see cref="GridEntry"/>.
     ///  </para>
     /// </remarks>
@@ -234,7 +232,7 @@ internal sealed partial class PropertyGridView :
     /// </summary>
     /// <remarks>
     ///  <para>
-    ///   The visisbility of this button is primarily driven through associated <see cref="UITypeEditor"/>s for
+    ///   The visibility of this button is primarily driven through associated <see cref="UITypeEditor"/>s for
     ///   the selected row's <see cref="GridEntry"/>.
     ///  </para>
     /// </remarks>
@@ -339,7 +337,7 @@ internal sealed partial class PropertyGridView :
     /// <summary>
     ///  Represents the DropDownListBox accessible object.
     /// </summary>
-    internal AccessibleObject DropDownListBoxAccessibleObject
+    internal AccessibleObject? DropDownListBoxAccessibleObject
         => DropDownListBox.Visible ? DropDownListBox.AccessibilityObject : null;
 
     internal bool DrawValuesRightToLeft
@@ -347,8 +345,9 @@ internal sealed partial class PropertyGridView :
             && _editTextBox.IsHandleCreated
             && ((WINDOW_EX_STYLE)PInvoke.GetWindowLong(_editTextBox, WINDOW_LONG_PTR_INDEX.GWL_EXSTYLE)).HasFlag(WINDOW_EX_STYLE.WS_EX_RTLREADING);
 
-    internal DropDownHolder DropDownControlHolder => _dropDownHolder;
+    internal DropDownHolder? DropDownControlHolder => _dropDownHolder;
 
+    [MemberNotNullWhen(true, nameof(DropDownControlHolder))]
     internal bool DropDownVisible => _dropDownHolder is not null && _dropDownHolder.Visible;
 
     public bool FocusInside => ContainsFocus || DropDownVisible;
@@ -481,7 +480,8 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    internal GridEntry SelectedGridEntry
+    [DisallowNull]
+    internal GridEntry? SelectedGridEntry
     {
         get => _selectedGridEntry;
         set
@@ -514,7 +514,7 @@ internal sealed partial class PropertyGridView :
     ///  Returns or sets the <see cref="IServiceProvider"/> the <see cref="PropertyGridView"/> will use to obtain
     ///  services. This may be null.
     /// </summary>
-    public IServiceProvider ServiceProvider
+    public IServiceProvider? ServiceProvider
     {
         get => _serviceProvider;
         set
@@ -589,7 +589,7 @@ internal sealed partial class PropertyGridView :
     /// <summary>
     ///  Gets the top level grid entries.
     /// </summary>
-    internal GridEntryCollection TopLevelGridEntries { get; private set; }
+    internal GridEntryCollection? TopLevelGridEntries { get; private set; }
 
     internal GridEntryCollection AccessibilityGetGridEntries() => GetAllGridEntries();
 
@@ -704,7 +704,7 @@ internal sealed partial class PropertyGridView :
 
     internal GridPositionData CaptureGridPositionData() => new(this);
 
-    private void ClearGridEntryEvents(GridEntryCollection entries, int startIndex, int count)
+    private void ClearGridEntryEvents(GridEntryCollection? entries, int startIndex, int count)
     {
         CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:ClearGridEntryEvents");
         if (entries is null)
@@ -769,13 +769,13 @@ internal sealed partial class PropertyGridView :
 
             if (_dropDownHolder.Component == DropDownListBox && _flags.HasFlag(Flags.DropDownCommit))
             {
-                OnListClick(null, null);
+                OnListClick(sender: null, e: null);
             }
 
             EditTextBox.Filter = false;
 
             // Disable the drop down holder so it won't steal the focus back.
-            _dropDownHolder.SetDropDownControl(null, resizable: false);
+            _dropDownHolder.SetDropDownControl(control: null, resizable: false);
             _dropDownHolder.Visible = false;
 
             // When we disable the dropdown holder focus will be lost, so put it onto one of our children.
@@ -991,7 +991,7 @@ internal sealed partial class PropertyGridView :
         static Bitmap GetBitmapFromIcon(string iconName, int iconWidth, int iconHeight)
         {
             Size desiredSize = new(iconWidth, iconHeight);
-            using Stream stream = typeof(PropertyGrid).Module.Assembly.GetManifestResourceStream(typeof(PropertyGrid), iconName);
+            using Stream stream = typeof(PropertyGrid).Module.Assembly.GetManifestResourceStream(typeof(PropertyGrid), iconName)!;
             using Icon icon = new(stream, desiredSize);
             Bitmap bitmap = icon.ToBitmap();
 
@@ -1024,7 +1024,7 @@ internal sealed partial class PropertyGridView :
             _listBox = null;
             _dropDownHolder = null;
 
-            OwnerGrid = null;
+            OwnerGrid = null!;
             TopLevelGridEntries = null;
             _allGridEntries = null;
             _serviceProvider = null;
@@ -1100,10 +1100,10 @@ internal sealed partial class PropertyGridView :
         }
         else
         {
-            IDataObject dataObj = Clipboard.GetDataObject();
+            IDataObject? dataObj = Clipboard.GetDataObject();
             if (dataObj is not null)
             {
-                string data = (string)dataObj.GetData(typeof(string));
+                string? data = (string?)dataObj.GetData(typeof(string));
                 if (data is not null)
                 {
                     EditTextBox.Focus();
@@ -1329,7 +1329,7 @@ internal sealed partial class PropertyGridView :
             {
                 object[] values = gridEntry.GetPropertyValueList();
 
-                if (values is null || index >= (values.Length - 1))
+                if (index >= (values.Length - 1))
                 {
                     index = 0;
                 }
@@ -1427,14 +1427,14 @@ internal sealed partial class PropertyGridView :
         return -1;
     }
 
-    public new object GetService(Type classService)
+    public new object? GetService(Type classService)
     {
         if (classService == typeof(IWindowsFormsEditorService))
         {
             return this;
         }
 
-        if (ServiceProvider is not null)
+        if (_serviceProvider is not null)
         {
             return _serviceProvider.GetService(classService);
         }
@@ -1457,10 +1457,10 @@ internal sealed partial class PropertyGridView :
 
     public int ValueWidth => (int)(LabelWidth * (_labelRatio - 1));
 
-    public void DropDownControl(Control control)
+    public void DropDownControl(Control? control)
     {
         CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:DropDownControl");
-        s_gridViewDebugPaint.TraceVerbose($"DropDownControl(ctl = {control.GetType().Name})");
+        s_gridViewDebugPaint.TraceVerbose($"DropDownControl(ctl = {control!.GetType().Name})");
 
         _dropDownHolder ??= new(this);
         _dropDownHolder.Visible = false;
@@ -1549,7 +1549,7 @@ internal sealed partial class PropertyGridView :
         // If it's the TAB key, we keep it since we'll give them focus with it.
         if (_dropDownHolder?.Visible == true && m.MsgInternal == PInvoke.WM_KEYDOWN && (Keys)(nint)m.WParamInternal != Keys.Tab)
         {
-            Control control = _dropDownHolder.Component;
+            Control? control = _dropDownHolder.Component;
             if (control is not null)
             {
                 m.ResultInternal = PInvoke.SendMessage(control, m.MsgInternal, m.WParamInternal, m.LParamInternal);
@@ -1559,7 +1559,7 @@ internal sealed partial class PropertyGridView :
 
         return false;
     }
-
+#nullable disable
     private bool FilterReadOnlyEditKeyPress(char keyChar)
     {
         GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
@@ -1760,7 +1760,7 @@ internal sealed partial class PropertyGridView :
             object value = gridEntry.PropertyValue;
             string textValue = gridEntry.TypeConverter.ConvertToString(gridEntry, value);
 
-            if (values is null || values.Length == 0)
+            if (values.Length == 0)
             {
                 return -1;
             }
@@ -2503,10 +2503,6 @@ internal sealed partial class PropertyGridView :
     {
         object value = entry.PropertyValue;
         object[] values = entry.GetPropertyValueList();
-        if (values is null)
-        {
-            return false;
-        }
 
         for (int i = 0; i < values.Length; i++)
         {

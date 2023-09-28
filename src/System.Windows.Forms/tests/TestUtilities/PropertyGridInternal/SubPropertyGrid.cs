@@ -17,7 +17,7 @@ public class SubPropertyGrid<TSelected> : PropertyGrid where TSelected : new()
 
     internal PropertyGridView GridView => this.TestAccessor().Dynamic._gridView;
 
-    internal GridEntry SelectedEntry
+    internal GridEntry? SelectedEntry
     {
         get => GridView.SelectedGridEntry;
         set => SelectedGridItem = value;

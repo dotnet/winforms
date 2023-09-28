@@ -182,7 +182,8 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests : ControlTestBase
             grid.SelectedEntry = grid[nameof(Button.AccessibleRole)];
 
             grid.PopupEditorAndClose(() =>
-                Assert.Equal(grid.GridView.DropDownControlHolder.AccessibilityObject,
+                Assert.Equal(
+                    grid.GridView.DropDownControlHolder!.AccessibilityObject,
                     grid.SelectedEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild)));
 
             return Task.CompletedTask;
