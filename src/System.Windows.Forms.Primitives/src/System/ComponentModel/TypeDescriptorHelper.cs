@@ -28,6 +28,12 @@ internal static class TypeDescriptorHelper
         return (T?)TypeDescriptor.GetEditor(type, typeof(T));
     }
 
+    public static bool TryGetEditor<T>(object component, [NotNullWhen(true)] out T? editor) where T : class
+    {
+        editor = TypeDescriptor.GetEditor(component, typeof(T)) as T;
+        return editor is not null;
+    }
+
     public static bool TryGetPropertyValue<T>(
         object component,
         string name,
