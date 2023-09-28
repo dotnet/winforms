@@ -26,20 +26,18 @@ namespace System.Windows.Forms.Design;
 internal class CommandSet : IDisposable
 {
     protected ISite site;
-    private readonly CommandSetItem[] commandSet;
-    private IMenuCommandService menuService;
-    private IEventHandlerService eventService;
+    private readonly CommandSetItem[] _commandSet;
+    private IMenuCommandService _menuService;
+    private IEventHandlerService _eventService;
 
     // Selection service fields.  We keep some state about the
     // currently selected components so we can determine proper
     // command enabling quickly.
     //
-    private ISelectionService selectionService;
     protected int selCount;                // the current selection count
     protected IComponent primarySelection;        // the primary selection, or null
-    private bool selectionInherited;      // the selection contains inherited components
+    private bool _selectionInherited;      // the selection contains inherited components
     protected bool controlsOnlySelection;   // is the selection containing only controls or are there components in it?
-    private int selectionVersion = 1;        // the counter of selection changes.
 
     // Selection sort constants
     //
@@ -51,10 +49,10 @@ internal class CommandSet : IDisposable
 
     //these are used for snapping control via keyboard movement
     protected DragAssistanceManager dragManager; //point to the snapline engine (only valid between keydown and timer expiration)
-    private Timer snapLineTimer; //used to track the time from when a snapline is rendered until it should expire
-    private BehaviorService behaviorService; //demand created pointer to the behaviorservice
-    private StatusCommandUI statusCommandUI; //Used to update the statusBar Information.
-    private readonly IUIService uiService;
+    private Timer _snapLineTimer; //used to track the time from when a snapline is rendered until it should expire
+    private BehaviorService _behaviorService; //demand created pointer to the behaviorservice
+    private StatusCommandUI _statusCommandUI; //Used to update the statusBar Information.
+    private readonly IUIService _uiService;
 
     /// <summary>
     ///  Creates a new CommandSet object.  This object implements the set
@@ -64,10 +62,10 @@ internal class CommandSet : IDisposable
     {
         this.site = site;
 
-        eventService = (IEventHandlerService)site.GetService(typeof(IEventHandlerService));
-        Debug.Assert(eventService is not null, "Command set must have the event service.  Is command set being initialized too early?");
+        _eventService = (IEventHandlerService)site.GetService(typeof(IEventHandlerService));
+        Debug.Assert(_eventService is not null, "Command set must have the event service.  Is command set being initialized too early?");
 
-        eventService.EventHandlerChanged += new EventHandler(OnEventHandlerChanged);
+        _eventService.EventHandlerChanged += new EventHandler(OnEventHandlerChanged);
 
         IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
         Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host is not null, "IDesignerHost not found");
@@ -77,13 +75,13 @@ internal class CommandSet : IDisposable
             host.Activated += new EventHandler(UpdateClipboardItems);
         }
 
-        statusCommandUI = new StatusCommandUI(site);
+        _statusCommandUI = new StatusCommandUI(site);
 
-        uiService = site.GetService(typeof(IUIService)) as IUIService;
+        _uiService = site.GetService(typeof(IUIService)) as IUIService;
 
         // Establish our set of commands
         //
-        commandSet = new CommandSetItem[]
+        _commandSet = new CommandSetItem[]
         {
             // Editing commands
             new(
@@ -91,28 +89,28 @@ internal class CommandSet : IDisposable
                 new EventHandler(OnStatusDelete),
                 new EventHandler(OnMenuDelete),
                 StandardCommands.Delete,
-                uiService),
+                _uiService),
 
             new(
                 this,
                 new EventHandler(OnStatusCopy),
                 new EventHandler(OnMenuCopy),
                 StandardCommands.Copy,
-                uiService),
+                _uiService),
 
             new(
                 this,
                 new EventHandler(OnStatusCut),
                 new EventHandler(OnMenuCut),
                 StandardCommands.Cut,
-                uiService),
+                _uiService),
 
             new ImmediateCommandSetItem(
                 this,
                 new EventHandler(OnStatusPaste),
                 new EventHandler(OnMenuPaste),
                 StandardCommands.Paste,
-                uiService),
+                _uiService),
 
             // Miscellaneous commands
             new(
@@ -120,14 +118,14 @@ internal class CommandSet : IDisposable
                 new EventHandler(OnStatusSelectAll),
                 new EventHandler(OnMenuSelectAll),
                 StandardCommands.SelectAll, true,
-                uiService),
+                _uiService),
 
             new(
                 this,
                 new EventHandler(OnStatusAlways),
                 new EventHandler(OnMenuDesignerProperties),
                 MenuCommands.DesignerProperties,
-                uiService),
+                _uiService),
 
             // Keyboard commands
             new(
@@ -135,42 +133,42 @@ internal class CommandSet : IDisposable
                 new EventHandler(OnStatusAlways),
                 new EventHandler(OnKeyCancel),
                 MenuCommands.KeyCancel,
-                uiService),
+                _uiService),
 
             new(
                 this,
                 new EventHandler(OnStatusAlways),
                 new EventHandler(OnKeyCancel),
                 MenuCommands.KeyReverseCancel,
-                uiService),
+                _uiService),
 
             new(
                 this,
                 new EventHandler(OnStatusPrimarySelection),
                 new EventHandler(OnKeyDefault),
                 MenuCommands.KeyDefaultAction, true,
-                uiService),
+                _uiService),
 
             new(
                 this,
                 new EventHandler(OnStatusAnySelection),
                 new EventHandler(OnKeyMove),
                 MenuCommands.KeyMoveUp, true,
-                uiService),
+                _uiService),
 
             new(
                 this,
                 new EventHandler(OnStatusAnySelection),
                 new EventHandler(OnKeyMove),
                 MenuCommands.KeyMoveDown, true,
-                uiService),
+                _uiService),
 
             new(
                 this,
                 new EventHandler(OnStatusAnySelection),
                 new EventHandler(OnKeyMove),
                 MenuCommands.KeyMoveLeft, true,
-                uiService),
+                _uiService),
 
             new(
                 this,
@@ -183,43 +181,43 @@ internal class CommandSet : IDisposable
                 new EventHandler(OnStatusAnySelection),
                 new EventHandler(OnKeyMove),
                 MenuCommands.KeyNudgeUp, true,
-                uiService),
+                _uiService),
 
             new(
                 this,
                 new EventHandler(OnStatusAnySelection),
                 new EventHandler(OnKeyMove),
                 MenuCommands.KeyNudgeDown, true,
-                uiService),
+                _uiService),
 
             new(
                 this,
                 new EventHandler(OnStatusAnySelection),
                 new EventHandler(OnKeyMove),
                 MenuCommands.KeyNudgeLeft, true,
-                uiService),
+                _uiService),
 
             new(
                 this,
                 new EventHandler(OnStatusAnySelection),
                 new EventHandler(OnKeyMove),
                 MenuCommands.KeyNudgeRight, true,
-                uiService),
+                _uiService),
         };
 
-        selectionService = (ISelectionService)site.GetService(typeof(ISelectionService));
-        Debug.Assert(selectionService is not null, "CommandSet relies on the selection service, which is unavailable.");
-        if (selectionService is not null)
+        SelectionService = (ISelectionService)site.GetService(typeof(ISelectionService));
+        Debug.Assert(SelectionService is not null, "CommandSet relies on the selection service, which is unavailable.");
+        if (SelectionService is not null)
         {
-            selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
+            SelectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
         }
 
-        menuService = (IMenuCommandService)site.GetService(typeof(IMenuCommandService));
-        if (menuService is not null)
+        _menuService = (IMenuCommandService)site.GetService(typeof(IMenuCommandService));
+        if (_menuService is not null)
         {
-            for (int i = 0; i < commandSet.Length; i++)
+            for (int i = 0; i < _commandSet.Length; i++)
             {
-                menuService.AddCommand(commandSet[i]);
+                _menuService.AddCommand(_commandSet[i]);
             }
         }
 
@@ -239,9 +237,9 @@ internal class CommandSet : IDisposable
     {
         get
         {
-            behaviorService ??= GetService(typeof(BehaviorService)) as BehaviorService;
+            _behaviorService ??= GetService(typeof(BehaviorService)) as BehaviorService;
 
-            return behaviorService;
+            return _behaviorService;
         }
     }
 
@@ -253,9 +251,9 @@ internal class CommandSet : IDisposable
     {
         get
         {
-            menuService ??= (IMenuCommandService)GetService(typeof(IMenuCommandService));
+            _menuService ??= (IMenuCommandService)GetService(typeof(IMenuCommandService));
 
-            return menuService;
+            return _menuService;
         }
     }
 
@@ -263,21 +261,12 @@ internal class CommandSet : IDisposable
     ///  Retrieves the selection service, which the command set
     ///  typically uses quite a bit.
     /// </summary>
-    protected ISelectionService SelectionService
-    {
-        get
-        {
-            return selectionService;
-        }
-    }
+    protected ISelectionService SelectionService { get; private set; }
 
-    protected int SelectionVersion
-    {
-        get
-        {
-            return selectionVersion;
-        }
-    }
+    /// <summary>
+    ///  This is the counter of selection changes.
+    /// </summary>
+    protected int SelectionVersion { get; private set; } = 1;
 
     /// <summary>
     ///  This property demand creates our snaplinetimer used to
@@ -288,17 +277,17 @@ internal class CommandSet : IDisposable
     {
         get
         {
-            if (snapLineTimer is null)
+            if (_snapLineTimer is null)
             {
                 //instantiate our snapline timer
-                snapLineTimer = new Timer
+                _snapLineTimer = new Timer
                 {
                     Interval = DesignerUtils.SNAPELINEDELAY
                 };
-                snapLineTimer.Tick += new EventHandler(OnSnapLineTimerExpire);
+                _snapLineTimer.Tick += new EventHandler(OnSnapLineTimerExpire);
             }
 
-            return snapLineTimer;
+            return _snapLineTimer;
         }
     }
 
@@ -391,27 +380,27 @@ internal class CommandSet : IDisposable
     // We don't need to Dispose snapLineTimer
     public virtual void Dispose()
     {
-        if (menuService is not null)
+        if (_menuService is not null)
         {
-            for (int i = 0; i < commandSet.Length; i++)
+            for (int i = 0; i < _commandSet.Length; i++)
             {
-                menuService.RemoveCommand(commandSet[i]);
-                commandSet[i].Dispose();
+                _menuService.RemoveCommand(_commandSet[i]);
+                _commandSet[i].Dispose();
             }
 
-            menuService = null;
+            _menuService = null;
         }
 
-        if (selectionService is not null)
+        if (SelectionService is not null)
         {
-            selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
-            selectionService = null;
+            SelectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
+            SelectionService = null;
         }
 
-        if (eventService is not null)
+        if (_eventService is not null)
         {
-            eventService.EventHandlerChanged -= new EventHandler(OnEventHandlerChanged);
-            eventService = null;
+            _eventService.EventHandlerChanged -= new EventHandler(OnEventHandlerChanged);
+            _eventService = null;
         }
 
         IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
@@ -421,15 +410,15 @@ internal class CommandSet : IDisposable
             host.Activated -= new EventHandler(UpdateClipboardItems);
         }
 
-        if (snapLineTimer is not null)
+        if (_snapLineTimer is not null)
         {
-            snapLineTimer.Stop();
-            snapLineTimer.Tick -= new EventHandler(OnSnapLineTimerExpire);
-            snapLineTimer = null;
+            _snapLineTimer.Stop();
+            _snapLineTimer.Tick -= new EventHandler(OnSnapLineTimerExpire);
+            _snapLineTimer = null;
         }
 
         EndDragManager();
-        statusCommandUI = null;
+        _statusCommandUI = null;
         site = null;
     }
 
@@ -440,7 +429,7 @@ internal class CommandSet : IDisposable
     {
         if (dragManager is not null)
         {
-            snapLineTimer?.Stop();
+            _snapLineTimer?.Stop();
 
             dragManager.EraseSnapLines();
             dragManager.OnMouseUp();
@@ -999,9 +988,9 @@ internal class CommandSet : IDisposable
                                     }
 
                                     //change the Status information ....
-                                    if (component == selSvc.PrimarySelection && statusCommandUI is not null)
+                                    if (component == selSvc.PrimarySelection && _statusCommandUI is not null)
                                     {
-                                        statusCommandUI.SetStatusInformation(component as Component);
+                                        _statusCommandUI.SetStatusInformation(component as Component);
                                     }
                                 }
                             }
@@ -1533,7 +1522,7 @@ internal class CommandSet : IDisposable
                 IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);
                 if (ExecuteSafely(() => Clipboard.SetDataObject(dataObj), throwOnException: false) == false)
                 {
-                    uiService?.ShowError(SR.ClipboardError);
+                    _uiService?.ShowError(SR.ClipboardError);
                 }
             }
 
@@ -1693,7 +1682,7 @@ internal class CommandSet : IDisposable
                 }
                 else
                 {
-                    uiService?.ShowError(SR.ClipboardError);
+                    _uiService?.ShowError(SR.ClipboardError);
                 }
             }
         }
@@ -2345,7 +2334,7 @@ internal class CommandSet : IDisposable
             }
             else
             {
-                uiService?.ShowError(SR.ClipboardError);
+                _uiService?.ShowError(SR.ClipboardError);
             }
         }
         finally
@@ -3111,7 +3100,7 @@ internal class CommandSet : IDisposable
             return;
         }
 
-        selectionVersion++;
+        SelectionVersion++;
 
         // Update our cached selection counts.
         //
@@ -3132,7 +3121,7 @@ internal class CommandSet : IDisposable
         }
 
         primarySelection = SelectionService.PrimarySelection as IComponent;
-        selectionInherited = false;
+        _selectionInherited = false;
         controlsOnlySelection = true;
 
         if (selCount > 0)
@@ -3147,7 +3136,7 @@ internal class CommandSet : IDisposable
 
                 if (!TypeDescriptor.GetAttributes(obj)[typeof(InheritanceAttribute)].Equals(InheritanceAttribute.NotInherited))
                 {
-                    selectionInherited = true;
+                    _selectionInherited = true;
                     break;
                 }
             }
@@ -3177,7 +3166,7 @@ internal class CommandSet : IDisposable
     /// </summary>
     private void OnSnapLineTimerExpireMarshalled(object sender, EventArgs e)
     {
-        snapLineTimer.Stop();
+        _snapLineTimer.Stop();
         EndDragManager();
     }
 
@@ -3211,7 +3200,7 @@ internal class CommandSet : IDisposable
         bool enable = false;
 
         IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-        if (!selectionInherited && host is not null && !host.Loading)
+        if (!_selectionInherited && host is not null && !host.Loading)
         {
             ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
             Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || selSvc is not null, "ISelectionService not found");
@@ -3264,7 +3253,7 @@ internal class CommandSet : IDisposable
     protected void OnStatusDelete(object sender, EventArgs e)
     {
         MenuCommand cmd = (MenuCommand)sender;
-        if (selectionInherited)
+        if (_selectionInherited)
         {
             cmd.Enabled = false;
         }
@@ -3391,9 +3380,9 @@ internal class CommandSet : IDisposable
     {
         // Now whip through all of the commands and ask them to update.
         //
-        for (int i = 0; i < commandSet.Length; i++)
+        for (int i = 0; i < _commandSet.Length; i++)
         {
-            commandSet[i].UpdateStatus();
+            _commandSet[i].UpdateStatus();
         }
     }
 
@@ -3474,9 +3463,9 @@ internal class CommandSet : IDisposable
     {
         int itemCount = 0;
         CommandSetItem curItem;
-        for (int i = 0; itemCount < 3 && i < commandSet.Length; i++)
+        for (int i = 0; itemCount < 3 && i < _commandSet.Length; i++)
         {
-            curItem = commandSet[i];
+            curItem = _commandSet[i];
             if (curItem.CommandID == StandardCommands.Paste ||
                 curItem.CommandID == StandardCommands.Copy ||
                 curItem.CommandID == StandardCommands.Cut)
@@ -3725,13 +3714,13 @@ internal class CommandSet : IDisposable
     /// </summary>
     protected class CommandSetItem : MenuCommand
     {
-        private readonly EventHandler statusHandler;
-        private readonly IEventHandlerService eventService;
-        private readonly IUIService uiService;
+        private readonly EventHandler _statusHandler;
+        private readonly IEventHandlerService _eventService;
+        private readonly IUIService _uiService;
 
-        private readonly CommandSet commandSet;
-        private static Dictionary<EventHandler, StatusState> commandStatusHash;       // Dictionary of the command statuses we are tracking.
-        private bool updatingCommand; // flag we set when we're updating the command so we don't call back on the status handler.
+        private readonly CommandSet _commandSet;
+        private static Dictionary<EventHandler, StatusState> s_commandStatusHash;       // Dictionary of the command statuses we are tracking.
+        private bool _updatingCommand; // flag we set when we're updating the command so we don't call back on the status handler.
 
         public CommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, IUIService uiService) : this(commandSet, statusHandler, invokeHandler, id, false, uiService)
         {
@@ -3753,9 +3742,9 @@ internal class CommandSet : IDisposable
         public CommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, bool optimizeStatus, IUIService uiService)
         : base(invokeHandler, id)
         {
-            this.uiService = uiService;
-            eventService = commandSet.eventService;
-            this.statusHandler = statusHandler;
+            this._uiService = uiService;
+            _eventService = commandSet._eventService;
+            this._statusHandler = statusHandler;
 
             // when we optimize, it's because status is fully based on selection.
             // so what we do is only call the status handler once per selection change to prevent
@@ -3767,13 +3756,13 @@ internal class CommandSet : IDisposable
             {
                 // we use this as our sentinel of when we're doing this.
                 //
-                this.commandSet = commandSet;
+                this._commandSet = commandSet;
 
                 // create the hash if needed.
                 //
                 lock (typeof(CommandSetItem))
                 {
-                    commandStatusHash ??= new();
+                    s_commandStatusHash ??= new();
                 }
 
                 //
@@ -3788,13 +3777,13 @@ internal class CommandSet : IDisposable
                 //
                 // if this handler isn't already in there, add it.
                 //
-                if (!commandStatusHash.TryGetValue(statusHandler, out StatusState state) || state is null)
+                if (!s_commandStatusHash.TryGetValue(statusHandler, out StatusState state) || state is null)
                 {
                     state = new StatusState();
-                    commandStatusHash.Add(statusHandler, state);
+                    s_commandStatusHash.Add(statusHandler, state);
                 }
 
-                state.refCount++;
+                state._refCount++;
             }
         }
 
@@ -3808,9 +3797,9 @@ internal class CommandSet : IDisposable
                 // check to see if this is a command we have hashed up and if it's version stamp
                 // is the same as our current selection version.
                 //
-                if (commandSet is not null && commandStatusHash.TryGetValue(statusHandler, out StatusState state))
+                if (_commandSet is not null && s_commandStatusHash.TryGetValue(_statusHandler, out StatusState state))
                 {
-                    if (state is not null && state.SelectionVersion == commandSet.SelectionVersion)
+                    if (state is not null && state.SelectionVersion == _commandSet.SelectionVersion)
                     {
                         return true;
                     }
@@ -3825,13 +3814,13 @@ internal class CommandSet : IDisposable
         /// </summary>
         private void ApplyCachedStatus()
         {
-            if (commandSet is not null && commandStatusHash.TryGetValue(statusHandler, out StatusState state))
+            if (_commandSet is not null && s_commandStatusHash.TryGetValue(_statusHandler, out StatusState state))
             {
                 try
                 {
                     // set our our updating flag so it doesn't call the status handler again.
                     //
-                    updatingCommand = true;
+                    _updatingCommand = true;
 
                     // and push the state into this command.
                     //
@@ -3839,7 +3828,7 @@ internal class CommandSet : IDisposable
                 }
                 finally
                 {
-                    updatingCommand = false;
+                    _updatingCommand = false;
                 }
             }
         }
@@ -3853,9 +3842,9 @@ internal class CommandSet : IDisposable
             //
             try
             {
-                if (eventService is not null)
+                if (_eventService is not null)
                 {
-                    IMenuStatusHandler msh = (IMenuStatusHandler)eventService.GetHandler(typeof(IMenuStatusHandler));
+                    IMenuStatusHandler msh = (IMenuStatusHandler)_eventService.GetHandler(typeof(IMenuStatusHandler));
                     if (msh is not null && msh.OverrideInvoke(this))
                     {
                         return;
@@ -3866,7 +3855,7 @@ internal class CommandSet : IDisposable
             }
             catch (Exception e)
             {
-                uiService?.ShowError(e, string.Format(SR.CommandSetError, e.Message));
+                _uiService?.ShowError(e, string.Format(SR.CommandSetError, e.Message));
 
                 if (e.IsCriticalException())
                 {
@@ -3880,7 +3869,7 @@ internal class CommandSet : IDisposable
         ///</summary>
         protected override void OnCommandChanged(EventArgs e)
         {
-            if (!updatingCommand)
+            if (!_updatingCommand)
             {
                 base.OnCommandChanged(e);
             }
@@ -3892,18 +3881,18 @@ internal class CommandSet : IDisposable
         ///</summary>
         private void SaveCommandStatus()
         {
-            if (commandSet is not null)
+            if (_commandSet is not null)
             {
                 // see if we need to create one of these StatusState dudes.
                 //
-                if (!commandStatusHash.TryGetValue(statusHandler, out StatusState state))
+                if (!s_commandStatusHash.TryGetValue(_statusHandler, out StatusState state))
                 {
                     state = new StatusState();
                 }
 
                 // and save the enabled, visible, checked, and supported state.
                 //
-                state.SaveState(this, commandSet.SelectionVersion);
+                state.SaveState(this, _commandSet.SelectionVersion);
             }
         }
 
@@ -3914,16 +3903,16 @@ internal class CommandSet : IDisposable
         {
             // We allow outside parties to override the availability of particular menu commands.
             //
-            if (eventService is not null)
+            if (_eventService is not null)
             {
-                IMenuStatusHandler msh = (IMenuStatusHandler)eventService.GetHandler(typeof(IMenuStatusHandler));
+                IMenuStatusHandler msh = (IMenuStatusHandler)_eventService.GetHandler(typeof(IMenuStatusHandler));
                 if (msh is not null && msh.OverrideStatus(this))
                 {
                     return;
                 }
             }
 
-            if (statusHandler is not null)
+            if (_statusHandler is not null)
             {
                 // if we need to update our status,
                 // call the status handler.  otherwise,
@@ -3934,7 +3923,7 @@ internal class CommandSet : IDisposable
                 {
                     try
                     {
-                        statusHandler(this, EventArgs.Empty);
+                        _statusHandler(this, EventArgs.Empty);
                         SaveCommandStatus();
                     }
                     catch
@@ -3953,12 +3942,12 @@ internal class CommandSet : IDisposable
         /// </summary>
         public virtual void Dispose()
         {
-            if (commandStatusHash.TryGetValue(statusHandler, out StatusState state) && state is not null)
+            if (s_commandStatusHash.TryGetValue(_statusHandler, out StatusState state) && state is not null)
             {
-                state.refCount--;
-                if (state.refCount == 0)
+                state._refCount--;
+                if (state._refCount == 0)
                 {
-                    commandStatusHash.Remove(statusHandler);
+                    s_commandStatusHash.Remove(_statusHandler);
                 }
             }
         }
@@ -3976,36 +3965,28 @@ internal class CommandSet : IDisposable
             private const int Checked = 0x04;
             private const int Supported = 0x08;
             private const int NeedsUpdate = 0x10;
-
-            private int selectionVersion; // the version of the selection that this was initialized with.
-            private int statusFlags = NeedsUpdate; // our flags.
+            private int _statusFlags = NeedsUpdate; // our flags.
 
             // Multiple CommandSetItem instances can share a same status handler within a designer host.
             // We use a simple ref count to make sure the CommandSetItem can be properly removed.
-            internal int refCount;
+            internal int _refCount;
 
             /// <summary>
             /// Just what it says...
             /// </summary>
-            public int SelectionVersion
-            {
-                get
-                {
-                    return selectionVersion;
-                }
-            }
+            public int SelectionVersion { get; private set; }
 
             /// <summary>
             /// Pushes the state stored in this object into the given command item.
             /// </summary>
             internal void ApplyState(CommandSetItem item)
             {
-                Debug.Assert((statusFlags & NeedsUpdate) != NeedsUpdate, "Updating item when StatusState is not valid.");
+                Debug.Assert((_statusFlags & NeedsUpdate) != NeedsUpdate, "Updating item when StatusState is not valid.");
 
-                item.Enabled = ((statusFlags & Enabled) == Enabled);
-                item.Visible = ((statusFlags & Visible) == Visible);
-                item.Checked = ((statusFlags & Checked) == Checked);
-                item.Supported = ((statusFlags & Supported) == Supported);
+                item.Enabled = ((_statusFlags & Enabled) == Enabled);
+                item.Visible = ((_statusFlags & Visible) == Visible);
+                item.Checked = ((_statusFlags & Checked) == Checked);
+                item.Supported = ((_statusFlags & Supported) == Supported);
             }
 
             /// <summary>
@@ -4014,26 +3995,26 @@ internal class CommandSet : IDisposable
             /// </summary>
             internal void SaveState(CommandSetItem item, int version)
             {
-                selectionVersion = version;
-                statusFlags = 0;
+                SelectionVersion = version;
+                _statusFlags = 0;
                 if (item.Enabled)
                 {
-                    statusFlags |= Enabled;
+                    _statusFlags |= Enabled;
                 }
 
                 if (item.Visible)
                 {
-                    statusFlags |= Visible;
+                    _statusFlags |= Visible;
                 }
 
                 if (item.Checked)
                 {
-                    statusFlags |= Checked;
+                    _statusFlags |= Checked;
                 }
 
                 if (item.Supported)
                 {
-                    statusFlags |= Supported;
+                    _statusFlags |= Supported;
                 }
             }
         }
