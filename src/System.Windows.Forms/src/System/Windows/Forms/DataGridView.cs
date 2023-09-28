@@ -3378,10 +3378,7 @@ public partial class DataGridView : Control, ISupportInitialize
             DataGridViewCellStyle cs = RowHeadersDefaultCellStyle;
             cs.RemoveScope(DataGridViewCellStyleScopes.RowHeaders);
             _rowHeadersDefaultCellStyle = value;
-            if (value is not null)
-            {
-                _rowHeadersDefaultCellStyle!.AddScope(this, DataGridViewCellStyleScopes.RowHeaders);
-            }
+            _rowHeadersDefaultCellStyle?.AddScope(this, DataGridViewCellStyleScopes.RowHeaders);
 
             // Update ambient font flag depending on cell style font
             _dataGridViewState1[State1_AmbientRowHeadersFont] = value?.Font == base.Font;
