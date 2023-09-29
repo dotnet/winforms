@@ -117,33 +117,6 @@ public class ByteViewer : TableLayoutPanel
     }
 
     /// <summary>
-    ///  Calculates an index for the first cell of a given row in the HEX grid
-    /// </summary>
-    private int RowToIndex(int row)
-    {
-        return row * _columnCount;
-    }
-
-    /// <summary>
-    ///  Copies the line from main data buffer to a line buffer
-    /// </summary>
-    private ReadOnlySpan<byte> ComposeLineBuffer(int startLine, int line)
-    {
-        int offset = RowToIndex(startLine);
-        int length;
-        if (offset + (line + 1) * _columnCount > _dataBuf!.Length)
-        {
-            length = _dataBuf.Length % _columnCount;
-        }
-        else
-        {
-            length = _columnCount;
-        }
-
-        return _dataBuf.AsSpan(offset + RowToIndex(line), length);
-    }
-
-    /// <summary>
     ///  Draws an address part in the HEXDUMP view
     /// </summary>
     private void DrawAddress(Graphics g, int startLine, int line)
@@ -151,7 +124,7 @@ public class ByteViewer : TableLayoutPanel
         Font font = ADDRESS_FONT;
 
         Span<char> hexChars = stackalloc char[8];
-        bool success = RowToIndex(startLine + line).TryFormat(hexChars, out int charCount, "X8", CultureInfo.InvariantCulture);
+        bool success = ((startLine + line) * _columnCount).TryFormat(hexChars, out int charCount, "X8", CultureInfo.InvariantCulture);
         Debug.Assert(success && charCount == 8);
 
         using var foreground = new SolidBrush(ForeColor);
@@ -263,14 +236,30 @@ public class ByteViewer : TableLayoutPanel
         }
 
         int maxLength = _columnCount * 3 + 1;
-        using BufferScope<char> charsBufferScope = new(maxLength);
+        using BufferScope<char> charsBufferScope = new(stackalloc char[256], maxLength);
         Span<char> charsBuffer = charsBufferScope;
         for (int i = 0; i < linesCount; i++)
         {
-            ReadOnlySpan<byte> lineBuffer = ComposeLineBuffer(startLine, i);
+            ReadOnlySpan<byte> lineBuffer = GetLineBytes(startLine + i);
             DrawAddress(g, startLine, i);
             DrawHex(g, lineBuffer, i, charsBuffer);
             DrawDump(g, lineBuffer, i, charsBuffer);
+        }
+
+        ReadOnlySpan<byte> GetLineBytes(int line)
+        {
+            int offset = (startLine + line) * _columnCount;
+            int length;
+            if (offset + _columnCount > _dataBuf!.Length)
+            {
+                length = _dataBuf.Length % _columnCount;
+            }
+            else
+            {
+                length = _columnCount;
+            }
+
+            return _dataBuf.AsSpan(offset, length);
         }
     }
 
@@ -421,20 +410,23 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     private unsafe void InitAnsi()
     {
-        char[] text;
+        using BufferScope<char> charsBuffer = new(stackalloc char[256]);
         int size;
+        int bufferSize;
         fixed (byte* pDataBuff = _dataBuf)
         {
-            size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, _dataBuf!.Length, null, 0);
-            text = new char[size + 1];
-            fixed (char* pText = text)
+            bufferSize = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, _dataBuf!.Length, null, 0);
+            charsBuffer.EnsureCapacity(bufferSize + 1);
+            fixed (char* pText = charsBuffer)
             {
-                size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, size, pText, size);
+                size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, bufferSize, pText, bufferSize);
             }
         }
 
+        Span<char> text = charsBuffer.Slice(0, bufferSize + 1);
+
         text[size] = '\0';
-        text.AsSpan(0, size).Replace('\0', (char)0x0B);
+        text[..size].Replace('\0', '\v');
 
         _edit.Text = new string(text);
     }
@@ -447,7 +439,7 @@ public class ByteViewer : TableLayoutPanel
         _edit.Text = string.Create(_dataBuf!.Length / 2 + 1, _dataBuf, static (text, dataBuf) =>
         {
             Encoding.Unicode.GetChars(dataBuf.AsSpan(), text);
-            text.Replace('\0', (char)0x0B);
+            text.Replace('\0', '\v');
             text[^1] = '\0';
         });
     }
@@ -613,7 +605,7 @@ public class ByteViewer : TableLayoutPanel
             return;
         }
 
-        using FileStream currentFile = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+        using FileStream currentFile = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
         currentFile.Write(_dataBuf.AsSpan());
     }
 
@@ -698,11 +690,7 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     public virtual void SetFile(string path)
     {
-        using FileStream currentFile = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
-        int length = (int)currentFile.Length;
-        byte[] buf = new byte[length + 1];
-        currentFile.Read(buf.AsSpan(0, length));
-        SetBytes(buf);
+        SetBytes(File.ReadAllBytes(path));
     }
 
     /// <summary>
