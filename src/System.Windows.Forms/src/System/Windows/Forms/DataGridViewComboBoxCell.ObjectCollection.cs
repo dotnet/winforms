@@ -24,39 +24,17 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             _owner = owner;
         }
 
-        private IComparer<object> Comparer
-        {
-            get
-            {
-                _comparer ??= new ItemComparer(_owner);
-
-                return _comparer;
-            }
-        }
+        private IComparer<object> Comparer => _comparer ??= new ItemComparer(_owner);
 
         /// <summary>
         ///  Retrieves the number of items.
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return InnerArray.Count;
-            }
-        }
+        public int Count => InnerArray.Count;
 
         /// <summary>
         ///  Internal access to the actual data store.
         /// </summary>
-        internal List<object> InnerArray
-        {
-            get
-            {
-                _items ??= new List<object>();
-
-                return _items;
-            }
-        }
+        internal List<object> InnerArray => _items ??= new List<object>();
 
         object ICollection.SyncRoot => ((ICollection)InnerArray).SyncRoot;
 
@@ -103,10 +81,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             return index;
         }
 
-        int IList.Add(object? item)
-        {
-            return Add(item!);
-        }
+        int IList.Add(object? item) => Add(item!);
 
         public void AddRange(params object[] items)
         {
@@ -145,10 +120,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             }
         }
 
-        internal void SortInternal()
-        {
-            InnerArray.Sort(Comparer);
-        }
+        internal void SortInternal() => InnerArray.Sort(Comparer);
 
         /// <summary>
         ///  Retrieves the item with the specified index.
@@ -191,36 +163,23 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             }
         }
 
-        internal void ClearInternal()
-        {
-            InnerArray.Clear();
-        }
+        internal void ClearInternal() => InnerArray.Clear();
 
-        public bool Contains(object? value)
-        {
-            return IndexOf(value!) != -1;
-        }
+        public bool Contains(object? value) => IndexOf(value!) != -1;
 
         /// <summary>
         ///  Copies the DataGridViewComboBoxCell Items collection to a destination array.
         /// </summary>
-        public void CopyTo(object[] destination, int arrayIndex)
-        {
+        public void CopyTo(object[] destination, int arrayIndex) =>
             ((ICollection)InnerArray).CopyTo(destination, arrayIndex);
-        }
 
-        void ICollection.CopyTo(Array destination, int index)
-        {
+        void ICollection.CopyTo(Array destination, int index) =>
             ((ICollection)InnerArray).CopyTo(destination, index);
-        }
 
         /// <summary>
         ///  Returns an enumerator for the DataGridViewComboBoxCell Items collection.
         /// </summary>
-        public IEnumerator GetEnumerator()
-        {
-            return InnerArray.GetEnumerator();
-        }
+        public IEnumerator GetEnumerator() => InnerArray.GetEnumerator();
 
         public int IndexOf(object? value)
         {
