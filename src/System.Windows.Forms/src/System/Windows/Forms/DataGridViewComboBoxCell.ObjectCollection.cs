@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -17,8 +15,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     public class ObjectCollection : IList
     {
         private readonly DataGridViewComboBoxCell _owner;
-        private List<object> _items;
-        private IComparer<object> _comparer;
+        private List<object>? _items;
+        private IComparer<object>? _comparer;
 
         public ObjectCollection(DataGridViewComboBoxCell owner)
         {
@@ -77,7 +75,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         /// </summary>
         public int Add(object item)
         {
-            //this.owner.CheckNoSharedCell();
             _owner.CheckNoDataSource();
 
             ArgumentNullException.ThrowIfNull(item);
@@ -106,14 +103,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             return index;
         }
 
-        int IList.Add(object item)
+        int IList.Add(object? item)
         {
-            return Add(item);
+            return Add(item!);
         }
 
         public void AddRange(params object[] items)
         {
-            //this.owner.CheckNoSharedCell();
             _owner.CheckNoDataSource();
             AddRangeInternal(items);
             _owner.OnItemsCollectionChanged();
@@ -121,7 +117,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
         public void AddRange(ObjectCollection value)
         {
-            //this.owner.CheckNoSharedCell();
             _owner.CheckNoDataSource();
             AddRangeInternal((ICollection<object>)value);
             _owner.OnItemsCollectionChanged();
@@ -158,7 +153,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         /// <summary>
         ///  Retrieves the item with the specified index.
         /// </summary>
-        public virtual object this[int index]
+        public virtual object? this[int index]
         {
             get
             {
@@ -171,7 +166,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             }
             set
             {
-                //this.owner.CheckNoSharedCell();
                 _owner.CheckNoDataSource();
 
                 if (index < 0 || index >= InnerArray.Count)
@@ -191,7 +185,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         {
             if (InnerArray.Count > 0)
             {
-                //this.owner.CheckNoSharedCell();
                 _owner.CheckNoDataSource();
                 InnerArray.Clear();
                 _owner.OnItemsCollectionChanged();
@@ -203,9 +196,9 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             InnerArray.Clear();
         }
 
-        public bool Contains(object value)
+        public bool Contains(object? value)
         {
-            return IndexOf(value) != -1;
+            return IndexOf(value!) != -1;
         }
 
         /// <summary>
@@ -229,7 +222,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             return InnerArray.GetEnumerator();
         }
 
-        public int IndexOf(object value)
+        public int IndexOf(object? value)
         {
             ArgumentNullException.ThrowIfNull(value);
 
@@ -243,9 +236,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         ///  The item's toString() method is called to obtain the string that is
         ///  displayed in the combo box.
         /// </summary>
-        public void Insert(int index, object item)
+        public void Insert(int index, object? item)
         {
-            //this.owner.CheckNoSharedCell();
             _owner.CheckNoDataSource();
 
             ArgumentNullException.ThrowIfNull(item);
@@ -272,9 +264,9 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         ///  Removes the given item from the collection, provided that it is
         ///  actually in the list.
         /// </summary>
-        public void Remove(object value)
+        public void Remove(object? value)
         {
-            int index = InnerArray.IndexOf(value);
+            int index = InnerArray.IndexOf(value!);
 
             if (index != -1)
             {
@@ -287,7 +279,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         /// </summary>
         public void RemoveAt(int index)
         {
-            //this.owner.CheckNoSharedCell();
             _owner.CheckNoDataSource();
 
             if (index < 0 || index >= InnerArray.Count)
@@ -298,5 +289,5 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             InnerArray.RemoveAt(index);
             _owner.OnItemsCollectionChanged();
         }
-    } // end ObjectCollection
+    }
 }
