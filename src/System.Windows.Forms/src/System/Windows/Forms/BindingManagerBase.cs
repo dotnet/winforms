@@ -67,7 +67,7 @@ public abstract class BindingManagerBase
         SetDataSource(dataSource);
     }
 
-    internal abstract Type BindType { get; }
+    internal abstract Type? BindType { get; }
 
     internal abstract PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors);
 
@@ -88,7 +88,7 @@ public abstract class BindingManagerBase
             return typedList.GetItemProperties(properties);
         }
 
-        return GetItemProperties(BindType, 0, dataSources, listAccessors);
+        return GetItemProperties(BindType!, 0, dataSources, listAccessors);
     }
 
     protected virtual PropertyDescriptorCollection? GetItemProperties([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]Type listType, int offset, ArrayList dataSources, ArrayList listAccessors)

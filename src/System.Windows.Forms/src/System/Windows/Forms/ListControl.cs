@@ -346,7 +346,7 @@ public abstract class ListControl : Control
         {
             if (SelectedIndex != -1 && _dataManager is not null)
             {
-                object currentItem = _dataManager[SelectedIndex];
+                object? currentItem = _dataManager[SelectedIndex];
                 return FilterItemOnProperty(currentItem, _valueMember.BindingField);
             }
 
@@ -398,7 +398,7 @@ public abstract class ListControl : Control
         {
             if (e.Index == -1)
             {
-                SetItemsCore(_dataManager.List);
+                SetItemsCore(_dataManager.List!);
                 if (AllowSelection)
                 {
                     SelectedIndex = _dataManager.Position;
@@ -406,7 +406,7 @@ public abstract class ListControl : Control
             }
             else
             {
-                SetItemCore(e.Index, _dataManager[e.Index]);
+                SetItemCore(e.Index, _dataManager[e.Index]!);
             }
         }
     }
