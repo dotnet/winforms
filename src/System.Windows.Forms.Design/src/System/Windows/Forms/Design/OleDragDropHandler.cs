@@ -142,7 +142,7 @@ internal partial class OleDragDropHandler
         //
         IToolboxService? toolboxSvc = GetService<IToolboxService>();
         IDesignerHost? host = GetService<IDesignerHost>();
-        IComponent[] comps = Array.Empty<IComponent>();
+        IComponent[]? comps = Array.Empty<IComponent>();
 
         Cursor? oldCursor = Cursor.Current;
         Cursor.Current = Cursors.WaitCursor;
@@ -154,12 +154,9 @@ internal partial class OleDragDropHandler
             {
                 trans = host?.CreateTransaction(string.Format(SR.DesignerBatchCreateTool, tool));
             }
-            catch (CheckoutException cxe)
+            catch (CheckoutException cxe) when (cxe == CheckoutException.Canceled)
             {
-                if (cxe == CheckoutException.Canceled)
-                    return comps;
-
-                throw;
+                return Array.Empty<IComponent>();
             }
 
             try
@@ -174,8 +171,7 @@ internal partial class OleDragDropHandler
                         IUIService? uiService = GetService<IUIService>();
                         uiService?.ShowMessage(SR.LocalizingCannotAdd);
 
-                        comps = Array.Empty<IComponent>();
-                        return comps;
+                        return Array.Empty<IComponent>();
                     }
 
                     // Create a dictionary of default values that the designer can
@@ -201,16 +197,9 @@ internal partial class OleDragDropHandler
 
                     comps = tool.CreateComponents(host, defaultValues);
                 }
-                catch (CheckoutException checkoutEx)
+                catch (CheckoutException checkoutEx) when (checkoutEx == CheckoutException.Canceled)
                 {
-                    if (checkoutEx == CheckoutException.Canceled)
-                    {
-                        comps = Array.Empty<IComponent>();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    comps = Array.Empty<IComponent>();
                 }
                 catch (ArgumentException argumentEx)
                 {
