@@ -144,7 +144,7 @@ public class DataGridViewImageColumn : DataGridViewColumn
         {
             if (ImageLayout != value)
             {
-                ImageCellTemplate!.ImageLayout = value;
+                ImageCellTemplate.ImageLayout = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
