@@ -148,4 +148,18 @@ public partial class WindowsFormsSynchronizationContextTests
         context.Post(callback, state);
         Assert.Equal(0, callCount);
     }
+
+    [WinFormsFact]
+    public void WindowsFormsSynchronizationContext_Send_NoDynamicInvoke()
+    {
+        string stackTrace = null;
+        var context = new WindowsFormsSynchronizationContext();
+        context.Send(_ => { stackTrace = Environment.StackTrace; }, null);
+
+        Assert.NotNull(stackTrace);
+
+        // check that the WindowsFormsSynchronizationContext.Send does not involve DynamicInvoke, for performance reasons.
+        // see https://github.com/dotnet/winforms/issues/9965
+        Assert.DoesNotContain("System.Delegate.DynamicInvokeImpl", stackTrace);
+    }
 }

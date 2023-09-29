@@ -6510,6 +6510,12 @@ public unsafe partial class Control :
                          "Arguments are wrong for WaitCallback");
             ((WaitCallback)tme._method)(tme._args[0]);
         }
+        else if (tme._method is SendOrPostCallback)
+        {
+            Debug.Assert(tme._args!.Length == 1,
+                         "Arguments are wrong for SendOrPostCallback");
+            ((SendOrPostCallback)tme._method)(tme._args[0]);
+        }
         else
         {
             tme._retVal = tme._method!.DynamicInvoke(tme._args);
