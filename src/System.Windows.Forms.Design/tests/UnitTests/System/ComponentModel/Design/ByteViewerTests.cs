@@ -882,7 +882,7 @@ public class ByteViewerTests
         using ByteViewer control = new();
         using TempFile file = TempFile.Create(new byte[] { 1, 2, 3 });
         control.SetFile(file.Path);
-        Assert.Equal(new byte[] { 1, 2, 3, 0 }, control.GetBytes());
+        Assert.Equal(new byte[] { 1, 2, 3 }, control.GetBytes());
     }
 
     [WinFormsFact]
@@ -893,7 +893,7 @@ public class ByteViewerTests
 
         using TempFile file = TempFile.Create(new byte[] { 1, 2, 3 });
         control.SetFile(file.Path);
-        Assert.Equal(new byte[] { 1, 2, 3, 0 }, control.GetBytes());
+        Assert.Equal(new byte[] { 1, 2, 3 }, control.GetBytes());
     }
 
     [WinFormsFact]
