@@ -199,16 +199,6 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
     public virtual Type? EditType => typeof(DataGridViewTextBoxEditingControl);
 
-    private static Bitmap ErrorBitmap
-    {
-        get
-        {
-            s_errorBmp ??= GetBitmap("DataGridViewRow.error");
-
-            return s_errorBmp;
-        }
-    }
-
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public Rectangle ErrorIconBounds
@@ -3644,13 +3634,11 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     {
         ArgumentNullException.ThrowIfNull(graphics);
 
-        Bitmap bmp = ErrorBitmap;
-        if (bmp is not null)
+        s_errorBmp ??= GetBitmap("DataGridViewRow.error");
+
+        lock (s_errorBmp)
         {
-            lock (bmp)
-            {
-                graphics.DrawImage(bmp, iconBounds, 0, 0, s_iconsWidth, s_iconsHeight, GraphicsUnit.Pixel);
-            }
+            graphics.DrawImage(s_errorBmp, iconBounds, 0, 0, s_iconsWidth, s_iconsHeight, GraphicsUnit.Pixel);
         }
     }
 
