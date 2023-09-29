@@ -42,12 +42,12 @@ override System.Windows.Forms.DataGridView.Font.set -> void
 ~override System.Windows.Forms.DataGridView.OnVisibleChanged(System.EventArgs e) -> void
 override System.Windows.Forms.DataGridView.Text.get -> string!
 override System.Windows.Forms.DataGridView.Text.set -> void
-~override System.Windows.Forms.DataGridViewButtonColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
-~override System.Windows.Forms.DataGridViewButtonColumn.CellTemplate.set -> void
-~override System.Windows.Forms.DataGridViewButtonColumn.Clone() -> object
-~override System.Windows.Forms.DataGridViewButtonColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~override System.Windows.Forms.DataGridViewButtonColumn.DefaultCellStyle.set -> void
-~override System.Windows.Forms.DataGridViewButtonColumn.ToString() -> string
+override System.Windows.Forms.DataGridViewButtonColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
+override System.Windows.Forms.DataGridViewButtonColumn.CellTemplate.set -> void
+override System.Windows.Forms.DataGridViewButtonColumn.Clone() -> object!
+override System.Windows.Forms.DataGridViewButtonColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+override System.Windows.Forms.DataGridViewButtonColumn.DefaultCellStyle.set -> void
+override System.Windows.Forms.DataGridViewButtonColumn.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewCell.ToString() -> string
 override System.Windows.Forms.DataGridViewCellCollection.List.get -> System.Collections.ArrayList!
 override System.Windows.Forms.DataGridViewCellStyle.Equals(object? o) -> bool
@@ -374,8 +374,8 @@ System.Windows.Forms.DataGridView.TopLeftHeaderCell.get -> System.Windows.Forms.
 System.Windows.Forms.DataGridView.TopLeftHeaderCell.set -> void
 System.Windows.Forms.DataGridView.UserSetCursor.get -> System.Windows.Forms.Cursor?
 System.Windows.Forms.DataGridView.VerticalScrollBar.get -> System.Windows.Forms.ScrollBar!
-~System.Windows.Forms.DataGridViewButtonColumn.Text.get -> string
-~System.Windows.Forms.DataGridViewButtonColumn.Text.set -> void
+System.Windows.Forms.DataGridViewButtonColumn.Text.get -> string?
+System.Windows.Forms.DataGridViewButtonColumn.Text.set -> void
 ~System.Windows.Forms.DataGridViewCell.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
 ~System.Windows.Forms.DataGridViewCell.EditedFormattedValue.get -> object
 ~System.Windows.Forms.DataGridViewCell.ErrorText.get -> string
