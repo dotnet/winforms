@@ -43,7 +43,7 @@ public class ByteViewer : TableLayoutPanel
     private TextBox _edit;
     private readonly int _columnCount = DEFAULT_COLUMN_COUNT;
     private int _rowCount = DEFAULT_ROW_COUNT;
-    private byte[]? _dataBuf;
+    private byte[] _dataBuf = Array.Empty<byte>();
     private int _startLine;
     private int _displayLinesCount;
     private int _linesCount;
@@ -236,8 +236,7 @@ public class ByteViewer : TableLayoutPanel
         }
 
         int maxLength = _columnCount * 3 + 1;
-        using BufferScope<char> charsBufferScope = new(stackalloc char[256], maxLength);
-        Span<char> charsBuffer = charsBufferScope;
+        using BufferScope<char> charsBuffer = new(stackalloc char[256], maxLength);
         for (int i = 0; i < linesCount; i++)
         {
             ReadOnlySpan<byte> lineBuffer = GetLineBytes(startLine + i);
@@ -250,7 +249,7 @@ public class ByteViewer : TableLayoutPanel
         {
             int offset = (startLine + line) * _columnCount;
             int length;
-            if (offset + _columnCount > _dataBuf!.Length)
+            if (offset + _columnCount > _dataBuf.Length)
             {
                 length = _dataBuf.Length % _columnCount;
             }
@@ -280,7 +279,7 @@ public class ByteViewer : TableLayoutPanel
         int unicodeCount = 0;
         int size;
 
-        if ((_dataBuf is null) || (_dataBuf.Length >= 0 && (_dataBuf.Length < 8)))
+        if (_dataBuf.Length is >= 0 and < 8)
         {
             return DisplayMode.Hexdump;
         }
@@ -364,7 +363,7 @@ public class ByteViewer : TableLayoutPanel
     /// <summary>
     ///  Gets the bytes in the buffer.
     /// </summary>
-    public virtual byte[]? GetBytes() => _dataBuf;
+    public virtual byte[] GetBytes() => _dataBuf;
 
     /// <summary>
     ///  Gets the display mode for the control.
@@ -415,7 +414,7 @@ public class ByteViewer : TableLayoutPanel
         int bufferSize;
         fixed (byte* pDataBuff = _dataBuf)
         {
-            bufferSize = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, _dataBuf!.Length, null, 0);
+            bufferSize = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, _dataBuf.Length, null, 0);
             charsBuffer.EnsureCapacity(bufferSize + 1);
             fixed (char* pText = charsBuffer)
             {
@@ -436,7 +435,7 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     private void InitUnicode()
     {
-        _edit.Text = string.Create(_dataBuf!.Length / 2 + 1, _dataBuf, static (text, dataBuf) =>
+        _edit.Text = string.Create(_dataBuf.Length / 2 + 1, _dataBuf, static (text, dataBuf) =>
         {
             Encoding.Unicode.GetChars(dataBuf.AsSpan(), text);
             text.Replace('\0', '\v');
@@ -487,7 +486,7 @@ public class ByteViewer : TableLayoutPanel
     private void InitState()
     {
         // calculate number of lines required (being careful to count 1 for the last partial line)
-        _linesCount = (_dataBuf!.Length + _columnCount - 1) / _columnCount;
+        _linesCount = (_dataBuf.Length + _columnCount - 1) / _columnCount;
 
         _startLine = 0;
         if (_linesCount > _rowCount)
@@ -600,11 +599,6 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     public virtual void SaveToFile(string path)
     {
-        if (_dataBuf is null)
-        {
-            return;
-        }
-
         using FileStream currentFile = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
         currentFile.Write(_dataBuf.AsSpan());
     }
@@ -625,11 +619,6 @@ public class ByteViewer : TableLayoutPanel
     public virtual void SetBytes(byte[] bytes)
     {
         ArgumentNullException.ThrowIfNull(bytes);
-
-        if (_dataBuf is not null)
-        {
-            _dataBuf = null;
-        }
 
         _dataBuf = bytes;
         InitState();
@@ -698,7 +687,7 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     public virtual void SetStartLine(int line)
     {
-        if (line < 0 || line >= _linesCount || line > _dataBuf?.Length / _columnCount)
+        if (line < 0 || line >= _linesCount || line > _dataBuf.Length / _columnCount)
         {
             _startLine = 0;
         }
