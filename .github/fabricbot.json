@@ -1888,6 +1888,16 @@
               "operator": "<",
               "days": 180
             }
+          },
+          {
+            "name": "isOpen",
+            "parameters": {}
+          },
+          {
+            "name": "noActivitySince",
+            "parameters": {
+              "days": 180
+            }
           }
         ],
         "taskName": "Close OLD draft PRs",
