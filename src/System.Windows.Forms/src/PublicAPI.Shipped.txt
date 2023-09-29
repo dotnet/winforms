@@ -6,11 +6,11 @@ override System.Windows.Forms.CurrencyManager.Current.get -> object?
 ~override System.Windows.Forms.CurrencyManager.GetItemProperties() -> System.ComponentModel.PropertyDescriptorCollection
 override System.Windows.Forms.DataGridView.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
-~override System.Windows.Forms.DataGridView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridView.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
+override System.Windows.Forms.DataGridView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridView.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection!
 override System.Windows.Forms.DataGridView.Font.get -> System.Drawing.Font!
 override System.Windows.Forms.DataGridView.Font.set -> void
-~override System.Windows.Forms.DataGridView.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.DataGridView.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject?
 ~override System.Windows.Forms.DataGridView.OnBindingContextChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnCursorChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnDoubleClick(System.EventArgs e) -> void
@@ -669,9 +669,9 @@ System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
 ~virtual System.Windows.Forms.BindingSource.this[int index].set -> void
 virtual System.Windows.Forms.DataGridView.AdjustColumnHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStylePlaceholder, bool isFirstDisplayedColumn, bool isLastVisibleColumn) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
 virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
-~virtual System.Windows.Forms.DataGridView.CreateColumnsInstance() -> System.Windows.Forms.DataGridViewColumnCollection
-~virtual System.Windows.Forms.DataGridView.CreateRowsInstance() -> System.Windows.Forms.DataGridViewRowCollection
-~virtual System.Windows.Forms.DataGridView.GetClipboardContent() -> System.Windows.Forms.DataObject
+virtual System.Windows.Forms.DataGridView.CreateColumnsInstance() -> System.Windows.Forms.DataGridViewColumnCollection!
+virtual System.Windows.Forms.DataGridView.CreateRowsInstance() -> System.Windows.Forms.DataGridViewRowCollection!
+virtual System.Windows.Forms.DataGridView.GetClipboardContent() -> System.Windows.Forms.DataObject?
 ~virtual System.Windows.Forms.DataGridView.OnAllowUserToAddRowsChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnAllowUserToDeleteRowsChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnAllowUserToOrderColumnsChanged(System.EventArgs e) -> void
