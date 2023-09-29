@@ -172,10 +172,7 @@ public class DataGridViewLinkColumn : DataGridViewColumn
     [SRDescription(nameof(SR.DataGridView_LinkColumnTextDescr))]
     public string? Text
     {
-        get
-        {
-            return _text;
-        }
+        get => _text;
         set
         {
             if (!string.Equals(value, _text, StringComparison.Ordinal))
@@ -351,8 +348,6 @@ public class DataGridViewLinkColumn : DataGridViewColumn
         return dataGridViewColumn;
     }
 
-    public override string ToString()
-    {
-        return $"DataGridViewLinkColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewLinkColumn {{ Name={Name}, Index={Index} }}";
 }
