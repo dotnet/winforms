@@ -769,7 +769,7 @@ internal sealed partial class PropertyGridView :
 
             if (_dropDownHolder.Component == DropDownListBox && _flags.HasFlag(Flags.DropDownCommit))
             {
-                OnListClick(sender: null, e: null!);
+                OnListClick(sender: null, e: null);
             }
 
             EditTextBox.Filter = false;
@@ -2316,7 +2316,7 @@ internal sealed partial class PropertyGridView :
         OnListClick(sender, me);
     }
 
-    private void OnListClick(object? sender, EventArgs e)
+    private void OnListClick(object? sender, EventArgs? e)
     {
         CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:OnListClick");
         _ = GetGridEntryFromRow(_selectedRow);
@@ -2386,7 +2386,7 @@ internal sealed partial class PropertyGridView :
     {
         if (e.KeyCode == Keys.Return)
         {
-            OnListClick(sender: null, e: null!);
+            OnListClick(sender: null, e: null);
             _selectedGridEntry?.OnValueReturnKey();
         }
 
