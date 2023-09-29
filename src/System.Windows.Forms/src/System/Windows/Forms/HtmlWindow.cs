@@ -74,13 +74,7 @@ public sealed unsafe partial class HtmlWindow
         }
     }
 
-    public object DomWindow
-    {
-        get
-        {
-            return NativeHtmlWindow;
-        }
-    }
+    public object DomWindow => NativeHtmlWindow;
 
     public HtmlWindowCollection? Frames
     {
@@ -255,10 +249,8 @@ public sealed unsafe partial class HtmlWindow
         htmlWindow.Value->alert(bstrMessage).ThrowOnFailure();
     }
 
-    public void AttachEventHandler(string eventName, EventHandler eventHandler)
-    {
+    public void AttachEventHandler(string eventName, EventHandler eventHandler) =>
         WindowShim.AttachEventHandler(eventName, eventHandler);
-    }
 
     public void Close()
     {
@@ -275,10 +267,8 @@ public sealed unsafe partial class HtmlWindow
         return confirmed;
     }
 
-    public void DetachEventHandler(string eventName, EventHandler eventHandler)
-    {
+    public void DetachEventHandler(string eventName, EventHandler eventHandler) =>
         WindowShim.DetachEventHandler(eventName, eventHandler);
-    }
 
     public void Focus()
     {
@@ -337,10 +327,8 @@ public sealed unsafe partial class HtmlWindow
         return htmlWindow2 is not null ? new HtmlWindow(ShimManager, htmlWindow2) : null;
     }
 
-    public HtmlWindow? Open(Uri url, string target, string windowOptions, bool replaceEntry)
-    {
-        return Open(url.ToString(), target, windowOptions, replaceEntry);
-    }
+    public HtmlWindow? Open(Uri url, string target, string windowOptions, bool replaceEntry) =>
+        Open(url.ToString(), target, windowOptions, replaceEntry);
 
     ///  Note: We intentionally have a string overload (apparently Mort wants one).  We don't have
     ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
@@ -357,10 +345,8 @@ public sealed unsafe partial class HtmlWindow
         return iHTMLWindow2 is not null ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
     }
 
-    public HtmlWindow? OpenNew(Uri url, string windowOptions)
-    {
-        return OpenNew(url.ToString(), windowOptions);
-    }
+    public HtmlWindow? OpenNew(Uri url, string windowOptions) =>
+        OpenNew(url.ToString(), windowOptions);
 
     public string? Prompt(string message, string defaultInputValue)
     {
