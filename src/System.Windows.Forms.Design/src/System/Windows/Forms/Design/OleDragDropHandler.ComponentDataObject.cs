@@ -203,6 +203,7 @@ internal partial class OleDragDropHandler
             return new string[] { NestedToolboxItemFormat, DataFormat, DataFormats.Serializable, ExtraInfoFormat };
         }
 
+        [MemberNotNull(nameof(_components))]
         public void Deserialize(IServiceProvider? serviceProvider, bool removeCurrentComponents)
         {
             serviceProvider ??= _serviceProvider;
