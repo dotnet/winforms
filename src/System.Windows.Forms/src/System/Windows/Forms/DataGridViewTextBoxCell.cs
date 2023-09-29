@@ -137,7 +137,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
     public override void DetachEditingControl()
     {
         DataGridView? dataGridView = DataGridView;
-        if (dataGridView is null || dataGridView.EditingControl is null)
+        if (dataGridView?.EditingControl is null)
         {
             throw new InvalidOperationException();
         }

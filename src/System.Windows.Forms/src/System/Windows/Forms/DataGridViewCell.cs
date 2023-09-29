@@ -1117,7 +1117,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     public virtual void DetachEditingControl()
     {
         DataGridView? dataGridView = DataGridView;
-        if (dataGridView is null || dataGridView.EditingControl is null)
+        if (dataGridView?.EditingControl is null)
         {
             throw new InvalidOperationException();
         }
