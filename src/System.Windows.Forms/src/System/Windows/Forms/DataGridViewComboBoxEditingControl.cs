@@ -34,6 +34,7 @@ public partial class DataGridViewComboBoxEditingControl : ComboBox, IDataGridVie
         }
     }
 
+    [AllowNull]
     public virtual object EditingControlFormattedValue
     {
         get => GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
