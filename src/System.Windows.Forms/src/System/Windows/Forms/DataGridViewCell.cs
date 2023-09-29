@@ -230,11 +230,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [AllowNull]
     private string ErrorTextInternal
     {
-        get
-        {
-            object? errorText = Properties.GetObject(s_propCellErrorText);
-            return (errorText is null) ? string.Empty : (string)errorText;
-        }
+        get => (string?)Properties.GetObject(s_propCellErrorText) ?? string.Empty;
         set
         {
             string errorText = ErrorTextInternal;
@@ -729,11 +725,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [AllowNull]
     private string ToolTipTextInternal
     {
-        get
-        {
-            object? toolTipText = Properties.GetObject(s_propCellToolTipText);
-            return (toolTipText is null) ? string.Empty : (string)toolTipText;
-        }
+        get => (string?)Properties.GetObject(s_propCellToolTipText) ?? string.Empty;
         set
         {
             string toolTipText = ToolTipTextInternal;
