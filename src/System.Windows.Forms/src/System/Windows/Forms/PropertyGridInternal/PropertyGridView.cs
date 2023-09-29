@@ -2405,6 +2405,7 @@ internal sealed partial class PropertyGridView :
 
         if (FocusInside)
         {
+            // Because the code has been like that since long time, we assume that e is not null.
             base.OnLostFocus(e!);
             return;
         }
@@ -2418,6 +2419,7 @@ internal sealed partial class PropertyGridView :
             InvalidateRow(_selectedRow);
         }
 
+        // Because the code has been like that since long time, we assume that e is not null.
         base.OnLostFocus(e!);
 
         // For empty GridView, clear the focus indicator that was painted in OnGotFocus()
