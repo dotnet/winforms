@@ -10,15 +10,29 @@ namespace Windows.Win32.System.Com;
 
 internal unsafe partial struct SAFEARRAY
 {
-    public ReadOnlySpan<SAFEARRAYBOUND> Bounds
+    /// <summary>
+    ///  Gets the <see cref="SAFEARRAYBOUND"/> of the <paramref name="dimension"/>.
+    /// </summary>
+    public SAFEARRAYBOUND GetBounds(int dimension = 0)
     {
-        get
+        fixed (void* b = &rgsabound)
         {
-            fixed (void* b = &rgsabound)
-            {
-                return new((SAFEARRAYBOUND*)b, cDims);
-            }
+            return new ReadOnlySpan<SAFEARRAYBOUND>(b, cDims)[dimension];
         }
+    }
+
+    /// <summary>
+    ///  Creates an empty one-dimensional SAFEARRAY of type <paramref name="arrayType"/>.
+    /// </summary>
+    public static SAFEARRAY* Empty(VARENUM arrayType)
+    {
+        SAFEARRAYBOUND saBound = new()
+        {
+            cElements = 0,
+            lLbound = 0
+        };
+
+        return PInvoke.SafeArrayCreate(arrayType, 1, &saBound);
     }
 
     public VARENUM VarType
@@ -62,21 +76,25 @@ internal unsafe partial struct SAFEARRAY
         int c1 = indices[indicesIndex++];
         uint dimensionSize = 1;
 
-        ReadOnlySpan<SAFEARRAYBOUND> bounds = Bounds;
-        int boundIndex = cDims - 1;
-
-        uint cell = 0;
-        for (ushort dim = 1; dim < cDims; dim++)
+        fixed (void* b = &rgsabound)
         {
-            dimensionSize *= bounds[boundIndex--].cElements;
+            ReadOnlySpan<SAFEARRAYBOUND> bounds = new(b, cDims);
 
-            int diff = (indices[indicesIndex++] - bounds[boundIndex].lLbound);
-            cell += (uint)diff * dimensionSize;
+            int boundIndex = cDims - 1;
+
+            uint cell = 0;
+            for (ushort dim = 1; dim < cDims; dim++)
+            {
+                dimensionSize *= bounds[boundIndex--].cElements;
+
+                int diff = (indices[indicesIndex++] - bounds[boundIndex].lLbound);
+                cell += (uint)diff * dimensionSize;
+            }
+
+            cell += (uint)(c1 - bounds[cDims - 1].lLbound);
+
+            void* v = Unsafe.Add<T>(pvData, (int)cell);
+            return Unsafe.AsRef<T>(v);
         }
-
-        cell += (uint)(c1 - bounds[cDims - 1].lLbound);
-
-        void* v = Unsafe.Add<T>(pvData, (int)cell);
-        return Unsafe.AsRef<T>(v);
     }
 }

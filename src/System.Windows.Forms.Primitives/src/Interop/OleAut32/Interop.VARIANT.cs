@@ -658,10 +658,10 @@ internal unsafe partial struct VARIANT : IDisposable
             _ => throw new ArgumentException(string.Format(SR.COM2UnhandledVT, vt)),
         };
 
-        if (psa->cDims == 1 && psa->Bounds[0].lLbound == 0)
+        if (psa->cDims == 1 && psa->GetBounds().lLbound == 0)
         {
             // SZArray.
-            return Array.CreateInstance(elementType, (int)psa->Bounds[0].cElements);
+            return Array.CreateInstance(elementType, (int)psa->GetBounds().cElements);
         }
 
         var lengths = new int[psa->cDims];
@@ -671,8 +671,8 @@ internal unsafe partial struct VARIANT : IDisposable
         // Copy the lower bounds and count of elements for the dimensions. These need to copied in reverse order.
         for (int i = psa->cDims - 1; i >= 0; i--)
         {
-            lengths[counter] = (int)psa->Bounds[i].cElements;
-            bounds[counter] = psa->Bounds[i].lLbound;
+            lengths[counter] = (int)psa->GetBounds(i).cElements;
+            bounds[counter] = psa->GetBounds(i).lLbound;
             counter++;
         }
 
@@ -951,6 +951,18 @@ internal unsafe partial struct VARIANT : IDisposable
     public static explicit operator IUnknown*(VARIANT value)
         => value.vt == VT_UNKNOWN ? value.data.punkVal : throw new InvalidCastException();
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator double(VARIANT value)
+        => value.data.dblVal;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(double value)
+        => new()
+        {
+            vt = VT_R8,
+            data = new() { dblVal = value }
+        };
+
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static T ThrowInvalidCast<T>() => throw new InvalidCastException();
 
@@ -983,6 +995,10 @@ internal unsafe partial struct VARIANT : IDisposable
         else if (value is uint uintValue)
         {
             return (VARIANT)uintValue;
+        }
+        else if (value is double dblVal)
+        {
+            return (VARIANT)dblVal;
         }
 
         // Need to fill out to match Marshal behavior so we can remove the call.

@@ -123,7 +123,7 @@ public partial class ListBox
             switch (propertyID)
             {
                 case UiaCore.UIA.BoundingRectanglePropertyId:
-                    return UiaTextProvider.BoundingRectangleAsArray(BoundingRectangle);
+                    return UiaTextProvider.BoundingRectangleAsArray(BoundingRectangle).ToObject();
                 case UiaCore.UIA.ControlTypePropertyId:
                     // If we don't set a default role for the accessible object
                     // it will be retrieved from Windows.

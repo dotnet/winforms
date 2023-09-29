@@ -3,13 +3,16 @@
 
 using System.Drawing;
 using System.Windows.Forms.Automation;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
 
 public partial class ComboBox
 {
-    internal class ComboBoxUiaTextProvider : UiaTextProvider2
+    internal unsafe class ComboBoxUiaTextProvider : UiaTextProvider2
     {
         /// <summary>
         ///  Since the TextBox inside the ComboBox is always single-line, for optimization
@@ -40,7 +43,14 @@ public partial class ComboBox
                 ? GetFormattingRectangle()
                 : Rectangle.Empty;
 
-        public override UiaCore.ITextRangeProvider DocumentRange => new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start: 0, TextLength);
+        public override ITextRangeProvider* DocumentRange
+            => ComHelpers.GetComPointer<ITextRangeProvider>(
+                new UiaTextRange(
+                    ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject),
+                    this,
+                    start:
+                    0,
+                    TextLength));
 
         public override int FirstVisibleLine
             => _owningComboBox.IsHandleCreated
@@ -73,29 +83,18 @@ public partial class ComboBox
                 : -1;
 
         public override int LinesPerPage
-        {
-            get
-            {
-                if (!_owningComboBox.IsHandleCreated)
-                {
-                    return -1;
-                }
-
-                if (_owningComboBox.ChildEditAccessibleObject.BoundingRectangle.IsEmpty)
-                {
-                    return 0;
-                }
-
-                return OwnerChildEditLinesCount;
-            }
-        }
+            => !_owningComboBox.IsHandleCreated
+                    ? -1
+                    : _owningComboBox.ChildEditAccessibleObject.BoundingRectangle.IsEmpty
+                        ? 0
+                        : OwnerChildEditLinesCount;
 
         public override LOGFONTW Logfont
             => _owningComboBox.IsHandleCreated
                 ? LOGFONTW.FromFont(_owningComboBox.Font)
                 : default;
 
-        public override UiaCore.SupportedTextSelection SupportedTextSelection => UiaCore.SupportedTextSelection.Single;
+        public override SupportedTextSelection SupportedTextSelection => SupportedTextSelection.SupportedTextSelection_Single;
 
         public override string Text
             => _owningComboBox.IsHandleCreated
@@ -117,22 +116,31 @@ public partial class ComboBox
                 ? GetWindowStyle(_owningChildEdit)
                 : WINDOW_STYLE.WS_OVERLAPPED;
 
-        public override UiaCore.ITextRangeProvider? GetCaretRange(out BOOL isActive)
+        public override HRESULT GetCaretRange(BOOL* isActive, ITextRangeProvider** pRetVal)
         {
-            isActive = false;
+            if (pRetVal is null || isActive is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *isActive = false;
 
             if (!_owningComboBox.IsHandleCreated)
             {
-                return null;
+                *pRetVal = null;
+                return HRESULT.S_OK;
             }
 
             object? hasKeyboardFocus = _owningComboBox.ChildEditAccessibleObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
-            if (hasKeyboardFocus is true)
-            {
-                isActive = true;
-            }
+            *isActive = hasKeyboardFocus is true;
 
-            return new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, _owningComboBox.SelectionStart, _owningComboBox.SelectionStart);
+            *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
+                new UiaTextRange(
+                    ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject),
+                    this,
+                    _owningComboBox.SelectionStart,
+                    _owningComboBox.SelectionStart));
+            return HRESULT.S_OK;
         }
 
         public override int GetLineFromCharIndex(int charIndex)
@@ -194,11 +202,17 @@ public partial class ComboBox
             return pt;
         }
 
-        public override UiaCore.ITextRangeProvider[]? GetSelection()
+        public override HRESULT GetSelection(SAFEARRAY** pRetVal)
         {
+            if (pRetVal is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             if (!_owningComboBox.IsHandleCreated)
             {
-                return null;
+                *pRetVal = null;
+                return HRESULT.S_OK;
             }
 
             // First caret position of a selected text
@@ -210,7 +224,19 @@ public partial class ComboBox
             // If there is no selection, start and end parameters are the position of the caret.
             PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETSEL, ref start, ref end);
 
-            return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start, end) };
+            SAFEARRAYBOUND saBound = new()
+            {
+                cElements = 1,
+                lLbound = 0
+            };
+
+            SAFEARRAY* result = PInvoke.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &saBound);
+            int i = 0;
+            IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject);
+            PInvoke.SafeArrayPutElement(result, &i, ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end))).ThrowOnFailure();
+
+            *pRetVal = result;
+            return HRESULT.S_OK;
         }
 
         public override void GetVisibleRangePoints(out int visibleStart, out int visibleEnd)
@@ -243,16 +269,34 @@ public partial class ComboBox
                 => rect.IsEmpty || rect.Width <= 0 || rect.Height <= 0;
         }
 
-        public override UiaCore.ITextRangeProvider[]? GetVisibleRanges()
+        public override HRESULT GetVisibleRanges(SAFEARRAY** pRetVal)
         {
+            if (pRetVal is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             if (!_owningComboBox.IsHandleCreated)
             {
-                return null;
+                *pRetVal = SAFEARRAY.Empty(VARENUM.VT_UNKNOWN);
+                return HRESULT.S_OK;
             }
 
             GetVisibleRangePoints(out int start, out int end);
 
-            return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start, end) };
+            SAFEARRAYBOUND saBound = new()
+            {
+                cElements = 1,
+                lLbound = 0
+            };
+
+            SAFEARRAY* result = PInvoke.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &saBound);
+            int i = 0;
+            IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject);
+            PInvoke.SafeArrayPutElement(result, &i, ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end))).ThrowOnFailure();
+
+            *pRetVal = result;
+            return HRESULT.S_OK;
         }
 
         public override bool LineScroll(int charactersHorizontal, int linesVertical)
@@ -265,47 +309,61 @@ public partial class ComboBox
             return pt;
         }
 
-        /// <summary>
-        ///  Exposes a text range that contains the text that is the target of the annotation associated with the specified annotation element.
-        /// </summary>
-        /// <param name="annotationElement">
-        ///  The provider for an element that implements the IAnnotationProvider interface.
-        ///  The annotation element is a sibling of the element that implements the <see cref="UiaCore.ITextProvider2"/> interface for the document.
-        /// </param>
-        /// <returns>
-        ///  A text range that contains the annotation target text.
-        /// </returns>
-        public override UiaCore.ITextRangeProvider RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
+        public override HRESULT RangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal)
         {
-            return new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start: 0, end: 0);
-        }
-
-        public override UiaCore.ITextRangeProvider? RangeFromChild(UiaCore.IRawElementProviderSimple childElement)
-        {
-            // We don't have any children so this call returns null.
-            Debug.Fail("Text edit control cannot have a child element.");
-            return null;
-        }
-
-        /// <summary>
-        ///  Returns the degenerate (empty) text range nearest to the specified screen coordinates.
-        /// </summary>
-        /// <param name="screenLocation">The location in screen coordinates.</param>
-        /// <returns>A degenerate range nearest the specified location. Null is never returned.</returns>
-        public override UiaCore.ITextRangeProvider? RangeFromPoint(Point screenLocation)
-        {
-            if (!_owningComboBox.IsHandleCreated)
+            if (pRetVal is null)
             {
-                return null;
+                return HRESULT.E_POINTER;
             }
 
-            Point clientLocation = screenLocation;
+            *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
+                new UiaTextRange(
+                    ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject),
+                    this,
+                    start: 0,
+                    end: 0));
+            return HRESULT.S_OK;
+        }
+
+        public override HRESULT RangeFromChild(IRawElementProviderSimple* childElement, ITextRangeProvider** pRetVal)
+        {
+            if (pRetVal is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            // We don't have any children so this call returns null.
+            Debug.Fail("Text edit control cannot have a child element.");
+            *pRetVal = null;
+            return HRESULT.S_OK;
+        }
+
+        public override HRESULT RangeFromPoint(UiaPoint point, ITextRangeProvider** pRetVal)
+        {
+            if (pRetVal is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            if (!_owningComboBox.IsHandleCreated)
+            {
+                *pRetVal = default;
+                return HRESULT.S_OK;
+            }
+
+            Point clientLocation = point;
 
             // Convert screen to client coordinates.
             // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
             if (PInvoke.MapWindowPoints((HWND)default, _owningChildEdit, ref clientLocation) == 0)
             {
-                return new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start: 0, end: 0);
+                *pRetVal  = ComHelpers.GetComPointer<ITextRangeProvider>(
+                    new UiaTextRange(
+                        ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject),
+                        this,
+                        start: 0,
+                        end: 0));
+                return HRESULT.S_OK;
             }
 
             // We have to deal with the possibility that the coordinate is inside the window rect
@@ -321,7 +379,13 @@ public partial class ComboBox
             // Get the character at those client coordinates.
             int start = GetCharIndexFromPosition(clientLocation);
 
-            return new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start, start);
+            *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
+                new UiaTextRange(
+                    ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject),
+                    this,
+                    start,
+                    start));
+            return HRESULT.S_OK;
         }
 
         public override Rectangle RectangleToScreen(Rectangle rect) => _owningComboBox.RectangleToScreen(rect);

@@ -2,27 +2,29 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Automation;
 
-internal abstract class UiaTextProvider : ITextProvider
+internal abstract unsafe class UiaTextProvider : ITextProvider.Interface
 {
     /// <summary>
     ///  The value of a width of an end of a text line as 2 px to a ScreenReader can show it.
     /// </summary>
     public const int EndOfLineWidth = 2;
 
-    public abstract ITextRangeProvider[]? GetSelection();
+    public abstract HRESULT GetSelection(SAFEARRAY** pRetVal);
 
-    public abstract ITextRangeProvider[]? GetVisibleRanges();
+    public abstract HRESULT GetVisibleRanges(SAFEARRAY** pRetVal);
 
-    public abstract ITextRangeProvider? RangeFromChild(IRawElementProviderSimple childElement);
+    public abstract HRESULT RangeFromChild(IRawElementProviderSimple* childElement, ITextRangeProvider** pRetVal);
 
-    public abstract ITextRangeProvider? RangeFromPoint(Point screenLocation);
+    public abstract HRESULT RangeFromPoint(UiaPoint point, ITextRangeProvider** pRetVal);
 
-    public abstract ITextRangeProvider? DocumentRange { get; }
+    public abstract ITextRangeProvider* DocumentRange { get; }
 
     public abstract SupportedTextSelection SupportedTextSelection { get; }
 
@@ -74,25 +76,41 @@ internal abstract class UiaTextProvider : ITextProvider
 
     public static WINDOW_STYLE GetWindowStyle(IHandle<HWND> hWnd) => (WINDOW_STYLE)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
 
-    public static double[] RectListToDoubleArray(List<Rectangle> rectArray)
+    public static SAFEARRAY* RectListToDoubleArray(List<Rectangle> rectArray)
     {
         if (rectArray is null || rectArray.Count == 0)
         {
-            return Array.Empty<double>();
+            return SAFEARRAY.Empty(VARENUM.VT_R8);
         }
+
+        SAFEARRAYBOUND saBound = new()
+        {
+            cElements = (uint)(rectArray.Count * 4),
+            lLbound = 0
+        };
+
+        SAFEARRAY* result = PInvoke.SafeArrayCreate(VARENUM.VT_R8, 1, &saBound);
 
         double[] doubles = new double[rectArray.Count * 4];
         int scan = 0;
 
         for (int i = 0; i < rectArray.Count; i++)
         {
-            doubles[scan++] = rectArray[i].X;
-            doubles[scan++] = rectArray[i].Y;
-            doubles[scan++] = rectArray[i].Width;
-            doubles[scan++] = rectArray[i].Height;
+            double put = rectArray[i].X;
+            PInvoke.SafeArrayPutElement(result, &scan, &put).ThrowOnFailure();
+            scan++;
+            put = rectArray[i].Y;
+            PInvoke.SafeArrayPutElement(result, &scan, &put).ThrowOnFailure();
+            scan++;
+            put = rectArray[i].Width;
+            PInvoke.SafeArrayPutElement(result, &scan, &put).ThrowOnFailure();
+            scan++;
+            put = rectArray[i].Height;
+            PInvoke.SafeArrayPutElement(result, &scan, &put).ThrowOnFailure();
+            scan++;
         }
 
-        return doubles;
+        return result;
     }
 
     /// <summary>
@@ -101,8 +119,34 @@ internal abstract class UiaTextProvider : ITextProvider
     ///  https://learn.microsoft.com/windows/win32/api/uiautomationcore/nf-uiautomationcore-irawelementproviderfragment-get_boundingrectangle
     ///  https://learn.microsoft.com/windows/win32/api/uiautomationcore/ns-uiautomationcore-uiarect
     /// </summary>
-    internal static double[] BoundingRectangleAsArray(Rectangle bounds)
-        => new double[] { bounds.X, bounds.Y, bounds.Width, bounds.Height };
+    internal static VARIANT BoundingRectangleAsArray(Rectangle bounds)
+    {
+        SAFEARRAYBOUND saBound = new()
+        {
+            cElements = 4,
+            lLbound = 0
+        };
+
+        SAFEARRAY* result = PInvoke.SafeArrayCreate(VARENUM.VT_R8, 1, &saBound);
+        int i = 0;
+        double put = bounds.X;
+        PInvoke.SafeArrayPutElement(result, &i, &put).ThrowOnFailure();
+        i = 1;
+        put = bounds.Y;
+        PInvoke.SafeArrayPutElement(result, &i, &put).ThrowOnFailure();
+        i = 2;
+        put = bounds.Width;
+        PInvoke.SafeArrayPutElement(result, &i, &put).ThrowOnFailure();
+        i = 3;
+        put = bounds.Height;
+        PInvoke.SafeArrayPutElement(result, &i, &put).ThrowOnFailure();
+
+        return new VARIANT()
+        {
+            vt = VARENUM.VT_ARRAY,
+            data = new() { parray = result }
+        };
+    }
 
     public int SendInput(int inputs, ref INPUT input, int size)
     {

@@ -3,12 +3,13 @@
 
 using System.Drawing;
 using System.Windows.Forms.Automation;
+using Windows.Win32.System.Com;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TextBoxBase;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
-public class TextBoxBase_TextBoxBaseUiaTextProviderTests
+public unsafe class TextBoxBase_TextBoxBaseUiaTextProviderTests
 {
     [WinFormsFact]
     public void TextBoxBaseUiaTextProvider_ctor_DoesntCreateControlHandle()
@@ -113,7 +114,8 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-        Assert.NotNull(provider.DocumentRange);
+        using ComScope<ITextRangeProvider> documentRange = new(provider.DocumentRange);
+        Assert.False(documentRange.IsNull);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
@@ -122,8 +124,8 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-        UiaCore.SupportedTextSelection uiaTextRange = provider.SupportedTextSelection;
-        Assert.Equal(UiaCore.SupportedTextSelection.Single, uiaTextRange);
+        SupportedTextSelection uiaTextRange = provider.SupportedTextSelection;
+        Assert.Equal(SupportedTextSelection.SupportedTextSelection_Single, uiaTextRange);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
@@ -133,8 +135,10 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.CreateControl();
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-        UiaCore.ITextRangeProvider uiaTextRange = provider.GetCaretRange(out _);
-        Assert.NotNull(uiaTextRange);
+        using ComScope<ITextRangeProvider> uiaTextRange = new(null);
+        BOOL isActive = default;
+        Assert.True(provider.GetCaretRange(&isActive, uiaTextRange).Succeeded);
+        Assert.False(uiaTextRange.IsNull);
         Assert.True(textBoxBase.IsHandleCreated);
     }
 
@@ -143,8 +147,10 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-        UiaCore.ITextRangeProvider uiaTextRange = provider.GetCaretRange(out _);
-        Assert.Null(uiaTextRange);
+        using ComScope<ITextRangeProvider> uiaTextRange = new(null);
+        BOOL isActive = default;
+        Assert.True(provider.GetCaretRange(&isActive, uiaTextRange).Succeeded);
+        Assert.True(uiaTextRange.IsNull);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
@@ -718,7 +724,9 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         textBoxBase.CreateControl();
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
 
-        Assert.NotNull(provider.GetVisibleRanges());
+        using ComSafeArrayScope<ITextRangeProvider> scope = new(null);
+        Assert.True(provider.GetVisibleRanges(scope).Succeeded);
+        Assert.False(scope.IsEmpty);
         Assert.True(textBoxBase.IsHandleCreated);
     }
 
@@ -733,7 +741,9 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         };
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
 
-        Assert.Null(provider.GetVisibleRanges());
+        using ComSafeArrayScope<ITextRangeProvider> scope = new(null);
+        Assert.True(provider.GetVisibleRanges(scope).Succeeded);
+        Assert.True(scope.IsEmpty);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
@@ -744,9 +754,10 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
 
         // RangeFromAnnotation doesn't throw an exception
-        UiaCore.ITextRangeProvider range = provider.RangeFromAnnotation(textBoxBase.AccessibilityObject);
+        using ComScope<ITextRangeProvider> range = new(null);
+        Assert.True(provider.RangeFromAnnotation(ComHelpers.GetComPointer<IRawElementProviderSimple>(textBoxBase.AccessibilityObject), range).Succeeded);
         // RangeFromAnnotation implementation can be changed so this test can be changed too
-        Assert.NotNull(range);
+        Assert.False(range.IsNull);
     }
 
     [WinFormsFact]
@@ -758,9 +769,10 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
             TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
 
             // RangeFromChild doesn't throw an exception
-            UiaCore.ITextRangeProvider range = provider.RangeFromChild(textBoxBase.AccessibilityObject);
+            using ComScope<ITextRangeProvider> range = new(null);
+            Assert.True(provider.RangeFromChild(ComHelpers.GetComPointer<IRawElementProviderSimple>(textBoxBase.AccessibilityObject), range).Succeeded);
             // RangeFromChild implementation can be changed so this test can be changed too
-            Assert.Null(range);
+            Assert.True(range.IsNull);
         }
     }
 
@@ -778,8 +790,9 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         textBoxBase.CreateControl();
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
 
-        UiaTextRange textRangeProvider = provider.RangeFromPoint(point) as UiaTextRange;
-        Assert.NotNull(textRangeProvider);
+        using ComScope<ITextRangeProvider> range = new(null);
+        Assert.True(provider.RangeFromPoint(point, range).Succeeded);
+        Assert.False(range.IsNull);
 
         Assert.True(textBoxBase.IsHandleCreated);
     }
@@ -791,8 +804,9 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
 
-        UiaTextRange textRangeProvider = provider.RangeFromPoint(point) as UiaTextRange;
-        Assert.Null(textRangeProvider);
+        using ComScope<ITextRangeProvider> range = new(null);
+        Assert.True(provider.RangeFromPoint(point, range).Succeeded);
+        Assert.True(range.IsNull);
 
         Assert.False(textBoxBase.IsHandleCreated);
     }
@@ -807,10 +821,12 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         textBoxBase.Text = "Some test text for testing";
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
         provider.SetSelection(start, end);
-        UiaCore.ITextRangeProvider[] selection = provider.GetSelection();
-        Assert.NotNull(selection);
+        using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
+        Assert.True(provider.GetSelection(selection).Succeeded);
+        Assert.False(selection.IsEmpty);
 
-        UiaTextRange textRange = selection[0] as UiaTextRange;
+        using ComScope<ITextRangeProvider> range = new(selection[0]);
+        UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range.AsUnknown) as UiaTextRange;
         Assert.NotNull(textRange);
 
         Assert.Equal(start, textRange.Start);
@@ -829,8 +845,9 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
         TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
         provider.SetSelection(start, end);
         Assert.False(textBoxBase.IsHandleCreated);
-        UiaCore.ITextRangeProvider[] selection = provider.GetSelection();
-        Assert.Null(selection);
+        using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
+        Assert.True(provider.GetSelection(selection).Succeeded);
+        Assert.True(selection.IsEmpty);
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
@@ -846,10 +863,12 @@ public class TextBoxBase_TextBoxBaseUiaTextProviderTests
             textBoxBase.Text = "Some test text for testing";
             TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
             provider.SetSelection(start, end);
-            UiaCore.ITextRangeProvider[] selection = provider.GetSelection();
-            Assert.NotNull(selection);
+            using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
+            Assert.True(provider.GetSelection(selection).Succeeded);
+            Assert.False(selection.IsEmpty);
 
-            UiaTextRange textRange = selection[0] as UiaTextRange;
+            using ComScope<ITextRangeProvider> range = new(selection[0]);
+            UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range.AsUnknown) as UiaTextRange;
             Assert.NotNull(textRange);
 
             Assert.Equal(0, textRange.Start);
