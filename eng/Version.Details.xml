@@ -7,7 +7,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
 -->
 <Dependencies>
   <ProductDependencies>
-    <Dependency Name="VS.Redist.Common.NetCore.SharedFramework.x64.6.0" Version="6.0.23-servicing.23475.15">
+    <Dependency Name="VS.Redist.Common.NetCore.SharedFramework.x64.6.0" Version="6.0.23-servicing.23479.5">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>301ba1ee5d1cfff28a8866924733603f3adf4936</Sha>
     </Dependency>
@@ -43,19 +43,19 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>4822e3c3aa77eb82b2fb33c9321f923cf11ddde6</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NET.Sdk.IL" Version="6.0.23-servicing.23475.15">
+    <Dependency Name="Microsoft.NET.Sdk.IL" Version="6.0.23-servicing.23479.5">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>301ba1ee5d1cfff28a8866924733603f3adf4936</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILAsm" Version="6.0.23-servicing.23475.15">
+    <Dependency Name="Microsoft.NETCore.ILAsm" Version="6.0.23-servicing.23479.5">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>301ba1ee5d1cfff28a8866924733603f3adf4936</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="6.0.23-servicing.23475.15">
+    <Dependency Name="runtime.win-x64.Microsoft.NETCore.ILAsm" Version="6.0.23-servicing.23479.5">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>301ba1ee5d1cfff28a8866924733603f3adf4936</Sha>
     </Dependency>
-    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="6.0.23-servicing.23475.15">
+    <Dependency Name="runtime.win-x86.Microsoft.NETCore.ILAsm" Version="6.0.23-servicing.23479.5">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>301ba1ee5d1cfff28a8866924733603f3adf4936</Sha>
     </Dependency>
@@ -79,7 +79,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>4822e3c3aa77eb82b2fb33c9321f923cf11ddde6</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="6.0.23-servicing.23475.15">
+    <Dependency Name="Microsoft.NETCore.ILDAsm" Version="6.0.23-servicing.23479.5">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>301ba1ee5d1cfff28a8866924733603f3adf4936</Sha>
     </Dependency>
@@ -119,7 +119,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>301ba1ee5d1cfff28a8866924733603f3adf4936</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Internal.Runtime.WindowsDesktop.Transport" Version="6.0.23-servicing.23475.15">
+    <Dependency Name="Microsoft.Internal.Runtime.WindowsDesktop.Transport" Version="6.0.23-servicing.23479.5">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>301ba1ee5d1cfff28a8866924733603f3adf4936</Sha>
     </Dependency>
