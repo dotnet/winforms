@@ -247,16 +247,8 @@ public class ByteViewer : TableLayoutPanel
 
         ReadOnlySpan<byte> GetLineBytes(int line)
         {
-            int offset = (startLine + line) * _columnCount;
-            int length;
-            if (offset + _columnCount > _dataBuf.Length)
-            {
-                length = _dataBuf.Length % _columnCount;
-            }
-            else
-            {
-                length = _columnCount;
-            }
+            int offset = line * _columnCount;
+            int length = offset + _columnCount > _dataBuf.Length ? _dataBuf.Length % _columnCount : _columnCount;
 
             return _dataBuf.AsSpan(offset, length);
         }
