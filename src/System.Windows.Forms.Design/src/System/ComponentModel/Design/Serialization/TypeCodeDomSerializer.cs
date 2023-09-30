@@ -12,7 +12,7 @@ namespace System.ComponentModel.Design.Serialization;
 ///  This class performs the same tasks as a CodeDomSerializer only serializing an object through this class defines a new type.
 /// </summary>
 [DefaultSerializationProvider(typeof(CodeDomSerializationProvider))]
-public class TypeCodeDomSerializer : CodeDomSerializerBase
+public partial class TypeCodeDomSerializer : CodeDomSerializerBase
 {
     // Used only during deserialization to provide name to object mapping.
     private IDictionary? _nameTable;
@@ -551,33 +551,4 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
             Trace(TraceLevel.Verbose, $"...generated {map.Method.Statements.Count} statements into method {map.Method.Name}");
         }
     }
-
-    #region OrderedStatementsCollection Class
-    private class StatementOrderComparer : IComparer<OrderedCodeStatementCollection>
-    {
-        public static readonly StatementOrderComparer s_default = new();
-
-        private StatementOrderComparer()
-        {
-        }
-
-        public int Compare(OrderedCodeStatementCollection? left, OrderedCodeStatementCollection? right)
-        {
-            if (left is null)
-            {
-                return 1;
-            }
-            else if (right is null)
-            {
-                return -1;
-            }
-            else if (right == left)
-            {
-                return 0;
-            }
-
-            return left.Order - right.Order;
-        }
-    }
-    #endregion
 }
