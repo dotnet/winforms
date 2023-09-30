@@ -80,23 +80,6 @@ public class SendInput
         await _waitForIdleAsync();
     }
 
-    private static HWND GetForegroundWindow()
-    {
-        var startTime = DateTime.Now;
-
-        // Attempt to get the foreground window in a loop, as the NativeMethods function can return IntPtr.Zero
-        // in certain circumstances, such as when a window is losing activation.
-        HWND foregroundWindow;
-        do
-        {
-            foregroundWindow = PInvoke.GetForegroundWindow();
-        }
-        while (foregroundWindow == IntPtr.Zero
-            && DateTime.Now - startTime < TimeSpan.FromMilliseconds(500));
-
-        return foregroundWindow;
-    }
-
     private static void SetForegroundWindow(Form window)
     {
         // Make the window a top-most window so it will appear above any existing top-most windows
