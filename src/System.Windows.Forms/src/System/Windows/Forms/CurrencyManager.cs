@@ -458,10 +458,7 @@ public class CurrencyManager : BindingManagerBase
         return success;
     }
 
-    public override void RemoveAt(int index)
-    {
-        _list!.RemoveAt(index);
-    }
+    public override void RemoveAt(int index) => _list!.RemoveAt(index);
 
     /// <summary>
     ///  Ends the current edit operation.
@@ -582,17 +579,10 @@ public class CurrencyManager : BindingManagerBase
     /// <summary>
     ///  Gets the name of the list.
     /// </summary>
-    internal override string GetListName()
-    {
-        if (_list is ITypedList typedList)
-        {
-            return typedList.GetListName(null);
-        }
-        else
-        {
-            return finalType!.Name;
-        }
-    }
+    internal override string GetListName() =>
+        _list is ITypedList typedList
+            ? typedList.GetListName(null)
+            : finalType!.Name;
 
     /// <summary>
     ///  Gets the name of the specified list.
@@ -614,18 +604,13 @@ public class CurrencyManager : BindingManagerBase
         return string.Empty;
     }
 
-    internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors)
-    {
-        return ListBindingHelper.GetListItemProperties(_list, listAccessors);
-    }
+    internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors) =>
+        ListBindingHelper.GetListItemProperties(_list, listAccessors);
 
     /// <summary>
     ///  Gets the <see cref="PropertyDescriptorCollection"/> for the list.
     /// </summary>
-    public override PropertyDescriptorCollection GetItemProperties()
-    {
-        return GetItemProperties(null);
-    }
+    public override PropertyDescriptorCollection GetItemProperties() => GetItemProperties(null);
 #nullable disable
     /// <summary>
     ///  Gets the <see cref="PropertyDescriptorCollection"/> for the specified list.
