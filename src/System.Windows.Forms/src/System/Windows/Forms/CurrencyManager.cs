@@ -317,10 +317,15 @@ public class CurrencyManager : BindingManagerBase
             }
         }
     }
-#nullable disable
-    private void ChangeRecordState(int newPosition, bool validating, bool endCurrentEdit, bool firePositionChange, bool pullData)
+
+    private void ChangeRecordState(
+        int newPosition,
+        bool validating,
+        bool endCurrentEdit,
+        bool firePositionChange,
+        bool pullData)
     {
-        if (newPosition == -1 && _list.Count == 0)
+        if (newPosition == -1 && _list!.Count == 0)
         {
             if (listposition != -1)
             {
@@ -455,7 +460,7 @@ public class CurrencyManager : BindingManagerBase
 
     public override void RemoveAt(int index)
     {
-        _list.RemoveAt(index);
+        _list!.RemoveAt(index);
     }
 
     /// <summary>
@@ -469,7 +474,7 @@ public class CurrencyManager : BindingManagerBase
 
             if (success)
             {
-                object item = (Position >= 0 && Position < _list.Count) ? _list[Position] : null;
+                object? item = (Position >= 0 && Position < _list!.Count) ? _list[Position] : null;
 
                 if (item is IEditableObject iEditableItem)
                 {
@@ -486,7 +491,7 @@ public class CurrencyManager : BindingManagerBase
 
     private void FindGoodRow()
     {
-        int rowCount = _list.Count;
+        int rowCount = _list!.Count;
         for (int i = 0; i < rowCount; i++)
         {
             listposition = i;
@@ -515,20 +520,20 @@ public class CurrencyManager : BindingManagerBase
     /// </summary>
     internal void SetSort(PropertyDescriptor property, ListSortDirection sortDirection)
     {
-        if (_list is IBindingList && ((IBindingList)_list).SupportsSorting)
+        if (_list is IBindingList bindingList && bindingList.SupportsSorting)
         {
-            ((IBindingList)_list).ApplySort(property, sortDirection);
+            bindingList.ApplySort(property, sortDirection);
         }
     }
 
     /// <summary>
     ///  Gets a <see cref="PropertyDescriptor"/> for a CurrencyManager.
     /// </summary>
-    internal PropertyDescriptor GetSortProperty()
+    internal PropertyDescriptor? GetSortProperty()
     {
-        if ((_list is IBindingList) && ((IBindingList)_list).SupportsSorting)
+        if (_list is IBindingList bindingList && bindingList.SupportsSorting)
         {
-            return ((IBindingList)_list).SortProperty;
+            return bindingList.SortProperty;
         }
 
         return null;
@@ -539,9 +544,9 @@ public class CurrencyManager : BindingManagerBase
     /// </summary>
     internal ListSortDirection GetSortDirection()
     {
-        if ((_list is IBindingList) && ((IBindingList)_list).SupportsSorting)
+        if (_list is IBindingList bindingList && bindingList.SupportsSorting)
         {
-            return ((IBindingList)_list).SortDirection;
+            return bindingList.SortDirection;
         }
 
         return ListSortDirection.Ascending;
@@ -550,20 +555,20 @@ public class CurrencyManager : BindingManagerBase
     /// <summary>
     ///  Find the position of a desired list item.
     /// </summary>
-    internal int Find(PropertyDescriptor property, object key, bool keepIndex)
+    internal int Find(PropertyDescriptor? property, object key, bool keepIndex)
     {
         ArgumentNullException.ThrowIfNull(key);
 
-        if (property is not null && (_list is IBindingList) && ((IBindingList)_list).SupportsSearching)
+        if (property is not null && _list is IBindingList bindingList && bindingList.SupportsSearching)
         {
-            return ((IBindingList)_list).Find(property, key);
+            return bindingList.Find(property, key);
         }
 
         if (property is not null)
         {
-            for (int i = 0; i < _list.Count; i++)
+            for (int i = 0; i < _list!.Count; i++)
             {
-                object value = property.GetValue(_list[i]);
+                object? value = property.GetValue(_list[i]);
                 if (key.Equals(value))
                 {
                     return i;
@@ -579,32 +584,37 @@ public class CurrencyManager : BindingManagerBase
     /// </summary>
     internal override string GetListName()
     {
-        if (_list is ITypedList)
+        if (_list is ITypedList typedList)
         {
-            return ((ITypedList)_list).GetListName(null);
+            return typedList.GetListName(null);
         }
         else
         {
-            return finalType.Name;
+            return finalType!.Name;
         }
     }
 
     /// <summary>
     ///  Gets the name of the specified list.
     /// </summary>
-    protected internal override string GetListName(ArrayList listAccessors)
+    protected internal override string GetListName(ArrayList? listAccessors)
     {
-        if (_list is ITypedList)
+        if (listAccessors is null)
+        {
+            return string.Empty;
+        }
+
+        if (_list is ITypedList typedList)
         {
             PropertyDescriptor[] properties = new PropertyDescriptor[listAccessors.Count];
             listAccessors.CopyTo(properties, 0);
-            return ((ITypedList)_list).GetListName(properties);
+            return typedList.GetListName(properties);
         }
 
-        return "";
+        return string.Empty;
     }
 
-    internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
+    internal override PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors)
     {
         return ListBindingHelper.GetListItemProperties(_list, listAccessors);
     }
@@ -616,7 +626,7 @@ public class CurrencyManager : BindingManagerBase
     {
         return GetItemProperties(null);
     }
-
+#nullable disable
     /// <summary>
     ///  Gets the <see cref="PropertyDescriptorCollection"/> for the specified list.
     /// </summary>
