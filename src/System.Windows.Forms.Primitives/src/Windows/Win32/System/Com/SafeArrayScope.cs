@@ -150,17 +150,12 @@ internal readonly unsafe ref struct SafeArrayScope<T>
 
     public void Dispose()
     {
-        if (IsNull)
-        {
-            return;
-        }
-
         SAFEARRAY* safeArray = (SAFEARRAY*)_value;
 
-        // Really want _value to be null after disposal to avoid double destroy, but we also want
+        // Really want this to be null after disposal to avoid double destroy, but we also want
         // to maintain the readonly state of the struct to allow passing as `in` without creating implicit
         // copies (which would break the T** and void** operators).
-        *(void**)_value = null;
+        *(void**)this = null;
 
         if (safeArray is not null)
         {
@@ -176,4 +171,7 @@ internal readonly unsafe ref struct SafeArrayScope<T>
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator SAFEARRAY**(in SafeArrayScope<T> scope) => (SAFEARRAY**)Unsafe.AsPointer(ref Unsafe.AsRef(in scope._value));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator void**(in SafeArrayScope<T> scope) => (void**)Unsafe.AsPointer(ref Unsafe.AsRef(in scope._value));
 }

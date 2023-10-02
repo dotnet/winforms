@@ -1,9 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using Windows.Win32.System.Com;
-
-namespace System.Windows.Forms.Primitives.Tests.Windows.Win32.System.Com;
+namespace Windows.Win32.System.Com.Tests;
 
 public class SafeArrayScopeTests
 {
@@ -47,12 +45,12 @@ public class SafeArrayScopeTests
     }
 
     [Fact]
-    public void SafeArrayScope_Dispose_Success()
+    public void SafeArrayScope_NullAfterDispose()
     {
         SafeArrayScope<string> scope = new(size: 1);
         Assert.False(scope.IsNull);
 
         scope.Dispose();
-        Assert.False(scope.IsNull);
+        Assert.True(scope.IsNull);
     }
 }

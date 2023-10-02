@@ -364,7 +364,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             return HRESULT.S_OK;
         }
 
-        SAFEARRAY* ownerBounds = result.data.parray;
+        SafeArrayScope<double> ownerBounds = new(result.data.parray);
 
         // We accumulate rectangles onto a list.
         List<Rectangle> rectangles = [];
@@ -385,7 +385,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             endlinePoint = _provider.PointToScreen(endlinePoint);
             Rectangle endlineRectangle = new Rectangle(endlinePoint.X, endlinePoint.Y + 2, UiaTextProvider.EndOfLineWidth, Math.Abs(_provider.Logfont.lfHeight) + 1);
             *pRetVal = UiaTextProvider.BoundingRectangleAsArray(endlineRectangle);
-            result.Dispose();
+            ownerBounds.Dispose();
             return HRESULT.S_OK;
         }
 
@@ -394,22 +394,15 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         if (IsDegenerate)
         {
             *pRetVal = SAFEARRAY.Empty(VARENUM.VT_R8);
-            result.Dispose();
+            ownerBounds.Dispose();
             return HRESULT.S_OK;
         }
 
         ValidateEndpoints();
 
         // Get the mapping from client coordinates to screen coordinates.
-        int i = 0;
-        double x = default;
-        double y = default;
-
-        PInvoke.SafeArrayGetElement(ownerBounds, &i, &x).ThrowOnFailure();
-        i = 1;
-        PInvoke.SafeArrayGetElement(ownerBounds, &i, &y).ThrowOnFailure();
-        Point mapClientToScreen = new Point((int)x, (int)y);
-        result.Dispose();
+        Point mapClientToScreen = new Point((int)ownerBounds[0], (int)ownerBounds[1]);
+        ownerBounds.Dispose();
 
         // Clip the rectangles to the edit control's formatting rectangle.
         Rectangle clippingRectangle = _provider.BoundingRectangle;

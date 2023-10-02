@@ -560,7 +560,7 @@ this is the third line.";
     public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsEmpty_for_EmptyText()
     {
         Rectangle expected = new Rectangle(10, 33, 96, 19);
-        using SafeArrayScope<double> array = new(4);
+        SafeArrayScope<double> array = new(4);
         array[0] = 10;
         array[1] = 33;
         array[2] = 96;
@@ -578,8 +578,8 @@ this is the third line.";
         UiaTextProvider provider = providerMock.Object;
         IRawElementProviderSimple* elementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(enclosingElement);
         UiaTextRange textRange = new UiaTextRange(elementProvider, provider, start: 0, end: 0);
-        // No using statement as this will hold the same SAFEARRAY as above.
-        SafeArrayScope<double> actual = new(null);
+
+        using SafeArrayScope<double> actual = new(null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetBoundingRectangles(actual).Succeeded);
         using SafeArrayScope<double> expectedRectArray = UiaTextProvider.BoundingRectangleAsArray(expected);
         for(int i = 0; i < actual.Length; i++)
@@ -591,7 +591,7 @@ this is the third line.";
     [StaFact]
     public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsEmpty_for_DegenerateRange()
     {
-        using SafeArrayScope<double> array = new(4);
+        SafeArrayScope<double> array = new(4);
         array[0] = 10;
         array[1] = 33;
         array[2] = 96;
@@ -618,7 +618,7 @@ this is the third line.";
     [StaFact]
     public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsExpected_for_Endline()
     {
-        using SafeArrayScope<double> array = new(4);
+        SafeArrayScope<double> array = new(4);
         array[0] = 10;
         array[1] = 33;
         array[2] = 96;
@@ -658,7 +658,7 @@ this is the third line.";
     {
         string testText = "Test text.";
 
-        using SafeArrayScope<double> array = new(4);
+        SafeArrayScope<double> array = new(4);
         array[0] = 10;
         array[1] = 33;
         array[2] = 96;
@@ -708,7 +708,7 @@ this is the third line.";
 test text with several lines
 and numbers 12345";
 
-        using SafeArrayScope<double> array = new(4);
+        SafeArrayScope<double> array = new(4);
         array[0] = 27;
         array[1] = 128;
         array[2] = 128;
@@ -791,7 +791,7 @@ and numbers 12345";
 test text with several lines
 and numbers 12345";
 
-        using SafeArrayScope<double> array = new(4);
+        SafeArrayScope<double> array = new(4);
         array[0] = 27;
         array[1] = 128;
         array[2] = 128;

@@ -67,12 +67,6 @@ public abstract partial class TextBoxBase
 
             GetVisibleRangePoints(out int start, out int end);
 
-            SAFEARRAYBOUND saBound = new()
-            {
-                cElements = 1,
-                lLbound = 0
-            };
-
             IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(Owner.AccessibilityObject);
             ComSafeArrayScope<ITextRangeProvider> result = new(1);
             result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
