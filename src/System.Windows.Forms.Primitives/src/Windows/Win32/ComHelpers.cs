@@ -150,7 +150,7 @@ internal static unsafe partial class ComHelpers
             }
             else
             {
-                Debug.WriteLine($"{nameof(TryGetManagedInterface)}: Found a manual CCW, but couldn't unwrap to {typeof(TWrapper).Name}");
+                Debug.WriteLine($"{nameof(TryGetObjectForIUnknown)}: Found a manual CCW, but couldn't unwrap to {typeof(TWrapper).Name}");
             }
         }
 
@@ -158,18 +158,26 @@ internal static unsafe partial class ComHelpers
         return false;
     }
 
+#pragma warning disable CS1574 // XML comment has cref attribute 'TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject?)' that could not be resolved
+    /// <inheritdoc cref="ComHelpers.TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject?)"/>
+    internal static bool TryGetObjectForIUnknown<TObject>(
+        IUnknown* unknown,
+        [NotNullWhen(true)] out TObject? @object) where TObject : class
+        => TryGetObjectForIUnknown(unknown, takeOwnership: false, out @object);
+#pragma warning restore CS1574
+
     /// <summary>
     ///  Attempts to get a managed wrapper of the specified type for the given COM interface.
     /// </summary>
     /// <param name="takeOwnership">
     ///  When <see langword="true"/>, releases the original <paramref name="unknown"/> whether successful or not.
     /// </param>
-    internal static bool TryGetManagedInterface<TWrapper>(
+    internal static bool TryGetObjectForIUnknown<TObject>(
         IUnknown* unknown,
         bool takeOwnership,
-        [NotNullWhen(true)] out TWrapper? @interface) where TWrapper : class
+        [NotNullWhen(true)] out TObject? @object) where TObject : class
     {
-        @interface = null;
+        @object = null;
         if (unknown is null)
         {
             return false;
@@ -177,12 +185,12 @@ internal static unsafe partial class ComHelpers
 
         try
         {
-            @interface = (TWrapper)GetObjectForIUnknown(unknown);
+            @object = (TObject)GetObjectForIUnknown(unknown);
             return true;
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"{nameof(TryGetManagedInterface)}: Failed to get RCW for {typeof(TWrapper).Name}. {ex.Message}");
+            Debug.WriteLine($"{nameof(TryGetObjectForIUnknown)}: Failed to get object for {typeof(TObject).Name}. {ex.Message}");
             return false;
         }
         finally
@@ -190,7 +198,7 @@ internal static unsafe partial class ComHelpers
             if (takeOwnership)
             {
                 uint count = unknown->Release();
-                Debug.WriteLineIf(count > 0, $"{nameof(TryGetManagedInterface)}: Count for {typeof(TWrapper).Name} is {count} after release.");
+                Debug.WriteLineIf(count > 0, $"{nameof(TryGetObjectForIUnknown)}: Count for {typeof(TObject).Name} is {count} after release.");
             }
         }
     }

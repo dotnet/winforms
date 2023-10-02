@@ -4,9 +4,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using Windows.Win32.System.Com;
-#if DEBUG
 using Windows.Win32.System.Variant;
-#endif
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 
@@ -30,15 +28,23 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
     /// <param name="end">
     ///  A caret position after the last character from a text range, not an index of an item.
     /// </param>
-    /// <remark>
-    ///  If there is a range "Test string", then start = 0, end = 11.
+    /// <remarks>
+    ///  <para>If there is a range "Test string", then start = 0, end = 11.
     ///  If start = 2 and end = 9, the range is "et stri".
-    ///  If start=end, that points a caret position only, there is no any text range.
-    /// </remark>
+    ///  If start=end, that points a caret position only, there is no any text range.</para>
+    /// </remarks>
     public UiaTextRange(IRawElementProviderSimple* enclosingElement, UiaTextProvider provider, int start, int end)
+#if DEBUG
+        : this(new AgileComPointer<IRawElementProviderSimple>(enclosingElement, takeOwnership: true, trackDisposal: false), provider, start, end)
+#else
+        : this(new AgileComPointer<IRawElementProviderSimple>(enclosingElement, takeOwnership: true), provider, start, end)
+#endif
     {
-        ArgumentNullException.ThrowIfNull(enclosingElement);
-        _enclosingElement = new(enclosingElement, takeOwnership: true, trackDisposal: false);
+    }
+
+    private UiaTextRange(AgileComPointer<IRawElementProviderSimple> enclosingElement, UiaTextProvider provider, int start, int end)
+    {
+        _enclosingElement = enclosingElement.OrThrowIfNull();
         _provider = provider.OrThrowIfNull();
 
         if (start > 0)
@@ -62,14 +68,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         set
         {
             // Ensure that we never accidentally get a negative index.
-            if (value < 0)
-            {
-                _end = 0;
-            }
-            else
-            {
-                _end = value;
-            }
+            _end = value < 0 ? 0 : value;
 
             // Ensure that end never moves before start.
             if (_end < _start)
@@ -108,14 +107,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             }
 
             // Ensure that we never accidentally get a negative index.
-            if (value < 0)
-            {
-                _start = 0;
-            }
-            else
-            {
-                _start = value;
-            }
+            _start = value < 0 ? 0 : value;
         }
     }
 
@@ -131,10 +123,9 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             return HRESULT.E_POINTER;
         }
 
-        using var element = _enclosingElement.GetInterface();
-        IRawElementProviderSimple* rawElementProviderSimple;
-        element.Value->QueryInterface(IID.Get<IRawElementProviderSimple>(), (void**)&rawElementProviderSimple).AssertSuccess();
-        *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProviderSimple, _provider, Start, End));
+        // Ensure UiaTextRange is not disposable since _enclosingElement is being shared.
+        Debug.Assert(!typeof(UiaTextRange).IsAssignableTo(typeof(IDisposable)));
+        *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(_enclosingElement, _provider, Start, End));
         return HRESULT.S_OK;
     }
 
@@ -153,8 +144,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             return HRESULT.E_INVALIDARG;
         }
 
-        var rangeObj = ComHelpers.GetObjectForIUnknown((IUnknown*)range);
-        *pRetVal = rangeObj is UiaTextRange editRange && editRange.Start == Start && editRange.End == End;
+        *pRetVal = ComHelpers.TryGetObjectForIUnknown((IUnknown*)range, out UiaTextRange? editRange) && editRange.Start == Start && editRange.End == End;
         return HRESULT.S_OK;
     }
 
@@ -170,8 +160,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             return HRESULT.E_INVALIDARG;
         }
 
-        var targetRangeObj = ComHelpers.GetObjectForIUnknown((IUnknown*)targetRange);
-        if (targetRangeObj is not UiaTextRange editRange)
+        if (!ComHelpers.TryGetObjectForIUnknown((IUnknown*)targetRange, out UiaTextRange? editRange))
         {
             *pRetVal = -1;
             return HRESULT.E_INVALIDARG;
@@ -325,11 +314,8 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         int index = backward ? rangeText.LastIndexOf(text, comparisonType) : rangeText.IndexOf(text, comparisonType);
 
         // If the text was found then create a new range covering the found text.
-        using var element = _enclosingElement.GetInterface();
-        IRawElementProviderSimple* rawElementProviderSimple;
-        element.Value->QueryInterface(IID.Get<IRawElementProviderSimple>(), (void**)&rawElementProviderSimple).AssertSuccess();
         *pRetVal = index >= 0
-            ? ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProviderSimple, _provider, Start + index, Start + index + text.Length))
+            ? ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(_enclosingElement, _provider, Start + index, Start + index + text.Length))
             : null;
         return HRESULT.S_OK;
     }
@@ -360,7 +346,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             || result.data.parray->GetBounds().cElements != 4)
         {
             result.Dispose();
-            *pRetVal = SAFEARRAY.Empty(VARENUM.VT_R8);
+            *pRetVal = SAFEARRAY.CreateEmpty(VARENUM.VT_R8);
             return HRESULT.S_OK;
         }
 
@@ -383,7 +369,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         {
             PInvoke.GetCaretPos(out Point endlinePoint);
             endlinePoint = _provider.PointToScreen(endlinePoint);
-            Rectangle endlineRectangle = new Rectangle(endlinePoint.X, endlinePoint.Y + 2, UiaTextProvider.EndOfLineWidth, Math.Abs(_provider.Logfont.lfHeight) + 1);
+            Rectangle endlineRectangle = new(endlinePoint.X, endlinePoint.Y + 2, UiaTextProvider.EndOfLineWidth, Math.Abs(_provider.Logfont.lfHeight) + 1);
             *pRetVal = UiaTextProvider.BoundingRectangleAsArray(endlineRectangle);
             ownerBounds.Dispose();
             return HRESULT.S_OK;
@@ -393,7 +379,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         // but properly positioned, rectangle for degenerate ranges.
         if (IsDegenerate)
         {
-            *pRetVal = SAFEARRAY.Empty(VARENUM.VT_R8);
+            *pRetVal = SAFEARRAY.CreateEmpty(VARENUM.VT_R8);
             ownerBounds.Dispose();
             return HRESULT.S_OK;
         }
@@ -401,7 +387,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         ValidateEndpoints();
 
         // Get the mapping from client coordinates to screen coordinates.
-        Point mapClientToScreen = new Point((int)ownerBounds[0], (int)ownerBounds[1]);
+        Point mapClientToScreen = new((int)ownerBounds[0], (int)ownerBounds[1]);
         ownerBounds.Dispose();
 
         // Clip the rectangles to the edit control's formatting rectangle.
@@ -419,7 +405,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         Point endPoint = _provider.GetPositionFromCharForUpperRightCorner(End - 1, text);
 
         // Add 2 to Y to get a correct size of a rectangle around a range
-        Rectangle rectangle = new Rectangle(startPoint.X, startPoint.Y + 2, endPoint.X - startPoint.X, clippingRectangle.Height);
+        Rectangle rectangle = new(startPoint.X, startPoint.Y + 2, endPoint.X - startPoint.X, clippingRectangle.Height);
         rectangle.Intersect(clippingRectangle);
 
         if (rectangle.Width > 0 && rectangle.Height > 0)
@@ -439,8 +425,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             return HRESULT.E_POINTER;
         }
 
-        using var element = _enclosingElement.GetInterface();
-        element.Value->QueryInterface(IID.Get<IRawElementProviderSimple>(), (void**)pRetVal).AssertSuccess();
+        *pRetVal = _enclosingElement.GetInterface();
         return HRESULT.S_OK;
     }
 
@@ -580,8 +565,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
 
     HRESULT ITextRangeProvider.Interface.MoveEndpointByRange(TextPatternRangeEndpoint endpoint, ITextRangeProvider* targetRange, TextPatternRangeEndpoint targetEndpoint)
     {
-        var targetRangeObj = ComHelpers.GetObjectForIUnknown((IUnknown*)targetRange);
-        if (targetRangeObj is not UiaTextRange textRange)
+        if (!ComHelpers.TryGetObjectForIUnknown((IUnknown*)targetRange, out UiaTextRange? textRange))
         {
             return HRESULT.E_INVALIDARG;
         }
@@ -658,7 +642,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             return HRESULT.E_POINTER;
         }
 
-        *pRetVal = SAFEARRAY.Empty(VARENUM.VT_UNKNOWN);
+        *pRetVal = SAFEARRAY.CreateEmpty(VARENUM.VT_UNKNOWN);
         return HRESULT.S_OK;
     }
 
@@ -769,7 +753,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
 
         string text = _provider.Text;
         // Adding a rectangle for each line.
-        List<Rectangle> rects = new List<Rectangle>();
+        List<Rectangle> rects = [];
 
         for (int lineIndex = startLine; lineIndex <= endLine; lineIndex++)
         {
@@ -896,7 +880,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
         }
     }
 
-    private static int GetBackgroundColor() => (int)(uint)(COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW);
+    private static int GetBackgroundColor() => (int)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW);
 
     private static int GetCapStyle(WINDOW_STYLE windowStyle)
         => (int)(((int)windowStyle & PInvoke.ES_UPPERCASE) != 0 ? CapStyle.AllCap : CapStyle.None);
@@ -914,7 +898,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
 
     private static int GetFontWeight(LOGFONTW logfont) => logfont.lfWeight;
 
-    private static int GetForegroundColor() => (int)(uint)(COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOWTEXT);
+    private static int GetForegroundColor() => (int)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOWTEXT);
 
     private static int GetHorizontalTextAlignment(WINDOW_STYLE windowStyle)
         => (int)(((int)windowStyle & PInvoke.ES_CENTER) != 0

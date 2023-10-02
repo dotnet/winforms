@@ -24,7 +24,7 @@ internal unsafe partial struct SAFEARRAY
     /// <summary>
     ///  Creates an empty one-dimensional SAFEARRAY of type <paramref name="arrayType"/>.
     /// </summary>
-    public static SAFEARRAY* Empty(VARENUM arrayType)
+    public static SAFEARRAY* CreateEmpty(VARENUM arrayType)
     {
         SAFEARRAYBOUND saBound = new()
         {
@@ -39,7 +39,7 @@ internal unsafe partial struct SAFEARRAY
     {
         get
         {
-            // Match CLR behaviour.
+            // Match CLR behavior.
             ADVANCED_FEATURE_FLAGS hardwiredType = fFeatures & (FADF_BSTR | FADF_UNKNOWN | FADF_DISPATCH | FADF_VARIANT);
             if (hardwiredType == FADF_BSTR && cbElements == sizeof(char*))
             {

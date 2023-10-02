@@ -71,7 +71,7 @@ public unsafe class UiaTextRangeTests
     public void UiaTextRange_Constructor_Control_Null_ThrowsException()
     {
         UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
-        Assert.Throws<ArgumentNullException>(() => new UiaTextRange(null, provider, 0, 5));
+        Assert.Throws<NullReferenceException>(() => new UiaTextRange(null, provider, 0, 5));
     }
 #pragma warning restore CS8625
 

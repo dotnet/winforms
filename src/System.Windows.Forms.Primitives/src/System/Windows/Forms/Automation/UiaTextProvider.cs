@@ -9,7 +9,7 @@ using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace System.Windows.Forms.Automation;
 
-internal abstract unsafe class UiaTextProvider : ITextProvider.Interface
+internal abstract unsafe class UiaTextProvider : ITextProvider.Interface, ITextProvider2.Interface, IManagedWrapper<ITextProvider2, ITextProvider>
 {
     /// <summary>
     ///  The value of a width of an end of a text line as 2 px to a ScreenReader can show it.
@@ -80,7 +80,7 @@ internal abstract unsafe class UiaTextProvider : ITextProvider.Interface
     {
         if (rectArray is null || rectArray.Count == 0)
         {
-            return new(SAFEARRAY.Empty(VARENUM.VT_R8));
+            return new(SAFEARRAY.CreateEmpty(VARENUM.VT_R8));
         }
 
         SafeArrayScope<double> result = new((uint)(rectArray.Count * 4));
@@ -139,4 +139,8 @@ internal abstract unsafe class UiaTextProvider : ITextProvider.Interface
 
         return SendInput(1, ref keyboardInput, sizeof(INPUT));
     }
+
+    public abstract HRESULT RangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal);
+
+    public abstract HRESULT GetCaretRange(BOOL* isActive, ITextRangeProvider** pRetVal);
 }

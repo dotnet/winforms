@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 
 public abstract partial class TextBoxBase
 {
-    internal unsafe class TextBoxBaseUiaTextProvider : UiaTextProvider2
+    internal sealed unsafe class TextBoxBaseUiaTextProvider : UiaTextProvider
     {
         private readonly WeakReference<TextBoxBase> _owner;
 
@@ -31,7 +31,7 @@ public abstract partial class TextBoxBase
 
             if (Owner is null || !Owner.IsHandleCreated)
             {
-                *pRetVal = SAFEARRAY.Empty(VARENUM.VT_UNKNOWN);
+                *pRetVal = SAFEARRAY.CreateEmpty(VARENUM.VT_UNKNOWN);
                 return HRESULT.S_OK;
             }
 
@@ -61,7 +61,7 @@ public abstract partial class TextBoxBase
 
             if (Owner is null || !Owner.IsHandleCreated)
             {
-                *pRetVal = SAFEARRAY.Empty(VARENUM.VT_UNKNOWN);
+                *pRetVal = SAFEARRAY.CreateEmpty(VARENUM.VT_UNKNOWN);
                 return HRESULT.S_OK;
             }
 
@@ -327,7 +327,7 @@ public abstract partial class TextBoxBase
 
                 pt = Owner.GetPositionFromCharIndex(startCharIndex);
 
-                if (ch == '\r' || ch == '\n')
+                if (ch is '\r' or '\n')
                 {
                     pt.X += EndOfLineWidth; // add 2 px to show the end of line
                 }

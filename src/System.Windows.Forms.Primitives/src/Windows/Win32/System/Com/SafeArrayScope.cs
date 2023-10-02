@@ -27,6 +27,53 @@ internal readonly unsafe ref struct SafeArrayScope<T>
 
     public SafeArrayScope(SAFEARRAY* value)
     {
+        if (value is null)
+        {
+            // This SafeArrayScope is meant to receive a SAFEARRAY* from COM.
+            _value = (nint)value;
+            return;
+        }
+
+        if (typeof(T) == typeof(string))
+        {
+            if (value->VarType is not VARENUM.VT_BSTR)
+            {
+                throw new ArgumentException($"Wanted SafeArrayScope<{typeof(T)}> but got SAFEARRAY with VarType={value->VarType}");
+            }
+        }
+        else if (typeof(T) == typeof(int))
+        {
+            if (value->VarType is not VARENUM.VT_I4 or VARENUM.VT_INT)
+            {
+                throw new ArgumentException($"Wanted SafeArrayScope<{typeof(T)}> but got SAFEARRAY with VarType={value->VarType}");
+            }
+        }
+        else if (typeof(T) == typeof(double))
+        {
+            if (value->VarType is not VARENUM.VT_R8)
+            {
+                throw new ArgumentException($"Wanted SafeArrayScope<{typeof(T)}> but got SAFEARRAY with VarType={value->VarType}");
+            }
+        }
+        else if (typeof(T) == typeof(nint))
+        {
+            if (value->VarType is not VARENUM.VT_UNKNOWN)
+            {
+                throw new ArgumentException($"Wanted SafeArrayScope<{typeof(T)}> but got SAFEARRAY with VarType={value->VarType}");
+            }
+        }
+        else if (typeof(T).IsAssignableTo(typeof(IComIID)))
+        {
+            throw new ArgumentException("Use ComSafeArrayScope instead");
+        }
+        else
+        {
+            // The type has not been accounted for yet in the SafeArrayScope
+            // If the type was intentional, this SafeArrayScope needs to be updated
+            // to behave appropriately with this type.
+            throw new ArgumentException("Unknown type");
+        }
+
         _value = (nint)value;
     }
 
@@ -45,7 +92,7 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         {
             vt = VARENUM.VT_R8;
         }
-        else if (typeof(T) == typeof(nint))
+        else if (typeof(T) == typeof(nint) || typeof(T).IsAssignableTo(typeof(IComIID)))
         {
             throw new ArgumentException("Use ComSafeArrayScope instead");
         }
@@ -64,6 +111,10 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         };
 
         _value = (nint)PInvoke.SafeArrayCreate(vt, 1, &saBound);
+        if (_value == 0)
+        {
+            throw new InvalidOperationException("Unable to create SAFEARRAY");
+        }
     }
 
     /// <remarks>

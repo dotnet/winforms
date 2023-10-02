@@ -9,7 +9,7 @@ using PARAM = Interop.PARAM;
 
 namespace System.Windows.Forms;
 
-internal unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider2
+internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
 {
     /// <summary>
     ///  Since the label edit inside the ListView is always single-line, for optimization
@@ -125,7 +125,7 @@ internal unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider2
 
             pt = GetPositionFromCharIndex(startCharIndex);
 
-            if (ch == '\r' || ch == '\n')
+            if (ch is '\r' or '\n')
             {
                 pt.X += EndOfLineWidth; // add 2 px to show the end of line
             }
@@ -223,7 +223,7 @@ internal unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider2
 
     public override Point PointToScreen(Point pt)
     {
-        PInvoke.MapWindowPoints((HWND)_owningChildEdit.Handle, HWND.Null, ref pt);
+        PInvoke.MapWindowPoints(_owningChildEdit.Handle, HWND.Null, ref pt);
         return pt;
     }
 
@@ -303,7 +303,7 @@ internal unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider2
     public override Rectangle RectangleToScreen(Rectangle rect)
     {
         RECT r = rect;
-        PInvoke.MapWindowPoints((HWND)_owningChildEdit.Handle, HWND.Null, ref r);
+        PInvoke.MapWindowPoints(_owningChildEdit.Handle, HWND.Null, ref r);
         return r;
     }
 

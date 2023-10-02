@@ -22,7 +22,7 @@ internal readonly unsafe ref struct ComSafeArrayScope<T> where T: unmanaged, ICo
 
     public ComSafeArrayScope(SAFEARRAY* value)
     {
-        if (value != null && value->VarType != VARENUM.VT_UNKNOWN)
+        if (value is not null && value->VarType != VARENUM.VT_UNKNOWN)
         {
             throw new ArgumentException("Must pass in a SafeArray of type VARENUM.VT_UNKNOWN");
         }
@@ -56,7 +56,6 @@ internal readonly unsafe ref struct ComSafeArrayScope<T> where T: unmanaged, ICo
             unknown.Value->QueryInterface(IID.Get<T>(), &result).ThrowOnFailure();
             return (T*)result;
         }
-
         set => _value[i] = (nint)value;
     }
 

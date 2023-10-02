@@ -60,7 +60,7 @@ public class SerializableTypesTests
 
             using var streamOut = result.GetStream();
             Assert.False(streamOut.IsNull);
-            Assert.True(ComHelpers.TryGetManagedInterface(streamOut.AsUnknown, takeOwnership: false, out Ole32.GPStream managedStream));
+            Assert.True(ComHelpers.TryGetObjectForIUnknown(streamOut.AsUnknown, takeOwnership: false, out Ole32.GPStream managedStream));
             Stream bufferStream = managedStream.GetDataStream();
             byte[] buffer = new byte[3];
             bufferStream.Read(buffer, 0, buffer.Length);

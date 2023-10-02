@@ -3,7 +3,7 @@
 
 namespace Windows.Win32.System.Com.Tests;
 
-public class SafeArrayScopeTests
+public unsafe class SafeArrayScopeTests
 {
     [Fact]
     public void SafeArrayScope_Construct_KnownType_Success()
@@ -52,5 +52,38 @@ public class SafeArrayScopeTests
 
         scope.Dispose();
         Assert.True(scope.IsNull);
+    }
+
+    [Fact]
+    public void SafeArrayScope_Construct_OfCOM_ThrowsArgumentException()
+    {
+        string message = "Use ComSafeArrayScope instead";
+        ArgumentException e = Assert.Throws<ArgumentException>(() => new SafeArrayScope<IUnknown>(size: 1));
+        Assert.Equal(message, e.Message);
+        SAFEARRAY* array = SAFEARRAY.CreateEmpty(Variant.VARENUM.VT_UNKNOWN);
+        try
+        {
+            e = Assert.Throws<ArgumentException>(() => new SafeArrayScope<IUnknown>(array));
+            Assert.Equal(message, e.Message);
+        }
+        finally
+        {
+            PInvoke.SafeArrayDestroy(array);
+        }
+    }
+
+    [Fact]
+    public void SafeArrayScope_Construct_MismatchType_ThrowsArgumentException()
+    {
+        SAFEARRAY* array = SAFEARRAY.CreateEmpty(Variant.VARENUM.VT_INT);
+        try
+        {
+            ArgumentException e = Assert.Throws<ArgumentException>(() => new SafeArrayScope<string>(array));
+            Assert.Equal("Wanted SafeArrayScope<System.String> but got SAFEARRAY with VarType=VT_INT", e.Message);
+        }
+        finally
+        {
+            PInvoke.SafeArrayDestroy(array);
+        }
     }
 }

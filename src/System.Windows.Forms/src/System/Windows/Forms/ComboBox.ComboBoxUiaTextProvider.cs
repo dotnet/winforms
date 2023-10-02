@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 
 public partial class ComboBox
 {
-    internal unsafe class ComboBoxUiaTextProvider : UiaTextProvider2
+    internal sealed unsafe class ComboBoxUiaTextProvider : UiaTextProvider
     {
         /// <summary>
         ///  Since the TextBox inside the ComboBox is always single-line, for optimization
@@ -181,7 +181,7 @@ public partial class ComboBox
 
                 pt = GetPositionFromCharIndex(startCharIndex);
 
-                if (ch == '\r' || ch == '\n')
+                if (ch is '\r' or '\n')
                 {
                     pt.X += EndOfLineWidth; // add 2 px to show the end of line
                 }
@@ -250,8 +250,8 @@ public partial class ComboBox
 
             // Formatting rectangle is the boundary, which we need to inflate by 1
             // in order to read characters within the rectangle
-            Point ptStart = new Point(rectangle.X + 1, rectangle.Y + 1);
-            Point ptEnd = new Point(rectangle.Right - 1, rectangle.Bottom - 1);
+            Point ptStart = new(rectangle.X + 1, rectangle.Y + 1);
+            Point ptEnd = new(rectangle.Right - 1, rectangle.Bottom - 1);
 
             visibleStart = GetCharIndexFromPosition(ptStart);
             visibleEnd = GetCharIndexFromPosition(ptEnd) + 1; // Add 1 to get a caret position after received character
@@ -271,7 +271,7 @@ public partial class ComboBox
 
             if (!_owningComboBox.IsHandleCreated)
             {
-                *pRetVal = SAFEARRAY.Empty(VARENUM.VT_UNKNOWN);
+                *pRetVal = SAFEARRAY.CreateEmpty(VARENUM.VT_UNKNOWN);
                 return HRESULT.S_OK;
             }
 
