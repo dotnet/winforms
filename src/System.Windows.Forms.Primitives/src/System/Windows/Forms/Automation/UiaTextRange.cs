@@ -6,13 +6,13 @@ using System.Drawing;
 using Windows.Win32.System.Com;
 #if DEBUG
 using Windows.Win32.System.Variant;
-using Windows.Win32.UI.Accessibility;
 #endif
+using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace System.Windows.Forms.Automation;
 
-internal unsafe class UiaTextRange : ITextRangeProvider.Interface
+internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManagedWrapper<ITextRangeProvider>
 {
     // Edit controls always use "\r\n" as the line separator, not "\n".
     // This string is a non-localizable string.

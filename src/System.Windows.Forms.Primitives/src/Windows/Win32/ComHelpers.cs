@@ -135,22 +135,14 @@ internal static unsafe partial class ComHelpers
     }
 
     /// <summary>
-    ///  Attempts to unwrap one of our ComWrapper CCWs as a particular managed object.
+    ///  Attempts to unwrap a ComWrapper CCW as a particular managed object.
     /// </summary>
-    /// <devdoc>
-    ///  <para>
-    ///   This should remain internal to this class and will ultimately mostly be replaced by
-    ///   https://github.com/dotnet/runtime/issues/79674.
-    ///  </para>
-    /// </devdoc>
     private static bool TryUnwrapComWrapperCCW<TWrapper>(
         IUnknown* unknown,
         [NotNullWhen(true)] out TWrapper? @interface) where TWrapper : class
     {
-        using var wrapper = ComScope<IComCallableWrapper>.TryQueryFrom(unknown, out HRESULT hr);
-        if (hr.Succeeded)
+        if (ComWrappers.TryGetObject((nint)unknown, out object? obj))
         {
-            object obj = ComWrappers.ComInterfaceDispatch.GetInstance<object>((ComWrappers.ComInterfaceDispatch*)unknown);
             if (obj is TWrapper desired)
             {
                 @interface = desired;
@@ -185,12 +177,6 @@ internal static unsafe partial class ComHelpers
 
         try
         {
-            // Check to see if we're one of our own CCWs and unwrap.
-            if (TryUnwrapComWrapperCCW(unknown, out @interface))
-            {
-                return true;
-            }
-
             @interface = (TWrapper)GetObjectForIUnknown(unknown);
             return true;
         }
@@ -214,9 +200,10 @@ internal static unsafe partial class ComHelpers
     /// </summary>
     internal static bool WrapsManagedObject(object @object, IUnknown* unknown)
     {
-        if (TryUnwrapComWrapperCCW(unknown, out object? foundObject))
+        // If it is a ComWrappers object we need to simply pull out the original object to check.
+        if (ComWrappers.TryGetObject((nint)unknown, out object? obj))
         {
-            return @object == foundObject;
+            return @object == obj;
         }
 
         using ComScope<IUnknown> ccw = new((IUnknown*)(void*)Marshal.GetIUnknownForObject(@object));
@@ -232,6 +219,12 @@ internal static unsafe partial class ComHelpers
         if (unknown is null)
         {
             throw new ArgumentNullException(nameof(unknown));
+        }
+
+        // If it is a ComWrappers object we need to simply pull out the original object.
+        if (ComWrappers.TryGetObject((nint)unknown, out object? obj))
+        {
+            return obj;
         }
 
         if (BuiltInComSupported)
