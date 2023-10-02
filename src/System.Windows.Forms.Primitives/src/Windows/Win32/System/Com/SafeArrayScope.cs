@@ -77,50 +77,22 @@ internal readonly unsafe ref struct SafeArrayScope<T>
     {
         get
         {
-            Span<int> indices = stackalloc int[] { i };
-
             if (typeof(T) == typeof(string))
             {
-                using BSTR result = default;
-                fixed (int* pIndices = indices)
-                {
-                    PInvoke.SafeArrayGetElement(Value, pIndices, &result).ThrowOnFailure();
-                }
-
-                string resultString = result.ToString();
-                return (T)(object)resultString;
+                using BSTR result = GetElement<BSTR>(i);
+                return (T)(object)result.ToString();
             }
             else if (typeof(T) == typeof(int))
             {
-                int result = default;
-                fixed (int* pIndices = indices)
-                {
-                    PInvoke.SafeArrayGetElement(Value, pIndices, &result).ThrowOnFailure();
-                }
-
-                return (T)(object)result;
+                return (T)(object)GetElement<int>(i);
             }
             else if (typeof(T) == typeof(double))
             {
-                double result = default;
-
-                fixed (int* pIndices = indices)
-                {
-                    PInvoke.SafeArrayGetElement(Value, pIndices, &result).ThrowOnFailure();
-                }
-
-                return (T)(object)result;
+                return (T)(object)GetElement<double>(i);
             }
             else if (typeof(T) == typeof(nint))
             {
-                nint result;
-
-                fixed (int* pIndices = indices)
-                {
-                    PInvoke.SafeArrayGetElement(Value, pIndices, &result).ThrowOnFailure();
-                }
-
-                return (T)(object)result;
+                return (T)(object)GetElement<nint>(i);
             }
 
             // Noop. This is an unknown type. We should fill this method out to to do the right
@@ -129,29 +101,44 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         }
         set
         {
-            Span<int> indices = stackalloc int[] { i };
             if (value is string s)
             {
                 using BSTR bstrText = new(s);
-                fixed (int* pIndices = indices)
-                {
-                    PInvoke.SafeArrayPutElement(Value, pIndices, bstrText).ThrowOnFailure();
-                }
+                PutElement(i, bstrText);
             }
             else if (value is int @int)
             {
-                fixed (int* pIndices = indices)
-                {
-                    PInvoke.SafeArrayPutElement(Value, pIndices, &@int).ThrowOnFailure();
-                }
+                PutElement(i, &@int);
             }
             else if (value is double dbl)
             {
-                fixed (int* pIndices = indices)
-                {
-                    PInvoke.SafeArrayPutElement(Value, pIndices, &dbl).ThrowOnFailure();
-                }
+                PutElement(i, &dbl);
             }
+            else if (value is nint @nint)
+            {
+                PutElement(i, (void*)@nint);
+            }
+        }
+    }
+
+    private TReturn GetElement<TReturn>(int index) where TReturn : unmanaged
+    {
+        Span<int> indices = [index];
+        TReturn result;
+        fixed (int* pIndices = indices)
+        {
+            PInvoke.SafeArrayGetElement(Value, pIndices, &result).ThrowOnFailure();
+        }
+
+        return result;
+    }
+
+    private void PutElement(int index, void* value)
+    {
+        Span<int> indices = [index];
+        fixed (int* pIndices = indices)
+        {
+            PInvoke.SafeArrayPutElement((SAFEARRAY*)_value, pIndices, value).ThrowOnFailure();
         }
     }
 
@@ -180,6 +167,8 @@ internal readonly unsafe ref struct SafeArrayScope<T>
             PInvoke.SafeArrayDestroy(safeArray).ThrowOnFailure();
         }
     }
+
+    public static explicit operator VARIANT(in SafeArrayScope<T> scope) => new() { vt = VARENUM.VT_ARRAY | scope.Value->VarType, data = new() { parray = (SAFEARRAY*)scope._value } };
 
     public static implicit operator SAFEARRAY*(in SafeArrayScope<T> scope) => (SAFEARRAY*)scope._value;
 

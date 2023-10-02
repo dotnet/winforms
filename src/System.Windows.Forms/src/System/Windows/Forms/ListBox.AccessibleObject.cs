@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.Automation;
+using Windows.Win32.System.Variant;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -123,7 +124,7 @@ public partial class ListBox
             switch (propertyID)
             {
                 case UiaCore.UIA.BoundingRectanglePropertyId:
-                    return UiaTextProvider.BoundingRectangleAsArray(BoundingRectangle).ToObject();
+                    return ((VARIANT)UiaTextProvider.BoundingRectangleAsArray(BoundingRectangle)).ToObject();
                 case UiaCore.UIA.ControlTypePropertyId:
                     // If we don't set a default role for the accessible object
                     // it will be retrieved from Windows.

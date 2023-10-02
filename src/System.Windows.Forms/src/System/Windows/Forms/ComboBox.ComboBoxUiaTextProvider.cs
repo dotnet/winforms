@@ -224,16 +224,9 @@ public partial class ComboBox
             // If there is no selection, start and end parameters are the position of the caret.
             PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETSEL, ref start, ref end);
 
-            SAFEARRAYBOUND saBound = new()
-            {
-                cElements = 1,
-                lLbound = 0
-            };
-
-            SAFEARRAY* result = PInvoke.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &saBound);
-            int i = 0;
             IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject);
-            PInvoke.SafeArrayPutElement(result, &i, ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end))).ThrowOnFailure();
+            ComSafeArrayScope<ITextRangeProvider> result = new(1);
+            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
 
             *pRetVal = result;
             return HRESULT.S_OK;
@@ -284,16 +277,9 @@ public partial class ComboBox
 
             GetVisibleRangePoints(out int start, out int end);
 
-            SAFEARRAYBOUND saBound = new()
-            {
-                cElements = 1,
-                lLbound = 0
-            };
-
-            SAFEARRAY* result = PInvoke.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &saBound);
-            int i = 0;
+            ComSafeArrayScope<ITextRangeProvider> result = new(1);
             IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject);
-            PInvoke.SafeArrayPutElement(result, &i, ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end))).ThrowOnFailure();
+            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
 
             *pRetVal = result;
             return HRESULT.S_OK;

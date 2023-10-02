@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.Automation;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using static System.Windows.Forms.UpDownBase;
 using static System.Windows.Forms.UpDownBase.UpDownButtons;
 using static Interop;
@@ -110,8 +112,8 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         using SubUpDownBase upDownBase = new();
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
         object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId);
-
-        Assert.Equal(UiaTextProvider.BoundingRectangleAsArray(upDownButtons.AccessibilityObject.BoundingRectangle), actual);
+        using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray(upDownButtons.AccessibilityObject.BoundingRectangle);
+        Assert.Equal(((VARIANT)rectArray).ToObject(), actual);
         Assert.False(upDownBase.IsHandleCreated);
     }
 

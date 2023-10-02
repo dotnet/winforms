@@ -76,38 +76,21 @@ internal abstract unsafe class UiaTextProvider : ITextProvider.Interface
 
     public static WINDOW_STYLE GetWindowStyle(IHandle<HWND> hWnd) => (WINDOW_STYLE)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
 
-    public static SAFEARRAY* RectListToDoubleArray(List<Rectangle> rectArray)
+    public static SafeArrayScope<double> RectListToDoubleArray(List<Rectangle> rectArray)
     {
         if (rectArray is null || rectArray.Count == 0)
         {
-            return SAFEARRAY.Empty(VARENUM.VT_R8);
+            return new(SAFEARRAY.Empty(VARENUM.VT_R8));
         }
 
-        SAFEARRAYBOUND saBound = new()
-        {
-            cElements = (uint)(rectArray.Count * 4),
-            lLbound = 0
-        };
-
-        SAFEARRAY* result = PInvoke.SafeArrayCreate(VARENUM.VT_R8, 1, &saBound);
-
-        double[] doubles = new double[rectArray.Count * 4];
+        SafeArrayScope<double> result = new((uint)(rectArray.Count * 4));
         int scan = 0;
-
         for (int i = 0; i < rectArray.Count; i++)
         {
-            double put = rectArray[i].X;
-            PInvoke.SafeArrayPutElement(result, &scan, &put).ThrowOnFailure();
-            scan++;
-            put = rectArray[i].Y;
-            PInvoke.SafeArrayPutElement(result, &scan, &put).ThrowOnFailure();
-            scan++;
-            put = rectArray[i].Width;
-            PInvoke.SafeArrayPutElement(result, &scan, &put).ThrowOnFailure();
-            scan++;
-            put = rectArray[i].Height;
-            PInvoke.SafeArrayPutElement(result, &scan, &put).ThrowOnFailure();
-            scan++;
+            result[scan++] = rectArray[i].X;
+            result[scan++] = rectArray[i].Y;
+            result[scan++] = rectArray[i].Width;
+            result[scan++] = rectArray[i].Height;
         }
 
         return result;
@@ -119,33 +102,14 @@ internal abstract unsafe class UiaTextProvider : ITextProvider.Interface
     ///  https://learn.microsoft.com/windows/win32/api/uiautomationcore/nf-uiautomationcore-irawelementproviderfragment-get_boundingrectangle
     ///  https://learn.microsoft.com/windows/win32/api/uiautomationcore/ns-uiautomationcore-uiarect
     /// </summary>
-    internal static VARIANT BoundingRectangleAsArray(Rectangle bounds)
+    internal static SafeArrayScope<double> BoundingRectangleAsArray(Rectangle bounds)
     {
-        SAFEARRAYBOUND saBound = new()
-        {
-            cElements = 4,
-            lLbound = 0
-        };
-
-        SAFEARRAY* result = PInvoke.SafeArrayCreate(VARENUM.VT_R8, 1, &saBound);
-        int i = 0;
-        double put = bounds.X;
-        PInvoke.SafeArrayPutElement(result, &i, &put).ThrowOnFailure();
-        i = 1;
-        put = bounds.Y;
-        PInvoke.SafeArrayPutElement(result, &i, &put).ThrowOnFailure();
-        i = 2;
-        put = bounds.Width;
-        PInvoke.SafeArrayPutElement(result, &i, &put).ThrowOnFailure();
-        i = 3;
-        put = bounds.Height;
-        PInvoke.SafeArrayPutElement(result, &i, &put).ThrowOnFailure();
-
-        return new VARIANT()
-        {
-            vt = VARENUM.VT_ARRAY,
-            data = new() { parray = result }
-        };
+        SafeArrayScope<double> result = new(4);
+        result[0] = bounds.X;
+        result[1] = bounds.Y;
+        result[2] = bounds.Width;
+        result[3] = bounds.Height;
+        return result;
     }
 
     public int SendInput(int inputs, ref INPUT input, int size)

@@ -44,16 +44,10 @@ public abstract partial class TextBoxBase
             // If there is no selection, start and end parameters are the position of the caret.
             PInvoke.SendMessage(Owner, PInvoke.EM_GETSEL, ref start, ref end);
 
-            SAFEARRAYBOUND saBound = new()
-            {
-                cElements = 1,
-                lLbound = 0
-            };
-
-            SAFEARRAY* result = PInvoke.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &saBound);
-            int i = 0;
             IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(Owner.AccessibilityObject);
-            PInvoke.SafeArrayPutElement(result, &i, ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end))).ThrowOnFailure();
+            ComSafeArrayScope<ITextRangeProvider> result = new(1);
+            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
+
             *pRetVal = result;
             return HRESULT.S_OK;
         }
@@ -79,10 +73,10 @@ public abstract partial class TextBoxBase
                 lLbound = 0
             };
 
-            SAFEARRAY* result = PInvoke.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &saBound);
-            int i = 0;
             IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(Owner.AccessibilityObject);
-            PInvoke.SafeArrayPutElement(result, &i, ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end))).ThrowOnFailure();
+            ComSafeArrayScope<ITextRangeProvider> result = new(1);
+            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
+
             *pRetVal = result;
             return HRESULT.S_OK;
         }

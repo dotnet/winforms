@@ -4,7 +4,6 @@
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using Windows.Win32.System.Com;
-using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using PARAM = Interop.PARAM;
 
@@ -163,16 +162,11 @@ internal unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider2
         // If there is no selection, start and end parameters are the position of the caret.
         PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETSEL, ref start, ref end);
 
-        SAFEARRAYBOUND saBound = new()
-        {
-            cElements = 1,
-            lLbound = 0
-        };
-
-        SAFEARRAY* result = PInvoke.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &saBound);
-        int i = 0;
+        ComSafeArrayScope<ITextRangeProvider> result = new(1);
         IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningChildEditAccessibilityObject);
-        PInvoke.SafeArrayPutElement(result, &i, ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end))).ThrowOnFailure();
+        result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
+        *pRetVal = result;
+
         return HRESULT.S_OK;
     }
 
@@ -214,16 +208,12 @@ internal unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider2
         }
 
         GetVisibleRangePoints(out int start, out int end);
-        SAFEARRAYBOUND saBound = new()
-        {
-            cElements = 1,
-            lLbound = 0
-        };
 
-        SAFEARRAY* result = PInvoke.SafeArrayCreate(VARENUM.VT_UNKNOWN, 1, &saBound);
-        int i = 0;
+        ComSafeArrayScope<ITextRangeProvider> result = new(1);
         IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningChildEditAccessibilityObject);
-        PInvoke.SafeArrayPutElement(result, &i, ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end))).ThrowOnFailure();
+        result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
+        *pRetVal = result;
+
         return HRESULT.S_OK;
     }
 

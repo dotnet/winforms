@@ -69,11 +69,11 @@ public unsafe class UiaTextProviderTests
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
         double[] expected = { 0, 0, 10, 5, 10, 10, 20, 30 };
-        using SafeArrayScope<double> actual = new(UiaTextProvider.RectListToDoubleArray(new List<Rectangle>
+        using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>
         {
             new Rectangle(0, 0, 10, 5),
             new Rectangle(10, 10, 20, 30)
-        }));
+        });
 
         Assert.Equal(8, actual.Length);
 
@@ -89,7 +89,7 @@ public unsafe class UiaTextProviderTests
     {
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-        using SafeArrayScope<double> actual = new(UiaTextProvider.RectListToDoubleArray(null));
+        using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(null);
         Assert.True(actual.IsEmpty);
     }
 #pragma warning restore CS8625
@@ -99,7 +99,7 @@ public unsafe class UiaTextProviderTests
     {
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-        using SafeArrayScope<double> actual = new(UiaTextProvider.RectListToDoubleArray(new List<Rectangle>()));
+        using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>());
         Assert.True(actual.IsEmpty);
     }
 

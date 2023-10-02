@@ -581,10 +581,7 @@ this is the third line.";
         // No using statement as this will hold the same SAFEARRAY as above.
         SafeArrayScope<double> actual = new(null);
         Assert.True(((ITextRangeProvider.Interface)textRange).GetBoundingRectangles(actual).Succeeded);
-        using VARIANT expectedRectArrayVariant = UiaTextProvider.BoundingRectangleAsArray(expected);
-        Assert.Equal(VARENUM.VT_ARRAY, expectedRectArrayVariant.vt);
-
-        SafeArrayScope<double> expectedRectArray = new(expectedRectArrayVariant.data.parray);
+        using SafeArrayScope<double> expectedRectArray = UiaTextProvider.BoundingRectangleAsArray(expected);
         for(int i = 0; i < actual.Length; i++)
         {
             Assert.Equal(expectedRectArray[i], actual[i]);

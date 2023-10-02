@@ -3,6 +3,8 @@
 
 using System.Drawing;
 using System.Windows.Forms.Automation;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 
@@ -20,7 +22,8 @@ public class ListViewLabelEditAccessibleObjectTests
 
         Assert.Equal(accessibilityObject.RuntimeId, accessibilityObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId));
         PInvoke.GetWindowRect(labelEdit, out RECT r);
-        Assert.Equal(UiaTextProvider.BoundingRectangleAsArray((Rectangle)r), accessibilityObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId));
+        using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray((Rectangle)r);
+        Assert.Equal(((VARIANT)rectArray).ToObject(), accessibilityObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId));
         Assert.Equal(Environment.ProcessId, accessibilityObject.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
         Assert.Equal(UiaCore.UIA.EditControlTypeId, accessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
         Assert.Equal(accessibilityObject.Name, accessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));

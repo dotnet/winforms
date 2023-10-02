@@ -54,7 +54,7 @@ internal readonly unsafe ref struct ComSafeArrayScope<T> where T: unmanaged, ICo
             using ComScope<IUnknown> unknown = new((IUnknown*)_value[i]);
             void* result;
             unknown.Value->QueryInterface(IID.Get<T>(), &result).ThrowOnFailure();
-            return (T*)_value[i];
+            return (T*)result;
         }
 
         set => _value[i] = (nint)value;
@@ -69,4 +69,6 @@ internal readonly unsafe ref struct ComSafeArrayScope<T> where T: unmanaged, ICo
     public void Dispose() => _value.Dispose();
 
     public static implicit operator SAFEARRAY**(in ComSafeArrayScope<T> scope) => scope._value;
+
+    public static implicit operator SAFEARRAY*(in ComSafeArrayScope<T> scope) => scope._value;
 }

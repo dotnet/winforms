@@ -953,7 +953,7 @@ internal unsafe partial struct VARIANT : IDisposable
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator double(VARIANT value)
-        => value.data.dblVal;
+        => value.vt == VT_R8 ? value.data.dblVal : ThrowInvalidCast<double>();
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static explicit operator VARIANT(double value)
@@ -996,9 +996,9 @@ internal unsafe partial struct VARIANT : IDisposable
         {
             return (VARIANT)uintValue;
         }
-        else if (value is double dblVal)
+        else if (value is double doubleValue)
         {
-            return (VARIANT)dblVal;
+            return (VARIANT)doubleValue;
         }
 
         // Need to fill out to match Marshal behavior so we can remove the call.

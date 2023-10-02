@@ -53,6 +53,6 @@ public class SafeArrayScopeTests
         Assert.False(scope.IsNull);
 
         scope.Dispose();
-        Assert.True(scope.IsNull);
+        Assert.False(scope.IsNull);
     }
 }

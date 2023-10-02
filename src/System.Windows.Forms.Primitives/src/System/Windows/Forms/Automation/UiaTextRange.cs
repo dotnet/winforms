@@ -384,7 +384,7 @@ internal unsafe class UiaTextRange : ITextRangeProvider.Interface
             PInvoke.GetCaretPos(out Point endlinePoint);
             endlinePoint = _provider.PointToScreen(endlinePoint);
             Rectangle endlineRectangle = new Rectangle(endlinePoint.X, endlinePoint.Y + 2, UiaTextProvider.EndOfLineWidth, Math.Abs(_provider.Logfont.lfHeight) + 1);
-            *pRetVal = UiaTextProvider.BoundingRectangleAsArray(endlineRectangle).data.parray;
+            *pRetVal = UiaTextProvider.BoundingRectangleAsArray(endlineRectangle);
             result.Dispose();
             return HRESULT.S_OK;
         }
