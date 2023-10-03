@@ -591,20 +591,11 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool IsDataBound
-    {
-        get
-        {
-            return IsDataBoundInternal;
-        }
-    }
+    public bool IsDataBound => IsDataBoundInternal;
 
     internal bool IsDataBoundInternal
     {
-        get
-        {
-            return (_flags & ColumnIsDataBound) != 0;
-        }
+        get => (_flags & ColumnIsDataBound) != 0;
         set
         {
             if (value)
@@ -625,14 +616,8 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [RefreshProperties(RefreshProperties.Repaint)]
     public int MinimumWidth
     {
-        get
-        {
-            return MinimumThickness;
-        }
-        set
-        {
-            MinimumThickness = value;
-        }
+        get => MinimumThickness;
+        set => MinimumThickness = value;
     }
 
     [Browsable(false)]
@@ -782,10 +767,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [AllowNull]
     public string ToolTipText
     {
-        get
-        {
-            return HeaderCell.ToolTipText;
-        }
+        get => HeaderCell.ToolTipText;
         set
         {
             if (string.Compare(ToolTipText, value, ignoreCase: false, CultureInfo.InvariantCulture) != 0)
@@ -799,10 +781,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     internal float UsedFillWeight
     {
-        get
-        {
-            return _usedFillWeight;
-        }
+        get => _usedFillWeight;
         set
         {
             Debug.Assert(value > 0);
@@ -815,10 +794,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Type? ValueType
     {
-        get
-        {
-            return (Type?)Properties.GetObject(s_propDataGridViewColumnValueType);
-        }
+        get => (Type?)Properties.GetObject(s_propDataGridViewColumnValueType);
         set
         {
             // what should we do when we modify the ValueType in the dataGridView column???
@@ -842,14 +818,8 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [RefreshProperties(RefreshProperties.Repaint)]
     public int Width
     {
-        get
-        {
-            return Thickness;
-        }
-        set
-        {
-            Thickness = value;
-        }
+        get => Thickness;
+        set => Thickness = value;
     }
 
     public override object Clone()
@@ -1077,8 +1047,6 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         return preferredColumnThickness;
     }
 
-    public override string ToString()
-    {
-        return $"DataGridViewColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewColumn {{ Name={Name}, Index={Index} }}";
 }
