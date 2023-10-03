@@ -1,23 +1,81 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Runtime.CompilerServices;
 using Windows.Win32.System.Variant;
 
 namespace Windows.Win32.System.Com;
 
 /// <summary>
-///  Helper to scope lifetime of a <see cref="SAFEARRAY"/> created via <see cref="PInvoke.SafeArrayCreate(VARENUM, uint, in SAFEARRAYBOUND)"/>
+///  Helper to scope lifetime of a <see cref="SAFEARRAY"/> created via <see cref="PInvoke.SafeArrayCreate(VARENUM, uint, SAFEARRAYBOUND*)"/>
 ///  Destroys the <see cref="SAFEARRAY"/> (if any) when disposed. Note that this scope currently only works for a one dimensional <see cref="SAFEARRAY"/>.
 /// </summary>
 /// <remarks>
 ///  <para>
 ///   Use in a <see langword="using" /> statement to ensure the <see cref="SAFEARRAY"/> gets disposed.
-///   Use <see cref="Value"/> to pass the <see cref="SAFEARRAY"/> to APIs that populate it.
+///  </para>
+///  <para>
+///   If the <see cref="SAFEARRAY"/> you are intending to scope the lifetime of has type <see cref="VARENUM.VT_UNKNOWN"/>,
+///   use <see cref="ComSafeArrayScope{T}"/> for better usability.
 ///  </para>
 /// </remarks>
-internal unsafe ref struct SafeArrayScope<T>
+internal readonly unsafe ref struct SafeArrayScope<T>
 {
-    public SAFEARRAY* Value { get; private set; }
+    private readonly nint _value;
+
+    public SAFEARRAY* Value => (SAFEARRAY*)_value;
+
+    public SafeArrayScope(SAFEARRAY* value)
+    {
+        if (value is null)
+        {
+            // This SafeArrayScope is meant to receive a SAFEARRAY* from COM.
+            _value = (nint)value;
+            return;
+        }
+
+        if (typeof(T) == typeof(string))
+        {
+            if (value->VarType is not VARENUM.VT_BSTR)
+            {
+                throw new ArgumentException($"Wanted SafeArrayScope<{typeof(T)}> but got SAFEARRAY with VarType={value->VarType}");
+            }
+        }
+        else if (typeof(T) == typeof(int))
+        {
+            if (value->VarType is not VARENUM.VT_I4 or VARENUM.VT_INT)
+            {
+                throw new ArgumentException($"Wanted SafeArrayScope<{typeof(T)}> but got SAFEARRAY with VarType={value->VarType}");
+            }
+        }
+        else if (typeof(T) == typeof(double))
+        {
+            if (value->VarType is not VARENUM.VT_R8)
+            {
+                throw new ArgumentException($"Wanted SafeArrayScope<{typeof(T)}> but got SAFEARRAY with VarType={value->VarType}");
+            }
+        }
+        else if (typeof(T) == typeof(nint))
+        {
+            if (value->VarType is not VARENUM.VT_UNKNOWN)
+            {
+                throw new ArgumentException($"Wanted SafeArrayScope<{typeof(T)}> but got SAFEARRAY with VarType={value->VarType}");
+            }
+        }
+        else if (typeof(T).IsAssignableTo(typeof(IComIID)))
+        {
+            throw new ArgumentException("Use ComSafeArrayScope instead");
+        }
+        else
+        {
+            // The type has not been accounted for yet in the SafeArrayScope
+            // If the type was intentional, this SafeArrayScope needs to be updated
+            // to behave appropriately with this type.
+            throw new ArgumentException("Unknown type");
+        }
+
+        _value = (nint)value;
+    }
 
     public SafeArrayScope(uint size)
     {
@@ -29,6 +87,14 @@ internal unsafe ref struct SafeArrayScope<T>
         else if (typeof(T) == typeof(int))
         {
             vt = VARENUM.VT_I4;
+        }
+        else if (typeof(T) == typeof(double))
+        {
+            vt = VARENUM.VT_R8;
+        }
+        else if (typeof(T) == typeof(nint) || typeof(T).IsAssignableTo(typeof(IComIID)))
+        {
+            throw new ArgumentException("Use ComSafeArrayScope instead");
         }
         else
         {
@@ -44,70 +110,119 @@ internal unsafe ref struct SafeArrayScope<T>
             lLbound = 0
         };
 
-        Value = PInvoke.SafeArrayCreate(vt, 1, &saBound);
+        _value = (nint)PInvoke.SafeArrayCreate(vt, 1, &saBound);
+        if (_value == 0)
+        {
+            throw new InvalidOperationException("Unable to create SAFEARRAY");
+        }
     }
 
-    public readonly T? this[int i]
+    /// <remarks>
+    ///  <para>
+    ///   A copy will be made of anything that is put into the <see cref="SAFEARRAY"/>
+    ///   and anything the <see cref="SAFEARRAY"/> gives out. Be sure to dispose of the
+    ///   items that are given to/from the <see cref="SAFEARRAY"/> if necessary.
+    ///  </para>
+    /// </remarks>
+    public T? this[int i]
     {
         get
         {
-            Span<int> indices = stackalloc int[] { i };
-
             if (typeof(T) == typeof(string))
             {
-                using BSTR result = default;
-                fixed (int* pIndices = indices)
-                {
-                    PInvoke.SafeArrayGetElement(Value, pIndices, &result).ThrowOnFailure();
-                }
-
-                string resultString = result.ToString();
-                return (T)(object)resultString;
+                using BSTR result = GetElement<BSTR>(i);
+                return (T)(object)result.ToString();
             }
             else if (typeof(T) == typeof(int))
             {
-                int result = default;
-                fixed (int* pIndices = indices)
-                {
-                    PInvoke.SafeArrayGetElement(Value, pIndices, &result).ThrowOnFailure();
-                }
-
-                return (T)(object)result;
+                return (T)(object)GetElement<int>(i);
+            }
+            else if (typeof(T) == typeof(double))
+            {
+                return (T)(object)GetElement<double>(i);
+            }
+            else if (typeof(T) == typeof(nint))
+            {
+                return (T)(object)GetElement<nint>(i);
             }
 
-            // Noop. We should never get here as we would've thrown in the constructor
-            // for an unknown type.
+            // Noop. This is an unknown type. We should fill this method out to to do the right
+            // thing as we run into new types.
             return default;
         }
         set
         {
-            Span<int> indices = stackalloc int[] { i };
             if (value is string s)
             {
                 using BSTR bstrText = new(s);
-                fixed (int* pIndices = indices)
-                {
-                    PInvoke.SafeArrayPutElement(Value, pIndices, bstrText).ThrowOnFailure();
-                }
+                PutElement(i, bstrText);
             }
             else if (value is int @int)
             {
-                fixed (int* pIndices = indices)
-                {
-                    PInvoke.SafeArrayPutElement(Value, pIndices, &@int).ThrowOnFailure();
-                }
+                PutElement(i, &@int);
+            }
+            else if (value is double dbl)
+            {
+                PutElement(i, &dbl);
+            }
+            else if (value is nint @nint)
+            {
+                PutElement(i, (void*)@nint);
             }
         }
     }
 
-    public readonly bool IsNull => Value is null;
+    private TReturn GetElement<TReturn>(int index) where TReturn : unmanaged
+    {
+        Span<int> indices = [index];
+        TReturn result;
+        fixed (int* pIndices = indices)
+        {
+            PInvoke.SafeArrayGetElement(Value, pIndices, &result).ThrowOnFailure();
+        }
+
+        return result;
+    }
+
+    private void PutElement(int index, void* value)
+    {
+        Span<int> indices = [index];
+        fixed (int* pIndices = indices)
+        {
+            PInvoke.SafeArrayPutElement((SAFEARRAY*)_value, pIndices, value).ThrowOnFailure();
+        }
+    }
+
+    public int Length => (int)Value->GetBounds().cElements;
+
+    public bool IsNull => _value == 0;
+
+    public bool IsEmpty => Length == 0;
 
     public void Dispose()
     {
-        if (!IsNull)
+        SAFEARRAY* safeArray = (SAFEARRAY*)_value;
+
+        // Really want this to be null after disposal to avoid double destroy, but we also want
+        // to maintain the readonly state of the struct to allow passing as `in` without creating implicit
+        // copies (which would break the T** and void** operators).
+        *(void**)this = null;
+
+        if (safeArray is not null)
         {
-            PInvoke.SafeArrayDestroy(Value).ThrowOnFailure();
-            Value = null;
+            PInvoke.SafeArrayDestroy(safeArray).ThrowOnFailure();
         }
     }
+
+    public static explicit operator VARIANT(in SafeArrayScope<T> scope) => new() { vt = VARENUM.VT_ARRAY | scope.Value->VarType, data = new() { parray = (SAFEARRAY*)scope._value } };
+
+    public static implicit operator SAFEARRAY*(in SafeArrayScope<T> scope) => (SAFEARRAY*)scope._value;
+
+    public static implicit operator nint(in SafeArrayScope<T> scope) => scope._value;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator SAFEARRAY**(in SafeArrayScope<T> scope) => (SAFEARRAY**)Unsafe.AsPointer(ref Unsafe.AsRef(in scope._value));
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator void**(in SafeArrayScope<T> scope) => (void**)Unsafe.AsPointer(ref Unsafe.AsRef(in scope._value));
 }

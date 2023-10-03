@@ -3,6 +3,8 @@
 
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.IntegrationTests.Common;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -87,8 +89,8 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
         object actual = itemAccessibleObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId);
-
-        Assert.Equal(UiaTextProvider.BoundingRectangleAsArray(itemAccessibleObject.BoundingRectangle), actual);
+        using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray(itemAccessibleObject.BoundingRectangle);
+        Assert.Equal(((VARIANT)rectArray).ToObject(), actual);
         Assert.False(listBox.IsHandleCreated);
     }
 

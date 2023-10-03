@@ -3,11 +3,12 @@
 
 using System.Drawing;
 using System.Windows.Forms.Automation;
-using static Interop;
+using Windows.Win32.System.Com;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
-public class ComboBox_ComboBoxUiaTextProviderTests
+public unsafe class ComboBox_ComboBoxUiaTextProviderTests
 {
     [WinFormsTheory]
     [InlineData(ComboBoxStyle.DropDown)]
@@ -156,8 +157,12 @@ public class ComboBox_ComboBoxUiaTextProviderTests
             using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
             comboBox.CreateControl();
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
-            Assert.Equal(comboBox.ChildEditAccessibleObject, provider.DocumentRange.GetEnclosingElement());
-            Assert.Equal(provider, provider.DocumentRange.TestAccessor().Dynamic._provider);
+
+            using ComScope<ITextRangeProvider> range = new(provider.DocumentRange);
+            using ComScope<IRawElementProviderSimple> elementProvider = new(range.Value->GetEnclosingElement());
+            Assert.Equal(comboBox.ChildEditAccessibleObject, ComHelpers.GetObjectForIUnknown(elementProvider.AsUnknown));
+            UiaTextRange rangeObj = ComHelpers.GetObjectForIUnknown(range.AsUnknown) as UiaTextRange;
+            Assert.Equal(provider, rangeObj?.TestAccessor().Dynamic._provider);
             Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
         }
     }
@@ -165,13 +170,13 @@ public class ComboBox_ComboBoxUiaTextProviderTests
     [WinFormsTheory]
     [InlineData(ComboBoxStyle.DropDown)]
     [InlineData(ComboBoxStyle.Simple)]
-    public void ComboBoxUiaTextProvider_DocumentRange_IsNull_ThowException(ComboBoxStyle dropDownStyle)
+    public void ComboBoxUiaTextProvider_DocumentRange_IsNull_ThrowException(ComboBoxStyle dropDownStyle)
     {
         using (new NoAssertContext())
         {
             using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
-            Assert.Throws<NullReferenceException>(() => provider.DocumentRange);
+            Assert.Throws<NullReferenceException>(() =>  _ = provider.DocumentRange);
         }
     }
 
@@ -184,9 +189,9 @@ public class ComboBox_ComboBoxUiaTextProviderTests
         {
             using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
-            UiaCore.SupportedTextSelection uiaTextRange = provider.SupportedTextSelection;
+            SupportedTextSelection uiaTextRange = provider.SupportedTextSelection;
 
-            Assert.Equal(UiaCore.SupportedTextSelection.Single, uiaTextRange);
+            Assert.Equal(SupportedTextSelection.SupportedTextSelection_Single, uiaTextRange);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -201,9 +206,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
         comboBox.CreateControl();
         ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-        UiaCore.ITextRangeProvider uiaTextRange = provider.GetCaretRange(out _);
+        ComScope<ITextRangeProvider> uiaTextRange = new(null);
+        BOOL isActive = default;
+        Assert.True(provider.GetCaretRange(&isActive, uiaTextRange).Succeeded);
 
-        Assert.NotNull(uiaTextRange);
+        Assert.False(uiaTextRange.IsNull);
         Assert.True(comboBox.IsHandleCreated);
         Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
     }
@@ -218,9 +225,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
             using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-            UiaCore.ITextRangeProvider uiaTextRange = provider.GetCaretRange(out _);
+            using ComScope<ITextRangeProvider> uiaTextRange = new(null);
+            BOOL isActive = default;
+            Assert.True(provider.GetCaretRange(&isActive, uiaTextRange).Succeeded);
 
-            Assert.Null(uiaTextRange);
+            Assert.True(uiaTextRange.IsNull);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -841,7 +850,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
         comboBox.SelectedIndex = 0;
         ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-        Assert.NotNull(provider.GetVisibleRanges());
+        using ComSafeArrayScope<ITextRangeProvider> result = new(null);
+        Assert.True(provider.GetVisibleRanges(result).Succeeded);
+
+        Assert.False(result.IsEmpty);
         Assert.True(comboBox.IsHandleCreated);
         Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
     }
@@ -857,7 +869,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
             comboBox.SelectedIndex = 0;
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-            Assert.Null(provider.GetVisibleRanges());
+            using ComSafeArrayScope<ITextRangeProvider> result = new(null);
+            Assert.True(provider.GetVisibleRanges(result).Succeeded);
+
+            Assert.True(result.IsEmpty);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -874,9 +889,11 @@ public class ComboBox_ComboBoxUiaTextProviderTests
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
             // RangeFromChild doesn't throw an exception
-            UiaCore.ITextRangeProvider range = provider.RangeFromChild(comboBox.AccessibilityObject);
+            using ComScope<ITextRangeProvider> range = new(null);
+            using var rawElementProvider = ComHelpers.GetComScope<IRawElementProviderSimple>(comboBox.AccessibilityObject);
+            Assert.True(provider.RangeFromChild(rawElementProvider, range).Succeeded);
             // RangeFromChild implementation can be changed so this test can be changed too
-            Assert.Null(range);
+            Assert.True(range.IsNull);
         }
     }
 
@@ -896,9 +913,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
         comboBox.CreateControl();
         ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-        UiaTextRange textRangeProvider = provider.RangeFromPoint(point) as UiaTextRange;
+        using ComScope<ITextRangeProvider> range = new(null);
+        Assert.True(provider.RangeFromPoint(point, range).Succeeded);
 
-        Assert.NotNull(textRangeProvider);
+        Assert.False(range.IsNull);
         Assert.True(comboBox.IsHandleCreated);
         Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
     }
@@ -912,9 +930,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
             using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-            UiaTextRange textRangeProvider = provider.RangeFromPoint(point) as UiaTextRange;
+            using ComScope<ITextRangeProvider> range = new(null);
+            Assert.True(provider.RangeFromPoint(point, range).Succeeded);
 
-            Assert.Null(textRangeProvider);
+            Assert.True(range.IsNull);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
         }
@@ -933,10 +952,13 @@ public class ComboBox_ComboBoxUiaTextProviderTests
         comboBox.SelectedIndex = 0;
         ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
         provider.SetSelection(start, end);
-        UiaCore.ITextRangeProvider[] selection = provider.GetSelection();
-        UiaTextRange textRange = selection[0] as UiaTextRange;
 
-        Assert.NotNull(selection);
+        using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
+        Assert.True(provider.GetSelection(selection).Succeeded);
+        using ComScope<ITextRangeProvider> range = new(selection[0]);
+        UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range.AsUnknown) as UiaTextRange;
+
+        Assert.False(selection.IsNull);
         Assert.NotNull(textRange);
         Assert.Equal(start, textRange.Start);
         Assert.Equal(end, textRange.End);
@@ -963,9 +985,10 @@ public class ComboBox_ComboBoxUiaTextProviderTests
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
 
-            UiaCore.ITextRangeProvider[] selection = provider.GetSelection();
+            using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
+            Assert.True(provider.GetSelection(selection).Succeeded);
 
-            Assert.Null(selection);
+            Assert.True(selection.IsNull);
             Assert.False(comboBox.IsHandleCreated);
             Assert.Null(comboBox.TestAccessor().Dynamic._childEdit);
             Assert.Equal(0, comboBox.SelectionStart);
@@ -990,10 +1013,13 @@ public class ComboBox_ComboBoxUiaTextProviderTests
             comboBox.SelectedIndex = 0;
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
             provider.SetSelection(start, end);
-            UiaCore.ITextRangeProvider[] selection = provider.GetSelection();
-            Assert.NotNull(selection);
 
-            UiaTextRange textRange = selection[0] as UiaTextRange;
+            using ComSafeArrayScope<ITextRangeProvider> selection = new(null);
+            Assert.True(provider.GetSelection(selection).Succeeded);
+            Assert.False(selection.IsEmpty);
+
+            using ComScope<ITextRangeProvider> range = new(selection[0]);
+            UiaTextRange textRange = ComHelpers.GetObjectForIUnknown(range.AsUnknown) as UiaTextRange;
 
             Assert.NotNull(textRange);
             Assert.Equal(0, textRange.Start);

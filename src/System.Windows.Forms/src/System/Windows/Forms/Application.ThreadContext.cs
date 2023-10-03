@@ -210,7 +210,7 @@ public sealed partial class Application
 
                     if (hr.Succeeded && componentManagerHandle is not null)
                     {
-                        ComHelpers.TryGetManagedInterface(
+                        ComHelpers.TryGetObjectForIUnknown(
                             (IUnknown*)componentManagerHandle,
                             takeOwnership: true,
                             out IMsoComponentManager? componentManager);

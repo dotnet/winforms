@@ -673,7 +673,7 @@ public abstract partial class AxHost
             hr = oleObject.Value->GetClientSite(clientSite);
             Debug.Assert(hr.Succeeded);
 
-            if (ComHelpers.TryGetManagedInterface(clientSite.AsUnknown, takeOwnership: false, out OleInterfaces? interfaces))
+            if (ComHelpers.TryGetObjectForIUnknown(clientSite.AsUnknown, takeOwnership: false, out OleInterfaces? interfaces))
             {
                 host = interfaces.GetAxHost();
             }

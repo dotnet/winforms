@@ -467,6 +467,9 @@ IsWindowEnabled
 IsWindowUnicode
 IsWindowVisible
 IsZoomed
+ITextProvider
+ITextProvider2
+ITextRangeProvider
 IVBFormat
 IVBGetControl
 IViewObject
@@ -792,6 +795,7 @@ TYPEATTR
 TYPEDESC
 TYPEKIND
 UiaAppendRuntimeId
+UiaGetReservedNotSupportedValue
 UiaRootObjectId
 UIS_*
 UISF_*

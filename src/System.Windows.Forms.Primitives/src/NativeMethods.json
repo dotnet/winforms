@@ -315,6 +315,7 @@
       "IQuickActivate.GetContentExtent",
       "IQuickActivate.QuickActivate",
       "IQuickActivate.SetContentExtent",
+      "IRawElementProviderSimple.GetPropertyValue",
       "IRichEditOleCallback.ContextSensitiveHelp",
       "IRichEditOleCallback.DeleteObject",
       "IRichEditOleCallback.GetClipboardData",

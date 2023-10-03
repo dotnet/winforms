@@ -1,11 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using Windows.Win32.System.Com;
+namespace Windows.Win32.System.Com.Tests;
 
-namespace System.Windows.Forms.Primitives.Tests.Windows.Win32.System.Com;
-
-public class SafeArrayScopeTests
+public unsafe class SafeArrayScopeTests
 {
     [Fact]
     public void SafeArrayScope_Construct_KnownType_Success()
@@ -47,12 +45,45 @@ public class SafeArrayScopeTests
     }
 
     [Fact]
-    public void SafeArrayScope_Dispose_Success()
+    public void SafeArrayScope_NullAfterDispose()
     {
         SafeArrayScope<string> scope = new(size: 1);
         Assert.False(scope.IsNull);
 
         scope.Dispose();
         Assert.True(scope.IsNull);
+    }
+
+    [Fact]
+    public void SafeArrayScope_Construct_OfCOM_ThrowsArgumentException()
+    {
+        string message = "Use ComSafeArrayScope instead";
+        ArgumentException e = Assert.Throws<ArgumentException>(() => new SafeArrayScope<IUnknown>(size: 1));
+        Assert.Equal(message, e.Message);
+        SAFEARRAY* array = SAFEARRAY.CreateEmpty(Variant.VARENUM.VT_UNKNOWN);
+        try
+        {
+            e = Assert.Throws<ArgumentException>(() => new SafeArrayScope<IUnknown>(array));
+            Assert.Equal(message, e.Message);
+        }
+        finally
+        {
+            PInvoke.SafeArrayDestroy(array);
+        }
+    }
+
+    [Fact]
+    public void SafeArrayScope_Construct_MismatchType_ThrowsArgumentException()
+    {
+        SAFEARRAY* array = SAFEARRAY.CreateEmpty(Variant.VARENUM.VT_INT);
+        try
+        {
+            ArgumentException e = Assert.Throws<ArgumentException>(() => new SafeArrayScope<string>(array));
+            Assert.Equal("Wanted SafeArrayScope<System.String> but got SAFEARRAY with VarType=VT_INT", e.Message);
+        }
+        finally
+        {
+            PInvoke.SafeArrayDestroy(array);
+        }
     }
 }
