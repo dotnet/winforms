@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 
@@ -13,10 +11,11 @@ namespace System.Windows.Forms;
 public class DataGridViewImageColumn : DataGridViewColumn
 {
     private static readonly Type s_columnType = typeof(DataGridViewImageColumn);
-    private Image _image;
-    private Icon _icon;
+    private Image? _image;
+    private Icon? _icon;
 
-    public DataGridViewImageColumn() : this(false /*valuesAreIcons*/)
+    public DataGridViewImageColumn()
+        : this(valuesAreIcons: false)
     {
     }
 
@@ -27,26 +26,22 @@ public class DataGridViewImageColumn : DataGridViewColumn
         {
             AlignmentInternal = DataGridViewContentAlignment.MiddleCenter
         };
-        if (valuesAreIcons)
-        {
-            defaultCellStyle.NullValue = DataGridViewImageCell.ErrorIcon;
-        }
-        else
-        {
-            defaultCellStyle.NullValue = DataGridViewImageCell.ErrorBitmap;
-        }
+
+        defaultCellStyle.NullValue = valuesAreIcons
+            ? DataGridViewImageCell.ErrorIcon
+            : DataGridViewImageCell.ErrorBitmap;
 
         DefaultCellStyle = defaultCellStyle;
     }
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public override DataGridViewCell CellTemplate
+    public override DataGridViewCell? CellTemplate
     {
         get => base.CellTemplate;
         set
         {
-            if (value is not null && !(value is DataGridViewImageCell))
+            if (value is not null and not DataGridViewImageCell)
             {
                 throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewImageCell"));
             }
@@ -58,6 +53,7 @@ public class DataGridViewImageColumn : DataGridViewColumn
     [Browsable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))]
+    [AllowNull]
     public override DataGridViewCellStyle DefaultCellStyle
     {
         get => base.DefaultCellStyle;
@@ -68,24 +64,12 @@ public class DataGridViewImageColumn : DataGridViewColumn
     [DefaultValue("")]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridViewImageColumn_DescriptionDescr))]
+    [AllowNull]
     public string Description
     {
-        get
-        {
-            if (CellTemplate is null)
-            {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
-            }
-
-            return ImageCellTemplate.Description;
-        }
+        get => ImageCellTemplate.Description;
         set
         {
-            if (CellTemplate is null)
-            {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
-            }
-
             ImageCellTemplate.Description = value;
             if (DataGridView is not null)
             {
@@ -105,12 +89,9 @@ public class DataGridViewImageColumn : DataGridViewColumn
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public Icon Icon
+    public Icon? Icon
     {
-        get
-        {
-            return _icon;
-        }
+        get => _icon;
         set
         {
             _icon = value;
@@ -121,12 +102,9 @@ public class DataGridViewImageColumn : DataGridViewColumn
     [DefaultValue(null)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridViewImageColumn_ImageDescr))]
-    public Image Image
+    public Image? Image
     {
-        get
-        {
-            return _image;
-        }
+        get => _image;
         set
         {
             _image = value;
@@ -138,6 +116,11 @@ public class DataGridViewImageColumn : DataGridViewColumn
     {
         get
         {
+            if (CellTemplate is null)
+            {
+                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
+            }
+
             return (DataGridViewImageCell)CellTemplate;
         }
     }
@@ -149,11 +132,6 @@ public class DataGridViewImageColumn : DataGridViewColumn
     {
         get
         {
-            if (CellTemplate is null)
-            {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
-            }
-
             DataGridViewImageCellLayout imageLayout = ImageCellTemplate.ImageLayout;
             if (imageLayout == DataGridViewImageCellLayout.NotSet)
             {
@@ -190,15 +168,7 @@ public class DataGridViewImageColumn : DataGridViewColumn
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ValuesAreIcons
     {
-        get
-        {
-            if (ImageCellTemplate is null)
-            {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
-            }
-
-            return ImageCellTemplate.ValueIsIcon;
-        }
+        get => ImageCellTemplate.ValueIsIcon;
         set
         {
             if (ValuesAreIcons != value)
@@ -221,14 +191,14 @@ public class DataGridViewImageColumn : DataGridViewColumn
                 }
 
                 if (value &&
-                    DefaultCellStyle.NullValue is Bitmap &&
-                    (Bitmap)DefaultCellStyle.NullValue == DataGridViewImageCell.ErrorBitmap)
+                    DefaultCellStyle.NullValue is Bitmap bitmap &&
+                    bitmap == DataGridViewImageCell.ErrorBitmap)
                 {
                     DefaultCellStyle.NullValue = DataGridViewImageCell.ErrorIcon;
                 }
                 else if (!value &&
-                         DefaultCellStyle.NullValue is Icon &&
-                         (Icon)DefaultCellStyle.NullValue == DataGridViewImageCell.ErrorIcon)
+                         DefaultCellStyle.NullValue is Icon icon &&
+                         icon == DataGridViewImageCell.ErrorIcon)
                 {
                     DefaultCellStyle.NullValue = DataGridViewImageCell.ErrorBitmap;
                 }
@@ -247,24 +217,19 @@ public class DataGridViewImageColumn : DataGridViewColumn
         }
         else
         {
-            //
-
-            dataGridViewColumn = (DataGridViewImageColumn)System.Activator.CreateInstance(thisType);
+            dataGridViewColumn = (DataGridViewImageColumn)Activator.CreateInstance(thisType)!;
         }
 
-        if (dataGridViewColumn is not null)
-        {
-            base.CloneInternal(dataGridViewColumn);
-            dataGridViewColumn.Icon = _icon;
-            dataGridViewColumn.Image = _image;
-        }
+        base.CloneInternal(dataGridViewColumn);
+        dataGridViewColumn.Icon = _icon;
+        dataGridViewColumn.Image = _image;
 
         return dataGridViewColumn;
     }
 
     private bool ShouldSerializeDefaultCellStyle()
     {
-        if (!(CellTemplate is DataGridViewImageCell templateCell))
+        if (CellTemplate is not DataGridViewImageCell templateCell)
         {
             Debug.Fail("we can't compute the default cell style w/o a template cell");
             return true;
@@ -275,15 +240,9 @@ public class DataGridViewImageColumn : DataGridViewColumn
             return false;
         }
 
-        object defaultNullValue;
-        if (templateCell.ValueIsIcon)
-        {
-            defaultNullValue = DataGridViewImageCell.ErrorIcon;
-        }
-        else
-        {
-            defaultNullValue = DataGridViewImageCell.ErrorBitmap;
-        }
+        object defaultNullValue = templateCell.ValueIsIcon
+            ? DataGridViewImageCell.ErrorIcon
+            : DataGridViewImageCell.ErrorBitmap;
 
         DataGridViewCellStyle defaultCellStyle = DefaultCellStyle;
 
@@ -302,8 +261,6 @@ public class DataGridViewImageColumn : DataGridViewColumn
                 !defaultCellStyle.Padding.Equals(Padding.Empty));
     }
 
-    public override string ToString()
-    {
-        return $"DataGridViewImageColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewImageColumn {{ Name={Name}, Index={Index} }}";
 }
