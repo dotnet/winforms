@@ -102,7 +102,7 @@ internal partial class PropertyGridView
             }
 
             int row = owner.GetRowFromGridEntry(current);
-            GridEntry nextEntry = owner.GetGridEntryFromRow(++row);
+            GridEntry? nextEntry = owner.GetGridEntryFromRow(++row);
             return nextEntry?.AccessibilityObject;
         }
 
@@ -316,7 +316,7 @@ internal partial class PropertyGridView
 
             int row = owner.GetRowFromGridEntry(current);
 
-            GridEntry nextEntry;
+            GridEntry? nextEntry;
 
             do
             {
@@ -339,7 +339,7 @@ internal partial class PropertyGridView
             }
 
             int row = owner.GetRowFromGridEntry(current);
-            GridEntry previousEntry = owner.GetGridEntryFromRow(--row);
+            GridEntry? previousEntry = owner.GetGridEntryFromRow(--row);
             return previousEntry?.AccessibilityObject;
         }
 
@@ -357,7 +357,7 @@ internal partial class PropertyGridView
 
             int row = owner.GetRowFromGridEntry(current);
 
-            GridEntry previousEntry;
+            GridEntry? previousEntry;
 
             do
             {
@@ -379,7 +379,7 @@ internal partial class PropertyGridView
                 return null;
             }
 
-            GridEntryCollection properties = owner.AccessibilityGetGridEntries();
+            GridEntryCollection? properties = owner.AccessibilityGetGridEntries();
             if (properties is not null && index >= 0 && index < properties.Count)
             {
                 return properties[index].AccessibilityObject;
@@ -429,7 +429,7 @@ internal partial class PropertyGridView
             Point position = owner.FindPosition(point.X, point.Y);
             if (position != InvalidPosition)
             {
-                GridEntry gridEntry = owner.GetGridEntryFromRow(position.Y);
+                GridEntry? gridEntry = owner.GetGridEntryFromRow(position.Y);
                 if (gridEntry is not null)
                 {
                     // Return the accessible object for this grid entry

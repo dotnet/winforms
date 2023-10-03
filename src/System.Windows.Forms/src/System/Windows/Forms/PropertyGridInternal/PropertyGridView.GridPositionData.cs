@@ -8,7 +8,7 @@ internal partial class PropertyGridView
     internal class GridPositionData
     {
         private readonly List<GridEntryCollection> _expandedState;
-        private readonly GridEntryCollection _selectedItemTree;
+        private readonly GridEntryCollection? _selectedItemTree;
         private readonly int _itemRow;
 
         public GridPositionData(PropertyGridView gridView)
@@ -21,7 +21,7 @@ internal partial class PropertyGridView
         public GridEntry? Restore(PropertyGridView gridView)
         {
             gridView.RestoreHierarchyState(_expandedState);
-            GridEntry entry = gridView.FindEquivalentGridEntry(_selectedItemTree);
+            GridEntry? entry = gridView.FindEquivalentGridEntry(_selectedItemTree);
 
             if (entry is null)
             {
