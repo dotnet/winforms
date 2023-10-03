@@ -588,7 +588,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
             }
         }
     }
-#nullable disable
+
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool IsDataBound
@@ -636,6 +636,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     }
 
     [Browsable(false)]
+    [AllowNull]
     public string Name
     {
         get
@@ -715,7 +716,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public ISite Site { get; set; }
+    public ISite? Site { get; set; }
 
     [DefaultValue(DataGridViewColumnSortMode.NotSortable)]
     [SRCategory(nameof(SR.CatBehavior))]
@@ -778,6 +779,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [Localizable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ColumnToolTipTextDescr))]
+    [AllowNull]
     public string ToolTipText
     {
         get
@@ -786,7 +788,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         }
         set
         {
-            if (string.Compare(ToolTipText, value, false /*ignore case*/, CultureInfo.InvariantCulture) != 0)
+            if (string.Compare(ToolTipText, value, ignoreCase: false, CultureInfo.InvariantCulture) != 0)
             {
                 HeaderCell.ToolTipText = value;
 
@@ -811,11 +813,11 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [Browsable(false)]
     [DefaultValue(null)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public Type ValueType
+    public Type? ValueType
     {
         get
         {
-            return (Type)Properties.GetObject(s_propDataGridViewColumnValueType);
+            return (Type?)Properties.GetObject(s_propDataGridViewColumnValueType);
         }
         set
         {
@@ -852,13 +854,8 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     public override object Clone()
     {
-        //
-
-        DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)System.Activator.CreateInstance(GetType());
-        if (dataGridViewColumn is not null)
-        {
-            CloneInternal(dataGridViewColumn);
-        }
+        DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)Activator.CreateInstance(GetType())!;
+        CloneInternal(dataGridViewColumn);
 
         return dataGridViewColumn;
     }
@@ -871,7 +868,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         dataGridViewColumn._displayIndex = -1;
         dataGridViewColumn.HeaderText = HeaderText;
         dataGridViewColumn.DataPropertyName = DataPropertyName;
-        dataGridViewColumn.CellTemplate = (DataGridViewCell)CellTemplate?.Clone();
+        dataGridViewColumn.CellTemplate = (DataGridViewCell?)CellTemplate?.Clone();
 
         if (HasHeaderCell)
         {
@@ -906,7 +903,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         }
     }
 
-    internal DataGridViewAutoSizeColumnMode GetInheritedAutoSizeMode(DataGridView dataGridView)
+    internal DataGridViewAutoSizeColumnMode GetInheritedAutoSizeMode(DataGridView? dataGridView)
     {
         if (dataGridView is not null && _autoSizeMode == DataGridViewAutoSizeColumnMode.NotSet)
         {
@@ -962,7 +959,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
                 throw new InvalidEnumArgumentException(nameof(autoSizeColumnMode), (int)autoSizeColumnMode, typeof(DataGridViewAutoSizeColumnMode));
         }
 
-        DataGridView dataGridView = DataGridView;
+        DataGridView? dataGridView = DataGridView;
 
         Debug.Assert(dataGridView is null || Index > -1);
 

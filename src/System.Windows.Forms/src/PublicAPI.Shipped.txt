@@ -83,13 +83,13 @@ override System.Windows.Forms.DataGridViewCellStyle.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewCheckBoxColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
 ~override System.Windows.Forms.DataGridViewCheckBoxColumn.DefaultCellStyle.set -> void
 ~override System.Windows.Forms.DataGridViewCheckBoxColumn.ToString() -> string
-~override System.Windows.Forms.DataGridViewColumn.Clone() -> object
+override System.Windows.Forms.DataGridViewColumn.Clone() -> object!
 override System.Windows.Forms.DataGridViewColumn.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
 override System.Windows.Forms.DataGridViewColumn.ContextMenuStrip.set -> void
 override System.Windows.Forms.DataGridViewColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
 override System.Windows.Forms.DataGridViewColumn.DefaultCellStyle.set -> void
 override System.Windows.Forms.DataGridViewColumn.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle?
-~override System.Windows.Forms.DataGridViewColumn.ToString() -> string
+override System.Windows.Forms.DataGridViewColumn.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewColumnCollection.List.get -> System.Collections.ArrayList
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewColumnHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -434,14 +434,14 @@ System.Windows.Forms.DataGridViewColumn.HeaderCell.get -> System.Windows.Forms.D
 System.Windows.Forms.DataGridViewColumn.HeaderCell.set -> void
 System.Windows.Forms.DataGridViewColumn.HeaderText.get -> string!
 System.Windows.Forms.DataGridViewColumn.HeaderText.set -> void
-~System.Windows.Forms.DataGridViewColumn.Name.get -> string
-~System.Windows.Forms.DataGridViewColumn.Name.set -> void
-~System.Windows.Forms.DataGridViewColumn.Site.get -> System.ComponentModel.ISite
-~System.Windows.Forms.DataGridViewColumn.Site.set -> void
-~System.Windows.Forms.DataGridViewColumn.ToolTipText.get -> string
-~System.Windows.Forms.DataGridViewColumn.ToolTipText.set -> void
-~System.Windows.Forms.DataGridViewColumn.ValueType.get -> System.Type
-~System.Windows.Forms.DataGridViewColumn.ValueType.set -> void
+System.Windows.Forms.DataGridViewColumn.Name.get -> string!
+System.Windows.Forms.DataGridViewColumn.Name.set -> void
+System.Windows.Forms.DataGridViewColumn.Site.get -> System.ComponentModel.ISite?
+System.Windows.Forms.DataGridViewColumn.Site.set -> void
+System.Windows.Forms.DataGridViewColumn.ToolTipText.get -> string!
+System.Windows.Forms.DataGridViewColumn.ToolTipText.set -> void
+System.Windows.Forms.DataGridViewColumn.ValueType.get -> System.Type?
+System.Windows.Forms.DataGridViewColumn.ValueType.set -> void
 ~System.Windows.Forms.DataGridViewColumnCollection.CopyTo(System.Windows.Forms.DataGridViewColumn[] array, int index) -> void
 ~System.Windows.Forms.DataGridViewColumnCollection.DataGridView.get -> System.Windows.Forms.DataGridView
 ~System.Windows.Forms.DataGridViewColumnCollection.DataGridViewColumnCollection(System.Windows.Forms.DataGridView dataGridView) -> void
