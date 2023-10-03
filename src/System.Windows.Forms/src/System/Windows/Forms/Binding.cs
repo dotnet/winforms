@@ -573,30 +573,30 @@ public partial class Binding
 
     internal bool ControlAtDesignTime()
     {
-        if (!(BindableComponent is IComponent comp))
+        if (BindableComponent is not IComponent comp)
         {
             return false;
         }
 
         return comp.Site?.DesignMode ?? false;
     }
-#nullable disable
-    private object GetDataSourceNullValue(Type type)
+
+    private object? GetDataSourceNullValue(Type? type)
     {
         return _dsNullValueSet ? _dsNullValue : Formatter.GetDefaultDataSourceNullValue(type);
     }
 
-    private object GetPropValue()
+    private object? GetPropValue()
     {
-        if (_propIsNullInfo is not null && (bool)_propIsNullInfo.GetValue(BindableComponent))
+        if (_propIsNullInfo is not null && (bool?)_propIsNullInfo.GetValue(BindableComponent) == true)
         {
             return DataSourceNullValue;
         }
 
-        return _propInfo.GetValue(BindableComponent) ?? DataSourceNullValue;
+        return _propInfo!.GetValue(BindableComponent) ?? DataSourceNullValue;
     }
 
-    private BindingCompleteEventArgs CreateBindingCompleteEventArgs(BindingCompleteContext context, Exception ex)
+    private BindingCompleteEventArgs CreateBindingCompleteEventArgs(BindingCompleteContext context, Exception? ex)
     {
         bool cancel = false;
         string errorText;
@@ -612,7 +612,7 @@ public partial class Binding
         else
         {
             // If data error info on data source for this binding, report that
-            errorText = _bindToObject.DataErrorText;
+            errorText = _bindToObject!.DataErrorText;
 
             // We should not cancel with an IDataErrorInfo error - we didn't in Everett
             if (!string.IsNullOrEmpty(errorText))
@@ -677,16 +677,16 @@ public partial class Binding
         }
     }
 
-    private object ParseObject(object value)
+    private object? ParseObject(object? value)
     {
-        Type type = _bindToObject.BindToType;
+        Type? type = _bindToObject!.BindToType;
         if (_formattingEnabled)
         {
             // Fire the Parse event so that user code gets a chance to supply the parsed value for us
             ConvertEventArgs e = new(value, type);
             OnParse(e);
 
-            object newValue = e.Value;
+            object? newValue = e.Value;
             if (!Equals(value, newValue))
             {
                 // If event handler replaced formatted value with parsed value, use that
@@ -695,7 +695,7 @@ public partial class Binding
             else
             {
                 // Otherwise parse the formatted value ourselves
-                TypeConverter fieldInfoConverter = null;
+                TypeConverter? fieldInfoConverter = null;
                 if (_bindToObject.FieldInfo is not null)
                 {
                     fieldInfoConverter = _bindToObject.FieldInfo.Converter;
@@ -703,8 +703,8 @@ public partial class Binding
 
                 return Formatter.ParseObject(
                     value,
-                    type,
-                    (value is null ? _propInfo.PropertyType : value.GetType()),
+                    type!,
+                    (value is null ? _propInfo!.PropertyType : value.GetType()),
                     fieldInfoConverter,
                     _propInfoConverter,
                     _formatInfo,
@@ -718,7 +718,7 @@ public partial class Binding
 
             // First try: use the OnParse event
             OnParse(e);
-            if (e.Value is not null && (e.Value.GetType().IsSubclassOf(type) || e.Value.GetType() == type || e.Value is DBNull))
+            if (e.Value is not null && (e.Value.GetType().IsSubclassOf(type!) || e.Value.GetType() == type || e.Value is DBNull))
             {
                 return e.Value;
             }
@@ -733,8 +733,8 @@ public partial class Binding
             // Last try: use Convert.ToType
             if (value is IConvertible)
             {
-                object ret = Convert.ChangeType(value, type, CultureInfo.CurrentCulture);
-                if (ret is not null && (ret.GetType().IsSubclassOf(type) || ret.GetType() == type))
+                object ret = Convert.ChangeType(value, type!, CultureInfo.CurrentCulture);
+                if (ret is not null && (ret.GetType().IsSubclassOf(type!) || ret.GetType() == type))
                 {
                     return ret;
                 }
@@ -744,7 +744,7 @@ public partial class Binding
         }
     }
 
-    private object FormatObject(object value)
+    private object? FormatObject(object? value)
     {
         // We will not format the object when the control is in design time.
         // This is because if we bind a boolean property on a control to a
@@ -754,7 +754,7 @@ public partial class Binding
             return value;
         }
 
-        Type type = _propInfo.PropertyType;
+        Type type = _propInfo!.PropertyType;
         if (_formattingEnabled)
         {
             // Fire the Format event so that user code gets a chance to supply the formatted value for us
@@ -769,8 +769,8 @@ public partial class Binding
             else
             {
                 // Otherwise format the parsed value ourselves
-                TypeConverter fieldInfoConverter = null;
-                if (_bindToObject.FieldInfo is not null)
+                TypeConverter? fieldInfoConverter = null;
+                if (_bindToObject!.FieldInfo is not null)
                 {
                     fieldInfoConverter = _bindToObject.FieldInfo.Converter;
                 }
@@ -783,7 +783,7 @@ public partial class Binding
             // first try: use the Format event
             ConvertEventArgs e = new(value, type);
             OnFormat(e);
-            object ret = e.Value;
+            object? ret = e.Value;
 
             // Fire the Format event even if the control property is of type Object.
             if (type == typeof(object))
@@ -840,8 +840,8 @@ public partial class Binding
         }
 
         bool parseFailed = false;
-        object parsedValue = null;
-        Exception lastException = null;
+        object? parsedValue = null;
+        Exception? lastException = null;
 
         // Check whether binding has been suspended or is simply not possible right now
         if (!IsBinding)
@@ -855,7 +855,7 @@ public partial class Binding
             // If control property supports change events, only pull if the value has been changed since
             // the last update (ie. its dirty). For properties that do NOT support change events, we cannot
             // track the dirty state, so we just have to pull all the time.
-            if (_propInfo.SupportsChangeEvents && !_modified)
+            if (_propInfo!.SupportsChangeEvents && !_modified)
             {
                 return false;
             }
@@ -876,7 +876,7 @@ public partial class Binding
         _inPushOrPull = true;
 
         // Get the value from the bound control property
-        object value = GetPropValue();
+        object? value = GetPropValue();
 
         // Attempt to parse the property value into a format suitable for the data source
         try
@@ -896,7 +896,7 @@ public partial class Binding
             if (lastException is not null || (!FormattingEnabled && parsedValue is null))
             {
                 parseFailed = true;
-                parsedValue = _bindToObject.GetValue();
+                parsedValue = _bindToObject!.GetValue();
             }
 
             // Format the parsed value to be re-displayed in the control
@@ -909,7 +909,7 @@ public partial class Binding
                 }
                 else
                 {
-                    object formattedObject = FormatObject(parsedValue);
+                    object? formattedObject = FormatObject(parsedValue);
                     if (force || !FormattingEnabled || !object.Equals(formattedObject, value))
                     {
                         SetPropValue(formattedObject);
@@ -920,7 +920,7 @@ public partial class Binding
             // Put the value into the data model
             if (!parseFailed)
             {
-                _bindToObject.SetValue(parsedValue);
+                _bindToObject!.SetValue(parsedValue);
             }
         }
         catch (Exception ex) when (FormattingEnabled)
@@ -969,8 +969,8 @@ public partial class Binding
 
     internal bool PushData(bool force)
     {
-        object dataSourceValue = null;
-        Exception lastException = null;
+        object? dataSourceValue = null;
+        Exception? lastException = null;
 
         // Don't push if update mode is 'Never' (unless caller is FORCING us to push)
         if (!force && ControlUpdateMode == ControlUpdateMode.Never)
@@ -990,8 +990,8 @@ public partial class Binding
         {
             if (IsBinding)
             {
-                dataSourceValue = _bindToObject.GetValue();
-                object controlValue = FormatObject(dataSourceValue);
+                dataSourceValue = _bindToObject!.GetValue();
+                object? controlValue = FormatObject(dataSourceValue);
                 SetPropValue(controlValue);
                 _modified = false;
             }
@@ -1035,7 +1035,7 @@ public partial class Binding
     ///  Takes current value from control, and writes this out to the data source.
     /// </summary>
     public void WriteValue() => PullData(reformat: true, force: true);
-
+#nullable disable
     private void SetPropValue(object value)
     {
         // we will not pull the data from the back end into the control
