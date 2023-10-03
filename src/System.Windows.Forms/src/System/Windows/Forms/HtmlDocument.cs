@@ -53,23 +53,18 @@ public sealed unsafe partial class HtmlDocument
         return scope;
     }
 
-    private HtmlDocumentShim? DocumentShim
+    private HtmlDocumentShim DocumentShim
     {
         get
         {
-            if (ShimManager is not null)
+            HtmlDocumentShim? shim = ShimManager.GetDocumentShim(this);
+            if (shim is null)
             {
-                HtmlDocumentShim? shim = ShimManager.GetDocumentShim(this);
-                if (shim is null)
-                {
-                    _shimManager.AddDocumentShim(this);
-                    shim = ShimManager.GetDocumentShim(this);
-                }
-
-                return shim;
+                _shimManager.AddDocumentShim(this);
+                shim = ShimManager.GetDocumentShim(this);
             }
 
-            return null;
+            return shim!;
         }
     }
 
@@ -578,32 +573,32 @@ public sealed unsafe partial class HtmlDocument
 
     public event HtmlElementEventHandler? Click
     {
-        add => DocumentShim!.AddHandler(s_eventClick, value);
-        remove => DocumentShim!.RemoveHandler(s_eventClick, value);
+        add => DocumentShim.AddHandler(s_eventClick, value);
+        remove => DocumentShim.RemoveHandler(s_eventClick, value);
     }
 
     public event HtmlElementEventHandler? ContextMenuShowing
     {
-        add => DocumentShim!.AddHandler(s_eventContextMenuShowing, value);
-        remove => DocumentShim!.RemoveHandler(s_eventContextMenuShowing, value);
+        add => DocumentShim.AddHandler(s_eventContextMenuShowing, value);
+        remove => DocumentShim.RemoveHandler(s_eventContextMenuShowing, value);
     }
 
     public event HtmlElementEventHandler? Focusing
     {
-        add => DocumentShim!.AddHandler(s_eventFocusing, value);
-        remove => DocumentShim!.RemoveHandler(s_eventFocusing, value);
+        add => DocumentShim.AddHandler(s_eventFocusing, value);
+        remove => DocumentShim.RemoveHandler(s_eventFocusing, value);
     }
 
     public event HtmlElementEventHandler? LosingFocus
     {
-        add => DocumentShim!.AddHandler(s_eventLosingFocus, value);
-        remove => DocumentShim!.RemoveHandler(s_eventLosingFocus, value);
+        add => DocumentShim.AddHandler(s_eventLosingFocus, value);
+        remove => DocumentShim.RemoveHandler(s_eventLosingFocus, value);
     }
 
     public event HtmlElementEventHandler? MouseDown
     {
-        add => DocumentShim!.AddHandler(s_eventMouseDown, value);
-        remove => DocumentShim!.RemoveHandler(s_eventMouseDown, value);
+        add => DocumentShim.AddHandler(s_eventMouseDown, value);
+        remove => DocumentShim.RemoveHandler(s_eventMouseDown, value);
     }
 
     /// <summary>
@@ -611,32 +606,32 @@ public sealed unsafe partial class HtmlDocument
     /// </summary>
     public event HtmlElementEventHandler? MouseLeave
     {
-        add => DocumentShim!.AddHandler(s_eventMouseLeave, value);
-        remove => DocumentShim!.RemoveHandler(s_eventMouseLeave, value);
+        add => DocumentShim.AddHandler(s_eventMouseLeave, value);
+        remove => DocumentShim.RemoveHandler(s_eventMouseLeave, value);
     }
 
     public event HtmlElementEventHandler? MouseMove
     {
-        add => DocumentShim!.AddHandler(s_eventMouseMove, value);
-        remove => DocumentShim!.RemoveHandler(s_eventMouseMove, value);
+        add => DocumentShim.AddHandler(s_eventMouseMove, value);
+        remove => DocumentShim.RemoveHandler(s_eventMouseMove, value);
     }
 
     public event HtmlElementEventHandler? MouseOver
     {
-        add => DocumentShim!.AddHandler(s_eventMouseOver, value);
-        remove => DocumentShim!.RemoveHandler(s_eventMouseOver, value);
+        add => DocumentShim.AddHandler(s_eventMouseOver, value);
+        remove => DocumentShim.RemoveHandler(s_eventMouseOver, value);
     }
 
     public event HtmlElementEventHandler? MouseUp
     {
-        add => DocumentShim!.AddHandler(s_eventMouseUp, value);
-        remove => DocumentShim!.RemoveHandler(s_eventMouseUp, value);
+        add => DocumentShim.AddHandler(s_eventMouseUp, value);
+        remove => DocumentShim.RemoveHandler(s_eventMouseUp, value);
     }
 
     public event HtmlElementEventHandler? Stop
     {
-        add => DocumentShim!.AddHandler(s_eventStop, value);
-        remove => DocumentShim!.RemoveHandler(s_eventStop, value);
+        add => DocumentShim.AddHandler(s_eventStop, value);
+        remove => DocumentShim.RemoveHandler(s_eventStop, value);
     }
 
     private static Color ColorFromVARIANT(VARIANT vColor)
