@@ -448,20 +448,18 @@ public sealed unsafe partial class HtmlWindow
 
     public static unsafe bool operator ==(HtmlWindow? left, HtmlWindow? right)
     {
-        // Not equal if only one's null.
-        if (left is null != right is null)
+        if (left is null)
+        {
+            return right is null;
+        }
+
+        if (right is null)
         {
             return false;
         }
 
-        // Equal if both are null.
-        if (left is null)
-        {
-            return true;
-        }
-
         // Neither are null. Compare their native pointers.
-        return left.NativeHtmlWindow.IsSameNativeObject(right!.NativeHtmlWindow);
+        return left.NativeHtmlWindow.IsSameNativeObject(right.NativeHtmlWindow);
     }
 
     public static bool operator !=(HtmlWindow? left, HtmlWindow? right) => !(left == right);

@@ -675,20 +675,18 @@ public sealed unsafe partial class HtmlDocument
 
     public static unsafe bool operator ==(HtmlDocument? left, HtmlDocument? right)
     {
-        // Not equal if only one's null.
-        if (left is null != right is null)
+        if (left is null)
+        {
+            return right is null;
+        }
+
+        if (right is null)
         {
             return false;
         }
 
-        // Equal if both are null.
-        if (left is null)
-        {
-            return true;
-        }
-
         // Neither are null. Compare their native pointers.
-        return left.NativeHtmlDocument2.IsSameNativeObject(right!.NativeHtmlDocument2);
+        return left.NativeHtmlDocument2.IsSameNativeObject(right.NativeHtmlDocument2);
     }
 
     public static bool operator !=(HtmlDocument? left, HtmlDocument? right) => !(left == right);
