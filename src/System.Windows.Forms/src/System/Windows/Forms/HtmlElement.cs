@@ -245,14 +245,8 @@ public sealed unsafe partial class HtmlElement
 
     public string Name
     {
-        get
-        {
-            return GetAttribute("Name");
-        }
-        set
-        {
-            SetAttribute("Name", value);
-        }
+        get => GetAttribute("Name");
+        set => SetAttribute("Name", value);
     }
 
     internal AgileComPointer<IHTMLElement> NativeHtmlElement => _htmlElement;
