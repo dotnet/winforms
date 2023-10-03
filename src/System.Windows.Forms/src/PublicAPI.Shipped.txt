@@ -210,7 +210,7 @@ override System.Windows.Forms.DataGridViewTextBoxCell.Paint(System.Drawing.Graph
 override System.Windows.Forms.DataGridViewTextBoxCell.PositionEditingControl(bool setLocation, bool setSize, System.Drawing.Rectangle cellBounds, System.Drawing.Rectangle cellClip, System.Windows.Forms.DataGridViewCellStyle! cellStyle, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow) -> void
 override System.Windows.Forms.DataGridViewTextBoxCell.ToString() -> string!
 override System.Windows.Forms.DataGridViewTextBoxCell.ValueType.get -> System.Type!
-~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
+override System.Windows.Forms.HtmlElement.Equals(object? obj) -> bool
 ~override System.Windows.Forms.HtmlWindow.Equals(object obj) -> bool
 override System.Windows.Forms.PictureBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.PictureBox.CreateParams.get -> System.Windows.Forms.CreateParams!
@@ -278,8 +278,8 @@ override System.Windows.Forms.TreeView.ToString() -> string!
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
-~static System.Windows.Forms.HtmlElement.operator !=(System.Windows.Forms.HtmlElement left, System.Windows.Forms.HtmlElement right) -> bool
-~static System.Windows.Forms.HtmlElement.operator ==(System.Windows.Forms.HtmlElement left, System.Windows.Forms.HtmlElement right) -> bool
+static System.Windows.Forms.HtmlElement.operator !=(System.Windows.Forms.HtmlElement? left, System.Windows.Forms.HtmlElement? right) -> bool
+static System.Windows.Forms.HtmlElement.operator ==(System.Windows.Forms.HtmlElement? left, System.Windows.Forms.HtmlElement? right) -> bool
 ~static System.Windows.Forms.HtmlWindow.operator !=(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
 ~static System.Windows.Forms.HtmlWindow.operator ==(System.Windows.Forms.HtmlWindow left, System.Windows.Forms.HtmlWindow right) -> bool
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
@@ -499,39 +499,39 @@ System.Windows.Forms.DataGridViewRowCollection.IndexOf(System.Windows.Forms.Data
 System.Windows.Forms.DataGridViewRowCollection.List.get -> System.Collections.ArrayList!
 System.Windows.Forms.DataGridViewRowCollection.SharedRow(int rowIndex) -> System.Windows.Forms.DataGridViewRow!
 System.Windows.Forms.DataGridViewRowCollection.this[int index].get -> System.Windows.Forms.DataGridViewRow!
-~System.Windows.Forms.HtmlElement.All.get -> System.Windows.Forms.HtmlElementCollection
-~System.Windows.Forms.HtmlElement.AppendChild(System.Windows.Forms.HtmlElement newElement) -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlElement.AttachEventHandler(string eventName, System.EventHandler eventHandler) -> void
-~System.Windows.Forms.HtmlElement.Children.get -> System.Windows.Forms.HtmlElementCollection
-~System.Windows.Forms.HtmlElement.DetachEventHandler(string eventName, System.EventHandler eventHandler) -> void
-~System.Windows.Forms.HtmlElement.Document.get -> System.Windows.Forms.HtmlDocument
-~System.Windows.Forms.HtmlElement.DomElement.get -> object
-~System.Windows.Forms.HtmlElement.FirstChild.get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlElement.GetAttribute(string attributeName) -> string
-~System.Windows.Forms.HtmlElement.GetElementsByTagName(string tagName) -> System.Windows.Forms.HtmlElementCollection
-~System.Windows.Forms.HtmlElement.Id.get -> string
-~System.Windows.Forms.HtmlElement.Id.set -> void
-~System.Windows.Forms.HtmlElement.InnerHtml.get -> string
-~System.Windows.Forms.HtmlElement.InnerHtml.set -> void
-~System.Windows.Forms.HtmlElement.InnerText.get -> string
-~System.Windows.Forms.HtmlElement.InnerText.set -> void
-~System.Windows.Forms.HtmlElement.InsertAdjacentElement(System.Windows.Forms.HtmlElementInsertionOrientation orient, System.Windows.Forms.HtmlElement newElement) -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlElement.InvokeMember(string methodName) -> object
-~System.Windows.Forms.HtmlElement.InvokeMember(string methodName, params object[] parameter) -> object
-~System.Windows.Forms.HtmlElement.Name.get -> string
-~System.Windows.Forms.HtmlElement.Name.set -> void
-~System.Windows.Forms.HtmlElement.NextSibling.get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlElement.OffsetParent.get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlElement.OuterHtml.get -> string
-~System.Windows.Forms.HtmlElement.OuterHtml.set -> void
-~System.Windows.Forms.HtmlElement.OuterText.get -> string
-~System.Windows.Forms.HtmlElement.OuterText.set -> void
-~System.Windows.Forms.HtmlElement.Parent.get -> System.Windows.Forms.HtmlElement
-~System.Windows.Forms.HtmlElement.RaiseEvent(string eventName) -> void
-~System.Windows.Forms.HtmlElement.SetAttribute(string attributeName, string value) -> void
-~System.Windows.Forms.HtmlElement.Style.get -> string
-~System.Windows.Forms.HtmlElement.Style.set -> void
-~System.Windows.Forms.HtmlElement.TagName.get -> string
+System.Windows.Forms.HtmlElement.All.get -> System.Windows.Forms.HtmlElementCollection!
+System.Windows.Forms.HtmlElement.AppendChild(System.Windows.Forms.HtmlElement! newElement) -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlElement.AttachEventHandler(string! eventName, System.EventHandler! eventHandler) -> void
+System.Windows.Forms.HtmlElement.Children.get -> System.Windows.Forms.HtmlElementCollection!
+System.Windows.Forms.HtmlElement.DetachEventHandler(string! eventName, System.EventHandler! eventHandler) -> void
+System.Windows.Forms.HtmlElement.Document.get -> System.Windows.Forms.HtmlDocument?
+System.Windows.Forms.HtmlElement.DomElement.get -> object!
+System.Windows.Forms.HtmlElement.FirstChild.get -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlElement.GetAttribute(string! attributeName) -> string!
+System.Windows.Forms.HtmlElement.GetElementsByTagName(string! tagName) -> System.Windows.Forms.HtmlElementCollection!
+System.Windows.Forms.HtmlElement.Id.get -> string!
+System.Windows.Forms.HtmlElement.Id.set -> void
+System.Windows.Forms.HtmlElement.InnerHtml.get -> string!
+System.Windows.Forms.HtmlElement.InnerHtml.set -> void
+System.Windows.Forms.HtmlElement.InnerText.get -> string!
+System.Windows.Forms.HtmlElement.InnerText.set -> void
+System.Windows.Forms.HtmlElement.InsertAdjacentElement(System.Windows.Forms.HtmlElementInsertionOrientation orient, System.Windows.Forms.HtmlElement! newElement) -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlElement.InvokeMember(string! methodName) -> object?
+System.Windows.Forms.HtmlElement.InvokeMember(string! methodName, params object![]? parameter) -> object?
+System.Windows.Forms.HtmlElement.Name.get -> string!
+System.Windows.Forms.HtmlElement.Name.set -> void
+System.Windows.Forms.HtmlElement.NextSibling.get -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlElement.OffsetParent.get -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlElement.OuterHtml.get -> string!
+System.Windows.Forms.HtmlElement.OuterHtml.set -> void
+System.Windows.Forms.HtmlElement.OuterText.get -> string!
+System.Windows.Forms.HtmlElement.OuterText.set -> void
+System.Windows.Forms.HtmlElement.Parent.get -> System.Windows.Forms.HtmlElement?
+System.Windows.Forms.HtmlElement.RaiseEvent(string! eventName) -> void
+System.Windows.Forms.HtmlElement.SetAttribute(string! attributeName, string! value) -> void
+System.Windows.Forms.HtmlElement.Style.get -> string!
+System.Windows.Forms.HtmlElement.Style.set -> void
+System.Windows.Forms.HtmlElement.TagName.get -> string!
 ~System.Windows.Forms.HtmlWindow.Alert(string message) -> void
 ~System.Windows.Forms.HtmlWindow.AttachEventHandler(string eventName, System.EventHandler eventHandler) -> void
 ~System.Windows.Forms.HtmlWindow.Confirm(string message) -> bool
@@ -7089,29 +7089,29 @@ System.Windows.Forms.HtmlDocument.Window.get -> System.Windows.Forms.HtmlWindow?
 System.Windows.Forms.HtmlDocument.Write(string! text) -> void
 System.Windows.Forms.HtmlElement
 System.Windows.Forms.HtmlElement.CanHaveChildren.get -> bool
-System.Windows.Forms.HtmlElement.Click -> System.Windows.Forms.HtmlElementEventHandler
+System.Windows.Forms.HtmlElement.Click -> System.Windows.Forms.HtmlElementEventHandler?
 System.Windows.Forms.HtmlElement.ClientRectangle.get -> System.Drawing.Rectangle
-System.Windows.Forms.HtmlElement.DoubleClick -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.Drag -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.DragEnd -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.DragLeave -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.DragOver -> System.Windows.Forms.HtmlElementEventHandler
+System.Windows.Forms.HtmlElement.DoubleClick -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.Drag -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.DragEnd -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.DragLeave -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.DragOver -> System.Windows.Forms.HtmlElementEventHandler?
 System.Windows.Forms.HtmlElement.Enabled.get -> bool
 System.Windows.Forms.HtmlElement.Enabled.set -> void
 System.Windows.Forms.HtmlElement.Focus() -> void
-System.Windows.Forms.HtmlElement.Focusing -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.GotFocus -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.KeyDown -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.KeyPress -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.KeyUp -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.LosingFocus -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.LostFocus -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.MouseDown -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.MouseEnter -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.MouseLeave -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.MouseMove -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.MouseOver -> System.Windows.Forms.HtmlElementEventHandler
-System.Windows.Forms.HtmlElement.MouseUp -> System.Windows.Forms.HtmlElementEventHandler
+System.Windows.Forms.HtmlElement.Focusing -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.GotFocus -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.KeyDown -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.KeyPress -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.KeyUp -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.LosingFocus -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.LostFocus -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.MouseDown -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.MouseEnter -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.MouseLeave -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.MouseMove -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.MouseOver -> System.Windows.Forms.HtmlElementEventHandler?
+System.Windows.Forms.HtmlElement.MouseUp -> System.Windows.Forms.HtmlElementEventHandler?
 System.Windows.Forms.HtmlElement.OffsetRectangle.get -> System.Drawing.Rectangle
 System.Windows.Forms.HtmlElement.RemoveFocus() -> void
 System.Windows.Forms.HtmlElement.ScrollIntoView(bool alignWithTop) -> void

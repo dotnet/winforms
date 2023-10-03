@@ -52,7 +52,7 @@ public sealed partial class HtmlElement
             _htmlElement = element;
 
             // Snap our associated window so we know when to disconnect.
-            HtmlDocument doc = _htmlElement.Document;
+            HtmlDocument? doc = _htmlElement.Document;
             if (doc is not null)
             {
                 HtmlWindow? window = doc.Window;

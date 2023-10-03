@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
@@ -105,7 +103,7 @@ public sealed unsafe partial class HtmlElement
         }
     }
 
-    public HtmlDocument Document
+    public HtmlDocument? Document
     {
         get
         {
@@ -137,23 +135,18 @@ public sealed unsafe partial class HtmlElement
     {
         get
         {
-            if (ShimManager is not null)
+            HtmlElementShim? shim = ShimManager.GetElementShim(this);
+            if (shim is null)
             {
-                HtmlElementShim shim = ShimManager.GetElementShim(this);
-                if (shim is null)
-                {
-                    _shimManager.AddElementShim(this);
-                    shim = ShimManager.GetElementShim(this);
-                }
-
-                return shim;
+                _shimManager.AddElementShim(this);
+                shim = ShimManager.GetElementShim(this);
             }
 
-            return null;
+            return shim!;
         }
     }
 
-    public HtmlElement FirstChild
+    public HtmlElement? FirstChild
     {
         get
         {
@@ -275,7 +268,7 @@ public sealed unsafe partial class HtmlElement
         return scope;
     }
 
-    public HtmlElement NextSibling
+    public HtmlElement? NextSibling
     {
         get
         {
@@ -316,7 +309,7 @@ public sealed unsafe partial class HtmlElement
         }
     }
 
-    public HtmlElement OffsetParent
+    public HtmlElement? OffsetParent
     {
         get
         {
@@ -385,7 +378,7 @@ public sealed unsafe partial class HtmlElement
         }
     }
 
-    public HtmlElement Parent
+    public HtmlElement? Parent
     {
         get
         {
@@ -499,7 +492,7 @@ public sealed unsafe partial class HtmlElement
 
     public object DomElement => NativeHtmlElement.GetManagedObject();
 
-    public HtmlElement AppendChild(HtmlElement newElement)
+    public HtmlElement? AppendChild(HtmlElement newElement)
     {
         return InsertAdjacentElement(HtmlElementInsertionOrientation.BeforeEnd, newElement);
     }
@@ -552,7 +545,7 @@ public sealed unsafe partial class HtmlElement
         return iHTMLElementCollection is not null ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
     }
 
-    public HtmlElement InsertAdjacentElement(HtmlElementInsertionOrientation orient, HtmlElement newElement)
+    public HtmlElement? InsertAdjacentElement(HtmlElementInsertionOrientation orient, HtmlElement newElement)
     {
         using var htmlElement2 = GetHtmlElement<IHTMLElement2>();
         using BSTR where = new(orient.ToString());
@@ -563,9 +556,9 @@ public sealed unsafe partial class HtmlElement
         return adjElement is not null ? new HtmlElement(_shimManager, adjElement) : null;
     }
 
-    public object InvokeMember(string methodName) => InvokeMember(methodName, null);
+    public object? InvokeMember(string methodName) => InvokeMember(methodName, parameter: null);
 
-    public unsafe object InvokeMember(string methodName, params object[] parameter)
+    public unsafe object? InvokeMember(string methodName, params object[]? parameter)
     {
         try
         {
@@ -676,103 +669,103 @@ public sealed unsafe partial class HtmlElement
     //
     // Events:
     //
-    public event HtmlElementEventHandler Click
+    public event HtmlElementEventHandler? Click
     {
         add => ElementShim.AddHandler(s_eventClick, value);
         remove => ElementShim.RemoveHandler(s_eventClick, value);
     }
 
-    public event HtmlElementEventHandler DoubleClick
+    public event HtmlElementEventHandler? DoubleClick
     {
         add => ElementShim.AddHandler(s_eventDoubleClick, value);
         remove => ElementShim.RemoveHandler(s_eventDoubleClick, value);
     }
 
-    public event HtmlElementEventHandler Drag
+    public event HtmlElementEventHandler? Drag
     {
         add => ElementShim.AddHandler(s_eventDrag, value);
         remove => ElementShim.RemoveHandler(s_eventDrag, value);
     }
 
-    public event HtmlElementEventHandler DragEnd
+    public event HtmlElementEventHandler? DragEnd
     {
         add => ElementShim.AddHandler(s_eventDragEnd, value);
         remove => ElementShim.RemoveHandler(s_eventDragEnd, value);
     }
 
-    public event HtmlElementEventHandler DragLeave
+    public event HtmlElementEventHandler? DragLeave
     {
         add => ElementShim.AddHandler(s_eventDragLeave, value);
         remove => ElementShim.RemoveHandler(s_eventDragLeave, value);
     }
 
-    public event HtmlElementEventHandler DragOver
+    public event HtmlElementEventHandler? DragOver
     {
         add => ElementShim.AddHandler(s_eventDragOver, value);
         remove => ElementShim.RemoveHandler(s_eventDragOver, value);
     }
 
-    public event HtmlElementEventHandler Focusing
+    public event HtmlElementEventHandler? Focusing
     {
         add => ElementShim.AddHandler(s_eventFocusing, value);
         remove => ElementShim.RemoveHandler(s_eventFocusing, value);
     }
 
-    public event HtmlElementEventHandler GotFocus
+    public event HtmlElementEventHandler? GotFocus
     {
         add => ElementShim.AddHandler(s_eventGotFocus, value);
         remove => ElementShim.RemoveHandler(s_eventGotFocus, value);
     }
 
-    public event HtmlElementEventHandler LosingFocus
+    public event HtmlElementEventHandler? LosingFocus
     {
         add => ElementShim.AddHandler(s_eventLosingFocus, value);
         remove => ElementShim.RemoveHandler(s_eventLosingFocus, value);
     }
 
-    public event HtmlElementEventHandler LostFocus
+    public event HtmlElementEventHandler? LostFocus
     {
         add => ElementShim.AddHandler(s_eventLostFocus, value);
         remove => ElementShim.RemoveHandler(s_eventLostFocus, value);
     }
 
-    public event HtmlElementEventHandler KeyDown
+    public event HtmlElementEventHandler? KeyDown
     {
         add => ElementShim.AddHandler(s_eventKeyDown, value);
         remove => ElementShim.RemoveHandler(s_eventKeyDown, value);
     }
 
-    public event HtmlElementEventHandler KeyPress
+    public event HtmlElementEventHandler? KeyPress
     {
         add => ElementShim.AddHandler(s_eventKeyPress, value);
         remove => ElementShim.RemoveHandler(s_eventKeyPress, value);
     }
 
-    public event HtmlElementEventHandler KeyUp
+    public event HtmlElementEventHandler? KeyUp
     {
         add => ElementShim.AddHandler(s_eventKeyUp, value);
         remove => ElementShim.RemoveHandler(s_eventKeyUp, value);
     }
 
-    public event HtmlElementEventHandler MouseMove
+    public event HtmlElementEventHandler? MouseMove
     {
         add => ElementShim.AddHandler(s_eventMouseMove, value);
         remove => ElementShim.RemoveHandler(s_eventMouseMove, value);
     }
 
-    public event HtmlElementEventHandler MouseDown
+    public event HtmlElementEventHandler? MouseDown
     {
         add => ElementShim.AddHandler(s_eventMouseDown, value);
         remove => ElementShim.RemoveHandler(s_eventMouseDown, value);
     }
 
-    public event HtmlElementEventHandler MouseOver
+    public event HtmlElementEventHandler? MouseOver
     {
         add => ElementShim.AddHandler(s_eventMouseOver, value);
         remove => ElementShim.RemoveHandler(s_eventMouseOver, value);
     }
 
-    public event HtmlElementEventHandler MouseUp
+    public event HtmlElementEventHandler? MouseUp
     {
         add => ElementShim.AddHandler(s_eventMouseUp, value);
         remove => ElementShim.RemoveHandler(s_eventMouseUp, value);
@@ -781,7 +774,7 @@ public sealed unsafe partial class HtmlElement
     /// <summary>
     ///  Fires when the mouse enters the element
     /// </summary>
-    public event HtmlElementEventHandler MouseEnter
+    public event HtmlElementEventHandler? MouseEnter
     {
         add => ElementShim.AddHandler(s_eventMouseEnter, value);
         remove => ElementShim.RemoveHandler(s_eventMouseEnter, value);
@@ -790,33 +783,31 @@ public sealed unsafe partial class HtmlElement
     /// <summary>
     ///  Fires when the mouse leaves the element
     /// </summary>
-    public event HtmlElementEventHandler MouseLeave
+    public event HtmlElementEventHandler? MouseLeave
     {
         add => ElementShim.AddHandler(s_eventMouseLeave, value);
         remove => ElementShim.RemoveHandler(s_eventMouseLeave, value);
     }
 
-    public static unsafe bool operator ==(HtmlElement left, HtmlElement right)
+    public static unsafe bool operator ==(HtmlElement? left, HtmlElement? right)
     {
-        // Not equal if only one's null.
-        if (left is null != right is null)
-        {
-            return false;
-        }
-
-        // Equal if both are null.
         if (left is null)
         {
-            return true;
+            return right is null;
+        }
+
+        if (right is null)
+        {
+            return false;
         }
 
         // Neither are null. Compare their native pointers.
         return left.NativeHtmlElement.IsSameNativeObject(right.NativeHtmlElement);
     }
 
-    public static bool operator !=(HtmlElement left, HtmlElement right) => !(left == right);
+    public static bool operator !=(HtmlElement? left, HtmlElement? right) => !(left == right);
 
     public override int GetHashCode() => _htmlElement.GetHashCode();
 
-    public override bool Equals(object obj) => this == (obj as HtmlElement);
+    public override bool Equals(object? obj) => this == (obj as HtmlElement);
 }
