@@ -210,8 +210,8 @@ System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLo
 ~System.Drawing.Design.IToolboxService.SetSelectedToolboxItem(System.Drawing.Design.ToolboxItem toolboxItem) -> void
 ~System.Drawing.Design.IToolboxUser.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
 ~System.Drawing.Design.IToolboxUser.ToolPicked(System.Drawing.Design.ToolboxItem tool) -> void
-~System.Drawing.Design.ToolboxComponentsCreatingEventArgs.DesignerHost.get -> System.ComponentModel.Design.IDesignerHost
-~System.Drawing.Design.ToolboxComponentsCreatingEventArgs.ToolboxComponentsCreatingEventArgs(System.ComponentModel.Design.IDesignerHost host) -> void
+System.Drawing.Design.ToolboxComponentsCreatingEventArgs.DesignerHost.get -> System.ComponentModel.Design.IDesignerHost?
+System.Drawing.Design.ToolboxComponentsCreatingEventArgs.ToolboxComponentsCreatingEventArgs(System.ComponentModel.Design.IDesignerHost? host) -> void
 System.Drawing.Design.ToolboxItem.AssemblyName.get -> System.Reflection.AssemblyName?
 System.Drawing.Design.ToolboxItem.AssemblyName.set -> void
 System.Drawing.Design.ToolboxItem.Bitmap.get -> System.Drawing.Bitmap?
