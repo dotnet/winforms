@@ -931,7 +931,7 @@ internal sealed partial class PropertyGridView :
         _currentEditor = control;
     }
 
-    private static int CountPropertiesFromOutline(GridEntryCollection entries)
+    private static int CountPropertiesFromOutline(GridEntryCollection? entries)
     {
         CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:CountPropertiesFromOutline");
         if (entries is null)
@@ -1963,7 +1963,7 @@ internal sealed partial class PropertyGridView :
         return rect;
     }
 
-    internal int GetRowFromGridEntry(GridEntry gridEntry)
+    internal int GetRowFromGridEntry(GridEntry? gridEntry)
     {
         GridEntryCollection? allGridEntries = GetAllGridEntries();
         if (gridEntry is null || allGridEntries is null)
@@ -2098,7 +2098,7 @@ internal sealed partial class PropertyGridView :
         return base.IsInputKey(keyData);
     }
 
-    private bool IsMyChild(Control control)
+    private bool IsMyChild(Control? control)
     {
         if (control == this || control is null)
         {
@@ -3186,7 +3186,7 @@ internal sealed partial class PropertyGridView :
     }
 
     protected override void OnMouseUp(MouseEventArgs e) => CancelSplitterMove();
-#nullable disable
+
     protected override void OnMouseWheel(MouseEventArgs e)
     {
         OwnerGrid.OnGridViewMouseWheel(e);
@@ -3256,7 +3256,7 @@ internal sealed partial class PropertyGridView :
             if (fullNotches != 0)
             {
                 int originalOffset = initialOffset;
-                int large = fullNotches * _scrollBar.LargeChange;
+                int large = fullNotches * _scrollBar!.LargeChange;
                 int newOffset = Math.Max(0, initialOffset - large);
                 newOffset = Math.Min(newOffset, TotalProperties - _visibleRows + 1);
 
@@ -3295,7 +3295,7 @@ internal sealed partial class PropertyGridView :
 
                 if (scrollBands > 0)
                 {
-                    if (_scrollBar.Value <= _scrollBar.Minimum)
+                    if (_scrollBar!.Value <= _scrollBar.Minimum)
                     {
                         _cumulativeVerticalWheelDelta = 0;
                     }
@@ -3306,7 +3306,7 @@ internal sealed partial class PropertyGridView :
                 }
                 else
                 {
-                    if (_scrollBar.Value > (_scrollBar.Maximum - _visibleRows + 1))
+                    if (_scrollBar!.Value > (_scrollBar.Maximum - _visibleRows + 1))
                     {
                         _cumulativeVerticalWheelDelta = 0;
                     }
@@ -3370,8 +3370,8 @@ internal sealed partial class PropertyGridView :
             int visibleCount = Math.Min(TotalProperties - GetScrollOffset(), 1 + _visibleRows);
 
 #if DEBUG
-            GridEntry debugEntryStart = GetGridEntryFromRow(startRow);
-            GridEntry debugEntryEnd = GetGridEntryFromRow(endRow);
+            GridEntry? debugEntryStart = GetGridEntryFromRow(startRow);
+            GridEntry? debugEntryEnd = GetGridEntryFromRow(endRow);
             string startName = debugEntryStart?.PropertyLabel ?? "(null)";
             string endName = debugEntryEnd?.PropertyLabel ?? "(null)";
 #endif
@@ -3431,7 +3431,7 @@ internal sealed partial class PropertyGridView :
                     catch
                     {
                         s_gridViewDebugPaint.TraceVerbose(
-                            $"Exception thrown during painting property {GetGridEntryFromRow(i).PropertyLabel}");
+                            $"Exception thrown during painting property {GetGridEntryFromRow(i)!.PropertyLabel}");
                     }
                 }
 
@@ -3463,9 +3463,9 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    private void OnGridEntryLabelDoubleClick(object s, EventArgs e)
+    private void OnGridEntryLabelDoubleClick(object? s, EventArgs e)
     {
-        var gridEntry = (GridEntry)s;
+        var gridEntry = (GridEntry)s!;
 
         // If we've changed since the click (probably because we moved a row into view), bail.
         if (gridEntry != _lastClickedEntry)
@@ -3477,9 +3477,9 @@ internal sealed partial class PropertyGridView :
         DoubleClickRow(row, gridEntry.Expandable, RowLabel);
     }
 
-    private void OnGridEntryValueDoubleClick(object s, EventArgs e)
+    private void OnGridEntryValueDoubleClick(object? s, EventArgs e)
     {
-        var gridEntry = (GridEntry)s;
+        var gridEntry = (GridEntry)s!;
 
         // If we've changed since the click (probably because we moved a row into view), bail.
         if (gridEntry != _lastClickedEntry)
@@ -3491,18 +3491,18 @@ internal sealed partial class PropertyGridView :
         DoubleClickRow(row, gridEntry.Expandable, RowValue);
     }
 
-    private void OnGridEntryLabelClick(object sender, EventArgs e)
+    private void OnGridEntryLabelClick(object? sender, EventArgs e)
     {
-        _lastClickedEntry = (GridEntry)sender;
+        _lastClickedEntry = (GridEntry?)sender;
         SelectGridEntry(_lastClickedEntry, pageIn: true);
     }
 
-    private void OnGridEntryOutlineClick(object sender, EventArgs e)
+    private void OnGridEntryOutlineClick(object? sender, EventArgs e)
     {
-        var gridEntry = (GridEntry)sender;
+        var gridEntry = (GridEntry)sender!;
         Debug.Assert(gridEntry.Expandable, "non-expandable IPE firing outline click");
 
-        Cursor oldCursor = Cursor;
+        Cursor? oldCursor = Cursor;
         if (!ShouldSerializeCursor())
         {
             oldCursor = null;
@@ -3521,9 +3521,9 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    private void OnGridEntryValueClick(object sender, EventArgs e)
+    private void OnGridEntryValueClick(object? sender, EventArgs e)
     {
-        _lastClickedEntry = (GridEntry)sender;
+        _lastClickedEntry = (GridEntry?)sender;
         bool setSelectTime = sender != _selectedGridEntry;
         SelectGridEntry(_lastClickedEntry, pageIn: true);
         EditTextBox.Focus();
@@ -3603,7 +3603,7 @@ internal sealed partial class PropertyGridView :
 
         if (parent.Expanded)
         {
-            var entries = new GridEntry[_allGridEntries.Count];
+            var entries = new GridEntry[_allGridEntries!.Count];
             _allGridEntries.CopyTo(entries, 0);
 
             // Find the index of the gridEntry that fired the event in our main list.
@@ -3711,7 +3711,7 @@ internal sealed partial class PropertyGridView :
         _lastClientRect = newRect;
     }
 
-    private void OnScroll(object sender, ScrollEventArgs e)
+    private void OnScroll(object? sender, ScrollEventArgs e)
     {
         CompModSwitches.DebugGridView.TraceVerbose(
             $"PropertyGridView:OnScroll({ScrollBar.Value} -> {e.NewValue})");
@@ -3724,11 +3724,11 @@ internal sealed partial class PropertyGridView :
         }
 
         int oldRow = -1;
-        GridEntry oldGridEntry = _selectedGridEntry;
+        GridEntry? oldGridEntry = _selectedGridEntry;
         if (_selectedGridEntry is not null)
         {
             oldRow = GetRowFromGridEntry(oldGridEntry);
-            CompModSwitches.DebugGridView.TraceVerbose($"OnScroll: SelectedGridEntry={oldGridEntry.PropertyLabel}");
+            CompModSwitches.DebugGridView.TraceVerbose($"OnScroll: SelectedGridEntry={oldGridEntry!.PropertyLabel}");
         }
 
         ScrollBar.Value = e.NewValue;
@@ -3763,7 +3763,7 @@ internal sealed partial class PropertyGridView :
     public unsafe void PopupEditor(int row)
     {
         CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:PopupEditor");
-        GridEntry gridEntry = GetGridEntryFromRow(row);
+        GridEntry? gridEntry = GetGridEntryFromRow(row);
         if (gridEntry is null)
         {
             return;
@@ -3937,7 +3937,7 @@ internal sealed partial class PropertyGridView :
 
                     bool forward = (keyData & Keys.Shift) == 0;
 
-                    Control focusedControl = FromHandle(PInvoke.GetFocus());
+                    Control? focusedControl = FromHandle(PInvoke.GetFocus());
 
                     if (focusedControl is null || !IsMyChild(focusedControl))
                     {
@@ -4053,7 +4053,7 @@ internal sealed partial class PropertyGridView :
 
         if (initialize)
         {
-            GridEntry selectedEntry = _selectedGridEntry;
+            GridEntry? selectedEntry = _selectedGridEntry;
             Refresh();
             SelectGridEntry(selectedEntry, pageIn: false);
             Invalidate();
@@ -4092,7 +4092,7 @@ internal sealed partial class PropertyGridView :
         s_gridViewDebugPaint.TraceVerbose(
             $"Refresh called for rows {startRow} through {endRow}");
         SetFlag(Flags.NeedsRefresh, true);
-        GridEntry gridEntry = null;
+        GridEntry? gridEntry = null;
 
         if (IsDisposed)
         {
@@ -4114,8 +4114,9 @@ internal sealed partial class PropertyGridView :
             }
 
             int oldLength = TotalProperties;
-            object oldObject = TopLevelGridEntries is null
-                || TopLevelGridEntries.Count == 0 ? null : TopLevelGridEntries[0].GetValueOwner();
+            object? oldObject = TopLevelGridEntries is null || TopLevelGridEntries.Count == 0
+                ? null
+                : TopLevelGridEntries[0].GetValueOwner();
 
             // Walk up to the main IPE and refresh it.
             if (fullRefresh)
@@ -4154,7 +4155,7 @@ internal sealed partial class PropertyGridView :
                     gridEntry = _positionData.Restore(this);
 
                     // Upon restoring the grid entry position, we don't want to page it in.
-                    object newObject = TopLevelGridEntries is null || TopLevelGridEntries.Count == 0
+                    object? newObject = TopLevelGridEntries is null || TopLevelGridEntries.Count == 0
                         ? null
                         : TopLevelGridEntries[0].GetValueOwner();
                     pageInGridEntry = (gridEntry is null) || oldLength != newLength || newObject != oldObject;
@@ -4212,7 +4213,7 @@ internal sealed partial class PropertyGridView :
     public void Reset()
     {
         CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:Reset");
-        GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
+        GridEntry? gridEntry = GetGridEntryFromRow(_selectedRow);
         if (gridEntry is null)
         {
             return;
@@ -4237,7 +4238,7 @@ internal sealed partial class PropertyGridView :
         }
     }
 
-    internal static List<GridEntryCollection> SaveHierarchyState(GridEntryCollection entries, List<GridEntryCollection> expandedItems = null)
+    internal static List<GridEntryCollection> SaveHierarchyState(GridEntryCollection? entries, List<GridEntryCollection>? expandedItems = null)
     {
         if (entries is null)
         {
@@ -4251,7 +4252,7 @@ internal sealed partial class PropertyGridView :
             if (entries[i].InternalExpanded)
             {
                 GridEntry entry = entries[i];
-                expandedItems.Add(GetGridEntryHierarchy(entry.Children[0]));
+                expandedItems.Add(GetGridEntryHierarchy(entry.Children[0])!);
                 SaveHierarchyState(entry.Children, expandedItems);
             }
         }
@@ -4262,7 +4263,7 @@ internal sealed partial class PropertyGridView :
     // Scroll to the new offset
     private bool ScrollRows(int newOffset)
     {
-        GridEntry currentEntry = _selectedGridEntry;
+        GridEntry? currentEntry = _selectedGridEntry;
 
         if (!IsScrollValueValid(newOffset) || !CommitEditTextBox())
         {
@@ -4302,7 +4303,7 @@ internal sealed partial class PropertyGridView :
         Invalidate();
         return true;
     }
-
+#nullable disable
     internal void SelectGridEntry(GridEntry entry, bool pageIn)
     {
         if (entry is null)
