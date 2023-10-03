@@ -54,7 +54,7 @@ public sealed partial class BehaviorService : IDisposable
     private static MessageId WM_GETRECENTSNAPLINES;
     private const string ToolboxFormat = ".NET Toolbox Item"; // used to detect if a drag is coming from the toolbox.
 
-    internal BehaviorService(IServiceProvider serviceProvider, Control windowFrame)
+    internal BehaviorService(IServiceProvider serviceProvider, DesignerFrame windowFrame)
     {
         _serviceProvider = serviceProvider;
         _adornerWindow = new AdornerWindow(this, windowFrame);

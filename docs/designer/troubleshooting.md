@@ -1,6 +1,6 @@
 # How to troubleshoot the Windows Forms Out-Of-Process designer
 
-Whilst the Windows Forms Out-Of-Process Designer (or the OOP designer) is by far and large is a black box to the users, it is still possible to find out more information on its state.
+Whilst the Windows Forms Out-Of-Process Designer (or the OOP designer) is by far and large sort of a black box to the users, it actually provides some good means to find out more information on its state.
 
 ## Logging 
 

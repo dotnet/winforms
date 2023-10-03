@@ -49,7 +49,8 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
             grid.SelectedEntry = grid[nameof(Button.FlatStyle)];
 
             grid.PopupEditorAndClose(onClosingAction: () =>
-                Assert.Equal(grid.GridView.DropDownControlHolder.AccessibilityObject,
+                Assert.Equal(
+                    grid.GridView.DropDownControlHolder!.AccessibilityObject,
                     grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling)));
 
             return Task.CompletedTask;

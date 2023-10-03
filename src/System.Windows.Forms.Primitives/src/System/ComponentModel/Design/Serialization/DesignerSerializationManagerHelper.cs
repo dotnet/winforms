@@ -7,10 +7,17 @@ namespace System.ComponentModel.Design.Serialization
     {
         public static bool TryGetContext<T>(
             this IDesignerSerializationManager manager,
-            [NotNullWhen(true)] out T? context) where T : class
+            [NotNullWhen(true)] out T? context)
         {
-            context = manager.GetContext<T>();
-            return context is not null;
+            object? contextObject = manager.Context[typeof(T)];
+            if (manager.Context[typeof(T)] is T contextTemp)
+            {
+                context = contextTemp;
+                return true;
+            }
+
+            context = default;
+            return false;
         }
 
         public static T? GetContext<T>(this IDesignerSerializationManager manager) where T : class

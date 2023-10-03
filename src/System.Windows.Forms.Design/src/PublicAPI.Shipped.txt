@@ -167,19 +167,19 @@ static System.Windows.Forms.Design.MaskDescriptor.IsValidMaskDescriptor(System.W
 ~System.ComponentModel.Design.DesignerActionUIStateChangeEventArgs.RelatedObject.get -> object
 System.ComponentModel.Design.EventBindingService.EventBindingService(System.IServiceProvider! provider) -> void
 System.ComponentModel.Design.EventBindingService.GetService(System.Type! serviceType) -> object?
-~System.ComponentModel.Design.MenuCommandService.FindCommand(System.ComponentModel.Design.CommandID commandID) -> System.ComponentModel.Design.MenuCommand
-~System.ComponentModel.Design.MenuCommandService.FindCommand(System.Guid guid, int id) -> System.ComponentModel.Design.MenuCommand
-~System.ComponentModel.Design.MenuCommandService.GetCommandList(System.Guid guid) -> System.Collections.ICollection
-~System.ComponentModel.Design.MenuCommandService.GetService(System.Type serviceType) -> object
-~System.ComponentModel.Design.MenuCommandService.MenuCommandService(System.IServiceProvider serviceProvider) -> void
+System.ComponentModel.Design.MenuCommandService.FindCommand(System.ComponentModel.Design.CommandID! commandID) -> System.ComponentModel.Design.MenuCommand?
+System.ComponentModel.Design.MenuCommandService.FindCommand(System.Guid guid, int id) -> System.ComponentModel.Design.MenuCommand?
+System.ComponentModel.Design.MenuCommandService.GetCommandList(System.Guid guid) -> System.Collections.ICollection?
+System.ComponentModel.Design.MenuCommandService.GetService(System.Type! serviceType) -> object?
+System.ComponentModel.Design.MenuCommandService.MenuCommandService(System.IServiceProvider? serviceProvider) -> void
 System.ComponentModel.Design.Serialization.BasicDesignerLoader.GetService(System.Type! serviceType) -> object?
 System.ComponentModel.Design.Serialization.BasicDesignerLoader.LoaderHost.get -> System.ComponentModel.Design.Serialization.IDesignerLoaderHost!
 System.ComponentModel.Design.Serialization.BasicDesignerLoader.PropertyProvider.get -> object?
 System.ComponentModel.Design.Serialization.BasicDesignerLoader.PropertyProvider.set -> void
 System.ComponentModel.Design.Serialization.BasicDesignerLoader.SetBaseComponentClassName(string! name) -> void
 ~System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationService(System.IServiceProvider provider) -> void
-~System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model) -> void
-~System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model, System.Globalization.CultureInfo[] supportedCultures) -> void
+System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider! provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model) -> void
+System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider! provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model, System.Globalization.CultureInfo?[]! supportedCultures) -> void
 ~System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.MethodSupportsSerialization(System.Reflection.MethodInfo method) -> bool
 ~System.Drawing.Design.IToolboxService.AddCreator(System.Drawing.Design.ToolboxItemCreatorCallback creator, string format) -> void
 ~System.Drawing.Design.IToolboxService.AddCreator(System.Drawing.Design.ToolboxItemCreatorCallback creator, string format, System.ComponentModel.Design.IDesignerHost host) -> void
@@ -330,15 +330,15 @@ System.Windows.Forms.Design.Behavior.GlyphCollection.this[int index].set -> void
 virtual System.ComponentModel.Design.EventBindingService.FreeMethod(System.ComponentModel.IComponent! component, System.ComponentModel.EventDescriptor! e, string! methodName) -> void
 virtual System.ComponentModel.Design.EventBindingService.UseMethod(System.ComponentModel.IComponent! component, System.ComponentModel.EventDescriptor! e, string! methodName) -> void
 virtual System.ComponentModel.Design.EventBindingService.ValidateMethodName(string! methodName) -> void
-~virtual System.ComponentModel.Design.MenuCommandService.AddCommand(System.ComponentModel.Design.MenuCommand command) -> void
-~virtual System.ComponentModel.Design.MenuCommandService.AddVerb(System.ComponentModel.Design.DesignerVerb verb) -> void
-~virtual System.ComponentModel.Design.MenuCommandService.GlobalInvoke(System.ComponentModel.Design.CommandID commandID) -> bool
-~virtual System.ComponentModel.Design.MenuCommandService.GlobalInvoke(System.ComponentModel.Design.CommandID commandId, object arg) -> bool
-~virtual System.ComponentModel.Design.MenuCommandService.OnCommandsChanged(System.ComponentModel.Design.MenuCommandsChangedEventArgs e) -> void
-~virtual System.ComponentModel.Design.MenuCommandService.RemoveCommand(System.ComponentModel.Design.MenuCommand command) -> void
-~virtual System.ComponentModel.Design.MenuCommandService.RemoveVerb(System.ComponentModel.Design.DesignerVerb verb) -> void
-~virtual System.ComponentModel.Design.MenuCommandService.ShowContextMenu(System.ComponentModel.Design.CommandID menuID, int x, int y) -> void
-~virtual System.ComponentModel.Design.MenuCommandService.Verbs.get -> System.ComponentModel.Design.DesignerVerbCollection
+virtual System.ComponentModel.Design.MenuCommandService.AddCommand(System.ComponentModel.Design.MenuCommand! command) -> void
+virtual System.ComponentModel.Design.MenuCommandService.AddVerb(System.ComponentModel.Design.DesignerVerb! verb) -> void
+virtual System.ComponentModel.Design.MenuCommandService.GlobalInvoke(System.ComponentModel.Design.CommandID! commandID) -> bool
+virtual System.ComponentModel.Design.MenuCommandService.GlobalInvoke(System.ComponentModel.Design.CommandID! commandId, object! arg) -> bool
+virtual System.ComponentModel.Design.MenuCommandService.OnCommandsChanged(System.ComponentModel.Design.MenuCommandsChangedEventArgs! e) -> void
+virtual System.ComponentModel.Design.MenuCommandService.RemoveCommand(System.ComponentModel.Design.MenuCommand! command) -> void
+virtual System.ComponentModel.Design.MenuCommandService.RemoveVerb(System.ComponentModel.Design.DesignerVerb! verb) -> void
+virtual System.ComponentModel.Design.MenuCommandService.ShowContextMenu(System.ComponentModel.Design.CommandID! menuID, int x, int y) -> void
+virtual System.ComponentModel.Design.MenuCommandService.Verbs.get -> System.ComponentModel.Design.DesignerVerbCollection!
 virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection? errors) -> void
 virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReportFlushErrors(System.Collections.ICollection! errors) -> void
 virtual System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnComponentRename(object! component, string? oldName, string? newName) -> void
@@ -688,7 +688,7 @@ System.ComponentModel.Design.MenuCommandsChangedType.CommandRemoved = 1 -> Syste
 System.ComponentModel.Design.MenuCommandService
 System.ComponentModel.Design.MenuCommandService.Dispose() -> void
 System.ComponentModel.Design.MenuCommandService.EnsureVerbs() -> void
-System.ComponentModel.Design.MenuCommandService.MenuCommandsChanged -> System.ComponentModel.Design.MenuCommandsChangedEventHandler
+System.ComponentModel.Design.MenuCommandService.MenuCommandsChanged -> System.ComponentModel.Design.MenuCommandsChangedEventHandler?
 System.ComponentModel.Design.MultilineStringEditor
 System.ComponentModel.Design.MultilineStringEditor.MultilineStringEditor() -> void
 System.ComponentModel.Design.ObjectSelectorEditor

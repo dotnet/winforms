@@ -1810,6 +1810,116 @@
           }
         ]
       }
+    },
+    {
+      "taskType": "scheduled",
+      "capabilityId": "ScheduledSearch",
+      "subCapability": "ScheduledSearch",
+      "version": "1.1",
+      "config": {
+        "frequency": [
+          {
+            "weekDay": 0,
+            "hours": [
+              8,
+              20
+            ],
+            "timezoneOffset": -7
+          },
+          {
+            "weekDay": 1,
+            "hours": [
+              8,
+              20
+            ],
+            "timezoneOffset": -7
+          },
+          {
+            "weekDay": 2,
+            "hours": [
+              8,
+              20
+            ],
+            "timezoneOffset": -7
+          },
+          {
+            "weekDay": 3,
+            "hours": [
+              8,
+              20
+            ],
+            "timezoneOffset": -7
+          },
+          {
+            "weekDay": 4,
+            "hours": [
+              8,
+              20
+            ],
+            "timezoneOffset": -7
+          },
+          {
+            "weekDay": 5,
+            "hours": [
+              8,
+              20
+            ],
+            "timezoneOffset": -7
+          },
+          {
+            "weekDay": 6,
+            "hours": [
+              8,
+              20
+            ],
+            "timezoneOffset": -7
+          }
+        ],
+        "searchTerms": [
+          {
+            "name": "isDraftPr",
+            "parameters": {
+              "value": "true"
+            }
+          },
+          {
+            "name": "created",
+            "parameters": {
+              "operator": "<",
+              "days": 180
+            }
+          },
+          {
+            "name": "isOpen",
+            "parameters": {}
+          },
+          {
+            "name": "noActivitySince",
+            "parameters": {
+              "days": 180
+            }
+          }
+        ],
+        "taskName": "Close OLD draft PRs",
+        "actions": [
+          {
+            "name": "closeIssue",
+            "parameters": {}
+          },
+          {
+            "name": "addReply",
+            "parameters": {
+              "comment": "The current status of this \"draft\" PR has persisted for over 180 days, making it highly probable that it is no longer aligned with the latest codebase. Our repository is set up to automatically close draft PRs that have become outdated, and it requests the author to revisit and reopen them if they deem it necessary, thereby bringing them to the team's attention."
+            }
+          },
+          {
+            "name": "addLabel",
+            "parameters": {
+              "label": "draft"
+            }
+          }
+        ]
+      }
     }
   ],
   "userGroups": []

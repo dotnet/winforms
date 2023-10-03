@@ -23,8 +23,9 @@ public class PropertyGridView_GridViewListBox_GridViewListBoxAccessibleObjectTes
 
             grid.PopupEditorAndClose(() =>
             {
-                Assert.Equal(grid.GridView.DropDownControlHolder.AccessibilityObject,
-                    grid.GridView.DropDownListBoxAccessibleObject.FragmentNavigate(NavigateDirection.Parent));
+                Assert.Equal(
+                    grid.GridView.DropDownControlHolder!.AccessibilityObject,
+                    grid.GridView.DropDownListBoxAccessibleObject!.FragmentNavigate(NavigateDirection.Parent));
             });
 
             return Task.CompletedTask;
@@ -40,7 +41,7 @@ public class PropertyGridView_GridViewListBox_GridViewListBoxAccessibleObjectTes
 
             grid.PopupEditorAndClose(() =>
             {
-                Assert.Null(grid.GridView.DropDownListBoxAccessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+                Assert.Null(grid.GridView.DropDownListBoxAccessibleObject!.FragmentNavigate(NavigateDirection.PreviousSibling));
             });
 
             return Task.CompletedTask;
@@ -56,7 +57,7 @@ public class PropertyGridView_GridViewListBox_GridViewListBoxAccessibleObjectTes
 
             grid.PopupEditorAndClose(() =>
             {
-                Assert.Null(grid.GridView.DropDownListBoxAccessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
+                Assert.Null(grid.GridView.DropDownListBoxAccessibleObject!.FragmentNavigate(NavigateDirection.NextSibling));
             });
 
             return Task.CompletedTask;

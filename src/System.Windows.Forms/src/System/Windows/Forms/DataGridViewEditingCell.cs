@@ -5,6 +5,7 @@ namespace System.Windows.Forms;
 
 public interface IDataGridViewEditingCell
 {
+    [AllowNull]
     object EditingCellFormattedValue
     {
         get;
