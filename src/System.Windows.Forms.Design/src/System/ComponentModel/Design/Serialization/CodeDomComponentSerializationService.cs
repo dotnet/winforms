@@ -188,7 +188,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         private MemoryStream? _resourceStream;
 
         // Transient fields only used during creation of the store
-        private Dictionary<object, ObjectData>? _objects;
+        private readonly Dictionary<object, ObjectData> _objects;
         private readonly IServiceProvider? _provider;
 
         // These fields persist across the store
@@ -243,11 +243,11 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceClosedStore);
             }
 
-            if (!_objects!.TryGetValue(value, out ObjectData? data))
+            if (!_objects.TryGetValue(value, out ObjectData? data))
             {
                 data = new ObjectData(GetObjectName(value), value);
 
-                _objects![value] = data;
+                _objects[value] = data;
                 _objectNames.Add(data._name);
             }
 
@@ -285,7 +285,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         {
             if (_objectState is null)
             {
-                Dictionary<string, CodeDomComponentSerializationState> state = new(_objects!.Count);
+                Dictionary<string, CodeDomComponentSerializationState> state = new(_objects.Count);
                 DesignerSerializationManager manager = new DesignerSerializationManager(new LocalServices(this, _provider));
                 if (_provider?.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
                 {
@@ -339,7 +339,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 TraceCode(state);
 
                 _objectState = state;
-                _objects = null;
+                _objects.Clear();
             }
         }
 
@@ -554,8 +554,8 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
         private class ComponentListCodeDomSerializer : CodeDomSerializer
         {
             internal static readonly ComponentListCodeDomSerializer s_instance = new();
-            private Dictionary<string, OrderedCodeStatementCollection?>? _statementsTable;
-            private Dictionary<string, List<CodeExpression>>? _expressions;
+            private readonly Dictionary<string, OrderedCodeStatementCollection?> _statementsTable = new();
+            private readonly Dictionary<string, List<CodeExpression>> _expressions = new();
             private Dictionary<string, CodeDomComponentSerializationState>? _objectState; // only used during deserialization
             private bool _applyDefaults = true;
             private readonly HashSet<string> _nameResolveGuard = new();
@@ -603,7 +603,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
             internal void Deserialize(IDesignerSerializationManager manager, Dictionary<string, CodeDomComponentSerializationState> objectState, List<string> objectNames, bool applyDefaults)
             {
                 CodeStatementCollection completeStatements = new CodeStatementCollection();
-                _expressions = new();
+                _expressions.Clear();
                 _applyDefaults = applyDefaults;
                 foreach (string name in objectNames)
                 {
@@ -619,7 +619,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
 
                 methodMap.Add(completeStatements);
                 methodMap.Combine();
-                _statementsTable = new Dictionary<string, OrderedCodeStatementCollection?>();
+                _statementsTable.Clear();
 
                 // generate statement table keyed on component name
                 FillStatementTable(manager, _statementsTable, mappedStatements);
@@ -793,7 +793,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                 // If it doesn't contain an OrderedCodeStatementsCollection this means one of two things:
                 // 1. We already resolved this name and shoved an instance in there.  In this case we just return the instance
                 // 2. There are no statements corresponding to this name, but there might be expressions that have never been deserialized, so we check for that and deserialize those.
-                _statementsTable!.TryGetValue(name, out OrderedCodeStatementCollection? statements);
+                _statementsTable.TryGetValue(name, out OrderedCodeStatementCollection? statements);
                 if (statements is not null)
                 {
                     _statementsTable[name] = null; // prevent recursion
@@ -870,7 +870,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                         DeserializeState(manager, name, state);
                     }
 
-                    if (_expressions!.Remove(name, out List<CodeExpression>? exps))
+                    if (_expressions.Remove(name, out List<CodeExpression>? exps))
                     {
                         foreach (CodeExpression exp in exps)
                         {
@@ -886,7 +886,7 @@ public sealed class CodeDomComponentSerializationService : ComponentSerializatio
                     if (!resolved)
                     {
                         // this is condition 2 of the comment at the start of this method.
-                        if (_expressions!.TryGetValue(name, out List<CodeExpression>? exps))
+                        if (_expressions.TryGetValue(name, out List<CodeExpression>? exps))
                         {
                             foreach (CodeExpression exp in exps)
                             {
