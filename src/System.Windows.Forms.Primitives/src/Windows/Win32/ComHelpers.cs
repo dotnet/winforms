@@ -158,13 +158,13 @@ internal static unsafe partial class ComHelpers
         return false;
     }
 
-#pragma warning disable CS1574 // XML comment has cref attribute 'TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject?)' that could not be resolved
-    /// <inheritdoc cref="ComHelpers.TryGetObjectForIUnknown{TObject}(IUnknown*, bool, out TObject?)"/>
+    /// <summary>
+    ///  Attempts to get a managed wrapper of the specified type for the given COM interface.
+    /// </summary>
     internal static bool TryGetObjectForIUnknown<TObject>(
         IUnknown* unknown,
         [NotNullWhen(true)] out TObject? @object) where TObject : class
         => TryGetObjectForIUnknown(unknown, takeOwnership: false, out @object);
-#pragma warning restore CS1574
 
     /// <summary>
     ///  Attempts to get a managed wrapper of the specified type for the given COM interface.

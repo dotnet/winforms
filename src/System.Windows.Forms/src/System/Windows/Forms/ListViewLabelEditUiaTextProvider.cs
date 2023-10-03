@@ -38,7 +38,7 @@ internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
 
     public override ITextRangeProvider* DocumentRange
         => ComHelpers.GetComPointer<ITextRangeProvider>(
-            new UiaTextRange(ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningChildEditAccessibilityObject),
+            new UiaTextRange(_owningChildEditAccessibilityObject,
                 this,
                 start: 0,
                 TextLength));
@@ -89,7 +89,7 @@ internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
         PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETSEL, ref start, ref end);
 
         *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(
-            ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningChildEditAccessibilityObject),
+            _owningChildEditAccessibilityObject,
             this,
             start,
             start));
@@ -163,8 +163,7 @@ internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
         PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETSEL, ref start, ref end);
 
         ComSafeArrayScope<ITextRangeProvider> result = new(1);
-        IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningChildEditAccessibilityObject);
-        result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
+        result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end));
         *pRetVal = result;
 
         return HRESULT.S_OK;
@@ -210,8 +209,7 @@ internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
         GetVisibleRangePoints(out int start, out int end);
 
         ComSafeArrayScope<ITextRangeProvider> result = new(1);
-        IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningChildEditAccessibilityObject);
-        result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
+        result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end));
         *pRetVal = result;
 
         return HRESULT.S_OK;
@@ -236,7 +234,7 @@ internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
 
         *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
             new UiaTextRange(
-                ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningChildEditAccessibilityObject),
+                _owningChildEditAccessibilityObject,
                 this,
                 start: 0,
                 end: 0));
@@ -271,7 +269,7 @@ internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
         {
             *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
                 new UiaTextRange(
-                    ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningChildEditAccessibilityObject),
+                    _owningChildEditAccessibilityObject,
                     this,
                     start: 0,
                     end: 0));
@@ -293,7 +291,7 @@ internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
 
         *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
             new UiaTextRange(
-                ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningChildEditAccessibilityObject),
+                _owningChildEditAccessibilityObject,
                 this,
                 start,
                 start));

@@ -44,9 +44,8 @@ public abstract partial class TextBoxBase
             // If there is no selection, start and end parameters are the position of the caret.
             PInvoke.SendMessage(Owner, PInvoke.EM_GETSEL, ref start, ref end);
 
-            IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(Owner.AccessibilityObject);
             ComSafeArrayScope<ITextRangeProvider> result = new(1);
-            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
+            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(Owner.AccessibilityObject, this, start, end));
 
             *pRetVal = result;
             return HRESULT.S_OK;
@@ -67,9 +66,8 @@ public abstract partial class TextBoxBase
 
             GetVisibleRangePoints(out int start, out int end);
 
-            IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(Owner.AccessibilityObject);
             ComSafeArrayScope<ITextRangeProvider> result = new(1);
-            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
+            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(Owner.AccessibilityObject, this, start, end));
 
             *pRetVal = result;
             return HRESULT.S_OK;
@@ -109,7 +107,7 @@ public abstract partial class TextBoxBase
             {
                 *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
                     new UiaTextRange(
-                        ComHelpers.GetComPointer<IRawElementProviderSimple>(Owner.AccessibilityObject),
+                        Owner.AccessibilityObject,
                         this,
                         start: 0,
                         end: 0));
@@ -131,7 +129,7 @@ public abstract partial class TextBoxBase
 
             *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
                 new UiaTextRange(
-                    ComHelpers.GetComPointer<IRawElementProviderSimple>(Owner.AccessibilityObject),
+                    Owner.AccessibilityObject,
                     this,
                     start,
                     start));
@@ -143,7 +141,7 @@ public abstract partial class TextBoxBase
         public override ITextRangeProvider* DocumentRange => Owner is not null
             ? ComHelpers.GetComPointer<ITextRangeProvider>(
                 new UiaTextRange(
-                    ComHelpers.GetComPointer<IRawElementProviderSimple>(Owner.AccessibilityObject),
+                    Owner.AccessibilityObject,
                     this,
                     start: 0,
                     TextLength))
@@ -171,7 +169,7 @@ public abstract partial class TextBoxBase
 
             *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
                 new UiaTextRange(
-                    ComHelpers.GetComPointer<IRawElementProviderSimple>(Owner.AccessibilityObject),
+                    Owner.AccessibilityObject,
                     this,
                     Owner.SelectionStart,
                     Owner.SelectionStart));
@@ -190,7 +188,7 @@ public abstract partial class TextBoxBase
             *pRetVal = Owner is not null
                 ? ComHelpers.GetComPointer<ITextRangeProvider>(
                     new UiaTextRange(
-                        ComHelpers.GetComPointer<IRawElementProviderSimple>(Owner.AccessibilityObject),
+                        Owner.AccessibilityObject,
                         this,
                         start: 0,
                         end: 0))

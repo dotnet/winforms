@@ -46,7 +46,7 @@ public partial class ComboBox
         public override ITextRangeProvider* DocumentRange
             => ComHelpers.GetComPointer<ITextRangeProvider>(
                 new UiaTextRange(
-                    ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject),
+                    _owningComboBox.ChildEditAccessibleObject,
                     this,
                     start:
                     0,
@@ -136,7 +136,7 @@ public partial class ComboBox
 
             *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
                 new UiaTextRange(
-                    ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject),
+                    _owningComboBox.ChildEditAccessibleObject,
                     this,
                     _owningComboBox.SelectionStart,
                     _owningComboBox.SelectionStart));
@@ -224,9 +224,8 @@ public partial class ComboBox
             // If there is no selection, start and end parameters are the position of the caret.
             PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETSEL, ref start, ref end);
 
-            IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject);
             ComSafeArrayScope<ITextRangeProvider> result = new(1);
-            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
+            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start, end));
 
             *pRetVal = result;
             return HRESULT.S_OK;
@@ -278,8 +277,7 @@ public partial class ComboBox
             GetVisibleRangePoints(out int start, out int end);
 
             ComSafeArrayScope<ITextRangeProvider> result = new(1);
-            IRawElementProviderSimple* rawElementProvider = ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject);
-            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(rawElementProvider, this, start, end));
+            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start, end));
 
             *pRetVal = result;
             return HRESULT.S_OK;
@@ -304,7 +302,7 @@ public partial class ComboBox
 
             *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
                 new UiaTextRange(
-                    ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject),
+                    _owningComboBox.ChildEditAccessibleObject,
                     this,
                     start: 0,
                     end: 0));
@@ -345,7 +343,7 @@ public partial class ComboBox
             {
                 *pRetVal  = ComHelpers.GetComPointer<ITextRangeProvider>(
                     new UiaTextRange(
-                        ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject),
+                        _owningComboBox.ChildEditAccessibleObject,
                         this,
                         start: 0,
                         end: 0));
@@ -367,7 +365,7 @@ public partial class ComboBox
 
             *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
                 new UiaTextRange(
-                    ComHelpers.GetComPointer<IRawElementProviderSimple>(_owningComboBox.ChildEditAccessibleObject),
+                    _owningComboBox.ChildEditAccessibleObject,
                     this,
                     start,
                     start));

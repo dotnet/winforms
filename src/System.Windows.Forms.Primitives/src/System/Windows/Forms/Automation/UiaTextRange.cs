@@ -16,7 +16,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
     // This string is a non-localizable string.
     private const string LineSeparator = "\r\n";
 
-    private readonly AgileComPointer<IRawElementProviderSimple> _enclosingElement;
+    private readonly Interop.UiaCore.IRawElementProviderSimple _enclosingElement;
     private readonly UiaTextProvider _provider;
 
     private int _start;
@@ -33,16 +33,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
     ///  If start = 2 and end = 9, the range is "et stri".
     ///  If start=end, that points a caret position only, there is no any text range.</para>
     /// </remarks>
-    public UiaTextRange(IRawElementProviderSimple* enclosingElement, UiaTextProvider provider, int start, int end)
-#if DEBUG
-        : this(new AgileComPointer<IRawElementProviderSimple>(enclosingElement, takeOwnership: true, trackDisposal: false), provider, start, end)
-#else
-        : this(new AgileComPointer<IRawElementProviderSimple>(enclosingElement, takeOwnership: true), provider, start, end)
-#endif
-    {
-    }
-
-    private UiaTextRange(AgileComPointer<IRawElementProviderSimple> enclosingElement, UiaTextProvider provider, int start, int end)
+    public UiaTextRange(Interop.UiaCore.IRawElementProviderSimple enclosingElement, UiaTextProvider provider, int start, int end)
     {
         _enclosingElement = enclosingElement.OrThrowIfNull();
         _provider = provider.OrThrowIfNull();
@@ -338,10 +329,8 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             return HRESULT.E_POINTER;
         }
 
-        VARIANT result = default;
-        using var element = _enclosingElement.GetInterface();
-        element.Value->GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId, &result).ThrowOnFailure();
-        if (result.vt is not VARENUM.VT_ARRAY
+        VARIANT result = VARIANT.FromObject(_enclosingElement.GetPropertyValue(Interop.UiaCore.UIA.BoundingRectanglePropertyId));
+        if (!result.vt.HasFlag(VARENUM.VT_ARRAY & VARENUM.VT_R8)
             || result.data.parray->VarType is not VARENUM.VT_R8
             || result.data.parray->GetBounds().cElements != 4)
         {
@@ -425,7 +414,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             return HRESULT.E_POINTER;
         }
 
-        *pRetVal = _enclosingElement.GetInterface();
+        *pRetVal = ComHelpers.GetComPointer<IRawElementProviderSimple>(_enclosingElement);
         return HRESULT.S_OK;
     }
 
