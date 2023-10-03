@@ -29,12 +29,9 @@ internal class TableLayoutControlCollectionCodeDomSerializer : CollectionCodeDom
         {
             bool isTargetInherited = false;
 
-            if (manager.TryGetContext(out ExpressionContext? ctx) && ctx.Expression == targetExpression)
+            if (manager.TryGetContext(out ExpressionContext? ctx) && ctx.Expression == targetExpression && ctx.Owner is IComponent comp)
             {
-                if (ctx.Owner is IComponent comp)
-                {
-                    isTargetInherited = TypeDescriptorHelper.TryGetAttribute(comp, out InheritanceAttribute? ia) && ia.InheritanceLevel == InheritanceLevel.Inherited;
-                }
+                isTargetInherited = TypeDescriptorHelper.TryGetAttribute(comp, out InheritanceAttribute? ia) && ia.InheritanceLevel == InheritanceLevel.Inherited;
             }
 
             foreach (object o in valuesToSerialize)

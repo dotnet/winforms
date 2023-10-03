@@ -235,13 +235,13 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                     ParameterInfo parameter = method.GetParameters()[0];
                     if (parameter is not null)
                     {
-                        Type? type = parameter.ParameterType;
+                        Type type = parameter.ParameterType;
                         if (type.IsArray)
                         {
-                            type = type.GetElementType();
+                            type = type.GetElementType()!;
                         }
 
-                        if (type is not null && type.IsAssignableFrom(objType))
+                        if (type.IsAssignableFrom(objType))
                         {
                             if (final is not null)
                             {
@@ -324,23 +324,17 @@ public class CollectionCodeDomSerializer : CodeDomSerializer
                 {
                     case "AddRange":
                         ParameterInfo[] parameters = method.GetParameters();
-                        if (parameters is [{ ParameterType.IsArray: true }])
+                        if (parameters is [{ ParameterType.IsArray: true }] && MethodSupportsSerialization(method))
                         {
-                            if (MethodSupportsSerialization(method))
-                            {
-                                addRangeMethods.Add(method);
-                            }
+                            addRangeMethods.Add(method);
                         }
 
                         break;
 
                     case "Add":
-                        if (method.GetParameters().Length == 1)
+                        if (method.GetParameters().Length == 1 && MethodSupportsSerialization(method))
                         {
-                            if (MethodSupportsSerialization(method))
-                            {
-                                addMethods.Add(method);
-                            }
+                            addMethods.Add(method);
                         }
 
                         break;
