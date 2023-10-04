@@ -48,42 +48,36 @@ public sealed partial class CodeDomComponentSerializationService
             protected override Type? GetType(string? name)
             {
                 Type? t = base.GetType(name);
-                if (t is null && !TypeResolutionAvailable)
+                if (t is not null || TypeResolutionAvailable)
                 {
-                    AssemblyName[] names = _store.AssemblyNames!;
-                    // First try the assembly names directly.
-                    foreach (AssemblyName n in names)
+                    return t;
+                }
+
+                AssemblyName[] names = _store.AssemblyNames!;
+                // First try the assembly names directly.
+                foreach (AssemblyName n in names)
+                {
+                    Assembly a = Assembly.Load(n);
+                    t = a?.GetType(name!);
+                    if (t is not null)
                     {
-                        Assembly a = Assembly.Load(n);
-                        t = a?.GetType(name!);
-                        if (t is not null)
-                        {
-                            break;
-                        }
+                        return t;
                     }
+                }
 
-                    // Failing that go after their dependencies.
-                    if (t is null)
+                // Failing that go after their dependencies.
+                foreach (AssemblyName n in names)
+                {
+                    Assembly a = Assembly.Load(n);
+                    if (a is not null)
                     {
-                        foreach (AssemblyName n in names)
+                        foreach (AssemblyName dep in a.GetReferencedAssemblies())
                         {
-                            Assembly a = Assembly.Load(n);
-                            if (a is not null)
+                            Assembly aDep = Assembly.Load(dep);
+                            t = aDep?.GetType(name!);
+                            if (t is not null)
                             {
-                                foreach (AssemblyName dep in a.GetReferencedAssemblies())
-                                {
-                                    Assembly aDep = Assembly.Load(dep);
-                                    t = aDep?.GetType(name!);
-                                    if (t is not null)
-                                    {
-                                        break;
-                                    }
-                                }
-
-                                if (t is not null)
-                                {
-                                    break;
-                                }
+                                return t;
                             }
                         }
                     }

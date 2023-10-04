@@ -279,38 +279,37 @@ public sealed partial class CodeDomComponentSerializationService
                             Trace(TraceLevel.Error, $"Type does not exist: {typeName}");
                             manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerTypeNotFound, typeName), manager));
                         }
-                        else
+                        else if (statements.Count > 0)
                         {
-                            if (statements.Count > 0)
+                            CodeDomSerializer? serializer = GetSerializer(manager, type);
+                            if (serializer is null)
                             {
-                                CodeDomSerializer? serializer = GetSerializer(manager, type);
-                                if (serializer is null)
+                                // We report this as an error.  This indicates that there are code statements in initialize component that we do not know how to load.
+                                Trace(TraceLevel.Error,
+                                    $"Type referenced in init method has no serializer: {type.Name}");
+                                manager.ReportError(new CodeDomSerializerException(
+                                    string.Format(SR.SerializerNoSerializerForComponent, type.FullName), manager));
+                            }
+                            else
+                            {
+                                Trace(TraceLevel.Verbose,
+                                    $"""
+                                     --------------------------------------------------------------------
+                                             Beginning deserialization of {name}
+                                     --------------------------------------------------------------------
+                                     """);
+                                try
                                 {
-                                    // We report this as an error.  This indicates that there are code statements in initialize component that we do not know how to load.
-                                    Trace(TraceLevel.Error, $"Type referenced in init method has no serializer: {type.Name}");
-                                    manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerNoSerializerForComponent, type.FullName), manager));
+                                    object? instance = serializer.Deserialize(manager, statements);
+                                    resolved = instance is not null;
+                                    if (resolved)
+                                    {
+                                        _statementsTable[name] = (OrderedCodeStatementCollection?)instance;
+                                    }
                                 }
-                                else
+                                catch (Exception ex)
                                 {
-                                    Trace(TraceLevel.Verbose,
-                                        $"""
-                                         --------------------------------------------------------------------
-                                                 Beginning deserialization of {name}
-                                         --------------------------------------------------------------------
-                                         """);
-                                    try
-                                    {
-                                        object? instance = serializer.Deserialize(manager, statements);
-                                        resolved = instance is not null;
-                                        if (resolved)
-                                        {
-                                            _statementsTable[name] = (OrderedCodeStatementCollection?)instance;
-                                        }
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        manager.ReportError(ex);
-                                    }
+                                    manager.ReportError(ex);
                                 }
                             }
                         }
@@ -353,13 +352,10 @@ public sealed partial class CodeDomComponentSerializationService
                             foreach (CodeExpression exp in exps)
                             {
                                 object? exValue = DeserializeExpression(manager, name, exp);
-                                if (exValue is not null && !resolved)
+                                if (exValue is not null && !resolved && canInvokeManager && manager.GetInstance(name) is null)
                                 {
-                                    if (canInvokeManager && manager.GetInstance(name) is null)
-                                    {
-                                        manager.SetName(exValue, name);
-                                        resolved = true;
-                                    }
+                                    manager.SetName(exValue, name);
+                                    resolved = true;
                                 }
                             }
                         }
@@ -444,7 +440,7 @@ public sealed partial class CodeDomComponentSerializationService
                 foreach (IComponent c in container.Components)
                 {
                     string? name = TypeDescriptor.GetComponentName(c);
-                    if (name is not null && name.Length > 0)
+                    if (!string.IsNullOrEmpty(name))
                     {
                         bool needVar = !(objectData.TryGetValue(c, out ObjectData? data) && data.EntireObject);
 
@@ -505,12 +501,9 @@ public sealed partial class CodeDomComponentSerializationService
                                         ctxStatements = null;
                                     }
 
-                                    if (extraStatements.Count > 0)
+                                    if (extraStatements.Count > 0 && code is CodeStatementCollection existingStatements)
                                     {
-                                        if (code is CodeStatementCollection existingStatements)
-                                        {
-                                            existingStatements.AddRange(extraStatements);
-                                        }
+                                        existingStatements.AddRange(extraStatements);
                                     }
                                 }
                                 else

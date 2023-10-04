@@ -24,9 +24,9 @@ public sealed partial class CodeDomComponentSerializationService
 #if DEBUG
         private static readonly TraceSwitch s_trace = new("ComponentSerializationService", "Trace component serialization");
 #else
-#pragma warning disable CS0649
+#pragma warning disable CS0649  // Field is never assigned to, and will always have its default value null
         private static readonly TraceSwitch? s_trace;
-#pragma warning restore CS0649
+#pragma warning restore CS0649  // Field is never assigned to, and will always have its default value null
 #endif
         private const string StateKey = "State";
         private const string NameKey = "Names";
@@ -132,64 +132,66 @@ public sealed partial class CodeDomComponentSerializationService
         [MemberNotNull(nameof(_objectState))]
         public override void Close()
         {
-            if (_objectState is null)
+            if (_objectState is not null)
             {
-                Dictionary<string, CodeDomComponentSerializationState> state = new(_objects.Count);
-                DesignerSerializationManager manager = new DesignerSerializationManager(new LocalServices(this, _provider));
-                if (_provider?.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
+                return;
+            }
+
+            Dictionary<string, CodeDomComponentSerializationState> state = new(_objects.Count);
+            DesignerSerializationManager manager = new DesignerSerializationManager(new LocalServices(this, _provider));
+            if (_provider?.GetService(typeof(IDesignerSerializationManager)) is DesignerSerializationManager hostManager)
+            {
+                foreach (IDesignerSerializationProvider provider in hostManager.SerializationProviders)
                 {
-                    foreach (IDesignerSerializationProvider provider in hostManager.SerializationProviders)
-                    {
-                        ((IDesignerSerializationManager)manager).AddSerializationProvider(provider);
-                    }
+                    ((IDesignerSerializationManager)manager).AddSerializationProvider(provider);
+                }
+            }
+
+            s_trace.TraceVerbose($"ComponentSerialization: Closing Store: serializing {_objects.Count} objects");
+            using (manager.CreateSession())
+            {
+                // Walk through our objects and name them so the serialization manager knows what names we gave them.
+                foreach (ObjectData data in _objects.Values)
+                {
+                    ((IDesignerSerializationManager)manager).SetName(data._value, data._name);
                 }
 
-                s_trace.TraceVerbose($"ComponentSerialization: Closing Store: serializing {_objects.Count} objects");
-                using (manager.CreateSession())
-                {
-                    // Walk through our objects and name them so the serialization manager knows what names we gave them.
-                    foreach (ObjectData data in _objects.Values)
-                    {
-                        ((IDesignerSerializationManager)manager).SetName(data._value, data._name);
-                    }
+                ComponentListCodeDomSerializer.s_instance.Serialize(manager, _objects, state, _shimObjectNames);
+                _errors = manager.Errors;
+            }
 
-                    ComponentListCodeDomSerializer.s_instance.Serialize(manager, _objects, state, _shimObjectNames);
-                    _errors = manager.Errors;
-                }
-
-                // also serialize out resources if we have any  we force this in order for undo to work correctly
-                if (_resources is not null)
+            // also serialize out resources if we have any  we force this in order for undo to work correctly
+            if (_resources is not null)
+            {
+                Debug.Assert(_resourceStream is null, "Attempting to close a serialization store with already serialized resources");
+                if (_resourceStream is null)
                 {
-                    Debug.Assert(_resourceStream is null, "Attempting to close a serialization store with already serialized resources");
-                    if (_resourceStream is null)
-                    {
-                        _resourceStream = new MemoryStream();
+                    _resourceStream = new MemoryStream();
 
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                        new BinaryFormatter().Serialize(_resourceStream, _resources.Data);
+                    new BinaryFormatter().Serialize(_resourceStream, _resources.Data);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
-                    }
                 }
-
-                Dictionary<Assembly, AssemblyName> assemblies = new(_objects.Count);
-                foreach (object obj in _objects.Keys)
-                {
-                    // Save off the assembly for this object
-                    Assembly a = obj.GetType().Assembly;
-                    if (!assemblies.ContainsKey(a))
-                    {
-                        assemblies.Add(a, a.GetName(true));
-                    }
-                }
-
-                AssemblyNames = new AssemblyName[assemblies.Count];
-                assemblies.Values.CopyTo(AssemblyNames, 0);
-
-                TraceCode(state);
-
-                _objectState = state;
-                _objects.Clear();
             }
+
+            Dictionary<Assembly, AssemblyName> assemblies = new(_objects.Count);
+            foreach (object obj in _objects.Keys)
+            {
+                // Save off the assembly for this object
+                Assembly a = obj.GetType().Assembly;
+                if (!assemblies.ContainsKey(a))
+                {
+                    assemblies.Add(a, a.GetName(true));
+                }
+            }
+
+            AssemblyNames = new AssemblyName[assemblies.Count];
+            assemblies.Values.CopyTo(AssemblyNames, 0);
+
+            TraceCode(state);
+
+            _objectState = state;
+            _objects.Clear();
         }
 
         /// <summary>
