@@ -77,7 +77,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
 
             try
             {
-                foreach (object o in _mergedDescriptor.GetValues(_objects))
+                foreach (object? o in _mergedDescriptor.GetValues(_objects))
                 {
                     if (o is null)
                     {
@@ -289,7 +289,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
                         }
                     }
 
-                    _mergedDescriptor.ResetValue(owner);
+                    _mergedDescriptor.ResetValue(owner!);
 
                     if (needChangeNotify)
                     {
