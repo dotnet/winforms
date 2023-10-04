@@ -325,9 +325,9 @@ System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object!
 System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode, object? nullValue, string! formatString) -> System.Windows.Forms.Binding!
 System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode, object? nullValue, string! formatString, System.IFormatProvider? formatInfo) -> System.Windows.Forms.Binding!
 System.Windows.Forms.ControlBindingsCollection.Add(System.Windows.Forms.Binding! binding) -> void
-System.Windows.Forms.ControlBindingsCollection.BindableComponent.get -> System.Windows.Forms.IBindableComponent?
+System.Windows.Forms.ControlBindingsCollection.BindableComponent.get -> System.Windows.Forms.IBindableComponent!
 System.Windows.Forms.ControlBindingsCollection.Control.get -> System.Windows.Forms.Control?
-System.Windows.Forms.ControlBindingsCollection.ControlBindingsCollection(System.Windows.Forms.IBindableComponent? control) -> void
+System.Windows.Forms.ControlBindingsCollection.ControlBindingsCollection(System.Windows.Forms.IBindableComponent! control) -> void
 System.Windows.Forms.ControlBindingsCollection.Remove(System.Windows.Forms.Binding! binding) -> void
 System.Windows.Forms.ControlBindingsCollection.this[string! propertyName].get -> System.Windows.Forms.Binding?
 System.Windows.Forms.CurrencyManager.List.get -> System.Collections.IList?

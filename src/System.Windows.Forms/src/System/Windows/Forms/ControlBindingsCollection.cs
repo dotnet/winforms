@@ -14,14 +14,14 @@ namespace System.Windows.Forms;
 [TypeConverter($"System.Windows.Forms.Design.ControlBindingsConverter, {AssemblyRef.SystemDesign}")]
 public class ControlBindingsCollection : BindingsCollection
 {
-    private readonly IBindableComponent? _control;
+    private readonly IBindableComponent _control;
 
-    public ControlBindingsCollection(IBindableComponent? control)
+    public ControlBindingsCollection(IBindableComponent control)
     {
         _control = control;
     }
 
-    public IBindableComponent? BindableComponent => _control;
+    public IBindableComponent BindableComponent => _control;
 
     public Control? Control => _control as Control;
 
