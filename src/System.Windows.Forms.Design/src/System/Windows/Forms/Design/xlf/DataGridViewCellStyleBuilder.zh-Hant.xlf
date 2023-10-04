@@ -4,37 +4,37 @@
     <body>
       <trans-unit id="$this.Text">
         <source>CellStyle Builder</source>
-        <target state="new">CellStyle Builder</target>
+        <target state="translated">CellStyle 產生器</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="new">Cancel</target>
+        <target state="translated">取消</target>
         <note />
       </trans-unit>
       <trans-unit id="label1.Text">
         <source>This preview shows properties from inherited CellStyles (Table, Column, Row)</source>
-        <target state="new">This preview shows properties from inherited CellStyles (Table, Column, Row)</target>
+        <target state="translated">這個預覽會顯示來自繼承的 CellStyles (資料表、資料行、資料列) 的屬性</target>
         <note />
       </trans-unit>
       <trans-unit id="normalLabel.Text">
         <source>Normal:</source>
-        <target state="new">Normal:</target>
+        <target state="translated">一般:</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="new">OK</target>
+        <target state="translated">確定</target>
         <note />
       </trans-unit>
       <trans-unit id="previewGroupBox.Text">
         <source>Preview</source>
-        <target state="new">Preview</target>
+        <target state="translated">預覽</target>
         <note />
       </trans-unit>
       <trans-unit id="selectedLabel.Text">
         <source>Selected:</source>
-        <target state="new">Selected:</target>
+        <target state="translated">已選取:</target>
         <note />
       </trans-unit>
     </body>
