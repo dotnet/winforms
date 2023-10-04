@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.Web.MsHtml;
@@ -53,23 +51,18 @@ public sealed unsafe partial class HtmlWindow
     {
         get
         {
-            if (ShimManager is not null)
+            HtmlWindowShim? shim = ShimManager.GetWindowShim(this);
+            if (shim is null)
             {
-                HtmlWindowShim shim = ShimManager.GetWindowShim(this);
-                if (shim is null)
-                {
-                    _shimManager.AddWindowShim(this);
-                    shim = ShimManager.GetWindowShim(this);
-                }
-
-                return shim;
+                _shimManager.AddWindowShim(this);
+                shim = ShimManager.GetWindowShim(this);
             }
 
-            return null;
+            return shim!;
         }
     }
 
-    public HtmlDocument Document
+    public HtmlDocument? Document
     {
         get
         {
@@ -89,7 +82,7 @@ public sealed unsafe partial class HtmlWindow
         }
     }
 
-    public HtmlWindowCollection Frames
+    public HtmlWindowCollection? Frames
     {
         get
         {
@@ -100,7 +93,7 @@ public sealed unsafe partial class HtmlWindow
         }
     }
 
-    public HtmlHistory History
+    public HtmlHistory? History
     {
         get
         {
@@ -142,7 +135,7 @@ public sealed unsafe partial class HtmlWindow
         }
     }
 
-    public HtmlWindow Opener
+    public HtmlWindow? Opener
     {
         get
         {
@@ -156,7 +149,7 @@ public sealed unsafe partial class HtmlWindow
         }
     }
 
-    public HtmlWindow Parent
+    public HtmlWindow? Parent
     {
         get
         {
@@ -222,7 +215,7 @@ public sealed unsafe partial class HtmlWindow
         }
     }
 
-    public Uri Url
+    public Uri? Url
     {
         get
         {
@@ -241,7 +234,7 @@ public sealed unsafe partial class HtmlWindow
         }
     }
 
-    public HtmlElement WindowFrameElement
+    public HtmlElement? WindowFrameElement
     {
         get
         {
@@ -333,7 +326,7 @@ public sealed unsafe partial class HtmlWindow
     ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
     ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
     ///  break.
-    public HtmlWindow Open(string urlString, string target, string windowOptions, bool replaceEntry)
+    public HtmlWindow? Open(string urlString, string target, string windowOptions, bool replaceEntry)
     {
         using var htmlWindow = NativeHtmlWindow.GetInterface();
         using BSTR url = new(urlString);
@@ -344,7 +337,7 @@ public sealed unsafe partial class HtmlWindow
         return htmlWindow2 is not null ? new HtmlWindow(ShimManager, htmlWindow2) : null;
     }
 
-    public HtmlWindow Open(Uri url, string target, string windowOptions, bool replaceEntry)
+    public HtmlWindow? Open(Uri url, string target, string windowOptions, bool replaceEntry)
     {
         return Open(url.ToString(), target, windowOptions, replaceEntry);
     }
@@ -353,7 +346,7 @@ public sealed unsafe partial class HtmlWindow
     ///  string overloads call Uri overloads because that breaks Uris that aren't fully qualified
     ///  (things like "www.microsoft.com") that the underlying objects support and we don't want to
     ///  break.
-    public HtmlWindow OpenNew(string urlString, string windowOptions)
+    public HtmlWindow? OpenNew(string urlString, string windowOptions)
     {
         using var htmlWindow = NativeHtmlWindow.GetInterface();
         using BSTR url = new(urlString);
@@ -364,19 +357,19 @@ public sealed unsafe partial class HtmlWindow
         return iHTMLWindow2 is not null ? new HtmlWindow(ShimManager, iHTMLWindow2) : null;
     }
 
-    public HtmlWindow OpenNew(Uri url, string windowOptions)
+    public HtmlWindow? OpenNew(Uri url, string windowOptions)
     {
         return OpenNew(url.ToString(), windowOptions);
     }
 
-    public string Prompt(string message, string defaultInputValue)
+    public string? Prompt(string message, string defaultInputValue)
     {
         using var htmlWindow = NativeHtmlWindow.GetInterface();
         using BSTR bstrMessage = new(message);
         using BSTR input = new(defaultInputValue);
         using VARIANT result = default;
         htmlWindow.Value->prompt(bstrMessage, input, &result).ThrowOnFailure();
-        return (string)result.ToObject();
+        return (string?)result.ToObject();
     }
 
     public void RemoveFocus()
@@ -425,49 +418,49 @@ public sealed unsafe partial class HtmlWindow
     // Events
     //
 
-    public event HtmlElementErrorEventHandler Error
+    public event HtmlElementErrorEventHandler? Error
     {
         add => WindowShim.AddHandler(s_eventError, value);
         remove => WindowShim.RemoveHandler(s_eventError, value);
     }
 
-    public event HtmlElementEventHandler GotFocus
+    public event HtmlElementEventHandler? GotFocus
     {
         add => WindowShim.AddHandler(s_eventGotFocus, value);
         remove => WindowShim.RemoveHandler(s_eventGotFocus, value);
     }
 
-    public event HtmlElementEventHandler Load
+    public event HtmlElementEventHandler? Load
     {
         add => WindowShim.AddHandler(s_eventLoad, value);
         remove => WindowShim.RemoveHandler(s_eventLoad, value);
     }
 
-    public event HtmlElementEventHandler LostFocus
+    public event HtmlElementEventHandler? LostFocus
     {
         add => WindowShim.AddHandler(s_eventLostFocus, value);
         remove => WindowShim.RemoveHandler(s_eventLostFocus, value);
     }
 
-    public event HtmlElementEventHandler Resize
+    public event HtmlElementEventHandler? Resize
     {
         add => WindowShim.AddHandler(s_eventResize, value);
         remove => WindowShim.RemoveHandler(s_eventResize, value);
     }
 
-    public event HtmlElementEventHandler Scroll
+    public event HtmlElementEventHandler? Scroll
     {
         add => WindowShim.AddHandler(s_eventScroll, value);
         remove => WindowShim.RemoveHandler(s_eventScroll, value);
     }
 
-    public event HtmlElementEventHandler Unload
+    public event HtmlElementEventHandler? Unload
     {
         add => WindowShim.AddHandler(s_eventUnload, value);
         remove => WindowShim.RemoveHandler(s_eventUnload, value);
     }
 
-    public static unsafe bool operator ==(HtmlWindow left, HtmlWindow right)
+    public static unsafe bool operator ==(HtmlWindow? left, HtmlWindow? right)
     {
         // Not equal if only one's null.
         if (left is null != right is null)
@@ -482,12 +475,12 @@ public sealed unsafe partial class HtmlWindow
         }
 
         // Neither are null. Compare their native pointers.
-        return left.NativeHtmlWindow.IsSameNativeObject(right.NativeHtmlWindow);
+        return left.NativeHtmlWindow.IsSameNativeObject(right!.NativeHtmlWindow);
     }
 
-    public static bool operator !=(HtmlWindow left, HtmlWindow right) => !(left == right);
+    public static bool operator !=(HtmlWindow? left, HtmlWindow? right) => !(left == right);
 
     public override int GetHashCode() => _htmlWindow2.GetHashCode();
 
-    public override bool Equals(object obj) => this == (HtmlWindow)obj;
+    public override bool Equals(object? obj) => this == (HtmlWindow?)obj;
 }
