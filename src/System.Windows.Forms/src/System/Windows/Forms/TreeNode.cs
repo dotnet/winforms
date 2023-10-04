@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -36,9 +34,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     // we use it to store font and color data in a minimal-memory-cost manner
     // ie. nodes which don't use fancy fonts or colors (ie. that use the TreeView settings for these)
     //     will take up less memory than those that do.
-    internal OwnerDrawPropertyBag propBag;
-    internal string text;
-    internal string name;
+    internal OwnerDrawPropertyBag? _propBag;
+    internal string? _text;
+    internal string? _name;
 
     // note: as the checked state of a node is user controlled, and this variable is simply for
     // state caching when a node hasn't yet been realized, you should use the Checked property to
@@ -46,26 +44,26 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     //private bool isChecked = false;
     private const int TREENODESTATE_isChecked = 0x00000001;
 
-    private Collections.Specialized.BitVector32 treeNodeState;
+    private Collections.Specialized.BitVector32 _treeNodeState;
 
-    private TreeNodeImageIndexer imageIndexer;
-    private TreeNodeImageIndexer selectedImageIndexer;
-    private TreeNodeImageIndexer stateImageIndexer;
+    private TreeNodeImageIndexer? _imageIndexer;
+    private TreeNodeImageIndexer? _selectedImageIndexer;
+    private TreeNodeImageIndexer? _stateImageIndexer;
 
-    private string toolTipText = string.Empty;
-    private ContextMenuStrip _contextMenuStrip;
-    internal bool nodesCleared;
+    private string _toolTipText = string.Empty;
+    private ContextMenuStrip? _contextMenuStrip;
+    internal bool _nodesCleared;
 
-    private TreeNodeAccessibleObject _accessibleObject;
+    private TreeNodeAccessibleObject? _accessibleObject;
 
     internal TreeNodeImageIndexer ImageIndexer
     {
         get
         {
             //Demand create the imageIndexer
-            imageIndexer ??= new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
+            _imageIndexer ??= new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
 
-            return imageIndexer;
+            return _imageIndexer;
         }
     }
 
@@ -74,9 +72,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         get
         {
             //Demand create the imageIndexer
-            selectedImageIndexer ??= new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
+            _selectedImageIndexer ??= new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.Default);
 
-            return selectedImageIndexer;
+            return _selectedImageIndexer;
         }
     }
 
@@ -85,20 +83,20 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         get
         {
             //Demand create the imageIndexer
-            stateImageIndexer ??= new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.State);
+            _stateImageIndexer ??= new TreeNodeImageIndexer(this, TreeNodeImageIndexer.ImageListType.State);
 
-            return stateImageIndexer;
+            return _stateImageIndexer;
         }
     }
 
-    internal int index;                  // our index into our parents child array
-    internal readonly List<TreeNode> childNodes = new();
-    internal TreeNode parent;
-    internal TreeView treeView;
-    private bool expandOnRealization;
-    private bool collapseOnRealization;
-    private TreeNodeCollection nodes;
-    private object userData;
+    internal int _index;                  // our index into our parents child array
+    internal readonly List<TreeNode> _childNodes = new();
+    internal TreeNode? _parent;
+    internal TreeView? _treeView;
+    private bool _expandOnRealization;
+    private bool _collapseOnRealization;
+    private TreeNodeCollection? _nodes;
+    private object? _userData;
 
     private const TVITEM_MASK InsertMask =
         TVITEM_MASK.TVIF_TEXT
@@ -110,26 +108,29 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     public TreeNode()
     {
-        treeNodeState = default;
+        _treeNodeState = default;
     }
 
-    internal TreeNode(TreeView treeView) : this()
+    internal TreeNode(TreeView treeView)
+        : this()
     {
-        this.treeView = treeView;
+        _treeView = treeView;
     }
 
     /// <summary>
     ///  Creates a TreeNode object.
     /// </summary>
-    public TreeNode(string text) : this()
+    public TreeNode(string? text)
+        : this()
     {
-        this.text = text;
+        _text = text;
     }
 
     /// <summary>
     ///  Creates a TreeNode object.
     /// </summary>
-    public TreeNode(string text, TreeNode[] children) : this(text)
+    public TreeNode(string? text, TreeNode[] children)
+        : this(text)
     {
         Nodes.AddRange(children);
     }
@@ -137,7 +138,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// <summary>
     ///  Creates a TreeNode object.
     /// </summary>
-    public TreeNode(string text, int imageIndex, int selectedImageIndex) : this(text)
+    public TreeNode(string? text, int imageIndex, int selectedImageIndex)
+        : this(text)
     {
         ImageIndex = imageIndex;
         SelectedImageIndex = selectedImageIndex;
@@ -146,7 +148,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// <summary>
     ///  Creates a TreeNode object.
     /// </summary>
-    public TreeNode(string text, int imageIndex, int selectedImageIndex, TreeNode[] children) : this(text, imageIndex, selectedImageIndex)
+    public TreeNode(string? text, int imageIndex, int selectedImageIndex, TreeNode[] children)
+        : this(text, imageIndex, selectedImageIndex)
     {
         Nodes.AddRange(children);
     }
@@ -154,7 +157,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /**
      * Constructor used in deserialization
      */
-    protected TreeNode(SerializationInfo serializationInfo, StreamingContext context) : this()
+    protected TreeNode(SerializationInfo serializationInfo, StreamingContext context)
+        : this()
     {
         Deserialize(serializationInfo, context);
     }
@@ -170,12 +174,12 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            if (propBag is null)
+            if (_propBag is null)
             {
                 return Color.Empty;
             }
 
-            return propBag.BackColor;
+            return _propBag.BackColor;
         }
         set
         {
@@ -185,9 +189,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             // useful data.
             if (value.IsEmpty)
             {
-                if (propBag is not null)
+                if (_propBag is not null)
                 {
-                    propBag.BackColor = Color.Empty;
+                    _propBag.BackColor = Color.Empty;
                     RemovePropBagIfEmpty();
                 }
 
@@ -201,9 +205,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             // Not the default, so if necessary create a new propBag, and fill it with the backcolor
 
-            propBag ??= new OwnerDrawPropertyBag();
+            _propBag ??= new OwnerDrawPropertyBag();
 
-            propBag.BackColor = value;
+            _propBag.BackColor = value;
             if (!value.Equals(oldbk))
             {
                 InvalidateHostTree();
@@ -220,7 +224,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            TreeView tv = TreeView;
+            TreeView? tv = TreeView;
             if (tv is null || tv.IsDisposed)
             {
                 return Rectangle.Empty;
@@ -248,7 +252,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            TreeView tv = TreeView;
+            TreeView? tv = TreeView;
             RECT rc = default;
             unsafe
             { *((IntPtr*)&rc.left) = Handle; }
@@ -271,24 +275,15 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     internal bool CheckedStateInternal
     {
-        get
-        {
-            return treeNodeState[TREENODESTATE_isChecked];
-        }
-        set
-        {
-            treeNodeState[TREENODESTATE_isChecked] = value;
-        }
+        get => _treeNodeState[TREENODESTATE_isChecked];
+        set => _treeNodeState[TREENODESTATE_isChecked] = value;
     }
 
     // Checked does sanity checking and fires Before/AfterCheck events, then forwards to this
     // property to get/set the actual checked value.
     internal unsafe bool CheckedInternal
     {
-        get
-        {
-            return CheckedStateInternal;
-        }
+        get => CheckedStateInternal;
         set
         {
             CheckedStateInternal = value;
@@ -297,7 +292,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return;
             }
 
-            TreeView tv = TreeView;
+            TreeView? tv = TreeView;
             if (tv is null || !tv.IsHandleCreated || tv.IsDisposed)
             {
                 return;
@@ -326,9 +321,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         get
         {
 #if DEBUG
-            if (HTREEITEMInternal != IntPtr.Zero && !treeView.IsDisposed)
+            if (HTREEITEMInternal != IntPtr.Zero && _treeView is not null && !_treeView.IsDisposed)
             {
-                TreeView tv = TreeView;
                 TVITEMW item = new()
                 {
                     mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_STATE,
@@ -336,9 +330,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                     stateMask = TREE_VIEW_ITEM_STATE_FLAGS.TVIS_STATEIMAGEMASK
                 };
 
-                PInvoke.SendMessage(tv, PInvoke.TVM_GETITEMW, 0, ref item);
+                PInvoke.SendMessage(_treeView, PInvoke.TVM_GETITEMW, 0, ref item);
                 Debug.Assert(
-                    !tv.CheckBoxes || (((int)item.state >> SHIFTVAL) > 1) == CheckedInternal,
+                    !_treeView.CheckBoxes || (((int)item.state >> SHIFTVAL) > 1) == CheckedInternal,
                     $"isChecked on node '{Name}' did not match the state in TVM_GETITEM.");
             }
 #endif
@@ -346,7 +340,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         }
         set
         {
-            TreeView tv = TreeView;
+            TreeView? tv = TreeView;
             if (tv is not null)
             {
                 bool eventReturn = tv.TreeViewBeforeCheck(this, TreeViewAction.Unknown);
@@ -370,7 +364,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [SRCategory(nameof(SR.CatBehavior))]
     [DefaultValue(null)]
     [SRDescription(nameof(SR.ControlContextMenuDescr))]
-    public virtual ContextMenuStrip ContextMenuStrip
+    public virtual ContextMenuStrip? ContextMenuStrip
     {
         get => _contextMenuStrip;
         set => _contextMenuStrip = value;
@@ -380,13 +374,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  The first child node of this node.
     /// </summary>
     [Browsable(false)]
-    public TreeNode FirstNode => childNodes.Count == 0 ? null : childNodes[0];
+    public TreeNode? FirstNode => _childNodes.Count == 0 ? null : _childNodes[0];
 
-    private TreeNode FirstVisibleParent
+    private TreeNode? FirstVisibleParent
     {
         get
         {
-            TreeNode node = this;
+            TreeNode? node = this;
             while (node is not null && node.Bounds.IsEmpty)
             {
                 node = node.Parent;
@@ -407,12 +401,12 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            if (propBag is null)
+            if (_propBag is null)
             {
                 return Color.Empty;
             }
 
-            return propBag.ForeColor;
+            return _propBag.ForeColor;
         }
         set
         {
@@ -421,9 +415,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             // useful data.
             if (value.IsEmpty)
             {
-                if (propBag is not null)
+                if (_propBag is not null)
                 {
-                    propBag.ForeColor = Color.Empty;
+                    _propBag.ForeColor = Color.Empty;
                     RemovePropBagIfEmpty();
                 }
 
@@ -437,9 +431,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             // Not the default, so if necessary create a new propBag, and fill it with the new forecolor
 
-            propBag ??= new OwnerDrawPropertyBag();
+            _propBag ??= new OwnerDrawPropertyBag();
 
-            propBag.ForeColor = value;
+            _propBag.ForeColor = value;
             if (!value.Equals(oldfc))
             {
                 InvalidateHostTree();
@@ -457,7 +451,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            TreeView tv = TreeView;
+            TreeView? tv = TreeView;
             if (tv is not null)
             {
                 StringBuilder path = new StringBuilder();
@@ -508,7 +502,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            TreeView tv = TreeView;
+            TreeView? tv = TreeView;
             if (ImageIndexer.Index != ImageList.Indexer.NoneIndex
                 && ImageIndexer.Index != ImageList.Indexer.DefaultIndex
                 && tv?.ImageList is not null
@@ -550,6 +544,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [RelatedImageList("TreeView.ImageList")]
+    [AllowNull]
     public string ImageKey
     {
         get => ImageIndexer.Key;
@@ -570,7 +565,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.TreeNodeIndexDescr))]
-    public int Index => index;
+    public int Index => _index;
 
     /// <summary>
     ///  Specifies whether this node is being edited by the user.
@@ -580,7 +575,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            TreeView tv = TreeView;
+            TreeView? tv = TreeView;
 
             if (tv is not null)
             {
@@ -595,13 +590,17 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  Specifies whether this node is in the expanded state.
     /// </summary>
     [Browsable(false)]
-    public bool IsExpanded => HTREEITEMInternal == IntPtr.Zero ? expandOnRealization : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) != 0;
+    public bool IsExpanded => HTREEITEMInternal == IntPtr.Zero
+        ? _expandOnRealization
+        : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_EXPANDED) != 0;
 
     /// <summary>
     ///  Specifies whether this node is in the selected state.
     /// </summary>
     [Browsable(false)]
-    public bool IsSelected => HTREEITEMInternal == IntPtr.Zero ? false : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED) != 0;
+    public bool IsSelected => HTREEITEMInternal == IntPtr.Zero
+        ? false
+        : (State & TREE_VIEW_ITEM_STATE_FLAGS.TVIS_SELECTED) != 0;
 
     /// <summary>
     ///  Specifies whether this node is visible.
@@ -616,7 +615,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return false;
             }
 
-            TreeView tv = TreeView;
+            TreeView tv = TreeView!;
             if (tv.IsDisposed)
             {
                 return false;
@@ -641,16 +640,16 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  The last child node of this node.
     /// </summary>
     [Browsable(false)]
-    public TreeNode LastNode
+    public TreeNode? LastNode
     {
         get
         {
-            if (childNodes.Count == 0)
+            if (_childNodes.Count == 0)
             {
                 return null;
             }
 
-            return childNodes[childNodes.Count - 1];
+            return _childNodes[_childNodes.Count - 1];
         }
     }
 
@@ -658,32 +657,19 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  This denotes the depth of nesting of the TreeNode.
     /// </summary>
     [Browsable(false)]
-    public int Level
-    {
-        get
-        {
-            if (Parent is null)
-            {
-                return 0;
-            }
-            else
-            {
-                return Parent.Level + 1;
-            }
-        }
-    }
+    public int Level => Parent is null ? 0 : Parent.Level + 1;
 
     /// <summary>
     ///  The next sibling node.
     /// </summary>
     [Browsable(false)]
-    public TreeNode NextNode
+    public TreeNode? NextNode
     {
         get
         {
-            if (parent is not null && index + 1 < parent.Nodes.Count)
+            if (_parent is not null && _index + 1 < _parent.Nodes.Count)
             {
-                return parent.Nodes[index + 1];
+                return _parent.Nodes[_index + 1];
             }
             else
             {
@@ -697,19 +683,19 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  or a node from another branch.
     /// </summary>
     [Browsable(false)]
-    public TreeNode NextVisibleNode
+    public TreeNode? NextVisibleNode
     {
         get
         {
             // TVGN_NEXTVISIBLE can only be sent if the specified node is visible.
             // So before sending, we check if this node is visible. If not, we find the first visible parent.
-            TreeView tv = TreeView;
+            TreeView? tv = TreeView;
             if (tv is null || tv.IsDisposed)
             {
                 return null;
             }
 
-            TreeNode node = FirstVisibleParent;
+            TreeNode? node = FirstVisibleParent;
 
             if (node is not null)
             {
@@ -740,27 +726,28 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.TreeNodeNodeFontDescr))]
     [DefaultValue(null)]
-    public Font NodeFont
+    public Font? NodeFont
     {
         get
         {
-            if (propBag is null)
+            if (_propBag is null)
             {
                 return null;
             }
 
-            return propBag.Font;
+            return _propBag.Font;
         }
         set
         {
-            Font oldfont = NodeFont;
+            Font? oldfont = NodeFont;
+
             // If we're setting the font to the default again, delete the propBag if it doesn't contain
             // useful data.
             if (value is null)
             {
-                if (propBag is not null)
+                if (_propBag is not null)
                 {
-                    propBag.Font = null;
+                    _propBag.Font = null;
                     RemovePropBagIfEmpty();
                 }
 
@@ -774,9 +761,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             // Not the default, so if necessary create a new propBag, and fill it with the font
 
-            propBag ??= new OwnerDrawPropertyBag();
+            _propBag ??= new OwnerDrawPropertyBag();
 
-            propBag.Font = value;
+            _propBag.Font = value;
             if (!value.Equals(oldfont))
             {
                 InvalidateHostTree();
@@ -790,9 +777,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            nodes ??= new TreeNodeCollection(this);
+            _nodes ??= new TreeNodeCollection(this);
 
-            return nodes;
+            return _nodes;
         }
     }
 
@@ -800,19 +787,19 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  Retrieves parent node.
     /// </summary>
     [Browsable(false)]
-    public TreeNode Parent
+    public TreeNode? Parent
     {
         get
         {
-            TreeView tv = TreeView;
+            TreeView? tv = TreeView;
 
             // Don't expose the virtual root publicly
-            if (tv is not null && parent == tv._root)
+            if (tv is not null && _parent == tv._root)
             {
                 return null;
             }
 
-            return parent;
+            return _parent;
         }
     }
 
@@ -820,27 +807,27 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  The previous sibling node.
     /// </summary>
     [Browsable(false)]
-    public TreeNode PrevNode
+    public TreeNode? PrevNode
     {
         get
         {
-            if (parent is null)
+            if (_parent is null)
             {
                 return null;
             }
 
             //fixedIndex is used for perf. optimization in case of adding big ranges of nodes
-            int currentInd = index;
-            int fixedInd = parent.Nodes.FixedIndex;
+            int currentInd = _index;
+            int fixedInd = _parent.Nodes.FixedIndex;
 
             if (fixedInd > 0)
             {
                 currentInd = fixedInd;
             }
 
-            if (currentInd > 0 && currentInd <= parent.Nodes.Count)
+            if (currentInd > 0 && currentInd <= _parent.Nodes.Count)
             {
-                return parent.Nodes[currentInd - 1];
+                return _parent.Nodes[currentInd - 1];
             }
             else
             {
@@ -854,14 +841,14 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  or a node from another branch.
     /// </summary>
     [Browsable(false)]
-    public TreeNode PrevVisibleNode
+    public TreeNode? PrevVisibleNode
     {
         get
         {
             // TVGN_PREVIOUSVISIBLE can only be sent if the specified node is visible.
             // So before sending, we check if this node is visible. If not, we find the first visible parent.
-            TreeNode node = FirstVisibleParent;
-            TreeView tv = TreeView;
+            TreeNode? node = FirstVisibleParent;
+            TreeView? tv = TreeView;
 
             if (node is not null)
             {
@@ -902,7 +889,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            TreeView tv = TreeView;
+            TreeView? tv = TreeView;
             if (SelectedImageIndexer.Index != ImageList.Indexer.NoneIndex
                 && SelectedImageIndexer.Index != ImageList.Indexer.DefaultIndex
                 && tv?.ImageList is not null
@@ -944,6 +931,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [RefreshProperties(RefreshProperties.Repaint)]
     [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [RelatedImageList("TreeView.ImageList")]
+    [AllowNull]
     public string SelectedImageKey
     {
         get => SelectedImageIndexer.Key;
@@ -971,7 +959,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 return 0;
             }
 
-            TreeView tv = TreeView;
+            TreeView? tv = TreeView;
             if (tv is null || tv.IsDisposed)
             {
                 return 0;
@@ -1000,12 +988,10 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [RelatedImageList("TreeView.StateImageList")]
+    [AllowNull]
     public string StateImageKey
     {
-        get
-        {
-            return StateImageIndexer.Key;
-        }
+        get => StateImageIndexer.Key;
         set
         {
             if (StateImageIndexer.Key == value && !string.Equals(value, ImageList.Indexer.DefaultKey))
@@ -1014,7 +1000,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             }
 
             StateImageIndexer.Key = value;
-            if (treeView is not null && !treeView.CheckBoxes)
+            if (_treeView is not null && !_treeView.CheckBoxes)
             {
                 UpdateNode(TVITEM_MASK.TVIF_STATE);
             }
@@ -1033,7 +1019,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         get
         {
-            TreeView tv = TreeView;
+            TreeView? tv = TreeView;
             if (StateImageIndexer.Index != ImageList.Indexer.DefaultIndex && tv is not null && tv.StateImageList is not null && StateImageIndexer.Index >= tv.StateImageList.Images.Count)
             {
                 return tv.StateImageList.Images.Count - 1;
@@ -1054,7 +1040,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             }
 
             StateImageIndexer.Index = value;
-            if (treeView is not null && !treeView.CheckBoxes)
+            if (_treeView is not null && !_treeView.CheckBoxes)
             {
                 UpdateNode(TVITEM_MASK.TVIF_STATE);
             }
@@ -1067,16 +1053,10 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [SRDescription(nameof(SR.ControlTagDescr))]
     [DefaultValue(null)]
     [TypeConverter(typeof(StringConverter))]
-    public object Tag
+    public object? Tag
     {
-        get
-        {
-            return userData;
-        }
-        set
-        {
-            userData = value;
-        }
+        get => _userData;
+        set => _userData = value;
     }
 
     /// <summary>
@@ -1085,15 +1065,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [Localizable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.TreeNodeTextDescr))]
+    [AllowNull]
     public string Text
     {
-        get
-        {
-            return text ?? "";
-        }
+        get => _text ?? string.Empty;
         set
         {
-            text = value;
+            _text = value;
             UpdateNode(TVITEM_MASK.TVIF_TEXT);
         }
     }
@@ -1107,14 +1085,8 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     [DefaultValue("")]
     public string ToolTipText
     {
-        get
-        {
-            return toolTipText;
-        }
-        set
-        {
-            toolTipText = value;
-        }
+        get => _toolTipText;
+        set => _toolTipText = value;
     }
 
     /// <summary>
@@ -1122,35 +1094,30 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.TreeNodeNodeNameDescr))]
+    [AllowNull]
     public string Name
     {
-        get
-        {
-            return name ?? "";
-        }
-        set
-        {
-            name = value;
-        }
+        get => _name ?? string.Empty;
+        set => _name = value;
     }
 
     /// <summary>
     ///  Return the TreeView control this node belongs to.
     /// </summary>
     [Browsable(false)]
-    public TreeView TreeView
+    public TreeView? TreeView
     {
         get
         {
-            treeView ??= FindTreeView();
+            _treeView ??= FindTreeView();
 
-            return treeView;
+            return _treeView;
         }
     }
 
     internal TreeNodeAccessibleObject AccessibilityObject
-        => _accessibleObject ??= new TreeNodeAccessibleObject(this, TreeView);
-
+        => _accessibleObject ??= new TreeNodeAccessibleObject(this, TreeView!);
+#nullable disable
     /// <summary>
     ///  Adds a new child node at the appropriate sorted position
     /// </summary>
@@ -1161,7 +1128,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         string nodeText = node.Text;
         TreeView parentTreeView = TreeView;
 
-        var nodeCount = childNodes.Count;
+        var nodeCount = _childNodes.Count;
         if (nodeCount > 0)
         {
             if (parentTreeView.TreeViewNodeSorter is null)
@@ -1169,7 +1136,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 CompareInfo compare = Application.CurrentCulture.CompareInfo;
 
                 // Optimize for the case where they're already sorted
-                if (compare.Compare(childNodes[nodeCount - 1].Text, nodeText) <= 0)
+                if (compare.Compare(_childNodes[nodeCount - 1].Text, nodeText) <= 0)
                 {
                     index = nodeCount;
                 }
@@ -1179,7 +1146,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                     for (iMin = 0, iLim = nodeCount; iMin < iLim;)
                     {
                         iT = (iMin + iLim) / 2;
-                        if (compare.Compare(childNodes[iT].Text, nodeText) <= 0)
+                        if (compare.Compare(_childNodes[iT].Text, nodeText) <= 0)
                         {
                             iMin = iT + 1;
                         }
@@ -1199,7 +1166,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 for (iMin = 0, iLim = nodeCount; iMin < iLim;)
                 {
                     iT = (iMin + iLim) / 2;
-                    if (sorter.Compare(childNodes[iT] /*previous*/, node/*current*/) <= 0)
+                    if (sorter.Compare(_childNodes[iT] /*previous*/, node/*current*/) <= 0)
                     {
                         iMin = iT + 1;
                     }
@@ -1222,29 +1189,26 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// <summary>
     ///  Returns a TreeNode object for the given HTREEITEM handle
     /// </summary>
-    public static TreeNode FromHandle(TreeView tree, IntPtr handle)
-    {
-        return tree.NodeFromHandle(handle);
-    }
+    public static TreeNode FromHandle(TreeView tree, IntPtr handle) => tree.NodeFromHandle(handle);
 
     private void SortChildren(TreeView parentTreeView)
     {
-        var nodeCount = childNodes.Count;
+        var nodeCount = _childNodes.Count;
         if (nodeCount > 0)
         {
             List<TreeNode> newOrder = new(nodeCount);
             if (parentTreeView?.TreeViewNodeSorter is null)
             {
-                childNodes.Sort((x, y) => Application.CurrentCulture.CompareInfo.Compare(x.Text, y.Text, CompareOptions.None));
+                _childNodes.Sort((x, y) => Application.CurrentCulture.CompareInfo.Compare(x.Text, y.Text, CompareOptions.None));
             }
             else
             {
-                childNodes.Sort(parentTreeView.TreeViewNodeSorter.Compare);
+                _childNodes.Sort(parentTreeView.TreeViewNodeSorter.Compare);
             }
 
-            for (int i = 0; i < childNodes.Count; i++)
+            for (int i = 0; i < _childNodes.Count; i++)
             {
-                childNodes[i].SortChildren(parentTreeView);
+                _childNodes[i].SortChildren(parentTreeView);
             }
         }
     }
@@ -1280,7 +1244,6 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         // This is a node that is a child of some other node.  We have
         // to selectively remove children here.
-        //
         bool isBulkOperation = false;
         TreeView tv = TreeView;
 
@@ -1290,19 +1253,19 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             {
                 tv._nodesCollectionClear = true;
 
-                if (childNodes.Count > MAX_TREENODES_OPS)
+                if (_childNodes.Count > MAX_TREENODES_OPS)
                 {
                     isBulkOperation = true;
                     tv.BeginUpdate();
                 }
             }
 
-            while (childNodes.Count > 0)
+            while (_childNodes.Count > 0)
             {
-                childNodes[^1].Remove(true);
+                _childNodes[^1].Remove(true);
             }
 
-            childNodes.Clear();
+            _childNodes.Clear();
 
             if (tv is not null && isBulkOperation)
             {
@@ -1316,7 +1279,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 tv._nodesCollectionClear = false;
             }
 
-            nodesCleared = true;
+            _nodesCleared = true;
         }
     }
 
@@ -1330,20 +1293,20 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
         if (clonedType == typeof(TreeNode))
         {
-            node = new TreeNode(text, ImageIndexer.Index, SelectedImageIndexer.Index);
+            node = new TreeNode(_text, ImageIndexer.Index, SelectedImageIndexer.Index);
         }
         else
         {
             node = (TreeNode)Activator.CreateInstance(clonedType);
         }
 
-        node.Text = text;
-        node.Name = name;
+        node.Text = _text;
+        node.Name = _name;
         node.ImageIndexer.Index = ImageIndexer.Index;
         node.SelectedImageIndexer.Index = SelectedImageIndexer.Index;
 
         node.StateImageIndexer.Index = StateImageIndexer.Index;
-        node.ToolTipText = toolTipText;
+        node.ToolTipText = _toolTipText;
         node.ContextMenuStrip = _contextMenuStrip;
 
         // only set the key if it's set to something useful
@@ -1364,20 +1327,20 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             node.StateImageIndexer.Key = StateImageIndexer.Key;
         }
 
-        var nodeCount = childNodes.Count;
+        var nodeCount = _childNodes.Count;
         if (nodeCount > 0)
         {
             for (int i = 0; i < nodeCount; i++)
             {
-                node.Nodes.Add((TreeNode)childNodes[i].Clone());
+                node.Nodes.Add((TreeNode)_childNodes[i].Clone());
             }
         }
 
         // Clone properties
         //
-        if (propBag is not null)
+        if (_propBag is not null)
         {
-            node.propBag = OwnerDrawPropertyBag.Copy(propBag);
+            node._propBag = OwnerDrawPropertyBag.Copy(_propBag);
         }
 
         node.Checked = Checked;
@@ -1390,12 +1353,12 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         TreeView tv = TreeView;
         bool setSelection = false;
-        collapseOnRealization = false;
-        expandOnRealization = false;
+        _collapseOnRealization = false;
+        _expandOnRealization = false;
 
         if (tv is null || !tv.IsHandleCreated)
         {
-            collapseOnRealization = true;
+            _collapseOnRealization = true;
             return;
         }
 
@@ -1407,19 +1370,19 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         }
         else
         {
-            var nodeCount = childNodes.Count;
+            var nodeCount = _childNodes.Count;
             if (!ignoreChildren && nodeCount > 0)
             {
                 // Virtual root should collapse all its children
                 for (int i = 0; i < nodeCount; i++)
                 {
-                    if (tv.SelectedNode == childNodes[i])
+                    if (tv.SelectedNode == _childNodes[i])
                     {
                         setSelection = true;
                     }
 
-                    childNodes[i].DoCollapse(tv);
-                    childNodes[i].Collapse();
+                    _childNodes[i].DoCollapse(tv);
+                    _childNodes[i].Collapse();
                 }
             }
 
@@ -1432,7 +1395,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         }
 
         tv.Invalidate();
-        collapseOnRealization = false;
+        _collapseOnRealization = false;
     }
 
     /// <summary>
@@ -1486,7 +1449,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             {
                 case "PropBag":
                     // this would throw a InvalidCastException if improper cast, thus validating the serializationInfo for OwnerDrawPropertyBag
-                    propBag = (OwnerDrawPropertyBag)serializationInfo.GetValue(entry.Name, typeof(OwnerDrawPropertyBag));
+                    _propBag = (OwnerDrawPropertyBag)serializationInfo.GetValue(entry.Name, typeof(OwnerDrawPropertyBag));
                     break;
                 case nameof(Text):
                     Text = serializationInfo.GetString(entry.Name);
@@ -1522,7 +1485,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                     childCount = serializationInfo.GetInt32(entry.Name);
                     break;
                 case "UserData":
-                    userData = entry.Value;
+                    _userData = entry.Value;
                     break;
             }
         }
@@ -1589,17 +1552,17 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     private void EnsureStateImageValue()
     {
-        if (treeView is null)
+        if (_treeView is null)
         {
             return;
         }
 
-        if (treeView.CheckBoxes && treeView.StateImageList is not null)
+        if (_treeView.CheckBoxes && _treeView.StateImageList is not null)
         {
             if (!string.IsNullOrEmpty(StateImageKey))
             {
                 StateImageIndex = (Checked) ? 1 : 0;
-                StateImageKey = treeView.StateImageList.Images.Keys[StateImageIndex];
+                StateImageKey = _treeView.StateImageList.Images.Keys[StateImageIndex];
             }
             else
             {
@@ -1631,7 +1594,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         TreeView tv = TreeView;
         if (tv is null || !tv.IsHandleCreated)
         {
-            expandOnRealization = true;
+            _expandOnRealization = true;
             return;
         }
 
@@ -1641,7 +1604,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             PInvoke.SendMessage(tv, PInvoke.TVM_EXPAND, (WPARAM)(uint)NM_TREEVIEW_ACTION.TVE_EXPAND, (LPARAM)Handle);
         }
 
-        expandOnRealization = false;
+        _expandOnRealization = false;
     }
 
     /// <summary>
@@ -1650,9 +1613,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     public void ExpandAll()
     {
         Expand();
-        for (int i = 0; i < childNodes.Count; i++)
+        for (int i = 0; i < _childNodes.Count; i++)
         {
-            childNodes[i].ExpandAll();
+            _childNodes[i].ExpandAll();
         }
     }
 
@@ -1664,12 +1627,12 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     internal TreeView FindTreeView()
     {
         TreeNode node = this;
-        while (node.parent is not null)
+        while (node._parent is not null)
         {
-            node = node.parent;
+            node = node._parent;
         }
 
-        return node.treeView;
+        return node._treeView;
     }
 
     internal List<TreeNode> GetSelfAndChildNodes()
@@ -1693,15 +1656,15 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     private void GetFullPath(StringBuilder path, string pathSeparator)
     {
-        if (parent is not null)
+        if (_parent is not null)
         {
-            parent.GetFullPath(path, pathSeparator);
-            if (parent.parent is not null)
+            _parent.GetFullPath(path, pathSeparator);
+            if (_parent._parent is not null)
             {
                 path.Append(pathSeparator);
             }
 
-            path.Append(text);
+            path.Append(_text);
         }
     }
 
@@ -1710,12 +1673,12 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     public int GetNodeCount(bool includeSubTrees)
     {
-        int total = childNodes.Count;
+        int total = _childNodes.Count;
         if (includeSubTrees)
         {
-            for (int i = 0; i < childNodes.Count; i++)
+            for (int i = 0; i < _childNodes.Count; i++)
             {
-                total += childNodes[i].GetNodeCount(true);
+                total += _childNodes[i].GetNodeCount(true);
             }
         }
 
@@ -1736,7 +1699,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 throw new ArgumentException(SR.TreeNodeCircularReference);
             }
 
-            node = node.parent;
+            node = node._parent;
         }
     }
 
@@ -1745,13 +1708,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     internal void InsertNodeAt(int index, TreeNode node)
     {
-        node.parent = this;
-        node.index = index;
+        node._parent = this;
+        node._index = index;
 
-        childNodes.Insert(index, node);
-        for (int i = index + 1; i < childNodes.Count; i++)
+        _childNodes.Insert(index, node);
+        for (int i = index + 1; i < _childNodes.Count; i++)
         {
-            childNodes[i].index = i;
+            _childNodes[i]._index = i;
         }
 
         node.Realize(false);
@@ -1767,9 +1730,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     private void InvalidateHostTree()
     {
-        if (treeView is not null && treeView.IsHandleCreated)
+        if (_treeView is not null && _treeView.IsHandleCreated)
         {
-            treeView.Invalidate();
+            _treeView.Invalidate();
         }
     }
 
@@ -1781,7 +1744,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             return;
         }
 
-        if (parent is not null)
+        if (_parent is not null)
         {
             // Never realize the virtual root
             if (tv.InvokeRequired)
@@ -1791,7 +1754,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             TVINSERTSTRUCTW tvis = new()
             {
-                hParent = parent.HTREEITEMInternal
+                hParent = _parent.HTREEITEMInternal
             };
 
             tvis.item.mask = InsertMask;
@@ -1799,7 +1762,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             TreeNode prev = PrevNode;
             tvis.hInsertAfter = insertFirst || prev is null ? HTREEITEM.TVI_FIRST : prev.HTREEITEMInternal;
 
-            tvis.item.pszText = (char*)Marshal.StringToHGlobalUni(text);
+            tvis.item.pszText = (char*)Marshal.StringToHGlobalUni(_text);
             tvis.item.iImage = (ImageIndexer.ActualIndex == ImageList.Indexer.DefaultIndex) ? tv.ImageIndexer.ActualIndex : ImageIndexer.ActualIndex;
             tvis.item.iSelectedImage = (SelectedImageIndexer.ActualIndex == ImageList.Indexer.DefaultIndex) ? tv.SelectedImageIndexer.ActualIndex : SelectedImageIndexer.ActualIndex;
             tvis.item.mask = TVITEM_MASK.TVIF_TEXT;
@@ -1858,7 +1821,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             PInvoke.InvalidateRect(tv, lpRect: null, bErase: false);
 
-            if (parent.nodesCleared && (insertFirst || prev is null) && !tv.Scrollable)
+            if (_parent._nodesCleared && (insertFirst || prev is null) && !tv.Scrollable)
             {
                 // We need to Redraw the TreeView ...
                 // If and only If we are not scrollable ...
@@ -1866,25 +1829,25 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 // This is Comctl quirk where it just doesn't draw
                 // the first node after a Clear( ) if Scrollable == false.
                 PInvoke.SendMessage(tv, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)true);
-                nodesCleared = false;
+                _nodesCleared = false;
             }
         }
 
-        for (int i = childNodes.Count - 1; i >= 0; i--)
+        for (int i = _childNodes.Count - 1; i >= 0; i--)
         {
-            childNodes[i].Realize(true);
+            _childNodes[i].Realize(true);
         }
 
         // If node expansion was requested before the handle was created,
         // we can expand it now.
-        if (expandOnRealization)
+        if (_expandOnRealization)
         {
             Expand();
         }
 
         // If node collapse was requested before the handle was created,
         // we can expand it now.
-        if (collapseOnRealization)
+        if (_collapseOnRealization)
         {
             Collapse();
         }
@@ -1904,26 +1867,26 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         bool expanded = IsExpanded;
 
         // unlink our children
-        for (int i = 0; i < childNodes.Count; i++)
+        for (int i = 0; i < _childNodes.Count; i++)
         {
-            childNodes[i].Remove(false);
+            _childNodes[i].Remove(false);
         }
 
         // children = null;
         // unlink ourself
-        if (notify && parent is not null)
+        if (notify && _parent is not null)
         {
-            parent.childNodes.RemoveAt(index);
-            for (int i = index; i < parent.childNodes.Count; i++)
+            _parent._childNodes.RemoveAt(_index);
+            for (int i = _index; i < _parent._childNodes.Count; i++)
             {
-                parent.childNodes[i].index = i;
+                _parent._childNodes[i]._index = i;
             }
 
-            parent = null;
+            _parent = null;
         }
 
         // Expand when we are realized the next time.
-        expandOnRealization = expanded;
+        _expandOnRealization = expanded;
 
         // unrealize ourself
         TreeView tv = TreeView;
@@ -1941,13 +1904,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 PInvoke.SendMessage(tv, PInvoke.TVM_DELETEITEM, 0, (LPARAM)HTREEITEMInternal);
             }
 
-            treeView._nodesByHandle.Remove(HTREEITEMInternal);
+            _treeView._nodesByHandle.Remove(HTREEITEMInternal);
             HTREEITEMInternal = (HTREEITEM)IntPtr.Zero;
         }
 
         ReleaseUiaProvider();
 
-        treeView = null;
+        _treeView = null;
     }
 
     internal virtual void ReleaseUiaProvider()
@@ -1965,14 +1928,14 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     private void RemovePropBagIfEmpty()
     {
-        if (propBag is null)
+        if (_propBag is null)
         {
             return;
         }
 
-        if (propBag.IsEmpty())
+        if (_propBag.IsEmpty())
         {
-            propBag = null;
+            _propBag = null;
         }
 
         return;
@@ -2010,45 +1973,45 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///
     protected virtual void Serialize(SerializationInfo si, StreamingContext context)
     {
-        if (propBag is not null)
+        if (_propBag is not null)
         {
-            si.AddValue("PropBag", propBag, typeof(OwnerDrawPropertyBag));
+            si.AddValue("PropBag", _propBag, typeof(OwnerDrawPropertyBag));
         }
 
-        si.AddValue(nameof(Text), text);
-        si.AddValue(nameof(ToolTipText), toolTipText);
+        si.AddValue(nameof(Text), _text);
+        si.AddValue(nameof(ToolTipText), _toolTipText);
         si.AddValue(nameof(Name), Name);
-        si.AddValue("IsChecked", treeNodeState[TREENODESTATE_isChecked]);
+        si.AddValue("IsChecked", _treeNodeState[TREENODESTATE_isChecked]);
         si.AddValue(nameof(ImageIndex), ImageIndexer.Index);
         si.AddValue(nameof(ImageKey), ImageIndexer.Key);
         si.AddValue(nameof(SelectedImageIndex), SelectedImageIndexer.Index);
         si.AddValue(nameof(SelectedImageKey), SelectedImageIndexer.Key);
 
-        if (treeView is not null && treeView.StateImageList is not null)
+        if (_treeView is not null && _treeView.StateImageList is not null)
         {
             si.AddValue("StateImageIndex", StateImageIndexer.Index);
         }
 
-        if (treeView is not null && treeView.StateImageList is not null)
+        if (_treeView is not null && _treeView.StateImageList is not null)
         {
             si.AddValue(nameof(StateImageKey), StateImageIndexer.Key);
         }
 
-        var nodeCount = childNodes.Count;
+        var nodeCount = _childNodes.Count;
         si.AddValue("ChildCount", nodeCount);
 
         if (nodeCount > 0)
         {
             for (int i = 0; i < nodeCount; i++)
             {
-                si.AddValue($"children{i}", childNodes[i], typeof(TreeNode));
+                si.AddValue($"children{i}", _childNodes[i], typeof(TreeNode));
             }
         }
 
 #pragma warning disable SYSLIB0050 // Type or member is obsolete
-        if (userData is not null && userData.GetType().IsSerializable)
+        if (_userData is not null && _userData.GetType().IsSerializable)
         {
-            si.AddValue("UserData", userData, userData.GetType());
+            si.AddValue("UserData", _userData, _userData.GetType());
         }
 #pragma warning restore SYSLIB0050 // Type or member is obsolete
     }
@@ -2059,7 +2022,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     public void Toggle()
     {
-        Debug.Assert(parent is not null, "toggle on virtual root");
+        Debug.Assert(_parent is not null, "toggle on virtual root");
 
         // I don't use the TVE_TOGGLE message 'cuz Windows TreeView doesn't send the appropriate
         // notifications when collapsing.
@@ -2078,7 +2041,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     public override string ToString()
     {
-        return $"TreeNode: {text ?? ""}";
+        return $"TreeNode: {_text ?? ""}";
     }
 
     /// <summary>
@@ -2106,7 +2069,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
         if ((mask & TVITEM_MASK.TVIF_TEXT) != 0)
         {
-            item.pszText = (char*)Marshal.StringToHGlobalUni(text);
+            item.pszText = (char*)Marshal.StringToHGlobalUni(_text);
         }
 
         if ((mask & TVITEM_MASK.TVIF_IMAGE) != 0)

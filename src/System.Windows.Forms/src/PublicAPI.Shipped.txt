@@ -580,37 +580,37 @@ System.Windows.Forms.PictureBox.LoadAsync(string! url) -> void
 ~System.Windows.Forms.PropertyGrid.SelectedTab.get -> System.Windows.Forms.Design.PropertyTab
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.get -> System.Windows.Forms.ToolStripRenderer
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.set -> void
-~System.Windows.Forms.TreeNode.FirstNode.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeNode.FullPath.get -> string
-~System.Windows.Forms.TreeNode.ImageKey.get -> string
-~System.Windows.Forms.TreeNode.ImageKey.set -> void
-~System.Windows.Forms.TreeNode.LastNode.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeNode.Name.get -> string
-~System.Windows.Forms.TreeNode.Name.set -> void
-~System.Windows.Forms.TreeNode.NextNode.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeNode.NextVisibleNode.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeNode.NodeFont.get -> System.Drawing.Font
-~System.Windows.Forms.TreeNode.NodeFont.set -> void
-~System.Windows.Forms.TreeNode.Nodes.get -> System.Windows.Forms.TreeNodeCollection
-~System.Windows.Forms.TreeNode.Parent.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeNode.PrevNode.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeNode.PrevVisibleNode.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeNode.SelectedImageKey.get -> string
-~System.Windows.Forms.TreeNode.SelectedImageKey.set -> void
-~System.Windows.Forms.TreeNode.StateImageKey.get -> string
-~System.Windows.Forms.TreeNode.StateImageKey.set -> void
-~System.Windows.Forms.TreeNode.Tag.get -> object
-~System.Windows.Forms.TreeNode.Tag.set -> void
-~System.Windows.Forms.TreeNode.Text.get -> string
-~System.Windows.Forms.TreeNode.Text.set -> void
-~System.Windows.Forms.TreeNode.ToolTipText.get -> string
-~System.Windows.Forms.TreeNode.ToolTipText.set -> void
-~System.Windows.Forms.TreeNode.TreeNode(string text) -> void
-~System.Windows.Forms.TreeNode.TreeNode(string text, int imageIndex, int selectedImageIndex) -> void
-~System.Windows.Forms.TreeNode.TreeNode(string text, int imageIndex, int selectedImageIndex, System.Windows.Forms.TreeNode[] children) -> void
-~System.Windows.Forms.TreeNode.TreeNode(string text, System.Windows.Forms.TreeNode[] children) -> void
-~System.Windows.Forms.TreeNode.TreeNode(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.TreeNode.TreeView.get -> System.Windows.Forms.TreeView
+System.Windows.Forms.TreeNode.FirstNode.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeNode.FullPath.get -> string!
+System.Windows.Forms.TreeNode.ImageKey.get -> string!
+System.Windows.Forms.TreeNode.ImageKey.set -> void
+System.Windows.Forms.TreeNode.LastNode.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeNode.Name.get -> string!
+System.Windows.Forms.TreeNode.Name.set -> void
+System.Windows.Forms.TreeNode.NextNode.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeNode.NextVisibleNode.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeNode.NodeFont.get -> System.Drawing.Font?
+System.Windows.Forms.TreeNode.NodeFont.set -> void
+System.Windows.Forms.TreeNode.Nodes.get -> System.Windows.Forms.TreeNodeCollection!
+System.Windows.Forms.TreeNode.Parent.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeNode.PrevNode.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeNode.PrevVisibleNode.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeNode.SelectedImageKey.get -> string!
+System.Windows.Forms.TreeNode.SelectedImageKey.set -> void
+System.Windows.Forms.TreeNode.StateImageKey.get -> string!
+System.Windows.Forms.TreeNode.StateImageKey.set -> void
+System.Windows.Forms.TreeNode.Tag.get -> object?
+System.Windows.Forms.TreeNode.Tag.set -> void
+System.Windows.Forms.TreeNode.Text.get -> string!
+System.Windows.Forms.TreeNode.Text.set -> void
+System.Windows.Forms.TreeNode.ToolTipText.get -> string!
+System.Windows.Forms.TreeNode.ToolTipText.set -> void
+System.Windows.Forms.TreeNode.TreeNode(string? text) -> void
+System.Windows.Forms.TreeNode.TreeNode(string? text, int imageIndex, int selectedImageIndex) -> void
+System.Windows.Forms.TreeNode.TreeNode(string? text, int imageIndex, int selectedImageIndex, System.Windows.Forms.TreeNode![]! children) -> void
+System.Windows.Forms.TreeNode.TreeNode(string? text, System.Windows.Forms.TreeNode![]! children) -> void
+System.Windows.Forms.TreeNode.TreeNode(System.Runtime.Serialization.SerializationInfo! serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
+System.Windows.Forms.TreeNode.TreeView.get -> System.Windows.Forms.TreeView?
 System.Windows.Forms.TreeView.GetItemRenderStyles(System.Windows.Forms.TreeNode? node, int state) -> System.Windows.Forms.OwnerDrawPropertyBag!
 System.Windows.Forms.TreeView.GetNodeAt(int x, int y) -> System.Windows.Forms.TreeNode?
 System.Windows.Forms.TreeView.GetNodeAt(System.Drawing.Point pt) -> System.Windows.Forms.TreeNode?
@@ -907,8 +907,8 @@ virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs! e) -
 ~virtual System.Windows.Forms.PropertyGrid.SortByCategoryImage.get -> System.Drawing.Bitmap
 ~virtual System.Windows.Forms.PropertyGrid.SortByPropertyImage.get -> System.Drawing.Bitmap
 ~virtual System.Windows.Forms.TreeNode.Clone() -> object
-~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~virtual System.Windows.Forms.TreeNode.ContextMenuStrip.set -> void
+virtual System.Windows.Forms.TreeNode.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+virtual System.Windows.Forms.TreeNode.ContextMenuStrip.set -> void
 ~virtual System.Windows.Forms.TreeNode.Deserialize(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
 ~virtual System.Windows.Forms.TreeNode.Serialize(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
 virtual System.Windows.Forms.TreeView.OnAfterCheck(System.Windows.Forms.TreeViewEventArgs! e) -> void
