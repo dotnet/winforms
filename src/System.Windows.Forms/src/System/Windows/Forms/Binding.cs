@@ -202,7 +202,7 @@ public partial class Binding
         CheckBinding();
     }
 
-    internal void SetBindableComponent(IBindableComponent value)
+    internal void SetBindableComponent(IBindableComponent? value)
     {
         if (BindableComponent != value)
         {

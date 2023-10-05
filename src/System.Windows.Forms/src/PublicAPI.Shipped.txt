@@ -1,7 +1,7 @@
 #nullable enable
 override System.Windows.Forms.AxHost.OnHandleCreated(System.EventArgs! e) -> void
-~override System.Windows.Forms.ControlBindingsCollection.AddCore(System.Windows.Forms.Binding dataBinding) -> void
-~override System.Windows.Forms.ControlBindingsCollection.RemoveCore(System.Windows.Forms.Binding dataBinding) -> void
+override System.Windows.Forms.ControlBindingsCollection.AddCore(System.Windows.Forms.Binding! dataBinding) -> void
+override System.Windows.Forms.ControlBindingsCollection.RemoveCore(System.Windows.Forms.Binding! dataBinding) -> void
 override System.Windows.Forms.CurrencyManager.Current.get -> object?
 ~override System.Windows.Forms.CurrencyManager.GetItemProperties() -> System.ComponentModel.PropertyDescriptorCollection
 override System.Windows.Forms.DataGridView.BackgroundImage.get -> System.Drawing.Image?
@@ -318,18 +318,18 @@ System.Windows.Forms.Binding.PropertyName.get -> string!
 ~System.Windows.Forms.BindingSource.List.get -> System.Collections.IList
 ~System.Windows.Forms.BindingSource.Sort.get -> string
 ~System.Windows.Forms.BindingSource.Sort.set -> void
-~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember) -> System.Windows.Forms.Binding
-~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled) -> System.Windows.Forms.Binding
-~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode) -> System.Windows.Forms.Binding
-~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode, object nullValue) -> System.Windows.Forms.Binding
-~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode, object nullValue, string formatString) -> System.Windows.Forms.Binding
-~System.Windows.Forms.ControlBindingsCollection.Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode, object nullValue, string formatString, System.IFormatProvider formatInfo) -> System.Windows.Forms.Binding
-~System.Windows.Forms.ControlBindingsCollection.Add(System.Windows.Forms.Binding binding) -> void
-~System.Windows.Forms.ControlBindingsCollection.BindableComponent.get -> System.Windows.Forms.IBindableComponent
-~System.Windows.Forms.ControlBindingsCollection.Control.get -> System.Windows.Forms.Control
-~System.Windows.Forms.ControlBindingsCollection.ControlBindingsCollection(System.Windows.Forms.IBindableComponent control) -> void
-~System.Windows.Forms.ControlBindingsCollection.Remove(System.Windows.Forms.Binding binding) -> void
-~System.Windows.Forms.ControlBindingsCollection.this[string propertyName].get -> System.Windows.Forms.Binding
+System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember) -> System.Windows.Forms.Binding!
+System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember, bool formattingEnabled) -> System.Windows.Forms.Binding!
+System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode) -> System.Windows.Forms.Binding!
+System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode, object? nullValue) -> System.Windows.Forms.Binding!
+System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode, object? nullValue, string! formatString) -> System.Windows.Forms.Binding!
+System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode, object? nullValue, string! formatString, System.IFormatProvider? formatInfo) -> System.Windows.Forms.Binding!
+System.Windows.Forms.ControlBindingsCollection.Add(System.Windows.Forms.Binding! binding) -> void
+System.Windows.Forms.ControlBindingsCollection.BindableComponent.get -> System.Windows.Forms.IBindableComponent?
+System.Windows.Forms.ControlBindingsCollection.Control.get -> System.Windows.Forms.Control?
+System.Windows.Forms.ControlBindingsCollection.ControlBindingsCollection(System.Windows.Forms.IBindableComponent? control) -> void
+System.Windows.Forms.ControlBindingsCollection.Remove(System.Windows.Forms.Binding! binding) -> void
+System.Windows.Forms.ControlBindingsCollection.this[string! propertyName].get -> System.Windows.Forms.Binding?
 System.Windows.Forms.CurrencyManager.List.get -> System.Collections.IList?
 System.Windows.Forms.DataGridView.AdvancedCellBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
 System.Windows.Forms.DataGridView.AdvancedColumnHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!

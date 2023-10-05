@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing.Design;
 
@@ -16,18 +14,18 @@ namespace System.Windows.Forms;
 [TypeConverter($"System.Windows.Forms.Design.ControlBindingsConverter, {AssemblyRef.SystemDesign}")]
 public class ControlBindingsCollection : BindingsCollection
 {
-    private readonly IBindableComponent _control;
+    private readonly IBindableComponent? _control;
 
-    public ControlBindingsCollection(IBindableComponent control)
+    public ControlBindingsCollection(IBindableComponent? control)
     {
         _control = control;
     }
 
-    public IBindableComponent BindableComponent => _control;
+    public IBindableComponent? BindableComponent => _control;
 
-    public Control Control => _control as Control;
+    public Control? Control => _control as Control;
 
-    public Binding this[string propertyName]
+    public Binding? this[string propertyName]
     {
         get
         {
@@ -59,36 +57,114 @@ public class ControlBindingsCollection : BindingsCollection
     ///  isn't a valid column given this DataSource.Table's schema.
     ///  Fires the CollectionChangedEvent.
     /// </summary>
-    public Binding Add(string propertyName, object dataSource, string dataMember)
+    public Binding Add(string propertyName, object dataSource, string? dataMember)
     {
-        return Add(propertyName, dataSource, dataMember, false, DefaultDataSourceUpdateMode, null, string.Empty, null);
+        return Add(
+            propertyName,
+            dataSource,
+            dataMember,
+            formattingEnabled: false,
+            DefaultDataSourceUpdateMode,
+            nullValue: null,
+            formatString: string.Empty,
+            formatInfo: null);
     }
 
-    public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled)
+    public Binding Add(
+        string propertyName,
+        object dataSource,
+        string? dataMember,
+        bool formattingEnabled)
     {
-        return Add(propertyName, dataSource, dataMember, formattingEnabled, DefaultDataSourceUpdateMode, null, string.Empty, null);
+        return Add(
+            propertyName,
+            dataSource,
+            dataMember,
+            formattingEnabled,
+            DefaultDataSourceUpdateMode,
+            nullValue: null,
+            formatString: string.Empty,
+            formatInfo: null);
     }
 
-    public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode)
+    public Binding Add(
+        string propertyName,
+        object dataSource,
+        string? dataMember,
+        bool formattingEnabled,
+        DataSourceUpdateMode updateMode)
     {
-        return Add(propertyName, dataSource, dataMember, formattingEnabled, updateMode, null, string.Empty, null);
+        return Add(
+            propertyName,
+            dataSource,
+            dataMember,
+            formattingEnabled,
+            updateMode,
+            nullValue: null,
+            formatString: string.Empty,
+            formatInfo: null);
     }
 
-    public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode, object nullValue)
+    public Binding Add(
+        string propertyName,
+        object dataSource,
+        string? dataMember,
+        bool formattingEnabled,
+        DataSourceUpdateMode updateMode,
+        object? nullValue)
     {
-        return Add(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, string.Empty, null);
+        return Add(
+            propertyName,
+            dataSource,
+            dataMember,
+            formattingEnabled,
+            updateMode,
+            nullValue,
+            formatString: string.Empty,
+            formatInfo: null);
     }
 
-    public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode, object nullValue, string formatString)
+    public Binding Add(
+        string propertyName,
+        object dataSource,
+        string? dataMember,
+        bool formattingEnabled,
+        DataSourceUpdateMode updateMode,
+        object? nullValue,
+        string formatString)
     {
-        return Add(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, formatString, null);
+        return Add(
+            propertyName,
+            dataSource,
+            dataMember,
+            formattingEnabled,
+            updateMode,
+            nullValue,
+            formatString,
+            formatInfo: null);
     }
 
-    public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode, object nullValue, string formatString, IFormatProvider formatInfo)
+    public Binding Add(
+        string propertyName,
+        object dataSource,
+        string? dataMember,
+        bool formattingEnabled,
+        DataSourceUpdateMode updateMode,
+        object? nullValue,
+        string formatString,
+        IFormatProvider? formatInfo)
     {
         ArgumentNullException.ThrowIfNull(dataSource);
 
-        Binding binding = new(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, formatString, formatInfo);
+        Binding binding = new(
+            propertyName,
+            dataSource,
+            dataMember,
+            formattingEnabled,
+            updateMode,
+            nullValue,
+            formatString,
+            formatInfo);
         Add(binding);
         return binding;
     }
@@ -179,7 +255,7 @@ public class ControlBindingsCollection : BindingsCollection
             throw new ArgumentException(SR.BindingsCollectionForeign, nameof(dataBinding));
         }
 
-        dataBinding.SetBindableComponent(null);
+        dataBinding.SetBindableComponent(value: null);
         base.RemoveCore(dataBinding);
     }
 }
