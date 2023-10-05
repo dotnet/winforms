@@ -106,7 +106,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             if (value != AutoComplete)
             {
                 if (value)
@@ -158,7 +157,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             // Same check as for ListControl's DataSource
             if (value is not null && !(value is IList || value is IListSource))
             {
@@ -236,7 +234,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             DisplayMemberInternal = value;
             if (OwnsEditingComboBox(RowIndex))
             {
@@ -412,7 +409,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             if (value < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(DropDownWidth), value, string.Format(SR.DataGridViewComboBoxCell_DropDownWidthOutOfRange, 1));
@@ -515,7 +511,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             if (value < 1 || value > 100)
             {
                 throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), value, string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, 1, 100));
@@ -555,7 +550,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             if (value != Sorted)
             {
                 if (value)
@@ -613,7 +607,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             ValueMemberInternal = value;
             if (OwnsEditingComboBox(RowIndex))
             {

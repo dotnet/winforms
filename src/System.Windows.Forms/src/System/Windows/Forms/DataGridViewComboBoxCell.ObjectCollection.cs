@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -16,49 +14,27 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     [ListBindable(false)]
     public class ObjectCollection : IList
     {
-        private readonly DataGridViewComboBoxCell owner;
-        private List<object> items;
-        private IComparer<object> comparer;
+        private readonly DataGridViewComboBoxCell _owner;
+        private List<object>? _items;
+        private IComparer<object>? _comparer;
 
         public ObjectCollection(DataGridViewComboBoxCell owner)
         {
             Debug.Assert(owner is not null);
-            this.owner = owner;
+            _owner = owner;
         }
 
-        private IComparer<object> Comparer
-        {
-            get
-            {
-                comparer ??= new ItemComparer(owner);
-
-                return comparer;
-            }
-        }
+        private IComparer<object> Comparer => _comparer ??= new ItemComparer(_owner);
 
         /// <summary>
         ///  Retrieves the number of items.
         /// </summary>
-        public int Count
-        {
-            get
-            {
-                return InnerArray.Count;
-            }
-        }
+        public int Count => InnerArray.Count;
 
         /// <summary>
         ///  Internal access to the actual data store.
         /// </summary>
-        internal List<object> InnerArray
-        {
-            get
-            {
-                items ??= new List<object>();
-
-                return items;
-            }
-        }
+        internal List<object> InnerArray => _items ??= new List<object>();
 
         object ICollection.SyncRoot => ((ICollection)InnerArray).SyncRoot;
 
@@ -77,15 +53,14 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         /// </summary>
         public int Add(object item)
         {
-            //this.owner.CheckNoSharedCell();
-            owner.CheckNoDataSource();
+            _owner.CheckNoDataSource();
 
             ArgumentNullException.ThrowIfNull(item);
 
             int index = ((IList)InnerArray).Add(item);
 
             bool success = false;
-            if (owner.Sorted)
+            if (_owner.Sorted)
             {
                 try
                 {
@@ -102,29 +77,24 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 }
             }
 
-            owner.OnItemsCollectionChanged();
+            _owner.OnItemsCollectionChanged();
             return index;
         }
 
-        int IList.Add(object item)
-        {
-            return Add(item);
-        }
+        int IList.Add(object? item) => Add(item!);
 
         public void AddRange(params object[] items)
         {
-            //this.owner.CheckNoSharedCell();
-            owner.CheckNoDataSource();
+            _owner.CheckNoDataSource();
             AddRangeInternal(items);
-            owner.OnItemsCollectionChanged();
+            _owner.OnItemsCollectionChanged();
         }
 
         public void AddRange(ObjectCollection value)
         {
-            //this.owner.CheckNoSharedCell();
-            owner.CheckNoDataSource();
+            _owner.CheckNoDataSource();
             AddRangeInternal((ICollection<object>)value);
-            owner.OnItemsCollectionChanged();
+            _owner.OnItemsCollectionChanged();
         }
 
         /// <summary>
@@ -144,21 +114,18 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
             // Add everything to the collection first, then sort
             InnerArray.AddRange(items);
-            if (owner.Sorted)
+            if (_owner.Sorted)
             {
                 InnerArray.Sort(Comparer);
             }
         }
 
-        internal void SortInternal()
-        {
-            InnerArray.Sort(Comparer);
-        }
+        internal void SortInternal() => InnerArray.Sort(Comparer);
 
         /// <summary>
         ///  Retrieves the item with the specified index.
         /// </summary>
-        public virtual object this[int index]
+        public virtual object? this[int index]
         {
             get
             {
@@ -171,8 +138,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             }
             set
             {
-                //this.owner.CheckNoSharedCell();
-                owner.CheckNoDataSource();
+                _owner.CheckNoDataSource();
 
                 if (index < 0 || index >= InnerArray.Count)
                 {
@@ -180,7 +146,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 }
 
                 InnerArray[index] = value.OrThrowIfNull();
-                owner.OnItemsCollectionChanged();
+                _owner.OnItemsCollectionChanged();
             }
         }
 
@@ -191,45 +157,31 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         {
             if (InnerArray.Count > 0)
             {
-                //this.owner.CheckNoSharedCell();
-                owner.CheckNoDataSource();
+                _owner.CheckNoDataSource();
                 InnerArray.Clear();
-                owner.OnItemsCollectionChanged();
+                _owner.OnItemsCollectionChanged();
             }
         }
 
-        internal void ClearInternal()
-        {
-            InnerArray.Clear();
-        }
+        internal void ClearInternal() => InnerArray.Clear();
 
-        public bool Contains(object value)
-        {
-            return IndexOf(value) != -1;
-        }
+        public bool Contains(object? value) => IndexOf(value!) != -1;
 
         /// <summary>
         ///  Copies the DataGridViewComboBoxCell Items collection to a destination array.
         /// </summary>
-        public void CopyTo(object[] destination, int arrayIndex)
-        {
+        public void CopyTo(object[] destination, int arrayIndex) =>
             ((ICollection)InnerArray).CopyTo(destination, arrayIndex);
-        }
 
-        void ICollection.CopyTo(Array destination, int index)
-        {
+        void ICollection.CopyTo(Array destination, int index) =>
             ((ICollection)InnerArray).CopyTo(destination, index);
-        }
 
         /// <summary>
         ///  Returns an enumerator for the DataGridViewComboBoxCell Items collection.
         /// </summary>
-        public IEnumerator GetEnumerator()
-        {
-            return InnerArray.GetEnumerator();
-        }
+        public IEnumerator GetEnumerator() => InnerArray.GetEnumerator();
 
-        public int IndexOf(object value)
+        public int IndexOf(object? value)
         {
             ArgumentNullException.ThrowIfNull(value);
 
@@ -243,10 +195,9 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         ///  The item's toString() method is called to obtain the string that is
         ///  displayed in the combo box.
         /// </summary>
-        public void Insert(int index, object item)
+        public void Insert(int index, object? item)
         {
-            //this.owner.CheckNoSharedCell();
-            owner.CheckNoDataSource();
+            _owner.CheckNoDataSource();
 
             ArgumentNullException.ThrowIfNull(item);
 
@@ -257,14 +208,14 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
             // If the combo box is sorted, then just treat this like an add
             // because we are going to twiddle the index anyway.
-            if (owner.Sorted)
+            if (_owner.Sorted)
             {
                 Add(item);
             }
             else
             {
                 InnerArray.Insert(index, item);
-                owner.OnItemsCollectionChanged();
+                _owner.OnItemsCollectionChanged();
             }
         }
 
@@ -272,9 +223,9 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         ///  Removes the given item from the collection, provided that it is
         ///  actually in the list.
         /// </summary>
-        public void Remove(object value)
+        public void Remove(object? value)
         {
-            int index = InnerArray.IndexOf(value);
+            int index = InnerArray.IndexOf(value!);
 
             if (index != -1)
             {
@@ -287,8 +238,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         /// </summary>
         public void RemoveAt(int index)
         {
-            //this.owner.CheckNoSharedCell();
-            owner.CheckNoDataSource();
+            _owner.CheckNoDataSource();
 
             if (index < 0 || index >= InnerArray.Count)
             {
@@ -296,7 +246,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             }
 
             InnerArray.RemoveAt(index);
-            owner.OnItemsCollectionChanged();
+            _owner.OnItemsCollectionChanged();
         }
-    } // end ObjectCollection
+    }
 }

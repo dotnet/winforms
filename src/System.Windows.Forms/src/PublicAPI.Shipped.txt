@@ -453,16 +453,16 @@ System.Windows.Forms.DataGridViewColumn.HeaderText.set -> void
 ~System.Windows.Forms.DataGridViewColumnCollection.IndexOf(System.Windows.Forms.DataGridViewColumn dataGridViewColumn) -> int
 ~System.Windows.Forms.DataGridViewColumnCollection.this[int index].get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewColumnCollection.this[string columnName].get -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Add(object item) -> int
-~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.AddRange(params object[] items) -> void
-~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.AddRange(System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection value) -> void
-~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Contains(object value) -> bool
-~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.CopyTo(object[] destination, int arrayIndex) -> void
-~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator
-~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.IndexOf(object value) -> int
-~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Insert(int index, object item) -> void
-~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.ObjectCollection(System.Windows.Forms.DataGridViewComboBoxCell owner) -> void
-~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Remove(object value) -> void
+System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Add(object! item) -> int
+System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.AddRange(params object![]! items) -> void
+System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.AddRange(System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection! value) -> void
+System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Contains(object? value) -> bool
+System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.CopyTo(object![]! destination, int arrayIndex) -> void
+System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.GetEnumerator() -> System.Collections.IEnumerator!
+System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.IndexOf(object? value) -> int
+System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Insert(int index, object? item) -> void
+System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.ObjectCollection(System.Windows.Forms.DataGridViewComboBoxCell! owner) -> void
+System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Remove(object? value) -> void
 ~System.Windows.Forms.DataGridViewComboBoxColumn.DataSource.get -> object
 ~System.Windows.Forms.DataGridViewComboBoxColumn.DataSource.set -> void
 ~System.Windows.Forms.DataGridViewComboBoxColumn.DisplayMember.get -> string
@@ -873,8 +873,8 @@ virtual System.Windows.Forms.DataGridViewColumn.CellTemplate.set -> void
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.DisplayMember.get -> string
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.DisplayMember.set -> void
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.Items.get -> System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection
-~virtual System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.this[int index].get -> object
-~virtual System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.this[int index].set -> void
+virtual System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.this[int index].get -> object?
+virtual System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.this[int index].set -> void
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.ValueMember.get -> string
 ~virtual System.Windows.Forms.DataGridViewComboBoxCell.ValueMember.set -> void
 virtual System.Windows.Forms.DataGridViewRow.AdjustRowHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStylePlaceholder, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedRow, bool isLastVisibleRow) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
