@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -19,9 +17,10 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
     private bool? _readOnly;
     private bool? _canReset;
 
-    private MultiMergeCollection _collection;
+    private MultiMergeCollection? _collection;
 
-    public MergePropertyDescriptor(PropertyDescriptor[] descriptors) : base(descriptors[0].Name, null)
+    public MergePropertyDescriptor(PropertyDescriptor[] descriptors)
+        : base(descriptors[0].Name, attrs: null)
     {
         _descriptors = descriptors;
     }
@@ -91,7 +90,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
             var a = (Array)component;
             for (int i = 0; i < _descriptors.Length; i++)
             {
-                if (!_descriptors[i].CanResetValue(GetPropertyOwnerForComponent(a, i)))
+                if (!_descriptors[i].CanResetValue(GetPropertyOwnerForComponent(a, i)!))
                 {
                     _canReset = false;
                     break;
@@ -106,7 +105,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
     ///  This method attempts to copy the given value so unique values are always passed to each object.
     ///  If the value cannot be copied the original value will be returned.
     /// </summary>
-    private static object CopyValue(object value)
+    private static object? CopyValue(object? value)
     {
         // Null is always OK.
         if (value is null)
@@ -122,7 +121,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
             return value;
         }
 
-        object clonedValue = null;
+        object? clonedValue = null;
 
         // ICloneable is the next easiest thing.
         if (value is ICloneable clone)
@@ -140,7 +139,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
         if (converter.CanConvertTo(typeof(InstanceDescriptor)))
         {
             // Instance descriptors provide full fidelity unless they are marked as incomplete.
-            var instanceDescriptor = (InstanceDescriptor)converter.ConvertTo(
+            var instanceDescriptor = (InstanceDescriptor?)converter.ConvertTo(
                 null,
                 CultureInfo.InvariantCulture,
                 value,
@@ -159,8 +158,8 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
         // If that didn't work, try conversion to/from string.
         if (converter.CanConvertTo(typeof(string)) && converter.CanConvertFrom(typeof(string)))
         {
-            object stringRepresentation = converter.ConvertToInvariantString(value);
-            clonedValue = converter.ConvertFromInvariantString((string)stringRepresentation);
+            string stringRepresentation = converter.ConvertToInvariantString(value)!;
+            clonedValue = converter.ConvertFromInvariantString(stringRepresentation);
             if (clonedValue is not null)
             {
                 return clonedValue;
@@ -178,9 +177,9 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
 
     protected override AttributeCollection CreateAttributeCollection() => new MergedAttributeCollection(this);
 
-    private object GetPropertyOwnerForComponent(Array a, int i)
+    private object? GetPropertyOwnerForComponent(Array a, int i)
     {
-        object propertyOwner = a.GetValue(i);
+        object? propertyOwner = a.GetValue(i);
         if (propertyOwner is ICustomTypeDescriptor descriptor)
         {
             propertyOwner = descriptor.GetPropertyOwner(_descriptors[i]);
@@ -190,18 +189,18 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
     }
 
     [RequiresUnreferencedCode($"{EditorRequiresUnreferencedCode} {PropertyDescriptorPropertyTypeMessage}")]
-    public override object GetEditor(Type editorBaseType) => _descriptors[0].GetEditor(editorBaseType);
+    public override object? GetEditor(Type editorBaseType) => _descriptors[0].GetEditor(editorBaseType);
 
-    public override object GetValue(object component)
+    public override object? GetValue(object? component)
     {
         Debug.Assert(component is Array, "MergePropertyDescriptor::GetValue called with non-array value");
         return GetValue((Array)component, out _);
     }
 
-    public object GetValue(Array components, out bool allEqual)
+    public object? GetValue(Array components, out bool allEqual)
     {
         allEqual = true;
-        object @object = _descriptors[0].GetValue(GetPropertyOwnerForComponent(components, 0));
+        object? @object = _descriptors[0].GetValue(GetPropertyOwnerForComponent(components, 0));
 
         if (@object is ICollection collection)
         {
@@ -221,11 +220,11 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
 
         for (int i = 1; i < _descriptors.Length; i++)
         {
-            object currentObject = _descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
+            object? currentObject = _descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
 
             if (_collection is not null)
             {
-                if (!_collection.ReinitializeIfNotEqual((ICollection)currentObject))
+                if (!_collection.ReinitializeIfNotEqual((ICollection)currentObject!))
                 {
                     allEqual = false;
                     return null;
@@ -250,9 +249,9 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
         return _collection ?? @object;
     }
 
-    internal object[] GetValues(Array components)
+    internal object?[] GetValues(Array components)
     {
-        object[] values = new object[components.Length];
+        object?[] values = new object?[components.Length];
 
         for (int i = 0; i < components.Length; i++)
         {
@@ -268,7 +267,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
         var array = (Array)component;
         for (int i = 0; i < _descriptors.Length; i++)
         {
-            _descriptors[i].ResetValue(GetPropertyOwnerForComponent(array, i));
+            _descriptors[i].ResetValue(GetPropertyOwnerForComponent(array, i)!);
         }
     }
 
@@ -309,7 +308,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
         }
     }
 
-    public override void SetValue(object component, object value)
+    public override void SetValue(object? component, object? value)
     {
         Debug.Assert(component is Array, "MergePropertyDescriptor::SetValue called with non-array value");
         var array = (Array)component;
@@ -321,7 +320,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
         {
             for (int i = 0; i < _descriptors.Length; i++)
             {
-                object clonedValue = CopyValue(value);
+                object? clonedValue = CopyValue(value);
                 _descriptors[i].SetValue(GetPropertyOwnerForComponent(array, i), clonedValue);
             }
         }
@@ -333,7 +332,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
         var array = (Array)component;
         for (int i = 0; i < _descriptors.Length; i++)
         {
-            if (!_descriptors[i].ShouldSerializeValue(GetPropertyOwnerForComponent(array, i)))
+            if (!_descriptors[i].ShouldSerializeValue(GetPropertyOwnerForComponent(array, i)!))
             {
                 return false;
             }
