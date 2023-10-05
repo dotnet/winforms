@@ -301,7 +301,7 @@ public abstract partial class AxHost
 
             if (control is AxHost hostControl && flags.HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
             {
-                controls.Add(hostControl.GetOcx());
+                controls.Add(hostControl.GetOcx()!);
             }
             else if (flags.HasFlag(OLECONTF.OLECONTF_OTHERS))
             {
@@ -586,7 +586,7 @@ public abstract partial class AxHost
                 {
                     if (control is AxHost hostControl)
                     {
-                        oleControls.Add(hostControl.GetOcx());
+                        oleControls.Add(hostControl.GetOcx()!);
                     }
                 }
 

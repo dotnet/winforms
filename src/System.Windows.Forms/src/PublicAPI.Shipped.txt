@@ -1,5 +1,5 @@
 #nullable enable
-~override System.Windows.Forms.AxHost.OnHandleCreated(System.EventArgs e) -> void
+override System.Windows.Forms.AxHost.OnHandleCreated(System.EventArgs! e) -> void
 ~override System.Windows.Forms.ControlBindingsCollection.AddCore(System.Windows.Forms.Binding dataBinding) -> void
 ~override System.Windows.Forms.ControlBindingsCollection.RemoveCore(System.Windows.Forms.Binding dataBinding) -> void
 override System.Windows.Forms.CurrencyManager.Current.get -> object?
@@ -262,15 +262,15 @@ override System.Windows.Forms.TreeView.OnMouseLeave(System.EventArgs! e) -> void
 override System.Windows.Forms.TreeView.Text.get -> string!
 override System.Windows.Forms.TreeView.Text.set -> void
 override System.Windows.Forms.TreeView.ToString() -> string!
-~static System.Windows.Forms.AxHost.GetFontFromIFont(object font) -> System.Drawing.Font
-~static System.Windows.Forms.AxHost.GetFontFromIFontDisp(object font) -> System.Drawing.Font
-~static System.Windows.Forms.AxHost.GetIFontDispFromFont(System.Drawing.Font font) -> object
-~static System.Windows.Forms.AxHost.GetIFontFromFont(System.Drawing.Font font) -> object
-~static System.Windows.Forms.AxHost.GetIPictureDispFromPicture(System.Drawing.Image image) -> object
-~static System.Windows.Forms.AxHost.GetIPictureFromCursor(System.Windows.Forms.Cursor cursor) -> object
-~static System.Windows.Forms.AxHost.GetIPictureFromPicture(System.Drawing.Image image) -> object
-~static System.Windows.Forms.AxHost.GetPictureFromIPicture(object picture) -> System.Drawing.Image
-~static System.Windows.Forms.AxHost.GetPictureFromIPictureDisp(object picture) -> System.Drawing.Image
+static System.Windows.Forms.AxHost.GetFontFromIFont(object? font) -> System.Drawing.Font?
+static System.Windows.Forms.AxHost.GetFontFromIFontDisp(object? font) -> System.Drawing.Font?
+static System.Windows.Forms.AxHost.GetIFontDispFromFont(System.Drawing.Font? font) -> object?
+static System.Windows.Forms.AxHost.GetIFontFromFont(System.Drawing.Font? font) -> object?
+static System.Windows.Forms.AxHost.GetIPictureDispFromPicture(System.Drawing.Image? image) -> object?
+static System.Windows.Forms.AxHost.GetIPictureFromCursor(System.Windows.Forms.Cursor? cursor) -> object?
+static System.Windows.Forms.AxHost.GetIPictureFromPicture(System.Drawing.Image? image) -> object?
+static System.Windows.Forms.AxHost.GetPictureFromIPicture(object? picture) -> System.Drawing.Image?
+static System.Windows.Forms.AxHost.GetPictureFromIPictureDisp(object? picture) -> System.Drawing.Image?
 ~static System.Windows.Forms.Control.FromChildHandle(nint handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.FromHandle(nint handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
@@ -283,11 +283,11 @@ static System.Windows.Forms.HtmlElement.operator ==(System.Windows.Forms.HtmlEle
 static System.Windows.Forms.HtmlWindow.operator !=(System.Windows.Forms.HtmlWindow? left, System.Windows.Forms.HtmlWindow? right) -> bool
 static System.Windows.Forms.HtmlWindow.operator ==(System.Windows.Forms.HtmlWindow? left, System.Windows.Forms.HtmlWindow? right) -> bool
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.AxHost.GetOcx() -> object
-~System.Windows.Forms.AxHost.RaiseOnMouseDown(object o1, object o2, object o3, object o4) -> void
-~System.Windows.Forms.AxHost.RaiseOnMouseMove(object o1, object o2, object o3, object o4) -> void
-~System.Windows.Forms.AxHost.RaiseOnMouseUp(object o1, object o2, object o3, object o4) -> void
-~System.Windows.Forms.AxHost.ShowPropertyPages(System.Windows.Forms.Control control) -> void
+System.Windows.Forms.AxHost.GetOcx() -> object?
+System.Windows.Forms.AxHost.RaiseOnMouseDown(object! o1, object! o2, object! o3, object! o4) -> void
+System.Windows.Forms.AxHost.RaiseOnMouseMove(object! o1, object! o2, object! o3, object! o4) -> void
+System.Windows.Forms.AxHost.RaiseOnMouseUp(object! o1, object! o2, object! o3, object! o4) -> void
+System.Windows.Forms.AxHost.ShowPropertyPages(System.Windows.Forms.Control? control) -> void
 System.Windows.Forms.Binding.BindableComponent.get -> System.Windows.Forms.IBindableComponent?
 System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember) -> void
 System.Windows.Forms.Binding.Binding(string! propertyName, object? dataSource, string? dataMember, bool formattingEnabled) -> void

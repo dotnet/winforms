@@ -20,7 +20,7 @@ public abstract partial class AxHost
         {
         }
 
-        internal ConnectionPointCookie(object source, object sink, Type eventInterface, bool throwException)
+        internal ConnectionPointCookie(object? source, object sink, Type eventInterface, bool throwException)
         {
             if (source is not IConnectionPointContainer.Interface cpc)
             {
