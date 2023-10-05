@@ -3255,8 +3255,9 @@ internal sealed partial class PropertyGridView :
             // Equivalent to large change scrolls
             if (fullNotches != 0)
             {
+                Debug.Assert(_scrollBar is not null);
                 int originalOffset = initialOffset;
-                int large = fullNotches * _scrollBar!.LargeChange;
+                int large = fullNotches * _scrollBar.LargeChange;
                 int newOffset = Math.Max(0, initialOffset - large);
                 newOffset = Math.Min(newOffset, TotalProperties - _visibleRows + 1);
 
