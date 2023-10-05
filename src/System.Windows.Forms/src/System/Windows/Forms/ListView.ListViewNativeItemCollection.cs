@@ -314,7 +314,7 @@ public partial class ListView
 
         public ListViewItem Insert(int index, ListViewItem item)
         {
-            int count = 0;
+            int count;
             if (_owner.VirtualMode)
             {
                 count = Count;

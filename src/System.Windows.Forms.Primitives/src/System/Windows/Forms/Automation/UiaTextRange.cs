@@ -172,7 +172,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
                 // Leave it as it is except the case with 0-range.
                 if (IsDegenerate)
                 {
-                    End = MoveEndpointForward(End, TextUnit.TextUnit_Character, 1, out int moved);
+                    End = MoveEndpointForward(End, TextUnit.TextUnit_Character, 1, out _);
                 }
 
                 break;

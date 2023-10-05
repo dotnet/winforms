@@ -13,7 +13,7 @@ internal unsafe partial struct STGMEDIUM
 
     public static explicit operator STGMEDIUM(ComType.STGMEDIUM comTypeStg)
     {
-        IUnknown* pUnkForRelease = ComHelpers.TryGetComPointer<IUnknown>(comTypeStg.pUnkForRelease, out HRESULT hr);
+        IUnknown* pUnkForRelease = ComHelpers.TryGetComPointer<IUnknown>(comTypeStg.pUnkForRelease, out _);
 
         return new()
         {

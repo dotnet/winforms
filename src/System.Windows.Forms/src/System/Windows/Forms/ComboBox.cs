@@ -1251,9 +1251,7 @@ public partial class ComboBox : ListControl
             }
 
             base.Text = value;
-            object? selectedItem = null;
-
-            selectedItem = SelectedItem;
+            object? selectedItem = SelectedItem;
 
             if (!DesignMode)
             {
@@ -2466,8 +2464,7 @@ public partial class ComboBox : ListControl
             PInvoke.SendMessage(this, PInvoke.CB_SETDROPPEDWIDTH, (WPARAM)dropDownWidth);
         }
 
-        found = false;
-        int itemHeight = Properties.GetInteger(PropItemHeight, out found);
+        _ = Properties.GetInteger(PropItemHeight, out found);
         if (found)
         {
             // someone has set the item height - update it

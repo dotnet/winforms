@@ -293,7 +293,6 @@ public abstract class ListControl : Control
             value ??= string.Empty;
 
             BindingMemberInfo newValueMember = new BindingMemberInfo(value);
-            BindingMemberInfo oldValueMember = _valueMember;
             if (!newValueMember.Equals(_valueMember))
             {
                 // If the displayMember is set to the EmptyString, then recreate the dataConnection
