@@ -1655,7 +1655,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         Debug.Assert(ValueMemberProperty is not null || DisplayMemberProperty is not null ||
                      !string.IsNullOrEmpty(ValueMember) || !string.IsNullOrEmpty(DisplayMember));
 
-        object item = null;
+        object item;
         if (DisplayMemberProperty is not null || ValueMemberProperty is not null)
         {
             //Now look up the item in the Combobox datasource - this can be horribly inefficient
@@ -1872,7 +1872,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                                                     isFirstDisplayedColumn);
 
             Rectangle cellBounds = DataGridView.GetCellDisplayRectangle(OwningColumn.Index, rowIndex, false /*cutOverflow*/);
-            Rectangle cutoffCellBounds = cellBounds;
             if (isFirstDisplayedScrollingColumn)
             {
                 cellBounds.X -= DataGridView.FirstDisplayedScrollingColumnHiddenWidth;

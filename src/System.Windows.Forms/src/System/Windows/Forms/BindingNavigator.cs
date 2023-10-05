@@ -599,7 +599,7 @@ public class BindingNavigator : ToolStrip, ISupportInitialize
     /// </summary>
     public bool Validate()
     {
-        return ValidateActiveControl(out bool validatedControlAllowsFocusChange);
+        return ValidateActiveControl(out _);
     }
 
     /// <summary>

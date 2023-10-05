@@ -195,7 +195,7 @@ internal partial class MergePropertyDescriptor : PropertyDescriptor
     public override object GetValue(object component)
     {
         Debug.Assert(component is Array, "MergePropertyDescriptor::GetValue called with non-array value");
-        return GetValue((Array)component, out bool _);
+        return GetValue((Array)component, out _);
     }
 
     public object GetValue(Array components, out bool allEqual)

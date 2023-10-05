@@ -1255,7 +1255,7 @@ public unsafe partial class Control :
         get
         {
             // check if we're caching text.
-            int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out bool _);
+            int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out _);
 
             return cacheTextCounter > 0 || GetStyle(ControlStyles.CacheText);
         }
@@ -1269,7 +1269,7 @@ public unsafe partial class Control :
             }
 
             // otherwise, get the state and update the cache if necessary.
-            int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out bool found);
+            int cacheTextCounter = Properties.GetInteger(s_cacheTextCountProperty, out _);
 
             if (value)
             {
@@ -1286,7 +1286,7 @@ public unsafe partial class Control :
                 cacheTextCounter--;
                 if (cacheTextCounter == 0)
                 {
-                    _text = (string?)Properties.GetObject(s_acheTextFieldProperty, out found);
+                    _text = (string?)Properties.GetObject(s_acheTextFieldProperty, out _);
                 }
             }
 
@@ -4839,7 +4839,6 @@ public unsafe partial class Control :
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     protected virtual void CreateHandle()
     {
-        IntPtr userCookie = IntPtr.Zero;
         ObjectDisposedException.ThrowIf(GetState(States.Disposed), this);
 
         if (GetState(States.CreatingHandle))

@@ -1289,7 +1289,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     public virtual object Clone()
     {
         Type clonedType = GetType();
-        TreeNode node = null;
+        TreeNode node;
 
         if (clonedType == typeof(TreeNode))
         {
