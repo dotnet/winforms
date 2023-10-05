@@ -5911,8 +5911,9 @@ public partial class DataGridView
 
     private void EditingControls_CommonMouseEventHandler(object sender, MouseEventArgs e, DataGridViewMouseEvent dgvme)
     {
+        Debug.Assert(_editingPanel is not null);
         Debug.Assert(_ptCurrentCell.X != -1);
-        int adjustedX = _editingPanel!.Location.X + e.X;
+        int adjustedX = _editingPanel.Location.X + e.X;
         int adjustedY = _editingPanel.Location.Y + e.Y;
         if (sender == EditingControl)
         {
