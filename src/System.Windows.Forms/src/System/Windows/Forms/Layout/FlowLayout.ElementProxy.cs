@@ -81,9 +81,6 @@ internal partial class FlowLayout
             }
         }
 
-        public virtual Size GetPreferredSize(Size proposedSize)
-        {
-            return _element!.GetPreferredSize(proposedSize);
-        }
+        public virtual Size GetPreferredSize(Size proposedSize) => _element!.GetPreferredSize(proposedSize);
     }
 }
