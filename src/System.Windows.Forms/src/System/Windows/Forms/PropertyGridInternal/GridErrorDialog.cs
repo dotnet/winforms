@@ -28,6 +28,7 @@ internal partial class GridErrorDialog : Form
 
     public bool DetailsButtonExpanded { get; private set; }
 
+    [AllowNull]
     public string Details
     {
         set => _detailsTextBox.Text = value;
