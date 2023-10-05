@@ -588,23 +588,14 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
             }
         }
     }
-#nullable disable
+
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool IsDataBound
-    {
-        get
-        {
-            return IsDataBoundInternal;
-        }
-    }
+    public bool IsDataBound => IsDataBoundInternal;
 
     internal bool IsDataBoundInternal
     {
-        get
-        {
-            return (_flags & ColumnIsDataBound) != 0;
-        }
+        get => (_flags & ColumnIsDataBound) != 0;
         set
         {
             if (value)
@@ -625,17 +616,12 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [RefreshProperties(RefreshProperties.Repaint)]
     public int MinimumWidth
     {
-        get
-        {
-            return MinimumThickness;
-        }
-        set
-        {
-            MinimumThickness = value;
-        }
+        get => MinimumThickness;
+        set => MinimumThickness = value;
     }
 
     [Browsable(false)]
+    [AllowNull]
     public string Name
     {
         get
@@ -715,7 +701,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public ISite Site { get; set; }
+    public ISite? Site { get; set; }
 
     [DefaultValue(DataGridViewColumnSortMode.NotSortable)]
     [SRCategory(nameof(SR.CatBehavior))]
@@ -778,15 +764,13 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [Localizable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ColumnToolTipTextDescr))]
+    [AllowNull]
     public string ToolTipText
     {
-        get
-        {
-            return HeaderCell.ToolTipText;
-        }
+        get => HeaderCell.ToolTipText;
         set
         {
-            if (string.Compare(ToolTipText, value, false /*ignore case*/, CultureInfo.InvariantCulture) != 0)
+            if (string.Compare(ToolTipText, value, ignoreCase: false, CultureInfo.InvariantCulture) != 0)
             {
                 HeaderCell.ToolTipText = value;
 
@@ -797,10 +781,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     internal float UsedFillWeight
     {
-        get
-        {
-            return _usedFillWeight;
-        }
+        get => _usedFillWeight;
         set
         {
             Debug.Assert(value > 0);
@@ -811,12 +792,9 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [Browsable(false)]
     [DefaultValue(null)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public Type ValueType
+    public Type? ValueType
     {
-        get
-        {
-            return (Type)Properties.GetObject(s_propDataGridViewColumnValueType);
-        }
+        get => (Type?)Properties.GetObject(s_propDataGridViewColumnValueType);
         set
         {
             // what should we do when we modify the ValueType in the dataGridView column???
@@ -840,25 +818,14 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [RefreshProperties(RefreshProperties.Repaint)]
     public int Width
     {
-        get
-        {
-            return Thickness;
-        }
-        set
-        {
-            Thickness = value;
-        }
+        get => Thickness;
+        set => Thickness = value;
     }
 
     public override object Clone()
     {
-        //
-
-        DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)System.Activator.CreateInstance(GetType());
-        if (dataGridViewColumn is not null)
-        {
-            CloneInternal(dataGridViewColumn);
-        }
+        DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)Activator.CreateInstance(GetType())!;
+        CloneInternal(dataGridViewColumn);
 
         return dataGridViewColumn;
     }
@@ -871,7 +838,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         dataGridViewColumn._displayIndex = -1;
         dataGridViewColumn.HeaderText = HeaderText;
         dataGridViewColumn.DataPropertyName = DataPropertyName;
-        dataGridViewColumn.CellTemplate = (DataGridViewCell)CellTemplate?.Clone();
+        dataGridViewColumn.CellTemplate = (DataGridViewCell?)CellTemplate?.Clone();
 
         if (HasHeaderCell)
         {
@@ -906,7 +873,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         }
     }
 
-    internal DataGridViewAutoSizeColumnMode GetInheritedAutoSizeMode(DataGridView dataGridView)
+    internal DataGridViewAutoSizeColumnMode GetInheritedAutoSizeMode(DataGridView? dataGridView)
     {
         if (dataGridView is not null && _autoSizeMode == DataGridViewAutoSizeColumnMode.NotSet)
         {
@@ -962,7 +929,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
                 throw new InvalidEnumArgumentException(nameof(autoSizeColumnMode), (int)autoSizeColumnMode, typeof(DataGridViewAutoSizeColumnMode));
         }
 
-        DataGridView dataGridView = DataGridView;
+        DataGridView? dataGridView = DataGridView;
 
         Debug.Assert(dataGridView is null || Index > -1);
 
@@ -1080,8 +1047,6 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         return preferredColumnThickness;
     }
 
-    public override string ToString()
-    {
-        return $"DataGridViewColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewColumn {{ Name={Name}, Index={Index} }}";
 }
