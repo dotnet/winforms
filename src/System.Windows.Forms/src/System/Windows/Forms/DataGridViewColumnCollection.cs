@@ -31,44 +31,23 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
     object? IList.this[int index]
     {
-        get { return this[index]; }
-        set { throw new NotSupportedException(); }
+        get => this[index];
+        set => throw new NotSupportedException();
     }
 
-    int IList.Add(object? value)
-    {
-        return Add((DataGridViewColumn)value!);
-    }
+    int IList.Add(object? value) => Add((DataGridViewColumn)value!);
 
-    void IList.Clear()
-    {
-        Clear();
-    }
+    void IList.Clear() => Clear();
 
-    bool IList.Contains(object? value)
-    {
-        return _items.Contains(value);
-    }
+    bool IList.Contains(object? value) => _items.Contains(value);
 
-    int IList.IndexOf(object? value)
-    {
-        return _items.IndexOf((DataGridViewColumn)value!);
-    }
+    int IList.IndexOf(object? value) => _items.IndexOf((DataGridViewColumn)value!);
 
-    void IList.Insert(int index, object? value)
-    {
-        Insert(index, (DataGridViewColumn)value!);
-    }
+    void IList.Insert(int index, object? value) => Insert(index, (DataGridViewColumn)value!);
 
-    void IList.Remove(object? value)
-    {
-        Remove((DataGridViewColumn)value!);
-    }
+    void IList.Remove(object? value) => Remove((DataGridViewColumn)value!);
 
-    void IList.RemoveAt(int index)
-    {
-        RemoveAt(index);
-    }
+    void IList.RemoveAt(int index) => RemoveAt(index);
 
     /* ICollection interface implementation */
 
@@ -78,17 +57,11 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
     object ICollection.SyncRoot => this;
 
-    void ICollection.CopyTo(Array array, int index)
-    {
-        ((ICollection)_items).CopyTo(array, index);
-    }
+    void ICollection.CopyTo(Array array, int index) => ((ICollection)_items).CopyTo(array, index);
 
     /* IEnumerable interface implementation */
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return _items.GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() => _items.GetEnumerator();
 
     public DataGridViewColumnCollection(DataGridView dataGridView)
     {
@@ -106,13 +79,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
     /// <summary>
     ///  Retrieves the DataGridViewColumn with the specified index.
     /// </summary>
-    public DataGridViewColumn this[int index]
-    {
-        get
-        {
-            return _items[index];
-        }
-    }
+    public DataGridViewColumn this[int index] => _items[index];
 
     /// <summary>
     ///  Retrieves the DataGridViewColumn with the Name provided.
@@ -359,10 +326,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
     /// <summary>
     ///  Checks to see if a DataGridViewColumn is contained in this collection.
     /// </summary>
-    public virtual bool Contains(DataGridViewColumn dataGridViewColumn)
-    {
-        return _items.IndexOf(dataGridViewColumn) != -1;
-    }
+    public virtual bool Contains(DataGridViewColumn dataGridViewColumn) => _items.IndexOf(dataGridViewColumn) != -1;
 
     public virtual bool Contains(string columnName)
     {
@@ -885,10 +849,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         return null;
     }
 
-    public int IndexOf(DataGridViewColumn dataGridViewColumn)
-    {
-        return _items.IndexOf(dataGridViewColumn);
-    }
+    public int IndexOf(DataGridViewColumn dataGridViewColumn) => _items.IndexOf(dataGridViewColumn);
 
     /// <summary>
     ///  Inserts a <see cref="DataGridViewColumn"/> in this collection.
@@ -956,15 +917,9 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         }
     }
 
-    internal void InvalidateCachedColumnCounts()
-    {
-        _columnCountsVisible = _columnCountsVisibleSelected = -1;
-    }
+    internal void InvalidateCachedColumnCounts() => _columnCountsVisible = _columnCountsVisibleSelected = -1;
 
-    internal void InvalidateCachedColumnsOrder()
-    {
-        _itemsSorted = null;
-    }
+    internal void InvalidateCachedColumnsOrder() => _itemsSorted = null;
 
     internal void InvalidateCachedColumnsWidth(DataGridViewElementStates includeFilter)
     {
@@ -985,15 +940,9 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         }
     }
 
-    internal void InvalidateCachedColumnsWidths()
-    {
-        _columnsWidthVisible = _columnsWidthVisibleFrozen = -1;
-    }
+    internal void InvalidateCachedColumnsWidths() => _columnsWidthVisible = _columnsWidthVisibleFrozen = -1;
 
-    protected virtual void OnCollectionChanged(CollectionChangeEventArgs e)
-    {
-        _onCollectionChanged?.Invoke(this, e);
-    }
+    protected virtual void OnCollectionChanged(CollectionChangeEventArgs e) => _onCollectionChanged?.Invoke(this, e);
 
     private void OnCollectionChanged(CollectionChangeEventArgs ccea, bool changeIsInsertion, Point newCurrentCell)
     {
