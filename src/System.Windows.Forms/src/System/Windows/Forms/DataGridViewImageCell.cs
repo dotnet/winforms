@@ -88,25 +88,9 @@ public partial class DataGridViewImageCell : DataGridViewCell
         }
     }
 
-    internal static Bitmap ErrorBitmap
-    {
-        get
-        {
-            s_errorBitmap ??= DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
+    internal static Bitmap ErrorBitmap => s_errorBitmap ??= DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
 
-            return s_errorBitmap;
-        }
-    }
-
-    internal static Icon ErrorIcon
-    {
-        get
-        {
-            s_errorIcon ??= new Icon(typeof(DataGridView), "IconInError");
-
-            return s_errorIcon;
-        }
-    }
+    internal static Icon ErrorIcon => s_errorIcon ??= new Icon(typeof(DataGridView), "IconInError");
 
     public override Type FormattedValueType
     {
@@ -163,10 +147,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
     [DefaultValue(false)]
     public bool ValueIsIcon
     {
-        get
-        {
-            return ((_flags & CellValueIsIcon) != 0x00);
-        }
+        get => ((_flags & CellValueIsIcon) != 0x00);
         set
         {
             if (ValueIsIcon != value)
@@ -266,10 +247,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         return dataGridViewCell;
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewImageCellAccessibleObject(this);
-    }
+    protected override AccessibleObject CreateAccessibilityInstance() => new DataGridViewImageCellAccessibleObject(this);
 
     protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
     {
@@ -331,10 +309,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         return imgBounds;
     }
 
-    private protected override string GetDefaultToolTipText()
-    {
-        return SR.DefaultDataGridViewImageCellToolTipText;
-    }
+    private protected override string GetDefaultToolTipText() => SR.DefaultDataGridViewImageCellToolTipText;
 
     protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
     {
