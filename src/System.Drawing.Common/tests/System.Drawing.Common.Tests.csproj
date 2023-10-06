@@ -137,4 +137,8 @@
     <PackageReference Include="System.ComponentModel.TypeConverter.TestData" Version="$(SystemComponentModelTypeConverterTestDataVersion)" />
     <PackageReference Include="System.Windows.Extensions.TestData" Version="$(SystemWindowsExtensionsTestDataVersion)" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
+  </ItemGroup>
 </Project>

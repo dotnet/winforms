@@ -107,7 +107,7 @@ public class EmbeddedResourceTests
         Assert.NotNull(bitmap);
     }
 
-    private const string expectedResourceNames = """
+    private const string ExpectedResourceNames = """
             System.ComponentModel.Design.BinaryEditor.resources
             System.ComponentModel.Design.CollectionEditor.resources
             System.SR.resources
@@ -129,10 +129,9 @@ public class EmbeddedResourceTests
         string[] actual = assembly.GetManifestResourceNames();
         Array.Sort(actual, StringComparer.Ordinal);
 
-        string resourceNames = s_expectedIconNames + "\r\n" + s_expectedBitmapNames;
-        string[] expected = $"{resourceNames}{Environment.NewLine}{expectedResourceNames}".Split(Environment.NewLine);
+        string[] expected = $"{s_expectedIconNames}{Environment.NewLine}{s_expectedBitmapNames}{Environment.NewLine}{ExpectedResourceNames}".Split(Environment.NewLine);
         Array.Sort(expected, StringComparer.Ordinal);
 
-        AssertExtensions.Equal(expected, actual);
+        actual.Should().Equal(expected);
     }
 }
