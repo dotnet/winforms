@@ -584,17 +584,17 @@ public class GraphicsPathTests
     [Fact]
     public void AddCurve_Success()
     {
-        PointF[] points = new PointF[]
-        {
+        PointF[] points =
+        [
             new PointF (37f, 185f),
             new PointF (99f, 185f),
             new PointF (161f, 159f),
             new PointF (223f, 185f),
             new PointF (285f, 54f),
-        };
+        ];
 
-        PointF[] expectedPoints = new PointF[]
-        {
+        PointF[] expectedPoints =
+        [
             new PointF (37f, 185f),
             new PointF (47.33333f, 185f),
             new PointF (78.3333f, 189.3333f),
@@ -608,10 +608,10 @@ public class GraphicsPathTests
             new PointF (243.6667f, 167.5f),
             new PointF (274.6667f, 75.8333f),
             new PointF (285f, 54f),
-        };
+        ];
 
-        byte[] expectedTypes = new byte[] { 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 };
-        int[] pointsCount = { 4, 7, 10, 13 };
+        byte[] expectedTypes = [0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
+        int[] pointsCount = [4, 7, 10, 13];
         using (GraphicsPath gp = new GraphicsPath())
         {
             for (int i = 0; i < points.Length - 1; i++)
@@ -620,8 +620,8 @@ public class GraphicsPathTests
                 Assert.Equal(pointsCount[i], gp.PointCount);
             }
 
-            AssertPointsSequenceEqual(expectedPoints, gp.PathPoints, Delta);
-            Assert.Equal(expectedTypes, gp.PathTypes);
+            gp.PathPoints.Should().BeApproximatelyEquivalentTo(expectedPoints, Delta);
+            gp.PathTypes.Should().BeEquivalentTo(expectedTypes);
         }
     }
 
@@ -1298,9 +1298,9 @@ public class GraphicsPathTests
         using (GraphicsPath gp = new GraphicsPath())
         using (Matrix matrix = new Matrix())
         {
-            Rectangle rectangle = new Rectangle(10, 10, 100, 100);
+            Rectangle rectangle = new(10, 10, 100, 100);
             gp.AddPie(rectangle, 30, 45);
-            AssertRectangleEqual(new RectangleF(60f, 60f, 43.3f, 48.3f), gp.GetBounds(), 0.1f);
+            gp.GetBounds().Should().BeApproximately(new (60f, 60f, 43.3f, 48.3f), precision: 0.1f);
         }
     }
 
@@ -1890,25 +1890,25 @@ public class GraphicsPathTests
     [Fact]
     public void Widen_Pen_Success()
     {
-        PointF[] expectedPoints = new PointF[]
-        {
+        PointF[] expectedPoints =
+        [
             new PointF(0.5f, 0.5f), new PointF(3.5f, 0.5f), new PointF(3.5f, 3.5f),
             new PointF(0.5f, 3.5f), new PointF(1.5f, 3.0f), new PointF(1.0f, 2.5f),
             new PointF(3.0f, 2.5f), new PointF(2.5f, 3.0f), new PointF(2.5f, 1.0f),
             new PointF(3.0f, 1.5f), new PointF(1.0f, 1.5f), new PointF(1.5f, 1.0f),
-        };
+        ];
 
-        byte[] expectedTypes = new byte[] { 0, 1, 1, 129, 0, 1, 1, 1, 1, 1, 1, 129 };
+        byte[] expectedTypes = [0, 1, 1, 129, 0, 1, 1, 1, 1, 1, 1, 129];
 
         using (GraphicsPath gp = new GraphicsPath())
         using (Pen pen = new Pen(Color.Blue))
         {
             gp.AddRectangle(new Rectangle(1, 1, 2, 2));
-            Assert.Equal(4, gp.PointCount);
+            gp.PointCount.Should().Be(4);
             gp.Widen(pen);
-            Assert.Equal(12, gp.PointCount);
-            AssertPointsSequenceEqual(expectedPoints, gp.PathPoints, Delta);
-            Assert.Equal(expectedTypes, gp.PathTypes);
+            gp.PointCount.Should().Be(12);
+            gp.PathPoints.Should().BeApproximatelyEquivalentTo(expectedPoints, Delta);
+            gp.PathTypes.Should().BeEquivalentTo(expectedTypes);
         }
     }
 
@@ -1983,8 +1983,8 @@ public class GraphicsPathTests
             pen.Width = penWidth;
             gp.AddRectangle(rectangle);
             gp.Widen(pen);
-            AssertRectangleEqual(expectedBounds, gp.GetBounds(null), Delta);
-            AssertRectangleEqual(expectedBounds, gp.GetBounds(matrix), Delta);
+            gp.GetBounds(null).Should().BeApproximately(expectedBounds, Delta);
+            gp.GetBounds(matrix).Should().BeApproximately(expectedBounds, Delta);
         }
     }
 
@@ -2382,148 +2382,149 @@ public class GraphicsPathTests
 
     private void AssertLine(GraphicsPath path)
     {
-        PointF[] expectedPoints = new PointF[]
-        {
+        PointF[] expectedPoints =
+        [
             new PointF(1f, 1f), new PointF(2f, 2f)
-        };
+        ];
 
-        Assert.Equal(2, path.PathPoints.Length);
-        Assert.Equal(2, path.PathTypes.Length);
-        Assert.Equal(2, path.PathData.Points.Length);
-        AssertExtensions.Equal(new RectangleF(1f, 1f, 1f, 1f), path.GetBounds(), variance: 0.000001f);
-        Assert.Equal(expectedPoints, path.PathPoints);
-        Assert.Equal(new byte[] { 0, 1 }, path.PathTypes);
+        path.PathPoints.Should().HaveCount(2);
+        path.PathTypes.Should().HaveCount(2);
+        path.PathData.Points.Should().HaveCount(2);
+        path.GetBounds().Should().BeApproximately(new(1f, 1f, 1f, 1f), precision: 0.000001f);
+        path.PathPoints.Should().BeApproximatelyEquivalentTo(expectedPoints, Delta);
+        path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 1 });
     }
 
     private void AssertArc(GraphicsPath path)
     {
-        PointF[] expectedPoints = new PointF[]
-        {
+        PointF[] expectedPoints =
+        [
             new PointF(2.99990582f, 2.01370716f), new PointF(2.99984312f, 2.018276f),
             new PointF(2.99974918f, 2.02284455f), new PointF(2.999624f, 2.027412f),
-        };
+        ];
 
-        Assert.Equal(4, path.PathPoints.Length);
-        Assert.Equal(4, path.PathTypes.Length);
-        Assert.Equal(4, path.PathData.Points.Length);
-        AssertExtensions.Equal(new RectangleF(2.99962401f, 2.01370716f, 0f, 0.0137047768f), path.GetBounds(), variance: Delta);
-        Assert.Equal(expectedPoints, path.PathPoints);
-        Assert.Equal(new byte[] { 0, 3, 3, 3 }, path.PathTypes);
+        path.PathPoints.Should().HaveCount(4);
+        path.PathTypes.Should().HaveCount(4);
+        path.PathData.Points.Should().HaveCount(4);
+        path.GetBounds().Should().BeApproximately(new(2.99962401f, 2.01370716f, 0f, 0.0137047768f), Delta);
+        path.PathPoints.Should().BeApproximatelyEquivalentTo(expectedPoints, Delta);
+        path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 3, 3, 3 });
     }
 
     private void AssertBezier(GraphicsPath path)
     {
-        PointF[] expectedPoints = new PointF[]
-        {
+        PointF[] expectedPoints =
+        [
             new PointF(1f, 1f), new PointF(2f, 2f),
             new PointF(3f, 3f), new PointF(4f, 4f),
-        };
+        ];
 
-        Assert.Equal(4, path.PointCount);
-        Assert.Equal(4, path.PathPoints.Length);
-        Assert.Equal(4, path.PathTypes.Length);
-        Assert.Equal(4, path.PathData.Points.Length);
-        AssertExtensions.Equal(new RectangleF(1f, 1f, 3f, 3f), path.GetBounds(), Delta);
-        AssertPointsSequenceEqual(expectedPoints, path.PathPoints, Delta);
-        Assert.Equal(new byte[] { 0, 3, 3, 3 }, path.PathTypes);
+        path.PointCount.Should().Be(4);
+        path.PathPoints.Should().HaveCount(4);
+        path.PathTypes.Should().HaveCount(4);
+        path.PathData.Points.Should().HaveCount(4);
+        path.GetBounds().Should().BeApproximately(new (1f, 1f, 3f, 3f), Delta);
+        path.PathPoints.Should().BeApproximatelyEquivalentTo(expectedPoints, Delta);
+        path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 3, 3, 3 });
     }
 
     private void AssertCurve(GraphicsPath path)
     {
-        PointF[] expectedPoints = new PointF[]
-        {
+        PointF[] expectedPoints =
+        [
             new PointF(1f, 1f), new PointF(1.16666663f, 1.16666663f),
             new PointF(1.83333325f, 1.83333325f), new PointF(2f, 2f)
-        };
+        ];
 
-        Assert.Equal(4, path.PathPoints.Length);
-        Assert.Equal(4, path.PathTypes.Length);
-        Assert.Equal(4, path.PathData.Points.Length);
-        AssertExtensions.Equal(new RectangleF(1f, 1f, 1f, 1f), path.GetBounds(), Delta);
-        AssertPointsSequenceEqual(expectedPoints, path.PathPoints, Delta);
-        Assert.Equal(new byte[] { 0, 3, 3, 3 }, path.PathTypes);
+        path.PathPoints.Should().HaveCount(4);
+        path.PathTypes.Should().HaveCount(4);
+        path.PathData.Points.Should().HaveCount(4);
+        path.GetBounds().Should().BeApproximately(new (1f, 1f, 1f, 1f), Delta);
+        path.PathPoints.Should().BeApproximatelyEquivalentTo(expectedPoints, Delta);
+        path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 3, 3, 3 });
     }
 
     private void AssertClosedCurve(GraphicsPath path)
     {
-        Assert.Equal(10, path.PathPoints.Length);
-        Assert.Equal(10, path.PathTypes.Length);
-        Assert.Equal(10, path.PathData.Points.Length);
-        AssertExtensions.Equal(new RectangleF(0.8333333f, 0.8333333f, 2.33333278f, 2.33333278f), path.GetBounds(), Delta);
-        Assert.Equal(new byte[] { 0, 3, 3, 3, 3, 3, 3, 3, 3, 131 }, path.PathTypes);
+        path.PathPoints.Should().HaveCount(10);
+        path.PathTypes.Should().HaveCount(10);
+        path.PathData.Points.Should().HaveCount(10);
+        path.GetBounds().Should().BeApproximately(new (0.8333333f, 0.8333333f, 2.33333278f, 2.33333278f), Delta);
+        path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 3, 3, 3, 3, 3, 3, 3, 3, 131 });
     }
 
     private void AssertRectangle(GraphicsPath path)
     {
-        PointF[] expectedPoints = new PointF[]
-        {
+        PointF[] expectedPoints =
+        [
             new PointF(1f, 1f), new PointF(3f, 1f),
             new PointF(3f, 3f), new PointF(1f, 3f)
-        };
+        ];
 
-        Assert.Equal(4, path.PathPoints.Length);
-        Assert.Equal(4, path.PathTypes.Length);
-        Assert.Equal(4, path.PathData.Points.Length);
-        AssertExtensions.Equal(new RectangleF(1f, 1f, 2f, 2f), path.GetBounds(), Delta);
-        AssertPointsSequenceEqual(expectedPoints, path.PathPoints, Delta);
-        Assert.Equal(new byte[] { 0, 1, 1, 129 }, path.PathTypes);
+        path.PathPoints.Should().HaveCount(4);
+        path.PathPoints.Should().HaveCount(4);
+        path.PathTypes.Should().HaveCount(4);
+        path.PathData.Points.Should().HaveCount(4);
+        path.GetBounds().Should().BeApproximately(new (1f, 1f, 2f, 2f), Delta);
+        path.PathPoints.Should().BeApproximatelyEquivalentTo(expectedPoints, Delta);
+        path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 1, 1, 129 });
     }
 
     private void AssertEllipse(GraphicsPath path)
     {
-        Assert.Equal(13, path.PathPoints.Length);
-        Assert.Equal(13, path.PathTypes.Length);
-        Assert.Equal(13, path.PathData.Points.Length);
-        AssertExtensions.Equal(new RectangleF(1f, 1f, 2f, 2f), path.GetBounds(), Delta);
-        Assert.Equal(new byte[] { 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 131 }, path.PathTypes);
+        path.PathPoints.Should().HaveCount(13);
+        path.PathTypes.Should().HaveCount(13);
+        path.PathData.Points.Should().HaveCount(13);
+        path.GetBounds().Should().BeApproximately(new (1f, 1f, 2f, 2f), Delta);
+        path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 131 });
     }
 
     private void AssertPie(GraphicsPath path)
     {
-        PointF[] expectedPoints = new PointF[]
-        {
+        PointF[] expectedPoints =
+        [
             new PointF(2f, 2f), new PointF(2.99990582f, 2.01370716f),
             new PointF(2.99984312f, 2.018276f), new PointF(2.99974918f, 2.02284455f),
             new PointF(2.999624f, 2.027412f)
-        };
+        ];
 
-        Assert.Equal(5, path.PathPoints.Length);
-        Assert.Equal(5, path.PathTypes.Length);
-        Assert.Equal(5, path.PathData.Points.Length);
-        AssertRectangleEqual(new RectangleF(2f, 2f, 0.9999058f, 0.0274119377f), path.GetBounds(), Delta);
-        AssertPointsSequenceEqual(expectedPoints, path.PathPoints, Delta);
-        Assert.Equal(new byte[] { 0, 1, 3, 3, 131 }, path.PathTypes);
+        path.PathPoints.Should().HaveCount(5);
+        path.PathTypes.Should().HaveCount(5);
+        path.PathData.Points.Should().HaveCount(5);
+        path.GetBounds().Should().BeApproximately(new (2f, 2f, 0.9999058f, 0.0274119377f), Delta);
+        path.PathPoints.Should().BeApproximatelyEquivalentTo(expectedPoints, Delta);
+        path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 1, 3, 3, 131 });
     }
 
     private void AssertPolygon(GraphicsPath path)
     {
-        PointF[] expectedPoints = new PointF[]
-        {
+        PointF[] expectedPoints =
+        [
             new PointF(1f, 1f),
             new PointF(2f, 2f),
             new PointF(3f, 3f)
-        };
+        ];
 
-        Assert.Equal(3, path.PathPoints.Length);
-        Assert.Equal(3, path.PathTypes.Length);
-        Assert.Equal(3, path.PathData.Points.Length);
-        AssertExtensions.Equal(new RectangleF(1f, 1f, 2f, 2f), path.GetBounds(), Delta);
-        AssertPointsSequenceEqual(expectedPoints, path.PathPoints, Delta);
-        Assert.Equal(new byte[] { 0, 1, 129 }, path.PathTypes);
+        path.PathPoints.Should().HaveCount(3);
+        path.PathTypes.Should().HaveCount(3);
+        path.PathData.Points.Should().HaveCount(3);
+        path.GetBounds().Should().BeApproximately(new (1f, 1f, 2f, 2f), Delta);
+        path.PathPoints.Should().BeApproximatelyEquivalentTo(expectedPoints, Delta);
+        path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 1, 129 });
     }
 
     private void AssertFlats(GraphicsPath flat, GraphicsPath original)
     {
-        AssertExtensions.GreaterThanOrEqualTo(flat.PointCount, original.PointCount);
+        flat.PointCount.Should().BeGreaterThanOrEqualTo(original.PointCount);
         for (int i = 0; i < flat.PointCount; i++)
         {
-            Assert.NotEqual(3, flat.PathTypes[i]);
+            flat.PathTypes[i].Should().NotBe(3);
         }
     }
 
     private void AssertWrapNaN(GraphicsPath path)
     {
-        byte[] expectedTypes = new byte[] { 0, 1, 129 };
+        byte[] expectedTypes = [0, 1, 129];
 
         Assert.Equal(3, path.PointCount);
         Assert.Equal(float.NaN, path.PathPoints[0].X);
@@ -2537,17 +2538,17 @@ public class GraphicsPathTests
 
     private void AssertWiden3(GraphicsPath path)
     {
-        PointF[] expectedPoints = new PointF[]
-        {
+        PointF[] expectedPoints =
+        [
             new PointF(4.2f, 4.5f), new PointF(15.8f, 4.5f),
             new PointF(10.0f, 16.1f), new PointF(10.4f, 14.8f),
             new PointF(9.6f, 14.8f), new PointF(14.6f, 4.8f),
             new PointF(15.0f, 5.5f), new PointF(5.0f, 5.5f),
             new PointF(5.4f, 4.8f)
-        };
+        ];
 
-        AssertPointsSequenceEqual(expectedPoints, path.PathPoints, 0.25f);
-        Assert.Equal(new byte[] { 0, 1, 129, 0, 1, 1, 1, 1, 129 }, path.PathTypes);
+        path.PathPoints.Should().BeApproximatelyEquivalentTo(expectedPoints, precision: 0.25f);
+        path.PathTypes.Should().BeEquivalentTo(new byte[] { 0, 1, 129, 0, 1, 1, 1, 1, 129 });
     }
 
     private void AssertIsOutlineVisibleLine(Graphics graphics)
@@ -2661,24 +2662,5 @@ public class GraphicsPathTests
             Assert.Equal(expectedPoints[i], reversedPoints[count - i - 1]);
             Assert.Equal(expectedTypes[i], reversedTypes[i]);
         }
-    }
-
-    private void AssertPointsSequenceEqual(PointF[] expected, PointF[] actual, float tolerance)
-    {
-        int count = expected.Length;
-        Assert.Equal(expected.Length, actual.Length);
-        for (int i = 0; i < count; i++)
-        {
-            AssertExtensions.LessThanOrEqualTo(Math.Abs(expected[i].X - actual[i].X), tolerance);
-            AssertExtensions.LessThanOrEqualTo(Math.Abs(expected[i].Y - actual[i].Y), tolerance);
-        }
-    }
-
-    private void AssertRectangleEqual(RectangleF expected, RectangleF actual, float tolerance)
-    {
-        AssertExtensions.LessThanOrEqualTo(Math.Abs(expected.X - actual.X), tolerance);
-        AssertExtensions.LessThanOrEqualTo(Math.Abs(expected.Y - actual.Y), tolerance);
-        AssertExtensions.LessThanOrEqualTo(Math.Abs(expected.Width - actual.Width), tolerance);
-        AssertExtensions.LessThanOrEqualTo(Math.Abs(expected.Height - actual.Height), tolerance);
     }
 }
