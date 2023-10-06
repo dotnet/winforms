@@ -5,7 +5,7 @@ namespace System.Windows.Forms;
 
 public partial class DataGridViewColumnCollection
 {
-    private class ColumnOrderComparer : IComparer<DataGridViewColumn>
+    private class ColumnOrderComparer : IComparer<DataGridViewColumn?>
     {
         public ColumnOrderComparer()
         {

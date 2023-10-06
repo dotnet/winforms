@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
@@ -17,9 +15,9 @@ namespace System.Windows.Forms;
 [ListBindable(false)]
 public partial class DataGridViewColumnCollection : BaseCollection, IList
 {
-    private CollectionChangeEventHandler _onCollectionChanged;
+    private CollectionChangeEventHandler? _onCollectionChanged;
     private readonly List<DataGridViewColumn> _items = new();
-    private List<DataGridViewColumn> _itemsSorted;
+    private List<DataGridViewColumn>? _itemsSorted;
     private int _lastAccessedSortedIndex = -1;
     private int _columnCountsVisible, _columnCountsVisibleSelected;
     private int _columnsWidthVisible, _columnsWidthVisibleFrozen;
@@ -31,15 +29,15 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
     bool IList.IsReadOnly => false;
 
-    object IList.this[int index]
+    object? IList.this[int index]
     {
         get { return this[index]; }
         set { throw new NotSupportedException(); }
     }
 
-    int IList.Add(object value)
+    int IList.Add(object? value)
     {
-        return Add((DataGridViewColumn)value);
+        return Add((DataGridViewColumn)value!);
     }
 
     void IList.Clear()
@@ -47,24 +45,24 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         Clear();
     }
 
-    bool IList.Contains(object value)
+    bool IList.Contains(object? value)
     {
         return _items.Contains(value);
     }
 
-    int IList.IndexOf(object value)
+    int IList.IndexOf(object? value)
     {
-        return _items.IndexOf((DataGridViewColumn)value);
+        return _items.IndexOf((DataGridViewColumn)value!);
     }
 
-    void IList.Insert(int index, object value)
+    void IList.Insert(int index, object? value)
     {
-        Insert(index, (DataGridViewColumn)value);
+        Insert(index, (DataGridViewColumn)value!);
     }
 
-    void IList.Remove(object value)
+    void IList.Remove(object? value)
     {
-        Remove((DataGridViewColumn)value);
+        Remove((DataGridViewColumn)value!);
     }
 
     void IList.RemoveAt(int index)
@@ -96,10 +94,10 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
     {
         InvalidateCachedColumnCounts();
         InvalidateCachedColumnsWidths();
-        this.DataGridView = dataGridView;
+        DataGridView = dataGridView;
     }
 
-    internal static IComparer<DataGridViewColumn> ColumnCollectionOrderComparer => System.Windows.Forms.DataGridViewColumnCollection.s_columnOrderComparer;
+    internal static IComparer<DataGridViewColumn?> ColumnCollectionOrderComparer => DataGridViewColumnCollection.s_columnOrderComparer;
 
     protected override ArrayList List => ArrayList.Adapter(_items);
 
@@ -119,7 +117,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
     /// <summary>
     ///  Retrieves the DataGridViewColumn with the Name provided.
     /// </summary>
-    public DataGridViewColumn this[string columnName]
+    public DataGridViewColumn? this[string columnName]
     {
         get
         {
@@ -140,7 +138,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         }
     }
 
-    public event CollectionChangeEventHandler CollectionChanged
+    public event CollectionChangeEventHandler? CollectionChanged
     {
         add => _onCollectionChanged += value;
         remove => _onCollectionChanged -= value;
@@ -162,7 +160,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
     ///  Adds a <see cref="DataGridViewColumn"/> to this collection.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public virtual int Add(string columnName, string headerText)
+    public virtual int Add(string? columnName, string? headerText)
     {
         DataGridViewTextBoxColumn dataGridViewTextBoxColumn = new DataGridViewTextBoxColumn
         {
@@ -396,7 +394,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         return displayIndex1 < displayIndex2;
     }
 
-    internal DataGridViewColumn GetColumnAtDisplayIndex(int displayIndex)
+    internal DataGridViewColumn? GetColumnAtDisplayIndex(int displayIndex)
     {
         if (displayIndex < 0 || displayIndex >= _items.Count)
         {
@@ -561,7 +559,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
         return -1;
     }
-
+#nullable disable
     internal float GetColumnsFillWeight(DataGridViewElementStates includeFilter)
     {
         Debug.Assert((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
