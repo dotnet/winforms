@@ -82,15 +82,8 @@ public partial class DataGridView
         {
             get
             {
-                if (CurrencyManager is not null)
-                {
-                    // we only allow to add new rows on an IBindingList
-                    return (CurrencyManager.List is IBindingList bindingList) && CurrencyManager.AllowAdd && bindingList.SupportsChangeNotification;
-                }
-                else
-                {
-                    return false;
-                }
+                // We only allow to add new rows on an IBindingList.
+                return CurrencyManager is { List: IBindingList { SupportsChangeNotification: true }, AllowAdd: true };
             }
         }
 
@@ -113,15 +106,8 @@ public partial class DataGridView
         {
             get
             {
-                if (CurrencyManager is not null)
-                {
-                    // we only allow deletion on an IBindingList
-                    return (CurrencyManager.List is IBindingList bindingList) && CurrencyManager.AllowRemove && bindingList.SupportsChangeNotification;
-                }
-                else
-                {
-                    return false;
-                }
+                // We only allow deletion on an IBindingList.
+                return CurrencyManager is { AllowRemove: true, List: IBindingList { SupportsChangeNotification: true } };
             }
         }
 
@@ -368,10 +354,7 @@ public partial class DataGridView
 
         public SortOrder BoundColumnSortOrder(int boundColumnIndex)
         {
-            IBindingList? ibl = CurrencyManager is not null ? CurrencyManager.List as IBindingList : null;
-            IBindingListView? iblv = ibl is not null ? ibl as IBindingListView : null;
-
-            if (ibl is null || !ibl.SupportsSorting || !ibl.IsSorted)
+            if (CurrencyManager?.List is not IBindingList { SupportsSorting: true, IsSorted: true })
             {
                 return SortOrder.None;
             }
@@ -1032,10 +1015,7 @@ public partial class DataGridView
 
         private void GetSortingInformationFromBackend(out PropertyDescriptor? sortProperty, out SortOrder sortOrder)
         {
-            IBindingList? ibl = CurrencyManager is not null ? CurrencyManager.List as IBindingList : null;
-            IBindingListView? iblv = ibl is not null ? ibl as IBindingListView : null;
-
-            if (ibl is null || !ibl.SupportsSorting || !ibl.IsSorted)
+            if (CurrencyManager?.List is not IBindingList { SupportsSorting: true, IsSorted: true } ibl)
             {
                 sortOrder = SortOrder.None;
                 sortProperty = null;
@@ -1047,7 +1027,7 @@ public partial class DataGridView
                 sortProperty = ibl.SortProperty;
                 sortOrder = ibl.SortDirection == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
             }
-            else if (iblv is not null)
+            else if (ibl is IBindingListView iblv)
             {
                 // Maybe the data view is sorted on multiple columns.
                 // Go thru the IBindingListView which offers the entire list of sorted columns
