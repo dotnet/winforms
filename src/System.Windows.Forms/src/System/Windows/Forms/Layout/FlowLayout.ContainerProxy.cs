@@ -30,13 +30,14 @@ internal partial class FlowLayout
         private readonly bool _isContainerRTL;
         private Rectangle _displayRect;
         private ElementProxy? _elementProxy;
+
         public ContainerProxy(IArrangedElement container)
         {
             _container = container;
             _isContainerRTL = false;
-            if (_container is Control)
+            if (_container is Control control)
             {
-                _isContainerRTL = ((Control)(_container)).RightToLeft == RightToLeft.Yes;
+                _isContainerRTL = control.RightToLeft == RightToLeft.Yes;
             }
         }
 
