@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -401,7 +400,7 @@ public static class AssertExtensions
         {
             string expectedString = string.Join(", ", expected);
             string actualString = string.Join(", ", actual);
-            throw new AssertActualExpectedException(expectedString, actualString, null);
+            throw EqualException.ForMismatchedValues(expectedString, actualString);
         }
     }
 
@@ -544,87 +543,17 @@ public static class AssertExtensions
         }
         catch (Exception e)
         {
-            throw new XunitException(
-                e.Message + Environment.NewLine +
-                Environment.NewLine +
-                "Expected:" + Environment.NewLine +
-                expected + Environment.NewLine +
-                Environment.NewLine +
-                "Actual:" + Environment.NewLine +
-                actual + Environment.NewLine +
-                Environment.NewLine);
+            throw new XunitException($"""
+                {e.Message}
+
+                Expected:
+                {expected}
+
+                Actual:
+                {actual}
+
+                """);
         }
-    }
-
-    public delegate void AssertThrowsActionReadOnly<T>(ReadOnlySpan<T> span);
-
-    public delegate void AssertThrowsAction<T>(Span<T> span);
-
-    // Cannot use standard Assert.Throws() when testing Span - Span and closures don't get along.
-    public static E AssertThrows<E, T>(ReadOnlySpan<T> span, AssertThrowsActionReadOnly<T> action) where E : Exception
-    {
-        Exception exception;
-
-        try
-        {
-            action(span);
-            exception = null;
-        }
-        catch (Exception ex)
-        {
-            exception = ex;
-        }
-
-        switch(exception)
-        {
-            case null:
-                throw new ThrowsException(typeof(E));
-            case E ex when (ex.GetType() == typeof(E)):
-                return ex;
-            default:
-                throw new ThrowsException(typeof(E), exception);
-        }
-    }
-
-    public static E AssertThrows<E, T>(Span<T> span, AssertThrowsAction<T> action) where E : Exception
-    {
-        Exception exception;
-
-        try
-        {
-            action(span);
-            exception = null;
-        }
-        catch (Exception ex)
-        {
-            exception = ex;
-        }
-
-        switch(exception)
-        {
-            case null:
-                throw new ThrowsException(typeof(E));
-            case E ex when (ex.GetType() == typeof(E)):
-                return ex;
-            default:
-                throw new ThrowsException(typeof(E), exception);
-        }
-    }
-
-    public static E Throws<E, T>(string expectedParamName, ReadOnlySpan<T> span, AssertThrowsActionReadOnly<T> action)
-        where E : ArgumentException
-    {
-        E exception = AssertThrows<E, T>(span, action);
-        Assert.Equal(expectedParamName, exception.ParamName);
-        return exception;
-    }
-
-    public static E Throws<E, T>(string expectedParamName, Span<T> span, AssertThrowsAction<T> action)
-        where E : ArgumentException
-    {
-        E exception = AssertThrows<E, T>(span, action);
-        Assert.Equal(expectedParamName, exception.ParamName);
-        return exception;
     }
 
     private class ItemCount
@@ -639,22 +568,6 @@ public static class AssertExtensions
         }
     }
 
-    /// <summary>Verifies that two <see cref="RectangleF"/> values are equal, within the <paramref name="variance"/>.</summary>
-    /// <param name="expected">The expected value</param>
-    /// <param name="actual">The value to be compared against</param>
-    /// <param name="variance">The total variance allowed between the expected and actual results.</param>
-    /// <exception cref="EqualException">Thrown when the values are not equal</exception>
-    public static void Equal(RectangleF expected, RectangleF actual, float variance)
-    {
-        if (!ComparisonHelpers.EqualsFloating(expected.X, actual.X, variance)
-            || !ComparisonHelpers.EqualsFloating(expected.Y, actual.Y, variance)
-            || !ComparisonHelpers.EqualsFloating(expected.Width, actual.Width, variance)
-            || !ComparisonHelpers.EqualsFloating(expected.Height, actual.Height, variance))
-        {
-            throw new EqualException(expected, actual);
-        }
-    }
-
     /// <summary>Verifies that two <typeparamref name="T"/> values are equal, within the <paramref name="variance"/>.</summary>
     /// <param name="expected">The expected value</param>
     /// <param name="actual">The value to be compared against</param>
@@ -665,7 +578,7 @@ public static class AssertExtensions
     {
         if (!ComparisonHelpers.EqualsFloating(expected, actual, variance))
         {
-            throw new EqualException(ToStringPadded(expected), ToStringPadded(actual));
+            throw EqualException.ForMismatchedValues(ToStringPadded(expected), ToStringPadded(actual));
         }
 
         // We have a custom ToString here to ensure that edge cases (specifically +-0.0,
