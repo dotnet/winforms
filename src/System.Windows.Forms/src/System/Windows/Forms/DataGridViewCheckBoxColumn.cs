@@ -43,13 +43,7 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
         }
     }
 
-    private DataGridViewCheckBoxCell? CheckBoxCellTemplate
-    {
-        get
-        {
-            return (DataGridViewCheckBoxCell?)CellTemplate;
-        }
-    }
+    private DataGridViewCheckBoxCell? CheckBoxCellTemplate => (DataGridViewCheckBoxCell?)CellTemplate;
 
     [Browsable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
@@ -312,8 +306,6 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
                 !defaultCellStyle.Padding.Equals(Padding.Empty));
     }
 
-    public override string ToString()
-    {
-        return $"DataGridViewCheckBoxColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewCheckBoxColumn {{ Name={Name}, Index={Index} }}";
 }
