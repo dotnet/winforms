@@ -705,7 +705,7 @@ public class CollectionFormTests : CollectionEditor
     {
         SubCollectionEditor editor = new(null);
         SubCollectionForm form = new(editor);
-        Assert.Throws<ArgumentNullException>("objectType", () => form.CreateInstance(null));
+        Assert.Throws<ArgumentNullException>("itemType", () => form.CreateInstance(null));
     }
 
     [Fact]

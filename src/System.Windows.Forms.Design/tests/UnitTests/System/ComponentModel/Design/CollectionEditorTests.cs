@@ -358,7 +358,7 @@ public class CollectionEditorTests
     public void CollectionEditor_CreateInstance_NullItemType_ThrowsArgumentNullException()
     {
         SubCollectionEditor editor = new(null);
-        Assert.Throws<ArgumentNullException>("objectType", () => editor.CreateInstance(null));
+        Assert.Throws<ArgumentNullException>("itemType", () => editor.CreateInstance(null));
     }
 
     [Theory]
