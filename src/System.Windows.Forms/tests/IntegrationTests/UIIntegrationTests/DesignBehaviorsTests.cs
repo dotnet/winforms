@@ -115,7 +115,7 @@ public class DesignBehaviorsTests : ControlTestBase
 
                 var dataObject = toolboxService.SerializeToolboxItem(toolboxItem) as DataObject;
 
-                var effects = node.TreeView.DoDragDrop(dataObject!, DragDropEffects.Copy);
+                var effects = node.TreeView!.DoDragDrop(dataObject!, DragDropEffects.Copy);
             }
 
             async Task InitiateDrangDropAsync(Form form, Point startCoordinates, Control rootView)

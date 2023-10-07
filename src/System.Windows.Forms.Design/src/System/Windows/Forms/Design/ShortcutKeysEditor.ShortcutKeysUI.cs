@@ -318,7 +318,7 @@ public partial class ShortcutKeysEditor
         /// <summary>
         ///  Triggered whenever the user drops down the editor.
         /// </summary>
-        public void Start(object value)
+        public void Start(object? value)
         {
             Debug.Assert(!_updateCurrentValue);
             _originalValue = _currentValue = value;

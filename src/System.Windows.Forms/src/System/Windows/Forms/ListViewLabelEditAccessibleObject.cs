@@ -1,13 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Drawing;
+using Windows.Win32.System.Com;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
-using static Interop;
-
+using UiaCore = Interop.UiaCore;
 namespace System.Windows.Forms;
 
-internal class ListViewLabelEditAccessibleObject : AccessibleObject
+internal unsafe class ListViewLabelEditAccessibleObject : AccessibleObject
 {
     private const string LIST_VIEW_LABEL_EDIT_AUTOMATION_ID = "1";
 
@@ -37,22 +37,13 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
             : _owningListViewSubItem?.AccessibilityObject;
 
     internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-    {
-        switch (direction)
+        => direction switch
         {
-            case UiaCore.NavigateDirection.Parent:
-                return Parent;
-            case UiaCore.NavigateDirection.NextSibling:
-                if(_owningListView.View == View.Tile)
-                {
-                    return _owingListViewItem?.SubItems[1].AccessibilityObject;
-                }
-
-                return null;
-        }
-
-        return base.FragmentNavigate(direction);
-    }
+            UiaCore.NavigateDirection.Parent => Parent,
+            UiaCore.NavigateDirection.NextSibling
+                => _owningListView.View == View.Tile ? _owingListViewItem?.SubItems[1].AccessibilityObject : null,
+            _ => base.FragmentNavigate(direction)
+        };
 
     internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningListView.AccessibilityObject;
 
@@ -103,27 +94,27 @@ internal class ListViewLabelEditAccessibleObject : AccessibleObject
         _labelEdit.TryGetTarget(out var target) ? (int)target.HWND : (int)HWND.Null
     };
 
-    internal override UiaCore.ITextRangeProvider DocumentRangeInternal
+    internal override ITextRangeProvider* DocumentRangeInternal
         => _textProvider.DocumentRange;
 
-    internal override UiaCore.ITextRangeProvider[]? GetTextSelection()
-        => _textProvider.GetSelection();
+    internal override HRESULT GetTextSelection(SAFEARRAY** pRetVal)
+        => _textProvider.GetSelection(pRetVal);
 
-    internal override UiaCore.ITextRangeProvider[]? GetTextVisibleRanges()
-        => _textProvider.GetVisibleRanges();
+    internal override HRESULT GetTextVisibleRanges(SAFEARRAY** pRetVal)
+        => _textProvider.GetVisibleRanges(pRetVal);
 
-    internal override UiaCore.ITextRangeProvider? GetTextRangeFromChild(UiaCore.IRawElementProviderSimple childElement)
-        => _textProvider.RangeFromChild(childElement);
+    internal override HRESULT GetTextRangeFromChild(IRawElementProviderSimple* childElement, ITextRangeProvider** pRetVal)
+        => _textProvider.RangeFromChild(childElement, pRetVal);
 
-    internal override UiaCore.ITextRangeProvider? GetTextRangeFromPoint(Point screenLocation)
-        => _textProvider.RangeFromPoint(screenLocation);
+    internal override HRESULT GetTextRangeFromPoint(UiaPoint screenLocation, ITextRangeProvider** pRetVal)
+        => _textProvider.RangeFromPoint(screenLocation, pRetVal);
 
-    internal override UiaCore.SupportedTextSelection SupportedTextSelectionInternal
+    internal override SupportedTextSelection SupportedTextSelectionInternal
         => _textProvider.SupportedTextSelection;
 
-    internal override UiaCore.ITextRangeProvider? GetTextCaretRange(out BOOL isActive)
-        => _textProvider.GetCaretRange(out isActive);
+    internal override HRESULT GetTextCaretRange(BOOL* isActive, ITextRangeProvider** pRetVal)
+        => _textProvider.GetCaretRange(isActive, pRetVal);
 
-    internal override UiaCore.ITextRangeProvider GetRangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
-        => _textProvider.RangeFromAnnotation(annotationElement);
+    internal override HRESULT GetRangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal)
+        => _textProvider.RangeFromAnnotation(annotationElement, pRetVal);
 }

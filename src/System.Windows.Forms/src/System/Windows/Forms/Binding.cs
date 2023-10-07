@@ -202,7 +202,7 @@ public partial class Binding
         CheckBinding();
     }
 
-    internal void SetBindableComponent(IBindableComponent value)
+    internal void SetBindableComponent(IBindableComponent? value)
     {
         if (BindableComponent != value)
         {
@@ -487,7 +487,6 @@ public partial class Binding
 
             // Check Properties
             string propertyNameIsNull = PropertyName + "IsNull";
-            Type? propType = null;
             PropertyDescriptor? tempPropInfo = null;
             PropertyDescriptor? tempPropIsNullInfo = null;
             PropertyDescriptorCollection propInfos;
@@ -540,7 +539,6 @@ public partial class Binding
             }
 
             _propInfo = tempPropInfo;
-            propType = _propInfo.PropertyType;
             _propInfoConverter = _propInfo.Converter;
 
             if (tempPropIsNullInfo is not null && tempPropIsNullInfo.PropertyType == typeof(bool) && !tempPropIsNullInfo.IsReadOnly)
@@ -601,7 +599,7 @@ public partial class Binding
     private BindingCompleteEventArgs CreateBindingCompleteEventArgs(BindingCompleteContext context, Exception ex)
     {
         bool cancel = false;
-        string errorText = string.Empty;
+        string errorText;
         BindingCompleteState state = BindingCompleteState.Success;
 
         if (ex is not null)

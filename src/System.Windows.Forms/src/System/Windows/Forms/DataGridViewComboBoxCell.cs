@@ -106,7 +106,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             if (value != AutoComplete)
             {
                 if (value)
@@ -158,7 +157,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             // Same check as for ListControl's DataSource
             if (value is not null && !(value is IList || value is IListSource))
             {
@@ -236,7 +234,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             DisplayMemberInternal = value;
             if (OwnsEditingComboBox(RowIndex))
             {
@@ -412,7 +409,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             if (value < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(DropDownWidth), value, string.Format(SR.DataGridViewComboBoxCell_DropDownWidthOutOfRange, 1));
@@ -515,7 +511,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             if (value < 1 || value > 100)
             {
                 throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), value, string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, 1, 100));
@@ -555,7 +550,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             if (value != Sorted)
             {
                 if (value)
@@ -613,7 +607,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
         set
         {
-            //CheckNoSharedCell();
             ValueMemberInternal = value;
             if (OwnsEditingComboBox(RowIndex))
             {
@@ -1655,7 +1648,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         Debug.Assert(ValueMemberProperty is not null || DisplayMemberProperty is not null ||
                      !string.IsNullOrEmpty(ValueMember) || !string.IsNullOrEmpty(DisplayMember));
 
-        object item = null;
+        object item;
         if (DisplayMemberProperty is not null || ValueMemberProperty is not null)
         {
             //Now look up the item in the Combobox datasource - this can be horribly inefficient
@@ -1872,7 +1865,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                                                     isFirstDisplayedColumn);
 
             Rectangle cellBounds = DataGridView.GetCellDisplayRectangle(OwningColumn.Index, rowIndex, false /*cutOverflow*/);
-            Rectangle cutoffCellBounds = cellBounds;
             if (isFirstDisplayedScrollingColumn)
             {
                 cellBounds.X -= DataGridView.FirstDisplayedScrollingColumnHiddenWidth;

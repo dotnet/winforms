@@ -193,7 +193,7 @@ public class DesignSurfaceExt : DesignSurface, IDesignSurfaceExt
     public TComponent CreateComponent<TComponent>()
         where TComponent : IComponent
     {
-        return CreateComponent<TComponent>(out IDesignerHost _);
+        return CreateComponent<TComponent>(out _);
     }
 
     private TComponent CreateComponent<TComponent>(out IDesignerHost host)

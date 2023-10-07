@@ -1890,6 +1890,7 @@ public partial class DataGridView : Control, ISupportInitialize
         }
     }
 
+    [AllowNull]
     internal Cursor CursorInternal
     {
         set
@@ -2792,7 +2793,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 scrollEventType = Columns.GetColumnCount(DataGridViewElementStates.Visible, DisplayedBandsInfo.FirstDisplayedScrollingCol, oldFirstVisibleScrollingCol) > 1 ? ScrollEventType.LargeDecrement : ScrollEventType.SmallDecrement;
             }
 
-            RECT[] rects = CreateScrollableRegion(rectTmp);
+            RECT[]? rects = CreateScrollableRegion(rectTmp);
             if (RightToLeftInternal)
             {
                 change = -change;

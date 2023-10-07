@@ -99,10 +99,8 @@ internal partial class FlowLayout : LayoutEngine
 
         for (int i = 0; i < container.Children.Count;)
         {
-            Size rowSize = Size.Empty;
-
             Rectangle measureBounds = new Rectangle(displayRect.X, displayRect.Y, displayRect.Width, displayRect.Height - layoutSize.Height);
-            rowSize = MeasureRow(containerProxy, elementProxy, i, measureBounds, out int breakIndex);
+            Size rowSize = MeasureRow(containerProxy, elementProxy, i, measureBounds, out int breakIndex);
 
             // if we are not wrapping contents, then the breakIndex (as set in MeasureRow)
             // should be equal to the count of child items in the container.

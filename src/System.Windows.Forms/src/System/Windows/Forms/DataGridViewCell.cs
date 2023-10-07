@@ -1598,8 +1598,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         int darkDistance = ColorDistance(baseline, SystemColors.ControlDark);
         int lightDistance = ColorDistance(baseline, SystemColors.ControlLightLight);
 
-        Color darkColor = default;
-        Color lightColor = default;
+        Color darkColor;
+        Color lightColor;
 
         if (SystemInformation.HighContrast)
         {

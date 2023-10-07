@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 
@@ -13,7 +11,7 @@ namespace System.Windows.Forms;
 public class DataGridViewButtonColumn : DataGridViewColumn
 {
     private static readonly Type s_columnType = typeof(DataGridViewButtonColumn);
-    private string _text;
+    private string? _text;
 
     public DataGridViewButtonColumn()
         : base(new DataGridViewButtonCell())
@@ -27,12 +25,12 @@ public class DataGridViewButtonColumn : DataGridViewColumn
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public override DataGridViewCell CellTemplate
+    public override DataGridViewCell? CellTemplate
     {
         get => base.CellTemplate;
         set
         {
-            if (value is not null && !(value is DataGridViewButtonCell))
+            if (value is not null and not DataGridViewButtonCell)
             {
                 throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewButtonCell"));
             }
@@ -44,6 +42,7 @@ public class DataGridViewButtonColumn : DataGridViewColumn
     [Browsable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))]
+    [AllowNull]
     public override DataGridViewCellStyle DefaultCellStyle
     {
         get => base.DefaultCellStyle;
@@ -68,7 +67,7 @@ public class DataGridViewButtonColumn : DataGridViewColumn
         {
             if (FlatStyle != value)
             {
-                ((DataGridViewButtonCell)CellTemplate).FlatStyle = value;
+                ((DataGridViewButtonCell)CellTemplate!).FlatStyle = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
@@ -91,7 +90,7 @@ public class DataGridViewButtonColumn : DataGridViewColumn
     [DefaultValue(null)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ButtonColumnTextDescr))]
-    public string Text
+    public string? Text
     {
         get
         {
@@ -147,7 +146,7 @@ public class DataGridViewButtonColumn : DataGridViewColumn
         {
             if (UseColumnTextForButtonValue != value)
             {
-                ((DataGridViewButtonCell)CellTemplate).UseColumnTextForButtonValueInternal = value;
+                ((DataGridViewButtonCell)CellTemplate!).UseColumnTextForButtonValueInternal = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
@@ -178,14 +177,11 @@ public class DataGridViewButtonColumn : DataGridViewColumn
         }
         else
         {
-            dataGridViewColumn = (DataGridViewButtonColumn)System.Activator.CreateInstance(thisType);
+            dataGridViewColumn = (DataGridViewButtonColumn)Activator.CreateInstance(thisType)!;
         }
 
-        if (dataGridViewColumn is not null)
-        {
-            base.CloneInternal(dataGridViewColumn);
-            dataGridViewColumn.Text = _text;
-        }
+        base.CloneInternal(dataGridViewColumn);
+        dataGridViewColumn.Text = _text;
 
         return dataGridViewColumn;
     }
@@ -207,7 +203,7 @@ public class DataGridViewButtonColumn : DataGridViewColumn
                 !defaultCellStyle.IsNullValueDefault ||
                 !defaultCellStyle.IsDataSourceNullValueDefault ||
                 !string.IsNullOrEmpty(defaultCellStyle.Format) ||
-                !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
+                !defaultCellStyle.FormatProvider.Equals(Globalization.CultureInfo.CurrentCulture) ||
                 defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                 defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
                 defaultCellStyle.Tag is not null ||

@@ -4,3 +4,4 @@
 global using System.Drawing;
 global using System.Diagnostics;
 global using Xunit;
+global using FluentAssertions;

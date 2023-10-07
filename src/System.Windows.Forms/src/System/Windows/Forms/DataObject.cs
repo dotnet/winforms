@@ -64,7 +64,7 @@ public unsafe partial class DataObject :
     internal static DataObject FromComPointer(Com.IDataObject* data)
     {
         // Get the RCW for the pointer and continue.
-        bool success = ComHelpers.TryGetManagedInterface(
+        bool success = ComHelpers.TryGetObjectForIUnknown(
             (Com.IUnknown*)data,
             takeOwnership: true,
             out ComTypes.IDataObject? comTypesData);

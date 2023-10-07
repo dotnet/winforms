@@ -672,8 +672,6 @@ internal class DataGridViewDesigner : ControlDesigner
             columnsToBeAddedCount = 0;
             for (int i = 0; i < backEndProps.Count; i++)
             {
-                DataGridViewColumn? dataGridViewColumn = null;
-
                 TypeConverter imageTypeConverter = TypeDescriptor.GetConverter(typeof(System.Drawing.Image));
 
                 Type propType = backEndProps[i].PropertyType;
@@ -712,7 +710,7 @@ internal class DataGridViewDesigner : ControlDesigner
                 // 5. IContainer.Add(newDataGridView.Columns
                 //
 #pragma warning disable IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
-                dataGridViewColumn = TypeDescriptor.CreateInstance(host, columnType, null, null) as DataGridViewColumn;
+                DataGridViewColumn? dataGridViewColumn = TypeDescriptor.CreateInstance(host, columnType, null, null) as DataGridViewColumn;
 #pragma warning restore IL2077 // Target parameter argument does not satisfy 'DynamicallyAccessedMembersAttribute' in call to target method. The source field does not have matching annotations.
 
                 if (dataGridViewColumn is not null)

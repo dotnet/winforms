@@ -1080,7 +1080,7 @@ public abstract partial class TextBoxBase : Control
     {
         get
         {
-            GetSelectionStartAndLength(out int selStart, out int selLength);
+            GetSelectionStartAndLength(out int selStart, out _);
 
             return selStart;
         }

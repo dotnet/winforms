@@ -1272,14 +1272,14 @@ public partial class DataGridViewRow : DataGridViewBand
 
     internal int GetHeight(int rowIndex)
     {
-        GetHeightInfo(rowIndex, out int height, out int minimumHeight);
+        GetHeightInfo(rowIndex, out int height, out _);
         return height;
     }
 
     internal int GetMinimumHeight(int rowIndex)
     {
         Debug.Assert(rowIndex >= -1);
-        GetHeightInfo(rowIndex, out int height, out int minimumHeight);
+        GetHeightInfo(rowIndex, out _, out int minimumHeight);
         return minimumHeight;
     }
 

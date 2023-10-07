@@ -3,13 +3,15 @@
 
 using System.Drawing;
 using System.Windows.Forms.Automation;
-using static Interop;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
 public abstract partial class TextBoxBase
 {
-    internal class TextBoxBaseUiaTextProvider : UiaTextProvider2
+    internal sealed unsafe class TextBoxBaseUiaTextProvider : UiaTextProvider
     {
         private readonly WeakReference<TextBoxBase> _owner;
 
@@ -20,11 +22,17 @@ public abstract partial class TextBoxBase
 
         private TextBoxBase? Owner => _owner.TryGetTarget(out TextBoxBase? owner) ? owner : null;
 
-        public override UiaCore.ITextRangeProvider[]? GetSelection()
+        public override HRESULT GetSelection(SAFEARRAY** pRetVal)
         {
+            if (pRetVal is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             if (Owner is null || !Owner.IsHandleCreated)
             {
-                return null;
+                *pRetVal = SAFEARRAY.CreateEmpty(VARENUM.VT_UNKNOWN);
+                return HRESULT.S_OK;
             }
 
             // First caret position of a selected text
@@ -36,47 +44,74 @@ public abstract partial class TextBoxBase
             // If there is no selection, start and end parameters are the position of the caret.
             PInvoke.SendMessage(Owner, PInvoke.EM_GETSEL, ref start, ref end);
 
-            return new UiaCore.ITextRangeProvider[] { new UiaTextRange(Owner.AccessibilityObject, this, start, end) };
+            ComSafeArrayScope<ITextRangeProvider> result = new(1);
+            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(Owner.AccessibilityObject, this, start, end));
+
+            *pRetVal = result;
+            return HRESULT.S_OK;
         }
 
-        public override UiaCore.ITextRangeProvider[]? GetVisibleRanges()
+        public override HRESULT GetVisibleRanges(SAFEARRAY** pRetVal)
         {
+            if (pRetVal is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
             if (Owner is null || !Owner.IsHandleCreated)
             {
-                return null;
+                *pRetVal = SAFEARRAY.CreateEmpty(VARENUM.VT_UNKNOWN);
+                return HRESULT.S_OK;
             }
 
             GetVisibleRangePoints(out int start, out int end);
 
-            return new UiaCore.ITextRangeProvider[] { new UiaTextRange(Owner.AccessibilityObject, this, start, end) };
+            ComSafeArrayScope<ITextRangeProvider> result = new(1);
+            result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(Owner.AccessibilityObject, this, start, end));
+
+            *pRetVal = result;
+            return HRESULT.S_OK;
         }
 
-        public override UiaCore.ITextRangeProvider? RangeFromChild(UiaCore.IRawElementProviderSimple childElement)
+        public override HRESULT RangeFromChild(IRawElementProviderSimple* childElement, ITextRangeProvider** pRetVal)
         {
-            // We don't have any children so this call returns null.
-            Debug.Fail("Text edit control cannot have a child element.");
-            return null;
-        }
-
-        /// <summary>
-        ///  Returns the degenerate (empty) text range nearest to the specified screen coordinates.
-        /// </summary>
-        /// <param name="screenLocation">The location in screen coordinates.</param>
-        /// <returns>A degenerate range nearest the specified location. Null is never returned.</returns>
-        public override UiaCore.ITextRangeProvider? RangeFromPoint(Point screenLocation)
-        {
-            if (Owner is null || !Owner.IsHandleCreated)
+            if (pRetVal is null)
             {
-                return null;
+                return HRESULT.E_POINTER;
             }
 
-            Point clientLocation = screenLocation;
+            // We don't have any children so this call returns null.
+            Debug.Fail("Text edit control cannot have a child element.");
+            *pRetVal = null;
+            return HRESULT.S_OK;
+        }
+
+        public override HRESULT RangeFromPoint(UiaPoint point, ITextRangeProvider** pRetVal)
+        {
+            if (pRetVal is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            if (Owner is null || !Owner.IsHandleCreated)
+            {
+                *pRetVal = default;
+                return HRESULT.S_OK;
+            }
+
+            Point clientLocation = point;
 
             // Convert screen to client coordinates.
             // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
             if (PInvoke.MapWindowPoints((HWND)default, Owner, ref clientLocation) == 0)
             {
-                return new UiaTextRange(Owner.AccessibilityObject, this, start: 0, end: 0);
+                *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
+                    new UiaTextRange(
+                        Owner.AccessibilityObject,
+                        this,
+                        start: 0,
+                        end: 0));
+                return HRESULT.S_OK;
             }
 
             // We have to deal with the possibility that the coordinate is inside the window rect
@@ -92,50 +127,73 @@ public abstract partial class TextBoxBase
             // Get the character at those client coordinates.
             int start = Owner.GetCharIndexFromPosition(clientLocation);
 
-            return new UiaTextRange(Owner.AccessibilityObject, this, start, start);
+            *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
+                new UiaTextRange(
+                    Owner.AccessibilityObject,
+                    this,
+                    start,
+                    start));
+            return HRESULT.S_OK;
         }
 
         public override Rectangle RectangleToScreen(Rectangle rect) => Owner is not null ? Owner.RectangleToScreen(rect) : Rectangle.Empty;
 
-        public override UiaCore.ITextRangeProvider? DocumentRange => Owner is not null
-            ? new UiaTextRange(Owner.AccessibilityObject, this, start: 0, TextLength)
+        public override ITextRangeProvider* DocumentRange => Owner is not null
+            ? ComHelpers.GetComPointer<ITextRangeProvider>(
+                new UiaTextRange(
+                    Owner.AccessibilityObject,
+                    this,
+                    start: 0,
+                    TextLength))
             : null;
 
-        public override UiaCore.SupportedTextSelection SupportedTextSelection => UiaCore.SupportedTextSelection.Single;
+        public override SupportedTextSelection SupportedTextSelection => SupportedTextSelection.SupportedTextSelection_Single;
 
-        public override UiaCore.ITextRangeProvider? GetCaretRange(out BOOL isActive)
+        public override HRESULT GetCaretRange(BOOL* isActive, ITextRangeProvider** pRetVal)
         {
-            isActive = false;
+            if (isActive is null || pRetVal is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *isActive = false;
 
             if (Owner is null || !Owner.IsHandleCreated)
             {
-                return null;
+                *pRetVal = null;
+                return HRESULT.S_OK;
             }
 
-            var hasKeyboardFocus = Owner.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
-            if (hasKeyboardFocus is bool && (bool)hasKeyboardFocus)
-            {
-                isActive = true;
-            }
+            var hasKeyboardFocus = Owner.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.HasKeyboardFocusPropertyId);
+            *isActive = hasKeyboardFocus is true;
 
-            return new UiaTextRange(Owner.AccessibilityObject, this, Owner.SelectionStart, Owner.SelectionStart);
+            *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
+                new UiaTextRange(
+                    Owner.AccessibilityObject,
+                    this,
+                    Owner.SelectionStart,
+                    Owner.SelectionStart));
+            return HRESULT.S_OK;
         }
 
         public override Point PointToScreen(Point pt) => Owner is not null ? Owner.PointToScreen(pt) : Point.Empty;
 
-        /// <summary>
-        ///  Exposes a text range that contains the text that is the target of the annotation associated with the specified annotation element.
-        /// </summary>
-        /// <param name="annotationElement">
-        ///  The provider for an element that implements the IAnnotationProvider interface.
-        ///  The annotation element is a sibling of the element that implements the <see cref="UiaCore.ITextProvider2"/> interface for the document.
-        /// </param>
-        /// <returns>
-        ///  A text range that contains the annotation target text.
-        /// </returns>
-        public override UiaCore.ITextRangeProvider? RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
+        public override HRESULT RangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal)
         {
-            return Owner is not null ? new UiaTextRange(Owner.AccessibilityObject, this, start: 0, end: 0) : null;
+            if (pRetVal is null)
+            {
+                return HRESULT.E_POINTER;
+            }
+
+            *pRetVal = Owner is not null
+                ? ComHelpers.GetComPointer<ITextRangeProvider>(
+                    new UiaTextRange(
+                        Owner.AccessibilityObject,
+                        this,
+                        start: 0,
+                        end: 0))
+                : null;
+            return HRESULT.S_OK;
         }
 
         public override Rectangle BoundingRectangle
@@ -267,7 +325,7 @@ public abstract partial class TextBoxBase
 
                 pt = Owner.GetPositionFromCharIndex(startCharIndex);
 
-                if (ch == '\r' || ch == '\n')
+                if (ch is '\r' or '\n')
                 {
                     pt.X += EndOfLineWidth; // add 2 px to show the end of line
                 }

@@ -5136,7 +5136,7 @@ public partial class DataGridView
             FlushDisplayIndexChanged(raiseEvent: false);
         }
     }
-#nullable disable
+
     private void CorrectColumnDisplayIndexesAfterInsertion(DataGridViewColumn dataGridViewColumn)
     {
         Debug.Assert(dataGridViewColumn is not null);
@@ -5162,12 +5162,12 @@ public partial class DataGridView
             Debug.Assert(Columns.VerifyColumnDisplayIndexes());
 #endif
             // Now raise all the OnColumnDisplayIndexChanged events
-            FlushDisplayIndexChanged(true /*raiseEvent*/);
+            FlushDisplayIndexChanged(raiseEvent: true);
         }
         finally
         {
             _dataGridViewOper[OperationInDisplayIndexAdjustments] = false;
-            FlushDisplayIndexChanged(false /*raiseEvent*/);
+            FlushDisplayIndexChanged(raiseEvent: false);
         }
     }
 
@@ -5593,7 +5593,7 @@ public partial class DataGridView
         return new DataGridViewRowCollection(this);
     }
 
-    private RECT[] CreateScrollableRegion(Rectangle scroll)
+    private RECT[]? CreateScrollableRegion(Rectangle scroll)
     {
         if (_cachedScrollableRegion is not null)
         {
@@ -5736,8 +5736,9 @@ public partial class DataGridView
 
     public int DisplayedRowCount(bool includePartialRow)
     {
-        return includePartialRow ? (DisplayedBandsInfo.NumDisplayedFrozenRows + DisplayedBandsInfo.NumDisplayedScrollingRows) :
-            (DisplayedBandsInfo.NumTotallyDisplayedFrozenRows + DisplayedBandsInfo.NumTotallyDisplayedScrollingRows);
+        return includePartialRow
+            ? (DisplayedBandsInfo.NumDisplayedFrozenRows + DisplayedBandsInfo.NumDisplayedScrollingRows)
+            : (DisplayedBandsInfo.NumTotallyDisplayedFrozenRows + DisplayedBandsInfo.NumTotallyDisplayedScrollingRows);
     }
 
     protected override void Dispose(bool disposing)
@@ -5758,10 +5759,10 @@ public partial class DataGridView
                 UnwireScrollBarsEvents();
 
                 _vertScrollBar?.Dispose();
-                _vertScrollBar = null;
+                _vertScrollBar = null!;
 
                 _horizScrollBar?.Dispose();
-                _horizScrollBar = null;
+                _horizScrollBar = null!;
 
                 _placeholderStringFormat?.Dispose();
                 _placeholderStringFormat = null;
@@ -5798,7 +5799,7 @@ public partial class DataGridView
         if (_dataGridViewState2[State2_ShowColumnRelocationInsertion])
         {
             Rectangle rectInsertionBar = new Rectangle(0, _layout.ColumnHeaders.Top, InsertionBarWidth, _layout.ColumnHeaders.Height);
-            // this.trackColumnEdge is the column preceeding the insertion point
+            // this.trackColumnEdge is the column preceding the insertion point
             if (_trackColumnEdge == -1)
             {
                 // Insert as first column
@@ -5832,13 +5833,15 @@ public partial class DataGridView
 
                 if (RightToLeftInternal)
                 {
-                    rectInsertionBar.X = Math.Max(_layout.ColumnHeaders.X,
-                                                  GetColumnXFromIndex(_trackColumnEdge) - Columns[_trackColumnEdge].Width - offsetFromCenter);
+                    rectInsertionBar.X = Math.Max(
+                        _layout.ColumnHeaders.X,
+                        GetColumnXFromIndex(_trackColumnEdge) - Columns[_trackColumnEdge].Width - offsetFromCenter);
                 }
                 else
                 {
-                    rectInsertionBar.X = Math.Min(GetColumnXFromIndex(_trackColumnEdge) + Columns[_trackColumnEdge].Width - offsetFromCenter,
-                                                  _layout.ColumnHeaders.Right - InsertionBarWidth);
+                    rectInsertionBar.X = Math.Min(
+                        GetColumnXFromIndex(_trackColumnEdge) + Columns[_trackColumnEdge].Width - offsetFromCenter,
+                        _layout.ColumnHeaders.Right - InsertionBarWidth);
                 }
             }
 
@@ -5908,6 +5911,7 @@ public partial class DataGridView
 
     private void EditingControls_CommonMouseEventHandler(object sender, MouseEventArgs e, DataGridViewMouseEvent dgvme)
     {
+        Debug.Assert(_editingPanel is not null);
         Debug.Assert(_ptCurrentCell.X != -1);
         int adjustedX = _editingPanel.Location.X + e.X;
         int adjustedY = _editingPanel.Location.Y + e.Y;
@@ -5923,11 +5927,12 @@ public partial class DataGridView
             _dataGridViewOper[OperationLastEditCtrlClickDoubled] = false;
         }
 
-        MouseEventArgs me = new MouseEventArgs(e.Button,
-                                               e.Clicks,
-                                               adjustedX,
-                                               adjustedY,
-                                               e.Delta);
+        MouseEventArgs me = new MouseEventArgs(
+            e.Button,
+            e.Clicks,
+            adjustedX,
+            adjustedY,
+            e.Delta);
 
         HitTestInfo hti = HitTest(me.X, me.Y);
         int mouseX = me.X - hti.ColumnX;
@@ -5936,7 +5941,12 @@ public partial class DataGridView
             mouseX += ((hti._col == -1) ? RowHeadersWidth : Columns[hti._col].Thickness);
         }
 
-        DataGridViewCellMouseEventArgs dgvcme = new DataGridViewCellMouseEventArgs(hti._col, hti._row, mouseX, me.Y - hti.RowY, me);
+        DataGridViewCellMouseEventArgs dgvcme = new DataGridViewCellMouseEventArgs(
+            hti._col,
+            hti._row,
+            mouseX,
+            me.Y - hti.RowY,
+            me);
 
         try
         {
@@ -5955,12 +5965,18 @@ public partial class DataGridView
                 if (Math.Abs(dgvcme.X - _lastMouseClickInfo.X) <= hotDoubleClickZone.Width / 2 &&
                     Math.Abs(dgvcme.Y - _lastMouseClickInfo.Y) <= hotDoubleClickZone.Height / 2)
                 {
-                    me = new MouseEventArgs(e.Button,
-                                            2,
-                                            adjustedX,
-                                            adjustedY,
-                                            e.Delta);
-                    dgvcme = new DataGridViewCellMouseEventArgs(dgvcme.ColumnIndex, dgvcme.RowIndex, dgvcme.X, dgvcme.Y, me);
+                    me = new MouseEventArgs(
+                        e.Button,
+                        2,
+                        adjustedX,
+                        adjustedY,
+                        e.Delta);
+                    dgvcme = new DataGridViewCellMouseEventArgs(
+                        dgvcme.ColumnIndex,
+                        dgvcme.RowIndex,
+                        dgvcme.X,
+                        dgvcme.Y,
+                        me);
                     switch (dgvme)
                     {
                         case DataGridViewMouseEvent.MouseDown:
@@ -6012,12 +6028,18 @@ public partial class DataGridView
                 // Make sure that the triple-click is exposed as a single-click and not a double-click.
                 if (e.Clicks == 2)
                 {
-                    me = new MouseEventArgs(e.Button,
-                                            1,
-                                            adjustedX,
-                                            adjustedY,
-                                            e.Delta);
-                    dgvcme = new DataGridViewCellMouseEventArgs(hti._col, hti._row, mouseX, me.Y - hti.RowY, me);
+                    me = new MouseEventArgs(
+                        e.Button,
+                        1,
+                        adjustedX,
+                        adjustedY,
+                        e.Delta);
+                    dgvcme = new DataGridViewCellMouseEventArgs(
+                        hti._col,
+                        hti._row,
+                        mouseX,
+                        me.Y - hti.RowY,
+                        me);
                 }
 
                 switch (dgvme)
@@ -6083,12 +6105,18 @@ public partial class DataGridView
                 case DataGridViewMouseEvent.MouseUp:
                     if (_dataGridViewState2[State2_NextMouseUpIsDouble])
                     {
-                        MouseEventArgs meTmp = new MouseEventArgs(e.Button,
-                                                                  2,
-                                                                  adjustedX,
-                                                                  adjustedY,
-                                                                  e.Delta);
-                        dgvcme = new DataGridViewCellMouseEventArgs(dgvcme.ColumnIndex, dgvcme.RowIndex, dgvcme.X, dgvcme.Y, meTmp);
+                        MouseEventArgs meTmp = new MouseEventArgs(
+                            e.Button,
+                            2,
+                            adjustedX,
+                            adjustedY,
+                            e.Delta);
+                        dgvcme = new DataGridViewCellMouseEventArgs(
+                            dgvcme.ColumnIndex,
+                            dgvcme.RowIndex,
+                            dgvcme.X,
+                            dgvcme.Y,
+                            meTmp);
                     }
 
                     OnCellMouseUp(dgvcme);
@@ -6302,20 +6330,22 @@ public partial class DataGridView
         }
         else
         {
-            return EndEdit(context,
-                DataGridViewValidateCellInternal.Never /*validateCell*/,
-                false /*fireCellLeave*/,
-                false /*fireCellEnter*/,
-                false /*fireRowLeave*/,
-                false /*fireRowEnter*/,
-                false /*fireLeave*/,
-                true /*keepFocus*/,
-                true /*resetCurrentCell*/,
-                true /*resetAnchorCell*/);
+            return EndEdit(
+                context,
+                validateCell: DataGridViewValidateCellInternal.Never,
+                fireCellLeave: false,
+                fireCellEnter: false,
+                fireRowLeave: false,
+                fireRowEnter: false,
+                fireLeave: false,
+                keepFocus: true,
+                resetCurrentCell: true,
+                resetAnchorCell: true);
         }
     }
 
-    private bool EndEdit(DataGridViewDataErrorContexts context,
+    private bool EndEdit(
+        DataGridViewDataErrorContexts context,
         DataGridViewValidateCellInternal validateCell,
         bool fireCellLeave,
         bool fireCellEnter,
@@ -6337,8 +6367,15 @@ public partial class DataGridView
             int curRowIndex = _ptCurrentCell.Y;
             int curColIndex = _ptCurrentCell.X;
             DataGridViewCell dataGridViewCurrentCell = CurrentCellInternal;
-            DataGridViewDataErrorEventArgs dgvdee = CommitEdit(ref dataGridViewCurrentCell, context, validateCell,
-                fireCellLeave, fireCellEnter, fireRowLeave, fireRowEnter, fireLeave);
+            DataGridViewDataErrorEventArgs? dgvdee = CommitEdit(
+                ref dataGridViewCurrentCell,
+                context,
+                validateCell,
+                fireCellLeave,
+                fireCellEnter,
+                fireRowLeave,
+                fireRowEnter,
+                fireLeave);
             if (dgvdee is not null)
             {
                 if (dgvdee.ThrowException)
@@ -6511,7 +6548,11 @@ public partial class DataGridView
             _inBulkLayoutCount--;
             if (_inBulkLayoutCount == 0)
             {
-                PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, invalidInAdjustFillingColumns, false /*repositionEditingControl*/);
+                PerformLayoutPrivate(
+                    useRowShortcut: false,
+                    computeVisibleRows: false,
+                    invalidInAdjustFillingColumns,
+                    repositionEditingControl: false);
             }
         }
     }
@@ -6568,7 +6609,7 @@ public partial class DataGridView
             if (!RowHeadersVisible && Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0)
             {
                 // All rows are hidden
-                UpdateRowsDisplayedState(false /*displayed*/);
+                UpdateRowsDisplayedState(displayed: false);
             }
             else
             {
@@ -6651,7 +6692,10 @@ public partial class DataGridView
                     Debug.Assert(firstDisplayedFrozenRowIndex != -1);
                     if (DisplayedBandsInfo.NumDisplayedFrozenRows > 1)
                     {
-                        lastDisplayedFrozenRowIndex = Rows.GetNextRow(firstDisplayedFrozenRowIndex, DataGridViewElementStates.Visible, DisplayedBandsInfo.NumDisplayedFrozenRows - 2 /*skipRows*/);
+                        lastDisplayedFrozenRowIndex = Rows.GetNextRow(
+                            firstDisplayedFrozenRowIndex,
+                            DataGridViewElementStates.Visible,
+                            skipRows: DisplayedBandsInfo.NumDisplayedFrozenRows - 2);
                     }
                     else
                     {
@@ -6663,7 +6707,10 @@ public partial class DataGridView
                 {
                     if (DisplayedBandsInfo.NumDisplayedScrollingRows > 1)
                     {
-                        lastDisplayedScrollingRowIndex = Rows.GetNextRow(DisplayedBandsInfo.FirstDisplayedScrollingRow, DataGridViewElementStates.Visible, DisplayedBandsInfo.NumDisplayedScrollingRows - 2 /*skipRows*/);
+                        lastDisplayedScrollingRowIndex = Rows.GetNextRow(
+                            DisplayedBandsInfo.FirstDisplayedScrollingRow,
+                            DataGridViewElementStates.Visible,
+                            skipRows: DisplayedBandsInfo.NumDisplayedScrollingRows - 2);
                     }
                     else
                     {
@@ -6778,7 +6825,7 @@ public partial class DataGridView
             if (!ColumnHeadersVisible && Rows.GetRowCount(DataGridViewElementStates.Visible) == 0)
             {
                 // All columns are hidden
-                UpdateColumnsDisplayedState(false /*displayed*/);
+                UpdateColumnsDisplayedState(displayed: false);
             }
             else
             {
@@ -6948,7 +6995,7 @@ public partial class DataGridView
         }
     }
 
-    protected override AccessibleObject GetAccessibilityObjectById(int objectId)
+    protected override AccessibleObject? GetAccessibilityObjectById(int objectId)
     {
         // Decrement the objectId because in our implementation of AccessibilityClient notification objectId's
         // are 1 - based. 0 == CHILDID_SELF which corresponds to the AccessibleObject itself
@@ -6957,7 +7004,7 @@ public partial class DataGridView
 
     internal TypeConverter GetCachedTypeConverter(Type type)
     {
-        if (_converters.TryGetValue(type, out TypeConverter converter))
+        if (_converters.TryGetValue(type, out TypeConverter? converter))
         {
             return converter;
         }
@@ -7123,13 +7170,14 @@ public partial class DataGridView
         return cellCount;
     }
 
-    private bool GetCellCount_CellIncluded(DataGridViewCell dataGridViewCell,
-                                           int rowIndex,
-                                           bool displayedRequired,
-                                           bool frozenRequired,
-                                           bool resizableRequired,
-                                           bool readOnlyRequired,
-                                           bool visibleRequired)
+    private bool GetCellCount_CellIncluded(
+        DataGridViewCell dataGridViewCell,
+        int rowIndex,
+        bool displayedRequired,
+        bool frozenRequired,
+        bool resizableRequired,
+        bool readOnlyRequired,
+        bool visibleRequired)
     {
         Debug.Assert(dataGridViewCell is not null);
         Debug.Assert(rowIndex >= 0);
@@ -7296,7 +7344,7 @@ public partial class DataGridView
         }
     }
 
-    public virtual DataObject GetClipboardContent()
+    public virtual DataObject? GetClipboardContent()
     {
         if (ClipboardCopyMode == DataGridViewClipboardCopyMode.Disable)
         {
@@ -7308,12 +7356,20 @@ public partial class DataGridView
             return null;
         }
 
-        string[] formats = new string[] { DataFormats.Html, DataFormats.Text, DataFormats.UnicodeText, DataFormats.CommaSeparatedValue };
+        string[] formats = new string[]
+        {
+            DataFormats.Html,
+            DataFormats.Text,
+            DataFormats.UnicodeText,
+            DataFormats.CommaSeparatedValue
+        };
         DataObject dataObject = new DataObject();
         bool includeColumnHeaders = false, includeRowHeaders = false;
-        string cellContent = null;
-        StringBuilder sbContent = null;
-        DataGridViewColumn dataGridViewColumn, prevDataGridViewColumn, nextDataGridViewColumn;
+        string? cellContent = null;
+        StringBuilder? sbContent = null;
+        DataGridViewColumn? dataGridViewColumn;
+        DataGridViewColumn? prevDataGridViewColumn;
+        DataGridViewColumn? nextDataGridViewColumn;
 
         switch (SelectionMode)
         {
@@ -7356,12 +7412,13 @@ public partial class DataGridView
                             if (dataGridViewColumn is not null)
                             {
                                 prevDataGridViewColumn = Columns.GetPreviousColumn(dataGridViewColumn, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
-                                cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(-1,
-                                                                                                        true /*firstCell*/,
-                                                                                                        !includeRowHeaders && prevDataGridViewColumn is null /*lastCell*/,
-                                                                                                        true /*inFirstRow*/,
-                                                                                                        false /*inLastRow*/,
-                                                                                                        format) as string;
+                                cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(
+                                    -1,
+                                    firstCell: true,
+                                    lastCell: !includeRowHeaders && prevDataGridViewColumn is null,
+                                    inFirstRow: true,
+                                    inLastRow: false,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7371,12 +7428,13 @@ public partial class DataGridView
                                 {
                                     dataGridViewColumn = prevDataGridViewColumn;
                                     prevDataGridViewColumn = Columns.GetPreviousColumn(dataGridViewColumn, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
-                                    cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(-1,
-                                                                                                            false /*firstCell*/,
-                                                                                                            !includeRowHeaders && prevDataGridViewColumn is null /*lastCell*/,
-                                                                                                            true /*inFirstRow*/,
-                                                                                                            false /*inLastRow*/,
-                                                                                                            format) as string;
+                                    cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(
+                                        -1,
+                                        firstCell: false,
+                                        lastCell: !includeRowHeaders && prevDataGridViewColumn is null,
+                                        inFirstRow: true,
+                                        inLastRow: false,
+                                        format) as string;
                                     if (cellContent is not null)
                                     {
                                         sbContent.Append(cellContent);
@@ -7386,12 +7444,13 @@ public partial class DataGridView
 
                             if (includeRowHeaders)
                             {
-                                cellContent = TopLeftHeaderCell.GetClipboardContentInternal(-1,
-                                                                                                 Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0 /*firstCell*/,
-                                                                                                 true /*lastCell*/,
-                                                                                                 true /*inFirstRow*/,
-                                                                                                 false /*inLastRow*/,
-                                                                                                 format) as string;
+                                cellContent = TopLeftHeaderCell.GetClipboardContentInternal(
+                                    -1,
+                                    firstCell: Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0,
+                                    lastCell: true,
+                                    inFirstRow: true,
+                                    inLastRow: false,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7402,12 +7461,13 @@ public partial class DataGridView
                         {
                             if (includeRowHeaders)
                             {
-                                cellContent = TopLeftHeaderCell.GetClipboardContentInternal(-1,
-                                                                                                 true /*firstCell*/,
-                                                                                                 Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0 /*lastCell*/,
-                                                                                                 true /*inFirstRow*/,
-                                                                                                 false /*inLastRow*/,
-                                                                                                 format) as string;
+                                cellContent = TopLeftHeaderCell.GetClipboardContentInternal(
+                                    -1,
+                                    firstCell: true,
+                                    lastCell: Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0,
+                                    inFirstRow: true,
+                                    inLastRow: false,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7419,12 +7479,13 @@ public partial class DataGridView
                             if (dataGridViewColumn is not null)
                             {
                                 nextDataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
-                                cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(-1,
-                                                                                                        !includeRowHeaders /*firstCell*/,
-                                                                                                        nextDataGridViewColumn is null /*lastCell*/,
-                                                                                                        true /*inFirstRow*/,
-                                                                                                        false /*inLastRow*/,
-                                                                                                        format) as string;
+                                cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(
+                                    -1,
+                                    firstCell: !includeRowHeaders,
+                                    lastCell: nextDataGridViewColumn is null,
+                                    inFirstRow: true,
+                                    inLastRow: false,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7434,12 +7495,13 @@ public partial class DataGridView
                                 {
                                     dataGridViewColumn = nextDataGridViewColumn;
                                     nextDataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
-                                    cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(-1,
-                                                                                                            false /*firstCell*/,
-                                                                                                            nextDataGridViewColumn is null /*lastCell*/,
-                                                                                                            true /*inFirstRow*/,
-                                                                                                            false /*inLastRow*/,
-                                                                                                            format) as string;
+                                    cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(
+                                        -1,
+                                        firstCell: false,
+                                        lastCell: nextDataGridViewColumn is null,
+                                        inFirstRow: true,
+                                        inLastRow: false,
+                                        format) as string;
                                     if (cellContent is not null)
                                     {
                                         sbContent.Append(cellContent);
@@ -7464,12 +7526,15 @@ public partial class DataGridView
                             if (dataGridViewColumn is not null)
                             {
                                 prevDataGridViewColumn = Columns.GetPreviousColumn(dataGridViewColumn, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
-                                cellContent = Rows.SharedRow(rowIndex).Cells[dataGridViewColumn.Index].GetClipboardContentInternal(rowIndex,
-                                                                                                                                        true /*firstCell*/,
-                                                                                                                                        !includeRowHeaders && prevDataGridViewColumn is null /*lastCell*/,
-                                                                                                                                        !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                                        nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                                        format) as string;
+                                cellContent = Rows.SharedRow(rowIndex)
+                                    .Cells[dataGridViewColumn.Index]
+                                    .GetClipboardContentInternal(
+                                        rowIndex,
+                                        firstCell: true,
+                                        lastCell: !includeRowHeaders && prevDataGridViewColumn is null,
+                                        inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                        inLastRow: nextRowIndex == -1,
+                                        format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7479,12 +7544,15 @@ public partial class DataGridView
                                 {
                                     dataGridViewColumn = prevDataGridViewColumn;
                                     prevDataGridViewColumn = Columns.GetPreviousColumn(dataGridViewColumn, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
-                                    cellContent = Rows.SharedRow(rowIndex).Cells[dataGridViewColumn.Index].GetClipboardContentInternal(rowIndex,
-                                                                                                                                            false /*firstCell*/,
-                                                                                                                                            !includeRowHeaders && prevDataGridViewColumn is null /*lastCell*/,
-                                                                                                                                            !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                                            nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                                            format) as string;
+                                    cellContent = Rows.SharedRow(rowIndex)
+                                        .Cells[dataGridViewColumn.Index]
+                                        .GetClipboardContentInternal(
+                                            rowIndex,
+                                            firstCell: false,
+                                            lastCell: !includeRowHeaders && prevDataGridViewColumn is null,
+                                            inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                            inLastRow: nextRowIndex == -1,
+                                            format) as string;
                                     if (cellContent is not null)
                                     {
                                         sbContent.Append(cellContent);
@@ -7495,12 +7563,13 @@ public partial class DataGridView
                             // Get the row header clipboard content
                             if (includeRowHeaders)
                             {
-                                cellContent = Rows.SharedRow(rowIndex).HeaderCell.GetClipboardContentInternal(rowIndex,
-                                                                                                                   Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0 /*firstCell*/,
-                                                                                                                   true /*lastCell*/,
-                                                                                                                   !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                   nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                   format) as string;
+                                cellContent = Rows.SharedRow(rowIndex).HeaderCell.GetClipboardContentInternal(
+                                    rowIndex,
+                                    firstCell: Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0,
+                                    lastCell: true,
+                                    inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                    inLastRow: nextRowIndex == -1,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7514,12 +7583,13 @@ public partial class DataGridView
                             // Get the row header clipboard content
                             if (includeRowHeaders)
                             {
-                                cellContent = Rows.SharedRow(rowIndex).HeaderCell.GetClipboardContentInternal(rowIndex,
-                                                                                                                   true /*firstCell*/,
-                                                                                                                   dataGridViewColumn is null /*lastCell*/,
-                                                                                                                   !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                   nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                   format) as string;
+                                cellContent = Rows.SharedRow(rowIndex).HeaderCell.GetClipboardContentInternal(
+                                    rowIndex,
+                                    firstCell: true,
+                                    lastCell: dataGridViewColumn is null,
+                                    inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                    inLastRow: nextRowIndex == -1,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7530,12 +7600,15 @@ public partial class DataGridView
                             if (dataGridViewColumn is not null)
                             {
                                 nextDataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
-                                cellContent = Rows.SharedRow(rowIndex).Cells[dataGridViewColumn.Index].GetClipboardContentInternal(rowIndex,
-                                                                                                                                        !includeRowHeaders /*firstCell*/,
-                                                                                                                                        nextDataGridViewColumn is null /*lastCell*/,
-                                                                                                                                        !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                                        nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                                        format) as string;
+                                cellContent = Rows.SharedRow(rowIndex)
+                                    .Cells[dataGridViewColumn.Index]
+                                    .GetClipboardContentInternal(
+                                        rowIndex,
+                                        firstCell: !includeRowHeaders,
+                                        lastCell: nextDataGridViewColumn is null,
+                                        inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                        inLastRow: nextRowIndex == -1,
+                                        format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7545,12 +7618,15 @@ public partial class DataGridView
                                 {
                                     dataGridViewColumn = nextDataGridViewColumn;
                                     nextDataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
-                                    cellContent = Rows.SharedRow(rowIndex).Cells[dataGridViewColumn.Index].GetClipboardContentInternal(rowIndex,
-                                                                                                                                            false /*firstCell*/,
-                                                                                                                                            nextDataGridViewColumn is null /*lastCell*/,
-                                                                                                                                            !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                                            nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                                            format) as string;
+                                    cellContent = Rows.SharedRow(rowIndex)
+                                        .Cells[dataGridViewColumn.Index]
+                                        .GetClipboardContentInternal(
+                                            rowIndex,
+                                            firstCell: false,
+                                            lastCell: nextDataGridViewColumn is null,
+                                            inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                            inLastRow: nextRowIndex == -1,
+                                            format) as string;
                                     if (cellContent is not null)
                                     {
                                         sbContent.Append(cellContent);
@@ -7570,12 +7646,12 @@ public partial class DataGridView
 
                     if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
                     {
-                        GetClipboardContentForHtml(sbContent, out IO.MemoryStream utf8Stream);
-                        dataObject.SetData(format, false /*autoConvert*/, utf8Stream);
+                        GetClipboardContentForHtml(sbContent, out MemoryStream utf8Stream);
+                        dataObject.SetData(format, autoConvert: false, utf8Stream);
                     }
                     else
                     {
-                        dataObject.SetData(format, false /*autoConvert*/, sbContent.ToString());
+                        dataObject.SetData(format, autoConvert: false, sbContent.ToString());
                     }
                 }
 
@@ -7624,12 +7700,13 @@ public partial class DataGridView
                             if (dataGridViewColumn is not null)
                             {
                                 prevDataGridViewColumn = Columns.GetPreviousColumn(dataGridViewColumn, DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, DataGridViewElementStates.None);
-                                cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(-1,
-                                                                                                        true /*firstCell*/,
-                                                                                                        !includeRowHeaders && prevDataGridViewColumn is null /*lastCell*/,
-                                                                                                        true /*inFirstRow*/,
-                                                                                                        firstVisibleRowIndex == -1 /*inLastRow*/,
-                                                                                                        format) as string;
+                                cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(
+                                    -1,
+                                    firstCell: true,
+                                    lastCell: !includeRowHeaders && prevDataGridViewColumn is null,
+                                    inFirstRow: true,
+                                    inLastRow: firstVisibleRowIndex == -1,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7639,12 +7716,13 @@ public partial class DataGridView
                                 {
                                     dataGridViewColumn = prevDataGridViewColumn;
                                     prevDataGridViewColumn = Columns.GetPreviousColumn(dataGridViewColumn, DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, DataGridViewElementStates.None);
-                                    cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(-1,
-                                                                                                            false /*firstCell*/,
-                                                                                                            !includeRowHeaders && prevDataGridViewColumn is null /*lastCell*/,
-                                                                                                            true /*inFirstRow*/,
-                                                                                                            firstVisibleRowIndex == -1 /*inLastRow*/,
-                                                                                                            format) as string;
+                                    cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(
+                                        -1,
+                                        firstCell: false,
+                                        lastCell: !includeRowHeaders && prevDataGridViewColumn is null,
+                                        inFirstRow: true,
+                                        inLastRow: firstVisibleRowIndex == -1,
+                                        format) as string;
                                     if (cellContent is not null)
                                     {
                                         sbContent.Append(cellContent);
@@ -7654,12 +7732,13 @@ public partial class DataGridView
 
                             if (includeRowHeaders)
                             {
-                                cellContent = TopLeftHeaderCell.GetClipboardContentInternal(-1,
-                                                                                                 lastDataGridViewColumn is null /*firstCell*/,
-                                                                                                 true /*lastCell*/,
-                                                                                                 true /*inFirstRow*/,
-                                                                                                 firstVisibleRowIndex == -1 /*inLastRow*/,
-                                                                                                 format) as string;
+                                cellContent = TopLeftHeaderCell.GetClipboardContentInternal(
+                                    -1,
+                                    firstCell: lastDataGridViewColumn is null,
+                                    lastCell: true,
+                                    inFirstRow: true,
+                                    inLastRow: firstVisibleRowIndex == -1,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7672,12 +7751,13 @@ public partial class DataGridView
 
                             if (includeRowHeaders)
                             {
-                                cellContent = TopLeftHeaderCell.GetClipboardContentInternal(-1,
-                                                                                                 true /*firstCell*/,
-                                                                                                 dataGridViewColumn is null /*lastCell*/,
-                                                                                                 true /*inFirstRow*/,
-                                                                                                 firstVisibleRowIndex == -1 /*inLastRow*/,
-                                                                                                 format) as string;
+                                cellContent = TopLeftHeaderCell.GetClipboardContentInternal(
+                                    -1,
+                                    firstCell: true,
+                                    lastCell: dataGridViewColumn is null,
+                                    inFirstRow: true,
+                                    inLastRow: firstVisibleRowIndex == -1,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7689,12 +7769,13 @@ public partial class DataGridView
                             if (dataGridViewColumn is not null)
                             {
                                 nextDataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn, DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, DataGridViewElementStates.None);
-                                cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(-1,
-                                                                                                        !includeRowHeaders /*firstCell*/,
-                                                                                                        nextDataGridViewColumn is null /*lastCell*/,
-                                                                                                        true /*inFirstRow*/,
-                                                                                                        firstVisibleRowIndex == -1 /*inLastRow*/,
-                                                                                                        format) as string;
+                                cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(
+                                    -1,
+                                    firstCell: !includeRowHeaders,
+                                    lastCell: nextDataGridViewColumn is null,
+                                    inFirstRow: true,
+                                    inLastRow: firstVisibleRowIndex == -1,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7704,12 +7785,13 @@ public partial class DataGridView
                                 {
                                     dataGridViewColumn = nextDataGridViewColumn;
                                     nextDataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn, DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, DataGridViewElementStates.None);
-                                    cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(-1,
-                                                                                                            false /*firstCell*/,
-                                                                                                            nextDataGridViewColumn is null /*lastCell*/,
-                                                                                                            true /*inFirstRow*/,
-                                                                                                            firstVisibleRowIndex == -1 /*inLastRow*/,
-                                                                                                            format) as string;
+                                    cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(
+                                        -1,
+                                        firstCell: false,
+                                        lastCell: nextDataGridViewColumn is null,
+                                        inFirstRow: true,
+                                        inLastRow: firstVisibleRowIndex == -1,
+                                        format) as string;
                                     if (cellContent is not null)
                                     {
                                         sbContent.Append(cellContent);
@@ -7739,12 +7821,15 @@ public partial class DataGridView
                             if (dataGridViewColumn is not null)
                             {
                                 prevDataGridViewColumn = Columns.GetPreviousColumn(dataGridViewColumn, DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, DataGridViewElementStates.None);
-                                cellContent = Rows.SharedRow(rowIndex).Cells[dataGridViewColumn.Index].GetClipboardContentInternal(rowIndex,
-                                                                                                                                        true /*firstCell*/,
-                                                                                                                                        !includeRowHeaders && prevDataGridViewColumn is null /*lastCell*/,
-                                                                                                                                        !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                                        nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                                        format) as string;
+                                cellContent = Rows.SharedRow(rowIndex)
+                                    .Cells[dataGridViewColumn.Index]
+                                    .GetClipboardContentInternal(
+                                        rowIndex,
+                                        firstCell: true,
+                                        lastCell: !includeRowHeaders && prevDataGridViewColumn is null,
+                                        inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                        inLastRow: nextRowIndex == -1,
+                                        format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7754,12 +7839,15 @@ public partial class DataGridView
                                 {
                                     dataGridViewColumn = prevDataGridViewColumn;
                                     prevDataGridViewColumn = Columns.GetPreviousColumn(dataGridViewColumn, DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, DataGridViewElementStates.None);
-                                    cellContent = Rows.SharedRow(rowIndex).Cells[dataGridViewColumn.Index].GetClipboardContentInternal(rowIndex,
-                                                                                                                                            false /*firstCell*/,
-                                                                                                                                            !includeRowHeaders && prevDataGridViewColumn is null /*lastCell*/,
-                                                                                                                                            !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                                            nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                                            format) as string;
+                                    cellContent = Rows.SharedRow(rowIndex)
+                                        .Cells[dataGridViewColumn.Index]
+                                        .GetClipboardContentInternal(
+                                        rowIndex,
+                                        firstCell: false,
+                                        lastCell: !includeRowHeaders && prevDataGridViewColumn is null,
+                                        inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                        inLastRow: nextRowIndex == -1,
+                                        format) as string;
                                     if (cellContent is not null)
                                     {
                                         sbContent.Append(cellContent);
@@ -7770,12 +7858,15 @@ public partial class DataGridView
                             // Get the row header clipboard content
                             if (includeRowHeaders)
                             {
-                                cellContent = Rows.SharedRow(rowIndex).HeaderCell.GetClipboardContentInternal(rowIndex,
-                                                                                                                   lastDataGridViewColumn is null /*firstCell*/,
-                                                                                                                   true /*lastCell*/,
-                                                                                                                   !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                   nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                   format) as string;
+                                cellContent = Rows.SharedRow(rowIndex)
+                                    .HeaderCell
+                                    .GetClipboardContentInternal(
+                                        rowIndex,
+                                        firstCell: lastDataGridViewColumn is null,
+                                        lastCell: true,
+                                        inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                        inLastRow: nextRowIndex == -1,
+                                        format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7789,12 +7880,15 @@ public partial class DataGridView
                             // Get the row header clipboard content
                             if (includeRowHeaders)
                             {
-                                cellContent = Rows.SharedRow(rowIndex).HeaderCell.GetClipboardContentInternal(rowIndex,
-                                                                                                                   true /*firstCell*/,
-                                                                                                                   dataGridViewColumn is null /*lastCell*/,
-                                                                                                                   !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                   nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                   format) as string;
+                                cellContent = Rows.SharedRow(rowIndex)
+                                    .HeaderCell
+                                    .GetClipboardContentInternal(
+                                        rowIndex,
+                                        firstCell: true,
+                                        lastCell: dataGridViewColumn is null,
+                                        inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                        inLastRow: nextRowIndex == -1,
+                                        format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7805,12 +7899,15 @@ public partial class DataGridView
                             if (dataGridViewColumn is not null)
                             {
                                 nextDataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn, DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, DataGridViewElementStates.None);
-                                cellContent = Rows.SharedRow(rowIndex).Cells[dataGridViewColumn.Index].GetClipboardContentInternal(rowIndex,
-                                                                                                                                        !includeRowHeaders /*firstCell*/,
-                                                                                                                                        nextDataGridViewColumn is null /*lastCell*/,
-                                                                                                                                        !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                                        nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                                        format) as string;
+                                cellContent = Rows.SharedRow(rowIndex)
+                                    .Cells[dataGridViewColumn.Index]
+                                    .GetClipboardContentInternal(
+                                        rowIndex,
+                                        firstCell: !includeRowHeaders,
+                                        lastCell: nextDataGridViewColumn is null,
+                                        inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                        inLastRow: nextRowIndex == -1,
+                                        format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -7820,12 +7917,15 @@ public partial class DataGridView
                                 {
                                     dataGridViewColumn = nextDataGridViewColumn;
                                     nextDataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn, DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, DataGridViewElementStates.None);
-                                    cellContent = Rows.SharedRow(rowIndex).Cells[dataGridViewColumn.Index].GetClipboardContentInternal(rowIndex,
-                                                                                                                                            false /*firstCell*/,
-                                                                                                                                            nextDataGridViewColumn is null /*lastCell*/,
-                                                                                                                                            !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                                            nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                                            format) as string;
+                                    cellContent = Rows.SharedRow(rowIndex)
+                                        .Cells[dataGridViewColumn.Index]
+                                        .GetClipboardContentInternal(
+                                            rowIndex,
+                                            firstCell: false,
+                                            lastCell: nextDataGridViewColumn is null,
+                                            inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                            inLastRow: nextRowIndex == -1,
+                                            format) as string;
                                     if (cellContent is not null)
                                     {
                                         sbContent.Append(cellContent);
@@ -7845,12 +7945,12 @@ public partial class DataGridView
 
                     if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
                     {
-                        GetClipboardContentForHtml(sbContent, out IO.MemoryStream utf8Stream);
-                        dataObject.SetData(format, false /*autoConvert*/, utf8Stream);
+                        GetClipboardContentForHtml(sbContent, out MemoryStream utf8Stream);
+                        dataObject.SetData(format, autoConvert: false, utf8Stream);
                     }
                     else
                     {
-                        dataObject.SetData(format, false /*autoConvert*/, sbContent.ToString());
+                        dataObject.SetData(format, autoConvert: false, sbContent.ToString());
                     }
                 }
 
@@ -7934,8 +8034,8 @@ public partial class DataGridView
                 // Get the four corners of the 'selected table'
                 int lRowIndex = int.MaxValue;
                 int uRowIndex = -1;
-                DataGridViewColumn lColumn = null, uColumn = null;
-
+                DataGridViewColumn? lColumn = null;
+                DataGridViewColumn? uColumn = null;
                 if (SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
                 {
                     DataGridViewColumn firstVisibleColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
@@ -8052,12 +8152,14 @@ public partial class DataGridView
                                     prevDataGridViewColumn = null;
                                 }
 
-                                cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(-1,
-                                                                                                        dataGridViewColumn == uColumn /*firstCell*/,
-                                                                                                        !includeRowHeaders && prevDataGridViewColumn is null /*lastCell*/,
-                                                                                                        true /*inFirstRow*/,
-                                                                                                        false /*inLastRow*/,
-                                                                                                        format) as string;
+                                cellContent = dataGridViewColumn.HeaderCell
+                                    .GetClipboardContentInternal(
+                                        -1,
+                                        firstCell: dataGridViewColumn == uColumn,
+                                        lastCell: !includeRowHeaders && prevDataGridViewColumn is null,
+                                        inFirstRow: true,
+                                        inLastRow: false,
+                                        format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -8068,12 +8170,13 @@ public partial class DataGridView
 
                             if (includeRowHeaders)
                             {
-                                cellContent = TopLeftHeaderCell.GetClipboardContentInternal(-1,
-                                                                                                 false /*firstCell*/,
-                                                                                                 true /*lastCell*/,
-                                                                                                 true  /*inFirstRow*/,
-                                                                                                 false /*inLastRow*/,
-                                                                                                 format) as string;
+                                cellContent = TopLeftHeaderCell.GetClipboardContentInternal(
+                                    -1,
+                                    firstCell: false,
+                                    lastCell: true,
+                                    inFirstRow: true,
+                                    inLastRow: false,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -8084,12 +8187,13 @@ public partial class DataGridView
                         {
                             if (includeRowHeaders)
                             {
-                                cellContent = TopLeftHeaderCell.GetClipboardContentInternal(-1,
-                                                                                                 true  /*firstCell*/,
-                                                                                                 false /*lastCell*/,
-                                                                                                 true  /*inFirstRow*/,
-                                                                                                 false /*inLastRow*/,
-                                                                                                 format) as string;
+                                cellContent = TopLeftHeaderCell.GetClipboardContentInternal(
+                                    -1,
+                                    firstCell: true,
+                                    lastCell: false,
+                                    inFirstRow: true,
+                                    inLastRow: false,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -8111,12 +8215,14 @@ public partial class DataGridView
                                     nextDataGridViewColumn = null;
                                 }
 
-                                cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(-1,
-                                                                                                        !includeRowHeaders && dataGridViewColumn == lColumn /*firstCell*/,
-                                                                                                        nextDataGridViewColumn is null /*lastCell*/,
-                                                                                                        true /*inFirstRow*/,
-                                                                                                        false /*inLastRow*/,
-                                                                                                        format) as string;
+                                cellContent = dataGridViewColumn.HeaderCell
+                                    .GetClipboardContentInternal(
+                                        -1,
+                                        firstCell: !includeRowHeaders && dataGridViewColumn == lColumn,
+                                        lastCell: nextDataGridViewColumn is null,
+                                        inFirstRow: true,
+                                        inLastRow: false,
+                                        format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -8161,12 +8267,15 @@ public partial class DataGridView
                                     prevDataGridViewColumn = null;
                                 }
 
-                                cellContent = Rows.SharedRow(rowIndex).Cells[dataGridViewColumn.Index].GetClipboardContentInternal(rowIndex,
-                                                                                                                                        dataGridViewColumn == uColumn /*firstCell*/,
-                                                                                                                                        !includeRowHeaders && prevDataGridViewColumn is null /*lastCell*/,
-                                                                                                                                        !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                                        nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                                        format) as string;
+                                cellContent = Rows.SharedRow(rowIndex)
+                                    .Cells[dataGridViewColumn.Index]
+                                    .GetClipboardContentInternal(
+                                        rowIndex,
+                                        firstCell: dataGridViewColumn == uColumn,
+                                        lastCell: !includeRowHeaders && prevDataGridViewColumn is null,
+                                        inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                        inLastRow: nextRowIndex == -1,
+                                        format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -8178,12 +8287,15 @@ public partial class DataGridView
                             if (includeRowHeaders)
                             {
                                 // Get the row header clipboard content
-                                cellContent = Rows.SharedRow(rowIndex).HeaderCell.GetClipboardContentInternal(rowIndex,
-                                                                                                                   false /*firstCell*/,
-                                                                                                                   true /*lastCell*/,
-                                                                                                                   !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                   nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                   format) as string;
+                                cellContent = Rows.SharedRow(rowIndex)
+                                    .HeaderCell
+                                    .GetClipboardContentInternal(
+                                        rowIndex,
+                                        firstCell: false,
+                                        lastCell: true,
+                                        inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                        inLastRow: nextRowIndex == -1,
+                                        format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -8195,12 +8307,15 @@ public partial class DataGridView
                             if (includeRowHeaders)
                             {
                                 // Get the row header clipboard content
-                                cellContent = Rows.SharedRow(rowIndex).HeaderCell.GetClipboardContentInternal(rowIndex,
-                                                                                                                   true /*firstCell*/,
-                                                                                                                   false /*lastCell*/,
-                                                                                                                   !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                   nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                   format) as string;
+                                cellContent = Rows.SharedRow(rowIndex)
+                                    .HeaderCell
+                                    .GetClipboardContentInternal(
+                                        rowIndex,
+                                        firstCell: true,
+                                        lastCell: false,
+                                        inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                        inLastRow: nextRowIndex == -1,
+                                        format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -8222,12 +8337,15 @@ public partial class DataGridView
                                     nextDataGridViewColumn = null;
                                 }
 
-                                cellContent = Rows.SharedRow(rowIndex).Cells[dataGridViewColumn.Index].GetClipboardContentInternal(rowIndex,
-                                                                                                                                        !includeRowHeaders && dataGridViewColumn == lColumn /*firstCell*/,
-                                                                                                                                        nextDataGridViewColumn is null /*lastCell*/,
-                                                                                                                                        !includeColumnHeaders && firstRowIndex /*inFirstRow*/,
-                                                                                                                                        nextRowIndex == -1 /*inLastRow*/,
-                                                                                                                                        format) as string;
+                                cellContent = Rows.SharedRow(rowIndex)
+                                    .Cells[dataGridViewColumn.Index]
+                                    .GetClipboardContentInternal(
+                                    rowIndex,
+                                    firstCell: !includeRowHeaders && dataGridViewColumn == lColumn,
+                                    lastCell: nextDataGridViewColumn is null,
+                                    inFirstRow: !includeColumnHeaders && firstRowIndex,
+                                    inLastRow: nextRowIndex == -1,
+                                    format) as string;
                                 if (cellContent is not null)
                                 {
                                     sbContent.Append(cellContent);
@@ -8243,12 +8361,12 @@ public partial class DataGridView
 
                     if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
                     {
-                        GetClipboardContentForHtml(sbContent, out IO.MemoryStream utf8Stream);
-                        dataObject.SetData(format, false /*autoConvert*/, utf8Stream);
+                        GetClipboardContentForHtml(sbContent, out MemoryStream utf8Stream);
+                        dataObject.SetData(format, autoConvert: false, utf8Stream);
                     }
                     else
                     {
-                        dataObject.SetData(format, false /*autoConvert*/, sbContent.ToString());
+                        dataObject.SetData(format, autoConvert: false, sbContent.ToString());
                     }
                 }
 
@@ -8257,7 +8375,7 @@ public partial class DataGridView
 
         return dataObject;
     }
-
+#nullable disable
     private static void GetClipboardContentForHtml(StringBuilder sbContent, out IO.MemoryStream utf8Stream)
     {
         byte[] sourceBytes = Encoding.Unicode.GetBytes(sbContent.ToString());

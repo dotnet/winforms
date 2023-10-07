@@ -55,7 +55,7 @@ public abstract partial class AxHost
                 return;
             }
 
-            object nativeObject = _host.GetOcx();
+            object? nativeObject = _host.GetOcx();
             _connectionPoint = new ConnectionPointCookie(nativeObject, this, typeof(IPropertyNotifySink), throwException: false);
         }
 

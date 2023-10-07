@@ -24,8 +24,8 @@ override System.ComponentModel.Design.BinaryEditor.GetEditStyle(System.Component
 ~override System.ComponentModel.Design.ByteViewer.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
 ~override System.ComponentModel.Design.CollectionEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
 ~override System.ComponentModel.Design.CollectionEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~override System.ComponentModel.Design.DateTimeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.ComponentModel.Design.DateTimeEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.ComponentModel.Design.DateTimeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.ComponentModel.Design.DateTimeEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 override System.ComponentModel.Design.Serialization.BasicDesignerLoader.BeginLoad(System.ComponentModel.Design.Serialization.IDesignerLoaderHost! host) -> void
 ~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore() -> System.ComponentModel.Design.Serialization.SerializationStore
 ~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize(System.ComponentModel.Design.Serialization.SerializationStore store) -> System.Collections.ICollection
@@ -39,7 +39,7 @@ override System.ComponentModel.Design.Serialization.BasicDesignerLoader.BeginLoa
 override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection? errors) -> void
 override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
 override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
-~override System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, object value) -> object
+override System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.Serialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, object! value) -> object?
 override System.Drawing.Design.ToolboxItem.Equals(object? obj) -> bool
 override System.Drawing.Design.ToolboxItem.ToString() -> string!
 override System.Windows.Forms.Design.AnchorEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
@@ -82,8 +82,8 @@ override System.Windows.Forms.Design.MaskDescriptor.ToString() -> string!
 ~override System.Windows.Forms.Design.ParentControlDesigner.OnPaintAdornments(System.Windows.Forms.PaintEventArgs pe) -> void
 ~override System.Windows.Forms.Design.ParentControlDesigner.PreFilterProperties(System.Collections.IDictionary properties) -> void
 ~override System.Windows.Forms.Design.ParentControlDesigner.SnapLines.get -> System.Collections.IList
-~override System.Windows.Forms.Design.ShortcutKeysEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~override System.Windows.Forms.Design.ShortcutKeysEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
+override System.Windows.Forms.Design.ShortcutKeysEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+override System.Windows.Forms.Design.ShortcutKeysEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 ~override System.Windows.Forms.Design.WindowsFormsDesignerOptionService.PopulateOptionCollection(System.ComponentModel.Design.DesignerOptionService.DesignerOptionCollection options) -> void
 ~static readonly System.Windows.Forms.Design.MenuCommands.ComponentTrayMenu -> System.ComponentModel.Design.CommandID
 ~static readonly System.Windows.Forms.Design.MenuCommands.ContainerMenu -> System.ComponentModel.Design.CommandID
@@ -180,7 +180,7 @@ System.ComponentModel.Design.Serialization.BasicDesignerLoader.SetBaseComponentC
 ~System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationService(System.IServiceProvider provider) -> void
 System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider! provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model) -> void
 System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider! provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model, System.Globalization.CultureInfo?[]! supportedCultures) -> void
-~System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.MethodSupportsSerialization(System.Reflection.MethodInfo method) -> bool
+System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.MethodSupportsSerialization(System.Reflection.MethodInfo! method) -> bool
 ~System.Drawing.Design.IToolboxService.AddCreator(System.Drawing.Design.ToolboxItemCreatorCallback creator, string format) -> void
 ~System.Drawing.Design.IToolboxService.AddCreator(System.Drawing.Design.ToolboxItemCreatorCallback creator, string format, System.ComponentModel.Design.IDesignerHost host) -> void
 ~System.Drawing.Design.IToolboxService.AddLinkedToolboxItem(System.Drawing.Design.ToolboxItem toolboxItem, string category, System.ComponentModel.Design.IDesignerHost host) -> void
@@ -342,7 +342,7 @@ virtual System.ComponentModel.Design.MenuCommandService.Verbs.get -> System.Comp
 virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection? errors) -> void
 virtual System.ComponentModel.Design.Serialization.BasicDesignerLoader.ReportFlushErrors(System.Collections.ICollection! errors) -> void
 virtual System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnComponentRename(object! component, string? oldName, string? newName) -> void
-~virtual System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.SerializeCollection(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeExpression targetExpression, System.Type targetType, System.Collections.ICollection originalCollection, System.Collections.ICollection valuesToSerialize) -> object
+virtual System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.SerializeCollection(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager, System.CodeDom.CodeExpression? targetExpression, System.Type! targetType, System.Collections.ICollection! originalCollection, System.Collections.ICollection! valuesToSerialize) -> object?
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.Deserialize(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration) -> object
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.GetInitializeMethod(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration, object value) -> System.CodeDom.CodeMemberMethod
 ~virtual System.ComponentModel.Design.Serialization.TypeCodeDomSerializer.GetInitializeMethods(System.ComponentModel.Design.Serialization.IDesignerSerializationManager manager, System.CodeDom.CodeTypeDeclaration declaration) -> System.CodeDom.CodeMemberMethod[]

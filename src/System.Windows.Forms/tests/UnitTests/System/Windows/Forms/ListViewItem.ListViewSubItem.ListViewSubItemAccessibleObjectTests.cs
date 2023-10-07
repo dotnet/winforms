@@ -3,6 +3,8 @@
 
 using System.Drawing;
 using System.Windows.Forms.Automation;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using static System.Windows.Forms.ListViewItem.ListViewSubItem;
 using static Interop;
 
@@ -925,8 +927,8 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
         ListViewSubItemAccessibleObject listViewSubItemAccessibleObject = new(listViewSubItem, listViewItem);
         object actual = listViewSubItemAccessibleObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId);
-
-        Assert.Equal(UiaTextProvider.BoundingRectangleAsArray(listViewSubItem.AccessibilityObject.BoundingRectangle), actual);
+        using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray(listViewSubItem.AccessibilityObject.BoundingRectangle);
+        Assert.Equal(((VARIANT)rectArray).ToObject(), actual);
         Assert.False(listView.IsHandleCreated);
     }
 

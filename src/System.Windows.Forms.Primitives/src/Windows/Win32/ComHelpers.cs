@@ -135,22 +135,14 @@ internal static unsafe partial class ComHelpers
     }
 
     /// <summary>
-    ///  Attempts to unwrap one of our ComWrapper CCWs as a particular managed object.
+    ///  Attempts to unwrap a ComWrapper CCW as a particular managed object.
     /// </summary>
-    /// <devdoc>
-    ///  <para>
-    ///   This should remain internal to this class and will ultimately mostly be replaced by
-    ///   https://github.com/dotnet/runtime/issues/79674.
-    ///  </para>
-    /// </devdoc>
     private static bool TryUnwrapComWrapperCCW<TWrapper>(
         IUnknown* unknown,
         [NotNullWhen(true)] out TWrapper? @interface) where TWrapper : class
     {
-        using var wrapper = ComScope<IComCallableWrapper>.TryQueryFrom(unknown, out HRESULT hr);
-        if (hr.Succeeded)
+        if (ComWrappers.TryGetObject((nint)unknown, out object? obj))
         {
-            object obj = ComWrappers.ComInterfaceDispatch.GetInstance<object>((ComWrappers.ComInterfaceDispatch*)unknown);
             if (obj is TWrapper desired)
             {
                 @interface = desired;
@@ -158,7 +150,7 @@ internal static unsafe partial class ComHelpers
             }
             else
             {
-                Debug.WriteLine($"{nameof(TryGetManagedInterface)}: Found a manual CCW, but couldn't unwrap to {typeof(TWrapper).Name}");
+                Debug.WriteLine($"{nameof(TryGetObjectForIUnknown)}: Found a manual CCW, but couldn't unwrap to {typeof(TWrapper).Name}");
             }
         }
 
@@ -169,15 +161,23 @@ internal static unsafe partial class ComHelpers
     /// <summary>
     ///  Attempts to get a managed wrapper of the specified type for the given COM interface.
     /// </summary>
+    internal static bool TryGetObjectForIUnknown<TObject>(
+        IUnknown* unknown,
+        [NotNullWhen(true)] out TObject? @object) where TObject : class
+        => TryGetObjectForIUnknown(unknown, takeOwnership: false, out @object);
+
+    /// <summary>
+    ///  Attempts to get a managed wrapper of the specified type for the given COM interface.
+    /// </summary>
     /// <param name="takeOwnership">
     ///  When <see langword="true"/>, releases the original <paramref name="unknown"/> whether successful or not.
     /// </param>
-    internal static bool TryGetManagedInterface<TWrapper>(
+    internal static bool TryGetObjectForIUnknown<TObject>(
         IUnknown* unknown,
         bool takeOwnership,
-        [NotNullWhen(true)] out TWrapper? @interface) where TWrapper : class
+        [NotNullWhen(true)] out TObject? @object) where TObject : class
     {
-        @interface = null;
+        @object = null;
         if (unknown is null)
         {
             return false;
@@ -185,18 +185,12 @@ internal static unsafe partial class ComHelpers
 
         try
         {
-            // Check to see if we're one of our own CCWs and unwrap.
-            if (TryUnwrapComWrapperCCW(unknown, out @interface))
-            {
-                return true;
-            }
-
-            @interface = (TWrapper)GetObjectForIUnknown(unknown);
+            @object = (TObject)GetObjectForIUnknown(unknown);
             return true;
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"{nameof(TryGetManagedInterface)}: Failed to get RCW for {typeof(TWrapper).Name}. {ex.Message}");
+            Debug.WriteLine($"{nameof(TryGetObjectForIUnknown)}: Failed to get object for {typeof(TObject).Name}. {ex.Message}");
             return false;
         }
         finally
@@ -204,7 +198,7 @@ internal static unsafe partial class ComHelpers
             if (takeOwnership)
             {
                 uint count = unknown->Release();
-                Debug.WriteLineIf(count > 0, $"{nameof(TryGetManagedInterface)}: Count for {typeof(TWrapper).Name} is {count} after release.");
+                Debug.WriteLineIf(count > 0, $"{nameof(TryGetObjectForIUnknown)}: Count for {typeof(TObject).Name} is {count} after release.");
             }
         }
     }
@@ -214,9 +208,10 @@ internal static unsafe partial class ComHelpers
     /// </summary>
     internal static bool WrapsManagedObject(object @object, IUnknown* unknown)
     {
-        if (TryUnwrapComWrapperCCW(unknown, out object? foundObject))
+        // If it is a ComWrappers object we need to simply pull out the original object to check.
+        if (ComWrappers.TryGetObject((nint)unknown, out object? obj))
         {
-            return @object == foundObject;
+            return @object == obj;
         }
 
         using ComScope<IUnknown> ccw = new((IUnknown*)(void*)Marshal.GetIUnknownForObject(@object));
@@ -232,6 +227,12 @@ internal static unsafe partial class ComHelpers
         if (unknown is null)
         {
             throw new ArgumentNullException(nameof(unknown));
+        }
+
+        // If it is a ComWrappers object we need to simply pull out the original object.
+        if (ComWrappers.TryGetObject((nint)unknown, out object? obj))
+        {
+            return obj;
         }
 
         if (BuiltInComSupported)

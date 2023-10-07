@@ -7,13 +7,14 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
-using Accessibility;
-using Windows.Win32.System.Ole;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
-using UIA = Windows.Win32.UI.Accessibility;
-using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
+using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
+using IAccessible = Accessibility.IAccessible;
+using UIA = Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -46,8 +47,8 @@ public unsafe partial class AccessibleObject :
     UiaCore.IRawElementProviderHwndOverride,
     UiaCore.IScrollItemProvider,
     UiaCore.IMultipleViewProvider,
-    UiaCore.ITextProvider,
-    UiaCore.ITextProvider2
+    ITextProvider.Interface,
+    ITextProvider2.Interface
 {
     private static readonly string[] s_propertiesWithArguments =
     {
@@ -440,7 +441,7 @@ public unsafe partial class AccessibleObject :
         {
             UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
             UiaCore.UIA.AutomationIdPropertyId => AutomationId,
-            UiaCore.UIA.BoundingRectanglePropertyId => UiaTextProvider.BoundingRectangleAsArray(Bounds),
+            UiaCore.UIA.BoundingRectanglePropertyId => ((VARIANT)UiaTextProvider.BoundingRectangleAsArray(Bounds)).ToObject(),
             UiaCore.UIA.FrameworkIdPropertyId => "WinForm",
             UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId),
             UiaCore.UIA.IsGridItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridItemPatternId),
@@ -610,7 +611,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual void Invoke() => DoDefaultAction();
 
-    internal virtual UiaCore.ITextRangeProvider? DocumentRangeInternal
+    internal virtual ITextRangeProvider* DocumentRangeInternal
     {
         get
         {
@@ -619,51 +620,26 @@ public unsafe partial class AccessibleObject :
         }
     }
 
-    internal virtual UiaCore.ITextRangeProvider[]? GetTextSelection()
-    {
-        Debug.Fail("Not implemented. GetTextSelection method should be overridden.");
-        return null;
-    }
+    internal virtual HRESULT GetTextSelection(SAFEARRAY** pRetVal) => HRESULT.E_NOTIMPL;
 
-    internal virtual UiaCore.ITextRangeProvider[]? GetTextVisibleRanges()
-    {
-        Debug.Fail("Not implemented. GetTextVisibleRanges method should be overridden.");
-        return null;
-    }
+    internal virtual HRESULT GetTextVisibleRanges(SAFEARRAY** pRetVal) => HRESULT.E_NOTIMPL;
 
-    internal virtual UiaCore.ITextRangeProvider? GetTextRangeFromChild(UiaCore.IRawElementProviderSimple childElement)
-    {
-        Debug.Fail("Not implemented. GetTextRangeFromChild method should be overridden.");
-        return null;
-    }
+    internal virtual HRESULT GetTextRangeFromChild(IRawElementProviderSimple* childElement, ITextRangeProvider** pRetVal) => HRESULT.E_NOTIMPL;
 
-    internal virtual UiaCore.ITextRangeProvider? GetTextRangeFromPoint(Point screenLocation)
-    {
-        Debug.Fail("Not implemented. GetTextRangeFromPoint method should be overridden.");
-        return null;
-    }
+    internal virtual HRESULT GetTextRangeFromPoint(UiaPoint screenLocation, ITextRangeProvider** pRetVal) => HRESULT.E_NOTIMPL;
 
-    internal virtual UiaCore.SupportedTextSelection SupportedTextSelectionInternal
+    internal virtual SupportedTextSelection SupportedTextSelectionInternal
     {
         get
         {
             Debug.Fail("Not implemented. SupportedTextSelectionInternal property should be overridden.");
-            return UiaCore.SupportedTextSelection.None;
+            return SupportedTextSelection.SupportedTextSelection_None;
         }
     }
 
-    internal virtual UiaCore.ITextRangeProvider? GetTextCaretRange(out BOOL isActive)
-    {
-        isActive = false;
-        Debug.Fail("Not implemented. GetTextCaretRange method should be overridden.");
-        return null;
-    }
+    internal virtual HRESULT GetTextCaretRange(BOOL* isActive, ITextRangeProvider** pRetVal) => HRESULT.E_NOTIMPL;
 
-    internal virtual UiaCore.ITextRangeProvider? GetRangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
-    {
-        Debug.Fail("Not implemented. GetRangeFromAnnotation method should be overridden.");
-        return null;
-    }
+    internal virtual HRESULT GetRangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal) => HRESULT.E_NOTIMPL;
 
     internal virtual bool IsReadOnly => false;
 
@@ -917,36 +893,38 @@ public unsafe partial class AccessibleObject :
 
     void UiaCore.IInvokeProvider.Invoke() => Invoke();
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider.DocumentRange => DocumentRangeInternal;
+    ITextRangeProvider* ITextProvider.Interface.DocumentRange => DocumentRangeInternal;
 
-    UiaCore.ITextRangeProvider[]? UiaCore.ITextProvider.GetSelection() => GetTextSelection();
+    HRESULT ITextProvider.Interface.GetSelection(SAFEARRAY** pRetVal) => GetTextSelection(pRetVal);
 
-    UiaCore.ITextRangeProvider[]? UiaCore.ITextProvider.GetVisibleRanges() => GetTextVisibleRanges();
+    HRESULT ITextProvider.Interface.GetVisibleRanges(SAFEARRAY** pRetVal) => GetTextVisibleRanges(pRetVal);
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider.RangeFromChild(UiaCore.IRawElementProviderSimple childElement) =>
-        GetTextRangeFromChild(childElement);
+    HRESULT ITextProvider.Interface.RangeFromChild(IRawElementProviderSimple* childElement, ITextRangeProvider** pRetVal)
+        => GetTextRangeFromChild(childElement, pRetVal);
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider.RangeFromPoint(Point screenLocation) => GetTextRangeFromPoint(screenLocation);
+    HRESULT ITextProvider.Interface.RangeFromPoint(UiaPoint point, ITextRangeProvider** pRetVal)
+        => GetTextRangeFromPoint(point, pRetVal);
 
-    UiaCore.SupportedTextSelection UiaCore.ITextProvider.SupportedTextSelection => SupportedTextSelectionInternal;
+    SupportedTextSelection ITextProvider.Interface.SupportedTextSelection => SupportedTextSelectionInternal;
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.DocumentRange => DocumentRangeInternal;
+    ITextRangeProvider* ITextProvider2.Interface.DocumentRange => DocumentRangeInternal;
 
-    UiaCore.ITextRangeProvider[]? UiaCore.ITextProvider2.GetSelection() => GetTextSelection();
+    HRESULT ITextProvider2.Interface.GetSelection(SAFEARRAY** pRetVal) => GetTextSelection(pRetVal);
 
-    UiaCore.ITextRangeProvider[]? UiaCore.ITextProvider2.GetVisibleRanges() => GetTextVisibleRanges();
+    HRESULT ITextProvider2.Interface.GetVisibleRanges(SAFEARRAY** pRetVal) => GetTextVisibleRanges(pRetVal);
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.RangeFromChild(UiaCore.IRawElementProviderSimple childElement) =>
-        GetTextRangeFromChild(childElement);
+    HRESULT ITextProvider2.Interface.RangeFromChild(IRawElementProviderSimple* childElement, ITextRangeProvider** pRetVal)
+        => GetTextRangeFromChild(childElement, pRetVal);
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.RangeFromPoint(Point screenLocation) => GetTextRangeFromPoint(screenLocation);
+    HRESULT ITextProvider2.Interface.RangeFromPoint(UiaPoint point, ITextRangeProvider** pRetVal)
+        => GetTextRangeFromPoint(point, pRetVal);
 
-    UiaCore.SupportedTextSelection UiaCore.ITextProvider2.SupportedTextSelection => SupportedTextSelectionInternal;
+    SupportedTextSelection ITextProvider2.Interface.SupportedTextSelection => SupportedTextSelectionInternal;
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.GetCaretRange(out BOOL isActive) => GetTextCaretRange(out isActive);
+    HRESULT ITextProvider2.Interface.GetCaretRange(BOOL* isActive, ITextRangeProvider** pRetVal) => GetTextCaretRange(isActive, pRetVal);
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement) =>
-        GetRangeFromAnnotation(annotationElement);
+    HRESULT ITextProvider2.Interface.RangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal)
+        => GetRangeFromAnnotation(annotationElement, pRetVal);
 
     BOOL UiaCore.IValueProvider.IsReadOnly => IsReadOnly ? true : false;
 

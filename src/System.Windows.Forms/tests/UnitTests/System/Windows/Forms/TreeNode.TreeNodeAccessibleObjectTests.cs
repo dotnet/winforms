@@ -503,7 +503,7 @@ public class TreeNodeAccessibleObjectTests
         node.Nodes.Add("ChildNode");
 
         Assert.True(node.AccessibilityObject.IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId));
-        Assert.True(node.childNodes.Count > 0);
+        Assert.True(node._childNodes.Count > 0);
         Assert.False(control.IsHandleCreated);
     }
 

@@ -3,11 +3,13 @@
 
 using System.Drawing;
 using System.Windows.Forms.Automation;
-using static Interop;
+using Windows.Win32.System.Com;
+using Windows.Win32.UI.Accessibility;
+using PARAM = Interop.PARAM;
 
 namespace System.Windows.Forms;
 
-internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
+internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
 {
     /// <summary>
     ///  Since the label edit inside the ListView is always single-line, for optimization
@@ -34,7 +36,12 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
 
     public override Rectangle BoundingRectangle => GetFormattingRectangle();
 
-    public override UiaCore.ITextRangeProvider DocumentRange => new UiaTextRange(_owningChildEditAccessibilityObject, this, start: 0, TextLength);
+    public override ITextRangeProvider* DocumentRange
+        => ComHelpers.GetComPointer<ITextRangeProvider>(
+            new UiaTextRange(_owningChildEditAccessibilityObject,
+                this,
+                start: 0,
+                TextLength));
 
     public override int FirstVisibleLine => 0;
 
@@ -52,7 +59,7 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
 
     public override LOGFONTW Logfont => LOGFONTW.FromFont(_owningListView.Font);
 
-    public override UiaCore.SupportedTextSelection SupportedTextSelection => UiaCore.SupportedTextSelection.Single;
+    public override SupportedTextSelection SupportedTextSelection => SupportedTextSelection.SupportedTextSelection_Single;
 
     public override string Text => PInvoke.GetWindowText(_owningChildEdit);
 
@@ -62,15 +69,15 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
 
     public override WINDOW_STYLE WindowStyle => GetWindowStyle(_owningChildEdit);
 
-    public override UiaCore.ITextRangeProvider? GetCaretRange(out BOOL isActive)
+    public override HRESULT GetCaretRange(BOOL* isActive, ITextRangeProvider** pRetVal)
     {
-        isActive = BOOL.FALSE;
-
-        object? hasKeyboardFocus = _owningChildEditAccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
-        if (hasKeyboardFocus is true)
+        if (isActive is null || pRetVal is null)
         {
-            isActive = BOOL.TRUE;
+            return HRESULT.E_POINTER;
         }
+
+        object? hasKeyboardFocus = _owningChildEditAccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.HasKeyboardFocusPropertyId);
+        *isActive = hasKeyboardFocus is true;
 
         // First caret position of a selected text
         int start = 0;
@@ -81,7 +88,12 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
         // If there is no selection, start and end parameters are the position of the caret.
         PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETSEL, ref start, ref end);
 
-        return new UiaTextRange(_owningChildEditAccessibilityObject, this, start, start);
+        *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(
+            _owningChildEditAccessibilityObject,
+            this,
+            start,
+            start));
+        return HRESULT.S_OK;
     }
 
     public override int GetLineFromCharIndex(int charIndex) => OwnerChildEditLineIndex;
@@ -113,7 +125,7 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
 
             pt = GetPositionFromCharIndex(startCharIndex);
 
-            if (ch == '\r' || ch == '\n')
+            if (ch is '\r' or '\n')
             {
                 pt.X += EndOfLineWidth; // add 2 px to show the end of line
             }
@@ -134,8 +146,13 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
         return pt;
     }
 
-    public override UiaCore.ITextRangeProvider[]? GetSelection()
+    public override HRESULT GetSelection(SAFEARRAY** pRetVal)
     {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
         // First caret position of a selected text
         int start = 0;
         // Last caret position of a selected text
@@ -145,7 +162,11 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
         // If there is no selection, start and end parameters are the position of the caret.
         PInvoke.SendMessage(_owningChildEdit, PInvoke.EM_GETSEL, ref start, ref end);
 
-        return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end) };
+        ComSafeArrayScope<ITextRangeProvider> result = new(1);
+        result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end));
+        *pRetVal = result;
+
+        return HRESULT.S_OK;
     }
 
     public override void GetVisibleRangePoints(out int visibleStart, out int visibleEnd)
@@ -178,11 +199,20 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
             => rect.IsEmpty || rect.Width <= 0 || rect.Height <= 0;
     }
 
-    public override UiaCore.ITextRangeProvider[]? GetVisibleRanges()
+    public override HRESULT GetVisibleRanges(SAFEARRAY** pRetVal)
     {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
         GetVisibleRangePoints(out int start, out int end);
 
-        return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end) };
+        ComSafeArrayScope<ITextRangeProvider> result = new(1);
+        result[0] = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(_owningChildEditAccessibilityObject, this, start, end));
+        *pRetVal = result;
+
+        return HRESULT.S_OK;
     }
 
     public override bool LineScroll(int charactersHorizontal, int linesVertical)
@@ -191,46 +221,59 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
 
     public override Point PointToScreen(Point pt)
     {
-        PInvoke.MapWindowPoints((HWND)_owningChildEdit.Handle, HWND.Null, ref pt);
+        PInvoke.MapWindowPoints(_owningChildEdit.Handle, HWND.Null, ref pt);
         return pt;
     }
 
-    /// <summary>
-    ///  Exposes a text range that contains the text that is the target of the annotation associated with the specified annotation element.
-    /// </summary>
-    /// <param name="annotationElement">
-    ///  The provider for an element that implements the IAnnotationProvider interface.
-    ///  The annotation element is a sibling of the element that implements the <see cref="UiaCore.ITextProvider2"/> interface for the document.
-    /// </param>
-    /// <returns>
-    ///  A text range that contains the annotation target text.
-    /// </returns>
-    public override UiaCore.ITextRangeProvider RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
+    public override HRESULT RangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal)
     {
-        return new UiaTextRange(_owningChildEditAccessibilityObject, this, start: 0, end: 0);
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
+            new UiaTextRange(
+                _owningChildEditAccessibilityObject,
+                this,
+                start: 0,
+                end: 0));
+        return HRESULT.S_OK;
     }
 
-    public override UiaCore.ITextRangeProvider? RangeFromChild(UiaCore.IRawElementProviderSimple childElement)
+    public override HRESULT RangeFromChild(IRawElementProviderSimple* childElement, ITextRangeProvider** pRetVal)
     {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
         // We don't have any children so this call returns null.
         Debug.Fail("Label edit control cannot have a child element.");
-        return null;
+        *pRetVal = null;
+        return HRESULT.S_OK;
     }
 
-    /// <summary>
-    ///  Returns the degenerate (empty) text range nearest to the specified screen coordinates.
-    /// </summary>
-    /// <param name="screenLocation">The location in screen coordinates.</param>
-    /// <returns>A degenerate range nearest the specified location. Null is never returned.</returns>
-    public override UiaCore.ITextRangeProvider? RangeFromPoint(Point screenLocation)
+    public override HRESULT RangeFromPoint(UiaPoint point, ITextRangeProvider** pRetVal)
     {
-        Point clientLocation = screenLocation;
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        Point clientLocation = point;
 
         // Convert screen to client coordinates.
         // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
-        if (PInvoke.MapWindowPoints(HWND.Null, (HWND)_owningChildEdit.Handle, ref clientLocation) == 0)
+        if (PInvoke.MapWindowPoints(HWND.Null, _owningChildEdit.Handle, ref clientLocation) == 0)
         {
-            return new UiaTextRange(_owningChildEditAccessibilityObject, this, start: 0, end: 0);
+            *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
+                new UiaTextRange(
+                    _owningChildEditAccessibilityObject,
+                    this,
+                    start: 0,
+                    end: 0));
+            return HRESULT.S_OK;
         }
 
         // We have to deal with the possibility that the coordinate is inside the window rect
@@ -246,13 +289,19 @@ internal class ListViewLabelEditUiaTextProvider : UiaTextProvider2
         // Get the character at those client coordinates.
         int start = GetCharIndexFromPosition(clientLocation);
 
-        return new UiaTextRange(_owningChildEditAccessibilityObject, this, start, start);
+        *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(
+            new UiaTextRange(
+                _owningChildEditAccessibilityObject,
+                this,
+                start,
+                start));
+        return HRESULT.S_OK;
     }
 
     public override Rectangle RectangleToScreen(Rectangle rect)
     {
         RECT r = rect;
-        PInvoke.MapWindowPoints((HWND)_owningChildEdit.Handle, HWND.Null, ref r);
+        PInvoke.MapWindowPoints(_owningChildEdit.Handle, HWND.Null, ref r);
         return r;
     }
 
