@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 
@@ -11,7 +9,8 @@ namespace System.Windows.Forms;
 [ToolboxBitmap(typeof(DataGridViewCheckBoxColumn), "DataGridViewCheckBoxColumn")]
 public class DataGridViewCheckBoxColumn : DataGridViewColumn
 {
-    public DataGridViewCheckBoxColumn() : this(false)
+    public DataGridViewCheckBoxColumn()
+        : this(threeState: false)
     {
     }
 
@@ -22,26 +21,20 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
         {
             AlignmentInternal = DataGridViewContentAlignment.MiddleCenter
         };
-        if (threeState)
-        {
-            defaultCellStyle.NullValue = CheckState.Indeterminate;
-        }
-        else
-        {
-            defaultCellStyle.NullValue = false;
-        }
+
+        defaultCellStyle.NullValue = threeState ? CheckState.Indeterminate : false;
 
         DefaultCellStyle = defaultCellStyle;
     }
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public override DataGridViewCell CellTemplate
+    public override DataGridViewCell? CellTemplate
     {
         get => base.CellTemplate;
         set
         {
-            if (value is not null && !(value is DataGridViewCheckBoxCell))
+            if (value is not null and not DataGridViewCheckBoxCell)
             {
                 throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewCheckBoxCell"));
             }
@@ -50,17 +43,18 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
         }
     }
 
-    private DataGridViewCheckBoxCell CheckBoxCellTemplate
+    private DataGridViewCheckBoxCell? CheckBoxCellTemplate
     {
         get
         {
-            return (DataGridViewCheckBoxCell)CellTemplate;
+            return (DataGridViewCheckBoxCell?)CellTemplate;
         }
     }
 
     [Browsable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))]
+    [AllowNull]
     public override DataGridViewCellStyle DefaultCellStyle
     {
         get => base.DefaultCellStyle;
@@ -71,7 +65,8 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.DataGridView_CheckBoxColumnFalseValueDescr))]
     [TypeConverter(typeof(StringConverter))]
-    public object FalseValue
+    [MemberNotNull(nameof(CheckBoxCellTemplate))]
+    public object? FalseValue
     {
         get
         {
@@ -109,6 +104,7 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
     [DefaultValue(FlatStyle.Standard)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_CheckBoxColumnFlatStyleDescr))]
+    [MemberNotNull(nameof(CheckBoxCellTemplate))]
     public FlatStyle FlatStyle
     {
         get
@@ -148,7 +144,8 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.DataGridView_CheckBoxColumnIndeterminateValueDescr))]
     [TypeConverter(typeof(StringConverter))]
-    public object IndeterminateValue
+    [MemberNotNull(nameof(CheckBoxCellTemplate))]
+    public object? IndeterminateValue
     {
         get
         {
@@ -186,6 +183,7 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_CheckBoxColumnThreeStateDescr))]
+    [MemberNotNull(nameof(CheckBoxCellTemplate))]
     public bool ThreeState
     {
         get
@@ -238,7 +236,8 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.DataGridView_CheckBoxColumnTrueValueDescr))]
     [TypeConverter(typeof(StringConverter))]
-    public object TrueValue
+    [MemberNotNull(nameof(CheckBoxCellTemplate))]
+    public object? TrueValue
     {
         get
         {
@@ -276,7 +275,7 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
     private bool ShouldSerializeDefaultCellStyle()
     {
         object defaultNullValue;
-        if (!(CellTemplate is DataGridViewCheckBoxCell templateCell))
+        if (CellTemplate is not DataGridViewCheckBoxCell templateCell)
         {
             Debug.Fail("we can't compute the default cell style w/o a template cell");
             return true;
@@ -303,10 +302,10 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
                 !defaultCellStyle.SelectionBackColor.IsEmpty ||
                 !defaultCellStyle.SelectionForeColor.IsEmpty ||
                 defaultCellStyle.Font is not null ||
-                !defaultCellStyle.NullValue.Equals(defaultNullValue) ||
+                !defaultNullValue.Equals(defaultCellStyle.NullValue) ||
                 !defaultCellStyle.IsDataSourceNullValueDefault ||
                 !string.IsNullOrEmpty(defaultCellStyle.Format) ||
-                !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
+                !defaultCellStyle.FormatProvider.Equals(Globalization.CultureInfo.CurrentCulture) ||
                 defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                 defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
                 defaultCellStyle.Tag is not null ||

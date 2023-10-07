@@ -78,11 +78,11 @@ override System.Windows.Forms.DataGridViewCellStyle.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ToString() -> string
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ValueType.set -> void
-~override System.Windows.Forms.DataGridViewCheckBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
-~override System.Windows.Forms.DataGridViewCheckBoxColumn.CellTemplate.set -> void
-~override System.Windows.Forms.DataGridViewCheckBoxColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~override System.Windows.Forms.DataGridViewCheckBoxColumn.DefaultCellStyle.set -> void
-~override System.Windows.Forms.DataGridViewCheckBoxColumn.ToString() -> string
+override System.Windows.Forms.DataGridViewCheckBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
+override System.Windows.Forms.DataGridViewCheckBoxColumn.CellTemplate.set -> void
+override System.Windows.Forms.DataGridViewCheckBoxColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+override System.Windows.Forms.DataGridViewCheckBoxColumn.DefaultCellStyle.set -> void
+override System.Windows.Forms.DataGridViewCheckBoxColumn.ToString() -> string!
 override System.Windows.Forms.DataGridViewColumn.Clone() -> object!
 override System.Windows.Forms.DataGridViewColumn.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
 override System.Windows.Forms.DataGridViewColumn.ContextMenuStrip.set -> void
@@ -420,12 +420,12 @@ System.Windows.Forms.DataGridViewCellStyle.Tag.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.IndeterminateValue.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.TrueValue.get -> object
 ~System.Windows.Forms.DataGridViewCheckBoxCell.TrueValue.set -> void
-~System.Windows.Forms.DataGridViewCheckBoxColumn.FalseValue.get -> object
-~System.Windows.Forms.DataGridViewCheckBoxColumn.FalseValue.set -> void
-~System.Windows.Forms.DataGridViewCheckBoxColumn.IndeterminateValue.get -> object
-~System.Windows.Forms.DataGridViewCheckBoxColumn.IndeterminateValue.set -> void
-~System.Windows.Forms.DataGridViewCheckBoxColumn.TrueValue.get -> object
-~System.Windows.Forms.DataGridViewCheckBoxColumn.TrueValue.set -> void
+System.Windows.Forms.DataGridViewCheckBoxColumn.FalseValue.get -> object?
+System.Windows.Forms.DataGridViewCheckBoxColumn.FalseValue.set -> void
+System.Windows.Forms.DataGridViewCheckBoxColumn.IndeterminateValue.get -> object?
+System.Windows.Forms.DataGridViewCheckBoxColumn.IndeterminateValue.set -> void
+System.Windows.Forms.DataGridViewCheckBoxColumn.TrueValue.get -> object?
+System.Windows.Forms.DataGridViewCheckBoxColumn.TrueValue.set -> void
 System.Windows.Forms.DataGridViewColumn.CellType.get -> System.Type?
 System.Windows.Forms.DataGridViewColumn.DataGridViewColumn(System.Windows.Forms.DataGridViewCell? cellTemplate) -> void
 System.Windows.Forms.DataGridViewColumn.DataPropertyName.get -> string!
