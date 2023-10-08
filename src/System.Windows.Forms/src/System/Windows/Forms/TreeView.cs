@@ -129,6 +129,7 @@ public partial class TreeView : Control
     internal TreeNode _root;
     internal Dictionary<IntPtr, TreeNode> _nodesByHandle = new();
     internal bool _nodesCollectionClear; //this is set when the treeNodeCollection is getting cleared and used by TreeView
+    internal TreeViewLabelEditNativeWindow? _labelEdit;
     private MouseButtons _downButton;
     private TreeViewDrawMode _drawMode = TreeViewDrawMode.Normal;
 
@@ -2571,12 +2572,18 @@ public partial class TreeView : Control
         }
     }
 
-    private IntPtr TvnBeginLabelEdit(NMTVDISPINFOW nmtvdi)
+    private void TvnBeginLabelEdit(NMTVDISPINFOW nmtvdi, out LRESULT lResult)
     {
         // Check for invalid node handle
         if (nmtvdi.item.hItem == IntPtr.Zero)
         {
-            return IntPtr.Zero;
+            lResult = (LRESULT)0;
+        }
+
+        if (_labelEdit is not null)
+        {
+            _labelEdit.ReleaseHandle();
+            _labelEdit = null;
         }
 
         TreeNode? editingNode = NodeFromHandle(nmtvdi.item.hItem);
@@ -2587,17 +2594,28 @@ public partial class TreeView : Control
             _editNode = editingNode;
         }
 
-        return (IntPtr)(e.CancelEdit ? 1 : 0);
+        lResult = (LRESULT)(e.CancelEdit ? 1 : 0);
+        if (!e.CancelEdit)
+        {
+            _labelEdit = new TreeViewLabelEditNativeWindow(this);
+            _labelEdit.AssignHandle(PInvoke.SendMessage(this, PInvoke.TVM_GETEDITCONTROL));
+        }
     }
 
-    private IntPtr TvnEndLabelEdit(NMTVDISPINFOW nmtvdi)
+    private void TvnEndLabelEdit(NMTVDISPINFOW nmtvdi, out LRESULT lResult)
     {
         _editNode = null;
 
         // Check for invalid node handle
         if (nmtvdi.item.hItem == IntPtr.Zero)
         {
-            return (IntPtr)1;
+            lResult = (LRESULT)1;
+        }
+
+        if (_labelEdit is not null)
+        {
+            _labelEdit.ReleaseHandle();
+            _labelEdit = null;
         }
 
         TreeNode? node = NodeFromHandle(nmtvdi.item.hItem);
@@ -2613,7 +2631,7 @@ public partial class TreeView : Control
             }
         }
 
-        return (IntPtr)(e.CancelEdit ? 0 : 1);
+        lResult = (LRESULT)(e.CancelEdit ? 0 : 1);
     }
 
     internal override void UpdateStylesCore()
@@ -3020,10 +3038,10 @@ public partial class TreeView : Control
                     TvnBeginDrag(MouseButtons.Right, nmtv);
                     break;
                 case PInvoke.TVN_BEGINLABELEDITW:
-                    m.ResultInternal = (LRESULT)TvnBeginLabelEdit(*(NMTVDISPINFOW*)(nint)m.LParamInternal);
+                    TvnBeginLabelEdit(*(NMTVDISPINFOW*)(nint)m.LParamInternal, out m.ResultInternal);
                     break;
                 case PInvoke.TVN_ENDLABELEDITW:
-                    m.ResultInternal = (LRESULT)TvnEndLabelEdit(*(NMTVDISPINFOW*)(nint)m.LParamInternal);
+                    TvnEndLabelEdit(*(NMTVDISPINFOW*)(nint)m.LParamInternal, out m.ResultInternal);
                     break;
                 case PInvoke.NM_CLICK:
                 case PInvoke.NM_RCLICK:

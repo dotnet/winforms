@@ -83,9 +83,11 @@ public partial class TreeNode
                 UiaCore.NavigateDirection.Parent
                     => Parent ?? _owningTreeView.AccessibilityObject,
                 UiaCore.NavigateDirection.FirstChild
-                    => _owningTreeNode.IsExpanded
-                        ? _owningTreeNode.FirstNode?.AccessibilityObject
-                        : null,
+                    => _owningTreeNode.IsEditing
+                        ? _owningTreeView._labelEdit?.AccessibilityObject
+                        : _owningTreeNode.IsExpanded
+                            ? _owningTreeNode.FirstNode?.AccessibilityObject
+                            : null,
                 UiaCore.NavigateDirection.LastChild
                     => _owningTreeNode.IsExpanded
                         ? _owningTreeNode.LastNode?.AccessibilityObject
