@@ -47,7 +47,7 @@ internal partial class FormatControl : UserControl
 
             for (int i = 0; i < formatTypeListBox.Items.Count; i++)
             {
-                FormatTypeClass formatType = (FormatTypeClass)formatTypeListBox.Items[i];
+                var formatType = (FormatTypeClass)formatTypeListBox.Items[i];
 
                 if (formatType.ToString().Equals(value))
                 {
@@ -89,7 +89,8 @@ internal partial class FormatControl : UserControl
 
     private void customStringTextBox_TextChanged(object? sender, EventArgs e)
     {
-        CustomFormatType customFormatType = (CustomFormatType)formatTypeListBox.SelectedItem!;
+        var customFormatType = (CustomFormatType?)formatTypeListBox.SelectedItem;
+        Debug.Assert(customFormatType is not null);
         sampleLabel.Text = customFormatType.SampleString;
         Dirty = true;
     }
@@ -97,7 +98,8 @@ internal partial class FormatControl : UserControl
     private void dateTimeFormatsListBox_SelectedIndexChanged(object? sender, EventArgs e)
     {
         // recompute the SampleLabel
-        FormatTypeClass item = (FormatTypeClass)formatTypeListBox.SelectedItem!;
+        var item = (FormatTypeClass?)formatTypeListBox.SelectedItem;
+        Debug.Assert(item is not null);
         sampleLabel.Text = item.SampleString;
         Dirty = true;
     }
@@ -105,7 +107,8 @@ internal partial class FormatControl : UserControl
     private void decimalPlacesUpDown_ValueChanged(object? sender, EventArgs e)
     {
         // update the sample label
-        FormatTypeClass item = (FormatTypeClass)formatTypeListBox.SelectedItem!;
+        var item = (FormatTypeClass?)formatTypeListBox.SelectedItem;
+        Debug.Assert(item is not null);
         sampleLabel.Text = item.SampleString;
         Dirty = true;
     }
@@ -116,7 +119,8 @@ internal partial class FormatControl : UserControl
 
     private void formatTypeListBox_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        FormatTypeClass item = (FormatTypeClass)formatTypeListBox.SelectedItem!;
+        var item = (FormatTypeClass?)formatTypeListBox.SelectedItem;
+        Debug.Assert(item is not null);
         UpdateControlVisibility(item);
         sampleLabel.Text = item.SampleString;
         explanationLabel.Text = item.TopLabelString;
@@ -239,20 +243,6 @@ internal partial class FormatControl : UserControl
 
     private void UpdateControlVisibility(FormatTypeClass formatType)
     {
-        if (formatType is null)
-        {
-            explanationLabel.Visible = false;
-            sampleLabel.Visible = false;
-            nullValueLabel.Visible = false;
-            secondRowLabel.Visible = false;
-            nullValueTextBox.Visible = false;
-            thirdRowLabel.Visible = false;
-            dateTimeFormatsListBox.Visible = false;
-            _customStringTextBox.Visible = false;
-            decimalPlacesUpDown.Visible = false;
-            return;
-        }
-
         tableLayoutPanel1.SuspendLayout();
         secondRowLabel.Text = string.Empty;
 
@@ -310,7 +300,7 @@ internal partial class FormatControl : UserControl
 
         secondRowLabel.Visible = secondRowLabel.Text.Length > 0;
 
-        tableLayoutPanel1.ResumeLayout(true /*performLayout*/);
+        tableLayoutPanel1.ResumeLayout(performLayout: true);
     }
 
     private void UpdateCustomStringTextBox()
@@ -361,7 +351,7 @@ internal partial class FormatControl : UserControl
         tableLayoutPanel1.SetColumn(thirdRowLabel, 0);
         tableLayoutPanel1.SetColumnSpan(thirdRowLabel, 2);
         thirdRowLabel.AutoSize = true;
-        tableLayoutPanel1.ResumeLayout(true /*performLayout*/);
+        tableLayoutPanel1.ResumeLayout(performLayout: true);
 
         // Now that PerformLayout set the bounds for the tableLayoutPanel we can use these bounds to specify the tableLayoutPanel minimumSize.
         tableLayoutPanel1.MinimumSize = new Drawing.Size(tableLayoutPanel1.Width, tableLayoutPanel1.Height);
@@ -408,7 +398,9 @@ internal partial class FormatControl : UserControl
         UpdateFormatTypeListBoxHeight();
         UpdateFormatTypeListBoxItems();
 
-        FormatTypeClass item = (FormatTypeClass)formatTypeListBox.SelectedItem!;
+        var item = (FormatTypeClass?)formatTypeListBox.SelectedItem;
+        Debug.Assert(item is not null);
+
         UpdateControlVisibility(item);
         sampleLabel.Text = item.SampleString;
         explanationLabel.Size = new Drawing.Size(formatGroupBox.Width - 10, 30);
