@@ -21,7 +21,7 @@ internal static class MemberDescriptorExtensions
 
     public static bool TryGetValue<T>(this PropertyDescriptor descriptor, object? component, out T? value)
     {
-        if (descriptor.PropertyType == typeof(T))
+        if (typeof(T).IsAssignableFrom(descriptor.PropertyType))
         {
             value = (T?)descriptor.GetValue(component);
             return true;
@@ -33,7 +33,7 @@ internal static class MemberDescriptorExtensions
 
     public static T? GetValue<T>(this PropertyDescriptor descriptor, object? component) where T : class
     {
-        if (descriptor.PropertyType == typeof(T))
+        if (typeof(T).IsAssignableFrom(descriptor.PropertyType))
         {
             return (T?)descriptor.GetValue(component);
         }

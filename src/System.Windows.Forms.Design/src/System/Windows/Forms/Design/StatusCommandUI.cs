@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -15,8 +13,8 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal sealed class StatusCommandUI
 {
-    private MenuCommand _statusRectCommand;
-    private IMenuCommandService _menuService;
+    private MenuCommand? _statusRectCommand;
+    private IMenuCommandService? _menuService;
     private readonly IServiceProvider _serviceProvider;
 
     public StatusCommandUI(IServiceProvider provider)
@@ -27,57 +25,31 @@ internal sealed class StatusCommandUI
     /// <summary>
     ///  Retrieves the menu editor service, which we cache for speed.
     /// </summary>
-    private IMenuCommandService MenuService
-    {
-        get
-        {
-            _menuService ??= (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
-
-            return _menuService;
-        }
-    }
+    private IMenuCommandService? MenuService => _menuService ??= _serviceProvider.GetService<IMenuCommandService>();
 
     /// <summary>
     ///  Retrieves the actual StatusRectCommand, which we cache for speed.
     /// </summary>
-    private MenuCommand StatusRectCommand
-    {
-        get
-        {
-            if (_statusRectCommand is null)
-            {
-                if (MenuService is not null)
-                {
-                    _statusRectCommand = MenuService.FindCommand(MenuCommands.SetStatusRectangle);
-                }
-            }
-
-            return _statusRectCommand;
-        }
-    }
+    private MenuCommand? StatusRectCommand => _statusRectCommand ??= MenuService?.FindCommand(MenuCommands.SetStatusRectangle);
 
     /// <summary>
     ///  Actual Function which invokes the command.
     /// </summary>
-    public void SetStatusInformation(Component selectedComponent, Point location)
+    public void SetStatusInformation(Component? selectedComponent, Point location)
     {
         if (selectedComponent is null)
         {
             return;
         }
 
-        Rectangle bounds = Rectangle.Empty;
+        Rectangle bounds;
         if (selectedComponent is Control c)
         {
             bounds = c.Bounds;
         }
-        else
+        else if (!TypeDescriptorHelper.TryGetPropertyValue(selectedComponent, "Bounds", out bounds))
         {
-            PropertyDescriptor BoundsProp = TypeDescriptor.GetProperties(selectedComponent)["Bounds"];
-            if (BoundsProp is not null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
-            {
-                bounds = (Rectangle)BoundsProp.GetValue(selectedComponent);
-            }
+            bounds = Rectangle.Empty;
         }
 
         if (location != Point.Empty)
@@ -92,25 +64,21 @@ internal sealed class StatusCommandUI
     /// <summary>
     ///  Actual Function which invokes the command.
     /// </summary>
-    public void SetStatusInformation(Component selectedComponent)
+    public void SetStatusInformation(Component? selectedComponent)
     {
         if (selectedComponent is null)
         {
             return;
         }
 
-        Rectangle bounds = Rectangle.Empty;
+        Rectangle bounds;
         if (selectedComponent is Control c)
         {
             bounds = c.Bounds;
         }
-        else
+        else if (!TypeDescriptorHelper.TryGetPropertyValue(selectedComponent, "Bounds", out bounds))
         {
-            PropertyDescriptor BoundsProp = TypeDescriptor.GetProperties(selectedComponent)["Bounds"];
-            if (BoundsProp is not null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
-            {
-                bounds = (Rectangle)BoundsProp.GetValue(selectedComponent);
-            }
+            bounds = Rectangle.Empty;
         }
 
         StatusRectCommand?.Invoke(bounds);
