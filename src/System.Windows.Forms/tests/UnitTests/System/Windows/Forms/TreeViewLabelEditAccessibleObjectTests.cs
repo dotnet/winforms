@@ -158,8 +158,7 @@ public class TreeViewLabelEditAccessibleObjectTests
         TreeNode node = new("node1");
         treeView.Nodes.Add(node);
         treeView.CreateControl();
-        PInvoke.SetFocus(treeView);
-        PInvoke.SendMessage(treeView, PInvoke.TVM_EDITLABELW, wParam: 0);
+        node.BeginEdit();
         return treeView;
     }
 }
