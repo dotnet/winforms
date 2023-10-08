@@ -68,13 +68,9 @@ internal partial class OleDragDropHandler
                 if (_components is null && (_serializationStream is not null || _serializationData is not null))
                 {
                     Deserialize(null, false);
-                    if (_components is null)
-                    {
-                        return Array.Empty<object>();
-                    }
                 }
 
-                return (object[])_components!.Clone();
+                return (object[]?)_components?.Clone() ?? Array.Empty<object>();
             }
         }
 
