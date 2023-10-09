@@ -403,10 +403,8 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     /// <param name="patternId">The pattern ID.</param>
     /// <returns><see langword="true"/> if <paramref name="patternId"/> is supported.</returns>
-    internal virtual bool IsPatternSupported(UiaCore.UIA patternId)
-    {
-        return patternId == UiaCore.UIA.InvokePatternId ? IsInvokePatternAvailable : false;
-    }
+    internal virtual bool IsPatternSupported(UIA_PATTERN_ID patternId)
+        => patternId == UIA_PATTERN_ID.UIA_InvokePatternId && IsInvokePatternAvailable;
 
     /// <summary>
     ///  Gets the runtime ID.
@@ -436,41 +434,41 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     /// <param name="propertyID">Identifier indicating the property to return.</param>
     /// <returns>The requested value if supported or <see langword="null"/> if it is not.</returns>
-    internal virtual object? GetPropertyValue(UiaCore.UIA propertyID) =>
+    internal virtual object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
         propertyID switch
         {
-            UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
-            UiaCore.UIA.AutomationIdPropertyId => AutomationId,
-            UiaCore.UIA.BoundingRectanglePropertyId => ((VARIANT)UiaTextProvider.BoundingRectangleAsArray(Bounds)).ToObject(),
-            UiaCore.UIA.FrameworkIdPropertyId => "WinForm",
-            UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId),
-            UiaCore.UIA.IsGridItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridItemPatternId),
-            UiaCore.UIA.IsGridPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridPatternId),
-            UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsInvokePatternAvailable,
-            UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId),
-            UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.MultipleViewPatternId),
-            UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
-            UiaCore.UIA.IsPasswordPropertyId => false,
-            UiaCore.UIA.IsScrollItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ScrollItemPatternId),
-            UiaCore.UIA.IsScrollPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ScrollPatternId),
-            UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.SelectionItemPatternId),
-            UiaCore.UIA.IsSelectionPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.SelectionPatternId),
-            UiaCore.UIA.IsTableItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TableItemPatternId),
-            UiaCore.UIA.IsTablePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TablePatternId),
-            UiaCore.UIA.IsTextPattern2AvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPattern2Id),
-            UiaCore.UIA.IsTextPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPatternId),
-            UiaCore.UIA.IsTogglePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TogglePatternId),
-            UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
-            UiaCore.UIA.HelpTextPropertyId => Help ?? string.Empty,
-            UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId => !string.IsNullOrEmpty(DefaultAction) ? DefaultAction : null,
-            UiaCore.UIA.LegacyIAccessibleNamePropertyId => !string.IsNullOrEmpty(Name) ? Name : null,
-            UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
-            UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
-            UiaCore.UIA.NamePropertyId => Name,
-            UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
-            UiaCore.UIA.SelectionCanSelectMultiplePropertyId => CanSelectMultiple,
-            UiaCore.UIA.SelectionIsSelectionRequiredPropertyId => IsSelectionRequired,
-            UiaCore.UIA.ValueValuePropertyId => !string.IsNullOrEmpty(Value) ? Value : null,
+            UIA_PROPERTY_ID.UIA_AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
+            UIA_PROPERTY_ID.UIA_AutomationIdPropertyId => AutomationId,
+            UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId => ((VARIANT)UiaTextProvider.BoundingRectangleAsArray(Bounds)).ToObject(),
+            UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId => "WinForm",
+            UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_ExpandCollapsePatternId),
+            UIA_PROPERTY_ID.UIA_IsGridItemPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_GridItemPatternId),
+            UIA_PROPERTY_ID.UIA_IsGridPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_GridPatternId),
+            UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId => IsInvokePatternAvailable,
+            UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId),
+            UIA_PROPERTY_ID.UIA_IsMultipleViewPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_MultipleViewPatternId),
+            UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
+            UIA_PROPERTY_ID.UIA_IsPasswordPropertyId => false,
+            UIA_PROPERTY_ID.UIA_IsScrollItemPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollItemPatternId),
+            UIA_PROPERTY_ID.UIA_IsScrollPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollPatternId),
+            UIA_PROPERTY_ID.UIA_IsSelectionItemPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_SelectionItemPatternId),
+            UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_SelectionPatternId),
+            UIA_PROPERTY_ID.UIA_IsTableItemPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_TableItemPatternId),
+            UIA_PROPERTY_ID.UIA_IsTablePatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_TablePatternId),
+            UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_TextPattern2Id),
+            UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_TextPatternId),
+            UIA_PROPERTY_ID.UIA_IsTogglePatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_TogglePatternId),
+            UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_ValuePatternId),
+            UIA_PROPERTY_ID.UIA_HelpTextPropertyId => Help ?? string.Empty,
+            UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId => !string.IsNullOrEmpty(DefaultAction) ? DefaultAction : null,
+            UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId => !string.IsNullOrEmpty(Name) ? Name : null,
+            UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId => Role,
+            UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId => State,
+            UIA_PROPERTY_ID.UIA_NamePropertyId => Name,
+            UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId => RuntimeId,
+            UIA_PROPERTY_ID.UIA_SelectionCanSelectMultiplePropertyId => CanSelectMultiple,
+            UIA_PROPERTY_ID.UIA_SelectionIsSelectionRequiredPropertyId => IsSelectionRequired,
+            UIA_PROPERTY_ID.UIA_ValueValuePropertyId => !string.IsNullOrEmpty(Value) ? Value : null,
             _ => null
         };
 
@@ -542,7 +540,7 @@ public unsafe partial class AccessibleObject :
     /// <returns>The element in the specified direction if it exists.</returns>
     internal virtual UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction) => null;
 
-    internal virtual UiaCore.IRawElementProviderSimple[]? GetEmbeddedFragmentRoots() => null;
+    internal virtual IRawElementProviderSimple.Interface[]? GetEmbeddedFragmentRoots() => null;
 
     internal virtual void SetFocus()
     {
@@ -772,8 +770,8 @@ public unsafe partial class AccessibleObject :
 
     UiaCore.IRawElementProviderSimple? UiaCore.IRawElementProviderSimple.HostRawElementProvider => HostRawElementProvider;
 
-    object? UiaCore.IRawElementProviderSimple.GetPatternProvider(UiaCore.UIA patternId)
-    {
+    object? UiaCore.IRawElementProviderSimple.GetPatternProvider(UIA_PATTERN_ID patternId)
+        {
         if (IsPatternSupported(patternId))
         {
             return this;
@@ -782,8 +780,8 @@ public unsafe partial class AccessibleObject :
         return null;
     }
 
-    object? UiaCore.IRawElementProviderSimple.GetPropertyValue(UiaCore.UIA propertyID)
-    {
+    object? UiaCore.IRawElementProviderSimple.GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        {
         object? value = GetPropertyValue(propertyID);
 
 #if DEBUG
@@ -2230,7 +2228,7 @@ public unsafe partial class AccessibleObject :
         throw new NotSupportedException(SR.AccessibleObjectLiveRegionNotSupported);
     }
 
-    internal virtual bool RaiseAutomationEvent(UiaCore.UIA eventId)
+    internal virtual bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
     {
         if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
         {
@@ -2241,7 +2239,7 @@ public unsafe partial class AccessibleObject :
         return false;
     }
 
-    internal virtual bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object? oldValue, object? newValue)
+    internal virtual bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
     {
         if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
         {

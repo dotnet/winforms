@@ -4,7 +4,8 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
-using static Interop.UiaCore;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -1612,13 +1613,13 @@ public class RadioButtonTests
 
         public int RaiseAutomationPropertyChangedEventCallsCount { get; private set; }
 
-        internal override bool RaiseAutomationEvent(UIA eventId)
+        internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
             RaiseAutomationEventCallsCount++;
             return base.RaiseAutomationEvent(eventId);
         }
 
-        internal override bool RaiseAutomationPropertyChangedEvent(UIA propertyId, object oldValue, object newValue)
+        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
         {
             RaiseAutomationPropertyChangedEventCallsCount++;
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);

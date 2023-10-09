@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Tests.ToolStripAccessibleObjectTests;
+using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests;
 
@@ -20,7 +20,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
         };
 
         AccessibleObject menuStripAccessibleObject = menuStrip.AccessibilityObject;
-        var accessibleName = menuStripAccessibleObject.GetPropertyValue(UIA.NamePropertyId);
+        var accessibleName = menuStripAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal("Test Name", accessibleName);
     }
@@ -32,7 +32,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = menuStrip.AccessibilityObject;
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsControlElementPropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsControlElementPropertyId));
     }
 
     [WinFormsFact]
@@ -42,7 +42,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = menuStrip.AccessibilityObject;
 
-        Assert.False((bool)accessibleObject.GetPropertyValue(UIA.IsContentElementPropertyId));
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsContentElementPropertyId));
     }
 
     [WinFormsFact]
@@ -51,7 +51,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
         using var menuStrip = new MenuStrip();
         AccessibleObject menuStripAccessibleObject = menuStrip.AccessibilityObject;
 
-        bool supportsLegacyIAccessiblePatternId = menuStripAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId);
+        bool supportsLegacyIAccessiblePatternId = menuStripAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);
 
         Assert.True(supportsLegacyIAccessiblePatternId);
     }
@@ -90,9 +90,9 @@ public class MenuStrip_MenuStripAccessibleObjectTests
         using MenuStrip menuStrip = new MenuStrip();
         // AccessibleRole is not set = Default
 
-        object actual = menuStrip.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
+        object actual = menuStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UIA.MenuBarControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_MenuBarControlTypeId, actual);
         Assert.False(menuStrip.IsHandleCreated);
     }
 
@@ -130,8 +130,8 @@ public class MenuStrip_MenuStripAccessibleObjectTests
         using MenuStrip menuStrip = new MenuStrip();
         menuStrip.AccessibleRole = role;
 
-        object actual = menuStrip.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = menuStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(menuStrip.IsHandleCreated);

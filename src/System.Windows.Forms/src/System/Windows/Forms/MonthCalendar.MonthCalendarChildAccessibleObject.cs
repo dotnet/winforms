@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -19,12 +20,12 @@ public partial class MonthCalendar
             _monthCalendarAccessibleObject = calendarAccessibleObject.OrThrowIfNull();
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.HasKeyboardFocusPropertyId => HasKeyboardFocus,
-                UiaCore.UIA.IsEnabledPropertyId => IsEnabled,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => HasKeyboardFocus,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => IsEnabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => false,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -32,10 +33,10 @@ public partial class MonthCalendar
 
         private protected virtual bool IsEnabled => _monthCalendarAccessibleObject.IsEnabled;
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.LegacyIAccessiblePatternId => true,
+                UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId => true,
                 _ => base.IsPatternSupported(patternId)
             };
 

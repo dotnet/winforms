@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -90,9 +91,9 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
     {
         var accessibleObject = new DataGridViewTopLeftHeaderCellAccessibleObject(null);
 
-        UiaCore.UIA expected = UiaCore.UIA.HeaderControlTypeId;
+        UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId;
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(expected, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsTheory]
@@ -105,7 +106,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
         control.TopLeftHeaderCell = cell;
         control.Enabled = isEnabled;
 
-        Assert.Equal(isEnabled, cell.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId));
+        Assert.Equal(isEnabled, cell.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 

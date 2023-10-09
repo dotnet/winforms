@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -268,13 +269,13 @@ public partial class DataGridViewRowHeaderCell
 
         #region IRawElementProviderSimple Implementation
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyId)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyId)
             => propertyId switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.HeaderControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => false,
-                UiaCore.UIA.IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => false,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                 _ => base.GetPropertyValue(propertyId),
             };
 

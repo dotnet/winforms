@@ -3,7 +3,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -318,7 +318,7 @@ public class TrackBar_TrackBarFirstButtonAccessibleObjectTests
         using TrackBar trackBar = GetTrackBar(orientation, rightToLeft, rightToLeftLayout, createControl, value, minimum, maximum);
         TrackBar.TrackBarFirstButtonAccessibleObject accessibleObject = GetTrackBarFirstButton(trackBar);
 
-        Assert.True(accessibleObject.IsPatternSupported(Interop.UiaCore.UIA.InvokePatternId));
+        Assert.True(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_InvokePatternId));
         Assert.Equal(createControl, trackBar.IsHandleCreated);
     }
 
@@ -330,7 +330,7 @@ public class TrackBar_TrackBarFirstButtonAccessibleObjectTests
         trackBar.Enabled = true;
         TrackBar.TrackBarFirstButtonAccessibleObject accessibleObject = GetTrackBarFirstButton(trackBar);
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.Equal(createControl, trackBar.IsHandleCreated);
     }
 
@@ -342,7 +342,7 @@ public class TrackBar_TrackBarFirstButtonAccessibleObjectTests
         trackBar.Enabled = false;
         TrackBar.TrackBarFirstButtonAccessibleObject accessibleObject = GetTrackBarFirstButton(trackBar);
 
-        Assert.False((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId));
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.Equal(createControl, trackBar.IsHandleCreated);
     }
 

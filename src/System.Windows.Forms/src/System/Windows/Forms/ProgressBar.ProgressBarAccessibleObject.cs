@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -15,29 +15,29 @@ public partial class ProgressBar
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId switch
         {
-            UiaCore.UIA.ValuePatternId or UiaCore.UIA.RangeValuePatternId => true,
+            UIA_PATTERN_ID.UIA_ValuePatternId or UIA_PATTERN_ID.UIA_RangeValuePatternId => true,
             _ => base.IsPatternSupported(patternId),
         };
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId when this.GetOwnerAccessibleRole() == AccessibleRole.Default
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId when this.GetOwnerAccessibleRole() == AccessibleRole.Default
                     // If we don't set a default role for the accessible object
                     // it will be retrieved from Windows.
                     // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                    => UiaCore.UIA.ProgressBarControlTypeId,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId =>
+                    => UIA_CONTROLTYPE_ID.UIA_ProgressBarControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId =>
                     // This is necessary for compatibility with MSAA proxy:
                     // IsKeyboardFocusable = true regardless the control is enabled/disabled.
                     true,
-                UiaCore.UIA.IsRangeValuePatternAvailablePropertyId => true,
-                UiaCore.UIA.IsValuePatternAvailablePropertyId => true,
-                UiaCore.UIA.RangeValueIsReadOnlyPropertyId => true,
-                UiaCore.UIA.RangeValueLargeChangePropertyId => double.NaN,
-                UiaCore.UIA.RangeValueSmallChangePropertyId => double.NaN,
+                UIA_PROPERTY_ID.UIA_IsRangeValuePatternAvailablePropertyId => true,
+                UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId => true,
+                UIA_PROPERTY_ID.UIA_RangeValueIsReadOnlyPropertyId => true,
+                UIA_PROPERTY_ID.UIA_RangeValueLargeChangePropertyId => double.NaN,
+                UIA_PROPERTY_ID.UIA_RangeValueSmallChangePropertyId => double.NaN,
                 _ => base.GetPropertyValue(propertyID)
             };
 

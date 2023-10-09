@@ -5,7 +5,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
-using static Interop;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -969,8 +970,8 @@ public partial class TrackBar : Control, ISupportInitialize
     {
         if (IsAccessibilityObjectCreated)
         {
-            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ValueValuePropertyId, Name, Name);
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ValueValuePropertyId, (VARIANT)Name, (VARIANT)Name);
+            AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationPropertyChangedEventId);
         }
 
         ((EventHandler?)Events[s_valueChangedEvent])?.Invoke(this, e);

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
@@ -57,18 +58,18 @@ internal partial class PropertyGridView
 
         internal override UiaCore.IRawElementProviderFragment? GetFocus() => GetFocused();
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TableControlTypeId,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TableControlTypeId,
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.TablePatternId => true,
-                UiaCore.UIA.GridPatternId => true,
+                UIA_PATTERN_ID.UIA_TablePatternId => true,
+                UIA_PATTERN_ID.UIA_GridPatternId => true,
                 _ => base.IsPatternSupported(patternId)
             };
 

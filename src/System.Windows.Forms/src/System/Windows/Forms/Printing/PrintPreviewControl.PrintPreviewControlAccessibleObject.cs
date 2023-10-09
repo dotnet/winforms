@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 using IScrollProvider = Windows.Win32.UI.Accessibility.IScrollProvider;
 using ScrollAmount = Windows.Win32.UI.Accessibility.ScrollAmount;
@@ -15,12 +16,12 @@ public partial class PrintPreviewControl
         {
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => !this.TryGetOwnerAs(out PrintPreviewControl? owner) ? null : propertyID switch
             {
-                UiaCore.UIA.AutomationIdPropertyId => owner.Name,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => owner.Focused,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_AutomationIdPropertyId => owner.Name,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => owner.Focused,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -54,10 +55,10 @@ public partial class PrintPreviewControl
             };
         }
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.ScrollPatternId => this.TryGetOwnerAs(out PrintPreviewControl? owner)
+                UIA_PATTERN_ID.UIA_ScrollPatternId => this.TryGetOwnerAs(out PrintPreviewControl? owner)
                     && (owner._vScrollBar.Visible || owner._hScrollBar.Visible),
                 _ => base.IsPatternSupported(patternId)
             };

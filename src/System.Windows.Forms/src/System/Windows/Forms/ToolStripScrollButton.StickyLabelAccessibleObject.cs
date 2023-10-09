@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -47,9 +48,9 @@ internal partial class ToolStripScrollButton
 
         public override string? DefaultAction => SR.AccessibleActionPress;
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
         {
-            UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
+            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
             _ => base.GetPropertyValue(propertyID)
         };
     }

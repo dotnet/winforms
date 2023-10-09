@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripProgressBar;
 using static Interop;
 
@@ -24,9 +25,9 @@ public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressB
         using ToolStripProgressBarControl toolStripProgressBarControl = new ToolStripProgressBarControl();
         // AccessibleRole is not set = Default
 
-        object actual = toolStripProgressBarControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = toolStripProgressBarControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.ProgressBarControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ProgressBarControlTypeId, actual);
         Assert.False(toolStripProgressBarControl.IsHandleCreated);
     }
 
@@ -72,8 +73,8 @@ public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressB
         toolStripProgressBarControl.AccessibleRole = role;
 
         AccessibleObject accessibleObject = toolStripProgressBarControl.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(role, accessibleObject.Role);
         Assert.Equal(expected, actual);

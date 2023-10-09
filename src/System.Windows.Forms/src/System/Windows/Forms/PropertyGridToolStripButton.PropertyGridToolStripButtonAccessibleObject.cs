@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -21,11 +21,11 @@ internal partial class PropertyGridToolStripButton
         internal override bool IsItemSelected
             => _owningPropertyGridToolStripButton.Checked;
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.SelectionItemPatternId => _owningPropertyGridToolStripButton._selectItemEnabled,
-                UiaCore.UIA.TogglePatternId => false,
+                UIA_PATTERN_ID.UIA_SelectionItemPatternId => _owningPropertyGridToolStripButton._selectItemEnabled,
+                UIA_PATTERN_ID.UIA_TogglePatternId => false,
                 _ => base.IsPatternSupported(patternId)
             };
 
@@ -54,7 +54,7 @@ internal partial class PropertyGridToolStripButton
                 ? _owningPropertyGridToolStripButton.Parent?.AccessibilityObject
                 : _owningPropertyGridToolStripButton._owningPropertyGrid.GridViewAccessibleObject.GetFocused();
 
-            focusedAccessibleObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            focusedAccessibleObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 }

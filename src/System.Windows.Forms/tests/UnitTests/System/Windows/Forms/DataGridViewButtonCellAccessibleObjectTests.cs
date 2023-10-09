@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -26,7 +26,7 @@ public class DataGridViewButtonCellAccessibleObjectTests : DataGridViewButtonCel
     public void DataGridViewButtonCellAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected()
     {
         var accessibleObject = new DataGridViewButtonCellAccessibleObject(null);
-        Assert.Equal(SR.DataGridView_AccButtonCellDefaultAction, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(SR.DataGridView_AccButtonCellDefaultAction, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
     }
 
     [WinFormsFact]
@@ -47,7 +47,7 @@ public class DataGridViewButtonCellAccessibleObjectTests : DataGridViewButtonCel
     public void DataGridViewButtonCellAccessibleObject_ControlType_ReturnsExpected()
     {
         var accessibleObject = new DataGridViewButtonCellAccessibleObject(null);
-        Assert.Equal(UiaCore.UIA.ButtonControlTypeId, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]

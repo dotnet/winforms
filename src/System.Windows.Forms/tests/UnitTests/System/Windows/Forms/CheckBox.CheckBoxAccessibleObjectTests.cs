@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop.UiaCore;
 using CheckBoxAccessibleObject = System.Windows.Forms.CheckBox.CheckBoxAccessibleObject;
 
@@ -186,11 +187,11 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA.NamePropertyId, "TestName")]
-    [InlineData((int)UIA.LegacyIAccessibleNamePropertyId, "TestName")]
-    [InlineData((int)UIA.ControlTypePropertyId, UIA.CheckBoxControlTypeId)] // If AccessibleRole is Default
-    [InlineData((int)UIA.IsKeyboardFocusablePropertyId, true)]
-    [InlineData((int)UIA.AutomationIdPropertyId, "CheckBox1")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId, "TestName")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, UIA_CONTROLTYPE_ID.UIA_CheckBoxControlTypeId)] // If AccessibleRole is Default
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId, true)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "CheckBox1")]
     public void CheckBoxAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
         using var checkBox = new CheckBox
@@ -201,22 +202,22 @@ public class CheckBox_CheckBoxAccessibleObjectTests
 
         Assert.False(checkBox.IsHandleCreated);
         var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
-        object value = checkBoxAccessibleObject.GetPropertyValue((UIA)propertyID);
+        object value = checkBoxAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
         Assert.Equal(expected, value);
         Assert.False(checkBox.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA.TogglePatternId)]
-    [InlineData((int)UIA.LegacyIAccessiblePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TogglePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)]
     public void CheckBoxAccessibleObject_IsPatternSupported_Invoke_ReturnsExpected(int patternId)
     {
         using var checkBox = new CheckBox();
         Assert.False(checkBox.IsHandleCreated);
         var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
 
-        Assert.True(checkBoxAccessibleObject.IsPatternSupported((UIA)patternId));
+        Assert.True(checkBoxAccessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(checkBox.IsHandleCreated);
     }
 
@@ -280,10 +281,10 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     {
         using CheckBox checkBox = new CheckBox();
         checkBox.AccessibleRole = role;
-        UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
-        Assert.Equal(expected, checkBox.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId));
-        Assert.Equal(checkBox.AccessibilityObject.DefaultAction, checkBox.AccessibilityObject.GetPropertyValue(UIA.LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(expected, checkBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(checkBox.AccessibilityObject.DefaultAction, checkBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
         Assert.False(checkBox.IsHandleCreated);
     }
 }

@@ -47,17 +47,17 @@ internal unsafe class ListViewLabelEditAccessibleObject : AccessibleObject
 
     internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningListView.AccessibilityObject;
 
-    internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+    internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
         => propertyID switch
         {
-            UiaCore.UIA.ProcessIdPropertyId => Environment.ProcessId,
-            UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
-            UiaCore.UIA.AccessKeyPropertyId => string.Empty,
-            UiaCore.UIA.HasKeyboardFocusPropertyId => true,
-            UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-            UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
-            UiaCore.UIA.IsContentElementPropertyId => true,
-            UiaCore.UIA.NativeWindowHandlePropertyId => _labelEdit.TryGetTarget(out var target) ? (nint)target.HWND : 0,
+            UIA_PROPERTY_ID.UIA_ProcessIdPropertyId => Environment.ProcessId,
+            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_EditControlTypeId,
+            UIA_PROPERTY_ID.UIA_AccessKeyPropertyId => string.Empty,
+            UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => true,
+            UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+            UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListView.Enabled,
+            UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => true,
+            UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _labelEdit.TryGetTarget(out var target) ? (nint)target.HWND : 0,
             _ => base.GetPropertyValue(propertyID),
         };
 
@@ -75,12 +75,12 @@ internal unsafe class ListViewLabelEditAccessibleObject : AccessibleObject
         }
     }
 
-    internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
+    internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId switch
     {
-        UiaCore.UIA.TextPatternId => true,
-        UiaCore.UIA.TextPattern2Id => true,
-        UiaCore.UIA.ValuePatternId => true,
-        UiaCore.UIA.LegacyIAccessiblePatternId => true,
+        UIA_PATTERN_ID.UIA_TextPatternId => true,
+        UIA_PATTERN_ID.UIA_TextPattern2Id => true,
+        UIA_PATTERN_ID.UIA_ValuePatternId => true,
+        UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId => true,
         _ => base.IsPatternSupported(patternId),
     };
 

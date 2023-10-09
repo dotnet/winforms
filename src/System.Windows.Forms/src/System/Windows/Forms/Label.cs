@@ -10,7 +10,8 @@ using System.Windows.Forms.Automation;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using Windows.Win32.System.SystemServices;
-using static Interop;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -1249,7 +1250,7 @@ public partial class Label : Control, IAutomationLiveRegion
             AccessibilityObject.RaiseLiveRegionChanged();
         }
 
-        AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, Text, Text);
+        AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, (VARIANT)Text, (VARIANT)Text);
     }
 
     protected virtual void OnTextAlignChanged(EventArgs e)

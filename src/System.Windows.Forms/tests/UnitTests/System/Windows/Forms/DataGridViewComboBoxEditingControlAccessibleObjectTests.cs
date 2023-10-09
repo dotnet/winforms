@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.DataGridViewComboBoxEditingControl;
 using static Interop;
 
@@ -45,9 +46,9 @@ public class DataGridViewComboBoxEditingControlAccessibleObjectTests
         using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
         // AccessibleRole is not set = Default
 
-        object actual = control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.ComboBoxControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId, actual);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -73,8 +74,8 @@ public class DataGridViewComboBoxEditingControlAccessibleObjectTests
         using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
         control.AccessibleRole = role;
 
-        object actual = control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(control.IsHandleCreated);

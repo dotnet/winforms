@@ -131,7 +131,7 @@ public partial class ComboBox
                 return HRESULT.S_OK;
             }
 
-            object? hasKeyboardFocus = _owningComboBox.ChildEditAccessibleObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+            object? hasKeyboardFocus = _owningComboBox.ChildEditAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
             *isActive = hasKeyboardFocus is true;
 
             *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(

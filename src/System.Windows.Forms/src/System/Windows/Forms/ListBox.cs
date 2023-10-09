@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -1727,11 +1728,11 @@ public partial class ListBox : ListControl
 
             if (item is not null)
             {
-                item.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                item.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             }
             else
             {
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             }
         }
 
@@ -1889,14 +1890,14 @@ public partial class ListBox : ListControl
                 var focused = AccessibilityObject.GetFocused();
                 if (focused == AccessibilityObject.GetSelected())
                 {
-                    focused?.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
+                    focused?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId);
                 }
 
-                focused?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                focused?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             }
             else if (ItemsCountIsChanged())
             {
-                AccessibilityObject?.GetChild(Items.Count - 1)?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                AccessibilityObject?.GetChild(Items.Count - 1)?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             }
         }
 

@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Reflection;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ErrorProvider;
 using static Interop;
 
@@ -127,14 +128,14 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)]
     public void ControlItemAccessibleObjectTests_IsPatternSupported_ReturnsExpected(int patternId)
     {
         Type type = typeof(ControlItem)
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, null, null, null });
 
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
 
     [WinFormsFact]
@@ -162,7 +163,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, null, null, null });
 
-        Assert.Equal(UiaCore.UIA.ImageControlTypeId, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]
@@ -172,9 +173,9 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
            .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, null, null, null });
 
-        Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
-        Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
-        Assert.Equal(AccessibleStates.ReadOnly | AccessibleStates.HasPopup, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleStatePropertyId));
+        Assert.Null(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Null(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(AccessibleStates.ReadOnly | AccessibleStates.HasPopup, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId));
     }
 
     [WinFormsFact]

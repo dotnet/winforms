@@ -8,6 +8,8 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.Layout;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 
@@ -1928,7 +1930,7 @@ public partial class ComboBox : ListControl
 
         if (IsAccessibilityObjectCreated && _childEdit is not null && ChildEditAccessibleObject.Bounds.Contains(PointToScreen(e.Location)))
         {
-            ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            ChildEditAccessibleObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
         }
     }
 
@@ -2564,9 +2566,9 @@ public partial class ComboBox : ListControl
         if (IsAccessibilityObjectCreated)
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                UiaCore.ExpandCollapseState.Collapsed,
-                UiaCore.ExpandCollapseState.Expanded);
+                UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                (VARIANT)(uint)UiaCore.ExpandCollapseState.Collapsed,
+                (VARIANT)(uint)UiaCore.ExpandCollapseState.Expanded);
 
             if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
             {
@@ -2633,7 +2635,7 @@ public partial class ComboBox : ListControl
 
         if (IsAccessibilityObjectCreated && _childEdit is not null && ContainsNavigationKeyCode(e.KeyCode))
         {
-            ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            ChildEditAccessibleObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
         }
     }
 
@@ -2759,7 +2761,7 @@ public partial class ComboBox : ListControl
 
             if (_childEdit is not null)
             {
-                ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                ChildEditAccessibleObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
             }
         }
 
@@ -2927,7 +2929,7 @@ public partial class ComboBox : ListControl
 
         if (IsAccessibilityObjectCreated && _childEdit is not null)
         {
-            ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
+            ChildEditAccessibleObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextChangedEventId);
         }
     }
 
@@ -3032,7 +3034,7 @@ public partial class ComboBox : ListControl
             // This is necessary for DropDown style as edit should not take focus.
             if (DropDownStyle == ComboBoxStyle.DropDown)
             {
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             }
 
             // Some accessibility tools (e.g., NVDA) could recognize ComboBox as IAccessible object
@@ -3055,9 +3057,9 @@ public partial class ComboBox : ListControl
 
             // Notify Collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                UiaCore.ExpandCollapseState.Expanded,
-                UiaCore.ExpandCollapseState.Collapsed);
+                UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                (VARIANT)(uint)UiaCore.ExpandCollapseState.Expanded,
+                (VARIANT)(uint)UiaCore.ExpandCollapseState.Collapsed);
         }
 
         // Collapsing the DropDown, so reset the flag.

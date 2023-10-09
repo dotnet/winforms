@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Tests.ToolStripAccessibleObjectTests;
+using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests;
 
@@ -20,7 +20,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         };
 
         AccessibleObject statusStripAccessibleObject = statusStrip.AccessibilityObject;
-        var accessibleName = statusStripAccessibleObject.GetPropertyValue(UIA.NamePropertyId);
+        var accessibleName = statusStripAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal("Test Name", accessibleName);
     }
@@ -31,7 +31,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         using var statusStrip = new StatusStrip();
         AccessibleObject statusStripAccessibleObject = statusStrip.AccessibilityObject;
 
-        bool supportsLegacyIAccessiblePatternId = statusStripAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId);
+        bool supportsLegacyIAccessiblePatternId = statusStripAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);
 
         Assert.True(supportsLegacyIAccessiblePatternId);
     }
@@ -70,9 +70,9 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         using StatusStrip statusStrip = new StatusStrip();
         // AccessibleRole is not set = Default
 
-        object actual = statusStrip.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
+        object actual = statusStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UIA.StatusBarControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_StatusBarControlTypeId, actual);
         Assert.False(statusStrip.IsHandleCreated);
     }
 
@@ -110,8 +110,8 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         using StatusStrip statusStrip = new StatusStrip();
         statusStrip.AccessibleRole = role;
 
-        object actual = statusStrip.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = statusStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(statusStrip.IsHandleCreated);

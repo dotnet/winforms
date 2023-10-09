@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Reflection;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ErrorProvider;
 using static Interop;
 
@@ -41,14 +42,14 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)]
     public void ErrorWindowAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
         Type type = typeof(ErrorWindow)
             .GetNestedType("ErrorWindowAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null });
 
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
 
     [WinFormsFact]
@@ -58,7 +59,7 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
             .GetNestedType("ErrorWindowAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null });
 
-        Assert.Equal(UiaCore.UIA.GroupControlTypeId, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]
@@ -68,9 +69,9 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
             .GetNestedType("ErrorWindowAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null });
 
-        Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
-        Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
-        Assert.Equal(AccessibleStates.ReadOnly, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleStatePropertyId));
+        Assert.Null(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Null(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(AccessibleStates.ReadOnly, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId));
     }
 
     [WinFormsFact]

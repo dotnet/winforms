@@ -3,7 +3,8 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -370,7 +371,7 @@ public abstract partial class ScrollBar : Control
                 OnValueChanged(EventArgs.Empty);
                 if (IsAccessibilityObjectCreated)
                 {
-                    AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.RangeValueValuePropertyId, (double)oldValue, (double)_value);
+                    AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_RangeValueValuePropertyId, (VARIANT)(double)oldValue, (VARIANT)(double)_value);
                 }
             }
         }

@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -19,8 +19,8 @@ public class PrintPreviewControl_PrintPreviewControlAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA.NamePropertyId, "TestName")]
-    [InlineData((int)UIA.AutomationIdPropertyId, "PrintPreviewControl1")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "PrintPreviewControl1")]
     public void PrintPreviewControlAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
         using PrintPreviewControl control = new()
@@ -31,7 +31,7 @@ public class PrintPreviewControl_PrintPreviewControlAccessibleObjectTests
 
         Assert.False(control.IsHandleCreated);
         var accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
-        object value = accessibleObject.GetPropertyValue((UIA)propertyID);
+        object value = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
         Assert.Equal(expected, value);
         Assert.False(control.IsHandleCreated);
@@ -45,7 +45,7 @@ public class PrintPreviewControl_PrintPreviewControlAccessibleObjectTests
         var accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
         control.CreateControl();
         PInvoke.SetFocus(control);
-        bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
+        bool value = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.True(value);
         Assert.True(control.IsHandleCreated);
@@ -58,7 +58,7 @@ public class PrintPreviewControl_PrintPreviewControlAccessibleObjectTests
 
         Assert.False(control.IsHandleCreated);
         var accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
-        bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
+        bool value = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.False(value);
         Assert.False(control.IsHandleCreated);

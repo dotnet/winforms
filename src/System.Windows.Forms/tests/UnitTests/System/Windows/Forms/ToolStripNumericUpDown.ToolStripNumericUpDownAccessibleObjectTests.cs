@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripControlHost;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -25,8 +25,8 @@ public class ToolStripNumericUpDown_ToolStripNumericUpDownAccessibleObjectTests
         using ToolStripNumericUpDown toolStripNumericUpDown = new ToolStripNumericUpDown();
         // AccessibleRole is not set = Default
 
-        Assert.Equal(UiaCore.UIA.SpinnerControlTypeId, toolStripNumericUpDown.Control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
-        Assert.Null(toolStripNumericUpDown.Control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_SpinnerControlTypeId, toolStripNumericUpDown.Control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Null(toolStripNumericUpDown.Control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
     }
 
     [WinFormsTheory]
@@ -71,8 +71,8 @@ public class ToolStripNumericUpDown_ToolStripNumericUpDownAccessibleObjectTests
         using ToolStripNumericUpDown toolStripNumericUpDown = new ToolStripNumericUpDown();
         toolStripNumericUpDown.AccessibleRole = role;
 
-        object actual = toolStripNumericUpDown.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = toolStripNumericUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
     }

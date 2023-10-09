@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Windows.Forms.PropertyGridInternal;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -22,8 +23,8 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.TableItemPatternId)]
-    [InlineData((int)UiaCore.UIA.GridItemPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TableItemPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_GridItemPatternId)]
     public void GridEntryAccessibleObject_SupportsPattern(int pattern)
     {
         using PropertyGrid propertyGrid = new PropertyGrid();
@@ -32,12 +33,12 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
         GridEntry defaultGridEntry = propertyGrid.GetDefaultGridEntry();
         GridEntry parentGridEntry = defaultGridEntry.ParentGridEntry; // Category which has item pattern.
         AccessibleObject accessibleObject = parentGridEntry.AccessibilityObject;
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)pattern));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)pattern));
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.GridPatternId)]
-    [InlineData((int)UiaCore.UIA.TablePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_GridPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TablePatternId)]
     public void PropertyGridAccessibleObject_SupportsPattern(int pattern)
     {
         using PropertyGrid propertyGrid = new PropertyGrid();
@@ -53,7 +54,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
         // Second child entry should be PropertyGridView.
         AccessibleObject gridViewChild = (AccessibleObject)firstChild.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
 
-        Assert.True(gridViewChild.IsPatternSupported((UiaCore.UIA)pattern));
+        Assert.True(gridViewChild.IsPatternSupported((UIA_PATTERN_ID)pattern));
     }
 
     [WinFormsTheory]
@@ -70,10 +71,10 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
         }
 
         AccessibleObject accessibleObject = propertyGrid.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedRole, accessibleObject.Role);
-        Assert.Equal(UiaCore.UIA.PaneControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId, actual);
         Assert.Equal(createControl, propertyGrid.IsHandleCreated);
     }
 
@@ -99,8 +100,8 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
         using PropertyGrid propertyGrid = new PropertyGrid();
         propertyGrid.AccessibleRole = role;
 
-        object actual = propertyGrid.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = propertyGrid.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(propertyGrid.IsHandleCreated);

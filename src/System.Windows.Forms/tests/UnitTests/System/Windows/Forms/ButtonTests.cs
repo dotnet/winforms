@@ -4,10 +4,11 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
-using static Interop.UiaCore;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -3768,7 +3769,7 @@ public class ButtonTests
 
         public int RaiseAutomationPropertyChangedEventCallsCount { get; private set; }
 
-        internal override bool RaiseAutomationEvent(UIA eventId)
+        internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
             if (Owner.IsHandleCreated)
             {
@@ -3778,7 +3779,7 @@ public class ButtonTests
             return base.RaiseAutomationEvent(eventId);
         }
 
-        internal override bool RaiseAutomationPropertyChangedEvent(UIA propertyId, object oldValue, object newValue)
+        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
         {
             if (Owner.IsHandleCreated)
             {

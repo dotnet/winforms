@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -468,42 +470,42 @@ public partial class Control
             {
                 return owner is not IAutomationLiveRegion
                     ? throw new InvalidOperationException(SR.OwnerControlIsNotALiveRegion)
-                    : RaiseAutomationEvent(UiaCore.UIA.LiveRegionChangedEventId);
+                    : RaiseAutomationEvent(UIA_EVENT_ID.UIA_LiveRegionChangedEventId);
             }
 
             return false;
         }
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            => this.TryGetOwnerAs(out Control? owner) && owner.SupportsUiaProviders && patternId == UiaCore.UIA.LegacyIAccessiblePatternId
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
+            => this.TryGetOwnerAs(out Control? owner) && owner.SupportsUiaProviders && patternId == UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId
                 ? true
                 : base.IsPatternSupported(patternId);
 
         internal override bool IsIAccessibleExSupported()
             => Owner is IAutomationLiveRegion ? true : base.IsIAccessibleExSupported();
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId =>
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId =>
                     // "ControlType" value depends on owner's AccessibleRole value.
                     // See: docs/accessibility/accessible-role-controltype.md
                     AccessibleRoleControlTypeMap.GetControlType(Role),
-                UiaCore.UIA.IsEnabledPropertyId => Owner?.Enabled ?? false,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId when
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => Owner?.Enabled ?? false,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId when
                     Owner?.SupportsUiaProviders ?? false
                     => Owner.CanSelect,
-                UiaCore.UIA.LiveSettingPropertyId => Owner is IAutomationLiveRegion owner
+                UIA_PROPERTY_ID.UIA_LiveSettingPropertyId => Owner is IAutomationLiveRegion owner
                     ? owner.LiveSetting
                     : base.GetPropertyValue(propertyID),
-                UiaCore.UIA.NativeWindowHandlePropertyId => (nint)(Owner?.InternalHandle ?? HWND.Null),
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => (nint)(Owner?.InternalHandle ?? HWND.Null),
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
+        internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
             => this.IsOwnerHandleCreated(out Control? _) && base.RaiseAutomationEvent(eventId);
 
-        internal override bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object? oldValue, object? newValue)
+        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
             => this.IsOwnerHandleCreated(out Control? _)
                 && base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
 

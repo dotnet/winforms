@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -35,7 +36,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Columns.Add(column);
         dataGridView.Sort(dataGridView.Columns[0], ListSortDirection.Ascending);
 
-        string itemStatus = dataGridView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ItemStatusPropertyId)?.ToString();
+        string itemStatus = dataGridView.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ItemStatusPropertyId)?.ToString();
         string expectedStatus = "Sorted ascending by Some column.";
 
         Assert.Equal(expectedStatus, itemStatus);
@@ -63,7 +64,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Sort(column1, ListSortDirection.Ascending);
         column1.Visible = false;
 
-        string itemStatus = dataGridView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ItemStatusPropertyId)?.ToString();
+        string itemStatus = dataGridView.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ItemStatusPropertyId)?.ToString();
 
         Assert.Equal(SR.NotSortedAccessibleStatus, itemStatus);
         Assert.False(dataGridView.IsHandleCreated);
@@ -188,8 +189,8 @@ public class DataGridViewAccessibleObjectTests
     {
         using DataGridView dataGridView = new();
         AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = UiaCore.UIA.DataGridControlTypeId;
+        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_DataGridControlTypeId;
 
         Assert.False(dataGridView.IsHandleCreated);
         Assert.Equal(expected, actual);
@@ -285,15 +286,15 @@ public class DataGridViewAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.IsGridPatternAvailablePropertyId)]
-    [InlineData((int)UiaCore.UIA.IsTablePatternAvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsGridPatternAvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTablePatternAvailablePropertyId)]
     public void DataGridViewAccessibleObject_Pattern_IsAvailable_IfDGVIsNotEmpty(int propertyId)
     {
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
         AccessibleObject accessibilityObject = dataGridView.AccessibilityObject;
 
-        Assert.True((bool)accessibilityObject.GetPropertyValue((UiaCore.UIA)propertyId));
+        Assert.True((bool)accessibilityObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -303,7 +304,7 @@ public class DataGridViewAccessibleObjectTests
         using DataGridView dataGridView = new();
         AccessibleObject accessibilityObject = dataGridView.AccessibilityObject;
 
-        Assert.False((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsTablePatternAvailablePropertyId));
+        Assert.False((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsTablePatternAvailablePropertyId));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -324,28 +325,28 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
 
         dataGridView.Rows.Add(); // 1
-        object isOffscreen = dataGridView.Rows[1].Cells[0].AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId);
+        object isOffscreen = dataGridView.Rows[1].Cells[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
         Assert.False((bool)isOffscreen); // Within the visible area
 
         dataGridView.Rows.Add(); // 2
         dataGridView.Rows.Add(); // 3
         dataGridView.Rows.Add(); // 4
-        isOffscreen = dataGridView.Rows[4].Cells[0].AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId);
+        isOffscreen = dataGridView.Rows[4].Cells[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
 
         Assert.Equal(createControl, (bool)isOffscreen); // Out of the visible area
         Assert.Equal(createControl, dataGridView.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.TablePatternId)]
-    [InlineData((int)UiaCore.UIA.GridPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TablePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_GridPatternId)]
     public void DataGridViewAccessibleObject_IsPatternSupported_IfDGVIsNotEmpty(int patternId)
     {
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
         AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
 
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -355,7 +356,7 @@ public class DataGridViewAccessibleObjectTests
         using DataGridView dataGridView = new();
         AccessibleObject accessibilityObject = dataGridView.AccessibilityObject;
 
-        Assert.False(accessibilityObject.IsPatternSupported(UiaCore.UIA.IsTablePatternAvailablePropertyId));
+        Assert.False(accessibilityObject.IsPatternSupported((UIA_PATTERN_ID)UIA_PROPERTY_ID.UIA_IsTablePatternAvailablePropertyId));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -367,7 +368,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Columns[0].Visible = false;
         AccessibleObject accessibilityObject = dataGridView.AccessibilityObject;
 
-        Assert.False(accessibilityObject.IsPatternSupported(UiaCore.UIA.IsTablePatternAvailablePropertyId));
+        Assert.False(accessibilityObject.IsPatternSupported((UIA_PATTERN_ID)UIA_PROPERTY_ID.UIA_IsTablePatternAvailablePropertyId));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -499,8 +500,8 @@ public class DataGridViewAccessibleObjectTests
         using DataGridView dataGridView = new();
         dataGridView.AccessibleRole = role;
 
-        object actual = dataGridView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = dataGridView.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(dataGridView.IsHandleCreated);
@@ -514,7 +515,7 @@ public class DataGridViewAccessibleObjectTests
         using DataGridView dataGridView = new FakeFocusDataGridView(focused);
 
         bool actual = (bool)dataGridView.AccessibilityObject
-            .GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+            .GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.Equal(focused, dataGridView.Focused);
         Assert.Equal(0, dataGridView.RowCount); // DGV is empty
@@ -531,7 +532,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Columns.Add(new DataGridViewButtonColumn());
 
         bool actual = (bool)dataGridView.AccessibilityObject
-            .GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+            .GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.Equal(focused, dataGridView.Focused);
         Assert.Equal(1, dataGridView.RowCount); // One new row for editing, it will be in focus instead of whole DGV
@@ -553,7 +554,7 @@ public class DataGridViewAccessibleObjectTests
         form.Load += (_, _) =>
         {
             actualValue = (bool)dataGridView.AccessibilityObject
-                .GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+                .GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
             form.Close();
         };
         if (modal)
@@ -580,7 +581,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Rows[0].Visible = false;
 
         bool actual = (bool)dataGridView.AccessibilityObject
-            .GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+            .GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.Equal(focused, dataGridView.Focused);
         Assert.Equal(focused, actual);
@@ -599,7 +600,7 @@ public class DataGridViewAccessibleObjectTests
         };
 
         bool actual = (bool)dataGridView.AccessibilityObject
-            .GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+            .GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.Equal(focused, dataGridView.Focused);
         Assert.Equal(focused, actual);
@@ -1665,7 +1666,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Columns.Add(column);
 
         object actual = dataGridView.AccessibilityObject
-            .GetPropertyValue(UiaCore.UIA.ItemStatusPropertyId);
+            .GetPropertyValue(UIA_PROPERTY_ID.UIA_ItemStatusPropertyId);
 
         Assert.Equal(1, dataGridView.RowCount);
         Assert.Equal(1, dataGridView.ColumnCount);
@@ -1679,7 +1680,7 @@ public class DataGridViewAccessibleObjectTests
         using DataGridView dataGridView = new() { AllowUserToAddRows = false };
 
         object actual = dataGridView.AccessibilityObject
-            .GetPropertyValue(UiaCore.UIA.ItemStatusPropertyId);
+            .GetPropertyValue(UIA_PROPERTY_ID.UIA_ItemStatusPropertyId);
 
         Assert.Equal(0, dataGridView.RowCount);
         Assert.Equal(0, dataGridView.ColumnCount);

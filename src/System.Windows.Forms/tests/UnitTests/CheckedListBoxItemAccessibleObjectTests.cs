@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.CheckedListBox;
 using static Interop;
 
@@ -78,10 +79,10 @@ public class CheckedListBoxItemAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.TogglePatternId)]
-    [InlineData((int)UiaCore.UIA.InvokePatternId)]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
-    [InlineData((int)UiaCore.UIA.ValuePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TogglePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_InvokePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ValuePatternId)]
     public void CheckedListBoxItemAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
         using CheckedListBox checkedListBox = new();
@@ -89,7 +90,7 @@ public class CheckedListBoxItemAccessibleObjectTests
 
         AccessibleObject itemAccessibleObject = checkedListBox.AccessibilityObject.GetChild(0);
 
-        Assert.True(itemAccessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(itemAccessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(checkedListBox.IsHandleCreated);
     }
 
@@ -199,7 +200,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         checkedListBox.SetItemChecked(0, isChecked);
         checkedListBox.CreateControl();
 
-        Assert.Equal(expected, checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(expected, checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
         Assert.True(checkedListBox.IsHandleCreated);
     }
 
@@ -262,7 +263,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         checkedListBox.SetItemCheckState(0, checkState);
 
         Assert.Equal((UiaCore.ToggleState)toggleState, checkedListBox.AccessibilityObject.GetChild(0).ToggleState);
-        Assert.Equal(checkValue.ToString(), checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.Equal(checkValue.ToString(), checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
         Assert.False(checkedListBox.IsHandleCreated);
     }
 
@@ -307,7 +308,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         using CheckedListBox checkedListBox = new();
         checkedListBox.Items.Add("A");
 
-        Assert.True((bool)checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UiaCore.UIA.IsInvokePatternAvailablePropertyId));
+        Assert.True((bool)checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId));
         Assert.False(checkedListBox.IsHandleCreated);
     }
 
@@ -320,7 +321,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         checkedListBox.SetItemChecked(0, isChecked);
 
         AccessibleObject accessibleObject = checkedListBox.AccessibilityObject.GetChild(0);
-        Assert.Equal(isChecked, bool.Parse(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId).ToString()));
+        Assert.Equal(isChecked, bool.Parse(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId).ToString()));
         Assert.False(checkedListBox.IsHandleCreated);
     }
 }

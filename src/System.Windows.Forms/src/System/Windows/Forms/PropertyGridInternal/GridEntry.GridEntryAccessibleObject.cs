@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
@@ -332,7 +333,7 @@ internal abstract partial class GridEntry
             return base.FragmentNavigate(direction);
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
         {
             return propertyID switch
             {
@@ -341,25 +342,25 @@ internal abstract partial class GridEntry
                 // button in the PropertyGridView to show dialog/drop-down. In Level < 3 action
                 // button is one of the first children of PropertyGridView.
 
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TreeItemControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out GridEntry? owner) && owner.HasFocus,
-                UiaCore.UIA.IsEnabledPropertyId => true,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out GridEntry? owner) && owner.HasFocus,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => true,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                 _ => base.GetPropertyValue(propertyID)
             };
         }
 
         internal override bool IsIAccessibleExSupported() => this.TryGetOwnerAs(out GridEntry? owner) && owner.Expandable;
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
             switch (patternId)
             {
-                case UiaCore.UIA.InvokePatternId:
-                case UiaCore.UIA.LegacyIAccessiblePatternId:
+                case UIA_PATTERN_ID.UIA_InvokePatternId:
+                case UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId:
                     return true;
 
-                case UiaCore.UIA.ExpandCollapsePatternId:
+                case UIA_PATTERN_ID.UIA_ExpandCollapsePatternId:
                     {
                         if (this.TryGetOwnerAs(out GridEntry? owner) && owner.Expandable)
                         {
@@ -369,8 +370,8 @@ internal abstract partial class GridEntry
                         break;
                     }
 
-                case UiaCore.UIA.GridItemPatternId:
-                case UiaCore.UIA.TableItemPatternId:
+                case UIA_PATTERN_ID.UIA_GridItemPatternId:
+                case UIA_PATTERN_ID.UIA_TableItemPatternId:
                     {
                         if (!this.TryGetOwnerAs(out GridEntry? owner) || owner.OwnerGrid is null || owner.OwnerGrid.SortedByCategories)
                         {
@@ -399,7 +400,7 @@ internal abstract partial class GridEntry
 
             base.SetFocus();
 
-            RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 }

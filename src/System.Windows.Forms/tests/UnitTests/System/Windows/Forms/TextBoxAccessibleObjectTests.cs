@@ -1,35 +1,37 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
+
 namespace System.Windows.Forms.Tests;
 
 public class TextBoxAccessibleObjectTests
 {
     [WinFormsTheory]
-    [InlineData((int)Interop.UiaCore.UIA.IsTextPatternAvailablePropertyId)]
-    [InlineData((int)Interop.UiaCore.UIA.IsTextPattern2AvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId)]
     public void TextBoxAccessibleObject_TextPatternAvailable(int propertyId)
     {
         using TextBox textBox = new TextBox();
         AccessibleObject textBoxAccessibleObject = textBox.AccessibilityObject;
 
         // Interop.UiaCore.UIA accessible level (internal) is less than the test level (public) so it needs boxing and unboxing
-        Assert.True((bool)textBoxAccessibleObject.GetPropertyValue((Interop.UiaCore.UIA)propertyId));
+        Assert.True((bool)textBoxAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId));
         Assert.False(textBox.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)Interop.UiaCore.UIA.LegacyIAccessiblePatternId)]
-    [InlineData((int)Interop.UiaCore.UIA.TextPatternId)]
-    [InlineData((int)Interop.UiaCore.UIA.TextPattern2Id)]
-    [InlineData((int)Interop.UiaCore.UIA.ValuePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TextPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TextPattern2Id)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ValuePatternId)]
     public void TextBoxAccessibleObject_PatternSupported(int patternId)
     {
         using TextBox textBox = new TextBox();
         AccessibleObject textBoxAccessibleObject = textBox.AccessibilityObject;
 
         // Interop.UiaCore.UIA accessible level (internal) is less than the test level (public) so it needs boxing and unboxing
-        Assert.True(textBoxAccessibleObject.IsPatternSupported((Interop.UiaCore.UIA)patternId));
+        Assert.True(textBoxAccessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(textBox.IsHandleCreated);
     }
 
@@ -40,9 +42,9 @@ public class TextBoxAccessibleObjectTests
         textBox.CreateControl();
         // AccessibleRole is not set = Default
 
-        object actual = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.ControlTypePropertyId);
+        object actual = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(Interop.UiaCore.UIA.EditControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, actual);
         Assert.True(textBox.IsHandleCreated);
     }
 
@@ -81,8 +83,8 @@ public class TextBoxAccessibleObjectTests
         using TextBox textBox = new TextBox();
         textBox.AccessibleRole = role;
 
-        object actual = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.ControlTypePropertyId);
-        Interop.UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(textBox.IsHandleCreated);
@@ -95,7 +97,7 @@ public class TextBoxAccessibleObjectTests
         textBox.UseSystemPasswordChar = true;
         textBox.Text = "some text";
 
-        object actual = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.ValueValuePropertyId);
+        object actual = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId);
 
         Assert.Equal(SR.AccessDenied, actual);
         Assert.True(textBox.IsHandleCreated);
@@ -109,7 +111,7 @@ public class TextBoxAccessibleObjectTests
         using TextBox textBox = new TextBox();
         textBox.UseSystemPasswordChar = useSystemPasswordChar;
 
-        object actual = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.IsPasswordPropertyId);
+        object actual = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
 
         Assert.Equal(useSystemPasswordChar, actual);
         // Handle is recreated when setting UseSystemPasswordChar
@@ -124,7 +126,7 @@ public class TextBoxAccessibleObjectTests
     {
         using TextBox textBox = new() { PlaceholderText = placeholderText };
 
-        object helpText = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.HelpTextPropertyId);
+        object helpText = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId);
 
         Assert.Equal(expectedHelpText, helpText);
     }
@@ -137,7 +139,7 @@ public class TextBoxAccessibleObjectTests
         using TextBox textBox = new TextBox();
         textBox.PasswordChar = passwordChar;
 
-        object actual = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.IsPasswordPropertyId);
+        object actual = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
         bool expected = passwordChar != '\0';
 
         Assert.Equal(expected, actual);
@@ -152,7 +154,7 @@ public class TextBoxAccessibleObjectTests
         textBox.Multiline = true;
         textBox.UseSystemPasswordChar = true;
 
-        bool actual = (bool)textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.IsPasswordPropertyId);
+        bool actual = (bool)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
 
         Assert.False(actual);
         // Handle is recreated when setting UseSystemPasswordChar
@@ -168,7 +170,7 @@ public class TextBoxAccessibleObjectTests
         textBox.PasswordChar = passwordChar;
         textBox.Multiline = true;
 
-        object actual = textBox.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.IsPasswordPropertyId);
+        object actual = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
         bool expected = passwordChar != '\0';
 
         Assert.Equal(expected, actual);

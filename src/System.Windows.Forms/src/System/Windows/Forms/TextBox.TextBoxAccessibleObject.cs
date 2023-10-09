@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -12,11 +12,11 @@ public partial class TextBox
         public TextBoxAccessibleObject(TextBox owner) : base(owner)
         { }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
         {
             switch (propertyID)
             {
-                case UiaCore.UIA.HelpTextPropertyId:
+                case UIA_PROPERTY_ID.UIA_HelpTextPropertyId:
                     string? placeholderText = this.TryGetOwnerAs(out TextBox? owner) ? owner.PlaceholderText : null;
                     return string.IsNullOrEmpty(placeholderText) ? base.GetPropertyValue(propertyID) : placeholderText;
                 default:

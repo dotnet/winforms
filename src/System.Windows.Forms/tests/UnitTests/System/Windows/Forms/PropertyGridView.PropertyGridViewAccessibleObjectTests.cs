@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms.PropertyGridInternal;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Control;
 using static System.Windows.Forms.PropertyGridInternal.PropertyGridView;
 using static Interop;
@@ -140,9 +141,9 @@ public class PropertyGridView_PropertyGridViewAccessibleObjectTests
         using PropertyGrid propertyGrid = new PropertyGrid();
         // AccessibleRole is not set = Default
 
-        object actual = propertyGrid.GridViewAccessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = propertyGrid.GridViewAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.TableControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TableControlTypeId, actual);
         Assert.False(propertyGrid.IsHandleCreated);
     }
 
@@ -209,23 +210,23 @@ public class PropertyGridView_PropertyGridViewAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.IsGridPatternAvailablePropertyId)]
-    [InlineData((int)UiaCore.UIA.IsTablePatternAvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsGridPatternAvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTablePatternAvailablePropertyId)]
     public void PropertyGridViewAccessibleObject_Pattern_IsAvailable(int propertyId)
     {
         using PropertyGrid propertyGrid = new PropertyGrid();
         AccessibleObject accessibleObject = propertyGrid.GridViewAccessibleObject;
-        Assert.True((bool)accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId));
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.TablePatternId)]
-    [InlineData((int)UiaCore.UIA.GridPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TablePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_GridPatternId)]
     public void PropertyGridViewAccessibleObject_IsPatternSupported(int patternId)
     {
         using PropertyGrid propertyGrid = new PropertyGrid();
         AccessibleObject accessibleObject = propertyGrid.GridViewAccessibleObject;
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
 
     [WinFormsFact]
@@ -256,7 +257,7 @@ public class PropertyGridView_PropertyGridViewAccessibleObjectTests
                          ((rect.Y > gridViewRectangle.Y + 1 && rect.Y < gridViewRectangle.Bottom - 1) ||
                           (rect.Y < gridViewRectangle.Bottom - 1 && rect.Bottom > gridViewRectangle.Y + 1)); // +-1 are borders
 
-            Assert.Equal(!visible, (bool)categoryAccessibilityObject.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId));
+            Assert.Equal(!visible, (bool)categoryAccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId));
 
             foreach (GridEntry entry in category.Children)
             {
@@ -269,7 +270,7 @@ public class PropertyGridView_PropertyGridViewAccessibleObjectTests
                          ((rect.Y > gridViewRectangle.Y + 1 && rect.Y < gridViewRectangle.Bottom - 1) ||
                           (rect.Y < gridViewRectangle.Bottom - 1 && rect.Bottom > gridViewRectangle.Y + 1)); // +-1 are borders
 
-                Assert.Equal(!visible, (bool)entryAccessibilityObject.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId));
+                Assert.Equal(!visible, (bool)entryAccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId));
             }
         }
     }

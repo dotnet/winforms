@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewGroup;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
@@ -208,20 +209,20 @@ public class ListView_ListViewAccessibleObjectTests
         list.AccessibleName = "ListView";
         AccessibleObject listAccessibleObject = list.AccessibilityObject;
 
-        object accessibleName = listAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+        object accessibleName = listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
         Assert.Equal("ListView", accessibleName);
 
-        object automationId = listAccessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId);
+        object automationId = listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId);
         Assert.Equal("List", automationId);
 
-        object accessibleControlType = listAccessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        Assert.Equal(UiaCore.UIA.ListControlTypeId, accessibleControlType); // If AccessibleRole is Default
+        object accessibleControlType = listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ListControlTypeId, accessibleControlType); // If AccessibleRole is Default
 
-        object controlType = listAccessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = UiaCore.UIA.ListControlTypeId;
+        object controlType = listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_ListControlTypeId;
         Assert.Equal(expected, controlType);
 
-        Assert.True((bool)listAccessibleObject.GetPropertyValue(UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId));
+        Assert.True((bool)listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsMultipleViewPatternAvailablePropertyId));
         Assert.False(list.IsHandleCreated);
     }
 
@@ -1128,8 +1129,8 @@ public class ListView_ListViewAccessibleObjectTests
         using ListView listView = new ListView();
         listView.AccessibleRole = role;
 
-        object actual = listView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = listView.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(listView.IsHandleCreated);

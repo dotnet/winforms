@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Accessibility;
 
 internal static partial class Interop
 {
@@ -32,14 +33,14 @@ internal static partial class Interop
             /// <param name="patternId">Identifier indicating the interface to return</param>
             /// <returns>Returns the interface as an object, if supported; otherwise returns null/</returns>
             [return: MarshalAs(UnmanagedType.IUnknown)]
-            object? GetPatternProvider(UIA patternId);
+            object? GetPatternProvider(UIA_PATTERN_ID patternId);
 
             /// <summary>
             ///  Returns the value of the specified <paramref name="propertyId"/> from the element.
             /// </summary>
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns the requested value if supported or null if it is not.</returns>
-            object? GetPropertyValue(UIA propertyId);
+            object? GetPropertyValue(UIA_PROPERTY_ID propertyId);
 
             // Only native impl roots need to return something for this,
             // proxies always return null (cause we already know their HWNDs)

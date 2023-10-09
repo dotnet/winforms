@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests;
@@ -66,7 +67,7 @@ public class ToolStripItemAccessibleObjectTests
         using ToolStripItem item = ReflectionHelper.InvokePublicConstructor<ToolStripItem>(type);
         AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
 
-        bool supportsLegacyIAccessiblePatternId = toolStripItemAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId);
+        bool supportsLegacyIAccessiblePatternId = toolStripItemAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);
 
         Assert.True(supportsLegacyIAccessiblePatternId);
     }
@@ -93,12 +94,12 @@ public class ToolStripItemAccessibleObjectTests
 
         // By default Name has string.Empty value, because if AccessibleName is not defined
         // then control uses the value of "Text" property from owner Item (by default an empty string)
-        Assert.Equal(string.Empty, toolStripItemAccessibleObject.GetPropertyValue(UIA.NamePropertyId));
+        Assert.Equal(string.Empty, toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
 
         item.Name = "Name1";
         item.AccessibleName = "Test Name";
 
-        var accessibleName = toolStripItemAccessibleObject.GetPropertyValue(UIA.NamePropertyId);
+        var accessibleName = toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal("Test Name", accessibleName);
     }
@@ -115,7 +116,7 @@ public class ToolStripItemAccessibleObjectTests
 
         AccessibleObject toolStripItemAccessibleObject = item.AccessibilityObject;
 
-        Assert.True((bool)toolStripItemAccessibleObject.GetPropertyValue(UIA.IsOffscreenPropertyId) ||
+        Assert.True((bool)toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId) ||
             (toolStripItemAccessibleObject.Bounds.Width > 0 && toolStripItemAccessibleObject.Bounds.Height > 0));
     }
 
@@ -128,9 +129,9 @@ public class ToolStripItemAccessibleObjectTests
         using ToolStripItem toolStripItem = new SubToolStripItem();
         // AccessibleRole is not set = Default
 
-        UIA actual = (UIA)toolStripItem.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UIA.ButtonControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, actual);
     }
 
     [WinFormsFact]
@@ -156,12 +157,12 @@ public class ToolStripItemAccessibleObjectTests
         using ToolStripItem toolStripItem = new SubToolStripItem();
         toolStripItem.AccessibleRole = role;
 
-        UIA actual = (UIA)toolStripItem.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
-        UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         // Check if the method returns an exist UIA_ControlTypeId
-        Assert.True(actual >= UIA.ButtonControlTypeId && actual <= UIA.AppBarControlTypeId);
+        Assert.True(actual >= UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId && actual <= UIA_CONTROLTYPE_ID.UIA_AppBarControlTypeId);
     }
 
     [WinFormsFact]
@@ -169,8 +170,8 @@ public class ToolStripItemAccessibleObjectTests
     {
         using ToolStripItem toolStripItem = new SubToolStripItem();
 
-        Assert.False((bool)toolStripItem.AccessibilityObject.GetPropertyValue(UIA.IsExpandCollapsePatternAvailablePropertyId));
-        Assert.Null(toolStripItem.AccessibilityObject.GetPropertyValue(UIA.ValueValuePropertyId));
+        Assert.False((bool)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId));
+        Assert.Null(toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
     }
 
     [WinFormsFact]
@@ -180,7 +181,7 @@ public class ToolStripItemAccessibleObjectTests
 
         AccessibleObject accessibleObject = toolStripItem.AccessibilityObject;
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsControlElementPropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsControlElementPropertyId));
     }
 
     [WinFormsFact]
@@ -190,7 +191,7 @@ public class ToolStripItemAccessibleObjectTests
 
         AccessibleObject accessibleObject = toolStripItem.AccessibilityObject;
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsContentElementPropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsContentElementPropertyId));
     }
 
     [WinFormsFact]

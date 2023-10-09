@@ -3,9 +3,10 @@
 
 using System.ComponentModel;
 using System.Drawing.Design;
-using Moq;
-using System.Windows.Forms.TestUtilities;
 using System.Reflection;
+using System.Windows.Forms.TestUtilities;
+using Moq;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Design.Tests;
 
@@ -88,8 +89,8 @@ public class AnchorEditorTests
             .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(anchorUI);
 
         object actual = item.AccessibilityObject.TestAccessor().Dynamic
-            .GetPropertyValue(Interop.UiaCore.UIA.ControlTypePropertyId);
+            .GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(Interop.UiaCore.UIA.CheckBoxControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_CheckBoxControlTypeId, actual);
     }
 }

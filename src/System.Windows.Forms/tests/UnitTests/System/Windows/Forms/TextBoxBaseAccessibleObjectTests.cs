@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -22,30 +22,30 @@ public class TextBoxBaseAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)Interop.UiaCore.UIA.IsTextPatternAvailablePropertyId)]
-    [InlineData((int)Interop.UiaCore.UIA.IsTextPattern2AvailablePropertyId)]
-    [InlineData((int)Interop.UiaCore.UIA.IsValuePatternAvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId)]
     public void TextBoxBaseAccessibleObject_PatternAvailable(int propertyId)
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         AccessibleObject textBoxAccessibleObject = textBoxBase.AccessibilityObject;
 
         // Interop.UiaCore.UIA accessible level (internal) is less than the test level (public) so it needs boxing and unboxing
-        Assert.True((bool)textBoxAccessibleObject.GetPropertyValue((Interop.UiaCore.UIA)propertyId));
+        Assert.True((bool)textBoxAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId));
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)Interop.UiaCore.UIA.TextPatternId)]
-    [InlineData((int)Interop.UiaCore.UIA.TextPattern2Id)]
-    [InlineData((int)Interop.UiaCore.UIA.ValuePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TextPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TextPattern2Id)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ValuePatternId)]
     public void TextBoxBaseAccessibleObject_PatternSupported(int patternId)
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         AccessibleObject textBoxAccessibleObject = textBoxBase.AccessibilityObject;
 
         // Interop.UiaCore.UIA accessible level (internal) is less than the test level (public) so it needs boxing and unboxing
-        Assert.True(textBoxAccessibleObject.IsPatternSupported((Interop.UiaCore.UIA)patternId));
+        Assert.True(textBoxAccessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(textBoxBase.IsHandleCreated);
     }
 
@@ -112,8 +112,8 @@ public class TextBoxBaseAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, AccessibleRole.Text, (int)UiaCore.UIA.EditControlTypeId)]
-    [InlineData(false, AccessibleRole.None, (int)UiaCore.UIA.PaneControlTypeId)]
+    [InlineData(true, AccessibleRole.Text, (int)UIA_CONTROLTYPE_ID.UIA_EditControlTypeId)]
+    [InlineData(false, AccessibleRole.None, (int)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)]
     public void TextBoxBaseAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, AccessibleRole expectedRole, int expectedType)
     {
         using TextBoxBase textBoxBase = new SubTextBoxBase();
@@ -125,10 +125,10 @@ public class TextBoxBaseAccessibleObjectTests
         }
 
         AccessibleObject accessibleObject = textBoxBase.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedRole, accessibleObject.Role);
-        Assert.Equal((UiaCore.UIA)expectedType, actual);
+        Assert.Equal((UIA_CONTROLTYPE_ID)expectedType, actual);
         Assert.Equal(createControl, textBoxBase.IsHandleCreated);
     }
 
@@ -154,8 +154,8 @@ public class TextBoxBaseAccessibleObjectTests
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.AccessibleRole = role;
 
-        object actual = textBoxBase.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = textBoxBase.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(textBoxBase.IsHandleCreated);

@@ -7,6 +7,8 @@ using System.Globalization;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using SourceGenerated;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -1064,9 +1066,9 @@ public partial class DateTimePicker : Control
         if (IsAccessibilityObjectCreated)
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: UiaCore.ExpandCollapseState.Expanded,
-                newValue: UiaCore.ExpandCollapseState.Collapsed);
+                UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                oldValue: (VARIANT)(uint)UiaCore.ExpandCollapseState.Expanded,
+                newValue: (VARIANT)(uint)UiaCore.ExpandCollapseState.Collapsed);
         }
     }
 
@@ -1082,9 +1084,9 @@ public partial class DateTimePicker : Control
         if (IsAccessibilityObjectCreated)
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: UiaCore.ExpandCollapseState.Collapsed,
-                newValue: UiaCore.ExpandCollapseState.Expanded);
+                UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                oldValue: (VARIANT)(uint)UiaCore.ExpandCollapseState.Collapsed,
+                newValue: (VARIANT)(uint)UiaCore.ExpandCollapseState.Expanded);
         }
     }
 
@@ -1104,7 +1106,7 @@ public partial class DateTimePicker : Control
         if (IsAccessibilityObjectCreated)
         {
             _expandCollapseState = UiaCore.ExpandCollapseState.Collapsed;
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -1158,10 +1160,11 @@ public partial class DateTimePicker : Control
             // so I have to use current value twice.
             // Anyway it doesn't matter because the Narrator pronounces actual AO state.
             string? value = AccessibilityObject.Value;
+            using VARIANT variantValue = value is null ? default : (VARIANT)value;
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ValueValuePropertyId,
-                oldValue: value,
-                newValue: value);
+                UIA_PROPERTY_ID.UIA_ValueValuePropertyId,
+                oldValue: variantValue,
+                newValue: variantValue);
         }
     }
 

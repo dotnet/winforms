@@ -81,15 +81,15 @@ public partial class ComboBox
         /// </summary>
         /// <param name="propertyID">The accessible property ID.</param>
         /// <returns>The accessible property value.</returns>
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => _owningComboBox.Focused,
-                UiaCore.UIA.IsEnabledPropertyId => _owningComboBox.Enabled,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                UiaCore.UIA.IsOffscreenPropertyId => false,
-                UiaCore.UIA.NativeWindowHandlePropertyId => _handle,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_EditControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningComboBox.Focused,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningComboBox.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => false,
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _handle,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -104,12 +104,12 @@ public partial class ComboBox
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) =>
             patternId switch
             {
-                UiaCore.UIA.ValuePatternId => true,
-                UiaCore.UIA.TextPatternId => true,
-                UiaCore.UIA.TextPattern2Id => true,
+                UIA_PATTERN_ID.UIA_ValuePatternId => true,
+                UIA_PATTERN_ID.UIA_TextPatternId => true,
+                UIA_PATTERN_ID.UIA_TextPattern2Id => true,
                 _ => base.IsPatternSupported(patternId)
             };
 

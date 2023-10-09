@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -22,9 +22,9 @@ public class DomainUpDownAccessibleObjectTests
         using DomainUpDown domainUpDown = new DomainUpDown();
         // AccessibleRole is not set = Default
 
-        object actual = domainUpDown.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = domainUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.SpinnerControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_SpinnerControlTypeId, actual);
         Assert.False(domainUpDown.IsHandleCreated);
     }
 
@@ -46,7 +46,7 @@ public class DomainUpDownAccessibleObjectTests
         using DomainUpDown domainUpDown = new DomainUpDown();
         AccessibleObject accessibleObject = domainUpDown.AccessibilityObject;
 
-        bool isKeyboardFocusable = (bool)accessibleObject.GetPropertyValue(Interop.UiaCore.UIA.IsKeyboardFocusablePropertyId);
+        bool isKeyboardFocusable = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId);
         Assert.True(isKeyboardFocusable);
     }
 
@@ -58,7 +58,7 @@ public class DomainUpDownAccessibleObjectTests
 
         domainUpDown.Enabled = false;
 
-        bool isKeyboardFocusable = (bool)accessibleObject.GetPropertyValue(Interop.UiaCore.UIA.IsKeyboardFocusablePropertyId);
+        bool isKeyboardFocusable = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId);
         Assert.False(isKeyboardFocusable);
     }
 
@@ -84,22 +84,22 @@ public class DomainUpDownAccessibleObjectTests
         using DomainUpDown domainUpDown = new DomainUpDown();
         domainUpDown.AccessibleRole = role;
 
-        object actual = domainUpDown.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = domainUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(domainUpDown.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessibleRolePropertyId, AccessibleRole.SpinButton)]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
-    [InlineData((int)UiaCore.UIA.ValueValuePropertyId, null)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, AccessibleRole.SpinButton)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_ValueValuePropertyId, null)]
     public void DomainUpDownAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
         using DomainUpDown domainUpDown = new DomainUpDown();
         AccessibleObject accessibleObject = domainUpDown.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue((UiaCore.UIA)property);
+        object actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
 
         Assert.Equal(expected, actual);
         Assert.False(domainUpDown.IsHandleCreated);

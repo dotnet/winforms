@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -393,7 +394,7 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
     public void DataGridViewRowAccessibleObject_IsEnabled_ReturnsFalse_WithoutDataGridView()
     {
         using DataGridViewRow dataGridViewRow = new();
-        bool actualValue = (bool)dataGridViewRow.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId);
+        bool actualValue = (bool)dataGridViewRow.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId);
 
         Assert.False(actualValue);
     }
@@ -2375,7 +2376,7 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         dataGridView.Rows.Add(new DataGridViewRow());
         dataGridView.Rows[0].Cells[0].Value = "test1";
 
-        Assert.Equal("test1", dataGridView.Rows[0].AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.Equal("test1", dataGridView.Rows[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
