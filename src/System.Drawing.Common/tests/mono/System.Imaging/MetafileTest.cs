@@ -219,7 +219,7 @@ public class MetafileFulltrustTest
                 Assert.Equal(MetafileType.EmfPlusOnly, mh.Type);
                 break;
             default:
-                Assert.True(false, $"Unknown EmfType '{type}'");
+                Assert.Fail($"Unknown EmfType '{type}'");
                 break;
         }
     }

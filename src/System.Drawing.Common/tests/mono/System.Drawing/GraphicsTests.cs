@@ -81,7 +81,7 @@ public class GraphicsTest : IDisposable
     {
         int x, y;
         if (!IsEmptyBitmap(bitmap, out x, out y))
-            Assert.True(false, $"Position {x},{y}");
+            Assert.Fail($"Position {x},{y}");
     }
 
     private void CheckForNonEmptyBitmap(Bitmap bitmap)
