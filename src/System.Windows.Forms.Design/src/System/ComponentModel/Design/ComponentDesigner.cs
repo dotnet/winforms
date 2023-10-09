@@ -38,12 +38,12 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
         if (component?.Site is { } site)
         {
             PropertyDescriptor? defaultProperty = TypeDescriptor.GetDefaultProperty(component);
-            if (!(defaultProperty is not null && defaultProperty.PropertyType.Equals(typeof(string))))
+            if (defaultProperty is null)
             {
                 return;
             }
 
-            if (defaultProperty.GetValue(component) is string currentValue && string.IsNullOrEmpty(currentValue))
+            if (defaultProperty.TryGetValue(component, out string? currentValue) && string.IsNullOrEmpty(currentValue))
             {
                 defaultProperty.SetValue(component, site.Name);
             }
@@ -202,10 +202,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
                 // If there were missing designers, our array could have some missing bits. Because that's not
                 // the norm, we don't optimize for that.
-                if (idx < designers.Length)
-                {
-                    Array.Resize(ref designers, idx);
-                }
+                Array.Resize(ref designers, idx);
 
                 return designers;
             }
@@ -567,19 +564,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
     [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
     public virtual void OnSetComponentDefaults()
     {
-        ISite? site = Component?.Site;
-        if (site is not null)
-        {
-            IComponent component = Component!;
-            PropertyDescriptor? pd = TypeDescriptor.GetDefaultProperty(component);
-            if (pd is not null && pd.TryGetValue(component, out string? current))
-            {
-                if (string.IsNullOrEmpty(current))
-                {
-                    pd.SetValue(component, site.Name);
-                }
-            }
-        }
+        UpdateTextualDefaultProperty();
     }
 
     /// <summary>
