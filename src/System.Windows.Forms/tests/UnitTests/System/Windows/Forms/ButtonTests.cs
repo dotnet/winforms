@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.TestUtilities;
 using Moq;
-using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 using Point = System.Drawing.Point;
@@ -3779,7 +3778,7 @@ public class ButtonTests
             return base.RaiseAutomationEvent(eventId);
         }
 
-        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
+        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, object oldValue, object newValue)
         {
             if (Owner.IsHandleCreated)
             {

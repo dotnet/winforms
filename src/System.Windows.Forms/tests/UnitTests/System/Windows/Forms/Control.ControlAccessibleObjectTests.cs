@@ -3,7 +3,6 @@
 
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.Automation;
-using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 using IAccessible = Accessibility.IAccessible;
@@ -1061,7 +1060,7 @@ public class Control_ControlAccessibleObjectTests
             Assert.NotEqual(IntPtr.Zero, ownerControl.Handle);
         }
 
-        Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, (VARIANT)ownerControl.Name, (VARIANT)ownerControl.Name));
+        Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, ownerControl.Name, ownerControl.Name));
         Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
     }
 

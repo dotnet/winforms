@@ -8,7 +8,6 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.Layout;
-using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
@@ -2567,8 +2566,8 @@ public partial class ComboBox : ListControl
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                (VARIANT)(uint)UiaCore.ExpandCollapseState.Collapsed,
-                (VARIANT)(uint)UiaCore.ExpandCollapseState.Expanded);
+                UiaCore.ExpandCollapseState.Collapsed,
+                UiaCore.ExpandCollapseState.Expanded);
 
             if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
             {
@@ -3058,8 +3057,8 @@ public partial class ComboBox : ListControl
             // Notify Collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                (VARIANT)(uint)UiaCore.ExpandCollapseState.Expanded,
-                (VARIANT)(uint)UiaCore.ExpandCollapseState.Collapsed);
+                UiaCore.ExpandCollapseState.Expanded,
+                UiaCore.ExpandCollapseState.Collapsed);
         }
 
         // Collapsing the DropDown, so reset the flag.

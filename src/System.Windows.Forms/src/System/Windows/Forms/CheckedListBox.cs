@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
-using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -809,7 +808,7 @@ public partial class CheckedListBox : ListBox
         {
             AccessibleObject? checkedItem = AccessibilityObject.GetChild(ice.Index);
 
-            checkedItem?.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId, (VARIANT)(uint)ice.CurrentValue, (VARIANT)(uint)ice.NewValue);
+            checkedItem?.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId, ice.CurrentValue, ice.NewValue);
         }
     }
 

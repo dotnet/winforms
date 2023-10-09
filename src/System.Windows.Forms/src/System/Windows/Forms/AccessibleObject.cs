@@ -540,7 +540,7 @@ public unsafe partial class AccessibleObject :
     /// <returns>The element in the specified direction if it exists.</returns>
     internal virtual UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction) => null;
 
-    internal virtual IRawElementProviderSimple.Interface[]? GetEmbeddedFragmentRoots() => null;
+    internal virtual UiaCore.IRawElementProviderSimple[]? GetEmbeddedFragmentRoots() => null;
 
     internal virtual void SetFocus()
     {
@@ -771,7 +771,7 @@ public unsafe partial class AccessibleObject :
     UiaCore.IRawElementProviderSimple? UiaCore.IRawElementProviderSimple.HostRawElementProvider => HostRawElementProvider;
 
     object? UiaCore.IRawElementProviderSimple.GetPatternProvider(UIA_PATTERN_ID patternId)
-        {
+    {
         if (IsPatternSupported(patternId))
         {
             return this;
@@ -781,7 +781,7 @@ public unsafe partial class AccessibleObject :
     }
 
     object? UiaCore.IRawElementProviderSimple.GetPropertyValue(UIA_PROPERTY_ID propertyID)
-        {
+    {
         object? value = GetPropertyValue(propertyID);
 
 #if DEBUG
@@ -2239,7 +2239,7 @@ public unsafe partial class AccessibleObject :
         return false;
     }
 
-    internal virtual bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
+    internal virtual bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, object? oldValue, object? newValue)
     {
         if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
         {

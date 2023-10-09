@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using LabelAccessibleObject = System.Windows.Forms.Label.LabelAccessibleObject;
 
@@ -127,7 +126,7 @@ public class LabelAccessibleObjectTests
     {
         const string newText = "New text";
         using var control = new LabelWithCustomAccessibleObject(
-            (propertyId, value) => propertyId == UIA_PROPERTY_ID.UIA_NamePropertyId && ReferenceEquals(value.ToObject(), newText))
+            (propertyId, value) => propertyId == UIA_PROPERTY_ID.UIA_NamePropertyId && ReferenceEquals(value, newText))
         {
             Text = "Text"
         };
@@ -144,9 +143,9 @@ public class LabelAccessibleObjectTests
 
     private class LabelWithCustomAccessibleObject : Label
     {
-        private readonly Func<UIA_PROPERTY_ID, VARIANT, bool> _checkRaisedEvent;
+        private readonly Func<UIA_PROPERTY_ID, object, bool> _checkRaisedEvent;
 
-        public LabelWithCustomAccessibleObject(Func<UIA_PROPERTY_ID, VARIANT, bool> checkRaisedEvent)
+        public LabelWithCustomAccessibleObject(Func<UIA_PROPERTY_ID, object, bool> checkRaisedEvent)
         {
             _checkRaisedEvent = checkRaisedEvent;
         }
@@ -156,16 +155,16 @@ public class LabelAccessibleObjectTests
 
     private class ControlAccessibleObjectWithNotificationCounter : Control.ControlAccessibleObject
     {
-        private readonly Func<UIA_PROPERTY_ID, VARIANT, bool> _checkRaisedEvent;
+        private readonly Func<UIA_PROPERTY_ID, object, bool> _checkRaisedEvent;
 
-        public ControlAccessibleObjectWithNotificationCounter(Control ownerControl, Func<UIA_PROPERTY_ID, VARIANT, bool> checkRaisedEvent) : base(ownerControl)
+        public ControlAccessibleObjectWithNotificationCounter(Control ownerControl, Func<UIA_PROPERTY_ID, object, bool> checkRaisedEvent) : base(ownerControl)
         {
             _checkRaisedEvent = checkRaisedEvent;
         }
 
         internal int RaiseAutomationNotificationCallCount { get; private set; }
 
-        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
+        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, object oldValue, object newValue)
         {
             if (_checkRaisedEvent(propertyId, newValue))
             {

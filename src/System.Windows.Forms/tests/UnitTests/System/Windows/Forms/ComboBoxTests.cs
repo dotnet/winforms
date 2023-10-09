@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Moq;
-using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox;
 using Point = System.Drawing.Point;
@@ -2331,7 +2330,7 @@ public class ComboBoxTests
 
         internal int RaiseAutomationCallCount;
 
-        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
+        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, object oldValue, object newValue)
         {
             RaiseAutomationCallCount++;
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);

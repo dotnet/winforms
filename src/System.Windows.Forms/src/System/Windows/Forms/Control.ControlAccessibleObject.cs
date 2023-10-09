@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
-using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -505,7 +504,7 @@ public partial class Control
         internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
             => this.IsOwnerHandleCreated(out Control? _) && base.RaiseAutomationEvent(eventId);
 
-        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
+        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, object? oldValue, object? newValue)
             => this.IsOwnerHandleCreated(out Control? _)
                 && base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
 

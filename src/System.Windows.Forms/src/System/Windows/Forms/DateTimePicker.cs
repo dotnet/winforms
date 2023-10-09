@@ -7,7 +7,6 @@ using System.Globalization;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using SourceGenerated;
-using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -1067,8 +1066,8 @@ public partial class DateTimePicker : Control
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: (VARIANT)(uint)UiaCore.ExpandCollapseState.Expanded,
-                newValue: (VARIANT)(uint)UiaCore.ExpandCollapseState.Collapsed);
+                oldValue: UiaCore.ExpandCollapseState.Expanded,
+                newValue: UiaCore.ExpandCollapseState.Collapsed);
         }
     }
 
@@ -1085,8 +1084,8 @@ public partial class DateTimePicker : Control
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: (VARIANT)(uint)UiaCore.ExpandCollapseState.Collapsed,
-                newValue: (VARIANT)(uint)UiaCore.ExpandCollapseState.Expanded);
+                oldValue: UiaCore.ExpandCollapseState.Collapsed,
+                newValue: UiaCore.ExpandCollapseState.Expanded);
         }
     }
 
@@ -1160,11 +1159,10 @@ public partial class DateTimePicker : Control
             // so I have to use current value twice.
             // Anyway it doesn't matter because the Narrator pronounces actual AO state.
             string? value = AccessibilityObject.Value;
-            using VARIANT variantValue = value is null ? default : (VARIANT)value;
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ValueValuePropertyId,
-                oldValue: variantValue,
-                newValue: variantValue);
+                oldValue: value,
+                newValue: value);
         }
     }
 

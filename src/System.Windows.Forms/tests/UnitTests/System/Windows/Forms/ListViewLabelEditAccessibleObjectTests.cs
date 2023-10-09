@@ -96,7 +96,7 @@ public class ListViewLabelEditAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public unsafe void ListViewLabelEditAccessibleObject_HostRawElementProvider_ReturnsExpected()
+    public void ListViewLabelEditAccessibleObject_HostRawElementProvider_ReturnsExpected()
     {
         using ListView listView = CreateListViewAndStartEditing();
 

@@ -4024,7 +4024,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         return new Rectangle(xEditingControl, yEditingControl, wEditingControl, hEditingControl);
     }
 
-    internal virtual unsafe void ReleaseUiaProvider()
+    internal virtual void ReleaseUiaProvider()
     {
         if (!IsAccessibilityObjectCreated)
         {
