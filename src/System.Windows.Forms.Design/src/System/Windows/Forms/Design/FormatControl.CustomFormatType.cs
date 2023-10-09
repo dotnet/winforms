@@ -97,7 +97,7 @@ internal partial class FormatControl
 
         public override bool FormatLabelVisible => false;
 
-        public override string FormatString => _owner.customStringTextBox.Text;
+        public override string FormatString => _owner._customStringTextBox.Text;
 
         public static bool ParseStatic(string formatString)
         {
@@ -108,7 +108,7 @@ internal partial class FormatControl
         public override bool Parse(string formatString) => ParseStatic(formatString);
 
         public override void PushFormatStringIntoFormatType(string formatString) =>
-            _owner.customStringTextBox.Text = formatString;
+            _owner._customStringTextBox.Text = formatString;
 
         public override string ToString() =>
             SR.BindingFormattingDialogFormatTypeCustom;
