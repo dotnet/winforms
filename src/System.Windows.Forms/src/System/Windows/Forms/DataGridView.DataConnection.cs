@@ -87,20 +87,9 @@ public partial class DataGridView
             }
         }
 
-        public bool AllowEdit
-        {
-            get
-            {
-                if (CurrencyManager is not null)
-                {
-                    return CurrencyManager.AllowEdit;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+        public bool AllowEdit => CurrencyManager is not null
+            ? CurrencyManager.AllowEdit
+            : false;
 
         public bool AllowRemove
         {
@@ -111,13 +100,7 @@ public partial class DataGridView
             }
         }
 
-        public bool CancellingRowEdit
-        {
-            get
-            {
-                return _dataConnectionState[DATACONNECTIONSTATE_cancellingRowEdit];
-            }
-        }
+        public bool CancellingRowEdit => _dataConnectionState[DATACONNECTIONSTATE_cancellingRowEdit];
 
         public CurrencyManager? CurrencyManager { get; private set; }
 
@@ -127,46 +110,17 @@ public partial class DataGridView
 
         public bool DoNotChangePositionInTheCurrencyManager
         {
-            get
-            {
-                return _dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager];
-            }
-            set
-            {
-                _dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager] = value;
-            }
+            get => _dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager];
+            set => _dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager] = value;
         }
 
-        public bool InterestedInRowEvents
-        {
-            get
-            {
-                return _dataConnectionState[DATACONNECTIONSTATE_interestedInRowEvents];
-            }
-        }
+        public bool InterestedInRowEvents =>
+            _dataConnectionState[DATACONNECTIONSTATE_interestedInRowEvents];
 
-        public IList? List
-        {
-            get
-            {
-                if (CurrencyManager is not null)
-                {
-                    return CurrencyManager.List;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
+        public IList? List => CurrencyManager?.List;
 
-        public bool ListWasReset
-        {
-            get
-            {
-                return _dataConnectionState[DATACONNECTIONSTATE_listWasReset];
-            }
-        }
+        public bool ListWasReset =>
+            _dataConnectionState[DATACONNECTIONSTATE_listWasReset];
 
         public bool PositionChangingOutsideDataGridView
         {
@@ -180,21 +134,11 @@ public partial class DataGridView
             }
         }
 
-        public bool ProcessingListChangedEvent
-        {
-            get
-            {
-                return _dataConnectionState[DATACONNECTIONSTATE_processingListChangedEvent];
-            }
-        }
+        public bool ProcessingListChangedEvent =>
+            _dataConnectionState[DATACONNECTIONSTATE_processingListChangedEvent];
 
-        public bool ProcessingMetaDataChanges
-        {
-            get
-            {
-                return _dataConnectionState[DATACONNECTIONSTATE_processingMetaDataChanges];
-            }
-        }
+        public bool ProcessingMetaDataChanges =>
+            _dataConnectionState[DATACONNECTIONSTATE_processingMetaDataChanges];
 
         public bool RestoreRow
         {
@@ -1055,10 +999,8 @@ public partial class DataGridView
             }
         }
 
-        public void ResetCachedAllowUserToAddRowsInternal()
-        {
+        public void ResetCachedAllowUserToAddRowsInternal() =>
             _dataConnectionState[DATACONNECTIONSTATE_cachedAllowUserToAddRowsInternal] = _owner.AllowUserToAddRowsInternal;
-        }
 
         private void ResetDataConnectionState()
         {
