@@ -852,12 +852,12 @@ public enum Keys
     /// <summary>
     ///  The Oem tilde key.
     /// </summary>
-    Oemtilde = 0xC0,
+    Oem3 = 0xC0,
 
     /// <summary>
     ///  The Oem 3 key.
     /// </summary>
-    Oem3 = Oemtilde,
+    Oemtilde = Oem3,
 
     /// <summary>
     ///  The Oem Open Brackets key.
@@ -892,12 +892,12 @@ public enum Keys
     /// <summary>
     ///  The Oem Quotes key.
     /// </summary>
-    OemQuotes = 0xDE,
+    Oem7 = 0xDE,
 
     /// <summary>
     ///  The Oem 7 key.
     /// </summary>
-    Oem7 = OemQuotes,
+    OemQuotes = Oem7,
 
     /// <summary>
     ///  The Oem8 key.
