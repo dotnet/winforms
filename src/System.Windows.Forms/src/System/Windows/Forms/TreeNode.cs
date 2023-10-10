@@ -2129,7 +2129,11 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
             hItem = HTREEITEM,
-            iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList!.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex))
+            iImage = Math.Max(
+                0,
+                tv.ImageList is { } imageList && ImageIndexer.ActualIndex >= imageList.Images.Count
+                    ? imageList.Images.Count - 1
+                    : ImageIndexer.ActualIndex)
         };
 
         PInvoke.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);
