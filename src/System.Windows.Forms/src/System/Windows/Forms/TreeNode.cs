@@ -1901,7 +1901,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 PInvoke.SendMessage(tv, PInvoke.TVM_DELETEITEM, 0, (LPARAM)HTREEITEMInternal);
             }
 
-            _treeView!._nodesByHandle.Remove(HTREEITEMInternal);
+            tv._nodesByHandle.Remove(HTREEITEMInternal);
             HTREEITEMInternal = (HTREEITEM)IntPtr.Zero;
         }
 
