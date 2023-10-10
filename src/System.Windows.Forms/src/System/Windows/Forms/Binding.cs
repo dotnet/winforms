@@ -14,7 +14,7 @@ public partial class Binding
 {
     private BindingManagerBase? _bindingManagerBase;
 
-    private readonly BindToObject? _bindToObject;
+    private readonly BindToObject _bindToObject;
 
     private PropertyDescriptor? _propInfo;
     private PropertyDescriptor? _propIsNullInfo;
@@ -162,6 +162,7 @@ public partial class Binding
     /// </summary>
     private Binding()
     {
+        _bindToObject = null!;
     }
 
     public object? DataSource { get; }
@@ -260,7 +261,7 @@ public partial class Binding
                     newCurrencyManager.MetaDataChanged += new EventHandler(binding_MetaDataChanged);
                 }
 
-                _bindToObject!.SetBindingManagerBase(value);
+                _bindToObject.SetBindingManagerBase(value);
                 CheckBinding();
             }
         }
@@ -358,7 +359,7 @@ public partial class Binding
 
                 // If data member is currently DBNull, force update of bound
                 // control property so that it displays the new NullValue
-                if (IsBinding && Formatter.IsNullData(_bindToObject!.GetValue(), _dsNullValue))
+                if (IsBinding && Formatter.IsNullData(_bindToObject.GetValue(), _dsNullValue))
                 {
                     PushData();
                 }
@@ -387,7 +388,7 @@ public partial class Binding
                 // control property to refresh itself from the data source property.
                 if (IsBinding)
                 {
-                    object? dsValue = _bindToObject!.GetValue();
+                    object? dsValue = _bindToObject.GetValue();
 
                     // Check previous DataSourceNullValue for null
                     if (Formatter.IsNullData(dsValue, oldValue))
@@ -477,7 +478,7 @@ public partial class Binding
 
     private void CheckBinding()
     {
-        _bindToObject!.CheckBinding();
+        _bindToObject.CheckBinding();
 
         if (BindableComponent is not null && !string.IsNullOrEmpty(PropertyName))
         {
@@ -612,7 +613,7 @@ public partial class Binding
         else
         {
             // If data error info on data source for this binding, report that
-            errorText = _bindToObject!.DataErrorText;
+            errorText = _bindToObject.DataErrorText;
 
             // We should not cancel with an IDataErrorInfo error - we didn't in Everett
             if (!string.IsNullOrEmpty(errorText))
@@ -679,7 +680,7 @@ public partial class Binding
 
     private object? ParseObject(object? value)
     {
-        Type? type = _bindToObject!.BindToType;
+        Type? type = _bindToObject.BindToType;
         if (_formattingEnabled)
         {
             // Fire the Parse event so that user code gets a chance to supply the parsed value for us
@@ -770,7 +771,7 @@ public partial class Binding
             {
                 // Otherwise format the parsed value ourselves
                 TypeConverter? fieldInfoConverter = null;
-                if (_bindToObject!.FieldInfo is not null)
+                if (_bindToObject.FieldInfo is not null)
                 {
                     fieldInfoConverter = _bindToObject.FieldInfo.Converter;
                 }
@@ -896,7 +897,7 @@ public partial class Binding
             if (lastException is not null || (!FormattingEnabled && parsedValue is null))
             {
                 parseFailed = true;
-                parsedValue = _bindToObject!.GetValue();
+                parsedValue = _bindToObject.GetValue();
             }
 
             // Format the parsed value to be re-displayed in the control
@@ -920,7 +921,7 @@ public partial class Binding
             // Put the value into the data model
             if (!parseFailed)
             {
-                _bindToObject!.SetValue(parsedValue);
+                _bindToObject.SetValue(parsedValue);
             }
         }
         catch (Exception ex) when (FormattingEnabled)
@@ -990,7 +991,7 @@ public partial class Binding
         {
             if (IsBinding)
             {
-                dataSourceValue = _bindToObject!.GetValue();
+                dataSourceValue = _bindToObject.GetValue();
                 object? controlValue = FormatObject(dataSourceValue);
                 SetPropValue(controlValue);
                 _modified = false;
