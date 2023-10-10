@@ -1292,15 +1292,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         Type clonedType = GetType();
 
-        TreeNode node;
-        if (clonedType == typeof(TreeNode))
-        {
-            node = new TreeNode(_text, ImageIndexer.Index, SelectedImageIndexer.Index);
-        }
-        else
-        {
-            node = (TreeNode)Activator.CreateInstance(clonedType)!;
-        }
+        TreeNode node = clonedType == typeof(TreeNode)
+            ? new TreeNode(_text, ImageIndexer.Index, SelectedImageIndexer.Index)
+            : (TreeNode)Activator.CreateInstance(clonedType)!;
 
         node.Text = _text;
         node.Name = _name;
