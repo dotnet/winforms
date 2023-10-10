@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -16,10 +14,10 @@ internal sealed partial class DesignerActionPanel
     private sealed partial class EditorPropertyLine : TextBoxPropertyLine, IWindowsFormsEditorService, IServiceProvider
     {
         private readonly EditorButton _button;
-        private UITypeEditor _editor;
+        private UITypeEditor? _editor;
         private bool _hasSwatch;
-        private Image _swatch;
-        private FlyoutDialog _dropDownHolder;
+        private Image? _swatch;
+        private FlyoutDialog? _dropDownHolder;
         private bool _ignoreNextSelectChange;
         private bool _ignoreDropDownValue;
 
@@ -39,7 +37,7 @@ internal sealed partial class DesignerActionPanel
             {
                 try
                 {
-                    object newValue = _editor.EditValue(TypeDescriptorContext, this, Value);
+                    object? newValue = _editor.EditValue(TypeDescriptorContext, this, Value);
                     SetValue(newValue);
                 }
                 catch (Exception ex)
@@ -58,12 +56,12 @@ internal sealed partial class DesignerActionPanel
                 listBox.SelectedIndexChanged += new EventHandler(OnListBoxSelectedIndexChanged);
                 listBox.KeyDown += new KeyEventHandler(OnListBoxKeyDown);
 
-                TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
+                TypeConverter.StandardValuesCollection? standardValues = GetStandardValues();
                 if (standardValues is not null)
                 {
                     foreach (object o in standardValues)
                     {
-                        string newItem = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, CultureInfo.CurrentCulture, o);
+                        string newItem = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, CultureInfo.CurrentCulture, o)!;
                         listBox.Items.Add(newItem);
 
                         if ((o is not null) && o.Equals(Value))
@@ -181,12 +179,12 @@ internal sealed partial class DesignerActionPanel
             return size;
         }
 
-        private void OnButtonClick(object sender, EventArgs e)
+        private void OnButtonClick(object? sender, EventArgs e)
         {
             ActivateDropDown();
         }
 
-        private void OnButtonGotFocus(object sender, EventArgs e)
+        private void OnButtonGotFocus(object? sender, EventArgs e)
         {
             if (!_button.Ellipsis)
             {
@@ -194,7 +192,7 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        private void OnListBoxKeyDown(object sender, KeyEventArgs e)
+        private void OnListBoxKeyDown(object? sender, KeyEventArgs e)
         {
             // Always respect the enter key and F4
             if (e.KeyData == Keys.Enter)
@@ -210,7 +208,7 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        private void OnListBoxSelectedIndexChanged(object sender, EventArgs e)
+        private void OnListBoxSelectedIndexChanged(object? sender, EventArgs e)
         {
             // If we're ignoring this selected index change, do nothing
             if (_ignoreNextSelectChange)
@@ -241,11 +239,11 @@ internal sealed partial class DesignerActionPanel
 
             if (_button.Ellipsis)
             {
-                EditControl.AccessibleRole = (IsReadOnly() ? AccessibleRole.StaticText : AccessibleRole.Text);
+                EditControl!.AccessibleRole = (IsReadOnly() ? AccessibleRole.StaticText : AccessibleRole.Text);
             }
             else
             {
-                EditControl.AccessibleRole = (IsReadOnly() ? AccessibleRole.DropList : AccessibleRole.ComboBox);
+                EditControl!.AccessibleRole = (IsReadOnly() ? AccessibleRole.DropList : AccessibleRole.ComboBox);
             }
 
             _button.TabStop = _button.Ellipsis;
@@ -256,7 +254,7 @@ internal sealed partial class DesignerActionPanel
             _button.AccessibleName = EditControl.AccessibleName;
         }
 
-        protected override void OnReadOnlyTextBoxLabelClick(object sender, MouseEventArgs e)
+        protected override void OnReadOnlyTextBoxLabelClick(object? sender, MouseEventArgs e)
         {
             base.OnReadOnlyTextBoxLabelClick(sender, e);
 
@@ -299,7 +297,7 @@ internal sealed partial class DesignerActionPanel
                     Rectangle rect = new Rectangle(1, 1, width - 2, height - 2);
                     using (Graphics swatchGraphics = Graphics.FromImage(_swatch))
                     {
-                        _editor.PaintValue(Value, swatchGraphics, rect);
+                        _editor!.PaintValue(Value, swatchGraphics, rect);
                         swatchGraphics.DrawRectangle(SystemPens.ControlDark, new Rectangle(0, 0, width - 1, height - 1));
                     }
                 }
@@ -420,7 +418,7 @@ internal sealed partial class DesignerActionPanel
 
         DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
         {
-            IUIService uiService = ServiceProvider.GetService<IUIService>();
+            IUIService? uiService = ServiceProvider.GetService<IUIService>();
             if (uiService is not null)
             {
                 return uiService.ShowDialog(dialog);
@@ -431,7 +429,7 @@ internal sealed partial class DesignerActionPanel
         #endregion
 
         #region IServiceProvider implementation
-        object IServiceProvider.GetService(Type serviceType)
+        object? IServiceProvider.GetService(Type serviceType)
         {
             // Inject this class as the IWindowsFormsEditorService
             // so drop-down custom editors can work
