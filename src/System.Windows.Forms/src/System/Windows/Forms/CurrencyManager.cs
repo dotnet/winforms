@@ -13,7 +13,7 @@ namespace System.Windows.Forms;
 public class CurrencyManager : BindingManagerBase
 {
     private object? _dataSource;
-    private IList? _list;
+    private IList _list;
 
     private bool _bound;
     private bool _shouldBind = true;
@@ -55,6 +55,7 @@ public class CurrencyManager : BindingManagerBase
 
     internal CurrencyManager(object? dataSource)
     {
+        _list = null!;
         SetDataSource(dataSource);
     }
 
@@ -149,7 +150,7 @@ public class CurrencyManager : BindingManagerBase
 
         Release();
         _dataSource = dataSource;
-        _list = null;
+        _list = null!;
         finalType = null;
 
         object? tempList = dataSource;
@@ -233,7 +234,7 @@ public class CurrencyManager : BindingManagerBase
                 value = 0;
             }
 
-            int count = _list!.Count;
+            int count = _list.Count;
             if (value >= count)
             {
                 value = count - 1;
@@ -255,7 +256,7 @@ public class CurrencyManager : BindingManagerBase
     {
         get
         {
-            if (index < 0 || index >= _list!.Count)
+            if (index < 0 || index >= _list.Count)
             {
                 throw new IndexOutOfRangeException(string.Format(SR.ListManagerNoValue, index.ToString(CultureInfo.CurrentCulture)));
             }
@@ -264,7 +265,7 @@ public class CurrencyManager : BindingManagerBase
         }
         set
         {
-            if (index < 0 || index >= _list!.Count)
+            if (index < 0 || index >= _list.Count)
             {
                 throw new IndexOutOfRangeException(string.Format(SR.ListManagerNoValue, index.ToString(CultureInfo.CurrentCulture)));
             }
@@ -300,7 +301,7 @@ public class CurrencyManager : BindingManagerBase
     {
         if (Count > 0)
         {
-            object? item = (Position >= 0 && Position < _list!.Count) ? _list[Position] : null;
+            object? item = (Position >= 0 && Position < _list.Count) ? _list[Position] : null;
 
             if (item is IEditableObject iEditableItem)
             {
@@ -327,7 +328,7 @@ public class CurrencyManager : BindingManagerBase
         bool firePositionChange,
         bool pullData)
     {
-        if (newPosition == -1 && _list!.Count == 0)
+        if (newPosition == -1 && _list.Count == 0)
         {
             if (listposition != -1)
             {
@@ -460,7 +461,7 @@ public class CurrencyManager : BindingManagerBase
         return success;
     }
 
-    public override void RemoveAt(int index) => _list!.RemoveAt(index);
+    public override void RemoveAt(int index) => _list.RemoveAt(index);
 
     /// <summary>
     ///  Ends the current edit operation.
@@ -473,7 +474,7 @@ public class CurrencyManager : BindingManagerBase
 
             if (success)
             {
-                object? item = (Position >= 0 && Position < _list!.Count) ? _list[Position] : null;
+                object? item = (Position >= 0 && Position < _list.Count) ? _list[Position] : null;
 
                 if (item is IEditableObject iEditableItem)
                 {
@@ -490,7 +491,7 @@ public class CurrencyManager : BindingManagerBase
 
     private void FindGoodRow()
     {
-        int rowCount = _list!.Count;
+        int rowCount = _list.Count;
         for (int i = 0; i < rowCount; i++)
         {
             listposition = i;
@@ -565,7 +566,7 @@ public class CurrencyManager : BindingManagerBase
 
         if (property is not null)
         {
-            for (int i = 0; i < _list!.Count; i++)
+            for (int i = 0; i < _list.Count; i++)
             {
                 object? value = property.GetValue(_list[i]);
                 if (key.Equals(value))
