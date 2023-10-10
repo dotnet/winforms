@@ -2196,8 +2196,8 @@ public partial class TreeView : Control
         {
             e.Node!.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: (VARIANT)(uint)UiaCore.ExpandCollapseState.Collapsed,
-                newValue: (VARIANT)(uint)UiaCore.ExpandCollapseState.Expanded);
+                oldValue: UiaCore.ExpandCollapseState.Collapsed,
+                newValue: UiaCore.ExpandCollapseState.Expanded);
         }
     }
 

@@ -129,7 +129,7 @@ internal class ListViewLabelEditNativeWindow : NativeWindow
         switch (eventId)
         {
             case (uint)AccessibleEvents.ValueChange:
-                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_TextEdit_TextChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextChangedEventId);
                 break;
             case TextSelectionChanged:
                 AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);

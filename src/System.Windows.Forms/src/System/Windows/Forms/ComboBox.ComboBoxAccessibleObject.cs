@@ -152,7 +152,7 @@ public partial class ComboBox
                     this.GetOwnerAccessibleRole() == AccessibleRole.Default
                         ? UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId
                         : base.GetPropertyValue(propertyID),
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => this.TryGetOwnerAs(out ComboBox? owner) && owner.Focused,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out ComboBox? owner) && owner.Focused,
                 _ => base.GetPropertyValue(propertyID)
             };
 
