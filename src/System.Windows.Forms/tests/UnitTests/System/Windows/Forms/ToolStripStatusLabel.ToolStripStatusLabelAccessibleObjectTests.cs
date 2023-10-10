@@ -18,9 +18,9 @@ public class ToolStripStatusLabel_ToolStripStatusLabelAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, (int)UIA_CONTROLTYPE_ID.UIA_HyperlinkControlTypeId)]
-    [InlineData(false, (int)UIA_CONTROLTYPE_ID.UIA_TextControlTypeId)]
-    public void ToolStripStatusLabelAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool isLink, int expectedType)
+    [InlineData(true, (uint)UIA_CONTROLTYPE_ID.UIA_HyperlinkControlTypeId)]
+    [InlineData(false, (uint)UIA_CONTROLTYPE_ID.UIA_TextControlTypeId)]
+    public void ToolStripStatusLabelAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool isLink, uint expectedType)
     {
         using ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
         toolStripStatusLabel.IsLink = isLink;
@@ -28,7 +28,7 @@ public class ToolStripStatusLabel_ToolStripStatusLabelAccessibleObjectTests
 
         object actual = toolStripStatusLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(expectedType, actual);
+        Assert.Equal(expectedType, (uint)actual);
     }
 
     [WinFormsTheory]

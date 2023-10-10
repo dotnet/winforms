@@ -142,9 +142,9 @@ public class UpDownEditAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, AccessibleRole.Text, (int)UIA_CONTROLTYPE_ID.UIA_EditControlTypeId)]
-    [InlineData(false, AccessibleRole.None, (int)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)]
-    public void UpDownEditAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, AccessibleRole expectedRole, int expectedType)
+    [InlineData(true, AccessibleRole.Text, (uint)UIA_CONTROLTYPE_ID.UIA_EditControlTypeId)]
+    [InlineData(false, AccessibleRole.None, (uint)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)]
+    public void UpDownEditAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, AccessibleRole expectedRole, uint expectedType)
     {
         using UpDownBase upDown = new SubUpDownBase();
         using UpDownBase.UpDownEdit upDownEdit = new UpDownBase.UpDownEdit(upDown);
@@ -159,7 +159,7 @@ public class UpDownEditAccessibleObjectTests
         object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedRole, accessibleObject.Role);
-        Assert.Equal(expectedType, actual);
+        Assert.Equal(expectedType, (uint)actual);
         Assert.Equal(createControl, upDownEdit.IsHandleCreated);
     }
 
