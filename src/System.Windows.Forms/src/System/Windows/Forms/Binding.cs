@@ -157,14 +157,6 @@ public partial class Binding
         CheckBinding();
     }
 
-    /// <summary>
-    ///  Initializes a new instance of the <see cref="Binding"/> class.
-    /// </summary>
-    private Binding()
-    {
-        _bindToObject = null!;
-    }
-
     public object? DataSource { get; }
 
     public BindingMemberInfo BindingMemberInfo { get; }
