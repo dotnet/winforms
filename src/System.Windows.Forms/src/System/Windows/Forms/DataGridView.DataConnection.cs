@@ -468,12 +468,16 @@ public partial class DataGridView
                             _dataConnectionState[DATACONNECTIONSTATE_listWasReset] = false;
                         }
                     }
-                    else if (_dataConnectionState[DATACONNECTIONSTATE_inDeleteOperation] && CurrencyManager!.List!.Count == 0)
+                    else
                     {
-                        // if System.Data.DataView was in AddNew transaction and we delete all the rows in the System.Data.DataView
-                        // then System.Data.DataView will close the AddNew transaction under us
-                        // start another AddNew transaction on the back end
-                        AddNew();
+                        Debug.Assert(CurrencyManager?.List is not null);
+                        if (_dataConnectionState[DATACONNECTIONSTATE_inDeleteOperation] && CurrencyManager.List.Count == 0)
+                        {
+                            // if System.Data.DataView was in AddNew transaction and we delete all the rows in the System.Data.DataView
+                            // then System.Data.DataView will close the AddNew transaction under us
+                            // start another AddNew transaction on the back end
+                            AddNew();
+                        }
                     }
                 }
 
@@ -484,8 +488,9 @@ public partial class DataGridView
 
             // we received an ListChangedType.ItemAdded and our list has exactly the same number of rows as the back-end.
             // return.
+            Debug.Assert(CurrencyManager?.List is not null);
             if (e.ListChangedType == ListChangedType.ItemAdded &&
-                CurrencyManager!.List!.Count == (_owner.AllowUserToAddRowsInternal ? _owner.Rows.Count - 1 : _owner.Rows.Count))
+                CurrencyManager.List.Count == (_owner.AllowUserToAddRowsInternal ? _owner.Rows.Count - 1 : _owner.Rows.Count))
             {
                 if (_dataConnectionState[DATACONNECTIONSTATE_inDeleteOperation] && _dataConnectionState[DATACONNECTIONSTATE_didNotDeleteRowFromDataGridView])
                 {
@@ -540,9 +545,13 @@ public partial class DataGridView
 
                     return;
                 }
-                else if (CurrencyManager!.List!.Count == DataBoundRowsCount())
+                else
                 {
-                    return;
+                    Debug.Assert(CurrencyManager?.List is not null);
+                    if (CurrencyManager.List.Count == DataBoundRowsCount())
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -723,7 +732,8 @@ public partial class DataGridView
                     // row is being committed, don't scroll it into view.
                     if (_dataConnectionState[DATACONNECTIONSTATE_rowValidatingInAddNew])
                     {
-                        if (CurrencyManager!.List is IBindingList ibl && ibl.SupportsSorting && ibl.IsSorted)
+                        Debug.Assert(CurrencyManager?.List is not null);
+                        if (CurrencyManager.List is IBindingList ibl && ibl.SupportsSorting && ibl.IsSorted)
                         {
                             scrollIntoView = false;
                         }
@@ -814,7 +824,8 @@ public partial class DataGridView
                 {
                     Debug.Assert(_owner.AllowUserToAddRowsInternal, "how did we start an add new row transaction if the dataGridView control has AllowUserToAddRows == false?");
                     bool deleteAddNewRow = false;
-                    if (_owner.NewRowIndex == CurrencyManager!.List!.Count)
+                    Debug.Assert(CurrencyManager?.List is not null);
+                    if (_owner.NewRowIndex == CurrencyManager.List.Count)
                     {
                         // the user clicked on the 'add new row' and started typing
                         deleteAddNewRow = (rowIndex == _owner.NewRowIndex - 1);
