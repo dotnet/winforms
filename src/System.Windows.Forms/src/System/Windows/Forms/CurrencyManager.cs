@@ -517,7 +517,7 @@ public class CurrencyManager : BindingManagerBase
     /// </summary>
     internal void SetSort(PropertyDescriptor property, ListSortDirection sortDirection)
     {
-        if (_list is IBindingList bindingList && bindingList.SupportsSorting)
+        if (_list is IBindingList { SupportsSorting: true } bindingList)
         {
             bindingList.ApplySort(property, sortDirection);
         }
@@ -528,7 +528,7 @@ public class CurrencyManager : BindingManagerBase
     /// </summary>
     internal PropertyDescriptor? GetSortProperty()
     {
-        if (_list is IBindingList bindingList && bindingList.SupportsSorting)
+        if (_list is IBindingList { SupportsSorting: true } bindingList)
         {
             return bindingList.SortProperty;
         }
@@ -541,7 +541,7 @@ public class CurrencyManager : BindingManagerBase
     /// </summary>
     internal ListSortDirection GetSortDirection()
     {
-        if (_list is IBindingList bindingList && bindingList.SupportsSorting)
+        if (_list is IBindingList { SupportsSorting: true } bindingList)
         {
             return bindingList.SortDirection;
         }
@@ -556,7 +556,7 @@ public class CurrencyManager : BindingManagerBase
     {
         ArgumentNullException.ThrowIfNull(key);
 
-        if (property is not null && _list is IBindingList bindingList && bindingList.SupportsSearching)
+        if (property is not null && _list is IBindingList { SupportsSearching: true } bindingList)
         {
             return bindingList.Find(property, key);
         }
