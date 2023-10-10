@@ -142,50 +142,52 @@ public class CurrencyManager : BindingManagerBase
 
     private protected override void SetDataSource(object? dataSource)
     {
-        if (_dataSource != dataSource)
+        if (_dataSource == dataSource)
         {
-            Release();
-            _dataSource = dataSource;
-            _list = null;
-            finalType = null;
+            return;
+        }
 
-            object? tempList = dataSource;
-            if (tempList is Array)
+        Release();
+        _dataSource = dataSource;
+        _list = null;
+        finalType = null;
+
+        object? tempList = dataSource;
+        if (tempList is Array)
+        {
+            finalType = tempList.GetType();
+            tempList = (Array)tempList;
+        }
+
+        if (tempList is IListSource listSource)
+        {
+            tempList = listSource.GetList();
+        }
+
+        if (tempList is IList list)
+        {
+            finalType ??= tempList.GetType();
+
+            _list = list;
+            WireEvents(_list);
+            if (_list.Count > 0)
             {
-                finalType = tempList.GetType();
-                tempList = (Array)tempList;
-            }
-
-            if (tempList is IListSource listSource)
-            {
-                tempList = listSource.GetList();
-            }
-
-            if (tempList is IList list)
-            {
-                finalType ??= tempList.GetType();
-
-                _list = list;
-                WireEvents(_list);
-                if (_list.Count > 0)
-                {
-                    listposition = 0;
-                }
-                else
-                {
-                    listposition = -1;
-                }
-
-                OnItemChanged(_resetEvent);
-                OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1, -1));
-                UpdateIsBinding();
+                listposition = 0;
             }
             else
             {
-                ArgumentNullException.ThrowIfNull(tempList, nameof(dataSource));
-
-                throw new ArgumentException(string.Format(SR.ListManagerSetDataSource, tempList.GetType().FullName), nameof(dataSource));
+                listposition = -1;
             }
+
+            OnItemChanged(_resetEvent);
+            OnListChanged(new ListChangedEventArgs(ListChangedType.Reset, -1, -1));
+            UpdateIsBinding();
+        }
+        else
+        {
+            ArgumentNullException.ThrowIfNull(tempList, nameof(dataSource));
+
+            throw new ArgumentException(string.Format(SR.ListManagerSetDataSource, tempList.GetType().FullName), nameof(dataSource));
         }
     }
 
