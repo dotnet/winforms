@@ -1123,12 +1123,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// <summary>
     ///  Adds a new child node at the appropriate sorted position
     /// </summary>
-    internal int AddSorted(TreeNode node)
+    internal int AddSorted(TreeView parentTreeView, TreeNode node)
     {
         int index = 0;
-        int iMin, iLim, iT;
+        int iMin;
+        int iLim;
+        int iT;
         string nodeText = node.Text;
-        TreeView parentTreeView = TreeView!;
 
         var nodeCount = _childNodes.Count;
         if (nodeCount > 0)
