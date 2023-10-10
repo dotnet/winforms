@@ -12,31 +12,24 @@ internal sealed partial class DesignerActionPanel
 {
     private class TextLine : Line
     {
-        private Label _label;
+        private readonly Label _label;
         private DesignerActionTextItem _textItem;
 
-        public TextLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+        protected TextLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
         {
             actionPanel.FontChanged += new EventHandler(OnParentControlFontChanged);
-        }
-
-        public sealed override string FocusId
-        {
-            get => string.Empty;
-        }
-
-        protected override void AddControls(List<Control> controls)
-        {
             _label = new Label
             {
                 BackColor = Color.Transparent,
                 ForeColor = ActionPanel.LabelForeColor,
                 TextAlign = ContentAlignment.MiddleLeft,
-                UseMnemonic = false
+                UseMnemonic = false,
             };
-            controls.Add(_label);
+            AddedControls.Add(_label);
         }
+
+        public sealed override string FocusId => string.Empty;
 
         public sealed override void Focus()
         {
@@ -57,7 +50,7 @@ internal sealed partial class DesignerActionPanel
 
         private void OnParentControlFontChanged(object sender, EventArgs e)
         {
-            if (_label is not null && _label.Font is not null)
+            if (_label.Font is not null)
             {
                 _label.Font = GetFont();
             }
@@ -68,13 +61,25 @@ internal sealed partial class DesignerActionPanel
             return ActionPanel.Font;
         }
 
-        internal override void UpdateActionItem(DesignerActionList actionList, DesignerActionItem actionItem, ToolTip toolTip, ref int currentTabIndex)
+        internal override void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex)
         {
-            _textItem = (DesignerActionTextItem)actionItem;
+            Info info = (Info)lineInfo;
+            _textItem = info.Item;
             _label.Text = StripAmpersands(_textItem.DisplayName);
             _label.Font = GetFont();
             _label.TabIndex = currentTabIndex++;
             toolTip.SetToolTip(_label, _textItem.Description);
+        }
+
+        public sealed class Info(DesignerActionList list, DesignerActionTextItem item) : StandardLineInfo(list)
+        {
+            public override DesignerActionTextItem Item { get; } = item;
+            public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+            {
+                return new TextLine(serviceProvider, actionPanel);
+            }
+
+            public override Type LineType => typeof(TextLine);
         }
     }
 }

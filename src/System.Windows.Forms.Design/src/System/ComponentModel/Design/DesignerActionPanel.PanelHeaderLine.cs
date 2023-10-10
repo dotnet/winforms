@@ -12,25 +12,16 @@ internal sealed partial class DesignerActionPanel
 {
     private sealed class PanelHeaderLine : Line
     {
-        private DesignerActionList _actionList;
         private DesignerActionPanelHeaderItem _panelHeaderItem;
-        private Label _titleLabel;
-        private Label _subtitleLabel;
+        private readonly Label _titleLabel;
+        private readonly Label _subtitleLabel;
         private bool _formActive;
 
-        public PanelHeaderLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+        private PanelHeaderLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
         {
             actionPanel.FontChanged += new EventHandler(OnParentControlFontChanged);
-        }
 
-        public sealed override string FocusId
-        {
-            get => string.Empty;
-        }
-
-        protected override void AddControls(List<Control> controls)
-        {
             _titleLabel = new Label
             {
                 BackColor = Color.Transparent,
@@ -47,15 +38,17 @@ internal sealed partial class DesignerActionPanel
                 UseMnemonic = false
             };
 
-            controls.Add(_titleLabel);
-            controls.Add(_subtitleLabel);
+            AddedControls.Add(_titleLabel);
+            AddedControls.Add(_subtitleLabel);
 
             // TODO: Need to figure out how to unhook these events. Perhaps have Initialize() and Cleanup() methods.
             ActionPanel.FormActivated += new EventHandler(OnFormActivated);
             ActionPanel.FormDeactivate += new EventHandler(OnFormDeactivate);
         }
 
-        public sealed override void Focus()
+        public override string FocusId => string.Empty;
+
+        public override void Focus()
         {
             Debug.Fail("Should never try to focus a PanelHeaderLine");
         }
@@ -100,16 +93,13 @@ internal sealed partial class DesignerActionPanel
 
         private void OnParentControlFontChanged(object sender, EventArgs e)
         {
-            if (_titleLabel is not null && _subtitleLabel is not null)
-            {
-                _titleLabel.Font = new Font(ActionPanel.Font, FontStyle.Bold);
-                _subtitleLabel.Font = ActionPanel.Font;
-            }
+            _titleLabel.Font = new Font(ActionPanel.Font, FontStyle.Bold);
+            _subtitleLabel.Font = ActionPanel.Font;
         }
 
         public override void PaintLine(Graphics g, int lineWidth, int lineHeight)
         {
-            Color backColor = (_formActive || ActionPanel.DropDownActive) ? ActionPanel.TitleBarColor : ActionPanel.TitleBarUnselectedColor;
+            Color backColor = (_formActive || ActionPanel._dropDownActive) ? ActionPanel.TitleBarColor : ActionPanel.TitleBarUnselectedColor;
             using (SolidBrush b = new SolidBrush(backColor))
             {
                 g.FillRectangle(b, 1, 1, lineWidth - 2, lineHeight - 1);
@@ -122,10 +112,10 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        internal override void UpdateActionItem(DesignerActionList actionList, DesignerActionItem actionItem, ToolTip toolTip, ref int currentTabIndex)
+        internal override void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex)
         {
-            _actionList = actionList;
-            _panelHeaderItem = (DesignerActionPanelHeaderItem)actionItem;
+            Info info = (Info)lineInfo;
+            _panelHeaderItem = info.Item;
 
             _titleLabel.Text = _panelHeaderItem.DisplayName;
             _titleLabel.TabIndex = currentTabIndex++;
@@ -135,6 +125,17 @@ internal sealed partial class DesignerActionPanel
 
             // Force the font to update
             OnParentControlFontChanged(null, EventArgs.Empty);
+        }
+
+        public sealed class Info(DesignerActionPanelHeaderItem item) : LineInfo
+        {
+            public override DesignerActionPanelHeaderItem Item { get; } = item;
+            public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+            {
+                return new PanelHeaderLine(serviceProvider, actionPanel);
+            }
+
+            public override Type LineType => typeof(PanelHeaderLine);
         }
     }
 }

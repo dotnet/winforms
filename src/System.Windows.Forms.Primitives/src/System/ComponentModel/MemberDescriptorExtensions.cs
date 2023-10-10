@@ -40,4 +40,12 @@ internal static class MemberDescriptorExtensions
 
         return null;
     }
+
+    public static T? GetEditor<T>(this PropertyDescriptor descriptor) => (T?)descriptor.GetEditor(typeof(T));
+
+    public static bool TryGetEditor<T>(this PropertyDescriptor descriptor, [NotNullWhen(true)] out T? value)
+    {
+        value = (T?)descriptor.GetEditor(typeof(T));
+        return value is not null;
+    }
 }

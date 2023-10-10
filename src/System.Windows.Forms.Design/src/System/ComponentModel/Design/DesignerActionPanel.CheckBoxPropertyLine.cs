@@ -12,14 +12,10 @@ internal sealed partial class DesignerActionPanel
 {
     private sealed class CheckBoxPropertyLine : PropertyLine
     {
-        private CheckBox _checkBox;
+        private readonly CheckBox _checkBox;
 
-        public CheckBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+        private CheckBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
-        {
-        }
-
-        protected override void AddControls(List<Control> controls)
         {
             _checkBox = new CheckBox
             {
@@ -31,10 +27,10 @@ internal sealed partial class DesignerActionPanel
             };
             _checkBox.CheckedChanged += new EventHandler(OnCheckBoxCheckedChanged);
 
-            controls.Add(_checkBox);
+            AddedControls.Add(_checkBox);
         }
 
-        public sealed override void Focus() => _checkBox.Focus();
+        public override void Focus() => _checkBox.Focus();
 
         public override Size LayoutControls(int top, int width, bool measureOnly)
         {
@@ -65,6 +61,16 @@ internal sealed partial class DesignerActionPanel
         protected override void OnValueChanged()
         {
             _checkBox.Checked = (bool)Value;
+        }
+
+        public sealed class Info(DesignerActionList list, DesignerActionPropertyItem item) : PropertyLineInfo(list, item)
+        {
+            public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+            {
+                return new CheckBoxPropertyLine(serviceProvider, actionPanel);
+            }
+
+            public override Type LineType => typeof(CheckBoxPropertyLine);
         }
     }
 }
