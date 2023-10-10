@@ -594,7 +594,7 @@ public partial class Binding
             return DataSourceNullValue;
         }
 
-        return _propInfo!.GetValue(BindableComponent) ?? DataSourceNullValue;
+        return _propInfo?.GetValue(BindableComponent) ?? DataSourceNullValue;
     }
 
     private BindingCompleteEventArgs CreateBindingCompleteEventArgs(BindingCompleteContext context, Exception? ex)
