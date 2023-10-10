@@ -11,26 +11,32 @@ internal class ToolStripContentPanelDesigner : PanelDesigner
 {
     private BaseContextMenuStrip? _contextMenu;
 
-    private ContextMenuStrip DesignerContextMenu
+    private ContextMenuStrip? DesignerContextMenu
     {
         get
         {
-            if (_contextMenu is null)
-            {
-                _contextMenu = new BaseContextMenuStrip(Component.Site, Component as Component);
+            ISite? site = Component.Site;
+            var component = Component as Component;
 
-                // If multiple Items Selected don't show the custom properties...
-                _contextMenu.GroupOrdering.Clear();
-                _contextMenu.GroupOrdering.AddRange(
-                [
-                    StandardGroups.Code,
-                    StandardGroups.Verbs,
-                    StandardGroups.Custom,
-                    StandardGroups.Selection,
-                    StandardGroups.Edit,
-                    StandardGroups.Properties
-                ]);
-                _contextMenu.Text = "CustomContextMenu";
+            if (site is not null && component is not null)
+            {
+                if (_contextMenu is null)
+                {
+                    _contextMenu = new BaseContextMenuStrip(site, component);
+
+                    // If multiple Items Selected don't show the custom properties...
+                    _contextMenu.GroupOrdering.Clear();
+                    _contextMenu.GroupOrdering.AddRange(
+                    [
+                        StandardGroups.Code,
+                        StandardGroups.Verbs,
+                        StandardGroups.Custom,
+                        StandardGroups.Selection,
+                        StandardGroups.Edit,
+                        StandardGroups.Properties
+                    ]);
+                    _contextMenu.Text = "CustomContextMenu";
+                }
             }
 
             return _contextMenu;
@@ -58,7 +64,7 @@ internal class ToolStripContentPanelDesigner : PanelDesigner
         ToolStripContentPanel? panel = Component as ToolStripContentPanel;
         if (panel is not null && panel.Parent is ToolStripContainer)
         {
-            DesignerContextMenu.Show(x, y);
+            DesignerContextMenu?.Show(x, y);
         }
         else
         {

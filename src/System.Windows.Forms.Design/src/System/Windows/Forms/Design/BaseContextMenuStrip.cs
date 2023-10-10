@@ -85,7 +85,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
             Debug.Assert(root is not null, "Null root component. Will be unable to build selection menu");
             if (selectionService.PrimarySelection is Control selectedControl && root is not null && selectedControl != root)
             {
-                Control parentControl = selectedControl.Parent;
+                Control? parentControl = selectedControl.Parent;
                 while (parentControl is not null)
                 {
                     if (parentControl.Site is not null)
@@ -102,9 +102,8 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
                     parentControl = parentControl.Parent;
                 }
             }
-            else if (selectionService.PrimarySelection is ToolStripItem)
+            else if (selectionService.PrimarySelection is ToolStripItem selectedItem)
             {
-                ToolStripItem selectedItem = selectionService.PrimarySelection as ToolStripItem;
                 if (host.GetDesigner(selectedItem) is ToolStripItemDesigner itemDesigner)
                 {
                     parentControls = itemDesigner.AddParentTree();
@@ -119,9 +118,15 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
 
             if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
             {
-                selectionMenuItem.DropDown.Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
-                //Set the right Font
-                selectionMenuItem.DropDown.Font = (Font)uis.Styles["DialogFont"];
+                var rendererStyle = uis.Styles["VsRenderer"];
+                if (rendererStyle is ToolStripProfessionalRenderer renderer)
+                {
+                    selectionMenuItem.DropDown.Renderer = renderer;
+                }
+
+                // Set the right Font
+                selectionMenuItem.DropDown.Font = uis.Styles["DialogFont"] as Font;
+
                 if (uis.Styles["VsColorPanelText"] is Color color)
                 {
                     selectionMenuItem.DropDown.ForeColor = color;
@@ -136,7 +141,8 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
             }
 
             Groups[StandardGroups.Selection].Items.Add(selectionMenuItem);
-            // Re add the newly refreshed item..
+
+            // Re-add the newly refreshed item.
             if (index != -1)
             {
                 Items.Insert(index, selectionMenuItem);
@@ -150,7 +156,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     private void AddVerbMenuItem()
     {
         //Add Designer Verbs..
-        IMenuCommandService menuCommandService = (IMenuCommandService)serviceProvider.GetService(typeof(IMenuCommandService));
+        IMenuCommandService? menuCommandService = serviceProvider.GetService(typeof(IMenuCommandService)) as IMenuCommandService;
         if (menuCommandService is not null)
         {
             DesignerVerbCollection verbCollection = menuCommandService.Verbs;
@@ -197,11 +203,8 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
         Name = "designerContextMenuStrip";
         if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
         {
-            Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
-            if (uis.Styles["VsColorPanelText"] is Color)
-            {
-                ForeColor = (Color)uis.Styles["VsColorPanelText"];
-            }
+            Renderer = uis.Styles["VsRenderer"] as ToolStripProfessionalRenderer;
+            ForeColor = (uis.Styles["VsColorPanelText"] as Color?) ?? DefaultForeColor;
         }
 
         GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.ZORder, StandardGroups.Grid, StandardGroups.Lock, StandardGroups.Verbs, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
@@ -223,7 +226,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     {
         if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
         {
-            Font = (Font)uis.Styles["DialogFont"];
+            Font = uis.Styles["DialogFont"] as Font;
         }
 
         foreach (ToolStripItem item in Items)
@@ -242,22 +245,22 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     /// </summary>
     private class SelectToolStripMenuItem : ToolStripMenuItem
     {
-        private readonly Component _comp;
+        private readonly Component? _comp;
         private readonly IServiceProvider _serviceProvider;
         private readonly Type _itemType;
         private bool _cachedImage;
-        private Image _image;
-        private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace;
+        private Image? _image;
+        private static readonly string s_systemWindowsFormsNamespace = typeof(ToolStripItem).Namespace!;
 
         public SelectToolStripMenuItem(Component c, IServiceProvider provider)
         {
             _comp = c;
             _serviceProvider = provider;
             // Get NestedSiteName...
-            string compName = null;
+            string? compName = null;
             if (_comp is not null)
             {
-                ISite site = _comp.Site;
+                ISite? site = _comp.Site;
                 if (site is not null)
                 {
                     if (site is INestedSite nestedSite && !string.IsNullOrEmpty(nestedSite.FullName))
@@ -275,7 +278,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
             _itemType = c.GetType();
         }
 
-        public override Image Image
+        public override Image? Image
         {
             get
             {
@@ -290,7 +293,10 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
                     }
 
                     // if all else fails, throw up a default image.
-                    _image ??= ToolboxBitmapAttribute.GetImageFromResource(_comp.GetType(), null, false);
+                    if (_comp is not null)
+                    {
+                        _image ??= ToolboxBitmapAttribute.GetImageFromResource(_comp.GetType(), null, false);
+                    }
                 }
 
                 return _image;
@@ -307,7 +313,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
         /// </summary>
         protected override void OnClick(EventArgs e)
         {
-            if (_serviceProvider.GetService(typeof(ISelectionService)) is ISelectionService selectionService)
+            if (_comp is not null && _serviceProvider.GetService(typeof(ISelectionService)) is ISelectionService selectionService)
             {
                 selectionService.SetSelectedComponents(new object[] { _comp }, SelectionTypes.Replace);
             }
