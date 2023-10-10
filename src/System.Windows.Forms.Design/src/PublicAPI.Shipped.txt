@@ -210,8 +210,8 @@ System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.MethodSup
 ~System.Drawing.Design.IToolboxService.SetSelectedToolboxItem(System.Drawing.Design.ToolboxItem toolboxItem) -> void
 ~System.Drawing.Design.IToolboxUser.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
 ~System.Drawing.Design.IToolboxUser.ToolPicked(System.Drawing.Design.ToolboxItem tool) -> void
-~System.Drawing.Design.ToolboxComponentsCreatingEventArgs.DesignerHost.get -> System.ComponentModel.Design.IDesignerHost
-~System.Drawing.Design.ToolboxComponentsCreatingEventArgs.ToolboxComponentsCreatingEventArgs(System.ComponentModel.Design.IDesignerHost host) -> void
+System.Drawing.Design.ToolboxComponentsCreatingEventArgs.DesignerHost.get -> System.ComponentModel.Design.IDesignerHost?
+System.Drawing.Design.ToolboxComponentsCreatingEventArgs.ToolboxComponentsCreatingEventArgs(System.ComponentModel.Design.IDesignerHost? host) -> void
 System.Drawing.Design.ToolboxItem.AssemblyName.get -> System.Reflection.AssemblyName?
 System.Drawing.Design.ToolboxItem.AssemblyName.set -> void
 System.Drawing.Design.ToolboxItem.Bitmap.get -> System.Drawing.Bitmap?
@@ -237,12 +237,12 @@ System.Drawing.Design.ToolboxItem.ToolboxItem(System.Type? toolType) -> void
 System.Drawing.Design.ToolboxItem.TypeName.get -> string!
 System.Drawing.Design.ToolboxItem.TypeName.set -> void
 System.Drawing.Design.ToolboxItem.ValidatePropertyType(string! propertyName, object? value, System.Type! expectedType, bool allowNull) -> void
-~System.Drawing.Design.ToolboxItemCollection.Contains(System.Drawing.Design.ToolboxItem value) -> bool
-~System.Drawing.Design.ToolboxItemCollection.CopyTo(System.Drawing.Design.ToolboxItem[] array, int index) -> void
-~System.Drawing.Design.ToolboxItemCollection.IndexOf(System.Drawing.Design.ToolboxItem value) -> int
-~System.Drawing.Design.ToolboxItemCollection.this[int index].get -> System.Drawing.Design.ToolboxItem
-~System.Drawing.Design.ToolboxItemCollection.ToolboxItemCollection(System.Drawing.Design.ToolboxItem[] value) -> void
-~System.Drawing.Design.ToolboxItemCollection.ToolboxItemCollection(System.Drawing.Design.ToolboxItemCollection value) -> void
+System.Drawing.Design.ToolboxItemCollection.Contains(System.Drawing.Design.ToolboxItem! value) -> bool
+System.Drawing.Design.ToolboxItemCollection.CopyTo(System.Drawing.Design.ToolboxItem![]! array, int index) -> void
+System.Drawing.Design.ToolboxItemCollection.IndexOf(System.Drawing.Design.ToolboxItem! value) -> int
+System.Drawing.Design.ToolboxItemCollection.this[int index].get -> System.Drawing.Design.ToolboxItem!
+System.Drawing.Design.ToolboxItemCollection.ToolboxItemCollection(System.Drawing.Design.ToolboxItem![]! value) -> void
+System.Drawing.Design.ToolboxItemCollection.ToolboxItemCollection(System.Drawing.Design.ToolboxItemCollection! value) -> void
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Add(System.Windows.Forms.Design.Behavior.Adorner! value) -> int
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(params System.Windows.Forms.Design.Behavior.Adorner![]! value) -> void
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection! value) -> void
