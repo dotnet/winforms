@@ -673,6 +673,7 @@ public partial class Binding
     private object? ParseObject(object? value)
     {
         Type? type = _bindToObject.BindToType;
+        Debug.Assert(type is not null);
         if (_formattingEnabled)
         {
             // Fire the Parse event so that user code gets a chance to supply the parsed value for us
@@ -696,7 +697,7 @@ public partial class Binding
 
                 return Formatter.ParseObject(
                     value,
-                    type!,
+                    type,
                     (value is null ? _propInfo!.PropertyType : value.GetType()),
                     fieldInfoConverter,
                     _propInfoConverter,
@@ -711,7 +712,7 @@ public partial class Binding
 
             // First try: use the OnParse event
             OnParse(e);
-            if (e.Value is not null && (e.Value.GetType().IsSubclassOf(type!) || e.Value.GetType() == type || e.Value is DBNull))
+            if (e.Value is not null && (e.Value.GetType().IsSubclassOf(type) || e.Value.GetType() == type || e.Value is DBNull))
             {
                 return e.Value;
             }
@@ -726,8 +727,8 @@ public partial class Binding
             // Last try: use Convert.ToType
             if (value is IConvertible)
             {
-                object ret = Convert.ChangeType(value, type!, CultureInfo.CurrentCulture);
-                if (ret is not null && (ret.GetType().IsSubclassOf(type!) || ret.GetType() == type))
+                object ret = Convert.ChangeType(value, type, CultureInfo.CurrentCulture);
+                if (ret is not null && (ret.GetType().IsSubclassOf(type) || ret.GetType() == type))
                 {
                     return ret;
                 }
