@@ -35,6 +35,7 @@ public class DataGridViewTextBoxColumn : DataGridViewColumn
     [DefaultValue(ColumnMaxInputLength)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_TextBoxColumnMaxInputLengthDescr))]
+    [MemberNotNull(nameof(TextBoxCellTemplate))]
     public int MaxInputLength
     {
         get
@@ -50,7 +51,7 @@ public class DataGridViewTextBoxColumn : DataGridViewColumn
         {
             if (MaxInputLength != value)
             {
-                TextBoxCellTemplate!.MaxInputLength = value;
+                TextBoxCellTemplate.MaxInputLength = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;

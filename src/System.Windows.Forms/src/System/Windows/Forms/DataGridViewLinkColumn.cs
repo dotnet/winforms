@@ -19,24 +19,27 @@ public class DataGridViewLinkColumn : DataGridViewColumn
     {
     }
 
+    private DataGridViewLinkCell? LinkCellTemplate => (DataGridViewLinkCell?)CellTemplate;
+
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_LinkColumnActiveLinkColorDescr))]
+    [MemberNotNull(nameof(LinkCellTemplate))]
     public Color ActiveLinkColor
     {
         get
         {
-            if (CellTemplate is null)
+            if (LinkCellTemplate is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            return ((DataGridViewLinkCell)CellTemplate).ActiveLinkColor;
+            return LinkCellTemplate.ActiveLinkColor;
         }
         set
         {
             if (!ActiveLinkColor.Equals(value))
             {
-                ((DataGridViewLinkCell)CellTemplate!).ActiveLinkColorInternal = value;
+                LinkCellTemplate.ActiveLinkColorInternal = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
@@ -85,22 +88,23 @@ public class DataGridViewLinkColumn : DataGridViewColumn
     [DefaultValue(LinkBehavior.SystemDefault)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_LinkColumnLinkBehaviorDescr))]
+    [MemberNotNull(nameof(LinkCellTemplate))]
     public LinkBehavior LinkBehavior
     {
         get
         {
-            if (CellTemplate is null)
+            if (LinkCellTemplate is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            return ((DataGridViewLinkCell)CellTemplate).LinkBehavior;
+            return LinkCellTemplate.LinkBehavior;
         }
         set
         {
             if (!LinkBehavior.Equals(value))
             {
-                ((DataGridViewLinkCell)CellTemplate!).LinkBehavior = value;
+                LinkCellTemplate.LinkBehavior = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
@@ -122,22 +126,23 @@ public class DataGridViewLinkColumn : DataGridViewColumn
 
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_LinkColumnLinkColorDescr))]
+    [MemberNotNull(nameof(LinkCellTemplate))]
     public Color LinkColor
     {
         get
         {
-            if (CellTemplate is null)
+            if (LinkCellTemplate is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            return ((DataGridViewLinkCell)CellTemplate).LinkColor;
+            return LinkCellTemplate.LinkColor;
         }
         set
         {
             if (!LinkColor.Equals(value))
             {
-                ((DataGridViewLinkCell)CellTemplate!).LinkColorInternal = value;
+                LinkCellTemplate.LinkColorInternal = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
@@ -208,22 +213,23 @@ public class DataGridViewLinkColumn : DataGridViewColumn
     [DefaultValue(true)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_LinkColumnTrackVisitedStateDescr))]
+    [MemberNotNull(nameof(LinkCellTemplate))]
     public bool TrackVisitedState
     {
         get
         {
-            if (CellTemplate is null)
+            if (LinkCellTemplate is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            return ((DataGridViewLinkCell)CellTemplate).TrackVisitedState;
+            return LinkCellTemplate.TrackVisitedState;
         }
         set
         {
             if (TrackVisitedState != value)
             {
-                ((DataGridViewLinkCell)CellTemplate!).TrackVisitedStateInternal = value;
+                LinkCellTemplate.TrackVisitedStateInternal = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
@@ -246,22 +252,23 @@ public class DataGridViewLinkColumn : DataGridViewColumn
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_LinkColumnUseColumnTextForLinkValueDescr))]
+    [MemberNotNull(nameof(LinkCellTemplate))]
     public bool UseColumnTextForLinkValue
     {
         get
         {
-            if (CellTemplate is null)
+            if (LinkCellTemplate is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            return ((DataGridViewLinkCell)CellTemplate).UseColumnTextForLinkValue;
+            return LinkCellTemplate.UseColumnTextForLinkValue;
         }
         set
         {
             if (UseColumnTextForLinkValue != value)
             {
-                ((DataGridViewLinkCell)CellTemplate!).UseColumnTextForLinkValueInternal = value;
+                LinkCellTemplate.UseColumnTextForLinkValueInternal = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
@@ -283,22 +290,23 @@ public class DataGridViewLinkColumn : DataGridViewColumn
 
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_LinkColumnVisitedLinkColorDescr))]
+    [MemberNotNull(nameof(LinkCellTemplate))]
     public Color VisitedLinkColor
     {
         get
         {
-            if (CellTemplate is null)
+            if (LinkCellTemplate is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            return ((DataGridViewLinkCell)CellTemplate).VisitedLinkColor;
+            return LinkCellTemplate.VisitedLinkColor;
         }
         set
         {
             if (!VisitedLinkColor.Equals(value))
             {
-                ((DataGridViewLinkCell)CellTemplate!).VisitedLinkColorInternal = value;
+                LinkCellTemplate.VisitedLinkColorInternal = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;

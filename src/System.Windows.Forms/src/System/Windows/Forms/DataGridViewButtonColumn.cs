@@ -23,6 +23,8 @@ public class DataGridViewButtonColumn : DataGridViewColumn
         DefaultCellStyle = defaultCellStyle;
     }
 
+    private DataGridViewButtonCell? ButtonCellTemplate => (DataGridViewButtonCell?)CellTemplate;
+
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public override DataGridViewCell? CellTemplate
@@ -52,22 +54,23 @@ public class DataGridViewButtonColumn : DataGridViewColumn
     [DefaultValue(FlatStyle.Standard)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ButtonColumnFlatStyleDescr))]
+    [MemberNotNull(nameof(ButtonCellTemplate))]
     public FlatStyle FlatStyle
     {
         get
         {
-            if (CellTemplate is null)
+            if (ButtonCellTemplate is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            return ((DataGridViewButtonCell)CellTemplate).FlatStyle;
+            return ButtonCellTemplate.FlatStyle;
         }
         set
         {
             if (FlatStyle != value)
             {
-                ((DataGridViewButtonCell)CellTemplate!).FlatStyle = value;
+                ButtonCellTemplate.FlatStyle = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
@@ -131,22 +134,23 @@ public class DataGridViewButtonColumn : DataGridViewColumn
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ButtonColumnUseColumnTextForButtonValueDescr))]
+    [MemberNotNull(nameof(ButtonCellTemplate))]
     public bool UseColumnTextForButtonValue
     {
         get
         {
-            if (CellTemplate is null)
+            if (ButtonCellTemplate is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            return ((DataGridViewButtonCell)CellTemplate).UseColumnTextForButtonValue;
+            return ButtonCellTemplate.UseColumnTextForButtonValue;
         }
         set
         {
             if (UseColumnTextForButtonValue != value)
             {
-                ((DataGridViewButtonCell)CellTemplate!).UseColumnTextForButtonValueInternal = value;
+                ButtonCellTemplate.UseColumnTextForButtonValueInternal = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;

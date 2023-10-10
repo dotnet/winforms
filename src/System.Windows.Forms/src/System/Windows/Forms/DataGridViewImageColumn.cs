@@ -65,22 +65,35 @@ public class DataGridViewImageColumn : DataGridViewColumn
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridViewImageColumn_DescriptionDescr))]
     [AllowNull]
+    [MemberNotNull(nameof(ImageCellTemplate))]
     public string Description
     {
-        get => ImageCellTemplate.Description;
+        get
+        {
+            if (ImageCellTemplate is null)
+            {
+                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
+            }
+
+            return ImageCellTemplate.Description;
+        }
+
         set
         {
-            ImageCellTemplate.Description = value;
-            if (DataGridView is not null)
+            if (Description != value)
             {
-                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                int rowCount = dataGridViewRows.Count;
-                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                ImageCellTemplate.Description = value;
+                if (DataGridView is not null)
                 {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
+                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                    int rowCount = dataGridViewRows.Count;
+                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                     {
-                        dataGridViewCell.Description = value;
+                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                        if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
+                        {
+                            dataGridViewCell.Description = value;
+                        }
                     }
                 }
             }
@@ -112,26 +125,21 @@ public class DataGridViewImageColumn : DataGridViewColumn
         }
     }
 
-    private DataGridViewImageCell ImageCellTemplate
-    {
-        get
-        {
-            if (CellTemplate is null)
-            {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
-            }
-
-            return (DataGridViewImageCell)CellTemplate;
-        }
-    }
+    private DataGridViewImageCell? ImageCellTemplate => (DataGridViewImageCell?)CellTemplate;
 
     [DefaultValue(DataGridViewImageCellLayout.Normal)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridViewImageColumn_ImageLayoutDescr))]
+    [MemberNotNull(nameof(ImageCellTemplate))]
     public DataGridViewImageCellLayout ImageLayout
     {
         get
         {
+            if (ImageCellTemplate is null)
+            {
+                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
+            }
+
             DataGridViewImageCellLayout imageLayout = ImageCellTemplate.ImageLayout;
             if (imageLayout == DataGridViewImageCellLayout.NotSet)
             {
@@ -166,9 +174,19 @@ public class DataGridViewImageColumn : DataGridViewColumn
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [MemberNotNull(nameof(ImageCellTemplate))]
     public bool ValuesAreIcons
     {
-        get => ImageCellTemplate.ValueIsIcon;
+        get
+        {
+            if (ImageCellTemplate is null)
+            {
+                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
+            }
+
+            return ImageCellTemplate.ValueIsIcon;
+        }
+
         set
         {
             if (ValuesAreIcons != value)
@@ -254,7 +272,7 @@ public class DataGridViewImageColumn : DataGridViewColumn
                 !defaultNullValue.Equals(defaultCellStyle.NullValue) ||
                 !defaultCellStyle.IsDataSourceNullValueDefault ||
                 !string.IsNullOrEmpty(defaultCellStyle.Format) ||
-                !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
+                !defaultCellStyle.FormatProvider.Equals(Globalization.CultureInfo.CurrentCulture) ||
                 defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                 defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
                 defaultCellStyle.Tag is not null ||
