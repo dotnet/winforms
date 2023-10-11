@@ -80,20 +80,22 @@ public class DataGridViewImageColumn : DataGridViewColumn
 
         set
         {
-            if (Description != value)
+            if (Description == value)
             {
-                ImageCellTemplate.Description = value;
-                if (DataGridView is not null)
+                return;
+            }
+
+            ImageCellTemplate.Description = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                 {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
                     {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
-                        {
-                            dataGridViewCell.Description = value;
-                        }
+                        dataGridViewCell.Description = value;
                     }
                 }
             }
@@ -150,24 +152,26 @@ public class DataGridViewImageColumn : DataGridViewColumn
         }
         set
         {
-            if (ImageLayout != value)
+            if (ImageLayout == value)
             {
-                ImageCellTemplate.ImageLayout = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
-                        {
-                            dataGridViewCell.ImageLayoutInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.OnColumnCommonChange(Index);
+            ImageCellTemplate.ImageLayout = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                {
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
+                    {
+                        dataGridViewCell.ImageLayoutInternal = value;
+                    }
                 }
+
+                DataGridView.OnColumnCommonChange(Index);
             }
         }
     }
@@ -189,37 +193,39 @@ public class DataGridViewImageColumn : DataGridViewColumn
 
         set
         {
-            if (ValuesAreIcons != value)
+            if (ValuesAreIcons == value)
             {
-                ImageCellTemplate.ValueIsIconInternal = value;
-                if (DataGridView is not null)
+                return;
+            }
+
+            ImageCellTemplate.ValueIsIconInternal = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                 {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
                     {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
-                        {
-                            dataGridViewCell.ValueIsIconInternal = value;
-                        }
+                        dataGridViewCell.ValueIsIconInternal = value;
                     }
-
-                    DataGridView.OnColumnCommonChange(Index);
                 }
 
-                if (value &&
-                    DefaultCellStyle.NullValue is Bitmap bitmap &&
-                    bitmap == DataGridViewImageCell.ErrorBitmap)
-                {
-                    DefaultCellStyle.NullValue = DataGridViewImageCell.ErrorIcon;
-                }
-                else if (!value &&
-                         DefaultCellStyle.NullValue is Icon icon &&
-                         icon == DataGridViewImageCell.ErrorIcon)
-                {
-                    DefaultCellStyle.NullValue = DataGridViewImageCell.ErrorBitmap;
-                }
+                DataGridView.OnColumnCommonChange(Index);
+            }
+
+            if (value &&
+                DefaultCellStyle.NullValue is Bitmap bitmap &&
+                bitmap == DataGridViewImageCell.ErrorBitmap)
+            {
+                DefaultCellStyle.NullValue = DataGridViewImageCell.ErrorIcon;
+            }
+            else if (!value &&
+                     DefaultCellStyle.NullValue is Icon icon &&
+                     icon == DataGridViewImageCell.ErrorIcon)
+            {
+                DefaultCellStyle.NullValue = DataGridViewImageCell.ErrorBitmap;
             }
         }
     }

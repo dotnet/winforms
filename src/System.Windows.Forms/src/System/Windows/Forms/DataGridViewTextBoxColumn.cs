@@ -49,20 +49,22 @@ public class DataGridViewTextBoxColumn : DataGridViewColumn
         }
         set
         {
-            if (MaxInputLength != value)
+            if (MaxInputLength == value)
             {
-                TextBoxCellTemplate.MaxInputLength = value;
-                if (DataGridView is not null)
+                return;
+            }
+
+            TextBoxCellTemplate.MaxInputLength = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                 {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewTextBoxCell dataGridViewCell)
                     {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewTextBoxCell dataGridViewCell)
-                        {
-                            dataGridViewCell.MaxInputLength = value;
-                        }
+                        dataGridViewCell.MaxInputLength = value;
                     }
                 }
             }

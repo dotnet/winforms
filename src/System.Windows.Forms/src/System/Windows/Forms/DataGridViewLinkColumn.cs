@@ -37,24 +37,26 @@ public class DataGridViewLinkColumn : DataGridViewColumn
         }
         set
         {
-            if (!ActiveLinkColor.Equals(value))
+            if (ActiveLinkColor.Equals(value))
             {
-                LinkCellTemplate.ActiveLinkColorInternal = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
-                        {
-                            dataGridViewCell.ActiveLinkColorInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.InvalidateColumn(Index);
+            LinkCellTemplate.ActiveLinkColorInternal = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                {
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
+                    {
+                        dataGridViewCell.ActiveLinkColorInternal = value;
+                    }
                 }
+
+                DataGridView.InvalidateColumn(Index);
             }
         }
     }
@@ -102,24 +104,26 @@ public class DataGridViewLinkColumn : DataGridViewColumn
         }
         set
         {
-            if (!LinkBehavior.Equals(value))
+            if (LinkBehavior.Equals(value))
             {
-                LinkCellTemplate.LinkBehavior = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
-                        {
-                            dataGridViewCell.LinkBehaviorInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.InvalidateColumn(Index);
+            LinkCellTemplate.LinkBehavior = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                {
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
+                    {
+                        dataGridViewCell.LinkBehaviorInternal = value;
+                    }
                 }
+
+                DataGridView.InvalidateColumn(Index);
             }
         }
     }
@@ -140,24 +144,26 @@ public class DataGridViewLinkColumn : DataGridViewColumn
         }
         set
         {
-            if (!LinkColor.Equals(value))
+            if (LinkColor.Equals(value))
             {
-                LinkCellTemplate.LinkColorInternal = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
-                        {
-                            dataGridViewCell.LinkColorInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.InvalidateColumn(Index);
+            LinkCellTemplate.LinkColorInternal = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                {
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
+                    {
+                        dataGridViewCell.LinkColorInternal = value;
+                    }
                 }
+
+                DataGridView.InvalidateColumn(Index);
             }
         }
     }
@@ -180,32 +186,36 @@ public class DataGridViewLinkColumn : DataGridViewColumn
         get => _text;
         set
         {
-            if (!string.Equals(value, _text, StringComparison.Ordinal))
+            if (string.Equals(value, _text, StringComparison.Ordinal))
             {
-                _text = value;
-                if (DataGridView is not null)
+                return;
+            }
+
+            _text = value;
+            if (DataGridView is null)
+            {
+                return;
+            }
+
+            if (UseColumnTextForLinkValue)
+            {
+                DataGridView.OnColumnCommonChange(Index);
+            }
+            else
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                 {
-                    if (UseColumnTextForLinkValue)
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell && dataGridViewCell.UseColumnTextForLinkValue)
                     {
                         DataGridView.OnColumnCommonChange(Index);
-                    }
-                    else
-                    {
-                        DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                        int rowCount = dataGridViewRows.Count;
-                        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                        {
-                            DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell && dataGridViewCell.UseColumnTextForLinkValue)
-                            {
-                                DataGridView.OnColumnCommonChange(Index);
-                                return;
-                            }
-                        }
-
-                        DataGridView.InvalidateColumn(Index);
+                        return;
                     }
                 }
+
+                DataGridView.InvalidateColumn(Index);
             }
         }
     }
@@ -227,24 +237,26 @@ public class DataGridViewLinkColumn : DataGridViewColumn
         }
         set
         {
-            if (TrackVisitedState != value)
+            if (TrackVisitedState == value)
             {
-                LinkCellTemplate.TrackVisitedStateInternal = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
-                        {
-                            dataGridViewCell.TrackVisitedStateInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.InvalidateColumn(Index);
+            LinkCellTemplate.TrackVisitedStateInternal = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                {
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
+                    {
+                        dataGridViewCell.TrackVisitedStateInternal = value;
+                    }
                 }
+
+                DataGridView.InvalidateColumn(Index);
             }
         }
     }
@@ -266,24 +278,26 @@ public class DataGridViewLinkColumn : DataGridViewColumn
         }
         set
         {
-            if (UseColumnTextForLinkValue != value)
+            if (UseColumnTextForLinkValue == value)
             {
-                LinkCellTemplate.UseColumnTextForLinkValueInternal = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
-                        {
-                            dataGridViewCell.UseColumnTextForLinkValueInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.OnColumnCommonChange(Index);
+            LinkCellTemplate.UseColumnTextForLinkValueInternal = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                {
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
+                    {
+                        dataGridViewCell.UseColumnTextForLinkValueInternal = value;
+                    }
                 }
+
+                DataGridView.OnColumnCommonChange(Index);
             }
         }
     }
@@ -304,24 +318,26 @@ public class DataGridViewLinkColumn : DataGridViewColumn
         }
         set
         {
-            if (!VisitedLinkColor.Equals(value))
+            if (VisitedLinkColor.Equals(value))
             {
-                LinkCellTemplate.VisitedLinkColorInternal = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
-                        {
-                            dataGridViewCell.VisitedLinkColorInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.InvalidateColumn(Index);
+            LinkCellTemplate.VisitedLinkColorInternal = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                {
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewLinkCell dataGridViewCell)
+                    {
+                        dataGridViewCell.VisitedLinkColorInternal = value;
+                    }
                 }
+
+                DataGridView.InvalidateColumn(Index);
             }
         }
     }

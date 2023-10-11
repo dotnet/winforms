@@ -68,24 +68,26 @@ public class DataGridViewButtonColumn : DataGridViewColumn
         }
         set
         {
-            if (FlatStyle != value)
+            if (FlatStyle == value)
             {
-                ButtonCellTemplate.FlatStyle = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell)
-                        {
-                            dataGridViewCell.FlatStyleInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.OnColumnCommonChange(Index);
+            ButtonCellTemplate.FlatStyle = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                {
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell)
+                    {
+                        dataGridViewCell.FlatStyleInternal = value;
+                    }
                 }
+
+                DataGridView.OnColumnCommonChange(Index);
             }
         }
     }
@@ -101,32 +103,36 @@ public class DataGridViewButtonColumn : DataGridViewColumn
         }
         set
         {
-            if (!string.Equals(value, _text, StringComparison.Ordinal))
+            if (string.Equals(value, _text, StringComparison.Ordinal))
             {
-                _text = value;
-                if (DataGridView is not null)
+                return;
+            }
+
+            _text = value;
+            if (DataGridView is null)
+            {
+                return;
+            }
+
+            if (UseColumnTextForButtonValue)
+            {
+                DataGridView.OnColumnCommonChange(Index);
+            }
+            else
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                 {
-                    if (UseColumnTextForButtonValue)
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell && dataGridViewCell.UseColumnTextForButtonValue)
                     {
                         DataGridView.OnColumnCommonChange(Index);
-                    }
-                    else
-                    {
-                        DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                        int rowCount = dataGridViewRows.Count;
-                        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                        {
-                            DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell && dataGridViewCell.UseColumnTextForButtonValue)
-                            {
-                                DataGridView.OnColumnCommonChange(Index);
-                                return;
-                            }
-                        }
-
-                        DataGridView.InvalidateColumn(Index);
+                        return;
                     }
                 }
+
+                DataGridView.InvalidateColumn(Index);
             }
         }
     }
@@ -148,24 +154,26 @@ public class DataGridViewButtonColumn : DataGridViewColumn
         }
         set
         {
-            if (UseColumnTextForButtonValue != value)
+            if (UseColumnTextForButtonValue == value)
             {
-                ButtonCellTemplate.UseColumnTextForButtonValueInternal = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell)
-                        {
-                            dataGridViewCell.UseColumnTextForButtonValueInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.OnColumnCommonChange(Index);
+            ButtonCellTemplate.UseColumnTextForButtonValueInternal = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                {
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell)
+                    {
+                        dataGridViewCell.UseColumnTextForButtonValueInternal = value;
+                    }
                 }
+
+                DataGridView.OnColumnCommonChange(Index);
             }
         }
     }
