@@ -330,7 +330,7 @@ System.Windows.Forms.ControlBindingsCollection.Control.get -> System.Windows.For
 System.Windows.Forms.ControlBindingsCollection.ControlBindingsCollection(System.Windows.Forms.IBindableComponent! control) -> void
 System.Windows.Forms.ControlBindingsCollection.Remove(System.Windows.Forms.Binding! binding) -> void
 System.Windows.Forms.ControlBindingsCollection.this[string! propertyName].get -> System.Windows.Forms.Binding?
-System.Windows.Forms.CurrencyManager.List.get -> System.Collections.IList?
+System.Windows.Forms.CurrencyManager.List.get -> System.Collections.IList!
 System.Windows.Forms.DataGridView.AdvancedCellBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
 System.Windows.Forms.DataGridView.AdvancedColumnHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
 System.Windows.Forms.DataGridView.AdvancedRowHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
@@ -5280,7 +5280,7 @@ System.Windows.Forms.CreateParams.Y.set -> void
 System.Windows.Forms.CurrencyManager
 System.Windows.Forms.CurrencyManager.ItemChanged -> System.Windows.Forms.ItemChangedEventHandler?
 System.Windows.Forms.CurrencyManager.ListChanged -> System.ComponentModel.ListChangedEventHandler?
-System.Windows.Forms.CurrencyManager.MetaDataChanged -> System.EventHandler
+System.Windows.Forms.CurrencyManager.MetaDataChanged -> System.EventHandler?
 System.Windows.Forms.CurrencyManager.Refresh() -> void
 System.Windows.Forms.Cursor
 System.Windows.Forms.Cursor.CopyHandle() -> nint
