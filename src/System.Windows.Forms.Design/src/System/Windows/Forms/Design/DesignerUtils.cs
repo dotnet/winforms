@@ -747,7 +747,7 @@ internal static class DesignerUtils
         }
 
         //now we get each Type and add it to the destination collection if its not a generic
-        ArrayList final = new ArrayList(types.Count);
+        List<Type> final = new(types.Count);
         foreach (Type t in types)
         {
             if (!t.ContainsGenericParameters)
@@ -779,7 +779,7 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used to create copies of the objects that we are dragging in a drag operation
     /// </summary>
-    public static ICollection CopyDragObjects(ICollection objects, IServiceProvider svcProvider)
+    public static List<IComponent> CopyDragObjects(ICollection objects, IServiceProvider svcProvider)
     {
         if (objects is null || svcProvider is null)
         {
@@ -813,20 +813,16 @@ internal static class DesignerUtils
                 // Now, copyObjects contains a flattened list of all the controls contained in the original drag objects,
                 // that's not what we want to return. We only want to return the root drag objects,
                 // so that the caller gets an identical copy - identical in terms of objects.Count
-                ArrayList newObjects = new ArrayList(objects.Count);
+                List<IComponent> newObjects = new(objects.Count);
                 foreach (IComponent comp in copyObjects)
                 {
-                    Control c = comp as Control;
-                    if (c is not null && c.Parent is null)
+                    if (comp is Control { Parent: null })
                     {
                         newObjects.Add(comp);
                     }
-                    else if (c is null)
+                    else if (comp is ToolStripItem item && item.GetCurrentParent() is null)
                     { // this happens when we are dragging a toolstripitem
-                        if (comp is ToolStripItem item && item.GetCurrentParent() is null)
-                        {
-                            newObjects.Add(comp);
-                        }
+                        newObjects.Add(comp);
                     }
                 }
 
@@ -842,14 +838,14 @@ internal static class DesignerUtils
         return null;
     }
 
-    private static ICollection GetCopySelection(ICollection objects, IDesignerHost host)
+    private static List<IComponent> GetCopySelection(ICollection objects, IDesignerHost host)
     {
         if (objects is null || host is null)
         {
             return null;
         }
 
-        ArrayList copySelection = new ArrayList();
+        List<IComponent> copySelection = new();
         foreach (IComponent comp in objects)
         {
             copySelection.Add(comp);
@@ -859,14 +855,9 @@ internal static class DesignerUtils
         return copySelection;
     }
 
-    internal static void GetAssociatedComponents(IComponent component, IDesignerHost host, ArrayList list)
+    internal static void GetAssociatedComponents(IComponent component, IDesignerHost host, List<IComponent> list)
     {
-        if (host is null)
-        {
-            return;
-        }
-
-        if (!(host.GetDesigner(component) is ComponentDesigner designer))
+        if (host?.GetDesigner(component) is not ComponentDesigner designer)
         {
             return;
         }

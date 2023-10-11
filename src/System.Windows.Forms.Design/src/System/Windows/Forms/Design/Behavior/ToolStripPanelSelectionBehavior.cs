@@ -152,7 +152,7 @@ internal sealed class ToolStripPanelSelectionBehavior : Behavior
                 temp!.Clear();
                 temp.Add(control);
 
-                temp = (List<IComponent>)DesignerUtils.CopyDragObjects(temp, _serviceProvider);
+                temp = DesignerUtils.CopyDragObjects(temp, _serviceProvider);
                 if (temp is not null)
                 {
                     control = (ToolStrip)temp[0];
