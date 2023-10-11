@@ -14,7 +14,7 @@ internal unsafe class TreeViewLabelEditAccessibleObject : LabelEditAccessibleObj
         _labelEdit = new(labelEdit);
     }
 
-    private protected override string? AutomationId => _owningTreeView.AccessibilityObject.Name;
+    private protected override string? AutomationId => _owningTreeView._editNode?.AccessibilityObject.Name;
 
     public override AccessibleObject? Parent => _owningTreeView._editNode?.AccessibilityObject;
 }
