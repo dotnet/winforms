@@ -5,31 +5,32 @@ using System.Drawing;
 using System.Windows.Forms.Automation;
 using Windows.Win32.System.Com;
 using Windows.Win32.UI.Accessibility;
-using PARAM = Interop.PARAM;
+
+using static Interop;
 
 namespace System.Windows.Forms;
 
-internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
+internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
 {
     /// <summary>
-    ///  Since the label edit inside the ListView is always single-line, for optimization
+    ///  Since the label edit inside the TreeView/ListView is always single-line, for optimization
     ///  we always return 0 as the index of lines
     /// </summary>
     private const int OwnerChildEditLineIndex = 0;
 
     /// <summary>
-    ///  Since the label edit inside the ListView is always single-line, for optimization
+    ///  Since the label edit inside the TreeView/ListView is always single-line, for optimization
     ///  we always return 1 as the number of lines
     /// </summary>
     private const int OwnerChildEditLinesCount = 1;
 
     private readonly IHandle<HWND> _owningChildEdit;
     private readonly AccessibleObject _owningChildEditAccessibilityObject;
-    private readonly ListView _owningListView;
+    private readonly Control _owningControl;
 
-    public ListViewLabelEditUiaTextProvider(ListView owner, ListViewLabelEditNativeWindow childEdit, AccessibleObject childEditAccessibilityObject)
+    public LabelEditUiaTextProvider(Control owner, LabelEditNativeWindow childEdit, AccessibleObject childEditAccessibilityObject)
     {
-        _owningListView = owner.OrThrowIfNull();
+        _owningControl = owner.OrThrowIfNull();
         _owningChildEdit = childEdit;
         _owningChildEditAccessibilityObject = childEditAccessibilityObject.OrThrowIfNull();
     }
@@ -57,7 +58,7 @@ internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
 
     public override int LinesPerPage => _owningChildEditAccessibilityObject.BoundingRectangle.IsEmpty ? 0 : OwnerChildEditLinesCount;
 
-    public override LOGFONTW Logfont => LOGFONTW.FromFont(_owningListView.Font);
+    public override LOGFONTW Logfont => LOGFONTW.FromFont(_owningControl.Font);
 
     public override SupportedTextSelection SupportedTextSelection => SupportedTextSelection.SupportedTextSelection_Single;
 
@@ -76,7 +77,7 @@ internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
             return HRESULT.E_POINTER;
         }
 
-        object? hasKeyboardFocus = _owningChildEditAccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.HasKeyboardFocusPropertyId);
+        object? hasKeyboardFocus = _owningChildEditAccessibilityObject.GetPropertyValue(propertyID: Interop.UiaCore.UIA.HasKeyboardFocusPropertyId);
         *isActive = hasKeyboardFocus is true;
 
         // First caret position of a selected text
@@ -174,7 +175,7 @@ internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
         visibleStart = 0;
         visibleEnd = 0;
 
-        if (IsDegenerate(_owningListView.ClientRectangle))
+        if (IsDegenerate(_owningControl.ClientRectangle))
         {
             return;
         }
@@ -221,7 +222,7 @@ internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
 
     public override Point PointToScreen(Point pt)
     {
-        PInvoke.MapWindowPoints(_owningChildEdit.Handle, HWND.Null, ref pt);
+        PInvoke.MapWindowPoints((HWND)_owningChildEdit.Handle, HWND.Null, ref pt);
         return pt;
     }
 

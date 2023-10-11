@@ -7,11 +7,11 @@ using static Interop;
 
 namespace System.Windows.Forms;
 
-internal class ListViewLabelEditNativeWindow : NativeWindow
+internal class LabelEditNativeWindow : NativeWindow
 {
     private const uint TextSelectionChanged = 0x8014;
 
-    private readonly ListView _owningListView;
+    private readonly Control _owningControl;
     private AccessibleObject? _accessibilityObject;
     private WINEVENTPROC? _winEventProcCallback;
     private HWINEVENTHOOK _valueChangeHook;
@@ -27,13 +27,13 @@ internal class ListViewLabelEditNativeWindow : NativeWindow
         uint idEventThread,
         uint dwmsEventTime);
 
-    public ListViewLabelEditNativeWindow(ListView owningListView)
+    public LabelEditNativeWindow(Control owningControl)
     {
-        _owningListView = owningListView.OrThrowIfNull();
+        _owningControl = owningControl.OrThrowIfNull();
     }
 
     public AccessibleObject AccessibilityObject =>
-        _accessibilityObject ??= new ListViewLabelEditAccessibleObject(_owningListView, this);
+        _accessibilityObject ??= _owningControl is TreeView ? new TreeViewLabelEditAccessibleObject((TreeView)_owningControl, this) : new ListViewLabelEditAccessibleObject((ListView)_owningControl, this);
 
     private unsafe void InstallWinEventHooks()
     {
@@ -80,10 +80,10 @@ internal class ListViewLabelEditNativeWindow : NativeWindow
             return;
         }
 
-        // Install winevent hooks *only* when the parent ListView has an existing accessible object.
+        // Install winevent hooks *only* when the parent Control has an existing accessible object.
         // If we don't install hooks at the label edit startup then assistive tech (e.g. Narrator) won't announce the text pattern for it.
         // By invoking UiaClientsAreListening we will have hooks installed even if the assistive tech isn't currently run.
-        if (!_owningListView.IsAccessibilityObjectCreated)
+        if (!_owningControl.IsAccessibilityObjectCreated)
         {
             return;
         }

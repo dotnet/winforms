@@ -178,7 +178,7 @@ public partial class ListView : Control
 
     private bool _blockLabelEdit;
 
-    internal ListViewLabelEditNativeWindow? _labelEdit;
+    internal LabelEditNativeWindow? _labelEdit;
 
     // Used to record the SubItem to which the Label Edit belongs.
     internal ListViewSubItem? _listViewSubItem;
@@ -6504,7 +6504,7 @@ public partial class ListView : Control
 
                     if (!cancelEdit)
                     {
-                        _labelEdit = new ListViewLabelEditNativeWindow(this);
+                        _labelEdit = new LabelEditNativeWindow(this);
                         _labelEdit.AssignHandle(PInvoke.SendMessage(this, PInvoke.LVM_GETEDITCONTROL));
                     }
 
