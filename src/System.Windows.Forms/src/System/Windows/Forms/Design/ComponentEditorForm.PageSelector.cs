@@ -207,7 +207,7 @@ public partial class ComponentEditorForm
                     break;
                 case NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT:
                     {
-                        TreeNode itemNode = TreeNode.FromHandle(this, (nint)nmtvcd->nmcd.dwItemSpec);
+                        TreeNode? itemNode = TreeNode.FromHandle(this, (nint)nmtvcd->nmcd.dwItemSpec);
                         if (itemNode is not null)
                         {
                             int state = STATE_NORMAL;

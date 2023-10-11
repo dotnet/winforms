@@ -317,7 +317,7 @@ public class TreeNodeCollection : IList
 
         if (tv is not null && tv.Sorted)
         {
-            return _owner.AddSorted(node);
+            return _owner.AddSorted(tv, node);
         }
 
         node._parent = _owner;
@@ -454,7 +454,7 @@ public class TreeNodeCollection : IList
 
         if (tv is not null && tv.Sorted)
         {
-            _owner.AddSorted(node);
+            _owner.AddSorted(tv, node);
             return;
         }
 
