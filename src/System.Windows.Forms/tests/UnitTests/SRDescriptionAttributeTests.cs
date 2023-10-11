@@ -10,10 +10,10 @@ public class SRDescriptionAttributeTests
     public void VerifyDescriptionAttributeValue()
     {
         SRDescriptionAttribute srDescriptionAttribute = new SRDescriptionAttribute(nameof(SR.AboutBoxDesc));
-        Assert.True(string.Equals(srDescriptionAttribute.Description, SR.AboutBoxDesc, StringComparison.Ordinal));
+        Assert.Equal(SR.AboutBoxDesc, srDescriptionAttribute.Description);
 
         // Getting srDescriptionAttribute.Description again should also return description value
-        Assert.True(string.Equals(srDescriptionAttribute.Description, SR.AboutBoxDesc, StringComparison.Ordinal));
+        Assert.Equal(SR.AboutBoxDesc, srDescriptionAttribute.Description);
     }
 
     [Fact]

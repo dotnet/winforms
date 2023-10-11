@@ -725,7 +725,8 @@ public class BitmapTests : FileCleanupTestBase
         IntPtr handle;
         try
         {
-            using (Bitmap bitmap = GetHicon_FromHicon_ReturnsExpected(icon.Handle, width, height))
+            GetHicon_FromHicon_ReturnsExpected(icon.Handle, width, height);
+            using (var bitmap = Bitmap.FromHicon(icon.Handle))
             {
                 handle = bitmap.GetHicon();
             }
@@ -748,19 +749,17 @@ public class BitmapTests : FileCleanupTestBase
 
     [Theory]
     [MemberData(nameof(FromHicon_TestData))]
-    public Bitmap GetHicon_FromHicon_ReturnsExpected(IntPtr handle, int width, int height)
+    public void GetHicon_FromHicon_ReturnsExpected(IntPtr handle, int width, int height)
     {
         Assert.NotEqual(IntPtr.Zero, handle);
 
-        Bitmap result = Bitmap.FromHicon(handle);
+        using Bitmap result = Bitmap.FromHicon(handle);
         Assert.Equal(width, result.Width);
         Assert.Equal(height, result.Height);
         Assert.Equal(PixelFormat.Format32bppArgb, result.PixelFormat);
         Assert.Equal(ImageFormat.MemoryBmp, result.RawFormat);
         Assert.Equal(335888, result.Flags);
         Assert.Empty(result.Palette.Entries);
-
-        return result;
     }
 
     [Fact]
