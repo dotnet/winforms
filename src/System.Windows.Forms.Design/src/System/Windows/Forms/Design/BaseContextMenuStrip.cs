@@ -150,9 +150,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     private void AddVerbMenuItem()
     {
         //Add Designer Verbs..
-        IMenuCommandService? menuCommandService = serviceProvider.GetService<IMenuCommandService>();
-
-        if (menuCommandService is not null)
+        if (serviceProvider.TryGetService(out IMenuCommandService? menuCommandService))
         {
             DesignerVerbCollection verbCollection = menuCommandService.Verbs;
             foreach (DesignerVerb verb in verbCollection)
@@ -197,7 +195,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
         //this.Opening += new CancelEventHandler(OnContextMenuOpening);
         Name = "designerContextMenuStrip";
 
-        if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
+        if (serviceProvider.TryGetService(out IUIService? uis))
         {
             Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"]!;
 
@@ -224,7 +222,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     /// </summary>
     public override void RefreshItems()
     {
-        if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
+        if (serviceProvider.TryGetService(out IUIService? uis))
         {
             Font = (Font)uis.Styles["DialogFont"]!;
         }
@@ -258,19 +256,15 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
             _serviceProvider = provider;
             // Get NestedSiteName...
             string? compName = null;
-            if (_comp is not null)
+            if (_comp is not null && _comp.Site is { } site)
             {
-                ISite? site = _comp.Site;
-                if (site is not null)
+                if (site is INestedSite nestedSite && !string.IsNullOrEmpty(nestedSite.FullName))
                 {
-                    if (site is INestedSite nestedSite && !string.IsNullOrEmpty(nestedSite.FullName))
-                    {
-                        compName = nestedSite.FullName;
-                    }
-                    else if (!string.IsNullOrEmpty(site.Name))
-                    {
-                        compName = site.Name;
-                    }
+                    compName = nestedSite.FullName;
+                }
+                else if (!string.IsNullOrEmpty(site.Name))
+                {
+                    compName = site.Name;
                 }
             }
 
@@ -289,11 +283,11 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
                     // else attempt to get the resource from a known place in the manifest. if and only if the namespace of the type is System.Windows.Forms. else attempt to get the resource from a known place in the manifest
                     if (_itemType.Namespace == s_systemWindowsFormsNamespace)
                     {
-                        _image = ToolboxBitmapAttribute.GetImageFromResource(_itemType, null, false);
+                        _image = ToolboxBitmapAttribute.GetImageFromResource(_itemType, imageName: null, large: false);
                     }
 
                     // if all else fails, throw up a default image.
-                    _image ??= ToolboxBitmapAttribute.GetImageFromResource(_comp!.GetType(), null, false);
+                    _image ??= ToolboxBitmapAttribute.GetImageFromResource(_comp!.GetType(), imageName: null, large: false);
                 }
 
                 return _image;
@@ -310,7 +304,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
         /// </summary>
         protected override void OnClick(EventArgs e)
         {
-            if (_comp is not null && _serviceProvider.GetService(typeof(ISelectionService)) is ISelectionService selectionService)
+            if (_comp is not null && _serviceProvider.TryGetService(out ISelectionService? selectionService))
             {
                 selectionService.SetSelectedComponents(new object[] { _comp }, SelectionTypes.Replace);
             }

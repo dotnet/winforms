@@ -15,27 +15,22 @@ internal class ToolStripContentPanelDesigner : PanelDesigner
     {
         get
         {
-            ISite? site = Component.Site;
-
-            if (site is not null)
+            if (_contextMenu is null && Component.Site is { } site)
             {
-                if (_contextMenu is null)
-                {
-                    _contextMenu = new BaseContextMenuStrip(site);
+                _contextMenu = new BaseContextMenuStrip(site);
 
-                    // If multiple Items Selected don't show the custom properties...
-                    _contextMenu.GroupOrdering.Clear();
-                    _contextMenu.GroupOrdering.AddRange(
-                    [
-                        StandardGroups.Code,
-                        StandardGroups.Verbs,
-                        StandardGroups.Custom,
-                        StandardGroups.Selection,
-                        StandardGroups.Edit,
-                        StandardGroups.Properties
-                    ]);
-                    _contextMenu.Text = "CustomContextMenu";
-                }
+                // If multiple Items Selected don't show the custom properties...
+                _contextMenu.GroupOrdering.Clear();
+                _contextMenu.GroupOrdering.AddRange(
+                [
+                    StandardGroups.Code,
+                    StandardGroups.Verbs,
+                    StandardGroups.Custom,
+                    StandardGroups.Selection,
+                    StandardGroups.Edit,
+                    StandardGroups.Properties
+                ]);
+                _contextMenu.Text = "CustomContextMenu";
             }
 
             return _contextMenu;
