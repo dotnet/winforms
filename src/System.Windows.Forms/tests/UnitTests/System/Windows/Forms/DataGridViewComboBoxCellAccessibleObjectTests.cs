@@ -44,9 +44,9 @@ public class DataGridViewComboBoxCellAccessibleObjectTests
         {
             foreach (bool cellIsEdited in new[] { true, false })
             {
-                uint expectedControlType = displayStyle != DataGridViewComboBoxDisplayStyle.Nothing || cellIsEdited
-                                    ? (uint)UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId
-                                    : (uint)UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId;
+                int expectedControlType = displayStyle != DataGridViewComboBoxDisplayStyle.Nothing || cellIsEdited
+                                    ? (int)UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId
+                                    : (int)UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId;
 
                 yield return new object[] { displayStyle, cellIsEdited, expectedControlType };
             }
@@ -55,7 +55,7 @@ public class DataGridViewComboBoxCellAccessibleObjectTests
 
     [WinFormsTheory]
     [MemberData(nameof(DataGridViewComboBoxCellAccessibleObject_ControlType_TestData))]
-    public void DataGridViewComboBoxCellAccessibleObject_ControlType_ReturnExpected(DataGridViewComboBoxDisplayStyle displayStyle, bool cellIsEdited, uint expectedControlType)
+    public void DataGridViewComboBoxCellAccessibleObject_ControlType_ReturnExpected(DataGridViewComboBoxDisplayStyle displayStyle, bool cellIsEdited, int expectedControlType)
     {
         using var dataGridView = new DataGridView();
         dataGridView.Columns.Add(new DataGridViewComboBoxColumn() { DisplayStyle = displayStyle });
@@ -67,8 +67,8 @@ public class DataGridViewComboBoxCellAccessibleObjectTests
             dataGridView.BeginEdit(false);
         }
 
-        uint actualPropertyValue = (uint)dataGridView.Rows[0].Cells[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        int actualPropertyValue = (int)dataGridView.Rows[0].Cells[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(expectedControlType, (uint)actualPropertyValue);
+        Assert.Equal(expectedControlType, actualPropertyValue);
     }
 }

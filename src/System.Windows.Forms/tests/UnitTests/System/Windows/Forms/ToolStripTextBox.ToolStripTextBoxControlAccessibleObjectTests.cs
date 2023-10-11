@@ -67,9 +67,9 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, (uint)UIA_CONTROLTYPE_ID.UIA_EditControlTypeId)]
-    [InlineData(false, (uint)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)]
-    public void ToolStripTextBoxControlAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, uint expectedType)
+    [InlineData(true, (int)UIA_CONTROLTYPE_ID.UIA_EditControlTypeId)]
+    [InlineData(false, (int)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)]
+    public void ToolStripTextBoxControlAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, int expectedType)
     {
         using ToolStripTextBox toolStripTextBox = new ToolStripTextBox();
         // AccessibleRole is not set = Default
@@ -82,7 +82,7 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
 
         object actual = toolStripTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(expectedType, (uint)actual);
+        Assert.Equal(expectedType, (int)actual);
         Assert.Equal(createControl, toolStripTextBoxControl.IsHandleCreated);
     }
 

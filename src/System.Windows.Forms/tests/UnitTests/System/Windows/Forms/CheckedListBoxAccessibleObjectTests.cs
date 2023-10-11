@@ -37,9 +37,9 @@ public class CheckedListBoxAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, (uint)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId)]
-    [InlineData(false, (uint)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId)]
-    public void CheckedListBoxAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, uint expectedType)
+    [InlineData(true, (int)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId)]
+    [InlineData(false, (int)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId)]
+    public void CheckedListBoxAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, int expectedType)
     {
         using CheckedListBox checkedListBox = new CheckedListBox();
         // AccessibleRole is not set = Default
@@ -51,7 +51,7 @@ public class CheckedListBoxAccessibleObjectTests
 
         object actual = checkedListBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(expectedType, (uint)actual);
+        Assert.Equal(expectedType, (int)actual);
         Assert.Equal(createControl, checkedListBox.IsHandleCreated);
     }
 

@@ -16,9 +16,9 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData("Test name", (uint)UIA_CONTROLTYPE_ID.UIA_CalendarControlTypeId)]
-    [InlineData(null, (uint)UIA_CONTROLTYPE_ID.UIA_CalendarControlTypeId)]
-    public void MonthCalendarAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(string name, uint expected)
+    [InlineData("Test name", (int)UIA_CONTROLTYPE_ID.UIA_CalendarControlTypeId)]
+    [InlineData(null, (int)UIA_CONTROLTYPE_ID.UIA_CalendarControlTypeId)]
+    public void MonthCalendarAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(string name, int expected)
     {
         // UIA is less accessible than the test
         // so we have to use "int" type here for "expected" argument
@@ -30,7 +30,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
 
         object actual = monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(expected, (uint)actual);
+        Assert.Equal(expected, (int)actual);
         Assert.False(monthCalendar.IsHandleCreated);
     }
 
