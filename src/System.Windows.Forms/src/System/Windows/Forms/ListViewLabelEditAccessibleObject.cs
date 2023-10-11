@@ -3,6 +3,7 @@
 
 using static System.Windows.Forms.ListViewItem;
 using UiaCore = Interop.UiaCore;
+
 namespace System.Windows.Forms;
 
 internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObject
@@ -22,7 +23,7 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
         _owingListViewItem = owningListView._selectedItem;
         _labelEdit = new(labelEdit);
         UseStdAccessibleObjects(labelEdit.Handle);
-        _textProvider = new LabelEditUiaTextProvider(owningListView, labelEdit, this);
+        _textProvider = new(owningListView, labelEdit, this);
     }
 
     private protected override string AutomationId => LIST_VIEW_LABEL_EDIT_AUTOMATION_ID;

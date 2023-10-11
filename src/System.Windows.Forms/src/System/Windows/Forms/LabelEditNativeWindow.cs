@@ -27,13 +27,12 @@ internal class LabelEditNativeWindow : NativeWindow
         uint idEventThread,
         uint dwmsEventTime);
 
-    public LabelEditNativeWindow(Control owningControl)
-    {
-        _owningControl = owningControl.OrThrowIfNull();
-    }
+    public LabelEditNativeWindow(Control owningControl) => _owningControl = owningControl.OrThrowIfNull();
 
     public AccessibleObject AccessibilityObject =>
-        _accessibilityObject ??= _owningControl is TreeView ? new TreeViewLabelEditAccessibleObject((TreeView)_owningControl, this) : new ListViewLabelEditAccessibleObject((ListView)_owningControl, this);
+        _accessibilityObject ??= _owningControl is TreeView treeView
+            ? new TreeViewLabelEditAccessibleObject(treeView, this)
+            : new ListViewLabelEditAccessibleObject((ListView)_owningControl, this);
 
     private unsafe void InstallWinEventHooks()
     {
