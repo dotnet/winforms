@@ -153,7 +153,7 @@ public class SingleInstanceTests
             const int n = 5;
             var sentArgs = Enumerable.Range(0, n).Select(i => Enumerable.Range(0, i).Select(i => i.ToString()).ToArray()).ToArray();
             var receivedArgs = new ReceivedArgs();
-            await WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
+            _ = WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
             var tasks = Enumerable.Range(0, n).Select(i => Task.Factory.StartNew(() => { Assert.True(SendSecondInstanceArgs(pipeName, SendTimeout, sentArgs[i])); }, cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default)).ToArray();
             await Task.WhenAll(tasks);
             FlushLastConnection(pipeName);
@@ -229,7 +229,7 @@ public class SingleInstanceTests
             var task = Task.Factory.StartNew<bool>(() => SendSecondInstanceArgs(pipeName, SendTimeout, new[] { "1", "ABC" }), cancellationToken: default, creationOptions: default, scheduler: TaskScheduler.Default);
             // Allow time for connection.
             Thread.Sleep(100);
-            await WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
+            _ = WaitForClientConnectionsAsync(pipeServer, receivedArgs.Add);
             await task;
             FlushLastConnection(pipeName);
             Assert.Equal(new[] { new[] { "1", "ABC" } }, receivedArgs.Freeze());
