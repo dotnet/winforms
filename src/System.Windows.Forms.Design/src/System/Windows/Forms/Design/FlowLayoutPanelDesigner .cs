@@ -910,14 +910,14 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
     ///  child to the appropriate index.  Otherwise, we'll do this in the ChildAdded
     ///  event.
     /// </summary>
-    protected override void OnDragDrop(DragEventArgs dragEvent)
+    protected override void OnDragDrop(DragEventArgs de)
     {
         if (_dragControls is not null &&
             _primaryDragControl is not null &&
             Control.Controls.Contains(_primaryDragControl))
         {
             // Manipulating our controls. We do it ourselves, so that we can set the indices right.
-            ReorderControls(dragEvent);
+            ReorderControls(de);
 
             _insertionIndex = s_invalidIndex;
         }
@@ -925,7 +925,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         {
             // If we are not reordering our controls then just let the base handle it.
             Control.ControlAdded += OnChildControlAdded;
-            base.OnDragDrop(dragEvent);
+            base.OnDragDrop(de);
         }
     }
 }
