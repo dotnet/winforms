@@ -59,12 +59,12 @@ internal sealed partial class DesignerActionPanel
                 TypeConverter.StandardValuesCollection? standardValues = GetStandardValues();
                 if (standardValues is not null)
                 {
-                    foreach (object o in standardValues)
+                    foreach (object standardValue in standardValues)
                     {
-                        string newItem = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, CultureInfo.CurrentCulture, o)!;
+                        string newItem = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, CultureInfo.CurrentCulture, standardValue)!;
                         listBox.Items.Add(newItem);
 
-                        if ((o is not null) && o.Equals(Value))
+                        if ((standardValue is not null) && standardValue.Equals(Value))
                         {
                             listBox.SelectedItem = newItem;
                         }
@@ -237,14 +237,9 @@ internal sealed partial class DesignerActionPanel
                 _button.Ellipsis = false;
             }
 
-            if (_button.Ellipsis)
-            {
-                EditControl!.AccessibleRole = (IsReadOnly() ? AccessibleRole.StaticText : AccessibleRole.Text);
-            }
-            else
-            {
-                EditControl!.AccessibleRole = (IsReadOnly() ? AccessibleRole.DropList : AccessibleRole.ComboBox);
-            }
+            EditControl!.AccessibleRole = _button.Ellipsis
+                ? IsReadOnly() ? AccessibleRole.StaticText : AccessibleRole.Text
+                : IsReadOnly() ? AccessibleRole.DropList : AccessibleRole.ComboBox;
 
             _button.TabStop = _button.Ellipsis;
             _button.TabIndex = currentTabIndex++;

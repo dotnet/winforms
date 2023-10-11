@@ -395,14 +395,14 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         return DoLayout(proposedSize, true);
     }
 
-    private static bool IsReadOnlyProperty(PropertyDescriptor pd)
+    private static bool IsReadOnlyProperty(PropertyDescriptor propertyDescriptor)
     {
-        if (pd.IsReadOnly)
+        if (propertyDescriptor.IsReadOnly)
         {
             return true;
         }
 
-        return (pd.ComponentType.GetProperty(pd.Name)!.GetSetMethod() is null);
+        return (propertyDescriptor.ComponentType.GetProperty(propertyDescriptor.Name)!.GetSetMethod() is null);
     }
 
     protected override void OnFontChanged(EventArgs e)
