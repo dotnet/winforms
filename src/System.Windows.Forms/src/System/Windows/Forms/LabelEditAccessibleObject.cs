@@ -1,59 +1,47 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static System.Windows.Forms.ListViewItem;
+using Windows.Win32.System.Com;
+using Windows.Win32.UI.Accessibility;
 using UiaCore = Interop.UiaCore;
+
 namespace System.Windows.Forms;
 
-internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObject
+internal unsafe class LabelEditAccessibleObject : AccessibleObject
 {
-    private const string LIST_VIEW_LABEL_EDIT_AUTOMATION_ID = "1";
-
-    private readonly ListView _owningListView;
-    private readonly ListViewSubItem? _owningListViewSubItem;
-    private readonly ListViewItem? _owingListViewItem;
+    private readonly Control _owningControl;
     private readonly WeakReference<LabelEditNativeWindow> _labelEdit;
     private readonly LabelEditUiaTextProvider _textProvider;
+    private int[]? _runtimeId;
 
-    public ListViewLabelEditAccessibleObject(ListView owningListView, LabelEditNativeWindow labelEdit) : base(owningListView, labelEdit)
+    public LabelEditAccessibleObject(Control owningControl, LabelEditNativeWindow labelEdit)
     {
-        _owningListView = owningListView.OrThrowIfNull();
-        _owningListViewSubItem = owningListView._listViewSubItem;
-        _owingListViewItem = owningListView._selectedItem;
+        _owningControl = owningControl.OrThrowIfNull();
         _labelEdit = new(labelEdit);
         UseStdAccessibleObjects(labelEdit.Handle);
-        _textProvider = new LabelEditUiaTextProvider(owningListView, labelEdit, this);
+        _textProvider = new LabelEditUiaTextProvider(owningControl, labelEdit, this);
     }
-
-    private protected override string AutomationId => LIST_VIEW_LABEL_EDIT_AUTOMATION_ID;
-
-    public override AccessibleObject? Parent => _owningListViewSubItem is null
-        ? _owingListViewItem?.AccessibilityObject
-        : _owningListView.View == View.Tile
-            ? _owingListViewItem?.AccessibilityObject
-            : _owningListViewSubItem?.AccessibilityObject;
 
     internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         => direction switch
         {
-            UiaCore.NavigateDirection.NextSibling
-                => _owningListView.View == View.Tile ? _owingListViewItem?.SubItems[1].AccessibilityObject : null,
+            UiaCore.NavigateDirection.Parent => Parent,
             _ => base.FragmentNavigate(direction)
         };
 
-    internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningListView.AccessibilityObject;
+    internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningControl.AccessibilityObject;
 
-    internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+    internal override object? GetPropertyValue(UiaCore.UIA propertyID)
         => propertyID switch
         {
-            UIA_PROPERTY_ID.UIA_ProcessIdPropertyId => Environment.ProcessId,
-            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_EditControlTypeId,
-            UIA_PROPERTY_ID.UIA_AccessKeyPropertyId => string.Empty,
-            UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => true,
-            UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-            UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListView.Enabled,
-            UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => true,
-            UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _labelEdit.TryGetTarget(out var target) ? (nint)target.HWND : 0,
+            UiaCore.UIA.ProcessIdPropertyId => Environment.ProcessId,
+            UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
+            UiaCore.UIA.AccessKeyPropertyId => string.Empty,
+            UiaCore.UIA.HasKeyboardFocusPropertyId => true,
+            UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+            UiaCore.UIA.IsEnabledPropertyId => _owningControl.Enabled,
+            UiaCore.UIA.IsContentElementPropertyId => true,
+            UiaCore.UIA.NativeWindowHandlePropertyId => _labelEdit.TryGetTarget(out var target) ? (nint)target.HWND : 0,
             _ => base.GetPropertyValue(propertyID),
         };
 
@@ -71,12 +59,12 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
         }
     }
 
-    internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId switch
+    internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
     {
-        UIA_PATTERN_ID.UIA_TextPatternId => true,
-        UIA_PATTERN_ID.UIA_TextPattern2Id => true,
-        UIA_PATTERN_ID.UIA_ValuePatternId => true,
-        UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId => true,
+        UiaCore.UIA.TextPatternId => true,
+        UiaCore.UIA.TextPattern2Id => true,
+        UiaCore.UIA.ValuePatternId => true,
+        UiaCore.UIA.LegacyIAccessiblePatternId => true,
         _ => base.IsPatternSupported(patternId),
     };
 

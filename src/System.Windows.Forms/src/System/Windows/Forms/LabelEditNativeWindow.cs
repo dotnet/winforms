@@ -7,11 +7,11 @@ using static Interop;
 
 namespace System.Windows.Forms;
 
-internal class TreeViewLabelEditNativeWindow : NativeWindow
+internal class LabelEditNativeWindow : NativeWindow
 {
     private const uint TextSelectionChanged = 0x8014;
 
-    private readonly TreeView _owningTreeView;
+    private readonly Control _owningControl;
     private AccessibleObject? _accessibilityObject;
     private WINEVENTPROC? _winEventProcCallback;
     private HWINEVENTHOOK _valueChangeHook;
@@ -27,13 +27,13 @@ internal class TreeViewLabelEditNativeWindow : NativeWindow
         uint idEventThread,
         uint dwmsEventTime);
 
-    public TreeViewLabelEditNativeWindow(TreeView owningTreeView)
+    public LabelEditNativeWindow(Control owningControl)
     {
-        _owningTreeView = owningTreeView.OrThrowIfNull();
+        _owningControl = owningControl.OrThrowIfNull();
     }
 
     public AccessibleObject AccessibilityObject =>
-        _accessibilityObject ??= new TreeViewLabelEditAccessibleObject(_owningTreeView, this);
+        _accessibilityObject ??= _owningControl is TreeView ? new TreeViewLabelEditAccessibleObject((TreeView)_owningControl, this) : new ListViewLabelEditAccessibleObject((ListView)_owningControl, this);
 
     private unsafe void InstallWinEventHooks()
     {
@@ -80,10 +80,10 @@ internal class TreeViewLabelEditNativeWindow : NativeWindow
             return;
         }
 
-        // Install winevent hooks *only* when the parent TreeView has an existing accessible object.
+        // Install winevent hooks *only* when the parent Control has an existing accessible object.
         // If we don't install hooks at the label edit startup then assistive tech (e.g. Narrator) won't announce the text pattern for it.
         // By invoking UiaClientsAreListening we will have hooks installed even if the assistive tech isn't currently run.
-        if (!_owningTreeView.IsAccessibilityObjectCreated)
+        if (!_owningControl.IsAccessibilityObjectCreated)
         {
             return;
         }
@@ -91,7 +91,7 @@ internal class TreeViewLabelEditNativeWindow : NativeWindow
         InstallWinEventHooks();
     }
 
-    public override void ReleaseHandle()
+    public override unsafe void ReleaseHandle()
     {
         if (_winEventHooksInstalled)
         {
@@ -129,10 +129,10 @@ internal class TreeViewLabelEditNativeWindow : NativeWindow
         switch (eventId)
         {
             case (uint)AccessibleEvents.ValueChange:
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextChangedEventId);
                 break;
             case TextSelectionChanged:
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
                 break;
         }
     }

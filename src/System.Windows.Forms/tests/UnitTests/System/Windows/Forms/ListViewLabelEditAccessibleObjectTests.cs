@@ -18,7 +18,7 @@ public class ListViewLabelEditAccessibleObjectTests
     {
         using ListView listView = CreateListViewAndStartEditing();
 
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        LabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.Equal(accessibilityObject.RuntimeId, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId));
@@ -52,7 +52,7 @@ public class ListViewLabelEditAccessibleObjectTests
     {
         using ListView listView = CreateListViewAndStartEditing();
 
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        LabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.Equal(listView._listViewSubItem.AccessibilityObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
@@ -64,7 +64,7 @@ public class ListViewLabelEditAccessibleObjectTests
     {
         using ListView listView = CreateListViewAndStartEditing();
 
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        LabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.True(accessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_TextPatternId));
@@ -78,7 +78,7 @@ public class ListViewLabelEditAccessibleObjectTests
     {
         using ListView listView = CreateListViewAndStartEditing();
 
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        LabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.Equal(new int[] { AccessibleObject.RuntimeIDFirstItem, PARAM.ToInt(labelEdit.Handle) }, accessibilityObject.RuntimeId);
@@ -89,7 +89,7 @@ public class ListViewLabelEditAccessibleObjectTests
     {
         using ListView listView = CreateListViewAndStartEditing();
 
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        LabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.Equal(listView.AccessibilityObject, accessibilityObject.FragmentRoot);
@@ -100,7 +100,7 @@ public class ListViewLabelEditAccessibleObjectTests
     {
         using ListView listView = CreateListViewAndStartEditing();
 
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        LabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.NotNull(accessibilityObject.HostRawElementProvider);
@@ -111,7 +111,7 @@ public class ListViewLabelEditAccessibleObjectTests
     {
         using ListView listView = CreateListViewAndStartEditing();
 
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        LabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.Equal(listView.Items[0].Text, accessibilityObject.Name);
@@ -121,7 +121,7 @@ public class ListViewLabelEditAccessibleObjectTests
     public void ListViewLabelEditAccessibleObject_Ctor_NullOwningListView_ThrowsArgumentNullException()
     {
         using ListView listView = CreateListViewAndStartEditing();
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        LabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
 
         Assert.Throws<ArgumentNullException>(() => new ListViewLabelEditAccessibleObject(null, labelEdit));
     }
@@ -129,25 +129,25 @@ public class ListViewLabelEditAccessibleObjectTests
     [WinFormsFact]
     public void ListViewLabelEditNativeWindow_Ctor_NullOwningListView_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new ListViewLabelEditNativeWindow(null));
+        Assert.Throws<ArgumentNullException>(() => new LabelEditNativeWindow(null));
     }
 
     [WinFormsFact]
     public void ListViewLabelEditUiaTextProvider_Ctor_NullOwningListView_ThrowsArgumentNullException()
     {
         using ListView listView = CreateListViewAndStartEditing();
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        LabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
 
-        Assert.Throws<ArgumentNullException>(() => new ListViewLabelEditUiaTextProvider(null, labelEdit, labelEdit.AccessibilityObject));
+        Assert.Throws<ArgumentNullException>(() => new LabelEditUiaTextProvider(null, labelEdit, labelEdit.AccessibilityObject));
     }
 
     [WinFormsFact]
     public void ListViewLabelEditUiaTextProvider_Ctor_NullChildEditAccessibilityObject_ThrowsArgumentNullException()
     {
         using ListView listView = CreateListViewAndStartEditing();
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        LabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
 
-        Assert.Throws<ArgumentNullException>(() => new ListViewLabelEditUiaTextProvider(listView, labelEdit, null));
+        Assert.Throws<ArgumentNullException>(() => new LabelEditUiaTextProvider(listView, labelEdit, null));
     }
 
     private ListView CreateListViewAndStartEditing()
