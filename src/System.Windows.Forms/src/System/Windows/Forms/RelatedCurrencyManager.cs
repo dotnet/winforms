@@ -118,8 +118,13 @@ internal class RelatedCurrencyManager : CurrencyManager
     /// <summary>
     ///  Gets the name of the specified list.
     /// </summary>
-    protected internal override string GetListName(ArrayList listAccessors)
+    protected internal override string GetListName(ArrayList? listAccessors)
     {
+        if (listAccessors is null)
+        {
+            return string.Empty;
+        }
+
         listAccessors.Insert(0, _fieldInfo);
         return _parentManager.GetListName(listAccessors);
     }

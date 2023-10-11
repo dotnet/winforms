@@ -3,7 +3,7 @@ override System.Windows.Forms.AxHost.OnHandleCreated(System.EventArgs! e) -> voi
 override System.Windows.Forms.ControlBindingsCollection.AddCore(System.Windows.Forms.Binding! dataBinding) -> void
 override System.Windows.Forms.ControlBindingsCollection.RemoveCore(System.Windows.Forms.Binding! dataBinding) -> void
 override System.Windows.Forms.CurrencyManager.Current.get -> object?
-~override System.Windows.Forms.CurrencyManager.GetItemProperties() -> System.ComponentModel.PropertyDescriptorCollection
+override System.Windows.Forms.CurrencyManager.GetItemProperties() -> System.ComponentModel.PropertyDescriptorCollection!
 override System.Windows.Forms.DataGridView.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
 override System.Windows.Forms.DataGridView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
