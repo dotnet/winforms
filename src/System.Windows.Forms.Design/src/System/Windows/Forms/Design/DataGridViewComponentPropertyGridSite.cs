@@ -7,13 +7,13 @@ namespace System.Windows.Forms.Design;
 
 internal class DataGridViewComponentPropertyGridSite : ISite
 {
-    private readonly IServiceProvider? _sp;
+    private readonly IServiceProvider? _serviceProvider;
     private bool _inGetService;
 
-    public DataGridViewComponentPropertyGridSite(IServiceProvider? sp, IComponent comp)
+    public DataGridViewComponentPropertyGridSite(IServiceProvider? serviceProvider, IComponent component)
     {
-        _sp = sp;
-        Component = comp;
+        _serviceProvider = serviceProvider;
+        Component = component;
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ internal class DataGridViewComponentPropertyGridSite : ISite
 
     public object? GetService(Type t)
     {
-        if (_inGetService || _sp is null)
+        if (_inGetService || _serviceProvider is null)
         {
             return null;
         }
@@ -46,7 +46,7 @@ internal class DataGridViewComponentPropertyGridSite : ISite
         try
         {
             _inGetService = true;
-            return _sp.GetService(t);
+            return _serviceProvider.GetService(t);
         }
         finally
         {
