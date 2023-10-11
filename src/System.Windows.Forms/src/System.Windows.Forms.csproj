@@ -70,12 +70,6 @@
       <LogicalName>System.Windows.Forms.%(FileName).cur</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="System\Windows\Forms\ListViewLabelEditNativeWindow.cs" />
-    <Compile Remove="System\Windows\Forms\ListViewLabelEditUiaTextProvider.cs" />
-    <Compile Remove="System\Windows\Forms\TreeViewLabelEditNativeWindow.cs" />
-    <Compile Remove="System\Windows\Forms\TreeViewLabelEditUiaTextProvider.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\System\Windows\Forms\XPThemes.manifest">
