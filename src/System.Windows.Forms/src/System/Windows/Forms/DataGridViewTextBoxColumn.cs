@@ -80,8 +80,6 @@ public class DataGridViewTextBoxColumn : DataGridViewColumn
 
     private DataGridViewTextBoxCell? TextBoxCellTemplate => (DataGridViewTextBoxCell?)CellTemplate;
 
-    public override string ToString()
-    {
-        return $"DataGridViewTextBoxColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewTextBoxColumn {{ Name={Name}, Index={Index} }}";
 }

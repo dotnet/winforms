@@ -222,8 +222,6 @@ public class DataGridViewButtonColumn : DataGridViewColumn
                 !defaultCellStyle.Padding.Equals(Padding.Empty));
     }
 
-    public override string ToString()
-    {
-        return $"DataGridViewButtonColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewButtonColumn {{ Name={Name}, Index={Index} }}";
 }
