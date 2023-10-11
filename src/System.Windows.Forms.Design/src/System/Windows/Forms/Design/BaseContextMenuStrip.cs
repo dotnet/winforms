@@ -13,13 +13,11 @@ namespace System.Windows.Forms.Design;
 internal class BaseContextMenuStrip : GroupedContextMenuStrip
 {
     private readonly IServiceProvider serviceProvider;
-    private readonly Component component;
     private ToolStripMenuItem? selectionMenuItem;
 
-    public BaseContextMenuStrip(IServiceProvider provider, Component component) : base()
+    public BaseContextMenuStrip(IServiceProvider provider) : base()
     {
         serviceProvider = provider;
-        this.component = component;
         // Now initialize the contextMenu
         InitializeContextMenu();
     }
@@ -118,14 +116,10 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
 
             if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
             {
-                object? rendererStyle = uis.Styles["VsRenderer"];
-                if (rendererStyle is ToolStripProfessionalRenderer renderer)
-                {
-                    selectionMenuItem.DropDown.Renderer = renderer;
-                }
+                selectionMenuItem.DropDown.Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"]!;
 
                 // Set the right Font
-                selectionMenuItem.DropDown.Font = uis.Styles["DialogFont"] as Font;
+                selectionMenuItem.DropDown.Font = (Font)uis.Styles["DialogFont"]!;
 
                 if (uis.Styles["VsColorPanelText"] is Color color)
                 {
@@ -156,7 +150,8 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     private void AddVerbMenuItem()
     {
         //Add Designer Verbs..
-        IMenuCommandService? menuCommandService = serviceProvider.GetService(typeof(IMenuCommandService)) as IMenuCommandService;
+        IMenuCommandService? menuCommandService = serviceProvider.GetService<IMenuCommandService>();
+
         if (menuCommandService is not null)
         {
             DesignerVerbCollection verbCollection = menuCommandService.Verbs;
@@ -201,10 +196,15 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     {
         //this.Opening += new CancelEventHandler(OnContextMenuOpening);
         Name = "designerContextMenuStrip";
+
         if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
         {
-            Renderer = uis.Styles["VsRenderer"] as ToolStripProfessionalRenderer;
-            ForeColor = (uis.Styles["VsColorPanelText"] as Color?) ?? DefaultForeColor;
+            Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"]!;
+
+            if (uis.Styles["VsColorPanelText"] is Color color)
+            {
+                ForeColor = color;
+            }
         }
 
         GroupOrdering.AddRange(new string[] { StandardGroups.Code, StandardGroups.ZORder, StandardGroups.Grid, StandardGroups.Lock, StandardGroups.Verbs, StandardGroups.Custom, StandardGroups.Selection, StandardGroups.Edit, StandardGroups.Properties });
@@ -226,7 +226,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
     {
         if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
         {
-            Font = uis.Styles["DialogFont"] as Font;
+            Font = (Font)uis.Styles["DialogFont"]!;
         }
 
         foreach (ToolStripItem item in Items)
@@ -293,10 +293,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
                     }
 
                     // if all else fails, throw up a default image.
-                    if (_comp is not null)
-                    {
-                        _image ??= ToolboxBitmapAttribute.GetImageFromResource(_comp.GetType(), null, false);
-                    }
+                    _image ??= ToolboxBitmapAttribute.GetImageFromResource(_comp!.GetType(), null, false);
                 }
 
                 return _image;

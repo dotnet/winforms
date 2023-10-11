@@ -65,11 +65,10 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
             if (_contextMenu is null)
             {
                 ISite? site = Component.Site;
-                var component = Component as Component;
 
-                if (site is not null && component is not null)
+                if (site is not null )
                 {
-                    _contextMenu = new BaseContextMenuStrip(site, component);
+                    _contextMenu = new BaseContextMenuStrip(site);
                     // If multiple Items Selected don't show the custom properties...
                     _contextMenu.GroupOrdering.Clear();
                     _contextMenu.GroupOrdering.AddRange([StandardGroups.Code,

@@ -264,7 +264,7 @@ internal class ToolStripTemplateNode : IMenuStatusHandler
     {
         get
         {
-            BaseContextMenuStrip templateNodeContextMenu = new BaseContextMenuStrip(_component.Site, _controlHost)
+            BaseContextMenuStrip templateNodeContextMenu = new BaseContextMenuStrip(_component.Site)
             {
                 Populated = false
             };

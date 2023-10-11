@@ -207,7 +207,7 @@ internal class ToolStripDesigner : ControlDesigner
     {
         get
         {
-            _toolStripContextMenu ??= new BaseContextMenuStrip(ToolStrip.Site, ToolStrip)
+            _toolStripContextMenu ??= new BaseContextMenuStrip(ToolStrip.Site)
                 {
                     Text = "CustomContextMenu"
                 };
