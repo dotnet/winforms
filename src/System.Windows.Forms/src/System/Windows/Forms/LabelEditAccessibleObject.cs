@@ -19,7 +19,7 @@ internal unsafe class LabelEditAccessibleObject : AccessibleObject
         _owningControl = owningControl.OrThrowIfNull();
         _labelEdit = new(labelEdit);
         UseStdAccessibleObjects(labelEdit.Handle);
-        _textProvider = new LabelEditUiaTextProvider(owningControl, labelEdit, this);
+        _textProvider = new(owningControl, labelEdit, this);
     }
 
     internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
