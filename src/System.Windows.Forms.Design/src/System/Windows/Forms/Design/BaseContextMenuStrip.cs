@@ -118,7 +118,7 @@ internal class BaseContextMenuStrip : GroupedContextMenuStrip
 
             if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
             {
-                var rendererStyle = uis.Styles["VsRenderer"];
+                object? rendererStyle = uis.Styles["VsRenderer"];
                 if (rendererStyle is ToolStripProfessionalRenderer renderer)
                 {
                     selectionMenuItem.DropDown.Renderer = renderer;
