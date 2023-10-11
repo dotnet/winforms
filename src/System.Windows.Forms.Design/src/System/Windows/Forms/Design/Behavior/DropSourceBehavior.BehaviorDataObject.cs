@@ -33,6 +33,6 @@ internal sealed partial class DropSourceBehavior
 
         internal void CleanupDrag() => _sourceBehavior.CleanupDrag();
 
-        internal List<IComponent> GetSortedDragControls(ref int primaryControlIndex) => _sourceBehavior.GetSortedDragControls(ref primaryControlIndex);
+        internal List<IComponent> GetSortedDragControls(out int primaryControlIndex) => _sourceBehavior.GetSortedDragControls(out primaryControlIndex);
     }
 }
