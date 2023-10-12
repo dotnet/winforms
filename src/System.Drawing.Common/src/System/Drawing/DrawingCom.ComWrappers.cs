@@ -55,11 +55,7 @@ internal unsafe partial class DrawingCom : ComWrappers
         Debug.Assert(flags == CreateObjectFlags.UniqueInstance);
 
         Guid pictureIID = IPicture.IID;
-#if NET8_0_OR_GREATER
-        int hr = Marshal.QueryInterface(externalComObject, in pictureIID, out IntPtr comObject);
-#else
         int hr = Marshal.QueryInterface(externalComObject, ref pictureIID, out IntPtr comObject);
-#endif
         if (hr == S_OK)
         {
             return new PictureWrapper(comObject);
@@ -78,12 +74,7 @@ internal unsafe partial class DrawingCom : ComWrappers
         IntPtr streamWrapperPtr = Instance.GetOrCreateComInterfaceForObject(stream, CreateComInterfaceFlags.None);
 
         Guid streamIID = IID_IStream;
-
-#if NET8_0_OR_GREATER
-        int hr = Marshal.QueryInterface(streamWrapperPtr, in streamIID, out IntPtr streamPtr);
-#else
         int hr = Marshal.QueryInterface(streamWrapperPtr, ref streamIID, out IntPtr streamPtr);
-#endif
 
         Marshal.Release(streamWrapperPtr);
 
@@ -321,11 +312,7 @@ internal unsafe partial class DrawingCom : ComWrappers
             // Get the IStream implementation, since the ComWrappers runtime returns a pointer to the IUnknown interface implementation
             Guid streamIID = IID_IStream;
 
-#if NET8_0_OR_GREATER
-            ThrowExceptionForHR(Marshal.QueryInterface(pstm, in streamIID, out IntPtr pstmImpl));
-#else
             ThrowExceptionForHR(Marshal.QueryInterface(pstm, ref streamIID, out IntPtr pstmImpl));
-#endif
 
             try
             {
