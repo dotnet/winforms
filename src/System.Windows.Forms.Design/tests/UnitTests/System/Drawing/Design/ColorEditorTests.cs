@@ -23,7 +23,7 @@ public partial class ColorEditorTests
         yield return new object[] { "value" };
         yield return new object[] { Color.Empty };
         yield return new object[] { Color.Red };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]

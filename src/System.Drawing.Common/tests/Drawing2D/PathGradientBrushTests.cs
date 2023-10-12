@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Copyright (C) 2005-2006 Novell, Inc (http://www.novell.com)
@@ -27,8 +27,8 @@ namespace System.Drawing.Drawing2D.Tests;
 
 public class PathGradientBrushTests
 {
-    private readonly Point[] _defaultIntPoints = new Point[2] { new Point(1, 2), new Point(20, 30) };
-    private readonly PointF[] _defaultFloatPoints = new PointF[2] { new PointF(1, 2), new PointF(20, 30) };
+    private readonly Point[] _defaultIntPoints = [new(1, 2), new(20, 30)];
+    private readonly PointF[] _defaultFloatPoints = [new(1, 2), new(20, 30)];
     private readonly RectangleF _defaultRectangle = new(1, 2, 19, 28);
 
     [Fact]
@@ -118,7 +118,7 @@ public class PathGradientBrushTests
         using (GraphicsPath path = new GraphicsPath())
         {
             Assert.Throws<OutOfMemoryException>(() => new PathGradientBrush(path));
-            path.AddLines(new PointF[] { new PointF(1, 1) });
+            path.AddLines(new PointF[] { new(1, 1) });
             Assert.Throws<OutOfMemoryException>(() => new PathGradientBrush(path));
         }
     }
@@ -210,8 +210,8 @@ public class PathGradientBrushTests
 
     public static IEnumerable<object[]> SurroundColors_InvalidColorsLength_TestData()
     {
-        yield return new object[] { new Point[2] { new Point(1, 1), new Point(2, 2) }, new Color[0] };
-        yield return new object[] { new Point[2] { new Point(1, 1), new Point(2, 2) }, new Color[3] };
+        yield return new object[] { new Point[2] { new(1, 1), new(2, 2) }, new Color[0] };
+        yield return new object[] { new Point[2] { new(1, 1), new(2, 2) }, new Color[3] };
     }
 
     [Theory]

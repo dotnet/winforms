@@ -71,8 +71,8 @@ public unsafe class UiaTextProviderTests
         double[] expected = { 0, 0, 10, 5, 10, 10, 20, 30 };
         using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>
         {
-            new Rectangle(0, 0, 10, 5),
-            new Rectangle(10, 10, 20, 30)
+            new(0, 0, 10, 5),
+            new(10, 10, 20, 30)
         });
 
         Assert.Equal(8, actual.Length);

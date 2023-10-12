@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Tests;
@@ -63,7 +63,7 @@ public class CharacterRangeTests
         yield return new object[] { new CharacterRange(1, 2), new CharacterRange(1, 2), true };
         yield return new object[] { new CharacterRange(1, 2), new CharacterRange(2, 2), false };
         yield return new object[] { new CharacterRange(1, 2), new CharacterRange(1, 1), false };
-        yield return new object[] { new CharacterRange(1, 2), new object(), false };
+        yield return new object[] { new CharacterRange(1, 2), new(), false };
 
         // .NET Framework throws NullReferenceException.
         if (!PlatformDetection.IsNetFramework)

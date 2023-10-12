@@ -86,126 +86,125 @@ internal class CommandSet : IDisposable
         commandSet = new CommandSetItem[]
         {
             // Editing commands
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusDelete),
-                              new EventHandler(OnMenuDelete),
-                              StandardCommands.Delete,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusDelete),
+                new EventHandler(OnMenuDelete),
+                StandardCommands.Delete,
+                uiService),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusCopy),
-                              new EventHandler(OnMenuCopy),
-                              StandardCommands.Copy,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusCopy),
+                new EventHandler(OnMenuCopy),
+                StandardCommands.Copy,
+                uiService),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusCut),
-                              new EventHandler(OnMenuCut),
-                              StandardCommands.Cut,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusCut),
+                new EventHandler(OnMenuCut),
+                StandardCommands.Cut,
+                uiService),
 
             new ImmediateCommandSetItem(
-                                       this,
-                                       new EventHandler(OnStatusPaste),
-                                       new EventHandler(OnMenuPaste),
-                                       StandardCommands.Paste,
-                                       uiService),
+                this,
+                new EventHandler(OnStatusPaste),
+                new EventHandler(OnMenuPaste),
+                StandardCommands.Paste,
+                uiService),
 
             // Miscellaneous commands
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusSelectAll),
-                              new EventHandler(OnMenuSelectAll),
-                              StandardCommands.SelectAll, true,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusSelectAll),
+                new EventHandler(OnMenuSelectAll),
+                StandardCommands.SelectAll, true,
+                uiService),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnMenuDesignerProperties),
-                              MenuCommands.DesignerProperties,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnMenuDesignerProperties),
+                MenuCommands.DesignerProperties,
+                uiService),
 
             // Keyboard commands
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnKeyCancel),
-                              MenuCommands.KeyCancel,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnKeyCancel),
+                MenuCommands.KeyCancel,
+                uiService),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnKeyCancel),
-                              MenuCommands.KeyReverseCancel,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnKeyCancel),
+                MenuCommands.KeyReverseCancel,
+                uiService),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusPrimarySelection),
-                              new EventHandler(OnKeyDefault),
-                              MenuCommands.KeyDefaultAction, true,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusPrimarySelection),
+                new EventHandler(OnKeyDefault),
+                MenuCommands.KeyDefaultAction, true,
+                uiService),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAnySelection),
-                              new EventHandler(OnKeyMove),
-                              MenuCommands.KeyMoveUp, true,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusAnySelection),
+                new EventHandler(OnKeyMove),
+                MenuCommands.KeyMoveUp, true,
+                uiService),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAnySelection),
-                              new EventHandler(OnKeyMove),
-                              MenuCommands.KeyMoveDown, true,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusAnySelection),
+                new EventHandler(OnKeyMove),
+                MenuCommands.KeyMoveDown, true,
+                uiService),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAnySelection),
-                              new EventHandler(OnKeyMove),
-                              MenuCommands.KeyMoveLeft, true,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusAnySelection),
+                new EventHandler(OnKeyMove),
+                MenuCommands.KeyMoveLeft, true,
+                uiService),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAnySelection),
-                              new EventHandler(OnKeyMove),
-                              MenuCommands.KeyMoveRight, true),
+            new(
+                this,
+                new EventHandler(OnStatusAnySelection),
+                new EventHandler(OnKeyMove),
+                MenuCommands.KeyMoveRight, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAnySelection),
-                              new EventHandler(OnKeyMove),
-                              MenuCommands.KeyNudgeUp, true,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusAnySelection),
+                new EventHandler(OnKeyMove),
+                MenuCommands.KeyNudgeUp, true,
+                uiService),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAnySelection),
-                              new EventHandler(OnKeyMove),
-                              MenuCommands.KeyNudgeDown, true,
-                              uiService),
+            new(
+                this,
+                new EventHandler(OnStatusAnySelection),
+                new EventHandler(OnKeyMove),
+                MenuCommands.KeyNudgeDown, true,
+                uiService),
 
-            new CommandSetItem(
+            new(
+                this,
+                new EventHandler(OnStatusAnySelection),
+                new EventHandler(OnKeyMove),
+                MenuCommands.KeyNudgeLeft, true,
+                uiService),
 
-                              this,
-                              new EventHandler(OnStatusAnySelection),
-                              new EventHandler(OnKeyMove),
-                              MenuCommands.KeyNudgeLeft, true,
-                              uiService),
-
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAnySelection),
-                              new EventHandler(OnKeyMove),
-                              MenuCommands.KeyNudgeRight, true,
-                                  uiService),
+            new(
+                this,
+                new EventHandler(OnStatusAnySelection),
+                new EventHandler(OnKeyMove),
+                MenuCommands.KeyNudgeRight, true,
+                uiService),
         };
 
         selectionService = (ISelectionService)site.GetService(typeof(ISelectionService));

@@ -138,7 +138,7 @@ public class ComponentDesignerTests
         Mock<IComponent> mockComponent2 = new(MockBehavior.Strict);
         Mock<IDesigner> mockDesigner = new(MockBehavior.Strict);
         using CustomAssociatedComponentsComponentDesigner designer = new(
-            new object[] { new object(), null, mockComponent1.Object, mockComponent2.Object });
+            new object[] { new(), null, mockComponent1.Object, mockComponent2.Object });
         ITreeDesigner treeDesigner = designer;
         Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
@@ -174,7 +174,7 @@ public class ComponentDesignerTests
         foreach (ICollection associatedComponents in new object[] { null, Array.Empty<object>(), new object[] { new Component() } })
         {
             yield return new object[] { associatedComponents, null };
-            yield return new object[] { associatedComponents, new object() };
+            yield return new object[] { associatedComponents, new() };
         }
     }
 
@@ -253,7 +253,7 @@ public class ComponentDesignerTests
     public static IEnumerable<object[]> InheritanceAttribute_GetInvalidService_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]
@@ -358,7 +358,7 @@ public class ComponentDesignerTests
     public static IEnumerable<object[]> ParentComponent_InvalidService_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]
@@ -561,7 +561,7 @@ public class ComponentDesignerTests
     public static IEnumerable<object[]> Dispose_InvokeWithComponentChangeService_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new Mock<IComponentChangeService>(MockBehavior.Strict).Object };
     }
 
@@ -655,7 +655,7 @@ public class ComponentDesignerTests
         foreach (bool disposing in new bool[] { true, false })
         {
             yield return new object[] { null, disposing };
-            yield return new object[] { new object(), disposing };
+            yield return new object[] { new(), disposing };
             yield return new object[] { new Mock<IComponentChangeService>(MockBehavior.Strict), disposing };
         }
     }
@@ -715,9 +715,9 @@ public class ComponentDesignerTests
             yield return new object[] { property, Array.Empty<object>(), 1, string.Empty };
             yield return new object[] { property, Array.Empty<object>(), 1, "UniqueMethod" };
 
-            yield return new object[] { property, new object[] { null, new object(), "NoSuchStringValue" }, 1, null };
-            yield return new object[] { property, new object[] { null, new object(), "NoSuchStringValue" }, 1, string.Empty };
-            yield return new object[] { property, new object[] { null, new object(), "NoSuchStringValue" }, 1, "UniqueMethod" };
+            yield return new object[] { property, new object[] { null, new(), "NoSuchStringValue" }, 1, null };
+            yield return new object[] { property, new object[] { null, new(), "NoSuchStringValue" }, 1, string.Empty };
+            yield return new object[] { property, new object[] { null, new(), "NoSuchStringValue" }, 1, "UniqueMethod" };
 
             // Should not call if in the compatible methods list.
             yield return new object[] { property, new object[] { "StringValue" }, 0, null };
@@ -983,7 +983,7 @@ public class ComponentDesignerTests
         Mock<ISelectionService> mockSelectionService = new(MockBehavior.Strict);
         mockSelectionService
             .Setup(s => s.GetSelectedComponents())
-            .Returns(new object[] { null, new object(), component1, component2, component3 });
+            .Returns(new object[] { null, new(), component1, component2, component3 });
         Mock<IDesignerHost> mockDesignerHost = new(MockBehavior.Strict);
         mockDesignerHost
             .Setup(h => h.RootComponent)
@@ -1645,7 +1645,7 @@ public class ComponentDesignerTests
     {
         yield return new object[] { null };
         yield return new object[] { Array.Empty<object>() };
-        yield return new object[] { new object[] { null, new object() } };
+        yield return new object[] { new object[] { null, new() } };
     }
 
     [Theory]
@@ -1716,7 +1716,7 @@ public class ComponentDesignerTests
     public static IEnumerable<object[]> DoDefaultAction_InvalidEventBindingService_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]
@@ -1771,7 +1771,7 @@ public class ComponentDesignerTests
     public static IEnumerable<object[]> DoDefaultAction_InvalidSelectionService_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]
@@ -1831,7 +1831,7 @@ public class ComponentDesignerTests
     public static IEnumerable<object[]> DoDefaultAction_InvalidDesignerHost_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]
@@ -2033,7 +2033,7 @@ public class ComponentDesignerTests
     public static IEnumerable<object[]> Initialize_NonRootComponent_TestData()
     {
         yield return new object[] { null, null };
-        yield return new object[] { new object(), new object() };
+        yield return new object[] { new(), new() };
 
         Mock<IDesignerHost> mockNullDesignerHost = new(MockBehavior.Strict);
         mockNullDesignerHost
@@ -2155,7 +2155,7 @@ public class ComponentDesignerTests
 
     public static IEnumerable<object[]> Initialize_NonNullDesignerCommandSet_TestData()
     {
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new DesignerCommandSet() };
     }
 
@@ -2449,7 +2449,7 @@ public class ComponentDesignerTests
     public static IEnumerable<object[]> RaiseComponentChanged_TestData()
     {
         yield return new object[] { null, null, null };
-        yield return new object[] { TypeDescriptor.GetProperties(typeof(CustomComponent))[0], new object(), new object() };
+        yield return new object[] { TypeDescriptor.GetProperties(typeof(CustomComponent))[0], new(), new() };
     }
 
     [Theory]
@@ -2474,10 +2474,10 @@ public class ComponentDesignerTests
 
     public static IEnumerable<object[]> RaiseComponentChanged_InvalidService_TestData()
     {
-        foreach (object componentChangeService in new object[] { null, new object() })
+        foreach (object componentChangeService in new object[] { null, new() })
         {
             yield return new object[] { componentChangeService, null, null, null };
-            yield return new object[] { componentChangeService, TypeDescriptor.GetProperties(typeof(CustomComponent))[0], new object(), new object() };
+            yield return new object[] { componentChangeService, TypeDescriptor.GetProperties(typeof(CustomComponent))[0], new(), new() };
         }
     }
 
@@ -2532,7 +2532,7 @@ public class ComponentDesignerTests
 
     public static IEnumerable<object[]> RaiseComponentChanging_InvalidService_TestData()
     {
-        foreach (object componentChangeService in new object[] { null, new object() })
+        foreach (object componentChangeService in new object[] { null, new() })
         {
             yield return new object[] { componentChangeService, null };
             yield return new object[] { componentChangeService, TypeDescriptor.GetProperties(typeof(CustomComponent))[0] };

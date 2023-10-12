@@ -489,7 +489,7 @@ public class CollectionFormTests : CollectionEditor
     public static IEnumerable<object[]> InvalidDesignerHost_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]

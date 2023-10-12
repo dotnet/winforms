@@ -81,7 +81,7 @@ public class CodeDomComponentSerializationServiceTests
     public static IEnumerable<object[]> CreateStore_ServiceProvider_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new Mock<IDesignerSerializationManager>(MockBehavior.Strict) };
     }
 
@@ -178,7 +178,7 @@ public class CodeDomComponentSerializationServiceTests
     public static IEnumerable<object[]> CreateStore_CloseSerializeWithInvalidProvider_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]
@@ -266,7 +266,7 @@ public class CodeDomComponentSerializationServiceTests
     public static IEnumerable<object[]> CreateStore_CloseSerializeWithValidProvider_TestData()
     {
         yield return new object[] { null, null };
-        yield return new object[] { new object(), new object() };
+        yield return new object[] { new(), new() };
 
         Mock<IComponentChangeService> mockComponentChangeService = new(MockBehavior.Strict);
         yield return new object[] { mockComponentChangeService.Object, new WindowsFormsDesignerOptionService() };

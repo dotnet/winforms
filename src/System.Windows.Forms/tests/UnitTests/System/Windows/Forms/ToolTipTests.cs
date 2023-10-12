@@ -619,7 +619,7 @@ public class ToolTipTests
     public static IEnumerable<object[]> CanExtend_TestData()
     {
         yield return new object[] { null, false };
-        yield return new object[] { new object(), false };
+        yield return new object[] { new(), false };
         yield return new object[] { new ToolTip(), false };
         yield return new object[] { new Control(), true };
     }

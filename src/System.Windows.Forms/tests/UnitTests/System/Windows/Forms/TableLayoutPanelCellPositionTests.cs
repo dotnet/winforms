@@ -70,7 +70,7 @@ public class TableLayoutPanelCellPositionTests
         yield return new object[] { new TableLayoutPanelCellPosition(1, 2), new TableLayoutPanelCellPosition(2, 2), false };
         yield return new object[] { new TableLayoutPanelCellPosition(1, 2), new TableLayoutPanelCellPosition(1, 3), false };
 
-        yield return new object[] { new TableLayoutPanelCellPosition(1, 2), new object(), false };
+        yield return new object[] { new TableLayoutPanelCellPosition(1, 2), new(), false };
         yield return new object[] { new TableLayoutPanelCellPosition(1, 2), null, false };
     }
 
