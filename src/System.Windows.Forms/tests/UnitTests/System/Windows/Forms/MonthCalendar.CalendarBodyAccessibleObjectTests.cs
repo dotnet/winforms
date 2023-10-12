@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
 
@@ -95,19 +96,19 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
         using MonthCalendar control = new MonthCalendar();
         CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
-        Assert.Equal(UiaCore.UIA.TableControlTypeId, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TableControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
         Assert.False(control.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.GridPatternId)]
-    [InlineData((int)UiaCore.UIA.TablePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_GridPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TablePatternId)]
     public void CalendarBodyAccessibleObject_Supports_GridAndTablePatterns(int pattern)
     {
         using MonthCalendar control = new MonthCalendar();
         CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)pattern));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)pattern));
         Assert.False(control.IsHandleCreated);
     }
 

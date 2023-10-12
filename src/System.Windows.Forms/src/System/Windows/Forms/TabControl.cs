@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Text;
 using System.Windows.Forms.Layout;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -1219,7 +1220,7 @@ public partial class TabControl : Control
 
         if (IsAccessibilityObjectCreated && SelectedTab is not null)
         {
-            SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -1966,8 +1967,8 @@ public partial class TabControl : Control
 
             if (IsAccessibilityObjectCreated && SelectedTab?.ParentInternal is TabControl)
             {
-                SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
-                BeginInvoke((MethodInvoker)(() => SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId)));
+                SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId);
+                BeginInvoke((MethodInvoker)(() => SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId)));
             }
         }
         else

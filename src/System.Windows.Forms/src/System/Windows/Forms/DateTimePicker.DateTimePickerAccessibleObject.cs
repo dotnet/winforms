@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -68,10 +69,10 @@ public partial class DateTimePicker
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.LocalizedControlTypePropertyId when this.GetOwnerAccessibleRole() == AccessibleRole.Default
+                UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId when this.GetOwnerAccessibleRole() == AccessibleRole.Default
                     // We define a custom "LocalizedControlType" by default.
                     // If DateTimePicker.AccessibleRole value is customized by a user
                     // then "LocalizedControlType" value will be based on "ControlType"
@@ -80,12 +81,12 @@ public partial class DateTimePicker
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.TogglePatternId when this.TryGetOwnerAs(out DateTimePicker? owner) && owner.ShowCheckBox => true,
-                UiaCore.UIA.ExpandCollapsePatternId => true,
-                UiaCore.UIA.ValuePatternId => true,
+                UIA_PATTERN_ID.UIA_TogglePatternId when this.TryGetOwnerAs(out DateTimePicker? owner) && owner.ShowCheckBox => true,
+                UIA_PATTERN_ID.UIA_ExpandCollapsePatternId => true,
+                UIA_PATTERN_ID.UIA_ValuePatternId => true,
                 _ => base.IsPatternSupported(patternId)
             };
 

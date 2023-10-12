@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -22,13 +22,13 @@ public partial class ToolStripStatusLabel
         /// <returns>True if operation succeeds, False otherwise.</returns>
         public override bool RaiseLiveRegionChanged()
         {
-            return RaiseAutomationEvent(UiaCore.UIA.LiveRegionChangedEventId);
+            return RaiseAutomationEvent(UIA_EVENT_ID.UIA_LiveRegionChangedEventId);
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.LiveSettingPropertyId => _owningToolStripStatusLabel.LiveSetting,
+                UIA_PROPERTY_ID.UIA_LiveSettingPropertyId => _owningToolStripStatusLabel.LiveSetting,
                 _ => base.GetPropertyValue(propertyID)
             };
     }

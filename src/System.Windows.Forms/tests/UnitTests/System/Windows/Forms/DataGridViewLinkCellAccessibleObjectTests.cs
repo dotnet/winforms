@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -45,9 +45,9 @@ public class DataGridViewLinkCellAccessibleObjectTests : DataGridViewLinkCell
     {
         var accessibleObject = new DataGridViewLinkCellAccessibleObject(null);
 
-        UiaCore.UIA expected = UiaCore.UIA.HyperlinkControlTypeId;
+        UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_HyperlinkControlTypeId;
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(expected, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]

@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.PrintPreviewControl;
 using IScrollProvider = Windows.Win32.UI.Accessibility.IScrollProvider;
 
@@ -147,10 +148,10 @@ public class PrintPreviewControl_PrintPreviewControlAccessibilityObjectTests
 
         var accessibleObject = (PrintPreviewControlAccessibleObject)control.AccessibilityObject;
         IScrollProvider.Interface scrollProvider = accessibleObject;
-        Assert.False(accessibleObject.IsPatternSupported(Interop.UiaCore.UIA.ScrollPatternId));
+        Assert.False(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollPatternId));
 
         control.MakeOnlyVerticalScrollBarVisible();
-        Assert.True(accessibleObject.IsPatternSupported(Interop.UiaCore.UIA.ScrollPatternId));
+        Assert.True(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollPatternId));
 
         Assert.False((bool)scrollProvider.HorizontallyScrollable);
         Assert.Equal(0, (int)scrollProvider.HorizontalScrollPercent);
@@ -161,10 +162,10 @@ public class PrintPreviewControl_PrintPreviewControlAccessibilityObjectTests
         AssertExtensions.GreaterThanOrEqualTo((int)scrollProvider.VerticalViewSize, 0);
 
         control.MakeNoScrollBarsVisible();
-        Assert.False(accessibleObject.IsPatternSupported(Interop.UiaCore.UIA.ScrollPatternId));
+        Assert.False(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollPatternId));
 
         control.MakeOnlyHorizontalScrollBarVisible();
-        Assert.True(accessibleObject.IsPatternSupported(Interop.UiaCore.UIA.ScrollPatternId));
+        Assert.True(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollPatternId));
 
         Assert.False((bool)scrollProvider.VerticallyScrollable);
         Assert.Equal(0, (int)scrollProvider.VerticalScrollPercent);

@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -17,7 +17,7 @@ public class ToolStripTextBox_ToolStripTextBoxAccessibleObjectTests
         };
 
         AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
-        var accessibleName = toolStripTextBoxAccessibleObject.GetPropertyValue(UIA.NamePropertyId);
+        var accessibleName = toolStripTextBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal("Test Name", accessibleName);
     }
@@ -28,7 +28,7 @@ public class ToolStripTextBox_ToolStripTextBoxAccessibleObjectTests
         using var toolStripTextBox = new ToolStripTextBox();
         AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
 
-        bool supportsLegacyIAccessiblePatternId = toolStripTextBoxAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId);
+        bool supportsLegacyIAccessiblePatternId = toolStripTextBoxAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);
 
         Assert.True(supportsLegacyIAccessiblePatternId);
     }

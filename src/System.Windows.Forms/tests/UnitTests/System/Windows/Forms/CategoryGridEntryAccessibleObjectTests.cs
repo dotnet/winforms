@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.PropertyGridInternal;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.PropertyGridInternal.CategoryGridEntry;
 using static System.Windows.Forms.PropertyGridInternal.PropertyGridView;
 using static Interop;
@@ -43,20 +44,20 @@ public class CategoryGridEntryAccessibleObjectTests
         using NoAssertContext context = new();
         var accessibilityObject = new CategoryGridEntryAccessibleObject(null);
 
-        UiaCore.UIA expected = UiaCore.UIA.TreeItemControlTypeId;
+        UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId;
 
-        Assert.Equal(expected, accessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(expected, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.GridItemPatternId)]
-    [InlineData((int)UiaCore.UIA.TableItemPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_GridItemPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TableItemPatternId)]
     public void CategoryGridEntryAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
         using NoAssertContext context = new();
         var accessibilityObject = new CategoryGridEntryAccessibleObject(null);
 
-        Assert.True(accessibilityObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibilityObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
 
     [WinFormsFact]
@@ -153,18 +154,18 @@ public class CategoryGridEntryAccessibleObjectTests
 
         string expected = SR.CategoryPropertyGridLocalizedControlType;
 
-        Assert.Equal(expected, accessibilityObject.GetPropertyValue(UiaCore.UIA.LocalizedControlTypePropertyId));
+        Assert.Equal(expected, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId));
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessibleRolePropertyId, AccessibleRole.ButtonDropDownGrid)]
-    [InlineData((int)UiaCore.UIA.IsGridItemPatternAvailablePropertyId, true)]
-    [InlineData((int)UiaCore.UIA.IsTableItemPatternAvailablePropertyId, true)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, AccessibleRole.ButtonDropDownGrid)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsGridItemPatternAvailablePropertyId, true)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTableItemPatternAvailablePropertyId, true)]
     public void CategoryGridEntryAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
         using NoAssertContext context = new();
         CategoryGridEntryAccessibleObject accessibleObject = new(null);
-        object actual = accessibleObject.GetPropertyValue((UiaCore.UIA)property);
+        object actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
 
         Assert.Equal(expected, actual);
     }
@@ -180,7 +181,7 @@ public class CategoryGridEntryAccessibleObjectTests
         var gridViewAccessibilityObject = (PropertyGridViewAccessibleObject)gridView.AccessibilityObject;
         AccessibleObject accessibilityObject = category.AccessibilityObject;
 
-        Assert.Equal("Collapse", accessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
-        Assert.Null(accessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.Equal("Collapse", accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Null(accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
     }
 }

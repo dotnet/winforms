@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
 
@@ -195,7 +196,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
-        Assert.Equal(enabled, calendar.GetPropertyValue(UiaCore.UIA.IsKeyboardFocusablePropertyId));
+        Assert.Equal(enabled, calendar.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -219,7 +220,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
-        Assert.True(calendar.IsPatternSupported(UiaCore.UIA.GridItemPatternId));
+        Assert.True(calendar.IsPatternSupported(UIA_PATTERN_ID.UIA_GridItemPatternId));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -231,7 +232,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
-        Assert.True(calendar.IsPatternSupported(UiaCore.UIA.TableItemPatternId));
+        Assert.True(calendar.IsPatternSupported(UIA_PATTERN_ID.UIA_TableItemPatternId));
         Assert.False(control.IsHandleCreated);
     }
 

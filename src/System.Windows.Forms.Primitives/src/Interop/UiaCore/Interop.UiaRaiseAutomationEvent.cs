@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Accessibility;
 
 internal partial class Interop
 {
     internal static partial class UiaCore
     {
         [DllImport(Libraries.UiaCore, ExactSpelling = true)]
-        public static extern HRESULT UiaRaiseAutomationEvent(IRawElementProviderSimple provider, UIA id);
+        public static extern HRESULT UiaRaiseAutomationEvent(IRawElementProviderSimple provider, UIA_EVENT_ID id);
     }
 }

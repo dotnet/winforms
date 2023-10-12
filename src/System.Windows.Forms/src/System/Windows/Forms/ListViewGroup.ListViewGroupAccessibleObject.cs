@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListView;
 using static Interop;
 
@@ -179,14 +180,14 @@ public partial class ListViewGroup
             return _owningGroup.ID;
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.GroupControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListView.Focused && Focused,
-                UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                UiaCore.UIA.NativeWindowHandlePropertyId => _owningListView.IsHandleCreated ? _owningListView.Handle : IntPtr.Zero,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningListView.Focused && Focused,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListView.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _owningListView.IsHandleCreated ? _owningListView.Handle : IntPtr.Zero,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -291,11 +292,11 @@ public partial class ListViewGroup
             return GetVisibleItems().Count;
         }
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.LegacyIAccessiblePatternId => true,
-                UiaCore.UIA.ExpandCollapsePatternId => _owningGroup.CollapsedState != ListViewGroupCollapsedState.Default,
+                UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId => true,
+                UIA_PATTERN_ID.UIA_ExpandCollapsePatternId => _owningGroup.CollapsedState != ListViewGroupCollapsedState.Default,
                 _ => base.IsPatternSupported(patternId),
             };
 
@@ -308,7 +309,7 @@ public partial class ListViewGroup
 
             _owningListView.FocusedGroup = _owningGroup;
 
-            RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 }

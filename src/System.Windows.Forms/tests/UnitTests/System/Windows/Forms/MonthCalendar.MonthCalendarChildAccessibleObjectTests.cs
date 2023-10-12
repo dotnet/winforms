@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
 
@@ -27,20 +28,20 @@ public class MonthCalendar_MonthCalendarChildAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.HasKeyboardFocusPropertyId, false)]
-    [InlineData((int)UiaCore.UIA.IsEnabledPropertyId, true)]
-    [InlineData((int)UiaCore.UIA.IsKeyboardFocusablePropertyId, false)]
-    [InlineData((int)UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId, true)]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessibleRolePropertyId, AccessibleRole.None)]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
-    [InlineData((int)UiaCore.UIA.NamePropertyId, null)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId, false)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsEnabledPropertyId, true)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId, false)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId, true)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, AccessibleRole.None)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, null)]
     public void MonthCalendarChildAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
         using MonthCalendar control = new MonthCalendar();
 
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         MonthCalendarChildAccessibleObject accessibleObject = new SubObject(controlAccessibleObject);
-        object actual = accessibleObject.GetPropertyValue((UiaCore.UIA)property);
+        object actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
 
         Assert.Equal(expected, actual);
         Assert.False(control.IsHandleCreated);
@@ -54,7 +55,7 @@ public class MonthCalendar_MonthCalendarChildAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         MonthCalendarChildAccessibleObject accessibleObject = new SubObject(controlAccessibleObject);
 
-        Assert.True(accessibleObject.IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId));
+        Assert.True(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId));
         Assert.False(control.IsHandleCreated);
     }
 

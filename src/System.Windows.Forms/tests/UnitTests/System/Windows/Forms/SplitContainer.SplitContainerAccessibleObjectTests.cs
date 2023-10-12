@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -24,9 +24,9 @@ public class SplitContainer_SplitContainerAccessibleObjectTests
         splitContainer.CreateControl();
         // AccessibleRole is not set = Default
 
-        object actual = splitContainer.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
+        object actual = splitContainer.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UIA.PaneControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId, actual);
         Assert.True(splitContainer.IsHandleCreated);
     }
 
@@ -65,16 +65,16 @@ public class SplitContainer_SplitContainerAccessibleObjectTests
         using SplitContainer splitContainer = new();
         splitContainer.AccessibleRole = role;
 
-        object actual = splitContainer.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
-        UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = splitContainer.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(splitContainer.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA.NamePropertyId, "TestName")]
-    [InlineData((int)UIA.AutomationIdPropertyId, "SplitContainer1")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "SplitContainer1")]
     public void SplitContainerAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
         using SplitContainer control = new()
@@ -84,7 +84,7 @@ public class SplitContainer_SplitContainerAccessibleObjectTests
         };
 
         var accessibleObject = new SplitContainer.SplitContainerAccessibleObject(control);
-        object value = accessibleObject.GetPropertyValue((UIA)propertyID);
+        object value = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
         Assert.Equal(expected, value);
         Assert.False(control.IsHandleCreated);
@@ -98,7 +98,7 @@ public class SplitContainer_SplitContainerAccessibleObjectTests
         var accessibleObject = new SplitContainer.SplitContainerAccessibleObject(control);
         Assert.False(control.IsHandleCreated);
         control.FocusActiveControlInternal();
-        bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
+        bool value = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.True(value);
         Assert.True(control.IsHandleCreated);
@@ -110,7 +110,7 @@ public class SplitContainer_SplitContainerAccessibleObjectTests
         using SplitContainer control = new();
 
         var accessibleObject = new SplitContainer.SplitContainerAccessibleObject(control);
-        bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
+        bool value = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.False(value);
         Assert.False(control.IsHandleCreated);

@@ -3,6 +3,7 @@
 
 using System.Drawing.Design;
 using System.Reflection;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Design.Tests;
 
@@ -28,8 +29,8 @@ public class ContentAlignmentEditorTests
             .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(contentUI);
 
         object actual = item.AccessibilityObject.TestAccessor().Dynamic
-            .GetPropertyValue(Interop.UiaCore.UIA.ControlTypePropertyId);
+            .GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(Interop.UiaCore.UIA.RadioButtonControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_RadioButtonControlTypeId, actual);
     }
 }

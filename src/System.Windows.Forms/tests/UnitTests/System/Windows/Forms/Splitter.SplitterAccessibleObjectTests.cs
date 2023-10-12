@@ -1,8 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -89,10 +88,10 @@ public class Splitter_SplitterAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA.NamePropertyId, "TestName")]
-    [InlineData((int)UIA.ControlTypePropertyId, UIA.PaneControlTypeId)] // If AccessibleRole is Default
-    [InlineData((int)UIA.IsKeyboardFocusablePropertyId, true)]
-    [InlineData((int)UIA.AutomationIdPropertyId, "Splitter1")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)] // If AccessibleRole is Default
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId, true)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "Splitter1")]
     public void SplitterAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
         using var splitter = new Splitter
@@ -103,7 +102,7 @@ public class Splitter_SplitterAccessibleObjectTests
 
         Assert.False(splitter.IsHandleCreated);
         var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
-        object value = splitterAccessibleObject.GetPropertyValue((UIA)propertyID);
+        object value = splitterAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
         Assert.Equal(expected, value);
         Assert.False(splitter.IsHandleCreated);
@@ -119,7 +118,7 @@ public class Splitter_SplitterAccessibleObjectTests
         Assert.False(splitter.IsHandleCreated);
         var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
 
-        Assert.True(splitterAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId));
+        Assert.True(splitterAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId));
         Assert.False(splitter.IsHandleCreated);
     }
 
@@ -145,8 +144,8 @@ public class Splitter_SplitterAccessibleObjectTests
         using Splitter splitter = new Splitter();
         splitter.AccessibleRole = role;
 
-        object actual = splitter.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = splitter.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(splitter.IsHandleCreated);

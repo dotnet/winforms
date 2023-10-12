@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.UpDownBase;
 using static System.Windows.Forms.UpDownBase.UpDownButtons;
 using static Interop;
@@ -10,8 +11,8 @@ namespace System.Windows.Forms.Tests;
 public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject_DirectionButtonAccessibleObjectTests
 {
     [WinFormsTheory]
-    [InlineData(((int)UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
-    [InlineData(((int)UiaCore.UIA.IsInvokePatternAvailablePropertyId))]
+    [InlineData(((int)UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId))]
+    [InlineData(((int)UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId))]
     public void UpDownButtonsAccessibleObject_DirectionButtonAccessibleObject_GetPropertyValue_IsPatternSupported(int propertyId)
     {
         using SubUpDownBase upDownBase = new();
@@ -19,7 +20,7 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject_DirectionBut
         UpDownButtonsAccessibleObject accessibleObject = new(upDownButtons);
         // UpButton has 0 index
         AccessibleObject upButton = accessibleObject.GetChild(index: 0);
-        bool actual = (bool)upButton.GetPropertyValue((UiaCore.UIA)propertyId);
+        bool actual = (bool)upButton.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
 
         Assert.True(actual);
         Assert.False(upDownButtons.IsHandleCreated);
@@ -27,9 +28,9 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject_DirectionBut
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessibleRolePropertyId, AccessibleRole.PushButton)]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
-    [InlineData((int)UiaCore.UIA.ValueValuePropertyId, null)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, AccessibleRole.PushButton)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_ValueValuePropertyId, null)]
     public void NumericUpDownAccessibleObject_DirectionButtonAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
         using SubUpDownBase upDownBase = new();
@@ -37,7 +38,7 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject_DirectionBut
         UpDownButtonsAccessibleObject accessibleObject = new(upDownButtons);
         // UpButton has 0 index
         AccessibleObject upButton = accessibleObject.GetChild(index: 0);
-        object actual = upButton.GetPropertyValue((UiaCore.UIA)property);
+        object actual = upButton.GetPropertyValue((UIA_PROPERTY_ID)property);
 
         Assert.Equal(expected, actual);
         Assert.False(upDownBase.IsHandleCreated);

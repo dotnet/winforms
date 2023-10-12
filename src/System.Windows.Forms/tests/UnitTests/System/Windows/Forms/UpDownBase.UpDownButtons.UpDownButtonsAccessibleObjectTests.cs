@@ -4,6 +4,7 @@
 using System.Windows.Forms.Automation;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.UpDownBase;
 using static System.Windows.Forms.UpDownBase.UpDownButtons;
 using static Interop;
@@ -31,9 +32,9 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
         // AccessibleRole is not set = Default
 
-        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.SpinnerControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_SpinnerControlTypeId, actual);
         Assert.False(upDownBase.IsHandleCreated);
     }
 
@@ -73,8 +74,8 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
         upDownButtons.AccessibleRole = role;
 
-        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(upDownBase.IsHandleCreated);
@@ -88,7 +89,7 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
         upDownButtons.AccessibleName = name;
 
-        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal(name, actual);
         Assert.False(upDownBase.IsHandleCreated);
@@ -100,7 +101,7 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         using SubUpDownBase upDownBase = new();
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
 
-        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId);
+        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
 
         Assert.Equal(upDownButtons.AccessibilityObject.RuntimeId, actual);
         Assert.False(upDownBase.IsHandleCreated);
@@ -111,28 +112,28 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
     {
         using SubUpDownBase upDownBase = new();
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
-        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId);
+        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
         using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray(upDownButtons.AccessibilityObject.BoundingRectangle);
         Assert.Equal(((VARIANT)rectArray).ToObject(), actual);
         Assert.False(upDownBase.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData(false, ((int)UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsGridItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsGridPatternAvailablePropertyId))]
-    [InlineData(true, ((int)UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsScrollItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsScrollPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsSelectionPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTableItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTablePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTextPattern2AvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTextPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTogglePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsValuePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsGridItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsGridPatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsMultipleViewPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsScrollItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsScrollPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsSelectionItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTableItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTablePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTogglePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId))]
     public void UpDownButtonsAccessibleObject_GetPropertyValue_Pattern_ReturnsExpected(bool expected, int propertyId)
     {
         using TrackBar trackBar = new();
@@ -140,21 +141,21 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
         UpDownButtonsAccessibleObject accessibleObject = (UpDownButtonsAccessibleObject)upDownButtons.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId) ?? false);
+        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
         Assert.False(upDownBase.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessibleRolePropertyId, AccessibleRole.SpinButton)]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
-    [InlineData((int)UiaCore.UIA.ValueValuePropertyId, null)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, AccessibleRole.SpinButton)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_ValueValuePropertyId, null)]
     public void UpDownButtonsAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
         using TrackBar trackBar = new();
         using SubUpDownBase upDownBase = new();
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
         UpDownButtonsAccessibleObject accessibleObject = (UpDownButtonsAccessibleObject)upDownButtons.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue((UiaCore.UIA)property);
+        object actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
 
         Assert.Equal(expected, actual);
         Assert.False(upDownBase.IsHandleCreated);

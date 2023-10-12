@@ -329,7 +329,7 @@ internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManag
             return HRESULT.E_POINTER;
         }
 
-        VARIANT result = VARIANT.FromObject(_enclosingElement.GetPropertyValue(Interop.UiaCore.UIA.BoundingRectanglePropertyId));
+        VARIANT result = VARIANT.FromObject(_enclosingElement.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId));
         if (!result.vt.HasFlag(VARENUM.VT_ARRAY & VARENUM.VT_R8)
             || result.data.parray->VarType is not VARENUM.VT_R8
             || result.data.parray->GetBounds().cElements != 4)

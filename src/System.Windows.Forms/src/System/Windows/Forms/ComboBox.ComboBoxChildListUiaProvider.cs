@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 
@@ -120,18 +121,18 @@ public partial class ComboBox
             return _owningComboBox.Items.Count;
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId =>
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ListControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId =>
                     // Narrator should keep the keyboard focus on th ComboBox itself but not on the DropDown.
                     false,
-                UiaCore.UIA.IsEnabledPropertyId => _owningComboBox.Enabled,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                UiaCore.UIA.IsOffscreenPropertyId => false,
-                UiaCore.UIA.IsSelectionPatternAvailablePropertyId => true,
-                UiaCore.UIA.NativeWindowHandlePropertyId => _childListControlhandle,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningComboBox.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => false,
+                UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId => true,
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _childListControlhandle,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -174,12 +175,12 @@ public partial class ComboBox
 
         internal override bool IsSelectionRequired => true;
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
             switch (patternId)
             {
-                case UiaCore.UIA.LegacyIAccessiblePatternId:
-                case UiaCore.UIA.SelectionPatternId:
+                case UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId:
+                case UIA_PATTERN_ID.UIA_SelectionPatternId:
                     return true;
                 default:
                     return base.IsPatternSupported(patternId);

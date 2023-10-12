@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static System.Windows.Forms.ListViewGroup;
 using static System.Windows.Forms.ListViewItem;
@@ -4791,7 +4792,7 @@ public partial class ListView : Control
             IsAccessibilityObjectCreated &&
             AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
         {
-            focusedAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            focusedAccessibleObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -4833,7 +4834,7 @@ public partial class ListView : Control
             ListViewItem item = e.Item;
             UiaCore.ToggleState oldValue = item.Checked ? UiaCore.ToggleState.Off : UiaCore.ToggleState.On;
             UiaCore.ToggleState newValue = item.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
-            item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, oldValue, newValue);
+            item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId, oldValue, newValue);
         }
     }
 
@@ -4939,7 +4940,7 @@ public partial class ListView : Control
             _selectedItem = firstSelectedItem;
             if (IsAccessibilityObjectCreated)
             {
-                firstSelectedItem.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                firstSelectedItem.AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             }
         }
     }
@@ -6024,7 +6025,7 @@ public partial class ListView : Control
         {
             Point screenPoint = PointToScreen(point);
             AccessibleObject? accessibilityObject = AccessibilityObject.HitTest(screenPoint.X, screenPoint.Y);
-            accessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            accessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 

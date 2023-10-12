@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -38,7 +38,7 @@ public class MonthCalendar_CalendarButtonAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarButtonAccessibleObject buttonAccessibleObject = new SubCalendarButtonAccessibleObject(controlAccessibleObject);
 
-        Assert.Equal(SR.AccessibleActionClick, buttonAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(SR.AccessibleActionClick, buttonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -49,9 +49,9 @@ public class MonthCalendar_CalendarButtonAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarButtonAccessibleObject buttonAccessibleObject = new SubCalendarButtonAccessibleObject(controlAccessibleObject);
 
-        UiaCore.UIA actual = (UiaCore.UIA)buttonAccessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)buttonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.ButtonControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, actual);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -62,7 +62,7 @@ public class MonthCalendar_CalendarButtonAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarButtonAccessibleObject buttonAccessibleObject = new SubCalendarButtonAccessibleObject(controlAccessibleObject);
 
-        bool actual = buttonAccessibleObject.IsPatternSupported(UiaCore.UIA.InvokePatternId);
+        bool actual = buttonAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_InvokePatternId);
 
         Assert.True(actual);
         Assert.False(control.IsHandleCreated);

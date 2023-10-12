@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
@@ -90,19 +91,19 @@ internal partial class CategoryGridEntry
             };
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
         {
             // To announce expanded collapsed state control type should be appropriate:
             // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
-            UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TreeItemControlTypeId,
-            UiaCore.UIA.LocalizedControlTypePropertyId => SR.CategoryPropertyGridLocalizedControlType,
+            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
+            UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId => SR.CategoryPropertyGridLocalizedControlType,
             _ => base.GetPropertyValue(propertyID),
         };
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
-            if (patternId == UiaCore.UIA.GridItemPatternId ||
-                patternId == UiaCore.UIA.TableItemPatternId)
+            if (patternId == UIA_PATTERN_ID.UIA_GridItemPatternId ||
+                patternId == UIA_PATTERN_ID.UIA_TableItemPatternId)
             {
                 return true;
             }

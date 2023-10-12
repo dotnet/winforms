@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.WebBrowser;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests;
 
@@ -19,8 +19,8 @@ public class WebBrowser_WebBrowserAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA.NamePropertyId, "TestName")]
-    [InlineData((int)UIA.AutomationIdPropertyId, "ToolStripContainer1")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "ToolStripContainer1")]
     public void WebBrowserAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
         using WebBrowser webBrowser = new WebBrowser
@@ -30,7 +30,7 @@ public class WebBrowser_WebBrowserAccessibleObjectTests
         };
 
         WebBrowserAccessibleObject accessibleObject = (WebBrowserAccessibleObject)webBrowser.AccessibilityObject;
-        object value = accessibleObject.GetPropertyValue((UIA)propertyID);
+        object value = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
         Assert.Equal(expected, value);
         Assert.False(webBrowser.IsHandleCreated);
@@ -42,7 +42,7 @@ public class WebBrowser_WebBrowserAccessibleObjectTests
         using WebBrowser webBrowser = new();
 
         WebBrowserAccessibleObject accessibleObject = (WebBrowserAccessibleObject)webBrowser.AccessibilityObject;
-        bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
+        bool value = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.False(value);
         Assert.False(webBrowser.IsHandleCreated);

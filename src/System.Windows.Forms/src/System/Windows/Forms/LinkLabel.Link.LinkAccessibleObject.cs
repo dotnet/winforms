@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -81,22 +82,22 @@ public partial class LinkLabel
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _linkLabelAccessibleObject;
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.HyperlinkControlTypeId,
-                    UiaCore.UIA.HasKeyboardFocusPropertyId => _owningLinkLabel.FocusLink == _owningLink,
-                    UiaCore.UIA.IsEnabledPropertyId => _owningLinkLabel.Enabled,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_HyperlinkControlTypeId,
+                    UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningLinkLabel.FocusLink == _owningLink,
+                    UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningLinkLabel.Enabled,
+                    UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     _ => base.GetPropertyValue(propertyID)
                 };
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             {
-                if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
-                    patternId == UiaCore.UIA.InvokePatternId)
+                if (patternId == UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId ||
+                    patternId == UIA_PATTERN_ID.UIA_InvokePatternId)
                 {
                     return true;
                 }

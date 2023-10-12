@@ -7,6 +7,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -1671,7 +1672,7 @@ public partial class LinkLabel : Label, IButtonControl
 
         if (IsAccessibilityObjectCreated)
         {
-            focusLink.AccessibleObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            focusLink.AccessibleObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 

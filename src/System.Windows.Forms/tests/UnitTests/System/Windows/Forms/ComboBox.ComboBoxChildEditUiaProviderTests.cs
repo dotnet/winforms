@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -117,7 +118,7 @@ public class ComboBox_ComboBoxChildEditUiaProviderTests
         comboBox.CreateControl();
         AccessibleObject accessibleObject = comboBox.ChildEditAccessibleObject;
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsTextPatternAvailablePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId));
     }
 
     [WinFormsTheory]
@@ -133,7 +134,7 @@ public class ComboBox_ComboBoxChildEditUiaProviderTests
         comboBox.CreateControl();
         AccessibleObject accessibleObject = comboBox.ChildEditAccessibleObject;
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsTextPattern2AvailablePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId));
     }
 
     [WinFormsTheory]
@@ -149,7 +150,7 @@ public class ComboBox_ComboBoxChildEditUiaProviderTests
         comboBox.CreateControl();
         AccessibleObject accessibleObject = comboBox.ChildEditAccessibleObject;
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsValuePatternAvailablePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId));
     }
 
     [WinFormsFact]
@@ -159,14 +160,14 @@ public class ComboBox_ComboBoxChildEditUiaProviderTests
         comboBox.CreateControl();
         AccessibleObject accessibleObject = comboBox.ChildEditAccessibleObject;
 
-        Assert.Equal(SR.ComboBoxEditDefaultAccessibleName, accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId).ToString());
-        Assert.Equal(SR.ComboBoxEditDefaultAccessibleName, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId).ToString());
-        Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.Equal(SR.ComboBoxEditDefaultAccessibleName, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId).ToString());
+        Assert.Equal(SR.ComboBoxEditDefaultAccessibleName, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId).ToString());
+        Assert.Null(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
 
         comboBox.AccessibleName = "Combo AO name";
 
-        Assert.Equal(comboBox.AccessibleName, accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId).ToString());
-        Assert.Equal(comboBox.AccessibleName, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId).ToString());
-        Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.Equal(comboBox.AccessibleName, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId).ToString());
+        Assert.Equal(comboBox.AccessibleName, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId).ToString());
+        Assert.Null(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
     }
 }

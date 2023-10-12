@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -45,8 +45,8 @@ public class DataGridViewImageCellAccessibleObjectTests : DataGridViewImageCell
     {
         var accessibleObject = new DataGridViewImageCellAccessibleObject(null);
 
-        UiaCore.UIA expected = UiaCore.UIA.ImageControlTypeId;
-        Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId;
+        Assert.Equal(expected, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]
@@ -54,16 +54,16 @@ public class DataGridViewImageCellAccessibleObjectTests : DataGridViewImageCell
     {
         var accessibleObject = new DataGridViewImageCellAccessibleObject(null);
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsInvokePatternAvailablePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId));
     }
 
     [WinFormsTheory]
-    [InlineData(((int)UiaCore.UIA.InvokePatternId))]
+    [InlineData(((int)UIA_PATTERN_ID.UIA_InvokePatternId))]
     public void DataGridViewImageCellAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
         var accessibleObject = new DataGridViewImageCellAccessibleObject(null);
 
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
 
     [WinFormsFact]

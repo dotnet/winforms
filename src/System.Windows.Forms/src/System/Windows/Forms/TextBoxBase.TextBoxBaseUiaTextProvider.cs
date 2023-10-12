@@ -164,7 +164,7 @@ public abstract partial class TextBoxBase
                 return HRESULT.S_OK;
             }
 
-            var hasKeyboardFocus = Owner.AccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.HasKeyboardFocusPropertyId);
+            var hasKeyboardFocus = Owner.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
             *isActive = hasKeyboardFocus is true;
 
             *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(

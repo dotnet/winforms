@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -74,8 +75,8 @@ public class ErrorProviderAccessibleObjectTests : IDisposable
     public void ErrorProvider_ControlItemAccessibleObject_CorrectControlType()
     {
         AccessibleObject controlItemAccessibleObject = _controlItem1.AccessibilityObject;
-        object actual = controlItemAccessibleObject?.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        object expected = UiaCore.UIA.ImageControlTypeId;
+        object actual = controlItemAccessibleObject?.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        object expected = UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId;
         Assert.Equal(expected, actual);
     }
 
@@ -83,8 +84,8 @@ public class ErrorProviderAccessibleObjectTests : IDisposable
     public void ErrorProvider_ErrorWindowAccessibleObject_CorrectControlType()
     {
         AccessibleObject errorWindowAccessibleObject = _errorWindow.AccessibilityObject;
-        object actual = errorWindowAccessibleObject?.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        object expected = UiaCore.UIA.GroupControlTypeId;
+        object actual = errorWindowAccessibleObject?.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        object expected = UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId;
         Assert.Equal(expected, actual);
     }
 

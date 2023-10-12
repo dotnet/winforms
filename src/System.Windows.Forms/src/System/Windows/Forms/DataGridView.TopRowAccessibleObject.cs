@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -250,9 +251,9 @@ public partial class DataGridView
 
         #region IRawElementProviderSimple Implementation
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
-            if (patternId.Equals(UiaCore.UIA.LegacyIAccessiblePatternId))
+            if (patternId.Equals(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId))
             {
                 return true;
             }
@@ -260,16 +261,16 @@ public partial class DataGridView
             return base.IsPatternSupported(patternId);
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyId) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyId) =>
             propertyId switch
             {
-                UiaCore.UIA.HasKeyboardFocusPropertyId => false,
-                UiaCore.UIA.IsContentElementPropertyId => true,
-                UiaCore.UIA.IsEnabledPropertyId => _ownerDataGridView is null
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => false,
+                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => true,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _ownerDataGridView is null
                     ? throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet)
                     : _ownerDataGridView.Enabled,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
-                UiaCore.UIA.IsOffscreenPropertyId => false,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => false,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => false,
                 _ => base.GetPropertyValue(propertyId)
             };
 

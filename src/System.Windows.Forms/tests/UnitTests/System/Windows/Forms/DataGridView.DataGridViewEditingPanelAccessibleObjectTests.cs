@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -48,9 +49,9 @@ public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
         Panel editingPanel = dataGridView.EditingPanel;
         // AccessibleRole is not set = Default
 
-        object actual = editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = editingPanel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.PaneControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId, actual);
         Assert.False(dataGridView.IsHandleCreated);
         Assert.False(editingPanel.IsHandleCreated);
     }
@@ -98,8 +99,8 @@ public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
         Panel editingPanel = dataGridView.EditingPanel;
         editingPanel.AccessibleRole = role;
 
-        object actual = editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = editingPanel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(editingPanel.IsHandleCreated);
@@ -111,12 +112,12 @@ public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
         using DataGridView dataGridView = new();
         Panel editingPanel = dataGridView.EditingPanel;
 
-        Assert.True((bool)editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
-        Assert.Equal(string.Empty, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HelpTextPropertyId));
-        Assert.Equal(SR.DataGridView_AccEditingPanelAccName, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
-        Assert.Equal(SR.DataGridView_AccEditingPanelAccName, editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
-        Assert.Null(editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
-        Assert.False((bool)editingPanel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsPasswordPropertyId));
+        Assert.True((bool)editingPanel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
+        Assert.Equal(string.Empty, editingPanel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId));
+        Assert.Equal(SR.DataGridView_AccEditingPanelAccName, editingPanel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        Assert.Equal(SR.DataGridView_AccEditingPanelAccName, editingPanel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
+        Assert.Null(editingPanel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.False((bool)editingPanel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId));
         Assert.False(editingPanel.IsHandleCreated);
     }
 }

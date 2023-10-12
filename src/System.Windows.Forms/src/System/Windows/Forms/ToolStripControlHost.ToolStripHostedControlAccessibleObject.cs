@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -60,17 +61,17 @@ public partial class ToolStripControlHost
             return base.FragmentNavigate(direction);
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
-                UiaCore.UIA.IsOffscreenPropertyId => GetIsOffscreenPropertyValue(_toolStripControlHost?.Placement, Bounds),
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => GetIsOffscreenPropertyValue(_toolStripControlHost?.Placement, Bounds),
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
-            if (patternId == UiaCore.UIA.ValuePatternId)
+            if (patternId == UIA_PATTERN_ID.UIA_ValuePatternId)
             {
                 return true;
             }

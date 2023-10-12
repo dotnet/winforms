@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
 
 namespace System.Windows.Forms.Tests;
@@ -54,8 +54,8 @@ public class ListViewItem_ListViewItemImageAccessibleObjectTests
 
         AccessibleObject imageAccessibleObject = listViewItem.AccessibilityObject.GetChild(0);
 
-        Assert.Equal(UiaCore.UIA.ImageControlTypeId, (UiaCore.UIA)imageAccessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
-        Assert.False((bool)imageAccessibleObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
-        Assert.False((bool)imageAccessibleObject.GetPropertyValue(UiaCore.UIA.IsKeyboardFocusablePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId, (UIA_CONTROLTYPE_ID)imageAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.False((bool)imageAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+        Assert.False((bool)imageAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId));
     }
 }

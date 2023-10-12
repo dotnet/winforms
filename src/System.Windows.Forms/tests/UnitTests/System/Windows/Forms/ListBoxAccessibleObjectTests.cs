@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListBox;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -18,7 +18,7 @@ public class ListBoxAccessibleObjectTests
         for (int i = 0; i < childCount; i++)
         {
             var child = listBox.AccessibilityObject.GetChild(i);
-            Assert.True(child.IsPatternSupported(UiaCore.UIA.ScrollItemPatternId));
+            Assert.True(child.IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollItemPatternId));
         }
     }
 
@@ -28,9 +28,9 @@ public class ListBoxAccessibleObjectTests
         using ListBox listBox = new ListBox();
         // AccessibleRole is not set = Default
 
-        object actual = listBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = listBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.ListControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ListControlTypeId, actual);
         Assert.False(listBox.IsHandleCreated);
     }
 
@@ -75,8 +75,8 @@ public class ListBoxAccessibleObjectTests
         using ListBox listBox = new ListBox();
         listBox.AccessibleRole = role;
 
-        object actual = listBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = listBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(listBox.IsHandleCreated);
@@ -88,7 +88,7 @@ public class ListBoxAccessibleObjectTests
         using ListBox listBox = new ListBox();
         AccessibleObject accessibleObject = listBox.AccessibilityObject;
 
-        Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.Null(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
         Assert.False(listBox.IsHandleCreated);
     }
 
@@ -140,16 +140,16 @@ public class ListBoxAccessibleObjectTests
 
         Assert.True(listBox.Focused);
 
-        bool actual = (bool)accessibleObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+        bool actual = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
         Assert.True(actual);
 
         listBox.Items.Add(item: "testItem");
-        actual = (bool)accessibleObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+        actual = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.False(actual);
 
         listBox.Items.Clear();
-        actual = (bool)accessibleObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+        actual = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.True(actual);
     }

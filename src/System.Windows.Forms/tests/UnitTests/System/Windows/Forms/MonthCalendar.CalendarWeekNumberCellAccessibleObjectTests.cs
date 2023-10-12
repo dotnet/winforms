@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
 
@@ -68,9 +69,9 @@ public class MonthCalendar_CalendarWeekNumberCellAccessibleObjectTests
         using MonthCalendar control = new();
         CalendarWeekNumberCellAccessibleObject cellAccessibleObject = CreateCalendarWeekNumberCellAccessibleObject(control);
 
-        UiaCore.UIA actual = (UiaCore.UIA)cellAccessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)cellAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.HeaderControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId, actual);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -80,7 +81,7 @@ public class MonthCalendar_CalendarWeekNumberCellAccessibleObjectTests
         using MonthCalendar control = new();
         CalendarWeekNumberCellAccessibleObject cellAccessibleObject = CreateCalendarWeekNumberCellAccessibleObject(control);
 
-        bool actual = (bool)cellAccessibleObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId);
+        bool actual = (bool)cellAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.False(actual);
         Assert.False(control.IsHandleCreated);

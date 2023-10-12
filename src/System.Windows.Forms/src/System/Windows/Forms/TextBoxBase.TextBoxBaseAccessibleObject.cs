@@ -4,7 +4,6 @@
 using Windows.Win32.System.Com;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ButtonBase;
-using UIA = Interop.UiaCore.UIA;
 
 namespace System.Windows.Forms;
 
@@ -43,16 +42,16 @@ public abstract partial class TextBoxBase
             //        ClearOwnerControl();
         }
 
-        internal override object? GetPropertyValue(UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
         {
             if (this.TryGetOwnerAs(out TextBoxBase? owner))
             {
-                if (propertyID == UIA.IsPasswordPropertyId)
+                if (propertyID == UIA_PROPERTY_ID.UIA_IsPasswordPropertyId)
                 {
                     return owner.PasswordProtect;
                 }
 
-                if (propertyID == UIA.HasKeyboardFocusPropertyId)
+                if (propertyID == UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId)
                 {
                     return owner.Focused;
                 }
@@ -63,12 +62,12 @@ public abstract partial class TextBoxBase
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override bool IsPatternSupported(UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UIA.TextPatternId => true,
-                UIA.TextPattern2Id => true,
-                UIA.ValuePatternId => true,
+                UIA_PATTERN_ID.UIA_TextPatternId => true,
+                UIA_PATTERN_ID.UIA_TextPattern2Id => true,
+                UIA_PATTERN_ID.UIA_ValuePatternId => true,
                 _ => base.IsPatternSupported(patternId)
             };
 
@@ -99,7 +98,7 @@ public abstract partial class TextBoxBase
 
             base.SetFocus();
 
-            RaiseAutomationEvent(UIA.AutomationFocusChangedEventId);
+            RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
 
         internal override void SetValue(string? newValue)

@@ -3,8 +3,9 @@
 
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.Automation;
-using Accessibility;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
+using IAccessible = Accessibility.IAccessible;
 
 namespace System.Windows.Forms.Tests;
 
@@ -201,7 +202,7 @@ public class Control_ControlAccessibleObjectTests
         };
         var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
         Assert.Equal(!string.IsNullOrEmpty(accessibleDefaultActionDescription) ? accessibleDefaultActionDescription :
-            null, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+            null, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
     }
 
     [WinFormsTheory]
@@ -1040,7 +1041,7 @@ public class Control_ControlAccessibleObjectTests
             Assert.NotEqual(IntPtr.Zero, ownerControl.Handle);
         }
 
-        Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId));
+        Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationPropertyChangedEventId));
         Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
     }
 
@@ -1059,7 +1060,7 @@ public class Control_ControlAccessibleObjectTests
             Assert.NotEqual(IntPtr.Zero, ownerControl.Handle);
         }
 
-        Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, ownerControl.Name, ownerControl.Name));
+        Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, ownerControl.Name, ownerControl.Name));
         Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
     }
 
@@ -1191,7 +1192,7 @@ public class Control_ControlAccessibleObjectTests
         bool expected = control.SupportsUiaProviders;
         Assert.False(expected);
 
-        bool actual = accessibleObject.IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId);
+        bool actual = accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);
         Assert.Equal(expected, actual);
     }
 
@@ -1202,7 +1203,7 @@ public class Control_ControlAccessibleObjectTests
         var accessibleObject = new Control.ControlAccessibleObject(control);
 
         Assert.True(control.SupportsUiaProviders);
-        bool actual = accessibleObject.IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId);
+        bool actual = accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);
         Assert.True(actual);
     }
 
@@ -1249,7 +1250,7 @@ public class Control_ControlAccessibleObjectTests
         AccessibleObject controlAccessibleObject = control.AccessibilityObject;
         string expectedValue = s_controlsNotUseTextForAccessibility.Contains(type) ? string.Empty : "Alt+n";
 
-        Assert.Equal(expectedValue, controlAccessibleObject.GetPropertyValue(UiaCore.UIA.AccessKeyPropertyId));
+        Assert.Equal(expectedValue, controlAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AccessKeyPropertyId));
     }
 
     [WinFormsTheory]
@@ -1265,7 +1266,7 @@ public class Control_ControlAccessibleObjectTests
 
         AccessibleObject controlAccessibleObject = control.AccessibilityObject;
 
-        bool supportsLegacyIAccessiblePatternId = controlAccessibleObject.IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId);
+        bool supportsLegacyIAccessiblePatternId = controlAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);
 
         Assert.True(supportsLegacyIAccessiblePatternId);
     }
@@ -1304,8 +1305,8 @@ public class Control_ControlAccessibleObjectTests
         control.Name = "Name1";
         control.AccessibleName = "Test Name";
 
-        Assert.Equal("Test Name", controlAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
-        Assert.Equal("Test Name", controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
+        Assert.Equal("Test Name", controlAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
+        Assert.Equal("Test Name", controlAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
     }
 
     public static IEnumerable<object[]> ControlAccessibleObject_DefaultName_TestData()
@@ -1341,7 +1342,7 @@ public class Control_ControlAccessibleObjectTests
         }
 
         AccessibleObject controlAccessibleObject = control.AccessibilityObject;
-        Assert.Equal(expectedName, controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
+        Assert.Equal(expectedName, controlAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
     }
 
     public static IEnumerable<object[]> ControlAccessibleObject_GetPropertyValue_ControlTypeProperty_ReturnsCorrectValue_TestData()
@@ -1361,12 +1362,12 @@ public class Control_ControlAccessibleObjectTests
         using Control control = new Control();
         control.AccessibleRole = role;
 
-        UiaCore.UIA actual = (UiaCore.UIA)control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         // Check if the method returns an exist UIA_ControlTypeId
-        Assert.True(actual >= UiaCore.UIA.ButtonControlTypeId && actual <= UiaCore.UIA.AppBarControlTypeId);
+        Assert.True(actual >= UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId && actual <= UIA_CONTROLTYPE_ID.UIA_AppBarControlTypeId);
     }
 
     [WinFormsTheory]
@@ -1563,7 +1564,7 @@ public class Control_ControlAccessibleObjectTests
     {
         using Control ownerControl = new() { Name = "test name" };
         string expected = ownerControl.Name;
-        object actual = ownerControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId);
+        object actual = ownerControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId);
 
         Assert.Equal(expected, actual);
         Assert.False(ownerControl.IsHandleCreated);

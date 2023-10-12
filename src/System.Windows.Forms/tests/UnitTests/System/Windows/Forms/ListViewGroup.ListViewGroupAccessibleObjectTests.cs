@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Reflection;
 using Microsoft.DotNet.RemoteExecutor;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListView;
 using static System.Windows.Forms.ListViewGroup;
 using static Interop;
@@ -57,18 +58,18 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         AccessibleObject accessibleObject = listGroup.AccessibilityObject;
         Assert.False(list.IsHandleCreated);
 
-        object accessibleName = accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+        object accessibleName = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
         Assert.Equal("Group1", accessibleName);
 
-        object automationId = accessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId);
+        object automationId = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId);
         Assert.Equal("ListViewGroup-0", automationId);
 
-        object controlType = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = UiaCore.UIA.GroupControlTypeId;
+        object controlType = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId;
         Assert.Equal(expected, controlType);
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
-        Assert.Equal(AccessibleRole.Grouping, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleRolePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
+        Assert.Equal(AccessibleRole.Grouping, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId));
         Assert.False(list.IsHandleCreated);
     }
 
@@ -89,22 +90,22 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         AccessibleObject defaultGroupAccessibleObject = list.DefaultGroup.AccessibilityObject;
         AccessibleObject groupAccessibleObject = listGroup.AccessibilityObject;
 
-        Assert.Equal(list.DefaultGroup.Header, defaultGroupAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
-        Assert.Equal("Group1", groupAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
-        Assert.Equal("Group1", groupAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
+        Assert.Equal(list.DefaultGroup.Header, defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        Assert.Equal("Group1", groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        Assert.Equal("Group1", groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
 
-        Assert.Equal("ListViewGroup-0", defaultGroupAccessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
-        Assert.Equal("ListViewGroup-1", groupAccessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
+        Assert.Equal("ListViewGroup-0", defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId));
+        Assert.Equal("ListViewGroup-1", groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId));
 
-        Assert.Equal(UiaCore.UIA.GroupControlTypeId, groupAccessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
-        Assert.Equal(UiaCore.UIA.GroupControlTypeId, defaultGroupAccessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId, groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId, defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
 
-        Assert.True((bool)defaultGroupAccessibleObject.GetPropertyValue(UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
-        Assert.True((bool)groupAccessibleObject.GetPropertyValue(UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
-        Assert.Equal(AccessibleRole.Grouping, defaultGroupAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleRolePropertyId));
-        Assert.Equal(AccessibleRole.Grouping, groupAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleRolePropertyId));
-        Assert.Null(groupAccessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
-        Assert.Equal("WinForm", groupAccessibleObject.GetPropertyValue(UiaCore.UIA.FrameworkIdPropertyId));
+        Assert.True((bool)defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
+        Assert.True((bool)groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
+        Assert.Equal(AccessibleRole.Grouping, defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId));
+        Assert.Equal(AccessibleRole.Grouping, groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId));
+        Assert.Null(groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal("WinForm", groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId));
         Assert.False(list.IsHandleCreated);
     }
 
@@ -121,7 +122,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         AccessibleObject accessibleObject = listGroup.AccessibilityObject;
         Assert.False(list.IsHandleCreated);
 
-        object accessibleName = accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+        object accessibleName = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
         Assert.Equal($"{name}. {subtitle}", accessibleName);
 
         Assert.False(list.IsHandleCreated);
@@ -1338,7 +1339,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
 
         bool expectedPatternSupported = listViewGroupCollapsedState != ListViewGroupCollapsedState.Default;
 
-        Assert.Equal(expectedPatternSupported, accessibleObject.IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId));
+        Assert.Equal(expectedPatternSupported, accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_ExpandCollapsePatternId));
         Assert.Equal(createHandle, listView.IsHandleCreated);
     }
 

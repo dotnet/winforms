@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
@@ -809,9 +810,9 @@ internal sealed partial class PropertyGridView :
                 GridEntry? gridEntry = GetGridEntryFromRow(_selectedRow);
                 if (gridEntry is not null && IsAccessibilityObjectCreated)
                 {
-                    gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                    gridEntry.AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
                     gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                        UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                        UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
                         UiaCore.ExpandCollapseState.Expanded,
                         UiaCore.ExpandCollapseState.Collapsed);
                 }
@@ -1491,7 +1492,7 @@ internal sealed partial class PropertyGridView :
         var gridEntry = GetGridEntryFromRow(_selectedRow);
         if (gridEntry is not null && IsAccessibilityObjectCreated)
         {
-            gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            gridEntry.AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             gridEntry.AccessibilityObject.InternalRaiseAutomationNotification(
                 Automation.AutomationNotificationKind.Other,
                 Automation.AutomationNotificationProcessing.ImportantMostRecent,
@@ -4654,7 +4655,7 @@ internal sealed partial class PropertyGridView :
             var oldExpandedState = value ? UiaCore.ExpandCollapseState.Collapsed : UiaCore.ExpandCollapseState.Expanded;
             var newExpandedState = value ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
             _selectedGridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
                 oldExpandedState,
                 newExpandedState);
         }
