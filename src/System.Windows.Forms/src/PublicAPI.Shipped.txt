@@ -352,9 +352,9 @@ System.Windows.Forms.DataGridView.EditingControl.get -> System.Windows.Forms.Con
 System.Windows.Forms.DataGridView.EditingPanel.get -> System.Windows.Forms.Panel!
 System.Windows.Forms.DataGridView.FirstDisplayedCell.get -> System.Windows.Forms.DataGridViewCell?
 System.Windows.Forms.DataGridView.FirstDisplayedCell.set -> void
-~System.Windows.Forms.DataGridView.HitTest(int x, int y) -> System.Windows.Forms.DataGridView.HitTestInfo
+System.Windows.Forms.DataGridView.HitTest(int x, int y) -> System.Windows.Forms.DataGridView.HitTestInfo!
 System.Windows.Forms.DataGridView.HorizontalScrollBar.get -> System.Windows.Forms.ScrollBar!
-~System.Windows.Forms.DataGridView.InvalidateCell(System.Windows.Forms.DataGridViewCell dataGridViewCell) -> void
+System.Windows.Forms.DataGridView.InvalidateCell(System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> void
 System.Windows.Forms.DataGridView.RowHeadersDefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
 System.Windows.Forms.DataGridView.RowHeadersDefaultCellStyle.set -> void
 System.Windows.Forms.DataGridView.Rows.get -> System.Windows.Forms.DataGridViewRowCollection!

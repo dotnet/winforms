@@ -8375,7 +8375,7 @@ public partial class DataGridView
 
         return dataObject;
     }
-#nullable disable
+
     private static void GetClipboardContentForHtml(StringBuilder sbContent, out IO.MemoryStream utf8Stream)
     {
         byte[] sourceBytes = Encoding.Unicode.GetBytes(sbContent.ToString());
@@ -8856,8 +8856,13 @@ public partial class DataGridView
             }
 
             // Discard frozen rows
-            DiscardZonesInScrollingArea(ref rectScrollingArea, emptyBackgroundWidth, emptyBackgroundHeight, frozenVisibleRowsHeight,
-                                        false /*discardFrozenColumns*/, true /*discardFrozenRows*/);
+            DiscardZonesInScrollingArea(
+                ref rectScrollingArea,
+                emptyBackgroundWidth,
+                emptyBackgroundHeight,
+                frozenVisibleRowsHeight,
+                discardFrozenColumns: false,
+                discardFrozenRows: true);
 
             if (mouseY >= rectScrollingArea.Top && mouseY <= rectScrollingArea.Bottom)
             {
@@ -8886,7 +8891,7 @@ public partial class DataGridView
 
                     if (firstColumnIndex >= 0 && firstUnfrozenRowIndex >= 0)
                     {
-                        if (!ScrollIntoView(firstColumnIndex, firstUnfrozenRowIndex, false /*forCurrentCellChange*/))
+                        if (!ScrollIntoView(firstColumnIndex, firstUnfrozenRowIndex, forCurrentCellChange: false))
                         {
                             return false;
                         }
@@ -8957,8 +8962,13 @@ public partial class DataGridView
             }
 
             // Discard frozen columns
-            DiscardZonesInScrollingArea(ref rectScrollingArea, emptyBackgroundWidth, emptyBackgroundHeight, frozenVisibleRowsHeight,
-                                        true /*discardFrozenColumns*/, false /*discardFrozenRows*/);
+            DiscardZonesInScrollingArea(
+                ref rectScrollingArea,
+                emptyBackgroundWidth,
+                emptyBackgroundHeight,
+                frozenVisibleRowsHeight,
+                discardFrozenColumns: true,
+                discardFrozenRows: false);
 
             if (mouseX >= rectScrollingArea.Left && mouseX <= rectScrollingArea.Right)
             {
@@ -8986,7 +8996,7 @@ public partial class DataGridView
 
                     if (firstRowIndex >= 0 && firstUnfrozenColumnIndex >= 0)
                     {
-                        if (!ScrollIntoView(firstUnfrozenColumnIndex, firstRowIndex, false /*forCurrentCellChange*/))
+                        if (!ScrollIntoView(firstUnfrozenColumnIndex, firstRowIndex, forCurrentCellChange: false))
                         {
                             return false;
                         }
@@ -9081,8 +9091,13 @@ public partial class DataGridView
             bool recomputeHitTestInfo = false;
 
             // Discard frozen columns and rows
-            DiscardZonesInScrollingArea(ref rectScrollingArea, emptyBackgroundWidth, emptyBackgroundHeight, frozenVisibleRowsHeight,
-                                        true /*discardFrozenColumns*/, true /*discardFrozenRows*/);
+            DiscardZonesInScrollingArea(
+                ref rectScrollingArea,
+                emptyBackgroundWidth,
+                emptyBackgroundHeight,
+                frozenVisibleRowsHeight,
+                discardFrozenColumns: true,
+                discardFrozenRows: true);
 
             if (mouseY < rectScrollingArea.Top)
             {
@@ -9698,12 +9713,11 @@ public partial class DataGridView
                      (RightToLeftInternal && xColumnLeftEdge - x < ColumnSizingHotZone))
             {
                 //hti.edge = DataGridViewHitTestTypeCloseEdge.Left;
-                DataGridViewColumn dataGridViewColumn = null;
+                DataGridViewColumn dataGridViewColumn = Columns.GetPreviousColumn(
+                    Columns[hti._col],
+                    DataGridViewElementStates.Visible,
+                    DataGridViewElementStates.None);
 
-                dataGridViewColumn = Columns.GetPreviousColumn(Columns[hti._col],
-                                                                             DataGridViewElementStates.Visible,
-                                                                             DataGridViewElementStates.None);
-                //}
                 if (dataGridViewColumn is not null)
                 {
                     hti._adjacentCol = dataGridViewColumn.Index;
@@ -9878,7 +9892,7 @@ public partial class DataGridView
                 else if ((!RightToLeftInternal && x - xColumnLeftEdge < ColumnSizingHotZone) ||
                          (RightToLeftInternal && xColumnLeftEdge - x < ColumnSizingHotZone))
                 {
-                    DataGridViewColumn dataGridViewColumn = null;
+                    DataGridViewColumn? dataGridViewColumn = null;
                     if (hti._col != DisplayedBandsInfo.FirstDisplayedScrollingCol || DisplayedBandsInfo.LastTotallyDisplayedScrollingCol >= 0)
                     {
                         dataGridViewColumn = Columns.GetPreviousColumn(Columns[hti._col],
@@ -10004,7 +10018,7 @@ public partial class DataGridView
         return hti;
     }
 
-    private void HorizScrollTimer_Tick(object sender, EventArgs e)
+    private void HorizScrollTimer_Tick(object? sender, EventArgs e)
     {
         BeginInvoke(new MethodInvoker(HorizScrollTimerHandler));
     }
@@ -10022,6 +10036,7 @@ public partial class DataGridView
             {
                 int absXOffset = Math.Abs(xOffset), normOffset = xOffset / absXOffset;
                 ScrollColumns(normOffset);
+                Debug.Assert(_horizScrollTimer is not null);
                 _horizScrollTimer.Interval = GetColumnScrollRate(absXOffset);
                 if (_dataGridViewOper[OperationTrackColSelect])
                 {
@@ -10067,22 +10082,21 @@ public partial class DataGridView
     // Returns true for success, returns false when the OnDataError event cancels the operation.
     private bool InitializeEditingCellValue(ref DataGridViewCellStyle dataGridViewCellStyle, ref DataGridViewCell dataGridViewCell)
     {
-        DataGridViewDataErrorEventArgs dgvdee = null;
+        DataGridViewDataErrorEventArgs? dgvdee = null;
         // Save unedited value so we can restore it later if parsing of new value fails
         _uneditedFormattedValue = dataGridViewCell.GetFormattedValue(_ptCurrentCell.Y, ref dataGridViewCellStyle, DataGridViewDataErrorContexts.Formatting);
         _dataGridViewState1[State1_IgnoringEditingChanges] = true;
         try
         {
-            IDataGridViewEditingCell dataGridViewEditingCell = dataGridViewCell as IDataGridViewEditingCell;
-            Debug.Assert(dataGridViewEditingCell is not null);
+            IDataGridViewEditingCell dataGridViewEditingCell = (IDataGridViewEditingCell)dataGridViewCell;
             object currentFormattedValue = dataGridViewEditingCell.GetEditingCellFormattedValue(DataGridViewDataErrorContexts.Formatting);
             if ((currentFormattedValue is null && _uneditedFormattedValue is not null) ||
                 (currentFormattedValue is not null && _uneditedFormattedValue is null) ||
-                (currentFormattedValue is not null && !_uneditedFormattedValue.Equals(currentFormattedValue)))
+                (currentFormattedValue is not null && !_uneditedFormattedValue!.Equals(currentFormattedValue)))
             {
                 Debug.Assert(_ptCurrentCell.X == dataGridViewCell.ColumnIndex);
                 dataGridViewCell = Rows[_ptCurrentCell.Y].Cells[_ptCurrentCell.X]; // unshare the edited cell
-                dataGridViewEditingCell = dataGridViewCell as IDataGridViewEditingCell;
+                dataGridViewEditingCell = (IDataGridViewEditingCell)dataGridViewCell;
                 dataGridViewEditingCell.EditingCellFormattedValue = _uneditedFormattedValue;
                 dataGridViewEditingCell.EditingCellValueChanged = false;
             }
@@ -10120,7 +10134,7 @@ public partial class DataGridView
         Debug.Assert(dataGridViewCell is not null);
         Debug.Assert(EditingControl is not null);
 
-        DataGridViewDataErrorEventArgs dgvdee = null;
+        DataGridViewDataErrorEventArgs? dgvdee = null;
         object initialFormattedValue = dataGridViewCell.GetFormattedValue(_ptCurrentCell.Y, ref dataGridViewCellStyle, DataGridViewDataErrorContexts.Formatting);
         _dataGridViewState1[State1_EditingControlChanging] = true;
         _dataGridViewState1[State1_IgnoringEditingChanges] = true;
@@ -10275,7 +10289,11 @@ public partial class DataGridView
         Rows.InvalidateCachedRowsHeights();
         if (IsHandleCreated)
         {
-            PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, false /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
+            PerformLayoutPrivate(
+                useRowShortcut: false,
+                computeVisibleRows: false,
+                invalidInAdjustFillingColumns: false,
+                repositionEditingControl: false);
             Invalidate();
         }
     }
@@ -10317,7 +10335,7 @@ public partial class DataGridView
         Debug.Assert(lo <= hi);
         Debug.Assert(lo > -1);
 
-        rowDisplayRect = GetRowDisplayRectangle(lo, true /*cutOverflow*/);
+        rowDisplayRect = GetRowDisplayRectangle(lo, cutOverflow: true);
 
         if (rowDisplayRect.IsEmpty)
         {
@@ -10345,7 +10363,7 @@ public partial class DataGridView
             {
                 // "lo" is a scrolling row "behind" frozen rows.
                 // Start invalidating at the top of the first displayed scrolling row.
-                top = GetRowDisplayRectangle(DisplayedBandsInfo.FirstDisplayedScrollingRow, true /*cutOverflow*/).Top;
+                top = GetRowDisplayRectangle(DisplayedBandsInfo.FirstDisplayedScrollingRow, cutOverflow: true).Top;
             }
         }
         else
@@ -10392,7 +10410,7 @@ public partial class DataGridView
 
                     if (i == DisplayedBandsInfo.NumDisplayedFrozenRows - 1)
                     {
-                        bottom = GetRowDisplayRectangle(i, true /*cutOverflow*/).Bottom;
+                        bottom = GetRowDisplayRectangle(i, cutOverflow: true).Bottom;
                         break;
                     }
 
@@ -10805,13 +10823,14 @@ public partial class DataGridView
              !AllowUserToAddRowsInternal ||
              firstDisplayedCellAddress.Y != Rows.Count - 1))
         {
-            bool success = SetAndSelectCurrentCellAddress(firstDisplayedCellAddress.X,
-                                                          firstDisplayedCellAddress.Y,
-                                                          true /*setAnchorCellAddress*/,
-                                                          false /*validateCurrentCell*/,
-                                                          false /*throughMouseClick*/,
-                                                          true /*clearSelection*/,
-                                                          false /*forceCurrentCellSelection (unused)*/);
+            bool success = SetAndSelectCurrentCellAddress(
+                firstDisplayedCellAddress.X,
+                firstDisplayedCellAddress.Y,
+                setAnchorCellAddress: true,
+                validateCurrentCell: false,
+                throughMouseClick: false,
+                clearSelection: true,
+                forceCurrentCellSelection: false);
             Debug.Assert(success);
         }
     }
@@ -10837,7 +10856,7 @@ public partial class DataGridView
                 return DataGridViewAutoSizeRowMode.RowHeader;
         }
     }
-
+#nullable disable
     private void MoveColumnHeadersOrRowResize(MouseEventArgs e)
     {
         _lastRowSplitBar = _currentRowSplitBar;
