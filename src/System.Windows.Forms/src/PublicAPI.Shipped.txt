@@ -3,7 +3,7 @@ override System.Windows.Forms.AxHost.OnHandleCreated(System.EventArgs! e) -> voi
 override System.Windows.Forms.ControlBindingsCollection.AddCore(System.Windows.Forms.Binding! dataBinding) -> void
 override System.Windows.Forms.ControlBindingsCollection.RemoveCore(System.Windows.Forms.Binding! dataBinding) -> void
 override System.Windows.Forms.CurrencyManager.Current.get -> object?
-~override System.Windows.Forms.CurrencyManager.GetItemProperties() -> System.ComponentModel.PropertyDescriptorCollection
+override System.Windows.Forms.CurrencyManager.GetItemProperties() -> System.ComponentModel.PropertyDescriptorCollection!
 override System.Windows.Forms.DataGridView.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.DataGridView.BackgroundImage.set -> void
 override System.Windows.Forms.DataGridView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
@@ -245,7 +245,7 @@ override System.Windows.Forms.PictureBox.ToString() -> string!
 ~override System.Windows.Forms.PropertyGrid.Site.set -> void
 ~override System.Windows.Forms.PropertyGrid.Text.get -> string
 ~override System.Windows.Forms.PropertyGrid.Text.set -> void
-~override System.Windows.Forms.TreeNode.ToString() -> string
+override System.Windows.Forms.TreeNode.ToString() -> string!
 override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.TreeView.BackgroundImage.set -> void
 override System.Windows.Forms.TreeView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
@@ -282,7 +282,7 @@ static System.Windows.Forms.HtmlElement.operator !=(System.Windows.Forms.HtmlEle
 static System.Windows.Forms.HtmlElement.operator ==(System.Windows.Forms.HtmlElement? left, System.Windows.Forms.HtmlElement? right) -> bool
 static System.Windows.Forms.HtmlWindow.operator !=(System.Windows.Forms.HtmlWindow? left, System.Windows.Forms.HtmlWindow? right) -> bool
 static System.Windows.Forms.HtmlWindow.operator ==(System.Windows.Forms.HtmlWindow? left, System.Windows.Forms.HtmlWindow? right) -> bool
-~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, nint handle) -> System.Windows.Forms.TreeNode
+static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView! tree, nint handle) -> System.Windows.Forms.TreeNode?
 System.Windows.Forms.AxHost.GetOcx() -> object?
 System.Windows.Forms.AxHost.RaiseOnMouseDown(object! o1, object! o2, object! o3, object! o4) -> void
 System.Windows.Forms.AxHost.RaiseOnMouseMove(object! o1, object! o2, object! o3, object! o4) -> void
@@ -906,11 +906,11 @@ virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs! e) -
 ~virtual System.Windows.Forms.PropertyGrid.ShowPropertyPageImage.get -> System.Drawing.Bitmap
 ~virtual System.Windows.Forms.PropertyGrid.SortByCategoryImage.get -> System.Drawing.Bitmap
 ~virtual System.Windows.Forms.PropertyGrid.SortByPropertyImage.get -> System.Drawing.Bitmap
-~virtual System.Windows.Forms.TreeNode.Clone() -> object
+virtual System.Windows.Forms.TreeNode.Clone() -> object!
 virtual System.Windows.Forms.TreeNode.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
 virtual System.Windows.Forms.TreeNode.ContextMenuStrip.set -> void
-~virtual System.Windows.Forms.TreeNode.Deserialize(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
-~virtual System.Windows.Forms.TreeNode.Serialize(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
+virtual System.Windows.Forms.TreeNode.Deserialize(System.Runtime.Serialization.SerializationInfo! serializationInfo, System.Runtime.Serialization.StreamingContext context) -> void
+virtual System.Windows.Forms.TreeNode.Serialize(System.Runtime.Serialization.SerializationInfo! si, System.Runtime.Serialization.StreamingContext context) -> void
 virtual System.Windows.Forms.TreeView.OnAfterCheck(System.Windows.Forms.TreeViewEventArgs! e) -> void
 virtual System.Windows.Forms.TreeView.OnAfterCollapse(System.Windows.Forms.TreeViewEventArgs! e) -> void
 virtual System.Windows.Forms.TreeView.OnAfterExpand(System.Windows.Forms.TreeViewEventArgs! e) -> void

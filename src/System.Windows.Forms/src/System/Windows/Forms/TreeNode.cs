@@ -1020,7 +1020,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         get
         {
             TreeView? tv = TreeView;
-            if (StateImageIndexer.Index != ImageList.Indexer.DefaultIndex && tv is not null && tv.StateImageList is not null && StateImageIndexer.Index >= tv.StateImageList.Images.Count)
+            if (StateImageIndexer.Index != ImageList.Indexer.DefaultIndex &&
+                tv?.StateImageList is not null &&
+                StateImageIndexer.Index >= tv.StateImageList.Images.Count)
             {
                 return tv.StateImageList.Images.Count - 1;
             }
@@ -1117,16 +1119,17 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     internal TreeNodeAccessibleObject AccessibilityObject
         => _accessibleObject ??= new TreeNodeAccessibleObject(this, TreeView!);
-#nullable disable
+
     /// <summary>
     ///  Adds a new child node at the appropriate sorted position
     /// </summary>
-    internal int AddSorted(TreeNode node)
+    internal int AddSorted(TreeView parentTreeView, TreeNode node)
     {
         int index = 0;
-        int iMin, iLim, iT;
+        int iMin;
+        int iLim;
+        int iT;
         string nodeText = node.Text;
-        TreeView parentTreeView = TreeView;
 
         var nodeCount = _childNodes.Count;
         if (nodeCount > 0)
@@ -1189,9 +1192,9 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// <summary>
     ///  Returns a TreeNode object for the given HTREEITEM handle
     /// </summary>
-    public static TreeNode FromHandle(TreeView tree, IntPtr handle) => tree.NodeFromHandle(handle);
+    public static TreeNode? FromHandle(TreeView tree, IntPtr handle) => tree.NodeFromHandle(handle);
 
-    private void SortChildren(TreeView parentTreeView)
+    private void SortChildren(TreeView? parentTreeView)
     {
         var nodeCount = _childNodes.Count;
         if (nodeCount > 0)
@@ -1221,7 +1224,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         if (HTREEITEMInternal != IntPtr.Zero)
         {
-            TreeView tv = TreeView;
+            TreeView tv = TreeView!;
             if (tv.LabelEdit == false)
             {
                 throw new InvalidOperationException(SR.TreeNodeBeginEditFailed);
@@ -1245,7 +1248,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         // This is a node that is a child of some other node.  We have
         // to selectively remove children here.
         bool isBulkOperation = false;
-        TreeView tv = TreeView;
+        TreeView? tv = TreeView;
 
         try
         {
@@ -1289,16 +1292,10 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     public virtual object Clone()
     {
         Type clonedType = GetType();
-        TreeNode node;
 
-        if (clonedType == typeof(TreeNode))
-        {
-            node = new TreeNode(_text, ImageIndexer.Index, SelectedImageIndexer.Index);
-        }
-        else
-        {
-            node = (TreeNode)Activator.CreateInstance(clonedType);
-        }
+        TreeNode node = clonedType == typeof(TreeNode)
+            ? new TreeNode(_text, ImageIndexer.Index, SelectedImageIndexer.Index)
+            : (TreeNode)Activator.CreateInstance(clonedType)!;
 
         node.Text = _text;
         node.Name = _name;
@@ -1351,7 +1348,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     private void CollapseInternal(bool ignoreChildren)
     {
-        TreeView tv = TreeView;
+        TreeView? tv = TreeView;
         bool setSelection = false;
         _collapseOnRealization = false;
         _expandOnRealization = false;
@@ -1435,13 +1432,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     {
         int childCount = 0;
         int imageIndex = ImageList.Indexer.DefaultIndex;
-        string imageKey = null;
+        string? imageKey = null;
 
         int selectedImageIndex = ImageList.Indexer.DefaultIndex;
-        string selectedImageKey = null;
+        string? selectedImageKey = null;
 
         int stateImageIndex = ImageList.Indexer.DefaultIndex;
-        string stateImageKey = null;
+        string? stateImageKey = null;
 
         foreach (SerializationEntry entry in serializationInfo)
         {
@@ -1449,13 +1446,13 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             {
                 case "PropBag":
                     // this would throw a InvalidCastException if improper cast, thus validating the serializationInfo for OwnerDrawPropertyBag
-                    _propBag = (OwnerDrawPropertyBag)serializationInfo.GetValue(entry.Name, typeof(OwnerDrawPropertyBag));
+                    _propBag = (OwnerDrawPropertyBag?)serializationInfo.GetValue(entry.Name, typeof(OwnerDrawPropertyBag));
                     break;
                 case nameof(Text):
                     Text = serializationInfo.GetString(entry.Name);
                     break;
                 case nameof(ToolTipText):
-                    ToolTipText = serializationInfo.GetString(entry.Name);
+                    ToolTipText = serializationInfo.GetString(entry.Name)!;
                     break;
                 case nameof(Name):
                     Name = serializationInfo.GetString(entry.Name);
@@ -1526,7 +1523,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             for (int i = 0; i < childCount; i++)
             {
-                childNodes[i] = (TreeNode)serializationInfo.GetValue($"children{i}", typeof(TreeNode));
+                childNodes[i] = (TreeNode)serializationInfo.GetValue($"children{i}", typeof(TreeNode))!;
             }
 
             Nodes.AddRange(childNodes);
@@ -1538,7 +1535,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     public void EndEdit(bool cancel)
     {
-        TreeView tv = TreeView;
+        TreeView? tv = TreeView;
         if (tv is null || tv.IsDisposed)
         {
             return;
@@ -1577,7 +1574,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     public void EnsureVisible()
     {
-        TreeView tv = TreeView;
+        TreeView? tv = TreeView;
         if (tv is null || tv.IsDisposed)
         {
             return;
@@ -1591,7 +1588,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     public void Expand()
     {
-        TreeView tv = TreeView;
+        TreeView? tv = TreeView;
         if (tv is null || !tv.IsHandleCreated)
         {
             _expandOnRealization = true;
@@ -1624,7 +1621,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     ///  up to the virtual root, whose treeView pointer we know to be
     ///  correct
     /// </summary>
-    internal TreeView FindTreeView()
+    internal TreeView? FindTreeView()
     {
         TreeNode node = this;
         while (node._parent is not null)
@@ -1690,7 +1687,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
     /// </summary>
     internal void CheckParentingCycle(TreeNode candidateToAdd)
     {
-        TreeNode node = this;
+        TreeNode? node = this;
 
         while (node is not null)
         {
@@ -1738,7 +1735,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     internal unsafe void Realize(bool insertFirst)
     {
-        TreeView tv = TreeView;
+        TreeView? tv = TreeView;
         if (tv is null || !tv.IsHandleCreated || tv.IsDisposed)
         {
             return;
@@ -1759,7 +1756,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
             tvis.item.mask = InsertMask;
 
-            TreeNode prev = PrevNode;
+            TreeNode? prev = PrevNode;
             tvis.hInsertAfter = insertFirst || prev is null ? HTREEITEM.TVI_FIRST : prev.HTREEITEMInternal;
 
             tvis.item.pszText = (char*)Marshal.StringToHGlobalUni(_text);
@@ -1889,7 +1886,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         _expandOnRealization = expanded;
 
         // unrealize ourself
-        TreeView tv = TreeView;
+        TreeView? tv = TreeView;
         if (tv is null || tv.IsDisposed)
         {
             return;
@@ -1904,7 +1901,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
                 PInvoke.SendMessage(tv, PInvoke.TVM_DELETEITEM, 0, (LPARAM)HTREEITEMInternal);
             }
 
-            _treeView._nodesByHandle.Remove(HTREEITEMInternal);
+            tv._nodesByHandle.Remove(HTREEITEMInternal);
             HTREEITEMInternal = (HTREEITEM)IntPtr.Zero;
         }
 
@@ -2054,7 +2051,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
             return;
         }
 
-        TreeView tv = TreeView;
+        TreeView tv = TreeView!;
         Debug.Assert(tv is not null, "TreeNode has handle but no TreeView");
         if (tv.IsDisposed)
         {
@@ -2122,7 +2119,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     internal unsafe void UpdateImage()
     {
-        TreeView tv = TreeView;
+        TreeView tv = TreeView!;
         if (tv.IsDisposed)
         {
             return;
@@ -2132,7 +2129,11 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
         {
             mask = TVITEM_MASK.TVIF_HANDLE | TVITEM_MASK.TVIF_IMAGE,
             hItem = HTREEITEM,
-            iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex))
+            iImage = Math.Max(
+                0,
+                tv.ImageList is { } imageList && ImageIndexer.ActualIndex >= imageList.Images.Count
+                    ? imageList.Images.Count - 1
+                    : ImageIndexer.ActualIndex)
         };
 
         PInvoke.SendMessage(tv, PInvoke.TVM_SETITEMW, 0, ref item);

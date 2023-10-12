@@ -12,42 +12,16 @@ internal sealed partial class DesignerActionPanel
 {
     private class TextBoxPropertyLine : PropertyLine
     {
-        private TextBox _textBox;
-        private EditorLabel _readOnlyTextBoxLabel;
-        private Control _editControl;
-        private Label _label;
+        private readonly TextBox _textBox;
+        private readonly EditorLabel _readOnlyTextBoxLabel;
+        private readonly Label _label;
         private int _editXPos;
         private bool _textBoxDirty;
         private Point _editRegionLocation;
-        private Point _editRegionRelativeLocation;
         private Size _editRegionSize;
 
-        public TextBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+        protected TextBoxPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
-        {
-        }
-
-        protected Control EditControl
-        {
-            get => _editControl;
-        }
-
-        protected Point EditRegionLocation
-        {
-            get => _editRegionLocation;
-        }
-
-        protected Point EditRegionRelativeLocation
-        {
-            get => _editRegionRelativeLocation;
-        }
-
-        protected Size EditRegionSize
-        {
-            get => _editRegionSize;
-        }
-
-        protected override void AddControls(List<Control> controls)
         {
             _label = new Label
             {
@@ -81,14 +55,22 @@ internal sealed partial class DesignerActionPanel
             _textBox.KeyDown += new KeyEventHandler(OnTextBoxKeyDown);
             _textBox.LostFocus += new EventHandler(OnTextBoxLostFocus);
 
-            controls.Add(_readOnlyTextBoxLabel);
-            controls.Add(_textBox);
-            controls.Add(_label);
+            AddedControls.Add(_readOnlyTextBoxLabel);
+            AddedControls.Add(_textBox);
+            AddedControls.Add(_label);
         }
+
+        protected Control EditControl { get; private set; }
+
+        protected Point EditRegionLocation => _editRegionLocation;
+
+        protected Point EditRegionRelativeLocation { get; private set; }
+
+        protected Size EditRegionSize => _editRegionSize;
 
         public sealed override void Focus()
         {
-            _editControl.Focus();
+            EditControl.Focus();
         }
 
         internal int GetEditRegionXPos()
@@ -120,21 +102,21 @@ internal sealed partial class DesignerActionPanel
             if (!measureOnly)
             {
                 _editRegionLocation = new Point(editRegionXPos, top + TextBoxTopPadding);
-                _editRegionRelativeLocation = new Point(editRegionXPos, TextBoxTopPadding);
+                EditRegionRelativeLocation = new Point(editRegionXPos, TextBoxTopPadding);
                 _editRegionSize = new Size(EditInputWidth + textBoxWidthBonus, textBoxPreferredHeight + TextBoxLineInnerPadding * 2);
 
                 _label.Location = new Point(LineLeftMargin, top);
                 int labelPreferredWidth = _label.GetPreferredSize(new Size(int.MaxValue, int.MaxValue)).Width;
                 _label.Size = new Size(labelPreferredWidth, height);
                 int specialPadding = 0;
-                if (_editControl is TextBox)
+                if (EditControl is TextBox)
                 {
                     specialPadding = 2;
                 }
 
-                _editControl.Location = new Point(_editRegionLocation.X + GetTextBoxLeftPadding(textBoxPreferredHeight) + 1 + specialPadding, _editRegionLocation.Y + TextBoxLineInnerPadding + 1);
-                _editControl.Width = _editRegionSize.Width - GetTextBoxRightPadding(textBoxPreferredHeight) - GetTextBoxLeftPadding(textBoxPreferredHeight) - specialPadding;
-                _editControl.Height = _editRegionSize.Height - TextBoxLineInnerPadding * 2 - 1;
+                EditControl.Location = new Point(_editRegionLocation.X + GetTextBoxLeftPadding(textBoxPreferredHeight) + 1 + specialPadding, _editRegionLocation.Y + TextBoxLineInnerPadding + 1);
+                EditControl.Width = _editRegionSize.Width - GetTextBoxRightPadding(textBoxPreferredHeight) - GetTextBoxLeftPadding(textBoxPreferredHeight) - specialPadding;
+                EditControl.Height = _editRegionSize.Height - TextBoxLineInnerPadding * 2 - 1;
             }
 
             return new Size(width, height);
@@ -155,7 +137,7 @@ internal sealed partial class DesignerActionPanel
                 _textBox.Visible = false;
                 // REVIEW: Setting Visible to false doesn't seem to work, so position far away
                 _textBox.Location = new Point(int.MaxValue, int.MaxValue);
-                _editControl = _readOnlyTextBoxLabel;
+                EditControl = _readOnlyTextBoxLabel;
             }
             else
             {
@@ -163,13 +145,13 @@ internal sealed partial class DesignerActionPanel
                 // REVIEW: Setting Visible to false doesn't seem to work, so position far away
                 _readOnlyTextBoxLabel.Location = new Point(int.MaxValue, int.MaxValue);
                 _textBox.Visible = true;
-                _editControl = _textBox;
+                EditControl = _textBox;
             }
 
-            _editControl.AccessibleDescription = PropertyItem.Description;
-            _editControl.AccessibleName = StripAmpersands(PropertyItem.DisplayName);
-            _editControl.TabIndex = currentTabIndex++;
-            _editControl.BringToFront();
+            EditControl.AccessibleDescription = PropertyItem.Description;
+            EditControl.AccessibleName = StripAmpersands(PropertyItem.DisplayName);
+            EditControl.TabIndex = currentTabIndex++;
+            EditControl.BringToFront();
         }
 
         protected virtual void OnReadOnlyTextBoxLabelClick(object sender, MouseEventArgs e)
@@ -275,7 +257,7 @@ internal sealed partial class DesignerActionPanel
 
         private void OnTextBoxKeyDown(object sender, KeyEventArgs e)
         {
-            if (ActionPanel.DropDownActive)
+            if (ActionPanel._dropDownActive)
             {
                 return;
             }
@@ -293,7 +275,7 @@ internal sealed partial class DesignerActionPanel
 
         private void OnTextBoxLostFocus(object sender, EventArgs e)
         {
-            if (ActionPanel.DropDownActive)
+            if (ActionPanel._dropDownActive)
             {
                 return;
             }
@@ -303,7 +285,7 @@ internal sealed partial class DesignerActionPanel
 
         private void OnTextBoxTextChanged(object sender, EventArgs e) => _textBoxDirty = true;
 
-        protected override void OnValueChanged() => _editControl.Text = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, Value);
+        protected override void OnValueChanged() => EditControl.Text = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, Value);
 
         public override void PaintLine(Graphics g, int lineWidth, int lineHeight)
         {
@@ -329,7 +311,7 @@ internal sealed partial class DesignerActionPanel
         {
             if (_textBoxDirty)
             {
-                SetValue(_editControl.Text);
+                SetValue(EditControl.Text);
                 _textBoxDirty = false;
             }
         }
@@ -358,8 +340,7 @@ internal sealed partial class DesignerActionPanel
 
             protected override bool IsInputKey(Keys keyData)
             {
-                if (keyData == Keys.Down ||
-                    keyData == Keys.Up)
+                if (keyData is Keys.Down or Keys.Up)
                 {
                     return true;
                 }
@@ -374,11 +355,18 @@ internal sealed partial class DesignerActionPanel
                 {
                 }
 
-                public override string Value
-                {
-                    get => Owner.Text;
-                }
+                public override string Value => Owner.Text;
             }
+        }
+
+        public sealed class Info(DesignerActionList list, DesignerActionPropertyItem item) : PropertyLineInfo(list, item)
+        {
+            public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+            {
+                return new TextBoxPropertyLine(serviceProvider, actionPanel);
+            }
+
+            public override Type LineType => typeof(TextBoxPropertyLine);
         }
     }
 }

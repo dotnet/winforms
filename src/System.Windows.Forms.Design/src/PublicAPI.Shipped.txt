@@ -27,15 +27,15 @@ override System.ComponentModel.Design.BinaryEditor.GetEditStyle(System.Component
 override System.ComponentModel.Design.DateTimeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
 override System.ComponentModel.Design.DateTimeEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
 override System.ComponentModel.Design.Serialization.BasicDesignerLoader.BeginLoad(System.ComponentModel.Design.Serialization.IDesignerLoaderHost! host) -> void
-~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore() -> System.ComponentModel.Design.Serialization.SerializationStore
-~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize(System.ComponentModel.Design.Serialization.SerializationStore store) -> System.Collections.ICollection
-~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize(System.ComponentModel.Design.Serialization.SerializationStore store, System.ComponentModel.IContainer container) -> System.Collections.ICollection
-~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.DeserializeTo(System.ComponentModel.Design.Serialization.SerializationStore store, System.ComponentModel.IContainer container, bool validateRecycledTypes, bool applyDefaults) -> void
-~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.LoadStore(System.IO.Stream stream) -> System.ComponentModel.Design.Serialization.SerializationStore
-~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Serialize(System.ComponentModel.Design.Serialization.SerializationStore store, object value) -> void
-~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeAbsolute(System.ComponentModel.Design.Serialization.SerializationStore store, object value) -> void
-~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeMember(System.ComponentModel.Design.Serialization.SerializationStore store, object owningObject, System.ComponentModel.MemberDescriptor member) -> void
-~override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeMemberAbsolute(System.ComponentModel.Design.Serialization.SerializationStore store, object owningObject, System.ComponentModel.MemberDescriptor member) -> void
+override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CreateStore() -> System.ComponentModel.Design.Serialization.SerializationStore!
+override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize(System.ComponentModel.Design.Serialization.SerializationStore! store) -> System.Collections.ICollection!
+override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Deserialize(System.ComponentModel.Design.Serialization.SerializationStore! store, System.ComponentModel.IContainer! container) -> System.Collections.ICollection!
+override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.DeserializeTo(System.ComponentModel.Design.Serialization.SerializationStore! store, System.ComponentModel.IContainer! container, bool validateRecycledTypes, bool applyDefaults) -> void
+override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.LoadStore(System.IO.Stream! stream) -> System.ComponentModel.Design.Serialization.SerializationStore!
+override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.Serialize(System.ComponentModel.Design.Serialization.SerializationStore! store, object! value) -> void
+override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeAbsolute(System.ComponentModel.Design.Serialization.SerializationStore! store, object! value) -> void
+override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeMember(System.ComponentModel.Design.Serialization.SerializationStore! store, object! owningObject, System.ComponentModel.MemberDescriptor! member) -> void
+override System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.SerializeMemberAbsolute(System.ComponentModel.Design.Serialization.SerializationStore! store, object! owningObject, System.ComponentModel.MemberDescriptor! member) -> void
 override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.OnEndLoad(bool successful, System.Collections.ICollection? errors) -> void
 override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformFlush(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
 override System.ComponentModel.Design.Serialization.CodeDomDesignerLoader.PerformLoad(System.ComponentModel.Design.Serialization.IDesignerSerializationManager! manager) -> void
@@ -177,7 +177,7 @@ System.ComponentModel.Design.Serialization.BasicDesignerLoader.LoaderHost.get ->
 System.ComponentModel.Design.Serialization.BasicDesignerLoader.PropertyProvider.get -> object?
 System.ComponentModel.Design.Serialization.BasicDesignerLoader.PropertyProvider.set -> void
 System.ComponentModel.Design.Serialization.BasicDesignerLoader.SetBaseComponentClassName(string! name) -> void
-~System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationService(System.IServiceProvider provider) -> void
+System.ComponentModel.Design.Serialization.CodeDomComponentSerializationService.CodeDomComponentSerializationService(System.IServiceProvider? provider) -> void
 System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider! provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model) -> void
 System.ComponentModel.Design.Serialization.CodeDomLocalizationProvider.CodeDomLocalizationProvider(System.IServiceProvider! provider, System.ComponentModel.Design.Serialization.CodeDomLocalizationModel model, System.Globalization.CultureInfo?[]! supportedCultures) -> void
 System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.MethodSupportsSerialization(System.Reflection.MethodInfo! method) -> bool
@@ -210,8 +210,8 @@ System.ComponentModel.Design.Serialization.CollectionCodeDomSerializer.MethodSup
 ~System.Drawing.Design.IToolboxService.SetSelectedToolboxItem(System.Drawing.Design.ToolboxItem toolboxItem) -> void
 ~System.Drawing.Design.IToolboxUser.GetToolSupported(System.Drawing.Design.ToolboxItem tool) -> bool
 ~System.Drawing.Design.IToolboxUser.ToolPicked(System.Drawing.Design.ToolboxItem tool) -> void
-~System.Drawing.Design.ToolboxComponentsCreatingEventArgs.DesignerHost.get -> System.ComponentModel.Design.IDesignerHost
-~System.Drawing.Design.ToolboxComponentsCreatingEventArgs.ToolboxComponentsCreatingEventArgs(System.ComponentModel.Design.IDesignerHost host) -> void
+System.Drawing.Design.ToolboxComponentsCreatingEventArgs.DesignerHost.get -> System.ComponentModel.Design.IDesignerHost?
+System.Drawing.Design.ToolboxComponentsCreatingEventArgs.ToolboxComponentsCreatingEventArgs(System.ComponentModel.Design.IDesignerHost? host) -> void
 System.Drawing.Design.ToolboxItem.AssemblyName.get -> System.Reflection.AssemblyName?
 System.Drawing.Design.ToolboxItem.AssemblyName.set -> void
 System.Drawing.Design.ToolboxItem.Bitmap.get -> System.Drawing.Bitmap?
@@ -237,12 +237,12 @@ System.Drawing.Design.ToolboxItem.ToolboxItem(System.Type? toolType) -> void
 System.Drawing.Design.ToolboxItem.TypeName.get -> string!
 System.Drawing.Design.ToolboxItem.TypeName.set -> void
 System.Drawing.Design.ToolboxItem.ValidatePropertyType(string! propertyName, object? value, System.Type! expectedType, bool allowNull) -> void
-~System.Drawing.Design.ToolboxItemCollection.Contains(System.Drawing.Design.ToolboxItem value) -> bool
-~System.Drawing.Design.ToolboxItemCollection.CopyTo(System.Drawing.Design.ToolboxItem[] array, int index) -> void
-~System.Drawing.Design.ToolboxItemCollection.IndexOf(System.Drawing.Design.ToolboxItem value) -> int
-~System.Drawing.Design.ToolboxItemCollection.this[int index].get -> System.Drawing.Design.ToolboxItem
-~System.Drawing.Design.ToolboxItemCollection.ToolboxItemCollection(System.Drawing.Design.ToolboxItem[] value) -> void
-~System.Drawing.Design.ToolboxItemCollection.ToolboxItemCollection(System.Drawing.Design.ToolboxItemCollection value) -> void
+System.Drawing.Design.ToolboxItemCollection.Contains(System.Drawing.Design.ToolboxItem! value) -> bool
+System.Drawing.Design.ToolboxItemCollection.CopyTo(System.Drawing.Design.ToolboxItem![]! array, int index) -> void
+System.Drawing.Design.ToolboxItemCollection.IndexOf(System.Drawing.Design.ToolboxItem! value) -> int
+System.Drawing.Design.ToolboxItemCollection.this[int index].get -> System.Drawing.Design.ToolboxItem!
+System.Drawing.Design.ToolboxItemCollection.ToolboxItemCollection(System.Drawing.Design.ToolboxItem![]! value) -> void
+System.Drawing.Design.ToolboxItemCollection.ToolboxItemCollection(System.Drawing.Design.ToolboxItemCollection! value) -> void
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.Add(System.Windows.Forms.Design.Behavior.Adorner! value) -> int
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(params System.Windows.Forms.Design.Behavior.Adorner![]! value) -> void
 System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection.AddRange(System.Windows.Forms.Design.Behavior.BehaviorServiceAdornerCollection! value) -> void

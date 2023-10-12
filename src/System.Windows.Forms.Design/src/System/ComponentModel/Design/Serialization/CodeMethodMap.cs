@@ -19,14 +19,15 @@ internal class CodeMethodMap
     private CodeStatementCollection? _variables;
     private readonly CodeStatementCollection _targetStatements;
 
-    internal CodeMethodMap(CodeMemberMethod method) : this(null, method)
-    {
-    }
-
-    internal CodeMethodMap(CodeStatementCollection? targetStatements, CodeMemberMethod method)
+    internal CodeMethodMap(CodeMemberMethod method)
     {
         Method = method;
-        _targetStatements = targetStatements ?? Method.Statements;
+        _targetStatements = Method.Statements;
+    }
+
+    internal CodeMethodMap(CodeStatementCollection targetStatements)
+    {
+        _targetStatements = targetStatements;
     }
 
     internal CodeStatementCollection BeginStatements => _begin ??= new CodeStatementCollection();
@@ -35,7 +36,7 @@ internal class CodeMethodMap
 
     internal CodeStatementCollection ContainerStatements => _container ??= new CodeStatementCollection();
 
-    internal CodeMemberMethod Method { get; }
+    internal CodeMemberMethod? Method { get; }
 
     internal CodeStatementCollection Statements => _statements ??= new CodeStatementCollection();
 

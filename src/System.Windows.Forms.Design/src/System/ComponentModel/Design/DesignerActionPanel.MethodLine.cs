@@ -15,17 +15,8 @@ internal sealed partial class DesignerActionPanel
     {
         private DesignerActionList _actionList;
         private DesignerActionMethodItem _methodItem;
-        private MethodItemLinkLabel _linkLabel;
-        public MethodLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
-        {
-        }
-
-        public sealed override string FocusId
-        {
-            get => $"METHOD:{_actionList.GetType().FullName}.{_methodItem.MemberName}";
-        }
-
-        protected override void AddControls(List<Control> controls)
+        private readonly MethodItemLinkLabel _linkLabel;
+        private MethodLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
         {
             _linkLabel = new MethodItemLinkLabel
             {
@@ -39,10 +30,12 @@ internal sealed partial class DesignerActionPanel
                 VisitedLinkColor = ActionPanel.LinkColor
             };
             _linkLabel.LinkClicked += new LinkLabelLinkClickedEventHandler(OnLinkLabelLinkClicked);
-            controls.Add(_linkLabel);
+            AddedControls.Add(_linkLabel);
         }
 
-        public sealed override void Focus()
+        public override string FocusId => $"METHOD:{_actionList.GetType().FullName}.{_methodItem.MemberName}";
+
+        public override void Focus()
         {
             _linkLabel.Focus();
         }
@@ -87,13 +80,14 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        internal override void UpdateActionItem(DesignerActionList actionList, DesignerActionItem actionItem, ToolTip toolTip, ref int currentTabIndex)
+        internal override void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex)
         {
-            _actionList = actionList;
-            _methodItem = (DesignerActionMethodItem)actionItem;
+            Info info = (Info)lineInfo;
+            _actionList = info.List;
+            _methodItem = info.Item;
             toolTip.SetToolTip(_linkLabel, _methodItem.Description);
             _linkLabel.Text = StripAmpersands(_methodItem.DisplayName);
-            _linkLabel.AccessibleDescription = actionItem.Description;
+            _linkLabel.AccessibleDescription = _methodItem.Description;
             _linkLabel.TabIndex = currentTabIndex++;
         }
 
@@ -114,6 +108,17 @@ internal sealed partial class DesignerActionPanel
 
                 return base.ProcessDialogKey(keyData);
             }
+        }
+
+        public sealed class Info(DesignerActionList list, DesignerActionMethodItem item) : StandardLineInfo(list)
+        {
+            public override DesignerActionMethodItem Item { get; } = item;
+            public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+            {
+                return new MethodLine(serviceProvider, actionPanel);
+            }
+
+            public override Type LineType => typeof(MethodLine);
         }
     }
 }

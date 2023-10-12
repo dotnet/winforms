@@ -15,7 +15,7 @@ internal sealed partial class DesignerActionPanel
 {
     private sealed partial class EditorPropertyLine : TextBoxPropertyLine, IWindowsFormsEditorService, IServiceProvider
     {
-        private EditorButton _button;
+        private readonly EditorButton _button;
         private UITypeEditor _editor;
         private bool _hasSwatch;
         private Image _swatch;
@@ -23,9 +23,14 @@ internal sealed partial class DesignerActionPanel
         private bool _ignoreNextSelectChange;
         private bool _ignoreDropDownValue;
 
-        public EditorPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+        private EditorPropertyLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
         {
+            _button = new EditorButton();
+            _button.Click += new EventHandler(OnButtonClick);
+            _button.GotFocus += new EventHandler(OnButtonGotFocus);
+
+            AddedControls.Add(_button);
         }
 
         private unsafe void ActivateDropDown()
@@ -120,17 +125,6 @@ internal sealed partial class DesignerActionPanel
                     }
                 }
             }
-        }
-
-        protected override void AddControls(List<Control> controls)
-        {
-            base.AddControls(controls);
-
-            _button = new EditorButton();
-            _button.Click += new EventHandler(OnButtonClick);
-            _button.GotFocus += new EventHandler(OnButtonGotFocus);
-
-            controls.Add(_button);
         }
 
         private void CloseDropDown()
@@ -231,7 +225,7 @@ internal sealed partial class DesignerActionPanel
 
         protected override void OnPropertyTaskItemUpdated(ToolTip toolTip, ref int currentTabIndex)
         {
-            _editor = (UITypeEditor)PropertyDescriptor.GetEditor(typeof(UITypeEditor));
+            _editor = PropertyDescriptor.GetEditor<UITypeEditor>();
 
             base.OnPropertyTaskItemUpdated(toolTip, ref currentTabIndex);
 
@@ -268,7 +262,7 @@ internal sealed partial class DesignerActionPanel
 
             if (e.Button == MouseButtons.Left)
             {
-                if (ActionPanel.DropDownActive)
+                if (ActionPanel._dropDownActive)
                 {
                     _ignoreDropDownValue = true;
                     CloseDropDown();
@@ -320,11 +314,11 @@ internal sealed partial class DesignerActionPanel
             // VS is going to eat the F4 in PreProcessMessage, preventing it from ever
             // getting to an OnKeyDown on this control. Doing it here also allow to not
             // hook up to multiple events for each button.
-            if (!_button.Focused && !_button.Ellipsis)
+            if (_button is { Focused: false, Ellipsis: false })
             {
-                if ((keyData == (Keys.Alt | Keys.Down)) || (keyData == (Keys.Alt | Keys.Up)) || (keyData == Keys.F4))
+                if (keyData is (Keys.Alt | Keys.Down) or (Keys.Alt | Keys.Up) or Keys.F4)
                 {
-                    if (!ActionPanel.DropDownActive)
+                    if (!ActionPanel._dropDownActive)
                     {
                         ActivateDropDown();
                     }
@@ -426,7 +420,7 @@ internal sealed partial class DesignerActionPanel
 
         DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
         {
-            IUIService uiService = (IUIService)ServiceProvider.GetService(typeof(IUIService));
+            IUIService uiService = ServiceProvider.GetService<IUIService>();
             if (uiService is not null)
             {
                 return uiService.ShowDialog(dialog);
@@ -479,6 +473,16 @@ internal sealed partial class DesignerActionPanel
 
                 return base.ProcessDialogKey(keyData);
             }
+        }
+
+        public new sealed class Info(DesignerActionList list, DesignerActionPropertyItem item) : PropertyLineInfo(list, item)
+        {
+            public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+            {
+                return new EditorPropertyLine(serviceProvider, actionPanel);
+            }
+
+            public override Type LineType => typeof(EditorPropertyLine);
         }
     }
 }

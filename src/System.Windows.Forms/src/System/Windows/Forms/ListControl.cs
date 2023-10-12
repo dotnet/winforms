@@ -339,6 +339,7 @@ public abstract class ListControl : Control
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.ListControlSelectedValueDescr))]
     [Bindable(true)]
+    [DisallowNull]
     public object? SelectedValue
     {
         get

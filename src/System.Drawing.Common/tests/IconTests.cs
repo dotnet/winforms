@@ -842,7 +842,7 @@ public class IconTests
                             Assert.Equal(0xFF000000u, (uint)bitmap.GetPixel(0, 31).ToArgb());
                             break;
                         default:
-                            Assert.False(true, $"Unexpected bitmap depth: {expectedBitDepth}");
+                            Assert.Fail($"Unexpected bitmap depth: {expectedBitDepth}");
                             break;
                     }
                 }

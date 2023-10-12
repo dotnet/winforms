@@ -58,11 +58,11 @@ public abstract class BindingManagerBase
 
     public abstract object? Current { get; }
 
-    private protected abstract void SetDataSource(object dataSource);
+    private protected abstract void SetDataSource(object? dataSource);
 
     public BindingManagerBase() { }
 
-    internal BindingManagerBase(object dataSource)
+    internal BindingManagerBase(object? dataSource)
     {
         SetDataSource(dataSource);
     }

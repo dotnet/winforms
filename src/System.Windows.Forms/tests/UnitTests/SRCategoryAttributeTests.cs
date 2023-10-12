@@ -10,7 +10,7 @@ public class SRCategoryAttributeTests
     public void VerifyCategoryForValidCategoryAttribute()
     {
         SRCategoryAttribute srCategoryAttribute = new SRCategoryAttribute(nameof(SR.CatAccessibility));
-        Assert.True(string.Equals(srCategoryAttribute.Category, SR.CatAccessibility, StringComparison.Ordinal));
+        Assert.Equal(SR.CatAccessibility, srCategoryAttribute.Category);
     }
 
     [Fact]
@@ -18,6 +18,6 @@ public class SRCategoryAttributeTests
     {
         const string fakeCategory = "fakeCategory";
         SRCategoryAttribute srCategoryAttribute = new SRCategoryAttribute(fakeCategory);
-        Assert.True(string.Equals(srCategoryAttribute.Category, fakeCategory, StringComparison.Ordinal));
+        Assert.Equal(fakeCategory, srCategoryAttribute.Category);
     }
 }
