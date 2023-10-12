@@ -633,9 +633,9 @@ System.Windows.Forms.TreeView.TopNode.get -> System.Windows.Forms.TreeNode?
 System.Windows.Forms.TreeView.TopNode.set -> void
 System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer?
 System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
-~virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void
-~virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs cevent) -> void
-~virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs cevent) -> void
+virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs! e) -> void
+virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs! cevent) -> void
+virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs! cevent) -> void
 ~virtual System.Windows.Forms.BindingSource.Add(object value) -> int
 ~virtual System.Windows.Forms.BindingSource.AddNew() -> object
 ~virtual System.Windows.Forms.BindingSource.ApplySort(System.ComponentModel.ListSortDescriptionCollection sorts) -> void
