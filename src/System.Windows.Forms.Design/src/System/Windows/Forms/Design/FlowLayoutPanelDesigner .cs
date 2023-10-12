@@ -712,9 +712,8 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             base.OnDragComplete(de);
 
             designerTransaction?.Commit();
-            designerTransaction = null;
         }
-        catch (Exception)
+        catch
         {
             designerTransaction?.Cancel();
         }
