@@ -907,12 +907,12 @@ public enum Keys
     /// <summary>
     ///  The Oem Backslash key.
     /// </summary>
-    OemBackslash = 0xE2,
+    Oem102 = 0xE2,
 
     /// <summary>
     ///  The Oem 102 key.
     /// </summary>
-    Oem102 = OemBackslash,
+    OemBackslash = Oem102,
 
     /// <summary>
     ///  The PROCESS KEY key.
