@@ -65,11 +65,26 @@ public class DataGridViewImageColumn : DataGridViewColumn
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridViewImageColumn_DescriptionDescr))]
     [AllowNull]
+    [MemberNotNull(nameof(ImageCellTemplate))]
     public string Description
     {
-        get => ImageCellTemplate.Description;
+        get
+        {
+            if (ImageCellTemplate is null)
+            {
+                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
+            }
+
+            return ImageCellTemplate.Description;
+        }
+
         set
         {
+            if (Description == value)
+            {
+                return;
+            }
+
             ImageCellTemplate.Description = value;
             if (DataGridView is not null)
             {
@@ -112,26 +127,21 @@ public class DataGridViewImageColumn : DataGridViewColumn
         }
     }
 
-    private DataGridViewImageCell ImageCellTemplate
-    {
-        get
-        {
-            if (CellTemplate is null)
-            {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
-            }
-
-            return (DataGridViewImageCell)CellTemplate;
-        }
-    }
+    private DataGridViewImageCell? ImageCellTemplate => (DataGridViewImageCell?)CellTemplate;
 
     [DefaultValue(DataGridViewImageCellLayout.Normal)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridViewImageColumn_ImageLayoutDescr))]
+    [MemberNotNull(nameof(ImageCellTemplate))]
     public DataGridViewImageCellLayout ImageLayout
     {
         get
         {
+            if (ImageCellTemplate is null)
+            {
+                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
+            }
+
             DataGridViewImageCellLayout imageLayout = ImageCellTemplate.ImageLayout;
             if (imageLayout == DataGridViewImageCellLayout.NotSet)
             {
@@ -142,66 +152,80 @@ public class DataGridViewImageColumn : DataGridViewColumn
         }
         set
         {
-            if (ImageLayout != value)
+            if (ImageLayout == value)
             {
-                ImageCellTemplate.ImageLayout = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
-                        {
-                            dataGridViewCell.ImageLayoutInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.OnColumnCommonChange(Index);
+            ImageCellTemplate.ImageLayout = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                {
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
+                    {
+                        dataGridViewCell.ImageLayoutInternal = value;
+                    }
                 }
+
+                DataGridView.OnColumnCommonChange(Index);
             }
         }
     }
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [MemberNotNull(nameof(ImageCellTemplate))]
     public bool ValuesAreIcons
     {
-        get => ImageCellTemplate.ValueIsIcon;
+        get
+        {
+            if (ImageCellTemplate is null)
+            {
+                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
+            }
+
+            return ImageCellTemplate.ValueIsIcon;
+        }
+
         set
         {
-            if (ValuesAreIcons != value)
+            if (ValuesAreIcons == value)
             {
-                ImageCellTemplate.ValueIsIconInternal = value;
-                if (DataGridView is not null)
+                return;
+            }
+
+            ImageCellTemplate.ValueIsIconInternal = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                 {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
                     {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
-                        {
-                            dataGridViewCell.ValueIsIconInternal = value;
-                        }
+                        dataGridViewCell.ValueIsIconInternal = value;
                     }
-
-                    DataGridView.OnColumnCommonChange(Index);
                 }
 
-                if (value &&
-                    DefaultCellStyle.NullValue is Bitmap bitmap &&
-                    bitmap == DataGridViewImageCell.ErrorBitmap)
-                {
-                    DefaultCellStyle.NullValue = DataGridViewImageCell.ErrorIcon;
-                }
-                else if (!value &&
-                         DefaultCellStyle.NullValue is Icon icon &&
-                         icon == DataGridViewImageCell.ErrorIcon)
-                {
-                    DefaultCellStyle.NullValue = DataGridViewImageCell.ErrorBitmap;
-                }
+                DataGridView.OnColumnCommonChange(Index);
+            }
+
+            if (value &&
+                DefaultCellStyle.NullValue is Bitmap bitmap &&
+                bitmap == DataGridViewImageCell.ErrorBitmap)
+            {
+                DefaultCellStyle.NullValue = DataGridViewImageCell.ErrorIcon;
+            }
+            else if (!value &&
+                     DefaultCellStyle.NullValue is Icon icon &&
+                     icon == DataGridViewImageCell.ErrorIcon)
+            {
+                DefaultCellStyle.NullValue = DataGridViewImageCell.ErrorBitmap;
             }
         }
     }
@@ -254,7 +278,7 @@ public class DataGridViewImageColumn : DataGridViewColumn
                 !defaultNullValue.Equals(defaultCellStyle.NullValue) ||
                 !defaultCellStyle.IsDataSourceNullValueDefault ||
                 !string.IsNullOrEmpty(defaultCellStyle.Format) ||
-                !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
+                !defaultCellStyle.FormatProvider.Equals(Globalization.CultureInfo.CurrentCulture) ||
                 defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                 defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
                 defaultCellStyle.Tag is not null ||

@@ -173,10 +173,10 @@ override System.Windows.Forms.DataGridViewLinkCell.OnMouseUp(System.Windows.Form
 override System.Windows.Forms.DataGridViewLinkCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 override System.Windows.Forms.DataGridViewLinkCell.ToString() -> string!
 override System.Windows.Forms.DataGridViewLinkCell.ValueType.get -> System.Type!
-~override System.Windows.Forms.DataGridViewLinkColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
-~override System.Windows.Forms.DataGridViewLinkColumn.CellTemplate.set -> void
-~override System.Windows.Forms.DataGridViewLinkColumn.Clone() -> object
-~override System.Windows.Forms.DataGridViewLinkColumn.ToString() -> string
+override System.Windows.Forms.DataGridViewLinkColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
+override System.Windows.Forms.DataGridViewLinkColumn.CellTemplate.set -> void
+override System.Windows.Forms.DataGridViewLinkColumn.Clone() -> object!
+override System.Windows.Forms.DataGridViewLinkColumn.ToString() -> string!
 override System.Windows.Forms.DataGridViewRow.Clone() -> object!
 override System.Windows.Forms.DataGridViewRow.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
 override System.Windows.Forms.DataGridViewRow.ContextMenuStrip.set -> void
@@ -478,8 +478,8 @@ System.Windows.Forms.DataGridViewImageColumn.Icon.get -> System.Drawing.Icon?
 System.Windows.Forms.DataGridViewImageColumn.Icon.set -> void
 System.Windows.Forms.DataGridViewImageColumn.Image.get -> System.Drawing.Image?
 System.Windows.Forms.DataGridViewImageColumn.Image.set -> void
-~System.Windows.Forms.DataGridViewLinkColumn.Text.get -> string
-~System.Windows.Forms.DataGridViewLinkColumn.Text.set -> void
+System.Windows.Forms.DataGridViewLinkColumn.Text.get -> string?
+System.Windows.Forms.DataGridViewLinkColumn.Text.set -> void
 System.Windows.Forms.DataGridViewRow.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject!
 System.Windows.Forms.DataGridViewRow.Cells.get -> System.Windows.Forms.DataGridViewCellCollection!
 System.Windows.Forms.DataGridViewRow.CreateCells(System.Windows.Forms.DataGridView! dataGridView) -> void
