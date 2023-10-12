@@ -226,8 +226,8 @@ override System.Windows.Forms.PictureBox.OnVisibleChanged(System.EventArgs! e) -
 override System.Windows.Forms.PictureBox.Text.get -> string!
 override System.Windows.Forms.PictureBox.Text.set -> void
 override System.Windows.Forms.PictureBox.ToString() -> string!
-~override System.Windows.Forms.PropertyGrid.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.PropertyGrid.BackgroundImage.set -> void
+override System.Windows.Forms.PropertyGrid.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.PropertyGrid.BackgroundImage.set -> void
 ~override System.Windows.Forms.PropertyGrid.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.PropertyGrid.OnEnabledChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.PropertyGrid.OnFontChanged(System.EventArgs e) -> void
@@ -565,9 +565,9 @@ System.Windows.Forms.PictureBox.InitialImage.get -> System.Drawing.Image?
 System.Windows.Forms.PictureBox.InitialImage.set -> void
 System.Windows.Forms.PictureBox.Load(string! url) -> void
 System.Windows.Forms.PictureBox.LoadAsync(string! url) -> void
-~System.Windows.Forms.PropertyGrid.BrowsableAttributes.get -> System.ComponentModel.AttributeCollection
-~System.Windows.Forms.PropertyGrid.BrowsableAttributes.set -> void
-~System.Windows.Forms.PropertyGrid.Controls.get -> System.Windows.Forms.Control.ControlCollection
+System.Windows.Forms.PropertyGrid.BrowsableAttributes.get -> System.ComponentModel.AttributeCollection!
+System.Windows.Forms.PropertyGrid.BrowsableAttributes.set -> void
+System.Windows.Forms.PropertyGrid.Controls.get -> System.Windows.Forms.Control.ControlCollection!
 ~System.Windows.Forms.PropertyGrid.OnComComponentNameChanged(System.ComponentModel.Design.ComponentRenameEventArgs e) -> void
 ~System.Windows.Forms.PropertyGrid.OnNotifyPropertyValueUIItemsChanged(object sender, System.EventArgs e) -> void
 ~System.Windows.Forms.PropertyGrid.PropertyTabs.get -> System.Windows.Forms.PropertyGrid.PropertyTabCollection
@@ -897,7 +897,7 @@ virtual System.Windows.Forms.PictureBox.OnLoadCompleted(System.ComponentModel.As
 virtual System.Windows.Forms.PictureBox.OnLoadProgressChanged(System.ComponentModel.ProgressChangedEventArgs! e) -> void
 virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.PropertyGrid.CreatePropertyTab(System.Type tabType) -> System.Windows.Forms.Design.PropertyTab
-~virtual System.Windows.Forms.PropertyGrid.DefaultTabType.get -> System.Type
+virtual System.Windows.Forms.PropertyGrid.DefaultTabType.get -> System.Type!
 ~virtual System.Windows.Forms.PropertyGrid.OnPropertySortChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.PropertyGrid.OnPropertyTabChanged(System.Windows.Forms.PropertyTabChangedEventArgs e) -> void
 ~virtual System.Windows.Forms.PropertyGrid.OnPropertyValueChanged(System.Windows.Forms.PropertyValueChangedEventArgs e) -> void
@@ -9051,8 +9051,8 @@ System.Windows.Forms.ProgressBarStyle.Blocks = 0 -> System.Windows.Forms.Progres
 System.Windows.Forms.ProgressBarStyle.Continuous = 1 -> System.Windows.Forms.ProgressBarStyle
 System.Windows.Forms.ProgressBarStyle.Marquee = 2 -> System.Windows.Forms.ProgressBarStyle
 System.Windows.Forms.PropertyGrid
-System.Windows.Forms.PropertyGrid.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.PropertyGrid.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.PropertyGrid.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.PropertyGrid.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.PropertyGrid.CanShowVisualStyleGlyphs.get -> bool
 System.Windows.Forms.PropertyGrid.CanShowVisualStyleGlyphs.set -> void
 System.Windows.Forms.PropertyGrid.CategoryForeColor.get -> System.Drawing.Color
