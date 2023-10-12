@@ -5,6 +5,7 @@ Option Explicit On
 Option Strict On
 
 Imports System.Runtime.InteropServices
+
 Imports Microsoft.Win32.SafeHandles
 
 Namespace Microsoft.VisualBasic.CompilerServices
@@ -13,6 +14,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
     Friend NotInheritable Class NativeTypes
 
 #Disable Warning CA1812 ' Supress warning as this is a type used in PInvoke and shouldn't be changed.
+
         <StructLayout(LayoutKind.Sequential)>
         Friend NotInheritable Class SECURITY_ATTRIBUTES
 #Enable Warning CA1812
@@ -38,6 +40,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 Dispose()
                 MyBase.Finalize()
             End Sub
+
         End Class
 
         ''' <summary>
@@ -52,13 +55,14 @@ Namespace Microsoft.VisualBasic.CompilerServices
             End Sub
 
             Friend Sub InitialSetHandle(h As IntPtr)
-                Debug.Assert(MyBase.IsInvalid, "Safe handle should only be set once.")
-                MyBase.SetHandle(h)
+                Debug.Assert(IsInvalid, "Safe handle should only be set once.")
+                SetHandle(h)
             End Sub
 
             Protected Overrides Function ReleaseHandle() As Boolean
                 Return NativeMethods.CloseHandle(handle) <> 0
             End Function
+
         End Class
 
         ''' <summary>
@@ -79,6 +83,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
             Friend Sub New()
             End Sub
+
         End Class
 
         ''' <summary>
@@ -155,6 +160,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 Dispose(True)
                 GC.SuppressFinalize(Me)
             End Sub
+
         End Class
 
         ' Handle Values
@@ -162,6 +168,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         ' GetWindow() Constants
         Friend Const GW_HWNDFIRST As Integer = 0
+
         Friend Const GW_HWNDLAST As Integer = 1
         Friend Const GW_HWNDNEXT As Integer = 2
         Friend Const GW_HWNDPREV As Integer = 3

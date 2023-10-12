@@ -261,7 +261,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
             Controls.Add(ButtonCloseDialog)
             Controls.Add(ProgressBarWork)
             Controls.Add(LabelInfo)
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+            FormBorderStyle = FormBorderStyle.FixedDialog
             MaximizeBox = False
             MinimizeBox = False
             Name = "ProgressDialog"

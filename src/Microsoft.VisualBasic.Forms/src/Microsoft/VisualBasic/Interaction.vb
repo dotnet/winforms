@@ -6,13 +6,14 @@ Imports System.Security
 Imports System.Text
 Imports System.Threading
 Imports System.Windows.Forms
+
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic
 
-    ' Helper methods invoked through reflection from Microsoft.VisualBasic.Interaction in Microsoft.VisualBasic.Core.dll. 
+    ' Helper methods invoked through reflection from Microsoft.VisualBasic.Interaction in Microsoft.VisualBasic.Core.dll.
     ' Do not change this API without also updating that dependent module.
     Friend Module _Interaction
 
@@ -247,7 +248,7 @@ Namespace Microsoft.VisualBasic
             Private ReadOnly _parentWindow As IWin32Window
             Private _exception As Exception
 
-            Sub New(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As IWin32Window)
+            Public Sub New(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer, ParentWindow As IWin32Window)
                 _prompt = Prompt
                 _title = Title
                 _defaultResponse = DefaultResponse
@@ -275,29 +276,29 @@ Namespace Microsoft.VisualBasic
                     Return _exception
                 End Get
             End Property
+
         End Class
 
         Public Function InputBox(Prompt As String, Title As String, DefaultResponse As String, XPos As Integer, YPos As Integer) As String
-            Dim vbhost As IVbHost
+            Dim vbHost As IVbHost
             Dim ParentWindow As IWin32Window = Nothing
 
-            vbhost = CompilerServices.HostServices.VBHost
-            If vbhost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
-                ParentWindow = vbhost.GetParentWindow()
+            vbHost = HostServices.VBHost
+            If vbHost IsNot Nothing Then 'If we are hosted then we want to use the host as the parent window.  If no parent window that's fine.
+                ParentWindow = vbHost.GetParentWindow()
             End If
 
             If String.IsNullOrEmpty(Title) Then
-                If vbhost Is Nothing Then
-                    Title = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
-                Else
-                    Title = vbhost.GetWindowTitle()
-                End If
+                Title = If(vbHost Is Nothing,
+                           GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly()),
+                           vbHost.GetWindowTitle()
+                          )
             End If
 
             'Threading state can only be set once, and will most often be already set
             'but set to STA and check if it isn't STA, then we need to start another thread
             'to display the InputBox
-            If System.Threading.Thread.CurrentThread.GetApartmentState() <> Threading.ApartmentState.STA Then
+            If Thread.CurrentThread.GetApartmentState() <> ApartmentState.STA Then
                 Dim InputHandler As New InputBoxHandler(Prompt, Title, DefaultResponse, XPos, YPos, ParentWindow)
                 Dim thread As New Thread(New ThreadStart(AddressOf InputHandler.StartHere))
                 thread.Start()
@@ -317,7 +318,7 @@ Namespace Microsoft.VisualBasic
 
             Dim Title As String
 
-            'Get the Assembly name of the calling assembly 
+            'Get the Assembly name of the calling assembly
             'Assembly.GetName requires PathDiscovery permission so we try this first
             'and if it throws we catch the security exception and parse the name
             'from the full assembly name
@@ -352,12 +353,12 @@ Namespace Microsoft.VisualBasic
         Public Function MsgBox(Prompt As Object, Buttons As MsgBoxStyle, Title As Object) As MsgBoxResult
             Dim sPrompt As String = Nothing
             Dim sTitle As String
-            Dim vbhost As IVbHost
+            Dim vbHost As IVbHost
             Dim ParentWindow As IWin32Window = Nothing
 
-            vbhost = CompilerServices.HostServices.VBHost
-            If vbhost IsNot Nothing Then
-                ParentWindow = vbhost.GetParentWindow()
+            vbHost = HostServices.VBHost
+            If vbHost IsNot Nothing Then
+                ParentWindow = vbHost.GetParentWindow()
             End If
 
             'Only allow legal button combinations to be set, one choice from each group
@@ -386,11 +387,10 @@ Namespace Microsoft.VisualBasic
 
             Try
                 If Title Is Nothing Then
-                    If vbhost Is Nothing Then
-                        sTitle = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
-                    Else
-                        sTitle = vbhost.GetWindowTitle()
-                    End If
+                    sTitle = If(vbHost Is Nothing,
+                                GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly()),
+                                vbHost.GetWindowTitle()
+                               )
                 Else
                     sTitle = CStr(Title) 'allows the title to be an expression, e.g. msgbox(prompt, Title:=1+5)
                 End If
@@ -404,7 +404,7 @@ Namespace Microsoft.VisualBasic
                 Throw New ArgumentException(GetResourceString(SR.Argument_InvalidValueType2, "Title", "String"))
             End Try
 
-            Return CType(System.Windows.Forms.MessageBox.Show(ParentWindow, sPrompt, sTitle,
+            Return CType(MessageBox.Show(ParentWindow, sPrompt, sTitle,
                  CType(Buttons And &HF, MessageBoxButtons),
                  CType(Buttons And &HF0, MessageBoxIcon),
                  CType(Buttons And &HF00, MessageBoxDefaultButton),
@@ -415,4 +415,3 @@ Namespace Microsoft.VisualBasic
     End Module
 
 End Namespace
-

@@ -54,7 +54,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             '
             'MyCancelButton
             '
-            MyCancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel
+            MyCancelButton.DialogResult = DialogResult.Cancel
             resources.ApplyResources(MyCancelButton, "MyCancelButton", CultureInfo.CurrentUICulture)
             MyCancelButton.Name = "MyCancelButton"
             '
@@ -77,7 +77,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Controls.Add(Label)
             Controls.Add(OKButton)
             Controls.Add(MyCancelButton)
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+            FormBorderStyle = FormBorderStyle.FixedDialog
             MaximizeBox = False
             MinimizeBox = False
             Name = "VBInputBox"
