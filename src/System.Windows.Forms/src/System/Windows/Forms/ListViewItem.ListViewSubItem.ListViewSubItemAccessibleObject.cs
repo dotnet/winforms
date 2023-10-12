@@ -147,7 +147,7 @@ public partial class ListViewItem
             internal override int Row => _owningItem.Index;
 
             internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
-                => _owningListView.View == View.Details
+                => _owningListView.View == View.Details && Column > -1
                     ? new UiaCore.IRawElementProviderSimple[] { _owningListView.Columns[Column].AccessibilityObject }
                     : null;
 

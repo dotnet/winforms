@@ -3888,6 +3888,19 @@ public partial class ListView : Control
         }
     }
 
+    internal void UpdateColumnHeaderCorrespondingListViewSubItemIndex()
+    {
+        if (_columnHeaders is null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < _columnHeaders.Length; i++)
+        {
+            _columnHeaders[i]._correspondingListViewSubItemIndex = i;
+        }
+    }
+
     /// <summary>
     ///  Inserts a new Column into the ListView
     /// </summary>
@@ -3985,6 +3998,8 @@ public partial class ListView : Control
         {
             RealizeAllSubItems();
         }
+
+        UpdateColumnHeaderCorrespondingListViewSubItemIndex();
 
         return ch;
     }
