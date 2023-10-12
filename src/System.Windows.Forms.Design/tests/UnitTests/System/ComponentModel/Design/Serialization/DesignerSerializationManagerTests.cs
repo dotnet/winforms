@@ -405,9 +405,9 @@ public class DesignerSerializationManagerTests
     public static IEnumerable<object[]> AddSerializationProvider_TestData()
     {
         yield return new object[] { null, null };
-        yield return new object[] { null, new object() };
+        yield return new object[] { null, new() };
         yield return new object[] { typeof(int), null };
-        yield return new object[] { typeof(int), new object() };
+        yield return new object[] { typeof(int), new() };
     }
 
     [Theory]
@@ -795,9 +795,9 @@ public class DesignerSerializationManagerTests
     public static IEnumerable<object[]> GetInstance_InvokeWithResolveName_TestData()
     {
         yield return new object[] { string.Empty, null };
-        yield return new object[] { string.Empty, new object() };
+        yield return new object[] { string.Empty, new() };
         yield return new object[] { "NoSuchName", null };
-        yield return new object[] { "NoSuchName", new object() };
+        yield return new object[] { "NoSuchName", new() };
     }
 
     [Theory]
@@ -871,7 +871,7 @@ public class DesignerSerializationManagerTests
 
     public static IEnumerable<object[]> GetName_NoNamedInstance_TestData()
     {
-        yield return new object[] { new object(), null };
+        yield return new object[] { new(), null };
         yield return new object[] { new Component(), null };
 
         Mock<IComponent> mockNoSiteComponent = new(MockBehavior.Strict);

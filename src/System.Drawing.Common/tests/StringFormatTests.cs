@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Text;
@@ -218,8 +218,8 @@ public class StringFormatTests
     public static IEnumerable<object[]> SetMeasurableCharacterRanges_TestData()
     {
         yield return new object[] { new CharacterRange[0] };
-        yield return new object[] { new CharacterRange[] { new CharacterRange(1, 2) } };
-        yield return new object[] { new CharacterRange[] { new CharacterRange(-1, -1) } };
+        yield return new object[] { new CharacterRange[] { new(1, 2) } };
+        yield return new object[] { new CharacterRange[] { new(-1, -1) } };
         yield return new object[] { new CharacterRange[32] };
     }
 

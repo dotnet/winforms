@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Text;
@@ -74,7 +74,7 @@ public class FontFamilyTests
         yield return new object[] { FontFamily.GenericMonospace, FontFamily.GenericMonospace, true };
         yield return new object[] { FontFamily.GenericMonospace, FontFamily.GenericSansSerif, false };
 
-        yield return new object[] { FontFamily.GenericSansSerif, new object(), false };
+        yield return new object[] { FontFamily.GenericSansSerif, new(), false };
         yield return new object[] { FontFamily.GenericSansSerif, null, false };
     }
 

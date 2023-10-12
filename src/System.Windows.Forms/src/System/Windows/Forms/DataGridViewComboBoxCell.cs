@@ -2255,9 +2255,9 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
                             g.FillPolygon(SystemBrushes.ControlText, new Point[]
                             {
-                                new Point(middle.X - s_offset2X, middle.Y - 1),
-                                new Point(middle.X + s_offset2X + 1, middle.Y - 1),
-                                new Point(middle.X, middle.Y + s_offset2Y)
+                                new(middle.X - s_offset2X, middle.Y - 1),
+                                new(middle.X + s_offset2X + 1, middle.Y - 1),
+                                new(middle.X, middle.Y + s_offset2Y)
                             });
                         }
                         else if (!paintXPThemes)

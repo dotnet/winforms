@@ -1935,7 +1935,7 @@ public class ToolStripControlHostTests
     public static IEnumerable<object[]> Site_GetService_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [WinFormsTheory]

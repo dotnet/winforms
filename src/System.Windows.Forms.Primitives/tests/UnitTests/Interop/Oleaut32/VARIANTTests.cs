@@ -1719,7 +1719,7 @@ public unsafe class VARIANTTests
         var d1 = new DateTime(2020, 05, 13, 13, 3, 12);
         var d2 = new DateTime(2020, 05, 13, 13, 3, 11);
         var d3 = new DateTime(2020, 3, 13, 13, 3, 12);
-        yield return new object[] { new PInvoke.FILETIME[] { new PInvoke.FILETIME(d1), new PInvoke.FILETIME(d2), new PInvoke.FILETIME(d3) }, new DateTime[] { d1, d2, d3 } };
+        yield return new object[] { new PInvoke.FILETIME[] { new(d1), new(d2), new(d3) }, new DateTime[] { d1, d2, d3 } };
     }
 
     [StaTheory]

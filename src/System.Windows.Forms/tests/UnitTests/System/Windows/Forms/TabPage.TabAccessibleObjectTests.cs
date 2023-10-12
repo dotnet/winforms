@@ -1056,7 +1056,7 @@ public class TabPage_TabAccessibleObjectTests
             tabControl.CreateControl();
         }
 
-        pages.AddRange(new TabPage[] { new TabPage(), new TabPage() });
+        pages.AddRange(new TabPage[] { new(), new() });
         TabAccessibleObject accessibleObject1 = Assert.IsType<TabAccessibleObject>(pages[0].TabAccessibilityObject);
         TabAccessibleObject accessibleObject2 = Assert.IsType<TabAccessibleObject>(pages[1].TabAccessibilityObject);
 

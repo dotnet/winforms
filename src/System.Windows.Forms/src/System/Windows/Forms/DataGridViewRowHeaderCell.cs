@@ -16,7 +16,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
     private static readonly VisualStyleElement s_headerElement = VisualStyleElement.Header.Item.Normal;
 
     // ColorMap used to map the black color of the resource bitmaps to the fore color in use in the row header cell
-    private static readonly ColorMap[] s_colorMap = new ColorMap[] { new ColorMap() };
+    private static readonly ColorMap[] s_colorMap = [new()];
 
     private static Bitmap s_rightArrowBmp;
     private static Bitmap s_leftArrowBmp;

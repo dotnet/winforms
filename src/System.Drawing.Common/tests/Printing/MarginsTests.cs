@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Authors:
@@ -86,7 +86,7 @@ public class MarginsTests
         yield return new object[] { margins, new Margins(1, 2, 4, 4), false };
         yield return new object[] { margins, new Margins(1, 2, 3, 5), false };
 
-        yield return new object[] { margins, new object(), false };
+        yield return new object[] { margins, new(), false };
         yield return new object[] { margins, null, false };
     }
 

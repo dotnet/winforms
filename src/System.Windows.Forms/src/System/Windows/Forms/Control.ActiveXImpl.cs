@@ -152,9 +152,9 @@ public partial class Control
             _activeXState = default;
             _ambientProperties = new AmbientProperty[]
             {
-                new AmbientProperty("Font", PInvoke.DISPID_AMBIENT_FONT),
-                new AmbientProperty("BackColor", PInvoke.DISPID_AMBIENT_BACKCOLOR),
-                new AmbientProperty("ForeColor", PInvoke.DISPID_AMBIENT_FORECOLOR)
+                new("Font", PInvoke.DISPID_AMBIENT_FONT),
+                new("BackColor", PInvoke.DISPID_AMBIENT_BACKCOLOR),
+                new("ForeColor", PInvoke.DISPID_AMBIENT_FORECOLOR)
             };
         }
 

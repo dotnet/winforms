@@ -3990,22 +3990,22 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 g.DrawLines(SystemPens.ControlText,
                     new Point[]
                     {
-                        new Point(verticalBeamStart, _lastInsertionMarkRect.Y), new Point(verticalBeamStart, _lastInsertionMarkRect.Bottom - 1), // first vertical line
-                        new Point(verticalBeamStart + 1, _lastInsertionMarkRect.Y), new Point(verticalBeamStart + 1, _lastInsertionMarkRect.Bottom - 1), //second  vertical line
+                        new(verticalBeamStart, _lastInsertionMarkRect.Y), new(verticalBeamStart, _lastInsertionMarkRect.Bottom - 1), // first vertical line
+                        new(verticalBeamStart + 1, _lastInsertionMarkRect.Y), new(verticalBeamStart + 1, _lastInsertionMarkRect.Bottom - 1), //second  vertical line
                     });
                 // then two top horizontal
                 g.DrawLines(SystemPens.ControlText,
                     new Point[]
                     {
-                        new Point(start, _lastInsertionMarkRect.Bottom - 1), new Point(start + widthOfBeam - 1, _lastInsertionMarkRect.Bottom - 1), //bottom line
-                        new Point(start + 1, _lastInsertionMarkRect.Bottom - 2), new Point(start + widthOfBeam - 2, _lastInsertionMarkRect.Bottom - 2), //bottom second line
+                        new(start, _lastInsertionMarkRect.Bottom - 1), new(start + widthOfBeam - 1, _lastInsertionMarkRect.Bottom - 1), //bottom line
+                        new(start + 1, _lastInsertionMarkRect.Bottom - 2), new(start + widthOfBeam - 2, _lastInsertionMarkRect.Bottom - 2), //bottom second line
                     });
                 // then two bottom horizontal
                 g.DrawLines(SystemPens.ControlText,
                      new Point[]
                      {
-                         new Point(start, _lastInsertionMarkRect.Y), new Point(start + widthOfBeam - 1, _lastInsertionMarkRect.Y), //top line
-                         new Point(start + 1, _lastInsertionMarkRect.Y + 1), new Point(start + widthOfBeam - 2, _lastInsertionMarkRect.Y + 1) //top second line
+                         new(start, _lastInsertionMarkRect.Y), new(start + widthOfBeam - 1, _lastInsertionMarkRect.Y), //top line
+                         new(start + 1, _lastInsertionMarkRect.Y + 1), new(start + widthOfBeam - 2, _lastInsertionMarkRect.Y + 1) //top second line
                      });
             }
             else
@@ -4018,22 +4018,22 @@ public partial class ToolStrip : ScrollableControl, IArrangedElement, ISupportTo
                 g.DrawLines(SystemPens.ControlText,
                     new Point[]
                     {
-                        new Point(_lastInsertionMarkRect.X, horizontalBeamStart), new Point(_lastInsertionMarkRect.Right - 1, horizontalBeamStart), // first vertical line
-                        new Point(_lastInsertionMarkRect.X, horizontalBeamStart + 1), new Point(_lastInsertionMarkRect.Right - 1, horizontalBeamStart + 1), //second  vertical line
+                        new(_lastInsertionMarkRect.X, horizontalBeamStart), new(_lastInsertionMarkRect.Right - 1, horizontalBeamStart), // first vertical line
+                        new(_lastInsertionMarkRect.X, horizontalBeamStart + 1), new(_lastInsertionMarkRect.Right - 1, horizontalBeamStart + 1), //second  vertical line
                     });
                 // then two left vertical
                 g.DrawLines(SystemPens.ControlText,
                     new Point[]
                     {
-                        new Point(_lastInsertionMarkRect.X, start), new Point(_lastInsertionMarkRect.X, start + widthOfBeam - 1), //left line
-                        new Point(_lastInsertionMarkRect.X + 1, start + 1), new Point(_lastInsertionMarkRect.X + 1, start + widthOfBeam - 2), //second left line
+                        new(_lastInsertionMarkRect.X, start), new(_lastInsertionMarkRect.X, start + widthOfBeam - 1), //left line
+                        new(_lastInsertionMarkRect.X + 1, start + 1), new(_lastInsertionMarkRect.X + 1, start + widthOfBeam - 2), //second left line
                     });
                 // then two right vertical
                 g.DrawLines(SystemPens.ControlText,
                      new Point[]
                      {
-                         new Point(_lastInsertionMarkRect.Right - 1, start), new Point(_lastInsertionMarkRect.Right - 1, start + widthOfBeam - 1), //right line
-                         new Point(_lastInsertionMarkRect.Right - 2, start + 1), new Point(_lastInsertionMarkRect.Right - 2, start + widthOfBeam - 2), //second right line
+                         new(_lastInsertionMarkRect.Right - 1, start), new(_lastInsertionMarkRect.Right - 1, start + widthOfBeam - 1), //right line
+                         new(_lastInsertionMarkRect.Right - 2, start + 1), new(_lastInsertionMarkRect.Right - 2, start + widthOfBeam - 2), //second right line
                      });
             }
         }
