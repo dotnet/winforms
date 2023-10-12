@@ -578,138 +578,145 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
             ? host.CreateTransaction(GetTransactionDescription(performCopy))
             : null;
 
-        // In order to be able to set the index correctly, we need to create a backwards move.
-        // We do this by first finding the control foo that corresponds to _insertionIndex.
-        // We then remove all the drag controls from the FLP.
-        // Then we get the new childIndex for the control foo.
-        // Finally we loop:
-        //      add the ith drag control
-        //      set its child index to (index of control foo) - 1
-        // On each iteration, the child index of control foo will change.
-        //
-        // This ensures that we can move both contiguous and non-contiguous selections.
-
-        // Special case when the element we are inserting before is a part of the dragControls.
-        while (_insertionIndex < _childInfo.Length - 1 && _childInfo[_insertionIndex].InSelectionCollection)
+        try
         {
-            // Find the next control that is not a part of the selection.
-            ++_insertionIndex;
-        }
+            // In order to be able to set the index correctly, we need to create a backwards move.
+            // We do this by first finding the control foo that corresponds to _insertionIndex.
+            // We then remove all the drag controls from the FLP.
+            // Then we get the new childIndex for the control foo.
+            // Finally we loop:
+            //      add the ith drag control
+            //      set its child index to (index of control foo) - 1
+            // On each iteration, the child index of control foo will change.
+            //
+            // This ensures that we can move both contiguous and non-contiguous selections.
 
-        PropertyDescriptor controlsProperty = TypeDescriptor.GetProperties(Component)["Controls"];
-        if (controlsProperty is not null)
-        {
-            RaiseComponentChanging(controlsProperty);
-        }
-
-        Control control = null;
-        var children = Control.Controls;
-        if (_insertionIndex != _childInfo.Length)
-        {
-            control = children[_insertionIndex];
-        }
-        else
-        {
-            // We are inserting past the last control.
-            _insertionIndex = s_invalidIndex;
-        }
-
-        // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done.
-        //List<Control> originalControls = new();
-        ArrayList originalControls = new();
-
-        // Remove the controls in the drag collection - don't need to do this if we are copying.
-        if (!performCopy)
-        {
-            foreach (var dragControl in _dragControls)
+            // Special case when the element we are inserting before is a part of the dragControls.
+            while (_insertionIndex < _childInfo.Length - 1 && _childInfo[_insertionIndex].InSelectionCollection)
             {
-                children.Remove(dragControl);
+                // Find the next control that is not a part of the selection.
+                ++_insertionIndex;
             }
 
-            // Get the new index -- if we are performing a copy, then the index is the same.
-            if (control is not null)
+            PropertyDescriptor controlsProperty = TypeDescriptor.GetProperties(Component)["Controls"];
+            if (controlsProperty is not null)
             {
-                _insertionIndex = children.GetChildIndex(control, throwException: false);
-            }
-        }
-        else
-        {
-            // We are doing a copy, so let's copy the controls.
-            ArrayList tempList = new ArrayList();
-            tempList.AddRange(_dragControls);
-
-            DesignerUtils.CopyDragObjects(tempList, Component.Site);
-
-            if (tempList is null)
-            {
-                return;
+                RaiseComponentChanging(controlsProperty);
             }
 
-            // And stick the copied controls back into the dragControls array.
-            for (var j = 0; j < tempList.Count; j++)
+            Control control = null;
+            var children = Control.Controls;
+            if (_insertionIndex != _childInfo.Length)
             {
-                // Save off the old controls first.
-                originalControls.Add(_dragControls[j]);
+                control = children[_insertionIndex];
+            }
+            else
+            {
+                // We are inserting past the last control.
+                _insertionIndex = s_invalidIndex;
+            }
 
-                // Remember to set the new primary control.
-                if (_primaryDragControl.Equals(_dragControls[j]))
+            // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done.
+            //List<Control> originalControls = new();
+            ArrayList originalControls = new();
+
+            // Remove the controls in the drag collection - don't need to do this if we are copying.
+            if (!performCopy)
+            {
+                foreach (var dragControl in _dragControls)
                 {
-                    _primaryDragControl = tempList[j] as Control;
+                    children.Remove(dragControl);
                 }
 
-                _dragControls[j] = tempList[j] as Control;
+                // Get the new index -- if we are performing a copy, then the index is the same.
+                if (control is not null)
+                {
+                    _insertionIndex = children.GetChildIndex(control, throwException: false);
+                }
             }
-        }
-
-        if (_insertionIndex == s_invalidIndex)
-        {
-            // Either _insertionIndex was _childInfo.Length (inserting past the end) or
-            // _insertionIndex was _childInfo.Length - 1 and the control at that index was also
-            // a part of the dragCollection. In either case, the new index is equal to the count
-            // of existing controls in the ControlCollection. Helps to draw this out.
-            _insertionIndex = children.Count;
-        }
-
-        children.Add(_primaryDragControl);
-        children.SetChildIndex(_primaryDragControl, _insertionIndex);
-        ++_insertionIndex;
-
-        //Set the Selection ..
-        SelectionService.SetSelectedComponents(new IComponent[] { _primaryDragControl }, SelectionTypes.Primary | SelectionTypes.Replace);
-
-        // Note _dragControls are in opposite order than what FLP uses,
-        // so add from the end.
-        for (var i = _dragControls.Count - 1; i >= 0; i--)
-        {
-            if (_primaryDragControl.Equals(_dragControls[i]))
+            else
             {
-                continue;
+                // We are doing a copy, so let's copy the controls.
+                ArrayList tempList = new ArrayList();
+                tempList.AddRange(_dragControls);
+
+                DesignerUtils.CopyDragObjects(tempList, Component.Site);
+
+                if (tempList is null)
+                {
+                    return;
+                }
+
+                // And stick the copied controls back into the dragControls array.
+                for (var j = 0; j < tempList.Count; j++)
+                {
+                    // Save off the old controls first.
+                    originalControls.Add(_dragControls[j]);
+
+                    // Remember to set the new primary control.
+                    if (_primaryDragControl.Equals(_dragControls[j]))
+                    {
+                        _primaryDragControl = tempList[j] as Control;
+                    }
+
+                    _dragControls[j] = tempList[j] as Control;
+                }
             }
 
-            children.Add(_dragControls[i]);
-            children.SetChildIndex(_dragControls[i], _insertionIndex);
+            if (_insertionIndex == s_invalidIndex)
+            {
+                // Either _insertionIndex was _childInfo.Length (inserting past the end) or
+                // _insertionIndex was _childInfo.Length - 1 and the control at that index was also
+                // a part of the dragCollection. In either case, the new index is equal to the count
+                // of existing controls in the ControlCollection. Helps to draw this out.
+                _insertionIndex = children.Count;
+            }
+
+            children.Add(_primaryDragControl);
+            children.SetChildIndex(_primaryDragControl, _insertionIndex);
             ++_insertionIndex;
 
-            SelectionService.SetSelectedComponents(new IComponent[] { _dragControls[i] }, SelectionTypes.Add);
-        }
+            //Set the Selection ..
+            SelectionService.SetSelectedComponents(new IComponent[] { _primaryDragControl }, SelectionTypes.Primary | SelectionTypes.Replace);
 
-        if (controlsProperty is not null)
-        {
-            RaiseComponentChanging(controlsProperty);
-        }
-
-        // If we did a Copy, then restore the old controls to make sure we set state correctly.
-        if (originalControls is not null)
-        {
-            for (var i = 0; i < originalControls.Count; i++)
+            // Note _dragControls are in opposite order than what FLP uses,
+            // so add from the end.
+            for (var i = _dragControls.Count - 1; i >= 0; i--)
             {
-                _dragControls[i] = (Control)originalControls[i];
+                if (_primaryDragControl.Equals(_dragControls[i]))
+                {
+                    continue;
+                }
+
+                children.Add(_dragControls[i]);
+                children.SetChildIndex(_dragControls[i], _insertionIndex);
+                ++_insertionIndex;
+
+                SelectionService.SetSelectedComponents(new IComponent[] { _dragControls[i] }, SelectionTypes.Add);
             }
+
+            if (controlsProperty is not null)
+            {
+                RaiseComponentChanging(controlsProperty);
+            }
+
+            // If we did a Copy, then restore the old controls to make sure we set state correctly.
+            if (originalControls is not null)
+            {
+                for (var i = 0; i < originalControls.Count; i++)
+                {
+                    _dragControls[i] = (Control)originalControls[i];
+                }
+            }
+
+            base.OnDragComplete(de);
+
+            designerTransaction?.Commit();
         }
-
-        base.OnDragComplete(de);
-
-        designerTransaction.Commit();
+        catch
+        {
+            designerTransaction?.Cancel();
+        }
     }
 
     /// <summary>
