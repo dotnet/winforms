@@ -1826,9 +1826,7 @@ public partial class MonthCalendar : Control
         // Updated the calendar range
         if (IsHandleCreated)
         {
-            Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
-            times[0] = (SYSTEMTIME)minDate;
-            times[1] = (SYSTEMTIME)maxDate;
+            Span<SYSTEMTIME> times = [(SYSTEMTIME)minDate, (SYSTEMTIME)maxDate];
             uint flags = PInvoke.GDTR_MIN | PInvoke.GDTR_MAX;
             if (PInvoke.SendMessage(this, PInvoke.MCM_SETRANGE, (WPARAM)(uint)flags, ref times[0]) == 0)
             {
@@ -1996,9 +1994,7 @@ public partial class MonthCalendar : Control
         // Always set the value on the control, to ensure that it is up to date.
         if (IsHandleCreated)
         {
-            Span<SYSTEMTIME> times = stackalloc SYSTEMTIME[2];
-            times[0] = (SYSTEMTIME)lower;
-            times[1] = (SYSTEMTIME)upper;
+            Span<SYSTEMTIME> times = [(SYSTEMTIME)lower, (SYSTEMTIME)upper];
             PInvoke.SendMessage(this, PInvoke.MCM_SETSELRANGE, 0, ref times[0]);
         }
 

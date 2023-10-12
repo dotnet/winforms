@@ -116,13 +116,7 @@ internal abstract unsafe class UiaTextProvider : ITextProvider.Interface, ITextP
     internal static VARIANT BoundingRectangleAsVariant(Rectangle bounds)
         => (VARIANT)BoundingRectangleAsArray(bounds);
 
-    public int SendInput(int inputs, ref INPUT input, int size)
-    {
-        Span<INPUT> currentInput = stackalloc INPUT[1];
-        currentInput[0] = input;
-
-        return (int)PInvoke.SendInput(currentInput, size);
-    }
+    public int SendInput(int inputs, ref INPUT input, int size) => (int)PInvoke.SendInput([input], size);
 
     public unsafe int SendKeyboardInputVK(VIRTUAL_KEY vk, bool press)
     {

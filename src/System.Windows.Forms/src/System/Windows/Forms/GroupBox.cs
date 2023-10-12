@@ -539,14 +539,14 @@ public partial class GroupBox : Control
         {
             Color boxColor = Enabled ? ForeColor : SystemColors.GrayText;
 
-            ReadOnlySpan<int> lines = stackalloc int[]
-            {
+            ReadOnlySpan<int> lines =
+            [
                 0, boxTop, 0, Height,                       // Left
                 0, Height - 1, Width, Height - 1,           // Bottom
                 0, boxTop, textLeft, boxTop,                // Top-left
                 textRight, boxTop, Width - 1, boxTop,       // Top-right
                 Width - 1, boxTop, Width - 1, Height - 1    // Right
-            };
+            ];
 
             if (boxColor.HasTransparency())
             {
@@ -563,23 +563,23 @@ public partial class GroupBox : Control
         }
         else
         {
-            ReadOnlySpan<int> lightLines = stackalloc int[]
-            {
+            ReadOnlySpan<int> lightLines =
+            [
                 1, boxTop, 1, Height - 1,                       // Left
                 0, Height - 1, Width, Height - 1,               // Bottom
                 1, boxTop, textLeft, boxTop,                    // Top-left
                 textRight, boxTop, Width - 1, boxTop,           // Top-right
                 Width - 1, boxTop - 1, Width - 1, Height - 1    // Right
-            };
+            ];
 
-            ReadOnlySpan<int> darkLines = stackalloc int[]
-            {
+            ReadOnlySpan<int> darkLines =
+            [
                 0, boxTop, 0, Height - 2,                       // Left
                 0, Height - 2, Width - 1, Height - 2,           // Bottom
                 0, boxTop - 1, textLeft, boxTop - 1,            // Top-left
                 textRight, boxTop - 1, Width - 2, boxTop - 1,   // Top-right
                 Width - 2, boxTop - 1, Width - 2, Height - 2    // Right
-            };
+            ];
 
             using DeviceContextHdcScope hdc = new(e);
             using PInvoke.CreatePenScope hpenLight = new(ControlPaint.Light(backColor, 1.0f));
