@@ -704,7 +704,7 @@ public abstract partial class DataGridViewCell
                 _owner.OwningRow is not null &&
                 _owner.OwningRow.HasHeaderCell)
             {
-                return new UiaCore.IRawElementProviderSimple[1] { _owner.OwningRow.HeaderCell.AccessibilityObject };
+                return [_owner.OwningRow.HeaderCell.AccessibilityObject];
             }
 
             return null;
@@ -717,7 +717,7 @@ public abstract partial class DataGridViewCell
                 _owner.OwningColumn is not null &&
                 _owner.OwningColumn.HasHeaderCell)
             {
-                return new UiaCore.IRawElementProviderSimple[1] { _owner.OwningColumn.HeaderCell.AccessibilityObject };
+                return [_owner.OwningColumn.HeaderCell.AccessibilityObject];
             }
 
             return null;
