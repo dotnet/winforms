@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -70,16 +71,16 @@ public abstract partial class UpDownBase
 
                 internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => Parent;
 
-                internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
+                internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
+                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
                     _ => base.GetPropertyValue(propertyID)
                 };
 
-                internal override bool IsPatternSupported(UiaCore.UIA patternId)
+                internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
                 {
-                    return patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
-                        patternId == UiaCore.UIA.InvokePatternId ||
+                    return patternId == UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId ||
+                        patternId == UIA_PATTERN_ID.UIA_InvokePatternId ||
                         base.IsPatternSupported(patternId);
                 }
 

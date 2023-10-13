@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -33,7 +33,7 @@ public class DataGridViewComboBoxCellAccessibleObjectTests
             dataGridView.BeginEdit(false);
         }
 
-        object actualPropertyValue = dataGridView.Rows[0].Cells[0].AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId);
+        object actualPropertyValue = dataGridView.Rows[0].Cells[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId);
 
         Assert.Equal(expectedValue, actualPropertyValue);
     }
@@ -45,8 +45,8 @@ public class DataGridViewComboBoxCellAccessibleObjectTests
             foreach (bool cellIsEdited in new[] { true, false })
             {
                 int expectedControlType = displayStyle != DataGridViewComboBoxDisplayStyle.Nothing || cellIsEdited
-                                    ? (int)UiaCore.UIA.ComboBoxControlTypeId
-                                    : (int)UiaCore.UIA.DataItemControlTypeId;
+                                    ? (int)UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId
+                                    : (int)UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId;
 
                 yield return new object[] { displayStyle, cellIsEdited, expectedControlType };
             }
@@ -67,7 +67,7 @@ public class DataGridViewComboBoxCellAccessibleObjectTests
             dataGridView.BeginEdit(false);
         }
 
-        int actualPropertyValue = (int)dataGridView.Rows[0].Cells[0].AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        int actualPropertyValue = (int)dataGridView.Rows[0].Cells[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedControlType, actualPropertyValue);
     }

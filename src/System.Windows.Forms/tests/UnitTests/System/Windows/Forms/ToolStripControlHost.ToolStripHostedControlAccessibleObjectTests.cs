@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -28,5 +28,5 @@ public class ToolStripControlHost_ToolStripHostedControlAccessibleObjectTests
     }
 
     private bool GetIsOffscreenPropertyValue(AccessibleObject accessibleObject) =>
-        (bool)accessibleObject.GetPropertyValue(UIA.IsOffscreenPropertyId) || (accessibleObject.Bounds.Width > 0 && accessibleObject.Bounds.Height > 0);
+        (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId) || (accessibleObject.Bounds.Width > 0 && accessibleObject.Bounds.Height > 0);
 }

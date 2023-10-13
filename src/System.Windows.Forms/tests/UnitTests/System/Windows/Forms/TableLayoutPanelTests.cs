@@ -2122,7 +2122,7 @@ public class TableLayoutPanelTests
     public static IEnumerable<object[]> IExtenderProvider_CanExtend_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new Control() };
     }
 

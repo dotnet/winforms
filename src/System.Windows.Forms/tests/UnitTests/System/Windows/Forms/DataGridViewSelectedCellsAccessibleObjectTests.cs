@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Reflection;
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -202,7 +202,7 @@ public class DataGridViewSelectedCellsAccessibleObjectTests
             .GetNestedType("DataGridViewSelectedCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { control.AccessibilityObject });
 
-        Assert.Equal("Selected Cells", accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.Equal("Selected Cells", accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
         Assert.False(control.IsHandleCreated);
     }
 }

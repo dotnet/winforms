@@ -685,7 +685,7 @@ public class DesignSurfaceTests
     public static IEnumerable<object[]> BeginLoad_InvalidIExtenderProvider_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [WinFormsTheory]

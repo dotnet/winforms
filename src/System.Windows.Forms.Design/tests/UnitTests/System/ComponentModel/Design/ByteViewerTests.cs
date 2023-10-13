@@ -635,8 +635,8 @@ public class ByteViewerTests
     {
         yield return new object[] { null, null };
         yield return new object[] { null, new EventArgs() };
-        yield return new object[] { new object(), null };
-        yield return new object[] { new object(), new EventArgs() };
+        yield return new object[] { new(), null };
+        yield return new object[] { new(), new EventArgs() };
     }
 
     [WinFormsTheory]

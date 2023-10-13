@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripMenuItem;
 using static Interop;
 
@@ -23,9 +24,9 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         using ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
         // AccessibleRole is not set = Default
 
-        object actual = toolStripMenuItem.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = toolStripMenuItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.MenuItemControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_MenuItemControlTypeId, actual);
     }
 
     [WinFormsFact]
@@ -61,8 +62,8 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         using ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
         toolStripMenuItem.AccessibleRole = role;
 
-        object actual = toolStripMenuItem.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = toolStripMenuItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
     }
@@ -74,7 +75,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
 
         AccessibleObject accessibilityObject = toolStripMenuItem.AccessibilityObject;
 
-        Assert.Null(accessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+        Assert.Null(accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
     }
 
     [WinFormsFact]
@@ -87,24 +88,24 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         menuStrip.PerformLayout();
 
         Assert.Equal(1, menuStrip.Items.Count);
-        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
 
         using ToolStripSeparator separator = new();
         menuStrip.Items.Add(separator);
         menuStrip.PerformLayout();
 
         Assert.Equal(2, menuStrip.Items.Count);
-        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
-        Assert.Null(separator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
+        Assert.Null(separator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
 
         using ToolStripMenuItem item2 = new();
         menuStrip.Items.Add(item2);
         menuStrip.PerformLayout();
 
         Assert.Equal(3, menuStrip.Items.Count);
-        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
-        Assert.Null(separator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
-        Assert.Equal(2, item2.AccessibilityObject.GetPropertyValue(UiaCore.UIA.PositionInSetPropertyId));
+        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
+        Assert.Null(separator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
+        Assert.Equal(2, item2.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
     }
 
     [WinFormsFact]
@@ -114,7 +115,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
 
         AccessibleObject accessibilityObject = toolStripMenuItem.AccessibilityObject;
 
-        Assert.Null(accessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+        Assert.Null(accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
     }
 
     [WinFormsFact]
@@ -127,24 +128,24 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         menuStrip.PerformLayout();
 
         Assert.Equal(1, menuStrip.Items.Count);
-        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
 
         using ToolStripSeparator separator = new();
         menuStrip.Items.Add(separator);
         menuStrip.PerformLayout();
 
         Assert.Equal(2, menuStrip.Items.Count);
-        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
-        Assert.Null(separator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
+        Assert.Null(separator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
 
         using ToolStripMenuItem item2 = new();
         menuStrip.Items.Add(item2);
         menuStrip.PerformLayout();
 
         Assert.Equal(3, menuStrip.Items.Count);
-        Assert.Equal(2, item1.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
-        Assert.Null(separator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
-        Assert.Equal(2, item2.AccessibilityObject.GetPropertyValue(UiaCore.UIA.SizeOfSetPropertyId));
+        Assert.Equal(2, item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
+        Assert.Null(separator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
+        Assert.Equal(2, item2.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
     }
 
     [WinFormsTheory]
@@ -162,7 +163,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
             CheckState = checkState
         };
 
-        object actual = toolStripMenuItem.AccessibilityObject.IsPatternSupported(UiaCore.UIA.TogglePatternId);
+        object actual = toolStripMenuItem.AccessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_TogglePatternId);
 
         Assert.Equal(expected, actual);
     }

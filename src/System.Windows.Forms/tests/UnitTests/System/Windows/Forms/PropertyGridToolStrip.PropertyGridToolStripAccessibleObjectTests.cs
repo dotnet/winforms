@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -27,9 +27,9 @@ public class PropertyGridToolStrip_PropertyGridToolStripAccessibleObjectTests
         using PropertyGridToolStrip propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
         // AccessibleRole is not set = Default
 
-        object actual = propertyGridToolStrip.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = propertyGridToolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.ToolBarControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ToolBarControlTypeId, actual);
         Assert.False(propertyGrid.IsHandleCreated);
         Assert.False(propertyGridToolStrip.IsHandleCreated);
     }

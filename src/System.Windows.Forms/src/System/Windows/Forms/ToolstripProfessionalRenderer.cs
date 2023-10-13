@@ -1664,27 +1664,27 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             case ArrowDirection.Up:
                 arrow = new Point[]
                 {
-                    new Point(middle.X - Offset2X, middle.Y + 1),
-                    new Point(middle.X + Offset2X + 1, middle.Y + 1),
-                    new Point(middle.X, middle.Y - Offset2Y)
+                    new(middle.X - Offset2X, middle.Y + 1),
+                    new(middle.X + Offset2X + 1, middle.Y + 1),
+                    new(middle.X, middle.Y - Offset2Y)
                 };
                 break;
 
             case ArrowDirection.Left:
                 arrow = new Point[]
                 {
-                    new Point(middle.X + Offset2X, middle.Y - Offset2Y - 1),
-                    new Point(middle.X + Offset2X, middle.Y + Offset2Y + 1),
-                    new Point(middle.X - 1, middle.Y)
+                    new(middle.X + Offset2X, middle.Y - Offset2Y - 1),
+                    new(middle.X + Offset2X, middle.Y + Offset2Y + 1),
+                    new(middle.X - 1, middle.Y)
                 };
                 break;
 
             case ArrowDirection.Right:
                 arrow = new Point[]
                 {
-                    new Point(middle.X - Offset2X, middle.Y - Offset2Y - 1),
-                    new Point(middle.X - Offset2X, middle.Y + Offset2Y + 1),
-                    new Point(middle.X + 1, middle.Y)
+                    new(middle.X - Offset2X, middle.Y - Offset2Y - 1),
+                    new(middle.X - Offset2X, middle.Y + Offset2Y + 1),
+                    new(middle.X + 1, middle.Y)
                 };
                 break;
 
@@ -1692,9 +1692,9 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             default:
                 arrow = new Point[]
                 {
-                    new Point(middle.X - Offset2X, middle.Y - 1),
-                    new Point(middle.X + Offset2X + 1, middle.Y - 1),
-                    new Point(middle.X, middle.Y + Offset2Y)
+                    new(middle.X - Offset2X, middle.Y - 1),
+                    new(middle.X + Offset2X + 1, middle.Y - 1),
+                    new(middle.X, middle.Y + Offset2Y)
                 };
                 break;
         }

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests;
@@ -264,7 +265,7 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
 
         ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject accessibleObject = (ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject)dropDown.AccessibilityObject;
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsControlElementPropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsControlElementPropertyId));
     }
 
     [WinFormsFact]
@@ -276,7 +277,7 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
 
         ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject accessibleObject = (ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject)dropDown.AccessibilityObject;
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsControlElementPropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsControlElementPropertyId));
     }
 
     [WinFormsFact]
@@ -286,7 +287,7 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
 
         ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject accessibleObject = (ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject)contextMenu.AccessibilityObject;
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsControlElementPropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsControlElementPropertyId));
     }
 
     [WinFormsFact]
@@ -298,7 +299,7 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
 
         ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject accessibleObject = (ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject)dropDown.AccessibilityObject;
 
-        Assert.False((bool)accessibleObject.GetPropertyValue(UIA.IsContentElementPropertyId));
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsContentElementPropertyId));
     }
 
     [WinFormsFact]
@@ -310,7 +311,7 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
 
         ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject accessibleObject = (ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject)dropDown.AccessibilityObject;
 
-        Assert.False((bool)accessibleObject.GetPropertyValue(UIA.IsContentElementPropertyId));
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsContentElementPropertyId));
     }
 
     [WinFormsFact]
@@ -320,6 +321,6 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
 
         ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject accessibleObject = (ToolStripDropDownMenu.ToolStripDropDownMenuAccessibleObject)contextMenu.AccessibilityObject;
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsContentElementPropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsContentElementPropertyId));
     }
 }

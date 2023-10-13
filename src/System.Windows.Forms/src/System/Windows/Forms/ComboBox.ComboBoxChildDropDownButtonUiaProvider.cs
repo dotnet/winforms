@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -66,13 +67,13 @@ public partial class ComboBox
 
         internal override int GetChildId() => COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX;
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => _owner.Focused,
-                UiaCore.UIA.IsEnabledPropertyId => _owner.Enabled,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owner.Focused,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owner.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -81,9 +82,9 @@ public partial class ComboBox
         public override string? KeyboardShortcut
             => SystemIAccessible.TryGetKeyboardShortcut(GetChildId());
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId switch
         {
-            UiaCore.UIA.LegacyIAccessiblePatternId or UiaCore.UIA.InvokePatternId => true,
+            UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId or UIA_PATTERN_ID.UIA_InvokePatternId => true,
             _ => base.IsPatternSupported(patternId)
         };
 

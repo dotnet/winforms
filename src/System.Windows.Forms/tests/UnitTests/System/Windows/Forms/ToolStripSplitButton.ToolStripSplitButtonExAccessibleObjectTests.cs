@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripSplitButton;
 using static Interop;
 
@@ -21,7 +22,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonExAccessibleObjectTests
 
         ToolStripSplitButtonExAccessibleObject accessibleObject = new(toolStripSplitButton);
 
-        Assert.Equal(UiaCore.UIA.ButtonControlTypeId, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]

@@ -9,7 +9,6 @@ using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using InteropUiaIRawElementProviderSimple = Interop.UiaCore.IRawElementProviderSimple;
 using ProviderOptions = Interop.UiaCore.ProviderOptions;
-using UIA = Interop.UiaCore.UIA;
 
 namespace System.Windows.Forms.Primitives.Tests.Automation;
 
@@ -1327,10 +1326,10 @@ This is the line 3";
 
         public ProviderOptions ProviderOptions => throw new NotImplementedException();
 
-        public object? GetPatternProvider(UIA patternId) => throw new NotImplementedException();
-        public object? GetPropertyValue(UIA propertyId)
+        public object? GetPatternProvider(UIA_PATTERN_ID patternId) => throw new NotImplementedException();
+        public object? GetPropertyValue(UIA_PROPERTY_ID propertyId)
         {
-            if (propertyId == UIA.BoundingRectanglePropertyId)
+            if (propertyId == UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId)
             {
                 return _boundingRectangleVariant.ToObject();
             }

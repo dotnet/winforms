@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests;
@@ -24,21 +25,21 @@ public class DropDownButton_DropDownButtonAccessibleObjectTests
         using DropDownButton dropDownButton = new DropDownButton();
         // AccessibleRole is not set = Default
 
-        object actual = dropDownButton.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = dropDownButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.ButtonControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, actual);
         Assert.False(dropDownButton.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId, true)]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessibleRolePropertyId, AccessibleRole.PushButton)]
-    [InlineData((int)UiaCore.UIA.ValueValuePropertyId, null)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId, true)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, AccessibleRole.PushButton)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_ValueValuePropertyId, null)]
     public void DomainUpDownAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
         using DropDownButton dropDownButton = new DropDownButton();
         AccessibleObject accessibleObject = dropDownButton.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue((UiaCore.UIA)property);
+        object actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
 
         Assert.Equal(expected, actual);
         Assert.False(dropDownButton.IsHandleCreated);

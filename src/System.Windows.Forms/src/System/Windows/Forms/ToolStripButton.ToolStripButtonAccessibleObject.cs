@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -19,10 +20,10 @@ public partial class ToolStripButton
             _ownerItem = ownerItem;
         }
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) =>
             patternId switch
             {
-                UiaCore.UIA.TogglePatternId => Role == AccessibleRole.CheckButton,
+                UIA_PATTERN_ID.UIA_TogglePatternId => Role == AccessibleRole.CheckButton,
                 _ => base.IsPatternSupported(patternId)
             };
 
@@ -69,7 +70,7 @@ public partial class ToolStripButton
 
         internal override void Toggle()
         {
-            if (IsPatternSupported(UiaCore.UIA.TogglePatternId))
+            if (IsPatternSupported(UIA_PATTERN_ID.UIA_TogglePatternId))
             {
                 _ownerItem.Checked = !_ownerItem.Checked;
             }
@@ -81,7 +82,7 @@ public partial class ToolStripButton
         internal void OnCheckStateChanged(CheckState oldValue, CheckState newValue)
         {
             RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ToggleToggleStatePropertyId,
+                UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId,
                 CheckStateToToggleState(oldValue),
                 CheckStateToToggleState(newValue));
         }

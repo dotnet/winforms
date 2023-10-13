@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -107,14 +108,14 @@ public partial class ComboBox
         /// </summary>
         /// <param name="propertyID">The accessible property ID.</param>
         /// <returns>The accessible property value.</returns>
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TextControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => _owner.Focused,
-                UiaCore.UIA.IsEnabledPropertyId => _owner.Enabled,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                UiaCore.UIA.IsOffscreenPropertyId => false,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TextControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owner.Focused,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owner.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => false,
                 _ => base.GetPropertyValue(propertyID)
             };
 

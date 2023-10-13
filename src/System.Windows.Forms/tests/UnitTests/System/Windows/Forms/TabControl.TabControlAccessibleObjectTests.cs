@@ -2,9 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TabControl;
+using static Interop.UiaCore;
+using IRawElementProviderSimple = Interop.UiaCore.IRawElementProviderSimple;
 
 namespace System.Windows.Forms.Tests;
 
@@ -27,9 +28,9 @@ public class TabControl_TabControlAccessibilityObjectTests
         tabControl.CreateControl();
         // AccessibleRole is not set = Default
 
-        object actual = tabControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.TabControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TabControlTypeId, actual);
         Assert.True(tabControl.IsHandleCreated);
     }
 
@@ -68,8 +69,8 @@ public class TabControl_TabControlAccessibilityObjectTests
         using TabControl tabControl = new();
         tabControl.AccessibleRole = role;
 
-        object actual = tabControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(tabControl.IsHandleCreated);
@@ -508,7 +509,7 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.True(accessibleObject.IsPatternSupported(UIA.SelectionPatternId));
+        Assert.True(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_SelectionPatternId));
         Assert.False(tabControl.IsHandleCreated);
     }
 
@@ -519,7 +520,7 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsSelectionPatternAvailablePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId));
         Assert.False(tabControl.IsHandleCreated);
     }
 
@@ -530,7 +531,7 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.True(accessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId));
+        Assert.True(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId));
         Assert.False(tabControl.IsHandleCreated);
     }
 
@@ -541,7 +542,7 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
         Assert.False(tabControl.IsHandleCreated);
     }
 
@@ -601,7 +602,7 @@ public class TabControl_TabControlAccessibilityObjectTests
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
         Assert.Equal(!string.IsNullOrEmpty(accessibleDefaultActionDescription) ? accessibleDefaultActionDescription : null,
-            accessibleObject.GetPropertyValue(UIA.LegacyIAccessibleDefaultActionPropertyId));
+            accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
         Assert.False(tabControl.IsHandleCreated);
     }
 
@@ -629,7 +630,7 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.False((bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId));
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
         Assert.False(tabControl.IsHandleCreated);
     }
 
@@ -640,7 +641,7 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsKeyboardFocusablePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId));
         Assert.False(tabControl.IsHandleCreated);
     }
 
@@ -653,7 +654,7 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.Equal(enabled, (bool)accessibleObject.GetPropertyValue(UIA.IsEnabledPropertyId));
+        Assert.Equal(enabled, (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.False(tabControl.IsHandleCreated);
     }
 
@@ -671,7 +672,7 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.Equal((nint)tabControl.InternalHandle, (nint)accessibleObject.GetPropertyValue(UIA.NativeWindowHandlePropertyId));
+        Assert.Equal((nint)tabControl.InternalHandle, (nint)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId));
         Assert.Equal(createControl, tabControl.IsHandleCreated);
     }
 
@@ -711,7 +712,7 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.Equal(expectedKeyboardShortcut, accessibleObject.GetPropertyValue(UIA.AccessKeyPropertyId));
+        Assert.Equal(expectedKeyboardShortcut, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AccessKeyPropertyId));
         Assert.Equal(createControl, tabControl.IsHandleCreated);
     }
 
@@ -720,7 +721,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     {
         using TabControl tabControl = new();
 
-        object actual = tabControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId);
+        object actual = tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
 
         Assert.Equal(tabControl.AccessibilityObject.RuntimeId, actual);
         Assert.False(tabControl.IsHandleCreated);
@@ -736,15 +737,15 @@ public class TabControl_TabControlAccessibilityObjectTests
             Enabled = enabled
         };
 
-        object actual = tabControl.AccessibilityObject.GetPropertyValue(UIA.IsEnabledPropertyId);
+        object actual = tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId);
 
         Assert.Equal(tabControl.Enabled, actual);
         Assert.False(tabControl.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA.NamePropertyId, "TestName")]
-    [InlineData((int)UIA.AutomationIdPropertyId, "TabControl1")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "TabControl1")]
     public void TabControlAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
         using TabControl tabControl = new()
@@ -753,34 +754,34 @@ public class TabControl_TabControlAccessibilityObjectTests
             AccessibleName = "TestName"
         };
 
-        object actual = tabControl.AccessibilityObject.GetPropertyValue((UIA)propertyID);
+        object actual = tabControl.AccessibilityObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
         Assert.Equal(expected, actual);
         Assert.False(tabControl.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData(false, ((int)UIA.IsExpandCollapsePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UIA.IsGridItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UIA.IsGridPatternAvailablePropertyId))]
-    [InlineData(true, ((int)UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UIA.IsMultipleViewPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UIA.IsScrollItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UIA.IsScrollPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UIA.IsSelectionItemPatternAvailablePropertyId))]
-    [InlineData(true, ((int)UIA.IsSelectionPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UIA.IsTableItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UIA.IsTablePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UIA.IsTextPattern2AvailablePropertyId))]
-    [InlineData(false, ((int)UIA.IsTextPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UIA.IsTogglePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UIA.IsValuePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsGridItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsGridPatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsMultipleViewPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsScrollItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsScrollPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsSelectionItemPatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTableItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTablePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTogglePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId))]
     public void TabControlAccessibleObject_GetPropertyValue_Pattern_ReturnsExpected(bool expected, int propertyId)
     {
         using TabControl tabControl = new();
         TabControlAccessibleObject accessibleObject = (TabControlAccessibleObject)tabControl.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA)propertyId) ?? false);
+        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
         Assert.False(tabControl.IsHandleCreated);
     }
 }

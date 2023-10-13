@@ -8,6 +8,8 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -2114,7 +2116,7 @@ public partial class TreeView : Control
         // if editing hasn't been canceled.
         if (IsAccessibilityObjectCreated && !e.CancelEdit)
         {
-            e.Node!.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            e.Node!.AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -2143,7 +2145,7 @@ public partial class TreeView : Control
                 : UiaCore.ToggleState.On;
 
             nodeAccessibleObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ToggleToggleStatePropertyId,
+                UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId,
                 oldValue: oldState,
                 newValue: newState);
         }
@@ -2168,9 +2170,9 @@ public partial class TreeView : Control
         if (IsAccessibilityObjectCreated)
         {
             e.Node!.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
                 oldValue: UiaCore.ExpandCollapseState.Expanded,
-                newValue: UiaCore.ExpandCollapseState.Collapsed);
+                newValue: (VARIANT)(uint)UiaCore.ExpandCollapseState.Collapsed);
         }
     }
 
@@ -2193,7 +2195,7 @@ public partial class TreeView : Control
         if (IsAccessibilityObjectCreated)
         {
             e.Node!.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
                 oldValue: UiaCore.ExpandCollapseState.Collapsed,
                 newValue: UiaCore.ExpandCollapseState.Expanded);
         }
@@ -2234,12 +2236,12 @@ public partial class TreeView : Control
         if (IsAccessibilityObjectCreated)
         {
             AccessibleObject nodeAccessibleObject = e.Node!.AccessibilityObject;
-            nodeAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            nodeAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
+            nodeAccessibleObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+            nodeAccessibleObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId);
 
             // Raise to say "Selected" after announcing the node.
             nodeAccessibleObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.SelectionItemIsSelectedPropertyId,
+                UIA_PROPERTY_ID.UIA_SelectionItemIsSelectedPropertyId,
                 oldValue: !nodeAccessibleObject.IsItemSelected,
                 newValue: nodeAccessibleObject.IsItemSelected);
         }
@@ -3096,7 +3098,7 @@ public partial class TreeView : Control
         // Raise an event to highlight & announce the selected node.
         if (IsAccessibilityObjectCreated)
         {
-            SelectedNode?.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            SelectedNode?.AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -3454,7 +3456,7 @@ public partial class TreeView : Control
                 if (m.LParamInternal == PInvoke.UiaRootObjectId && SupportsUiaProviders && !IsAccessibilityObjectCreated && Focused)
                 {
                     base.WndProc(ref m);
-                    SelectedNode?.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                    SelectedNode?.AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
                 }
                 else
                 {

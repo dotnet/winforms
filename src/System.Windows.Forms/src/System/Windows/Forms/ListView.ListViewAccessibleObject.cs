@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -237,18 +238,18 @@ public partial class ListView
             return owningListView.Items.Count == 0 ? null : owningListView.Items[owningListView.Items.Count - 1].AccessibilityObject;
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
                 // If we don't set a default role for the accessible object
                 // it will be retrieved from Windows.
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                UiaCore.UIA.ControlTypePropertyId when
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                    => UiaCore.UIA.ListControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => false,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                UiaCore.UIA.ItemStatusPropertyId => GetItemStatus(),
+                    => UIA_CONTROLTYPE_ID.UIA_ListControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => false,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_ItemStatusPropertyId => GetItemStatus(),
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -360,17 +361,17 @@ public partial class ListView
             return null;
         }
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
             if (!this.TryGetOwnerAs(out ListView? owningListView))
             {
                 return false;
             }
 
-            if (patternId == UiaCore.UIA.SelectionPatternId ||
-                patternId == UiaCore.UIA.MultipleViewPatternId ||
-                (patternId == UiaCore.UIA.GridPatternId && owningListView.View == View.Details) ||
-                (patternId == UiaCore.UIA.TablePatternId && owningListView.View == View.Details))
+            if (patternId == UIA_PATTERN_ID.UIA_SelectionPatternId ||
+                patternId == UIA_PATTERN_ID.UIA_MultipleViewPatternId ||
+                (patternId == UIA_PATTERN_ID.UIA_GridPatternId && owningListView.View == View.Details) ||
+                (patternId == UIA_PATTERN_ID.UIA_TablePatternId && owningListView.View == View.Details))
             {
                 return true;
             }

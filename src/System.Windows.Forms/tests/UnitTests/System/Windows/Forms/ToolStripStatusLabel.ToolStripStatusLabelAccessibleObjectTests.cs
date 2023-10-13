@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripStatusLabel;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -18,17 +18,17 @@ public class ToolStripStatusLabel_ToolStripStatusLabelAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, (int)UiaCore.UIA.HyperlinkControlTypeId)]
-    [InlineData(false, (int)UiaCore.UIA.TextControlTypeId)]
+    [InlineData(true, (int)UIA_CONTROLTYPE_ID.UIA_HyperlinkControlTypeId)]
+    [InlineData(false, (int)UIA_CONTROLTYPE_ID.UIA_TextControlTypeId)]
     public void ToolStripStatusLabelAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool isLink, int expectedType)
     {
         using ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
         toolStripStatusLabel.IsLink = isLink;
         // AccessibleRole is not set = Default
 
-        object actual = toolStripStatusLabel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = toolStripStatusLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal((UiaCore.UIA)expectedType, actual);
+        Assert.Equal(expectedType, (int)actual);
     }
 
     [WinFormsTheory]
@@ -67,8 +67,8 @@ public class ToolStripStatusLabel_ToolStripStatusLabelAccessibleObjectTests
         using ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
         toolStripStatusLabel.AccessibleRole = role;
 
-        object actual = toolStripStatusLabel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = toolStripStatusLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
     }

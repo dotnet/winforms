@@ -24,6 +24,7 @@ public partial class ColumnHeader : Component, ICloneable
     internal string? _text;
     internal string _name;
     internal int _width = 60;
+    internal int _correspondingListViewSubItemIndex = -1;
 
     // Use TextAlign property instead of this member variable, always
     private HorizontalAlignment _textAlign = HorizontalAlignment.Left;

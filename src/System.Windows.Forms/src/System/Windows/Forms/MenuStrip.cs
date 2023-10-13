@@ -3,7 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -172,8 +172,8 @@ public partial class MenuStrip : ToolStrip
         {
             if (!TabStop && !DesignMode && IsAccessibilityObjectCreated)
             {
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuModeStartEventId);
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuOpenedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_MenuModeStartEventId);
+                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_MenuOpenedEventId);
             }
 
             AccessibilityNotifyClients(AccessibleEvents.SystemMenuStart, (int)OBJECT_IDENTIFIER.OBJID_MENU, -1);
@@ -190,8 +190,8 @@ public partial class MenuStrip : ToolStrip
 
             if (!TabStop && !DesignMode && IsAccessibilityObjectCreated)
             {
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuClosedEventId);
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.MenuModeEndEventId);
+                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_MenuClosedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_MenuModeEndEventId);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -99,7 +100,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         using ComboBox control = new ComboBox();
         control.AccessibleName = name;
         control.CreateControl(false);
-        object editAccessibleName = control.ChildEditAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+        object editAccessibleName = control.ChildEditAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
         Assert.NotNull(editAccessibleName);
     }
 
@@ -109,14 +110,14 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         const string name = "Test text";
         using ComboBox comboBox = new();
 
-        Assert.Null(comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
-        Assert.Null(comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
+        Assert.Null(comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        Assert.Null(comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
 
         comboBox.AccessibleName = name;
         comboBox.CreateControl(false);
 
-        Assert.Equal(name, comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
-        Assert.Equal(name, comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
+        Assert.Equal(name, comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        Assert.Equal(name, comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
         Assert.True(comboBox.IsHandleCreated);
     }
 
@@ -229,9 +230,9 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         using ComboBox control = new ComboBox();
         // AccessibleRole is not set = Default
 
-        object actual = control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.ComboBoxControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId, actual);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -257,8 +258,8 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         using ComboBox comboBox = new ComboBox();
         comboBox.AccessibleRole = role;
 
-        object actual = comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(comboBox.IsHandleCreated);
@@ -269,35 +270,35 @@ public class ComboBox_ComboBoxAccessibleObjectTests
     {
         using ComboBox comboBox = new();
         comboBox.CreateControl(false);
-        object actual = comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NativeWindowHandlePropertyId);
+        object actual = comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId);
 
         Assert.True(comboBox.IsHandleCreated);
         Assert.Equal((nint)comboBox.InternalHandle, actual);
     }
 
     [WinFormsTheory]
-    [InlineData(true, ((int)UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsGridItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsGridPatternAvailablePropertyId))]
-    [InlineData(true, ((int)UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsScrollItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsScrollPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsSelectionPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTableItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTablePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTextPattern2AvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTextPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTogglePatternAvailablePropertyId))]
-    [InlineData(true, ((int)UiaCore.UIA.IsValuePatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsGridItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsGridPatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsMultipleViewPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsScrollItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsScrollPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsSelectionItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTableItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTablePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTogglePatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId))]
     public void ComboBoxAccessibleObject_GetPropertyValue_Pattern_ReturnsExpected(bool expected, int propertyId)
     {
         using ComboBox comboBox = new();
         comboBox.CreateControl(false);
         ComboBox.ComboBoxAccessibleObject accessibleObject = (ComboBox.ComboBoxAccessibleObject)comboBox.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId) ?? false);
+        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
         Assert.True(comboBox.IsHandleCreated);
     }
 
@@ -357,7 +358,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         comboBox.CreateControl();
         comboBox.DroppedDown = droppedDown;
 
-        Assert.Equal(expectedAction, comboBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(expectedAction, comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
         Assert.True(comboBox.IsHandleCreated);
     }
 

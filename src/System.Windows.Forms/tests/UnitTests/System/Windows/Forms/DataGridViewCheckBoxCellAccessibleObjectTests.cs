@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -56,7 +57,7 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
     public void DataGridViewCheckBoxCellAccessibleObject_ControlType_ReturnsExpected()
     {
         var accessibleObject = new DataGridViewCheckBoxCellAccessibleObject(null);
-        Assert.Equal(UiaCore.UIA.CheckBoxControlTypeId, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_CheckBoxControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]
@@ -64,7 +65,7 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
     {
         var accessibleObject = new DataGridViewCheckBoxCellAccessibleObject(null);
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsTogglePatternAvailablePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsTogglePatternAvailablePropertyId));
     }
 
     [WinFormsFact]
@@ -76,20 +77,20 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
         control.CreateControl();
         var accessibleObject = (DataGridViewCheckBoxCellAccessibleObject)cell.AccessibilityObject;
 
-        Assert.False(bool.Parse(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId).ToString()));
+        Assert.False(bool.Parse(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId).ToString()));
 
         accessibleObject.DoDefaultAction();
 
-        Assert.True(bool.Parse(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId).ToString()));
+        Assert.True(bool.Parse(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId).ToString()));
         Assert.True(control.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.TogglePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TogglePatternId)]
     public void DataGridViewCheckBoxCellAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
         var accessibleObject = new DataGridViewCheckBoxCellAccessibleObject(null);
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
 
     [WinFormsFact]
@@ -163,12 +164,12 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
         if (isChecked)
         {
             // Make sure that default action is check as a default case.
-            Assert.Equal(SR.DataGridView_AccCheckBoxCellDefaultActionCheck, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.Equal(SR.DataGridView_AccCheckBoxCellDefaultActionCheck, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
             // Check it.
             accessibleObject.DoDefaultAction();
         }
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(expected, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
         Assert.True(control.IsHandleCreated);
     }
 

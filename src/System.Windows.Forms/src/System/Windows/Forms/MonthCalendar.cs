@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -1518,7 +1518,7 @@ public partial class MonthCalendar : Control
 
         if (IsAccessibilityObjectCreated)
         {
-            ((MonthCalendarAccessibleObject)AccessibilityObject).FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            ((MonthCalendarAccessibleObject)AccessibilityObject).FocusedCell?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -2201,7 +2201,7 @@ public partial class MonthCalendar : Control
         if (IsAccessibilityObjectCreated)
         {
             MonthCalendarAccessibleObject calendarAccessibleObject = (MonthCalendarAccessibleObject)AccessibilityObject;
-            calendarAccessibleObject.RaiseAutomationEventForChild(UiaCore.UIA.AutomationFocusChangedEventId);
+            calendarAccessibleObject.RaiseAutomationEventForChild(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
 
         OnDateChanged(new DateRangeEventArgs(start, end));

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.DateTimePicker;
 using static Interop;
 
@@ -25,9 +26,9 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         using DateTimePicker dateTimePicker = new();
         // AccessibleRole is not set = Default
 
-        object actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.ComboBoxControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId, actual);
         Assert.False(dateTimePicker.IsHandleCreated);
     }
 
@@ -49,7 +50,7 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         using DateTimePicker dateTimePicker = new();
         // AccessibleRole is not set = Default
 
-        object actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LocalizedControlTypePropertyId);
+        object actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId);
         string expected = SR.DateTimePickerLocalizedControlType;
 
         Assert.Equal(expected, actual);
@@ -78,8 +79,8 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         using DateTimePicker dateTimePicker = new();
         dateTimePicker.AccessibleRole = role;
 
-        object actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(dateTimePicker.IsHandleCreated);
@@ -92,7 +93,7 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         using DateTimePicker dateTimePicker = new();
         dateTimePicker.AccessibleRole = role;
 
-        object actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LocalizedControlTypePropertyId);
+        object actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId);
 
         Assert.Null(actual);
         Assert.False(dateTimePicker.IsHandleCreated);
@@ -106,12 +107,12 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         dateTimePicker.Value = dt;
         AccessibleObject accessibleObject = dateTimePicker.AccessibilityObject;
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId));
         Assert.False(dateTimePicker.IsHandleCreated);
 
         dateTimePicker.CreateControl();
 
-        Assert.Equal(dt.ToLongDateString(), accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.Equal(dt.ToLongDateString(), accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
     }
 
     [WinFormsTheory]
@@ -245,31 +246,31 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.ExpandCollapsePatternId)]
-    [InlineData((int)UiaCore.UIA.ValuePatternId)]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ValuePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)]
     public void DateTimePickerAccessibleObject_IsPatternSupported_ReturnsExpected_IfDoNotShowCheckbox(int patternId)
     {
         using DateTimePicker dateTimePicker = new() { ShowCheckBox = false };
 
         AccessibleObject accessibleObject = dateTimePicker.AccessibilityObject;
 
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(dateTimePicker.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.TogglePatternId)]
-    [InlineData((int)UiaCore.UIA.ExpandCollapsePatternId)]
-    [InlineData((int)UiaCore.UIA.ValuePatternId)]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TogglePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ExpandCollapsePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ValuePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)]
     public void DateTimePickerAccessibleObject_IsPatternSupported_ReturnsExpected_IfShowCheckbox(int patternId)
     {
         using DateTimePicker dateTimePicker = new() { ShowCheckBox = true };
 
         AccessibleObject accessibleObject = dateTimePicker.AccessibilityObject;
 
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(dateTimePicker.IsHandleCreated);
     }
 

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -162,24 +163,24 @@ public partial class ListBox
             return CurrentIndex + 1;
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
              => propertyID switch
              {
-                 UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListItemControlTypeId,
-                 UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListBox.Focused && _owningListBox.FocusedIndex == CurrentIndex,
-                 UiaCore.UIA.IsEnabledPropertyId => _owningListBox.Enabled,
-                 UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                 UiaCore.UIA.NativeWindowHandlePropertyId => _owningListBox.IsHandleCreated ? _owningListBox.Handle : IntPtr.Zero,
+                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId,
+                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningListBox.Focused && _owningListBox.FocusedIndex == CurrentIndex,
+                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListBox.Enabled,
+                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                 UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _owningListBox.IsHandleCreated ? _owningListBox.Handle : IntPtr.Zero,
                  _ => base.GetPropertyValue(propertyID)
              };
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
             switch (patternId)
             {
-                case UiaCore.UIA.ScrollItemPatternId:
-                case UiaCore.UIA.LegacyIAccessiblePatternId:
-                case UiaCore.UIA.SelectionItemPatternId:
+                case UIA_PATTERN_ID.UIA_ScrollItemPatternId:
+                case UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId:
+                case UIA_PATTERN_ID.UIA_SelectionItemPatternId:
                     return true;
                 default:
                     return base.IsPatternSupported(patternId);
@@ -248,8 +249,8 @@ public partial class ListBox
             _owningListBox.SelectedIndex = CurrentIndex;
 
             PInvoke.InvalidateRect(_owningListBox, lpRect: null, bErase: false);
-            RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
+            RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+            RaiseAutomationEvent(UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId);
         }
 
         internal override void SetFocus()
@@ -259,7 +260,7 @@ public partial class ListBox
                 return;
             }
 
-            RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             SelectItem();
         }
 

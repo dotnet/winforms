@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32.System.Threading;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -3100,7 +3101,7 @@ public partial class Form : ContainerControl
         // If the form has any control (ActiveControl is true), a screen reader will focus on it instead.
         if (Focused && ActiveControl is null)
         {
-            accessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            accessibleObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
 
         return accessibleObject;
@@ -3976,7 +3977,7 @@ public partial class Form : ContainerControl
         // If the form has any control, a screen reader will focus on it instead.
         if (Focused && IsAccessibilityObjectCreated && ActiveControl is null)
         {
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 

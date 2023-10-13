@@ -1062,7 +1062,7 @@ public class TabControlTabPageCollectionTests
     public static IEnumerable<object[]> IListAdd_InvalidValue_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new Control() };
     }
 
@@ -3087,7 +3087,7 @@ public class TabControlTabPageCollectionTests
     public static IEnumerable<object[]> IListInsert_InvalidValue_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new Control() };
     }
 
@@ -3860,7 +3860,7 @@ public class TabControlTabPageCollectionTests
     public static IEnumerable<object[]> IListItem_InvalidValue_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new Control() };
     }
 
@@ -4707,7 +4707,7 @@ public class TabControlTabPageCollectionTests
     public static IEnumerable<object[]> IListRemove_InvalidValue_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
         yield return new object[] { new Control() };
     }
 

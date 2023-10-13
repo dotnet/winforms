@@ -237,17 +237,16 @@ internal class ToolboxItemSnapLineBehavior : Behavior
     /// </summary>
     private static SnapLine[] GenerateNewToolSnapLines(Rectangle r)
     {
-        return new SnapLine[]
-        {
-            new SnapLine(SnapLineType.Left, r.Left),
-            new SnapLine(SnapLineType.Right, r.Right),
-            new SnapLine(SnapLineType.Bottom, r.Bottom),
-            new SnapLine(SnapLineType.Top, r.Top),
-            new SnapLine(SnapLineType.Horizontal, r.Top - 4, SnapLine.MarginTop, SnapLinePriority.Always),
-            new SnapLine(SnapLineType.Horizontal, r.Bottom + 3, SnapLine.MarginBottom, SnapLinePriority.Always),
-            new SnapLine(SnapLineType.Vertical, r.Left - 4, SnapLine.MarginLeft, SnapLinePriority.Always),
-            new SnapLine(SnapLineType.Vertical, r.Right + 3, SnapLine.MarginRight, SnapLinePriority.Always)
-        };
+        return [
+            new(SnapLineType.Left, r.Left),
+            new(SnapLineType.Right, r.Right),
+            new(SnapLineType.Bottom, r.Bottom),
+            new(SnapLineType.Top, r.Top),
+            new(SnapLineType.Horizontal, r.Top - 4, SnapLine.MarginTop, SnapLinePriority.Always),
+            new(SnapLineType.Horizontal, r.Bottom + 3, SnapLine.MarginBottom, SnapLinePriority.Always),
+            new(SnapLineType.Vertical, r.Left - 4, SnapLine.MarginLeft, SnapLinePriority.Always),
+            new(SnapLineType.Vertical, r.Right + 3, SnapLine.MarginRight, SnapLinePriority.Always)
+        ];
     }
 
     /// <summary>

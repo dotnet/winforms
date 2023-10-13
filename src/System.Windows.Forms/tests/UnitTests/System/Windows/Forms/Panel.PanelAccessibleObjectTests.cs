@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -57,11 +57,11 @@ public class Panel_PanelAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA.NamePropertyId, "PanelTestName")]
-    [InlineData((int)UIA.AutomationIdPropertyId, "Panel1")]
-    [InlineData((int)UIA.ControlTypePropertyId, UIA.PaneControlTypeId)] // If AccessibleRole is Default
-    [InlineData((int)UIA.IsKeyboardFocusablePropertyId, false)]
-    [InlineData((int)UIA.LegacyIAccessibleDefaultActionPropertyId, null)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "PanelTestName")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "Panel1")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)] // If AccessibleRole is Default
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId, false)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId, null)]
     public void PanelAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
         using Panel panel = new()
@@ -71,7 +71,7 @@ public class Panel_PanelAccessibleObjectTests
         };
 
         Panel.PanelAccessibleObject panelAccessibleObject = new(panel);
-        object actual = panelAccessibleObject.GetPropertyValue((UIA)propertyID);
+        object actual = panelAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
         Assert.Equal(expected, actual);
         Assert.False(panel.IsHandleCreated);
@@ -99,8 +99,8 @@ public class Panel_PanelAccessibleObjectTests
         using Panel panel = new();
         panel.AccessibleRole = role;
 
-        object actual = panel.AccessibilityObject.GetPropertyValue(UIA.ControlTypePropertyId);
-        UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = panel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(panel.IsHandleCreated);
@@ -112,7 +112,7 @@ public class Panel_PanelAccessibleObjectTests
         using Panel panel = new();
         Panel.PanelAccessibleObject panelAccessibleObject = new(panel);
 
-        Assert.True(panelAccessibleObject.IsPatternSupported(UIA.LegacyIAccessiblePatternId));
+        Assert.True(panelAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId));
         Assert.False(panel.IsHandleCreated);
     }
 

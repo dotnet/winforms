@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using Accessibility;
-using static Interop;
+using Windows.Win32.UI.Accessibility;
+using IAccessible = Accessibility.IAccessible;
 
 namespace System.Windows.Forms.Tests;
 
@@ -113,9 +113,9 @@ public class ProgressBarAccessibleObject
         using ProgressBar progressBar = new ProgressBar();
         // AccessibleRole is not set = Default
 
-        object actual = progressBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = progressBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.ProgressBarControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ProgressBarControlTypeId, actual);
         Assert.False(progressBar.IsHandleCreated);
     }
 
@@ -141,8 +141,8 @@ public class ProgressBarAccessibleObject
         using ProgressBar progressBar = new ProgressBar();
         progressBar.AccessibleRole = role;
 
-        object actual = progressBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = progressBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(progressBar.IsHandleCreated);

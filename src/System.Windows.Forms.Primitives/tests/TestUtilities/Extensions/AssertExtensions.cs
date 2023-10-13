@@ -4,8 +4,8 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Windows.Win32.UI.Accessibility;
 using Xunit.Sdk;
-using static Interop;
 
 namespace System;
 
@@ -13,12 +13,12 @@ public static class AssertExtensions
 {
     private static bool IsNetFramework => RuntimeInformation.FrameworkDescription.StartsWith(".NET Framework");
 
-    internal static void True(AccessibleObject accessibleObject, UiaCore.UIA propertyId)
+    internal static void True(AccessibleObject accessibleObject, UIA_PROPERTY_ID propertyId)
     {
         Assert.True((bool)accessibleObject.GetPropertyValue(propertyId));
     }
 
-    internal static void False(AccessibleObject accessibleObject, UiaCore.UIA propertyId)
+    internal static void False(AccessibleObject accessibleObject, UIA_PROPERTY_ID propertyId)
     {
         Assert.False((bool)accessibleObject.GetPropertyValue(propertyId));
     }

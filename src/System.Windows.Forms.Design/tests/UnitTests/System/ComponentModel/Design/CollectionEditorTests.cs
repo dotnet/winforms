@@ -141,7 +141,7 @@ public class CollectionEditorTests
     public static IEnumerable<object[]> InvalidDesignerHost_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]
@@ -389,7 +389,7 @@ public class CollectionEditorTests
     public static IEnumerable<object[]> DestroyInstance_NormalObject_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]
@@ -822,7 +822,7 @@ public class CollectionEditorTests
     public static IEnumerable<object[]> GetItems_TestData()
     {
         yield return new object[] { null, Array.Empty<object>() };
-        yield return new object[] { new object(), Array.Empty<object>() };
+        yield return new object[] { new(), Array.Empty<object>() };
         yield return new object[] { new int[] { 1, 2, 3 }, new object[] { 1, 2, 3, } };
         yield return new object[] { new ArrayList { 1, 2, 3 }, new object[] { 1, 2, 3, } };
     }
@@ -886,7 +886,7 @@ public class CollectionEditorTests
     public static IEnumerable<object[]> GetObjectsFromInstance_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]

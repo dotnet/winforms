@@ -53,15 +53,14 @@ public abstract class ToolStripRenderer
 
     // this is used in building up the half pyramid of rectangles that are drawn in a
     // status strip sizing grip.
-    private static readonly Rectangle[] baseSizeGripRectangles = new Rectangle[]
-    {
-        new Rectangle(8, 0, 2, 2),
-        new Rectangle(8, 4, 2, 2),
-        new Rectangle(8, 8, 2, 2),
-        new Rectangle(4, 4, 2, 2),
-        new Rectangle(4, 8, 2, 2),
-        new Rectangle(0, 8, 2, 2)
-    };
+    private static readonly Rectangle[] baseSizeGripRectangles = [
+        new(8, 0, 2, 2),
+        new(8, 4, 2, 2),
+        new(8, 8, 2, 2),
+        new(4, 4, 2, 2),
+        new(4, 8, 2, 2),
+        new(0, 8, 2, 2)
+    ];
 
     protected ToolStripRenderer()
     {
@@ -644,27 +643,27 @@ public abstract class ToolStripRenderer
 
                     arrow = new Point[]
                     {
-                        new Point(middle.X - Offset2X, middle.Y + 1),
-                        new Point(middle.X + Offset2X + 1, middle.Y + 1),
-                        new Point(middle.X, middle.Y - Offset2Y)
+                        new(middle.X - Offset2X, middle.Y + 1),
+                        new(middle.X + Offset2X + 1, middle.Y + 1),
+                        new(middle.X, middle.Y - Offset2Y)
                     };
 
                     break;
                 case ArrowDirection.Left:
                     arrow = new Point[]
                     {
-                        new Point(middle.X + Offset2X, middle.Y - offset4Y),
-                        new Point(middle.X + Offset2X, middle.Y + offset4Y),
-                        new Point(middle.X - horizontalOffset, middle.Y)
+                        new(middle.X + Offset2X, middle.Y - offset4Y),
+                        new(middle.X + Offset2X, middle.Y + offset4Y),
+                        new(middle.X - horizontalOffset, middle.Y)
                     };
 
                     break;
                 case ArrowDirection.Right:
                     arrow = new Point[]
                     {
-                        new Point(middle.X - Offset2X, middle.Y - offset4Y),
-                        new Point(middle.X - Offset2X, middle.Y + offset4Y),
-                        new Point(middle.X + horizontalOffset, middle.Y)
+                        new(middle.X - Offset2X, middle.Y - offset4Y),
+                        new(middle.X - Offset2X, middle.Y + offset4Y),
+                        new(middle.X + horizontalOffset, middle.Y)
                     };
 
                     break;
@@ -672,9 +671,9 @@ public abstract class ToolStripRenderer
                 default:
                     arrow = new Point[]
                     {
-                        new Point(middle.X - Offset2X, middle.Y - 1),
-                        new Point(middle.X + Offset2X + 1, middle.Y - 1),
-                        new Point(middle.X, middle.Y + Offset2Y)
+                        new(middle.X - Offset2X, middle.Y - 1),
+                        new(middle.X + Offset2X + 1, middle.Y - 1),
+                        new(middle.X, middle.Y + Offset2Y)
                     };
                     break;
             }

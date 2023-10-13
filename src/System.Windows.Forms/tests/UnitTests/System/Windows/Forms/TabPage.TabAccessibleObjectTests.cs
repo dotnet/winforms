@@ -1,10 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TabControl;
 using static System.Windows.Forms.TabPage;
+using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -264,7 +264,7 @@ public class TabPage_TabAccessibleObjectTests
 
         TabAccessibleObject accessibleObject = Assert.IsType<TabAccessibleObject>(pages[0].TabAccessibilityObject);
 
-        Assert.True(accessibleObject.IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId));
+        Assert.True(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId));
         Assert.False(pages[0].IsHandleCreated);
         Assert.False(tabControl.IsHandleCreated);
     }
@@ -278,7 +278,7 @@ public class TabPage_TabAccessibleObjectTests
 
         TabAccessibleObject accessibleObject = Assert.IsType<TabAccessibleObject>(pages[0].TabAccessibilityObject);
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
         Assert.False(pages[0].IsHandleCreated);
         Assert.False(tabControl.IsHandleCreated);
     }
@@ -292,7 +292,7 @@ public class TabPage_TabAccessibleObjectTests
 
         TabAccessibleObject accessibleObject = Assert.IsType<TabAccessibleObject>(pages[0].TabAccessibilityObject);
 
-        Assert.True(accessibleObject.IsPatternSupported(UiaCore.UIA.SelectionItemPatternId));
+        Assert.True(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_SelectionItemPatternId));
         Assert.False(pages[0].IsHandleCreated);
         Assert.False(tabControl.IsHandleCreated);
     }
@@ -306,7 +306,7 @@ public class TabPage_TabAccessibleObjectTests
 
         TabAccessibleObject accessibleObject = Assert.IsType<TabAccessibleObject>(pages[0].TabAccessibilityObject);
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsSelectionItemPatternAvailablePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsSelectionItemPatternAvailablePropertyId));
         Assert.False(pages[0].IsHandleCreated);
         Assert.False(tabControl.IsHandleCreated);
     }
@@ -320,7 +320,7 @@ public class TabPage_TabAccessibleObjectTests
 
         TabAccessibleObject accessibleObject = Assert.IsType<TabAccessibleObject>(pages[0].TabAccessibilityObject);
 
-        Assert.False(accessibleObject.IsPatternSupported(UiaCore.UIA.InvokePatternId));
+        Assert.False(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_InvokePatternId));
         Assert.False(pages[0].IsHandleCreated);
         Assert.False(tabControl.IsHandleCreated);
     }
@@ -334,7 +334,7 @@ public class TabPage_TabAccessibleObjectTests
 
         TabAccessibleObject accessibleObject = Assert.IsType<TabAccessibleObject>(pages[0].TabAccessibilityObject);
 
-        Assert.False((bool)accessibleObject.GetPropertyValue(UIA.IsInvokePatternAvailablePropertyId));
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId));
         Assert.False(pages[0].IsHandleCreated);
         Assert.False(tabControl.IsHandleCreated);
     }
@@ -1056,7 +1056,7 @@ public class TabPage_TabAccessibleObjectTests
             tabControl.CreateControl();
         }
 
-        pages.AddRange(new TabPage[] { new TabPage(), new TabPage() });
+        pages.AddRange(new TabPage[] { new(), new() });
         TabAccessibleObject accessibleObject1 = Assert.IsType<TabAccessibleObject>(pages[0].TabAccessibilityObject);
         TabAccessibleObject accessibleObject2 = Assert.IsType<TabAccessibleObject>(pages[1].TabAccessibilityObject);
 
@@ -1085,7 +1085,7 @@ public class TabPage_TabAccessibleObjectTests
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
         TabAccessibleObject accessibleObject = Assert.IsType<TabAccessibleObject>(pages[0].TabAccessibilityObject);
 
-        Assert.Equal(expectedEnabled, (bool)accessibleObject.GetPropertyValue(UIA.IsEnabledPropertyId));
+        Assert.Equal(expectedEnabled, (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.False(pages[0].IsHandleCreated);
         Assert.False(tabControl.IsHandleCreated);
     }
@@ -1100,7 +1100,7 @@ public class TabPage_TabAccessibleObjectTests
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
         TabAccessibleObject accessibleObject = Assert.IsType<TabAccessibleObject>(pages[0].TabAccessibilityObject);
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UIA.IsKeyboardFocusablePropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId));
         Assert.False(pages[0].IsHandleCreated);
         Assert.False(tabControl.IsHandleCreated);
     }
@@ -1115,7 +1115,7 @@ public class TabPage_TabAccessibleObjectTests
         Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
         TabAccessibleObject accessibleObject = Assert.IsType<TabAccessibleObject>(pages[0].TabAccessibilityObject);
 
-        Assert.False((bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId));
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
         Assert.False(pages[0].IsHandleCreated);
         Assert.False(tabControl.IsHandleCreated);
     }
@@ -1135,14 +1135,14 @@ public class TabPage_TabAccessibleObjectTests
 
         internal int CallFocusChangedEventCount { get; private set; }
 
-        internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
+        internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
             switch (eventId)
             {
-                case UiaCore.UIA.SelectionItem_ElementSelectedEventId:
+                case UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId:
                     CallSelectionItemEventCount++;
                     break;
-                case UiaCore.UIA.AutomationFocusChangedEventId:
+                case UIA_EVENT_ID.UIA_AutomationFocusChangedEventId:
                     CallFocusChangedEventCount++;
                     break;
                 default:

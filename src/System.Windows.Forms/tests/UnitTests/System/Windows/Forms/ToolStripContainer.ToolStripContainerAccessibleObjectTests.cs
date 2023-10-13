@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -18,8 +18,8 @@ public class ToolStripContainer_ToolStripContainerAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA.NamePropertyId, "TestName")]
-    [InlineData((int)UIA.AutomationIdPropertyId, "ToolStripContainer1")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "ToolStripContainer1")]
     public void ToolStripContainerAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
     {
         using var control = new ToolStripContainer
@@ -29,7 +29,7 @@ public class ToolStripContainer_ToolStripContainerAccessibleObjectTests
         };
 
         var accessibleObject = new ToolStripContainer.ToolStripContainerAccessibleObject(control);
-        object value = accessibleObject.GetPropertyValue((UIA)propertyID);
+        object value = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
         Assert.Equal(expected, value);
         Assert.False(control.IsHandleCreated);
@@ -43,7 +43,7 @@ public class ToolStripContainer_ToolStripContainerAccessibleObjectTests
         var accessibleObject = new ToolStripContainer.ToolStripContainerAccessibleObject(control);
         Assert.False(control.IsHandleCreated);
         control.FocusActiveControlInternal();
-        bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
+        bool value = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.True(value);
         Assert.True(control.IsHandleCreated);
@@ -55,7 +55,7 @@ public class ToolStripContainer_ToolStripContainerAccessibleObjectTests
         using var control = new ToolStripContainer();
 
         var accessibleObject = new ToolStripContainer.ToolStripContainerAccessibleObject(control);
-        bool value = (bool)accessibleObject.GetPropertyValue(UIA.HasKeyboardFocusPropertyId);
+        bool value = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
 
         Assert.False(value);
         Assert.False(control.IsHandleCreated);

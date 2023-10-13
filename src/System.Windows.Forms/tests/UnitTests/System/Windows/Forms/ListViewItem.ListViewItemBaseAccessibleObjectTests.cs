@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 
@@ -243,9 +244,9 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         ListViewItem item = new();
         control.Items.Add(item);
 
-        var actual = item.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        var actual = item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.ListItemControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId, actual);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -256,7 +257,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         ListViewItem item = new();
         control.Items.Add(item);
 
-        var actual = item.AccessibilityObject.GetPropertyValue(UiaCore.UIA.FrameworkIdPropertyId);
+        var actual = item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId);
 
         Assert.Equal("WinForm", actual);
         Assert.False(control.IsHandleCreated);
@@ -269,9 +270,9 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         ListViewItem item = new();
         control.Items.Add(item);
 
-        Assert.Equal(SR.AccessibleActionDoubleClick, item.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
-        Assert.Null(item.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
-        Assert.True((bool)item.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsInvokePatternAvailablePropertyId));
+        Assert.Equal(SR.AccessibleActionDoubleClick, item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Null(item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.True((bool)item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -325,18 +326,18 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.ScrollItemPatternId)]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
-    [InlineData((int)UiaCore.UIA.SelectionItemPatternId)]
-    [InlineData((int)UiaCore.UIA.InvokePatternId)]
-    [InlineData((int)UiaCore.UIA.TogglePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ScrollItemPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_SelectionItemPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_InvokePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TogglePatternId)]
     public void ListViewItemBaseAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
         using ListView control = new() { CheckBoxes = true };
         ListViewItem item = new();
         control.Items.Add(item);
 
-        Assert.True(item.AccessibilityObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(item.AccessibilityObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -392,7 +393,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         var accessibleObject = (ListViewItemBaseAccessibleObject)item.AccessibilityObject;
 
         var expected = $"{nameof(ListViewItem)}-{accessibleObject.CurrentIndex}";
-        Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
+        Assert.Equal(expected, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId));
         Assert.False(listView.IsHandleCreated);
     }
 

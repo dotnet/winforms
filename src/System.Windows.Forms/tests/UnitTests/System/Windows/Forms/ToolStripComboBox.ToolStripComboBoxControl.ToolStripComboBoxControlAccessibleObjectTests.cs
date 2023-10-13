@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripComboBox;
 using static System.Windows.Forms.ToolStripComboBox.ToolStripComboBoxControl;
 using static Interop;
@@ -30,10 +31,10 @@ public class ToolStripComboBox_ToolStripComboBoxControl_ToolStripComboBoxControl
         control.CreateControl();
 
         AccessibleObject accessibleObject = toolStripComboBox.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(AccessibleRole.ComboBox, accessibleObject.Role);
-        Assert.Equal(UiaCore.UIA.ComboBoxControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId, actual);
         Assert.True(control.IsHandleCreated);
     }
 
@@ -62,10 +63,10 @@ public class ToolStripComboBox_ToolStripComboBoxControl_ToolStripComboBoxControl
         control.CreateControl();
 
         AccessibleObject accessibleObject = toolStripComboBox.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(role, accessibleObject.Role);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
         Assert.Equal(expected, actual);
     }
 

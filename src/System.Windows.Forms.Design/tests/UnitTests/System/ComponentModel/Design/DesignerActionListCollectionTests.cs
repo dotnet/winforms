@@ -15,7 +15,7 @@ public class DesignerActionListCollectionTests
     public static IEnumerable<object[]> Ctor_DesignerActionListArray_TestData()
     {
         yield return new object[] { Array.Empty<DesignerActionList>() };
-        yield return new object[] { new DesignerActionList[] { new DesignerActionList(null), null } };
+        yield return new object[] { new DesignerActionList[] { new(null), null } };
     }
 
     [Theory]

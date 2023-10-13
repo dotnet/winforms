@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripLabel;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -18,17 +18,17 @@ public class ToolStripLabel_ToolStripLabelAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, (int)UiaCore.UIA.HyperlinkControlTypeId)]
-    [InlineData(false, (int)UiaCore.UIA.TextControlTypeId)]
+    [InlineData(true, (int)UIA_CONTROLTYPE_ID.UIA_HyperlinkControlTypeId)]
+    [InlineData(false, (int)UIA_CONTROLTYPE_ID.UIA_TextControlTypeId)]
     public void ToolStripLabelAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool isLink, int expectedType)
     {
         using ToolStripLabel toolStripLabel = new ToolStripLabel();
         toolStripLabel.IsLink = isLink;
         // AccessibleRole is not set = Default
 
-        object actual = toolStripLabel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = toolStripLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal((UiaCore.UIA)expectedType, actual);
+        Assert.Equal(expectedType, (int)actual);
     }
 
     [WinFormsTheory]
@@ -67,8 +67,8 @@ public class ToolStripLabel_ToolStripLabelAccessibleObjectTests
         using ToolStripLabel toolStripLabel = new ToolStripLabel();
         toolStripLabel.AccessibleRole = role;
 
-        Assert.Equal(AccessibleRoleControlTypeMap.GetControlType(role), toolStripLabel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
-        Assert.Null(toolStripLabel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.Equal(AccessibleRoleControlTypeMap.GetControlType(role), toolStripLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Null(toolStripLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
     }
 
     [WinFormsTheory]
@@ -77,7 +77,7 @@ public class ToolStripLabel_ToolStripLabelAccessibleObjectTests
     public void ToolStripLabelAccessibleObject_GetPropertyValue_LegacyIAccessibleStatePropertyId_ReturnsExpected(bool isLink, AccessibleStates expectedState)
     {
         using ToolStripLabel toolStripLabel = new ToolStripLabel() { IsLink = isLink };
-        object actual = toolStripLabel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleStatePropertyId);
+        object actual = toolStripLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId);
 
         Assert.Equal(expectedState, actual);
     }

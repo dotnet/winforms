@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TreeView;
 using static Interop;
 
@@ -31,9 +32,9 @@ public class TreeViewAccessibleObjectTests
         using TreeView control = new();
 
         // AccessibleRole is not set = Default
-        object actual = control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.TreeControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TreeControlTypeId, actual);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -125,7 +126,7 @@ public class TreeViewAccessibleObjectTests
     {
         using TreeView control = new() { Enabled = isEnabled };
 
-        Assert.Equal(isEnabled, control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId));
+        Assert.Equal(isEnabled, control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -135,7 +136,7 @@ public class TreeViewAccessibleObjectTests
         using TreeView control = new();
 
         Assert.True(control.Enabled);
-        Assert.True((bool)control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
+        Assert.True((bool)control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -145,7 +146,7 @@ public class TreeViewAccessibleObjectTests
         using TreeView control = new() { Enabled = false };
 
         Assert.False(control.Enabled);
-        Assert.False((bool)control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
+        Assert.False((bool)control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -156,18 +157,18 @@ public class TreeViewAccessibleObjectTests
         control.Nodes.Add("Node 1");
 
         Assert.True(control.Enabled);
-        Assert.False((bool)control.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
+        Assert.False((bool)control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
-    [InlineData((int)UiaCore.UIA.SelectionPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_SelectionPatternId)]
     public void TreeViewAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
         using TreeView control = new();
 
-        Assert.True(control.AccessibilityObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(control.AccessibilityObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(control.IsHandleCreated);
     }
 

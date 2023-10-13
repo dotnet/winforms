@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Copyright (C) 2006-2007 Novell, Inc (http://www.novell.com)
@@ -27,7 +27,7 @@ namespace System.Drawing.Drawing2D.Tests;
 
 public class GraphicsPathIteratorTests
 {
-    private readonly PointF[] _twoPoints = new PointF[2] { new PointF(1, 2), new PointF(20, 30) };
+    private readonly PointF[] _twoPoints = [new(1, 2), new(20, 30)];
 
     [Fact]
     public void Ctor_Path_Success()
@@ -218,7 +218,7 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void HasCurve_ReturnsExpected()
     {
-        Point[] points = new Point[] { new Point(1, 1), new Point(2, 2), new Point(3, 3), new Point(4, 4) };
+        Point[] points = [new(1, 1), new(2, 2), new(3, 3), new(4, 4)];
         byte[] types = new byte[] { 0, 3, 3, 3 };
 
         using (GraphicsPath gp = new GraphicsPath(points, types))
@@ -276,7 +276,7 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void Enumerate_ReturnsExpected()
     {
-        PointF[] points = new PointF[] { new PointF(1f, 1f), new PointF(2f, 2f), new PointF(3f, 3f), new PointF(4f, 4f) };
+        PointF[] points = [new(1f, 1f), new(2f, 2f), new(3f, 3f), new(4f, 4f)];
         byte[] types = new byte[] { 0, 3, 3, 3 };
 
         PointF[] actualPoints = new PointF[4];
@@ -387,7 +387,7 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void CopyData_EqualStartEndIndexes_ReturnsExpected()
     {
-        PointF[] points = new PointF[] { new PointF(1f, 1f), new PointF(2f, 2f), new PointF(3f, 3f), new PointF(4f, 4f) };
+        PointF[] points = [new(1f, 1f), new(2f, 2f), new(3f, 3f), new(4f, 4f)];
         byte[] types = new byte[] { 0, 3, 3, 3 };
 
         PointF[] actualPoints = new PointF[1];
@@ -405,7 +405,7 @@ public class GraphicsPathIteratorTests
     [Fact]
     public void CopyData_ReturnsExpected()
     {
-        PointF[] points = new PointF[] { new PointF(1f, 1f), new PointF(2f, 2f), new PointF(3f, 3f), new PointF(4f, 4f) };
+        PointF[] points = [new(1f, 1f), new(2f, 2f), new(3f, 3f), new(4f, 4f)];
         byte[] types = new byte[] { 0, 3, 3, 3 };
 
         PointF[] actualPoints = new PointF[3];

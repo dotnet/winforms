@@ -4,6 +4,7 @@
 using System.Drawing;
 using Moq;
 using Moq.Protected;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -150,7 +151,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     [MemberData(nameof(DefaultAction_TestData))]
     public void DataGridViewCellAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected(AccessibleObject accessibleObject, string expected)
     {
-        Assert.Equal(expected, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId) ?? string.Empty);
+        Assert.Equal(expected, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId) ?? string.Empty);
     }
 
     [WinFormsTheory]
@@ -635,7 +636,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     {
         UiaCore.IRawElementProviderSimple provider = new DataGridViewCellAccessibleObject();
 
-        Assert.Equal(UiaCore.UIA.DataItemControlTypeId, provider.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId, provider.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]
@@ -648,8 +649,8 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
 
         //DataGridViewCellAccessibleObject name couldn't be set, it's gathered dynamically in the Name property accessor
-        Assert.Equal(accessibleObject.Name, accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
-        Assert.Equal(accessibleObject.Name, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
+        Assert.Equal(accessibleObject.Name, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        Assert.Equal(accessibleObject.Name, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -662,7 +663,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
 
-        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.HelpTextPropertyId);
+        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId);
 
         Assert.Equal(accessibleObject.Help ?? string.Empty, actual);
         Assert.False(dataGridView.IsHandleCreated);
@@ -677,28 +678,28 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
 
-        bool actual = (bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId);
+        bool actual = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
 
         Assert.False(actual);
         Assert.False(dataGridView.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData(false, ((int)UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId))]
-    [InlineData(true, ((int)UiaCore.UIA.IsGridItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsGridPatternAvailablePropertyId))]
-    [InlineData(true, ((int)UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsScrollItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsScrollPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsSelectionPatternAvailablePropertyId))]
-    [InlineData(true, ((int)UiaCore.UIA.IsTableItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTablePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTextPattern2AvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTextPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTogglePatternAvailablePropertyId))]
-    [InlineData(true, ((int)UiaCore.UIA.IsValuePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsGridItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsGridPatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsMultipleViewPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsScrollItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsScrollPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsSelectionItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsTableItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTablePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTogglePatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId))]
     public void DataGridViewCellAccessibleObject_GetPropertyValue_Pattern_ReturnsExpected(bool expected, int propertyId)
     {
         using DataGridView dataGridView = new();
@@ -706,7 +707,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         dataGridView.Rows.Add(new DataGridViewRow());
         DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId) ?? false);
+        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1003,7 +1004,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         DataGridViewCellAccessibleObject dataGridViewCellAccessibleObject = new(dataGridView.Rows[0].Cells[0]);
         string expected = string.Concat(dataGridViewCellAccessibleObject.RuntimeId);
 
-        Assert.Equal(expected, dataGridViewCellAccessibleObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
+        Assert.Equal(expected, dataGridViewCellAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId));
         Assert.False(dataGridView.IsHandleCreated);
     }
 

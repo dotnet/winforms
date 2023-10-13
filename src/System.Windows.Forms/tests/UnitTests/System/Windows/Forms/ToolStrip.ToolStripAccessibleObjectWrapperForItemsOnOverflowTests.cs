@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Reflection;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripItem;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -31,9 +31,9 @@ public class ToolStrip_ToolStripAccessibleObjectWrapperForItemsOnOverflowTests
         // AccessibleRole is not set = Default
 
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject.GetChild(1);
-        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.ButtonControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, actual);
         Assert.False(toolStrip.IsHandleCreated);
     }
 

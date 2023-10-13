@@ -794,6 +794,7 @@ TYPE_E_BADMODULEKIND
 TYPEATTR
 TYPEDESC
 TYPEKIND
+UIA_EVENT_ID
 UiaAppendRuntimeId
 UiaGetReservedNotSupportedValue
 UiaRootObjectId

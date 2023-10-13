@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ColumnHeader;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests;
 
@@ -21,7 +21,7 @@ public class ColumnHeader_ListViewColumnHeaderAccessibleObjectTests
 
         ListViewColumnHeaderAccessibleObject accessibleObject = new(columnHeader);
 
-        Assert.Equal(UIA.HeaderItemControlTypeId, accessibleObject.GetPropertyValue(UIA.ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_HeaderItemControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]
@@ -32,9 +32,9 @@ public class ColumnHeader_ListViewColumnHeaderAccessibleObjectTests
 
         ListViewColumnHeaderAccessibleObject accessibleObject = new(columnHeader);
 
-        Assert.Equal(testText, accessibleObject.GetPropertyValue(UIA.NamePropertyId));
-        Assert.Equal(testText, accessibleObject.GetPropertyValue(UIA.LegacyIAccessibleNamePropertyId));
-        Assert.Null(accessibleObject.GetPropertyValue(UIA.LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(testText, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        Assert.Equal(testText, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
+        Assert.Null(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
     }
 
     [WinFormsFact]
