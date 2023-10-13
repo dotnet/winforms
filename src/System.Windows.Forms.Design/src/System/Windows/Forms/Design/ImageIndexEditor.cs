@@ -48,7 +48,9 @@ internal class ImageIndexEditor : UITypeEditor
 
         if (_currentImageList is null
             || instance != _currentInstance
-            || (_currentImageListPropertyReference?.TryGetTarget(out PropertyDescriptor? currentProperty) is true && (ImageList?)currentProperty.GetValue(_currentInstance) != _currentImageList))
+            || (_currentImageListPropertyReference is not null &&
+                _currentImageListPropertyReference.TryGetTarget(out PropertyDescriptor? currentProperty) &&
+                (ImageList?)currentProperty.GetValue(_currentInstance) != _currentImageList))
         {
             _currentInstance = instance;
 
