@@ -79,13 +79,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
     }
 
-    private DataGridViewComboBoxCell? ComboBoxCellTemplate
-    {
-        get
-        {
-            return (DataGridViewComboBoxCell?)CellTemplate;
-        }
-    }
+    private DataGridViewComboBoxCell? ComboBoxCellTemplate => (DataGridViewComboBoxCell?)CellTemplate;
 
     [DefaultValue(null)]
     [SRCategory(nameof(SR.CatData))]
@@ -514,8 +508,6 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
 
     /// <summary>
     /// </summary>
-    public override string ToString()
-    {
-        return $"DataGridViewComboBoxColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewComboBoxColumn {{ Name={Name}, Index={Index} }}";
 }
