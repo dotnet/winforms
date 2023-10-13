@@ -699,10 +699,7 @@ public abstract partial class DataGridViewCell
 
         internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaderItems()
         {
-            if (_owner?.DataGridView?.IsHandleCreated is true &&
-                _owner.DataGridView.RowHeadersVisible &&
-                _owner.OwningRow is not null &&
-                _owner.OwningRow.HasHeaderCell)
+            if (_owner is { OwningRow.HasHeaderCell: true, DataGridView: { IsHandleCreated: true, RowHeadersVisible: true } })
             {
                 return [_owner.OwningRow.HeaderCell.AccessibilityObject];
             }
@@ -712,10 +709,7 @@ public abstract partial class DataGridViewCell
 
         internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
         {
-            if (_owner?.DataGridView?.IsHandleCreated is true &&
-                _owner.DataGridView.ColumnHeadersVisible &&
-                _owner.OwningColumn is not null &&
-                _owner.OwningColumn.HasHeaderCell)
+            if (_owner is { OwningColumn.HasHeaderCell: true, DataGridView: { IsHandleCreated: true, ColumnHeadersVisible: true } })
             {
                 return [_owner.OwningColumn.HeaderCell.AccessibilityObject];
             }
