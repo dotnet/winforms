@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
@@ -16,15 +14,17 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
 {
     private static readonly Type s_columnType = typeof(DataGridViewComboBoxColumn);
 
-    public DataGridViewComboBoxColumn() : base(new DataGridViewComboBoxCell())
+    public DataGridViewComboBoxColumn()
+        : base(new DataGridViewComboBoxCell())
     {
-        ((DataGridViewComboBoxCell)base.CellTemplate).TemplateComboBoxColumn = this;
+        ((DataGridViewComboBoxCell)base.CellTemplate!).TemplateComboBoxColumn = this;
     }
 
     [Browsable(true)]
     [DefaultValue(true)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnAutoCompleteDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public bool AutoComplete
     {
         get
@@ -60,30 +60,30 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public override DataGridViewCell CellTemplate
+    public override DataGridViewCell? CellTemplate
     {
         get => base.CellTemplate;
         set
         {
-            DataGridViewComboBoxCell dataGridViewComboBoxCell = value as DataGridViewComboBoxCell;
+            DataGridViewComboBoxCell? dataGridViewComboBoxCell = value as DataGridViewComboBoxCell;
             if (value is not null && dataGridViewComboBoxCell is null)
             {
                 throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewComboBoxCell"));
             }
 
             base.CellTemplate = value;
-            if (value is not null)
+            if (dataGridViewComboBoxCell is not null)
             {
                 dataGridViewComboBoxCell.TemplateComboBoxColumn = this;
             }
         }
     }
 
-    private DataGridViewComboBoxCell ComboBoxCellTemplate
+    private DataGridViewComboBoxCell? ComboBoxCellTemplate
     {
         get
         {
-            return (DataGridViewComboBoxCell)CellTemplate;
+            return (DataGridViewComboBoxCell?)CellTemplate;
         }
     }
 
@@ -92,7 +92,8 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnDataSourceDescr))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [AttributeProvider(typeof(IListSource))]
-    public object DataSource
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
+    public object? DataSource
     {
         get
         {
@@ -134,6 +135,8 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayMemberDescr))]
     [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {AssemblyRef.SystemDesign}")]
     [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
+    [AllowNull]
     public string DisplayMember
     {
         get
@@ -174,6 +177,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [DefaultValue(DataGridViewComboBoxDisplayStyle.DropDownButton)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayStyleDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public DataGridViewComboBoxDisplayStyle DisplayStyle
     {
         get
@@ -215,6 +219,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayStyleForCurrentCellOnlyDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public bool DisplayStyleForCurrentCellOnly
     {
         get
@@ -256,6 +261,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [DefaultValue(1)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnDropDownWidthDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public int DropDownWidth
     {
         get
@@ -292,22 +298,23 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [DefaultValue(FlatStyle.Standard)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnFlatStyleDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public FlatStyle FlatStyle
     {
         get
         {
-            if (CellTemplate is null)
+            if (ComboBoxCellTemplate is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            return ((DataGridViewComboBoxCell)CellTemplate).FlatStyle;
+            return ComboBoxCellTemplate.FlatStyle;
         }
         set
         {
             if (FlatStyle != value)
             {
-                ((DataGridViewComboBoxCell)CellTemplate).FlatStyle = value;
+                ComboBoxCellTemplate.FlatStyle = value;
                 if (DataGridView is not null)
                 {
                     DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
@@ -349,6 +356,8 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnValueMemberDescr))]
     [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {AssemblyRef.SystemDesign}")]
     [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
+    [AllowNull]
     public string ValueMember
     {
         get
@@ -389,6 +398,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [DefaultValue(DataGridViewComboBoxCell.DefaultMaxDropDownItems)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnMaxDropDownItemsDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public int MaxDropDownItems
     {
         get
@@ -425,6 +435,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnSortedDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public bool Sorted
     {
         get
@@ -469,16 +480,11 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
         else
         {
-            //
-
-            dataGridViewColumn = (DataGridViewComboBoxColumn)System.Activator.CreateInstance(thisType);
+            dataGridViewColumn = (DataGridViewComboBoxColumn)Activator.CreateInstance(thisType)!;
         }
 
-        if (dataGridViewColumn is not null)
-        {
-            base.CloneInternal(dataGridViewColumn);
-            ((DataGridViewComboBoxCell)dataGridViewColumn.CellTemplate).TemplateComboBoxColumn = dataGridViewColumn;
-        }
+        base.CloneInternal(dataGridViewColumn);
+        dataGridViewColumn.ComboBoxCellTemplate!.TemplateComboBoxColumn = dataGridViewColumn;
 
         return dataGridViewColumn;
     }
@@ -491,7 +497,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         {
             DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
             int rowCount = dataGridViewRows.Count;
-            object[] items = ((DataGridViewComboBoxCell)CellTemplate).Items.InnerArray.ToArray();
+            object[] items = ComboBoxCellTemplate!.Items.InnerArray.ToArray();
             for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
             {
                 DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);

@@ -118,10 +118,10 @@ override System.Windows.Forms.DataGridViewColumnCollection.List.get -> System.Co
 ~override System.Windows.Forms.DataGridViewComboBoxCell.ParseFormattedValue(object formattedValue, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.ComponentModel.TypeConverter formattedValueTypeConverter, System.ComponentModel.TypeConverter valueTypeConverter) -> object
 ~override System.Windows.Forms.DataGridViewComboBoxCell.ToString() -> string
 ~override System.Windows.Forms.DataGridViewComboBoxCell.ValueType.get -> System.Type
-~override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
-~override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.set -> void
-~override System.Windows.Forms.DataGridViewComboBoxColumn.Clone() -> object
-~override System.Windows.Forms.DataGridViewComboBoxColumn.ToString() -> string
+override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
+override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.set -> void
+override System.Windows.Forms.DataGridViewComboBoxColumn.Clone() -> object!
+override System.Windows.Forms.DataGridViewComboBoxColumn.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewHeaderCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewHeaderCell.FormattedValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewHeaderCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip
@@ -463,13 +463,13 @@ System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.IndexOf(object? v
 System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Insert(int index, object? item) -> void
 System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.ObjectCollection(System.Windows.Forms.DataGridViewComboBoxCell! owner) -> void
 System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Remove(object? value) -> void
-~System.Windows.Forms.DataGridViewComboBoxColumn.DataSource.get -> object
-~System.Windows.Forms.DataGridViewComboBoxColumn.DataSource.set -> void
-~System.Windows.Forms.DataGridViewComboBoxColumn.DisplayMember.get -> string
-~System.Windows.Forms.DataGridViewComboBoxColumn.DisplayMember.set -> void
-~System.Windows.Forms.DataGridViewComboBoxColumn.Items.get -> System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection
-~System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.get -> string
-~System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.set -> void
+System.Windows.Forms.DataGridViewComboBoxColumn.DataSource.get -> object?
+System.Windows.Forms.DataGridViewComboBoxColumn.DataSource.set -> void
+System.Windows.Forms.DataGridViewComboBoxColumn.DisplayMember.get -> string!
+System.Windows.Forms.DataGridViewComboBoxColumn.DisplayMember.set -> void
+System.Windows.Forms.DataGridViewComboBoxColumn.Items.get -> System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection!
+System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.get -> string!
+System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.set -> void
 System.Windows.Forms.DataGridViewImageCell.Description.get -> string!
 System.Windows.Forms.DataGridViewImageCell.Description.set -> void
 System.Windows.Forms.DataGridViewImageColumn.Description.get -> string!
