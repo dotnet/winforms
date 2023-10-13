@@ -177,7 +177,7 @@ namespace System.Drawing.Tests
             yield return new object[] { ToolboxBitmapAttribute.Default, ToolboxBitmapAttribute.Default, true };
             yield return new object[] { ToolboxBitmapAttribute.Default, new ToolboxBitmapAttribute(typeof(ToolboxBitmapAttribute), "bitmap_173x183_indexed_8bit"), true };
 
-            yield return new object[] { ToolboxBitmapAttribute.Default, new object(), false };
+            yield return new object[] { ToolboxBitmapAttribute.Default, new(), false };
             yield return new object[] { ToolboxBitmapAttribute.Default, null, false };
         }
 

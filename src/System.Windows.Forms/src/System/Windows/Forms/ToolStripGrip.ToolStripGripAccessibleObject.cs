@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -34,10 +34,10 @@ internal partial class ToolStripGrip
             }
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.IsOffscreenPropertyId => false,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => false,
                 _ => base.GetPropertyValue(propertyID)
             };
     }

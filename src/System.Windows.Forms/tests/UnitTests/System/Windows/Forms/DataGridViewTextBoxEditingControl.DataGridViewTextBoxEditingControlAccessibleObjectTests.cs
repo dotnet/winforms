@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.DataGridViewTextBoxEditingControl;
 using static Interop;
 
@@ -35,25 +36,25 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.IsTextPatternAvailablePropertyId)]
-    [InlineData((int)UiaCore.UIA.IsTextPattern2AvailablePropertyId)]
-    [InlineData((int)UiaCore.UIA.IsValuePatternAvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId)]
     public void DataGridViewTextBoxEditingControlAccessibleObject_GetPropertyValue_PatternsSuported(int propertyID)
     {
         using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
         AccessibleObject accessibleObject = textCellControl.AccessibilityObject;
-        Assert.True((bool)accessibleObject.GetPropertyValue((UiaCore.UIA)propertyID));
+        Assert.True((bool)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID));
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.ValuePatternId)]
-    [InlineData((int)UiaCore.UIA.TextPatternId)]
-    [InlineData((int)UiaCore.UIA.TextPattern2Id)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ValuePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TextPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TextPattern2Id)]
     public void DataGridViewTextBoxEditingControlAccessibleObject_IsPatternSupported_PatternsSuported(int patternId)
     {
         using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
         AccessibleObject accessibleObject = textCellControl.AccessibilityObject;
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
 
     [WinFormsFact]
@@ -62,9 +63,9 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
         using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
         // AccessibleRole is not set = Default
 
-        object actual = textCellControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = textCellControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.EditControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, actual);
         Assert.False(textCellControl.IsHandleCreated);
     }
 
@@ -109,8 +110,8 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
         using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
         textCellControl.AccessibleRole = role;
 
-        object actual = textCellControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = textCellControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(textCellControl.IsHandleCreated);

@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.IntegrationTests.Common;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
@@ -203,7 +204,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
         {
             ComboBoxItemAccessibleObject itemAccessibleObject = itemsCollection.GetComboBoxItemAccessibleObject(itemEntry);
 
-            Assert.True(itemAccessibleObject.IsPatternSupported(UiaCore.UIA.ScrollItemPatternId));
+            Assert.True(itemAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollItemPatternId));
         }
     }
 
@@ -222,9 +223,9 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
         {
             ComboBoxItemAccessibleObject itemAccessibleObject = itemsCollection.GetComboBoxItemAccessibleObject(itemEntry);
 
-            Assert.True((bool)itemAccessibleObject.GetPropertyValue(UiaCore.UIA.IsScrollItemPatternAvailablePropertyId));
-            Assert.True((bool)itemAccessibleObject.GetPropertyValue(UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId));
-            Assert.Null(itemAccessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.True((bool)itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsScrollItemPatternAvailablePropertyId));
+            Assert.True((bool)itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsSelectionItemPatternAvailablePropertyId));
+            Assert.Null(itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
         }
     }
 
@@ -590,9 +591,9 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
         ComboBox.ComboBoxItemAccessibleObject comboBoxItem3 = (ComboBox.ComboBoxItemAccessibleObject)comboBoxItem2
                 .FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling);
 
-        AssertExtensions.True(comboBoxItem1, UiaCore.UIA.IsOffscreenPropertyId); // comboBoxItem1 above the visible area
-        AssertExtensions.False(comboBoxItem2, UiaCore.UIA.IsOffscreenPropertyId); // comboBoxItem2 in the visible area
-        AssertExtensions.True(comboBoxItem3, UiaCore.UIA.IsOffscreenPropertyId); // comboBoxItem3 below the visible area
+        AssertExtensions.True(comboBoxItem1, UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId); // comboBoxItem1 above the visible area
+        AssertExtensions.False(comboBoxItem2, UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId); // comboBoxItem2 in the visible area
+        AssertExtensions.True(comboBoxItem3, UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId); // comboBoxItem3 below the visible area
     }
 
     [WinFormsTheory]
@@ -609,9 +610,9 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
         ComboBox.ComboBoxItemAccessibleObject comboBoxItem3 = (ComboBox.ComboBoxItemAccessibleObject)comboBoxItem2
                 .FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling);
 
-        AssertExtensions.True(comboBoxItem1, UiaCore.UIA.IsOffscreenPropertyId); // comboBoxItem1 above the visible area
-        AssertExtensions.False(comboBoxItem2, UiaCore.UIA.IsOffscreenPropertyId); // comboBoxItem2 in the visible area
-        AssertExtensions.True(comboBoxItem3, UiaCore.UIA.IsOffscreenPropertyId); // comboBoxItem3 below the visible area
+        AssertExtensions.True(comboBoxItem1, UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId); // comboBoxItem1 above the visible area
+        AssertExtensions.False(comboBoxItem2, UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId); // comboBoxItem2 in the visible area
+        AssertExtensions.True(comboBoxItem3, UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId); // comboBoxItem3 below the visible area
     }
 
     [WinFormsTheory]
@@ -626,8 +627,8 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
         ComboBox.ComboBoxItemAccessibleObject comboBoxItem2 = (ComboBox.ComboBoxItemAccessibleObject)comboBoxItem1
                 .FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling);
 
-        AssertExtensions.True(comboBoxItem1, UiaCore.UIA.IsOffscreenPropertyId);
-        AssertExtensions.True(comboBoxItem2, UiaCore.UIA.IsOffscreenPropertyId);
+        AssertExtensions.True(comboBoxItem1, UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
+        AssertExtensions.True(comboBoxItem2, UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
     }
 
     [WinFormsFact]
@@ -642,9 +643,9 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
         ComboBox.ComboBoxItemAccessibleObject comboBoxItem3 = (ComboBox.ComboBoxItemAccessibleObject)comboBoxItem2
                 .FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling);
 
-        AssertExtensions.True(comboBoxItem1, UiaCore.UIA.IsOffscreenPropertyId); // comboBoxItem1 above the visible area
-        AssertExtensions.False(comboBoxItem2, UiaCore.UIA.IsOffscreenPropertyId); // comboBoxItem2 in the visible area
-        AssertExtensions.True(comboBoxItem3, UiaCore.UIA.IsOffscreenPropertyId); // comboBoxItem3 below the visible area
+        AssertExtensions.True(comboBoxItem1, UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId); // comboBoxItem1 above the visible area
+        AssertExtensions.False(comboBoxItem2, UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId); // comboBoxItem2 in the visible area
+        AssertExtensions.True(comboBoxItem3, UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId); // comboBoxItem3 below the visible area
     }
 
     private ComboBox GetComboBox(ComboBoxStyle comboBoxStyle)

@@ -465,7 +465,7 @@ public class FontTests
         yield return new object[] { font.Clone(), new Font(family, 10, FontStyle.Bold, GraphicsUnit.Inch, 9, gdiVerticalFont: true), false };
         yield return new object[] { font.Clone(), new Font(family, 10, FontStyle.Bold, GraphicsUnit.Inch, 10, gdiVerticalFont: false), false };
 
-        yield return new object[] { new Font(family, 10), new object(), false };
+        yield return new object[] { new Font(family, 10), new(), false };
         yield return new object[] { new Font(family, 10), null, false };
     }
 

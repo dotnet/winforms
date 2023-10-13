@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests;
@@ -145,15 +146,15 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
         var expectedUpButtonName = SR.ToolStripScrollButtonUpAccessibleName;
         var expectedDownButtonName = SR.ToolStripScrollButtonDownAccessibleName;
         var expectedDefaultAction = SR.AccessibleActionPress;
-        var expectedControlType = UIA.ButtonControlTypeId;
+        var expectedControlType = UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId;
 
         Assert.Equal(expectedUpButtonName, upScrollButtonAccessibleObject.Name);
         Assert.Equal(expectedDefaultAction, upScrollButtonAccessibleObject.DefaultAction);
-        Assert.Equal(expectedControlType, upScrollButtonAccessibleObject.GetPropertyValue(UIA.ControlTypePropertyId));
+        Assert.Equal(expectedControlType, upScrollButtonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
 
         Assert.Equal(expectedDownButtonName, downScrollButtonAccessibleObject.Name);
         Assert.Equal(expectedDefaultAction, downScrollButtonAccessibleObject.DefaultAction);
-        Assert.Equal(expectedControlType, downScrollButtonAccessibleObject.GetPropertyValue(UIA.ControlTypePropertyId));
+        Assert.Equal(expectedControlType, downScrollButtonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     private class SubToolStripDropDownMenu : ToolStripDropDownMenu

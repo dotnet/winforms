@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Imaging.Tests;
@@ -31,7 +31,7 @@ public class FrameDimensionTests
             yield return new object[] { new FrameDimension(new Guid("48749428-316f-496a-ab30-c819a92b3137")), new FrameDimension(new Guid("48749428-316f-496a-ab30-c819a92b3137")), true };
             yield return new object[] { new FrameDimension(new Guid("48749428-316f-496a-ab30-c819a92b3137")), new FrameDimension(new Guid("b96b3cad-0728-11d3-9d7b-0000f81ef32e")), false };
             yield return new object[] { new FrameDimension(new Guid("48749428-316f-496a-ab30-c819a92b3137")), null, false };
-            yield return new object[] { new FrameDimension(new Guid("48749428-316f-496a-ab30-c819a92b3137")), new object(), false };
+            yield return new object[] { new FrameDimension(new Guid("48749428-316f-496a-ab30-c819a92b3137")), new(), false };
         }
     }
 

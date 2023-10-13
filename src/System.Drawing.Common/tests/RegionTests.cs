@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Copyright (C) 2004-2008 Novell, Inc (http://www.novell.com)
@@ -185,9 +185,9 @@ public class RegionTests
             {
                 Assert.Equal(new RectangleF[]
                 {
-                    new RectangleF(1, 2, 3, 3),
-                    new RectangleF(1, 5, 9, 1),
-                    new RectangleF(4, 6, 6, 6)
+                    new(1, 2, 3, 3),
+                    new(1, 5, 9, 1),
+                    new(4, 6, 6, 6)
                 }, region.GetRegionScans(matrix));
                 Assert.Equal(new RectangleF(1, 2, 9, 10), region.GetBounds(s_graphic));
             }
@@ -223,15 +223,15 @@ public class RegionTests
         yield return new object[] { path3, false };
 
         var path4 = new GraphicsPath();
-        path4.AddCurve(new Point[] { new Point(-4194304, -4194304), new Point(4194304, 4194304) });
+        path4.AddCurve(new Point[] { new(-4194304, -4194304), new(4194304, 4194304) });
         yield return new object[] { path4, false };
 
         var path5 = new GraphicsPath();
-        path5.AddPolygon(new Point[] { new Point(-4194304, -4194304), new Point(-4194304, 4194304), new Point(4194304, 4194304), new Point(4194304, -4194304) });
+        path5.AddPolygon(new Point[] { new(-4194304, -4194304), new(-4194304, 4194304), new(4194304, 4194304), new(4194304, -4194304) });
         yield return new object[] { path5, true };
 
         var path6 = new GraphicsPath();
-        path6.AddPolygon(new Point[] { new Point(-4194304, -4194304), new Point(-4194304, 4194304), new Point(4194304, 4194304), new Point(4194304, -4194304), new Point(-4194304, -4194304) });
+        path6.AddPolygon(new Point[] { new(-4194304, -4194304), new(-4194304, 4194304), new(4194304, 4194304), new(4194304, -4194304), new(-4194304, -4194304) });
         yield return new object[] { path6, true };
     }
 
@@ -251,7 +251,7 @@ public class RegionTests
     {
         using (var path = new GraphicsPath())
         {
-            path.AddCurve(new Point[] { new Point(-4194304, -4194304), new Point(4194304, 4194304) });
+            path.AddCurve(new Point[] { new(-4194304, -4194304), new(4194304, 4194304) });
 
             using (var region = new Region(path))
             using (var matrix = new Matrix())
@@ -302,29 +302,29 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new RectangleF(10, 10, 100, 100)),
-            new RectangleF[] { new RectangleF(40, 60, 100, 20) },
-            new RectangleF[] { new RectangleF(110, 60, 30, 20) }
+            new RectangleF[] { new(40, 60, 100, 20) },
+            new RectangleF[] { new(110, 60, 30, 20) }
         };
 
         yield return new object[]
         {
             new Region(new RectangleF(70, 10, 100, 100)),
-            new RectangleF[] { new RectangleF(40, 60, 100, 20) },
-            new RectangleF[] { new RectangleF(40, 60, 30, 20) }
+            new RectangleF[] { new(40, 60, 100, 20) },
+            new RectangleF[] { new(40, 60, 30, 20) }
         };
 
         yield return new object[]
         {
             new Region(new RectangleF(40, 100, 100, 100)),
-            new RectangleF[] { new RectangleF(70, 80, 50, 40) },
-            new RectangleF[] { new RectangleF(70, 80, 50, 20) }
+            new RectangleF[] { new(70, 80, 50, 40) },
+            new RectangleF[] { new(70, 80, 50, 20) }
         };
 
         yield return new object[]
         {
             new Region(new RectangleF(40, 10, 100, 100)),
-            new RectangleF[] { new RectangleF(70, 80, 50, 40) },
-            new RectangleF[] { new RectangleF(70, 110, 50, 10) }
+            new RectangleF[] { new(70, 80, 50, 40) },
+            new RectangleF[] { new(70, 110, 50, 10) }
         };
 
         yield return new object[]
@@ -332,11 +332,11 @@ public class RegionTests
             new Region(new RectangleF(30, 30, 80, 80)),
             new RectangleF[]
             {
-                new RectangleF(45, 45, 200, 200),
-                new RectangleF(160, 260, 10, 10),
-                new RectangleF(170, 260, 10, 10),
+                new(45, 45, 200, 200),
+                new(160, 260, 10, 10),
+                new(170, 260, 10, 10),
             },
-            new RectangleF[] { new RectangleF(170, 260, 10, 10) }
+            new RectangleF[] { new(170, 260, 10, 10) }
         };
 
         yield return new object[]
@@ -349,7 +349,7 @@ public class RegionTests
         yield return new object[]
         {
             new Region(),
-            new RectangleF[] { new RectangleF(1, 2, 3, 4) },
+            new RectangleF[] { new(1, 2, 3, 4) },
             new RectangleF[0]
         };
     }
@@ -387,8 +387,8 @@ public class RegionTests
             region.Complement(other);
             Assert.Equal(new RectangleF[]
             {
-                new RectangleF(60, 60, 30, 10),
-                new RectangleF(20, 80, 20, 10)
+                new(60, 60, 30, 10),
+                new(20, 80, 20, 10)
             }, region.GetRegionScans(matrix));
         }
     }
@@ -406,8 +406,8 @@ public class RegionTests
             Assert.False(region.IsInfinite(s_graphic));
             Assert.Equal(new RectangleF[]
             {
-                new RectangleF(5, -5, 2, 10),
-                new RectangleF(-5, 5, 12, 2)
+                new(5, -5, 2, 10),
+                new(-5, 5, 12, 2)
             }, region.GetRegionScans(matrix));
         }
     }
@@ -423,10 +423,10 @@ public class RegionTests
 
             Assert.Equal(new RectangleF[]
             {
-                new RectangleF(-4194304, -4194304, 8388608, 4194306),
-                new RectangleF(-4194304, 2, 4194305, 4),
-                new RectangleF(4, 2, 4194300, 4),
-                new RectangleF(-4194304, 6, 8388608, 4194298)
+                new(-4194304, -4194304, 8388608, 4194306),
+                new(-4194304, 2, 4194305, 4),
+                new(4, 2, 4194300, 4),
+                new(-4194304, 6, 8388608, 4194298)
             }, region.GetRegionScans(matrix));
         }
     }
@@ -533,8 +533,8 @@ public class RegionTests
 
             Assert.Equal(new RectangleF[]
             {
-                new RectangleF(80, 40, 30, 70),
-                new RectangleF(50, 110, 60, 10)
+                new(80, 40, 30, 70),
+                new(50, 110, 60, 10)
             }, region1.GetRegionScans(matrix));
         }
     }
@@ -682,7 +682,7 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new Rectangle(500, 30, 60, 80)),
-            new RectangleF[] { new RectangleF(500, 30, 60, 80) },
+            new RectangleF[] { new(500, 30, 60, 80) },
             new RectangleF[0]
         };
 
@@ -690,19 +690,19 @@ public class RegionTests
         {
             new Region(new Rectangle(500, 30, 60, 80)),
             new RectangleF[] { RectangleF.Empty },
-            new RectangleF[] { new RectangleF(500, 30, 60, 80) }
+            new RectangleF[] { new(500, 30, 60, 80) }
         };
 
         yield return new object[]
         {
             new Region(),
-            new RectangleF[] { new RectangleF(520, 40, 60, 80) },
+            new RectangleF[] { new(520, 40, 60, 80) },
             new RectangleF[]
             {
-                new RectangleF(-4194304, -4194304, 8388608, 4194344),
-                new RectangleF(-4194304, 40, 4194824, 80),
-                new RectangleF(580, 40, 4193724, 80),
-                new RectangleF(-4194304, 120, 8388608, 4194184)
+                new(-4194304, -4194304, 8388608, 4194344),
+                new(-4194304, 40, 4194824, 80),
+                new(580, 40, 4193724, 80),
+                new(-4194304, 120, 8388608, 4194184)
             }
         };
 
@@ -717,12 +717,12 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new Rectangle(10, 10, 100, 100)),
-            new RectangleF[] { new RectangleF(40, 60, 100, 20) },
+            new RectangleF[] { new(40, 60, 100, 20) },
             new RectangleF[]
             {
-                new RectangleF(10, 10, 100, 50),
-                new RectangleF(10, 60, 30, 20),
-                new RectangleF(10, 80, 100, 30)
+                new(10, 10, 100, 50),
+                new(10, 60, 30, 20),
+                new(10, 80, 100, 30)
             }
         };
 
@@ -730,12 +730,12 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new Rectangle(70, 10, 100, 100)),
-            new RectangleF[] { new RectangleF(40, 60, 100, 20) },
+            new RectangleF[] { new(40, 60, 100, 20) },
             new RectangleF[]
             {
-                new RectangleF(70, 10, 100, 50),
-                new RectangleF(140, 60, 30, 20),
-                new RectangleF(70, 80, 100, 30)
+                new(70, 10, 100, 50),
+                new(140, 60, 30, 20),
+                new(70, 80, 100, 30)
             }
         };
 
@@ -743,12 +743,12 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new Rectangle(40, 100, 100, 100)),
-            new RectangleF[] { new RectangleF(70, 80, 50, 40) },
+            new RectangleF[] { new(70, 80, 50, 40) },
             new RectangleF[]
             {
-                new RectangleF(40, 100, 30, 20),
-                new RectangleF(120, 100, 20, 20),
-                new RectangleF(40, 120, 100, 80)
+                new(40, 100, 30, 20),
+                new(120, 100, 20, 20),
+                new(40, 120, 100, 80)
             }
         };
 
@@ -756,12 +756,12 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new Rectangle(40, 10, 100, 100)),
-            new RectangleF[] { new RectangleF(70, 80, 50, 40) },
+            new RectangleF[] { new(70, 80, 50, 40) },
             new RectangleF[]
             {
-                new RectangleF(40, 10, 100, 70),
-                new RectangleF(40, 80, 30, 30),
-                new RectangleF(120, 80, 20, 30)
+                new(40, 10, 100, 70),
+                new(40, 80, 30, 30),
+                new(120, 80, 20, 30)
             }
         };
 
@@ -771,14 +771,14 @@ public class RegionTests
             new Region(new Rectangle(30, 30, 80, 80)),
             new RectangleF[]
             {
-                new RectangleF(45, 45, 200, 200),
-                new RectangleF(160, 260, 10, 10),
-                new RectangleF(170, 260, 10, 10)
+                new(45, 45, 200, 200),
+                new(160, 260, 10, 10),
+                new(170, 260, 10, 10)
             },
             new RectangleF[]
             {
-                new RectangleF(30, 30, 80, 15),
-                new RectangleF(30, 45, 15, 65)
+                new(30, 30, 80, 15),
+                new(30, 45, 15, 65)
             }
         };
 
@@ -786,42 +786,42 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new Rectangle(50, 100, 100, 100)),
-            new RectangleF[] { new RectangleF(30, 70, 150, 40) },
-            new RectangleF[] { new RectangleF(50, 110, 100, 90) }
+            new RectangleF[] { new(30, 70, 150, 40) },
+            new RectangleF[] { new(50, 110, 100, 90) }
         };
 
         // Intersecting from the right with a larger rect.
         yield return new object[]
         {
             new Region(new Rectangle(70, 60, 100, 70)),
-            new RectangleF[] { new RectangleF(40, 10, 100, 150) },
-            new RectangleF[] { new RectangleF(140, 60, 30, 70) }
+            new RectangleF[] { new(40, 10, 100, 150) },
+            new RectangleF[] { new(140, 60, 30, 70) }
         };
 
         // Intersecting from the left with a larger rect.
         yield return new object[]
         {
             new Region(new Rectangle(70, 60, 100, 70)),
-            new RectangleF[] { new RectangleF(100, 10, 100, 150) },
-            new RectangleF[] { new RectangleF(70, 60, 30, 70) }
+            new RectangleF[] { new(100, 10, 100, 150) },
+            new RectangleF[] { new(70, 60, 30, 70) }
         };
 
         // Intersecting from the bottom with a larger rect.
         yield return new object[]
         {
             new Region(new Rectangle(20, 20, 100, 100)),
-            new RectangleF[] { new RectangleF(10, 80, 140, 150) },
-            new RectangleF[] { new RectangleF(20, 20, 100, 60) }
+            new RectangleF[] { new(10, 80, 140, 150) },
+            new RectangleF[] { new(20, 20, 100, 60) }
         };
 
         yield return new object[]
         {
             new Region(new Rectangle(130, 30, 60, 80)),
-            new RectangleF[] { new RectangleF(170, 40, 60, 80) },
+            new RectangleF[] { new(170, 40, 60, 80) },
             new RectangleF[]
             {
-                new RectangleF(130, 30, 60, 10),
-                new RectangleF(130, 40, 40, 70)
+                new(130, 30, 60, 10),
+                new(130, 40, 40, 70)
             }
         };
     }
@@ -856,7 +856,7 @@ public class RegionTests
         {
             union.Union(new RectangleF(60, 60, 30, 10));
             region.Exclude(union);
-            Assert.Equal(new RectangleF[] { new RectangleF(20, 20, 20, 20) }, region.GetRegionScans(matrix));
+            Assert.Equal(new RectangleF[] { new(20, 20, 20, 20) }, region.GetRegionScans(matrix));
         }
     }
 
@@ -1111,8 +1111,8 @@ public class RegionTests
             matrix.Translate(10, 11);
             matrix.Scale(5, 6);
 
-            Assert.Equal(new RectangleF[] { new RectangleF(1, 2, 3, 4) }, region.GetRegionScans(emptyMatrix));
-            Assert.Equal(new RectangleF[] { new RectangleF(15, 23, 15, 24) }, region.GetRegionScans(matrix));
+            Assert.Equal(new RectangleF[] { new(1, 2, 3, 4) }, region.GetRegionScans(emptyMatrix));
+            Assert.Equal(new RectangleF[] { new(15, 23, 15, 24) }, region.GetRegionScans(matrix));
         }
     }
 
@@ -1168,13 +1168,13 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new Rectangle(500, 30, 60, 80)),
-            new RectangleF[] { new RectangleF(500, 30, 60, 80) },
-            new RectangleF[] { new RectangleF(500, 30, 60, 80) }
+            new RectangleF[] { new(500, 30, 60, 80) },
+            new RectangleF[] { new(500, 30, 60, 80) }
         };
         yield return new object[]
         {
             new Region(new Rectangle(0, 0, 0, 0)),
-            new RectangleF[] { new RectangleF(500, 30, 60, 80) },
+            new RectangleF[] { new(500, 30, 60, 80) },
             new RectangleF[0]
         };
 
@@ -1188,7 +1188,7 @@ public class RegionTests
         yield return new object[]
         {
             new Region(),
-            new RectangleF[] { new RectangleF(520, 40, 60, 80) },
+            new RectangleF[] { new(520, 40, 60, 80) },
             new RectangleF[] { new Rectangle(520, 40, 60, 80) }
         };
 
@@ -1202,8 +1202,8 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new RectangleF(260, 30, 60, 80)),
-            new RectangleF[] { new RectangleF(290, 40, 60, 90) },
-            new RectangleF[] { new RectangleF(290, 40, 30, 70) }
+            new RectangleF[] { new(290, 40, 60, 90) },
+            new RectangleF[] { new(290, 40, 30, 70) }
         };
 
         yield return new object[]
@@ -1211,9 +1211,9 @@ public class RegionTests
             new Region(new RectangleF(20, 330, 40, 50)),
             new RectangleF[]
             {
-                new RectangleF(50, 340, 40, 50),
-                new RectangleF(70, 360, 30, 50),
-                new RectangleF(80, 400, 30, 10)
+                new(50, 340, 40, 50),
+                new(70, 360, 30, 50),
+                new(80, 400, 30, 10)
             },
             new RectangleF[0]
         };
@@ -1305,7 +1305,7 @@ public class RegionTests
 
             Assert.False(region.IsEmpty(s_graphic));
             Assert.False(region.IsInfinite(s_graphic));
-            Assert.Equal(new RectangleF[] { new RectangleF(-5, -5, 10, 10) }, region.GetRegionScans(matrix));
+            Assert.Equal(new RectangleF[] { new(-5, -5, 10, 10) }, region.GetRegionScans(matrix));
         }
     }
 
@@ -1337,7 +1337,7 @@ public class RegionTests
 
             Assert.False(region.IsEmpty(s_graphic));
             Assert.False(region.IsInfinite(s_graphic));
-            Assert.Equal(new RectangleF[] { new RectangleF(-5, -5, 10, 10) }, region.GetRegionScans(matrix));
+            Assert.Equal(new RectangleF[] { new(-5, -5, 10, 10) }, region.GetRegionScans(matrix));
         }
     }
 
@@ -1630,40 +1630,40 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new Rectangle(500, 30, 60, 80)),
-            new RectangleF[] { new RectangleF(500, 30, 60, 80) },
-            new RectangleF[] { new RectangleF(500, 30, 60, 80) }
+            new RectangleF[] { new(500, 30, 60, 80) },
+            new RectangleF[] { new(500, 30, 60, 80) }
         };
 
         yield return new object[]
         {
             new Region(new Rectangle(500, 30, 60, 80)),
             new RectangleF[] { RectangleF.Empty },
-            new RectangleF[] { new RectangleF(500, 30, 60, 80) }
+            new RectangleF[] { new(500, 30, 60, 80) }
         };
 
         yield return new object[]
         {
             new Region(new Rectangle(500, 30, 60, 80)),
-            new RectangleF[] { new RectangleF(520, 30, 60, 80) },
-            new RectangleF[] { new RectangleF(500, 30, 80, 80) }
+            new RectangleF[] { new(520, 30, 60, 80) },
+            new RectangleF[] { new(500, 30, 80, 80) }
         };
 
         yield return new object[]
         {
             new Region(new Rectangle(500, 30, 60, 80)),
-            new RectangleF[] { new RectangleF(520, 40, 60, 80) },
+            new RectangleF[] { new(520, 40, 60, 80) },
             new RectangleF[]
             {
-                new RectangleF(500, 30, 60, 10),
-                new RectangleF(500, 40, 80, 70),
-                new RectangleF(520, 110, 60, 10),
+                new(500, 30, 60, 10),
+                new(500, 40, 80, 70),
+                new(520, 110, 60, 10),
             }
         };
 
         yield return new object[]
         {
             new Region(),
-            new RectangleF[] { new RectangleF(520, 40, 60, 80) },
+            new RectangleF[] { new(520, 40, 60, 80) },
             new RectangleF[] { new Rectangle(-4194304, -4194304, 8388608, 8388608) }
         };
 
@@ -1680,14 +1680,14 @@ public class RegionTests
             new Region(new Rectangle(20, 20, 20, 20)),
             new RectangleF[]
             {
-                new RectangleF(20, 80, 20, 10),
-                new RectangleF(60, 60, 30, 10)
+                new(20, 80, 20, 10),
+                new(60, 60, 30, 10)
             },
             new RectangleF[]
             {
-                new RectangleF(20, 20, 20, 20),
-                new RectangleF(60, 60, 30, 10),
-                new RectangleF(20, 80, 20, 10)
+                new(20, 20, 20, 20),
+                new(60, 60, 30, 10),
+                new(20, 80, 20, 10)
             }
         };
 
@@ -1696,16 +1696,16 @@ public class RegionTests
             new Region(new Rectangle(20, 180, 40, 50)),
             new RectangleF[]
             {
-                new RectangleF(50, 190, 40, 50),
-                new RectangleF(70, 210, 30, 50)
+                new(50, 190, 40, 50),
+                new(70, 210, 30, 50)
             },
             new RectangleF[]
             {
-                new RectangleF(20, 180, 40, 10),
-                new RectangleF(20, 190, 70, 20),
-                new RectangleF(20, 210, 80, 20),
-                new RectangleF(50, 230, 50, 10),
-                new RectangleF(70, 240, 30, 20)
+                new(20, 180, 40, 10),
+                new(20, 190, 70, 20),
+                new(20, 210, 80, 20),
+                new(50, 230, 50, 10),
+                new(70, 240, 30, 20)
             }
         };
 
@@ -1714,18 +1714,18 @@ public class RegionTests
             new Region(new Rectangle(20, 330, 40, 50)),
             new RectangleF[]
             {
-                new RectangleF(50, 340, 40, 50),
-                new RectangleF(70, 360, 30, 50),
-                new RectangleF(80, 400, 30, 10)
+                new(50, 340, 40, 50),
+                new(70, 360, 30, 50),
+                new(80, 400, 30, 10)
             },
             new RectangleF[]
             {
-                new RectangleF(20, 330, 40, 10),
-                new RectangleF(20, 340, 70, 20),
-                new RectangleF(20, 360, 80, 20),
-                new RectangleF(50, 380, 50, 10),
-                new RectangleF(70, 390, 30, 10),
-                new RectangleF(70, 400, 40, 10)
+                new(20, 330, 40, 10),
+                new(20, 340, 70, 20),
+                new(20, 360, 80, 20),
+                new(50, 380, 50, 10),
+                new(70, 390, 30, 10),
+                new(70, 400, 40, 10)
             }
         };
 
@@ -1734,14 +1734,14 @@ public class RegionTests
             new Region(new Rectangle(10, 20, 50, 50)),
             new RectangleF[]
             {
-                new RectangleF(100, 100, 60, 60),
-                new RectangleF(200, 200, 80, 80)
+                new(100, 100, 60, 60),
+                new(200, 200, 80, 80)
             },
             new RectangleF[]
             {
-                new RectangleF(10, 20, 50, 50),
-                new RectangleF(100, 100, 60, 60),
-                new RectangleF(200, 200, 80, 80)
+                new (10, 20, 50, 50),
+                new (100, 100, 60, 60),
+                new (200, 200, 80, 80)
             }
         };
 
@@ -1749,12 +1749,12 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new Rectangle(10, 10, 100, 100)),
-            new RectangleF[] { new RectangleF(40, 60, 100, 20) },
+            new RectangleF[] { new(40, 60, 100, 20) },
             new RectangleF[]
             {
-                new RectangleF(10, 10, 100, 50),
-                new RectangleF(10, 60, 130, 20),
-                new RectangleF(10, 80, 100, 30)
+                new(10, 10, 100, 50),
+                new(10, 60, 130, 20),
+                new(10, 80, 100, 30)
             }
         };
 
@@ -1762,12 +1762,12 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new Rectangle(70, 10, 100, 100)),
-            new RectangleF[] { new RectangleF(40, 60, 100, 20) },
+            new RectangleF[] { new(40, 60, 100, 20) },
             new RectangleF[]
             {
-                new RectangleF(70, 10, 100, 50),
-                new RectangleF(40, 60, 130, 20),
-                new RectangleF(70, 80, 100, 30)
+                new(70, 10, 100, 50),
+                new(40, 60, 130, 20),
+                new(70, 80, 100, 30)
             }
         };
 
@@ -1775,11 +1775,11 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new Rectangle(40, 100, 100, 100)),
-            new RectangleF[] { new RectangleF(70, 80, 50, 40) },
+            new RectangleF[] { new(70, 80, 50, 40) },
             new RectangleF[]
             {
-                new RectangleF(70, 80, 50, 20),
-                new RectangleF(40, 100, 100, 100)
+                new(70, 80, 50, 20),
+                new(40, 100, 100, 100)
             }
         };
 
@@ -1787,11 +1787,11 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new Rectangle(40, 10, 100, 100)),
-            new RectangleF[] { new RectangleF(70, 80, 50, 40) },
+            new RectangleF[] { new(70, 80, 50, 40) },
             new RectangleF[]
             {
-                new RectangleF(40, 10, 100, 100),
-                new RectangleF(70, 110, 50, 10)
+                new(40, 10, 100, 100),
+                new(70, 110, 50, 10)
             }
         };
 
@@ -1801,16 +1801,16 @@ public class RegionTests
             new Region(new Rectangle(30, 30, 80, 80)),
             new RectangleF[]
             {
-                new RectangleF(45, 45, 200, 200),
-                new RectangleF(160, 260, 10, 10),
-                new RectangleF(170, 260, 10, 10)
+                new(45, 45, 200, 200),
+                new(160, 260, 10, 10),
+                new(170, 260, 10, 10)
             },
             new RectangleF[]
             {
-                new RectangleF(30, 30, 80, 15),
-                new RectangleF(30, 45, 215, 65),
-                new RectangleF(45, 110, 200, 135),
-                new RectangleF(160, 260, 20, 10)
+                new(30, 30, 80, 15),
+                new(30, 45, 215, 65),
+                new(45, 110, 200, 135),
+                new(160, 260, 20, 10)
             }
         };
     }
@@ -1976,7 +1976,7 @@ public class RegionTests
         using (var matrix = new Matrix())
         {
             region.Transform(matrix);
-            Assert.Equal(new RectangleF[] { new RectangleF(1, 2, 3, 4) }, region.GetRegionScans(matrix));
+            Assert.Equal(new RectangleF[] { new(1, 2, 3, 4) }, region.GetRegionScans(matrix));
         }
     }
 
@@ -1991,7 +1991,7 @@ public class RegionTests
             matrix.Scale(5, 6);
 
             region.Transform(matrix);
-            Assert.Equal(new RectangleF[] { new RectangleF(15, 23, 15, 24) }, region.GetRegionScans(emptyMatrix));
+            Assert.Equal(new RectangleF[] { new(15, 23, 15, 24) }, region.GetRegionScans(emptyMatrix));
         }
     }
 
@@ -2012,7 +2012,7 @@ public class RegionTests
 
             region.Transform(matrix);
             Assert.True(region.IsInfinite(s_graphic));
-            Assert.Equal(new RectangleF[] { new RectangleF(-4194304, -4194304, 8388608, 8388608) }, region.GetRegionScans(emptyMatrix));
+            Assert.Equal(new RectangleF[] { new(-4194304, -4194304, 8388608, 8388608) }, region.GetRegionScans(emptyMatrix));
         }
     }
 
@@ -2028,7 +2028,7 @@ public class RegionTests
             region.Intersect(new Rectangle(-10, -10, 20, 20));
             region.Transform(matrix);
             Assert.False(region.IsInfinite(s_graphic));
-            Assert.Equal(new RectangleF[] { new RectangleF(-20, -5, 40, 10) }, region.GetRegionScans(emptyMatrix));
+            Assert.Equal(new RectangleF[] { new(-20, -5, 40, 10) }, region.GetRegionScans(emptyMatrix));
         }
     }
 
@@ -2043,7 +2043,7 @@ public class RegionTests
             region.Transform(matrix);
 
             Assert.False(region.IsInfinite(s_graphic));
-            Assert.Equal(new RectangleF[] { new RectangleF(-10, 5, 40, 10) }, region.GetRegionScans(emptyMatrix));
+            Assert.Equal(new RectangleF[] { new(-10, 5, 40, 10) }, region.GetRegionScans(emptyMatrix));
         }
     }
 
@@ -2075,7 +2075,7 @@ public class RegionTests
         using (var matrix = new Matrix())
         {
             region.Translate(dx, dy);
-            Assert.Equal(new RectangleF[] { new RectangleF(1 + dx, 2 + dy, 3, 4) }, region.GetRegionScans(matrix));
+            Assert.Equal(new RectangleF[] { new(1 + dx, 2 + dy, 3, 4) }, region.GetRegionScans(matrix));
         }
     }
 
@@ -2089,7 +2089,7 @@ public class RegionTests
             region.Translate(10, 10);
 
             Assert.False(region.IsInfinite(s_graphic));
-            Assert.Equal(new RectangleF[] { new RectangleF(0, 0, 20, 20) }, region.GetRegionScans(matrix));
+            Assert.Equal(new RectangleF[] { new(0, 0, 20, 20) }, region.GetRegionScans(matrix));
         }
     }
 
@@ -2102,7 +2102,7 @@ public class RegionTests
         using (var matrix = new Matrix())
         {
             region.Translate(dx, dy);
-            Assert.Equal(new RectangleF[] { new RectangleF(1 + dx, 2 + dy, 3, 4) }, region.GetRegionScans(matrix));
+            Assert.Equal(new RectangleF[] { new(1 + dx, 2 + dy, 3, 4) }, region.GetRegionScans(matrix));
         }
     }
 
@@ -2116,7 +2116,7 @@ public class RegionTests
             region.Translate(10f, 10f);
 
             Assert.False(region.IsInfinite(s_graphic));
-            Assert.Equal(new RectangleF[] { new RectangleF(0, 0, 20, 20) }, region.GetRegionScans(matrix));
+            Assert.Equal(new RectangleF[] { new(0, 0, 20, 20) }, region.GetRegionScans(matrix));
         }
     }
 
@@ -2130,7 +2130,7 @@ public class RegionTests
             region.Translate(10f, 10f);
 
             Assert.True(region.IsInfinite(s_graphic));
-            Assert.Equal(new RectangleF[] { new RectangleF(-4194304, -4194304, 8388608, 8388608) }, region.GetRegionScans(matrix));
+            Assert.Equal(new RectangleF[] { new(-4194304, -4194304, 8388608, 8388608) }, region.GetRegionScans(matrix));
         }
     }
 
@@ -2167,7 +2167,7 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new RectangleF(500, 30, 60, 80)),
-            new RectangleF[] { new RectangleF(500, 30, 60, 80) },
+            new RectangleF[] { new(500, 30, 60, 80) },
             new RectangleF[0]
         };
 
@@ -2175,26 +2175,26 @@ public class RegionTests
         {
             new Region(new RectangleF(500, 30, 60, 80)),
             new RectangleF[] { RectangleF.Empty },
-            new RectangleF[] { new RectangleF(500, 30, 60, 80) }
+            new RectangleF[] { new(500, 30, 60, 80) }
         };
 
         yield return new object[]
         {
             new Region(new RectangleF(0, 0, 0, 0)),
-            new RectangleF[] { new RectangleF(500, 30, 60, 80) },
-            new RectangleF[] { new RectangleF(500, 30, 60, 80) }
+            new RectangleF[] { new(500, 30, 60, 80) },
+            new RectangleF[] { new(500, 30, 60, 80) }
         };
 
         yield return new object[]
         {
             new Region(),
-            new RectangleF[] { new RectangleF(520, 40, 60, 80) },
+            new RectangleF[] { new(520, 40, 60, 80) },
             new RectangleF[]
             {
-                new RectangleF(-4194304, -4194304, 8388608, 4194344),
-                new RectangleF(-4194304, 40, 4194824, 80),
-                new RectangleF(580, 40, 4193724, 80),
-                new RectangleF(-4194304, 120, 8388608, 4194184)
+                new(-4194304, -4194304, 8388608, 4194344),
+                new(-4194304, 40, 4194824, 80),
+                new(580, 40, 4193724, 80),
+                new(-4194304, 120, 8388608, 4194184)
             }
         };
 
@@ -2208,13 +2208,13 @@ public class RegionTests
         yield return new object[]
         {
             new Region(new RectangleF(380, 30, 60, 80)),
-            new RectangleF[] { new RectangleF(410, 40, 60, 80) },
+            new RectangleF[] { new(410, 40, 60, 80) },
             new RectangleF[]
             {
-                new RectangleF(380, 30, 60, 10),
-                new RectangleF(380, 40, 30, 70),
-                new RectangleF(440, 40, 30, 70),
-                new RectangleF(410, 110, 60, 10)
+                new(380, 30, 60, 10),
+                new(380, 40, 30, 70),
+                new(440, 40, 30, 70),
+                new(410, 110, 60, 10)
             }
         };
     }
@@ -2251,10 +2251,10 @@ public class RegionTests
 
             Assert.Equal(new RectangleF[]
             {
-                new RectangleF(-4194304, -4194304, 8388608, 4194306),
-                new RectangleF(-4194304, 2, 4194305, 4),
-                new RectangleF(4, 2, 4194300, 4),
-                new RectangleF(-4194304, 6, 8388608, 4194298)
+                new(-4194304, -4194304, 8388608, 4194306),
+                new(-4194304, 2, 4194305, 4),
+                new(4, 2, 4194300, 4),
+                new(-4194304, 6, 8388608, 4194298)
             }, region.GetRegionScans(matrix));
         }
     }

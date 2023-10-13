@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
 
@@ -15,8 +16,8 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData("Test name", (int)UiaCore.UIA.CalendarControlTypeId)]
-    [InlineData(null, (int)UiaCore.UIA.CalendarControlTypeId)]
+    [InlineData("Test name", (int)UIA_CONTROLTYPE_ID.UIA_CalendarControlTypeId)]
+    [InlineData(null, (int)UIA_CONTROLTYPE_ID.UIA_CalendarControlTypeId)]
     public void MonthCalendarAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(string name, int expected)
     {
         // UIA is less accessible than the test
@@ -27,9 +28,9 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
         };
         // AccessibleRole is not set = Default
 
-        object actual = monthCalendar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal((UiaCore.UIA)expected, actual);
+        Assert.Equal(expected, (int)actual);
         Assert.False(monthCalendar.IsHandleCreated);
     }
 
@@ -67,8 +68,8 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
         using MonthCalendar monthCalendar = new MonthCalendar();
         monthCalendar.AccessibleRole = role;
 
-        object actual = monthCalendar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(monthCalendar.IsHandleCreated);
@@ -81,8 +82,8 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
         DateTime dt = new DateTime(2000, 1, 1);
         monthCalendar.SetDate(dt);
 
-        Assert.Equal(dt.ToLongDateString(), monthCalendar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
-        Assert.Equal(AccessibleStates.None, monthCalendar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleStatePropertyId));
+        Assert.Equal(dt.ToLongDateString(), monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal(AccessibleStates.None, monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId));
         Assert.False(monthCalendar.IsHandleCreated);
     }
 

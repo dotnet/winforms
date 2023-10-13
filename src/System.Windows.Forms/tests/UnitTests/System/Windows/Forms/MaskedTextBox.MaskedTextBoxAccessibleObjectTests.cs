@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -24,9 +24,9 @@ public class MaskedTextBoxAccessibilityObjectTests
         maskedTextBox.CreateControl();
         // AccessibleRole is not set = Default
 
-        object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.EditControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, actual);
         Assert.True(maskedTextBox.IsHandleCreated);
     }
 
@@ -65,8 +65,8 @@ public class MaskedTextBoxAccessibilityObjectTests
         using MaskedTextBox maskedTextBox = new MaskedTextBox();
         maskedTextBox.AccessibleRole = role;
 
-        object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(maskedTextBox.IsHandleCreated);
@@ -81,7 +81,7 @@ public class MaskedTextBoxAccessibilityObjectTests
         maskedTextBox.Text = "000000";
         maskedTextBox.AccessibleName = accessibleName;
 
-        var actual = (string)maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+        var actual = (string)maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal(expectedAccessibleName, actual);
         Assert.False(maskedTextBox.IsHandleCreated);
@@ -97,7 +97,7 @@ public class MaskedTextBoxAccessibilityObjectTests
         maskedTextBox.Mask = "00/00/0000";
         maskedTextBox.AccessibleName = accessibleName;
 
-        var actual = (string)maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+        var actual = (string)maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal(expectedAccessibleName, actual);
         Assert.False(maskedTextBox.IsHandleCreated);
@@ -112,7 +112,7 @@ public class MaskedTextBoxAccessibilityObjectTests
         maskedTextBox.Text = "000000";
         maskedTextBox.Mask = useMask ? "00/00/0000" : null;
 
-        var actual = (string)maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId);
+        var actual = (string)maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId);
 
         Assert.Equal(maskedTextBox.WindowText, actual);
         Assert.Equal(useMask, maskedTextBox.Mask?.Length == actual.Length);
@@ -126,7 +126,7 @@ public class MaskedTextBoxAccessibilityObjectTests
         maskedTextBox.UseSystemPasswordChar = true;
         maskedTextBox.Text = "some text";
 
-        object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId);
+        object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId);
 
         Assert.Equal(SR.AccessDenied, actual);
         Assert.False(maskedTextBox.IsHandleCreated);
@@ -140,7 +140,7 @@ public class MaskedTextBoxAccessibilityObjectTests
         using MaskedTextBox maskedTextBox = new MaskedTextBox();
         maskedTextBox.UseSystemPasswordChar = useSystemPasswordChar;
 
-        object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsPasswordPropertyId);
+        object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
 
         Assert.Equal(useSystemPasswordChar, actual);
         Assert.False(maskedTextBox.IsHandleCreated);
@@ -154,7 +154,7 @@ public class MaskedTextBoxAccessibilityObjectTests
         using MaskedTextBox maskedTextBox = new MaskedTextBox();
         maskedTextBox.PasswordChar = passwordChar;
 
-        object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsPasswordPropertyId);
+        object actual = maskedTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
         bool expected = passwordChar != '\0';
 
         Assert.Equal(expected, actual);

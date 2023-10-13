@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -597,7 +598,7 @@ public abstract partial class DataGridViewCell
 
             base.SetFocus();
 
-            RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
 
         internal override int[] RuntimeId
@@ -664,27 +665,27 @@ public abstract partial class DataGridViewCell
 
         #region IRawElementProviderSimple Implementation
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.DataItemControlTypeId,
-                UiaCore.UIA.GridItemContainingGridPropertyId => _owner?.DataGridView?.AccessibilityObject,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused, // Announce the cell when focusing.
-                UiaCore.UIA.IsEnabledPropertyId => _owner?.DataGridView?.Enabled ?? false,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_GridItemContainingGridPropertyId => _owner?.DataGridView?.AccessibilityObject,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused, // Announce the cell when focusing.
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owner?.DataGridView?.Enabled ?? false,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                 _ => base.GetPropertyValue(propertyID),
             };
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
-            if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
-                patternId == UiaCore.UIA.InvokePatternId ||
-                patternId == UiaCore.UIA.ValuePatternId)
+            if (patternId == UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId ||
+                patternId == UIA_PATTERN_ID.UIA_InvokePatternId ||
+                patternId == UIA_PATTERN_ID.UIA_ValuePatternId)
             {
                 return true;
             }
 
-            if ((patternId == UiaCore.UIA.TableItemPatternId || patternId == UiaCore.UIA.GridItemPatternId)
+            if ((patternId == UIA_PATTERN_ID.UIA_TableItemPatternId || patternId == UIA_PATTERN_ID.UIA_GridItemPatternId)
                 // We don't want to implement patterns for header cells
                 && _owner?.ColumnIndex != -1 && _owner?.RowIndex != -1)
             {

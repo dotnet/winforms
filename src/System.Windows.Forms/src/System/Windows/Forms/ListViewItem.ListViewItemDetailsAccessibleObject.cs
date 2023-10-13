@@ -29,7 +29,9 @@ public partial class ListViewItem
         /// </summary>
         /// <param name="accessibleChildIndex">The index of the child <see cref="AccessibleObject"/>.</param>
         /// <returns>The index of an owning <see cref="ListViewSubItem"/>'s object.</returns>
-        private int AccessibleChildToSubItemIndex(int accessibleChildIndex) => HasImage ? accessibleChildIndex - 1 : accessibleChildIndex;
+        private int AccessibleChildToSubItemIndex(int accessibleChildIndex) => HasImage
+            ? _owningListView.Columns[accessibleChildIndex - 1]._correspondingListViewSubItemIndex
+            : _owningListView.Columns[accessibleChildIndex]._correspondingListViewSubItemIndex;
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
@@ -106,7 +108,16 @@ public partial class ListViewItem
             }
 
             int subItemIndex = _owningItem.SubItems.IndexOf(subItemAccessibleObject.OwningSubItem);
-            int accessibleChildIndex = SubItemToAccessibleChildIndex(subItemIndex);
+            int accessibleChildIndex = InvalidIndex;
+            for (int i = 0; i < _owningListView.Columns.Count; i++)
+            {
+                if (_owningListView.Columns[i]._correspondingListViewSubItemIndex == subItemIndex)
+                {
+                    accessibleChildIndex = i + (HasImage ? 1 : 0);
+                    break;
+                }
+            }
+
             return accessibleChildIndex > LastChildIndex ? InvalidIndex : accessibleChildIndex;
         }
 
@@ -115,7 +126,7 @@ public partial class ListViewItem
         // when there is no ListViewSubItem, but the cell for it is displayed and the user can interact with it.
         internal AccessibleObject? GetDetailsSubItemOrFake(int subItemIndex)
         {
-            int accessibleChildIndex = SubItemToAccessibleChildIndex(subItemIndex);
+            int accessibleChildIndex = HasImage ? subItemIndex + 1 : subItemIndex;
             return GetDetailsSubItemOrFakeInternal(accessibleChildIndex);
         }
 
@@ -168,7 +179,7 @@ public partial class ListViewItem
 
         internal override Rectangle GetSubItemBounds(int accessibleChildIndex)
             => _owningListView.IsHandleCreated
-                ? _owningListView.GetSubItemRect(_owningItem.Index, AccessibleChildToSubItemIndex(accessibleChildIndex))
+                ? _owningListView.GetSubItemRect(_owningItem.Index, HasImage ? accessibleChildIndex - 1 : accessibleChildIndex)
                 : Rectangle.Empty;
 
         /// <devdoc>
@@ -185,12 +196,5 @@ public partial class ListViewItem
 
             _listViewSubItemAccessibleObjects.Clear();
         }
-
-        /// <summary>
-        ///  Converts the provided index of a <see cref="ListViewSubItem"/> to an index of the <see cref="AccessibleObject"/>'s child.
-        /// </summary>
-        /// <param name="subItemIndex">The index of an owning <see cref="ListViewSubItem"/>'s object.</param>
-        /// <returns>The index of the child <see cref="AccessibleObject"/>.</returns>
-        private int SubItemToAccessibleChildIndex(int subItemIndex) => HasImage ? subItemIndex + 1 : subItemIndex;
     }
 }

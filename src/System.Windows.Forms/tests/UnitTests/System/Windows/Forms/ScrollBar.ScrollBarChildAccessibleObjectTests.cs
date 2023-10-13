@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ScrollBar;
 using static Interop;
 
@@ -85,7 +86,7 @@ public class ScrollBar_ScrollBarChildAccessibleObjectTests
     public void ScrollBarChildAccessibleObject_GetPropertyValue_ControlType_ReturnsExpected()
     {
         var accessibleObject = new ScrollBarChildAccessibleObject(null);
-        Assert.Equal(UiaCore.UIA.ButtonControlTypeId, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsTheory]
@@ -96,7 +97,7 @@ public class ScrollBar_ScrollBarChildAccessibleObjectTests
         control.Enabled = isEnabled;
         var accessibleObject = new ScrollBarChildAccessibleObject(control);
 
-        Assert.Equal(isEnabled, accessibleObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId));
+        Assert.Equal(isEnabled, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 

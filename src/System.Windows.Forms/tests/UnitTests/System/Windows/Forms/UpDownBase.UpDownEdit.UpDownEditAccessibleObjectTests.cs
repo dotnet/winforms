@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -116,34 +116,34 @@ public class UpDownEditAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.IsTextPatternAvailablePropertyId)]
-    [InlineData((int)UiaCore.UIA.IsTextPattern2AvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId)]
     public void UpDownEditAccessibleObject_GetPropertyValue_PatternsSuported(int propertyID)
     {
         using UpDownBase upDown = new SubUpDownBase();
         using UpDownBase.UpDownEdit upDownEdit = new UpDownBase.UpDownEdit(upDown);
         AccessibleObject accessibleObject = upDownEdit.AccessibilityObject;
-        Assert.True((bool)accessibleObject.GetPropertyValue((UiaCore.UIA)propertyID));
+        Assert.True((bool)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID));
         Assert.False(upDown.IsHandleCreated);
         Assert.False(upDownEdit.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.TextPatternId)]
-    [InlineData((int)UiaCore.UIA.TextPattern2Id)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TextPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TextPattern2Id)]
     public void UpDownEditAccessibleObject_IsPatternSupported_PatternsSuported(int patternId)
     {
         using UpDownBase upDown = new SubUpDownBase();
         using UpDownBase.UpDownEdit upDownEdit = new UpDownBase.UpDownEdit(upDown);
         AccessibleObject accessibleObject = upDownEdit.AccessibilityObject;
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(upDown.IsHandleCreated);
         Assert.False(upDownEdit.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData(true, AccessibleRole.Text, (int)UiaCore.UIA.EditControlTypeId)]
-    [InlineData(false, AccessibleRole.None, (int)UiaCore.UIA.PaneControlTypeId)]
+    [InlineData(true, AccessibleRole.Text, (int)UIA_CONTROLTYPE_ID.UIA_EditControlTypeId)]
+    [InlineData(false, AccessibleRole.None, (int)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)]
     public void UpDownEditAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool createControl, AccessibleRole expectedRole, int expectedType)
     {
         using UpDownBase upDown = new SubUpDownBase();
@@ -156,10 +156,10 @@ public class UpDownEditAccessibleObjectTests
         }
 
         AccessibleObject accessibleObject = upDownEdit.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedRole, accessibleObject.Role);
-        Assert.Equal((UiaCore.UIA)expectedType, actual);
+        Assert.Equal(expectedType, (int)actual);
         Assert.Equal(createControl, upDownEdit.IsHandleCreated);
     }
 
@@ -186,8 +186,8 @@ public class UpDownEditAccessibleObjectTests
         using UpDownBase.UpDownEdit upDownEdit = new UpDownBase.UpDownEdit(upDown);
         upDownEdit.AccessibleRole = role;
 
-        object actual = upDownEdit.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = upDownEdit.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(upDownEdit.IsHandleCreated);

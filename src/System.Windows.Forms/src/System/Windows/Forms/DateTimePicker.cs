@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using SourceGenerated;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -1064,7 +1065,7 @@ public partial class DateTimePicker : Control
         if (IsAccessibilityObjectCreated)
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
                 oldValue: UiaCore.ExpandCollapseState.Expanded,
                 newValue: UiaCore.ExpandCollapseState.Collapsed);
         }
@@ -1082,7 +1083,7 @@ public partial class DateTimePicker : Control
         if (IsAccessibilityObjectCreated)
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
                 oldValue: UiaCore.ExpandCollapseState.Collapsed,
                 newValue: UiaCore.ExpandCollapseState.Expanded);
         }
@@ -1104,7 +1105,7 @@ public partial class DateTimePicker : Control
         if (IsAccessibilityObjectCreated)
         {
             _expandCollapseState = UiaCore.ExpandCollapseState.Collapsed;
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -1159,7 +1160,7 @@ public partial class DateTimePicker : Control
             // Anyway it doesn't matter because the Narrator pronounces actual AO state.
             string? value = AccessibilityObject.Value;
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ValueValuePropertyId,
+                UIA_PROPERTY_ID.UIA_ValueValuePropertyId,
                 oldValue: value,
                 newValue: value);
         }

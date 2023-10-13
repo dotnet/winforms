@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using Microsoft.DotNet.RemoteExecutor;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 using static Interop.ComCtl32;
@@ -5781,7 +5782,7 @@ public class ListViewTests
         {
         }
 
-        internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
+        internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
             RaiseAutomationEventCalls++;
             return base.RaiseAutomationEvent(eventId);

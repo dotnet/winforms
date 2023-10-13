@@ -38,233 +38,233 @@ internal class ControlCommandSet : CommandSet
         commandSet = new CommandSetItem[]
         {
             // Alignment commands
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectPrimary),
-                              new EventHandler(OnMenuAlignByPrimary),
-                              StandardCommands.AlignLeft, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectPrimary),
+                new EventHandler(OnMenuAlignByPrimary),
+                StandardCommands.AlignLeft, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectPrimary),
-                              new EventHandler(OnMenuAlignByPrimary),
-                              StandardCommands.AlignTop, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectPrimary),
+                new EventHandler(OnMenuAlignByPrimary),
+                StandardCommands.AlignTop, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusControlsOnlySelectionAndGrid),
-                              new EventHandler(OnMenuAlignToGrid),
-                              StandardCommands.AlignToGrid, true),
+            new(
+                this,
+                new EventHandler(OnStatusControlsOnlySelectionAndGrid),
+                new EventHandler(OnMenuAlignToGrid),
+                StandardCommands.AlignToGrid, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectPrimary),
-                              new EventHandler(OnMenuAlignByPrimary),
-                              StandardCommands.AlignBottom, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectPrimary),
+                new EventHandler(OnMenuAlignByPrimary),
+                StandardCommands.AlignBottom, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectPrimary),
-                              new EventHandler(OnMenuAlignByPrimary),
-                              StandardCommands.AlignHorizontalCenters, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectPrimary),
+                new EventHandler(OnMenuAlignByPrimary),
+                StandardCommands.AlignHorizontalCenters, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectPrimary),
-                              new EventHandler(OnMenuAlignByPrimary),
-                              StandardCommands.AlignRight, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectPrimary),
+                new EventHandler(OnMenuAlignByPrimary),
+                StandardCommands.AlignRight, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectPrimary),
-                              new EventHandler(OnMenuAlignByPrimary),
-                              StandardCommands.AlignVerticalCenters, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectPrimary),
+                new EventHandler(OnMenuAlignByPrimary),
+                StandardCommands.AlignVerticalCenters, true),
 
             // Centering commands
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusControlsOnlySelection),
-                              new EventHandler(OnMenuCenterSelection),
-                              StandardCommands.CenterHorizontally, true),
+            new(
+                this,
+                new EventHandler(OnStatusControlsOnlySelection),
+                new EventHandler(OnMenuCenterSelection),
+                StandardCommands.CenterHorizontally, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusControlsOnlySelection),
-                              new EventHandler(OnMenuCenterSelection),
-                              StandardCommands.CenterVertically, true),
+            new(
+                this,
+                new EventHandler(OnStatusControlsOnlySelection),
+                new EventHandler(OnMenuCenterSelection),
+                StandardCommands.CenterVertically, true),
 
             // Spacing commands
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectNonContained),
-                              new EventHandler(OnMenuSpacingCommand),
-                              StandardCommands.HorizSpaceConcatenate, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectNonContained),
+                new EventHandler(OnMenuSpacingCommand),
+                StandardCommands.HorizSpaceConcatenate, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectNonContained),
-                              new EventHandler(OnMenuSpacingCommand),
-                              StandardCommands.HorizSpaceDecrease, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectNonContained),
+                new EventHandler(OnMenuSpacingCommand),
+                StandardCommands.HorizSpaceDecrease, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectNonContained),
-                              new EventHandler(OnMenuSpacingCommand),
-                              StandardCommands.HorizSpaceIncrease, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectNonContained),
+                new EventHandler(OnMenuSpacingCommand),
+                StandardCommands.HorizSpaceIncrease, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectNonContained),
-                              new EventHandler(OnMenuSpacingCommand),
-                              StandardCommands.HorizSpaceMakeEqual, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectNonContained),
+                new EventHandler(OnMenuSpacingCommand),
+                StandardCommands.HorizSpaceMakeEqual, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectNonContained),
-                              new EventHandler(OnMenuSpacingCommand),
-                              StandardCommands.VertSpaceConcatenate, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectNonContained),
+                new EventHandler(OnMenuSpacingCommand),
+                StandardCommands.VertSpaceConcatenate, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectNonContained),
-                              new EventHandler(OnMenuSpacingCommand),
-                              StandardCommands.VertSpaceDecrease, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectNonContained),
+                new EventHandler(OnMenuSpacingCommand),
+                StandardCommands.VertSpaceDecrease, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectNonContained),
-                              new EventHandler(OnMenuSpacingCommand),
-                              StandardCommands.VertSpaceIncrease, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectNonContained),
+                new EventHandler(OnMenuSpacingCommand),
+                StandardCommands.VertSpaceIncrease, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectNonContained),
-                              new EventHandler(OnMenuSpacingCommand),
-                              StandardCommands.VertSpaceMakeEqual, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectNonContained),
+                new EventHandler(OnMenuSpacingCommand),
+                StandardCommands.VertSpaceMakeEqual, true),
 
             // Sizing commands
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectPrimary),
-                              new EventHandler(OnMenuSizingCommand),
-                              StandardCommands.SizeToControl, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectPrimary),
+                new EventHandler(OnMenuSizingCommand),
+                StandardCommands.SizeToControl, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectPrimary),
-                              new EventHandler(OnMenuSizingCommand),
-                              StandardCommands.SizeToControlWidth, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectPrimary),
+                new EventHandler(OnMenuSizingCommand),
+                StandardCommands.SizeToControlWidth, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusMultiSelectPrimary),
-                              new EventHandler(OnMenuSizingCommand),
-                              StandardCommands.SizeToControlHeight, true),
+            new(
+                this,
+                new EventHandler(OnStatusMultiSelectPrimary),
+                new EventHandler(OnMenuSizingCommand),
+                StandardCommands.SizeToControlHeight, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusControlsOnlySelectionAndGrid),
-                              new EventHandler(OnMenuSizeToGrid),
-                              StandardCommands.SizeToGrid, true),
+            new(
+                this,
+                new EventHandler(OnStatusControlsOnlySelectionAndGrid),
+                new EventHandler(OnMenuSizeToGrid),
+                StandardCommands.SizeToGrid, true),
 
             // Z-Order commands
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusZOrder),
-                              new EventHandler(OnMenuZOrderSelection),
-                              StandardCommands.BringToFront, true),
+            new(
+                this,
+                new EventHandler(OnStatusZOrder),
+                new EventHandler(OnMenuZOrderSelection),
+                StandardCommands.BringToFront, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusZOrder),
-                              new EventHandler(OnMenuZOrderSelection),
-                              StandardCommands.SendToBack, true),
+            new(
+                this,
+                new EventHandler(OnStatusZOrder),
+                new EventHandler(OnMenuZOrderSelection),
+                StandardCommands.SendToBack, true),
 
             // Miscellaneous commands
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusShowGrid),
-                              new EventHandler(OnMenuShowGrid),
-                              StandardCommands.ShowGrid, true),
+            new(
+                this,
+                new EventHandler(OnStatusShowGrid),
+                new EventHandler(OnMenuShowGrid),
+                StandardCommands.ShowGrid, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusSnapToGrid),
-                              new EventHandler(OnMenuSnapToGrid),
-                              StandardCommands.SnapToGrid, true),
+            new(
+                this,
+                new EventHandler(OnStatusSnapToGrid),
+                new EventHandler(OnMenuSnapToGrid),
+                StandardCommands.SnapToGrid, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAnyControls),
-                              new EventHandler(OnMenuTabOrder),
-                              StandardCommands.TabOrder, true),
+            new(
+                this,
+                new EventHandler(OnStatusAnyControls),
+                new EventHandler(OnMenuTabOrder),
+                StandardCommands.TabOrder, true),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusLockControls),
-                              new EventHandler(OnMenuLockControls),
-                              StandardCommands.LockControls, true),
+            new(
+                this,
+                new EventHandler(OnStatusLockControls),
+                new EventHandler(OnMenuLockControls),
+                StandardCommands.LockControls, true),
 
             // Keyboard commands
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnKeySize),
-                              MenuCommands.KeySizeWidthIncrease),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnKeySize),
+                MenuCommands.KeySizeWidthIncrease),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnKeySize),
-                              MenuCommands.KeySizeHeightIncrease),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnKeySize),
+                MenuCommands.KeySizeHeightIncrease),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnKeySize),
-                              MenuCommands.KeySizeWidthDecrease),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnKeySize),
+                MenuCommands.KeySizeWidthDecrease),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnKeySize),
-                              MenuCommands.KeySizeHeightDecrease),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnKeySize),
+                MenuCommands.KeySizeHeightDecrease),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnKeySize),
-                              MenuCommands.KeyNudgeWidthIncrease),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnKeySize),
+                MenuCommands.KeyNudgeWidthIncrease),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnKeySize),
-                              MenuCommands.KeyNudgeHeightIncrease),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnKeySize),
+                MenuCommands.KeyNudgeHeightIncrease),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnKeySize),
-                              MenuCommands.KeyNudgeWidthDecrease),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnKeySize),
+                MenuCommands.KeyNudgeWidthDecrease),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnKeySize),
-                              MenuCommands.KeyNudgeHeightDecrease),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnKeySize),
+                MenuCommands.KeyNudgeHeightDecrease),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnKeySelect),
-                              MenuCommands.KeySelectNext),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnKeySelect),
+                MenuCommands.KeySelectNext),
 
-            new CommandSetItem(
-                              this,
-                              new EventHandler(OnStatusAlways),
-                              new EventHandler(OnKeySelect),
-                              MenuCommands.KeySelectPrevious),
+            new(
+                this,
+                new EventHandler(OnStatusAlways),
+                new EventHandler(OnKeySelect),
+                MenuCommands.KeySelectPrevious),
         };
 
         if (MenuService is not null)

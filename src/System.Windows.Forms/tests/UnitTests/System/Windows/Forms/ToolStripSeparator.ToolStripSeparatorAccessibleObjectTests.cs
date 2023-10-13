@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripSeparator;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -23,9 +23,9 @@ public class ToolStripSeparator_ToolStripSeparatorAccessibleObjectTests
         using ToolStripSeparator toolStripSeparator = new ToolStripSeparator();
         // AccessibleRole is not set = Default
 
-        object actual = toolStripSeparator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = toolStripSeparator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.SeparatorControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_SeparatorControlTypeId, actual);
     }
 
     [WinFormsFact]
@@ -61,8 +61,8 @@ public class ToolStripSeparator_ToolStripSeparatorAccessibleObjectTests
         using ToolStripSeparator toolStripSeparator = new ToolStripSeparator();
         toolStripSeparator.AccessibleRole = role;
 
-        object actual = toolStripSeparator.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = toolStripSeparator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
     }

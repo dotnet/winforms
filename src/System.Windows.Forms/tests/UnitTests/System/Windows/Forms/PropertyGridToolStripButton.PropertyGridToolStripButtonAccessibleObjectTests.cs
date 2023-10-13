@@ -1,8 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -46,12 +45,12 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
         AccessibleObject alphaButtonAccessibleObject = toolStripButtons[1].AccessibilityObject;
         AccessibleObject propertyPagesButtonAccessibleObject = propertyPagesButton.AccessibilityObject;
 
-        Assert.True(categoryButtonAccessibleObject.IsPatternSupported(UIA.SelectionItemPatternId));
-        Assert.True(alphaButtonAccessibleObject.IsPatternSupported(UIA.SelectionItemPatternId));
+        Assert.True(categoryButtonAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_SelectionItemPatternId));
+        Assert.True(alphaButtonAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_SelectionItemPatternId));
 
         // In accordance with the behavior of the PropertyGrid, the "Property Page" button does not have
         // the role of a "RadioButton" and therefore does not support the "SelectionItem" pattern
-        Assert.False(propertyPagesButtonAccessibleObject.IsPatternSupported(UIA.SelectionItemPatternId));
+        Assert.False(propertyPagesButtonAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_SelectionItemPatternId));
     }
 
     [WinFormsFact]
@@ -61,9 +60,9 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
         AccessibleObject accessibleObject = toolStripButtons[0].AccessibilityObject;
 
-        UiaCore.UIA actual = (UiaCore.UIA)accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.RadioButtonControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_RadioButtonControlTypeId, actual);
     }
 
     [WinFormsFact]
@@ -182,8 +181,8 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
         AccessibleObject alphaButtonAccessibleObject = toolStripButtons[1].AccessibilityObject;
         AccessibleObject propertyPagesButtonAccessibleObject = propertyPagesButton.AccessibilityObject;
 
-        Assert.False(categoryButtonAccessibleObject.IsPatternSupported(UIA.TogglePatternId));
-        Assert.False(alphaButtonAccessibleObject.IsPatternSupported(UIA.TogglePatternId));
-        Assert.False(propertyPagesButtonAccessibleObject.IsPatternSupported(UIA.TogglePatternId));
+        Assert.False(categoryButtonAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_TogglePatternId));
+        Assert.False(alphaButtonAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_TogglePatternId));
+        Assert.False(propertyPagesButtonAccessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_TogglePatternId));
     }
 }

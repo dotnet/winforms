@@ -259,12 +259,11 @@ public partial class CollectionEditor
             // If the width is odd - favor pushing it over one pixel right.
             middle.X += (dropDownRect.Width % 2);
 
-            Point[] arrow = new Point[]
-            {
-                new Point(middle.X - s_offset2X, middle.Y - 1),
-                new Point(middle.X + s_offset2X + 1, middle.Y - 1),
-                new Point(middle.X, middle.Y + s_offset2Y)
-            };
+            Point[] arrow = [
+                new(middle.X - s_offset2X, middle.Y - 1),
+                new(middle.X + s_offset2X + 1, middle.Y - 1),
+                new(middle.X, middle.Y + s_offset2Y)
+            ];
 
             deviceContext.TryGetGraphics(create: true)?.FillPolygon(SystemBrushes.ControlText, arrow);
         }

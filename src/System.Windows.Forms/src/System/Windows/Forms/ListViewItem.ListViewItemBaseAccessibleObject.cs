@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -168,16 +169,16 @@ public partial class ListViewItem
 
         internal override int GetChildIndex(AccessibleObject? child) => InvalidIndex;
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListItemControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => OwningListItemFocused,
-                UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                UiaCore.UIA.IsOffscreenPropertyId => OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed ||
-                                                     (bool)(base.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId) ?? false),
-                UiaCore.UIA.NativeWindowHandlePropertyId => (nint)_owningListView.InternalHandle,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => OwningListItemFocused,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListView.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed ||
+                                                     (bool)(base.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId) ?? false),
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => (nint)_owningListView.InternalHandle,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -218,14 +219,14 @@ public partial class ListViewItem
         /// </summary>
         /// <param name="patternId">The pattern ID.</param>
         /// <returns>True if specified </returns>
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.ScrollItemPatternId => true,
-                UiaCore.UIA.LegacyIAccessiblePatternId => true,
-                UiaCore.UIA.SelectionItemPatternId => true,
-                UiaCore.UIA.InvokePatternId => true,
-                UiaCore.UIA.TogglePatternId => _owningListView.CheckBoxes,
+                UIA_PATTERN_ID.UIA_ScrollItemPatternId => true,
+                UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId => true,
+                UIA_PATTERN_ID.UIA_SelectionItemPatternId => true,
+                UIA_PATTERN_ID.UIA_InvokePatternId => true,
+                UIA_PATTERN_ID.UIA_TogglePatternId => _owningListView.CheckBoxes,
                 _ => base.IsPatternSupported(patternId)
             };
 
@@ -255,13 +256,13 @@ public partial class ListViewItem
                 PInvoke.InvalidateRect(_owningListView, lpRect: null, bErase: false);
             }
 
-            RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
+            RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
+            RaiseAutomationEvent(UIA_EVENT_ID.UIA_SelectionItem_ElementSelectedEventId);
         }
 
         internal override void SetFocus()
         {
-            RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             SelectItem();
         }
 

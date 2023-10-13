@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -115,18 +116,18 @@ public class DataGridViewColumnHeaderCellAccessibleObjectTests : DataGridViewCol
         column.SortMode = DataGridViewColumnSortMode.Automatic;
         var accessibleObject = (DataGridViewColumnHeaderCellAccessibleObject)column.HeaderCell.AccessibilityObject;
 
-        Assert.Equal(SR.DataGridView_AccColumnHeaderCellDefaultAction, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(SR.DataGridView_AccColumnHeaderCellDefaultAction, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.InvokePatternId)]
-    [InlineData((int)UiaCore.UIA.LegacyIAccessiblePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_InvokePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)]
     public void DataGridViewColumnHeaderCellAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
         var accessibleObject = new DataGridViewColumnHeaderCellAccessibleObject(null);
 
-        Assert.True((bool)accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True((bool)accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
 
     [WinFormsFact]
@@ -134,7 +135,7 @@ public class DataGridViewColumnHeaderCellAccessibleObjectTests : DataGridViewCol
     {
         var accessibleObject = new DataGridViewColumnHeaderCellAccessibleObject(null);
 
-        Assert.Equal(UiaCore.UIA.HeaderControlTypeId, accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]
@@ -146,7 +147,7 @@ public class DataGridViewColumnHeaderCellAccessibleObjectTests : DataGridViewCol
         column.SortMode = DataGridViewColumnSortMode.Automatic;
 
         var accessibleObject = (DataGridViewColumnHeaderCellAccessibleObject)column.HeaderCell.AccessibilityObject;
-        Assert.Equal("Header text 1", accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.Equal("Header text 1", accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
     }
 
     [WinFormsFact]

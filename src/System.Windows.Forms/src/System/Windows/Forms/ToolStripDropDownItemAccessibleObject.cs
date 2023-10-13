@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.Layout;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -46,9 +47,9 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
         return true;
     }
 
-    internal override bool IsPatternSupported(UiaCore.UIA patternId)
+    internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
     {
-        if (patternId == UiaCore.UIA.ExpandCollapsePatternId && _owner.HasDropDownItems)
+        if (patternId == UIA_PATTERN_ID.UIA_ExpandCollapsePatternId && _owner.HasDropDownItems)
         {
             return true;
         }
@@ -58,10 +59,10 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
         }
     }
 
-    internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+    internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
         propertyID switch
         {
-            UiaCore.UIA.IsOffscreenPropertyId when
+            UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId when
                 _owner.Owner is ToolStripDropDown toolStripDropDown
                 => !toolStripDropDown.Visible,
             _ => base.GetPropertyValue(propertyID)

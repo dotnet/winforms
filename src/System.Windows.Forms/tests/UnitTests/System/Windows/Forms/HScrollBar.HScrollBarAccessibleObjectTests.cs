@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ScrollBar;
 using static Interop;
 
@@ -71,9 +72,9 @@ public class HScrollBar_HScrollBarAccessibleObjectTests
         using HScrollBar scrollBar = new();
         // AccessibleRole is not set = Default
 
-        object actual = scrollBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.ScrollBarControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ScrollBarControlTypeId, actual);
         Assert.False(scrollBar.IsHandleCreated);
     }
 
@@ -99,8 +100,8 @@ public class HScrollBar_HScrollBarAccessibleObjectTests
         using HScrollBar scrollBar = new();
         scrollBar.AccessibleRole = role;
 
-        object actual = scrollBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(scrollBar.IsHandleCreated);
@@ -263,7 +264,7 @@ public class HScrollBar_HScrollBarAccessibleObjectTests
             Enabled = enabled
         };
 
-        Assert.Equal(enabled, scrollBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId));
+        Assert.Equal(enabled, scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.False(scrollBar.IsHandleCreated);
     }
 

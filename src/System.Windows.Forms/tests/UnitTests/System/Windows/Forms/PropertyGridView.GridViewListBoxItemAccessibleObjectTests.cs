@@ -3,8 +3,8 @@
 
 using System.Reflection;
 using System.Windows.Forms.PropertyGridInternal;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.PropertyGridInternal.PropertyGridView;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -56,7 +56,7 @@ public class PropertyGridView_GridViewListBoxItemAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.InvokePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_InvokePatternId)]
     public void GridViewListBoxItemAccessibleObject_IsPatternSupported_ReturnsExpected(int patternId)
     {
         using GridViewListBox control = new(new PropertyGridView(null, null));
@@ -64,7 +64,7 @@ public class PropertyGridView_GridViewListBoxItemAccessibleObjectTests
             .GetNestedType("GridViewListBoxItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { control, new ItemArray.Entry("A") });
 
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
         Assert.False(control.IsHandleCreated);
     }
 }

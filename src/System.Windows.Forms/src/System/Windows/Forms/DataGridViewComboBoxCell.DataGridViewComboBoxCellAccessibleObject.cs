@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -18,19 +19,19 @@ public partial class DataGridViewComboBoxCell
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => IsInComboBoxMode
-                    ? UiaCore.UIA.ComboBoxControlTypeId
-                    : UiaCore.UIA.DataItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => IsInComboBoxMode
+                    ? UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId
+                    : UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId,
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.ExpandCollapsePatternId => IsInComboBoxMode,
+                UIA_PATTERN_ID.UIA_ExpandCollapsePatternId => IsInComboBoxMode,
                 _ => base.IsPatternSupported(patternId)
             };
 

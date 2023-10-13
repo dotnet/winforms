@@ -5,7 +5,7 @@ using System.Windows.Forms.Automation;
 using System.Windows.Forms.IntegrationTests.Common;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -56,7 +56,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
-        object actual = itemAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+        object actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal(itemAccessibleObject.Name, actual);
         Assert.False(listBox.IsHandleCreated);
@@ -72,7 +72,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
-        object actual = itemAccessibleObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId);
+        object actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
 
         Assert.Equal(itemAccessibleObject.RuntimeId, actual);
         Assert.False(listBox.IsHandleCreated);
@@ -88,7 +88,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
-        object actual = itemAccessibleObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId);
+        object actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
         using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray(itemAccessibleObject.BoundingRectangle);
         Assert.Equal(((VARIANT)rectArray).ToObject(), actual);
         Assert.False(listBox.IsHandleCreated);
@@ -104,7 +104,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
-        object actual = itemAccessibleObject.GetPropertyValue(UiaCore.UIA.HelpTextPropertyId);
+        object actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId);
 
         Assert.Equal(itemAccessibleObject.Help ?? string.Empty, actual);
         Assert.False(listBox.IsHandleCreated);
@@ -120,28 +120,28 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
-        bool actual = (bool)itemAccessibleObject.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId);
+        bool actual = (bool)itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
 
         Assert.False(actual);
         Assert.False(listBox.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData(false, ((int)UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsGridItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsGridPatternAvailablePropertyId))]
-    [InlineData(true, ((int)UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId))]
-    [InlineData(true, ((int)UiaCore.UIA.IsScrollItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsScrollPatternAvailablePropertyId))]
-    [InlineData(true, ((int)UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsSelectionPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTableItemPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTablePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTextPattern2AvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTextPatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsTogglePatternAvailablePropertyId))]
-    [InlineData(false, ((int)UiaCore.UIA.IsValuePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsGridItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsGridPatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsMultipleViewPatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsScrollItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsScrollPatternAvailablePropertyId))]
+    [InlineData(true, ((int)UIA_PROPERTY_ID.UIA_IsSelectionItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTableItemPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTablePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsTogglePatternAvailablePropertyId))]
+    [InlineData(false, ((int)UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId))]
     public void ListBoxItemAccessibleObject_GetPropertyValue_Pattern_ReturnsExpected(bool expected, int propertyId)
     {
         using ListBox listBox = new();
@@ -149,7 +149,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         ListBox.ListBoxAccessibleObject listBoxAccessibleObject = new(listBox);
         ListBox.ListBoxItemAccessibleObject accessibleObject = (ListBox.ListBoxItemAccessibleObject)listBoxAccessibleObject.GetChild(0);
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId) ?? false);
+        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
         Assert.False(listBox.IsHandleCreated);
     }
 }

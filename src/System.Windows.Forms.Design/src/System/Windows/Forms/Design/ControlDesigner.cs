@@ -2252,7 +2252,7 @@ public partial class ControlDesigner : ComponentDesigner
         };
 
         string exceptionText = ex.ToString();
-        stringFormat.SetMeasurableCharacterRanges(new CharacterRange[] { new CharacterRange(0, exceptionText.Length) });
+        stringFormat.SetMeasurableCharacterRanges(new CharacterRange[] { new(0, exceptionText.Length) });
 
         // rendering calculations...
         int penThickness = 2;

@@ -1717,7 +1717,7 @@ public class UpDownBaseTests
     public static IEnumerable<object[]> OnChanged_TestData()
     {
         yield return new object[] { null, null };
-        yield return new object[] { new object(), new EventArgs() };
+        yield return new object[] { new(), new EventArgs() };
     }
 
     [WinFormsTheory]
@@ -2350,7 +2350,7 @@ public class UpDownBaseTests
 
     public static IEnumerable<object[]> OnTextBoxKeyDown_TestData()
     {
-        foreach (object source in new object[] { null, new object() })
+        foreach (object source in new object[] { null, new() })
         {
             foreach (bool userEdit in new bool[] { true, false })
             {
@@ -2504,9 +2504,9 @@ public class UpDownBaseTests
                 foreach (LeftRightAlignment upDownAlign in Enum.GetValues(typeof(LeftRightAlignment)))
                 {
                     yield return new object[] { borderStyle, rightToLeft, upDownAlign, null, null };
-                    yield return new object[] { borderStyle, rightToLeft, upDownAlign, new object(), null };
+                    yield return new object[] { borderStyle, rightToLeft, upDownAlign, new(), null };
                     yield return new object[] { borderStyle, rightToLeft, upDownAlign, null, new EventArgs() };
-                    yield return new object[] { borderStyle, rightToLeft, upDownAlign, new object(), new EventArgs() };
+                    yield return new object[] { borderStyle, rightToLeft, upDownAlign, new(), new EventArgs() };
                 }
             }
         }

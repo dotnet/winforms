@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests;
@@ -95,7 +96,7 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
         AccessibleObject accessibleObject = gridEntry.AccessibilityObject;
 
         Assert.True(gridEntry.Enumerable);
-        Assert.True(accessibleObject.IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId));
+        Assert.True(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_ExpandCollapsePatternId));
         Assert.False(propertyGrid.IsHandleCreated);
         Assert.False(propertyGridView.IsHandleCreated);
     }
@@ -114,7 +115,7 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
         AccessibleObject accessibleObject = gridEntry.AccessibilityObject;
 
         Assert.True(gridEntry.NeedsDropDownButton);
-        Assert.True(accessibleObject.IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId));
+        Assert.True(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_ExpandCollapsePatternId));
         Assert.False(propertyGrid.IsHandleCreated);
         Assert.False(propertyGridView.IsHandleCreated);
     }

@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -1237,11 +1237,11 @@ public class DataGridViewTopRowAccessibleObjectTests
         using DataGridView dataGridView = new DataGridView();
         AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
 
-        Assert.True((bool)topRowAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
-        Assert.Equal(string.Empty, topRowAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.HelpTextPropertyId));
-        Assert.Equal(SR.DataGridView_AccTopRow, topRowAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.NamePropertyId));
-        Assert.Equal(SR.DataGridView_AccTopRow, topRowAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.LegacyIAccessibleNamePropertyId));
-        Assert.Equal("Top Row", topRowAccessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        Assert.True((bool)topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
+        Assert.Equal(string.Empty, topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId));
+        Assert.Equal(SR.DataGridView_AccTopRow, topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        Assert.Equal(SR.DataGridView_AccTopRow, topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
+        Assert.Equal("Top Row", topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
         Assert.False(dataGridView.IsHandleCreated);
     }
 }

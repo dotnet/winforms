@@ -106,27 +106,27 @@ public partial class TabPage
 
         public override string? KeyboardShortcut => SystemIAccessibleInternal.TryGetKeyboardShortcut(GetChildId());
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TabItemControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
-                UiaCore.UIA.IsEnabledPropertyId => OwningTabControl?.Enabled ?? false,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TabItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => OwningTabControl?.Enabled ?? false,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId
                     // This is necessary for compatibility with MSAA proxy:
                     // IsKeyboardFocusable = true regardless the control is enabled/disabled.
                     => true,
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
                 // The "Enabled" property of the TabControl does not affect the behavior of that property,
                 // so it is always true
-                UiaCore.UIA.SelectionItemPatternId => true,
-                UiaCore.UIA.InvokePatternId => false,
-                UiaCore.UIA.LegacyIAccessiblePatternId => true,
+                UIA_PATTERN_ID.UIA_SelectionItemPatternId => true,
+                UIA_PATTERN_ID.UIA_InvokePatternId => false,
+                UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId => true,
                 _ => base.IsPatternSupported(patternId)
             };
 

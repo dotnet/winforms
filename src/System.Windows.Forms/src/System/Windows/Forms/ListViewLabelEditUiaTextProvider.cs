@@ -76,7 +76,7 @@ internal sealed unsafe class ListViewLabelEditUiaTextProvider : UiaTextProvider
             return HRESULT.E_POINTER;
         }
 
-        object? hasKeyboardFocus = _owningChildEditAccessibilityObject.GetPropertyValue(Interop.UiaCore.UIA.HasKeyboardFocusPropertyId);
+        object? hasKeyboardFocus = _owningChildEditAccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
         *isActive = hasKeyboardFocus is true;
 
         // First caret position of a selected text

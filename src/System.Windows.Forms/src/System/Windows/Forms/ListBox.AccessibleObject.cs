@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -119,20 +120,20 @@ public partial class ListBox
         /// </summary>
         /// <param name="propertyID">The accessible property ID.</param>
         /// <returns>The accessible property value.</returns>
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
         {
             switch (propertyID)
             {
-                case UiaCore.UIA.BoundingRectanglePropertyId:
+                case UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId:
                     return ((VARIANT)UiaTextProvider.BoundingRectangleAsArray(BoundingRectangle)).ToObject();
-                case UiaCore.UIA.ControlTypePropertyId:
+                case UIA_PROPERTY_ID.UIA_ControlTypePropertyId:
                     // If we don't set a default role for the accessible object
                     // it will be retrieved from Windows.
                     // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
                     return this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                           ? UiaCore.UIA.ListControlTypeId
+                           ? UIA_CONTROLTYPE_ID.UIA_ListControlTypeId
                            : base.GetPropertyValue(propertyID);
-                case UiaCore.UIA.HasKeyboardFocusPropertyId:
+                case UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId:
                     return this.TryGetOwnerAs(out ListBox? owner) ? GetChildCount() == 0 && owner.Focused : base.GetPropertyValue(propertyID);
                 default:
                     return base.GetPropertyValue(propertyID);
@@ -142,37 +143,18 @@ public partial class ListBox
         internal override UiaCore.IRawElementProviderSimple[] GetSelection()
         {
             AccessibleObject? itemAccessibleObject = GetSelected();
-            if (itemAccessibleObject is not null)
-            {
-                return new UiaCore.IRawElementProviderSimple[]
-                {
-                    itemAccessibleObject
-                };
-            }
-
-            return Array.Empty<UiaCore.IRawElementProviderSimple>();
+            return itemAccessibleObject is not null
+                ? [itemAccessibleObject]
+                : [];
         }
 
         internal override bool IsIAccessibleExSupported()
-        {
-            if (this.TryGetOwnerAs(out ListBox? _))
-            {
-                return true;
-            }
+            => this.TryGetOwnerAs(out ListBox? _) || base.IsIAccessibleExSupported();
 
-            return base.IsIAccessibleExSupported();
-        }
-
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
-        {
-            if (patternId == UiaCore.UIA.ScrollPatternId ||
-                patternId == UiaCore.UIA.SelectionPatternId)
-            {
-                return true;
-            }
-
-            return base.IsPatternSupported(patternId);
-        }
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
+            => patternId == UIA_PATTERN_ID.UIA_ScrollPatternId ||
+            patternId == UIA_PATTERN_ID.UIA_SelectionPatternId ||
+            base.IsPatternSupported(patternId);
 
         internal void ResetListItemAccessibleObjects()
         {
@@ -231,7 +213,7 @@ public partial class ListBox
             }
 
             AccessibleObject? focusedItem = GetFocused();
-            focusedItem?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            focusedItem?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             focusedItem?.SetFocus();
         }
 

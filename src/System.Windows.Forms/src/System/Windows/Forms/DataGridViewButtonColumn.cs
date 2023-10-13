@@ -23,6 +23,8 @@ public class DataGridViewButtonColumn : DataGridViewColumn
         DefaultCellStyle = defaultCellStyle;
     }
 
+    private DataGridViewButtonCell? ButtonCellTemplate => (DataGridViewButtonCell?)CellTemplate;
+
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public override DataGridViewCell? CellTemplate
@@ -52,37 +54,40 @@ public class DataGridViewButtonColumn : DataGridViewColumn
     [DefaultValue(FlatStyle.Standard)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ButtonColumnFlatStyleDescr))]
+    [MemberNotNull(nameof(ButtonCellTemplate))]
     public FlatStyle FlatStyle
     {
         get
         {
-            if (CellTemplate is null)
+            if (ButtonCellTemplate is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            return ((DataGridViewButtonCell)CellTemplate).FlatStyle;
+            return ButtonCellTemplate.FlatStyle;
         }
         set
         {
-            if (FlatStyle != value)
+            if (FlatStyle == value)
             {
-                ((DataGridViewButtonCell)CellTemplate!).FlatStyle = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell)
-                        {
-                            dataGridViewCell.FlatStyleInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.OnColumnCommonChange(Index);
+            ButtonCellTemplate.FlatStyle = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                {
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell)
+                    {
+                        dataGridViewCell.FlatStyleInternal = value;
+                    }
                 }
+
+                DataGridView.OnColumnCommonChange(Index);
             }
         }
     }
@@ -98,32 +103,36 @@ public class DataGridViewButtonColumn : DataGridViewColumn
         }
         set
         {
-            if (!string.Equals(value, _text, StringComparison.Ordinal))
+            if (string.Equals(value, _text, StringComparison.Ordinal))
             {
-                _text = value;
-                if (DataGridView is not null)
+                return;
+            }
+
+            _text = value;
+            if (DataGridView is null)
+            {
+                return;
+            }
+
+            if (UseColumnTextForButtonValue)
+            {
+                DataGridView.OnColumnCommonChange(Index);
+            }
+            else
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
                 {
-                    if (UseColumnTextForButtonValue)
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell && dataGridViewCell.UseColumnTextForButtonValue)
                     {
                         DataGridView.OnColumnCommonChange(Index);
-                    }
-                    else
-                    {
-                        DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                        int rowCount = dataGridViewRows.Count;
-                        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                        {
-                            DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                            if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell && dataGridViewCell.UseColumnTextForButtonValue)
-                            {
-                                DataGridView.OnColumnCommonChange(Index);
-                                return;
-                            }
-                        }
-
-                        DataGridView.InvalidateColumn(Index);
+                        return;
                     }
                 }
+
+                DataGridView.InvalidateColumn(Index);
             }
         }
     }
@@ -131,37 +140,40 @@ public class DataGridViewButtonColumn : DataGridViewColumn
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ButtonColumnUseColumnTextForButtonValueDescr))]
+    [MemberNotNull(nameof(ButtonCellTemplate))]
     public bool UseColumnTextForButtonValue
     {
         get
         {
-            if (CellTemplate is null)
+            if (ButtonCellTemplate is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            return ((DataGridViewButtonCell)CellTemplate).UseColumnTextForButtonValue;
+            return ButtonCellTemplate.UseColumnTextForButtonValue;
         }
         set
         {
-            if (UseColumnTextForButtonValue != value)
+            if (UseColumnTextForButtonValue == value)
             {
-                ((DataGridViewButtonCell)CellTemplate!).UseColumnTextForButtonValueInternal = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell)
-                        {
-                            dataGridViewCell.UseColumnTextForButtonValueInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.OnColumnCommonChange(Index);
+            ButtonCellTemplate.UseColumnTextForButtonValueInternal = value;
+            if (DataGridView is not null)
+            {
+                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+                int rowCount = dataGridViewRows.Count;
+                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                {
+                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                    if (dataGridViewRow.Cells[Index] is DataGridViewButtonCell dataGridViewCell)
+                    {
+                        dataGridViewCell.UseColumnTextForButtonValueInternal = value;
+                    }
                 }
+
+                DataGridView.OnColumnCommonChange(Index);
             }
         }
     }
@@ -210,8 +222,6 @@ public class DataGridViewButtonColumn : DataGridViewColumn
                 !defaultCellStyle.Padding.Equals(Padding.Empty));
     }
 
-    public override string ToString()
-    {
-        return $"DataGridViewButtonColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewButtonColumn {{ Name={Name}, Index={Index} }}";
 }

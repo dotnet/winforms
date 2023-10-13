@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripOverflowButton;
 using static Interop;
 
@@ -26,9 +27,9 @@ public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTest
         ToolStripOverflowButton toolStripOverflowButton = new ToolStripOverflowButton(toolStrip);
         // AccessibleRole is not set = Default
 
-        object actual = toolStripOverflowButton.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = toolStripOverflowButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.MenuItemControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_MenuItemControlTypeId, actual);
         Assert.False(toolStrip.IsHandleCreated);
     }
 
@@ -68,8 +69,8 @@ public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTest
         ToolStripOverflowButton toolStripOverflowButton = new ToolStripOverflowButton(toolStrip);
         toolStripOverflowButton.AccessibleRole = role;
 
-        object actual = toolStripOverflowButton.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = toolStripOverflowButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
     }

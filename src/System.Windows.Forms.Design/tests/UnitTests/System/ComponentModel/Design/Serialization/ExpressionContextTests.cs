@@ -9,8 +9,8 @@ public class ExpressionContextTests
 {
     public static IEnumerable<object[]> Ctor_CodeExpression_Type_Object_Object_TestData()
     {
-        yield return new object[] { new CodeExpression(), typeof(int), new object(), new object() };
-        yield return new object[] { new CodeExpression(), typeof(int), new object(), null };
+        yield return new object[] { new CodeExpression(), typeof(int), new(), new() };
+        yield return new object[] { new CodeExpression(), typeof(int), new(), null };
     }
 
     [Theory]
@@ -26,7 +26,7 @@ public class ExpressionContextTests
 
     public static IEnumerable<object[]> Ctor_CodeExpression_Type_Object_TestData()
     {
-        yield return new object[] { new CodeExpression(), typeof(int), new object() };
+        yield return new object[] { new CodeExpression(), typeof(int), new() };
     }
 
     [Theory]

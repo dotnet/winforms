@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -74,11 +75,11 @@ public partial class ErrorProvider
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+            internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
                 propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.GroupControlTypeId,
-                    UiaCore.UIA.NativeWindowHandlePropertyId => _owner.Handle,
+                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId,
+                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _owner.Handle,
                     _ => base.GetPropertyValue(propertyID)
                 };
 
@@ -106,9 +107,9 @@ public partial class ErrorProvider
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             {
-                if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId)
+                if (patternId == UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId)
                 {
                     return true;
                 }

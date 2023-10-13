@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 using static System.Windows.Forms.ScrollBar;
 
@@ -130,7 +131,7 @@ public class HScrollBar_ScrollBarFirstLineButtonAccessibleObjectTests
         using HScrollBar scrollBar = GetHScrollBar(createControl, rightToLeft, minimum, maximum, value);
         ScrollBarFirstLineButtonAccessibleObject accessibleObject = GetFirstLineButton(scrollBar);
 
-        Assert.Equal(createControl, accessibleObject.IsPatternSupported(UiaCore.UIA.InvokePatternId));
+        Assert.Equal(createControl, accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_InvokePatternId));
         Assert.Equal(createControl, scrollBar.IsHandleCreated);
     }
 
@@ -290,7 +291,7 @@ public class HScrollBar_ScrollBarFirstLineButtonAccessibleObjectTests
         scrollBar.Enabled = true;
         ScrollBarFirstLineButtonAccessibleObject accessibleObject = GetFirstLineButton(scrollBar);
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.Equal(createControl, scrollBar.IsHandleCreated);
     }
 
@@ -302,7 +303,7 @@ public class HScrollBar_ScrollBarFirstLineButtonAccessibleObjectTests
         scrollBar.Enabled = false;
         ScrollBarFirstLineButtonAccessibleObject accessibleObject = GetFirstLineButton(scrollBar);
 
-        Assert.False((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId));
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.Equal(createControl, scrollBar.IsHandleCreated);
     }
 

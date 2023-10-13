@@ -143,7 +143,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         {
             if (designerContextMenuStrip is null)
             {
-                designerContextMenuStrip = new BaseContextMenuStrip(Component.Site, Table);
+                designerContextMenuStrip = new BaseContextMenuStrip(Component.Site);
 
                 // Remove all the verbs -- except the Edit Rows and Columns
                 ContextMenuStripGroup group = designerContextMenuStrip.Groups[StandardGroups.Verbs];

@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Reflection;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Control;
 using static Interop;
 
@@ -113,27 +114,27 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.IsTextPatternAvailablePropertyId)]
-    [InlineData((int)UiaCore.UIA.IsTextPattern2AvailablePropertyId)]
-    [InlineData((int)UiaCore.UIA.IsValuePatternAvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId)]
     public void GridViewTextBoxAccessibleObject_GetPropertyValue_PatternsSuported(int propertyID)
     {
         using PropertyGrid propertyGrid = new PropertyGrid();
         PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
         AccessibleObject accessibleObject = gridView.EditAccessibleObject;
-        Assert.True((bool)accessibleObject.GetPropertyValue((UiaCore.UIA)propertyID));
+        Assert.True((bool)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID));
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.UIA.ValuePatternId)]
-    [InlineData((int)UiaCore.UIA.TextPatternId)]
-    [InlineData((int)UiaCore.UIA.TextPattern2Id)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_ValuePatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TextPatternId)]
+    [InlineData((int)UIA_PATTERN_ID.UIA_TextPattern2Id)]
     public void GridViewTextBoxAccessibleObject_IsPatternSupported_PatternsSuported(int patternId)
     {
         using PropertyGrid propertyGrid = new PropertyGrid();
         PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
         AccessibleObject accessibleObject = gridView.EditAccessibleObject;
-        Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        Assert.True(accessibleObject.IsPatternSupported((UIA_PATTERN_ID)patternId));
     }
 
     [WinFormsFact]
@@ -145,9 +146,9 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
 
         // AccessibleRole is not set = Default
 
-        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UiaCore.UIA.EditControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, actual);
         Assert.False(propertyGrid.IsHandleCreated);
     }
 
@@ -158,7 +159,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
         AccessibleObject accessibleObject = gridView.EditAccessibleObject;
 
-        Assert.Equal("WinForm", accessibleObject.GetPropertyValue(UiaCore.UIA.FrameworkIdPropertyId));
+        Assert.Equal("WinForm", accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId));
         Assert.False(propertyGrid.IsHandleCreated);
     }
 

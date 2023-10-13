@@ -78,11 +78,11 @@ override System.Windows.Forms.DataGridViewCellStyle.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ToString() -> string
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ValueType.set -> void
-~override System.Windows.Forms.DataGridViewCheckBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
-~override System.Windows.Forms.DataGridViewCheckBoxColumn.CellTemplate.set -> void
-~override System.Windows.Forms.DataGridViewCheckBoxColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~override System.Windows.Forms.DataGridViewCheckBoxColumn.DefaultCellStyle.set -> void
-~override System.Windows.Forms.DataGridViewCheckBoxColumn.ToString() -> string
+override System.Windows.Forms.DataGridViewCheckBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
+override System.Windows.Forms.DataGridViewCheckBoxColumn.CellTemplate.set -> void
+override System.Windows.Forms.DataGridViewCheckBoxColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+override System.Windows.Forms.DataGridViewCheckBoxColumn.DefaultCellStyle.set -> void
+override System.Windows.Forms.DataGridViewCheckBoxColumn.ToString() -> string!
 override System.Windows.Forms.DataGridViewColumn.Clone() -> object!
 override System.Windows.Forms.DataGridViewColumn.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
 override System.Windows.Forms.DataGridViewColumn.ContextMenuStrip.set -> void
@@ -134,20 +134,20 @@ override System.Windows.Forms.DataGridViewColumn.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewHeaderCell.ToString() -> string
 ~override System.Windows.Forms.DataGridViewHeaderCell.ValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewHeaderCell.ValueType.set -> void
-~override System.Windows.Forms.DataGridViewImageCell.Clone() -> object
-~override System.Windows.Forms.DataGridViewImageCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewImageCell.DefaultNewRowValue.get -> object
-~override System.Windows.Forms.DataGridViewImageCell.EditType.get -> System.Type
-~override System.Windows.Forms.DataGridViewImageCell.FormattedValueType.get -> System.Type
-~override System.Windows.Forms.DataGridViewImageCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
-~override System.Windows.Forms.DataGridViewImageCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
-~override System.Windows.Forms.DataGridViewImageCell.GetFormattedValue(object value, int rowIndex, ref System.Windows.Forms.DataGridViewCellStyle cellStyle, System.ComponentModel.TypeConverter valueTypeConverter, System.ComponentModel.TypeConverter formattedValueTypeConverter, System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
-~override System.Windows.Forms.DataGridViewImageCell.GetPreferredSize(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
-~override System.Windows.Forms.DataGridViewImageCell.GetValue(int rowIndex) -> object
-~override System.Windows.Forms.DataGridViewImageCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates elementState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
-~override System.Windows.Forms.DataGridViewImageCell.ToString() -> string
-~override System.Windows.Forms.DataGridViewImageCell.ValueType.get -> System.Type
-~override System.Windows.Forms.DataGridViewImageCell.ValueType.set -> void
+override System.Windows.Forms.DataGridViewImageCell.Clone() -> object!
+override System.Windows.Forms.DataGridViewImageCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridViewImageCell.DefaultNewRowValue.get -> object?
+override System.Windows.Forms.DataGridViewImageCell.EditType.get -> System.Type?
+override System.Windows.Forms.DataGridViewImageCell.FormattedValueType.get -> System.Type!
+override System.Windows.Forms.DataGridViewImageCell.GetContentBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewImageCell.GetErrorIconBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewImageCell.GetFormattedValue(object? value, int rowIndex, ref System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.ComponentModel.TypeConverter? valueTypeConverter, System.ComponentModel.TypeConverter? formattedValueTypeConverter, System.Windows.Forms.DataGridViewDataErrorContexts context) -> object?
+override System.Windows.Forms.DataGridViewImageCell.GetPreferredSize(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
+override System.Windows.Forms.DataGridViewImageCell.GetValue(int rowIndex) -> object?
+override System.Windows.Forms.DataGridViewImageCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates elementState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+override System.Windows.Forms.DataGridViewImageCell.ToString() -> string!
+override System.Windows.Forms.DataGridViewImageCell.ValueType.get -> System.Type?
+override System.Windows.Forms.DataGridViewImageCell.ValueType.set -> void
 override System.Windows.Forms.DataGridViewImageColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
 override System.Windows.Forms.DataGridViewImageColumn.CellTemplate.set -> void
 override System.Windows.Forms.DataGridViewImageColumn.Clone() -> object!
@@ -173,10 +173,10 @@ override System.Windows.Forms.DataGridViewLinkCell.OnMouseUp(System.Windows.Form
 override System.Windows.Forms.DataGridViewLinkCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 override System.Windows.Forms.DataGridViewLinkCell.ToString() -> string!
 override System.Windows.Forms.DataGridViewLinkCell.ValueType.get -> System.Type!
-~override System.Windows.Forms.DataGridViewLinkColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
-~override System.Windows.Forms.DataGridViewLinkColumn.CellTemplate.set -> void
-~override System.Windows.Forms.DataGridViewLinkColumn.Clone() -> object
-~override System.Windows.Forms.DataGridViewLinkColumn.ToString() -> string
+override System.Windows.Forms.DataGridViewLinkColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
+override System.Windows.Forms.DataGridViewLinkColumn.CellTemplate.set -> void
+override System.Windows.Forms.DataGridViewLinkColumn.Clone() -> object!
+override System.Windows.Forms.DataGridViewLinkColumn.ToString() -> string!
 override System.Windows.Forms.DataGridViewRow.Clone() -> object!
 override System.Windows.Forms.DataGridViewRow.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
 override System.Windows.Forms.DataGridViewRow.ContextMenuStrip.set -> void
@@ -226,8 +226,8 @@ override System.Windows.Forms.PictureBox.OnVisibleChanged(System.EventArgs! e) -
 override System.Windows.Forms.PictureBox.Text.get -> string!
 override System.Windows.Forms.PictureBox.Text.set -> void
 override System.Windows.Forms.PictureBox.ToString() -> string!
-~override System.Windows.Forms.PropertyGrid.BackgroundImage.get -> System.Drawing.Image
-~override System.Windows.Forms.PropertyGrid.BackgroundImage.set -> void
+override System.Windows.Forms.PropertyGrid.BackgroundImage.get -> System.Drawing.Image?
+override System.Windows.Forms.PropertyGrid.BackgroundImage.set -> void
 ~override System.Windows.Forms.PropertyGrid.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.PropertyGrid.OnEnabledChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.PropertyGrid.OnFontChanged(System.EventArgs e) -> void
@@ -352,9 +352,9 @@ System.Windows.Forms.DataGridView.EditingControl.get -> System.Windows.Forms.Con
 System.Windows.Forms.DataGridView.EditingPanel.get -> System.Windows.Forms.Panel!
 System.Windows.Forms.DataGridView.FirstDisplayedCell.get -> System.Windows.Forms.DataGridViewCell?
 System.Windows.Forms.DataGridView.FirstDisplayedCell.set -> void
-~System.Windows.Forms.DataGridView.HitTest(int x, int y) -> System.Windows.Forms.DataGridView.HitTestInfo
+System.Windows.Forms.DataGridView.HitTest(int x, int y) -> System.Windows.Forms.DataGridView.HitTestInfo!
 System.Windows.Forms.DataGridView.HorizontalScrollBar.get -> System.Windows.Forms.ScrollBar!
-~System.Windows.Forms.DataGridView.InvalidateCell(System.Windows.Forms.DataGridViewCell dataGridViewCell) -> void
+System.Windows.Forms.DataGridView.InvalidateCell(System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> void
 System.Windows.Forms.DataGridView.RowHeadersDefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
 System.Windows.Forms.DataGridView.RowHeadersDefaultCellStyle.set -> void
 System.Windows.Forms.DataGridView.Rows.get -> System.Windows.Forms.DataGridViewRowCollection!
@@ -420,12 +420,12 @@ System.Windows.Forms.DataGridViewCellStyle.Tag.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.IndeterminateValue.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.TrueValue.get -> object
 ~System.Windows.Forms.DataGridViewCheckBoxCell.TrueValue.set -> void
-~System.Windows.Forms.DataGridViewCheckBoxColumn.FalseValue.get -> object
-~System.Windows.Forms.DataGridViewCheckBoxColumn.FalseValue.set -> void
-~System.Windows.Forms.DataGridViewCheckBoxColumn.IndeterminateValue.get -> object
-~System.Windows.Forms.DataGridViewCheckBoxColumn.IndeterminateValue.set -> void
-~System.Windows.Forms.DataGridViewCheckBoxColumn.TrueValue.get -> object
-~System.Windows.Forms.DataGridViewCheckBoxColumn.TrueValue.set -> void
+System.Windows.Forms.DataGridViewCheckBoxColumn.FalseValue.get -> object?
+System.Windows.Forms.DataGridViewCheckBoxColumn.FalseValue.set -> void
+System.Windows.Forms.DataGridViewCheckBoxColumn.IndeterminateValue.get -> object?
+System.Windows.Forms.DataGridViewCheckBoxColumn.IndeterminateValue.set -> void
+System.Windows.Forms.DataGridViewCheckBoxColumn.TrueValue.get -> object?
+System.Windows.Forms.DataGridViewCheckBoxColumn.TrueValue.set -> void
 System.Windows.Forms.DataGridViewColumn.CellType.get -> System.Type?
 System.Windows.Forms.DataGridViewColumn.DataGridViewColumn(System.Windows.Forms.DataGridViewCell? cellTemplate) -> void
 System.Windows.Forms.DataGridViewColumn.DataPropertyName.get -> string!
@@ -470,16 +470,16 @@ System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Remove(object? va
 ~System.Windows.Forms.DataGridViewComboBoxColumn.Items.get -> System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection
 ~System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.get -> string
 ~System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.set -> void
-~System.Windows.Forms.DataGridViewImageCell.Description.get -> string
-~System.Windows.Forms.DataGridViewImageCell.Description.set -> void
+System.Windows.Forms.DataGridViewImageCell.Description.get -> string!
+System.Windows.Forms.DataGridViewImageCell.Description.set -> void
 System.Windows.Forms.DataGridViewImageColumn.Description.get -> string!
 System.Windows.Forms.DataGridViewImageColumn.Description.set -> void
 System.Windows.Forms.DataGridViewImageColumn.Icon.get -> System.Drawing.Icon?
 System.Windows.Forms.DataGridViewImageColumn.Icon.set -> void
 System.Windows.Forms.DataGridViewImageColumn.Image.get -> System.Drawing.Image?
 System.Windows.Forms.DataGridViewImageColumn.Image.set -> void
-~System.Windows.Forms.DataGridViewLinkColumn.Text.get -> string
-~System.Windows.Forms.DataGridViewLinkColumn.Text.set -> void
+System.Windows.Forms.DataGridViewLinkColumn.Text.get -> string?
+System.Windows.Forms.DataGridViewLinkColumn.Text.set -> void
 System.Windows.Forms.DataGridViewRow.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject!
 System.Windows.Forms.DataGridViewRow.Cells.get -> System.Windows.Forms.DataGridViewCellCollection!
 System.Windows.Forms.DataGridViewRow.CreateCells(System.Windows.Forms.DataGridView! dataGridView) -> void
@@ -565,9 +565,9 @@ System.Windows.Forms.PictureBox.InitialImage.get -> System.Drawing.Image?
 System.Windows.Forms.PictureBox.InitialImage.set -> void
 System.Windows.Forms.PictureBox.Load(string! url) -> void
 System.Windows.Forms.PictureBox.LoadAsync(string! url) -> void
-~System.Windows.Forms.PropertyGrid.BrowsableAttributes.get -> System.ComponentModel.AttributeCollection
-~System.Windows.Forms.PropertyGrid.BrowsableAttributes.set -> void
-~System.Windows.Forms.PropertyGrid.Controls.get -> System.Windows.Forms.Control.ControlCollection
+System.Windows.Forms.PropertyGrid.BrowsableAttributes.get -> System.ComponentModel.AttributeCollection!
+System.Windows.Forms.PropertyGrid.BrowsableAttributes.set -> void
+System.Windows.Forms.PropertyGrid.Controls.get -> System.Windows.Forms.Control.ControlCollection!
 ~System.Windows.Forms.PropertyGrid.OnComComponentNameChanged(System.ComponentModel.Design.ComponentRenameEventArgs e) -> void
 ~System.Windows.Forms.PropertyGrid.OnNotifyPropertyValueUIItemsChanged(object sender, System.EventArgs e) -> void
 ~System.Windows.Forms.PropertyGrid.PropertyTabs.get -> System.Windows.Forms.PropertyGrid.PropertyTabCollection
@@ -633,9 +633,9 @@ System.Windows.Forms.TreeView.TopNode.get -> System.Windows.Forms.TreeNode?
 System.Windows.Forms.TreeView.TopNode.set -> void
 System.Windows.Forms.TreeView.TreeViewNodeSorter.get -> System.Collections.IComparer?
 System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
-~virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void
-~virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs cevent) -> void
-~virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs cevent) -> void
+virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs! e) -> void
+virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs! cevent) -> void
+virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs! cevent) -> void
 ~virtual System.Windows.Forms.BindingSource.Add(object value) -> int
 ~virtual System.Windows.Forms.BindingSource.AddNew() -> object
 ~virtual System.Windows.Forms.BindingSource.ApplySort(System.ComponentModel.ListSortDescriptionCollection sorts) -> void
@@ -897,7 +897,7 @@ virtual System.Windows.Forms.PictureBox.OnLoadCompleted(System.ComponentModel.As
 virtual System.Windows.Forms.PictureBox.OnLoadProgressChanged(System.ComponentModel.ProgressChangedEventArgs! e) -> void
 virtual System.Windows.Forms.PictureBox.OnSizeModeChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.PropertyGrid.CreatePropertyTab(System.Type tabType) -> System.Windows.Forms.Design.PropertyTab
-~virtual System.Windows.Forms.PropertyGrid.DefaultTabType.get -> System.Type
+virtual System.Windows.Forms.PropertyGrid.DefaultTabType.get -> System.Type!
 ~virtual System.Windows.Forms.PropertyGrid.OnPropertySortChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.PropertyGrid.OnPropertyTabChanged(System.Windows.Forms.PropertyTabChangedEventArgs e) -> void
 ~virtual System.Windows.Forms.PropertyGrid.OnPropertyValueChanged(System.Windows.Forms.PropertyValueChangedEventArgs e) -> void
@@ -9051,8 +9051,8 @@ System.Windows.Forms.ProgressBarStyle.Blocks = 0 -> System.Windows.Forms.Progres
 System.Windows.Forms.ProgressBarStyle.Continuous = 1 -> System.Windows.Forms.ProgressBarStyle
 System.Windows.Forms.ProgressBarStyle.Marquee = 2 -> System.Windows.Forms.ProgressBarStyle
 System.Windows.Forms.PropertyGrid
-System.Windows.Forms.PropertyGrid.BackgroundImageChanged -> System.EventHandler
-System.Windows.Forms.PropertyGrid.BackgroundImageLayoutChanged -> System.EventHandler
+System.Windows.Forms.PropertyGrid.BackgroundImageChanged -> System.EventHandler?
+System.Windows.Forms.PropertyGrid.BackgroundImageLayoutChanged -> System.EventHandler?
 System.Windows.Forms.PropertyGrid.CanShowVisualStyleGlyphs.get -> bool
 System.Windows.Forms.PropertyGrid.CanShowVisualStyleGlyphs.set -> void
 System.Windows.Forms.PropertyGrid.CategoryForeColor.get -> System.Drawing.Color

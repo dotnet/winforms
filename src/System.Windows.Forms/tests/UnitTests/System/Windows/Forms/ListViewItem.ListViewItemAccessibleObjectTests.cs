@@ -3,8 +3,8 @@
 
 using System.Drawing;
 using System.Reflection;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
-using static Interop;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests;
@@ -96,21 +96,21 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         list.Items.Add(listItem);
         AccessibleObject listItemAccessibleObject = listItem.AccessibilityObject;
 
-        object accessibleName = listItemAccessibleObject.GetPropertyValue(UIA.NamePropertyId);
+        object accessibleName = listItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal("ListItem", accessibleName);
 
-        object automationId = listItemAccessibleObject.GetPropertyValue(UIA.AutomationIdPropertyId);
+        object automationId = listItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId);
 
         Assert.Equal("ListViewItem-0", automationId);
 
-        object controlType = listItemAccessibleObject.GetPropertyValue(UIA.ControlTypePropertyId);
-        UIA expected = UIA.ListItemControlTypeId;
+        object controlType = listItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId;
 
         Assert.Equal(expected, controlType);
-        Assert.True((bool)listItemAccessibleObject.GetPropertyValue(UIA.IsSelectionItemPatternAvailablePropertyId));
-        Assert.True((bool)listItemAccessibleObject.GetPropertyValue(UIA.IsScrollItemPatternAvailablePropertyId));
-        Assert.True((bool)listItemAccessibleObject.GetPropertyValue(UIA.IsInvokePatternAvailablePropertyId));
+        Assert.True((bool)listItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsSelectionItemPatternAvailablePropertyId));
+        Assert.True((bool)listItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsScrollItemPatternAvailablePropertyId));
+        Assert.True((bool)listItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId));
         Assert.False(list.IsHandleCreated);
     }
 
@@ -849,7 +849,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
             Assert.NotEqual(IntPtr.Zero, listView.Handle);
         }
 
-        Assert.Equal(checkboxesEnabled, listViewItem.AccessibilityObject.IsPatternSupported(UIA.TogglePatternId));
+        Assert.Equal(checkboxesEnabled, listViewItem.AccessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_TogglePatternId));
         Assert.Equal(createHandle, listView.IsHandleCreated);
     }
 
@@ -1831,7 +1831,7 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         ListViewItemBaseAccessibleObject accessibleObject = (ListViewItemBaseAccessibleObject)listView.Items[0].AccessibilityObject;
 
         bool expected = listView.GroupsDisplayed && listView.Items[0].Group?.CollapsedState == ListViewGroupCollapsedState.Collapsed;
-        bool actual = (bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId);
+        bool actual = (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
 
         Assert.Equal(expected, actual);
         Assert.Equal(createControl, listView.IsHandleCreated);

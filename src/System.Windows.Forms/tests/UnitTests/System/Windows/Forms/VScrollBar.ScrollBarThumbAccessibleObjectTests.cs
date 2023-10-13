@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 using static System.Windows.Forms.ScrollBar;
 
@@ -129,7 +130,7 @@ public class VScrollBar_ScrollBarThumbAccessibleObjectTests
         using VScrollBar scrollBar = GetVScrollBar(createControl, rightToLeft, minimum, maximum, value);
         ScrollBarThumbAccessibleObject accessibleObject = GetThumb(scrollBar);
 
-        Assert.False(accessibleObject.IsPatternSupported(UiaCore.UIA.InvokePatternId));
+        Assert.False(accessibleObject.IsPatternSupported(UIA_PATTERN_ID.UIA_InvokePatternId));
         Assert.Equal(createControl, scrollBar.IsHandleCreated);
     }
 
@@ -220,7 +221,7 @@ public class VScrollBar_ScrollBarThumbAccessibleObjectTests
         scrollBar.Enabled = true;
         ScrollBarThumbAccessibleObject accessibleObject = GetThumb(scrollBar);
 
-        Assert.True((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId));
+        Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.Equal(createControl, scrollBar.IsHandleCreated);
     }
 
@@ -232,7 +233,7 @@ public class VScrollBar_ScrollBarThumbAccessibleObjectTests
         scrollBar.Enabled = false;
         ScrollBarThumbAccessibleObject accessibleObject = GetThumb(scrollBar);
 
-        Assert.False((bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId));
+        Assert.False((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.Equal(createControl, scrollBar.IsHandleCreated);
     }
 

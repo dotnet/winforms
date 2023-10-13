@@ -8,8 +8,8 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Windows.Forms.VisualStyles;
 using Windows.Win32.Globalization;
+using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.Ime;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -2043,7 +2043,7 @@ public partial class MaskedTextBox : TextBoxBase
 
         if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode))
         {
-            AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
         }
     }
 
@@ -2088,7 +2088,7 @@ public partial class MaskedTextBox : TextBoxBase
             // about text selection changed for TextBox assuming
             // that any mouse down on textbox leads to change of
             // the caret position and thereby change the selection.
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
         }
     }
 

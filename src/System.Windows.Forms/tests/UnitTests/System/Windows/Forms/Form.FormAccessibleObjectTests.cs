@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Form;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -26,10 +26,10 @@ public class Form_FormAccessibleObjectTests
         // AccessibleRole is not set = Default
 
         AccessibleObject accessibleObject = form.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(AccessibleRole.Client, accessibleObject.Role);
-        Assert.Equal(UiaCore.UIA.WindowControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_WindowControlTypeId, actual);
         Assert.False(form.IsHandleCreated);
     }
 
@@ -42,7 +42,7 @@ public class Form_FormAccessibleObjectTests
         form.Load += (_, _) =>
         {
             AccessibleObject accessibleObject = form.AccessibilityObject;
-            actualValue = (bool?)accessibleObject.GetPropertyValue(UiaCore.UIA.IsDialogPropertyId);
+            actualValue = (bool?)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsDialogPropertyId);
             form.Close();
         };
         form.ShowDialog();
@@ -60,7 +60,7 @@ public class Form_FormAccessibleObjectTests
         form.Load += (_, _) =>
         {
             AccessibleObject accessibleObject = form.AccessibilityObject;
-            actualValue = (bool?)accessibleObject.GetPropertyValue(UiaCore.UIA.IsDialogPropertyId);
+            actualValue = (bool?)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsDialogPropertyId);
             form.Close();
         };
         form.Show();
@@ -91,8 +91,8 @@ public class Form_FormAccessibleObjectTests
         using Form form = new Form();
         form.AccessibleRole = role;
 
-        object actual = form.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-        UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+        object actual = form.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
         Assert.False(form.IsHandleCreated);
@@ -217,9 +217,9 @@ public class Form_FormAccessibleObjectTests
 
         public int RaiseAutomationFocusEventCallsCount { get; private set; }
 
-        internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
+        internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
-            if (eventId == UiaCore.UIA.AutomationFocusChangedEventId)
+            if (eventId == UIA_EVENT_ID.UIA_AutomationFocusChangedEventId)
             {
                 RaiseAutomationFocusEventCallsCount++;
             }
