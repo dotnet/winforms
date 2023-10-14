@@ -56,7 +56,7 @@ internal sealed partial class DesignerActionPanel
                             // If we can't convert it, show an error
                             if (!PropertyDescriptor.Converter.CanConvertFrom(_typeDescriptorContext, valueType))
                             {
-                                ActionPanel.ShowError(string.Format(SR.DesignerActionPanel_CouldNotConvertValue, newValue, _propDesc!.PropertyType));
+                                ActionPanel.ShowError(string.Format(SR.DesignerActionPanel_CouldNotConvertValue, newValue, PropertyDescriptor.PropertyType));
                                 return;
                             }
                             else

@@ -118,6 +118,7 @@ internal sealed partial class DesignerActionPanel
 
         protected virtual bool IsReadOnly() => IsReadOnlyProperty(PropertyDescriptor);
 
+        [MemberNotNull(nameof(EditControl))]
         protected override void OnPropertyTaskItemUpdated(ToolTip toolTip, ref int currentTabIndex)
         {
             _label.Text = StripAmpersands(PropertyItem!.DisplayName);
@@ -349,7 +350,7 @@ internal sealed partial class DesignerActionPanel
                 {
                 }
 
-                public override string Value => Owner!.Text;
+                public override string? Value => Owner?.Text;
             }
         }
 

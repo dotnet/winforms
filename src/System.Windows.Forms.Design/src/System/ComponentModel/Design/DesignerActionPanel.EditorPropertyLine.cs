@@ -15,7 +15,8 @@ internal sealed partial class DesignerActionPanel
     {
         private readonly EditorButton _button;
         private UITypeEditor? _editor;
-        private bool _hasSwatch;
+        [MemberNotNullWhen(true, nameof(_editor))]
+        private bool HasSwatch { get; set; }
         private Image? _swatch;
         private FlyoutDialog? _dropDownHolder;
         private bool _ignoreNextSelectChange;
@@ -59,7 +60,7 @@ internal sealed partial class DesignerActionPanel
                 TypeConverter.StandardValuesCollection? standardValues = GetStandardValues();
                 if (standardValues is not null)
                 {
-                    foreach (object standardValue in standardValues)
+                    foreach (object? standardValue in standardValues)
                     {
                         string newItem = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, CultureInfo.CurrentCulture, standardValue)!;
                         listBox.Items.Add(newItem);
@@ -135,7 +136,7 @@ internal sealed partial class DesignerActionPanel
 
         protected override int GetTextBoxLeftPadding(int textBoxHeight)
         {
-            if (_hasSwatch)
+            if (HasSwatch)
             {
                 return base.GetTextBoxLeftPadding(textBoxHeight) + textBoxHeight + 2 * EditorLineSwatchPadding;
             }
@@ -230,14 +231,14 @@ internal sealed partial class DesignerActionPanel
             if (_editor is not null)
             {
                 _button.Ellipsis = (_editor.GetEditStyle(TypeDescriptorContext) == UITypeEditorEditStyle.Modal);
-                _hasSwatch = _editor.GetPaintValueSupported(TypeDescriptorContext);
+                HasSwatch = _editor.GetPaintValueSupported(TypeDescriptorContext);
             }
             else
             {
                 _button.Ellipsis = false;
             }
 
-            EditControl!.AccessibleRole = _button.Ellipsis
+            EditControl.AccessibleRole = _button.Ellipsis
                 ? IsReadOnly() ? AccessibleRole.StaticText : AccessibleRole.Text
                 : IsReadOnly() ? AccessibleRole.DropList : AccessibleRole.ComboBox;
 
@@ -272,7 +273,7 @@ internal sealed partial class DesignerActionPanel
             base.OnValueChanged();
 
             _swatch = null;
-            if (_hasSwatch)
+            if (HasSwatch)
             {
                 ActionPanel.Invalidate(new Rectangle(EditRegionLocation, EditRegionSize), false);
             }
@@ -282,7 +283,7 @@ internal sealed partial class DesignerActionPanel
         {
             base.PaintLine(g, lineWidth, lineHeight);
 
-            if (_hasSwatch)
+            if (HasSwatch)
             {
                 if (_swatch is null)
                 {
@@ -292,7 +293,7 @@ internal sealed partial class DesignerActionPanel
                     Rectangle rect = new Rectangle(1, 1, width - 2, height - 2);
                     using (Graphics swatchGraphics = Graphics.FromImage(_swatch))
                     {
-                        _editor!.PaintValue(Value, swatchGraphics, rect);
+                        _editor.PaintValue(Value, swatchGraphics, rect);
                         swatchGraphics.DrawRectangle(SystemPens.ControlDark, new Rectangle(0, 0, width - 1, height - 1));
                     }
                 }
@@ -408,7 +409,10 @@ internal sealed partial class DesignerActionPanel
 
         void IWindowsFormsEditorService.DropDownControl(Control control)
         {
-            ShowDropDown(control, ActionPanel.BorderColor);
+            if (control is not null)
+            {
+                ShowDropDown(control, ActionPanel.BorderColor);
+            }
         }
 
         DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)

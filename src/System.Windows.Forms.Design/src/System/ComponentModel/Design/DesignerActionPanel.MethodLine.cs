@@ -31,6 +31,7 @@ internal sealed partial class DesignerActionPanel
             AddedControls.Add(_linkLabel);
         }
 
+        // _methodItem and _actionList are set in UpdateActionItem, which is always called right after the MethodLine object creation
         public override string FocusId => $"METHOD:{_actionList!.GetType().FullName}.{_methodItem!.MemberName}";
 
         public override void Focus()
@@ -56,6 +57,7 @@ internal sealed partial class DesignerActionPanel
             ActionPanel.InMethodInvoke = true;
             try
             {
+                // _methodItem is set in UpdateActionItem, which is always called right after the MethodLine object creation
                 _methodItem!.Invoke();
             }
             catch (Exception ex)
