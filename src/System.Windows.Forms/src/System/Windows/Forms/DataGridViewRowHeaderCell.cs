@@ -37,75 +37,19 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
     {
     }
 
-    private static Bitmap LeftArrowBitmap
-    {
-        get
-        {
-            s_leftArrowBmp ??= GetBitmapFromIcon("DataGridViewRow.left");
+    private static Bitmap LeftArrowBitmap => s_leftArrowBmp ??= GetBitmapFromIcon("DataGridViewRow.left");
 
-            return s_leftArrowBmp;
-        }
-    }
+    private static Bitmap LeftArrowStarBitmap => s_leftArrowStarBmp ??= GetBitmapFromIcon("DataGridViewRow.leftstar");
 
-    private static Bitmap LeftArrowStarBitmap
-    {
-        get
-        {
-            s_leftArrowStarBmp ??= GetBitmapFromIcon("DataGridViewRow.leftstar");
+    private static Bitmap PencilLTRBitmap => s_pencilLTRBmp ??= GetBitmapFromIcon("DataGridViewRow.pencil_ltr");
 
-            return s_leftArrowStarBmp;
-        }
-    }
+    private static Bitmap PencilRTLBitmap => s_pencilRTLBmp ??= GetBitmapFromIcon("DataGridViewRow.pencil_rtl");
 
-    private static Bitmap PencilLTRBitmap
-    {
-        get
-        {
-            s_pencilLTRBmp ??= GetBitmapFromIcon("DataGridViewRow.pencil_ltr");
+    private static Bitmap RightArrowBitmap => s_rightArrowBmp ??= GetBitmapFromIcon("DataGridViewRow.right");
 
-            return s_pencilLTRBmp;
-        }
-    }
+    private static Bitmap RightArrowStarBitmap => s_rightArrowStarBmp ??= GetBitmapFromIcon("DataGridViewRow.rightstar");
 
-    private static Bitmap PencilRTLBitmap
-    {
-        get
-        {
-            s_pencilRTLBmp ??= GetBitmapFromIcon("DataGridViewRow.pencil_rtl");
-
-            return s_pencilRTLBmp;
-        }
-    }
-
-    private static Bitmap RightArrowBitmap
-    {
-        get
-        {
-            s_rightArrowBmp ??= GetBitmapFromIcon("DataGridViewRow.right");
-
-            return s_rightArrowBmp;
-        }
-    }
-
-    private static Bitmap RightArrowStarBitmap
-    {
-        get
-        {
-            s_rightArrowStarBmp ??= GetBitmapFromIcon("DataGridViewRow.rightstar");
-
-            return s_rightArrowStarBmp;
-        }
-    }
-
-    private static Bitmap StarBitmap
-    {
-        get
-        {
-            s_starBmp ??= GetBitmapFromIcon("DataGridViewRow.star");
-
-            return s_starBmp;
-        }
-    }
+    private static Bitmap StarBitmap => s_starBmp ??= GetBitmapFromIcon("DataGridViewRow.star");
 
     public override object Clone()
     {
@@ -126,20 +70,18 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         return dataGridViewCell;
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewRowHeaderCellAccessibleObject(this);
-    }
+    protected override AccessibleObject CreateAccessibilityInstance() =>
+        new DataGridViewRowHeaderCellAccessibleObject(this);
 
-    private static Bitmap GetArrowBitmap(bool rightToLeft)
-    {
-        return rightToLeft ? DataGridViewRowHeaderCell.LeftArrowBitmap : DataGridViewRowHeaderCell.RightArrowBitmap;
-    }
+    private static Bitmap GetArrowBitmap(bool rightToLeft) =>
+        rightToLeft
+            ? LeftArrowBitmap
+            : RightArrowBitmap;
 
-    private static Bitmap GetArrowStarBitmap(bool rightToLeft)
-    {
-        return rightToLeft ? DataGridViewRowHeaderCell.LeftArrowStarBitmap : DataGridViewRowHeaderCell.RightArrowStarBitmap;
-    }
+    private static Bitmap GetArrowStarBitmap(bool rightToLeft) =>
+        rightToLeft
+            ? LeftArrowStarBitmap
+            : RightArrowStarBitmap;
 
     private static Bitmap GetBitmapFromIcon(string iconName)
     {
@@ -362,17 +304,10 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         return errorBounds;
     }
 
-    protected internal override string GetErrorText(int rowIndex)
-    {
-        if (OwningRow is null)
-        {
-            return base.GetErrorText(rowIndex);
-        }
-        else
-        {
-            return OwningRow.GetErrorText(rowIndex);
-        }
-    }
+    protected internal override string GetErrorText(int rowIndex) =>
+        OwningRow is null
+            ? base.GetErrorText(rowIndex)
+            : OwningRow.GetErrorText(rowIndex);
 
     public override ContextMenuStrip? GetInheritedContextMenuStrip(int rowIndex)
     {
@@ -382,20 +317,9 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, DataGridView.Rows.Count);
         }
 
-        ContextMenuStrip contextMenuStrip = GetContextMenuStrip(rowIndex);
-        if (contextMenuStrip is not null)
-        {
-            return contextMenuStrip;
-        }
+        ContextMenuStrip? contextMenuStrip = GetContextMenuStrip(rowIndex);
 
-        if (DataGridView is not null)
-        {
-            return DataGridView.ContextMenuStrip;
-        }
-        else
-        {
-            return null;
-        }
+        return contextMenuStrip ?? DataGridView?.ContextMenuStrip;
     }
 
     public override DataGridViewCellStyle GetInheritedStyle(DataGridViewCellStyle? inheritedCellStyle, int rowIndex, bool includeColors)
@@ -594,10 +518,10 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         return inheritedCellStyleTmp;
     }
 
-    private static Bitmap GetPencilBitmap(bool rightToLeft)
-    {
-        return rightToLeft ? DataGridViewRowHeaderCell.PencilRTLBitmap : DataGridViewRowHeaderCell.PencilLTRBitmap;
-    }
+    private static Bitmap GetPencilBitmap(bool rightToLeft) =>
+        rightToLeft
+            ? PencilRTLBitmap
+            : PencilLTRBitmap;
 
     protected override Size GetPreferredSize(
         Graphics graphics,
@@ -906,7 +830,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                         }
                         else if (DataGridView.NewRowIndex == rowIndex)
                         {
-                            bmp = DataGridViewRowHeaderCell.StarBitmap;
+                            bmp = StarBitmap;
                         }
 
                         if (bmp is not null)
@@ -1063,7 +987,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                         }
                         else if (DataGridView.NewRowIndex == rowIndex)
                         {
-                            bmp = DataGridViewRowHeaderCell.StarBitmap;
+                            bmp = StarBitmap;
                         }
 
                         if (bmp is not null)
@@ -1166,8 +1090,6 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
 
     /// <summary>
     /// </summary>
-    public override string ToString()
-    {
-        return $"DataGridViewRowHeaderCell {{ RowIndex={RowIndex} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewRowHeaderCell {{ RowIndex={RowIndex} }}";
 }
