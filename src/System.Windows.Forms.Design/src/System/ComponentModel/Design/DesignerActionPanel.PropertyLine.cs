@@ -112,7 +112,7 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        public abstract class PropertyLineInfo(DesignerActionList list, DesignerActionPropertyItem item) : StandardLineInfo(list)
+        protected abstract class PropertyLineInfo(DesignerActionList list, DesignerActionPropertyItem item) : StandardLineInfo(list)
         {
             public override DesignerActionPropertyItem Item { get; } = item;
         }

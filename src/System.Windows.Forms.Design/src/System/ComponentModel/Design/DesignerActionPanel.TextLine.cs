@@ -63,15 +63,17 @@ internal sealed partial class DesignerActionPanel
 
         internal override void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex)
         {
-            Info info = (Info)lineInfo;
-            _textItem = info.Item;
+            TextLineInfo textLineInfo = (TextLineInfo)lineInfo;
+            _textItem = textLineInfo.Item;
             _label.Text = StripAmpersands(_textItem.DisplayName);
             _label.Font = GetFont();
             _label.TabIndex = currentTabIndex++;
             toolTip.SetToolTip(_label, _textItem.Description);
         }
 
-        public sealed class Info(DesignerActionList list, DesignerActionTextItem item) : StandardLineInfo(list)
+        public static StandardLineInfo CreateLineInfo(DesignerActionList list, DesignerActionTextItem item) => new TextLineInfo(list, item);
+
+        protected class TextLineInfo(DesignerActionList list, DesignerActionTextItem item) : StandardLineInfo(list)
         {
             public override DesignerActionTextItem Item { get; } = item;
             public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)

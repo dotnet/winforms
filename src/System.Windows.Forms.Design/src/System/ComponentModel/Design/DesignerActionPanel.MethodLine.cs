@@ -110,7 +110,8 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        public sealed class Info(DesignerActionList list, DesignerActionMethodItem item) : StandardLineInfo(list)
+        public static StandardLineInfo CreateLineInfo(DesignerActionList list, DesignerActionMethodItem item) => new Info(list, item);
+        private sealed class Info(DesignerActionList list, DesignerActionMethodItem item) : StandardLineInfo(list)
         {
             public override DesignerActionMethodItem Item { get; } = item;
             public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
