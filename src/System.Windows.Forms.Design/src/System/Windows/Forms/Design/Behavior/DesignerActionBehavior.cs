@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -14,13 +12,13 @@ namespace System.Windows.Forms.Design.Behavior;
 /// </summary>
 internal sealed class DesignerActionBehavior : Behavior
 {
-    private readonly IServiceProvider _serviceProvider; // we need to cache the service provider here to be able to create the panel with the proper arguments
+    private readonly IServiceProvider? _serviceProvider; // we need to cache the service provider here to be able to create the panel with the proper arguments
     private bool _ignoreNextMouseUp;
 
     /// <summary>
     ///  Constructor that calls base and caches off the action lists.
     /// </summary>
-    internal DesignerActionBehavior(IServiceProvider serviceProvider, IComponent relatedComponent, DesignerActionListCollection actionLists, DesignerActionUI parentUI)
+    internal DesignerActionBehavior(IServiceProvider? serviceProvider, IComponent relatedComponent, DesignerActionListCollection actionLists, DesignerActionUI parentUI)
     {
         ActionLists = actionLists;
         _serviceProvider = serviceProvider;
@@ -84,13 +82,13 @@ internal sealed class DesignerActionBehavior : Behavior
         }
     }
 
-    public override bool OnMouseDoubleClick(Glyph g, MouseButtons button, Point mouseLoc)
+    public override bool OnMouseDoubleClick(Glyph? g, MouseButtons button, Point mouseLoc)
     {
         _ignoreNextMouseUp = true;
         return true;
     }
 
-    public override bool OnMouseDown(Glyph g, MouseButtons button, Point mouseLoc)
+    public override bool OnMouseDown(Glyph? g, MouseButtons button, Point mouseLoc)
     { // we take the msg
         return (!ParentUI.IsDesignerActionPanelVisible);
     }
@@ -98,9 +96,9 @@ internal sealed class DesignerActionBehavior : Behavior
     /// <summary>
     ///  In response to a MouseUp, we will either 1) select the Glyph and control if not selected, or 2) Build up our context menu representing our DesignerActions and show it.
     /// </summary>
-    public override bool OnMouseUp(Glyph g, MouseButtons button)
+    public override bool OnMouseUp(Glyph? g, MouseButtons button)
     {
-        if (button != MouseButtons.Left || ParentUI is null)
+        if (button != MouseButtons.Left)
         {
             return true;
         }
@@ -112,14 +110,17 @@ internal sealed class DesignerActionBehavior : Behavior
         }
         else if (!_ignoreNextMouseUp)
         {
-            if (_serviceProvider.TryGetService(out ISelectionService selectionService) &&
+            if (_serviceProvider.TryGetService(out ISelectionService? selectionService) &&
                 selectionService.PrimarySelection != RelatedComponent)
             {
                 List<IComponent> componentList = [RelatedComponent];
                 selectionService.SetSelectedComponents(componentList, SelectionTypes.Primary);
             }
 
-            ShowUI(g);
+            if (g is not null)
+            {
+                ShowUI(g);
+            }
         }
         else
         {
