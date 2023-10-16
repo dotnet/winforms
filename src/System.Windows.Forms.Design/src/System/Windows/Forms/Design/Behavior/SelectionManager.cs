@@ -37,13 +37,10 @@ internal sealed class SelectionManager : IDisposable
         _behaviorService = behaviorService;
         _serviceProvider = serviceProvider;
 
-        _selectionService = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
-        _designerHost = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
+        _selectionService = serviceProvider.GetService<ISelectionService>();
+        _designerHost = serviceProvider.GetService<IDesignerHost>();
 
-        if (_designerHost is null || _selectionService is null)
-        {
-            Debug.Fail("SelectionManager - Host or SelSvc is null, can't continue");
-        }
+        Debug.Assert(_designerHost is not null && _selectionService is not null, "SelectionManager - Host or SelSvc is null, can't continue");
 
         //sync the BehaviorService's begindrag event
         behaviorService.BeginDrag += new BehaviorDragDropEventHandler(OnBeginDrag);
@@ -64,7 +61,7 @@ internal sealed class SelectionManager : IDisposable
 
         _componentToDesigner = new();
 
-        IComponentChangeService cs = (IComponentChangeService)serviceProvider.GetService(typeof(IComponentChangeService));
+        IComponentChangeService cs = serviceProvider.GetService<IComponentChangeService>();
         if (cs is not null)
         {
             cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
@@ -75,14 +72,12 @@ internal sealed class SelectionManager : IDisposable
         _designerHost.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
 
         // designeraction UI
-        if (_designerHost.GetService(typeof(DesignerOptionService)) is DesignerOptionService options)
+        DesignerOptionService options = _designerHost.GetService<DesignerOptionService>();
+        PropertyDescriptor p = options?.Options.Properties["UseSmartTags"];
+        if (p is not null && p.TryGetValue(component: null, out bool b) && b)
         {
-            PropertyDescriptor p = options.Options.Properties["UseSmartTags"];
-            if (p is not null && p.PropertyType == typeof(bool) && (bool)p.GetValue(null))
-            {
-                _designerActionUI = new DesignerActionUI(serviceProvider, SelectionGlyphAdorner);
-                behaviorService.DesignerActionUI = _designerActionUI;
-            }
+            _designerActionUI = new DesignerActionUI(serviceProvider, SelectionGlyphAdorner);
+            behaviorService.DesignerActionUI = _designerActionUI;
         }
     }
 
@@ -138,23 +133,20 @@ internal sealed class SelectionManager : IDisposable
     /// </summary>
     private void AddControlGlyphs(Control control, GlyphSelectionType selType)
     {
+        bool isSelected = selType is GlyphSelectionType.SelectedPrimary or GlyphSelectionType.Selected;
+
         if (_componentToDesigner.TryGetValue(control, out ControlDesigner controlDesigner) && controlDesigner is not null)
         {
             ControlBodyGlyph bodyGlyph = controlDesigner.GetControlGlyphInternal(selType);
             if (bodyGlyph is not null)
             {
                 BodyGlyphAdorner.Glyphs.Add(bodyGlyph);
-                if (selType == GlyphSelectionType.SelectedPrimary ||
-                    selType == GlyphSelectionType.Selected)
+                if (isSelected)
                 {
-                    if (_currentSelectionBounds[_curCompIndex] == Rectangle.Empty)
-                    {
-                        _currentSelectionBounds[_curCompIndex] = bodyGlyph.Bounds;
-                    }
-                    else
-                    {
-                        _currentSelectionBounds[_curCompIndex] = Rectangle.Union(_currentSelectionBounds[_curCompIndex], bodyGlyph.Bounds);
-                    }
+                    ref Rectangle currentSelectionBounds = ref _currentSelectionBounds[_curCompIndex];
+                    currentSelectionBounds = currentSelectionBounds == Rectangle.Empty
+                        ? bodyGlyph.Bounds
+                        : Rectangle.Union(currentSelectionBounds, bodyGlyph.Bounds);
                 }
             }
 
@@ -162,8 +154,7 @@ internal sealed class SelectionManager : IDisposable
             if (glyphs is not null)
             {
                 SelectionGlyphAdorner.Glyphs.AddRange(glyphs);
-                if (selType == GlyphSelectionType.SelectedPrimary ||
-                    selType == GlyphSelectionType.Selected)
+                if (isSelected)
                 {
                     foreach (Glyph glyph in glyphs)
                     {
@@ -173,7 +164,7 @@ internal sealed class SelectionManager : IDisposable
             }
         }
 
-        if (selType == GlyphSelectionType.SelectedPrimary || selType == GlyphSelectionType.Selected)
+        if (isSelected)
         {
             _curCompIndex++;
         }
@@ -193,7 +184,7 @@ internal sealed class SelectionManager : IDisposable
 
         if (_serviceProvider is not null)
         {
-            IComponentChangeService cs = (IComponentChangeService)_serviceProvider.GetService(typeof(IComponentChangeService));
+            IComponentChangeService cs = _serviceProvider.GetService<IComponentChangeService>();
             if (cs is not null)
             {
                 cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
@@ -244,7 +235,7 @@ internal sealed class SelectionManager : IDisposable
     public void Refresh()
     {
         NeedRefresh = false;
-        OnSelectionChanged(this, null);
+        OnSelectionChanged(sender: this, e: null);
     }
 
     /// <summary>
@@ -284,7 +275,7 @@ internal sealed class SelectionManager : IDisposable
     // Called by the DropSourceBehavior when dragging into a new host
     internal void OnBeginDrag(BehaviorDragDropEventArgs e)
     {
-        OnBeginDrag(null, e);
+        OnBeginDrag(source: null, e);
     }
 
     /// <summary>
@@ -347,10 +338,9 @@ internal sealed class SelectionManager : IDisposable
         // determine which rects in the larger array need to be
         // included in the region to invalidate by intersecting
         // with rects in the smaller array.
-        for (int l = 0; l < larger.Length; l++)
+        foreach (Rectangle large in larger)
         {
             bool largeIntersected = false;
-            Rectangle large = larger[l];
             for (int s = 0; s < smaller.Length; s++)
             {
                 if (large.IntersectsWith(smaller[s]))
@@ -460,15 +450,7 @@ internal sealed class SelectionManager : IDisposable
             }
 
             _previousPrimarySelection = primarySelection;
-            if (_currentSelectionBounds.Length > 0)
-            {
-                _previousSelectionBounds = new Rectangle[_currentSelectionBounds.Length];
-                Array.Copy(_currentSelectionBounds, _previousSelectionBounds, _currentSelectionBounds.Length);
-            }
-            else
-            {
-                _previousSelectionBounds = null;
-            }
+            _previousSelectionBounds = _currentSelectionBounds.Length > 0 ? _currentSelectionBounds.AsSpan().ToArray() : null;
 
             _selectionChanging = false;
         }
