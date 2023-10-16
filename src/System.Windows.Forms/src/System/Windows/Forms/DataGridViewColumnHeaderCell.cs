@@ -55,21 +55,12 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         _sortGlyphDirection = SortOrder.None;
     }
 
-    internal bool ContainsLocalValue
-    {
-        get
-        {
-            return Properties.ContainsObject(s_propCellValue);
-        }
-    }
+    internal bool ContainsLocalValue => Properties.ContainsObject(s_propCellValue);
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public SortOrder SortGlyphDirection
     {
-        get
-        {
-            return _sortGlyphDirection;
-        }
+        get => _sortGlyphDirection;
         set
         {
             // Sequential enum.  Valid values are 0x0 to 0x2
@@ -120,10 +111,8 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         return dataGridViewCell;
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewColumnHeaderCellAccessibleObject(this);
-    }
+    protected override AccessibleObject CreateAccessibilityInstance() =>
+        new DataGridViewColumnHeaderCellAccessibleObject(this);
 
     protected override object? GetClipboardContent(
         int rowIndex,
@@ -279,19 +268,8 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
         ContextMenuStrip contextMenuStrip = GetContextMenuStrip(-1);
-        if (contextMenuStrip is not null)
-        {
-            return contextMenuStrip;
-        }
 
-        if (DataGridView is not null)
-        {
-            return DataGridView.ContextMenuStrip;
-        }
-        else
-        {
-            return null;
-        }
+        return contextMenuStrip ?? DataGridView?.ContextMenuStrip;
     }
 
     public override DataGridViewCellStyle GetInheritedStyle(DataGridViewCellStyle? inheritedCellStyle, int rowIndex, bool includeColors)
@@ -728,21 +706,9 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
     {
         ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
-        if (ContainsLocalValue)
-        {
-            return Properties.GetObject(s_propCellValue);
-        }
-        else
-        {
-            if (OwningColumn is not null)
-            {
-                return OwningColumn.Name;
-            }
-            else
-            {
-                return null;
-            }
-        }
+        return ContainsLocalValue
+            ? Properties.GetObject(s_propCellValue)
+            : (OwningColumn?.Name);
     }
 
     protected override void Paint(
@@ -1238,8 +1204,6 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
 
     /// <summary>
     /// </summary>
-    public override string ToString()
-    {
-        return $"DataGridViewColumnHeaderCell {{ ColumnIndex={ColumnIndex} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewColumnHeaderCell {{ ColumnIndex={ColumnIndex} }}";
 }
