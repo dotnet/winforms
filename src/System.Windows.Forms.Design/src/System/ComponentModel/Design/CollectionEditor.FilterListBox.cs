@@ -20,9 +20,9 @@ public partial class CollectionEditor
         {
             get
             {
-                if (_grid is null)
+                if (_grid is null && Parent is not null)
                 {
-                    foreach (Control c in Parent!.Controls)
+                    foreach (Control c in Parent.Controls)
                     {
                         if (c is PropertyGrid grid)
                         {

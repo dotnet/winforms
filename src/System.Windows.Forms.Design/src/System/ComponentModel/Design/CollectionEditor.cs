@@ -94,7 +94,7 @@ public partial class CollectionEditor : UITypeEditor
 
         if (Context.TryGetService(out IDesignerHost? host) && typeof(IComponent).IsAssignableFrom(itemType))
         {
-            IComponent instance = host.CreateComponent(itemType, null!);
+            IComponent instance = host.CreateComponent(itemType);
 
             // Set component defaults
             if (host.GetDesigner(instance) is IComponentInitializer initializer)
@@ -337,7 +337,8 @@ public partial class CollectionEditor : UITypeEditor
     /// </summary>
     private void OnComponentChanged(object? sender, ComponentChangedEventArgs e)
     {
-        if (!_ignoreChangedEvents && sender != Context!.Instance)
+        Debug.Assert(Context is not null);
+        if (!_ignoreChangedEvents && sender != Context.Instance)
         {
             _ignoreChangedEvents = true;
             Context.OnComponentChanged();
@@ -349,7 +350,8 @@ public partial class CollectionEditor : UITypeEditor
     /// </summary>
     private void OnComponentChanging(object? sender, ComponentChangingEventArgs e)
     {
-        if (!_ignoreChangingEvents && sender != Context!.Instance)
+        Debug.Assert(Context is not null);
+        if (!_ignoreChangingEvents && sender != Context.Instance)
         {
             _ignoreChangingEvents = true;
             Context.OnComponentChanging();

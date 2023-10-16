@@ -957,7 +957,7 @@ public partial class CollectionEditor
         /// </summary>
         protected internal override DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
         {
-            IComponentChangeService? changeService = _editor.Context!.GetService<IComponentChangeService>();
+            IComponentChangeService? changeService = _editor.Context?.GetService<IComponentChangeService>();
             DialogResult result = DialogResult.OK;
             try
             {
@@ -1237,10 +1237,7 @@ public partial class CollectionEditor
             /// <summary>
             ///  Retrieves an array of member attributes for the given object.
             /// </summary>
-            AttributeCollection ICustomTypeDescriptor.GetAttributes()
-            {
-                return TypeDescriptor.GetAttributes(PropertyType);
-            }
+            AttributeCollection ICustomTypeDescriptor.GetAttributes() => TypeDescriptor.GetAttributes(PropertyType);
 
             /// <summary>
             ///  Retrieves the class name for this object. If null is returned, the type name is used.
@@ -1288,20 +1285,14 @@ public partial class CollectionEditor
             ///  If the component is sited, the site may add or remove additional events.
             ///  The returned array of events will be filtered by the given set of attributes.
             /// </summary>
-            EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[]? attributes)
-            {
-                return EventDescriptorCollection.Empty;
-            }
+            EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[]? attributes) => EventDescriptorCollection.Empty;
 
             /// <summary>
             ///  Retrieves an array of properties that the given component instance provides.
             ///  This may differ from the set of properties the class provides.
             ///  If the component is sited, the site may add or remove additional properties.
             /// </summary>
-            PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
-            {
-                return _properties;
-            }
+            PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() => _properties;
 
             /// <summary>
             ///  Retrieves an array of properties that the given component instance provides.
@@ -1309,10 +1300,7 @@ public partial class CollectionEditor
             ///  If the component is sited, the site may add or remove additional properties.
             ///  The returned array of properties will be filtered by the given set of attributes.
             /// </summary>
-            PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[]? attributes)
-            {
-                return _properties;
-            }
+            PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[]? attributes) => _properties;
 
             /// <summary>
             ///  Retrieves the object that directly depends on this value being edited.
@@ -1320,10 +1308,7 @@ public partial class CollectionEditor
             ///  If 'null' is passed for the PropertyDescriptor, the ICustomComponent descriptor implementation should return the default object,
             ///  that is the main object that exposes the properties and attributes
             /// </summary>
-            object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor? pd)
-            {
-                return this;
-            }
+            object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor? pd) => this;
         }
 
         /// <summary>
@@ -1342,10 +1327,7 @@ public partial class CollectionEditor
                 _parentCollectionEditor = parentCollectionEditor;
             }
 
-            public override string ToString()
-            {
-                return _parentCollectionEditor.GetDisplayText(_value);
-            }
+            public override string ToString() => _parentCollectionEditor.GetDisplayText(_value);
 
             public UITypeEditor? Editor
             {
