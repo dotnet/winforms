@@ -661,7 +661,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
     {
         if (item is DesignerActionMethodItem methodItem)
         {
-            return new MethodLine.Info(list, methodItem);
+            return MethodLine.CreateLineInfo(list, methodItem);
         }
         else if (item is DesignerActionPropertyItem pti)
         {
@@ -675,37 +675,37 @@ internal sealed partial class DesignerActionPanel : ContainerControl
             bool standardValuesSupported = pd.Converter.GetStandardValuesSupported(context);
             if (pd.TryGetEditor(out UITypeEditor _))
             {
-                return new EditorPropertyLine.Info(list, pti);
+                return EditorPropertyLine.CreateLineInfo(list, pti);
             }
             else if (pd.PropertyType == typeof(bool))
             {
                 if (IsReadOnlyProperty(pd))
                 {
-                    return new TextBoxPropertyLine.Info(list, pti);
+                    return TextBoxPropertyLine.CreateLineInfo(list, pti);
                 }
                 else
                 {
-                    return new CheckBoxPropertyLine.Info(list, pti);
+                    return CheckBoxPropertyLine.CreateLineInfo(list, pti);
                 }
             }
             else if (standardValuesSupported)
             {
-                return new EditorPropertyLine.Info(list, pti);
+                return EditorPropertyLine.CreateLineInfo(list, pti);
             }
             else
             {
-                return new TextBoxPropertyLine.Info(list, pti);
+                return TextBoxPropertyLine.CreateLineInfo(list, pti);
             }
         }
         else if (item is DesignerActionTextItem textItem)
         {
             if (item is DesignerActionHeaderItem)
             {
-                return new HeaderLine.Info(list, textItem);
+                return HeaderLine.CreateLineInfo(list, textItem);
             }
             else
             {
-                return new TextLine.Info(list, textItem);
+                return TextLine.CreateLineInfo(list, textItem);
             }
         }
         else
