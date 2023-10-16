@@ -66,7 +66,7 @@ internal sealed class DesignerActionBehavior : Behavior
     /// </summary>
     internal void ShowUI(Glyph g)
     {
-        if (!(g is DesignerActionGlyph glyph))
+        if (g is not DesignerActionGlyph glyph)
         {
             Debug.Fail("Why are we trying to 'showui' on a glyph that's not a DesignerActionGlyph?");
             return;
@@ -112,20 +112,11 @@ internal sealed class DesignerActionBehavior : Behavior
         }
         else if (!_ignoreNextMouseUp)
         {
-            if (_serviceProvider is not null)
+            if (_serviceProvider.TryGetService(out ISelectionService selectionService) &&
+                selectionService.PrimarySelection != RelatedComponent)
             {
-                ISelectionService selectionService = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
-                if (selectionService is not null)
-                {
-                    if (selectionService.PrimarySelection != RelatedComponent)
-                    {
-                        List<IComponent> componentList = new List<IComponent>
-                        {
-                            RelatedComponent
-                        };
-                        selectionService.SetSelectedComponents(componentList, SelectionTypes.Primary);
-                    }
-                }
+                List<IComponent> componentList = [RelatedComponent];
+                selectionService.SetSelectedComponents(componentList, SelectionTypes.Primary);
             }
 
             ShowUI(g);
