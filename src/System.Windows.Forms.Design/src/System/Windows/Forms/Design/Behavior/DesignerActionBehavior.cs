@@ -14,9 +14,6 @@ namespace System.Windows.Forms.Design.Behavior;
 /// </summary>
 internal sealed class DesignerActionBehavior : Behavior
 {
-    private readonly IComponent _relatedComponent; //The component we are bound to
-    private readonly DesignerActionUI _parentUI; //ptr to the parenting UI, used for showing menus and setting selection
-    private DesignerActionListCollection _actionLists; //all the shortcuts!
     private readonly IServiceProvider _serviceProvider; // we need to cache the service provider here to be able to create the panel with the proper arguments
     private bool _ignoreNextMouseUp;
 
@@ -25,36 +22,26 @@ internal sealed class DesignerActionBehavior : Behavior
     /// </summary>
     internal DesignerActionBehavior(IServiceProvider serviceProvider, IComponent relatedComponent, DesignerActionListCollection actionLists, DesignerActionUI parentUI)
     {
-        _actionLists = actionLists;
+        ActionLists = actionLists;
         _serviceProvider = serviceProvider;
-        _relatedComponent = relatedComponent;
-        _parentUI = parentUI;
+        RelatedComponent = relatedComponent;
+        ParentUI = parentUI;
     }
 
     /// <summary>
     ///  Returns the collection of DesignerActionLists this Behavior is managing. These will be dynamically updated (some can be removed, new ones can be added, etc...).
     /// </summary>
-    internal DesignerActionListCollection ActionLists
-    {
-        get => _actionLists;
-        set => _actionLists = value;
-    }
+    internal DesignerActionListCollection ActionLists { get; set; }
 
     /// <summary>
     ///  Returns the parenting UI (a DesignerActionUI)
     /// </summary>
-    internal DesignerActionUI ParentUI
-    {
-        get => _parentUI;
-    }
+    internal DesignerActionUI ParentUI { get; }
 
     /// <summary>
     ///  Returns the Component that this glyph is attached to.
     /// </summary>
-    internal IComponent RelatedComponent
-    {
-        get => _relatedComponent;
-    }
+    internal IComponent RelatedComponent { get; }
 
     /// <summary>
     ///  Hides the designer action panel UI.
