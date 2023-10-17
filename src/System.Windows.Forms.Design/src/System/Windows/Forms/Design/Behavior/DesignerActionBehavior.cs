@@ -89,7 +89,8 @@ internal sealed class DesignerActionBehavior : Behavior
     }
 
     public override bool OnMouseDown(Glyph? g, MouseButtons button, Point mouseLoc)
-    { // we take the msg
+    {
+        // we take the msg
         return (!ParentUI.IsDesignerActionPanelVisible);
     }
 
