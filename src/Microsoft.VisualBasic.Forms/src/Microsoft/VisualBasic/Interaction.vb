@@ -290,7 +290,7 @@ Namespace Microsoft.VisualBasic
 
             If String.IsNullOrEmpty(Title) Then
                 If vbHost Is Nothing Then
-                    Title = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
+                    Title = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
                 Else
                     Title = vbHost.GetWindowTitle()
                 End If
@@ -389,7 +389,7 @@ Namespace Microsoft.VisualBasic
             Try
                 If Title Is Nothing Then
                     If vbHost Is Nothing Then
-                        sTitle = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
+                        sTitle = GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly())
                     Else
                         sTitle = vbHost.GetWindowTitle()
                     End If
