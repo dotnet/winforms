@@ -1023,10 +1023,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 Dim version As Version = Entry.GetName.Version
 
-                Return If(version IsNot Nothing,
-                          $"{guidAttrib.Value}{version.Major}.{version.Minor}",
-                          guidAttrib.Value
-                         )
+                If version IsNot Nothing Then
+                    Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
+                Else
+                    Return guidAttrib.Value
+                End If
             End If
 
             Return Entry.ManifestModule.ModuleVersionId.ToString()

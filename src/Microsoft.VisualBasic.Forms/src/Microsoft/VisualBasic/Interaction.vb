@@ -289,10 +289,11 @@ Namespace Microsoft.VisualBasic
             End If
 
             If String.IsNullOrEmpty(Title) Then
-                Title = If(vbHost Is Nothing,
-                           GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly()),
-                           vbHost.GetWindowTitle()
-                          )
+                If vbHost Is Nothing Then
+                    Title = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
+                Else
+                    Title = vbHost.GetWindowTitle()
+                End If
             End If
 
             'Threading state can only be set once, and will most often be already set
@@ -387,10 +388,11 @@ Namespace Microsoft.VisualBasic
 
             Try
                 If Title Is Nothing Then
-                    sTitle = If(vbHost Is Nothing,
-                                GetTitleFromAssembly(Reflection.Assembly.GetCallingAssembly()),
-                                vbHost.GetWindowTitle()
-                               )
+                    If vbHost Is Nothing Then
+                        sTitle = GetTitleFromAssembly(System.Reflection.Assembly.GetCallingAssembly())
+                    Else
+                        sTitle = vbHost.GetWindowTitle()
+                    End If
                 Else
                     sTitle = CStr(Title) 'allows the title to be an expression, e.g. msgbox(prompt, Title:=1+5)
                 End If

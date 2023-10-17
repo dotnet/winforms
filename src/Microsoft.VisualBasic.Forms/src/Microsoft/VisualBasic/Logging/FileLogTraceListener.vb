@@ -530,10 +530,12 @@ Namespace Microsoft.VisualBasic.Logging
         Public Overrides Sub TraceEvent(eventCache As TraceEventCache, source As String, eventType As TraceEventType, id As Integer, format As String, ParamArray args() As Object)
 
             ' Create the message
-            Dim message = If(args IsNot Nothing,
-                             String.Format(CultureInfo.InvariantCulture, format, args),
-                             format
-                            )
+            Dim message As String
+            If args IsNot Nothing Then
+                message = String.Format(CultureInfo.InvariantCulture, format, args)
+            Else
+                message = format
+            End If
 
             TraceEvent(eventCache, source, eventType, id, message)
         End Sub
@@ -636,10 +638,11 @@ Namespace Microsoft.VisualBasic.Logging
                     Case LogFileLocation.TempDirectory
                         basePath = Path.GetTempPath()
                     Case LogFileLocation.Custom
-                        basePath = If(String.IsNullOrEmpty(CustomLocation),
-                                      Application.UserAppDataPath,
-                                      CustomLocation
-                                     )
+                        If String.IsNullOrEmpty(CustomLocation) Then
+                            basePath = Application.UserAppDataPath
+                        Else
+                            basePath = CustomLocation
+                        End If
                     Case Else
                         Debug.Fail("Unrecognized location")
                         basePath = Application.UserAppDataPath
@@ -694,10 +697,12 @@ Namespace Microsoft.VisualBasic.Logging
                 ' This should only be true if processes outside our process have
                 ' MAX_OPEN_ATTEMPTS files open using the naming schema (file-1.log, file-2.log ... file-MAX_OPEN_ATTEMPTS.log)
 
-                Dim fileName = If(i = 0,
-                                  Path.GetFullPath(LogFileName & FILE_EXTENSION),
-                                  Path.GetFullPath(LogFileName & "-" & i.ToString(CultureInfo.InvariantCulture) & FILE_EXTENSION)
-                                 )
+                Dim fileName As String
+                If i = 0 Then
+                    fileName = Path.GetFullPath(LogFileName & FILE_EXTENSION)
+                Else
+                    fileName = Path.GetFullPath(LogFileName & "-" & i.ToString(CultureInfo.InvariantCulture) & FILE_EXTENSION)
+                End If
 
                 Dim caseInsensitiveKey As String = fileName.ToUpper(CultureInfo.InvariantCulture)
                 SyncLock s_streams

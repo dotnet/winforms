@@ -24,10 +24,13 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Sub
 
         Friend Shared Function VbMakeException(hr As Integer) As Exception
-            Dim sMsg As String = If(hr > 0 AndAlso hr <= &HFFFFI,
-                                    GetResourceString(CType(hr, vbErrors)),
-                                    ""
-                                   )
+            Dim sMsg As String
+
+            If hr > 0 AndAlso hr <= &HFFFFI Then
+                sMsg = GetResourceString(CType(hr, vbErrors))
+            Else
+                sMsg = ""
+            End If
             VbMakeException = VbMakeExceptionEx(hr, sMsg)
         End Function
 
