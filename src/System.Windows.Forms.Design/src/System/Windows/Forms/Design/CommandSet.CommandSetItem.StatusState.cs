@@ -15,12 +15,17 @@ internal partial class CommandSet
         {
             // these are the command's possible values.
             //
-            private const int Enabled = 0x01;
-            private const int Visible = 0x02;
-            private const int Checked = 0x04;
-            private const int Supported = 0x08;
-            private const int NeedsUpdate = 0x10;
-            private int _statusFlags = NeedsUpdate; // our flags.
+            [Flags]
+            private enum StatusFlag
+            {
+                Enabled = 0x01,
+                Visible = 0x02,
+                Checked = 0x04,
+                Supported = 0x08,
+                NeedsUpdate = 0x10
+            }
+
+            private StatusFlag _statusFlags = StatusFlag.NeedsUpdate; // our flags.
 
             // Multiple CommandSetItem instances can share a same status handler within a designer host.
             // We use a simple ref count to make sure the CommandSetItem can be properly removed.
@@ -36,12 +41,12 @@ internal partial class CommandSet
             /// </summary>
             internal void ApplyState(CommandSetItem item)
             {
-                Debug.Assert((_statusFlags & NeedsUpdate) != NeedsUpdate, "Updating item when StatusState is not valid.");
+                Debug.Assert(!_statusFlags.HasFlag(StatusFlag.NeedsUpdate), "Updating item when StatusState is not valid.");
 
-                item.Enabled = ((_statusFlags & Enabled) == Enabled);
-                item.Visible = ((_statusFlags & Visible) == Visible);
-                item.Checked = ((_statusFlags & Checked) == Checked);
-                item.Supported = ((_statusFlags & Supported) == Supported);
+                item.Enabled = _statusFlags.HasFlag(StatusFlag.Enabled);
+                item.Visible = _statusFlags.HasFlag(StatusFlag.Visible);
+                item.Checked = _statusFlags.HasFlag(StatusFlag.Checked);
+                item.Supported = _statusFlags.HasFlag(StatusFlag.Supported);
             }
 
             /// <summary>
@@ -54,22 +59,22 @@ internal partial class CommandSet
                 _statusFlags = 0;
                 if (item.Enabled)
                 {
-                    _statusFlags |= Enabled;
+                    _statusFlags |= StatusFlag.Enabled;
                 }
 
                 if (item.Visible)
                 {
-                    _statusFlags |= Visible;
+                    _statusFlags |= StatusFlag.Visible;
                 }
 
                 if (item.Checked)
                 {
-                    _statusFlags |= Checked;
+                    _statusFlags |= StatusFlag.Checked;
                 }
 
                 if (item.Supported)
                 {
-                    _statusFlags |= Supported;
+                    _statusFlags |= StatusFlag.Supported;
                 }
             }
         }
