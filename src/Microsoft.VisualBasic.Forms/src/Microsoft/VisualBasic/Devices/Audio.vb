@@ -4,6 +4,7 @@
 Option Explicit On
 Option Strict On
 
+Imports System.ComponentModel
 Imports System.IO
 
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
@@ -157,7 +158,7 @@ Namespace Microsoft.VisualBasic
             ''' <param name="value"></param>
             Private Shared Sub ValidateAudioPlayModeEnum(value As AudioPlayMode, paramName As String)
                 If value < AudioPlayMode.WaitToComplete OrElse value > AudioPlayMode.BackgroundLoop Then
-                    Throw New ComponentModel.InvalidEnumArgumentException(paramName, value, GetType(AudioPlayMode))
+                    Throw New InvalidEnumArgumentException(paramName, value, GetType(AudioPlayMode))
                 End If
             End Sub
 

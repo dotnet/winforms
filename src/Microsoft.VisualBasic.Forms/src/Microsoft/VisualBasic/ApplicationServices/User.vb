@@ -6,6 +6,7 @@ Option Strict On
 
 Imports System.ComponentModel
 Imports System.Security.Principal
+Imports System.Threading
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -65,20 +66,19 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' The principal representing the current user.
         ''' </summary>
         ''' <value>An IPrincipal representing the current user</value>
-        ''' <remarks> 
+        ''' <remarks>
         ''' This should be overridden by derived classes that don't get the current
         ''' user from the current thread
         ''' </remarks>
         Protected Overridable Property InternalPrincipal() As IPrincipal
             Get
-                Return Threading.Thread.CurrentPrincipal
+                Return Thread.CurrentPrincipal
             End Get
             Set(value As IPrincipal)
-                Threading.Thread.CurrentPrincipal = value
+                Thread.CurrentPrincipal = value
             End Set
         End Property
 
     End Class 'User
 
 End Namespace
-

@@ -3,6 +3,9 @@
 
 Option Strict On
 
+Imports System.ComponentModel
+Imports System.Runtime.InteropServices
+
 Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.CompilerServices
@@ -159,9 +162,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <remarks>There is no way to exclude the Win32 error so this function will call Marshal.GetLastWin32Error all the time.</remarks>
 
         Friend Shared Function GetWin32Exception(
-            ResourceID As String, ParamArray PlaceHolders() As String) As ComponentModel.Win32Exception
+            ResourceID As String, ParamArray PlaceHolders() As String) As Win32Exception
 
-            Return New ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error(), GetResourceString(ResourceID, PlaceHolders))
+            Return New Win32Exception(Marshal.GetLastWin32Error(), GetResourceString(ResourceID, PlaceHolders))
         End Function
 
     End Class

@@ -4,6 +4,8 @@
 Option Strict On
 Option Explicit On
 
+Imports System.Threading
+
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
@@ -58,10 +60,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Info() As AssemblyInfo
             Get
                 If _info Is Nothing Then
-                    Dim Assembly As Reflection.Assembly = Reflection.Assembly.GetEntryAssembly()
-                    If Assembly Is Nothing Then 'It can be nothing if we are an add-in or a dll on the web
-                        Assembly = Reflection.Assembly.GetCallingAssembly()
-                    End If
+                    Dim Assembly As Reflection.Assembly = If(Reflection.Assembly.GetEntryAssembly(), Reflection.Assembly.GetCallingAssembly())
                     _info = New AssemblyInfo(Assembly)
                 End If
                 Return _info
@@ -73,7 +72,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         Public ReadOnly Property Culture() As Globalization.CultureInfo
             Get
-                Return Threading.Thread.CurrentThread.CurrentCulture
+                Return Thread.CurrentThread.CurrentCulture
             End Get
         End Property
 
@@ -87,7 +86,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </returns>
         Public ReadOnly Property UICulture() As Globalization.CultureInfo
             Get
-                Return Threading.Thread.CurrentThread.CurrentUICulture
+                Return Thread.CurrentThread.CurrentUICulture
             End Get
         End Property
 
@@ -99,7 +98,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' or an invalid CultureInfo ID. We are not catching those exceptions.
         ''' </remarks>
         Public Sub ChangeCulture(cultureName As String)
-            Threading.Thread.CurrentThread.CurrentCulture = New Globalization.CultureInfo(cultureName)
+            Thread.CurrentThread.CurrentCulture = New Globalization.CultureInfo(cultureName)
         End Sub
 
         ''' <summary>
@@ -111,10 +110,11 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' or an invalid CultureInfo ID. We are not catching those exceptions.
         ''' </remarks>
         Public Sub ChangeUICulture(cultureName As String)
-            Threading.Thread.CurrentThread.CurrentUICulture = New Globalization.CultureInfo(cultureName)
+            Thread.CurrentThread.CurrentUICulture = New Globalization.CultureInfo(cultureName)
         End Sub
 
         Private _log As Logging.Log 'Lazy-initialized and cached log object.
         Private _info As AssemblyInfo ' The executing application (the EntryAssembly)
     End Class 'ApplicationBase
+
 End Namespace

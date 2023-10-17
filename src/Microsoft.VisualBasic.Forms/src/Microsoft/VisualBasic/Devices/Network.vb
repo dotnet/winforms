@@ -153,7 +153,10 @@ Namespace Microsoft.VisualBasic.Devices
 
             Dim PingMaker As New NetInfoAlias.Ping
             Dim Reply As NetInfoAlias.PingReply = PingMaker.Send(hostNameOrAddress, timeout, PingBuffer)
-            Return Reply.Status = NetInfoAlias.IPStatus.Success
+            If Reply.Status = NetInfoAlias.IPStatus.Success Then
+                Return True
+            End If
+            Return False
         End Function
 
         ''' <summary>
@@ -675,7 +678,7 @@ Namespace Microsoft.VisualBasic.Devices
                     ReDim _pingBuffer(BUFFER_SIZE - 1)
                     For i As Integer = 0 To BUFFER_SIZE - 1
                         'This is the same logic Ping.exe uses to fill it's buffer
-                        _pingBuffer(i) = Convert.ToByte(Asc("a"c) + i Mod 23, Globalization.CultureInfo.InvariantCulture)
+                        _pingBuffer(i) = CByte(Asc("a"c) + i Mod 23)
                     Next
                 End If
 
@@ -714,10 +717,11 @@ Namespace Microsoft.VisualBasic.Devices
                 password = ""
             End If
 
-            Return If(userName.Length = 0 And password.Length = 0,
-                      Nothing,
-                      DirectCast(New NetworkCredential(userName, password), ICredentials)
-                     )
+            If userName.Length = 0 AndAlso password.Length = 0 Then
+                Return Nothing
+            Else
+                Return New NetworkCredential(userName, password)
+            End If
         End Function
 
         'Holds the buffer for pinging. We lazy initialize on first use

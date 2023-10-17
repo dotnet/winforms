@@ -2,6 +2,7 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Globalization
+Imports System.Threading
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
@@ -18,10 +19,9 @@ Namespace Microsoft.VisualBasic.CompilerServices
         End Function
 
         Friend Shared Function GetCultureInfo() As CultureInfo
-            Return Threading.Thread.CurrentThread.CurrentCulture
+            Return Thread.CurrentThread.CurrentCulture
         End Function
 
     End Class
 
 End Namespace
-
