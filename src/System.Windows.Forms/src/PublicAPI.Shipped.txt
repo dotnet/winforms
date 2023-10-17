@@ -184,19 +184,19 @@ override System.Windows.Forms.DataGridViewRow.DefaultCellStyle.get -> System.Win
 override System.Windows.Forms.DataGridViewRow.DefaultCellStyle.set -> void
 override System.Windows.Forms.DataGridViewRow.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
 override System.Windows.Forms.DataGridViewRow.ToString() -> string!
-~override System.Windows.Forms.DataGridViewRowHeaderCell.Clone() -> object
-~override System.Windows.Forms.DataGridViewRowHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewRowHeaderCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format) -> object
-~override System.Windows.Forms.DataGridViewRowHeaderCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
-~override System.Windows.Forms.DataGridViewRowHeaderCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
-~override System.Windows.Forms.DataGridViewRowHeaderCell.GetErrorText(int rowIndex) -> string
-~override System.Windows.Forms.DataGridViewRowHeaderCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip
-~override System.Windows.Forms.DataGridViewRowHeaderCell.GetInheritedStyle(System.Windows.Forms.DataGridViewCellStyle inheritedCellStyle, int rowIndex, bool includeColors) -> System.Windows.Forms.DataGridViewCellStyle
-~override System.Windows.Forms.DataGridViewRowHeaderCell.GetPreferredSize(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
-~override System.Windows.Forms.DataGridViewRowHeaderCell.GetValue(int rowIndex) -> object
-~override System.Windows.Forms.DataGridViewRowHeaderCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
-~override System.Windows.Forms.DataGridViewRowHeaderCell.SetValue(int rowIndex, object value) -> bool
-~override System.Windows.Forms.DataGridViewRowHeaderCell.ToString() -> string
+override System.Windows.Forms.DataGridViewRowHeaderCell.Clone() -> object!
+override System.Windows.Forms.DataGridViewRowHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridViewRowHeaderCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string! format) -> object?
+override System.Windows.Forms.DataGridViewRowHeaderCell.GetContentBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewRowHeaderCell.GetErrorIconBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewRowHeaderCell.GetErrorText(int rowIndex) -> string!
+override System.Windows.Forms.DataGridViewRowHeaderCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip?
+override System.Windows.Forms.DataGridViewRowHeaderCell.GetInheritedStyle(System.Windows.Forms.DataGridViewCellStyle? inheritedCellStyle, int rowIndex, bool includeColors) -> System.Windows.Forms.DataGridViewCellStyle!
+override System.Windows.Forms.DataGridViewRowHeaderCell.GetPreferredSize(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
+override System.Windows.Forms.DataGridViewRowHeaderCell.GetValue(int rowIndex) -> object?
+override System.Windows.Forms.DataGridViewRowHeaderCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object! value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+override System.Windows.Forms.DataGridViewRowHeaderCell.SetValue(int rowIndex, object? value) -> bool
+override System.Windows.Forms.DataGridViewRowHeaderCell.ToString() -> string!
 override System.Windows.Forms.DataGridViewTextBoxCell.Clone() -> object!
 override System.Windows.Forms.DataGridViewTextBoxCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DataGridViewTextBoxCell.FormattedValueType.get -> System.Type!
