@@ -113,14 +113,9 @@ internal sealed class SelectionManager : IDisposable
         GlyphSelectionType selType = GlyphSelectionType.NotSelected;
         if (selComps.Contains(parent))
         {
-            if (parent.Equals(primarySelection))
-            {
-                selType = GlyphSelectionType.SelectedPrimary;
-            }
-            else
-            {
-                selType = GlyphSelectionType.Selected;
-            }
+            selType = parent.Equals(primarySelection)
+                ? GlyphSelectionType.SelectedPrimary
+                : GlyphSelectionType.Selected;
         }
 
         AddControlGlyphs(parent, selType);
