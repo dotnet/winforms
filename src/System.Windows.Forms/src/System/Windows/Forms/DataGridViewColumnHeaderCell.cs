@@ -131,7 +131,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
 
         // Not using formatted values for header cells.
         object? val = GetValue(rowIndex);
-        StringBuilder sb = new StringBuilder(64);
+        StringBuilder stringBuilder = new(64);
 
         Debug.Assert(inFirstRow);
 
@@ -139,32 +139,32 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         {
             if (firstCell)
             {
-                sb.Append("<TABLE>");
-                sb.Append("<THEAD>");
+                stringBuilder.Append("<TABLE>");
+                stringBuilder.Append("<THEAD>");
             }
 
-            sb.Append("<TH>");
+            stringBuilder.Append("<TH>");
             if (val is not null)
             {
-                using StringWriter sw = new(sb, CultureInfo.CurrentCulture);
+                using StringWriter sw = new(stringBuilder, CultureInfo.CurrentCulture);
                 FormatPlainTextAsHtml(val.ToString(), sw);
             }
             else
             {
-                sb.Append("&nbsp;");
+                stringBuilder.Append("&nbsp;");
             }
 
-            sb.Append("</TH>");
+            stringBuilder.Append("</TH>");
             if (lastCell)
             {
-                sb.Append("</THEAD>");
+                stringBuilder.Append("</THEAD>");
                 if (inLastRow)
                 {
-                    sb.Append("</TABLE>");
+                    stringBuilder.Append("</TABLE>");
                 }
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
         else
         {
@@ -176,13 +176,13 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                 if (val is not null)
                 {
                     bool escapeApplied = false;
-                    int insertionPoint = sb.Length;
-                    using StringWriter sw = new(sb, CultureInfo.CurrentCulture);
+                    int insertionPoint = stringBuilder.Length;
+                    using StringWriter sw = new(stringBuilder, CultureInfo.CurrentCulture);
                     FormatPlainText(val.ToString(), csv, sw, ref escapeApplied);
                     if (escapeApplied)
                     {
                         Debug.Assert(csv);
-                        sb.Insert(insertionPoint, '"');
+                        stringBuilder.Insert(insertionPoint, '"');
                     }
                 }
 
@@ -190,16 +190,16 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                 {
                     if (!inLastRow)
                     {
-                        sb.Append((char)Keys.Return);
-                        sb.Append((char)Keys.LineFeed);
+                        stringBuilder.Append((char)Keys.Return);
+                        stringBuilder.Append((char)Keys.LineFeed);
                     }
                 }
                 else
                 {
-                    sb.Append(csv ? ',' : (char)Keys.Tab);
+                    stringBuilder.Append(csv ? ',' : (char)Keys.Tab);
                 }
 
-                return sb.ToString();
+                return stringBuilder.ToString();
             }
             else
             {
