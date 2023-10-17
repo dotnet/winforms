@@ -3078,10 +3078,16 @@ public partial class ComboBox : ListControl
     {
         bool returnedValue = base.ProcessCmdKey(ref msg, keyData);
 
-        if (DropDownStyle == ComboBoxStyle.DropDown && keyData == (Keys.Control | Keys.A))
+        if (!returnedValue && keyData == (Keys.Control | Keys.A))
         {
             Select(0, Text.Length);
             SelectedText = Text;
+            int boundaryStart = ClientUtils.GetWordBoundaryStart(Text, SelectionStart);
+            int length = SelectionStart - boundaryStart;
+            SelectionStart = boundaryStart;
+            SelectionLength = length;
+
+            return true;
         }
 
         if (DropDownStyle != ComboBoxStyle.DropDownList &&
@@ -3396,7 +3402,7 @@ public partial class ComboBox : ListControl
             throw new ArgumentOutOfRangeException(nameof(length), length, string.Format(SR.InvalidArgument, nameof(length), length));
         }
 
-        PInvoke.SendMessage(this, PInvoke.CB_SETEDITSEL, (WPARAM)start, (LPARAM)end);
+        PInvoke.SendMessage(this, PInvoke.CB_SETEDITSEL, (WPARAM)0, LPARAM.MAKELPARAM(start, end));
     }
 
     /// <summary>
