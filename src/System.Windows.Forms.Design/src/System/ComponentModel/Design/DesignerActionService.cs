@@ -13,7 +13,7 @@ public class DesignerActionService : IDisposable
     private readonly Dictionary<IComponent, DesignerActionListCollection> _designerActionLists; // this is how we store 'em.  Syntax: key = object, value = DesignerActionListCollection
     private DesignerActionListsChangedEventHandler? _designerActionListsChanged;
     private readonly IServiceProvider? _serviceProvider; // standard service provider
-    private readonly ISelectionService? _selSvc; // selection service
+    private readonly ISelectionService? _selectionService; // selection service
     private readonly HashSet<IComponent> _componentToVerbsEventHookedUp; //Hashset of components which have events hooked up.
     // Guard against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accessed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
     private bool _reEntrantCode;
@@ -29,12 +29,12 @@ public class DesignerActionService : IDisposable
             IDesignerHost? host = serviceProvider.GetService<IDesignerHost>();
             host?.AddService(typeof(DesignerActionService), this);
 
-            if (serviceProvider.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
+            if (serviceProvider.GetService(typeof(IComponentChangeService)) is IComponentChangeService componentChangeService)
             {
-                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+                componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
             }
 
-            _selSvc = serviceProvider.GetService<ISelectionService>();
+            _selectionService = serviceProvider.GetService<ISelectionService>();
         }
 
         _designerActionLists = new();
@@ -58,9 +58,9 @@ public class DesignerActionService : IDisposable
         ArgumentNullException.ThrowIfNull(comp);
         ArgumentNullException.ThrowIfNull(designerActionListCollection);
 
-        if (_designerActionLists.TryGetValue(comp, out DesignerActionListCollection? dhlc))
+        if (_designerActionLists.TryGetValue(comp, out DesignerActionListCollection? collection))
         {
-            dhlc.AddRange(designerActionListCollection);
+            collection.AddRange(designerActionListCollection);
         }
         else
         {
@@ -165,12 +165,12 @@ public class DesignerActionService : IDisposable
         ArgumentNullException.ThrowIfNull(component);
         ArgumentNullException.ThrowIfNull(actionLists);
 
-        if (component.Site is IServiceContainer sc)
+        if (component.Site is IServiceContainer serviceContainer)
         {
-            DesignerCommandSet? dcs = sc.GetService<DesignerCommandSet>();
-            if (dcs is not null)
+            DesignerCommandSet? designerCommandSet = serviceContainer.GetService<DesignerCommandSet>();
+            if (designerCommandSet is not null)
             {
-                DesignerActionListCollection? pullCollection = dcs.ActionLists;
+                DesignerActionListCollection? pullCollection = designerCommandSet.ActionLists;
                 if (pullCollection is not null)
                 {
                     actionLists.AddRange(pullCollection);
@@ -179,7 +179,7 @@ public class DesignerActionService : IDisposable
                 // if we don't find any, add the verbs for this component there...
                 if (actionLists.Count == 0)
                 {
-                    DesignerVerbCollection? verbs = dcs.Verbs;
+                    DesignerVerbCollection? verbs = designerCommandSet.Verbs;
                     if (verbs is not null && verbs.Count != 0)
                     {
                         List<DesignerVerb> verbsArray = new();
@@ -234,15 +234,15 @@ public class DesignerActionService : IDisposable
             try
             {
                 _reEntrantCode = true;
-                if (_selSvc?.PrimarySelection is IComponent { Site: IServiceContainer sc } comp)
+                if (_selectionService?.PrimarySelection is IComponent { Site: IServiceContainer container } comp)
                 {
-                    DesignerCommandSet dcs = sc.GetRequiredService<DesignerCommandSet>();
-                    foreach (DesignerVerb verb in dcs.Verbs!)
+                    DesignerCommandSet commandSet = container.GetRequiredService<DesignerCommandSet>();
+                    foreach (DesignerVerb verb in commandSet.Verbs!)
                     {
                         if (verb == sender)
                         {
-                            DesignerActionUIService? dapUISvc = sc.GetService<DesignerActionUIService>();
-                            dapUISvc?.Refresh(comp); // we need to refresh, a verb on the current panel has changed its state
+                            DesignerActionUIService? designerActionUIService = container.GetService<DesignerActionUIService>();
+                            designerActionUIService?.Refresh(comp); // we need to refresh, a verb on the current panel has changed its state
                         }
                     }
                 }
@@ -277,9 +277,9 @@ public class DesignerActionService : IDisposable
     /// <summary>
     ///  We hook the OnComponentRemoved event so we can clean up  all associated actions.
     /// </summary>
-    private void OnComponentRemoved(object? source, ComponentEventArgs ce)
+    private void OnComponentRemoved(object? source, ComponentEventArgs componentEventArgs)
     {
-        Remove(ce.Component!);
+        Remove(componentEventArgs.Component!);
     }
 
     /// <summary>
@@ -359,16 +359,16 @@ public class DesignerActionService : IDisposable
     {
         add
         {
-            if (_serviceProvider.TryGetService(out DesignerActionUIService? dapUISvc))
+            if (_serviceProvider.TryGetService(out DesignerActionUIService? designerActionUIService))
             {
-                dapUISvc.DesignerActionUIStateChange += value;
+                designerActionUIService.DesignerActionUIStateChange += value;
             }
         }
         remove
         {
-            if (_serviceProvider.TryGetService(out DesignerActionUIService? dapUISvc))
+            if (_serviceProvider.TryGetService(out DesignerActionUIService? designerActionUIService))
             {
-                dapUISvc.DesignerActionUIStateChange -= value;
+                designerActionUIService.DesignerActionUIStateChange -= value;
             }
         }
     }
