@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.Drawing;
 using System.Drawing.Design;
@@ -37,7 +35,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
     private const int PanelHeaderHorizontalPadding = 5; // Horizontal padding within the header of the panel
 
     private const int TextBoxHeightFixup = 2; // Countereffects the fix for VSWhidbey 359726 - we relied on the broken behavior before
-    private CommandID[] _filteredCommandIDs;
+    private CommandID[]? _filteredCommandIDs;
     private readonly ToolTip _toolTip;
     private readonly List<Line> _lines;
     private readonly List<int> _lineYPositions;
@@ -61,10 +59,10 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         _lineYPositions = new List<int>();
         _toolTip = new ToolTip();
         // Try to get the font from the IUIService, otherwise, use the default
-        IUIService uiService = _serviceProvider.GetService<IUIService>();
+        IUIService? uiService = _serviceProvider.GetService<IUIService>();
         if (uiService is not null)
         {
-            Font = (Font)uiService.Styles["DialogFont"];
+            Font = (Font)uiService.Styles["DialogFont"]!;
             if (uiService.Styles["VsColorPanelGradientDark"] is Color vsColorPanelGradientDarkColor)
             {
                 GradientDarkColor = vsColorPanelGradientDarkColor;
@@ -167,7 +165,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
     /// <summary>
     ///  Gets the Line that currently has input focus.
     /// </summary>
-    private Line FocusedLine => ActiveControl?.Tag as Line;
+    private Line? FocusedLine => ActiveControl?.Tag as Line;
 
     public Color GradientDarkColor { get; } = SystemColors.Control;
 
@@ -207,16 +205,16 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
     private static void AddToCategories(StandardLineInfo lineInfo, Dictionary<string, Dictionary<DesignerActionList, List<LineInfo>>> categories)
     {
-        string categoryName = lineInfo.Item.Category;
+        string? categoryName = lineInfo.Item.Category;
         categoryName ??= string.Empty;
 
-        if (!categories.TryGetValue(categoryName, out Dictionary<DesignerActionList, List<LineInfo>> category))
+        if (!categories.TryGetValue(categoryName, out Dictionary<DesignerActionList, List<LineInfo>>? category))
         {
             category = new Dictionary<DesignerActionList, List<LineInfo>>();
             categories.Add(categoryName, category);
         }
 
-        if (!category.TryGetValue(lineInfo.List, out List<LineInfo> categoryList))
+        if (!category.TryGetValue(lineInfo.List, out List<LineInfo>? categoryList))
         {
             categoryList = new List<LineInfo>();
             category.Add(lineInfo.List, categoryList);
@@ -397,14 +395,14 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         return DoLayout(proposedSize, true);
     }
 
-    private static bool IsReadOnlyProperty(PropertyDescriptor pd)
+    private static bool IsReadOnlyProperty(PropertyDescriptor propertyDescriptor)
     {
-        if (pd.IsReadOnly)
+        if (propertyDescriptor.IsReadOnly)
         {
             return true;
         }
 
-        return (pd.ComponentType.GetProperty(pd.Name).GetSetMethod() is null);
+        return (propertyDescriptor.ComponentType.GetProperty(propertyDescriptor.Name)!.GetSetMethod() is null);
     }
 
     protected override void OnFontChanged(EventArgs e)
@@ -416,10 +414,10 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
     private void OnFormActivated(object sender, EventArgs e)
     {
-        ((EventHandler)Events[s_eventFormActivated])?.Invoke(sender, e);
+        ((EventHandler?)Events[s_eventFormActivated])?.Invoke(sender, e);
     }
 
-    private void OnFormClosing(object sender, CancelEventArgs e)
+    private void OnFormClosing(object? sender, CancelEventArgs e)
     {
         if (!e.Cancel && TopLevelControl is not null)
         {
@@ -434,7 +432,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
     private void OnFormDeactivate(object sender, EventArgs e)
     {
-        ((EventHandler)Events[s_eventFormDeactivate])?.Invoke(sender, e);
+        ((EventHandler?)Events[s_eventFormDeactivate])?.Invoke(sender, e);
     }
 
     protected override void OnHandleCreated(EventArgs e)
@@ -524,7 +522,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
     protected override bool ProcessDialogKey(Keys keyData)
     {
         // TODO: RightToLeft management for left/right arrow keys (from old DesignerActionPanel)
-        Line focusedLine = FocusedLine;
+        Line? focusedLine = FocusedLine;
         if (focusedLine is not null)
         {
             if (focusedLine.ProcessDialogKey(keyData))
@@ -542,7 +540,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         return (SelectNextControl(ActiveControl, forward, true, true, true));
     }
 
-    private void ProcessLists(DesignerActionListCollection lists, Dictionary<string, Dictionary<DesignerActionList, List<LineInfo>>> categories)
+    private void ProcessLists(DesignerActionListCollection? lists, Dictionary<string, Dictionary<DesignerActionList, List<LineInfo>>> categories)
     {
         if (lists is null)
         {
@@ -563,7 +561,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
                             continue;
                         }
 
-                        StandardLineInfo lineInfo = ProcessTaskItem(list, item);
+                        StandardLineInfo? lineInfo = ProcessTaskItem(list, item);
                         if (lineInfo is null)
                         {
                             continue;
@@ -571,22 +569,19 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
                         AddToCategories(lineInfo, categories);
                         // Process lists from related component
-                        IComponent relatedComponent = null;
+                        IComponent? relatedComponent = null;
                         if (item is DesignerActionPropertyItem propItem)
                         {
                             relatedComponent = propItem.RelatedComponent;
                         }
-                        else
+                        else if (item is DesignerActionMethodItem methodItem)
                         {
-                            if (item is DesignerActionMethodItem methodItem)
-                            {
-                                relatedComponent = methodItem.RelatedComponent;
-                            }
+                            relatedComponent = methodItem.RelatedComponent;
                         }
 
                         if (relatedComponent is not null)
                         {
-                            IEnumerable<StandardLineInfo> relatedLineInfos = ProcessRelatedTaskItems(relatedComponent);
+                            IEnumerable<StandardLineInfo>? relatedLineInfos = ProcessRelatedTaskItems(relatedComponent);
                             if (relatedLineInfos is not null)
                             {
                                 foreach (StandardLineInfo relatedLineInfo in relatedLineInfos)
@@ -605,8 +600,8 @@ internal sealed partial class DesignerActionPanel : ContainerControl
     {
         // Add the related tasks
         Debug.Assert(relatedComponent is not null);
-        DesignerActionListCollection relatedLists = null;
-        DesignerActionService actionService = _serviceProvider.GetService<DesignerActionService>();
+        DesignerActionListCollection? relatedLists = null;
+        DesignerActionService? actionService = _serviceProvider.GetService<DesignerActionService>();
         if (actionService is not null)
         {
             relatedLists = actionService.GetComponentActions(relatedComponent);
@@ -614,10 +609,10 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         else
         {
             // Try to use the component's service provider if it exists so that we end up getting the right IDesignerHost.
-            IServiceProvider serviceProvider = relatedComponent.Site;
+            IServiceProvider? serviceProvider = relatedComponent.Site;
             serviceProvider ??= _serviceProvider;
 
-            IDesignerHost host = serviceProvider.GetService<IDesignerHost>();
+            IDesignerHost? host = serviceProvider.GetService<IDesignerHost>();
             if (host?.GetDesigner(relatedComponent) is ComponentDesigner componentDesigner)
             {
                 relatedLists = componentDesigner.ActionLists;
@@ -641,7 +636,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
                             {
                                 if (relatedItem.AllowAssociate)
                                 {
-                                    StandardLineInfo lineInfo = ProcessTaskItem(relatedList, relatedItem);
+                                    StandardLineInfo? lineInfo = ProcessTaskItem(relatedList, relatedItem);
                                     if (lineInfo is not null)
                                     {
                                         lineInfos.Add(lineInfo);
@@ -657,7 +652,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         return lineInfos;
     }
 
-    private StandardLineInfo ProcessTaskItem(DesignerActionList list, DesignerActionItem item)
+    private StandardLineInfo? ProcessTaskItem(DesignerActionList list, DesignerActionItem item)
     {
         if (item is DesignerActionMethodItem methodItem)
         {
@@ -665,7 +660,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         }
         else if (item is DesignerActionPropertyItem pti)
         {
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(list)[pti.MemberName];
+            PropertyDescriptor? pd = TypeDescriptor.GetProperties(list)[pti.MemberName];
             if (pd is null)
             {
                 throw new InvalidOperationException(string.Format(SR.DesignerActionPanel_CouldNotFindProperty, pti.MemberName, list.GetType().FullName));
@@ -673,7 +668,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
             TypeDescriptorContext context = new TypeDescriptorContext(_serviceProvider, pd, list);
             bool standardValuesSupported = pd.Converter.GetStandardValuesSupported(context);
-            if (pd.TryGetEditor(out UITypeEditor _))
+            if (pd.TryGetEditor(out UITypeEditor? _))
             {
                 return EditorPropertyLine.CreateLineInfo(list, pti);
             }
@@ -722,7 +717,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
     private void ShowError(string errorMessage)
     {
-        IUIService uiService = _serviceProvider.GetService<IUIService>();
+        IUIService? uiService = _serviceProvider.GetService<IUIService>();
         if (uiService is not null)
         {
             uiService.ShowError(errorMessage);
@@ -745,7 +740,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
     ///  - Convert "&amp;x" to "x"
     ///  - An ampersand by itself at the end of a string is displayed as-is
     /// </summary>
-    private static string StripAmpersands(string s)
+    private static string StripAmpersands(string? s)
     {
         if (string.IsNullOrEmpty(s))
         {
@@ -795,7 +790,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
         }
     }
 
-    public void UpdateTasks(DesignerActionListCollection actionLists, DesignerActionListCollection serviceActionLists, string title, string subtitle)
+    public void UpdateTasks(DesignerActionListCollection actionLists, DesignerActionListCollection serviceActionLists, string title, string? subtitle)
     {
         _updatingTasks = true;
         SuspendLayout();
@@ -806,7 +801,7 @@ internal sealed partial class DesignerActionPanel : ContainerControl
 
             // Store the focus state
             string focusId = string.Empty;
-            Line focusedLine = FocusedLine;
+            Line? focusedLine = FocusedLine;
             if (focusedLine is not null)
             {
                 focusId = focusedLine.FocusId;

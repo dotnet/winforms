@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -44,14 +42,14 @@ internal sealed partial class DesignerActionPanel
             return checkBoxPreferredSize + new Size(LineLeftMargin + LineRightMargin, LineVerticalPadding);
         }
 
-        private void OnCheckBoxCheckedChanged(object sender, EventArgs e)
+        private void OnCheckBoxCheckedChanged(object? sender, EventArgs e)
         {
             SetValue(_checkBox.Checked);
         }
 
         protected override void OnPropertyTaskItemUpdated(ToolTip toolTip, ref int currentTabIndex)
         {
-            _checkBox.Text = StripAmpersands(PropertyItem.DisplayName);
+            _checkBox.Text = StripAmpersands(PropertyItem!.DisplayName);
             _checkBox.AccessibleDescription = PropertyItem.Description;
             _checkBox.TabIndex = currentTabIndex++;
 
@@ -60,7 +58,7 @@ internal sealed partial class DesignerActionPanel
 
         protected override void OnValueChanged()
         {
-            _checkBox.Checked = (bool)Value;
+            _checkBox.Checked = (bool)Value!;
         }
 
         public static StandardLineInfo CreateLineInfo(DesignerActionList list, DesignerActionPropertyItem item) => new Info(list, item);
