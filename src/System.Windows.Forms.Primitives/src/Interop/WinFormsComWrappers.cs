@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -53,7 +53,6 @@ internal partial class Interop
             int hr = Marshal.QueryInterface(externalComObject, ref pictureIID, out IntPtr comObject);
             if (hr == S_OK)
             {
-                Marshal.Release(externalComObject);
                 return new PictureWrapper(comObject);
             }
 
