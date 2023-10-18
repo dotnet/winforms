@@ -72,11 +72,6 @@ namespace System.Windows.Forms
         public Cursor(Type type, string resource)
             : this((type.OrThrowIfNull()).Module.Assembly.GetManifestResourceStream(type, resource)!)
         {
-            if (type == typeof(Cursor))
-            {
-                // This came from the Cursors class, we shouldn't be disposing them.
-                _ownHandle = false;
-            }
         }
 
         /// <summary>
@@ -228,11 +223,13 @@ namespace System.Windows.Forms
 
         private void Dispose(bool disposing)
         {
-            if (_handle != IntPtr.Zero && _ownHandle)
+            if (_handle != IntPtr.Zero)
             {
-                // If we don't own the handle we should never _actually_ dispose or set to null.
-                // Doing so would make the static cursors in Cursors unusable.
-                User32.DestroyCursor(_handle);
+                if (_ownHandle)
+                {
+                    User32.DestroyCursor(_handle);
+                }
+
                 _handle = IntPtr.Zero;
             }
         }
