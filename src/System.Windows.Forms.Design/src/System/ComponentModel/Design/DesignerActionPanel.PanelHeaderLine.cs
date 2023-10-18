@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,7 +10,7 @@ internal sealed partial class DesignerActionPanel
 {
     private sealed class PanelHeaderLine : Line
     {
-        private DesignerActionPanelHeaderItem _panelHeaderItem;
+        private DesignerActionPanelHeaderItem? _panelHeaderItem;
         private readonly Label _titleLabel;
         private readonly Label _subtitleLabel;
         private bool _formActive;
@@ -57,7 +55,7 @@ internal sealed partial class DesignerActionPanel
         {
             Size titleSize = _titleLabel.GetPreferredSize(new Size(int.MaxValue, int.MaxValue));
             Size subtitleSize = Size.Empty;
-            if (!string.IsNullOrEmpty(_panelHeaderItem.Subtitle))
+            if (!string.IsNullOrEmpty(_panelHeaderItem!.Subtitle))
             {
                 subtitleSize = _subtitleLabel.GetPreferredSize(new Size(int.MaxValue, int.MaxValue));
             }
@@ -76,7 +74,7 @@ internal sealed partial class DesignerActionPanel
             return new Size(newWidth + 2, newHeight + 1);
         }
 
-        private void OnFormActivated(object sender, EventArgs e)
+        private void OnFormActivated(object? sender, EventArgs e)
         {
             // TODO: Figure out better rect
             _formActive = true;
@@ -84,14 +82,14 @@ internal sealed partial class DesignerActionPanel
             //ActionPanel.Invalidate(new Rectangle(EditRegionLocation, EditRegionSize), false);
         }
 
-        private void OnFormDeactivate(object sender, EventArgs e)
+        private void OnFormDeactivate(object? sender, EventArgs e)
         {
             // TODO: Figure out better rect
             _formActive = false;
             ActionPanel.Invalidate();
         }
 
-        private void OnParentControlFontChanged(object sender, EventArgs e)
+        private void OnParentControlFontChanged(object? sender, EventArgs e)
         {
             _titleLabel.Font = new Font(ActionPanel.Font, FontStyle.Bold);
             _subtitleLabel.Font = ActionPanel.Font;

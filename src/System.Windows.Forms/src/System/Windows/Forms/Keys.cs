@@ -850,12 +850,12 @@ public enum Keys
     Oem2 = OemQuestion,
 
     /// <summary>
-    ///  The Oem tilde key.
+    ///  The Oem 3 key.
     /// </summary>
     Oem3 = 0xC0,
 
     /// <summary>
-    ///  The Oem 3 key.
+    ///  The Oem tilde key.
     /// </summary>
     Oemtilde = Oem3,
 
@@ -890,12 +890,12 @@ public enum Keys
     Oem6 = OemCloseBrackets,
 
     /// <summary>
-    ///  The Oem Quotes key.
+    ///  The Oem 7 key.
     /// </summary>
     Oem7 = 0xDE,
 
     /// <summary>
-    ///  The Oem 7 key.
+    ///  The Oem Quotes key.
     /// </summary>
     OemQuotes = Oem7,
 
@@ -905,14 +905,14 @@ public enum Keys
     Oem8 = 0xDF,
 
     /// <summary>
-    ///  The Oem Backslash key.
-    /// </summary>
-    OemBackslash = 0xE2,
-
-    /// <summary>
     ///  The Oem 102 key.
     /// </summary>
-    Oem102 = OemBackslash,
+    Oem102 = 0xE2,
+
+    /// <summary>
+    ///  The Oem Backslash key.
+    /// </summary>
+    OemBackslash = Oem102,
 
     /// <summary>
     ///  The PROCESS KEY key.
