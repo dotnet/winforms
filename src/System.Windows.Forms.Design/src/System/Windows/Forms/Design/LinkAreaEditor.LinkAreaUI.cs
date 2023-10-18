@@ -18,14 +18,15 @@ internal partial class LinkAreaEditor
         private Button _okButton = new();
         private Button _cancelButton = new();
         private TableLayoutPanel _okCancelTableLayoutPanel;
-        private readonly IHelpService _helpService;
+        private readonly IHelpService? _helpService;
 
-        public LinkAreaUI(IHelpService helpService)
+        public LinkAreaUI(IHelpService? helpService)
         {
             _helpService = helpService;
             InitializeComponent();
         }
 
+        [AllowNull]
         public string SampleText
         {
             get => _sampleEdit.Text;
@@ -125,7 +126,7 @@ internal partial class LinkAreaEditor
             _helpService?.ShowHelpFromKeyword("net.ComponentModel.LinkAreaEditor");
         }
 
-        public void Start(object value)
+        public void Start(object? value)
         {
             Value = value;
             UpdateSelection();

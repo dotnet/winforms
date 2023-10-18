@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -60,7 +58,7 @@ internal sealed partial class DesignerActionPanel
             AddedControls.Add(_label);
         }
 
-        protected Control EditControl { get; private set; }
+        protected Control? EditControl { get; private set; }
 
         protected Point EditRegionLocation => _editRegionLocation;
 
@@ -70,7 +68,7 @@ internal sealed partial class DesignerActionPanel
 
         public sealed override void Focus()
         {
-            EditControl.Focus();
+            EditControl!.Focus();
         }
 
         internal int GetEditRegionXPos()
@@ -108,13 +106,9 @@ internal sealed partial class DesignerActionPanel
                 _label.Location = new Point(LineLeftMargin, top);
                 int labelPreferredWidth = _label.GetPreferredSize(new Size(int.MaxValue, int.MaxValue)).Width;
                 _label.Size = new Size(labelPreferredWidth, height);
-                int specialPadding = 0;
-                if (EditControl is TextBox)
-                {
-                    specialPadding = 2;
-                }
+                int specialPadding = EditControl is TextBox ? 2 : 0;
 
-                EditControl.Location = new Point(_editRegionLocation.X + GetTextBoxLeftPadding(textBoxPreferredHeight) + 1 + specialPadding, _editRegionLocation.Y + TextBoxLineInnerPadding + 1);
+                EditControl!.Location = new Point(_editRegionLocation.X + GetTextBoxLeftPadding(textBoxPreferredHeight) + 1 + specialPadding, _editRegionLocation.Y + TextBoxLineInnerPadding + 1);
                 EditControl.Width = _editRegionSize.Width - GetTextBoxRightPadding(textBoxPreferredHeight) - GetTextBoxLeftPadding(textBoxPreferredHeight) - specialPadding;
                 EditControl.Height = _editRegionSize.Height - TextBoxLineInnerPadding * 2 - 1;
             }
@@ -124,9 +118,10 @@ internal sealed partial class DesignerActionPanel
 
         protected virtual bool IsReadOnly() => IsReadOnlyProperty(PropertyDescriptor);
 
+        [MemberNotNull(nameof(EditControl))]
         protected override void OnPropertyTaskItemUpdated(ToolTip toolTip, ref int currentTabIndex)
         {
-            _label.Text = StripAmpersands(PropertyItem.DisplayName);
+            _label.Text = StripAmpersands(PropertyItem!.DisplayName);
             _label.TabIndex = currentTabIndex++;
             toolTip.SetToolTip(_label, PropertyItem.Description);
             _textBoxDirty = false;
@@ -154,7 +149,7 @@ internal sealed partial class DesignerActionPanel
             EditControl.BringToFront();
         }
 
-        protected virtual void OnReadOnlyTextBoxLabelClick(object sender, MouseEventArgs e)
+        protected virtual void OnReadOnlyTextBoxLabelClick(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -162,19 +157,19 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        private void OnReadOnlyTextBoxLabelEnter(object sender, EventArgs e)
+        private void OnReadOnlyTextBoxLabelEnter(object? sender, EventArgs e)
         {
             _readOnlyTextBoxLabel.ForeColor = SystemColors.HighlightText;
             _readOnlyTextBoxLabel.BackColor = SystemColors.Highlight;
         }
 
-        private void OnReadOnlyTextBoxLabelLeave(object sender, EventArgs e)
+        private void OnReadOnlyTextBoxLabelLeave(object? sender, EventArgs e)
         {
             _readOnlyTextBoxLabel.ForeColor = SystemColors.WindowText;
             _readOnlyTextBoxLabel.BackColor = SystemColors.Window;
         }
 
-        protected TypeConverter.StandardValuesCollection GetStandardValues()
+        protected TypeConverter.StandardValuesCollection? GetStandardValues()
         {
             TypeConverter converter = PropertyDescriptor.Converter;
             if (converter is not null &&
@@ -192,7 +187,7 @@ internal sealed partial class DesignerActionPanel
             {
                 e.Handled = true;
                 // Try to find the existing value and then pick the one after it
-                TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
+                TypeConverter.StandardValuesCollection? standardValues = GetStandardValues();
                 if (standardValues is not null)
                 {
                     for (int i = 0; i < standardValues.Count; i++)
@@ -222,7 +217,7 @@ internal sealed partial class DesignerActionPanel
             {
                 e.Handled = true;
                 // Try to find the existing value and then pick the one before it
-                TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
+                TypeConverter.StandardValuesCollection? standardValues = GetStandardValues();
                 if (standardValues is not null)
                 {
                     for (int i = 0; i < standardValues.Count; i++)
@@ -249,13 +244,13 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        private void OnReadOnlyTextBoxLabelKeyDown(object sender, KeyEventArgs e)
+        private void OnReadOnlyTextBoxLabelKeyDown(object? sender, KeyEventArgs e)
         {
             // Delegate the rest of the processing to a common helper
             OnEditControlKeyDown(e);
         }
 
-        private void OnTextBoxKeyDown(object sender, KeyEventArgs e)
+        private void OnTextBoxKeyDown(object? sender, KeyEventArgs e)
         {
             if (ActionPanel._dropDownActive)
             {
@@ -273,7 +268,7 @@ internal sealed partial class DesignerActionPanel
             OnEditControlKeyDown(e);
         }
 
-        private void OnTextBoxLostFocus(object sender, EventArgs e)
+        private void OnTextBoxLostFocus(object? sender, EventArgs e)
         {
             if (ActionPanel._dropDownActive)
             {
@@ -283,9 +278,9 @@ internal sealed partial class DesignerActionPanel
             UpdateValue();
         }
 
-        private void OnTextBoxTextChanged(object sender, EventArgs e) => _textBoxDirty = true;
+        private void OnTextBoxTextChanged(object? sender, EventArgs e) => _textBoxDirty = true;
 
-        protected override void OnValueChanged() => EditControl.Text = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, Value);
+        protected override void OnValueChanged() => EditControl!.Text = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, Value);
 
         public override void PaintLine(Graphics g, int lineWidth, int lineHeight)
         {
@@ -311,7 +306,7 @@ internal sealed partial class DesignerActionPanel
         {
             if (_textBoxDirty)
             {
-                SetValue(EditControl.Text);
+                SetValue(EditControl!.Text);
                 _textBoxDirty = false;
             }
         }
@@ -355,11 +350,13 @@ internal sealed partial class DesignerActionPanel
                 {
                 }
 
-                public override string Value => Owner.Text;
+                public override string? Value => Owner?.Text;
             }
         }
 
-        public sealed class Info(DesignerActionList list, DesignerActionPropertyItem item) : PropertyLineInfo(list, item)
+        public static StandardLineInfo CreateLineInfo(DesignerActionList list, DesignerActionPropertyItem item) => new Info(list, item);
+
+        private sealed class Info(DesignerActionList list, DesignerActionPropertyItem item) : PropertyLineInfo(list, item)
         {
             public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             {

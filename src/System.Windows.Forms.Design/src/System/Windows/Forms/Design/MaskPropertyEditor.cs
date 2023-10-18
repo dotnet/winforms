@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel.Design;
 using System.Drawing.Design;
 
@@ -22,14 +20,14 @@ internal class MaskPropertyEditor : UITypeEditor
     ///   blocked if focus is moved to another app.
     ///  </para>
     /// </remarks>
-    internal static string EditMask(
-        ITypeDiscoveryService discoveryService,
-        IUIService uiService,
+    internal static string? EditMask(
+        ITypeDiscoveryService? discoveryService,
+        IUIService? uiService,
         MaskedTextBox instance,
-        IHelpService helpService)
+        IHelpService? helpService)
     {
         Debug.Assert(instance is not null, "Null masked text box.");
-        string mask = null;
+        string? mask = null;
 
         // Launching modal dialog in System aware mode.
         using MaskDesignerDialog dialog = DpiHelper.CreateInstanceInSystemAwareContext(
@@ -57,17 +55,17 @@ internal class MaskPropertyEditor : UITypeEditor
     /// <summary>
     ///  Edits the Mask property of the MaskedTextBox control from the PropertyGrid.
     /// </summary>
-    public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
+    public override object? EditValue(System.ComponentModel.ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
         if (context is null || provider is null)
         {
             return value;
         }
 
-        string mask = EditMask(
+        string? mask = EditMask(
             provider.GetService<ITypeDiscoveryService>(),
             provider.GetService<IUIService>(),
-            context.Instance as MaskedTextBox,
+            (context.Instance as MaskedTextBox)!,
             provider.GetService<IHelpService>());
 
         return mask ?? value;
@@ -76,10 +74,10 @@ internal class MaskPropertyEditor : UITypeEditor
     /// <summary>
     ///  Painting a representation of the Mask value is not supported.
     /// </summary>
-    public override bool GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context)
+    public override bool GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext? context)
         => false;
 
     /// <inheritdoc />
-    public override UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext context)
+    public override UITypeEditorEditStyle GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context)
         => UITypeEditorEditStyle.Modal;
 }

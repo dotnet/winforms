@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -16,10 +14,11 @@ internal sealed partial class DesignerActionPanel
     private sealed partial class EditorPropertyLine : TextBoxPropertyLine, IWindowsFormsEditorService, IServiceProvider
     {
         private readonly EditorButton _button;
-        private UITypeEditor _editor;
-        private bool _hasSwatch;
-        private Image _swatch;
-        private FlyoutDialog _dropDownHolder;
+        private UITypeEditor? _editor;
+        [MemberNotNullWhen(true, nameof(_editor))]
+        private bool HasSwatch { get; set; }
+        private Image? _swatch;
+        private FlyoutDialog? _dropDownHolder;
         private bool _ignoreNextSelectChange;
         private bool _ignoreDropDownValue;
 
@@ -39,7 +38,7 @@ internal sealed partial class DesignerActionPanel
             {
                 try
                 {
-                    object newValue = _editor.EditValue(TypeDescriptorContext, this, Value);
+                    object? newValue = _editor.EditValue(TypeDescriptorContext, this, Value);
                     SetValue(newValue);
                 }
                 catch (Exception ex)
@@ -58,15 +57,15 @@ internal sealed partial class DesignerActionPanel
                 listBox.SelectedIndexChanged += new EventHandler(OnListBoxSelectedIndexChanged);
                 listBox.KeyDown += new KeyEventHandler(OnListBoxKeyDown);
 
-                TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
+                TypeConverter.StandardValuesCollection? standardValues = GetStandardValues();
                 if (standardValues is not null)
                 {
-                    foreach (object o in standardValues)
+                    foreach (object? standardValue in standardValues)
                     {
-                        string newItem = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, CultureInfo.CurrentCulture, o);
+                        string newItem = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, CultureInfo.CurrentCulture, standardValue)!;
                         listBox.Items.Add(newItem);
 
-                        if ((o is not null) && o.Equals(Value))
+                        if ((standardValue is not null) && standardValue.Equals(Value))
                         {
                             listBox.SelectedItem = newItem;
                         }
@@ -137,7 +136,7 @@ internal sealed partial class DesignerActionPanel
 
         protected override int GetTextBoxLeftPadding(int textBoxHeight)
         {
-            if (_hasSwatch)
+            if (HasSwatch)
             {
                 return base.GetTextBoxLeftPadding(textBoxHeight) + textBoxHeight + 2 * EditorLineSwatchPadding;
             }
@@ -181,12 +180,12 @@ internal sealed partial class DesignerActionPanel
             return size;
         }
 
-        private void OnButtonClick(object sender, EventArgs e)
+        private void OnButtonClick(object? sender, EventArgs e)
         {
             ActivateDropDown();
         }
 
-        private void OnButtonGotFocus(object sender, EventArgs e)
+        private void OnButtonGotFocus(object? sender, EventArgs e)
         {
             if (!_button.Ellipsis)
             {
@@ -194,7 +193,7 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        private void OnListBoxKeyDown(object sender, KeyEventArgs e)
+        private void OnListBoxKeyDown(object? sender, KeyEventArgs e)
         {
             // Always respect the enter key and F4
             if (e.KeyData == Keys.Enter)
@@ -210,7 +209,7 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        private void OnListBoxSelectedIndexChanged(object sender, EventArgs e)
+        private void OnListBoxSelectedIndexChanged(object? sender, EventArgs e)
         {
             // If we're ignoring this selected index change, do nothing
             if (_ignoreNextSelectChange)
@@ -232,21 +231,16 @@ internal sealed partial class DesignerActionPanel
             if (_editor is not null)
             {
                 _button.Ellipsis = (_editor.GetEditStyle(TypeDescriptorContext) == UITypeEditorEditStyle.Modal);
-                _hasSwatch = _editor.GetPaintValueSupported(TypeDescriptorContext);
+                HasSwatch = _editor.GetPaintValueSupported(TypeDescriptorContext);
             }
             else
             {
                 _button.Ellipsis = false;
             }
 
-            if (_button.Ellipsis)
-            {
-                EditControl.AccessibleRole = (IsReadOnly() ? AccessibleRole.StaticText : AccessibleRole.Text);
-            }
-            else
-            {
-                EditControl.AccessibleRole = (IsReadOnly() ? AccessibleRole.DropList : AccessibleRole.ComboBox);
-            }
+            EditControl.AccessibleRole = _button.Ellipsis
+                ? IsReadOnly() ? AccessibleRole.StaticText : AccessibleRole.Text
+                : IsReadOnly() ? AccessibleRole.DropList : AccessibleRole.ComboBox;
 
             _button.TabStop = _button.Ellipsis;
             _button.TabIndex = currentTabIndex++;
@@ -256,7 +250,7 @@ internal sealed partial class DesignerActionPanel
             _button.AccessibleName = EditControl.AccessibleName;
         }
 
-        protected override void OnReadOnlyTextBoxLabelClick(object sender, MouseEventArgs e)
+        protected override void OnReadOnlyTextBoxLabelClick(object? sender, MouseEventArgs e)
         {
             base.OnReadOnlyTextBoxLabelClick(sender, e);
 
@@ -279,7 +273,7 @@ internal sealed partial class DesignerActionPanel
             base.OnValueChanged();
 
             _swatch = null;
-            if (_hasSwatch)
+            if (HasSwatch)
             {
                 ActionPanel.Invalidate(new Rectangle(EditRegionLocation, EditRegionSize), false);
             }
@@ -289,7 +283,7 @@ internal sealed partial class DesignerActionPanel
         {
             base.PaintLine(g, lineWidth, lineHeight);
 
-            if (_hasSwatch)
+            if (HasSwatch)
             {
                 if (_swatch is null)
                 {
@@ -415,12 +409,15 @@ internal sealed partial class DesignerActionPanel
 
         void IWindowsFormsEditorService.DropDownControl(Control control)
         {
-            ShowDropDown(control, ActionPanel.BorderColor);
+            if (control is not null)
+            {
+                ShowDropDown(control, ActionPanel.BorderColor);
+            }
         }
 
         DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
         {
-            IUIService uiService = ServiceProvider.GetService<IUIService>();
+            IUIService? uiService = ServiceProvider.GetService<IUIService>();
             if (uiService is not null)
             {
                 return uiService.ShowDialog(dialog);
@@ -431,7 +428,7 @@ internal sealed partial class DesignerActionPanel
         #endregion
 
         #region IServiceProvider implementation
-        object IServiceProvider.GetService(Type serviceType)
+        object? IServiceProvider.GetService(Type serviceType)
         {
             // Inject this class as the IWindowsFormsEditorService
             // so drop-down custom editors can work
@@ -475,7 +472,9 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        public new sealed class Info(DesignerActionList list, DesignerActionPropertyItem item) : PropertyLineInfo(list, item)
+        public static new StandardLineInfo CreateLineInfo(DesignerActionList list, DesignerActionPropertyItem item) => new Info(list, item);
+
+        private sealed class Info(DesignerActionList list, DesignerActionPropertyItem item) : PropertyLineInfo(list, item)
         {
             public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             {

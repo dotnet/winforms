@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms;
@@ -15,13 +13,13 @@ public sealed partial class MultilineStringEditor
 {
     private class MultilineStringEditorUI : RichTextBox
     {
-        private IWindowsFormsEditorService _editorService;
+        private IWindowsFormsEditorService? _editorService;
         private bool _editing;
         private bool _escapePressed;
         private bool _ctrlEnterPressed;
-        private SolidBrush _watermarkBrush;
+        private SolidBrush? _watermarkBrush;
         private Size _watermarkSize = Size.Empty;
-        private readonly Dictionary<int, Font> _fallbackFonts;
+        private readonly Dictionary<int, Font?> _fallbackFonts;
         private bool _firstTimeResizeToContent = true;
 
         private readonly StringFormat _watermarkFormat;
@@ -105,9 +103,9 @@ public sealed partial class MultilineStringEditor
             }
 
             // Ask the editor service to ask my parent to close when the user types "Ctrl+Enter".
-            if (e.Control && e.KeyCode == Keys.Return && e.Modifiers == Keys.Control)
+            if (e is { Control: true, KeyCode: Keys.Return, Modifiers: Keys.Control })
             {
-                _editorService.CloseDropDown();
+                _editorService!.CloseDropDown();
                 _ctrlEnterPressed = true;
             }
         }
@@ -123,7 +121,7 @@ public sealed partial class MultilineStringEditor
             }
         }
 
-        internal void BeginEdit(IWindowsFormsEditorService editorService, object value)
+        internal void BeginEdit(IWindowsFormsEditorService editorService, object? value)
         {
             _editing = true;
             _editorService = editorService;
@@ -246,6 +244,7 @@ public sealed partial class MultilineStringEditor
             }
         }
 
+        [AllowNull]
         public override Font Font
         {
             get => base.Font;
@@ -291,14 +290,14 @@ public sealed partial class MultilineStringEditor
 
                 // Plane 0 is the default plane.
                 int planeNumber = (value[currentSurrogate] / 0x40) - (0xD800 / 0x40) + 1;
-                if (!_fallbackFonts.TryGetValue(planeNumber, out Font replaceFont))
+                if (!_fallbackFonts.TryGetValue(planeNumber, out Font? replaceFont))
                 {
-                    using RegistryKey regkey = Registry.LocalMachine.OpenSubKey(
+                    using RegistryKey? regkey = Registry.LocalMachine.OpenSubKey(
                         @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\LanguagePack\SurrogateFallback");
 
                     if (regkey is not null)
                     {
-                        string fallBackFontName = (string)regkey.GetValue($"Plane{planeNumber}");
+                        string? fallBackFontName = (string?)regkey.GetValue($"Plane{planeNumber}");
                         if (!string.IsNullOrEmpty(fallBackFontName))
                         {
                             replaceFont = new Font(fallBackFontName, base.Font.Size, base.Font.Style);
@@ -319,6 +318,7 @@ public sealed partial class MultilineStringEditor
             }
         }
 
+        [AllowNull]
         public override string Text
         {
             get

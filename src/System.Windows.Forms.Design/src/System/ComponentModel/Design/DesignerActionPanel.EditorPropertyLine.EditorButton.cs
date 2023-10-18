@@ -17,7 +17,6 @@ internal sealed partial class DesignerActionPanel
         {
             private bool _mouseOver;
             private bool _mouseDown;
-            private bool _ellipsis;
 
             protected override void OnMouseDown(MouseEventArgs e)
             {
@@ -51,16 +50,12 @@ internal sealed partial class DesignerActionPanel
                 }
             }
 
-            public bool Ellipsis
-            {
-                get => _ellipsis;
-                set => _ellipsis = value;
-            }
+            public bool Ellipsis { get; set; }
 
             protected override void OnPaint(PaintEventArgs e)
             {
                 Graphics g = e.Graphics;
-                if (_ellipsis)
+                if (Ellipsis)
                 {
                     PushButtonState buttonState = PushButtonState.Normal;
                     if (_mouseDown)
@@ -161,7 +156,7 @@ internal sealed partial class DesignerActionPanel
                             }
                             finally
                             {
-                                icon?.Dispose();
+                                icon.Dispose();
                             }
                         }
                         catch
