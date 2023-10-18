@@ -52,8 +52,8 @@ Namespace Microsoft.VisualBasic.CompilerServices
             End Sub
 
             Friend Sub InitialSetHandle(h As IntPtr)
-                Debug.Assert(MyBase.IsInvalid, "Safe handle should only be set once.")
-                MyBase.SetHandle(h)
+                Debug.Assert(IsInvalid, "Safe handle should only be set once.")
+                SetHandle(h)
             End Sub
 
             Protected Overrides Function ReleaseHandle() As Boolean

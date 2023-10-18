@@ -4,7 +4,6 @@
 Option Strict On
 Option Explicit On
 
-Imports System
 Imports System.IO
 Imports System.IO.Pipes
 Imports System.Runtime.InteropServices
@@ -66,7 +65,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     If bytesRead = 0 Then
                         Exit While
                     End If
-                    stream.Write(buffer, 0, bytesRead)
+                    Await stream.WriteAsync(buffer.AsMemory(0, bytesRead), cancellationToken).ConfigureAwait(False)
                 End While
                 stream.Seek(0, SeekOrigin.Begin)
                 Dim serializer = New DataContractSerializer(GetType(String()))

@@ -17,7 +17,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' <summary>
         ''' Default constructor
         ''' </summary>
-        Sub New()
+        Public Sub New()
         End Sub
 
 #Disable Warning IDE0049 ' Simplify Names, Justification:="<Public API>

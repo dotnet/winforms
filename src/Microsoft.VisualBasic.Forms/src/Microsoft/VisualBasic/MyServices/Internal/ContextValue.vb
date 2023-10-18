@@ -22,7 +22,7 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
     <ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)>
     Public Class ContextValue(Of T)
         Public Sub New()
-            _contextKey = System.Guid.NewGuid.ToString
+            _contextKey = Guid.NewGuid.ToString
         End Sub
 
         ''' <summary>

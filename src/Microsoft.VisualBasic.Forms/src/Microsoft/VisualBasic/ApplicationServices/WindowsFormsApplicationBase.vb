@@ -13,6 +13,7 @@ Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Threading
 Imports System.Windows.Forms
+
 Imports Microsoft.VisualBasic.CompilerServices
 Imports Microsoft.VisualBasic.CompilerServices.Utils
 
@@ -91,6 +92,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' How long a subsequent instance will wait for the original instance to get on its feet.
         Private Const SECOND_INSTANCE_TIMEOUT As Integer = 2500 ' milliseconds.
+
         Friend Const MINIMUM_SPLASH_EXPOSURE_DEFAULT As Integer = 2000 ' milliseconds.
 
         Private ReadOnly _splashLock As New Object
@@ -107,6 +109,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' Whether we have made it through the processing of OnInitialize.
         Private _finishedOnInitialize As Boolean
+
         Private _networkAvailabilityEventHandlers As List(Of Devices.NetworkAvailableEventHandler)
         Private _networkObject As Devices.Network
 
@@ -128,11 +131,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' For splash screens with a minimum display time, this let's us know when that time
         ' has expired and it is OK to close the splash screen.
         Private _splashScreenCompletionSource As TaskCompletionSource(Of Boolean)
+
         Private _formLoadWaiter As AutoResetEvent
         Private _splashScreen As Form
 
         ' Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
         Private _minimumSplashExposure As Integer = MINIMUM_SPLASH_EXPOSURE_DEFAULT
+
         Private _splashTimer As Timers.Timer
         Private _appSynchronizationContext As SynchronizationContext
 
@@ -288,7 +293,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             ' Setup Windows Authentication if that's what the user wanted.  Note, we want to do this now,
             ' before the Network object gets created because the network object will be doing a
-            ' AsyncOperationsManager.CreateOperation() which captures the execution context.  So we have 
+            ' AsyncOperationsManager.CreateOperation() which captures the execution context.  So we have
             ' to have our principal on the thread before that happens.
             If authenticationMode = AuthenticationMode.Windows Then
                 Try
@@ -416,7 +421,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <remarks>
         ''' This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
         ''' calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
-        ''' ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly 
+        ''' ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly
         ''' as it is currently suggested to be used in the docs.
         ''' First step for that is to make it hidden in IntelliSense.
         ''' </remarks>
@@ -485,7 +490,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced), STAThread()>
         Protected Overridable Function OnInitialize(commandLineArgs As ReadOnlyCollection(Of String)) As Boolean
 
-            ' Rationale for how we process the default values and how we let the user modify 
+            ' Rationale for how we process the default values and how we let the user modify
             ' them on demand via the ApplyApplicationDefaults event.
             ' ===========================================================================================
             ' a) Users used to be able to set MinimumSplashScreenDisplayTime _only_ by overriding OnInitialize
@@ -499,12 +504,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             '    "My Project\Application.myapp\Application.Designer.vb for how those UI-set values get applied.)
             '    Once all this is done, we give the User another chance to change the value by code through
             '    the ApplyDefaults event.
-            Dim applicationDefaultsEventArgs = New ApplyApplicationDefaultsEventArgs(
-                MinimumSplashScreenDisplayTime,
-                HighDpiMode)
 
             ' Overriding MinimumSplashScreenDisplayTime needs still to keep working!
-            applicationDefaultsEventArgs.MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
+            Dim applicationDefaultsEventArgs = New ApplyApplicationDefaultsEventArgs(
+                    MinimumSplashScreenDisplayTime,
+                    HighDpiMode) With {
+                                    .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
+                    }
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
 
             If (applicationDefaultsEventArgs.Font IsNot Nothing) Then
@@ -823,8 +829,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         ''' <summary>
-        ''' Displays the splash screen.  We get called here from a different thread than what the 
-        ''' main form is starting up on.  This allows us to process events for the Splash screen so 
+        ''' Displays the splash screen.  We get called here from a different thread than what the
+        ''' main form is starting up on.  This allows us to process events for the Splash screen so
         ''' it doesn't freeze up while the main form is getting it together.
         ''' </summary>
         Private Sub DisplaySplash()
@@ -928,7 +934,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         SynchronizationContext.
                         Send(Sub() handleNextInstance(), Nothing)
                 End If
-
             Catch ex As Exception When Not invoked
                 ' Only catch exceptions thrown when the UI thread is not available, before
                 ' the UI thread has been created or after it has been terminated. Exceptions
@@ -1027,5 +1032,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             Return Entry.ManifestModule.ModuleVersionId.ToString()
         End Function
+
     End Class
+
 End Namespace

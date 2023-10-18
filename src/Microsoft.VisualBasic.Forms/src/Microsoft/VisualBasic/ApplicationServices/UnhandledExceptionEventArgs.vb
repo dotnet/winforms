@@ -18,7 +18,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Public Class UnhandledExceptionEventArgs
         Inherits ThreadExceptionEventArgs
 
-        Sub New(exitApplication As Boolean, exception As Exception)
+        Public Sub New(exitApplication As Boolean, exception As Exception)
             MyBase.New(exception)
             Me.ExitApplication = exitApplication
         End Sub
@@ -27,5 +27,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' Indicates whether the application should exit upon exiting the exception handler
         ''' </summary>
         Public Property ExitApplication() As Boolean
+
     End Class
+
 End Namespace
