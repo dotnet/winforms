@@ -414,6 +414,11 @@ public sealed partial class CodeDomComponentSerializationService
 
             private static void DeserializeModifier(IDesignerSerializationManager manager, string name, object? state)
             {
+                if (state is null)
+                {
+                    return;
+                }
+
                 Debug.Assert(state is MemberAttributes, "Attempting to deserialize a null modifier");
                 object? comp = manager.GetInstance(name);
                 if (comp is not null)

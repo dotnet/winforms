@@ -1621,7 +1621,7 @@ public partial class DataGridView
         }
 
         // Sort the array.
-        Array.Sort(finalClonedColumns, System.Windows.Forms.DataGridViewColumnCollection.ColumnCollectionOrderComparer);
+        Array.Sort(finalClonedColumns, DataGridViewColumnCollection.ColumnCollectionOrderComparer);
 
         // 4. Add new columns for the Fields which were not data bound previously ( ie, for fields which do not have a clone ).
         if (boundColumns is not null)
@@ -1674,11 +1674,11 @@ public partial class DataGridView
         {
             for (int k = 0; k < finalClonedColumns.Length; k++)
             {
-                if (finalClonedColumns[k] is not null)
+                if (finalClonedColumns[k] is DataGridViewColumn dataGridViewColumn)
                 {
-                    dataGridViewCols.Add(finalClonedColumns[k]);
-                    MapDataGridViewColumnToDataBoundField(finalClonedColumns[k]);
-                    Debug.Assert(finalClonedColumns[k]!.IsDataBound);
+                    dataGridViewCols.Add(dataGridViewColumn);
+                    MapDataGridViewColumnToDataBoundField(dataGridViewColumn);
+                    Debug.Assert(dataGridViewColumn.IsDataBound);
                 }
             }
         }
@@ -5187,7 +5187,7 @@ public partial class DataGridView
             anticipatedColumnDisplayIndex = dataGridViewColumn.DisplayIndex; // The specified DisplayIndex is just fine.
         }
 
-        DataGridViewColumn dataGridViewColumnPrev;
+        DataGridViewColumn? dataGridViewColumnPrev;
         int displayIndex = anticipatedColumnDisplayIndex - 1;
         do
         {
@@ -5201,7 +5201,7 @@ public partial class DataGridView
         }
         else
         {
-            DataGridViewColumn dataGridViewColumnNext;
+            DataGridViewColumn? dataGridViewColumnNext;
             displayIndex = anticipatedColumnDisplayIndex;
             do
             {
@@ -5325,7 +5325,7 @@ public partial class DataGridView
             // DisplayIndex decreases.
             // Throw an exception if the visible unfrozen column is placed before a frozen column
             // Get the closest visible column placed after the displaced column
-            DataGridViewColumn dataGridViewColumnNext;
+            DataGridViewColumn? dataGridViewColumnNext;
             displayIndex = newDisplayIndex;
             do
             {
@@ -5344,7 +5344,7 @@ public partial class DataGridView
             // DisplayIndex increases.
             // Throw an exception if the visible frozen column is placed after a non-frozen column
             // Get the closest visible column placed before the displaced column
-            DataGridViewColumn dataGridViewColumnPrev;
+            DataGridViewColumn? dataGridViewColumnPrev;
             displayIndex = newDisplayIndex;
             do
             {

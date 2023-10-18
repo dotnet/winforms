@@ -9,14 +9,6 @@ parameters:
   testResultsFormat: 'xunit'
 
 steps:
-  - ${{ if eq(parameters.enableRichCodeNavigation, true) }}:
-    - task: RichCodeNavIndexer@0
-      displayName: RichCodeNav Upload
-      inputs:
-        languages: ${{ coalesce(parameters.richCodeNavigationLanguage, 'csharp') }}
-        environment: ${{ coalesce(parameters.richCodeNavigationEnvironment, 'production') }}
-        richNavLogOutputDirectory: $(Build.SourcesDirectory)/artifacts/bin
-      continueOnError: true
 
   - ${{ if eq(parameters.enableMicrobuild, 'true') }}:
     - ${{ if and(eq(parameters.runAsPublic, 'false'), ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
