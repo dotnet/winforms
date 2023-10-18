@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal partial class Kernel32
     {
-        [LibraryImport(Libraries.Kernel32, SetLastError = true)]
+        [LibraryImport(Libraries.Kernel32)]
         public static partial BOOL GetExitCodeThread(IntPtr hWnd, out uint lpdwExitCode);
     }
 }
