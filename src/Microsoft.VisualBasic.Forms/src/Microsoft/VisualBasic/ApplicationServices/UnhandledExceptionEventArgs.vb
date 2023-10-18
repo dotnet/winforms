@@ -25,4 +25,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Property ExitApplication() As Boolean
 
     End Class
+
 End Namespace

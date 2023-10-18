@@ -61,4 +61,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ' Lazy-initialized and cached collection of command line arguments.
         Private _commandLineArgs As ObjectModel.ReadOnlyCollection(Of String)
     End Class 'ApplicationBase
+
 End Namespace
