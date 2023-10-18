@@ -17,7 +17,7 @@ internal class ListControlUnboundActionList : DesignerActionList
 
     public void InvokeItemsDialog()
     {
-        EditorServiceContext.EditValue(_designer, Component, "Items");
+        EditorServiceContext.EditValue(_designer, Component!, "Items");
     }
 
     public override DesignerActionItemCollection GetSortedActionItems()
