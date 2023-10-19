@@ -307,17 +307,17 @@ System.Windows.Forms.Binding.FormatString.set -> void
 System.Windows.Forms.Binding.NullValue.get -> object?
 System.Windows.Forms.Binding.NullValue.set -> void
 System.Windows.Forms.Binding.PropertyName.get -> string!
-~System.Windows.Forms.BindingSource.BindingSource(object dataSource, string dataMember) -> void
-~System.Windows.Forms.BindingSource.BindingSource(System.ComponentModel.IContainer container) -> void
-~System.Windows.Forms.BindingSource.Current.get -> object
-~System.Windows.Forms.BindingSource.DataMember.get -> string
-~System.Windows.Forms.BindingSource.DataMember.set -> void
-~System.Windows.Forms.BindingSource.DataSource.get -> object
-~System.Windows.Forms.BindingSource.DataSource.set -> void
+System.Windows.Forms.BindingSource.BindingSource(object? dataSource, string! dataMember) -> void
+System.Windows.Forms.BindingSource.BindingSource(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.BindingSource.Current.get -> object?
+System.Windows.Forms.BindingSource.DataMember.get -> string!
+System.Windows.Forms.BindingSource.DataMember.set -> void
+System.Windows.Forms.BindingSource.DataSource.get -> object?
+System.Windows.Forms.BindingSource.DataSource.set -> void
 ~System.Windows.Forms.BindingSource.Find(string propertyName, object key) -> int
-~System.Windows.Forms.BindingSource.List.get -> System.Collections.IList
-~System.Windows.Forms.BindingSource.Sort.get -> string
-~System.Windows.Forms.BindingSource.Sort.set -> void
+System.Windows.Forms.BindingSource.List.get -> System.Collections.IList!
+System.Windows.Forms.BindingSource.Sort.get -> string?
+System.Windows.Forms.BindingSource.Sort.set -> void
 System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember) -> System.Windows.Forms.Binding!
 System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember, bool formattingEnabled) -> System.Windows.Forms.Binding!
 System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode) -> System.Windows.Forms.Binding!
@@ -642,14 +642,14 @@ virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventAr
 ~virtual System.Windows.Forms.BindingSource.ApplySort(System.ComponentModel.PropertyDescriptor property, System.ComponentModel.ListSortDirection sort) -> void
 ~virtual System.Windows.Forms.BindingSource.Contains(object value) -> bool
 ~virtual System.Windows.Forms.BindingSource.CopyTo(System.Array arr, int index) -> void
-~virtual System.Windows.Forms.BindingSource.CurrencyManager.get -> System.Windows.Forms.CurrencyManager
+virtual System.Windows.Forms.BindingSource.CurrencyManager.get -> System.Windows.Forms.CurrencyManager?
 ~virtual System.Windows.Forms.BindingSource.Filter.get -> string
 ~virtual System.Windows.Forms.BindingSource.Filter.set -> void
 ~virtual System.Windows.Forms.BindingSource.Find(System.ComponentModel.PropertyDescriptor prop, object key) -> int
 ~virtual System.Windows.Forms.BindingSource.GetEnumerator() -> System.Collections.IEnumerator
 ~virtual System.Windows.Forms.BindingSource.GetItemProperties(System.ComponentModel.PropertyDescriptor[] listAccessors) -> System.ComponentModel.PropertyDescriptorCollection
 ~virtual System.Windows.Forms.BindingSource.GetListName(System.ComponentModel.PropertyDescriptor[] listAccessors) -> string
-~virtual System.Windows.Forms.BindingSource.GetRelatedCurrencyManager(string dataMember) -> System.Windows.Forms.CurrencyManager
+virtual System.Windows.Forms.BindingSource.GetRelatedCurrencyManager(string? dataMember) -> System.Windows.Forms.CurrencyManager?
 ~virtual System.Windows.Forms.BindingSource.IndexOf(object value) -> int
 ~virtual System.Windows.Forms.BindingSource.Insert(int index, object value) -> void
 ~virtual System.Windows.Forms.BindingSource.OnAddingNew(System.ComponentModel.AddingNewEventArgs e) -> void
@@ -4525,25 +4525,25 @@ System.Windows.Forms.BindingsCollection.CollectionChanged -> System.ComponentMod
 System.Windows.Forms.BindingsCollection.CollectionChanging -> System.ComponentModel.CollectionChangeEventHandler?
 System.Windows.Forms.BindingsCollection.this[int index].get -> System.Windows.Forms.Binding!
 System.Windows.Forms.BindingSource
-System.Windows.Forms.BindingSource.AddingNew -> System.ComponentModel.AddingNewEventHandler
-System.Windows.Forms.BindingSource.BindingComplete -> System.Windows.Forms.BindingCompleteEventHandler
+System.Windows.Forms.BindingSource.AddingNew -> System.ComponentModel.AddingNewEventHandler?
+System.Windows.Forms.BindingSource.BindingComplete -> System.Windows.Forms.BindingCompleteEventHandler?
 System.Windows.Forms.BindingSource.BindingSource() -> void
 System.Windows.Forms.BindingSource.CancelEdit() -> void
-System.Windows.Forms.BindingSource.CurrentChanged -> System.EventHandler
-System.Windows.Forms.BindingSource.CurrentItemChanged -> System.EventHandler
-System.Windows.Forms.BindingSource.DataError -> System.Windows.Forms.BindingManagerDataErrorEventHandler
-System.Windows.Forms.BindingSource.DataMemberChanged -> System.EventHandler
-System.Windows.Forms.BindingSource.DataSourceChanged -> System.EventHandler
+System.Windows.Forms.BindingSource.CurrentChanged -> System.EventHandler?
+System.Windows.Forms.BindingSource.CurrentItemChanged -> System.EventHandler?
+System.Windows.Forms.BindingSource.DataError -> System.Windows.Forms.BindingManagerDataErrorEventHandler?
+System.Windows.Forms.BindingSource.DataMemberChanged -> System.EventHandler?
+System.Windows.Forms.BindingSource.DataSourceChanged -> System.EventHandler?
 System.Windows.Forms.BindingSource.EndEdit() -> void
 System.Windows.Forms.BindingSource.IsBindingSuspended.get -> bool
-System.Windows.Forms.BindingSource.ListChanged -> System.ComponentModel.ListChangedEventHandler
+System.Windows.Forms.BindingSource.ListChanged -> System.ComponentModel.ListChangedEventHandler?
 System.Windows.Forms.BindingSource.MoveFirst() -> void
 System.Windows.Forms.BindingSource.MoveLast() -> void
 System.Windows.Forms.BindingSource.MoveNext() -> void
 System.Windows.Forms.BindingSource.MovePrevious() -> void
 System.Windows.Forms.BindingSource.Position.get -> int
 System.Windows.Forms.BindingSource.Position.set -> void
-System.Windows.Forms.BindingSource.PositionChanged -> System.EventHandler
+System.Windows.Forms.BindingSource.PositionChanged -> System.EventHandler?
 System.Windows.Forms.BindingSource.RaiseListChangedEvents.get -> bool
 System.Windows.Forms.BindingSource.RaiseListChangedEvents.set -> void
 System.Windows.Forms.BindingSource.RemoveCurrent() -> void
