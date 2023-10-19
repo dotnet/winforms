@@ -574,10 +574,8 @@ public partial class Binding
         return comp.Site?.DesignMode ?? false;
     }
 
-    private object? GetDataSourceNullValue(Type? type)
-    {
-        return _dsNullValueSet ? _dsNullValue : Formatter.GetDefaultDataSourceNullValue(type);
-    }
+    private object? GetDataSourceNullValue(Type? type) =>
+        _dsNullValueSet ? _dsNullValue : Formatter.GetDefaultDataSourceNullValue(type);
 
     private object? GetPropValue()
     {
@@ -1078,10 +1076,8 @@ public partial class Binding
 
     private bool ShouldSerializeNullValue() => _nullValue is not null;
 
-    private bool ShouldSerializeDataSourceNullValue()
-    {
-        return _dsNullValueSet && _dsNullValue != Formatter.GetDefaultDataSourceNullValue(null);
-    }
+    private bool ShouldSerializeDataSourceNullValue() =>
+        _dsNullValueSet && _dsNullValue != Formatter.GetDefaultDataSourceNullValue(null);
 
     private void Target_PropertyChanged(object? sender, EventArgs e)
     {
@@ -1132,14 +1128,11 @@ public partial class Binding
     }
 
     [MemberNotNullWhen(true, nameof(_bindingManagerBase))]
-    internal bool IsBindable
-    {
-        get
-        {
-            return (BindableComponent is not null && !string.IsNullOrEmpty(PropertyName) &&
-                            DataSource is not null && _bindingManagerBase is not null);
-        }
-    }
+    internal bool IsBindable =>
+        BindableComponent is not null &&
+        !string.IsNullOrEmpty(PropertyName) &&
+        DataSource is not null &&
+        _bindingManagerBase is not null;
 
     internal void UpdateIsBinding()
     {
