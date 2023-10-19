@@ -131,7 +131,7 @@ public partial class TreeView : Control
     internal TreeNode _root;
     internal Dictionary<IntPtr, TreeNode> _nodesByHandle = new();
     internal bool _nodesCollectionClear; //this is set when the treeNodeCollection is getting cleared and used by TreeView
-    internal LabelEditNativeWindow? _labelEdit;
+    internal TreeViewLabelEditNativeWindow? _labelEdit;
     private MouseButtons _downButton;
     private TreeViewDrawMode _drawMode = TreeViewDrawMode.Normal;
 
@@ -2598,7 +2598,7 @@ public partial class TreeView : Control
 
         if (!e.CancelEdit)
         {
-            _labelEdit = new LabelEditNativeWindow(this);
+            _labelEdit = new TreeViewLabelEditNativeWindow(this);
             _labelEdit.AssignHandle(PInvoke.SendMessage(this, PInvoke.TVM_GETEDITCONTROL));
         }
 

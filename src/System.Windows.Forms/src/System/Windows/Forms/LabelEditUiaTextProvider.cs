@@ -25,11 +25,12 @@ internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
 
     private readonly IHandle<HWND> _owningChildEdit;
     private readonly AccessibleObject _owningChildEditAccessibilityObject;
-    private readonly Control _owningControl;
+    private readonly WeakReference<Control> _owningControl;
 
     public LabelEditUiaTextProvider(Control owner, LabelEditNativeWindow childEdit, AccessibleObject childEditAccessibilityObject)
     {
-        _owningControl = owner.OrThrowIfNull();
+        ArgumentNullException.ThrowIfNull(owner);
+        _owningControl = new(owner);
         _owningChildEdit = childEdit;
         _owningChildEditAccessibilityObject = childEditAccessibilityObject.OrThrowIfNull();
     }
@@ -57,7 +58,7 @@ internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
 
     public override int LinesPerPage => _owningChildEditAccessibilityObject.BoundingRectangle.IsEmpty ? 0 : OwnerChildEditLinesCount;
 
-    public override LOGFONTW Logfont => LOGFONTW.FromFont(_owningControl.Font);
+    public override LOGFONTW Logfont => _owningControl.TryGetTarget(out Control? target) ? LOGFONTW.FromFont(target.Font) : default;
 
     public override SupportedTextSelection SupportedTextSelection => SupportedTextSelection.SupportedTextSelection_Single;
 
@@ -76,7 +77,7 @@ internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
             return HRESULT.E_POINTER;
         }
 
-        object? hasKeyboardFocus = _owningChildEditAccessibilityObject.GetPropertyValue(propertyID: Interop.UiaCore.UIA.HasKeyboardFocusPropertyId);
+        object? hasKeyboardFocus = _owningChildEditAccessibilityObject.GetPropertyValue(propertyID: UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId);
         *isActive = hasKeyboardFocus is true;
 
         // First caret position of a selected text
@@ -174,7 +175,7 @@ internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
         visibleStart = 0;
         visibleEnd = 0;
 
-        if (IsDegenerate(_owningControl.ClientRectangle))
+        if (IsDegenerate(_owningControl.TryGetTarget(out Control? target) ? target.ClientRectangle : Rectangle.Empty))
         {
             return;
         }

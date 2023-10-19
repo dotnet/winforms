@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Windows.Forms.Automation;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
+
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -16,31 +18,31 @@ public class TreeViewLabelEditAccessibleObjectTests
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
 
-        LabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
+        TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         TreeViewLabelEditAccessibleObject accessibilityObject = (TreeViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
-        Assert.Equal(accessibilityObject.RuntimeId, accessibilityObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId));
+        Assert.Equal(accessibilityObject.RuntimeId, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId));
         PInvoke.GetWindowRect(labelEdit, out RECT r);
         using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray((Rectangle)r);
-        Assert.Equal(((VARIANT)rectArray).ToObject(), accessibilityObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId));
-        Assert.Equal(Environment.ProcessId, accessibilityObject.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
-        Assert.Equal(UiaCore.UIA.EditControlTypeId, accessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
-        Assert.Equal(accessibilityObject.Name, accessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
-        Assert.Empty((string)accessibilityObject.GetPropertyValue(UiaCore.UIA.AccessKeyPropertyId));
-        Assert.True((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
-        Assert.True((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsKeyboardFocusablePropertyId));
-        Assert.True((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId));
-        Assert.Equal(treeView.Enabled, (bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId));
-        Assert.Equal(accessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId), accessibilityObject.GetPropertyValue(UiaCore.UIA.AutomationIdPropertyId));
-        Assert.Empty((string)accessibilityObject.GetPropertyValue(UiaCore.UIA.HelpTextPropertyId));
-        Assert.True((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsContentElementPropertyId));
-        Assert.False((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsPasswordPropertyId));
-        Assert.Equal(labelEdit.Handle, accessibilityObject.GetPropertyValue(UiaCore.UIA.NativeWindowHandlePropertyId));
-        Assert.False((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId));
-        Assert.True((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsTextPatternAvailablePropertyId));
-        Assert.True((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsTextPattern2AvailablePropertyId));
-        Assert.True((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsValuePatternAvailablePropertyId));
-        Assert.True((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
+        Assert.Equal(((VARIANT)rectArray).ToObject(), accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId));
+        Assert.Equal(Environment.ProcessId, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ProcessIdPropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(accessibilityObject.Name, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        Assert.Empty((string)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AccessKeyPropertyId));
+        Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
+        Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId));
+        Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
+        Assert.Equal(treeView.Enabled, (bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
+        Assert.Equal(accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId), accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId));
+        Assert.Empty((string)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId));
+        Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsContentElementPropertyId));
+        Assert.False((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId));
+        Assert.Equal(labelEdit.Handle, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId));
+        Assert.False((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId));
+        Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId));
+        Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId));
+        Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId));
+        Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
         Assert.True(treeView.IsHandleCreated);
         Assert.True(labelEdit.IsHandleCreated);
     }
@@ -50,7 +52,7 @@ public class TreeViewLabelEditAccessibleObjectTests
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
 
-        LabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
+        TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         TreeViewLabelEditAccessibleObject accessibilityObject = (TreeViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.Equal(treeView.Nodes[0].AccessibilityObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
@@ -62,13 +64,13 @@ public class TreeViewLabelEditAccessibleObjectTests
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
 
-        LabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
+        TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         TreeViewLabelEditAccessibleObject accessibilityObject = (TreeViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
-        Assert.True(accessibilityObject.IsPatternSupported(UiaCore.UIA.TextPatternId));
-        Assert.True(accessibilityObject.IsPatternSupported(UiaCore.UIA.TextPattern2Id));
-        Assert.True(accessibilityObject.IsPatternSupported(UiaCore.UIA.ValuePatternId));
-        Assert.True(accessibilityObject.IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId));
+        Assert.True(accessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_TextPatternId));
+        Assert.True(accessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_TextPattern2Id));
+        Assert.True(accessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_ValuePatternId));
+        Assert.True(accessibilityObject.IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId));
     }
 
     [WinFormsFact]
@@ -76,7 +78,7 @@ public class TreeViewLabelEditAccessibleObjectTests
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
 
-        LabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
+        TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         TreeViewLabelEditAccessibleObject accessibilityObject = (TreeViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.Equal(new int[] { AccessibleObject.RuntimeIDFirstItem, PARAM.ToInt(labelEdit.Handle) }, accessibilityObject.RuntimeId);
@@ -87,7 +89,7 @@ public class TreeViewLabelEditAccessibleObjectTests
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
 
-        LabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
+        TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         TreeViewLabelEditAccessibleObject accessibilityObject = (TreeViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.Equal(treeView.AccessibilityObject, accessibilityObject.FragmentRoot);
@@ -98,7 +100,7 @@ public class TreeViewLabelEditAccessibleObjectTests
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
 
-        LabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
+        TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         TreeViewLabelEditAccessibleObject accessibilityObject = (TreeViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.NotNull(accessibilityObject.HostRawElementProvider);
@@ -109,7 +111,7 @@ public class TreeViewLabelEditAccessibleObjectTests
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
 
-        LabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
+        TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         TreeViewLabelEditAccessibleObject accessibilityObject = (TreeViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
         Assert.Equal(treeView.Nodes[0].Text, accessibilityObject.Name);
@@ -119,23 +121,23 @@ public class TreeViewLabelEditAccessibleObjectTests
     public void TreeViewLabelEditAccessibleObject_Ctor_NullOwningTreeView_ThrowsArgumentNullException()
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
-        LabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
 
+        TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         Assert.Throws<ArgumentNullException>(() => new TreeViewLabelEditAccessibleObject(null, labelEdit));
     }
 
     [WinFormsFact]
     public void TreeViewLabelEditNativeWindow_Ctor_NullOwningTreeView_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new LabelEditNativeWindow(null));
+        Assert.Throws<ArgumentNullException>(() => new TreeViewLabelEditNativeWindow(null));
     }
 
     [WinFormsFact]
     public void TreeViewLabelEditUiaTextProvider_Ctor_NullOwningTreeView_ThrowsArgumentNullException()
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
-        LabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
 
+        TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         Assert.Throws<ArgumentNullException>(() => new LabelEditUiaTextProvider(null, labelEdit, labelEdit.AccessibilityObject));
     }
 
@@ -143,8 +145,8 @@ public class TreeViewLabelEditAccessibleObjectTests
     public void TreeViewLabelEditUiaTextProvider_Ctor_NullChildEditAccessibilityObject_ThrowsArgumentNullException()
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
-        LabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
 
+        TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         Assert.Throws<ArgumentNullException>(() => new LabelEditUiaTextProvider(treeView, labelEdit, null));
     }
 

@@ -11,8 +11,7 @@ internal class LabelEditNativeWindow : NativeWindow
 {
     private const uint TextSelectionChanged = 0x8014;
 
-    private readonly Control _owningControl;
-    private AccessibleObject? _accessibilityObject;
+    private readonly WeakReference<Control>  _owningControl;
     private WINEVENTPROC? _winEventProcCallback;
     private HWINEVENTHOOK _valueChangeHook;
     private HWINEVENTHOOK _textSelectionChangedHook;
@@ -27,12 +26,14 @@ internal class LabelEditNativeWindow : NativeWindow
         uint idEventThread,
         uint dwmsEventTime);
 
-    public LabelEditNativeWindow(Control owningControl) => _owningControl = owningControl.OrThrowIfNull();
+    public LabelEditNativeWindow(Control owningControl)
+    {
+        ArgumentNullException.ThrowIfNull(owningControl);
 
-    public AccessibleObject AccessibilityObject =>
-        _accessibilityObject ??= _owningControl is TreeView treeView
-            ? new TreeViewLabelEditAccessibleObject(treeView, this)
-            : new ListViewLabelEditAccessibleObject((ListView)_owningControl, this);
+        _owningControl = new(owningControl);
+    }
+
+    public virtual AccessibleObject? AccessibilityObject { get; set; }
 
     private unsafe void InstallWinEventHooks()
     {
@@ -66,7 +67,7 @@ internal class LabelEditNativeWindow : NativeWindow
         _winEventHooksInstalled = true;
     }
 
-    private bool IsAccessibilityObjectCreated => _accessibilityObject is not null;
+    private bool IsAccessibilityObjectCreated => AccessibilityObject is not null;
 
     public bool IsHandleCreated => Handle != IntPtr.Zero;
 
@@ -82,7 +83,7 @@ internal class LabelEditNativeWindow : NativeWindow
         // Install winevent hooks *only* when the parent Control has an existing accessible object.
         // If we don't install hooks at the label edit startup then assistive tech (e.g. Narrator) won't announce the text pattern for it.
         // By invoking UiaClientsAreListening we will have hooks installed even if the assistive tech isn't currently run.
-        if (!_owningControl.IsAccessibilityObjectCreated)
+        if (_owningControl.TryGetTarget(out Control? target) && !target.IsAccessibilityObjectCreated)
         {
             return;
         }
@@ -111,10 +112,10 @@ internal class LabelEditNativeWindow : NativeWindow
 
         if (OsVersion.IsWindows8OrGreater())
         {
-            UiaCore.UiaDisconnectProvider(_accessibilityObject);
+            UiaCore.UiaDisconnectProvider(AccessibilityObject);
         }
 
-        _accessibilityObject = null;
+        AccessibilityObject = null;
         base.ReleaseHandle();
     }
 
@@ -128,19 +129,19 @@ internal class LabelEditNativeWindow : NativeWindow
         switch (eventId)
         {
             case (uint)AccessibleEvents.ValueChange:
-                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextChangedEventId);
+                AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextChangedEventId);
                 break;
             case TextSelectionChanged:
-                AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
+                AccessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
                 break;
         }
     }
 
     private void WmGetObject(ref Message m)
     {
-        AccessibleObject EnsureWinEventHooksInstalledAndGetAccessibilityObject()
+        AccessibleObject? EnsureWinEventHooksInstalledAndGetAccessibilityObject()
         {
-            AccessibleObject accessibilityObject = AccessibilityObject;
+            AccessibleObject? accessibilityObject = AccessibilityObject;
 
             // Accessibility object was likely requested by an assistive tech (which sent WM_GETOBJECT message).
             // We may need to install winevent hooks to produce the automation events related to the text pattern.
@@ -174,7 +175,7 @@ internal class LabelEditNativeWindow : NativeWindow
 
         try
         {
-            m.ResultInternal = EnsureWinEventHooksInstalledAndGetAccessibilityObject().GetLRESULT(m.WParamInternal);
+            m.ResultInternal = EnsureWinEventHooksInstalledAndGetAccessibilityObject()!.GetLRESULT(m.WParamInternal);
         }
         catch (Exception ex)
         {

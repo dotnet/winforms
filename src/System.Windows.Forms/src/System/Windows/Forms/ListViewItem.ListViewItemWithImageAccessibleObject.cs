@@ -14,7 +14,7 @@ public partial class ListViewItem
 
         private ListViewItemImageAccessibleObject? _imageAccessibleObject;
 
-        private LabelEditAccessibleObject? _labelEditAccessibleObject;
+        private ListViewLabelEditAccessibleObject? _labelEditAccessibleObject;
 
         public ListViewItemWithImageAccessibleObject(ListViewItem owningItem) : base(owningItem)
         {
@@ -23,7 +23,7 @@ public partial class ListViewItem
         internal override int FirstSubItemIndex => HasImage ? 1 : 0;
 
         private ListViewItemImageAccessibleObject ImageAccessibleObject => _imageAccessibleObject ??= new(_owningItem);
-        private LabelEditAccessibleObject? LabelEditAccessibleObject
+        private ListViewLabelEditAccessibleObject? LabelEditAccessibleObject
             => _labelEditAccessibleObject ??= _owningListView._labelEdit is null
                 ? null
                 : new(_owningListView, _owningListView._labelEdit);

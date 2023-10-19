@@ -10,14 +10,14 @@ public partial class ListViewItem
 {
     internal class ListViewItemTileAccessibleObject : ListViewItemBaseAccessibleObject
     {
-        private LabelEditAccessibleObject? _labelEditAccessibleObject;
+        private ListViewLabelEditAccessibleObject? _labelEditAccessibleObject;
         public ListViewItemTileAccessibleObject(ListViewItem owningItem) : base(owningItem)
         {
         }
 
         protected override View View => View.Tile;
 
-        private LabelEditAccessibleObject? LabelEditAccessibleObject
+        private ListViewLabelEditAccessibleObject? LabelEditAccessibleObject
             => _labelEditAccessibleObject ??= _owningListView._labelEdit is null
                 ? null
                 : new(_owningListView, _owningListView._labelEdit);
