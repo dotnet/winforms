@@ -1029,8 +1029,8 @@ public partial class Binding
     ///  Takes current value from control, and writes this out to the data source.
     /// </summary>
     public void WriteValue() => PullData(reformat: true, force: true);
-#nullable disable
-    private void SetPropValue(object value)
+
+    private void SetPropValue(object? value)
     {
         // we will not pull the data from the back end into the control
         // when the control is in design time. this is because if we bind a boolean property on a control
@@ -1065,7 +1065,7 @@ public partial class Binding
             }
             else
             {
-                _propInfo.SetValue(BindableComponent, value);
+                _propInfo!.SetValue(BindableComponent, value);
             }
         }
         finally
@@ -1083,7 +1083,7 @@ public partial class Binding
         return _dsNullValueSet && _dsNullValue != Formatter.GetDefaultDataSourceNullValue(null);
     }
 
-    private void Target_PropertyChanged(object sender, EventArgs e)
+    private void Target_PropertyChanged(object? sender, EventArgs e)
     {
         if (_inSetPropValue)
         {
@@ -1116,7 +1116,7 @@ public partial class Binding
     ///  NOTE: If no error occurs, we MUST leave e.Cancel alone, to respect any value put in there
     ///  by event handlers high up the event chain.
     /// </summary>
-    private void Target_Validate(object sender, CancelEventArgs e)
+    private void Target_Validate(object? sender, CancelEventArgs e)
     {
         try
         {
@@ -1131,6 +1131,7 @@ public partial class Binding
         }
     }
 
+    [MemberNotNullWhen(true, nameof(_bindingManagerBase))]
     internal bool IsBindable
     {
         get
