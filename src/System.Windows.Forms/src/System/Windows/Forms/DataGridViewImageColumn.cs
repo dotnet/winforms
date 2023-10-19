@@ -86,17 +86,19 @@ public class DataGridViewImageColumn : DataGridViewColumn
             }
 
             ImageCellTemplate.Description = value;
-            if (DataGridView is not null)
+            if (DataGridView is null)
             {
-                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                int rowCount = dataGridViewRows.Count;
-                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+                return;
+            }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
                 {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
-                    {
-                        dataGridViewCell.Description = value;
-                    }
+                    dataGridViewCell.Description = value;
                 }
             }
         }
@@ -158,21 +160,23 @@ public class DataGridViewImageColumn : DataGridViewColumn
             }
 
             ImageCellTemplate.ImageLayout = value;
-            if (DataGridView is not null)
+            if (DataGridView is null)
             {
-                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                int rowCount = dataGridViewRows.Count;
-                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
-                    {
-                        dataGridViewCell.ImageLayoutInternal = value;
-                    }
-                }
-
-                DataGridView.OnColumnCommonChange(Index);
+                return;
             }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewImageCell dataGridViewCell)
+                {
+                    dataGridViewCell.ImageLayoutInternal = value;
+                }
+            }
+
+            DataGridView.OnColumnCommonChange(Index);
         }
     }
 
