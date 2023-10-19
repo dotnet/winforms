@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
@@ -37,10 +35,10 @@ public class BindingSource : Component,
     private static readonly object s_eventInitialized = new();
 
     // Public property values
-    private object _dataSource;
+    private object? _dataSource;
     private string _dataMember = string.Empty;
-    private string _sort;
-    private string _filter;
+    private string? _sort;
+    private string? _filter;
     private readonly CurrencyManager _currencyManager;
     private bool _parentsCurrentItemChanging;
     private bool _disposedOrFinalized;
@@ -52,20 +50,20 @@ public class BindingSource : Component,
     private bool _listExtractedFromEnumerable;
 
     // Description of items in the current bound list
-    private Type _itemType;
-    private ConstructorInfo _itemConstructor;
-    private PropertyDescriptorCollection _itemShape;
+    private Type? _itemType;
+    private ConstructorInfo? _itemConstructor;
+    private PropertyDescriptorCollection? _itemShape;
 
     // Cached list of 'related' binding sources returned to callers of ICurrencyManagerProvider.GetRelatedCurrencyManager()
-    private Dictionary<string, BindingSource> _relatedBindingSources;
+    private Dictionary<string, BindingSource>? _relatedBindingSources;
 
     // Support for user-overriding of the AllowNew property
     private bool _allowNewIsSet;
     private bool _allowNewSetValue = true;
 
     // Support for property change event hooking on list items
-    private object _currentItemHookedForItemChange;
-    private object _lastCurrentItem;
+    private object? _currentItemHookedForItemChange;
+    private object? _lastCurrentItem;
     private readonly EventHandler _listItemPropertyChangedHandler;
 
     // State data
@@ -76,11 +74,12 @@ public class BindingSource : Component,
     private bool _innerListChanging;
     private bool _endingEdit;
 
-    public BindingSource() : this(null, string.Empty)
+    public BindingSource()
+        : this(dataSource: null, dataMember: string.Empty)
     {
     }
 
-    public BindingSource(object dataSource, string dataMember) : base()
+    public BindingSource(object? dataSource, string dataMember) : base()
     {
         // Set data source and data member
         _dataSource = dataSource;
@@ -103,7 +102,8 @@ public class BindingSource : Component,
         WireDataSource();
     }
 
-    public BindingSource(IContainer container) : this()
+    public BindingSource(IContainer container)
+        : this()
     {
         ArgumentNullException.ThrowIfNull(container);
 
@@ -141,12 +141,12 @@ public class BindingSource : Component,
     }
 
     [Browsable(false)]
-    public virtual CurrencyManager CurrencyManager
+    public virtual CurrencyManager? CurrencyManager
     {
-        get => ((ICurrencyManagerProvider)this).GetRelatedCurrencyManager(null);
+        get => ((ICurrencyManagerProvider)this).GetRelatedCurrencyManager(dataMember: null);
     }
 
-    public virtual CurrencyManager GetRelatedCurrencyManager(string dataMember)
+    public virtual CurrencyManager? GetRelatedCurrencyManager(string? dataMember)
     {
         // Make sure inner list has been set up! We do this here so that
         // the list is set up as early as possible after initialization.
@@ -194,13 +194,14 @@ public class BindingSource : Component,
     }
 
     [Browsable(false)]
-    public object Current => _currencyManager.Count > 0 ? _currencyManager.Current : null;
+    public object? Current => _currencyManager.Count > 0 ? _currencyManager.Current : null;
 
     [SRCategory(nameof(SR.CatData))]
     [DefaultValue("")]
     [RefreshProperties(RefreshProperties.Repaint)]
     [Editor($"System.Windows.Forms.Design.DataMemberListEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.BindingSourceDataMemberDescr))]
+    [AllowNull]
     public string DataMember
     {
         get => _dataMember;
@@ -222,7 +223,7 @@ public class BindingSource : Component,
     [RefreshProperties(RefreshProperties.Repaint)]
     [AttributeProvider(typeof(IListSource))]
     [SRDescription(nameof(SR.BindingSourceDataSourceDescr))]
-    public object DataSource
+    public object? DataSource
     {
         get => _dataSource;
         set
@@ -253,7 +254,7 @@ public class BindingSource : Component,
         }
     }
 
-    private string InnerListFilter
+    private string? InnerListFilter
     {
         get
         {
@@ -285,11 +286,11 @@ public class BindingSource : Component,
         }
     }
 
-    private string InnerListSort
+    private string? InnerListSort
     {
         get
         {
-            ListSortDescriptionCollection sortsColln = null;
+            ListSortDescriptionCollection? sortsColln = null;
 
             if (List is IBindingListView iblv && iblv.SupportsAdvancedSorting)
             {
@@ -341,7 +342,8 @@ public class BindingSource : Component,
                 }
                 else if (sortsColln.Count == 1)
                 {
-                    ibl.ApplySort(sortsColln[0].PropertyDescriptor, sortsColln[0].SortDirection);
+                    ListSortDescription listSortDescription = sortsColln[0]!;
+                    ibl.ApplySort(listSortDescription.PropertyDescriptor!, listSortDescription.SortDirection);
                     return;
                 }
             }
@@ -385,7 +387,7 @@ public class BindingSource : Component,
     [SRCategory(nameof(SR.CatData))]
     [DefaultValue(null)]
     [SRDescription(nameof(SR.BindingSourceSortDescr))]
-    public string Sort
+    public string? Sort
     {
         get => _sort;
         set
@@ -397,7 +399,7 @@ public class BindingSource : Component,
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.BindingSourceAddingNewEventHandlerDescr))]
-    public event AddingNewEventHandler AddingNew
+    public event AddingNewEventHandler? AddingNew
     {
         add => Events.AddHandler(s_eventAddingNew, value);
         remove => Events.RemoveHandler(s_eventAddingNew, value);
@@ -405,7 +407,7 @@ public class BindingSource : Component,
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.BindingSourceBindingCompleteEventHandlerDescr))]
-    public event BindingCompleteEventHandler BindingComplete
+    public event BindingCompleteEventHandler? BindingComplete
     {
         add => Events.AddHandler(s_eventBindingComplete, value);
         remove => Events.RemoveHandler(s_eventBindingComplete, value);
@@ -413,7 +415,7 @@ public class BindingSource : Component,
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.BindingSourceDataErrorEventHandlerDescr))]
-    public event BindingManagerDataErrorEventHandler DataError
+    public event BindingManagerDataErrorEventHandler? DataError
     {
         add => Events.AddHandler(s_eventDataError, value);
         remove => Events.RemoveHandler(s_eventDataError, value);
@@ -421,7 +423,7 @@ public class BindingSource : Component,
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.BindingSourceDataSourceChangedEventHandlerDescr))]
-    public event EventHandler DataSourceChanged
+    public event EventHandler? DataSourceChanged
     {
         add => Events.AddHandler(s_eventDataSourceChanged, value);
         remove => Events.RemoveHandler(s_eventDataSourceChanged, value);
@@ -429,7 +431,7 @@ public class BindingSource : Component,
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.BindingSourceDataMemberChangedEventHandlerDescr))]
-    public event EventHandler DataMemberChanged
+    public event EventHandler? DataMemberChanged
     {
         add => Events.AddHandler(s_eventDataMemberChanged, value);
         remove => Events.RemoveHandler(s_eventDataMemberChanged, value);
@@ -437,7 +439,7 @@ public class BindingSource : Component,
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.BindingSourceCurrentChangedEventHandlerDescr))]
-    public event EventHandler CurrentChanged
+    public event EventHandler? CurrentChanged
     {
         add => Events.AddHandler(s_eventCurrentChanged, value);
         remove => Events.RemoveHandler(s_eventCurrentChanged, value);
@@ -445,7 +447,7 @@ public class BindingSource : Component,
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.BindingSourceCurrentItemChangedEventHandlerDescr))]
-    public event EventHandler CurrentItemChanged
+    public event EventHandler? CurrentItemChanged
     {
         add => Events.AddHandler(s_eventCurrentItemChanged, value);
         remove => Events.RemoveHandler(s_eventCurrentItemChanged, value);
@@ -453,7 +455,7 @@ public class BindingSource : Component,
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.BindingSourceListChangedEventHandlerDescr))]
-    public event ListChangedEventHandler ListChanged
+    public event ListChangedEventHandler? ListChanged
     {
         add => Events.AddHandler(s_eventListChanged, value);
         remove => Events.RemoveHandler(s_eventListChanged, value);
@@ -461,13 +463,13 @@ public class BindingSource : Component,
 
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.BindingSourcePositionChangedEventHandlerDescr))]
-    public event EventHandler PositionChanged
+    public event EventHandler? PositionChanged
     {
         add => Events.AddHandler(s_eventPositionChanged, value);
         remove => Events.RemoveHandler(s_eventPositionChanged, value);
     }
 
-    private static string BuildSortString(ListSortDescriptionCollection sortsColln)
+    private static string BuildSortString(ListSortDescriptionCollection? sortsColln)
     {
         if (sortsColln is null || sortsColln.Count == 0)
         {
@@ -478,8 +480,9 @@ public class BindingSource : Component,
 
         for (int i = 0; i < sortsColln.Count; ++i)
         {
-            sb.Append(sortsColln[i].PropertyDescriptor.Name);
-            sb.Append(sortsColln[i].SortDirection == ListSortDirection.Ascending ? " ASC" : " DESC");
+            ListSortDescription listSortDescription = sortsColln[i]!;
+            sb.Append(listSortDescription.PropertyDescriptor!.Name);
+            sb.Append(listSortDescription.SortDirection == ListSortDirection.Ascending ? " ASC" : " DESC");
             sb.Append(',');
         }
 
@@ -492,9 +495,9 @@ public class BindingSource : Component,
     // 1. there is a break in the chain ( BindingSource::DataSource is not a BindingSource ), or
     // 2. detects a cycle in the chain.
     // If a cycle is detected we throw the BindingSourceRecursionDetected exception
-    private void ThrowIfBindingSourceRecursionDetected(object newDataSource)
+    private void ThrowIfBindingSourceRecursionDetected(object? newDataSource)
     {
-        BindingSource bindingSource = newDataSource as BindingSource;
+        BindingSource? bindingSource = newDataSource as BindingSource;
 
         while (bindingSource is not null)
         {
@@ -525,16 +528,16 @@ public class BindingSource : Component,
         Type genericType = typeof(BindingList<>);
         Type bindingType = genericType.MakeGenericType(new Type[] { type });
 
-        return (IList)Activator.CreateInstance(bindingType);
+        return (IList)Activator.CreateInstance(bindingType)!;
     }
 
     /// <summary>
     ///  Create an object of the given type. Throw an exception if this fails.
     /// </summary>
-    private static object CreateInstanceOfType(Type type)
+    private static object? CreateInstanceOfType(Type type)
     {
-        object instancedObject = null;
-        Exception instanceException = null;
+        object? instancedObject = null;
+        Exception? instanceException = null;
 
         try
         {
@@ -604,8 +607,8 @@ public class BindingSource : Component,
             UnwireCurrencyManager(_currencyManager);
             _dataSource = null;
             _sort = null;
-            _dataMember = null;
-            _innerList = null;
+            _dataMember = null!;
+            _innerList = null!;
             _isBindingList = false;
             _needToSetList = true;
             RaiseListChangedEvents = false;
@@ -646,7 +649,7 @@ public class BindingSource : Component,
             ResetList();
         }
     }
-
+#nullable disable
     /// <summary>
     ///  Overload of IBindingList.Find that takes a string instead of a property
     ///  descriptor (for convenience).
