@@ -7,7 +7,8 @@ Option Strict On
 Imports System.Collections.Specialized
 Imports System.ComponentModel
 Imports System.Text
-Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Logging
 
@@ -101,7 +102,7 @@ Namespace Microsoft.VisualBasic.Logging
         Public Sub WriteException(ex As Exception, severity As TraceEventType, additionalInfo As String, id As Integer)
 
             If ex Is Nothing Then
-                Throw GetArgumentNullException("ex")
+                Throw ExUtils.GetArgumentNullException("ex")
             End If
 
             Dim builder As New StringBuilder()

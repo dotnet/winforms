@@ -6,7 +6,7 @@ Option Strict On
 Imports System.ComponentModel
 Imports System.IO
 
-Imports Microsoft.VisualBasic.CompilerServices
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic
 
@@ -63,7 +63,7 @@ Namespace Microsoft.VisualBasic
             ''' <param name="playMode">The mode in which the array should be played</param>
             Public Sub Play(data() As Byte, playMode As AudioPlayMode)
                 If data Is Nothing Then
-                    Throw ExceptionUtils.GetArgumentNullException("data")
+                    Throw ExUtils.GetArgumentNullException("data")
                 End If
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
 
@@ -80,7 +80,7 @@ Namespace Microsoft.VisualBasic
             Public Sub Play(stream As Stream, playMode As AudioPlayMode)
                 ValidateAudioPlayModeEnum(playMode, NameOf(playMode))
                 If stream Is Nothing Then
-                    Throw ExceptionUtils.GetArgumentNullException("stream")
+                    Throw ExUtils.GetArgumentNullException("stream")
                 End If
 
                 Play(New Media.SoundPlayer(stream), playMode)
@@ -93,7 +93,7 @@ Namespace Microsoft.VisualBasic
             ''' <remarks>Plays the sound asynchronously</remarks>
             Public Sub PlaySystemSound(systemSound As Media.SystemSound)
                 If systemSound Is Nothing Then
-                    Throw ExceptionUtils.GetArgumentNullException("systemSound")
+                    Throw ExUtils.GetArgumentNullException("systemSound")
                 End If
 
                 systemSound.Play()
@@ -143,7 +143,7 @@ Namespace Microsoft.VisualBasic
             ''' <returns>A full name and path of the file</returns>
             Private Shared Function ValidateFilename(location As String) As String
                 If String.IsNullOrEmpty(location) Then
-                    Throw ExceptionUtils.GetArgumentNullException("location")
+                    Throw ExUtils.GetArgumentNullException("location")
                 End If
 
                 Return location

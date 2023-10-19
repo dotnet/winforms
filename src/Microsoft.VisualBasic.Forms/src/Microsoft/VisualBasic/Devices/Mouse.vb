@@ -5,7 +5,7 @@ Option Strict On
 Option Explicit On
 
 Imports System.Windows.Forms
-Imports Microsoft.VisualBasic.CompilerServices
+Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
 
@@ -31,7 +31,7 @@ Namespace Microsoft.VisualBasic.Devices
                 If SystemInformation.MousePresent Then
                     Return SystemInformation.MouseButtonsSwapped
                 Else
-                    Throw ExceptionUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+                    Throw ExUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
                 End If
             End Get
         End Property
@@ -46,7 +46,7 @@ Namespace Microsoft.VisualBasic.Devices
                 If SystemInformation.MousePresent Then
                     Return SystemInformation.MouseWheelPresent
                 Else
-                    Throw ExceptionUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+                    Throw ExUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
                 End If
             End Get
         End Property
@@ -61,7 +61,7 @@ Namespace Microsoft.VisualBasic.Devices
                 If WheelExists Then
                     Return SystemInformation.MouseWheelScrollLines
                 Else
-                    Throw ExceptionUtils.GetInvalidOperationException(SR.Mouse_NoWheelIsPresent)
+                    Throw ExUtils.GetInvalidOperationException(SR.Mouse_NoWheelIsPresent)
                 End If
             End Get
         End Property
