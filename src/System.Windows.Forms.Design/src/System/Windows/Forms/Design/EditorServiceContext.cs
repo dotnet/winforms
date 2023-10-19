@@ -20,17 +20,17 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
     internal EditorServiceContext(ComponentDesigner designer, PropertyDescriptor? prop)
     {
         _designer = designer;
-        _targetProperty = prop!;
         if (prop is null)
         {
             prop = TypeDescriptor.GetDefaultProperty(designer.Component);
-            if (prop is not null && typeof(ICollection).IsAssignableFrom(prop.PropertyType))
+            if (!typeof(ICollection).IsAssignableFrom(prop?.PropertyType))
             {
-                _targetProperty = prop;
+                prop = null;
+                Debug.Fail("Need PropertyDescriptor for ICollection property to associate collection editor with.");
             }
         }
 
-        Debug.Assert(_targetProperty is not null, "Need PropertyDescriptor for ICollection property to associate collection editor with.");
+        _targetProperty = prop;
     }
 
     internal EditorServiceContext(ComponentDesigner designer, PropertyDescriptor? prop, string newVerbText) : this(designer, prop)
