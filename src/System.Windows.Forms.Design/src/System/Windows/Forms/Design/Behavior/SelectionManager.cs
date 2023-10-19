@@ -127,7 +127,7 @@ internal sealed class SelectionManager : IDisposable
     private void AddControlGlyphs(Control control, GlyphSelectionType selType)
     {
         Debug.Assert(_currentSelectionBounds is not null);
-        bool isSelected = selType is GlyphSelectionType.SelectedPrimary or GlyphSelectionType.Selected;
+        bool hasSelection = selType is GlyphSelectionType.SelectedPrimary or GlyphSelectionType.Selected;
 
         if (_componentToDesigner.TryGetValue(control, out ControlDesigner? controlDesigner))
         {
@@ -135,7 +135,7 @@ internal sealed class SelectionManager : IDisposable
             if (bodyGlyph is not null)
             {
                 BodyGlyphAdorner.Glyphs.Add(bodyGlyph);
-                if (isSelected)
+                if (hasSelection)
                 {
                     ref Rectangle currentSelectionBounds = ref _currentSelectionBounds[_curCompIndex];
                     currentSelectionBounds = currentSelectionBounds == Rectangle.Empty
@@ -148,7 +148,7 @@ internal sealed class SelectionManager : IDisposable
             if (glyphs is not null)
             {
                 SelectionGlyphAdorner.Glyphs.AddRange(glyphs);
-                if (isSelected)
+                if (hasSelection)
                 {
                     foreach (Glyph glyph in glyphs)
                     {
@@ -158,7 +158,7 @@ internal sealed class SelectionManager : IDisposable
             }
         }
 
-        if (isSelected)
+        if (hasSelection)
         {
             _curCompIndex++;
         }
