@@ -5,12 +5,12 @@ Option Strict On
 Option Explicit On
 
 Imports System.Windows.Forms
-Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
+Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.Devices
 
     ''' <summary>
-    ''' A wrapper object that acts as a discovery mechanism for finding 
+    ''' A wrapper object that acts as a discovery mechanism for finding
     ''' information about the mouse on your computer such as whether the mouse
     ''' exists, the number of buttons, WheelScrolls details.
     '''
@@ -23,7 +23,7 @@ Namespace Microsoft.VisualBasic.Devices
         ''' mouses buttons have been swapped.
         ''' </summary>
         ''' <value>
-        ''' true if the functions of the left and right mouse buttons are swapped. false otherwise. 
+        ''' true if the functions of the left and right mouse buttons are swapped. false otherwise.
         ''' </value>
         ''' <exception cref="InvalidOperationException">If no mouse is installed.</exception>
         Public ReadOnly Property ButtonsSwapped() As Boolean
@@ -31,7 +31,7 @@ Namespace Microsoft.VisualBasic.Devices
                 If SystemInformation.MousePresent Then
                     Return SystemInformation.MouseButtonsSwapped
                 Else
-                    Throw GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+                    Throw ExceptionUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
                 End If
             End Get
         End Property
@@ -46,7 +46,7 @@ Namespace Microsoft.VisualBasic.Devices
                 If SystemInformation.MousePresent Then
                     Return SystemInformation.MouseWheelPresent
                 Else
-                    Throw GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
+                    Throw ExceptionUtils.GetInvalidOperationException(SR.Mouse_NoMouseIsPresent)
                 End If
             End Get
         End Property
@@ -61,7 +61,7 @@ Namespace Microsoft.VisualBasic.Devices
                 If WheelExists Then
                     Return SystemInformation.MouseWheelScrollLines
                 Else
-                    Throw GetInvalidOperationException(SR.Mouse_NoWheelIsPresent)
+                    Throw ExceptionUtils.GetInvalidOperationException(SR.Mouse_NoWheelIsPresent)
                 End If
             End Get
         End Property

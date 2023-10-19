@@ -5,7 +5,6 @@ Option Strict On
 
 Imports System.ComponentModel
 Imports System.Runtime.InteropServices
-
 Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.CompilerServices

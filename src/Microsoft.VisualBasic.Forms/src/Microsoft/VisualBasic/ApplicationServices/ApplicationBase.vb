@@ -60,7 +60,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public ReadOnly Property Info() As AssemblyInfo
             Get
                 If _info Is Nothing Then
-                    Dim Assembly As Reflection.Assembly = If(Reflection.Assembly.GetEntryAssembly(), Reflection.Assembly.GetCallingAssembly())
+                    Dim Assembly As Reflection.Assembly = Reflection.Assembly.GetEntryAssembly()
+                    If Assembly Is Nothing Then 'It can be nothing if we are an add-in or a dll on the web
+                        Assembly = Reflection.Assembly.GetCallingAssembly()
+                    End If
                     _info = New AssemblyInfo(Assembly)
                 End If
                 Return _info
@@ -116,5 +119,4 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _log As Logging.Log 'Lazy-initialized and cached log object.
         Private _info As AssemblyInfo ' The executing application (the EntryAssembly)
     End Class 'ApplicationBase
-
 End Namespace

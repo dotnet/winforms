@@ -7,7 +7,6 @@ Option Strict On
 Imports System.ComponentModel
 Imports System.Security.Principal
 Imports System.Threading
-
 Namespace Microsoft.VisualBasic.ApplicationServices
 
     ''' <summary>

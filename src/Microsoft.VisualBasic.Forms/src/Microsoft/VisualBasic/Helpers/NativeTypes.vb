@@ -5,7 +5,6 @@ Option Explicit On
 Option Strict On
 
 Imports System.Runtime.InteropServices
-
 Imports Microsoft.Win32.SafeHandles
 
 Namespace Microsoft.VisualBasic.CompilerServices

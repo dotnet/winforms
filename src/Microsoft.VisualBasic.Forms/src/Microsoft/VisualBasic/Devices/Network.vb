@@ -3,18 +3,13 @@
 
 Option Explicit On
 Option Strict On
-
 Imports System.ComponentModel
 Imports System.Net
 Imports System.Security
 Imports System.Threading
-
 Imports Microsoft.VisualBasic.CompilerServices
-Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-Imports Microsoft.VisualBasic.CompilerServices.Utils
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
-
 Imports NetInfoAlias = System.Net.NetworkInformation
 
 Namespace Microsoft.VisualBasic.Devices
@@ -24,7 +19,6 @@ Namespace Microsoft.VisualBasic.Devices
     ''' </summary>
     Public Class NetworkAvailableEventArgs
         Inherits EventArgs
-
         Public Sub New(networkAvailable As Boolean)
             IsNetworkAvailable = networkAvailable
         End Sub
@@ -133,7 +127,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
             ' However, it is good practice to verify address before calling address.Host.
             If address Is Nothing Then
-                Throw GetArgumentNullException("address")
+                Throw ExceptionUtils.GetArgumentNullException("address")
             End If
             Return Ping(address.Host, DEFAULT_PING_TIMEOUT)
         End Function
@@ -148,7 +142,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' Make sure a network is available
             If Not IsAvailable Then
-                Throw GetInvalidOperationException(SR.Network_NetworkNotAvailable)
+                Throw ExceptionUtils.GetInvalidOperationException(SR.Network_NetworkNotAvailable)
             End If
 
             Dim PingMaker As New NetInfoAlias.Ping
@@ -169,7 +163,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
             ' However, it is good practice to verify address before calling address.Host.
             If address Is Nothing Then
-                Throw GetArgumentNullException("address")
+                Throw ExceptionUtils.GetArgumentNullException("address")
             End If
             Return Ping(address.Host, timeout)
         End Function
@@ -258,7 +252,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from DownloadFile(Nothing, ...) due to overload failure (DownloadFile(String,...) vs. DownloadFile(Uri,...)).
             ' However, it is good practice to verify address before calling Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw GetArgumentNullException("address")
+                Throw ExceptionUtils.GetArgumentNullException("address")
             End If
 
             Dim addressUri As Uri = GetUri(address.Trim())
@@ -356,11 +350,11 @@ Namespace Microsoft.VisualBasic.Devices
                     overwrite As Boolean,
                     onUserCancel As UICancelOption)
             If connectionTimeout <= 0 Then
-                Throw GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
+                Throw ExceptionUtils.GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
-                Throw GetArgumentNullException("address")
+                Throw ExceptionUtils.GetArgumentNullException("address")
             End If
 
             Using client As New WebClientExtended
@@ -375,12 +369,12 @@ Namespace Microsoft.VisualBasic.Devices
                 ' Sometime a path that can't be parsed is normalized to the current directory. This makes sure we really
                 ' have a file and path
                 If IO.Directory.Exists(fullFilename) Then
-                    Throw GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
+                    Throw ExceptionUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
                 End If
 
                 'Throw if the file exists and the user doesn't want to overwrite
                 If IO.File.Exists(fullFilename) And Not overwrite Then
-                    Throw New IO.IOException(GetResourceString(SR.IO_FileExists_Path, destinationFileName))
+                    Throw New IO.IOException(Utils.GetResourceString(SR.IO_FileExists_Path, destinationFileName))
                 End If
 
                 ' Set credentials if we have any
@@ -391,8 +385,8 @@ Namespace Microsoft.VisualBasic.Devices
                 Dim dialog As ProgressDialog = Nothing
                 If showUI AndAlso Environment.UserInteractive Then
                     dialog = New ProgressDialog With {
-                        .Text = GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
-                        .LabelText = GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
+                        .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
+                        .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
                     }
                 End If
 
@@ -401,7 +395,7 @@ Namespace Microsoft.VisualBasic.Devices
 
                 ' Make sure we have a meaningful directory. If we don't, the destinationFileName is suspect
                 If String.IsNullOrEmpty(targetDirectory) Then
-                    Throw GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
+                    Throw ExceptionUtils.GetInvalidOperationException(SR.Network_DownloadNeedsFilename)
                 End If
 
                 If Not IO.Directory.Exists(targetDirectory) Then
@@ -505,7 +499,7 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from UploadFile(Nothing, ...) due to overload failure (UploadFile(String,...) vs. UploadFile(Uri,...)).
             ' However, it is good practice to verify address before calling address.Trim.
             If String.IsNullOrWhiteSpace(address) Then
-                Throw GetArgumentNullException("address")
+                Throw ExceptionUtils.GetArgumentNullException("address")
             End If
 
             ' Getting a uri will validate the form of the host address
@@ -513,7 +507,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             ' For uploads, we need to make sure the address includes the filename
             If String.IsNullOrEmpty(IO.Path.GetFileName(addressUri.AbsolutePath)) Then
-                Throw GetInvalidOperationException(SR.Network_UploadAddressNeedsFilename)
+                Throw ExceptionUtils.GetInvalidOperationException(SR.Network_UploadAddressNeedsFilename)
             End If
 
             UploadFile(sourceFileName, addressUri, userName, password, showUI, connectionTimeout, onUserCancel)
@@ -600,15 +594,15 @@ Namespace Microsoft.VisualBasic.Devices
 
             'Make sure the file exists
             If Not IO.File.Exists(sourceFileName) Then
-                Throw New IO.FileNotFoundException(GetResourceString(SR.IO_FileNotFound_Path, sourceFileName))
+                Throw New IO.FileNotFoundException(Utils.GetResourceString(SR.IO_FileNotFound_Path, sourceFileName))
             End If
 
             If connectionTimeout <= 0 Then
-                Throw GetArgumentExceptionWithArgName("connectionTimeout", SR.Network_BadConnectionTimeout)
+                Throw ExceptionUtils.GetArgumentExceptionWithArgName("connectionTimeout", SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
-                Throw GetArgumentNullException("address")
+                Throw ExceptionUtils.GetArgumentNullException("address")
             End If
 
             Using client As New WebClientExtended()
@@ -622,8 +616,8 @@ Namespace Microsoft.VisualBasic.Devices
                 Dim Dialog As ProgressDialog = Nothing
                 If showUI AndAlso Environment.UserInteractive Then
                     Dialog = New ProgressDialog With {
-                        .Text = GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
-                        .LabelText = GetResourceString(SR.ProgressDialogUploadingLabel, sourceFileName, address.AbsolutePath)
+                        .Text = Utils.GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
+                        .LabelText = Utils.GetResourceString(SR.ProgressDialogUploadingLabel, sourceFileName, address.AbsolutePath)
                     }
                 End If
 
@@ -696,7 +690,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Return New Uri(address)
             Catch ex As UriFormatException
                 'Throw an exception with an error message more appropriate to our API
-                Throw GetArgumentExceptionWithArgName("address", SR.Network_InvalidUriString, address)
+                Throw ExceptionUtils.GetArgumentExceptionWithArgName("address", SR.Network_InvalidUriString, address)
             End Try
         End Function
 
