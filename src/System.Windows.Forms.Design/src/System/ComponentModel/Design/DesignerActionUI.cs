@@ -25,11 +25,11 @@ internal partial class DesignerActionUI : IDisposable
 
     private Adorner _designerActionAdorner; //used to add designeraction-related glyphs
     private IServiceProvider _serviceProvider; //standard service provider
-    private ISelectionService _selSvc; //used to determine if comps have selection or not
+    private ISelectionService _selectionService; //used to determine if comps have selection or not
     private DesignerActionService _designerActionService; //this is how all designeractions will be managed
     private DesignerActionUIService _designerActionUIService; //this is how all designeractions UI elements will be managed
     private BehaviorService _behaviorService; //this is how all of our UI is implemented (glyphs, behaviors, etc...)
-    private DesignerActionKeyboardBehavior? _dapkb;   //out keyboard behavior
+    private DesignerActionKeyboardBehavior? _designerActionKeyboardBehavior;   //out keyboard behavior
     private readonly Dictionary<object, DesignerActionGlyph> _componentToGlyph; //used for quick reference between components and our glyphs
     private Control _marshalingControl; //used to invoke events on our main gui thread
     private IComponent? _lastPanelComponent;
@@ -60,8 +60,8 @@ internal partial class DesignerActionUI : IDisposable
         _designerActionAdorner = containerAdorner;
         _behaviorService = serviceProvider.GetService<BehaviorService>()!;
         IMenuCommandService? menuCommandService = serviceProvider.GetService<IMenuCommandService>();
-        _selSvc = serviceProvider.GetService<ISelectionService>()!;
-        if (_behaviorService is null || _selSvc is null)
+        _selectionService = serviceProvider.GetService<ISelectionService>()!;
+        if (_behaviorService is null || _selectionService is null)
         {
             Debug.Fail("Either BehaviorService or ISelectionService is null, cannot continue.");
             return;
@@ -145,7 +145,7 @@ internal partial class DesignerActionUI : IDisposable
 
         _serviceProvider = null!;
         _behaviorService = null!;
-        _selSvc = null!;
+        _selectionService = null!;
         if (_designerActionService is not null)
         {
             _designerActionService.DesignerActionListsChanged -= new DesignerActionListsChangedEventHandler(OnDesignerActionsChanged);
@@ -189,7 +189,7 @@ internal partial class DesignerActionUI : IDisposable
 
         if (dalColl is not null && dalColl.Count > 0)
         {
-            if (!_componentToGlyph.TryGetValue(comp, out DesignerActionGlyph? dag))
+            if (!_componentToGlyph.TryGetValue(comp, out DesignerActionGlyph? designerActionGlyph))
             {
                 DesignerActionBehavior dab = new DesignerActionBehavior(_serviceProvider, comp, dalColl, this);
 
@@ -197,36 +197,36 @@ internal partial class DesignerActionUI : IDisposable
                 if (comp is not Control or ToolStripDropDown)
                 {
                     //Here, we'll try to get the traycontrol associated with the comp and supply the glyph with an alternative bounds
-                    ComponentTray? compTray = _serviceProvider.GetService<ComponentTray>();
-                    if (compTray is not null)
+                    ComponentTray? componentTray = _serviceProvider.GetService<ComponentTray>();
+                    if (componentTray is not null)
                     {
                         ComponentTray.TrayControl trayControl = ComponentTray.GetTrayControlFromComponent(comp);
                         if (trayControl is not null)
                         {
                             Rectangle trayBounds = trayControl.Bounds;
-                            dag = new DesignerActionGlyph(dab, trayBounds, compTray);
+                            designerActionGlyph = new DesignerActionGlyph(dab, trayBounds, componentTray);
                         }
                     }
                 }
 
                 //either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyph.
                 //if the related comp is a control, then this shortcut will be off its bounds
-                dag ??= new DesignerActionGlyph(dab, _designerActionAdorner);
+                designerActionGlyph ??= new DesignerActionGlyph(dab, _designerActionAdorner);
 
                 //store off this relationship
-                _componentToGlyph[comp] = dag;
+                _componentToGlyph[comp] = designerActionGlyph;
             }
             else
             {
-                if (dag.Behavior is DesignerActionBehavior behavior)
+                if (designerActionGlyph.Behavior is DesignerActionBehavior behavior)
                 {
                     behavior.ActionLists = dalColl;
                 }
 
-                dag.Invalidate(); // need to invalidate here too, someone could have called refresh too soon, causing the glyph to get created in the wrong place
+                designerActionGlyph.Invalidate(); // need to invalidate here too, someone could have called refresh too soon, causing the glyph to get created in the wrong place
             }
 
-            return dag;
+            return designerActionGlyph;
         }
         else
         {
@@ -275,7 +275,7 @@ internal partial class DesignerActionUI : IDisposable
 
     private void RecreatePanel(IComponent? comp)
     {
-        if (_inTransaction || comp != _selSvc.PrimarySelection)
+        if (_inTransaction || comp != _selectionService.PrimarySelection)
         { // we only ever need to do that when the comp is the primary selection
             return;
         }
@@ -426,7 +426,7 @@ internal partial class DesignerActionUI : IDisposable
                 return;
             }
 
-            IComponent? primSel = _selSvc.PrimarySelection as IComponent;
+            IComponent? primSel = _selectionService.PrimarySelection as IComponent;
             if (primSel == e.RelatedObject)
             {
                 g = GetDesignerActionGlyph(relatedComponent, e.ActionLists);
@@ -465,12 +465,12 @@ internal partial class DesignerActionUI : IDisposable
     internal bool ShowDesignerActionPanelForPrimarySelection()
     {
         //can't do anything w/o selection service
-        if (_selSvc is null)
+        if (_selectionService is null)
         {
             return false;
         }
 
-        object? primarySelection = _selSvc.PrimarySelection;
+        object? primarySelection = _selectionService.PrimarySelection;
         //verify that we have obtained a valid component with designer actions
         if (primarySelection is null || !_componentToGlyph.TryGetValue(primarySelection, out DesignerActionGlyph? glyph))
         {
@@ -610,8 +610,8 @@ internal partial class DesignerActionUI : IDisposable
 
             _lastPanelComponent = null;
             // panel is going away, pop the behavior that's on the stack...
-            Debug.Assert(_dapkb is not null, "why is dapkb null?");
-            Behavior? popBehavior = _behaviorService.PopBehavior(_dapkb);
+            Debug.Assert(_designerActionKeyboardBehavior is not null, $"why is {nameof(_designerActionKeyboardBehavior)} null?");
+            Behavior? popBehavior = _behaviorService.PopBehavior(_designerActionKeyboardBehavior);
             Debug.Assert(popBehavior is DesignerActionKeyboardBehavior, "behavior returned is of the wrong kind?");
         }
     }
@@ -720,8 +720,8 @@ internal partial class DesignerActionUI : IDisposable
             glyph.InvalidateOwnerLocation();
             _lastPanelComponent = relatedComponent;
             // push new behavior for keyboard handling on the behavior stack
-            _dapkb = new DesignerActionKeyboardBehavior(designerActionHost.CurrentPanel, _serviceProvider, _behaviorService);
-            _behaviorService.PushBehavior(_dapkb);
+            _designerActionKeyboardBehavior = new DesignerActionKeyboardBehavior(designerActionHost.CurrentPanel, _serviceProvider, _behaviorService);
+            _behaviorService.PushBehavior(_designerActionKeyboardBehavior);
         }
     }
 
