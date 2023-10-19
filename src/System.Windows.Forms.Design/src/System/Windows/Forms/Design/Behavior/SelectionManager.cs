@@ -304,21 +304,20 @@ internal sealed class SelectionManager : IDisposable
     /// <summary>
     ///  Computes the region representing the difference between the old selection and the new selection.
     /// </summary>
-    private Region DetermineRegionToRefresh(object? primarySelection)
+    private Region DetermineRegionToRefresh(object? primarySelection, Rectangle[] previousSelectionBounds, Rectangle[] currentSelectionBounds)
     {
-        Debug.Assert(_currentSelectionBounds is not null && _previousSelectionBounds is not null);
         Region toRefresh = new Region(Rectangle.Empty);
         Rectangle[] larger;
         Rectangle[] smaller;
-        if (_currentSelectionBounds.Length >= _previousSelectionBounds.Length)
+        if (currentSelectionBounds.Length >= previousSelectionBounds.Length)
         {
-            larger = _currentSelectionBounds;
-            smaller = _previousSelectionBounds;
+            larger = currentSelectionBounds;
+            smaller = previousSelectionBounds;
         }
         else
         {
-            larger = _previousSelectionBounds;
-            smaller = _currentSelectionBounds;
+            larger = previousSelectionBounds;
+            smaller = currentSelectionBounds;
         }
 
         // we need to make sure all of the rects in the smaller array are
@@ -373,9 +372,9 @@ internal sealed class SelectionManager : IDisposable
         // If all that changed was the primary selection, then the refresh region was empty, but we do need to update the 2 controls.
         if (toRefresh.IsEmpty(g) && primarySelection is not null && !primarySelection.Equals(_previousPrimarySelection))
         {
-            for (int i = 0; i < _currentSelectionBounds.Length; i++)
+            for (int i = 0; i < currentSelectionBounds.Length; i++)
             {
-                toRefresh.Union(_currentSelectionBounds[i]);
+                toRefresh.Union(currentSelectionBounds[i]);
             }
         }
 
@@ -414,7 +413,7 @@ internal sealed class SelectionManager : IDisposable
 
             if (_previousSelectionBounds is not null)
             {
-                Region toUpdate = DetermineRegionToRefresh(primarySelection);
+                Region toUpdate = DetermineRegionToRefresh(primarySelection, _previousSelectionBounds, _currentSelectionBounds);
                 using Graphics g = _behaviorService.AdornerWindowGraphics;
                 if (!toUpdate.IsEmpty(g))
                 {
