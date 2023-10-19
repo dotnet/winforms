@@ -133,7 +133,8 @@ public class InputLanguageTests
     {
         yield return new object[] { "got-Goth", "000C0C00", "Gothic" };
         yield return new object[] { "jv-Java", "00110C00", "Javanese" };
-        yield return new object[] { "nqo", "00090C00", "N’Ko" };
+        // See https://github.com/dotnet/winforms/issues/10150
+        // yield return new object[] { "nqo", "00090C00", "N’Ko" };
         yield return new object[] { "zgh-Tfng", "0000105F", "Tifinagh (Basic)" };
     }
 
