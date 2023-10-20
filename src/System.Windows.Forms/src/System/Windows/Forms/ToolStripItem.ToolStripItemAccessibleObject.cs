@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Globalization;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -102,18 +103,18 @@ public abstract partial class ToolStripItem
         /// </summary>
         /// <param name="propertyID">The accessible property ID.</param>
         /// <returns>The accessible property value.</returns>
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
                 // "ControlType" value depends on owner's AccessibleRole value.
                 // See: docs/accessibility/accessible-role-controltype.md
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => AccessibleRoleControlTypeMap.GetControlType(Role),
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _ownerItem.Selected,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _ownerItem.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => _ownerItem.CanSelect,
-                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => GetIsOffscreenPropertyValue(_ownerItem.Placement, Bounds),
-                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => true,
-                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => true,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)AccessibleRoleControlTypeMap.GetControlType(Role),
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)_ownerItem.Selected,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_ownerItem.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)_ownerItem.CanSelect,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (VARIANT)GetIsOffscreenPropertyValue(_ownerItem.Placement, Bounds),
+                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => (VARIANT)true,
                 _ => base.GetPropertyValue(propertyID)
             };
 

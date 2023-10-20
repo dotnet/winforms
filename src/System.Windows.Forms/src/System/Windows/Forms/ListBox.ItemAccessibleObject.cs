@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -31,7 +32,7 @@ public partial class ListBox
 
         internal override bool IsItemSelected => State.HasFlag(AccessibleStates.Selected);
 
-        internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer
+        internal override IRawElementProviderSimple.Interface ItemSelectionContainer
             => _owningAccessibleObject;
 
         public override AccessibleObject Parent => _owningAccessibleObject;
@@ -163,14 +164,14 @@ public partial class ListBox
             return CurrentIndex + 1;
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
              => propertyID switch
              {
-                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId,
-                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningListBox.Focused && _owningListBox.FocusedIndex == CurrentIndex,
-                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListBox.Enabled,
-                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                 UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _owningListBox.IsHandleCreated ? _owningListBox.Handle : IntPtr.Zero,
+                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId,
+                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(_owningListBox.Focused && _owningListBox.FocusedIndex == CurrentIndex),
+                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningListBox.Enabled,
+                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
+                 UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => (VARIANT)(_owningListBox.IsHandleCreated ? _owningListBox.Handle : IntPtr.Zero),
                  _ => base.GetPropertyValue(propertyID)
              };
 

@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using SourceGenerated;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -1065,8 +1066,8 @@ public partial class DateTimePicker : Control
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: ExpandCollapseState.ExpandCollapseState_Expanded,
-                newValue: ExpandCollapseState.ExpandCollapseState_Collapsed);
+                oldValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded,
+                newValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed);
         }
     }
 
@@ -1083,8 +1084,8 @@ public partial class DateTimePicker : Control
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: ExpandCollapseState.ExpandCollapseState_Collapsed,
-                newValue: ExpandCollapseState.ExpandCollapseState_Expanded);
+                oldValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed,
+                newValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded);
         }
     }
 
@@ -1158,10 +1159,11 @@ public partial class DateTimePicker : Control
             // so I have to use current value twice.
             // Anyway it doesn't matter because the Narrator pronounces actual AO state.
             string? value = AccessibilityObject.Value;
+            using VARIANT variantValue = value is null ? default : (VARIANT)value;
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ValueValuePropertyId,
-                oldValue: value,
-                newValue: value);
+                oldValue: variantValue,
+                newValue: variantValue);
         }
     }
 

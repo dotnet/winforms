@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -45,12 +46,12 @@ public partial class ToolStripMenuItem
             }
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_AcceleratorKeyPropertyId => _owningToolStripMenuItem.GetShortcutText(),
-                UIA_PROPERTY_ID.UIA_PositionInSetPropertyId => GetPositionInSet(),
-                UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId => GetSizeOfSet(),
+                UIA_PROPERTY_ID.UIA_AcceleratorKeyPropertyId => _owningToolStripMenuItem.GetShortcutText() is { } shortcutText ? (VARIANT)shortcutText : VARIANT.Empty,
+                UIA_PROPERTY_ID.UIA_PositionInSetPropertyId => GetPositionInSet() is { } position ? (VARIANT)position : VARIANT.Empty,
+                UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId => GetSizeOfSet() is { } size ? (VARIANT)size : VARIANT.Empty,
                 _ => base.GetPropertyValue(propertyID)
             };
 

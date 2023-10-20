@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -105,13 +106,13 @@ public partial class TreeNode
             _owningTreeView.SelectedNode = _owningTreeNode;
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningTreeView.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focused),
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningTreeView.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -246,7 +247,7 @@ public partial class TreeNode
 
         internal override bool IsItemSelected => _owningTreeNode.IsSelected;
 
-        internal override UiaCore.IRawElementProviderSimple? ItemSelectionContainer
+        internal override IRawElementProviderSimple.Interface? ItemSelectionContainer
             => _owningTreeView.AccessibilityObject;
 
         #endregion

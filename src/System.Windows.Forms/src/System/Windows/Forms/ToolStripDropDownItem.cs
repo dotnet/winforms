@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -504,8 +505,8 @@ public abstract class ToolStripDropDownItem : ToolStripItem
         {
             accessibleObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                ExpandCollapseState.ExpandCollapseState_Collapsed,
-                ExpandCollapseState.ExpandCollapseState_Expanded);
+                (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed,
+                (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded);
         }
     }
 
@@ -533,8 +534,8 @@ public abstract class ToolStripDropDownItem : ToolStripItem
         {
             accessibleObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                ExpandCollapseState.ExpandCollapseState_Expanded,
-                ExpandCollapseState.ExpandCollapseState_Collapsed);
+                (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded,
+                (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed);
         }
     }
 

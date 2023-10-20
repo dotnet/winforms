@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop.UiaCore;
-using IRawElementProviderSimple = Interop.UiaCore.IRawElementProviderSimple;
 
 namespace System.Windows.Forms;
 
@@ -124,21 +124,21 @@ public partial class TabControl
             };
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out TabControl? owner) && owner.Focused,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(this.TryGetOwnerAs(out TabControl? owner) && owner.Focused),
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId
                     // This is necessary for compatibility with MSAA proxy:
                     // IsKeyboardFocusable = true regardless the control is enabled/disabled.
-                    => true,
+                    => (VARIANT)true,
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override IRawElementProviderSimple[]? GetSelection()
+        internal override IRawElementProviderSimple.Interface[]? GetSelection()
             => !this.IsOwnerHandleCreated(out TabControl? owner) || owner.SelectedTab is null
-                ? Array.Empty<IRawElementProviderSimple>()
-                : new IRawElementProviderSimple[] { owner.SelectedTab.TabAccessibilityObject };
+                ? []
+                : [owner.SelectedTab.TabAccessibilityObject];
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch

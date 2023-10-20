@@ -963,6 +963,18 @@ internal unsafe partial struct VARIANT : IDisposable
             data = new() { dblVal = value }
         };
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator nint(VARIANT value)
+        => value.vt == VT_INT ? value.data.intVal : ThrowInvalidCast<nint>();
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static explicit operator VARIANT(nint value)
+        => new()
+        {
+            vt = VT_INT,
+            data = new() { intVal = (int)value }
+        };
+
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static T ThrowInvalidCast<T>() => throw new InvalidCastException();
 
@@ -999,6 +1011,10 @@ internal unsafe partial struct VARIANT : IDisposable
         else if (value is double doubleValue)
         {
             return (VARIANT)doubleValue;
+        }
+        else if (value is nint nintValue)
+        {
+            return (VARIANT)nintValue;
         }
 
         // Need to fill out to match Marshal behavior so we can remove the call.

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 using static Interop.UiaCore;
@@ -39,14 +40,14 @@ public partial class TreeView
         internal override int GetChildIndex(AccessibleObject? child)
             => child is TreeNodeAccessibleObject node ? node.Index : -1;
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TreeControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out TreeView? owningTreeView)
-                    && owningTreeView.Enabled && owningTreeView.Nodes.Count == 0,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => this.TryGetOwnerAs(out TreeView? owningTreeView) && owningTreeView.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TreeControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(this.TryGetOwnerAs(out TreeView? owningTreeView)
+                    && owningTreeView.Enabled && owningTreeView.Nodes.Count == 0),
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(this.TryGetOwnerAs(out TreeView? owningTreeView) && owningTreeView.Enabled),
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -124,15 +125,10 @@ public partial class TreeView
         internal override bool IsSelectionRequired => this.TryGetOwnerAs(out TreeView? owningTreeView) &&
             owningTreeView.Nodes.Count != 0;
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetSelection()
-        {
-            if (this.IsOwnerHandleCreated(out TreeView? _) && GetSelected() is UiaCore.IRawElementProviderSimple selected)
-            {
-                return new[] { selected };
-            }
-
-            return Array.Empty<UiaCore.IRawElementProviderSimple>();
-        }
+        internal override IRawElementProviderSimple.Interface[]? GetSelection()
+            => this.IsOwnerHandleCreated(out TreeView? _) && GetSelected() is IRawElementProviderSimple.Interface selected
+                ? [selected]
+                : [];
 
         #endregion
     }

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
@@ -20,9 +19,9 @@ public partial class ComboBox
         private const string COMBO_BOX_LIST_AUTOMATION_ID = "1000";
 
         private readonly ComboBox _owningComboBox;
-        private readonly IntPtr _childListControlhandle;
+        private readonly HWND _childListControlhandle;
 
-        public ComboBoxChildListUiaProvider(ComboBox owningComboBox, IntPtr childListControlhandle) : base(owningComboBox, childListControlhandle)
+        public ComboBoxChildListUiaProvider(ComboBox owningComboBox, HWND childListControlhandle) : base(owningComboBox, childListControlhandle)
         {
             _owningComboBox = owningComboBox;
             _childListControlhandle = childListControlhandle;
@@ -121,18 +120,18 @@ public partial class ComboBox
             return _owningComboBox.Items.Count;
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ListControlTypeId,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId,
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId =>
                     // Narrator should keep the keyboard focus on th ComboBox itself but not on the DropDown.
-                    false,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningComboBox.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => false,
-                UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId => true,
-                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _childListControlhandle,
+                    (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningComboBox.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => (VARIANT)(nint)_childListControlhandle,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -149,26 +148,20 @@ public partial class ComboBox
             return GetChildFragment(selectedIndex);
         }
 
-        internal override UiaCore.IRawElementProviderSimple[] GetSelection()
+        internal override IRawElementProviderSimple.Interface[] GetSelection()
         {
             if (!_owningComboBox.IsHandleCreated)
             {
-                return Array.Empty<UiaCore.IRawElementProviderSimple>();
+                return [];
             }
 
             int selectedIndex = _owningComboBox.SelectedIndex;
 
             AccessibleObject? itemAccessibleObject = GetChildFragment(selectedIndex);
 
-            if (itemAccessibleObject is not null)
-            {
-                return new UiaCore.IRawElementProviderSimple[]
-                {
-                itemAccessibleObject
-                };
-            }
-
-            return Array.Empty<UiaCore.IRawElementProviderSimple>();
+            return itemAccessibleObject is not null
+                ? [itemAccessibleObject]
+                : [];
         }
 
         internal override bool CanSelectMultiple => false;
@@ -187,11 +180,11 @@ public partial class ComboBox
             }
         }
 
-        internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
+        internal override unsafe IRawElementProviderSimple* HostRawElementProvider
         {
             get
             {
-                UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, _childListControlhandle), out UiaCore.IRawElementProviderSimple provider);
+                PInvoke.UiaHostProviderFromHwnd(new HandleRef<HWND>(this, _childListControlhandle), out IRawElementProviderSimple* provider);
                 return provider;
             }
         }

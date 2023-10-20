@@ -113,7 +113,7 @@ public partial class ListViewItem
         {
             base.ReleaseChildUiaProviders();
 
-            UiaCore.UiaDisconnectProvider(_imageAccessibleObject);
+            PInvoke.UiaDisconnectProvider(_imageAccessibleObject, skipOSCheck: true);
         }
     }
 }

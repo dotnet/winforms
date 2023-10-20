@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Accessibility;
 
 internal static partial class Interop
 {
@@ -54,7 +55,7 @@ internal static partial class Interop
             /// </summary>
             [PreserveSig]
             HRESULT ConvertReturnedElement(
-                IRawElementProviderSimple pIn,
+                IRawElementProviderSimple.Interface pIn,
                 IntPtr* ppRetValOut);
         }
     }

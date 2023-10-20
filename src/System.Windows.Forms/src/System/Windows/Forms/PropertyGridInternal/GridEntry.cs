@@ -11,7 +11,6 @@ using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -1013,10 +1012,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             }
         }
 
-        if (OsVersion.IsWindows8OrGreater() && _accessibleObject is not null)
-        {
-            UiaCore.UiaDisconnectProvider(_accessibleObject);
-        }
+        PInvoke.UiaDisconnectProvider(_accessibleObject);
 
         _accessibleObject = null;
     }

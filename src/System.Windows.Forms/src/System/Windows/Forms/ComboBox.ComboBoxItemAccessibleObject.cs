@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
@@ -103,17 +105,21 @@ public partial class ComboBox
         // Index is zero-based, Child ID is 1-based.
         internal override int GetChildId() => GetCurrentIndex() + 1;
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        internal override unsafe VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningComboBox.Focused && _owningComboBox.SelectedIndex == GetCurrentIndex(),
-                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => true,
-                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => true,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningComboBox.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                UIA_PROPERTY_ID.UIA_SelectionItemIsSelectedPropertyId => (State & AccessibleStates.Selected) != 0,
-                UIA_PROPERTY_ID.UIA_SelectionItemSelectionContainerPropertyId => _owningComboBox.ChildListAccessibleObject,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(_owningComboBox.Focused && _owningComboBox.SelectedIndex == GetCurrentIndex()),
+                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningComboBox.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
+                UIA_PROPERTY_ID.UIA_SelectionItemIsSelectedPropertyId => (VARIANT)State.HasFlag(AccessibleStates.Selected),
+                UIA_PROPERTY_ID.UIA_SelectionItemSelectionContainerPropertyId => new()
+                {
+                    vt = VARENUM.VT_UNKNOWN,
+                    data = new() { punkVal = ComHelpers.GetComPointer<IUnknown>(_owningComboBox.ChildListAccessibleObject) }
+                },
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -219,6 +225,6 @@ public partial class ComboBox
 
         internal override bool IsItemSelected => (State & AccessibleStates.Selected) != 0;
 
-        internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer => _owningComboBox.ChildListAccessibleObject;
+        internal override IRawElementProviderSimple.Interface ItemSelectionContainer => _owningComboBox.ChildListAccessibleObject;
     }
 }

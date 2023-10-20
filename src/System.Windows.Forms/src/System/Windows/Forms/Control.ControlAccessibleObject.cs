@@ -3,8 +3,8 @@
 
 using System.ComponentModel;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -483,41 +483,41 @@ public partial class Control
         internal override bool IsIAccessibleExSupported()
             => Owner is IAutomationLiveRegion ? true : base.IsIAccessibleExSupported();
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId =>
                     // "ControlType" value depends on owner's AccessibleRole value.
                     // See: docs/accessibility/accessible-role-controltype.md
-                    AccessibleRoleControlTypeMap.GetControlType(Role),
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => Owner?.Enabled ?? false,
+                    (VARIANT)(int)AccessibleRoleControlTypeMap.GetControlType(Role),
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(Owner?.Enabled ?? false),
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId when
                     Owner?.SupportsUiaProviders ?? false
-                    => Owner.CanSelect,
+                    => (VARIANT)Owner.CanSelect,
                 UIA_PROPERTY_ID.UIA_LiveSettingPropertyId => Owner is IAutomationLiveRegion owner
-                    ? owner.LiveSetting
+                    ? (VARIANT)(int)owner.LiveSetting
                     : base.GetPropertyValue(propertyID),
-                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => (nint)(Owner?.InternalHandle ?? HWND.Null),
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => (VARIANT)(nint)(Owner?.InternalHandle ?? HWND.Null),
                 _ => base.GetPropertyValue(propertyID)
             };
 
         internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
             => this.IsOwnerHandleCreated(out Control? _) && base.RaiseAutomationEvent(eventId);
 
-        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, object? oldValue, object? newValue)
+        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
             => this.IsOwnerHandleCreated(out Control? _)
                 && base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
 
-        internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
+        internal override unsafe IRawElementProviderSimple* HostRawElementProvider
         {
             get
             {
-                if (HandleInternal == IntPtr.Zero)
+                if (HandleInternal.IsNull)
                 {
                     return null;
                 }
 
-                UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, HandleInternal), out UiaCore.IRawElementProviderSimple provider);
+                PInvoke.UiaHostProviderFromHwnd(new HandleRef<HWND>(this, HandleInternal), out IRawElementProviderSimple* provider);
                 return provider;
             }
         }

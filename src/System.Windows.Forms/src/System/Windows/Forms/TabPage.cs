@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -619,11 +618,7 @@ public partial class TabPage : Panel
 
     internal override void ReleaseUiaProvider(HWND handle)
     {
-        if (OsVersion.IsWindows8OrGreater())
-        {
-            UiaCore.UiaDisconnectProvider(_tabAccessibilityObject);
-        }
-
+        PInvoke.UiaDisconnectProvider(_tabAccessibilityObject);
         _tabAccessibilityObject = null;
 
         base.ReleaseUiaProvider(handle);

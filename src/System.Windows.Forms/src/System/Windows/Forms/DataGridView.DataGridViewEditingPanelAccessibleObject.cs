@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -65,24 +66,24 @@ public partial class DataGridView
             }
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyId) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyId) =>
             propertyId switch
             {
-                UIA_PROPERTY_ID.UIA_AccessKeyPropertyId => this.TryGetOwnerAs(out Panel? owner)
-                    ? owner.AccessibilityObject.KeyboardShortcut
-                    : null,
+                UIA_PROPERTY_ID.UIA_AccessKeyPropertyId => this.TryGetOwnerAs(out Panel? owner) && owner.AccessibilityObject.KeyboardShortcut is { } shortcut
+                    ? (VARIANT)shortcut
+                    : VARIANT.Empty,
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => this.GetOwnerAccessibleRole() == AccessibleRole.Default
                     // If we don't set a default role for the accessible object it will be retrieved from Windows.
                     // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                    ? UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId
+                    ? (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId
                     : base.GetPropertyValue(propertyId),
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId
-                    => _ownerDataGridView.TryGetTarget(out var owner) && owner.CurrentCell is not null,
-                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => true,
-                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => true,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _ownerDataGridView.TryGetTarget(out var owner) && owner.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => true,
-                UIA_PROPERTY_ID.UIA_ProviderDescriptionPropertyId => SR.DataGridViewEditingPanelUiaProviderDescription,
+                    => (VARIANT)(_ownerDataGridView.TryGetTarget(out var owner) && owner.CurrentCell is not null),
+                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(_ownerDataGridView.TryGetTarget(out var owner) && owner.Enabled),
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_ProviderDescriptionPropertyId => (VARIANT)SR.DataGridViewEditingPanelUiaProviderDescription,
                 _ => base.GetPropertyValue(propertyId)
             };
     }

@@ -3,6 +3,8 @@
 
 namespace Windows.Win32.UI.Accessibility;
 
+// Remove this definition and use Cswin32 definition instead once
+// https://github.com/microsoft/win32metadata/issues/1723 is resolved
 internal enum UIA_PATTERN_ID : int
 {
     UIA_InvokePatternId = 10000,

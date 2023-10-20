@@ -2148,8 +2148,8 @@ public partial class TreeView : Control
 
             nodeAccessibleObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId,
-                oldValue: oldState,
-                newValue: newState);
+                oldValue: (VARIANT)(int)oldState,
+                newValue: (VARIANT)(int)newState);
         }
     }
 
@@ -2173,8 +2173,8 @@ public partial class TreeView : Control
         {
             e.Node!.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: ExpandCollapseState.ExpandCollapseState_Expanded,
-                newValue: (VARIANT)(uint)ExpandCollapseState.ExpandCollapseState_Collapsed);
+                oldValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded,
+                newValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed);
         }
     }
 
@@ -2198,8 +2198,8 @@ public partial class TreeView : Control
         {
             e.Node!.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: ExpandCollapseState.ExpandCollapseState_Collapsed,
-                newValue: ExpandCollapseState.ExpandCollapseState_Expanded);
+                oldValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed,
+                newValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded);
         }
     }
 
@@ -2244,8 +2244,8 @@ public partial class TreeView : Control
             // Raise to say "Selected" after announcing the node.
             nodeAccessibleObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_SelectionItemIsSelectedPropertyId,
-                oldValue: !nodeAccessibleObject.IsItemSelected,
-                newValue: nodeAccessibleObject.IsItemSelected);
+                oldValue: (VARIANT)!nodeAccessibleObject.IsItemSelected,
+                newValue: (VARIANT)nodeAccessibleObject.IsItemSelected);
         }
     }
 

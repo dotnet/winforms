@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Text;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -3927,11 +3926,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             return;
         }
 
-        if (OsVersion.IsWindows8OrGreater())
-        {
-            UiaCore.UiaDisconnectProvider(AccessibilityObject);
-        }
-
+        PInvoke.UiaDisconnectProvider(AccessibilityObject);
         Properties.SetObject(s_propCellAccessibilityObject, null);
     }
 

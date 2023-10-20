@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Globalization;
 using System.Text;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -480,12 +481,12 @@ public partial class DataGridViewRow
 
         internal override bool IsReadOnly => _owningDataGridViewRow?.ReadOnly ?? false;
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyId) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyId) =>
             propertyId switch
             {
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => string.Empty,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => string.Empty,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)string.Empty,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(Owner?.DataGridView?.Enabled ?? false),
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)string.Empty,
                 _ => base.GetPropertyValue(propertyId)
             };
     }
