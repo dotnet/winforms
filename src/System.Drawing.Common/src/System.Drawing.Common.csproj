@@ -16,6 +16,7 @@
     <!-- This should point to the last stable released version of this package. -->
     <PackageValidationBaselineVersion>7.0.0</PackageValidationBaselineVersion>
     <AddXamarinPlaceholderFilesToPackage>true</AddXamarinPlaceholderFilesToPackage>
+    <NoWarn>$(NoWarn);IDE0090</NoWarn>
     <PackageDescription>Provides access to GDI+ graphics functionality.
 
 Commonly Used Types:

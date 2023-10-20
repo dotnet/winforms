@@ -26,6 +26,7 @@
       to some of these. Disabling for now until we can get https://github.com/microsoft/CsWin32/issues/1014 resolved.
     -->
     <NoWarn>$(NoWarn);CS9195</NoWarn>
+    <NoWarn>$(NoWarn);IDE0090</NoWarn>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>

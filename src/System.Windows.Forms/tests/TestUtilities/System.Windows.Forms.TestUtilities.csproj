@@ -3,6 +3,7 @@
     <AssemblyName>System.Windows.Forms.TestUtilities</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>System</RootNamespace>
+    <NoWarn>$(NoWarn);IDE0090</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

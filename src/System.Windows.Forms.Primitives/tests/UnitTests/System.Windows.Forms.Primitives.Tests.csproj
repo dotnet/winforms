@@ -6,6 +6,7 @@
     <AssemblyName>System.Windows.Forms.Primitives.Tests</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>$(NoWarn);618</NoWarn>
+    <NoWarn>$(NoWarn);IDE0090</NoWarn>
     <Nullable>enable</Nullable>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
   </PropertyGroup>

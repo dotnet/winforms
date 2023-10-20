@@ -25,7 +25,11 @@
                                   >true</IsAnalyzerProject>
 
     <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
-    <EnableTrimAnalyzer Condition="$(IsTestProject) or $(IsAnalyzerProject) or $(MSBuildProjectDirectory.Contains('\tests\'))">false</EnableTrimAnalyzer>
+    <EnableTrimAnalyzer Condition="$(IsTestProject) 
+                        or $(IsAnalyzerProject) 
+                        or $(MSBuildProjectDirectory.Contains('\tests\')) 
+                        or $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.0'))
+                        or $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net472'))">false</EnableTrimAnalyzer>
   </PropertyGroup>
 
   <!-- Making all tests run sequentially until we regroup tests. Tracked under issue https://github.com/dotnet/winforms/issues/8810. -->
