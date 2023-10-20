@@ -5,8 +5,6 @@ namespace Windows.Win32.Foundation;
 
 internal readonly partial struct BOOL
 {
-    public override string ToString() => ((bool)this).ToString();
-
     public const int Size = sizeof(int);
 
     public static BOOL TRUE { get; } = new(true);
