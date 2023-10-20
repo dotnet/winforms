@@ -58,36 +58,33 @@ internal partial class DesignerActionUI : IDisposable
     {
         _serviceProvider = serviceProvider;
         _designerActionAdorner = containerAdorner;
-        _behaviorService = serviceProvider.GetService<BehaviorService>()!;
         IMenuCommandService? menuCommandService = serviceProvider.GetService<IMenuCommandService>();
-        _selectionService = serviceProvider.GetService<ISelectionService>()!;
-        if (_behaviorService is null || _selectionService is null)
+        if (!serviceProvider.TryGetService(out BehaviorService? behaviorService) ||
+            !serviceProvider.TryGetService(out ISelectionService? selectionService))
         {
             Debug.Fail("Either BehaviorService or ISelectionService is null, cannot continue.");
             return;
         }
 
+        _behaviorService = behaviorService;
+        _selectionService = selectionService;
+
         //query for our DesignerActionService
-        if (serviceProvider.GetService<DesignerActionService>() is { } designerActionService)
-        {
-            _designerActionService = designerActionService;
-        }
-        else
+        if (!serviceProvider.TryGetService(out DesignerActionService? designerActionService))
         {
             //start the service
-            _designerActionService = new DesignerActionService(serviceProvider);
+            designerActionService = new DesignerActionService(serviceProvider);
             _disposeActionService = true;
         }
 
-        if (serviceProvider.GetService<DesignerActionUIService>() is { } designerActionUIService)
+        if (!serviceProvider.TryGetService(out DesignerActionUIService? designerActionUIService))
         {
-            _designerActionUIService = designerActionUIService;
-        }
-        else
-        {
-            _designerActionUIService = new DesignerActionUIService(serviceProvider);
+            designerActionUIService = new DesignerActionUIService(serviceProvider);
             _disposeActionUIService = true;
         }
+
+        _designerActionService = designerActionService;
+        _designerActionUIService = designerActionUIService;
 
         _designerActionUIService.DesignerActionUIStateChange += new DesignerActionUIStateChangeEventHandler(OnDesignerActionUIStateChange);
         _designerActionService.DesignerActionListsChanged += new DesignerActionListsChangedEventHandler(OnDesignerActionsChanged);
@@ -352,7 +349,7 @@ internal partial class DesignerActionUI : IDisposable
         }
         else
         {
-            if (_designerActionAdorner?.Glyphs is not null && !_designerActionAdorner.Glyphs.Contains(glyph))
+            if (_designerActionAdorner?.Glyphs is { } glyphs && !glyphs.Contains(glyph))
             {
                 _designerActionAdorner.Glyphs.Insert(0, glyph);
             }
