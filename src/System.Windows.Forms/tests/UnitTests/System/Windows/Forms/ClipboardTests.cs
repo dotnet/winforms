@@ -537,26 +537,45 @@ public class ClipboardTests
     }
 
     [WinFormsFact]
-    public void Clipboard_Copy_WithKeyboardShortcut()
+    public void Clipboard_UseKeyboardShortcut_ToCopy()
     {
         Clipboard.Clear();
-        Form form = new Form();
+        Form form = new();
 
-        TextBox textBox = new TextBox();
-        textBox.CreateControl(); 
-        textBox.Text = "Test";
-
+        TextBox textBox = new() { Text = "Test" };
+        textBox.CreateControl();
         form.Controls.Add(textBox);
         form.Show();
-
-        textBox.Select();
         textBox.Focus();
+
         Assert.True(textBox.Focused);
+
         SendKeys.SendWait("^(a)");
         SendKeys.SendWait("^(c)");
 
         string copiedText = Clipboard.GetText();
         Assert.NotNull(copiedText);
         Assert.Equal(textBox.Text, copiedText);
+    }
+
+    [WinFormsFact]
+    public void Clipboard_UseKeyboardShortcut_ToPaste()
+    {
+        Clipboard.Clear();
+        Clipboard.SetData("Text", "Test");
+
+        Form form = new();
+        TextBox control = new();
+        form.Controls.Add(control);
+        form.Show();
+        control.Focus();
+
+        Assert.True(control.Focused);
+
+        SendKeys.SendWait("^(v)");
+        
+        Assert.NotNull(control.Text);
+        Assert.Equal(Clipboard.GetText(), control.Text);
+        Clipboard.Clear();
     }
 }
