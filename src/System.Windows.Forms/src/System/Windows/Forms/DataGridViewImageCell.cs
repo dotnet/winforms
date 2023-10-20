@@ -203,7 +203,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
     {
         get
         {
-            Type baseValueType = base.ValueType;
+            Type? baseValueType = base.ValueType;
 
             if (baseValueType is not null)
             {

@@ -127,7 +127,7 @@ public partial class MonthCalendar
             {
                 if (cell.Column == _columnIndex)
                 {
-                    return new UiaCore.IRawElementProviderSimple[1] { cell };
+                    return [cell];
                 }
             }
 
