@@ -7,6 +7,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
+    <NoWarn>$(NoWarn);IDE0090</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

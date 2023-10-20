@@ -13,6 +13,7 @@
       See https://github.com/dotnet/winforms/issues/4649
     -->
     <NoWarn>$(NoWarn);IL2026;IL2046;IL2057;IL2067;IL2070;IL2072;IL2075;IL2094;IL2111</NoWarn>
+    <NoWarn>$(NoWarn);IDE0090</NoWarn>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UsePublicApiAnalyzers>true</UsePublicApiAnalyzers>
   </PropertyGroup>
