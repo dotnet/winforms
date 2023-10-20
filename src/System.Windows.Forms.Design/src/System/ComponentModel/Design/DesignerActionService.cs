@@ -29,7 +29,7 @@ public class DesignerActionService : IDisposable
             IDesignerHost? host = serviceProvider.GetService<IDesignerHost>();
             host?.AddService(typeof(DesignerActionService), this);
 
-            if (serviceProvider.GetService(typeof(IComponentChangeService)) is IComponentChangeService componentChangeService)
+            if (serviceProvider.TryGetService(out IComponentChangeService? componentChangeService))
             {
                 componentChangeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
             }
@@ -126,9 +126,9 @@ public class DesignerActionService : IDisposable
             IDesignerHost? host = _serviceProvider.GetService<IDesignerHost>();
             host?.RemoveService(typeof(DesignerActionService));
 
-            if (_serviceProvider.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
+            if (_serviceProvider.TryGetService(out IComponentChangeService? componentChangeService))
             {
-                cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
             }
         }
     }
@@ -165,62 +165,59 @@ public class DesignerActionService : IDisposable
         ArgumentNullException.ThrowIfNull(component);
         ArgumentNullException.ThrowIfNull(actionLists);
 
-        if (component.Site is IServiceContainer serviceContainer)
+        IServiceContainer? serviceContainer = component.Site as IServiceContainer;
+        if (serviceContainer.TryGetService(out DesignerCommandSet? designerCommandSet))
         {
-            DesignerCommandSet? designerCommandSet = serviceContainer.GetService<DesignerCommandSet>();
-            if (designerCommandSet is not null)
+            DesignerActionListCollection? pullCollection = designerCommandSet.ActionLists;
+            if (pullCollection is not null)
             {
-                DesignerActionListCollection? pullCollection = designerCommandSet.ActionLists;
-                if (pullCollection is not null)
-                {
-                    actionLists.AddRange(pullCollection);
-                }
+                actionLists.AddRange(pullCollection);
+            }
 
-                // if we don't find any, add the verbs for this component there...
-                if (actionLists.Count == 0)
+            // if we don't find any, add the verbs for this component there...
+            if (actionLists.Count == 0)
+            {
+                DesignerVerbCollection? verbs = designerCommandSet.Verbs;
+                if (verbs is not null && verbs.Count != 0)
                 {
-                    DesignerVerbCollection? verbs = designerCommandSet.Verbs;
-                    if (verbs is not null && verbs.Count != 0)
+                    List<DesignerVerb> verbsArray = new();
+                    bool hookupEvents = _componentToVerbsEventHookedUp.Add(component);
+
+                    foreach (DesignerVerb verb in verbs)
                     {
-                        List<DesignerVerb> verbsArray = new();
-                        bool hookupEvents = _componentToVerbsEventHookedUp.Add(component);
-
-                        foreach (DesignerVerb verb in verbs)
+                        if (verb is null)
                         {
-                            if (verb is null)
-                            {
-                                continue;
-                            }
-
-                            if (hookupEvents)
-                            {
-                                verb.CommandChanged += new EventHandler(OnVerbStatusChanged);
-                            }
-
-                            if (verb is { Enabled: true, Visible: true })
-                            {
-                                verbsArray.Add(verb);
-                            }
+                            continue;
                         }
 
-                        if (verbsArray.Count != 0)
+                        if (hookupEvents)
                         {
-                            actionLists.Add(new DesignerActionVerbList(verbsArray.ToArray()));
+                            verb.CommandChanged += new EventHandler(OnVerbStatusChanged);
+                        }
+
+                        if (verb is { Enabled: true, Visible: true })
+                        {
+                            verbsArray.Add(verb);
                         }
                     }
-                }
 
-                // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
-                // NOTE: We do this AFTER the verb check that way to disable auto verb upgrading you can just return an empty actionlist collection
-                if (pullCollection is not null)
-                {
-                    foreach (DesignerActionList actionList in pullCollection)
+                    if (verbsArray.Count != 0)
                     {
-                        DesignerActionItemCollection? collection = actionList?.GetSortedActionItems();
-                        if (collection is null || collection.Count == 0)
-                        {
-                            actionLists.Remove(actionList);
-                        }
+                        actionLists.Add(new DesignerActionVerbList(verbsArray.ToArray()));
+                    }
+                }
+            }
+
+            // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
+            // NOTE: We do this AFTER the verb check that way to disable auto verb upgrading you can just return an empty actionlist collection
+            if (pullCollection is not null)
+            {
+                foreach (DesignerActionList actionList in pullCollection)
+                {
+                    DesignerActionItemCollection? collection = actionList?.GetSortedActionItems();
+                    if (collection is null || collection.Count == 0)
+                    {
+                        actionLists.Remove(actionList);
                     }
                 }
             }
