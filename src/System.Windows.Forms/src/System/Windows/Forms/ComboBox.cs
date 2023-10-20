@@ -3082,10 +3082,8 @@ public partial class ComboBox : ListControl
         {
             Select(0, Text.Length);
             SelectedText = Text;
-            int boundaryStart = ClientUtils.GetWordBoundaryStart(Text, SelectionStart);
-            int length = SelectionStart - boundaryStart;
-            SelectionStart = boundaryStart;
-            SelectionLength = length;
+            SelectionStart = 0;
+            SelectionLength = Text.Length;
 
             return true;
         }
