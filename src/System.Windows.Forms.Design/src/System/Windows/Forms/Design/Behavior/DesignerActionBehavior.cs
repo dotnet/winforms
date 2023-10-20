@@ -12,13 +12,13 @@ namespace System.Windows.Forms.Design.Behavior;
 /// </summary>
 internal sealed class DesignerActionBehavior : Behavior
 {
-    private readonly IServiceProvider? _serviceProvider; // we need to cache the service provider here to be able to create the panel with the proper arguments
+    private readonly IServiceProvider _serviceProvider; // we need to cache the service provider here to be able to create the panel with the proper arguments
     private bool _ignoreNextMouseUp;
 
     /// <summary>
     ///  Constructor that calls base and caches off the action lists.
     /// </summary>
-    internal DesignerActionBehavior(IServiceProvider? serviceProvider, IComponent relatedComponent, DesignerActionListCollection actionLists, DesignerActionUI parentUI)
+    internal DesignerActionBehavior(IServiceProvider serviceProvider, IComponent relatedComponent, DesignerActionListCollection actionLists, DesignerActionUI parentUI)
     {
         ActionLists = actionLists;
         _serviceProvider = serviceProvider;
