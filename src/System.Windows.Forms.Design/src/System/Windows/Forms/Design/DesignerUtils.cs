@@ -475,9 +475,8 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
     /// </summary>
-    public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type, int borderSize)
-    {
-        return type switch
+    public static Rectangle GetBoundsForSelectionType(Rectangle originalBounds, SelectionBorderGlyphType type, int borderSize) =>
+        type switch
         {
             SelectionBorderGlyphType.Top => new Rectangle(originalBounds.Left - borderSize, originalBounds.Top - borderSize, originalBounds.Width + 2 * borderSize, borderSize),
             SelectionBorderGlyphType.Bottom => new Rectangle(originalBounds.Left - borderSize, originalBounds.Bottom, originalBounds.Width + 2 * borderSize, borderSize),
@@ -486,7 +485,6 @@ internal static class DesignerUtils
             SelectionBorderGlyphType.Body => originalBounds,
             _ => Rectangle.Empty
         };
-    }
 
     /// <summary>
     ///  Used by the Glyphs and ComponentTray to determine the Top, Left, Right, Bottom and Body bound rects related to their original bounds and bordersize.
