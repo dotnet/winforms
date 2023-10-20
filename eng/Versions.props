@@ -74,7 +74,7 @@
     <InputSimulatorPlusVersion>1.0.7</InputSimulatorPlusVersion>
     <MicrosoftVisualStudioThreadingVersion>17.0.15-alpha</MicrosoftVisualStudioThreadingVersion>
     <!-- This is needed for Verify.Xunit to pull correct version of System.Speech -->
-    <MicrosoftWindowsCompatibilityVersion>7.0.4</MicrosoftWindowsCompatibilityVersion>
+    <MicrosoftWindowsCompatibilityVersion>7.0.5</MicrosoftWindowsCompatibilityVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <VerifyXunitVersion>14.2.0</VerifyXunitVersion>
   </PropertyGroup>
