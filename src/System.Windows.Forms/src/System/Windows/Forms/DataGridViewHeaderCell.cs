@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 
@@ -96,11 +94,11 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         }
     }
 
-    internal Bitmap FlipXPThemesBitmap
+    internal Bitmap? FlipXPThemesBitmap
     {
         get
         {
-            return (Bitmap)Properties.GetObject(s_propFlipXPThemesBitmap);
+            return (Bitmap?)Properties.GetObject(s_propFlipXPThemesBitmap);
         }
         set
         {
@@ -197,11 +195,11 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         }
     }
 
-    public override Type ValueType
+    public override Type? ValueType
     {
         get
         {
-            Type valueType = (Type)Properties.GetObject(s_propValueType);
+            Type? valueType = (Type?)Properties.GetObject(s_propValueType);
             if (valueType is not null)
             {
                 return valueType;
@@ -257,9 +255,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         }
         else
         {
-            //
-
-            dataGridViewCell = (DataGridViewHeaderCell)System.Activator.CreateInstance(thisType);
+            dataGridViewCell = (DataGridViewHeaderCell)Activator.CreateInstance(thisType)!;
         }
 
         base.CloneInternal(dataGridViewCell);
@@ -267,7 +263,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         return dataGridViewCell;
     }
 
-    public override ContextMenuStrip GetInheritedContextMenuStrip(int rowIndex)
+    public override ContextMenuStrip? GetInheritedContextMenuStrip(int rowIndex)
     {
         ContextMenuStrip contextMenuStrip = GetContextMenuStrip(rowIndex);
         if (contextMenuStrip is not null)
@@ -478,7 +474,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         return s_rectThemeMargins;
     }
 
-    protected override object GetValue(int rowIndex)
+    protected override object? GetValue(int rowIndex)
     {
         ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
@@ -487,24 +483,24 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
 
     protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
     {
-        return e.Button == MouseButtons.Left && DataGridView.ApplyVisualStylesToHeaderCells;
+        return e.Button == MouseButtons.Left && DataGridView!.ApplyVisualStylesToHeaderCells;
     }
 
     protected override bool MouseEnterUnsharesRow(int rowIndex)
     {
-        return ColumnIndex == DataGridView.MouseDownCellAddress.X &&
+        return ColumnIndex == DataGridView!.MouseDownCellAddress.X &&
                rowIndex == DataGridView.MouseDownCellAddress.Y &&
                DataGridView.ApplyVisualStylesToHeaderCells;
     }
 
     protected override bool MouseLeaveUnsharesRow(int rowIndex)
     {
-        return ButtonState != ButtonState.Normal && DataGridView.ApplyVisualStylesToHeaderCells;
+        return ButtonState != ButtonState.Normal && DataGridView!.ApplyVisualStylesToHeaderCells;
     }
 
     protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
     {
-        return e.Button == MouseButtons.Left && DataGridView.ApplyVisualStylesToHeaderCells;
+        return e.Button == MouseButtons.Left && DataGridView!.ApplyVisualStylesToHeaderCells;
     }
 
     protected override void OnMouseDown(DataGridViewCellMouseEventArgs e)
@@ -584,9 +580,9 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates dataGridViewElementState,
-        object value,
-        object formattedValue,
-        string errorText,
+        object? value,
+        object? formattedValue,
+        string? errorText,
         DataGridViewCellStyle cellStyle,
         DataGridViewAdvancedBorderStyle advancedBorderStyle,
         DataGridViewPaintParts paintParts)

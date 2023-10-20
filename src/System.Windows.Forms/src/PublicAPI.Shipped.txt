@@ -99,7 +99,7 @@ override System.Windows.Forms.DataGridViewColumnHeaderCell.GetInheritedContextMe
 override System.Windows.Forms.DataGridViewColumnHeaderCell.GetInheritedStyle(System.Windows.Forms.DataGridViewCellStyle? inheritedCellStyle, int rowIndex, bool includeColors) -> System.Windows.Forms.DataGridViewCellStyle!
 override System.Windows.Forms.DataGridViewColumnHeaderCell.GetPreferredSize(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
 override System.Windows.Forms.DataGridViewColumnHeaderCell.GetValue(int rowIndex) -> object?
-override System.Windows.Forms.DataGridViewColumnHeaderCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates dataGridViewElementState, object! value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+override System.Windows.Forms.DataGridViewColumnHeaderCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates dataGridViewElementState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 override System.Windows.Forms.DataGridViewColumnHeaderCell.SetValue(int rowIndex, object? value) -> bool
 override System.Windows.Forms.DataGridViewColumnHeaderCell.ToString() -> string!
 override System.Windows.Forms.DataGridViewComboBoxCell.Clone() -> object!
@@ -122,18 +122,18 @@ override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.get -> Sys
 override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.set -> void
 override System.Windows.Forms.DataGridViewComboBoxColumn.Clone() -> object!
 override System.Windows.Forms.DataGridViewComboBoxColumn.ToString() -> string!
-~override System.Windows.Forms.DataGridViewHeaderCell.Clone() -> object
-~override System.Windows.Forms.DataGridViewHeaderCell.FormattedValueType.get -> System.Type
-~override System.Windows.Forms.DataGridViewHeaderCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip
-~override System.Windows.Forms.DataGridViewHeaderCell.GetValue(int rowIndex) -> object
-~override System.Windows.Forms.DataGridViewHeaderCell.MouseDownUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> bool
-~override System.Windows.Forms.DataGridViewHeaderCell.MouseUpUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> bool
-~override System.Windows.Forms.DataGridViewHeaderCell.OnMouseDown(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~override System.Windows.Forms.DataGridViewHeaderCell.OnMouseUp(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~override System.Windows.Forms.DataGridViewHeaderCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates dataGridViewElementState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
-~override System.Windows.Forms.DataGridViewHeaderCell.ToString() -> string
-~override System.Windows.Forms.DataGridViewHeaderCell.ValueType.get -> System.Type
-~override System.Windows.Forms.DataGridViewHeaderCell.ValueType.set -> void
+override System.Windows.Forms.DataGridViewHeaderCell.Clone() -> object!
+override System.Windows.Forms.DataGridViewHeaderCell.FormattedValueType.get -> System.Type!
+override System.Windows.Forms.DataGridViewHeaderCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip?
+override System.Windows.Forms.DataGridViewHeaderCell.GetValue(int rowIndex) -> object?
+override System.Windows.Forms.DataGridViewHeaderCell.MouseDownUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
+override System.Windows.Forms.DataGridViewHeaderCell.MouseUpUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
+override System.Windows.Forms.DataGridViewHeaderCell.OnMouseDown(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+override System.Windows.Forms.DataGridViewHeaderCell.OnMouseUp(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+override System.Windows.Forms.DataGridViewHeaderCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates dataGridViewElementState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+override System.Windows.Forms.DataGridViewHeaderCell.ToString() -> string!
+override System.Windows.Forms.DataGridViewHeaderCell.ValueType.get -> System.Type?
+override System.Windows.Forms.DataGridViewHeaderCell.ValueType.set -> void
 override System.Windows.Forms.DataGridViewImageCell.Clone() -> object!
 override System.Windows.Forms.DataGridViewImageCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DataGridViewImageCell.DefaultNewRowValue.get -> object?
@@ -194,7 +194,7 @@ override System.Windows.Forms.DataGridViewRowHeaderCell.GetInheritedContextMenuS
 override System.Windows.Forms.DataGridViewRowHeaderCell.GetInheritedStyle(System.Windows.Forms.DataGridViewCellStyle? inheritedCellStyle, int rowIndex, bool includeColors) -> System.Windows.Forms.DataGridViewCellStyle!
 override System.Windows.Forms.DataGridViewRowHeaderCell.GetPreferredSize(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
 override System.Windows.Forms.DataGridViewRowHeaderCell.GetValue(int rowIndex) -> object?
-override System.Windows.Forms.DataGridViewRowHeaderCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object! value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+override System.Windows.Forms.DataGridViewRowHeaderCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 override System.Windows.Forms.DataGridViewRowHeaderCell.SetValue(int rowIndex, object? value) -> bool
 override System.Windows.Forms.DataGridViewRowHeaderCell.ToString() -> string!
 override System.Windows.Forms.DataGridViewTextBoxCell.Clone() -> object!
