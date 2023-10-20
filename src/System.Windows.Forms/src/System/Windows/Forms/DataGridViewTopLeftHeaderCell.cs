@@ -34,7 +34,7 @@ public partial class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCel
             return Rectangle.Empty;
         }
 
-        object value = GetValue(rowIndex);
+        object? value = GetValue(rowIndex);
 
         // Intentionally not using GetFormattedValue because header cells don't typically perform formatting.
         // the content bounds are computed on demand
@@ -109,7 +109,7 @@ public partial class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCel
             paint: false);
 
 #if DEBUG
-        object value = GetValue(rowIndex);
+        object? value = GetValue(rowIndex);
 
         Rectangle errorBoundsDebug = PaintPrivate(
             graphics,
@@ -148,15 +148,11 @@ public partial class DataGridViewTopLeftHeaderCell : DataGridViewColumnHeaderCel
         TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
 
         // Intentionally not using GetFormattedValue because header cells don't typically perform formatting.
-        object? val = GetValue(rowIndex);
-        if (val is not string)
-        {
-            val = null;
-        }
+        string? val = GetValue(rowIndex) as string;
 
         return DataGridViewUtilities.GetPreferredRowHeaderSize(
             graphics,
-            (string?)val,
+            val,
             cellStyle,
             borderAndPaddingWidths,
             borderAndPaddingHeights,

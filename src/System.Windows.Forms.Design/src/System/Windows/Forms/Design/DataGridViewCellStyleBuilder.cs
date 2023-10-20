@@ -81,7 +81,7 @@ internal class DataGridViewCellStyleBuilder : Form
         }
     }
 
-    public ITypeDescriptorContext Context
+    public ITypeDescriptorContext? Context
     {
         set => _context = value;
     }

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -13,7 +11,7 @@ internal sealed partial class DesignerActionPanel
     private class TextLine : Line
     {
         private readonly Label _label;
-        private DesignerActionTextItem _textItem;
+        private DesignerActionTextItem? _textItem;
 
         protected TextLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             : base(serviceProvider, actionPanel)
@@ -48,7 +46,7 @@ internal sealed partial class DesignerActionPanel
             return labelSize + new Size(LineLeftMargin + LineRightMargin, LineVerticalPadding);
         }
 
-        private void OnParentControlFontChanged(object sender, EventArgs e)
+        private void OnParentControlFontChanged(object? sender, EventArgs e)
         {
             if (_label.Font is not null)
             {
@@ -63,15 +61,17 @@ internal sealed partial class DesignerActionPanel
 
         internal override void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex)
         {
-            Info info = (Info)lineInfo;
-            _textItem = info.Item;
+            TextLineInfo textLineInfo = (TextLineInfo)lineInfo;
+            _textItem = textLineInfo.Item;
             _label.Text = StripAmpersands(_textItem.DisplayName);
             _label.Font = GetFont();
             _label.TabIndex = currentTabIndex++;
             toolTip.SetToolTip(_label, _textItem.Description);
         }
 
-        public sealed class Info(DesignerActionList list, DesignerActionTextItem item) : StandardLineInfo(list)
+        public static StandardLineInfo CreateLineInfo(DesignerActionList list, DesignerActionTextItem item) => new TextLineInfo(list, item);
+
+        protected class TextLineInfo(DesignerActionList list, DesignerActionTextItem item) : StandardLineInfo(list)
         {
             public override DesignerActionTextItem Item { get; } = item;
             public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
