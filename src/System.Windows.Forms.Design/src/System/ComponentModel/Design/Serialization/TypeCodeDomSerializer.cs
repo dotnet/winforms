@@ -548,7 +548,7 @@ public partial class TypeCodeDomSerializer : CodeDomSerializerBase
         {
             map.Combine();
             typeDecl.Members.Add(map.Method);
-            Trace(TraceLevel.Verbose, $"...generated {map.Method.Statements.Count} statements into method {map.Method.Name}");
+            Trace(TraceLevel.Verbose, $"...generated {map.Method!.Statements.Count} statements into method {map.Method.Name}");
         }
     }
 }
