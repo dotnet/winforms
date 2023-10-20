@@ -10,7 +10,7 @@ using static System.Windows.Forms.ListViewGroup;
 using static Interop;
 using static Interop.UiaCore;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ListViewGroup_ListViewGroupAccessibleObjectTests
 {

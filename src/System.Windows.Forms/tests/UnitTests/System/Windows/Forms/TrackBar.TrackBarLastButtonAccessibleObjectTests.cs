@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Windows.Win32.UI.Accessibility;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class TrackBar_TrackBarLastButtonAccessibleObjectTests
 {

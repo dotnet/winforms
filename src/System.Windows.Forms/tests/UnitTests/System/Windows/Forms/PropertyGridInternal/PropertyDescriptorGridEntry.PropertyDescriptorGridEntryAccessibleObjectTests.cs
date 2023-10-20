@@ -6,7 +6,7 @@ using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
-namespace System.Windows.Forms.PropertyGridInternal.Tests;
+namespace System.Windows.Forms.PropertyGridInternal.Tests.AccessibleObjects;
 
 public class PropertyDescriptorGridEntryAccessibleObjectTests
 {

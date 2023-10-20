@@ -7,7 +7,7 @@ using static System.Windows.Forms.PropertyGridInternal.CategoryGridEntry;
 using static System.Windows.Forms.PropertyGridInternal.PropertyGridView;
 using static Interop;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class CategoryGridEntryAccessibleObjectTests
 {

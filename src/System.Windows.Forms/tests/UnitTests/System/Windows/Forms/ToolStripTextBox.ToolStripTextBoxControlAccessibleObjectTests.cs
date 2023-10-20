@@ -5,7 +5,7 @@ using System.Reflection;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Control;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
 {

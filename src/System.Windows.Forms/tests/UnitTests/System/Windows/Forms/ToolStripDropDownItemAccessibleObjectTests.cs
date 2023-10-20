@@ -3,7 +3,7 @@
 
 using static Interop.UiaCore;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ToolStripDropDownItemAccessibleObjectTests
 {

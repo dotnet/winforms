@@ -3,7 +3,7 @@
 
 using static System.Windows.Forms.ListViewItem;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ListViewItem_ListViewItemTileAccessibleObjectTests
 {

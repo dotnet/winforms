@@ -4,7 +4,7 @@
 using Windows.Win32.UI.Accessibility;
 using RadioButtonAccessibleObject = System.Windows.Forms.RadioButton.RadioButtonAccessibleObject;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class RadioButton_RadioButtonAccessibleObjectTests
 {

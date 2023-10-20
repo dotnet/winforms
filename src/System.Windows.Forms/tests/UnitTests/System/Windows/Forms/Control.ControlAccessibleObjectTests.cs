@@ -7,7 +7,7 @@ using Windows.Win32.UI.Accessibility;
 using static Interop;
 using IAccessible = Accessibility.IAccessible;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class Control_ControlAccessibleObjectTests
 {

@@ -3,7 +3,7 @@
 
 using Windows.Win32.UI.Accessibility;
 
-namespace System.Windows.Forms.PropertyGridInternal.Tests;
+namespace System.Windows.Forms.PropertyGridInternal.Tests.AccessibleObjects;
 
 public class DetailsButton_DetailsButtonAccessibleObjectTests
 {

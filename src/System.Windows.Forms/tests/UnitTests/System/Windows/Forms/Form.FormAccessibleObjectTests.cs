@@ -5,7 +5,7 @@ using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Form;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class Form_FormAccessibleObjectTests
 {

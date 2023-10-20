@@ -8,7 +8,7 @@ using static System.Windows.Forms.ComboBox;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ComboBox_ComboBoxItemAccessibleObjectTests
 {

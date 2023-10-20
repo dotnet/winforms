@@ -4,7 +4,7 @@
 using Windows.Win32.UI.Accessibility;
 using LabelAccessibleObject = System.Windows.Forms.Label.LabelAccessibleObject;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class LabelAccessibleObjectTests
 {

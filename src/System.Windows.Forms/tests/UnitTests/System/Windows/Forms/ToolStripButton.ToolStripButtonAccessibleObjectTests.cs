@@ -5,7 +5,7 @@ using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripButton;
 using static Interop;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ToolStripButton_ToolStripButtonAccessibleObjectTests
 {

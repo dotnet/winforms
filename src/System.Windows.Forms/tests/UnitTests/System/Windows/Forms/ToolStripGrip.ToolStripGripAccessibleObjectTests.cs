@@ -4,7 +4,7 @@
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripGrip;
 
-namespace System.Windows.Forms;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ToolStripGrip_ToolStripGripAccessibleObjectTests
 {

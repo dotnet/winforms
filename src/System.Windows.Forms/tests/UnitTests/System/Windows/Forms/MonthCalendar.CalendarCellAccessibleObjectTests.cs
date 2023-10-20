@@ -5,7 +5,7 @@ using System.Drawing;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 [UseDefaultXunitCulture]
 public class MonthCalendar_CalendarCellAccessibleObjectTests

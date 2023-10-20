@@ -4,7 +4,7 @@
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ToolStripControlHost_ToolStripHostedControlAccessibleObjectTests
 {

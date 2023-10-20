@@ -5,7 +5,7 @@ using Windows.Win32.UI.Accessibility;
 using static Interop.UiaCore;
 using CheckBoxAccessibleObject = System.Windows.Forms.CheckBox.CheckBoxAccessibleObject;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class CheckBox_CheckBoxAccessibleObjectTests
 {

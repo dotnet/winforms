@@ -4,7 +4,7 @@
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripLabel;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ToolStripLabel_ToolStripLabelAccessibleObjectTests
 {

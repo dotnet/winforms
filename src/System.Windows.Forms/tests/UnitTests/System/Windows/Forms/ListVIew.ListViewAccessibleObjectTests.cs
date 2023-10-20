@@ -7,7 +7,7 @@ using static System.Windows.Forms.ListViewGroup;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ListView_ListViewAccessibleObjectTests
 {

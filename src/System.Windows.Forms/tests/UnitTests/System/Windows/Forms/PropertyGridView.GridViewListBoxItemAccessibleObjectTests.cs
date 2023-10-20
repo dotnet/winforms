@@ -6,7 +6,7 @@ using System.Windows.Forms.PropertyGridInternal;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.PropertyGridInternal.PropertyGridView;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class PropertyGridView_GridViewListBoxItemAccessibleObjectTests
 {

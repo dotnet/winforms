@@ -9,7 +9,7 @@ using static Interop;
 using System.Reflection;
 using UIA_PROPERTY_ID = Windows.Win32.UI.Accessibility.UIA_PROPERTY_ID;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public partial class AccessibleObjectTests
 {

@@ -7,7 +7,7 @@ using static System.Windows.Forms.LinkLabel.Link;
 using static Interop;
 using static Interop.UiaCore;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class LinkLabel_Link_LinkAccessibleObjectTests
 {

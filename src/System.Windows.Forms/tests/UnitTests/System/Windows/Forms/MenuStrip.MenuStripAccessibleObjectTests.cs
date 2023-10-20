@@ -3,10 +3,10 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
-using static System.Windows.Forms.Tests.ToolStripAccessibleObjectTests;
+using static System.Windows.Forms.Tests.AccessibleObjects.ToolStripAccessibleObjectTests;
 using static Interop.UiaCore;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class MenuStrip_MenuStripAccessibleObjectTests
 {

@@ -7,7 +7,7 @@ using System.Windows.Forms.TestUtilities;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class TrackBarAccessibleObjectTests
 {

@@ -7,7 +7,7 @@ using Moq.Protected;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 // NB: doesn't require thread affinity
 public class DataGridViewCellAccessibleObjectTests : DataGridViewCell

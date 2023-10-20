@@ -6,7 +6,7 @@ using static System.Windows.Forms.ToolStripComboBox;
 using static System.Windows.Forms.ToolStripComboBox.ToolStripComboBoxControl;
 using static Interop;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ToolStripComboBox_ToolStripComboBoxControl_ToolStripComboBoxControlAccessibleObjectTests
 {

@@ -5,7 +5,7 @@ using System.Drawing;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ListViewItem_ListViewItemListAccessibleObjectTests
 {

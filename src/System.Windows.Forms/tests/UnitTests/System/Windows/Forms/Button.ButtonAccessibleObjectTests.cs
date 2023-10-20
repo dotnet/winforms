@@ -4,7 +4,7 @@
 using Windows.Win32.UI.Accessibility;
 using ButtonAccessibleObject = System.Windows.Forms.Button.ButtonAccessibleObject;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class Button_ButtonAccessibleObjectTests
 {

@@ -6,7 +6,7 @@ using static System.Windows.Forms.TabControl;
 using static System.Windows.Forms.TabPage;
 using static Interop;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class TabPage_TabAccessibleObjectTests
 {

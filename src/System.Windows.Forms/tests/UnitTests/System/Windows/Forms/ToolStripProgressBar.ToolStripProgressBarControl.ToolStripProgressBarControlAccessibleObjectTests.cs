@@ -5,7 +5,7 @@ using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripProgressBar;
 using static Interop;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressBarControlAccessibleObjectTests
 {

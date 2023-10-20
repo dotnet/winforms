@@ -7,7 +7,7 @@ using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Control;
 using static Interop;
 
-namespace System.Windows.Forms.PropertyGridInternal.Tests;
+namespace System.Windows.Forms.PropertyGridInternal.Tests.AccessibleObjects;
 
 public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTests
 {

@@ -4,7 +4,7 @@
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripSeparator;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class ToolStripSeparator_ToolStripSeparatorAccessibleObjectTests
 {
