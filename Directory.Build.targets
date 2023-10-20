@@ -24,8 +24,10 @@
     <CoverletOutput>$(TargetDir)coverage\$(MSBuildProjectName).coverage</CoverletOutput>
   </PropertyGroup>
 
-  <!-- Turn on single-file publishing analysis for everything except the test projects -->
-  <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
+  <!-- Turn on single-file publishing analysis for everything except the test projects, .NET Standard projects, and .NET Framework projects-->
+  <PropertyGroup Condition="'$(IsTestProject)' != 'true' 
+                 and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'netstandard2.0')) != 'true'
+                 and $([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net472'))  != 'true'">
     <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
   </PropertyGroup>
 
