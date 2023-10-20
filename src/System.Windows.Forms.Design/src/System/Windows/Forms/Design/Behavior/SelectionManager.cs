@@ -35,10 +35,8 @@ internal sealed class SelectionManager : IDisposable
         _behaviorService = behaviorService;
         _serviceProvider = serviceProvider;
 
-        _selectionService = serviceProvider.GetService<ISelectionService>()!;
-        _designerHost = serviceProvider.GetService<IDesignerHost>()!;
-
-        Debug.Assert(_designerHost is not null && _selectionService is not null, "SelectionManager - Host or SelSvc is null, can't continue");
+        _selectionService = serviceProvider.GetRequiredService<ISelectionService>();
+        _designerHost = serviceProvider.GetRequiredService<IDesignerHost>();
 
         //sync the BehaviorService's begindrag event
         behaviorService.BeginDrag += new BehaviorDragDropEventHandler(OnBeginDrag);
