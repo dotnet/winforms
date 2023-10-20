@@ -535,4 +535,28 @@ public class ClipboardTests
         Assert.Equal(obj.Name, deserializedObj.GetProperty("Name").GetString());
         Assert.Equal(obj.Age, deserializedObj.GetProperty("Age").GetInt32());
     }
+
+    [WinFormsFact]
+    public void Clipboard_Copy_WithKeyboardShortcut()
+    {
+        Clipboard.Clear();
+        Form form = new Form();
+
+        TextBox textBox = new TextBox();
+        textBox.CreateControl(); 
+        textBox.Text = "Test";
+
+        form.Controls.Add(textBox);
+        form.Show();
+
+        textBox.Select();
+        textBox.Focus();
+        Assert.True(textBox.Focused);
+        SendKeys.SendWait("^(a)");
+        SendKeys.SendWait("^(c)");
+
+        string copiedText = Clipboard.GetText();
+        Assert.NotNull(copiedText);
+        Assert.Equal(textBox.Text, copiedText);
+    }
 }
