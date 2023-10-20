@@ -148,14 +148,8 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public override bool ReadOnly
     {
-        get
-        {
-            return true;
-        }
-        set
-        {
-            throw new InvalidOperationException(string.Format(SR.DataGridView_HeaderCellReadOnlyProperty, "ReadOnly"));
-        }
+        get => true;
+        set => throw new InvalidOperationException(string.Format(SR.DataGridView_HeaderCellReadOnlyProperty, "ReadOnly"));
     }
 
     [Browsable(false)]
@@ -185,14 +179,8 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public override bool Selected
     {
-        get
-        {
-            return false;
-        }
-        set
-        {
-            throw new InvalidOperationException(string.Format(SR.DataGridView_HeaderCellReadOnlyProperty, "Selected"));
-        }
+        get => false;
+        set => throw new InvalidOperationException(string.Format(SR.DataGridView_HeaderCellReadOnlyProperty, "Selected"));
     }
 
     public override Type? ValueType
