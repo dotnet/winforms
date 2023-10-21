@@ -192,7 +192,7 @@ public abstract partial class DataGridViewCell
                 }
                 else if (_owner.OwningColumn is not null)
                 {
-                    TypeConverter converter = _owner.FormattedValueTypeConverter;
+                    TypeConverter? converter = _owner.FormattedValueTypeConverter;
                     if (converter is not null && converter.CanConvertTo(typeof(string)))
                     {
                         return converter.ConvertToString(formattedValue);
@@ -699,9 +699,9 @@ public abstract partial class DataGridViewCell
 
         internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaderItems()
         {
-            if (_owner?.DataGridView?.IsHandleCreated is true && _owner.DataGridView.RowHeadersVisible && _owner.OwningRow.HasHeaderCell)
+            if (_owner is { OwningRow.HasHeaderCell: true, DataGridView: { IsHandleCreated: true, RowHeadersVisible: true } })
             {
-                return new UiaCore.IRawElementProviderSimple[1] { _owner.OwningRow.HeaderCell.AccessibilityObject };
+                return [_owner.OwningRow.HeaderCell.AccessibilityObject];
             }
 
             return null;
@@ -709,9 +709,9 @@ public abstract partial class DataGridViewCell
 
         internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
         {
-            if (_owner?.DataGridView?.IsHandleCreated is true && _owner.DataGridView.ColumnHeadersVisible && _owner.OwningColumn.HasHeaderCell)
+            if (_owner is { OwningColumn.HasHeaderCell: true, DataGridView: { IsHandleCreated: true, ColumnHeadersVisible: true } })
             {
-                return new UiaCore.IRawElementProviderSimple[1] { _owner.OwningColumn.HeaderCell.AccessibilityObject };
+                return [_owner.OwningColumn.HeaderCell.AccessibilityObject];
             }
 
             return null;
