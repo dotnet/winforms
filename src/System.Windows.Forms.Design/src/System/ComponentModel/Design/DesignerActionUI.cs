@@ -372,11 +372,9 @@ internal partial class DesignerActionUI : IDisposable
 
     private void OnDesignerActionUIStateChange(object sender, DesignerActionUIStateChangeEventArgs e)
     {
-        IComponent? comp = e.RelatedObject as IComponent;
-        Debug.Assert(comp is not null || e.ChangeType == DesignerActionUIStateChangeType.Hide, "related object is not an IComponent, something is wrong here...");
-        if (comp is not null)
+        if (e.RelatedObject is IComponent component)
         {
-            DesignerActionGlyph? relatedGlyph = GetDesignerActionGlyph(comp);
+            DesignerActionGlyph? relatedGlyph = GetDesignerActionGlyph(component);
             if (relatedGlyph is not null)
             {
                 if (e.ChangeType == DesignerActionUIStateChangeType.Show)
@@ -396,16 +394,17 @@ internal partial class DesignerActionUI : IDisposable
                 else if (e.ChangeType == DesignerActionUIStateChangeType.Refresh)
                 {
                     relatedGlyph.Invalidate();
-                    RecreatePanel((IComponent?)e.RelatedObject);
+                    RecreatePanel(component);
                 }
             }
         }
+        else if (e.ChangeType == DesignerActionUIStateChangeType.Hide)
+        {
+            HideDesignerActionPanel();
+        }
         else
         {
-            if (e.ChangeType == DesignerActionUIStateChangeType.Hide)
-            {
-                HideDesignerActionPanel();
-            }
+            Debug.Fail("related object is not an IComponent, something is wrong here...");
         }
     }
 
