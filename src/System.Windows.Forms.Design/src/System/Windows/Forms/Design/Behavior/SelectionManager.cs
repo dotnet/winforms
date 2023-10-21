@@ -57,8 +57,7 @@ internal sealed class SelectionManager : IDisposable
 
         _componentToDesigner = new();
 
-        IComponentChangeService? cs = serviceProvider.GetService<IComponentChangeService>();
-        if (cs is not null)
+        if (_serviceProvider.TryGetService(out IComponentChangeService? cs))
         {
             cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
             cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
@@ -176,8 +175,7 @@ internal sealed class SelectionManager : IDisposable
 
         if (_serviceProvider is not null)
         {
-            IComponentChangeService? cs = _serviceProvider.GetService<IComponentChangeService>();
-            if (cs is not null)
+            if (_serviceProvider.TryGetService(out IComponentChangeService? cs))
             {
                 cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
                 cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
