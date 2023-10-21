@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
@@ -16,15 +14,17 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
 {
     private static readonly Type s_columnType = typeof(DataGridViewComboBoxColumn);
 
-    public DataGridViewComboBoxColumn() : base(new DataGridViewComboBoxCell())
+    public DataGridViewComboBoxColumn()
+        : base(new DataGridViewComboBoxCell())
     {
-        ((DataGridViewComboBoxCell)base.CellTemplate).TemplateComboBoxColumn = this;
+        ((DataGridViewComboBoxCell)base.CellTemplate!).TemplateComboBoxColumn = this;
     }
 
     [Browsable(true)]
     [DefaultValue(true)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnAutoCompleteDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public bool AutoComplete
     {
         get
@@ -38,21 +38,25 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
         set
         {
-            if (AutoComplete != value)
+            if (AutoComplete == value)
             {
-                ComboBoxCellTemplate.AutoComplete = value;
-                if (DataGridView is not null)
+                return;
+            }
+
+            ComboBoxCellTemplate.AutoComplete = value;
+            if (DataGridView is null)
+            {
+                return;
+            }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                 {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
-                        {
-                            dataGridViewCell.AutoComplete = value;
-                        }
-                    }
+                    dataGridViewCell.AutoComplete = value;
                 }
             }
         }
@@ -60,39 +64,34 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public override DataGridViewCell CellTemplate
+    public override DataGridViewCell? CellTemplate
     {
         get => base.CellTemplate;
         set
         {
-            DataGridViewComboBoxCell dataGridViewComboBoxCell = value as DataGridViewComboBoxCell;
+            DataGridViewComboBoxCell? dataGridViewComboBoxCell = value as DataGridViewComboBoxCell;
             if (value is not null && dataGridViewComboBoxCell is null)
             {
                 throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewComboBoxCell"));
             }
 
             base.CellTemplate = value;
-            if (value is not null)
+            if (dataGridViewComboBoxCell is not null)
             {
                 dataGridViewComboBoxCell.TemplateComboBoxColumn = this;
             }
         }
     }
 
-    private DataGridViewComboBoxCell ComboBoxCellTemplate
-    {
-        get
-        {
-            return (DataGridViewComboBoxCell)CellTemplate;
-        }
-    }
+    private DataGridViewComboBoxCell? ComboBoxCellTemplate => (DataGridViewComboBoxCell?)CellTemplate;
 
     [DefaultValue(null)]
     [SRCategory(nameof(SR.CatData))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnDataSourceDescr))]
     [RefreshProperties(RefreshProperties.Repaint)]
     [AttributeProvider(typeof(IListSource))]
-    public object DataSource
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
+    public object? DataSource
     {
         get
         {
@@ -105,27 +104,29 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
         set
         {
-            if (ComboBoxCellTemplate is null)
+            if (DataSource == value)
             {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
+                return;
             }
 
             ComboBoxCellTemplate.DataSource = value;
-            if (DataGridView is not null)
+            if (DataGridView is null)
             {
-                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                int rowCount = dataGridViewRows.Count;
-                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
-                    {
-                        dataGridViewCell.DataSource = value;
-                    }
-                }
-
-                DataGridView.OnColumnCommonChange(Index);
+                return;
             }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
+                {
+                    dataGridViewCell.DataSource = value;
+                }
+            }
+
+            DataGridView.OnColumnCommonChange(Index);
         }
     }
 
@@ -134,6 +135,8 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayMemberDescr))]
     [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {AssemblyRef.SystemDesign}")]
     [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
+    [AllowNull]
     public string DisplayMember
     {
         get
@@ -147,33 +150,36 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
         set
         {
-            if (ComboBoxCellTemplate is null)
+            if (DisplayMember == value)
             {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
+                return;
             }
 
             ComboBoxCellTemplate.DisplayMember = value;
-            if (DataGridView is not null)
+            if (DataGridView is null)
             {
-                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                int rowCount = dataGridViewRows.Count;
-                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
-                    {
-                        dataGridViewCell.DisplayMember = value;
-                    }
-                }
-
-                DataGridView.OnColumnCommonChange(Index);
+                return;
             }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
+                {
+                    dataGridViewCell.DisplayMember = value;
+                }
+            }
+
+            DataGridView.OnColumnCommonChange(Index);
         }
     }
 
     [DefaultValue(DataGridViewComboBoxDisplayStyle.DropDownButton)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayStyleDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public DataGridViewComboBoxDisplayStyle DisplayStyle
     {
         get
@@ -187,34 +193,37 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
         set
         {
-            if (ComboBoxCellTemplate is null)
+            if (DisplayStyle == value)
             {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
+                return;
             }
 
             ComboBoxCellTemplate.DisplayStyle = value;
-            if (DataGridView is not null)
+            if (DataGridView is null)
             {
-                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                int rowCount = dataGridViewRows.Count;
-                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
-                    {
-                        dataGridViewCell.DisplayStyleInternal = value;
-                    }
-                }
-
-                // Calling InvalidateColumn instead of OnColumnCommonChange because DisplayStyle does not affect preferred size.
-                DataGridView.InvalidateColumn(Index);
+                return;
             }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
+                {
+                    dataGridViewCell.DisplayStyleInternal = value;
+                }
+            }
+
+            // Calling InvalidateColumn instead of OnColumnCommonChange because DisplayStyle does not affect preferred size.
+            DataGridView.InvalidateColumn(Index);
         }
     }
 
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnDisplayStyleForCurrentCellOnlyDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public bool DisplayStyleForCurrentCellOnly
     {
         get
@@ -228,34 +237,37 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
         set
         {
-            if (ComboBoxCellTemplate is null)
+            if (DisplayStyleForCurrentCellOnly == value)
             {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
+                return;
             }
 
             ComboBoxCellTemplate.DisplayStyleForCurrentCellOnly = value;
-            if (DataGridView is not null)
+            if (DataGridView is null)
             {
-                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                int rowCount = dataGridViewRows.Count;
-                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
-                    {
-                        dataGridViewCell.DisplayStyleForCurrentCellOnlyInternal = value;
-                    }
-                }
-
-                // Calling InvalidateColumn instead of OnColumnCommonChange because DisplayStyleForCurrentCellOnly does not affect preferred size.
-                DataGridView.InvalidateColumn(Index);
+                return;
             }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
+                {
+                    dataGridViewCell.DisplayStyleForCurrentCellOnlyInternal = value;
+                }
+            }
+
+            // Calling InvalidateColumn instead of OnColumnCommonChange because DisplayStyleForCurrentCellOnly does not affect preferred size.
+            DataGridView.InvalidateColumn(Index);
         }
     }
 
     [DefaultValue(1)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnDropDownWidthDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public int DropDownWidth
     {
         get
@@ -269,21 +281,25 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
         set
         {
-            if (DropDownWidth != value)
+            if (DropDownWidth == value)
             {
-                ComboBoxCellTemplate.DropDownWidth = value;
-                if (DataGridView is not null)
+                return;
+            }
+
+            ComboBoxCellTemplate.DropDownWidth = value;
+            if (DataGridView is null)
+            {
+                return;
+            }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                 {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
-                        {
-                            dataGridViewCell.DropDownWidth = value;
-                        }
-                    }
+                    dataGridViewCell.DropDownWidth = value;
                 }
             }
         }
@@ -292,38 +308,43 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [DefaultValue(FlatStyle.Standard)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnFlatStyleDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public FlatStyle FlatStyle
     {
         get
         {
-            if (CellTemplate is null)
+            if (ComboBoxCellTemplate is null)
             {
                 throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
             }
 
-            return ((DataGridViewComboBoxCell)CellTemplate).FlatStyle;
+            return ComboBoxCellTemplate.FlatStyle;
         }
         set
         {
-            if (FlatStyle != value)
+            if (FlatStyle == value)
             {
-                ((DataGridViewComboBoxCell)CellTemplate).FlatStyle = value;
-                if (DataGridView is not null)
-                {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
-                        {
-                            dataGridViewCell.FlatStyleInternal = value;
-                        }
-                    }
+                return;
+            }
 
-                    DataGridView.OnColumnCommonChange(Index);
+            ComboBoxCellTemplate.FlatStyle = value;
+            if (DataGridView is null)
+            {
+                return;
+            }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
+                {
+                    dataGridViewCell.FlatStyleInternal = value;
                 }
             }
+
+            DataGridView.OnColumnCommonChange(Index);
         }
     }
 
@@ -349,6 +370,8 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnValueMemberDescr))]
     [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {AssemblyRef.SystemDesign}")]
     [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
+    [AllowNull]
     public string ValueMember
     {
         get
@@ -362,33 +385,36 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
         set
         {
-            if (ComboBoxCellTemplate is null)
+            if (ValueMember == value)
             {
-                throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
+                return;
             }
 
             ComboBoxCellTemplate.ValueMember = value;
-            if (DataGridView is not null)
+            if (DataGridView is null)
             {
-                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                int rowCount = dataGridViewRows.Count;
-                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
-                    {
-                        dataGridViewCell.ValueMember = value;
-                    }
-                }
-
-                DataGridView.OnColumnCommonChange(Index);
+                return;
             }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
+                {
+                    dataGridViewCell.ValueMember = value;
+                }
+            }
+
+            DataGridView.OnColumnCommonChange(Index);
         }
     }
 
     [DefaultValue(DataGridViewComboBoxCell.DefaultMaxDropDownItems)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnMaxDropDownItemsDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public int MaxDropDownItems
     {
         get
@@ -402,21 +428,25 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
         set
         {
-            if (MaxDropDownItems != value)
+            if (MaxDropDownItems == value)
             {
-                ComboBoxCellTemplate.MaxDropDownItems = value;
-                if (DataGridView is not null)
+                return;
+            }
+
+            ComboBoxCellTemplate.MaxDropDownItems = value;
+            if (DataGridView is null)
+            {
+                return;
+            }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                 {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
-                        {
-                            dataGridViewCell.MaxDropDownItems = value;
-                        }
-                    }
+                    dataGridViewCell.MaxDropDownItems = value;
                 }
             }
         }
@@ -425,6 +455,7 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     [DefaultValue(false)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_ComboBoxColumnSortedDescr))]
+    [MemberNotNull(nameof(ComboBoxCellTemplate))]
     public bool Sorted
     {
         get
@@ -438,21 +469,25 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
         set
         {
-            if (Sorted != value)
+            if (Sorted == value)
             {
-                ComboBoxCellTemplate.Sorted = value;
-                if (DataGridView is not null)
+                return;
+            }
+
+            ComboBoxCellTemplate.Sorted = value;
+            if (DataGridView is null)
+            {
+                return;
+            }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
                 {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
-                        {
-                            dataGridViewCell.Sorted = value;
-                        }
-                    }
+                    dataGridViewCell.Sorted = value;
                 }
             }
         }
@@ -469,16 +504,11 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
         }
         else
         {
-            //
-
-            dataGridViewColumn = (DataGridViewComboBoxColumn)System.Activator.CreateInstance(thisType);
+            dataGridViewColumn = (DataGridViewComboBoxColumn)Activator.CreateInstance(thisType)!;
         }
 
-        if (dataGridViewColumn is not null)
-        {
-            base.CloneInternal(dataGridViewColumn);
-            ((DataGridViewComboBoxCell)dataGridViewColumn.CellTemplate).TemplateComboBoxColumn = dataGridViewColumn;
-        }
+        base.CloneInternal(dataGridViewColumn);
+        dataGridViewColumn.ComboBoxCellTemplate!.TemplateComboBoxColumn = dataGridViewColumn;
 
         return dataGridViewColumn;
     }
@@ -487,29 +517,29 @@ public class DataGridViewComboBoxColumn : DataGridViewColumn
     {
         // Items collection of the CellTemplate was changed.
         // Update the items collection of each existing DataGridViewComboBoxCell in the column.
-        if (DataGridView is not null)
+        if (DataGridView is null)
         {
-            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-            int rowCount = dataGridViewRows.Count;
-            object[] items = ((DataGridViewComboBoxCell)CellTemplate).Items.InnerArray.ToArray();
-            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-            {
-                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
-                {
-                    dataGridViewCell.Items.ClearInternal();
-                    dataGridViewCell.Items.AddRangeInternal(items);
-                }
-            }
-
-            DataGridView.OnColumnCommonChange(Index);
+            return;
         }
+
+        DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+        int rowCount = dataGridViewRows.Count;
+        object[] items = ComboBoxCellTemplate!.Items.InnerArray.ToArray();
+        for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+        {
+            DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+            if (dataGridViewRow.Cells[Index] is DataGridViewComboBoxCell dataGridViewCell)
+            {
+                dataGridViewCell.Items.ClearInternal();
+                dataGridViewCell.Items.AddRangeInternal(items);
+            }
+        }
+
+        DataGridView.OnColumnCommonChange(Index);
     }
 
     /// <summary>
     /// </summary>
-    public override string ToString()
-    {
-        return $"DataGridViewComboBoxColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewComboBoxColumn {{ Name={Name}, Index={Index} }}";
 }

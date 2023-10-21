@@ -148,7 +148,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     {
         get
         {
-            Type valueType = base.ValueType;
+            Type? valueType = base.ValueType;
             if (valueType is not null)
             {
                 return valueType;

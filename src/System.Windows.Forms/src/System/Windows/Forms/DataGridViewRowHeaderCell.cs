@@ -536,8 +536,10 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
 
         ArgumentNullException.ThrowIfNull(cellStyle);
 
-        DataGridViewAdvancedBorderStyle dgvabsPlaceholder = new(), dgvabsEffective;
-        dgvabsEffective = OwningRow.AdjustRowHeaderBorderStyle(
+        DataGridViewAdvancedBorderStyle dgvabsPlaceholder = new();
+
+        Debug.Assert(OwningRow is not null);
+        DataGridViewAdvancedBorderStyle dgvabsEffective = OwningRow.AdjustRowHeaderBorderStyle(
             DataGridView.AdvancedRowHeadersBorderStyle,
             dgvabsPlaceholder,
             singleVerticalBorderAdded: false,

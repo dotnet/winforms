@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -14,24 +12,16 @@ namespace System.ComponentModel.Design.Serialization;
 ///  This class performs the same tasks as a CodeDomSerializer only serializing an object through this class defines a new type.
 /// </summary>
 [DefaultSerializationProvider(typeof(CodeDomSerializationProvider))]
-public class TypeCodeDomSerializer : CodeDomSerializerBase
+public partial class TypeCodeDomSerializer : CodeDomSerializerBase
 {
     // Used only during deserialization to provide name to object mapping.
-    private IDictionary _nameTable;
-    private Dictionary<string, OrderedCodeStatementCollection> _statementTable;
-    private static readonly Attribute[] s_designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
+    private IDictionary? _nameTable;
+    private Dictionary<string, OrderedCodeStatementCollection>? _statementTable;
+    private static readonly Attribute[] s_designTimeFilter = { DesignOnlyAttribute.Yes };
     private static readonly object s_initMethodKey = new();
-    private static TypeCodeDomSerializer s_default;
+    private static TypeCodeDomSerializer? s_default;
 
-    internal static TypeCodeDomSerializer Default
-    {
-        get
-        {
-            s_default ??= new TypeCodeDomSerializer();
-
-            return s_default;
-        }
-    }
+    internal static TypeCodeDomSerializer Default => s_default ??= new TypeCodeDomSerializer();
 
     /// <summary>
     ///  This method deserializes a previously serialized code type declaration. The default implementation performs the following tasks:
@@ -44,12 +34,12 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
         ArgumentNullException.ThrowIfNull(manager);
         ArgumentNullException.ThrowIfNull(declaration);
 
-        object rootObject = null;
+        object rootObject;
         using (TraceScope("TypeCodeDomSerializer::Deserialize"))
         {
             // Determine case-sensitivity
             bool caseInsensitive = false;
-            CodeDomProvider provider = manager.GetService(typeof(CodeDomProvider)) as CodeDomProvider;
+            CodeDomProvider? provider = manager.GetService<CodeDomProvider>();
             TraceIf(TraceLevel.Warning, provider is null, "Unable to determine case sensitivity. Make sure CodeDomProvider is a service of the manager.");
             if (provider is not null)
             {
@@ -57,12 +47,12 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
             }
 
             // Get and initialize the document type.
-            Type baseType = null;
+            Type? baseType = null;
             string baseTypeName = declaration.Name;
 
             foreach (CodeTypeReference typeRef in declaration.BaseTypes)
             {
-                Type t = manager.GetType(GetTypeNameFromCodeTypeReference(manager, typeRef));
+                Type? t = manager.GetType(GetTypeNameFromCodeTypeReference(manager, typeRef));
                 baseTypeName = typeRef.BaseType;
                 if (t is not null && !(t.IsInterface))
                 {
@@ -145,19 +135,19 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
                 }
 
                 // Interesting problem.  The CodeDom parser may auto generate statements that are associated with other methods. VB does this, for example, to  create statements automatically for Handles clauses.  The problem with this technique is that we will end up with statements that are related to variables that live solely in user code and not in InitializeComponent. We will attempt to construct instances of these objects with limited success. To guard against this, we check to see if the manager even supports this feature, and if it does, we must look out for these statements while filling the statement collections.
-                PropertyDescriptor supportGenerate = manager.Properties["SupportsStatementGeneration"];
-                if (supportGenerate is not null && supportGenerate.PropertyType == typeof(bool) && ((bool)supportGenerate.GetValue(manager)))
+                PropertyDescriptor? supportGenerate = manager.Properties["SupportsStatementGeneration"];
+                if (supportGenerate is not null && supportGenerate.TryGetValue(manager, out bool supportGenerateValue) && supportGenerateValue)
                 {
                     // Ok, we must do the more expensive work of validating the statements we get.
                     foreach (string name in _nameTable.Keys)
                     {
-                        if (!name.Equals(declaration.Name) && _statementTable.TryGetValue(name, out OrderedCodeStatementCollection statements))
+                        if (!name.Equals(declaration.Name) && _statementTable.TryGetValue(name, out OrderedCodeStatementCollection? statements))
                         {
                             bool acceptStatement = false;
                             foreach (CodeStatement statement in statements)
                             {
-                                object genFlag = statement.UserData["GeneratedStatement"];
-                                if (genFlag is null || !(genFlag is bool) || !((bool)genFlag))
+                                object? genFlag = statement.UserData["GeneratedStatement"];
+                                if (genFlag is not true)
                                 {
                                     acceptStatement = true;
                                     break;
@@ -186,7 +176,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
                 _statementTable.Values.CopyTo(statementArray, 0);
                 Array.Sort(statementArray, StatementOrderComparer.s_default);
                 // make sure we have fully deserialized everything that is referenced in the statement table. Skip the root object for last
-                OrderedCodeStatementCollection rootStatements = null;
+                OrderedCodeStatementCollection? rootStatements = null;
                 foreach (OrderedCodeStatementCollection statements in statementArray)
                 {
                     if (statements.Name.Equals(declaration.Name))
@@ -220,16 +210,16 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
     /// <summary>
     ///  This takes the given name and deserializes it from our name table.  Before blindly deserializing it checks the contents of the name table to see if the object already exists within it. We do this because deserializing one object may call back into us through OnResolveName and deserialize another.
     /// </summary>
-    private object DeserializeName(IDesignerSerializationManager manager, string name, CodeStatementCollection statements)
+    private object? DeserializeName(IDesignerSerializationManager manager, string name, CodeStatementCollection? statements)
     {
-        object value = null;
+        object? value = null;
         using (TraceScope("RootCodeDomSerializer::DeserializeName"))
         {
             // If the name we're looking for isn't in our dictionary, we return null.  It is up to the caller to decide if this is an error or not.
-            value = _nameTable[name];
-            CodeObject codeObject = value as CodeObject;
-            string typeName = null;
-            CodeMemberField field = null;
+            value = _nameTable![name];
+            CodeObject? codeObject = value as CodeObject;
+            string? typeName = null;
+            CodeMemberField? field = null;
             TraceIf(TraceLevel.Verbose, codeObject is null, $"Name already deserialized.  Type: {(value is null ? "(null)" : value.GetType().Name)}");
             if (codeObject is not null)
             {
@@ -249,28 +239,25 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
                     {
                         typeName = GetTypeNameFromCodeTypeReference(manager, field.Type);
                     }
+                    else if (manager.TryGetContext(out RootContext? rootCtx) && codeObject is CodeExpression exp && rootCtx.Expression == exp)
+                    {
+                        value = rootCtx.Value;
+                        typeName = TypeDescriptor.GetClassName(value);
+                    }
                     else
                     {
-                        if (manager.Context[typeof(RootContext)] is RootContext rootCtx && codeObject is CodeExpression exp && rootCtx.Expression == exp)
-                        {
-                            value = rootCtx.Value;
-                            typeName = TypeDescriptor.GetClassName(value);
-                        }
-                        else
-                        {
-                            Debug.Fail("Unrecognized code object in nametable.");
-                        }
+                        Debug.Fail("Unrecognized code object in nametable.");
                     }
                 }
             }
             else if (value is null)
             {
                 // See if the container has this object.  This may be necessary for visual inheritance.
-                IContainer container = (IContainer)manager.GetService(typeof(IContainer));
+                IContainer? container = manager.GetService<IContainer>();
                 if (container is not null)
                 {
                     Trace(TraceLevel.Verbose, $"Try to get the type name from the container: {name}");
-                    IComponent comp = container.Components[name];
+                    IComponent? comp = container.Components[name];
                     if (comp is not null)
                     {
                         typeName = comp.GetType().FullName;
@@ -283,7 +270,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
             if (typeName is not null)
             {
                 // Default case -- something that needs to be deserialized
-                Type type = manager.GetType(typeName);
+                Type? type = manager.GetType(typeName);
                 if (type is null)
                 {
                     Trace(TraceLevel.Error, $"Type does not exist: {typeName}");
@@ -291,14 +278,14 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
                 }
                 else
                 {
-                    if (statements is null && _statementTable.TryGetValue(name, out OrderedCodeStatementCollection statementOut))
+                    if (statements is null && _statementTable!.TryGetValue(name, out OrderedCodeStatementCollection? statementOut))
                     {
                         statements = statementOut;
                     }
 
                     if (statements is not null && statements.Count > 0)
                     {
-                        CodeDomSerializer serializer = GetSerializer(manager, type);
+                        CodeDomSerializer? serializer = GetSerializer(manager, type);
                         if (serializer is null)
                         {
                             // We report this as an error.  This indicates that there are code statements in initialize component that we do not know how to load.
@@ -320,7 +307,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
                                 // Search for a modifiers property, and set it.
                                 if (value is not null && field is not null)
                                 {
-                                    PropertyDescriptor prop = TypeDescriptor.GetProperties(value)["Modifiers"];
+                                    PropertyDescriptor? prop = TypeDescriptor.GetProperties(value)["Modifiers"];
 
                                     if (prop is not null && prop.PropertyType == typeof(MemberAttributes))
                                     {
@@ -354,7 +341,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
         ArgumentNullException.ThrowIfNull(declaration);
         ArgumentNullException.ThrowIfNull(value);
 
-        if (!(declaration.UserData[s_initMethodKey] is CodeConstructor ctor))
+        if (declaration.UserData[s_initMethodKey] is not CodeConstructor ctor)
         {
             ctor = new CodeConstructor();
             declaration.UserData[s_initMethodKey] = ctor;
@@ -385,7 +372,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
     /// <summary>
     ///  Called by the serialization manager to resolve a name to an object.
     /// </summary>
-    private void OnResolveName(object sender, ResolveNameEventArgs e)
+    private void OnResolveName(object? sender, ResolveNameEventArgs e)
     {
         Debug.Assert(_nameTable is not null, "OnResolveName called and we are not deserializing!");
         using (TraceScope("RootCodeDomSerializer::OnResolveName"))
@@ -398,8 +385,8 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
             }
             else
             {
-                IDesignerSerializationManager manager = (IDesignerSerializationManager)sender;
-                e.Value = DeserializeName(manager, e.Name, null);
+                IDesignerSerializationManager manager = (IDesignerSerializationManager)sender!;
+                e.Value = DeserializeName(manager, e.Name!, null);
             }
         }
     }
@@ -412,7 +399,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
     ///  •    Root Serialization.  Finally, the root object is serialized and its statements are added to the statement collection.
     ///  •    Statement Integration.  After all objects have been serialized the Serialize method orders the statements and adds them to a method returned from GetInitializeMethod.  Finally, a constructor is fabricated that calls all of the methods returned from GetInitializeMethod (this step is skipped for cases when GetInitializeMethod returns a constructor.
     /// </summary>
-    public virtual CodeTypeDeclaration Serialize(IDesignerSerializationManager manager, object root, ICollection members)
+    public virtual CodeTypeDeclaration Serialize(IDesignerSerializationManager manager, object root, ICollection? members)
     {
         ArgumentNullException.ThrowIfNull(manager);
         ArgumentNullException.ThrowIfNull(root);
@@ -420,7 +407,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
         Trace(TraceLevel.Verbose, "TypeCodeDomSerializer::Serialize");
 
         // As a type serializer we are responsible for creating the type declaration. Other serializers may access this type declaration and add members to it, so we need to place it on the context stack. The serialization process also looks at the root context to see if there is a root component. The root context is also used by the serializers to add statement collections for serialized components.
-        CodeTypeDeclaration docType = new CodeTypeDeclaration(manager.GetName(root));
+        CodeTypeDeclaration docType = new CodeTypeDeclaration(manager.GetName(root)!);
         CodeThisReferenceExpression thisRef = new CodeThisReferenceExpression();
         RootContext rootCtx = new RootContext(thisRef, root);
         StatementContext statementCtx = new StatementContext();
@@ -445,7 +432,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
                     if (member != root)
                     {
 #if DEBUG
-                        string memberName = manager.GetName(member);
+                        string? memberName = manager.GetName(member);
                         memberName ??= member.ToString();
 
                         Trace(TraceLevel.Verbose,
@@ -463,7 +450,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
 
             // Now do the root object last.
 #if DEBUG
-            string rootName = manager.GetName(root);
+            string? rootName = manager.GetName(root);
             rootName ??= root.ToString();
 
             Trace(TraceLevel.Verbose,
@@ -500,10 +487,9 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
     /// <summary>
     ///  Takes the statement context and integrates all the statements into the correct methods.  Then, those methods are added to the code type declaration.
     /// </summary>
-    private void IntegrateStatements(IDesignerSerializationManager manager, object root, ICollection members, StatementContext statementCtx, CodeTypeDeclaration typeDecl)
+    private void IntegrateStatements(IDesignerSerializationManager manager, object root, ICollection? members, StatementContext statementCtx, CodeTypeDeclaration typeDecl)
     {
-        Dictionary<string, int> methodMapIndex = new Dictionary<string, int>();
-        List<CodeMethodMap> methodMap = new List<CodeMethodMap>();
+        Dictionary<string, CodeMethodMap> methodMap = new Dictionary<string, CodeMethodMap>();
         // Go through all of our members and root object and fish out matching statement context info for each object.  The statement context will probably contain more objects than our members, because each object that returned a statement collection was placed in the context. That's fine, because for each major component we serialized it pushed its statement collection on the context stack and statements were added there as well, forming a complete graph.
         if (members is not null)
         {
@@ -511,7 +497,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
             {
                 if (member != root)
                 { // always skip the root and do it last
-                    CodeStatementCollection statements = statementCtx.StatementCollection[member];
+                    CodeStatementCollection? statements = statementCtx.StatementCollection[member];
                     if (statements is not null)
                     {
                         CodeMemberMethod method = GetInitializeMethod(manager, typeDecl, member);
@@ -520,16 +506,10 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
                             throw new InvalidOperationException();
                         }
 
-                        CodeMethodMap map;
-                        if (methodMapIndex.TryGetValue(method.Name, out int mapIndex))
-                        {
-                            map = methodMap[mapIndex];
-                        }
-                        else
+                        if (!methodMap.TryGetValue(method.Name, out CodeMethodMap? map))
                         {
                             map = new CodeMethodMap(method);
-                            methodMap.Add(map);
-                            methodMapIndex[method.Name] = methodMap.Count - 1;
+                            methodMap[method.Name] = map;
                         }
 
                         if (statements.Count > 0)
@@ -542,7 +522,7 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
         }
 
         // Finally, do the same thing for the root object.
-        CodeStatementCollection rootStatements = statementCtx.StatementCollection[root];
+        CodeStatementCollection? rootStatements = statementCtx.StatementCollection[root];
         if (rootStatements is not null)
         {
             CodeMemberMethod rootMethod = GetInitializeMethod(manager, typeDecl, root);
@@ -551,16 +531,10 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
                 throw new InvalidOperationException();
             }
 
-            CodeMethodMap rootMap;
-            if (methodMapIndex.TryGetValue(rootMethod.Name, out int rootMapIndex))
-            {
-                rootMap = methodMap[rootMapIndex];
-            }
-            else
+            if (!methodMap.TryGetValue(rootMethod.Name, out CodeMethodMap? rootMap))
             {
                 rootMap = new CodeMethodMap(rootMethod);
-                methodMap.Add(rootMap);
-                methodMapIndex[rootMethod.Name] = methodMap.Count - 1;
+                methodMap[rootMethod.Name] = rootMap;
             }
 
             if (rootStatements.Count > 0)
@@ -570,42 +544,11 @@ public class TypeCodeDomSerializer : CodeDomSerializerBase
         }
 
         // Final step -- walk through all of the sections and emit them to the type declaration.
-        foreach (CodeMethodMap map in methodMap)
+        foreach (CodeMethodMap map in methodMap.Values)
         {
             map.Combine();
             typeDecl.Members.Add(map.Method);
-            Trace(TraceLevel.Verbose, $"...generated {map.Method.Statements.Count} statements into method {map.Method.Name}");
+            Trace(TraceLevel.Verbose, $"...generated {map.Method!.Statements.Count} statements into method {map.Method.Name}");
         }
     }
-
-    #region OrderedStatementsCollection Class
-    private class StatementOrderComparer : IComparer
-    {
-        public static readonly StatementOrderComparer s_default = new();
-
-        private StatementOrderComparer()
-        {
-        }
-
-        public int Compare(object left, object right)
-        {
-            OrderedCodeStatementCollection cscLeft = left as OrderedCodeStatementCollection;
-            OrderedCodeStatementCollection cscRight = right as OrderedCodeStatementCollection;
-            if (left is null)
-            {
-                return 1;
-            }
-            else if (right is null)
-            {
-                return -1;
-            }
-            else if (right == left)
-            {
-                return 0;
-            }
-
-            return cscLeft.Order - cscRight.Order;
-        }
-    }
-    #endregion
 }

@@ -45,6 +45,14 @@ internal static class OsVersion
     public static bool IsWindows11_OrGreater() => OperatingSystem.IsWindowsVersionAtLeast(major: 10, build: 22000);
 
     /// <summary>
+    ///  Is this Windows 11 version 22H2 or greater?
+    ///  The underlying API does not read supportedOs from the manifest, it returns the actual version.
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SupportedOSPlatformGuard("windows11.0.22621")]
+    public static bool IsWindows11_22H2OrGreater() => OperatingSystem.IsWindowsVersionAtLeast(major: 10, build: 22621);
+
+    /// <summary>
     ///  Is Windows 8.1 or later.
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
