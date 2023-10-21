@@ -90,18 +90,12 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     /// <returns>
     ///  AccessibleObject for this DataGridViewComboBoxCell instance.
     /// </returns>
-    protected override AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewComboBoxCellAccessibleObject(this);
-    }
+    protected override AccessibleObject CreateAccessibilityInstance() => new DataGridViewComboBoxCellAccessibleObject(this);
 
     [DefaultValue(true)]
     public virtual bool AutoComplete
     {
-        get
-        {
-            return ((_flags & CellAutoComplete) != 0x00);
-        }
+        get => (_flags & CellAutoComplete) != 0x00;
         set
         {
             if (value != AutoComplete)
@@ -134,10 +128,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
     private CurrencyManager? DataManager
     {
-        get
-        {
-            return GetDataManager(DataGridView);
-        }
+        get => GetDataManager(DataGridView);
         set
         {
             if (value is not null || Properties.ContainsObject(s_propComboBoxCellDataManager))
@@ -149,10 +140,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
     public virtual object? DataSource
     {
-        get
-        {
-            return Properties.GetObject(s_propComboBoxCellDataSource);
-        }
+        get => Properties.GetObject(s_propComboBoxCellDataSource);
         set
         {
             // Same check as for ListControl's DataSource
@@ -260,10 +248,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
     private PropertyDescriptor? DisplayMemberProperty
     {
-        get
-        {
-            return (PropertyDescriptor?)Properties.GetObject(s_propComboBoxCellDisplayMemberProp);
-        }
+        get => (PropertyDescriptor?)Properties.GetObject(s_propComboBoxCellDisplayMemberProp);
         set
         {
             if (value is not null || Properties.ContainsObject(s_propComboBoxCellDisplayMemberProp))
@@ -383,20 +368,9 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
     }
 
-    private TypeConverter DisplayTypeConverter
-    {
-        get
-        {
-            if (DataGridView is not null)
-            {
-                return DataGridView.GetCachedTypeConverter(DisplayType);
-            }
-            else
-            {
-                return TypeDescriptor.GetConverter(DisplayType);
-            }
-        }
-    }
+    private TypeConverter DisplayTypeConverter => DataGridView is not null
+        ? DataGridView.GetCachedTypeConverter(DisplayType)
+        : TypeDescriptor.GetConverter(DisplayType);
 
     [DefaultValue(1)]
     public virtual int DropDownWidth
@@ -423,10 +397,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
     private DataGridViewComboBoxEditingControl? EditingComboBox
     {
-        get
-        {
-            return (DataGridViewComboBoxEditingControl?)Properties.GetObject(s_propComboBoxCellEditingComboBox);
-        }
+        get => (DataGridViewComboBoxEditingControl?)Properties.GetObject(s_propComboBoxCellEditingComboBox);
         set
         {
             if (value is not null || Properties.ContainsObject(s_propComboBoxCellEditingComboBox))
@@ -437,13 +408,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
-    public override Type EditType
-    {
-        get
-        {
-            return s_defaultEditType;
-        }
-    }
+    public override Type EditType => s_defaultEditType;
 
     [DefaultValue(FlatStyle.Standard)]
     public FlatStyle FlatStyle
@@ -487,13 +452,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     internal bool HasItems => Properties.ContainsObjectThatIsNotNull(s_propComboBoxCellItems);
 
     [Browsable(false)]
-    public virtual ObjectCollection Items
-    {
-        get
-        {
-            return GetItems(DataGridView);
-        }
-    }
+    public virtual ObjectCollection Items => GetItems(DataGridView);
 
     [DefaultValue(DefaultMaxDropDownItems)]
     public virtual int MaxDropDownItems
@@ -532,21 +491,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
     }
 
-    private static bool PostXPThemesExist
-    {
-        get
-        {
-            return VisualStyleRenderer.IsElementDefined(VisualStyleElement.ComboBox.ReadOnlyButton.Normal);
-        }
-    }
+    private static bool PostXPThemesExist =>
+        VisualStyleRenderer.IsElementDefined(VisualStyleElement.ComboBox.ReadOnlyButton.Normal);
 
     [DefaultValue(false)]
     public virtual bool Sorted
     {
-        get
-        {
-            return ((_flags & CellSorted) != 0x00);
-        }
+        get => (_flags & CellSorted) != 0x00;
         set
         {
             if (value != Sorted)
@@ -579,14 +530,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
     internal DataGridViewComboBoxColumn? TemplateComboBoxColumn
     {
-        get
-        {
-            return (DataGridViewComboBoxColumn?)Properties.GetObject(s_propComboBoxCellColumnTemplate);
-        }
-        set
-        {
-            Properties.SetObject(s_propComboBoxCellColumnTemplate, value);
-        }
+        get => (DataGridViewComboBoxColumn?)Properties.GetObject(s_propComboBoxCellColumnTemplate);
+        set => Properties.SetObject(s_propComboBoxCellColumnTemplate, value);
     }
 
     [DefaultValue("")]
@@ -634,10 +579,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
     private PropertyDescriptor? ValueMemberProperty
     {
-        get
-        {
-            return (PropertyDescriptor?)Properties.GetObject(s_propComboBoxCellValueMemberProp);
-        }
+        get => (PropertyDescriptor?)Properties.GetObject(s_propComboBoxCellValueMemberProp);
         set
         {
             if (value is not null || Properties.ContainsObject(s_propComboBoxCellValueMemberProp))
@@ -828,10 +770,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
     private bool CreateItemsFromDataSource
     {
-        get
-        {
-            return ((_flags & CellCreateItemsFromDataSource) != 0x00);
-        }
+        get => (_flags & CellCreateItemsFromDataSource) != 0x00;
         set
         {
             if (value)

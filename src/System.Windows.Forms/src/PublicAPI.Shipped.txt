@@ -105,7 +105,7 @@ override System.Windows.Forms.DataGridViewColumnHeaderCell.ToString() -> string!
 override System.Windows.Forms.DataGridViewComboBoxCell.Clone() -> object!
 override System.Windows.Forms.DataGridViewComboBoxCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.DataGridViewComboBoxCell.EditType.get -> System.Type!
-~override System.Windows.Forms.DataGridViewComboBoxCell.FormattedValueType.get -> System.Type
+override System.Windows.Forms.DataGridViewComboBoxCell.FormattedValueType.get -> System.Type!
 override System.Windows.Forms.DataGridViewComboBoxCell.GetContentBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewComboBoxCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewComboBoxCell.GetFormattedValue(object value, int rowIndex, ref System.Windows.Forms.DataGridViewCellStyle cellStyle, System.ComponentModel.TypeConverter valueTypeConverter, System.ComponentModel.TypeConverter formattedValueTypeConverter, System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
