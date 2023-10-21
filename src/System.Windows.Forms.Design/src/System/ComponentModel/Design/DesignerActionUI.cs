@@ -90,8 +90,7 @@ internal partial class DesignerActionUI : IDisposable
         _designerActionService.DesignerActionListsChanged += new DesignerActionListsChangedEventHandler(OnDesignerActionsChanged);
         _lastPanelComponent = null;
 
-        IComponentChangeService? cs = serviceProvider.GetService<IComponentChangeService>();
-        if (cs is not null)
+        if (serviceProvider.TryGetService(out IComponentChangeService? cs))
         {
             cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
         }
@@ -102,8 +101,7 @@ internal partial class DesignerActionUI : IDisposable
             menuCommandService.AddCommand(_cmdShowDesignerActions);
         }
 
-        IUIService? uiService = serviceProvider.GetService<IUIService>();
-        if (uiService is not null)
+        if (serviceProvider.TryGetService(out IUIService? uiService))
         {
             _mainParentWindow = uiService.GetDialogOwnerWindow();
         }
@@ -127,8 +125,7 @@ internal partial class DesignerActionUI : IDisposable
 
         if (_serviceProvider is not null)
         {
-            IComponentChangeService? cs = _serviceProvider.GetService<IComponentChangeService>();
-            if (cs is not null)
+            if (_serviceProvider.TryGetService(out IComponentChangeService? cs))
             {
                 cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
             }
@@ -518,7 +515,7 @@ internal partial class DesignerActionUI : IDisposable
         _componentToGlyph.Remove(relatedObject);
 
         // we only do this when we're in a transaction, see bug VSWHIDBEY 418709. This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
-        if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost { InTransaction: true } host)
+        if (_serviceProvider.TryGetService(out IDesignerHost? host) && host.InTransaction)
         {
             host.TransactionClosed += new DesignerTransactionCloseEventHandler(InvalidateGlyphOnLastTransaction);
             _relatedGlyphTransaction = glyph;
