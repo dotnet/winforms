@@ -16,34 +16,34 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion>8.0.0-rtm.23519.13</VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion>
-    <SystemDiagnosticsEventLogPackageVersion>8.0.0-rtm.23519.13</SystemDiagnosticsEventLogPackageVersion>
-    <SystemDirectoryServicesPackageVersion>8.0.0-rtm.23519.13</SystemDirectoryServicesPackageVersion>
-    <SystemReflectionMetadataLoadContextPackageVersion>8.0.0-rtm.23519.13</SystemReflectionMetadataLoadContextPackageVersion>
-    <SystemSecurityCryptographyXmlPackageVersion>8.0.0-rtm.23519.13</SystemSecurityCryptographyXmlPackageVersion>
-    <SystemIOPackagingPackageVersion>8.0.0-rtm.23519.13</SystemIOPackagingPackageVersion>
+    <VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion>8.0.0-rtm.23520.9</VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion>
+    <SystemDiagnosticsEventLogPackageVersion>8.0.0-rtm.23520.9</SystemDiagnosticsEventLogPackageVersion>
+    <SystemDirectoryServicesPackageVersion>8.0.0-rtm.23520.9</SystemDirectoryServicesPackageVersion>
+    <SystemReflectionMetadataLoadContextPackageVersion>8.0.0-rtm.23520.9</SystemReflectionMetadataLoadContextPackageVersion>
+    <SystemSecurityCryptographyXmlPackageVersion>8.0.0-rtm.23520.9</SystemSecurityCryptographyXmlPackageVersion>
+    <SystemIOPackagingPackageVersion>8.0.0-rtm.23520.9</SystemIOPackagingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>8.0.0-rtm.23519.13</MicrosoftNETCoreILDAsmPackageVersion>
-    <SystemDiagnosticsPerformanceCounterPackageVersion>8.0.0-rtm.23519.13</SystemDiagnosticsPerformanceCounterPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>8.0.0-rtm.23520.9</MicrosoftNETCoreILDAsmPackageVersion>
+    <SystemDiagnosticsPerformanceCounterPackageVersion>8.0.0-rtm.23520.9</SystemDiagnosticsPerformanceCounterPackageVersion>
     <SystemRuntimeCompilerServicesUnsafePackageVersion>6.0.0</SystemRuntimeCompilerServicesUnsafePackageVersion>
-    <SystemSecurityCryptographyPkcsPackageVersion>8.0.0-rtm.23519.13</SystemSecurityCryptographyPkcsPackageVersion>
-    <SystemSecurityCryptographyProtectedDataPackageVersion>8.0.0-rtm.23519.13</SystemSecurityCryptographyProtectedDataPackageVersion>
-    <SystemTextEncodingsWebPackageVersion>8.0.0-rtm.23519.13</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>8.0.0-rtm.23519.13</SystemTextJsonPackageVersion>
-    <SystemThreadingAccessControlPackageVersion>8.0.0-rtm.23519.13</SystemThreadingAccessControlPackageVersion>
-    <MicrosoftWin32RegistryAccessControlPackageVersion>8.0.0-rtm.23519.13</MicrosoftWin32RegistryAccessControlPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>8.0.0-rtm.23519.13</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>8.0.0-rtm.23519.13</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>8.0.0-rtm.23519.13</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>8.0.0-rtm.23519.13</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>8.0.0-rtm.23519.13</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>8.0.0-rtm.23519.13</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>8.0.0-rtm.23519.13</SystemResourcesExtensionsPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>8.0.0-rtm.23519.13</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>8.0.0-rtm.23519.13</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>8.0.0-rtm.23519.13</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>8.0.0-rtm.23519.13</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>8.0.0-rtm.23519.13</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <SystemSecurityCryptographyPkcsPackageVersion>8.0.0-rtm.23520.9</SystemSecurityCryptographyPkcsPackageVersion>
+    <SystemSecurityCryptographyProtectedDataPackageVersion>8.0.0-rtm.23520.9</SystemSecurityCryptographyProtectedDataPackageVersion>
+    <SystemTextEncodingsWebPackageVersion>8.0.0-rtm.23520.9</SystemTextEncodingsWebPackageVersion>
+    <SystemTextJsonPackageVersion>8.0.0-rtm.23520.9</SystemTextJsonPackageVersion>
+    <SystemThreadingAccessControlPackageVersion>8.0.0-rtm.23520.9</SystemThreadingAccessControlPackageVersion>
+    <MicrosoftWin32RegistryAccessControlPackageVersion>8.0.0-rtm.23520.9</MicrosoftWin32RegistryAccessControlPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>8.0.0-rtm.23520.9</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>8.0.0-rtm.23520.9</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>8.0.0-rtm.23520.9</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>8.0.0-rtm.23520.9</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>8.0.0-rtm.23520.9</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>8.0.0-rtm.23520.9</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>8.0.0-rtm.23520.9</SystemResourcesExtensionsPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>8.0.0-rtm.23520.9</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>8.0.0-rtm.23520.9</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>8.0.0-rtm.23520.9</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>8.0.0-rtm.23520.9</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>8.0.0-rtm.23520.9</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
