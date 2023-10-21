@@ -353,9 +353,9 @@ internal static class DesignerUtils
 
     public static bool UseSnapLines(IServiceProvider provider)
     {
+        ArgumentNullException.ThrowIfNull(provider);
         object optionValue = null;
-        DesignerOptionService options = provider.GetService<DesignerOptionService>();
-        if (options is not null)
+        if (provider.TryGetService(out DesignerOptionService options))
         {
             PropertyDescriptor snaplinesProp = options.Options.Properties["UseSnapLines"];
             if (snaplinesProp is not null)
@@ -374,20 +374,13 @@ internal static class DesignerUtils
 
     public static object GetOptionValue(IServiceProvider provider, string name)
     {
-        if (provider is null)
-        {
-            return null;
-        }
-
-        DesignerOptionService designerOptionService = provider.GetService<DesignerOptionService>();
-        if (designerOptionService is not null)
+        if (provider.TryGetService(out DesignerOptionService designerOptionService))
         {
             PropertyDescriptor prop = designerOptionService.Options.Properties[name];
             return prop?.GetValue(null);
         }
 
-        IDesignerOptionService optionService = provider.GetService<IDesignerOptionService>();
-        if (optionService is not null)
+        if (provider.TryGetService(out IDesignerOptionService optionService))
         {
             return optionService.GetOptionValue("WindowsFormsDesigner\\General", name);
         }
@@ -640,8 +633,8 @@ internal static class DesignerUtils
         }
 
         // Get the name creation service from the designer host
-        INameCreationService nameCreationService = host.GetService<INameCreationService>();
-        if (nameCreationService is null)
+        ArgumentNullException.ThrowIfNull(host);
+        if (!host.TryGetService(out INameCreationService nameCreationService))
         {
             return null;
         }
