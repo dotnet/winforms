@@ -56,10 +56,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     public virtual object? EditingCellFormattedValue
     {
-        get
-        {
-            return GetEditingCellFormattedValue(DataGridViewDataErrorContexts.Formatting);
-        }
+        get => GetEditingCellFormattedValue(DataGridViewDataErrorContexts.Formatting);
         set
         {
             if (FormattedValueType is null)
@@ -114,10 +111,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     public virtual bool EditingCellValueChanged
     {
-        get
-        {
-            return ((_flags & DATAGRIDVIEWCHECKBOXCELL_valueChanged) != 0);
-        }
+        get => (_flags & DATAGRIDVIEWCHECKBOXCELL_valueChanged) != 0;
         set
         {
             if (value)
@@ -226,10 +220,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     [DefaultValue(null)]
     public object? FalseValue
     {
-        get
-        {
-            return Properties.GetObject(PropFalseValue);
-        }
+        get => Properties.GetObject(PropFalseValue);
         set
         {
             if (value is not null || Properties.ContainsObject(PropFalseValue))
@@ -298,28 +289,12 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         }
     }
 
-    public override Type FormattedValueType
-    {
-        get
-        {
-            if (ThreeState)
-            {
-                return s_defaultCheckStateType;
-            }
-            else
-            {
-                return s_defaultBooleanType;
-            }
-        }
-    }
+    public override Type FormattedValueType => ThreeState ? s_defaultCheckStateType : s_defaultBooleanType;
 
     [DefaultValue(null)]
     public object? IndeterminateValue
     {
-        get
-        {
-            return Properties.GetObject(PropIndeterminateValue);
-        }
+        get => Properties.GetObject(PropIndeterminateValue);
         set
         {
             if (value is not null || Properties.ContainsObject(PropIndeterminateValue))
@@ -354,10 +329,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     [DefaultValue(false)]
     public bool ThreeState
     {
-        get
-        {
-            return ((_flags & DATAGRIDVIEWCHECKBOXCELL_threeState) != 0);
-        }
+        get => (_flags & DATAGRIDVIEWCHECKBOXCELL_threeState) != 0;
         set
         {
             if (ThreeState != value)
@@ -429,10 +401,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     [DefaultValue(null)]
     public object? TrueValue
     {
-        get
-        {
-            return Properties.GetObject(PropTrueValue);
-        }
+        get => Properties.GetObject(PropTrueValue);
         set
         {
             if (value is not null || Properties.ContainsObject(PropTrueValue))
@@ -521,20 +490,11 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                DataGridView.IsCurrentCellInEditMode;
     }
 
-    protected override bool ContentClickUnsharesRow(DataGridViewCellEventArgs e)
-    {
-        return CommonContentClickUnsharesRow(e);
-    }
+    protected override bool ContentClickUnsharesRow(DataGridViewCellEventArgs e) => CommonContentClickUnsharesRow(e);
 
-    protected override bool ContentDoubleClickUnsharesRow(DataGridViewCellEventArgs e)
-    {
-        return CommonContentClickUnsharesRow(e);
-    }
+    protected override bool ContentDoubleClickUnsharesRow(DataGridViewCellEventArgs e) => CommonContentClickUnsharesRow(e);
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewCheckBoxCellAccessibleObject(this);
-    }
+    protected override AccessibleObject CreateAccessibilityInstance() => new DataGridViewCheckBoxCellAccessibleObject(this);
 
     protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
     {
@@ -855,20 +815,12 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         return preferredSize;
     }
 
-    protected override bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex)
-    {
-        return e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift;
-    }
+    protected override bool KeyDownUnsharesRow(KeyEventArgs e, int rowIndex) =>
+        e.KeyCode == Keys.Space && !e.Alt && !e.Control && !e.Shift;
 
-    protected override bool KeyUpUnsharesRow(KeyEventArgs e, int rowIndex)
-    {
-        return e.KeyCode == Keys.Space;
-    }
+    protected override bool KeyUpUnsharesRow(KeyEventArgs e, int rowIndex) => e.KeyCode == Keys.Space;
 
-    protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
-    {
-        return e.Button == MouseButtons.Left;
-    }
+    protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e) => e.Button == MouseButtons.Left;
 
     protected override bool MouseEnterUnsharesRow(int rowIndex)
     {
@@ -876,15 +828,9 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         return ColumnIndex == DataGridView.MouseDownCellAddress.X && rowIndex == DataGridView.MouseDownCellAddress.Y;
     }
 
-    protected override bool MouseLeaveUnsharesRow(int rowIndex)
-    {
-        return (ButtonState & ButtonState.Pushed) != 0;
-    }
+    protected override bool MouseLeaveUnsharesRow(int rowIndex) => (ButtonState & ButtonState.Pushed) != 0;
 
-    protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
-    {
-        return e.Button == MouseButtons.Left;
-    }
+    protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e) => e.Button == MouseButtons.Left;
 
     private void NotifyDataGridViewOfValueChange()
     {
@@ -913,15 +859,9 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         }
     }
 
-    protected override void OnContentClick(DataGridViewCellEventArgs e)
-    {
-        OnCommonContentClick(e);
-    }
+    protected override void OnContentClick(DataGridViewCellEventArgs e) => OnCommonContentClick(e);
 
-    protected override void OnContentDoubleClick(DataGridViewCellEventArgs e)
-    {
-        OnCommonContentClick(e);
-    }
+    protected override void OnContentDoubleClick(DataGridViewCellEventArgs e) => OnCommonContentClick(e);
 #nullable disable
     protected override void OnKeyDown(KeyEventArgs e, int rowIndex)
     {
@@ -1803,10 +1743,8 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     /// <summary>
     ///  Gets the row Index and column Index of the cell.
     /// </summary>
-    public override string ToString()
-    {
-        return $"DataGridViewCheckBoxCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewCheckBoxCell {{ ColumnIndex={ColumnIndex}, RowIndex={RowIndex} }}";
 
     private void UpdateButtonState(ButtonState newButtonState, int rowIndex)
     {
