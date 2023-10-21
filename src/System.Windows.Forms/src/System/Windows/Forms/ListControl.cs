@@ -102,6 +102,7 @@ public abstract class ListControl : Control
     [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {AssemblyRef.SystemDesign}")]
     [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.ListControlDisplayMemberDescr))]
+    [AllowNull]
     public string DisplayMember
     {
         get => _displayMember.BindingMember;
@@ -285,6 +286,7 @@ public abstract class ListControl : Control
     [DefaultValue("")]
     [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.ListControlValueMemberDescr))]
+    [AllowNull]
     public string ValueMember
     {
         get => _valueMember.BindingMember;
