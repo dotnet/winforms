@@ -192,9 +192,13 @@ csharp_style_deconstructed_variable_declaration = true:suggestion
 # Modifier preferences
 visual_basic_preferred_modifier_order = Partial,Default,Private,Protected,Public,Friend,NotOverridable,Overridable,MustOverride,Overloads,Overrides,MustInherit,NotInheritable,Static,Shared,Shadows,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion
 
+# IDE0079: Remove unnecessary suppression
+dotnet_diagnostic.IDE0079.severity = none
+
 # Expression-level preferences
 dotnet_style_coalesce_expression = false:suggestion
 dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
+dotnet_style_coalesce_expression = false:suggestion
 dotnet_style_prefer_conditional_expression_over_assignment = false:silent
 dotnet_style_prefer_conditional_expression_over_return = false:silent
 

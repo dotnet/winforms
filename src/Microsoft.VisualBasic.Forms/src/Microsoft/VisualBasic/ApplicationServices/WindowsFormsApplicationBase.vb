@@ -880,7 +880,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             RemoveHandler MainForm.Load, AddressOf MainFormLoadingDone
 
             ' Now, we don't want to eat up a complete Processor Core just for waiting on the main form,
-            ' since this is eating up a LOT of enegery and workload, espacially on Notebooks and tablets.
+            ' since this is eating up a LOT of energy and workload, especially on Notebooks and tablets.
             If _splashScreenCompletionSource IsNot Nothing Then
 
                 _formLoadWaiter = New AutoResetEvent(False)
