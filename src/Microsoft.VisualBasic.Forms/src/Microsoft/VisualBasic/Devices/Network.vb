@@ -11,8 +11,6 @@ Imports System.Security
 Imports System.Threading
 
 Imports Microsoft.VisualBasic.CompilerServices
-Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
-Imports Microsoft.VisualBasic.CompilerServices.Utils
 Imports Microsoft.VisualBasic.FileIO
 Imports Microsoft.VisualBasic.MyServices.Internal
 
@@ -134,7 +132,6 @@ Namespace Microsoft.VisualBasic.Devices
             ' We're safe from Ping(Nothing, ...) due to overload failure (Ping(String,...) vs. Ping(Uri,...)).
             ' However, it is good practice to verify address before calling address.Host.
             If address Is Nothing Then
-#Disable Warning IDE0002 ' Simplify Member Access
                 Throw ExceptionUtils.GetArgumentNullException("address")
             End If
             Return Ping(address.Host, DEFAULT_PING_TIMEOUT)
@@ -355,7 +352,7 @@ Namespace Microsoft.VisualBasic.Devices
                                             overwrite As Boolean,
                                             onUserCancel As UICancelOption) As Task
             If connectionTimeout <= 0 Then
-                Throw GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
+                Throw ExceptionUtils.GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
             End If
 
             If addressUri Is Nothing Then
@@ -380,7 +377,7 @@ Namespace Microsoft.VisualBasic.Devices
 
             'Throw if the file exists and the user doesn't want to overwrite
             If IO.File.Exists(fullFilename) And Not overwrite Then
-                Throw New IO.IOException(GetResourceString(SR.IO_FileExists_Path, destinationFileName))
+                Throw New IO.IOException(Utils.GetResourceString(SR.IO_FileExists_Path, destinationFileName))
             End If
 
             'Check to see if the target directory exists. If it doesn't, create it
@@ -511,8 +508,8 @@ Namespace Microsoft.VisualBasic.Devices
                     'Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
                     dialog = New ProgressDialog With {
-                    .Text = GetResourceString(SR.ProgressDialogDownloadingTitle, address),
-                    .LabelText = GetResourceString(SR.ProgressDialogDownloadingLabel, address, fullFilename)
+                    .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
+                    .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address, fullFilename)
                 }
                 End If
 
@@ -569,8 +566,8 @@ Namespace Microsoft.VisualBasic.Devices
                     'Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
                     dialog = New ProgressDialog With {
-                .Text = GetResourceString(SR.ProgressDialogDownloadingTitle, address),
-                .LabelText = GetResourceString(SR.ProgressDialogDownloadingLabel, address, fullFilename)
+                .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address),
+                .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address, fullFilename)
             }
                 End If
 
@@ -614,8 +611,8 @@ Namespace Microsoft.VisualBasic.Devices
                     'Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
                     dialog = New ProgressDialog With {
-                .Text = GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
-                .LabelText = GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
+                .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
+                .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
             }
                 End If
                 Dim t As Task = DownloadFileAsync(address, destinationFileName, userName, password,
@@ -663,8 +660,8 @@ Namespace Microsoft.VisualBasic.Devices
                     'Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
                     dialog = New ProgressDialog With {
-                    .Text = GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
-                    .LabelText = GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
+                    .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
+                    .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
                 }
                 End If
 
@@ -707,8 +704,8 @@ Namespace Microsoft.VisualBasic.Devices
                     'Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
                     dialog = New ProgressDialog With {
-                    .Text = GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
-                    .LabelText = GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
+                    .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
+                    .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
                 }
                 End If
 
@@ -747,7 +744,7 @@ Namespace Microsoft.VisualBasic.Devices
                 overwrite As Boolean,
                 onUserCancel As UICancelOption)
             If connectionTimeout <= 0 Then
-                Throw GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
+                Throw ExceptionUtils.GetArgumentExceptionWithArgName("connectionTimeOut", SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
@@ -760,8 +757,8 @@ Namespace Microsoft.VisualBasic.Devices
                     'Construct the local file. This will validate the full name and path
                     Dim fullFilename As String = FileSystemUtils.NormalizeFilePath(destinationFileName, "destinationFileName")
                     dialog = New ProgressDialog With {
-                    .Text = GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
-                    .LabelText = GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
+                    .Text = Utils.GetResourceString(SR.ProgressDialogDownloadingTitle, address.AbsolutePath),
+                    .LabelText = Utils.GetResourceString(SR.ProgressDialogDownloadingLabel, address.AbsolutePath, fullFilename)
                 }
                 End If
 
@@ -956,11 +953,11 @@ Namespace Microsoft.VisualBasic.Devices
 
             'Make sure the file exists
             If Not IO.File.Exists(sourceFileName) Then
-                Throw New IO.FileNotFoundException(GetResourceString(SR.IO_FileNotFound_Path, sourceFileName))
+                Throw New IO.FileNotFoundException(Utils.GetResourceString(SR.IO_FileNotFound_Path, sourceFileName))
             End If
 
             If connectionTimeout <= 0 Then
-                Throw GetArgumentExceptionWithArgName("connectionTimeout", SR.Network_BadConnectionTimeout)
+                Throw ExceptionUtils.GetArgumentExceptionWithArgName("connectionTimeout", SR.Network_BadConnectionTimeout)
             End If
 
             If address Is Nothing Then
@@ -978,8 +975,8 @@ Namespace Microsoft.VisualBasic.Devices
                 Dim Dialog As ProgressDialog = Nothing
                 If showUI AndAlso System.Environment.UserInteractive Then
                     Dialog = New ProgressDialog With {
-                        .Text = GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
-                        .LabelText = GetResourceString(SR.ProgressDialogUploadingLabel, sourceFileName, address.AbsolutePath)
+                        .Text = Utils.GetResourceString(SR.ProgressDialogUploadingTitle, sourceFileName),
+                        .LabelText = Utils.GetResourceString(SR.ProgressDialogUploadingLabel, sourceFileName, address.AbsolutePath)
                     }
                 End If
 
@@ -1070,7 +1067,7 @@ Namespace Microsoft.VisualBasic.Devices
                 Return New Uri(address)
             Catch ex As UriFormatException
                 'Throw an exception with an error message more appropriate to our API
-                Throw GetArgumentExceptionWithArgName("address", SR.Network_InvalidUriString, address)
+                Throw ExceptionUtils.GetArgumentExceptionWithArgName("address", SR.Network_InvalidUriString, address)
             End Try
         End Function
 
