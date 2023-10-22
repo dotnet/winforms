@@ -1,10 +1,8 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports System.Windows.Forms
+
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.Devices
@@ -67,4 +65,5 @@ Namespace Microsoft.VisualBasic.Devices
         End Property
 
     End Class 'Mouse
+
 End Namespace

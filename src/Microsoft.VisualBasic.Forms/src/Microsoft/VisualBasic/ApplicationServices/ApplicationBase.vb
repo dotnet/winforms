@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports System.Threading
 
 Imports ExUtils = Microsoft.VisualBasic.CompilerServices.ExceptionUtils
@@ -119,4 +116,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _log As Logging.Log 'Lazy-initialized and cached log object.
         Private _info As AssemblyInfo ' The executing application (the EntryAssembly)
     End Class 'ApplicationBase
+
 End Namespace

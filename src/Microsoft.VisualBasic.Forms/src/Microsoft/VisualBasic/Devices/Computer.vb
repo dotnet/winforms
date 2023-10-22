@@ -1,10 +1,8 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-
 Imports Microsoft.VisualBasic.MyServices
+
 Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.Devices
@@ -97,4 +95,5 @@ Namespace Microsoft.VisualBasic.Devices
         Private Shared s_keyboardInstance As Keyboard 'Lazy initialized cache for the Keyboard class.  SHARED because Keyboard behaves as a ReadOnly singleton class
 
     End Class 'Computer
+
 End Namespace

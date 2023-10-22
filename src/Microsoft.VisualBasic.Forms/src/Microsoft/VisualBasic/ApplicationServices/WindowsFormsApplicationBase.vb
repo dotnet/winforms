@@ -1,21 +1,16 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-Option Infer On
-
 Imports System.Collections.ObjectModel
 Imports System.ComponentModel
 Imports System.IO.Pipes
 Imports System.Reflection
+Imports System.Runtime.CompilerServices
 Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Threading
 Imports System.Windows.Forms
-
 Imports Microsoft.VisualBasic.CompilerServices
-Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -343,7 +338,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     ' --- This is the first instance of a single-instance application to run.
                     ' This is the instance that subsequent instances will attach to.
                     Using pipeServer
-                        Dim tokenSource = New CancellationTokenSource()
+                        Dim tokenSource As New CancellationTokenSource()
 #Disable Warning BC42358 ' Call is not awaited.
                         WaitForClientConnectionsAsync(pipeServer, AddressOf OnStartupNextInstanceMarshallingAdaptor, cancellationToken:=tokenSource.Token)
 #Enable Warning BC42358
@@ -353,10 +348,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Else
 
                     ' --- We are launching a subsequent instance.
-                    Dim tokenSource = New CancellationTokenSource()
+                    Dim tokenSource As New CancellationTokenSource()
                     tokenSource.CancelAfter(SECOND_INSTANCE_TIMEOUT)
                     Try
-                        Dim awaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
+                        Dim awaitable As ConfiguredTaskAwaitable = SendSecondInstanceArgsAsync(ApplicationInstanceID, commandLine, cancellationToken:=tokenSource.Token).ConfigureAwait(False)
                         awaitable.GetAwaiter().GetResult()
                     Catch ex As Exception
                         Throw New CantStartSingleInstanceException()
@@ -388,7 +383,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     Throw ExceptionUtils.GetArgumentNullException("MainForm", SR.General_PropertyNothing, "MainForm")
                 End If
                 If value Is _splashScreen Then
-                    Throw New ArgumentException(GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Throw New ArgumentException(Utils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
                 _appContext.MainForm = value
             End Set
@@ -405,7 +400,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
                 ' Allow for the case where they set splash screen = nothing and mainForm is currently nothing.
                 If value IsNot Nothing AndAlso value Is _appContext.MainForm Then
-                    Throw New ArgumentException(GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
+                    Throw New ArgumentException(Utils.GetResourceString(SR.AppModel_SplashAndMainFormTheSame))
                 End If
 
                 _splashScreen = value
@@ -506,7 +501,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             '    the ApplyDefaults event.
 
             ' Overriding MinimumSplashScreenDisplayTime needs still to keep working!
-            Dim applicationDefaultsEventArgs = New ApplyApplicationDefaultsEventArgs(
+            Dim applicationDefaultsEventArgs As New ApplyApplicationDefaultsEventArgs(
                 MinimumSplashScreenDisplayTime,
                 HighDpiMode) With {
                     .MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
@@ -526,7 +521,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             _highDpiMode = applicationDefaultsEventArgs.HighDpiMode
 
             ' Then, it's applying what we got back as HighDpiMode.
-            Dim dpiSetResult = Application.SetHighDpiMode(_highDpiMode)
+            Dim dpiSetResult As Boolean = Application.SetHighDpiMode(_highDpiMode)
             If dpiSetResult Then
                 _highDpiMode = Application.HighDpiMode
             End If
@@ -912,7 +907,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         Private Sub OnStartupNextInstanceMarshallingAdaptor(ByVal args As String())
 
-            Dim invoked = False
+            Dim invoked As Boolean = False
 
             Try
                 Dim handleNextInstance As New Action(
@@ -934,7 +929,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         SynchronizationContext.
                         Send(Sub() handleNextInstance(), Nothing)
                 End If
-
             Catch ex As Exception When Not invoked
                 ' Only catch exceptions thrown when the UI thread is not available, before
                 ' the UI thread has been created or after it has been terminated. Exceptions

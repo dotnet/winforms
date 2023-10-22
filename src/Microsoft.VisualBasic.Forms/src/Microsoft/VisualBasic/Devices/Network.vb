@@ -1,8 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
 Imports System.ComponentModel
 Imports System.Net
 Imports System.Security
@@ -21,6 +19,7 @@ Namespace Microsoft.VisualBasic.Devices
     ''' </summary>
     Public Class NetworkAvailableEventArgs
         Inherits EventArgs
+
         Public Sub New(networkAvailable As Boolean)
             IsNetworkAvailable = networkAvailable
         End Sub

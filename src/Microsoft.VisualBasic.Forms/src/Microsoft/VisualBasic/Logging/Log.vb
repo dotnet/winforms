@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.Collections.Specialized
 Imports System.ComponentModel
 Imports System.Text
@@ -234,6 +231,7 @@ Namespace Microsoft.VisualBasic.Logging
 
         ' Names of TraceSources
         Private Const WINAPP_SOURCE_NAME As String = "DefaultSource"
+
         Private Const DEFAULT_FILE_LOG_TRACE_LISTENER_NAME As String = "FileLog" 'taken from appconfig
 
     End Class

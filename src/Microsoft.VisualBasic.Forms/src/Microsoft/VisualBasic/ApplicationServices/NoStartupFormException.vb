@@ -1,12 +1,8 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-Option Explicit On
-Option Infer On
-
 Imports System.ComponentModel
-Imports Microsoft.VisualBasic.CompilerServices.Utils
+Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -21,7 +17,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         '''  Creates a new exception
         ''' </summary>
         Public Sub New()
-            MyBase.New(GetResourceString(SR.AppModel_NoStartupForm))
+            MyBase.New(Utils.GetResourceString(SR.AppModel_NoStartupForm))
         End Sub
 
         Public Sub New(message As String)
@@ -38,5 +34,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Protected Sub New(info As Runtime.Serialization.SerializationInfo, context As Runtime.Serialization.StreamingContext)
             MyBase.New(info, context)
         End Sub
+
     End Class
+
 End Namespace

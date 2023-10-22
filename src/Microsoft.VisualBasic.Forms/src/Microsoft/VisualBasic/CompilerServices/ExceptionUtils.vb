@@ -1,11 +1,8 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Strict On
-
 Imports System.ComponentModel
 Imports System.Runtime.InteropServices
-Imports Microsoft.VisualBasic.CompilerServices.Utils
 
 Namespace Microsoft.VisualBasic.CompilerServices
 
@@ -26,7 +23,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Dim sMsg As String
 
             If hr > 0 AndAlso hr <= &HFFFFI Then
-                sMsg = GetResourceString(CType(hr, vbErrors))
+                sMsg = Utils.GetResourceString(CType(hr, vbErrors))
             Else
                 sMsg = ""
             End If
@@ -81,7 +78,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Shared Function GetArgumentExceptionWithArgName(ArgumentName As String,
             ResourceID As String, ParamArray PlaceHolders() As String) As ArgumentException
 
-            Return New ArgumentException(GetResourceString(ResourceID, PlaceHolders), ArgumentName)
+            Return New ArgumentException(Utils.GetResourceString(ResourceID, PlaceHolders), ArgumentName)
         End Function
 
         ''' <summary>
@@ -91,7 +88,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <returns>A new instance of ArgumentNullException.</returns>
         Friend Shared Function GetArgumentNullException(ArgumentName As String) As ArgumentNullException
 
-            Return New ArgumentNullException(ArgumentName, GetResourceString(SR.General_ArgumentNullException))
+            Return New ArgumentNullException(ArgumentName, Utils.GetResourceString(SR.General_ArgumentNullException))
         End Function
 
         ''' <summary>
@@ -104,7 +101,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Shared Function GetArgumentNullException(ArgumentName As String,
             ResourceID As String, ParamArray PlaceHolders() As String) As ArgumentNullException
 
-            Return New ArgumentNullException(ArgumentName, GetResourceString(ResourceID, PlaceHolders))
+            Return New ArgumentNullException(ArgumentName, Utils.GetResourceString(ResourceID, PlaceHolders))
         End Function
 
         ''' <summary>
@@ -116,7 +113,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Shared Function GetDirectoryNotFoundException(
             ResourceID As String, ParamArray PlaceHolders() As String) As IO.DirectoryNotFoundException
 
-            Return New IO.DirectoryNotFoundException(GetResourceString(ResourceID, PlaceHolders))
+            Return New IO.DirectoryNotFoundException(Utils.GetResourceString(ResourceID, PlaceHolders))
         End Function
 
         ''' <summary>
@@ -129,7 +126,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Shared Function GetFileNotFoundException(FileName As String,
             ResourceID As String, ParamArray PlaceHolders() As String) As IO.FileNotFoundException
 
-            Return New IO.FileNotFoundException(GetResourceString(ResourceID, PlaceHolders), FileName)
+            Return New IO.FileNotFoundException(Utils.GetResourceString(ResourceID, PlaceHolders), FileName)
         End Function
 
         ''' <summary>
@@ -141,7 +138,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Shared Function GetInvalidOperationException(
             ResourceID As String, ParamArray PlaceHolders() As String) As InvalidOperationException
 
-            Return New InvalidOperationException(GetResourceString(ResourceID, PlaceHolders))
+            Return New InvalidOperationException(Utils.GetResourceString(ResourceID, PlaceHolders))
         End Function
 
         ''' <summary>
@@ -152,7 +149,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         ''' <returns>A new instance of IO.IOException.</returns>
         Friend Shared Function GetIOException(ResourceID As String, ParamArray PlaceHolders() As String) As IO.IOException
 
-            Return New IO.IOException(GetResourceString(ResourceID, PlaceHolders))
+            Return New IO.IOException(Utils.GetResourceString(ResourceID, PlaceHolders))
         End Function
 
         ''' <summary>
@@ -166,7 +163,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Shared Function GetWin32Exception(
             ResourceID As String, ParamArray PlaceHolders() As String) As Win32Exception
 
-            Return New Win32Exception(Marshal.GetLastWin32Error(), GetResourceString(ResourceID, PlaceHolders))
+            Return New Win32Exception(Marshal.GetLastWin32Error(), Utils.GetResourceString(ResourceID, PlaceHolders))
         End Function
 
     End Class

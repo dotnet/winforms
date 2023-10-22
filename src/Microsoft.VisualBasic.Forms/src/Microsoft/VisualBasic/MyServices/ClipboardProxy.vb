@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.Collections.Specialized
 Imports System.ComponentModel
 Imports System.Drawing
@@ -51,7 +48,7 @@ Namespace Microsoft.VisualBasic.MyServices
         End Function
 
         ''' <summary>
-        ''' Indicates whether or not text is available on the clipboard in 
+        ''' Indicates whether or not text is available on the clipboard in
         ''' the passed in format
         ''' </summary>
         ''' <param name="format">The type of text being checked for</param>
@@ -210,5 +207,7 @@ Namespace Microsoft.VisualBasic.MyServices
         Public Sub SetDataObject(data As System.Windows.Forms.DataObject)
             Clipboard.SetDataObject(data)
         End Sub
+
     End Class
+
 End Namespace

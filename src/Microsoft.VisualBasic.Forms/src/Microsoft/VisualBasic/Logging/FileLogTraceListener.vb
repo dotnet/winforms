@@ -1,9 +1,6 @@
 ﻿' Licensed to the .NET Foundation under one or more agreements.
 ' The .NET Foundation licenses this file to you under the MIT license.
 
-Option Explicit On
-Option Strict On
-
 Imports System.ComponentModel
 Imports System.Globalization
 Imports System.IO
@@ -19,8 +16,10 @@ Namespace Microsoft.VisualBasic.Logging
     ''' Options for the location of a log's directory
     ''' </summary>
     Public Enum LogFileLocation As Integer
+
         ' Changes to this enum must be reflected in ValidateLogfileLocationEnumValue()
         TempDirectory
+
         LocalUserApplicationDirectory
         CommonApplicationDirectory
         ExecutableDirectory
