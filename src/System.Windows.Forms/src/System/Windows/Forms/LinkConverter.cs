@@ -47,32 +47,23 @@ public class LinkConverter : TypeConverter
     {
         if (value is string valueStr)
         {
-            string text = valueStr.Trim();
-            if (text.Length == 0)
+            ReadOnlySpan<char> text = valueStr.AsSpan().Trim();
+            if (text.IsEmpty)
             {
                 return null;
             }
 
             // Parse 2 integer values.
             culture ??= CultureInfo.CurrentCulture;
+            Span<int> values = stackalloc int[2];
 
-            char sep = culture.TextInfo.ListSeparator[0];
-            string[] tokens = text.Split(new char[] { sep });
-            int[] values = new int[tokens.Length];
-
-            if (values.Length != 2)
+            if (!TypeConverterHelper.TryParseAsSpan(context, culture, text, values))
             {
                 throw new ArgumentException(
                     string.Format(
                         SR.TextParseFailedFormat,
-                        text,
+                        valueStr,
                         "Start, Length"));
-            }
-
-            TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
-            for (int i = 0; i < values.Length; i++)
-            {
-                values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i])!;
             }
 
             return new LinkLabel.Link(values[0], values[1]);
