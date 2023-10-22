@@ -4,7 +4,6 @@
 Imports System.Collections.ObjectModel
 Imports System.ComponentModel
 Imports System.Text
-
 Imports Microsoft.VisualBasic.FileIO
 
 Namespace Microsoft.VisualBasic.MyServices
