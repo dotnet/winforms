@@ -269,8 +269,9 @@ internal partial class DesignerActionUI : IDisposable
 
     private void RecreatePanel(IComponent? comp)
     {
-        if (_inTransaction || comp != _selectionService.PrimarySelection)
-        { // we only ever need to do that when the comp is the primary selection
+        if (_inTransaction || comp is null || comp != _selectionService.PrimarySelection)
+        {
+            // we only ever need to do that when the comp is the primary selection
             return;
         }
 
@@ -284,7 +285,7 @@ internal partial class DesignerActionUI : IDisposable
             return;
         }
 
-        RecreateInternal(comp!);
+        RecreateInternal(comp);
     }
 
     private void DesignerTransactionClosed(object? sender, DesignerTransactionCloseEventArgs e)
