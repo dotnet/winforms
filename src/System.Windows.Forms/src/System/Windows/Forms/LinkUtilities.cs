@@ -36,15 +36,17 @@ internal static class LinkUtilities
 
             if (s is not null)
             {
-                string[] rgbs = s.Split(new char[] { ',' });
-                int[] rgb = new int[3];
+                Span<Range> rgbs = stackalloc Range[4];
+                int rgbsCount = s.AsSpan().Split(rgbs, ',');
+                Span<int> rgb = stackalloc int[3];
+                rgb.Clear();
 
-                int nMax = Math.Min(rgb.Length, rgbs.Length);
+                int nMax = Math.Min(rgb.Length, rgbsCount);
 
                 // NOTE: if we can't parse rgbs[i], rgb[i] will be set to 0.
                 for (int i = 0; i < nMax; i++)
                 {
-                    int.TryParse(rgbs[i], out rgb[i]);
+                    int.TryParse(s.AsSpan(rgbs[i]), out rgb[i]);
                 }
 
                 return Color.FromArgb(rgb[0], rgb[1], rgb[2]);
