@@ -4,7 +4,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Globalization;
 using System.Reflection;
 using System.Text;
 
@@ -980,22 +979,22 @@ public class BindingSource : Component,
             return new ListSortDescriptionCollection();
         }
 
-        List<ListSortDescription> sorts = new();
         PropertyDescriptorCollection props = _currencyManager.GetItemProperties();
 
-        string[] split = sortString.Split(new char[] { ',' });
+        string[] split = sortString.Split(',', StringSplitOptions.TrimEntries);
+        ListSortDescription[] sorts = new ListSortDescription[split.Length];
         for (int i = 0; i < split.Length; i++)
         {
-            string current = split[i].Trim();
+            string current = split[i];
 
             // Handle ASC and DESC
             int length = current.Length;
             bool ascending = true;
-            if (length >= 5 && string.Compare(current, length - 4, " ASC", 0, 4, true, CultureInfo.InvariantCulture) == 0)
+            if (current.EndsWith(" ASC", StringComparison.InvariantCulture))
             {
                 current = current.Substring(0, length - 4).Trim();
             }
-            else if (length >= 6 && string.Compare(current, length - 5, " DESC", 0, 5, true, CultureInfo.InvariantCulture) == 0)
+            else if (current.EndsWith(" DESC", StringComparison.InvariantCulture))
             {
                 ascending = false;
                 current = current.Substring(0, length - 5).Trim();
@@ -1017,10 +1016,10 @@ public class BindingSource : Component,
             }
 
             // Add the sort description
-            sorts.Add(new ListSortDescription(prop, ascending ? ListSortDirection.Ascending : ListSortDirection.Descending));
+            sorts[i] = new ListSortDescription(prop, ascending ? ListSortDirection.Ascending : ListSortDirection.Descending);
         }
 
-        return new ListSortDescriptionCollection(sorts.ToArray());
+        return new ListSortDescriptionCollection(sorts);
     }
 
     public void RemoveCurrent()
