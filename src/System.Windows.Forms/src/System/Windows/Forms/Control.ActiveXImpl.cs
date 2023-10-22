@@ -1481,7 +1481,7 @@ public partial class Control
                 if (controlType.GetCustomAttributes<ComSourceInterfacesAttribute>(inherit: false).FirstOrDefault()
                     is { } comSourceInterfaces)
                 {
-                    string eventName = comSourceInterfaces.Value.Split('\0')[0];
+                    string eventName = comSourceInterfaces.Value.AsSpan().SliceAtFirstNull().ToString();
                     eventInterface = controlType.Module.Assembly.GetType(eventName, throwOnError: false);
                     eventInterface ??= Type.GetType(eventName, throwOnError: false);
                 }
