@@ -23,8 +23,9 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests : ControlTestBase
             GridEntry entry = grid[nameof(Button.Font)];
             entry.Expanded = true;
 
-            Assert.Equal(entry.AccessibilityObject,
-                entry.Children.First().AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+            Assert.Equal(
+                entry.AccessibilityObject,
+                entry.Children!.First().AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
             return Task.CompletedTask;
         });
@@ -38,7 +39,7 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests : ControlTestBase
             GridEntry entry = grid[nameof(Button.Font)];
             entry.Expanded = true;
 
-            Assert.Null(entry.Children.First().AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+            Assert.Null(entry.Children!.First().AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
             return Task.CompletedTask;
         });
@@ -52,7 +53,8 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests : ControlTestBase
             GridEntry entry = grid[nameof(Button.Font)];
             entry.Expanded = true;
 
-            Assert.Equal(entry.Children.First().AccessibilityObject,
+            Assert.Equal(
+                entry.Children!.First().AccessibilityObject,
                 entry.Children[1].AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
             return Task.CompletedTask;
@@ -67,8 +69,9 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests : ControlTestBase
             grid.SelectedEntry = grid[nameof(Button.Size)];
             grid.SelectedEntry.Expanded = true;
 
-            Assert.Equal(grid.GridView.EditAccessibleObject,
-                grid.SelectedEntry.Children.First().AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+            Assert.Equal(
+                grid.GridView.EditAccessibleObject,
+                grid.SelectedEntry.Children!.First().AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
             return Task.CompletedTask;
         });
@@ -82,8 +85,9 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests : ControlTestBase
             grid.SelectedEntry = grid[nameof(Button.Font)];
             grid.SelectedEntry.Expanded = true;
 
-            Assert.Equal(grid.GridView.DialogButton.AccessibilityObject,
-                grid.SelectedEntry.Children.First().AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+            Assert.Equal(
+                grid.GridView.DialogButton.AccessibilityObject,
+                grid.SelectedEntry.Children!.First().AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
             return Task.CompletedTask;
         });
@@ -97,7 +101,7 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests : ControlTestBase
             GridEntry entry = grid[nameof(Button.Font)];
             entry.Expanded = true;
 
-            Assert.Null(entry.Children.Last().AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+            Assert.Null(entry.Children!.Last().AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
             return Task.CompletedTask;
         });
@@ -111,7 +115,8 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests : ControlTestBase
             GridEntry entry = grid[nameof(Button.Font)];
             entry.Expanded = true;
 
-            Assert.Equal(entry.Children[1].AccessibilityObject,
+            Assert.Equal(
+                entry.Children![1].AccessibilityObject,
                 entry.Children.First().AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
             return Task.CompletedTask;
@@ -137,7 +142,8 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests : ControlTestBase
             GridEntry entry = grid[nameof(Button.Font)];
             entry.Expanded = true;
 
-            Assert.Equal(entry.Children.First().AccessibilityObject,
+            Assert.Equal(
+                entry.Children!.First().AccessibilityObject,
                 entry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
 
             return Task.CompletedTask;
@@ -209,7 +215,8 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests : ControlTestBase
             GridEntry entry = grid[nameof(Button.Font)];
             entry.Expanded = true;
 
-            Assert.Equal(entry.Children.Last().AccessibilityObject,
+            Assert.Equal(
+                entry.Children!.Last().AccessibilityObject,
                 entry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
             return Task.CompletedTask;

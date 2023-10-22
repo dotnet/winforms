@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -34,15 +32,15 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     // Too many characters leads to bad performance.
     private const int MaximumLengthOfPropertyString = 1000;
 
-    private EventEntry _eventList;
-    private CacheItems _cacheItems;
+    private EventEntry? _eventList;
+    private CacheItems? _cacheItems;
 
-    protected TypeConverter _typeConverter;
+    protected TypeConverter? _typeConverter;
 
-    protected UITypeEditor Editor { get; set; }
+    protected UITypeEditor? Editor { get; set; }
 
-    private GridEntry _parent;
-    private GridEntryCollection _children;
+    private GridEntry? _parent;
+    private GridEntryCollection? _children;
     private int _propertyDepth;
     private bool _hasFocus;
     private Rectangle _outlineRect = Rectangle.Empty;
@@ -61,14 +59,14 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     private static readonly object s_outlineDoubleClickEvent = new();
     private static readonly object s_recreateChildrenEvent = new();
 
-    private GridEntryAccessibleObject _accessibleObject;
+    private GridEntryAccessibleObject? _accessibleObject;
 
     private bool _lastPaintWithExplorerStyle;
 
     private static Color InvertColor(Color color)
         => Color.FromArgb(color.A, (byte)~color.R, (byte)~color.G, (byte)~color.B);
 
-    protected GridEntry(PropertyGrid ownerGrid, GridEntry parent)
+    protected GridEntry(PropertyGrid ownerGrid, GridEntry? parent)
     {
         _parent = parent;
         OwnerGrid = ownerGrid;
@@ -144,28 +142,35 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     /// <summary>
     ///  The set of attributes that will be used for browse filtering.
     /// </summary>
-    public virtual AttributeCollection BrowsableAttributes
+    public virtual AttributeCollection? BrowsableAttributes
     {
         get => _parent?.BrowsableAttributes;
-        set => _parent.BrowsableAttributes = value;
+        set
+        {
+            if (_parent is not null)
+            {
+                _parent.BrowsableAttributes = value;
+            }
+        }
     }
 
     /// <summary>
     ///  Retrieves the component that is invoking the method on the formatter object.  This may
     ///  return null if there is no component responsible for the call.
     /// </summary>
-    public virtual IComponent Component
-        => GetValueOwner() is IComponent component ? component : (_parent?.Component);
+    public virtual IComponent? Component
+        => GetValueOwner() is IComponent component ? component : _parent?.Component;
 
-    protected virtual IComponentChangeService ComponentChangeService => _parent.ComponentChangeService;
+    protected virtual IComponentChangeService? ComponentChangeService => _parent?.ComponentChangeService;
 
     /// <summary>
     ///  Retrieves the container that contains the set of objects this formatter may work
     ///  with. It may return null if there is no container, or of the formatter should not
     ///  use any outside objects.
     /// </summary>
-    public virtual IContainer Container => Component?.Site?.Container;
+    public virtual IContainer? Container => Component?.Site?.Container;
 
+    [AllowNull]
     protected GridEntryCollection ChildCollection
     {
         get => _children ??= new GridEntryCollection();
@@ -187,7 +192,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     public int ChildCount => Children?.Count ?? 0;
 
-    public virtual GridEntryCollection Children
+    public virtual GridEntryCollection? Children
     {
         get
         {
@@ -208,7 +213,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///   The root grid entry <see cref="SingleSelectRootGridEntry"/> maintains this value.
     ///  </para>
     /// </remarks>
-    public virtual PropertyTab OwnerTab => _parent?.OwnerTab;
+    public virtual PropertyTab? OwnerTab => _parent?.OwnerTab;
 
     /// <summary>
     ///  Returns the default child <see cref="GridEntry"/> of this item.
@@ -218,7 +223,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///   The root grid entry <see cref="SingleSelectRootGridEntry"/> maintains this value.
     ///  </para>
     /// </remarks>
-    internal virtual GridEntry DefaultChild
+    internal virtual GridEntry? DefaultChild
     {
         get => null;
         set { }
@@ -233,7 +238,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     ///   <see cref="PropertyGrid"/> will update this when <see cref="PropertyGrid.ActiveDesigner"/> is set.
     ///  </para>
     /// </remarks>
-    internal virtual IDesignerHost DesignerHost
+    internal virtual IDesignerHost? DesignerHost
     {
         get => _parent?.DesignerHost;
         set
@@ -288,6 +293,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     protected void SetForceReadOnlyFlag() => _flags |= Flags.ForceReadOnly;
 
+    [MemberNotNullWhen(true, nameof(Children))]
     internal virtual bool InternalExpanded
     {
         get
@@ -370,7 +376,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
                 _flags |= Flags.TextEditable;
             }
 
-            bool hasImmutableAttribute = TypeDescriptor.GetAttributes(PropertyType)[typeof(ImmutableObjectAttribute)]
+            bool hasImmutableAttribute = TypeDescriptor.GetAttributes(PropertyType)[typeof(ImmutableObjectAttribute)]!
                 .Equals(ImmutableObjectAttribute.Yes);
             bool isImmutable = hasImmutableAttribute || converter.GetCreateInstanceSupported(this);
 
@@ -484,7 +490,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     {
         get
         {
-            string label = _parent?.FullLabel;
+            string? label = _parent?.FullLabel;
 
             if (label is not null)
             {
@@ -512,7 +518,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
             return new GridItemCollection(Children);
         }
     }
-
+#nullable disable
     /// <summary>
     ///  The <see cref="PropertyGridView"/> that this <see cref="GridEntry"/> belongs to.
     /// </summary>

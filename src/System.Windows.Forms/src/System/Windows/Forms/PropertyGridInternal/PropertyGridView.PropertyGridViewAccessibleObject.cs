@@ -254,7 +254,7 @@ internal partial class PropertyGridView
                 return null;
             }
 
-            GridEntryCollection subGridEntry = current.Children;
+            GridEntryCollection? subGridEntry = current.Children;
             if (subGridEntry is not null && subGridEntry.Count > 0)
             {
                 var targetEntries = new GridEntry[1];
@@ -285,7 +285,7 @@ internal partial class PropertyGridView
                 return null;
             }
 
-            GridEntryCollection subGridEntry = current.Children;
+            GridEntryCollection? subGridEntry = current.Children;
             if (subGridEntry is not null && subGridEntry.Count > 0)
             {
                 var targetEntries = new GridEntry[1];

@@ -135,7 +135,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
                 ChildCollection.AddRange(mergedProperties);
             }
 
-            bool expandable = Children.Count > 0;
+            bool expandable = Children!.Count > 0;
             if (!expandable)
             {
                 SetFlag(Flags.ExpandableFailed, true);
@@ -220,7 +220,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
 
             owner = entry.GetValueOwner();
 
-            IComponentChangeService changeService = ComponentChangeService;
+            IComponentChangeService? changeService = ComponentChangeService;
 
             if (changeService is null)
             {
@@ -272,7 +272,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
                     return false;
                 }
 
-                IDesignerHost host = DesignerHost;
+                IDesignerHost? host = DesignerHost;
                 DesignerTransaction? transaction = host?.CreateTransaction(string.Format(SR.PropertyGridResetValue, PropertyName));
 
                 try

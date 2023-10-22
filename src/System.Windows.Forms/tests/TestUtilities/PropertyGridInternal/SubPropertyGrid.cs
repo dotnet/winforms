@@ -30,7 +30,7 @@ public class SubPropertyGrid<TSelected> : PropertyGrid where TSelected : new()
             string categoryName = SelectedObject.GetType().GetProperty(propertyName)!
                 .GetCustomAttribute<CategoryAttribute>()!.Category;
             return GetCurrentEntries().Single(entry => entry.PropertyName == categoryName)
-                .Children.Single(entry => entry.PropertyName == propertyName);
+                .Children!.Single(entry => entry.PropertyName == propertyName);
         }
     }
 

@@ -84,7 +84,7 @@ internal partial class PropertyDescriptorGridEntry
             {
                 if (index < owner.ChildCount)
                 {
-                    return owner.Children[index].AccessibilityObject;
+                    return owner.Children![index].AccessibilityObject;
                 }
 
                 // Uncomment the following line in case there will be another children going after the child entries:
@@ -225,7 +225,7 @@ internal partial class PropertyDescriptorGridEntry
             // Child entries exist in the tree if the entry has child entries and is expanded.
             if (owner is { ChildCount: > 0, Expanded: true })
             {
-                foreach (GridEntry childEntry in owner.Children)
+                foreach (GridEntry childEntry in owner.Children!)
                 {
                     if (child == childEntry.AccessibilityObject)
                     {

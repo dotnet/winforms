@@ -64,7 +64,8 @@ public class DropDownButtonAccessibleObjectTests : ControlTestBase
 
             grid.SelectedEntry.Expanded = true;
 
-            Assert.Equal(grid.SelectedEntry.Children.First().AccessibilityObject,
+            Assert.Equal(
+                grid.SelectedEntry.Children!.First().AccessibilityObject,
                 grid.GridView.DialogButton.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
             return Task.CompletedTask;
