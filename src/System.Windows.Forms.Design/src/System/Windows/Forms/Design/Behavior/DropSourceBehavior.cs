@@ -21,7 +21,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         public int zorderIndex; //the dragComponent's z-order index
         public Point originalControlLocation; //the original control of the control in AdornerWindow coordinates
         public Point draggedLocation; //the location of the component after each drag - in AdornerWindow coordinates
-        public Image dragImage; //bitblt'd image of control
+        public Bitmap dragImage; //bitblt'd image of control
         public Point positionOffset; //control position offset from primary selection
     }
 
@@ -918,7 +918,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
             dragComponents[i].draggedLocation = controlRect.Location;
             dragComponents[i].originalControlLocation = dragComponents[i].draggedLocation;
             //take snapshot of each control
-            DesignerUtils.GenerateSnapShot(dragControl, ref dragComponents[i].dragImage, i == 0 ? 2 : 1, 1, backColor);
+            DesignerUtils.GenerateSnapShot(dragControl, out dragComponents[i].dragImage, i == 0 ? 2 : 1, 1, backColor);
 
             // The dragged components are not in any specific order. If they all share the same parent, we will sort them by their index in that parent's control's collection to preserve correct Z-order
             if (primaryParent is not null && shareParent)
