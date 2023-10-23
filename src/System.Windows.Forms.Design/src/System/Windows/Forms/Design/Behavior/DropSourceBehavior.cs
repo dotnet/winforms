@@ -390,7 +390,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
                         }
 
                         // Create a copy of them
-                        temp = DesignerUtils.CopyDragObjects(temp, serviceProviderTarget).Cast<IComponent>().ToList();
+                        temp = DesignerUtils.CopyDragObjects(temp, serviceProviderTarget);
                         if (temp is null)
                         {
                             Debug.Fail("Couldn't create copies of the controls we are dragging.");

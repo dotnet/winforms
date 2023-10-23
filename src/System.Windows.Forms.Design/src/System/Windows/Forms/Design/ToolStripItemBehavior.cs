@@ -636,7 +636,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
             //Do DragDrop only if currentDropItem has changed.
             if (currentDropItem != selectedItem && designerHost is not null)
             {
-                ArrayList components = data.DragComponents;
+                IList components = data.DragComponents;
                 ToolStrip parentToolStrip = currentDropItem.GetCurrentParent();
                 int primaryIndex = -1;
                 string transDesc;
@@ -687,7 +687,7 @@ internal class ToolStripItemBehavior : Behavior.Behavior
                             keyboardHandlingService.CopyInProgress = true;
                         }
 
-                        components = DesignerUtils.CopyDragObjects(components, currentDropItem.Site) as ArrayList;
+                        components = DesignerUtils.CopyDragObjects(components, currentDropItem.Site);
                         if (keyboardHandlingService is not null)
                         {
                             keyboardHandlingService.CopyInProgress = false;
