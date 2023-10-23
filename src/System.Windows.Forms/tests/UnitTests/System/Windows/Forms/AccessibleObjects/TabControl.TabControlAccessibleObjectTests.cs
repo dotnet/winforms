@@ -7,7 +7,7 @@ using static System.Windows.Forms.TabControl;
 using static Interop.UiaCore;
 using IRawElementProviderSimple = Interop.UiaCore.IRawElementProviderSimple;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class TabControl_TabControlAccessibilityObjectTests
 {

@@ -5,7 +5,7 @@ using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Control;
 using static System.Windows.Forms.PropertyGridInternal.PropertyGridView;
 
-namespace System.Windows.Forms.PropertyGridInternal.Tests;
+namespace System.Windows.Forms.PropertyGridInternal.Tests.AccessibleObjects;
 
 public class PropertyGridView_GridViewListBoxAccessibleObjectTest
 {

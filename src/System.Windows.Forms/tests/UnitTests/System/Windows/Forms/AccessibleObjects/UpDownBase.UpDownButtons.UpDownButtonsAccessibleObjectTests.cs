@@ -9,7 +9,7 @@ using static System.Windows.Forms.UpDownBase;
 using static System.Windows.Forms.UpDownBase.UpDownButtons;
 using static Interop;
 
-namespace System.Windows.Forms.Tests;
+namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
 {
