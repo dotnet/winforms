@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Microsoft.DotNet.RemoteExecutor;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests;
 

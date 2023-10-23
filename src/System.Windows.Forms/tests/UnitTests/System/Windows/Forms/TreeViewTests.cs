@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Moq;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -6603,7 +6602,7 @@ public class TreeViewTests
         using var treeView = new TreeView();
         treeView.ShowNodeToolTips = showNodeToolTips;
         ToolTip toolTip = useKeyboardToolTip ? treeView.KeyboardToolTip : new ToolTip();
-        ComCtl32.ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
+        ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
 
         Assert.Equal("Test caption", wrapper.Text);
         // Assert.Equal method does not work because char* cannot be used as an argument to it
@@ -6616,7 +6615,7 @@ public class TreeViewTests
         using var treeView = new TreeView();
         treeView.ShowNodeToolTips = true;
         ToolTip toolTip = new ToolTip();
-        ComCtl32.ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
+        ToolInfoWrapper<Control> wrapper = treeView.GetToolInfoWrapper(TOOLTIP_FLAGS.TTF_ABSOLUTE, "Test caption", toolTip);
         char* expected = (char*)(-1);
 
         Assert.Null(wrapper.Text);
