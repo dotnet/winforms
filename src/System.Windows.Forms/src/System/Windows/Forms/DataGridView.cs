@@ -2090,7 +2090,7 @@ public partial class DataGridView : Control, ISupportInitialize
             {
                 BackColor = s_defaultBackColor,
                 ForeColor = SystemInformation.HighContrast ? DefaultForeBrush.Color : base.ForeColor,
-                SelectionBackColor = DefaultSelectionBackBrush.Color,
+                SelectionBackColor = Color.MidnightBlue,
                 SelectionForeColor = DefaultSelectionForeBrush.Color,
                 Font = base.Font,
                 AlignmentInternal = DataGridViewContentAlignment.MiddleLeft,
