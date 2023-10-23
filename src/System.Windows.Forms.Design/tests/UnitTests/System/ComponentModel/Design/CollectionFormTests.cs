@@ -559,7 +559,7 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.GetService(typeof(IComponentChangeService)))
             .Returns(null);
         mockHost
-            .Setup(h => h.CreateComponent(typeof(Component), null))
+            .Setup(h => h.CreateComponent(typeof(Component)))
             .Returns(result);
         mockHost
             .Setup(h => h.GetDesigner(result))
@@ -607,7 +607,7 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.GetService(typeof(IComponentChangeService)))
             .Returns(null);
         mockHost
-            .Setup(h => h.CreateComponent(typeof(Component), null))
+            .Setup(h => h.CreateComponent(typeof(Component)))
             .Returns((IComponent)null);
         mockHost
             .Setup(h => h.GetDesigner(null))
@@ -665,7 +665,7 @@ public class CollectionFormTests : CollectionEditor
             .Setup(c => c.GetService(typeof(IComponentChangeService)))
             .Returns(null);
         mockHost
-            .Setup(h => h.CreateComponent(typeof(Component), null))
+            .Setup(h => h.CreateComponent(typeof(Component)))
             .Returns(result);
         mockHost
             .Setup(h => h.GetDesigner(result))
@@ -705,7 +705,7 @@ public class CollectionFormTests : CollectionEditor
     {
         SubCollectionEditor editor = new(null);
         SubCollectionForm form = new(editor);
-        Assert.Throws<ArgumentNullException>("objectType", () => form.CreateInstance(null));
+        Assert.Throws<ArgumentNullException>("itemType", () => form.CreateInstance(null));
     }
 
     [Fact]

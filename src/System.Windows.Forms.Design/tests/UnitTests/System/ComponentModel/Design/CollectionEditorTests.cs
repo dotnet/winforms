@@ -210,7 +210,7 @@ public class CollectionEditorTests
             .Setup(c => c.GetService(typeof(IComponentChangeService)))
             .Returns(null);
         mockHost
-            .Setup(h => h.CreateComponent(typeof(Component), null))
+            .Setup(h => h.CreateComponent(typeof(Component)))
             .Returns(result);
         mockHost
             .Setup(h => h.GetDesigner(result))
@@ -257,7 +257,7 @@ public class CollectionEditorTests
             .Setup(c => c.GetService(typeof(IComponentChangeService)))
             .Returns(null);
         mockHost
-            .Setup(h => h.CreateComponent(typeof(Component), null))
+            .Setup(h => h.CreateComponent(typeof(Component)))
             .Returns((IComponent)null);
         mockHost
             .Setup(h => h.GetDesigner(null))
@@ -314,7 +314,7 @@ public class CollectionEditorTests
             .Setup(c => c.GetService(typeof(IComponentChangeService)))
             .Returns(null);
         mockHost
-            .Setup(h => h.CreateComponent(typeof(Component), null))
+            .Setup(h => h.CreateComponent(typeof(Component)))
             .Returns(result);
         mockHost
             .Setup(h => h.GetDesigner(result))
@@ -358,7 +358,7 @@ public class CollectionEditorTests
     public void CollectionEditor_CreateInstance_NullItemType_ThrowsArgumentNullException()
     {
         SubCollectionEditor editor = new(null);
-        Assert.Throws<ArgumentNullException>("objectType", () => editor.CreateInstance(null));
+        Assert.Throws<ArgumentNullException>("itemType", () => editor.CreateInstance(null));
     }
 
     [Theory]

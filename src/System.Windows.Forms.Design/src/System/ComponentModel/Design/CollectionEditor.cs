@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.Drawing.Design;
 using System.Reflection;
@@ -16,9 +14,8 @@ namespace System.ComponentModel.Design;
 /// </summary>
 public partial class CollectionEditor : UITypeEditor
 {
-    private Type _collectionItemType;
-    private Type[] _newItemTypes;
-    private ITypeDescriptorContext _currentContext;
+    private Type? _collectionItemType;
+    private Type[]? _newItemTypes;
 
     private bool _ignoreChangedEvents;
     private bool _ignoreChangingEvents;
@@ -29,19 +26,19 @@ public partial class CollectionEditor : UITypeEditor
     public CollectionEditor(Type type) => CollectionType = type;
 
     /// <summary>
-    ///  Gets or sets the data type of each item in the collection.
+    ///  Gets the data type of each item in the collection.
     /// </summary>
     protected Type CollectionItemType => _collectionItemType ??= CreateCollectionItemType();
 
     /// <summary>
-    ///  Gets or sets the type of the collection.
+    ///  Gets the type of the collection.
     /// </summary>
     protected Type CollectionType { get; }
 
     /// <summary>
     ///  Gets or sets a type descriptor that indicates the current context.
     /// </summary>
-    protected ITypeDescriptorContext Context => _currentContext;
+    protected ITypeDescriptorContext? Context { get; private set; }
 
     /// <summary>
     ///  Gets or sets the available item types that can be created for this collection.
@@ -54,14 +51,14 @@ public partial class CollectionEditor : UITypeEditor
     protected virtual string HelpTopic => "net.ComponentModel.CollectionEditor";
 
     /// <summary>
-    ///  Gets or sets a value indicating whether original members of the collection can be removed.
+    ///  Gets a value indicating whether original members of the collection can be removed.
     /// </summary>
     protected virtual bool CanRemoveInstance(object value)
     {
         if (value is IComponent component)
         {
             // Make sure the component is not being inherited -- we can't delete these!
-            if (TypeDescriptorHelper.TryGetAttribute(component, out InheritanceAttribute attribute)
+            if (TypeDescriptorHelper.TryGetAttribute(component, out InheritanceAttribute? attribute)
                 && attribute.InheritanceLevel != InheritanceLevel.NotInherited)
             {
                 return false;
@@ -93,9 +90,11 @@ public partial class CollectionEditor : UITypeEditor
     /// </summary>
     protected virtual object CreateInstance(Type itemType)
     {
-        if (Context.TryGetService(out IDesignerHost host) && typeof(IComponent).IsAssignableFrom(itemType))
+        ArgumentNullException.ThrowIfNull(itemType);
+
+        if (Context.TryGetService(out IDesignerHost? host) && typeof(IComponent).IsAssignableFrom(itemType))
         {
-            IComponent instance = host.CreateComponent(itemType, null);
+            IComponent instance = host.CreateComponent(itemType);
 
             // Set component defaults
             if (host.GetDesigner(instance) is IComponentInitializer initializer)
@@ -109,43 +108,38 @@ public partial class CollectionEditor : UITypeEditor
             }
         }
 
-        return itemType?.UnderlyingSystemType == typeof(string)
+        return itemType.UnderlyingSystemType == typeof(string)
             ? string.Empty
-            : TypeDescriptor.CreateInstance(host, itemType, null, null);
+            : TypeDescriptor.CreateInstance(host, itemType, argTypes: null, args: null)!;
     }
 
     /// <summary>
     ///  This method gets the object from the given object. The input is an arrayList returned as an Object.
     ///  The output is a arraylist which contains the individual objects that need to be created.
     /// </summary>
-    protected virtual IList GetObjectsFromInstance(object instance) => new ArrayList { instance };
+    protected virtual IList GetObjectsFromInstance(object? instance) => new ArrayList { instance };
 
     /// <summary>
     ///  Retrieves the display text for the given list item.
     /// </summary>
-    protected virtual string GetDisplayText(object value)
+    protected virtual string GetDisplayText(object? value)
     {
-        string text;
-
         if (value is null)
         {
             return string.Empty;
         }
 
-        PropertyDescriptor property = TypeDescriptor.GetProperties(value)["Name"];
-        if (property?.PropertyType == typeof(string))
+        if (TypeDescriptorHelper.TryGetPropertyValue(value, "Name", out string? text))
         {
-            text = (string)property.GetValue(value);
             if (!string.IsNullOrEmpty(text))
             {
                 return text;
             }
         }
 
-        property = TypeDescriptor.GetDefaultProperty(CollectionType);
-        if (property?.PropertyType == typeof(string))
+        PropertyDescriptor? property = TypeDescriptor.GetDefaultProperty(CollectionType);
+        if (property is not null && property.TryGetValue(value, out text))
         {
-            text = (string)property.GetValue(value);
             if (!string.IsNullOrEmpty(text))
             {
                 return text;
@@ -170,7 +164,7 @@ public partial class CollectionEditor : UITypeEditor
 
         foreach (var property in properties)
         {
-            if (property.Name.Equals("Item") || property.Name.Equals("Items"))
+            if (property.Name is "Item" or "Items")
             {
                 return property.PropertyType;
             }
@@ -191,7 +185,7 @@ public partial class CollectionEditor : UITypeEditor
     {
         if (instance is IComponent component)
         {
-            if (Context.TryGetService(out IDesignerHost host))
+            if (Context.TryGetService(out IDesignerHost? host))
             {
                 host.DestroyComponent(component);
             }
@@ -209,26 +203,26 @@ public partial class CollectionEditor : UITypeEditor
     /// <summary>
     ///  Edits the specified object value using the editor style  provided by <see cref="GetEditStyle"/>.
     /// </summary>
-    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
+        if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
         {
             return value;
         }
 
-        _currentContext = context;
+        Context = context;
 
         // Child modal dialog - launching in SystemAware mode.
         CollectionForm localCollectionForm = DpiHelper.CreateInstanceInSystemAwareContext(CreateCollectionForm);
-        ITypeDescriptorContext lastContext = _currentContext;
+        ITypeDescriptorContext? lastContext = Context;
         localCollectionForm.EditValue = value;
         _ignoreChangingEvents = false;
         _ignoreChangedEvents = false;
-        DesignerTransaction transaction = null;
+        DesignerTransaction? transaction = null;
 
         bool commitChange = true;
-        IComponentChangeService changeService = null;
-        IDesignerHost host = Context?.GetService<IDesignerHost>();
+        IComponentChangeService? changeService = null;
+        IDesignerHost? host = Context?.GetService<IDesignerHost>();
 
         try
         {
@@ -259,7 +253,7 @@ public partial class CollectionEditor : UITypeEditor
         finally
         {
             localCollectionForm.EditValue = null;
-            _currentContext = lastContext;
+            Context = lastContext;
 
             if (commitChange)
             {
@@ -283,7 +277,7 @@ public partial class CollectionEditor : UITypeEditor
     }
 
     /// <inheritdoc />
-    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.Modal;
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.Modal;
 
     private bool IsAnyObjectInheritedReadOnly(object[] items)
     {
@@ -292,12 +286,12 @@ public partial class CollectionEditor : UITypeEditor
         // to place it in the collection editor. If the inheritance service chose not to site the component, that
         // indicates it should be hidden from  the user.
 
-        IInheritanceService inheritanceService = null;
+        IInheritanceService? inheritanceService = null;
         bool isInheritanceServiceInitialized = false;
 
         foreach (object item in items)
         {
-            if (item is not IComponent component || component.Site is not null)
+            if (item is not IComponent { Site: null } component)
             {
                 continue;
             }
@@ -321,7 +315,7 @@ public partial class CollectionEditor : UITypeEditor
     /// <summary>
     ///  Converts the specified collection into an array of objects.
     /// </summary>
-    protected virtual object[] GetItems(object editValue)
+    protected virtual object[] GetItems(object? editValue)
     {
         if (editValue is ICollection collection)
         {
@@ -336,13 +330,14 @@ public partial class CollectionEditor : UITypeEditor
     /// <summary>
     ///  Gets the requested service, if it is available.
     /// </summary>
-    protected object GetService(Type serviceType) => Context?.GetService(serviceType);
+    protected object? GetService(Type serviceType) => Context?.GetService(serviceType);
 
     /// <summary>
     ///  Reflect any change events to the instance object
     /// </summary>
-    private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
+    private void OnComponentChanged(object? sender, ComponentChangedEventArgs e)
     {
+        Debug.Assert(Context is not null);
         if (!_ignoreChangedEvents && sender != Context.Instance)
         {
             _ignoreChangedEvents = true;
@@ -353,8 +348,9 @@ public partial class CollectionEditor : UITypeEditor
     /// <summary>
     ///  Reflect any changed events to the instance object
     /// </summary>
-    private void OnComponentChanging(object sender, ComponentChangingEventArgs e)
+    private void OnComponentChanging(object? sender, ComponentChangingEventArgs e)
     {
+        Debug.Assert(Context is not null);
         if (!_ignoreChangingEvents && sender != Context.Instance)
         {
             _ignoreChangingEvents = true;
@@ -365,14 +361,14 @@ public partial class CollectionEditor : UITypeEditor
     /// <summary>
     ///  Removes the item from the column header from the listview column header collection
     /// </summary>
-    internal virtual void OnItemRemoving(object item)
+    internal virtual void OnItemRemoving(object? item)
     {
     }
 
     /// <summary>
     ///  Sets the specified collection to have the specified array of items.
     /// </summary>
-    protected virtual object SetItems(object editValue, object[] value)
+    protected virtual object? SetItems(object? editValue, object[]? value)
     {
         // We look to see if the value implements IList, and if it does, we set through that.
         if (editValue is IList list)
@@ -395,7 +391,7 @@ public partial class CollectionEditor : UITypeEditor
     /// </summary>
     protected virtual void ShowHelp()
     {
-        if (Context.TryGetService(out IHelpService helpService))
+        if (Context.TryGetService(out IHelpService? helpService))
         {
             helpService.ShowHelpFromKeyword(HelpTopic);
         }
