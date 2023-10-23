@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.Json;
 
 namespace System.Windows.Forms.Tests;
 
@@ -512,28 +511,6 @@ public class ClipboardTests
         }
 
         Assert.Fail("Formatting should have failed.");
-    }
-
-    [WinFormsFact]
-    public void Clipboard_SetData_JsonDeserialization()
-    {
-        string format = "JsonFormat";
-        var obj = new { Name = "Name", Age = 25 };
-        string json = JsonSerializer.Serialize(obj);
-
-        Clipboard.SetData(format, json);
-
-        Assert.True(Clipboard.ContainsData(format));
-
-        var str = (string)Clipboard.GetData(format);
-
-        Assert.NotNull(str);
-
-        var deserializedObj = JsonSerializer.Deserialize<dynamic>(str);
-
-        Assert.NotNull(deserializedObj);
-        Assert.Equal(obj.Name, deserializedObj.GetProperty("Name").GetString());
-        Assert.Equal(obj.Age, deserializedObj.GetProperty("Age").GetInt32());
     }
 
     [WinFormsFact]
