@@ -28,7 +28,7 @@ public class ContentAlignmentEditorTests
         var item = (Control)contentUI.GetType()
             .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(contentUI);
 
-        object actual = item.AccessibilityObject.TestAccessor().Dynamic
+        var actual = (UIA_CONTROLTYPE_ID)(int)item.AccessibilityObject.TestAccessor().Dynamic
             .GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_RadioButtonControlTypeId, actual);
