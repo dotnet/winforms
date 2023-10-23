@@ -3078,6 +3078,16 @@ public partial class ComboBox : ListControl
     {
         bool returnedValue = base.ProcessCmdKey(ref msg, keyData);
 
+        if (!returnedValue && keyData == (Keys.Control | Keys.A))
+        {
+            Select(0, Text.Length);
+            SelectedText = Text;
+            SelectionStart = 0;
+            SelectionLength = Text.Length;
+
+            return true;
+        }
+
         if (DropDownStyle != ComboBoxStyle.DropDownList &&
             (keyData == (Keys.Control | Keys.Back) || keyData == (Keys.Control | Keys.Shift | Keys.Back)))
         {

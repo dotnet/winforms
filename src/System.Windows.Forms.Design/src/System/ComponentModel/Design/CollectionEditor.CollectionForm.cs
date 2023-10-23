@@ -67,7 +67,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Gets or sets a type descriptor that indicates the current context.
         /// </summary>
-        protected ITypeDescriptorContext Context => _editor.Context;
+        protected ITypeDescriptorContext? Context => _editor.Context;
 
         /// <summary>
         ///  Gets or sets the value of the item being edited.
@@ -85,6 +85,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Gets or sets the array of items this form is to display.
         /// </summary>
+        [AllowNull]
         protected object[] Items
         {
             get => _editor.GetItems(EditValue);
@@ -106,7 +107,7 @@ public partial class CollectionEditor
 
                 if (canChange)
                 {
-                    object newValue = _editor.SetItems(EditValue, value);
+                    object? newValue = _editor.SetItems(EditValue, value);
                     if (newValue != EditValue)
                     {
                         EditValue = newValue;
@@ -173,7 +174,7 @@ public partial class CollectionEditor
         /// <summary>
         ///  Gets the requested service, if it is available.
         /// </summary>
-        protected override object GetService(Type serviceType) => _editor.GetService(serviceType);
+        protected override object? GetService(Type serviceType) => _editor.GetService(serviceType);
 
         /// <summary>
         ///  Called to show the dialog via the IWindowsFormsEditorService

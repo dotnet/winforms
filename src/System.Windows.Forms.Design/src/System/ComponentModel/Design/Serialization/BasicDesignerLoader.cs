@@ -173,7 +173,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
             else
             {
                 IServiceContainer sc = GetRequiredService<IServiceContainer>();
-                sc.AddService(typeof(IDesignerSerializationManager), _serializationManager);
+                sc.AddService<IDesignerSerializationManager>(_serializationManager);
             }
 
             Initialize();
@@ -257,7 +257,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
 
         if (_host is not null)
         {
-            _host.RemoveService(typeof(IDesignerLoaderService));
+            _host.RemoveService<IDesignerLoaderService>();
             _host.Activated -= new EventHandler(OnDesignerActivate);
             _host.Deactivated -= new EventHandler(OnDesignerDeactivate);
             _host = null;
@@ -378,7 +378,7 @@ public abstract partial class BasicDesignerLoader : DesignerLoader, IDesignerLoa
     ///  remove any custom services you add here by overriding
     ///  Dispose.
     /// </summary>
-    protected virtual void Initialize() => LoaderHost.AddService(typeof(IDesignerLoaderService), this);
+    protected virtual void Initialize() => LoaderHost.AddService<IDesignerLoaderService>(this);
 
     /// <summary>
     ///  This method an be overridden to provide some intelligent

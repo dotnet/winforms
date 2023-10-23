@@ -374,7 +374,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
                             if (manager.GetService(typeof(IServiceContainer)) is ServiceContainer sc)
                             {
                                 cache = new ComponentCache(manager);
-                                sc.AddService(typeof(ComponentCache), cache);
+                                sc.AddService(cache);
                             }
                         }
                         else
