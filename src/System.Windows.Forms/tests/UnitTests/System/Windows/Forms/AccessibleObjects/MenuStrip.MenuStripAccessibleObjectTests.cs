@@ -21,7 +21,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
         AccessibleObject menuStripAccessibleObject = menuStrip.AccessibilityObject;
         var accessibleName = menuStripAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
-        Assert.Equal("Test Name", accessibleName);
+        Assert.Equal("Test Name", ((BSTR)accessibleName).ToStringAndFree());
     }
 
     [WinFormsFact]
@@ -89,7 +89,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
         using MenuStrip menuStrip = new MenuStrip();
         // AccessibleRole is not set = Default
 
-        object actual = menuStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)menuStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_MenuBarControlTypeId, actual);
         Assert.False(menuStrip.IsHandleCreated);
@@ -129,7 +129,7 @@ public class MenuStrip_MenuStripAccessibleObjectTests
         using MenuStrip menuStrip = new MenuStrip();
         menuStrip.AccessibleRole = role;
 
-        object actual = menuStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)menuStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

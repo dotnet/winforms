@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Windows.Forms.IntegrationTests.Common;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
@@ -224,7 +225,7 @@ public class ComboBox_ComboBoxItemAccessibleObjectTests
 
             Assert.True((bool)itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsScrollItemPatternAvailablePropertyId));
             Assert.True((bool)itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsSelectionItemPatternAvailablePropertyId));
-            Assert.Null(itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+            Assert.Equal(VARIANT.Empty, itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
         }
     }
 

@@ -2375,7 +2375,7 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         dataGridView.Rows.Add(new DataGridViewRow());
         dataGridView.Rows[0].Cells[0].Value = "test1";
 
-        Assert.Equal("test1", dataGridView.Rows[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal("test1", ((BSTR)dataGridView.Rows[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree());
         Assert.False(dataGridView.IsHandleCreated);
     }
 

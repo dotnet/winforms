@@ -20,23 +20,23 @@ public class TreeViewLabelEditAccessibleObjectTests
         TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         var accessibilityObject = (TreeViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
-        Assert.Equal(accessibilityObject.RuntimeId, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId));
+        Assert.Equal(accessibilityObject.RuntimeId, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId).ToObject());
         PInvoke.GetWindowRect(labelEdit, out RECT r);
         using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray((Rectangle)r);
         Assert.Equal(((VARIANT)rectArray).ToObject(), accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId));
-        Assert.Equal(Environment.ProcessId, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ProcessIdPropertyId));
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
-        Assert.Equal(accessibilityObject.Name, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
-        Assert.Empty((string)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AccessKeyPropertyId));
+        Assert.Equal(Environment.ProcessId, (int)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ProcessIdPropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(accessibilityObject.Name, ((BSTR)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree());
+        Assert.Empty(((BSTR)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AccessKeyPropertyId)).ToStringAndFree());
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId));
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.Equal(treeView.Enabled, (bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.Equal(accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId), accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId));
-        Assert.Empty((string)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId));
+        Assert.Empty(((BSTR)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId)).ToStringAndFree());
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsContentElementPropertyId));
         Assert.False((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId));
-        Assert.Equal(labelEdit.Handle, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId));
+        Assert.Equal((int)labelEdit.Handle, (int)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId));
         Assert.False((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId));
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId));
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId));
@@ -95,14 +95,14 @@ public class TreeViewLabelEditAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void TreeViewLabelEditAccessibleObject_HostRawElementProvider_ReturnsExpected()
+    public unsafe void TreeViewLabelEditAccessibleObject_HostRawElementProvider_ReturnsExpected()
     {
         using TreeView treeView = CreateTreeViewAndStartEditing();
 
         TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         var accessibilityObject = (TreeViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
-
-        Assert.NotNull(accessibilityObject.HostRawElementProvider);
+        using ComScope<IRawElementProviderSimple> provider = new(accessibilityObject.HostRawElementProvider); 
+        Assert.False(provider.IsNull);
     }
 
     [WinFormsFact]

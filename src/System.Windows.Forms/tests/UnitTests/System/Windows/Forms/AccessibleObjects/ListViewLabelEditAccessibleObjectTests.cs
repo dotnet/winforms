@@ -14,30 +14,31 @@ namespace System.Windows.Forms.Tests.AccessibleObjects;
 public class ListViewLabelEditAccessibleObjectTests
 {
     [WinFormsFact]
-    public void ListViewLabelEditAccessibleObject_GetPropertyValue_ReturnsExpected()
+    public unsafe void ListViewLabelEditAccessibleObject_GetPropertyValue_ReturnsExpected()
     {
         using ListView listView = CreateListViewAndStartEditing();
 
         ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
-
-        Assert.Equal(accessibilityObject.RuntimeId, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId));
+        using VARIANT runtimeId = accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
+        Assert.Equal(accessibilityObject.RuntimeId, runtimeId.ToObject());
         PInvoke.GetWindowRect(labelEdit, out RECT r);
         using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray((Rectangle)r);
-        Assert.Equal(((VARIANT)rectArray).ToObject(), accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId));
-        Assert.Equal(Environment.ProcessId, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ProcessIdPropertyId));
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
-        Assert.Equal(accessibilityObject.Name, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
-        Assert.Empty((string)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AccessKeyPropertyId));
+        using VARIANT rectArrayVariant = accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
+        Assert.Equal(((VARIANT)rectArray).ToObject(), rectArrayVariant.ToObject());
+        Assert.Equal(Environment.ProcessId, (int)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ProcessIdPropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(accessibilityObject.Name, ((BSTR)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree());
+        Assert.Empty(((BSTR)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AccessKeyPropertyId)).ToStringAndFree());
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId));
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId));
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.Equal(listView.Enabled, (bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
-        Assert.Equal("1", accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId));
-        Assert.Empty((string)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId));
+        Assert.Equal("1", ((BSTR)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree());
+        Assert.Empty(((BSTR)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId)).ToStringAndFree());
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsContentElementPropertyId));
         Assert.False((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId));
-        Assert.Equal(labelEdit.Handle, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId));
+        Assert.Equal(labelEdit.Handle, (nint)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId));
         Assert.False((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId));
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId));
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId));
@@ -96,14 +97,14 @@ public class ListViewLabelEditAccessibleObjectTests
     }
 
     [WinFormsFact]
-    public void ListViewLabelEditAccessibleObject_HostRawElementProvider_ReturnsExpected()
+    public unsafe void ListViewLabelEditAccessibleObject_HostRawElementProvider_ReturnsExpected()
     {
         using ListView listView = CreateListViewAndStartEditing();
 
         ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
-
-        Assert.NotNull(accessibilityObject.HostRawElementProvider);
+        using ComScope<IRawElementProviderSimple> elementProvider = new(accessibilityObject.HostRawElementProvider);
+        Assert.False(elementProvider.IsNull);
     }
 
     [WinFormsFact]

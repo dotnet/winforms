@@ -42,7 +42,7 @@ public class TextBoxAccessibleObjectTests
         textBox.CreateControl();
         // AccessibleRole is not set = Default
 
-        object actual = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, actual);
         Assert.True(textBox.IsHandleCreated);
@@ -83,7 +83,7 @@ public class TextBoxAccessibleObjectTests
         using TextBox textBox = new TextBox();
         textBox.AccessibleRole = role;
 
-        object actual = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -97,7 +97,7 @@ public class TextBoxAccessibleObjectTests
         textBox.UseSystemPasswordChar = true;
         textBox.Text = "some text";
 
-        object actual = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId);
+        string actual = ((BSTR)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree();
 
         Assert.Equal(SR.AccessDenied, actual);
         Assert.True(textBox.IsHandleCreated);
@@ -111,7 +111,7 @@ public class TextBoxAccessibleObjectTests
         using TextBox textBox = new TextBox();
         textBox.UseSystemPasswordChar = useSystemPasswordChar;
 
-        object actual = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
+        var actual = (bool)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
 
         Assert.Equal(useSystemPasswordChar, actual);
         // Handle is recreated when setting UseSystemPasswordChar
@@ -126,7 +126,7 @@ public class TextBoxAccessibleObjectTests
     {
         using TextBox textBox = new() { PlaceholderText = placeholderText };
 
-        object helpText = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId);
+        string helpText = ((BSTR)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId)).ToStringAndFree();
 
         Assert.Equal(expectedHelpText, helpText);
     }
@@ -139,7 +139,7 @@ public class TextBoxAccessibleObjectTests
         using TextBox textBox = new TextBox();
         textBox.PasswordChar = passwordChar;
 
-        object actual = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
+        var actual = (bool)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
         bool expected = passwordChar != '\0';
 
         Assert.Equal(expected, actual);
@@ -170,7 +170,7 @@ public class TextBoxAccessibleObjectTests
         textBox.PasswordChar = passwordChar;
         textBox.Multiline = true;
 
-        object actual = textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
+        var actual = (bool)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
         bool expected = passwordChar != '\0';
 
         Assert.Equal(expected, actual);

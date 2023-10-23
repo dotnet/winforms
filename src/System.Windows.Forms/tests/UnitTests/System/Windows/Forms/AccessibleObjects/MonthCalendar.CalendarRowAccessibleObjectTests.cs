@@ -41,7 +41,7 @@ public class MonthCalendar_CalendarRowAccessibleObjectTests
         using MonthCalendar control = new();
         CalendarRowAccessibleObject rowAccessibleObject = CreateCalendarRowAccessibleObject(control);
 
-        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)rowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)rowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId, actual);
         Assert.False(control.IsHandleCreated);

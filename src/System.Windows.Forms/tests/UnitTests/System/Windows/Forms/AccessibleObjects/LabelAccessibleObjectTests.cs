@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using LabelAccessibleObject = System.Windows.Forms.Label.LabelAccessibleObject;
 
@@ -11,7 +12,7 @@ public class LabelAccessibleObjectTests
     [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "Address")]
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "Label1")]
-    public void LabelAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
+    public void LabelAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, string expected)
     {
         using Label label = new()
         {
@@ -22,7 +23,7 @@ public class LabelAccessibleObjectTests
 
         LabelAccessibleObject accessibilityObject = (LabelAccessibleObject)label.AccessibilityObject;
 
-        object value = accessibilityObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        string value = ((BSTR)accessibilityObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID)).ToStringAndFree();
         Assert.Equal(expected, value);
         Assert.False(label.IsHandleCreated);
     }
@@ -86,9 +87,9 @@ public class LabelAccessibleObjectTests
         using Label label = new Label();
         // AccessibleRole is not set = Default
 
-        object actual = label.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = label.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TextControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TextControlTypeId, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(label.IsHandleCreated);
     }
 
@@ -114,10 +115,10 @@ public class LabelAccessibleObjectTests
         using Label label = new Label();
         label.AccessibleRole = role;
 
-        object actual = label.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = label.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
-        Assert.Equal(expected, actual);
+        Assert.Equal(expected, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(label.IsHandleCreated);
     }
 
@@ -126,7 +127,7 @@ public class LabelAccessibleObjectTests
     {
         const string newText = "New text";
         using var control = new LabelWithCustomAccessibleObject(
-            (propertyId, value) => propertyId == UIA_PROPERTY_ID.UIA_NamePropertyId && ReferenceEquals(value, newText))
+            (propertyId, value) => propertyId == UIA_PROPERTY_ID.UIA_NamePropertyId && newText.Equals(value.ToObject()))
         {
             Text = "Text"
         };
@@ -143,9 +144,9 @@ public class LabelAccessibleObjectTests
 
     private class LabelWithCustomAccessibleObject : Label
     {
-        private readonly Func<UIA_PROPERTY_ID, object, bool> _checkRaisedEvent;
+        private readonly Func<UIA_PROPERTY_ID, VARIANT, bool> _checkRaisedEvent;
 
-        public LabelWithCustomAccessibleObject(Func<UIA_PROPERTY_ID, object, bool> checkRaisedEvent)
+        public LabelWithCustomAccessibleObject(Func<UIA_PROPERTY_ID, VARIANT, bool> checkRaisedEvent)
         {
             _checkRaisedEvent = checkRaisedEvent;
         }
@@ -155,16 +156,16 @@ public class LabelAccessibleObjectTests
 
     private class ControlAccessibleObjectWithNotificationCounter : Control.ControlAccessibleObject
     {
-        private readonly Func<UIA_PROPERTY_ID, object, bool> _checkRaisedEvent;
+        private readonly Func<UIA_PROPERTY_ID, VARIANT, bool> _checkRaisedEvent;
 
-        public ControlAccessibleObjectWithNotificationCounter(Control ownerControl, Func<UIA_PROPERTY_ID, object, bool> checkRaisedEvent) : base(ownerControl)
+        public ControlAccessibleObjectWithNotificationCounter(Control ownerControl, Func<UIA_PROPERTY_ID, VARIANT, bool> checkRaisedEvent) : base(ownerControl)
         {
             _checkRaisedEvent = checkRaisedEvent;
         }
 
         internal int RaiseAutomationNotificationCallCount { get; private set; }
 
-        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, object oldValue, object newValue)
+        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
         {
             if (_checkRaisedEvent(propertyId, newValue))
             {

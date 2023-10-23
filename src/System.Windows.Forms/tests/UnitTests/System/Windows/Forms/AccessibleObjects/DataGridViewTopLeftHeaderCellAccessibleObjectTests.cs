@@ -92,7 +92,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
 
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId;
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(expected, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsTheory]
@@ -105,7 +105,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
         control.TopLeftHeaderCell = cell;
         control.Enabled = isEnabled;
 
-        Assert.Equal(isEnabled, cell.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
+        Assert.Equal(isEnabled, (bool)cell.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 

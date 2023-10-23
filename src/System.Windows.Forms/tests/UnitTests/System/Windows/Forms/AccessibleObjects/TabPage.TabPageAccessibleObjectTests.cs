@@ -26,7 +26,7 @@ public class TabPage_TabPageAccessibilityObjectTests
         tabPage.CreateControl();
         // AccessibleRole is not set = Default
 
-        object actual = tabPage.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)tabPage.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId, actual);
         Assert.True(tabPage.IsHandleCreated);
@@ -70,7 +70,7 @@ public class TabPage_TabPageAccessibilityObjectTests
         using TabPage tabPage = new();
         tabPage.AccessibleRole = role;
 
-        object actual = tabPage.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)tabPage.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -473,14 +473,14 @@ public class TabPage_TabPageAccessibilityObjectTests
 
         TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(tabPage.AccessibilityObject);
 
-        Assert.Equal(expectedKeyboardShortcut, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AccessKeyPropertyId));
+        Assert.Equal(expectedKeyboardShortcut, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AccessKeyPropertyId)).ToStringAndFree());
         Assert.Equal(createControl, tabPage.IsHandleCreated);
     }
 
     [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "TabPage1")]
-    public void TabPageAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
+    public void TabPageAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, string expected)
     {
         using TabPage tabPage = new()
         {
@@ -488,7 +488,7 @@ public class TabPage_TabPageAccessibilityObjectTests
             AccessibleName = "TestName"
         };
 
-        object actual = tabPage.AccessibilityObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        string actual = ((BSTR)tabPage.AccessibilityObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID)).ToStringAndFree();
 
         Assert.Equal(expected, actual);
         Assert.False(tabPage.IsHandleCreated);
@@ -514,8 +514,8 @@ public class TabPage_TabPageAccessibilityObjectTests
     {
         using TabPage tabPage = new();
         TabPageAccessibleObject accessibleObject = (TabPageAccessibleObject)tabPage.AccessibilityObject;
-
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(tabPage.IsHandleCreated);
     }
 }

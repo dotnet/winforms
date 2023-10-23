@@ -24,7 +24,7 @@ public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressB
         using ToolStripProgressBarControl toolStripProgressBarControl = new ToolStripProgressBarControl();
         // AccessibleRole is not set = Default
 
-        object actual = toolStripProgressBarControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripProgressBarControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ProgressBarControlTypeId, actual);
         Assert.False(toolStripProgressBarControl.IsHandleCreated);
@@ -72,7 +72,7 @@ public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressB
         toolStripProgressBarControl.AccessibleRole = role;
 
         AccessibleObject accessibleObject = toolStripProgressBarControl.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(role, accessibleObject.Role);

@@ -86,7 +86,7 @@ public class TrackBar_TrackBarChildAccessibleObjectTests
         using TrackBar control = new();
         var accessibleObject = new SubTrackBarChildAccessibleObject(control);
 
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsTheory]
@@ -97,7 +97,7 @@ public class TrackBar_TrackBarChildAccessibleObjectTests
         control.Enabled = isEnabled;
         var accessibleObject = new SubTrackBarChildAccessibleObject(control);
 
-        Assert.Equal(isEnabled, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
+        Assert.Equal(isEnabled, (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 

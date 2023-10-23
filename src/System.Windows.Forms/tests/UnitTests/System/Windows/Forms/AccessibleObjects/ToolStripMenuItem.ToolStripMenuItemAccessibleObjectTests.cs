@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripMenuItem;
 
@@ -23,7 +24,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         using ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
         // AccessibleRole is not set = Default
 
-        object actual = toolStripMenuItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripMenuItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_MenuItemControlTypeId, actual);
     }
@@ -61,7 +62,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         using ToolStripMenuItem toolStripMenuItem = new ToolStripMenuItem();
         toolStripMenuItem.AccessibleRole = role;
 
-        object actual = toolStripMenuItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripMenuItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -74,7 +75,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
 
         AccessibleObject accessibilityObject = toolStripMenuItem.AccessibilityObject;
 
-        Assert.Null(accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
+        Assert.Equal(VARIANT.Empty, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
     }
 
     [WinFormsFact]
@@ -87,24 +88,24 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         menuStrip.PerformLayout();
 
         Assert.Equal(1, menuStrip.Items.Count);
-        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
+        Assert.Equal(1, (int)item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
 
         using ToolStripSeparator separator = new();
         menuStrip.Items.Add(separator);
         menuStrip.PerformLayout();
 
         Assert.Equal(2, menuStrip.Items.Count);
-        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
-        Assert.Null(separator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
+        Assert.Equal(1, (int)item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
+        Assert.Equal(VARIANT.Empty, separator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
 
         using ToolStripMenuItem item2 = new();
         menuStrip.Items.Add(item2);
         menuStrip.PerformLayout();
 
         Assert.Equal(3, menuStrip.Items.Count);
-        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
-        Assert.Null(separator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
-        Assert.Equal(2, item2.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
+        Assert.Equal(1, (int)item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
+        Assert.Equal(VARIANT.Empty, separator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
+        Assert.Equal(2, (int)item2.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_PositionInSetPropertyId));
     }
 
     [WinFormsFact]
@@ -114,7 +115,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
 
         AccessibleObject accessibilityObject = toolStripMenuItem.AccessibilityObject;
 
-        Assert.Null(accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
+        Assert.Equal(VARIANT.Empty, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
     }
 
     [WinFormsFact]
@@ -127,24 +128,24 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
         menuStrip.PerformLayout();
 
         Assert.Equal(1, menuStrip.Items.Count);
-        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
+        Assert.Equal(1, (int)item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
 
         using ToolStripSeparator separator = new();
         menuStrip.Items.Add(separator);
         menuStrip.PerformLayout();
 
         Assert.Equal(2, menuStrip.Items.Count);
-        Assert.Equal(1, item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
-        Assert.Null(separator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
+        Assert.Equal(1, (int)item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
+        Assert.Equal(VARIANT.Empty, separator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
 
         using ToolStripMenuItem item2 = new();
         menuStrip.Items.Add(item2);
         menuStrip.PerformLayout();
 
         Assert.Equal(3, menuStrip.Items.Count);
-        Assert.Equal(2, item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
-        Assert.Null(separator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
-        Assert.Equal(2, item2.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
+        Assert.Equal(2, (int)item1.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
+        Assert.Equal(VARIANT.Empty, separator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
+        Assert.Equal(2, (int)item2.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId));
     }
 
     [WinFormsTheory]

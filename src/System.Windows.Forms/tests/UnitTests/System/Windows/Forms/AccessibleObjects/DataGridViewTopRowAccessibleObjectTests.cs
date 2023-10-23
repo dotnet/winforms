@@ -1238,10 +1238,10 @@ public class DataGridViewTopRowAccessibleObjectTests
         AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
 
         Assert.True((bool)topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
-        Assert.Equal(string.Empty, topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId));
-        Assert.Equal(SR.DataGridView_AccTopRow, topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
-        Assert.Equal(SR.DataGridView_AccTopRow, topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
-        Assert.Equal("Top Row", topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal(string.Empty, ((BSTR)topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId)).ToStringAndFree());
+        Assert.Equal(SR.DataGridView_AccTopRow, ((BSTR)topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree());
+        Assert.Equal(SR.DataGridView_AccTopRow, ((BSTR)topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId)).ToStringAndFree());
+        Assert.Equal("Top Row", ((BSTR)topRowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree());
         Assert.False(dataGridView.IsHandleCreated);
     }
 }

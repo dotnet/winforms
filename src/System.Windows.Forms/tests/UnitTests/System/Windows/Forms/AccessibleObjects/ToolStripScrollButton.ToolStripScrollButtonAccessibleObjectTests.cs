@@ -149,11 +149,11 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
 
         Assert.Equal(expectedUpButtonName, upScrollButtonAccessibleObject.Name);
         Assert.Equal(expectedDefaultAction, upScrollButtonAccessibleObject.DefaultAction);
-        Assert.Equal(expectedControlType, upScrollButtonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(expectedControlType, (UIA_CONTROLTYPE_ID)(int)upScrollButtonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
 
         Assert.Equal(expectedDownButtonName, downScrollButtonAccessibleObject.Name);
         Assert.Equal(expectedDefaultAction, downScrollButtonAccessibleObject.DefaultAction);
-        Assert.Equal(expectedControlType, downScrollButtonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(expectedControlType, (UIA_CONTROLTYPE_ID)(int)downScrollButtonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     private class SubToolStripDropDownMenu : ToolStripDropDownMenu

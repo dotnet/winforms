@@ -4,8 +4,8 @@
 using System.Drawing;
 using Moq;
 using Moq.Protected;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -151,7 +151,14 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     [MemberData(nameof(DefaultAction_TestData))]
     public void DataGridViewCellAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected(AccessibleObject accessibleObject, string expected)
     {
-        Assert.Equal(expected, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId) ?? string.Empty);
+        if (!string.IsNullOrEmpty(expected))
+        {
+            Assert.Equal(expected, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
+        }
+        else
+        {
+            Assert.Equal(VARIANT.Empty, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        }
     }
 
     [WinFormsTheory]
@@ -632,11 +639,12 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
     }
 
     [WinFormsFact]
-    public void DataGridViewCellAccessibleObject_ControlType_IsDefined()
+    public unsafe void DataGridViewCellAccessibleObject_ControlType_IsDefined()
     {
-        UiaCore.IRawElementProviderSimple provider = new DataGridViewCellAccessibleObject();
-
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId, provider.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        IRawElementProviderSimple.Interface provider = new DataGridViewCellAccessibleObject();
+        using VARIANT actual = default;
+        Assert.True(provider.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId, &actual).Succeeded);
+        Assert.Equal((int)UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId, actual.ToObject());
     }
 
     [WinFormsFact]
@@ -649,8 +657,8 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
 
         //DataGridViewCellAccessibleObject name couldn't be set, it's gathered dynamically in the Name property accessor
-        Assert.Equal(accessibleObject.Name, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
-        Assert.Equal(accessibleObject.Name, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
+        Assert.Equal(accessibleObject.Name, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree());
+        Assert.Equal(accessibleObject.Name, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId)).ToStringAndFree());
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -663,9 +671,9 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
 
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId);
+        VARIANT actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId);
 
-        Assert.Equal(accessibleObject.Help ?? string.Empty, actual);
+        Assert.Equal(accessibleObject.Help ?? string.Empty, ((BSTR)actual).ToStringAndFree());
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -706,8 +714,9 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
         dataGridView.Rows.Add(new DataGridViewRow());
         DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
+        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1004,7 +1013,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         DataGridViewCellAccessibleObject dataGridViewCellAccessibleObject = new(dataGridView.Rows[0].Cells[0]);
         string expected = string.Concat(dataGridViewCellAccessibleObject.RuntimeId);
 
-        Assert.Equal(expected, dataGridViewCellAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId));
+        Assert.Equal(expected, ((BSTR)dataGridViewCellAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree());
         Assert.False(dataGridView.IsHandleCreated);
     }
 

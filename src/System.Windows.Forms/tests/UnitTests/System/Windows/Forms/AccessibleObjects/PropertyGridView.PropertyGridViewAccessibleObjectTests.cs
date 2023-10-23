@@ -140,7 +140,7 @@ public class PropertyGridView_PropertyGridViewAccessibleObjectTests
         using PropertyGrid propertyGrid = new PropertyGrid();
         // AccessibleRole is not set = Default
 
-        object actual = propertyGrid.GridViewAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)propertyGrid.GridViewAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TableControlTypeId, actual);
         Assert.False(propertyGrid.IsHandleCreated);

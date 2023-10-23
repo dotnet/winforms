@@ -225,7 +225,7 @@ public class TreeNodeAccessibleObjectTests
         TreeNode node = new(control);
 
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId;
-        object actual = node.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)node.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expected, actual);
         Assert.False(control.IsHandleCreated);

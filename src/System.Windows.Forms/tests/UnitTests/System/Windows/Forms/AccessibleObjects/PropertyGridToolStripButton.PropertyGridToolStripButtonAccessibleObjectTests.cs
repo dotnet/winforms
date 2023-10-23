@@ -60,7 +60,7 @@ public class PropertyGridToolStripButton_PropertyGridToolStripButtonAccessibleOb
         ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
         AccessibleObject accessibleObject = toolStripButtons[0].AccessibilityObject;
 
-        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_RadioButtonControlTypeId, actual);
     }

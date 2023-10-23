@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -14,15 +15,15 @@ public class GroupBoxAccessibleObjectTests
         using var groupBox = new GroupBox();
         AccessibleObject groupBoxAccessibleObject = groupBox.AccessibilityObject;
 
-        Assert.Null(groupBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
-        Assert.Null(groupBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
+        Assert.Equal(VARIANT.Empty, groupBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        Assert.Equal(VARIANT.Empty, groupBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
 
         groupBox.Text = "Some test groupBox text";
         groupBox.Name = "Group1";
         groupBox.AccessibleName = testAccName;
 
-        Assert.Equal(testAccName, groupBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
-        Assert.Equal(testAccName, groupBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
+        Assert.Equal(testAccName, ((BSTR)groupBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree());
+        Assert.Equal(testAccName, ((BSTR)groupBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId)).ToStringAndFree());
         Assert.False(groupBox.IsHandleCreated);
     }
 
@@ -84,8 +85,8 @@ public class GroupBoxAccessibleObjectTests
     {
         using GroupBox groupBox = new GroupBox();
         // AccessibleRole is not set = Default
-        object actual = groupBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId, actual);
+        VARIANT actual = groupBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(groupBox.IsHandleCreated);
     }
 
@@ -111,10 +112,10 @@ public class GroupBoxAccessibleObjectTests
         using GroupBox groupBox = new GroupBox();
         groupBox.AccessibleRole = role;
 
-        object actual = groupBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = groupBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
-        Assert.Equal(expected, actual);
+        Assert.Equal(expected, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(groupBox.IsHandleCreated);
     }
 
@@ -123,7 +124,7 @@ public class GroupBoxAccessibleObjectTests
     {
         using GroupBox ownerControl = new() { Name = "test name" };
         string expected = ownerControl.Name;
-        object actual = ownerControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId);
+        string actual = ((BSTR)ownerControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree();
 
         Assert.Equal(expected, actual);
         Assert.False(ownerControl.IsHandleCreated);

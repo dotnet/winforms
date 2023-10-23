@@ -195,7 +195,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
-        Assert.Equal(enabled, calendar.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId));
+        Assert.Equal(enabled, (bool)calendar.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId));
         Assert.False(control.IsHandleCreated);
     }
 

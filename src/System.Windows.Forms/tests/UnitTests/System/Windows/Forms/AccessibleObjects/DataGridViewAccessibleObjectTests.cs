@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -36,7 +37,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Columns.Add(column);
         dataGridView.Sort(dataGridView.Columns[0], ListSortDirection.Ascending);
 
-        string itemStatus = dataGridView.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ItemStatusPropertyId)?.ToString();
+        string itemStatus = ((BSTR)dataGridView.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ItemStatusPropertyId)).ToStringAndFree();
         string expectedStatus = "Sorted ascending by Some column.";
 
         Assert.Equal(expectedStatus, itemStatus);
@@ -64,7 +65,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Sort(column1, ListSortDirection.Ascending);
         column1.Visible = false;
 
-        string itemStatus = dataGridView.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ItemStatusPropertyId)?.ToString();
+        string itemStatus = ((BSTR)dataGridView.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ItemStatusPropertyId)).ToStringAndFree();
 
         Assert.Equal(SR.NotSortedAccessibleStatus, itemStatus);
         Assert.False(dataGridView.IsHandleCreated);
@@ -189,11 +190,11 @@ public class DataGridViewAccessibleObjectTests
     {
         using DataGridView dataGridView = new();
         AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_DataGridControlTypeId;
 
         Assert.False(dataGridView.IsHandleCreated);
-        Assert.Equal(expected, actual);
+        Assert.Equal(expected, (UIA_CONTROLTYPE_ID)(int)actual);
     }
 
     [WinFormsFact]
@@ -325,7 +326,7 @@ public class DataGridViewAccessibleObjectTests
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
 
         dataGridView.Rows.Add(); // 1
-        object isOffscreen = dataGridView.Rows[1].Cells[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
+        VARIANT isOffscreen = dataGridView.Rows[1].Cells[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
         Assert.False((bool)isOffscreen); // Within the visible area
 
         dataGridView.Rows.Add(); // 2
@@ -500,10 +501,10 @@ public class DataGridViewAccessibleObjectTests
         using DataGridView dataGridView = new();
         dataGridView.AccessibleRole = role;
 
-        object actual = dataGridView.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = dataGridView.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
-        Assert.Equal(expected, actual);
+        Assert.Equal(expected, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1665,12 +1666,12 @@ public class DataGridViewAccessibleObjectTests
         using DataGridViewTextBoxColumn column = new();
         dataGridView.Columns.Add(column);
 
-        object actual = dataGridView.AccessibilityObject
+        VARIANT actual = dataGridView.AccessibilityObject
             .GetPropertyValue(UIA_PROPERTY_ID.UIA_ItemStatusPropertyId);
 
         Assert.Equal(1, dataGridView.RowCount);
         Assert.Equal(1, dataGridView.ColumnCount);
-        Assert.Equal(SR.NotSortedAccessibleStatus, actual);
+        Assert.Equal(SR.NotSortedAccessibleStatus, ((BSTR)actual).ToStringAndFree());
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1679,12 +1680,12 @@ public class DataGridViewAccessibleObjectTests
     {
         using DataGridView dataGridView = new() { AllowUserToAddRows = false };
 
-        object actual = dataGridView.AccessibilityObject
+        VARIANT actual = dataGridView.AccessibilityObject
             .GetPropertyValue(UIA_PROPERTY_ID.UIA_ItemStatusPropertyId);
 
         Assert.Equal(0, dataGridView.RowCount);
         Assert.Equal(0, dataGridView.ColumnCount);
-        Assert.Null(actual);
+        Assert.Equal(VARIANT.Empty, actual);
         Assert.False(dataGridView.IsHandleCreated);
     }
 }

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
@@ -32,8 +33,8 @@ public class MonthCalendar_MonthCalendarChildAccessibleObjectTests
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsEnabledPropertyId, true)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId, false)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId, true)]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, AccessibleRole.None)]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, (int)AccessibleRole.None)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, (int)AccessibleStates.None)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, null)]
     public void MonthCalendarChildAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
@@ -41,9 +42,9 @@ public class MonthCalendar_MonthCalendarChildAccessibleObjectTests
 
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         MonthCalendarChildAccessibleObject accessibleObject = new SubObject(controlAccessibleObject);
-        object actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
+        VARIANT actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
 
-        Assert.Equal(expected, actual);
+        Assert.Equal(expected, actual.ToObject());
         Assert.False(control.IsHandleCreated);
     }
 

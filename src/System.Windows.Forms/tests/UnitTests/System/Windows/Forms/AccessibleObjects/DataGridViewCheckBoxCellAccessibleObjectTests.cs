@@ -56,7 +56,7 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
     public void DataGridViewCheckBoxCellAccessibleObject_ControlType_ReturnsExpected()
     {
         var accessibleObject = new DataGridViewCheckBoxCellAccessibleObject(null);
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_CheckBoxControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_CheckBoxControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]
@@ -76,11 +76,11 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
         control.CreateControl();
         var accessibleObject = (DataGridViewCheckBoxCellAccessibleObject)cell.AccessibilityObject;
 
-        Assert.False(bool.Parse(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId).ToString()));
+        Assert.False(bool.Parse(((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree()));
 
         accessibleObject.DoDefaultAction();
 
-        Assert.True(bool.Parse(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId).ToString()));
+        Assert.True(bool.Parse(((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree()));
         Assert.True(control.IsHandleCreated);
     }
 
@@ -163,12 +163,12 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
         if (isChecked)
         {
             // Make sure that default action is check as a default case.
-            Assert.Equal(SR.DataGridView_AccCheckBoxCellDefaultActionCheck, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+            Assert.Equal(SR.DataGridView_AccCheckBoxCellDefaultActionCheck, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
             // Check it.
             accessibleObject.DoDefaultAction();
         }
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(expected, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
         Assert.True(control.IsHandleCreated);
     }
 

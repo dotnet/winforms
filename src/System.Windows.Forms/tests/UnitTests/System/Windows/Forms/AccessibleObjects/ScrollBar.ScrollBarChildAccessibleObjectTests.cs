@@ -85,7 +85,7 @@ public class ScrollBar_ScrollBarChildAccessibleObjectTests
     public void ScrollBarChildAccessibleObject_GetPropertyValue_ControlType_ReturnsExpected()
     {
         var accessibleObject = new ScrollBarChildAccessibleObject(null);
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsTheory]
@@ -96,7 +96,7 @@ public class ScrollBar_ScrollBarChildAccessibleObjectTests
         control.Enabled = isEnabled;
         var accessibleObject = new ScrollBarChildAccessibleObject(control);
 
-        Assert.Equal(isEnabled, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
+        Assert.Equal(isEnabled, (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 

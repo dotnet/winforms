@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -88,7 +89,7 @@ public class PictureBox_PictureBoxAccessibleObjectTests
 
     [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)] // If AccessibleRole is Default
+    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, (int)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)] // If AccessibleRole is Default
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId, true)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "PictureBox1")]
     public void PictureBoxAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
@@ -100,9 +101,9 @@ public class PictureBox_PictureBoxAccessibleObjectTests
         };
 
         PictureBox.PictureBoxAccessibleObject pictureBoxAccessibleObject = new(pictureBox);
-        object value = pictureBoxAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        using VARIANT value = pictureBoxAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
-        Assert.Equal(expected, value);
+        Assert.Equal(expected, value.ToObject());
         Assert.False(pictureBox.IsHandleCreated);
     }
 
@@ -139,7 +140,7 @@ public class PictureBox_PictureBoxAccessibleObjectTests
         using PictureBox pictureBox = new PictureBox();
         pictureBox.AccessibleRole = role;
 
-        object actual = pictureBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)pictureBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

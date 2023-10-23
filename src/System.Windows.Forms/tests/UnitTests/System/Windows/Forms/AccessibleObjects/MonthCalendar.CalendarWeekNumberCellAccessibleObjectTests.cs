@@ -68,7 +68,7 @@ public class MonthCalendar_CalendarWeekNumberCellAccessibleObjectTests
         using MonthCalendar control = new();
         CalendarWeekNumberCellAccessibleObject cellAccessibleObject = CreateCalendarWeekNumberCellAccessibleObject(control);
 
-        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)cellAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)cellAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId, actual);
         Assert.False(control.IsHandleCreated);

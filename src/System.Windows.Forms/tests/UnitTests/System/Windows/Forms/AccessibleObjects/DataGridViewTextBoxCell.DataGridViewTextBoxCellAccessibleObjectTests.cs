@@ -13,7 +13,7 @@ public class DataGridViewTextBoxCell_DataGridViewTextBoxCellAccessibleObject
         using var cell = new DataGridViewTextBoxCell();
         AccessibleObject accessibleObject = cell.AccessibilityObject;
 
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId, actual);
     }

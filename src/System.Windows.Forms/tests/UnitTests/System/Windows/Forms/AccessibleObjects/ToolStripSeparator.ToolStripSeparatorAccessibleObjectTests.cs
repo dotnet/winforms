@@ -23,7 +23,7 @@ public class ToolStripSeparator_ToolStripSeparatorAccessibleObjectTests
         using ToolStripSeparator toolStripSeparator = new ToolStripSeparator();
         // AccessibleRole is not set = Default
 
-        object actual = toolStripSeparator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripSeparator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_SeparatorControlTypeId, actual);
     }
@@ -61,7 +61,7 @@ public class ToolStripSeparator_ToolStripSeparatorAccessibleObjectTests
         using ToolStripSeparator toolStripSeparator = new ToolStripSeparator();
         toolStripSeparator.AccessibleRole = role;
 
-        object actual = toolStripSeparator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripSeparator.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

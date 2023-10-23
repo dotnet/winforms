@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Reflection;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Control;
 using static Interop;
@@ -146,9 +147,9 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
 
         // AccessibleRole is not set = Default
 
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(propertyGrid.IsHandleCreated);
     }
 
@@ -159,7 +160,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
         AccessibleObject accessibleObject = gridView.EditAccessibleObject;
 
-        Assert.Equal("WinForm", accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId));
+        Assert.Equal("WinForm", ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId)).ToStringAndFree());
         Assert.False(propertyGrid.IsHandleCreated);
     }
 

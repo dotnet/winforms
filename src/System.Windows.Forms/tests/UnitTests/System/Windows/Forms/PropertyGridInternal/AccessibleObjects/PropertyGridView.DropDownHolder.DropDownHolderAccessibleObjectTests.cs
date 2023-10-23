@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests.AccessibleObjects;
@@ -44,7 +45,7 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
 
         Assert.Equal(ownerControl, accessibilityObject.Owner);
         Assert.Equal(SR.PropertyGridViewDropDownControlHolderAccessibleName,
-            accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+            ((BSTR)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree());
 
         AccessibleObject selectedGridEntryAccessibleObject = null;
         Assert.Equal(selectedGridEntryAccessibleObject, accessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
@@ -69,9 +70,9 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
         using PropertyGridView.DropDownHolder dropDownControlHolder = new PropertyGridView.DropDownHolder(propertyGridView);
         // AccessibleRole is not set = Default
 
-        object actual = dropDownControlHolder.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = dropDownControlHolder.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(propertyGrid.IsHandleCreated);
         Assert.False(dropDownControlHolder.IsHandleCreated);
     }
