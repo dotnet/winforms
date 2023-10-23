@@ -24,14 +24,12 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
         _textProvider = new(owningListView, labelEdit, this);
     }
 
-    private ListViewSubItemAccessibleObject? owningSubItemAccessibleObject
+    private ListViewSubItemAccessibleObject? OwningSubItemAccessibleObject
         => _owningListView.TryGetTarget(out ListView? target)
-        ? target._listViewSubItem is not null
-            ? target._listViewSubItem.AccessibilityObject as ListViewSubItemAccessibleObject
-            : null
+        ? target._listViewSubItem?.AccessibilityObject as ListViewSubItemAccessibleObject
         : null;
 
-    private AccessibleObject? owingListViewItemAccessibleObject
+    private AccessibleObject? OwingListViewItemAccessibleObject
         => _owningListView.TryGetTarget(out ListView? target)
         ? target._selectedItem?.AccessibilityObject
         : null;
@@ -40,10 +38,10 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
 
     public override AccessibleObject? Parent
         => _owningListView.TryGetTarget(out ListView? target) && target._listViewSubItem is null
-        ? owingListViewItemAccessibleObject
+        ? OwingListViewItemAccessibleObject
         : target!.View == View.Tile
-            ? owingListViewItemAccessibleObject
-            : owningSubItemAccessibleObject;
+            ? OwingListViewItemAccessibleObject
+            : OwningSubItemAccessibleObject;
 
     internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
         => propertyID switch

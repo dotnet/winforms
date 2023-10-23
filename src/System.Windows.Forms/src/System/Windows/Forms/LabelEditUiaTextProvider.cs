@@ -222,7 +222,7 @@ internal sealed unsafe class LabelEditUiaTextProvider : UiaTextProvider
 
     public override Point PointToScreen(Point pt)
     {
-        PInvoke.MapWindowPoints((HWND)_owningChildEdit.Handle, HWND.Null, ref pt);
+        PInvoke.MapWindowPoints(_owningChildEdit.Handle, HWND.Null, ref pt);
         return pt;
     }
 

@@ -186,7 +186,7 @@ public partial class ListViewGroup
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId,
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningListView.Focused && Focused,
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListView.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => State.HasFlag(AccessibleStates.Focusable),
                 UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _owningListView.IsHandleCreated ? _owningListView.Handle : IntPtr.Zero,
                 _ => base.GetPropertyValue(propertyID)
             };

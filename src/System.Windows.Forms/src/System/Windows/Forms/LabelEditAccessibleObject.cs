@@ -36,7 +36,7 @@ internal unsafe class LabelEditAccessibleObject : AccessibleObject
             UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_EditControlTypeId,
             UIA_PROPERTY_ID.UIA_AccessKeyPropertyId => string.Empty,
             UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => true,
-            UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+            UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => State.HasFlag(AccessibleStates.Focusable),
             UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => true,
             UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _labelEdit.TryGetTarget(out var target) ? (nint)target.HWND : 0,
             _ => base.GetPropertyValue(propertyID),
@@ -69,11 +69,11 @@ internal unsafe class LabelEditAccessibleObject : AccessibleObject
         ? PInvoke.GetWindowText(target)
         : null;
 
-    internal override int[] RuntimeId => _runtimeId ??= new int[]
-    {
-        RuntimeIDFirstItem,
-        _labelEdit.TryGetTarget(out var target) ? (int)target.HWND : (int)HWND.Null
-    };
+    internal override int[] RuntimeId => _runtimeId ??=
+        [
+            RuntimeIDFirstItem,
+            _labelEdit.TryGetTarget(out var target) ? (int)target.HWND : (int)HWND.Null
+        ];
 
     internal override ITextRangeProvider* DocumentRangeInternal
         => _textProvider.DocumentRange;

@@ -69,7 +69,7 @@ internal class LabelEditNativeWindow : NativeWindow
 
     private bool IsAccessibilityObjectCreated => AccessibilityObject is not null;
 
-    public bool IsHandleCreated => Handle != IntPtr.Zero;
+    public bool IsHandleCreated => Handle != HWND.Null;
 
     protected override void OnHandleChange()
     {

@@ -2583,6 +2583,9 @@ public partial class TreeView : Control
             return (LRESULT)IntPtr.Zero;
         }
 
+        Debug.Assert(_labelEdit is null,
+            "A new label editing shouldn't start before the previous one ended");
+
         if (_labelEdit is not null)
         {
             _labelEdit.ReleaseHandle();
