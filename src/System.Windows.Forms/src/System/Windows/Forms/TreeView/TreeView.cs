@@ -2925,14 +2925,14 @@ public partial class TreeView : Control
         return retval;
     }
 
-    internal override unsafe ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
+    internal override unsafe ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
     {
         // The "ShowNodeToolTips" flag is required so that when the user hovers over the TreeNode,
         // their own tooltip is displayed, not the TreeView tooltip.
         // The second condition is necessary for the correct display of the keyboard tooltip,
         // since the logic of the external tooltip blocks its display
         bool isExternalTooltip = ShowNodeToolTips && tooltip != KeyboardToolTip;
-        ComCtl32.ToolInfoWrapper<Control> wrapper = new(this, flags, isExternalTooltip ? null : caption);
+        ToolInfoWrapper<Control> wrapper = new(this, flags, isExternalTooltip ? null : caption);
         if (isExternalTooltip)
         {
             wrapper.Info.lpszText = (char*)(-1);

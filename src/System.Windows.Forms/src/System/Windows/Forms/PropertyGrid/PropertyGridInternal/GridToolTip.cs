@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
-
 namespace System.Windows.Forms.PropertyGridInternal;
 
 internal class GridToolTip : Control
@@ -62,7 +60,7 @@ internal class GridToolTip : Control
 
                 for (int i = 0; i < _controls.Length; i++)
                 {
-                    ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(_controls[i]);
+                    ToolInfoWrapper<Control> info = GetTOOLINFO(_controls[i]);
                     info.SendMessage(this, PInvoke.TTM_UPDATETIPTEXTW);
                 }
 
@@ -95,7 +93,7 @@ internal class GridToolTip : Control
         }
     }
 
-    private ComCtl32.ToolInfoWrapper<Control> GetTOOLINFO(Control c)
+    private ToolInfoWrapper<Control> GetTOOLINFO(Control c)
         => new(c, TOOLTIP_FLAGS.TTF_TRANSPARENT | TOOLTIP_FLAGS.TTF_SUBCLASS, _toolTipText);
 
     private void OnControlCreateHandle(object? sender, EventArgs e) => SetupToolTip((Control?)sender);
@@ -130,7 +128,7 @@ internal class GridToolTip : Control
                 0, 0, 0, 0,
                 SET_WINDOW_POS_FLAGS.SWP_NOMOVE | SET_WINDOW_POS_FLAGS.SWP_NOSIZE | SET_WINDOW_POS_FLAGS.SWP_NOACTIVATE);
 
-            ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(control);
+            ToolInfoWrapper<Control> info = GetTOOLINFO(control);
             if (info.SendMessage(this, PInvoke.TTM_ADDTOOLW) == 0)
             {
                 Debug.Fail($"TTM_ADDTOOL failed for {control.GetType().Name}");
@@ -156,7 +154,7 @@ internal class GridToolTip : Control
 
         for (int i = 0; i < _controls.Length; i++)
         {
-            ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(_controls[i]);
+            ToolInfoWrapper<Control> info = GetTOOLINFO(_controls[i]);
             info.SendMessage(this, PInvoke.TTM_UPDATETIPTEXTW);
         }
 

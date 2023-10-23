@@ -16,7 +16,6 @@ using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static System.Windows.Forms.ListViewGroup;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
-using static Interop.ComCtl32;
 using NMHEADERW = Windows.Win32.UI.Controls.NMHEADERW;
 using NMLVLINK = Windows.Win32.UI.Controls.NMLVLINK;
 
@@ -3581,14 +3580,14 @@ public partial class ListView : Control
         }
     }
 
-    internal override unsafe ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
+    internal override unsafe ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
     {
         // The "ShowItemToolTips" flag is required so that when the user hovers over the ListViewItem,
         // their own tooltip is displayed, not the ListViewItem tooltip.
         // The second condition is necessary for the correct display of the keyboard tooltip,
         // since the logic of the external tooltip blocks its display
         bool isExternalTooltip = ShowItemToolTips && tooltip != KeyboardToolTip;
-        ComCtl32.ToolInfoWrapper<Control> wrapper = new(this, flags, isExternalTooltip ? null : caption);
+        ToolInfoWrapper<Control> wrapper = new(this, flags, isExternalTooltip ? null : caption);
         if (isExternalTooltip)
             wrapper.Info.lpszText = (char*)(-1);
 
@@ -4229,7 +4228,7 @@ public partial class ListView : Control
                 if (GroupsEnabled)
                 {
                     lvItem.mask |= LIST_VIEW_ITEM_FLAGS.LVIF_GROUPID;
-                    lvItem.iGroupId = (LVITEMA_GROUP_ID)GetNativeGroupId(li);
+                    lvItem.iGroupId = GetNativeGroupId(li);
 
 #if DEBUG
                     IntPtr result = PInvoke.SendMessage(this, PInvoke.LVM_ISGROUPVIEWENABLED);

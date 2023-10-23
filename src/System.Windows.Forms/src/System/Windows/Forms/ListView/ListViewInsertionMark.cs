@@ -129,7 +129,7 @@ public sealed class ListViewInsertionMark
         LVINSERTMARK lvInsertMark = new()
         {
             cbSize = (uint)sizeof(LVINSERTMARK),
-            dwFlags = (LIST_VIEW_INSERT_MARK_FLAGS)(_appearsAfterItem ? PInvoke.LVIM_AFTER : PInvoke.LVIM_BEFORE),
+            dwFlags = _appearsAfterItem ? PInvoke.LVIM_AFTER : PInvoke.LVIM_BEFORE,
             iItem = _index
         };
 

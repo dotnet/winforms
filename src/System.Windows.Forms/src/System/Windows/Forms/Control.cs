@@ -13573,7 +13573,7 @@ public unsafe partial class Control :
         }
     }
 
-    internal virtual ComCtl32.ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
+    internal virtual ToolInfoWrapper<Control> GetToolInfoWrapper(TOOLTIP_FLAGS flags, string? caption, ToolTip tooltip)
         => new(this, flags, caption);
 
     private readonly WeakReference<ToolStripControlHost?> toolStripControlHostReference
