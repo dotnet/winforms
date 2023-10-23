@@ -124,7 +124,7 @@ public class DesignerActionService : IDisposable
         if (disposing && _serviceProvider is not null)
         {
             IDesignerHost? host = _serviceProvider.GetService<IDesignerHost>();
-            host?.RemoveService(typeof(DesignerActionService));
+            host?.RemoveService<DesignerActionService>();
 
             if (_serviceProvider.TryGetService(out IComponentChangeService? componentChangeService))
             {

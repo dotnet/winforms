@@ -57,7 +57,7 @@ internal class ToolStripKeyboardHandlingService
 
         _designerHost = (IDesignerHost)_provider.GetService(typeof(IDesignerHost));
         Debug.Assert(_designerHost is not null, "ToolStripKeyboardHandlingService relies on the selection service, which is unavailable.");
-        _designerHost?.AddService(typeof(ToolStripKeyboardHandlingService), this);
+        _designerHost?.AddService(this);
 
         _componentChangeService = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
         Debug.Assert(_componentChangeService is not null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
@@ -448,7 +448,7 @@ internal class ToolStripKeyboardHandlingService
                 keyboardHandlingService.RestoreCommands();
                 // clean up.
                 keyboardHandlingService.RemoveCommands();
-                _designerHost.RemoveService(typeof(ToolStripKeyboardHandlingService));
+                _designerHost.RemoveService<ToolStripKeyboardHandlingService>();
             }
         }
     }

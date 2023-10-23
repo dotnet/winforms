@@ -28,7 +28,7 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
         _sp = provider;
         _designerHost = (IDesignerHost)provider.GetService(typeof(IDesignerHost));
         Debug.Assert(_designerHost is not null, "ToolStripKeyboardHandlingService relies on the selection service, which is unavailable.");
-        _designerHost?.AddService(typeof(ISupportInSituService), this);
+        _designerHost?.AddService<ISupportInSituService>(this);
 
         _componentChangeService = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
         Debug.Assert(_componentChangeService is not null, "ToolStripKeyboardHandlingService relies on the componentChange service, which is unavailable.");
@@ -243,7 +243,7 @@ internal class ToolStripInSituService : ISupportInSituService, IDisposable
             if (inSituService is not null)
             {
                 //since we are going away .. restore the old commands.
-                _designerHost.RemoveService(typeof(ISupportInSituService));
+                _designerHost.RemoveService<ISupportInSituService>();
             }
         }
     }
