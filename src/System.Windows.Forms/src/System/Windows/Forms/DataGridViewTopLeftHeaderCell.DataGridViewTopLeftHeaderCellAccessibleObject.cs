@@ -63,7 +63,7 @@ public partial class DataGridViewTopLeftHeaderCell
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
 
-                object value = Owner.Value;
+                object? value = Owner.Value;
                 if (value is not null && !(value is string))
                 {
                     // The user set the Value on the DataGridViewTopLeftHeaderCell and it did not set it to a string.
