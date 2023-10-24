@@ -28,14 +28,9 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     private static readonly int PropIndeterminateValue = PropertyStore.CreateKey();
     private static Bitmap? s_checkImage;
 
-    private const byte DATAGRIDVIEWCHECKBOXCELL_threeState = 0x01;
-    private const byte DATAGRIDVIEWCHECKBOXCELL_valueChanged = 0x02;
-    private const byte DATAGRIDVIEWCHECKBOXCELL_checked = 0x10;
-    private const byte DATAGRIDVIEWCHECKBOXCELL_indeterminate = 0x20;
-
     private const byte DATAGRIDVIEWCHECKBOXCELL_margin = 2;  // horizontal and vertical margins for preferred sizes
 
-    private byte _flags;  // see DATAGRIDVIEWCHECKBOXCELL_ consts above
+    private DataGridViewCheckBoxCellFlags _flags;
     private static bool s_mouseInContentBounds;
     private static readonly Type s_defaultCheckStateType = typeof(CheckState);
     private static readonly Type s_defaultBooleanType = typeof(bool);
@@ -50,7 +45,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     {
         if (threeState)
         {
-            _flags = DATAGRIDVIEWCHECKBOXCELL_threeState;
+            _flags = DataGridViewCheckBoxCellFlags.ThreeState;
         }
     }
 
@@ -73,34 +68,34 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
             if (value is CheckState)
             {
-                if (((CheckState)value) == System.Windows.Forms.CheckState.Checked)
+                if (((CheckState)value) == CheckState.Checked)
                 {
-                    _flags |= (byte)DATAGRIDVIEWCHECKBOXCELL_checked;
-                    _flags = (byte)(_flags & ~DATAGRIDVIEWCHECKBOXCELL_indeterminate);
+                    _flags |= DataGridViewCheckBoxCellFlags.Checked;
+                    _flags &= ~DataGridViewCheckBoxCellFlags.Indeterminate;
                 }
-                else if (((CheckState)value) == System.Windows.Forms.CheckState.Indeterminate)
+                else if (((CheckState)value) == CheckState.Indeterminate)
                 {
-                    _flags |= (byte)DATAGRIDVIEWCHECKBOXCELL_indeterminate;
-                    _flags = (byte)(_flags & ~DATAGRIDVIEWCHECKBOXCELL_checked);
+                    _flags |= DataGridViewCheckBoxCellFlags.Indeterminate;
+                    _flags &= ~DataGridViewCheckBoxCellFlags.Checked;
                 }
                 else
                 {
-                    _flags = (byte)(_flags & ~DATAGRIDVIEWCHECKBOXCELL_checked);
-                    _flags = (byte)(_flags & ~DATAGRIDVIEWCHECKBOXCELL_indeterminate);
+                    _flags &= ~DataGridViewCheckBoxCellFlags.Checked;
+                    _flags &= ~DataGridViewCheckBoxCellFlags.Indeterminate;
                 }
             }
             else if (value is bool valueAsBool)
             {
                 if (valueAsBool)
                 {
-                    _flags |= (byte)DATAGRIDVIEWCHECKBOXCELL_checked;
+                    _flags |= DataGridViewCheckBoxCellFlags.Checked;
                 }
                 else
                 {
-                    _flags = (byte)(_flags & ~DATAGRIDVIEWCHECKBOXCELL_checked);
+                    _flags &= ~DataGridViewCheckBoxCellFlags.Checked;
                 }
 
-                _flags = (byte)(_flags & ~DATAGRIDVIEWCHECKBOXCELL_indeterminate);
+                _flags &= ~DataGridViewCheckBoxCellFlags.Indeterminate;
             }
             else
             {
@@ -111,16 +106,16 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     public virtual bool EditingCellValueChanged
     {
-        get => (_flags & DATAGRIDVIEWCHECKBOXCELL_valueChanged) != 0;
+        get => _flags.HasFlag(DataGridViewCheckBoxCellFlags.ValueChanged);
         set
         {
             if (value)
             {
-                _flags |= (byte)DATAGRIDVIEWCHECKBOXCELL_valueChanged;
+                _flags |= DataGridViewCheckBoxCellFlags.ValueChanged;
             }
             else
             {
-                _flags = (byte)(_flags & ~DATAGRIDVIEWCHECKBOXCELL_valueChanged);
+                _flags &= ~DataGridViewCheckBoxCellFlags.ValueChanged;
             }
         }
     }
@@ -134,7 +129,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
         if (FormattedValueType.IsAssignableFrom(s_defaultCheckStateType))
         {
-            if ((_flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
+            if (_flags.HasFlag(DataGridViewCheckBoxCellFlags.Checked))
             {
                 if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
                 {
@@ -143,7 +138,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
                 return System.Windows.Forms.CheckState.Checked;
             }
-            else if ((_flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0)
+            else if (_flags.HasFlag(DataGridViewCheckBoxCellFlags.Indeterminate))
             {
                 if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
                 {
@@ -164,7 +159,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         }
         else if (FormattedValueType.IsAssignableFrom(s_defaultBooleanType))
         {
-            bool ret = (bool)((_flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0);
+            bool ret = _flags.HasFlag(DataGridViewCheckBoxCellFlags.Checked);
             if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
             {
                 return ret ? SR.DataGridViewCheckBoxCell_ClipboardTrue : SR.DataGridViewCheckBoxCell_ClipboardFalse;
@@ -329,7 +324,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     [DefaultValue(false)]
     public bool ThreeState
     {
-        get => (_flags & DATAGRIDVIEWCHECKBOXCELL_threeState) != 0;
+        get => _flags.HasFlag(DataGridViewCheckBoxCellFlags.ThreeState);
         set
         {
             if (ThreeState != value)
@@ -358,11 +353,11 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             {
                 if (value)
                 {
-                    _flags |= (byte)DATAGRIDVIEWCHECKBOXCELL_threeState;
+                    _flags |= DataGridViewCheckBoxCellFlags.ThreeState;
                 }
                 else
                 {
-                    _flags = (byte)(_flags & ~DATAGRIDVIEWCHECKBOXCELL_threeState);
+                    _flags &= ~DataGridViewCheckBoxCellFlags.ThreeState;
                 }
             }
         }
@@ -377,19 +372,19 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             // When users change the CheckBoxCell's CheckState but don't commit the value,
             // FormattedValue is not updated, but flags are, so in this case, we use flags to determine CheckState.
             if ((!EditingCellValueChanged && FormattedValue is CheckState checkState && checkState == CheckState.Indeterminate) ||
-                (_flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0)
+                (_flags.HasFlag(DataGridViewCheckBoxCellFlags.Indeterminate)))
             {
                 return CheckState.Indeterminate;
             }
 
             if ((!EditingCellValueChanged && FormattedValue is CheckState checkState2 && checkState2 == CheckState.Checked) ||
-                (_flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
+                (_flags.HasFlag(DataGridViewCheckBoxCellFlags.Checked)))
             {
                 return CheckState.Checked;
             }
 
             if ((!EditingCellValueChanged && FormattedValue is bool boolValue && boolValue) ||
-                (_flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
+                (_flags.HasFlag(DataGridViewCheckBoxCellFlags.Checked)))
             {
                 return CheckState.Checked;
             }
@@ -834,7 +829,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     private void NotifyDataGridViewOfValueChange()
     {
-        _flags |= (byte)DATAGRIDVIEWCHECKBOXCELL_valueChanged;
+        _flags |= DataGridViewCheckBoxCellFlags.ValueChanged;
         Debug.Assert(DataGridView is not null);
         DataGridView.NotifyCurrentCellDirty(true);
     }
@@ -1719,11 +1714,11 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         IDataGridViewEditingCell editingCell = (IDataGridViewEditingCell)this;
         if (FormattedValueType.IsAssignableFrom(typeof(CheckState)))
         {
-            if ((_flags & DATAGRIDVIEWCHECKBOXCELL_checked) != 0)
+            if (_flags.HasFlag(DataGridViewCheckBoxCellFlags.Checked))
             {
                 editingCell.EditingCellFormattedValue = System.Windows.Forms.CheckState.Indeterminate;
             }
-            else if ((_flags & DATAGRIDVIEWCHECKBOXCELL_indeterminate) != 0)
+            else if ((_flags.HasFlag(DataGridViewCheckBoxCellFlags.Indeterminate)))
             {
                 editingCell.EditingCellFormattedValue = System.Windows.Forms.CheckState.Unchecked;
             }
