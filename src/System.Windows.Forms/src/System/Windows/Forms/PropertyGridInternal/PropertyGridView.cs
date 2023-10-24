@@ -1458,10 +1458,16 @@ internal sealed partial class PropertyGridView :
 
     public int ValueWidth => (int)(LabelWidth * (_labelRatio - 1));
 
-    public void DropDownControl(Control? control)
+    public void DropDownControl(Control control)
     {
         CompModSwitches.DebugGridView.TraceVerbose("PropertyGridView:DropDownControl");
-        s_gridViewDebugPaint.TraceVerbose($"DropDownControl(ctl = {control!.GetType().Name})");
+
+        if (control is null)
+        {
+            return;
+        }
+
+        s_gridViewDebugPaint.TraceVerbose($"DropDownControl(ctl = {control.GetType().Name})");
 
         _dropDownHolder ??= new(this);
         _dropDownHolder.Visible = false;
