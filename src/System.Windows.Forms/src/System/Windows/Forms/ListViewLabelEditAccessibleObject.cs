@@ -4,6 +4,7 @@
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem.ListViewSubItem;
 using UiaCore = Interop.UiaCore;
+
 namespace System.Windows.Forms;
 
 internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObject
@@ -29,18 +30,20 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
         ? target._listViewSubItem?.AccessibilityObject as ListViewSubItemAccessibleObject
         : null;
 
-    private AccessibleObject? OwingListViewItemAccessibleObject
+    private AccessibleObject? OwningListViewItemAccessibleObject
         => _owningListView.TryGetTarget(out ListView? target)
         ? target._selectedItem?.AccessibilityObject
         : null;
 
     private protected override string AutomationId => LIST_VIEW_LABEL_EDIT_AUTOMATION_ID;
 
+    // The ListView target was not null at accessible initialization object time,
+    // before the ListView control had been WM_DESTROY'd, the TryGetTarget() method will not return null.
     public override AccessibleObject? Parent
         => _owningListView.TryGetTarget(out ListView? target) && target._listViewSubItem is null
-        ? OwingListViewItemAccessibleObject
+        ? OwningListViewItemAccessibleObject
         : target!.View == View.Tile
-            ? OwingListViewItemAccessibleObject
+            ? OwningListViewItemAccessibleObject
             : OwningSubItemAccessibleObject;
 
     internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
