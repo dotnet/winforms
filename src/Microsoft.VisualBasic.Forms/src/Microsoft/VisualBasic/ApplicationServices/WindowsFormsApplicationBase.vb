@@ -10,7 +10,6 @@ Imports System.Runtime.InteropServices
 Imports System.Security
 Imports System.Threading
 Imports System.Windows.Forms
-
 Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.ApplicationServices
@@ -1028,7 +1027,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
             Return Entry.ManifestModule.ModuleVersionId.ToString()
         End Function
-
     End Class
-
 End Namespace

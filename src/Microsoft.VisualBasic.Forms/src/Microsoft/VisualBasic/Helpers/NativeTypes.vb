@@ -36,7 +36,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 Dispose()
                 MyBase.Finalize()
             End Sub
-
         End Class
 
         ''' <summary>
@@ -58,7 +57,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
             Protected Overrides Function ReleaseHandle() As Boolean
                 Return NativeMethods.CloseHandle(handle) <> 0
             End Function
-
         End Class
 
         ''' <summary>
@@ -79,7 +77,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
             Friend Sub New()
             End Sub
-
         End Class
 
         ''' <summary>
@@ -156,7 +153,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 Dispose(True)
                 GC.SuppressFinalize(Me)
             End Sub
-
         End Class
 
         ' Handle Values
@@ -164,7 +160,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
         ' GetWindow() Constants
         Friend Const GW_HWNDFIRST As Integer = 0
-
         Friend Const GW_HWNDLAST As Integer = 1
         Friend Const GW_HWNDNEXT As Integer = 2
         Friend Const GW_HWNDPREV As Integer = 3
@@ -175,7 +170,5 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Const STARTF_USESHOWWINDOW As Integer = 1
 
         Friend Const NORMAL_PRIORITY_CLASS As Integer = &H20
-
     End Class
-
 End Namespace
