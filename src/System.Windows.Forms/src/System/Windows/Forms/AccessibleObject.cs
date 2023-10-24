@@ -83,11 +83,6 @@ public unsafe partial class AccessibleObject :
     // Indicates this object is being used ONLY to wrap a system IAccessible
     private readonly bool _isSystemWrapper;
 
-    // The support for the UIA Notification event begins in RS3.
-    // Assume the UIA Notification event is available until we learn otherwise.
-    // If we learn that the UIA Notification event is not available,
-    // controls should not attempt to raise it.
-    private static bool s_notificationEventAvailable = true;
     private static bool? s_canNotifyClients;
 
     internal const int InvalidIndex = -1;
@@ -2186,27 +2181,18 @@ public unsafe partial class AccessibleObject :
         AutomationNotificationProcessing notificationProcessing,
         string? notificationText)
     {
-        if (!s_notificationEventAvailable || !CanNotifyClients)
+        if (!OsVersion.IsWindows10_1709OrGreater() || !CanNotifyClients)
         {
             return false;
         }
 
-        try
-        {
-            // The activityId can be any string. It cannot be null. It is not used currently.
-            HRESULT result = PInvoke.UiaRaiseNotificationEvent(
-                this,
-                notificationKind,
-                notificationProcessing,
-                notificationText);
-            return result == HRESULT.S_OK;
-        }
-        catch (EntryPointNotFoundException)
-        {
-            // The UIA Notification event is not available, so don't attempt to raise it again.
-            s_notificationEventAvailable = false;
-            return false;
-        }
+        // The activityId can be any string. It cannot be null. It is not used currently.
+        HRESULT result = PInvoke.UiaRaiseNotificationEvent(
+            this,
+            notificationKind,
+            notificationProcessing,
+            notificationText);
+        return result == HRESULT.S_OK;
     }
 
     /// <summary>
@@ -2247,14 +2233,9 @@ public unsafe partial class AccessibleObject :
         AutomationNotificationKind notificationKind,
         AutomationNotificationProcessing notificationProcessing,
         string notificationText)
-    {
-        if (PInvoke.UiaClientsAreListening())
-        {
-            return RaiseAutomationNotification(notificationKind, notificationProcessing, notificationText);
-        }
-
-        return s_notificationEventAvailable;
-    }
+        => PInvoke.UiaClientsAreListening()
+            ? RaiseAutomationNotification(notificationKind, notificationProcessing, notificationText)
+            : OsVersion.IsWindows10_1709OrGreater();
 
     internal bool RaiseStructureChangedEvent(StructureChangeType structureChangeType, int[] runtimeId)
     {
