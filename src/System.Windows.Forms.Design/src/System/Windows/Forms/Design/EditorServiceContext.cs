@@ -15,12 +15,12 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
 {
     private readonly ComponentDesigner _designer;
     private IComponentChangeService? _componentChangeService;
-    private readonly PropertyDescriptor _targetProperty;
+    private readonly PropertyDescriptor? _targetProperty;
 
     internal EditorServiceContext(ComponentDesigner designer, PropertyDescriptor? prop)
     {
         _designer = designer;
-        _targetProperty = prop!;
+        _targetProperty = prop;
         if (prop is null)
         {
             prop = TypeDescriptor.GetDefaultProperty(designer.Component);
@@ -94,7 +94,7 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
 
     object ITypeDescriptorContext.Instance => _designer.Component;
 
-    PropertyDescriptor ITypeDescriptorContext.PropertyDescriptor => _targetProperty;
+    PropertyDescriptor? ITypeDescriptorContext.PropertyDescriptor => _targetProperty;
 
     object? IServiceProvider.GetService(Type serviceType)
     {
@@ -137,7 +137,7 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
     /// </summary>
     private void OnEditItems(object? sender, EventArgs e)
     {
-        object? propertyValue = _targetProperty.GetValue(_designer.Component);
+        object? propertyValue = _targetProperty?.GetValue(_designer.Component);
         if (propertyValue is null)
         {
             return;
@@ -145,7 +145,7 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
 
         CollectionEditor? itemsEditor = TypeDescriptor.GetEditor(propertyValue, typeof(UITypeEditor)) as CollectionEditor;
 
-        Debug.Assert(itemsEditor is not null, $"Didn't get a collection editor for type '{_targetProperty.PropertyType.FullName}'");
+        Debug.Assert(itemsEditor is not null, $"Didn't get a collection editor for type '{_targetProperty!.PropertyType.FullName}'");
         itemsEditor?.EditValue(this, this, propertyValue);
     }
 }
