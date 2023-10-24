@@ -24,7 +24,7 @@ internal static partial class Interop
             void IRawElementProviderFragment.SetFocus() { }
             IRawElementProviderFragmentRoot? IRawElementProviderFragment.FragmentRoot => default;
 
-            Windows.Win32.UI.Accessibility.ProviderOptions IRawElementProviderSimple.Interface.ProviderOptions => default;
+            ProviderOptions IRawElementProviderSimple.Interface.ProviderOptions => default;
 
             unsafe HRESULT IRawElementProviderSimple.Interface.GetPatternProvider(UIA_PATTERN_ID patternId, IUnknown** pRetVal)
             {
