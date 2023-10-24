@@ -165,7 +165,5 @@ Namespace Microsoft.VisualBasic.CompilerServices
 
             Return New Win32Exception(Marshal.GetLastWin32Error(), Utils.GetResourceString(ResourceID, PlaceHolders))
         End Function
-
     End Class
-
 End Namespace
