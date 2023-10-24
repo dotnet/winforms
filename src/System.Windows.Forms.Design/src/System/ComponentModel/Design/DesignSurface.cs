@@ -33,13 +33,13 @@ public class DesignSurface : IDisposable, IServiceProvider
 
         // Configure our default services
         ServiceCreatorCallback callback = new ServiceCreatorCallback(OnCreateService);
-        ServiceContainer.AddService(typeof(ISelectionService), callback);
-        ServiceContainer.AddService(typeof(IExtenderProviderService), callback);
-        ServiceContainer.AddService(typeof(IExtenderListService), callback);
-        ServiceContainer.AddService(typeof(ITypeDescriptorFilterService), callback);
-        ServiceContainer.AddService(typeof(IReferenceService), callback);
+        ServiceContainer.AddService<ISelectionService>(callback);
+        ServiceContainer.AddService<IExtenderProviderService>(callback);
+        ServiceContainer.AddService<IExtenderListService>(callback);
+        ServiceContainer.AddService<ITypeDescriptorFilterService>(callback);
+        ServiceContainer.AddService<IReferenceService>(callback);
 
-        ServiceContainer.AddService(typeof(DesignSurface), this);
+        ServiceContainer.AddService(this);
         _host = new DesignerHost(this);
     }
 
@@ -329,7 +329,7 @@ public class DesignSurface : IDisposable, IServiceProvider
                 {
                     if (_serviceContainer is not null)
                     {
-                        _serviceContainer.RemoveService(typeof(DesignSurface));
+                        _serviceContainer.RemoveService<DesignSurface>();
                         _serviceContainer.Dispose();
                     }
                 }

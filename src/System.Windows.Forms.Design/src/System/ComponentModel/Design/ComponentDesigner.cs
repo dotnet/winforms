@@ -382,7 +382,7 @@ public partial class ComponentDesigner : ITreeDesigner, IDesignerFilter, ICompon
 
         if (component?.Site is IServiceContainer sc && GetService(typeof(DesignerCommandSet)) is null)
         {
-            sc.AddService(typeof(DesignerCommandSet), new CDDesignerCommandSet(this));
+            sc.AddService<DesignerCommandSet>(new CDDesignerCommandSet(this));
         }
 
         if (TryGetService(out IComponentChangeService cs))

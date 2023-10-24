@@ -71,7 +71,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
     {
         if (_documentType is not null)
         {
-            LoaderHost.RemoveService(typeof(CodeTypeDeclaration));
+            LoaderHost.RemoveService<CodeTypeDeclaration>();
             _documentType = null;
             _documentNamespace = null;
             _documentCompileUnit = null;
@@ -97,13 +97,13 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         if (TryGetService(out IDesignerHost? host))
         {
-            host.RemoveService(typeof(INameCreationService));
-            host.RemoveService(typeof(IDesignerSerializationService));
-            host.RemoveService(typeof(ComponentSerializationService));
+            host.RemoveService<INameCreationService>();
+            host.RemoveService<IDesignerSerializationService>();
+            host.RemoveService<ComponentSerializationService>();
 
             if (_state[s_stateOwnTypeResolution])
             {
-                host.RemoveService(typeof(ITypeResolutionService));
+                host.RemoveService<ITypeResolutionService>();
                 _state[s_stateOwnTypeResolution] = false;
             }
         }
@@ -364,7 +364,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
             {
                 // We are successful.  At this point, we want to provide some of these
                 // code dom elements as services for outside parties to use.
-                LoaderHost.AddService(typeof(CodeTypeDeclaration), _documentType);
+                LoaderHost.AddService(_documentType);
             }
         }
     }
@@ -579,9 +579,9 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
 
         ServiceCreatorCallback callback = new ServiceCreatorCallback(OnCreateService);
 
-        LoaderHost.AddService(typeof(ComponentSerializationService), callback);
-        LoaderHost.AddService(typeof(INameCreationService), this);
-        LoaderHost.AddService(typeof(IDesignerSerializationService), this);
+        LoaderHost.AddService<ComponentSerializationService>(callback);
+        LoaderHost.AddService<INameCreationService>(this);
+        LoaderHost.AddService<IDesignerSerializationService>(this);
 
         // The code dom designer loader requires a working ITypeResolutionService to
         // function.  See if someone added one already, and if not, provide
@@ -595,7 +595,7 @@ public abstract partial class CodeDomDesignerLoader : BasicDesignerLoader, IName
                 throw new InvalidOperationException(SR.CodeDomDesignerLoaderNoTypeResolution);
             }
 
-            LoaderHost.AddService(typeof(ITypeResolutionService), typeResolutionService);
+            LoaderHost.AddService(typeResolutionService);
             _state[s_stateOwnTypeResolution] = true;
         }
 

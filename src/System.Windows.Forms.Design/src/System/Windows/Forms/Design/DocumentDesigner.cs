@@ -396,7 +396,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                 if (toolWindow is not null)
                 {
                     toolWindow.Dispose();
-                    host.RemoveService(typeof(ToolStripAdornerWindowService));
+                    host.RemoveService<ToolStripAdornerWindowService>();
                 }
 
                 host.Activated -= new EventHandler(OnDesignerActivate);
@@ -415,7 +415,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                         componentTray = null;
                     }
 
-                    host.RemoveService(typeof(ComponentTray));
+                    host.RemoveService<ComponentTray>();
                 }
 
                 IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
@@ -535,14 +535,14 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
 
             if (host is not null)
             {
-                host.RemoveService(typeof(BehaviorService));
-                host.RemoveService(typeof(ToolStripAdornerWindowService));
-                host.RemoveService(typeof(SelectionManager));
-                host.RemoveService(typeof(IInheritanceService));
-                host.RemoveService(typeof(IEventHandlerService));
-                host.RemoveService(typeof(IOverlayService));
-                host.RemoveService(typeof(ISplitWindowService));
-                host.RemoveService(typeof(InheritanceUI));
+                host.RemoveService<BehaviorService>();
+                host.RemoveService<ToolStripAdornerWindowService>();
+                host.RemoveService<SelectionManager>();
+                host.RemoveService<IInheritanceService>();
+                host.RemoveService<IEventHandlerService>();
+                host.RemoveService<IOverlayService>();
+                host.RemoveService<ISplitWindowService>();
+                host.RemoveService<InheritanceUI>();
             }
         }
 
@@ -745,7 +745,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             host.Deactivated += new EventHandler(OnDesignerDeactivate);
 
             ServiceCreatorCallback callback = new ServiceCreatorCallback(OnCreateService);
-            host.AddService(typeof(IEventHandlerService), callback);
+            host.AddService<IEventHandlerService>(callback);
 
             // M3.2 CONTROL ARRAY IS CUT
 
@@ -756,16 +756,16 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             frame = new DesignerFrame(component.Site);
 
             IOverlayService os = frame;
-            host.AddService(typeof(IOverlayService), os);
-            host.AddService(typeof(ISplitWindowService), frame);
+            host.AddService(os);
+            host.AddService<ISplitWindowService>(frame);
 
             behaviorService = new BehaviorService(Component.Site, frame);
-            host.AddService(typeof(BehaviorService), behaviorService);
+            host.AddService(behaviorService);
 
             selectionManager = new SelectionManager(host, behaviorService);
 
-            host.AddService(typeof(SelectionManager), selectionManager);
-            host.AddService(typeof(ToolStripAdornerWindowService), callback);
+            host.AddService(selectionManager);
+            host.AddService<ToolStripAdornerWindowService>(callback);
 
             // And component add and remove events for our tray
             //
@@ -785,10 +785,10 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
             // scan, assign the variable, and then call OnCreateHandle if needed.
             //
             inheritanceUI = new InheritanceUI();
-            host.AddService(typeof(InheritanceUI), inheritanceUI);
+            host.AddService(inheritanceUI);
 
             InheritanceService isvc = new DocumentInheritanceService(this);
-            host.AddService(typeof(IInheritanceService), isvc);
+            host.AddService<IInheritanceService>(isvc);
 
             manager = host.GetService(typeof(IDesignerSerializationManager)) as IDesignerSerializationManager;
             isvc.AddInheritedComponents(component, component.Site.Container);
@@ -982,7 +982,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                         componentTray.ShowLargeIcons = trayLargeIcon;
                         componentTray.AutoArrange = trayAutoArrange;
 
-                        host.AddService(typeof(ComponentTray), componentTray);
+                        host.AddService(componentTray);
                     }
                 }
 
@@ -1026,7 +1026,7 @@ public partial class DocumentDesigner : ScrollableControlDesigner, IRootDesigner
                 {
                     sws.RemoveSplitWindow(componentTray);
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                    host?.RemoveService(typeof(ComponentTray));
+                    host?.RemoveService<ComponentTray>();
 
                     componentTray.Dispose();
                     componentTray = null;
