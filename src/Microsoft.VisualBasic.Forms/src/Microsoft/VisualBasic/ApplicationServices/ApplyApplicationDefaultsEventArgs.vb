@@ -43,7 +43,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' The default value for this property is SystemAware.
         ''' </remarks>
         Public Property HighDpiMode As HighDpiMode
-
     End Class
-
 End Namespace

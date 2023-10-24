@@ -2,7 +2,6 @@
 ' The .NET Foundation licenses this file to you under the MIT license.
 
 Imports System.Windows.Forms
-
 Imports Microsoft.VisualBasic.CompilerServices
 
 Namespace Microsoft.VisualBasic.Devices
@@ -109,7 +108,5 @@ Namespace Microsoft.VisualBasic.Devices
                 Return CType((UnsafeNativeMethods.GetKeyState(Keys.Scroll) And 1), Boolean)
             End Get
         End Property
-
     End Class
-
 End Namespace

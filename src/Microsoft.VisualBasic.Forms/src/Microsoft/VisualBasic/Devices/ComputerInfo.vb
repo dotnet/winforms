@@ -241,5 +241,4 @@ Namespace Microsoft.VisualBasic.Devices
             Private _memoryStatusEx As NativeMethods.MEMORYSTATUSEX
         End Class
     End Class
-
 End Namespace

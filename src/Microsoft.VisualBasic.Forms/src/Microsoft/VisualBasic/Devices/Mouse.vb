@@ -63,7 +63,5 @@ Namespace Microsoft.VisualBasic.Devices
                 End If
             End Get
         End Property
-
     End Class 'Mouse
-
 End Namespace
