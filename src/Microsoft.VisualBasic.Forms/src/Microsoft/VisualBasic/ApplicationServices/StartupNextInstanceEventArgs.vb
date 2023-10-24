@@ -37,7 +37,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <remarks>I'm using Me.CommandLine so that it is consistent with my.net and to assure they
         ''' always return the same values</remarks>
         Public ReadOnly Property CommandLine() As ReadOnlyCollection(Of String)
-
     End Class
-
 End Namespace

@@ -35,7 +35,5 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Protected Sub New(ByVal info As Runtime.Serialization.SerializationInfo, ByVal context As Runtime.Serialization.StreamingContext)
             MyBase.New(info, context)
         End Sub
-
     End Class
-
 End Namespace

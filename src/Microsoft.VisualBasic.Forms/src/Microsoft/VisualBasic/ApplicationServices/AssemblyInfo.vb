@@ -244,5 +244,4 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _trademark As String ' Cache the assembly's trademark.
         Private _copyright As String ' Cache the assembly's copyright.
     End Class
-
 End Namespace
