@@ -2696,7 +2696,7 @@ public partial class DataGridView
                 return false;
             }
 
-            Type editControlType = dataGridViewCell.EditType;
+            Type? editControlType = dataGridViewCell.EditType;
             if (editControlType is null)
             {
                 // Current cell does not have an editing control. Does it implement IDataGridViewEditingCell?
@@ -7181,6 +7181,7 @@ public partial class DataGridView
     {
         Debug.Assert(dataGridViewCell is not null);
         Debug.Assert(rowIndex >= 0);
+        Debug.Assert(dataGridViewCell.OwningColumn is not null);
         DataGridViewElementStates rowState = Rows.GetRowState(rowIndex);
         if (displayedRequired)
         {

@@ -79,21 +79,23 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
             }
 
             CheckBoxCellTemplate.FalseValueInternal = value;
-            if (DataGridView is not null)
+            if (DataGridView is null)
             {
-                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                int rowCount = dataGridViewRows.Count;
-                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
-                    {
-                        dataGridViewCell.FalseValueInternal = value;
-                    }
-                }
-
-                DataGridView.InvalidateColumn(Index);
+                return;
             }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
+                {
+                    dataGridViewCell.FalseValueInternal = value;
+                }
+            }
+
+            DataGridView.InvalidateColumn(Index);
         }
     }
 
@@ -120,21 +122,23 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
             }
 
             CheckBoxCellTemplate.FlatStyle = value;
-            if (DataGridView is not null)
+            if (DataGridView is null)
             {
-                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                int rowCount = dataGridViewRows.Count;
-                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
-                    {
-                        dataGridViewCell.FlatStyleInternal = value;
-                    }
-                }
-
-                DataGridView.OnColumnCommonChange(Index);
+                return;
             }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
+                {
+                    dataGridViewCell.FlatStyleInternal = value;
+                }
+            }
+
+            DataGridView.OnColumnCommonChange(Index);
         }
     }
 
@@ -162,21 +166,23 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
             }
 
             CheckBoxCellTemplate.IndeterminateValueInternal = value;
-            if (DataGridView is not null)
+            if (DataGridView is null)
             {
-                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                int rowCount = dataGridViewRows.Count;
-                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
-                    {
-                        dataGridViewCell.IndeterminateValueInternal = value;
-                    }
-                }
-
-                DataGridView.InvalidateColumn(Index);
+                return;
             }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
+                {
+                    dataGridViewCell.IndeterminateValueInternal = value;
+                }
+            }
+
+            DataGridView.InvalidateColumn(Index);
         }
     }
 
@@ -258,21 +264,23 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
             }
 
             CheckBoxCellTemplate.TrueValueInternal = value;
-            if (DataGridView is not null)
+            if (DataGridView is null)
             {
-                DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                int rowCount = dataGridViewRows.Count;
-                for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                {
-                    DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                    if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
-                    {
-                        dataGridViewCell.TrueValueInternal = value;
-                    }
-                }
-
-                DataGridView.InvalidateColumn(Index);
+                return;
             }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewCheckBoxCell dataGridViewCell)
+                {
+                    dataGridViewCell.TrueValueInternal = value;
+                }
+            }
+
+            DataGridView.InvalidateColumn(Index);
         }
     }
 

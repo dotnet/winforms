@@ -93,7 +93,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             if (host is not null)
             {
                 eventHandlerService = new EventHandlerService(this);
-                host.AddService(typeof(IEventHandlerService), eventHandlerService);
+                host.AddService(eventHandlerService);
             }
         }
 
@@ -690,7 +690,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             if (selectionUISvc is null)
             {
                 selectionUISvc = new SelectionUIService(host);
-                host.AddService(typeof(ISelectionUIService), selectionUISvc);
+                host.AddService(selectionUISvc);
             }
 
             grabHandle = selectionUISvc.GetAdornmentDimensions(AdornmentType.GrabHandle);
@@ -856,7 +856,7 @@ public class ComponentTray : ScrollableControl, IExtenderProvider, ISelectionUIH
             {
                 if (host is not null)
                 {
-                    host.RemoveService(typeof(IEventHandlerService));
+                    host.RemoveService<IEventHandlerService>();
                     eventHandlerService = null;
                 }
             }

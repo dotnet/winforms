@@ -141,6 +141,12 @@ public class InputLanguageTests
     [MemberData(nameof(SupplementalInputLanguages_TestData))]
     public void InputLanguage_FromCulture_SupplementalInputLanguages_Expected(string languageTag, string layoutId, string layoutName)
     {
+        // This condition should be removed once https://github.com/dotnet/winforms/issues/10150 is resolved.
+        if (languageTag == "nqo" && !OsVersion.IsWindows11_22H2OrGreater())
+        {
+            return;
+        }
+
         // Also installs default keyboard layout for this language
         // https://learn.microsoft.com/windows-hardware/manufacture/desktop/default-input-locales-for-windows-language-packs
         InstallUserLanguage(languageTag);

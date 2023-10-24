@@ -91,17 +91,17 @@ override System.Windows.Forms.DataGridViewColumn.DefaultCellStyle.set -> void
 override System.Windows.Forms.DataGridViewColumn.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle?
 override System.Windows.Forms.DataGridViewColumn.ToString() -> string!
 override System.Windows.Forms.DataGridViewColumnCollection.List.get -> System.Collections.ArrayList!
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.Clone() -> object
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format) -> object
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetInheritedStyle(System.Windows.Forms.DataGridViewCellStyle inheritedCellStyle, int rowIndex, bool includeColors) -> System.Windows.Forms.DataGridViewCellStyle
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetPreferredSize(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.GetValue(int rowIndex) -> object
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates dataGridViewElementState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.SetValue(int rowIndex, object value) -> bool
-~override System.Windows.Forms.DataGridViewColumnHeaderCell.ToString() -> string
+override System.Windows.Forms.DataGridViewColumnHeaderCell.Clone() -> object!
+override System.Windows.Forms.DataGridViewColumnHeaderCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridViewColumnHeaderCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string! format) -> object?
+override System.Windows.Forms.DataGridViewColumnHeaderCell.GetContentBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewColumnHeaderCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip?
+override System.Windows.Forms.DataGridViewColumnHeaderCell.GetInheritedStyle(System.Windows.Forms.DataGridViewCellStyle? inheritedCellStyle, int rowIndex, bool includeColors) -> System.Windows.Forms.DataGridViewCellStyle!
+override System.Windows.Forms.DataGridViewColumnHeaderCell.GetPreferredSize(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
+override System.Windows.Forms.DataGridViewColumnHeaderCell.GetValue(int rowIndex) -> object?
+override System.Windows.Forms.DataGridViewColumnHeaderCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates dataGridViewElementState, object! value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+override System.Windows.Forms.DataGridViewColumnHeaderCell.SetValue(int rowIndex, object? value) -> bool
+override System.Windows.Forms.DataGridViewColumnHeaderCell.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewComboBoxCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewComboBoxCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DataGridViewComboBoxCell.EditType.get -> System.Type
@@ -118,10 +118,10 @@ override System.Windows.Forms.DataGridViewColumnCollection.List.get -> System.Co
 ~override System.Windows.Forms.DataGridViewComboBoxCell.ParseFormattedValue(object formattedValue, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.ComponentModel.TypeConverter formattedValueTypeConverter, System.ComponentModel.TypeConverter valueTypeConverter) -> object
 ~override System.Windows.Forms.DataGridViewComboBoxCell.ToString() -> string
 ~override System.Windows.Forms.DataGridViewComboBoxCell.ValueType.get -> System.Type
-~override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell
-~override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.set -> void
-~override System.Windows.Forms.DataGridViewComboBoxColumn.Clone() -> object
-~override System.Windows.Forms.DataGridViewComboBoxColumn.ToString() -> string
+override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
+override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.set -> void
+override System.Windows.Forms.DataGridViewComboBoxColumn.Clone() -> object!
+override System.Windows.Forms.DataGridViewComboBoxColumn.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewHeaderCell.Clone() -> object
 ~override System.Windows.Forms.DataGridViewHeaderCell.FormattedValueType.get -> System.Type
 ~override System.Windows.Forms.DataGridViewHeaderCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip
@@ -307,17 +307,17 @@ System.Windows.Forms.Binding.FormatString.set -> void
 System.Windows.Forms.Binding.NullValue.get -> object?
 System.Windows.Forms.Binding.NullValue.set -> void
 System.Windows.Forms.Binding.PropertyName.get -> string!
-~System.Windows.Forms.BindingSource.BindingSource(object dataSource, string dataMember) -> void
-~System.Windows.Forms.BindingSource.BindingSource(System.ComponentModel.IContainer container) -> void
-~System.Windows.Forms.BindingSource.Current.get -> object
-~System.Windows.Forms.BindingSource.DataMember.get -> string
-~System.Windows.Forms.BindingSource.DataMember.set -> void
-~System.Windows.Forms.BindingSource.DataSource.get -> object
-~System.Windows.Forms.BindingSource.DataSource.set -> void
+System.Windows.Forms.BindingSource.BindingSource(object? dataSource, string! dataMember) -> void
+System.Windows.Forms.BindingSource.BindingSource(System.ComponentModel.IContainer! container) -> void
+System.Windows.Forms.BindingSource.Current.get -> object?
+System.Windows.Forms.BindingSource.DataMember.get -> string!
+System.Windows.Forms.BindingSource.DataMember.set -> void
+System.Windows.Forms.BindingSource.DataSource.get -> object?
+System.Windows.Forms.BindingSource.DataSource.set -> void
 ~System.Windows.Forms.BindingSource.Find(string propertyName, object key) -> int
-~System.Windows.Forms.BindingSource.List.get -> System.Collections.IList
-~System.Windows.Forms.BindingSource.Sort.get -> string
-~System.Windows.Forms.BindingSource.Sort.set -> void
+System.Windows.Forms.BindingSource.List.get -> System.Collections.IList!
+System.Windows.Forms.BindingSource.Sort.get -> string?
+System.Windows.Forms.BindingSource.Sort.set -> void
 System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember) -> System.Windows.Forms.Binding!
 System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember, bool formattingEnabled) -> System.Windows.Forms.Binding!
 System.Windows.Forms.ControlBindingsCollection.Add(string! propertyName, object! dataSource, string? dataMember, bool formattingEnabled, System.Windows.Forms.DataSourceUpdateMode updateMode) -> System.Windows.Forms.Binding!
@@ -376,23 +376,23 @@ System.Windows.Forms.DataGridView.UserSetCursor.get -> System.Windows.Forms.Curs
 System.Windows.Forms.DataGridView.VerticalScrollBar.get -> System.Windows.Forms.ScrollBar!
 System.Windows.Forms.DataGridViewButtonColumn.Text.get -> string?
 System.Windows.Forms.DataGridViewButtonColumn.Text.set -> void
-~System.Windows.Forms.DataGridViewCell.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
-~System.Windows.Forms.DataGridViewCell.EditedFormattedValue.get -> object
-~System.Windows.Forms.DataGridViewCell.ErrorText.get -> string
-~System.Windows.Forms.DataGridViewCell.ErrorText.set -> void
-~System.Windows.Forms.DataGridViewCell.FormattedValue.get -> object
+System.Windows.Forms.DataGridViewCell.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject!
+System.Windows.Forms.DataGridViewCell.EditedFormattedValue.get -> object?
+System.Windows.Forms.DataGridViewCell.ErrorText.get -> string!
+System.Windows.Forms.DataGridViewCell.ErrorText.set -> void
+System.Windows.Forms.DataGridViewCell.FormattedValue.get -> object?
 ~System.Windows.Forms.DataGridViewCell.GetEditedFormattedValue(int rowIndex, System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
-~System.Windows.Forms.DataGridViewCell.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridViewCell.OwningColumn.get -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewCell.OwningRow.get -> System.Windows.Forms.DataGridViewRow
-~System.Windows.Forms.DataGridViewCell.Style.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridViewCell.Style.set -> void
-~System.Windows.Forms.DataGridViewCell.Tag.get -> object
-~System.Windows.Forms.DataGridViewCell.Tag.set -> void
-~System.Windows.Forms.DataGridViewCell.ToolTipText.get -> string
-~System.Windows.Forms.DataGridViewCell.ToolTipText.set -> void
-~System.Windows.Forms.DataGridViewCell.Value.get -> object
-~System.Windows.Forms.DataGridViewCell.Value.set -> void
+System.Windows.Forms.DataGridViewCell.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+System.Windows.Forms.DataGridViewCell.OwningColumn.get -> System.Windows.Forms.DataGridViewColumn?
+System.Windows.Forms.DataGridViewCell.OwningRow.get -> System.Windows.Forms.DataGridViewRow?
+System.Windows.Forms.DataGridViewCell.Style.get -> System.Windows.Forms.DataGridViewCellStyle!
+System.Windows.Forms.DataGridViewCell.Style.set -> void
+System.Windows.Forms.DataGridViewCell.Tag.get -> object?
+System.Windows.Forms.DataGridViewCell.Tag.set -> void
+System.Windows.Forms.DataGridViewCell.ToolTipText.get -> string!
+System.Windows.Forms.DataGridViewCell.ToolTipText.set -> void
+System.Windows.Forms.DataGridViewCell.Value.get -> object?
+System.Windows.Forms.DataGridViewCell.Value.set -> void
 System.Windows.Forms.DataGridViewCellCollection.CopyTo(System.Windows.Forms.DataGridViewCell![]! array, int index) -> void
 System.Windows.Forms.DataGridViewCellCollection.DataGridViewCellCollection(System.Windows.Forms.DataGridViewRow! dataGridViewRow) -> void
 System.Windows.Forms.DataGridViewCellCollection.IndexOf(System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> int
@@ -463,13 +463,13 @@ System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.IndexOf(object? v
 System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Insert(int index, object? item) -> void
 System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.ObjectCollection(System.Windows.Forms.DataGridViewComboBoxCell! owner) -> void
 System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Remove(object? value) -> void
-~System.Windows.Forms.DataGridViewComboBoxColumn.DataSource.get -> object
-~System.Windows.Forms.DataGridViewComboBoxColumn.DataSource.set -> void
-~System.Windows.Forms.DataGridViewComboBoxColumn.DisplayMember.get -> string
-~System.Windows.Forms.DataGridViewComboBoxColumn.DisplayMember.set -> void
-~System.Windows.Forms.DataGridViewComboBoxColumn.Items.get -> System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection
-~System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.get -> string
-~System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.set -> void
+System.Windows.Forms.DataGridViewComboBoxColumn.DataSource.get -> object?
+System.Windows.Forms.DataGridViewComboBoxColumn.DataSource.set -> void
+System.Windows.Forms.DataGridViewComboBoxColumn.DisplayMember.get -> string!
+System.Windows.Forms.DataGridViewComboBoxColumn.DisplayMember.set -> void
+System.Windows.Forms.DataGridViewComboBoxColumn.Items.get -> System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection!
+System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.get -> string!
+System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.set -> void
 System.Windows.Forms.DataGridViewImageCell.Description.get -> string!
 System.Windows.Forms.DataGridViewImageCell.Description.set -> void
 System.Windows.Forms.DataGridViewImageColumn.Description.get -> string!
@@ -642,14 +642,14 @@ virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventAr
 ~virtual System.Windows.Forms.BindingSource.ApplySort(System.ComponentModel.PropertyDescriptor property, System.ComponentModel.ListSortDirection sort) -> void
 ~virtual System.Windows.Forms.BindingSource.Contains(object value) -> bool
 ~virtual System.Windows.Forms.BindingSource.CopyTo(System.Array arr, int index) -> void
-~virtual System.Windows.Forms.BindingSource.CurrencyManager.get -> System.Windows.Forms.CurrencyManager
+virtual System.Windows.Forms.BindingSource.CurrencyManager.get -> System.Windows.Forms.CurrencyManager?
 ~virtual System.Windows.Forms.BindingSource.Filter.get -> string
 ~virtual System.Windows.Forms.BindingSource.Filter.set -> void
 ~virtual System.Windows.Forms.BindingSource.Find(System.ComponentModel.PropertyDescriptor prop, object key) -> int
 ~virtual System.Windows.Forms.BindingSource.GetEnumerator() -> System.Collections.IEnumerator
 ~virtual System.Windows.Forms.BindingSource.GetItemProperties(System.ComponentModel.PropertyDescriptor[] listAccessors) -> System.ComponentModel.PropertyDescriptorCollection
 ~virtual System.Windows.Forms.BindingSource.GetListName(System.ComponentModel.PropertyDescriptor[] listAccessors) -> string
-~virtual System.Windows.Forms.BindingSource.GetRelatedCurrencyManager(string dataMember) -> System.Windows.Forms.CurrencyManager
+virtual System.Windows.Forms.BindingSource.GetRelatedCurrencyManager(string? dataMember) -> System.Windows.Forms.CurrencyManager?
 ~virtual System.Windows.Forms.BindingSource.IndexOf(object value) -> int
 ~virtual System.Windows.Forms.BindingSource.Insert(int index, object value) -> void
 ~virtual System.Windows.Forms.BindingSource.OnAddingNew(System.ComponentModel.AddingNewEventArgs e) -> void
@@ -794,19 +794,19 @@ virtual System.Windows.Forms.DataGridView.GetClipboardContent() -> System.Window
 ~virtual System.Windows.Forms.DataGridView.ProcessDataGridViewKey(System.Windows.Forms.KeyEventArgs e) -> bool
 ~virtual System.Windows.Forms.DataGridView.Sort(System.Collections.IComparer comparer) -> void
 ~virtual System.Windows.Forms.DataGridView.Sort(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, System.ComponentModel.ListSortDirection direction) -> void
-~virtual System.Windows.Forms.DataGridViewCell.AdjustCellBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
-~virtual System.Windows.Forms.DataGridViewCell.BorderWidths(System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle) -> System.Drawing.Rectangle
-~virtual System.Windows.Forms.DataGridViewCell.ClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.Clone() -> object
-~virtual System.Windows.Forms.DataGridViewCell.ContentClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.ContentDoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~virtual System.Windows.Forms.DataGridViewCell.ContextMenuStrip.set -> void
-~virtual System.Windows.Forms.DataGridViewCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~virtual System.Windows.Forms.DataGridViewCell.DefaultNewRowValue.get -> object
+virtual System.Windows.Forms.DataGridViewCell.AdjustCellBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStylePlaceholder, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
+virtual System.Windows.Forms.DataGridViewCell.BorderWidths(System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle) -> System.Drawing.Rectangle
+virtual System.Windows.Forms.DataGridViewCell.ClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs! e) -> bool
+virtual System.Windows.Forms.DataGridViewCell.Clone() -> object!
+virtual System.Windows.Forms.DataGridViewCell.ContentClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs! e) -> bool
+virtual System.Windows.Forms.DataGridViewCell.ContentDoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs! e) -> bool
+virtual System.Windows.Forms.DataGridViewCell.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+virtual System.Windows.Forms.DataGridViewCell.ContextMenuStrip.set -> void
+virtual System.Windows.Forms.DataGridViewCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+virtual System.Windows.Forms.DataGridViewCell.DefaultNewRowValue.get -> object?
 ~virtual System.Windows.Forms.DataGridViewCell.DoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.EditType.get -> System.Type
-~virtual System.Windows.Forms.DataGridViewCell.FormattedValueType.get -> System.Type
+virtual System.Windows.Forms.DataGridViewCell.EditType.get -> System.Type?
+virtual System.Windows.Forms.DataGridViewCell.FormattedValueType.get -> System.Type?
 ~virtual System.Windows.Forms.DataGridViewCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format) -> object
 ~virtual System.Windows.Forms.DataGridViewCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~virtual System.Windows.Forms.DataGridViewCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
@@ -845,8 +845,8 @@ virtual System.Windows.Forms.DataGridView.GetClipboardContent() -> System.Window
 ~virtual System.Windows.Forms.DataGridViewCell.PositionEditingControl(bool setLocation, bool setSize, System.Drawing.Rectangle cellBounds, System.Drawing.Rectangle cellClip, System.Windows.Forms.DataGridViewCellStyle cellStyle, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow) -> void
 ~virtual System.Windows.Forms.DataGridViewCell.PositionEditingPanel(System.Drawing.Rectangle cellBounds, System.Drawing.Rectangle cellClip, System.Windows.Forms.DataGridViewCellStyle cellStyle, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow) -> System.Drawing.Rectangle
 ~virtual System.Windows.Forms.DataGridViewCell.SetValue(int rowIndex, object value) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.ValueType.get -> System.Type
-~virtual System.Windows.Forms.DataGridViewCell.ValueType.set -> void
+virtual System.Windows.Forms.DataGridViewCell.ValueType.get -> System.Type?
+virtual System.Windows.Forms.DataGridViewCell.ValueType.set -> void
 virtual System.Windows.Forms.DataGridViewCellCollection.Add(System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> int
 virtual System.Windows.Forms.DataGridViewCellCollection.AddRange(params System.Windows.Forms.DataGridViewCell![]! dataGridViewCells) -> void
 virtual System.Windows.Forms.DataGridViewCellCollection.Contains(System.Windows.Forms.DataGridViewCell! dataGridViewCell) -> bool
@@ -4525,25 +4525,25 @@ System.Windows.Forms.BindingsCollection.CollectionChanged -> System.ComponentMod
 System.Windows.Forms.BindingsCollection.CollectionChanging -> System.ComponentModel.CollectionChangeEventHandler?
 System.Windows.Forms.BindingsCollection.this[int index].get -> System.Windows.Forms.Binding!
 System.Windows.Forms.BindingSource
-System.Windows.Forms.BindingSource.AddingNew -> System.ComponentModel.AddingNewEventHandler
-System.Windows.Forms.BindingSource.BindingComplete -> System.Windows.Forms.BindingCompleteEventHandler
+System.Windows.Forms.BindingSource.AddingNew -> System.ComponentModel.AddingNewEventHandler?
+System.Windows.Forms.BindingSource.BindingComplete -> System.Windows.Forms.BindingCompleteEventHandler?
 System.Windows.Forms.BindingSource.BindingSource() -> void
 System.Windows.Forms.BindingSource.CancelEdit() -> void
-System.Windows.Forms.BindingSource.CurrentChanged -> System.EventHandler
-System.Windows.Forms.BindingSource.CurrentItemChanged -> System.EventHandler
-System.Windows.Forms.BindingSource.DataError -> System.Windows.Forms.BindingManagerDataErrorEventHandler
-System.Windows.Forms.BindingSource.DataMemberChanged -> System.EventHandler
-System.Windows.Forms.BindingSource.DataSourceChanged -> System.EventHandler
+System.Windows.Forms.BindingSource.CurrentChanged -> System.EventHandler?
+System.Windows.Forms.BindingSource.CurrentItemChanged -> System.EventHandler?
+System.Windows.Forms.BindingSource.DataError -> System.Windows.Forms.BindingManagerDataErrorEventHandler?
+System.Windows.Forms.BindingSource.DataMemberChanged -> System.EventHandler?
+System.Windows.Forms.BindingSource.DataSourceChanged -> System.EventHandler?
 System.Windows.Forms.BindingSource.EndEdit() -> void
 System.Windows.Forms.BindingSource.IsBindingSuspended.get -> bool
-System.Windows.Forms.BindingSource.ListChanged -> System.ComponentModel.ListChangedEventHandler
+System.Windows.Forms.BindingSource.ListChanged -> System.ComponentModel.ListChangedEventHandler?
 System.Windows.Forms.BindingSource.MoveFirst() -> void
 System.Windows.Forms.BindingSource.MoveLast() -> void
 System.Windows.Forms.BindingSource.MoveNext() -> void
 System.Windows.Forms.BindingSource.MovePrevious() -> void
 System.Windows.Forms.BindingSource.Position.get -> int
 System.Windows.Forms.BindingSource.Position.set -> void
-System.Windows.Forms.BindingSource.PositionChanged -> System.EventHandler
+System.Windows.Forms.BindingSource.PositionChanged -> System.EventHandler?
 System.Windows.Forms.BindingSource.RaiseListChangedEvents.get -> bool
 System.Windows.Forms.BindingSource.RaiseListChangedEvents.set -> void
 System.Windows.Forms.BindingSource.RemoveCurrent() -> void
