@@ -1548,9 +1548,9 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
                 int oldArraySize = tabComponents is null ? 0 : tabComponents.Length;
 
                 object[] newComponents = new object[oldArraySize + 1];
-                if (oldArraySize > 0)
+                if (tabComponents is not null)
                 {
-                    Array.Copy(tabComponents!, newComponents, oldArraySize);
+                    Array.Copy(tabComponents, newComponents, oldArraySize);
                 }
 
                 newComponents[oldArraySize] = @object;
