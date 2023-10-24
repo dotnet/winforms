@@ -438,14 +438,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                 return valueType;
             }
 
-            if (ThreeState)
-            {
-                return s_defaultCheckStateType;
-            }
-            else
-            {
-                return s_defaultBooleanType;
-            }
+            return ThreeState ? s_defaultCheckStateType : s_defaultBooleanType;
         }
         set
         {
