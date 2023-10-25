@@ -816,7 +816,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         return ColumnIndex == DataGridView.MouseDownCellAddress.X && rowIndex == DataGridView.MouseDownCellAddress.Y;
     }
 
-    protected override bool MouseLeaveUnsharesRow(int rowIndex) => (ButtonState & ButtonState.Pushed) != 0;
+    protected override bool MouseLeaveUnsharesRow(int rowIndex) => ButtonState.HasFlag(ButtonState.Pushed);
 
     protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e) => e.Button == MouseButtons.Left;
 
@@ -938,7 +938,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             }
         }
 
-        if ((ButtonState & ButtonState.Pushed) != 0 &&
+        if (ButtonState.HasFlag(ButtonState.Pushed) &&
             ColumnIndex == DataGridView.MouseDownCellAddress.X &&
             rowIndex == DataGridView.MouseDownCellAddress.Y)
         {
@@ -966,13 +966,13 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                 e.RowIndex == DataGridView.MouseDownCellAddress.Y &&
                 Control.MouseButtons == MouseButtons.Left)
             {
-                if ((ButtonState & ButtonState.Pushed) == 0 &&
+                if (!ButtonState.HasFlag(ButtonState.Pushed) &&
                     s_mouseInContentBounds &&
                     DataGridView.CellMouseDownInContentBounds)
                 {
                     UpdateButtonState(ButtonState | ButtonState.Pushed, e.RowIndex);
                 }
-                else if ((ButtonState & ButtonState.Pushed) != 0 && !s_mouseInContentBounds)
+                else if (ButtonState.HasFlag(ButtonState.Pushed) && !s_mouseInContentBounds)
                 {
                     UpdateButtonState(ButtonState & ~ButtonState.Pushed, e.RowIndex);
                 }
