@@ -23,8 +23,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 return (int)returnValue;
             }
 
-            string itemName1 = dataGridViewComboBoxCell.GetItemDisplayText(item1);
-            string itemName2 = dataGridViewComboBoxCell.GetItemDisplayText(item2);
+            string? itemName1 = dataGridViewComboBoxCell.GetItemDisplayText(item1);
+            string? itemName2 = dataGridViewComboBoxCell.GetItemDisplayText(item2);
 
             CompareInfo compInfo = Application.CurrentCulture.CompareInfo;
             return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
