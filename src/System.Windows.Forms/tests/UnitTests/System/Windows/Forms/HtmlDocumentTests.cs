@@ -1779,6 +1779,26 @@ public class HtmlDocumentTests
     }
 
     [WinFormsFact]
+    public async Task HtmlDocument_GetElementsByTagName_IndexIntoByString_ReturnsExpected()
+    {
+        using var parent = new Control();
+        using var control = new WebBrowser
+        {
+            Parent = parent
+        };
+
+        const string Html = "<html><body><img id=\"img1\" /><img id=\"img2\" /><a id=\"link1\">Href</a><a id=\"link2\">Href</a><form id=\"form1\"></form><form id=\"form2\"></form></body></html>";
+        HtmlDocument document = await GetDocument(control, Html);
+
+        HtmlElementCollection collection = document.GetElementsByTagName("form");
+        Assert.NotSame(collection, document.GetElementsByTagName("form"));
+        Assert.Equal(2, collection.Count);
+        Assert.NotNull(collection["form1"]);
+        Assert.NotNull(collection["form2"]);
+        Assert.Null(collection["form3"]);
+    }
+
+    [WinFormsFact]
     public async Task HtmlDocument_GetElementsByTagName_NullTagName_ThrowsArgumentException()
     {
         using var parent = new Control();
