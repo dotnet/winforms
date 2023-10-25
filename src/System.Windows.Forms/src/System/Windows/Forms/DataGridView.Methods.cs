@@ -4039,7 +4039,7 @@ public partial class DataGridView
                     }
                 }
 
-                object formattedValue;
+                object? formattedValue;
 
                 if (EditingControl is not null)
                 {
@@ -10090,7 +10090,7 @@ public partial class DataGridView
         try
         {
             IDataGridViewEditingCell dataGridViewEditingCell = (IDataGridViewEditingCell)dataGridViewCell;
-            object currentFormattedValue = dataGridViewEditingCell.GetEditingCellFormattedValue(DataGridViewDataErrorContexts.Formatting);
+            object? currentFormattedValue = dataGridViewEditingCell.GetEditingCellFormattedValue(DataGridViewDataErrorContexts.Formatting);
             if ((currentFormattedValue is null && _uneditedFormattedValue is not null) ||
                 (currentFormattedValue is not null && _uneditedFormattedValue is null) ||
                 (currentFormattedValue is not null && !_uneditedFormattedValue!.Equals(currentFormattedValue)))
