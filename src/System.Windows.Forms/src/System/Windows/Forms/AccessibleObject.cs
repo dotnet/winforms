@@ -761,9 +761,27 @@ public unsafe partial class AccessibleObject :
         return HRESULT.E_NOTIMPL;
     }
 
-    ProviderOptions IRawElementProviderSimple.Interface.ProviderOptions => (ProviderOptions)ProviderOptions;
+    HRESULT IRawElementProviderSimple.Interface.get_ProviderOptions(ProviderOptions* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    IRawElementProviderSimple* IRawElementProviderSimple.Interface.HostRawElementProvider => HostRawElementProvider;
+        *pRetVal = (ProviderOptions)ProviderOptions;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IRawElementProviderSimple.Interface.get_HostRawElementProvider(IRawElementProviderSimple** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = HostRawElementProvider;
+        return HRESULT.S_OK;
+    }
 
     HRESULT IRawElementProviderSimple.Interface.GetPatternProvider(UIA_PATTERN_ID patternId, IUnknown** pRetVal)
     {

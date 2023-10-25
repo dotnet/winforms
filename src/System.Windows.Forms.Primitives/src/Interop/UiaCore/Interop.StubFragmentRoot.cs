@@ -9,7 +9,7 @@ internal static partial class Interop
 {
     internal static partial class UiaCore
     {
-        public class StubFragmentRoot : IRawElementProviderFragmentRoot
+        public unsafe class StubFragmentRoot : IRawElementProviderFragmentRoot
         {
             private StubFragmentRoot() { }
 
@@ -24,9 +24,7 @@ internal static partial class Interop
             void IRawElementProviderFragment.SetFocus() { }
             IRawElementProviderFragmentRoot? IRawElementProviderFragment.FragmentRoot => default;
 
-            ProviderOptions IRawElementProviderSimple.Interface.ProviderOptions => default;
-
-            unsafe HRESULT IRawElementProviderSimple.Interface.GetPatternProvider(UIA_PATTERN_ID patternId, IUnknown** pRetVal)
+            HRESULT IRawElementProviderSimple.Interface.get_ProviderOptions(ProviderOptions* pRetVal)
             {
                 if (pRetVal is null)
                 {
@@ -37,7 +35,7 @@ internal static partial class Interop
                 return HRESULT.S_OK;
             }
 
-            unsafe HRESULT IRawElementProviderSimple.Interface.GetPropertyValue(UIA_PROPERTY_ID propertyId, VARIANT* pRetVal)
+            HRESULT IRawElementProviderSimple.Interface.GetPatternProvider(UIA_PATTERN_ID patternId, IUnknown** pRetVal)
             {
                 if (pRetVal is null)
                 {
@@ -48,7 +46,27 @@ internal static partial class Interop
                 return HRESULT.S_OK;
             }
 
-            unsafe IRawElementProviderSimple* IRawElementProviderSimple.Interface.HostRawElementProvider => default;
+            HRESULT IRawElementProviderSimple.Interface.GetPropertyValue(UIA_PROPERTY_ID propertyId, VARIANT* pRetVal)
+            {
+                if (pRetVal is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pRetVal = default;
+                return HRESULT.S_OK;
+            }
+
+            HRESULT IRawElementProviderSimple.Interface.get_HostRawElementProvider(IRawElementProviderSimple** pRetVal)
+            {
+                if (pRetVal is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pRetVal = default;
+                return HRESULT.S_OK;
+            }
         }
     }
 }

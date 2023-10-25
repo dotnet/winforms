@@ -1322,7 +1322,7 @@ This is the line 3";
             _boundingRectangleVariant = test;
         }
 
-        ProviderOptions IRawElementProviderSimple.Interface.ProviderOptions => throw new NotImplementedException();
+        HRESULT IRawElementProviderSimple.Interface.get_ProviderOptions(ProviderOptions* pRetVal) => throw new NotImplementedException();
 
         public HRESULT GetPatternProvider(UIA_PATTERN_ID patternId, IUnknown** pRetVal) => HRESULT.E_NOTIMPL;
         public HRESULT GetPropertyValue(UIA_PROPERTY_ID propertyId, VARIANT* pRetVal)
@@ -1336,6 +1336,6 @@ This is the line 3";
             return HRESULT.E_NOTIMPL;
         }
 
-        IRawElementProviderSimple* IRawElementProviderSimple.Interface.HostRawElementProvider => throw new NotImplementedException();
+        HRESULT IRawElementProviderSimple.Interface.get_HostRawElementProvider(IRawElementProviderSimple** pRetVal) => throw new NotImplementedException();
     }
 }
