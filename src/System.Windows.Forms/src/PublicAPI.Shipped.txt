@@ -11,7 +11,7 @@ override System.Windows.Forms.DataGridView.CreateControlsInstance() -> System.Wi
 override System.Windows.Forms.DataGridView.Font.get -> System.Drawing.Font!
 override System.Windows.Forms.DataGridView.Font.set -> void
 override System.Windows.Forms.DataGridView.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject?
-~override System.Windows.Forms.DataGridView.OnBindingContextChanged(System.EventArgs e) -> void
+override System.Windows.Forms.DataGridView.OnBindingContextChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.DataGridView.OnCursorChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnDoubleClick(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnEnabledChanged(System.EventArgs e) -> void
@@ -672,25 +672,25 @@ virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -
 virtual System.Windows.Forms.DataGridView.CreateColumnsInstance() -> System.Windows.Forms.DataGridViewColumnCollection!
 virtual System.Windows.Forms.DataGridView.CreateRowsInstance() -> System.Windows.Forms.DataGridViewRowCollection!
 virtual System.Windows.Forms.DataGridView.GetClipboardContent() -> System.Windows.Forms.DataObject?
-~virtual System.Windows.Forms.DataGridView.OnAllowUserToAddRowsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAllowUserToDeleteRowsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAllowUserToOrderColumnsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAllowUserToResizeColumnsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAllowUserToResizeRowsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAlternatingRowsDefaultCellStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAutoGenerateColumnsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAutoSizeColumnModeChanged(System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAutoSizeColumnsModeChanged(System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAutoSizeRowsModeChanged(System.Windows.Forms.DataGridViewAutoSizeModeEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnBackgroundColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnBorderStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCancelRowEdit(System.Windows.Forms.QuestionEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellBeginEdit(System.Windows.Forms.DataGridViewCellCancelEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellBorderStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellContentClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellContentDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellContextMenuStripChanged(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
+virtual System.Windows.Forms.DataGridView.OnAllowUserToAddRowsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAllowUserToDeleteRowsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAllowUserToOrderColumnsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAllowUserToResizeColumnsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAllowUserToResizeRowsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAlternatingRowsDefaultCellStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAutoGenerateColumnsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAutoSizeColumnModeChanged(System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAutoSizeColumnsModeChanged(System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAutoSizeRowsModeChanged(System.Windows.Forms.DataGridViewAutoSizeModeEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnBackgroundColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnBorderStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCancelRowEdit(System.Windows.Forms.QuestionEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellBeginEdit(System.Windows.Forms.DataGridViewCellCancelEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellBorderStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellContentClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellContentDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellContextMenuStripChanged(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnCellContextMenuStripNeeded(System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnCellDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnCellEndEdit(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
@@ -5642,8 +5642,8 @@ System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader 
 System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill = 16 -> System.Windows.Forms.DataGridViewAutoSizeColumnsMode
 System.Windows.Forms.DataGridViewAutoSizeColumnsMode.None = 1 -> System.Windows.Forms.DataGridViewAutoSizeColumnsMode
 System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs
-System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.DataGridViewAutoSizeColumnsModeEventArgs(System.Windows.Forms.DataGridViewAutoSizeColumnMode[]? previousModes) -> void
-System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get -> System.Windows.Forms.DataGridViewAutoSizeColumnMode[]?
+System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.DataGridViewAutoSizeColumnsModeEventArgs(System.Windows.Forms.DataGridViewAutoSizeColumnMode[]! previousModes) -> void
+System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get -> System.Windows.Forms.DataGridViewAutoSizeColumnMode[]!
 System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventHandler
 System.Windows.Forms.DataGridViewAutoSizeModeEventArgs
 System.Windows.Forms.DataGridViewAutoSizeModeEventArgs.DataGridViewAutoSizeModeEventArgs(bool previousModeAutoSized) -> void
