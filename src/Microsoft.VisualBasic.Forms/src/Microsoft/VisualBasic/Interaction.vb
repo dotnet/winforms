@@ -412,7 +412,5 @@ Namespace Microsoft.VisualBasic
                  CType(Buttons And &HFFFFF000, MessageBoxOptions)),
                  MsgBoxResult)
         End Function
-
     End Module
-
 End Namespace

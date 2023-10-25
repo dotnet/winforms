@@ -99,7 +99,5 @@ Namespace Microsoft.VisualBasic.Devices
         Private _network As Network 'Lazy initialized cache for the Network class.
         Private _registryInstance As RegistryProxy 'Lazy initialized cache for the Registry class
         Private Shared s_clock As Clock 'Lazy initialized cache for the Clock class.  SHARED because Clock behaves as a readonly singleton class
-
     End Class 'MyServerComputer
-
 End Namespace

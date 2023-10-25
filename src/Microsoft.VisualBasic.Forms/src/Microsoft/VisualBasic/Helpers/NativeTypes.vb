@@ -10,7 +10,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
     Friend NotInheritable Class NativeTypes
 
 #Disable Warning CA1812 ' Supress warning as this is a type used in PInvoke and shouldn't be changed.
-
         <StructLayout(LayoutKind.Sequential)>
         Friend NotInheritable Class SECURITY_ATTRIBUTES
 #Enable Warning CA1812
@@ -168,7 +167,6 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Friend Const GW_MAX As Integer = 5
 
         Friend Const STARTF_USESHOWWINDOW As Integer = 1
-
         Friend Const NORMAL_PRIORITY_CLASS As Integer = &H20
     End Class
 End Namespace

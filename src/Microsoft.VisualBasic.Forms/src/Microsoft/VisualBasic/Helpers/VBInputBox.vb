@@ -126,7 +126,5 @@ Namespace Microsoft.VisualBasic.CompilerServices
         Private Sub MyCancelButton_Click(sender As Object, e As EventArgs)
             Close()
         End Sub
-
     End Class
-
 End Namespace

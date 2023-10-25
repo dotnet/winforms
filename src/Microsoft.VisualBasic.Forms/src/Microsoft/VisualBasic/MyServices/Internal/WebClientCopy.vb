@@ -204,7 +204,5 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
 
         ' The percentage of the operation completed
         Private _percentage As Integer
-
     End Class
-
 End Namespace

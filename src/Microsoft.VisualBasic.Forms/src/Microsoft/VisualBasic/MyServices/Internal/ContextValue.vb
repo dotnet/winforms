@@ -47,7 +47,5 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         Private ReadOnly _contextKey As String 'An item is stored in the dictionary by a GUID which this string maintains
 
         Private Shared s_threadLocal As ThreadLocal(Of IDictionary)
-
     End Class 'ContextValue
-
 End Namespace

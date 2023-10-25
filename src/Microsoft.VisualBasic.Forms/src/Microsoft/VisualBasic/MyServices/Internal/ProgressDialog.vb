@@ -270,7 +270,5 @@ Namespace Microsoft.VisualBasic.MyServices.Internal
         End Sub
 
 #End Region
-
     End Class
-
 End Namespace

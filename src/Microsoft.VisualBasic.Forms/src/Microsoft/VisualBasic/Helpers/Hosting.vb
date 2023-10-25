@@ -23,7 +23,5 @@ Namespace Microsoft.VisualBasic.CompilerServices
                 s_host = Value
             End Set
         End Property
-
     End Class
-
 End Namespace
