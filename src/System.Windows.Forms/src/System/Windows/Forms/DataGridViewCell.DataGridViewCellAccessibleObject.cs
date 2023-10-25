@@ -231,17 +231,20 @@ public abstract partial class DataGridViewCell
                 DataGridViewCellStyle dataGridViewCellStyle = _owner.InheritedStyle;
 
                 // Format string "True" to boolean True.
-                object? formattedValue = _owner.GetFormattedValue(value,
-                                                                  _owner.OwningRow.Index,
-                                                                  ref dataGridViewCellStyle,
-                                                                  valueTypeConverter: null,
-                                                                  formattedValueTypeConverter: null,
-                                                                  DataGridViewDataErrorContexts.Formatting);
+                object? formattedValue = _owner.GetFormattedValue(
+                    value,
+                    _owner.OwningRow.Index,
+                    ref dataGridViewCellStyle,
+                    valueTypeConverter: null,
+                    formattedValueTypeConverter: null,
+                    DataGridViewDataErrorContexts.Formatting);
+
                 // Parse the formatted value and push it into the back end.
-                _owner.Value = _owner.ParseFormattedValue(formattedValue,
-                                                           dataGridViewCellStyle,
-                                                           formattedValueTypeConverter: null,
-                                                           valueTypeConverter: null);
+                _owner.Value = _owner.ParseFormattedValue(
+                    formattedValue,
+                    dataGridViewCellStyle,
+                    formattedValueTypeConverter: null,
+                    valueTypeConverter: null);
             }
         }
 

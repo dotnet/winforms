@@ -10,7 +10,7 @@ public class DataGridViewCellFormattingEventArgs : ConvertEventArgs
         int rowIndex,
         object? value,
         Type? desiredType,
-        DataGridViewCellStyle? cellStyle)
+        DataGridViewCellStyle cellStyle)
         : base(value, desiredType)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(columnIndex, -1);
@@ -21,7 +21,7 @@ public class DataGridViewCellFormattingEventArgs : ConvertEventArgs
         CellStyle = cellStyle;
     }
 
-    public DataGridViewCellStyle? CellStyle { get; set; }
+    public DataGridViewCellStyle CellStyle { get; set; }
 
     public int ColumnIndex { get; }
 

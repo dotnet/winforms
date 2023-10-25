@@ -267,7 +267,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
     {
         ArgumentOutOfRangeException.ThrowIfNotEqual(rowIndex, -1);
 
-        ContextMenuStrip contextMenuStrip = GetContextMenuStrip(-1);
+        ContextMenuStrip? contextMenuStrip = GetContextMenuStrip(-1);
 
         return contextMenuStrip ?? DataGridView?.ContextMenuStrip;
     }

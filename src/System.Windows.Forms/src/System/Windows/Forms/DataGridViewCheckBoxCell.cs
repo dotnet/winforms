@@ -635,7 +635,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             }
         }
 
-        object ret = base.GetFormattedValue(
+        object? ret = base.GetFormattedValue(
             value,
             rowIndex,
             ref cellStyle,

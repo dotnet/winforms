@@ -1152,7 +1152,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         // so that the tooltip appears again on mousemove after the editing.
         CurrentMouseLocation = FlagAreaNotSet;
     }
-#nullable disable
+
     /// <summary>
     /// Gets the value indicating whether DataGridView editing control should be processed in accessible
     /// hierarchy restructuring. This check is necessary to not restructure the accessible hierarchy for
@@ -1165,6 +1165,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         get
         {
             // Get the type of the editing control and cache it to not call expensive GetType() method repeatedly.
+            Debug.Assert(DataGridView?.EditingControl is not null);
             Type editingControlType = DataGridView.EditingControl.GetType();
 
             return
@@ -1184,7 +1185,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     {
         if (disposing)
         {
-            ContextMenuStrip contextMenuStrip = (ContextMenuStrip)ContextMenuStripInternal;
+            ContextMenuStrip? contextMenuStrip = ContextMenuStripInternal;
             if (contextMenuStrip is not null)
             {
                 contextMenuStrip.Disposed -= new EventHandler(DetachContextMenuStrip);
@@ -1216,7 +1217,11 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         return EnterUnsharesRow(rowIndex, throughMouseClick);
     }
 
-    internal static void FormatPlainText(string s, bool csv, TextWriter output, ref bool escapeApplied)
+    internal static void FormatPlainText(
+        string? s,
+        bool csv,
+        TextWriter output,
+        ref bool escapeApplied)
     {
         if (s is null)
         {
@@ -1274,7 +1279,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     // Code taken from ASP.NET file xsp\System\Web\httpserverutility.cs
-    internal static void FormatPlainTextAsHtml(string s, TextWriter output)
+    internal static void FormatPlainTextAsHtml(string? s, TextWriter output)
     {
         if (s is null)
         {
@@ -1355,12 +1360,13 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         return b;
     }
 
-    protected virtual object GetClipboardContent(int rowIndex,
-                                                 bool firstCell,
-                                                 bool lastCell,
-                                                 bool inFirstRow,
-                                                 bool inLastRow,
-                                                 string format)
+    protected virtual object? GetClipboardContent(
+        int rowIndex,
+        bool firstCell,
+        bool lastCell,
+        bool inFirstRow,
+        bool inLastRow,
+        string format)
     {
         if (DataGridView is null)
         {
@@ -1373,7 +1379,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
         // Assuming (like in other places in this class) that the formatted value is independent of the style colors.
         DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false);
-        object formattedValue = null;
+        object? formattedValue = null;
         if (DataGridView.IsSharedCellSelected(this, rowIndex))
         {
             formattedValue = GetEditedFormattedValue(GetValue(rowIndex), rowIndex, ref dataGridViewCellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.ClipboardContent);
@@ -1465,7 +1471,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         }
     }
 
-    internal object GetClipboardContentInternal(
+    internal object? GetClipboardContentInternal(
         int rowIndex,
         bool firstCell,
         bool lastCell,
@@ -1473,12 +1479,18 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         bool inLastRow,
         string format)
     {
-        return GetClipboardContent(rowIndex, firstCell, lastCell, inFirstRow, inLastRow, format);
+        return GetClipboardContent(
+            rowIndex,
+            firstCell,
+            lastCell,
+            inFirstRow,
+            inLastRow,
+            format);
     }
 
-    internal ContextMenuStrip GetContextMenuStrip(int rowIndex)
+    internal ContextMenuStrip? GetContextMenuStrip(int rowIndex)
     {
-        ContextMenuStrip contextMenuStrip = ContextMenuStripInternal;
+        ContextMenuStrip? contextMenuStrip = ContextMenuStripInternal;
         if (DataGridView is not null &&
             (DataGridView.VirtualMode || DataGridView.DataSource is not null))
         {
@@ -1540,18 +1552,22 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         return Rectangle.Empty;
     }
 
-    private protected virtual string GetDefaultToolTipText()
+    private protected virtual string? GetDefaultToolTipText()
     {
         return string.Empty;
     }
 
-    internal object GetEditedFormattedValue(object value, int rowIndex, ref DataGridViewCellStyle dataGridViewCellStyle, DataGridViewDataErrorContexts context)
+    internal object? GetEditedFormattedValue(
+        object? value,
+        int rowIndex,
+        ref DataGridViewCellStyle dataGridViewCellStyle,
+        DataGridViewDataErrorContexts context)
     {
         Debug.Assert(DataGridView is not null);
         Point ptCurrentCell = DataGridView.CurrentCellAddress;
         if (ColumnIndex == ptCurrentCell.X && rowIndex == ptCurrentCell.Y)
         {
-            IDataGridViewEditingControl dgvectl = (IDataGridViewEditingControl)DataGridView.EditingControl;
+            IDataGridViewEditingControl? dgvectl = (IDataGridViewEditingControl?)DataGridView.EditingControl;
             if (dgvectl is not null)
             {
                 return dgvectl.GetEditingControlFormattedValue(context);
@@ -1562,26 +1578,38 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 return dgvecell.GetEditingCellFormattedValue(context);
             }
 
-            return GetFormattedValue(value, rowIndex, ref dataGridViewCellStyle, null, null, context);
+            return GetFormattedValue(
+                value,
+                rowIndex,
+                ref dataGridViewCellStyle,
+                valueTypeConverter: null,
+                formattedValueTypeConverter: null,
+                context);
         }
 
-        return GetFormattedValue(value, rowIndex, ref dataGridViewCellStyle, null, null, context);
+        return GetFormattedValue(
+            value,
+            rowIndex,
+            ref dataGridViewCellStyle,
+            valueTypeConverter: null,
+            formattedValueTypeConverter: null,
+            context);
     }
 
-    public object GetEditedFormattedValue(int rowIndex, DataGridViewDataErrorContexts context)
+    public object? GetEditedFormattedValue(int rowIndex, DataGridViewDataErrorContexts context)
     {
         if (DataGridView is null)
         {
             return null;
         }
 
-        DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false /*includeColors*/);
+        DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(inheritedCellStyle: null, rowIndex, includeColors: false);
         return GetEditedFormattedValue(GetValue(rowIndex), rowIndex, ref dataGridViewCellStyle, context);
     }
 
     internal Rectangle GetErrorIconBounds(int rowIndex)
     {
-        DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, rowIndex, false /*includeColors*/);
+        DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(inheritedCellStyle: null, rowIndex, includeColors: false);
         using var screen = GdiCache.GetScreenDCGraphics();
         return GetErrorIconBounds(screen, dataGridViewCellStyle, rowIndex);
     }
@@ -1594,7 +1622,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     protected internal virtual string GetErrorText(int rowIndex)
     {
         string errorText = string.Empty;
-        object objErrorText = Properties.GetObject(s_propCellErrorText);
+        object? objErrorText = Properties.GetObject(s_propCellErrorText);
         if (objErrorText is not null)
         {
             errorText = (string)objErrorText;
@@ -1618,7 +1646,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         return errorText;
     }
 
-    internal object GetFormattedValue(int rowIndex, ref DataGridViewCellStyle cellStyle, DataGridViewDataErrorContexts context)
+    internal object? GetFormattedValue(int rowIndex, ref DataGridViewCellStyle cellStyle, DataGridViewDataErrorContexts context)
     {
         if (DataGridView is null)
         {
@@ -1626,26 +1654,38 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         }
         else
         {
-            return GetFormattedValue(GetValue(rowIndex), rowIndex, ref cellStyle, null, null, context);
+            return GetFormattedValue(
+                GetValue(rowIndex),
+                rowIndex,
+                ref cellStyle,
+                valueTypeConverter: null,
+                formattedValueTypeConverter: null,
+                context);
         }
     }
 
-    protected virtual object GetFormattedValue(object value,
-                                               int rowIndex,
-                                               ref DataGridViewCellStyle cellStyle,
-                                               TypeConverter valueTypeConverter,
-                                               TypeConverter formattedValueTypeConverter,
-                                               DataGridViewDataErrorContexts context)
+    protected virtual object? GetFormattedValue(
+        object? value,
+        int rowIndex,
+        ref DataGridViewCellStyle cellStyle,
+        TypeConverter? valueTypeConverter,
+        TypeConverter? formattedValueTypeConverter,
+        DataGridViewDataErrorContexts context)
     {
         if (DataGridView is null)
         {
             return null;
         }
 
-        DataGridViewCellFormattingEventArgs gdvcfe = DataGridView.OnCellFormatting(ColumnIndex, rowIndex, value, FormattedValueType, cellStyle);
+        DataGridViewCellFormattingEventArgs gdvcfe = DataGridView.OnCellFormatting(
+            ColumnIndex,
+            rowIndex,
+            value,
+            FormattedValueType,
+            cellStyle);
         cellStyle = gdvcfe.CellStyle;
         bool formattingApplied = gdvcfe.FormattingApplied;
-        object formattedValue = gdvcfe.Value;
+        object? formattedValue = gdvcfe.Value;
         bool checkFormattedValType = true;
 
         if (!formattingApplied &&
@@ -1694,7 +1734,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 return null;
             }
 
-            Exception exception = null;
+            Exception exception;
             if (FormattedValueType is null)
             {
                 exception = new FormatException(SR.DataGridViewCell_FormattedValueTypeNull);
@@ -1761,7 +1801,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         return OwningRow.GetHeight(rowIndex);
     }
 
-    public virtual ContextMenuStrip GetInheritedContextMenuStrip(int rowIndex)
+    public virtual ContextMenuStrip? GetInheritedContextMenuStrip(int rowIndex)
     {
         if (DataGridView is not null)
         {
@@ -1776,7 +1816,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             Debug.Assert(ColumnIndex < DataGridView.Columns.Count);
         }
 
-        ContextMenuStrip contextMenuStrip = GetContextMenuStrip(rowIndex);
+        ContextMenuStrip? contextMenuStrip = GetContextMenuStrip(rowIndex);
         if (contextMenuStrip is not null)
         {
             return contextMenuStrip;
@@ -1907,7 +1947,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 #endif
         return state;
     }
-
+#nullable disable
     public virtual DataGridViewCellStyle GetInheritedStyle(DataGridViewCellStyle inheritedCellStyle, int rowIndex, bool includeColors)
     {
         if (DataGridView is null)
