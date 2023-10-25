@@ -114,10 +114,10 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
     internal int ActualDisplayIndexToColumnIndex(int actualDisplayIndex, DataGridViewElementStates includeFilter)
     {
         // Microsoft: is there a faster way to get the column index?
-        DataGridViewColumn dataGridViewColumn = GetFirstColumn(includeFilter);
+        DataGridViewColumn? dataGridViewColumn = GetFirstColumn(includeFilter);
         for (int i = 0; i < actualDisplayIndex; i++)
         {
-            dataGridViewColumn = GetNextColumn(dataGridViewColumn, includeFilter, DataGridViewElementStates.None);
+            dataGridViewColumn = GetNextColumn(dataGridViewColumn!, includeFilter, DataGridViewElementStates.None);
         }
 
         return dataGridViewColumn?.Index ?? -1;
@@ -312,7 +312,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
     internal int ColumnIndexToActualDisplayIndex(int columnIndex, DataGridViewElementStates includeFilter)
     {
         // map the column index to the actual display index
-        DataGridViewColumn dataGridViewColumn = GetFirstColumn(includeFilter);
+        DataGridViewColumn? dataGridViewColumn = GetFirstColumn(includeFilter);
         int actualDisplayIndex = 0;
         while (dataGridViewColumn is not null && dataGridViewColumn.Index != columnIndex)
         {
@@ -477,11 +477,12 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         Debug.Assert(_items[toColumnIndex].StateIncludes(includeFilter));
 
         int jumpColumns = 0;
-        DataGridViewColumn dataGridViewColumn = _items[fromColumnIndex];
+        DataGridViewColumn? dataGridViewColumn = _items[fromColumnIndex];
 
         while (dataGridViewColumn != _items[toColumnIndex])
         {
-            dataGridViewColumn = GetNextColumn(dataGridViewColumn, includeFilter,
+            dataGridViewColumn = GetNextColumn(
+                dataGridViewColumn, includeFilter,
                 DataGridViewElementStates.None);
             Debug.Assert(dataGridViewColumn is not null);
             if (dataGridViewColumn.StateIncludes(includeFilter))
@@ -523,7 +524,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
 
         return -1;
     }
-#nullable disable
+
     internal float GetColumnsFillWeight(DataGridViewElementStates includeFilter)
     {
         Debug.Assert((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
@@ -591,7 +592,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         return columnsWidth;
     }
 
-    public DataGridViewColumn GetFirstColumn(DataGridViewElementStates includeFilter)
+    public DataGridViewColumn? GetFirstColumn(DataGridViewElementStates includeFilter)
     {
         if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
             DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
@@ -622,8 +623,9 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         return null;
     }
 
-    public DataGridViewColumn GetFirstColumn(DataGridViewElementStates includeFilter,
-                                             DataGridViewElementStates excludeFilter)
+    public DataGridViewColumn? GetFirstColumn(
+        DataGridViewElementStates includeFilter,
+        DataGridViewElementStates excludeFilter)
     {
         if (excludeFilter == DataGridViewElementStates.None)
         {
@@ -666,8 +668,9 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         return null;
     }
 
-    public DataGridViewColumn GetLastColumn(DataGridViewElementStates includeFilter,
-                                            DataGridViewElementStates excludeFilter)
+    public DataGridViewColumn? GetLastColumn(
+        DataGridViewElementStates includeFilter,
+        DataGridViewElementStates excludeFilter)
     {
         if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
             DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
@@ -705,9 +708,10 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         return null;
     }
 
-    public DataGridViewColumn GetNextColumn(DataGridViewColumn dataGridViewColumnStart,
-                                            DataGridViewElementStates includeFilter,
-                                            DataGridViewElementStates excludeFilter)
+    public DataGridViewColumn? GetNextColumn(
+        DataGridViewColumn dataGridViewColumnStart,
+        DataGridViewElementStates includeFilter,
+        DataGridViewElementStates excludeFilter)
     {
         ArgumentNullException.ThrowIfNull(dataGridViewColumnStart);
 
@@ -777,9 +781,10 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         return null;
     }
 
-    public DataGridViewColumn GetPreviousColumn(DataGridViewColumn dataGridViewColumnStart,
-                                                         DataGridViewElementStates includeFilter,
-                                                         DataGridViewElementStates excludeFilter)
+    public DataGridViewColumn? GetPreviousColumn(
+        DataGridViewColumn dataGridViewColumnStart,
+        DataGridViewElementStates includeFilter,
+        DataGridViewElementStates excludeFilter)
     {
         ArgumentNullException.ThrowIfNull(dataGridViewColumnStart);
 
@@ -963,7 +968,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
     private void OnCollectionChanged_PostNotification(CollectionChangeEventArgs ccea, bool changeIsInsertion, Point newCurrentCell)
     {
         Debug.Assert(DataGridView is not null);
-        DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)ccea.Element;
+        DataGridViewColumn? dataGridViewColumn = (DataGridViewColumn?)ccea.Element;
         if (ccea.Action == CollectionChangeAction.Add && changeIsInsertion)
         {
             DataGridView.OnInsertedColumn_PostNotification(newCurrentCell);
@@ -1122,6 +1127,7 @@ public partial class DataGridViewColumnCollection : BaseCollection, IList
         }
     }
 
+    [MemberNotNull(nameof(_itemsSorted))]
     private void UpdateColumnOrderCache()
     {
         _itemsSorted = _items.ToList();

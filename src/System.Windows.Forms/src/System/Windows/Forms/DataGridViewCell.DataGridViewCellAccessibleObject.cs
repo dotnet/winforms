@@ -506,9 +506,10 @@ public abstract partial class DataGridViewCell
             }
             else
             {
-                int previousVisibleColumnIndex = _owner.DataGridView.Columns.GetPreviousColumn(_owner.OwningColumn,
-                                                                                               DataGridViewElementStates.Visible,
-                                                                                               DataGridViewElementStates.None).Index;
+                int previousVisibleColumnIndex = _owner.DataGridView.Columns.GetPreviousColumn(
+                    _owner.OwningColumn,
+                    DataGridViewElementStates.Visible,
+                    DataGridViewElementStates.None)!.Index;
                 return _owner.OwningRow.Cells[previousVisibleColumnIndex].AccessibilityObject;
             }
         }
@@ -520,8 +521,9 @@ public abstract partial class DataGridViewCell
             Debug.Assert(_owner.OwningColumn is not null);
             Debug.Assert(_owner.OwningRow is not null);
 
-            if (_owner.OwningColumn == _owner.DataGridView.Columns.GetLastColumn(DataGridViewElementStates.Visible,
-                                                                                    DataGridViewElementStates.None))
+            if (_owner.OwningColumn == _owner.DataGridView.Columns.GetLastColumn(
+                DataGridViewElementStates.Visible,
+                DataGridViewElementStates.None))
             {
                 if (wrapAround)
                 {
@@ -537,9 +539,10 @@ public abstract partial class DataGridViewCell
             }
             else
             {
-                int nextVisibleColumnIndex = _owner.DataGridView.Columns.GetNextColumn(_owner.OwningColumn,
-                                                                                       DataGridViewElementStates.Visible,
-                                                                                       DataGridViewElementStates.None).Index;
+                int nextVisibleColumnIndex = _owner.DataGridView.Columns.GetNextColumn(
+                    _owner.OwningColumn,
+                    DataGridViewElementStates.Visible,
+                    DataGridViewElementStates.None)!.Index;
                 return _owner.OwningRow.Cells[nextVisibleColumnIndex].AccessibilityObject;
             }
         }
