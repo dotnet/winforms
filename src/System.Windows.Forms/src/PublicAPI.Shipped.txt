@@ -68,14 +68,14 @@ override System.Windows.Forms.DataGridViewCheckBoxCell.MouseDownUnsharesRow(Syst
 override System.Windows.Forms.DataGridViewCheckBoxCell.MouseUpUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
 override System.Windows.Forms.DataGridViewCheckBoxCell.OnContentClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
 override System.Windows.Forms.DataGridViewCheckBoxCell.OnContentDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
-~override System.Windows.Forms.DataGridViewCheckBoxCell.OnKeyDown(System.Windows.Forms.KeyEventArgs e, int rowIndex) -> void
-~override System.Windows.Forms.DataGridViewCheckBoxCell.OnKeyUp(System.Windows.Forms.KeyEventArgs e, int rowIndex) -> void
-~override System.Windows.Forms.DataGridViewCheckBoxCell.OnMouseDown(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~override System.Windows.Forms.DataGridViewCheckBoxCell.OnMouseMove(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~override System.Windows.Forms.DataGridViewCheckBoxCell.OnMouseUp(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~override System.Windows.Forms.DataGridViewCheckBoxCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates elementState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
-~override System.Windows.Forms.DataGridViewCheckBoxCell.ParseFormattedValue(object formattedValue, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.ComponentModel.TypeConverter formattedValueTypeConverter, System.ComponentModel.TypeConverter valueTypeConverter) -> object
-~override System.Windows.Forms.DataGridViewCheckBoxCell.ToString() -> string
+override System.Windows.Forms.DataGridViewCheckBoxCell.OnKeyDown(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> void
+override System.Windows.Forms.DataGridViewCheckBoxCell.OnKeyUp(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> void
+override System.Windows.Forms.DataGridViewCheckBoxCell.OnMouseDown(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+override System.Windows.Forms.DataGridViewCheckBoxCell.OnMouseMove(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+override System.Windows.Forms.DataGridViewCheckBoxCell.OnMouseUp(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+override System.Windows.Forms.DataGridViewCheckBoxCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates elementState, object? value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
+override System.Windows.Forms.DataGridViewCheckBoxCell.ParseFormattedValue(object? formattedValue, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.ComponentModel.TypeConverter? formattedValueTypeConverter, System.ComponentModel.TypeConverter? valueTypeConverter) -> object!
+override System.Windows.Forms.DataGridViewCheckBoxCell.ToString() -> string!
 override System.Windows.Forms.DataGridViewCheckBoxCell.ValueType.get -> System.Type?
 override System.Windows.Forms.DataGridViewCheckBoxCell.ValueType.set -> void
 override System.Windows.Forms.DataGridViewCheckBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
