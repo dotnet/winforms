@@ -54,7 +54,7 @@ public sealed unsafe partial class HtmlElement
             using ComScope<IDispatch> dispatch = new(null);
             htmlElement.Value->get_all(dispatch).ThrowOnFailure();
             IHTMLElementCollection* htmlElementCollection;
-            return dispatch.Value->QueryInterface(IID.Get<IHTMLElementCollection>(), (void**)&htmlElementCollection).Succeeded
+            return !dispatch.IsNull && dispatch.Value->QueryInterface(IID.Get<IHTMLElementCollection>(), (void**)&htmlElementCollection).Succeeded
                 ? new(_shimManager, htmlElementCollection)
                 : new(_shimManager);
         }
@@ -68,7 +68,7 @@ public sealed unsafe partial class HtmlElement
             using ComScope<IDispatch> dispatch = new(null);
             htmlElement.Value->get_children(dispatch).ThrowOnFailure();
             IHTMLElementCollection* htmlElementCollection;
-            return dispatch.Value->QueryInterface(IID.Get<IHTMLElementCollection>(), (void**)&htmlElementCollection).Succeeded
+            return !dispatch.IsNull && dispatch.Value->QueryInterface(IID.Get<IHTMLElementCollection>(), (void**)&htmlElementCollection).Succeeded
                 ? new(_shimManager, htmlElementCollection)
                 : new(_shimManager);
         }
@@ -110,6 +110,11 @@ public sealed unsafe partial class HtmlElement
             using var nativeHtmlElement = NativeHtmlElement.GetInterface();
             using ComScope<IDispatch> dispatch = new(null);
             nativeHtmlElement.Value->get_document(dispatch).ThrowOnFailure();
+            if (dispatch.IsNull)
+            {
+                return null;
+            }
+
             using var htmlDocument = dispatch.TryQuery<IHTMLDocument>(out HRESULT hr);
             return hr.Succeeded ? new HtmlDocument(_shimManager, htmlDocument) : null;
         }
