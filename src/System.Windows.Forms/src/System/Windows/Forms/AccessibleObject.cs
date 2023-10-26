@@ -2198,20 +2198,12 @@ public unsafe partial class AccessibleObject :
         AutomationNotificationKind notificationKind,
         AutomationNotificationProcessing notificationProcessing,
         string? notificationText)
-    {
-        if (!OsVersion.IsWindows10_1709OrGreater() || !CanNotifyClients)
-        {
-            return false;
-        }
-
-        // The activityId can be any string. It cannot be null. It is not used currently.
-        HRESULT result = PInvoke.UiaRaiseNotificationEvent(
-            this,
-            notificationKind,
-            notificationProcessing,
-            notificationText);
-        return result == HRESULT.S_OK;
-    }
+        => CanNotifyClients
+            && PInvoke.UiaRaiseNotificationEvent(
+                this,
+                notificationKind,
+                notificationProcessing,
+                notificationText) == HRESULT.S_OK;
 
     /// <summary>
     ///  Raises the LiveRegionChanged UIA event.
