@@ -14,7 +14,6 @@ Namespace Microsoft.VisualBasic.Devices
         ''' </summary>
         ''' <value>A Date whose value is the current date and time.</value>
 #Disable Warning IDE0049 ' Simplify Names, Justification:=<Public API>
-
         Public ReadOnly Property LocalTime() As DateTime
             Get
                 Return DateTime.Now
@@ -31,7 +30,6 @@ Namespace Microsoft.VisualBasic.Devices
                 Return DateTime.UtcNow
             End Get
         End Property
-
 #Enable Warning IDE0049 ' Simplify Names
 
         ''' <summary>
@@ -44,7 +42,5 @@ Namespace Microsoft.VisualBasic.Devices
                 Return Environment.TickCount
             End Get
         End Property
-
     End Class 'Clock
-
 End Namespace
