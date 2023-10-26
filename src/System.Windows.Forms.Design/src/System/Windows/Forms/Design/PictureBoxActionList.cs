@@ -32,7 +32,7 @@ internal class PictureBoxActionList : DesignerActionList
 
     public void ChooseImage()
     {
-        EditorServiceContext.EditValue(_designer, Component, "Image");
+        EditorServiceContext.EditValue(_designer, Component!, "Image");
     }
 
     public override DesignerActionItemCollection GetSortedActionItems()

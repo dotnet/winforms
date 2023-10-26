@@ -17,7 +17,7 @@ internal class RichTextBoxActionList : DesignerActionList
 
     public void EditLines()
     {
-        EditorServiceContext.EditValue(_designer, Component, "Lines");
+        EditorServiceContext.EditValue(_designer, Component!, "Lines");
     }
 
     public override DesignerActionItemCollection GetSortedActionItems()

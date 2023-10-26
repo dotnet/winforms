@@ -17,7 +17,7 @@ internal class ImageListActionList : DesignerActionList
         _designer = designer;
     }
 
-    public void ChooseImages() => EditorServiceContext.EditValue(_designer, Component, "Images");
+    public void ChooseImages() => EditorServiceContext.EditValue(_designer, Component!, "Images");
 
     public ColorDepth ColorDepth
     {
