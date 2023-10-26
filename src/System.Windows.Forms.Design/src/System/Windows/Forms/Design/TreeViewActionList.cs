@@ -20,7 +20,7 @@ internal class TreeViewActionList : DesignerActionList
 
     public void InvokeNodesDialog()
     {
-        EditorServiceContext.EditValue(_designer, Component, "Nodes");
+        EditorServiceContext.EditValue(_designer, Component!, "Nodes");
     }
 
     public ImageList? ImageList

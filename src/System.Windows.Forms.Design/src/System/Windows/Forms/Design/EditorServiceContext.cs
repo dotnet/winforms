@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -16,15 +14,10 @@ namespace System.Windows.Forms.Design;
 internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescriptorContext
 {
     private readonly ComponentDesigner _designer;
-    private IComponentChangeService _componentChangeService;
-    private readonly PropertyDescriptor _targetProperty;
+    private IComponentChangeService? _componentChangeService;
+    private readonly PropertyDescriptor? _targetProperty;
 
-    internal EditorServiceContext(ComponentDesigner designer)
-    {
-        _designer = designer;
-    }
-
-    internal EditorServiceContext(ComponentDesigner designer, PropertyDescriptor prop)
+    internal EditorServiceContext(ComponentDesigner designer, PropertyDescriptor? prop)
     {
         _designer = designer;
         _targetProperty = prop;
@@ -40,24 +33,24 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
         Debug.Assert(_targetProperty is not null, "Need PropertyDescriptor for ICollection property to associate collection editor with.");
     }
 
-    internal EditorServiceContext(ComponentDesigner designer, PropertyDescriptor prop, string newVerbText) : this(designer, prop)
+    internal EditorServiceContext(ComponentDesigner designer, PropertyDescriptor? prop, string newVerbText) : this(designer, prop)
     {
         Debug.Assert(!string.IsNullOrEmpty(newVerbText), "newVerbText cannot be null or empty");
-        _designer.Verbs.Add(new DesignerVerb(newVerbText, new EventHandler(OnEditItems)));
+        _designer.Verbs?.Add(new DesignerVerb(newVerbText, new EventHandler(OnEditItems)));
     }
 
-    public static object EditValue(ComponentDesigner designer, object objectToChange, string propName)
+    public static object? EditValue(ComponentDesigner designer, object objectToChange, string propName)
     {
         // Get PropertyDescriptor
-        PropertyDescriptor descriptor = TypeDescriptor.GetProperties(objectToChange)[propName];
+        PropertyDescriptor descriptor = TypeDescriptor.GetProperties(objectToChange)[propName]!;
         // Create a Context
         EditorServiceContext context = new EditorServiceContext(designer, descriptor);
         // Get Editor
-        UITypeEditor editor = descriptor.GetEditor(typeof(UITypeEditor)) as UITypeEditor;
+        UITypeEditor editor = descriptor.GetEditor<UITypeEditor>()!;
         // Get value to edit
-        object value = descriptor.GetValue(objectToChange);
+        object? value = descriptor.GetValue(objectToChange);
         // Edit value
-        object newValue = editor.EditValue(context, context, value);
+        object? newValue = editor.EditValue(context, context, value);
 
         if (newValue != value)
         {
@@ -76,29 +69,10 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
     /// <summary>
     ///  Our caching property for the IComponentChangeService
     /// </summary>
-    private IComponentChangeService ChangeService
-    {
-        get
-        {
-            _componentChangeService ??= (IComponentChangeService)((IServiceProvider)this).GetService(typeof(IComponentChangeService));
-
-            return _componentChangeService;
-        }
-    }
+    private IComponentChangeService ChangeService => _componentChangeService ??= this.GetRequiredService<IComponentChangeService>();
 
     /// <inheritdoc />
-    IContainer ITypeDescriptorContext.Container
-    {
-        get
-        {
-            if (_designer.Component.Site is not null)
-            {
-                return _designer.Component.Site.Container;
-            }
-
-            return null;
-        }
-    }
+    IContainer? ITypeDescriptorContext.Container => _designer.Component.Site?.Container;
 
     /// <inheritdoc />
     void ITypeDescriptorContext.OnComponentChanged()
@@ -120,21 +94,16 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
 
     object ITypeDescriptorContext.Instance => _designer.Component;
 
-    PropertyDescriptor ITypeDescriptorContext.PropertyDescriptor => _targetProperty;
+    PropertyDescriptor? ITypeDescriptorContext.PropertyDescriptor => _targetProperty;
 
-    object IServiceProvider.GetService(Type serviceType)
+    object? IServiceProvider.GetService(Type serviceType)
     {
         if (serviceType == typeof(ITypeDescriptorContext) || serviceType == typeof(IWindowsFormsEditorService))
         {
             return this;
         }
 
-        if (_designer.Component is not null && _designer.Component.Site is not null)
-        {
-            return _designer.Component.Site.GetService(serviceType);
-        }
-
-        return null;
+        return _designer.Component?.Site?.GetService(serviceType);
     }
 
     void IWindowsFormsEditorService.CloseDropDown()
@@ -152,7 +121,7 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
 
     DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
     {
-        IUIService uiSvc = (IUIService)((IServiceProvider)this).GetService(typeof(IUIService));
+        IUIService? uiSvc = this.GetService<IUIService>();
         if (uiSvc is not null)
         {
             return uiSvc.ShowDialog(dialog);
@@ -166,17 +135,17 @@ internal class EditorServiceContext : IWindowsFormsEditorService, ITypeDescripto
     /// <summary>
     ///  When the verb is invoked, use all the stuff above to show the dialog, etc.
     /// </summary>
-    private void OnEditItems(object sender, EventArgs e)
+    private void OnEditItems(object? sender, EventArgs e)
     {
-        object propertyValue = _targetProperty.GetValue(_designer.Component);
+        object? propertyValue = _targetProperty?.GetValue(_designer.Component);
         if (propertyValue is null)
         {
             return;
         }
 
-        CollectionEditor itemsEditor = TypeDescriptor.GetEditor(propertyValue, typeof(UITypeEditor)) as CollectionEditor;
+        CollectionEditor? itemsEditor = TypeDescriptor.GetEditor(propertyValue, typeof(UITypeEditor)) as CollectionEditor;
 
-        Debug.Assert(itemsEditor is not null, $"Didn't get a collection editor for type '{_targetProperty.PropertyType.FullName}'");
+        Debug.Assert(itemsEditor is not null, $"Didn't get a collection editor for type '{_targetProperty!.PropertyType.FullName}'");
         itemsEditor?.EditValue(this, this, propertyValue);
     }
 }

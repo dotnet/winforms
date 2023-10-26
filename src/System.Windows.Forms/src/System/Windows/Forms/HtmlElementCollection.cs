@@ -79,7 +79,7 @@ public sealed unsafe class HtmlElementCollection : ICollection
                 using ComScope<IDispatch> dispatch = new(null);
                 nativeHtmlElementCollection.Value->item(variantElementId, (VARIANT)0, dispatch).ThrowOnFailure();;
                 IHTMLElement* htmlElement;
-                return dispatch.Value->QueryInterface(IID.Get<IHTMLElement>(), (void**)&htmlElement).Succeeded
+                return !dispatch.IsNull && dispatch.Value->QueryInterface(IID.Get<IHTMLElement>(), (void**)&htmlElement).Succeeded
                     ? new(_shimManager, htmlElement)
                     : null;
             }
