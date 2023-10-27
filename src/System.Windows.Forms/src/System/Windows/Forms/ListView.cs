@@ -6048,7 +6048,7 @@ public partial class ListView : Control
     {
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
-        if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && UiaCore.UiaClientsAreListening())
+        if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && PInvoke.UiaClientsAreListening())
         {
             // Checking that mouse buttons are not pressed is necessary to avoid
             // multiple annotation of the column header when resizing the column with the mouse

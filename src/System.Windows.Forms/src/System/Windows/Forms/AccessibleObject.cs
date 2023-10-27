@@ -2230,7 +2230,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
     {
-        if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
         {
             HRESULT result = UiaCore.UiaRaiseAutomationEvent(this, eventId);
             return result == HRESULT.S_OK;
@@ -2241,7 +2241,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, object? oldValue, object? newValue)
     {
-        if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
         {
             HRESULT result = UiaCore.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
             return result == HRESULT.S_OK;
@@ -2255,7 +2255,7 @@ public unsafe partial class AccessibleObject :
         AutomationNotificationProcessing notificationProcessing,
         string notificationText)
     {
-        if (UiaCore.UiaClientsAreListening())
+        if (PInvoke.UiaClientsAreListening())
         {
             return RaiseAutomationNotification(notificationKind, notificationProcessing, notificationText);
         }
@@ -2265,7 +2265,7 @@ public unsafe partial class AccessibleObject :
 
     internal bool RaiseStructureChangedEvent(UiaCore.StructureChangeType structureChangeType, int[] runtimeId)
     {
-        if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
         {
             HRESULT result = UiaCore.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId is null ? 0 : runtimeId.Length);
             return result == HRESULT.S_OK;

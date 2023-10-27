@@ -797,6 +797,7 @@ TYPEDESC
 TYPEKIND
 UIA_EVENT_ID
 UiaAppendRuntimeId
+UiaClientsAreListening
 UiaGetReservedNotSupportedValue
 UiaRootObjectId
 UIS_*
