@@ -3,7 +3,7 @@
 
 namespace Windows.Win32.UI.Controls;
 
-internal struct ToolInfoWrapper<T>
+internal unsafe struct ToolInfoWrapper<T>
             where T : IHandle<HWND>
 {
     public TTTOOLINFOW Info;
@@ -11,7 +11,7 @@ internal struct ToolInfoWrapper<T>
     [MaybeNull]
     private readonly T _handle;
 
-    public unsafe ToolInfoWrapper(T handle, TOOLTIP_FLAGS flags = default, string? text = null)
+    public ToolInfoWrapper(T handle, TOOLTIP_FLAGS flags = default, string? text = null)
     {
         Info = new TTTOOLINFOW
         {
@@ -23,7 +23,7 @@ internal struct ToolInfoWrapper<T>
         _handle = handle;
     }
 
-    public unsafe ToolInfoWrapper(T handle, IntPtr id, TOOLTIP_FLAGS flags = default, string? text = null, RECT rect = default)
+    public ToolInfoWrapper(T handle, IntPtr id, TOOLTIP_FLAGS flags = default, string? text = null, RECT rect = default)
     {
         Info = new TTTOOLINFOW
         {
@@ -36,7 +36,7 @@ internal struct ToolInfoWrapper<T>
         _handle = handle;
     }
 
-    public unsafe LRESULT SendMessage(IHandle<HWND> sender, MessageId message, bool state = false)
+    public LRESULT SendMessage(IHandle<HWND> sender, MessageId message, bool state = false)
     {
         Info.cbSize = (uint)sizeof(TTTOOLINFOW);
         fixed (char* c = Text)
