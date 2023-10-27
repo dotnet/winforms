@@ -260,7 +260,7 @@ public partial class TaskDialog : IWin32Window
     private static void FreeConfig(IntPtr ptrToFree) => Marshal.FreeHGlobal(ptrToFree);
 
 #pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
-    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvStdcall)])]
+    [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvStdcall) })]
 #pragma warning restore CS3016
     private static unsafe HRESULT HandleTaskDialogNativeCallback(
         HWND hwnd,
