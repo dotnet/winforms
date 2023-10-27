@@ -96,7 +96,7 @@ public partial class ListBox
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             int childCount = this.TryGetOwnerAs(out ListBox? owner) ? owner.Items.Count : 0;
 
@@ -107,8 +107,8 @@ public partial class ListBox
 
             return direction switch
             {
-                UiaCore.NavigateDirection.FirstChild => GetChild(0),
-                UiaCore.NavigateDirection.LastChild => GetChild(childCount - 1),
+                NavigateDirection.NavigateDirection_FirstChild => GetChild(0),
+                NavigateDirection.NavigateDirection_LastChild => GetChild(childCount - 1),
                 _ => base.FragmentNavigate(direction),
             };
         }

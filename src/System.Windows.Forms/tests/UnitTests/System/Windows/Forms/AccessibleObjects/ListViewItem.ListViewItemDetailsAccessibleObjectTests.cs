@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -26,7 +26,7 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         AccessibleObject accessibleObject = item.AccessibilityObject;
         AccessibleObject expected = item.SubItems[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -42,7 +42,7 @@ public class ListViewItem_ListViewItemDetailsAccessibleObjectTests
         AccessibleObject accessibleObject = item.AccessibilityObject;
         AccessibleObject expected = item.SubItems[control.Columns.Count - 1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 

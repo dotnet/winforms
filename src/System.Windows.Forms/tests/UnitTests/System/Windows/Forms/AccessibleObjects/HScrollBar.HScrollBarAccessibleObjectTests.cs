@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ScrollBar;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -114,8 +113,8 @@ public class HScrollBar_HScrollBarAccessibleObjectTests
         using HScrollBar scrollBar = GetHScrollBar(createControl, rightToLeft, minimum, maximum, value);
         var accessibleObject = (ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
 
-        Assert.Equal(accessibleObject.FirstLineButtonAccessibleObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject.LastLineButtonAccessibleObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(accessibleObject.FirstLineButtonAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject.LastLineButtonAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.Equal(createControl, scrollBar.IsHandleCreated);
     }
 

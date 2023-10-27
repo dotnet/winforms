@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripOverflowButton;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -89,15 +88,15 @@ public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTest
 
         AccessibleObject accessibleObject = toolStrip.OverflowButton.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         toolStrip.OverflowButton.DropDown.Show();
 
         AccessibleObject expected = toolStrip.OverflowButton.DropDown.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsFact]
@@ -115,8 +114,8 @@ public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTest
         AccessibleObject overflowButton = toolStrip.OverflowButton.AccessibilityObject;
         AccessibleObject item1 = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Null(overflowButton.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(item1, overflowButton.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(overflowButton.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(item1, overflowButton.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         Assert.False(toolStrip.IsHandleCreated);
     }

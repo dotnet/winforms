@@ -72,10 +72,10 @@ public class MonthCalendar_MonthCalendarChildAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.NavigateDirection.FirstChild)]
-    [InlineData((int)UiaCore.NavigateDirection.LastChild)]
-    [InlineData((int)UiaCore.NavigateDirection.NextSibling)]
-    [InlineData((int)UiaCore.NavigateDirection.PreviousSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_NextSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_PreviousSibling)]
     public void MonthCalendarChildAccessibleObject_FragmentNavigate_DoesntHaveChildrenAndSiblings(int direction)
     {
         using MonthCalendar control = new MonthCalendar();
@@ -83,7 +83,7 @@ public class MonthCalendar_MonthCalendarChildAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         MonthCalendarChildAccessibleObject accessibleObject = new SubObject(controlAccessibleObject);
 
-        Assert.Null(accessibleObject.FragmentNavigate((UiaCore.NavigateDirection)direction));
+        Assert.Null(accessibleObject.FragmentNavigate((NavigateDirection)direction));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -95,7 +95,7 @@ public class MonthCalendar_MonthCalendarChildAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         MonthCalendarChildAccessibleObject accessibleObject = new SubObject(controlAccessibleObject);
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);
     }
 

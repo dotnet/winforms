@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -142,9 +141,9 @@ public class ToolStripDropDownItemAccessibleObjectTests
         var accessibleObjectItem2 = (ToolStripDropDownItemAccessibleObject)item2.AccessibilityObject;
         var accessibleObjectNotItem = (ToolStripDropDownItemAccessibleObject)notItem.AccessibilityObject;
 
-        Assert.Equal(accessibleObjectItem2, accessibleObjectItem1.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObjectItem2.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObjectNotItem.FragmentNavigate(NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObjectItem2, accessibleObjectItem1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObjectItem2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObjectNotItem.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
     }
 
     [WinFormsFact]
@@ -161,9 +160,9 @@ public class ToolStripDropDownItemAccessibleObjectTests
         var accessibleObjectItem2 = (ToolStripDropDownItemAccessibleObject)item2.AccessibilityObject;
         var accessibleObjectNotItem = (ToolStripDropDownItemAccessibleObject)notItem.AccessibilityObject;
 
-        Assert.Null(accessibleObjectItem1.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObjectItem1, accessibleObjectItem2.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObjectNotItem.FragmentNavigate(NavigateDirection.PreviousSibling));
+        Assert.Null(accessibleObjectItem1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObjectItem1, accessibleObjectItem2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObjectNotItem.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]

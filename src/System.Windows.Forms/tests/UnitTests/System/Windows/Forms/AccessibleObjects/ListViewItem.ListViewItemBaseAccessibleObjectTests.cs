@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -152,7 +151,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         control.Items.Add(item);
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
-        var actual = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+        var actual = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(control.AccessibilityObject, actual);
         Assert.False(control.IsHandleCreated);
@@ -167,10 +166,10 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         AccessibleObject accessibleObject1 = control.Items[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = control.Items[1].AccessibilityObject;
 
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -183,8 +182,8 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 

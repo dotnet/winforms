@@ -36,11 +36,11 @@ public partial class MonthCalendar
 
         public override string? Description => null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction) =>
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction) =>
             direction switch
             {
-                UiaCore.NavigateDirection.NextSibling => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Next?.Value,
-                UiaCore.NavigateDirection.PreviousSibling => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Previous?.Value,
+                NavigateDirection.NavigateDirection_NextSibling => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Next?.Value,
+                NavigateDirection.NavigateDirection_PreviousSibling => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Previous?.Value,
                 _ => base.FragmentNavigate(direction)
             };
 

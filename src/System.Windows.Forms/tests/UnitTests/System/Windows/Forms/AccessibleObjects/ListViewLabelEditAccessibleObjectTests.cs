@@ -55,8 +55,8 @@ public class ListViewLabelEditAccessibleObjectTests
         ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         ListViewLabelEditAccessibleObject accessibilityObject = (ListViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
 
-        Assert.Equal(listView._listViewSubItem.AccessibilityObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
-        Assert.NotNull(accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(listView._listViewSubItem.AccessibilityObject, accessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.NotNull(accessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
     }
 
     [WinFormsFact]

@@ -7,7 +7,6 @@ using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.UpDownBase;
 using static System.Windows.Forms.UpDownBase.UpDownButtons;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -168,7 +167,7 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         using UpDownButtons upDownButtons = new UpDownButtons(upDownBase);
         UpDownButtonsAccessibleObject accessibleObject = new UpDownButtonsAccessibleObject(upDownButtons);
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(upDownBase.IsHandleCreated);
         Assert.False(upDownButtons.IsHandleCreated);
     }
@@ -180,8 +179,8 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         using UpDownButtons upDownButtons = new UpDownButtons(upDownBase);
         UpDownButtonsAccessibleObject accessibleObject = new UpDownButtonsAccessibleObject(upDownButtons);
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(upDownBase.IsHandleCreated);
         Assert.False(upDownButtons.IsHandleCreated);
     }
@@ -196,8 +195,8 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         AccessibleObject upButton = accessibleObject.GetChild(0);
         AccessibleObject downButton = accessibleObject.GetChild(1);
 
-        Assert.Equal(upButton, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(downButton, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(upButton, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(downButton, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(numericUpDown.IsHandleCreated);
     }
 
@@ -211,8 +210,8 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         AccessibleObject upButton = accessibleObject.GetChild(0);
         AccessibleObject downButton = accessibleObject.GetChild(1);
 
-        Assert.Equal(upButton, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(downButton, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(upButton, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(downButton, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(domainUpDown.IsHandleCreated);
     }
 

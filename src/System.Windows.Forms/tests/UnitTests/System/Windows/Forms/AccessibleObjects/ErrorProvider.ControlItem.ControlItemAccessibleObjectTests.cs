@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Reflection;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ErrorProvider;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -216,7 +215,7 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
             .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, window, control, provider });
 
-        Assert.Equal(window.AccessibilityObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(window.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -247,9 +246,9 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
         accessibleObject2.TestAccessor().Dynamic._window = window;
         accessibleObject3.TestAccessor().Dynamic._window = window;
 
-        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -280,9 +279,9 @@ public class ErrorProvider_ControlItem_ControlItemAccessibleObjectTests
         accessibleObject2.TestAccessor().Dynamic._window = window;
         accessibleObject3.TestAccessor().Dynamic._window = window;
 
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(control.IsHandleCreated);
     }
 }

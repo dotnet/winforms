@@ -44,16 +44,16 @@ public partial class ToolStripControlHost
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (_toolStripHostedControl is not null &&
                 _toolStripControlHost is not null)
             {
                 switch (direction)
                 {
-                    case UiaCore.NavigateDirection.Parent:
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                    case UiaCore.NavigateDirection.NextSibling:
+                    case NavigateDirection.NavigateDirection_Parent:
+                    case NavigateDirection.NavigateDirection_PreviousSibling:
+                    case NavigateDirection.NavigateDirection_NextSibling:
                         return _toolStripControlHost.AccessibilityObject.FragmentNavigate(direction);
                 }
             }

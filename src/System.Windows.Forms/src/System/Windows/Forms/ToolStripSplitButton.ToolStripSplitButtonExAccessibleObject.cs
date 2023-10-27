@@ -75,13 +75,13 @@ public partial class ToolStripSplitButton
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     return DropDownItemsCount > 0 ? _owningToolStripSplitButton.DropDown.Items[0].AccessibilityObject : null;
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     return DropDownItemsCount > 0 ? _owningToolStripSplitButton.DropDown.Items[_owningToolStripSplitButton.DropDown.Items.Count - 1].AccessibilityObject : null;
             }
 

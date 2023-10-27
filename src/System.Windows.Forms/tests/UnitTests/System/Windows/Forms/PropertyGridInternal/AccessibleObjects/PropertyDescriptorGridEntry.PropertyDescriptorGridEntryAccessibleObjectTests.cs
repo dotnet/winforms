@@ -27,7 +27,7 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
         propertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
         gridEntry.TestAccessor().Dynamic._parent = new TestGridEntry(propertyGrid, null, propertyGridView);
 
-        UiaCore.IRawElementProviderFragment firstChild = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        UiaCore.IRawElementProviderFragment firstChild = gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.NotNull(firstChild);
         Assert.Equal(typeof(PropertyGridView.DropDownHolder.DropDownHolderAccessibleObject), firstChild.GetType());
     }

@@ -189,13 +189,13 @@ public class AccessibleObjectTests : InteropTestBase
     }
 
     [WinFormsTheory]
-    [InlineData((int)NavigateDirection.Parent - 1)]
-    [InlineData((int)NavigateDirection.Parent)]
-    [InlineData((int)NavigateDirection.NextSibling)]
-    [InlineData((int)NavigateDirection.PreviousSibling)]
-    [InlineData((int)NavigateDirection.FirstChild)]
-    [InlineData((int)NavigateDirection.LastChild)]
-    [InlineData((int)NavigateDirection.LastChild + 1)]
+    [InlineData((int)NavigateDirection.NavigateDirection_Parent - 1)]
+    [InlineData((int)NavigateDirection.NavigateDirection_Parent)]
+    [InlineData((int)NavigateDirection.NavigateDirection_NextSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_PreviousSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_LastChild + 1)]
     public void AccessibleObject_IRawElementProviderFragmentNavigate_Invoke_ReturnsExpected(int direction)
     {
         var o = new AccessibleObject();

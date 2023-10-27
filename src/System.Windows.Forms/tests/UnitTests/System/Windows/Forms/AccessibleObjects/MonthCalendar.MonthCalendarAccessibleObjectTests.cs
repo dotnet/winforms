@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -231,7 +230,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
         using MonthCalendar monthCalendar = new();
         MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
     }
 
     [WinFormsFact]
@@ -240,8 +239,8 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
         using MonthCalendar monthCalendar = new();
         MonthCalendarAccessibleObject accessibleObject = new(monthCalendar);
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
     }
 
     [WinFormsFact]
@@ -252,7 +251,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
 
         AccessibleObject previousButton = accessibleObject.PreviousButtonAccessibleObject;
 
-        Assert.Equal(previousButton, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(previousButton, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsFact]
@@ -263,7 +262,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
 
         AccessibleObject todayLink = accessibleObject.TodayLinkAccessibleObject;
 
-        Assert.Equal(todayLink, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(todayLink, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsFact]
@@ -274,6 +273,6 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
 
         AccessibleObject lastCalendar = accessibleObject.CalendarsAccessibleObjects?.Last?.Value;
 
-        Assert.Equal(lastCalendar, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(lastCalendar, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 }

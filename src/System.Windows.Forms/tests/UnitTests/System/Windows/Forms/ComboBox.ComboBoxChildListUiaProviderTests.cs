@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.Tests;
@@ -41,7 +42,7 @@ public class ComboBox_ComboBoxChildListUiaProviderTests
 
         comboBox.DroppedDown = droppedDown;
         AccessibleObject previousItem = comboBox.ChildListAccessibleObject
-            .FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) as AccessibleObject;
+            .FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling) as AccessibleObject;
 
         AccessibleObject expectedItem = comboBoxStyle == ComboBoxStyle.Simple
             ? comboBox.ChildListAccessibleObject
@@ -70,7 +71,7 @@ public class ComboBox_ComboBoxChildListUiaProviderTests
 
         comboBox.DroppedDown = droppedDown;
         AccessibleObject nextItem = comboBox.ChildListAccessibleObject
-            .FragmentNavigate(UiaCore.NavigateDirection.NextSibling) as AccessibleObject;
+            .FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling) as AccessibleObject;
 
         AccessibleObject expectedItem = comboBoxStyle == ComboBoxStyle.DropDownList
             ? comboBox.ChildTextAccessibleObject

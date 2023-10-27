@@ -37,7 +37,7 @@ internal partial class PropertyGridView
                 }
             }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             {
                 if (!this.TryGetOwnerAs(out GridViewTextBox? owner)
                     || !owner.PropertyGridView.IsEditTextBoxCreated
@@ -51,9 +51,9 @@ internal partial class PropertyGridView
 
                 return direction switch
                 {
-                    UiaCore.NavigateDirection.Parent => parent,
-                    UiaCore.NavigateDirection.NextSibling => parent.GetNextChild(this),
-                    UiaCore.NavigateDirection.PreviousSibling => parent.GetPreviousChild(this),
+                    NavigateDirection.NavigateDirection_Parent => parent,
+                    NavigateDirection.NavigateDirection_NextSibling => parent.GetNextChild(this),
+                    NavigateDirection.NavigateDirection_PreviousSibling => parent.GetPreviousChild(this),
                     _ => base.FragmentNavigate(direction),
                 };
             }

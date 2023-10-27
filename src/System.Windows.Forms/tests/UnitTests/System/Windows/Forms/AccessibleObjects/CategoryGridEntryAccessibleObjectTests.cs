@@ -5,7 +5,6 @@ using System.Windows.Forms.PropertyGridInternal;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.PropertyGridInternal.CategoryGridEntry;
 using static System.Windows.Forms.PropertyGridInternal.PropertyGridView;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -70,7 +69,7 @@ public class CategoryGridEntryAccessibleObjectTests
 
         AccessibleObject accessibilityObject = gridView.TopLevelGridEntries[0].AccessibilityObject;
 
-        Assert.Equal(gridView.AccessibilityObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(gridView.AccessibilityObject, accessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);
         Assert.False(button.IsHandleCreated);
     }
@@ -87,8 +86,8 @@ public class CategoryGridEntryAccessibleObjectTests
         AccessibleObject accessibilityObjectCategory2 = gridView.TopLevelGridEntries[1].AccessibilityObject;
         AccessibleObject accessibilityObjectLastCategory = gridView.TopLevelGridEntries[^1].AccessibilityObject;
 
-        Assert.Equal(accessibilityObjectCategory2, accessibilityObjectCategory1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibilityObjectLastCategory.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibilityObjectCategory2, accessibilityObjectCategory1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibilityObjectLastCategory.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.False(control.IsHandleCreated);
         Assert.False(button.IsHandleCreated);
     }
@@ -104,8 +103,8 @@ public class CategoryGridEntryAccessibleObjectTests
         AccessibleObject accessibilityObjectCategory1 = gridView.TopLevelGridEntries[0].AccessibilityObject;
         AccessibleObject accessibilityObjectCategory2 = gridView.TopLevelGridEntries[1].AccessibilityObject;
 
-        Assert.Null(accessibilityObjectCategory1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibilityObjectCategory1, accessibilityObjectCategory2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(accessibilityObjectCategory1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibilityObjectCategory1, accessibilityObjectCategory2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(control.IsHandleCreated);
         Assert.False(button.IsHandleCreated);
     }
@@ -123,7 +122,7 @@ public class CategoryGridEntryAccessibleObjectTests
         AccessibleObject accessibilityObject = category.AccessibilityObject;
         AccessibleObject accessibilityObjectFirstItem = gridViewAccessibilityObject.GetFirstChildProperty(category);
 
-        Assert.Equal(accessibilityObjectFirstItem, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(accessibilityObjectFirstItem, accessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.False(control.IsHandleCreated);
         Assert.False(button.IsHandleCreated);
     }
@@ -141,7 +140,7 @@ public class CategoryGridEntryAccessibleObjectTests
         AccessibleObject accessibilityObject = category.AccessibilityObject;
         AccessibleObject accessibilityObjectLastItem = gridViewAccessibilityObject.GetLastChildProperty(category);
 
-        Assert.Equal(accessibilityObjectLastItem, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(accessibilityObjectLastItem, accessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
         Assert.False(button.IsHandleCreated);
     }

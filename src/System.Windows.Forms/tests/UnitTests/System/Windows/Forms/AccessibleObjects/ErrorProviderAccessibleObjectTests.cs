@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -132,16 +131,16 @@ public class ErrorProviderAccessibleObjectTests : IDisposable
         actualAccessibilityObject = controlItem2_AccessibilityObject.Parent;
         Assert.Equal(errorWindowAccessibilityObject, actualAccessibilityObject);
 
-        actualAccessibilityObject = (AccessibleObject)controlItem1_AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        actualAccessibilityObject = (AccessibleObject)controlItem1_AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
         Assert.Equal(controlItem2_AccessibilityObject, actualAccessibilityObject);
 
-        actualAccessibilityObject = (AccessibleObject)controlItem1_AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+        actualAccessibilityObject = (AccessibleObject)controlItem1_AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
         Assert.Null(actualAccessibilityObject);
 
-        actualAccessibilityObject = (AccessibleObject)controlItem2_AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+        actualAccessibilityObject = (AccessibleObject)controlItem2_AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
         Assert.Equal(controlItem1_AccessibilityObject, actualAccessibilityObject);
 
-        actualAccessibilityObject = (AccessibleObject)controlItem2_AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        actualAccessibilityObject = (AccessibleObject)controlItem2_AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
         Assert.Null(actualAccessibilityObject);
     }
 

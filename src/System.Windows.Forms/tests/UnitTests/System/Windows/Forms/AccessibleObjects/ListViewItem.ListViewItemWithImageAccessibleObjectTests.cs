@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -18,8 +18,8 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
 
         AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
 
-        Assert.Null(listViewItemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(listViewItemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(listViewItemAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(listViewItemAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -45,8 +45,8 @@ public class ListViewItem_ListViewItemWithImageAccessibleObjectTests
         control.Items.Add(listViewItem);
 
         AccessibleObject listViewItemAccessibleObject = control.Items[0].AccessibilityObject;
-        var firstChild = listViewItemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-        var lastChild = listViewItemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+        var firstChild = listViewItemAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        var lastChild = listViewItemAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
         Assert.IsType<ListViewItemImageAccessibleObject>(firstChild);
         Assert.IsType<ListViewItemImageAccessibleObject>(lastChild);

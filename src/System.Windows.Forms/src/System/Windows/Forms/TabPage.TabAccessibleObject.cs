@@ -83,7 +83,7 @@ public partial class TabPage
 
         internal override void AddToSelection() => DoDefaultAction();
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (OwningTabControl is null || !OwningTabControl.IsHandleCreated)
             {
@@ -92,9 +92,9 @@ public partial class TabPage
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => OwningTabControl.AccessibilityObject,
-                UiaCore.NavigateDirection.NextSibling => OwningTabControl.AccessibilityObject.GetChild(GetChildId() + 1),
-                UiaCore.NavigateDirection.PreviousSibling => OwningTabControl.AccessibilityObject.GetChild(GetChildId() - 1),
+                NavigateDirection.NavigateDirection_Parent => OwningTabControl.AccessibilityObject,
+                NavigateDirection.NavigateDirection_NextSibling => OwningTabControl.AccessibilityObject.GetChild(GetChildId() + 1),
+                NavigateDirection.NavigateDirection_PreviousSibling => OwningTabControl.AccessibilityObject.GetChild(GetChildId() - 1),
                 _ => null
             };
         }

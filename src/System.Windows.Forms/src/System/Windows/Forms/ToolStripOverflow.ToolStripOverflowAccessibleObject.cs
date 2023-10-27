@@ -26,7 +26,7 @@ public partial class ToolStripOverflow
         internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                NavigateDirection.Parent when this.TryGetOwnerAs(out ToolStripOverflow? owner)
+                NavigateDirection.NavigateDirection_Parent when this.TryGetOwnerAs(out ToolStripOverflow? owner)
                     => owner.OwnerItem?.AccessibilityObject,
                 _ => base.FragmentNavigate(direction),
             };

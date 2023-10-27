@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -112,7 +111,7 @@ public class MonthCalendar_CalendarRowAccessibleObjectTests
         CalendarBodyAccessibleObject body = new(calendar, controlAccessibleObject, 0);
         CalendarRowAccessibleObject row = new(body, controlAccessibleObject, 0, 2);
 
-        Assert.Equal(body, row.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(body, row.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -142,13 +141,13 @@ public class MonthCalendar_CalendarRowAccessibleObjectTests
         CalendarRowAccessibleObject thirdWeek = body.RowsAccessibleObjects?.First?.Next?.Next?.Next?.Value;
         Assert.NotNull(thirdWeek);
 
-        Assert.Null(daysOfWeekRow.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(daysOfWeekRow, firstWeek.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(firstWeek, secondWeek.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(daysOfWeekRow.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(daysOfWeekRow, firstWeek.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(firstWeek, secondWeek.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
-        Assert.Equal(firstWeek, daysOfWeekRow.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(secondWeek, firstWeek.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(thirdWeek, secondWeek.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(firstWeek, daysOfWeekRow.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(secondWeek, firstWeek.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(thirdWeek, secondWeek.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
     }
 
     [WinFormsFact]
@@ -171,8 +170,8 @@ public class MonthCalendar_CalendarRowAccessibleObjectTests
         CalendarCellAccessibleObject sunday = firstWeek.CellsAccessibleObjects?.First?.Value;
         CalendarCellAccessibleObject saturday = firstWeek.CellsAccessibleObjects?.Last?.Value;
 
-        Assert.Equal(sunday, firstWeek.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(saturday, firstWeek.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(sunday, firstWeek.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(saturday, firstWeek.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsFact]
@@ -195,8 +194,8 @@ public class MonthCalendar_CalendarRowAccessibleObjectTests
         CalendarWeekNumberCellAccessibleObject weekNumber = firstWeek.WeekNumberCellAccessibleObject;
         CalendarCellAccessibleObject saturday = firstWeek.CellsAccessibleObjects?.Last?.Value;
 
-        Assert.Equal(weekNumber, firstWeek.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(saturday, firstWeek.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(weekNumber, firstWeek.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(saturday, firstWeek.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     private CalendarRowAccessibleObject CreateCalendarRowAccessibleObject(MonthCalendar control, int calendarIndex = 0, int rowIndex = 0)

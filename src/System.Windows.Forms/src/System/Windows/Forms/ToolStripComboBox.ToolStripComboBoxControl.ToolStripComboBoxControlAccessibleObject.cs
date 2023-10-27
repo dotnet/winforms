@@ -17,13 +17,13 @@ public partial class ToolStripComboBox
             {
             }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UiaCore.NavigateDirection.Parent:
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                    case UiaCore.NavigateDirection.NextSibling:
+                    case NavigateDirection.NavigateDirection_Parent:
+                    case NavigateDirection.NavigateDirection_PreviousSibling:
+                    case NavigateDirection.NavigateDirection_NextSibling:
                         if (this.TryGetOwnerAs(out ToolStripComboBoxControl? owner))
                         {
                             return owner.Owner?.AccessibilityObject.FragmentNavigate(direction);

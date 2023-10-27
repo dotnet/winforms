@@ -30,7 +30,7 @@ internal partial class PropertyGridToolStrip
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (_parentPropertyGrid.TryGetTarget(out PropertyGrid? target)
                 && target.IsHandleCreated

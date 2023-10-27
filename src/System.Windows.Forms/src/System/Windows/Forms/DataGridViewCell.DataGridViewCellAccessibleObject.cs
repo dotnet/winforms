@@ -623,7 +623,7 @@ public abstract partial class DataGridViewCell
         internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
             => _owner?.DataGridView?.AccessibilityObject;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (_owner is null)
             {
@@ -637,17 +637,17 @@ public abstract partial class DataGridViewCell
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _owner.OwningRow.AccessibilityObject;
 
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     return NavigateForward(wrapAround: false);
 
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return NavigateBackward(wrapAround: false);
 
-                case UiaCore.NavigateDirection.FirstChild:
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     if (_owner.DataGridView.CurrentCell == _owner &&
                         _owner.DataGridView.IsCurrentCellInEditMode &&
                         _owner.DataGridView.EditingControl is not null)

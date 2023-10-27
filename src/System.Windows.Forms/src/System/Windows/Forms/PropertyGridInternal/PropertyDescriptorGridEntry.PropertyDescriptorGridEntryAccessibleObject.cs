@@ -153,13 +153,13 @@ internal partial class PropertyDescriptorGridEntry
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling => GetNextSibling(),
-                UiaCore.NavigateDirection.PreviousSibling => GetPreviousSibling(),
-                UiaCore.NavigateDirection.FirstChild => GetFirstChild(),
-                UiaCore.NavigateDirection.LastChild => GetLastChild(),
+                NavigateDirection.NavigateDirection_NextSibling => GetNextSibling(),
+                NavigateDirection.NavigateDirection_PreviousSibling => GetPreviousSibling(),
+                NavigateDirection.NavigateDirection_FirstChild => GetFirstChild(),
+                NavigateDirection.NavigateDirection_LastChild => GetLastChild(),
                 _ => base.FragmentNavigate(direction),
             };
 

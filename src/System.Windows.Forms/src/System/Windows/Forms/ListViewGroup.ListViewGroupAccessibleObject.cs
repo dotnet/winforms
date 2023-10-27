@@ -218,7 +218,7 @@ public partial class ListViewGroup
             return visibleItems;
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed || IsEmpty)
             {
@@ -227,18 +227,18 @@ public partial class ListViewGroup
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _owningListViewAccessibilityObject;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     int childIndex = _owningListViewAccessibilityObject.GetChildIndex(this);
                     return childIndex == InvalidIndex
                         ? null
                         : _owningListViewAccessibilityObject.GetChild(childIndex + 1);
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return _owningListViewAccessibilityObject.GetChild(_owningListViewAccessibilityObject.GetChildIndex(this) - 1);
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     return GetChild(0);
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     IReadOnlyList<ListViewItem> visibleItems = GetVisibleItems();
                     return visibleItems.Count > 0 ? visibleItems[visibleItems.Count - 1].AccessibilityObject : null;
 

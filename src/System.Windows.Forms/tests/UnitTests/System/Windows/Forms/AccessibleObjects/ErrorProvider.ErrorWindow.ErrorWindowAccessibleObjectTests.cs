@@ -4,7 +4,6 @@
 using System.Reflection;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ErrorProvider;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -169,8 +168,8 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
         window.ControlItems.AddRange(new[] { item1, item2, item3 });
         AccessibleObject accessibleObject = window.AccessibilityObject;
 
-        Assert.Equal(item1.AccessibilityObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(item3.AccessibilityObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(item1.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(item3.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -183,8 +182,8 @@ public class ErrorProvider_ErrorWindow_ErrorWindowAccessibleObject
 
         AccessibleObject accessibleObject = window.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 }

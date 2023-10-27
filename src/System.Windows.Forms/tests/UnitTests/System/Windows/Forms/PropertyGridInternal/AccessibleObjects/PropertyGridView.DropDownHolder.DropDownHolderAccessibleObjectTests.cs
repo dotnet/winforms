@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests.AccessibleObjects;
 
@@ -48,7 +47,7 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
             accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
 
         AccessibleObject selectedGridEntryAccessibleObject = null;
-        Assert.Equal(selectedGridEntryAccessibleObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(selectedGridEntryAccessibleObject, accessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
         PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[0];
         PropertyDescriptorGridEntry gridEntry = new PropertyDescriptorGridEntry(propertyGrid, null, property, false);
@@ -57,7 +56,7 @@ public class PropertyGridView_DropDownHolder_DropDownHolderAccessibleObjectTests
         ownerControl.Visible = true;
 
         selectedGridEntryAccessibleObject = gridEntry.AccessibilityObject;
-        Assert.Equal(selectedGridEntryAccessibleObject, accessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(selectedGridEntryAccessibleObject, accessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
         Assert.Equal(propertyGridView.AccessibilityObject, accessibilityObject.FragmentRoot);
     }

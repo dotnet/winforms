@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Tests.AccessibleObjects.ToolStripAccessibleObjectTests;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -145,7 +144,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         using StatusStrip statusStrip = CreateStatusStrip();
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
     }
 
     [WinFormsFact]
@@ -154,8 +153,8 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         using StatusStrip statusStrip = CreateStatusStrip();
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     public static IEnumerable<object[]> StatusStripAccessibleObject_FragmentNavigate_IfNoGripAndStackLayout_TestData()
@@ -213,7 +212,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -224,7 +223,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     public static IEnumerable<object[]> StatusStripAccessibleObject_FragmentNavigate_IfGripVisible_TestData()
@@ -252,7 +251,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Grip.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -264,7 +263,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Grip.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     public static IEnumerable<object[]> StatusStripAccessibleObject_FragmentNavigate_IfNoGripAndOverflow_TestData()
@@ -287,7 +286,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.OverflowButton.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     public static IEnumerable<object[]> StatusStripAccessibleObject_FragmentNavigate_IfNoGripAndCannotOverflowAndStackLayout_TestData()
@@ -309,7 +308,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     public static IEnumerable<object[]> StatusStripAccessibleObject_FragmentNavigate_IfNoGripAndCannotOverflowAndNonStackLayout_TestData()
@@ -331,7 +330,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -347,7 +346,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -363,7 +362,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -379,7 +378,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -395,7 +394,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -413,7 +412,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[2].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -431,7 +430,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -448,7 +447,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -465,7 +464,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     public static IEnumerable<object[]> StatusStripAccessibleObject_FragmentNavigate_IfStackLayout_TestData()
@@ -522,7 +521,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -533,7 +532,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -545,7 +544,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Grip.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -561,7 +560,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -577,7 +576,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -594,7 +593,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Grip.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -610,7 +609,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -626,7 +625,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -648,7 +647,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -670,7 +669,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[2].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -687,7 +686,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -704,7 +703,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     public static IEnumerable<object[]> StatusStripAccessibleObject_FragmentNavigate_IfOverflow_TestData()
@@ -730,7 +729,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.OverflowButton.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     public static IEnumerable<object[]> StatusStripAccessibleObject_FragmentNavigate_IfCannotOverflow_TestData()
@@ -769,7 +768,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     public static IEnumerable<object[]> StatusStripAccessibleObject_FragmentNavigate_IfCannotOverflowAndItemSkipped_TestData()
@@ -812,7 +811,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     public static IEnumerable<object[]> StatusStripAccessibleObject_FragmentNavigate_IfCannotOverflowAndItemAlignedAndStackLayout_TestData()
@@ -846,7 +845,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     public static IEnumerable<object[]> StatusStripAccessibleObject_FragmentNavigate_IfCannotOverflowAndItemAlignedAndNonStackLayout_TestData()
@@ -872,7 +871,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject accessibleObject = statusStrip.AccessibilityObject;
         AccessibleObject expected = statusStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     private StatusStrip CreateStatusStrip(

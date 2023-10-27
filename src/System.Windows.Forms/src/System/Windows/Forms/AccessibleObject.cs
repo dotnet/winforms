@@ -538,7 +538,7 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     /// <param name="direction">Indicates the direction in which to navigate.</param>
     /// <returns>The element in the specified direction if it exists.</returns>
-    internal virtual UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction) => null;
+    internal virtual UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction) => null;
 
     internal virtual UiaCore.IRawElementProviderSimple[]? GetEmbeddedFragmentRoots() => null;
 
@@ -801,7 +801,7 @@ public unsafe partial class AccessibleObject :
         return value;
     }
 
-    object? UiaCore.IRawElementProviderFragment.Navigate(UiaCore.NavigateDirection direction) => FragmentNavigate(direction);
+    object? UiaCore.IRawElementProviderFragment.Navigate(NavigateDirection direction) => FragmentNavigate(direction);
 
     int[]? UiaCore.IRawElementProviderFragment.GetRuntimeId() => RuntimeId;
 

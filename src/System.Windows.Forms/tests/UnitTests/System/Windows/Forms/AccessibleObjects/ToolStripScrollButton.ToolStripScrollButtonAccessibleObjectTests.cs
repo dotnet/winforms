@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -43,8 +42,8 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
 
         AccessibleObject accessibleObject = dropDownMenu.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         if (!createControl)
         {
@@ -59,25 +58,25 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
         AccessibleObject itemAccessibleObject3 = dropDownMenu.Items[2].AccessibilityObject;
         AccessibleObject downScrollButtonAccessibleObject = dropDownMenu.DownScrollButton.AccessibilityObject;
 
-        Assert.Equal(upScrollButtonAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(downScrollButtonAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(upScrollButtonAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(downScrollButtonAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(upScrollButtonAccessibleObject, itemAccessibleObject1.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(itemAccessibleObject2, itemAccessibleObject1.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Equal(itemAccessibleObject2, itemAccessibleObject3.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(downScrollButtonAccessibleObject, itemAccessibleObject3.FragmentNavigate(NavigateDirection.NextSibling));
+        Assert.Equal(upScrollButtonAccessibleObject, itemAccessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(itemAccessibleObject2, itemAccessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(itemAccessibleObject2, itemAccessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(downScrollButtonAccessibleObject, itemAccessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject, upScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Equal(itemAccessibleObject1, upScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(upScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(upScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(upScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(accessibleObject, upScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(itemAccessibleObject1, upScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(upScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(upScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(upScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(accessibleObject, downScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(downScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Equal(itemAccessibleObject3, downScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(downScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(downScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(accessibleObject, downScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(downScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(itemAccessibleObject3, downScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(downScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(downScrollButtonAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         Assert.Equal(createControl, toolStrip.IsHandleCreated);
     }
@@ -105,8 +104,8 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
 
         AccessibleObject accessibleObject = dropDownMenu.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         if (!createControl)
         {
@@ -118,13 +117,13 @@ public class ToolStripScrollButtonAccessibleObject_ToolStripScrollButtonAccessib
         AccessibleObject itemAccessibleObject1 = dropDownMenu.Items[0].AccessibilityObject;
         AccessibleObject itemAccessibleObject2 = dropDownMenu.Items[1].AccessibilityObject;
 
-        Assert.Equal(itemAccessibleObject1, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(itemAccessibleObject2, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(itemAccessibleObject1, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(itemAccessibleObject2, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Null(itemAccessibleObject1.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(itemAccessibleObject2, itemAccessibleObject1.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Equal(itemAccessibleObject1, itemAccessibleObject2.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(itemAccessibleObject2.FragmentNavigate(NavigateDirection.NextSibling));
+        Assert.Null(itemAccessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(itemAccessibleObject2, itemAccessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(itemAccessibleObject1, itemAccessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(itemAccessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
     }
 
     [WinFormsFact]

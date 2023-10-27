@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -62,10 +63,10 @@ public partial class MonthCalendar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling => _monthCalendarAccessibleObject.NextButtonAccessibleObject,
+                NavigateDirection.NavigateDirection_NextSibling => _monthCalendarAccessibleObject.NextButtonAccessibleObject,
                 _ => base.FragmentNavigate(direction)
             };
 

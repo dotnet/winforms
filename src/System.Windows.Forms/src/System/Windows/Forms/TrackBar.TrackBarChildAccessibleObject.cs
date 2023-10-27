@@ -58,10 +58,10 @@ public partial class TrackBar
                 GetChildId()
             };
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.Parent => ParentInternal,
+                NavigateDirection.NavigateDirection_Parent => ParentInternal,
                 _ => base.FragmentNavigate(direction)
             };
 

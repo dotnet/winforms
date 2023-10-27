@@ -204,11 +204,11 @@ public partial class MonthCalendar
         internal CalendarCellAccessibleObject? FocusedCell
             => _focusedCellAccessibleObject ??= this.TryGetOwnerAs(out MonthCalendar? owner) ? GetCellByDate(owner._focusedDate) : null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.FirstChild => PreviousButtonAccessibleObject,
-                UiaCore.NavigateDirection.LastChild => ShowToday
+                NavigateDirection.NavigateDirection_FirstChild => PreviousButtonAccessibleObject,
+                NavigateDirection.NavigateDirection_LastChild => ShowToday
                     ? TodayLinkAccessibleObject
                     : CalendarsAccessibleObjects?.Last?.Value,
                 _ => base.FragmentNavigate(direction),

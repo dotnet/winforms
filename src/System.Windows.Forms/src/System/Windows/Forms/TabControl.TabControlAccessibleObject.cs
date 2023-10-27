@@ -116,8 +116,8 @@ public partial class TabControl
 
             return direction switch
             {
-                NavigateDirection.FirstChild => owner.SelectedTab?.AccessibilityObject,
-                NavigateDirection.LastChild => owner.TabPages.Count > 0
+                NavigateDirection.NavigateDirection_FirstChild => owner.SelectedTab?.AccessibilityObject,
+                NavigateDirection.NavigateDirection_LastChild => owner.TabPages.Count > 0
                     ? owner.TabPages[^1].TabAccessibilityObject
                     : null,
                 _ => base.FragmentNavigate(direction)

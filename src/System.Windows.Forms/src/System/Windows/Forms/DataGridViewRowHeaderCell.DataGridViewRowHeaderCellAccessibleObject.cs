@@ -242,7 +242,7 @@ public partial class DataGridViewRowHeaderCell
 
         #region IRawElementProviderFragment Implementation
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (Owner is null)
             {
@@ -256,8 +256,8 @@ public partial class DataGridViewRowHeaderCell
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => Owner.OwningRow.AccessibilityObject,
-                UiaCore.NavigateDirection.NextSibling =>
+                NavigateDirection.NavigateDirection_Parent => Owner.OwningRow.AccessibilityObject,
+                NavigateDirection.NavigateDirection_NextSibling =>
                         (Owner.DataGridView is not null && Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) > 0)
                             ? Owner.OwningRow.AccessibilityObject.GetChild(1) // go to the next sibling
                             : null,

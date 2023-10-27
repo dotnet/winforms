@@ -128,7 +128,7 @@ public partial class ListBox
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             int firstItemIndex = 0;
             int lastItemIndex = _owningListBox.Items.Count - 1;
@@ -136,16 +136,16 @@ public partial class ListBox
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _owningListBox.AccessibilityObject;
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     if (currentIndex > firstItemIndex && currentIndex <= lastItemIndex)
                     {
                         return _owningAccessibleObject.GetChild(currentIndex - 1);
                     }
 
                     return null;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     if (currentIndex >= firstItemIndex && currentIndex < lastItemIndex)
                     {
                         return _owningAccessibleObject.GetChild(currentIndex + 1);

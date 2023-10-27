@@ -126,7 +126,7 @@ public partial class TrackBar
             return element ?? base.ElementProviderFromPoint(x, y);
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out TrackBar? _))
             {
@@ -135,8 +135,8 @@ public partial class TrackBar
 
             return direction switch
             {
-                UiaCore.NavigateDirection.FirstChild => GetChild(0),
-                UiaCore.NavigateDirection.LastChild => (LastButtonAccessibleObject?.IsDisplayed ?? false)
+                NavigateDirection.NavigateDirection_FirstChild => GetChild(0),
+                NavigateDirection.NavigateDirection_LastChild => (LastButtonAccessibleObject?.IsDisplayed ?? false)
                     ? LastButtonAccessibleObject
                     : ThumbAccessibleObject,
                 _ => base.FragmentNavigate(direction)

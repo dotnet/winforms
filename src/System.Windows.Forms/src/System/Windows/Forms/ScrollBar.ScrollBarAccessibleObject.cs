@@ -124,11 +124,11 @@ public partial class ScrollBar
             return element ?? base.ElementProviderFromPoint(x, y);
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.FirstChild => FirstLineButtonAccessibleObject,
-                UiaCore.NavigateDirection.LastChild => LastLineButtonAccessibleObject,
+                NavigateDirection.NavigateDirection_FirstChild => FirstLineButtonAccessibleObject,
+                NavigateDirection.NavigateDirection_LastChild => LastLineButtonAccessibleObject,
                 _ => base.FragmentNavigate(direction)
             };
 

@@ -61,11 +61,11 @@ public abstract partial class UpDownBase
                 }
 
                 internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(
-                    UiaCore.NavigateDirection direction) => direction switch
+                    NavigateDirection direction) => direction switch
                     {
-                        UiaCore.NavigateDirection.Parent => Parent,
-                        UiaCore.NavigateDirection.NextSibling => _up ? Parent.GetChild(1) : null,
-                        UiaCore.NavigateDirection.PreviousSibling => _up ? null : Parent.GetChild(0),
+                        NavigateDirection.NavigateDirection_Parent => Parent,
+                        NavigateDirection.NavigateDirection_NextSibling => _up ? Parent.GetChild(1) : null,
+                        NavigateDirection.NavigateDirection_PreviousSibling => _up ? null : Parent.GetChild(0),
                         _ => base.FragmentNavigate(direction),
                     };
 

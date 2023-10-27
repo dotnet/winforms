@@ -58,9 +58,9 @@ public partial class ComboBox
         public override string? DefaultAction
             => _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetDefaultAction(GetChildId());
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
-            if (direction == UiaCore.NavigateDirection.Parent)
+            if (direction == NavigateDirection.NavigateDirection_Parent)
             {
                 return _owningComboBox.ChildListAccessibleObject;
             }
@@ -72,7 +72,7 @@ public partial class ComboBox
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     int currentIndex = GetCurrentIndex();
                     int itemsCount = comboBoxChildListUiaProvider.GetChildFragmentCount();
                     int nextItemIndex = currentIndex + 1;
@@ -82,7 +82,7 @@ public partial class ComboBox
                     }
 
                     break;
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     currentIndex = GetCurrentIndex();
                     int previousItemIndex = currentIndex - 1;
                     if (previousItemIndex >= 0)

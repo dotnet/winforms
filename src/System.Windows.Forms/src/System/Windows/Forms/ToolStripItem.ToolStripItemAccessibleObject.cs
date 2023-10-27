@@ -332,14 +332,14 @@ public abstract partial class ToolStripItem
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return Parent;
-                case UiaCore.NavigateDirection.NextSibling:
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     int index = GetChildFragmentIndex();
                     if (index == -1)
                     {
@@ -348,7 +348,7 @@ public abstract partial class ToolStripItem
                     }
 
                     AccessibleObject? sibling = null;
-                    index += direction == UiaCore.NavigateDirection.NextSibling ? 1 : -1;
+                    index += direction == NavigateDirection.NavigateDirection_NextSibling ? 1 : -1;
                     int itemsCount = GetChildFragmentCount();
                     if (index >= 0 && index < itemsCount)
                     {
@@ -361,7 +361,7 @@ public abstract partial class ToolStripItem
             return base.FragmentNavigate(direction);
         }
 
-        private AccessibleObject? GetChildFragment(int index, UiaCore.NavigateDirection direction)
+        private AccessibleObject? GetChildFragment(int index, NavigateDirection direction)
         {
             if (Parent is ToolStrip.ToolStripAccessibleObject toolStripParent)
             {

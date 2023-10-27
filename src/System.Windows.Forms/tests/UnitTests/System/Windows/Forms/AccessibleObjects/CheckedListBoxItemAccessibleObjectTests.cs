@@ -118,7 +118,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         checkedListBox.Items.Add(2);
 
         AccessibleObject itemAccessibleObject = checkedListBox.AccessibilityObject.GetChild(itemIndex);
-        UiaCore.IRawElementProviderFragment actual = itemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+        UiaCore.IRawElementProviderFragment actual = itemAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(expected, actual);
         Assert.False(checkedListBox.IsHandleCreated);
@@ -137,9 +137,9 @@ public class CheckedListBoxItemAccessibleObjectTests
         AccessibleObject itemAccessibleObject2 = checkedListBox.AccessibilityObject.GetChild(1);
         AccessibleObject itemAccessibleObject3 = checkedListBox.AccessibilityObject.GetChild(2);
 
-        Assert.Equal(itemAccessibleObject2, itemAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(itemAccessibleObject3, itemAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(itemAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(itemAccessibleObject2, itemAccessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(itemAccessibleObject3, itemAccessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(itemAccessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.False(checkedListBox.IsHandleCreated);
     }
 
@@ -156,9 +156,9 @@ public class CheckedListBoxItemAccessibleObjectTests
         AccessibleObject itemAccessibleObject2 = checkedListBox.AccessibilityObject.GetChild(1);
         AccessibleObject itemAccessibleObject3 = checkedListBox.AccessibilityObject.GetChild(2);
 
-        Assert.Null(itemAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(itemAccessibleObject1, itemAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(itemAccessibleObject2, itemAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(itemAccessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(itemAccessibleObject1, itemAccessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(itemAccessibleObject2, itemAccessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(checkedListBox.IsHandleCreated);
     }
 

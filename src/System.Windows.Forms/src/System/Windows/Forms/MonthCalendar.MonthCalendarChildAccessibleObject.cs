@@ -42,10 +42,10 @@ public partial class MonthCalendar
 
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _monthCalendarAccessibleObject;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.Parent => Parent,
+                NavigateDirection.NavigateDirection_Parent => Parent,
                 _ => base.FragmentNavigate(direction)
             };
 

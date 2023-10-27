@@ -30,7 +30,7 @@ public partial class DataGridView
         internal override int[] RuntimeId
             => _runtimeId ??= this.TryGetOwnerAs(out Panel? owner) ? owner.AccessibilityObject.RuntimeId : base.RuntimeId;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!_ownerDataGridView.TryGetTarget(out var owner))
             {
@@ -39,7 +39,7 @@ public partial class DataGridView
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     DataGridViewCell? currentCell = owner.CurrentCell;
                     if (currentCell is not null && owner.IsCurrentCellInEditMode)
                     {
@@ -47,8 +47,8 @@ public partial class DataGridView
                     }
 
                     break;
-                case UiaCore.NavigateDirection.FirstChild:
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     return owner.EditingControlAccessibleObject;
             }
 

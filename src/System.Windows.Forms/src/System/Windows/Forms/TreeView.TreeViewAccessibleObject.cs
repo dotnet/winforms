@@ -23,8 +23,8 @@ public partial class TreeView
         internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                NavigateDirection.FirstChild => GetChild(0),
-                NavigateDirection.LastChild => GetChild(GetChildCount() - 1),
+                NavigateDirection.NavigateDirection_FirstChild => GetChild(0),
+                NavigateDirection.NavigateDirection_LastChild => GetChild(GetChildCount() - 1),
                 _ => base.FragmentNavigate(direction),
             };
 

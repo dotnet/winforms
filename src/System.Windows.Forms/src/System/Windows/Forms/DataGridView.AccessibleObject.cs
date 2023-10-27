@@ -394,11 +394,11 @@ public partial class DataGridView
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     int childCount = GetChildCount();
                     if (childCount > 0)
                     {
@@ -406,7 +406,7 @@ public partial class DataGridView
                     }
 
                     break;
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     childCount = GetChildCount();
                     if (childCount > 0)
                     {

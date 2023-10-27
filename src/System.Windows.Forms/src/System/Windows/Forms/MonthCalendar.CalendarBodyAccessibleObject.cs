@@ -72,13 +72,13 @@ public partial class MonthCalendar
         /// </remark>
         internal override int ColumnCount => _monthCalendarAccessibleObject.CalendarView == MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH ? 7 : 4;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling => null,
-                UiaCore.NavigateDirection.PreviousSibling => _calendarAccessibleObject.CalendarHeaderAccessibleObject,
-                UiaCore.NavigateDirection.FirstChild => RowsAccessibleObjects?.First?.Value,
-                UiaCore.NavigateDirection.LastChild => RowsAccessibleObjects?.Last?.Value,
+                NavigateDirection.NavigateDirection_NextSibling => null,
+                NavigateDirection.NavigateDirection_PreviousSibling => _calendarAccessibleObject.CalendarHeaderAccessibleObject,
+                NavigateDirection.NavigateDirection_FirstChild => RowsAccessibleObjects?.First?.Value,
+                NavigateDirection.NavigateDirection_LastChild => RowsAccessibleObjects?.Last?.Value,
                 _ => base.FragmentNavigate(direction),
 
             };

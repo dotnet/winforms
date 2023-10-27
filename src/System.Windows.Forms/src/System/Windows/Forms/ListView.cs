@@ -6780,20 +6780,20 @@ public partial class ListView : Control
                     {
                         AccessibleObject accessibleObject = SelectedItems[0].AccessibilityObject;
                         if (lvkd->wVKey == (short)Keys.Down
-                            && accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling) is null)
+                            && accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling) is null)
                         {
-                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
                             if (groupAccObj is not null)
                             {
-                                ListViewGroupAccessibleObject? nextGroupAccObj = (ListViewGroupAccessibleObject?)groupAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+                                ListViewGroupAccessibleObject? nextGroupAccObj = (ListViewGroupAccessibleObject?)groupAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
                                 nextGroupAccObj?.SetFocus();
                             }
                         }
 
                         if (lvkd->wVKey == (short)Keys.Up
-                        && accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) is null)
+                        && accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling) is null)
                         {
-                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
                             groupAccObj?.SetFocus();
                         }
                     }

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -34,10 +35,10 @@ public abstract partial class UpDownBase
             }
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(
-                UiaCore.NavigateDirection direction) => direction switch
+                NavigateDirection direction) => direction switch
                 {
-                    UiaCore.NavigateDirection.FirstChild => GetChild(0),
-                    UiaCore.NavigateDirection.LastChild => GetChild(1),
+                    NavigateDirection.NavigateDirection_FirstChild => GetChild(0),
+                    NavigateDirection.NavigateDirection_LastChild => GetChild(1),
                     _ => base.FragmentNavigate(direction),
                 };
 

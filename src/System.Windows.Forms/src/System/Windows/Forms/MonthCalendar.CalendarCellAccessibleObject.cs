@@ -93,12 +93,12 @@ public partial class MonthCalendar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_NextSibling
                     => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Next?.Value,
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => _columnIndex == 0
                         ? _calendarRowAccessibleObject.WeekNumberCellAccessibleObject
                         : _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Previous?.Value,

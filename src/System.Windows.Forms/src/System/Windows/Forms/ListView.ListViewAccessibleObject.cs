@@ -74,7 +74,7 @@ public partial class ListView
             return element ?? base.ElementProviderFromPoint(x, y);
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out ListView? _))
             {
@@ -83,8 +83,8 @@ public partial class ListView
 
             return direction switch
             {
-                UiaCore.NavigateDirection.FirstChild => GetChild(0),
-                UiaCore.NavigateDirection.LastChild => GetLastChild(),
+                NavigateDirection.NavigateDirection_FirstChild => GetChild(0),
+                NavigateDirection.NavigateDirection_LastChild => GetLastChild(),
                 _ => base.FragmentNavigate(direction)
             };
         }
