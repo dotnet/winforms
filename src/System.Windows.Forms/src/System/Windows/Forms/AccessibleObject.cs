@@ -2263,7 +2263,7 @@ public unsafe partial class AccessibleObject :
         return s_notificationEventAvailable;
     }
 
-    internal bool RaiseStructureChangedEvent(UiaCore.StructureChangeType structureChangeType, int[] runtimeId)
+    internal bool RaiseStructureChangedEvent(StructureChangeType structureChangeType, int[] runtimeId)
     {
         if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
         {

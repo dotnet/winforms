@@ -751,6 +751,7 @@ STGC
 STGTY
 STILL_ACTIVE
 StretchDIBits
+StructureChangeType
 SYSBUTTONSTATES
 SystemParametersInfo
 SystemParametersInfoForDpi

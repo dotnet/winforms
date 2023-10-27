@@ -11,6 +11,7 @@ using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -28039,7 +28040,7 @@ public partial class DataGridView
         editingControlAccessibleObject.SetParent(CurrentCell.AccessibilityObject);
 
         CurrentCell.AccessibilityObject.SetDetachableChild(editingControlAccessibleObject);
-        CurrentCell.AccessibilityObject.RaiseStructureChangedEvent(UiaCore.StructureChangeType.ChildAdded, editingControlAccessibleObject.RuntimeId);
+        CurrentCell.AccessibilityObject.RaiseStructureChangedEvent(StructureChangeType.StructureChangeType_ChildAdded, editingControlAccessibleObject.RuntimeId);
     }
 
     private bool SetAndSelectCurrentCellAddress(int columnIndex,
