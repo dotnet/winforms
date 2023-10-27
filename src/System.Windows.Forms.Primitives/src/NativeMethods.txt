@@ -632,6 +632,7 @@ PRINTDLGEX_FLAGS
 PROGRESS_CLASS
 PROPERTYKEY
 PropVariantClear
+ProviderOptions
 ReadClassStg
 READYSTATE
 RealizePalette

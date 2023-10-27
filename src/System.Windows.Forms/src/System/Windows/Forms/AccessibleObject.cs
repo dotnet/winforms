@@ -425,7 +425,7 @@ public unsafe partial class AccessibleObject :
     }
 
     internal virtual int ProviderOptions
-        => (int)(UiaCore.ProviderOptions.ServerSideProvider | UiaCore.ProviderOptions.UseComThreading);
+        => (int)(UIA.ProviderOptions.ProviderOptions_ServerSideProvider | UIA.ProviderOptions.ProviderOptions_UseComThreading);
 
     internal virtual UiaCore.IRawElementProviderSimple? HostRawElementProvider => null;
 
@@ -766,7 +766,7 @@ public unsafe partial class AccessibleObject :
         return HRESULT.E_NOTIMPL;
     }
 
-    UiaCore.ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions => (UiaCore.ProviderOptions)ProviderOptions;
+    ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions => (ProviderOptions)ProviderOptions;
 
     UiaCore.IRawElementProviderSimple? UiaCore.IRawElementProviderSimple.HostRawElementProvider => HostRawElementProvider;
 

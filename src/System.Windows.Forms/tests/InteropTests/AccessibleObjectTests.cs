@@ -7,7 +7,6 @@ using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using ProviderOptions = Interop.UiaCore.ProviderOptions;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.InteropTests;
@@ -67,7 +66,7 @@ public class AccessibleObjectTests : InteropTestBase
     public void AccessibleObject_IRawElementProviderSimpleProviderOptions_Get_ReturnsExpected()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderSimpleProviderOptions(o, ProviderOptions.ServerSideProvider | ProviderOptions.UseComThreading));
+        AssertSuccess(Test_IRawElementProviderSimpleProviderOptions(o, ProviderOptions.ProviderOptions_ServerSideProvider | ProviderOptions.ProviderOptions_UseComThreading));
     }
 
     public static TheoryData<int, bool> GetPatternProvider_TestData() => new()
