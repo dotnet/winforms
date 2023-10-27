@@ -533,7 +533,7 @@ public partial class MonthCalendar
                 ? (int)Math.Ceiling((double)CalendarsAccessibleObjects.Count / ColumnCount)
                 : 0;
 
-        internal override UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
+        internal override RowOrColumnMajor RowOrColumnMajor => RowOrColumnMajor.RowOrColumnMajor_RowMajor;
 
         internal SelectionRange SelectionRange => this.TryGetOwnerAs(out MonthCalendar? owner) ? owner.SelectionRange : new SelectionRange();
 

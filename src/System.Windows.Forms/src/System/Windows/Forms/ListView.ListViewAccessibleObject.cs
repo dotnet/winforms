@@ -64,8 +64,8 @@ public partial class ListView
         internal override int RowCount
             => this.TryGetOwnerAs(out ListView? owningListView) ? owningListView.Items.Count : base.RowCount;
 
-        internal override UiaCore.RowOrColumnMajor RowOrColumnMajor
-            => UiaCore.RowOrColumnMajor.RowMajor;
+        internal override RowOrColumnMajor RowOrColumnMajor
+            => RowOrColumnMajor.RowOrColumnMajor_RowMajor;
 
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
         {

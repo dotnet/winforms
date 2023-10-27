@@ -585,7 +585,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual UiaCore.IRawElementProviderSimple[]? GetColumnHeaders() => null;
 
-    internal virtual UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
+    internal virtual RowOrColumnMajor RowOrColumnMajor => RowOrColumnMajor.RowOrColumnMajor_RowMajor;
 
     internal virtual UiaCore.IRawElementProviderSimple[]? GetRowHeaderItems() => null;
 
@@ -938,7 +938,7 @@ public unsafe partial class AccessibleObject :
 
     object[]? UiaCore.ITableProvider.GetColumnHeaders() => GetColumnHeaders();
 
-    UiaCore.RowOrColumnMajor UiaCore.ITableProvider.RowOrColumnMajor => RowOrColumnMajor;
+    RowOrColumnMajor UiaCore.ITableProvider.RowOrColumnMajor => RowOrColumnMajor;
 
     object[]? UiaCore.ITableItemProvider.GetRowHeaderItems() => GetRowHeaderItems();
 

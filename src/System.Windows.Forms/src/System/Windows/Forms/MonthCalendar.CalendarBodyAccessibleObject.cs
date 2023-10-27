@@ -203,7 +203,7 @@ public partial class MonthCalendar
 
         internal override int RowCount => RowsAccessibleObjects?.Count ?? -1;
 
-        internal override UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
+        internal override RowOrColumnMajor RowOrColumnMajor => RowOrColumnMajor.RowOrColumnMajor_RowMajor;
 
         // Use a LinkedList instead a List for the following reasons:
         // 1. We don't require an access to items by indices.

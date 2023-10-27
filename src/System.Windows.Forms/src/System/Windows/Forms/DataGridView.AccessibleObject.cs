@@ -342,11 +342,11 @@ public partial class DataGridView
             return result;
         }
 
-        internal override UiaCore.RowOrColumnMajor RowOrColumnMajor
+        internal override RowOrColumnMajor RowOrColumnMajor
         {
             get
             {
-                return UiaCore.RowOrColumnMajor.RowMajor;
+                return RowOrColumnMajor.RowOrColumnMajor_RowMajor;
             }
         }
 

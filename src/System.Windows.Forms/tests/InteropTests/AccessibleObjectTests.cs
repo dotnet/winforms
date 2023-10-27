@@ -317,7 +317,7 @@ public class AccessibleObjectTests : InteropTestBase
     public void AccessibleObject_ITableProviderRowOrColumnMajor_Get_ReturnsExpected()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_ITableProviderGetRowOrColumnMajor(o, RowOrColumnMajor.RowMajor));
+        AssertSuccess(Test_ITableProviderGetRowOrColumnMajor(o, RowOrColumnMajor.RowOrColumnMajor_RowMajor));
     }
 
     [WinFormsFact]
