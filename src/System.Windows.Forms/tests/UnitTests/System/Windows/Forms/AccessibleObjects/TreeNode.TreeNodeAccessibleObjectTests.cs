@@ -458,7 +458,7 @@ public class TreeNodeAccessibleObjectTests
         using TreeView control = new() { CheckBoxes = true };
         TreeNode node = new(control) { Checked = isChecked };
 
-        UiaCore.ToggleState expected = isChecked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+        ToggleState expected = isChecked ? ToggleState.ToggleState_On : ToggleState.ToggleState_Off;
 
         Assert.Equal(expected, node.AccessibilityObject.ToggleState);
         Assert.False(control.IsHandleCreated);

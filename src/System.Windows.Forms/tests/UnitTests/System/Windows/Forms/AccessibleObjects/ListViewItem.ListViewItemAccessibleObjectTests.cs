@@ -899,15 +899,15 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
 
         AccessibleObject listViewItemAccessibleObject = listViewItem.AccessibilityObject;
 
-        Assert.Equal(ToggleState.Off, listViewItemAccessibleObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, listViewItemAccessibleObject.ToggleState);
 
         listViewItem.Checked = true;
 
-        Assert.Equal(ToggleState.On, listViewItemAccessibleObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_On, listViewItemAccessibleObject.ToggleState);
 
         listViewItem.Checked = false;
 
-        Assert.Equal(ToggleState.Off, listViewItemAccessibleObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, listViewItemAccessibleObject.ToggleState);
         Assert.Equal(createHandle, listView.IsHandleCreated);
     }
 
@@ -934,18 +934,18 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
 
         AccessibleObject listViewItemAccessibleObject = listViewItem.AccessibilityObject;
 
-        Assert.Equal(ToggleState.Off, listViewItemAccessibleObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, listViewItemAccessibleObject.ToggleState);
         Assert.False(listViewItem.Checked);
 
         listViewItemAccessibleObject.Toggle();
 
-        Assert.Equal(ToggleState.On, listViewItemAccessibleObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_On, listViewItemAccessibleObject.ToggleState);
         Assert.True(listViewItem.Checked);
 
         // toggle again
         listViewItemAccessibleObject.Toggle();
 
-        Assert.Equal(ToggleState.Off, listViewItemAccessibleObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, listViewItemAccessibleObject.ToggleState);
         Assert.False(listViewItem.Checked);
         Assert.Equal(createHandle, listView.IsHandleCreated);
     }

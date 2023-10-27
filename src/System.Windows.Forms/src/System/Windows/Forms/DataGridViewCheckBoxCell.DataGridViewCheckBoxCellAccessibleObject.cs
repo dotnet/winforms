@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -149,7 +148,7 @@ public partial class DataGridViewCheckBoxCell
 
         internal override void Toggle() => DoDefaultAction();
 
-        internal override UiaCore.ToggleState ToggleState
+        internal override ToggleState ToggleState
         {
             get
             {
@@ -160,9 +159,9 @@ public partial class DataGridViewCheckBoxCell
 
                 return ((Owner as DataGridViewCheckBoxCell)?.CheckState) switch
                 {
-                    CheckState.Checked => UiaCore.ToggleState.On,
-                    CheckState.Unchecked => UiaCore.ToggleState.Off,
-                    _ => UiaCore.ToggleState.Indeterminate,
+                    CheckState.Checked => ToggleState.ToggleState_On,
+                    CheckState.Unchecked => ToggleState.ToggleState_Off,
+                    _ => ToggleState.ToggleState_Indeterminate,
                 };
             }
         }

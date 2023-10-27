@@ -2141,10 +2141,10 @@ public partial class TreeView : Control
         if (IsAccessibilityObjectCreated)
         {
             AccessibleObject nodeAccessibleObject = e.Node!.AccessibilityObject;
-            UiaCore.ToggleState newState = nodeAccessibleObject.ToggleState;
-            UiaCore.ToggleState oldState = newState == UiaCore.ToggleState.On
-                ? UiaCore.ToggleState.Off
-                : UiaCore.ToggleState.On;
+            ToggleState newState = nodeAccessibleObject.ToggleState;
+            ToggleState oldState = newState == ToggleState.ToggleState_On
+                ? ToggleState.ToggleState_Off
+                : ToggleState.ToggleState_On;
 
             nodeAccessibleObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId,

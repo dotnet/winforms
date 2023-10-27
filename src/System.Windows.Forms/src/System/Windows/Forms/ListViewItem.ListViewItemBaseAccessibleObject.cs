@@ -209,10 +209,10 @@ public partial class ListViewItem
             }
         }
 
-        internal override UiaCore.ToggleState ToggleState
+        internal override ToggleState ToggleState
             => _owningItem.Checked
-                ? UiaCore.ToggleState.On
-                : UiaCore.ToggleState.Off;
+                ? ToggleState.ToggleState_On
+                : ToggleState.ToggleState_Off;
 
         /// <summary>
         ///  Indicates whether specified pattern is supported.

@@ -303,14 +303,14 @@ public class AccessibleObjectTests : InteropTestBase
     public void AccessibleObject_IToggleProviderToggleState_Get_ReturnsExpected()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IToggleProviderGetToggleState(o, ToggleState.Indeterminate));
+        AssertSuccess(Test_IToggleProviderGetToggleState(o, ToggleState.ToggleState_Indeterminate));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IToggleProviderToggle_Invoke_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IToggleProviderToggle(o, ToggleState.Indeterminate));
+        AssertSuccess(Test_IToggleProviderToggle(o, ToggleState.ToggleState_Indeterminate));
     }
 
     [WinFormsFact]

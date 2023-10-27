@@ -4847,8 +4847,8 @@ public partial class ListView : Control
         if (IsAccessibilityObjectCreated)
         {
             ListViewItem item = e.Item;
-            UiaCore.ToggleState oldValue = item.Checked ? UiaCore.ToggleState.Off : UiaCore.ToggleState.On;
-            UiaCore.ToggleState newValue = item.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+            ToggleState oldValue = item.Checked ? ToggleState.ToggleState_Off : ToggleState.ToggleState_On;
+            ToggleState newValue = item.Checked ? ToggleState.ToggleState_On : ToggleState.ToggleState_Off;
             item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId, oldValue, newValue);
         }
     }

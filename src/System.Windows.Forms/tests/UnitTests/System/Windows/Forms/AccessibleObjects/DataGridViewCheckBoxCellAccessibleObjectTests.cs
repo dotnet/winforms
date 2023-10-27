@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -18,8 +17,8 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
 
     public static IEnumerable<object[]> DataGridViewCheckBoxCellAccessibleObject_ToggleState_TestData()
     {
-        yield return new object[] { false, (int)UiaCore.ToggleState.Off };
-        yield return new object[] { true, (int)UiaCore.ToggleState.On };
+        yield return new object[] { false, (int)ToggleState.ToggleState_Off };
+        yield return new object[] { true, (int)ToggleState.ToggleState_On };
     }
 
     [WinFormsTheory]
@@ -37,12 +36,12 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
         if (isChecked)
         {
             // Make sure that toggle state is off as a default case.
-            Assert.Equal(UiaCore.ToggleState.Off, accessibleObject.ToggleState);
+            Assert.Equal(ToggleState.ToggleState_Off, accessibleObject.ToggleState);
             // Check it.
             accessibleObject.DoDefaultAction();
         }
 
-        Assert.Equal((UiaCore.ToggleState)expected, accessibleObject.ToggleState);
+        Assert.Equal((ToggleState)expected, accessibleObject.ToggleState);
         Assert.True(control.IsHandleCreated);
     }
 
@@ -182,10 +181,10 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
 
     public static IEnumerable<object[]> DataGridViewCheckBoxCellAccessibleObject_DoDefaultAction_TestData()
     {
-        yield return new object[] { false, true, (int)UiaCore.ToggleState.Off };
-        yield return new object[] { false, false, (int)UiaCore.ToggleState.Off };
-        yield return new object[] { true, true, (int)UiaCore.ToggleState.Off };
-        yield return new object[] { true, false, (int)UiaCore.ToggleState.On };
+        yield return new object[] { false, true, (int)ToggleState.ToggleState_Off };
+        yield return new object[] { false, false, (int)ToggleState.ToggleState_Off };
+        yield return new object[] { true, true, (int)ToggleState.ToggleState_Off };
+        yield return new object[] { true, false, (int)ToggleState.ToggleState_On };
     }
 
     [WinFormsFact]
@@ -221,25 +220,25 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
         if (isChecked)
         {
             // Make sure that toogle state is off as a default case.
-            Assert.Equal(UiaCore.ToggleState.Off, accessibleObject.ToggleState);
+            Assert.Equal(ToggleState.ToggleState_Off, accessibleObject.ToggleState);
             // Check it.
             accessibleObject.DoDefaultAction();
 
             if (createControl)
             {
                 // Make sure that toogle state has been changed.
-                Assert.Equal(UiaCore.ToggleState.On, accessibleObject.ToggleState);
+                Assert.Equal(ToggleState.ToggleState_On, accessibleObject.ToggleState);
             }
             else
             {
                 // Make sure that nothing changes.
-                Assert.Equal(UiaCore.ToggleState.Off, accessibleObject.ToggleState);
+                Assert.Equal(ToggleState.ToggleState_Off, accessibleObject.ToggleState);
             }
         }
 
         accessibleObject.DoDefaultAction();
 
-        Assert.Equal((UiaCore.ToggleState)expected, accessibleObject.ToggleState);
+        Assert.Equal((ToggleState)expected, accessibleObject.ToggleState);
         Assert.Equal(createControl, control.IsHandleCreated);
     }
 
@@ -259,44 +258,44 @@ public class DataGridViewCheckBoxCellAccessibleObjectTests : DataGridViewCheckBo
 
         var checkBoxAccessibleObject = cell.AccessibilityObject;
 
-        Assert.Equal(UiaCore.ToggleState.Indeterminate, checkBoxAccessibleObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Indeterminate, checkBoxAccessibleObject.ToggleState);
         checkBoxAccessibleObject.DoDefaultAction();
-        Assert.Equal(UiaCore.ToggleState.Off, checkBoxAccessibleObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, checkBoxAccessibleObject.ToggleState);
         checkBoxAccessibleObject.DoDefaultAction();
-        Assert.Equal(UiaCore.ToggleState.On, checkBoxAccessibleObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_On, checkBoxAccessibleObject.ToggleState);
         checkBoxAccessibleObject.DoDefaultAction();
-        Assert.Equal(UiaCore.ToggleState.Indeterminate, checkBoxAccessibleObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Indeterminate, checkBoxAccessibleObject.ToggleState);
         checkBoxAccessibleObject.DoDefaultAction();
-        Assert.Equal(UiaCore.ToggleState.Off, checkBoxAccessibleObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, checkBoxAccessibleObject.ToggleState);
         checkBoxAccessibleObject.DoDefaultAction();
-        Assert.Equal(UiaCore.ToggleState.On, checkBoxAccessibleObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_On, checkBoxAccessibleObject.ToggleState);
 
         dataGridView.Rows.Add(true);
-        Assert.Equal(UiaCore.ToggleState.On, dataGridView.Rows[1].Cells[0].AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_On, dataGridView.Rows[1].Cells[0].AccessibilityObject.ToggleState);
 
         dataGridView.Rows.Add(false);
-        Assert.Equal(UiaCore.ToggleState.Off, dataGridView.Rows[2].Cells[0].AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, dataGridView.Rows[2].Cells[0].AccessibilityObject.ToggleState);
 
         dataGridView.Rows.Add(CheckState.Indeterminate);
-        Assert.Equal(UiaCore.ToggleState.Indeterminate, dataGridView.Rows[3].Cells[0].AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Indeterminate, dataGridView.Rows[3].Cells[0].AccessibilityObject.ToggleState);
 
         dataGridView.Rows.Add(CheckState.Checked);
-        Assert.Equal(UiaCore.ToggleState.On, dataGridView.Rows[4].Cells[0].AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_On, dataGridView.Rows[4].Cells[0].AccessibilityObject.ToggleState);
 
         dataGridView.Rows.Add(CheckState.Unchecked);
-        Assert.Equal(UiaCore.ToggleState.Off, dataGridView.Rows[5].Cells[0].AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, dataGridView.Rows[5].Cells[0].AccessibilityObject.ToggleState);
 
         checkBoxColumn.TrueValue = "on";
         checkBoxColumn.FalseValue = "off";
         checkBoxColumn.IndeterminateValue = "not set";
 
         dataGridView.Rows.Add("on");
-        Assert.Equal(UiaCore.ToggleState.On, dataGridView.Rows[4].Cells[0].AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_On, dataGridView.Rows[4].Cells[0].AccessibilityObject.ToggleState);
 
         dataGridView.Rows.Add("off");
-        Assert.Equal(UiaCore.ToggleState.Off, dataGridView.Rows[5].Cells[0].AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, dataGridView.Rows[5].Cells[0].AccessibilityObject.ToggleState);
 
         dataGridView.Rows.Add("not set");
-        Assert.Equal(UiaCore.ToggleState.Indeterminate, dataGridView.Rows[3].Cells[0].AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Indeterminate, dataGridView.Rows[3].Cells[0].AccessibilityObject.ToggleState);
     }
 }

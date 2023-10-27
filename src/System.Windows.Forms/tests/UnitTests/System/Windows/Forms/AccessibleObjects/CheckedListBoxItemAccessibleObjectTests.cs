@@ -253,16 +253,16 @@ public class CheckedListBoxItemAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, CheckState.Checked, (int)UiaCore.ToggleState.On)]
-    [InlineData(false, CheckState.Unchecked, (int)UiaCore.ToggleState.Off)]
-    [InlineData(true, CheckState.Indeterminate, (int)UiaCore.ToggleState.Indeterminate)]
+    [InlineData(true, CheckState.Checked, (int)ToggleState.ToggleState_On)]
+    [InlineData(false, CheckState.Unchecked, (int)ToggleState.ToggleState_Off)]
+    [InlineData(true, CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate)]
     public void CheckedListBoxItemAccessibleObject_ToggleState_ReturnsExpected(bool checkValue, CheckState checkState, int toggleState)
     {
         using CheckedListBox checkedListBox = new();
         checkedListBox.Items.Add("A");
         checkedListBox.SetItemCheckState(0, checkState);
 
-        Assert.Equal((UiaCore.ToggleState)toggleState, checkedListBox.AccessibilityObject.GetChild(0).ToggleState);
+        Assert.Equal((ToggleState)toggleState, checkedListBox.AccessibilityObject.GetChild(0).ToggleState);
         Assert.Equal(checkValue.ToString(), checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
         Assert.False(checkedListBox.IsHandleCreated);
     }

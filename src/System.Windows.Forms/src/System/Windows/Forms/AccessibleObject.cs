@@ -577,7 +577,7 @@ public unsafe partial class AccessibleObject :
     {
     }
 
-    internal virtual UiaCore.ToggleState ToggleState => UiaCore.ToggleState.Indeterminate;
+    internal virtual ToggleState ToggleState => ToggleState.ToggleState_Indeterminate;
 
     private protected virtual UiaCore.IRawElementProviderFragmentRoot? ToolStripFragmentRoot => null;
 
@@ -932,7 +932,7 @@ public unsafe partial class AccessibleObject :
 
     void UiaCore.IToggleProvider.Toggle() => Toggle();
 
-    UiaCore.ToggleState UiaCore.IToggleProvider.ToggleState => ToggleState;
+    ToggleState UiaCore.IToggleProvider.ToggleState => ToggleState;
 
     object[]? UiaCore.ITableProvider.GetRowHeaders() => GetRowHeaders();
 

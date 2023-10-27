@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -107,18 +106,18 @@ public partial class CheckedListBox
 
         internal override void Toggle() => DoDefaultAction();
 
-        internal override UiaCore.ToggleState ToggleState
+        internal override ToggleState ToggleState
         {
             get
             {
-                UiaCore.ToggleState toggleState= UiaCore.ToggleState.Off;
+                ToggleState toggleState= ToggleState.ToggleState_Off;
                 switch (_owningCheckedListBox.GetItemCheckState(CurrentIndex))
                 {
                     case CheckState.Checked:
-                        toggleState = UiaCore.ToggleState.On;
+                        toggleState = ToggleState.ToggleState_On;
                         break;
                     case CheckState.Indeterminate:
-                        toggleState = UiaCore.ToggleState.Indeterminate;
+                        toggleState = ToggleState.ToggleState_Indeterminate;
                         break;
                 }
 

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -111,8 +110,8 @@ public partial class DateTimePicker
             }
         }
 
-        internal override UiaCore.ToggleState ToggleState
-            => this.TryGetOwnerAs(out DateTimePicker? owner) && owner.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+        internal override ToggleState ToggleState
+            => this.TryGetOwnerAs(out DateTimePicker? owner) && owner.Checked ? ToggleState.ToggleState_On : ToggleState.ToggleState_Off;
 
         internal override void Toggle()
         {

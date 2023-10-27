@@ -353,21 +353,21 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, (int)UiaCore.ToggleState.On)]
-    [InlineData(false, (int)UiaCore.ToggleState.Off)]
+    [InlineData(true, (int)ToggleState.ToggleState_On)]
+    [InlineData(false, (int)ToggleState.ToggleState_Off)]
     public void ListViewItemBaseAccessibleObject_ToggleState_ReturnsExpected(bool isChecked, int expected)
     {
         using ListView control = new();
         ListViewItem item = new() { Checked = isChecked };
         control.Items.Add(item);
 
-        Assert.Equal((UiaCore.ToggleState)expected, item.AccessibilityObject.ToggleState);
+        Assert.Equal((ToggleState)expected, item.AccessibilityObject.ToggleState);
         Assert.False(control.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData(false, (int)UiaCore.ToggleState.Off, (int)UiaCore.ToggleState.On)]
-    [InlineData(true, (int)UiaCore.ToggleState.On, (int)UiaCore.ToggleState.Off)]
+    [InlineData(false, (int)ToggleState.ToggleState_Off, (int)ToggleState.ToggleState_On)]
+    [InlineData(true, (int)ToggleState.ToggleState_On, (int)ToggleState.ToggleState_Off)]
     public void ListViewItemBaseAccessibleObject_Toggle_WorksExpected(bool isChecked, int before, int expected)
     {
         using ListView control = new();
@@ -376,11 +376,11 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
 
-        Assert.Equal((UiaCore.ToggleState)before, accessibleObject.ToggleState);
+        Assert.Equal((ToggleState)before, accessibleObject.ToggleState);
 
         accessibleObject.Toggle();
 
-        Assert.Equal((UiaCore.ToggleState)expected, accessibleObject.ToggleState);
+        Assert.Equal((ToggleState)expected, accessibleObject.ToggleState);
         Assert.False(control.IsHandleCreated);
     }
 

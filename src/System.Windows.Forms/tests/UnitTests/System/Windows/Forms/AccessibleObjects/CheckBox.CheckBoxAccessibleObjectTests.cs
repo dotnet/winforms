@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop.UiaCore;
 using CheckBoxAccessibleObject = System.Windows.Forms.CheckBox.CheckBoxAccessibleObject;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -94,12 +93,12 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, CheckState.Checked, (int)ToggleState.On)]
-    [InlineData(true, CheckState.Unchecked, (int)ToggleState.Off)]
-    [InlineData(true, CheckState.Indeterminate, (int)ToggleState.Indeterminate)]
-    [InlineData(false, CheckState.Checked, (int)ToggleState.On)]
-    [InlineData(false, CheckState.Unchecked, (int)ToggleState.Off)]
-    [InlineData(false, CheckState.Indeterminate, (int)ToggleState.Indeterminate)]
+    [InlineData(true, CheckState.Checked, (int)ToggleState.ToggleState_On)]
+    [InlineData(true, CheckState.Unchecked, (int)ToggleState.ToggleState_Off)]
+    [InlineData(true, CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate)]
+    [InlineData(false, CheckState.Checked, (int)ToggleState.ToggleState_On)]
+    [InlineData(false, CheckState.Unchecked, (int)ToggleState.ToggleState_Off)]
+    [InlineData(false, CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate)]
     public void CheckBoxAccessibleObject_ToggleState_ReturnsExpected(bool createControl, CheckState checkState, int toggleState)
     {
         using var checkBox = new CheckBox() { CheckState = checkState };
@@ -117,21 +116,21 @@ public class CheckBox_CheckBoxAccessibleObjectTests
 
     public static IEnumerable<object[]> CheckBoxAccessibleObject_DoDefaultAction_Success_Data()
     {
-        yield return new object[] { true, false, CheckState.Checked, (int)ToggleState.Off };
-        yield return new object[] { true, false, CheckState.Indeterminate, (int)ToggleState.Off };
-        yield return new object[] { true, false, CheckState.Unchecked, (int)ToggleState.On };
+        yield return new object[] { true, false, CheckState.Checked, (int)ToggleState.ToggleState_Off };
+        yield return new object[] { true, false, CheckState.Indeterminate, (int)ToggleState.ToggleState_Off };
+        yield return new object[] { true, false, CheckState.Unchecked, (int)ToggleState.ToggleState_On };
 
-        yield return new object[] { true, true, CheckState.Checked, (int)ToggleState.Indeterminate };
-        yield return new object[] { true, true, CheckState.Indeterminate, (int)ToggleState.Off };
-        yield return new object[] { true, true, CheckState.Unchecked, (int)ToggleState.On };
+        yield return new object[] { true, true, CheckState.Checked, (int)ToggleState.ToggleState_Indeterminate };
+        yield return new object[] { true, true, CheckState.Indeterminate, (int)ToggleState.ToggleState_Off };
+        yield return new object[] { true, true, CheckState.Unchecked, (int)ToggleState.ToggleState_On };
 
-        yield return new object[] { false, true, CheckState.Checked, (int)ToggleState.On };
-        yield return new object[] { false, true, CheckState.Indeterminate, (int)ToggleState.Indeterminate };
-        yield return new object[] { false, true, CheckState.Unchecked, (int)ToggleState.Off };
+        yield return new object[] { false, true, CheckState.Checked, (int)ToggleState.ToggleState_On };
+        yield return new object[] { false, true, CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate };
+        yield return new object[] { false, true, CheckState.Unchecked, (int)ToggleState.ToggleState_Off };
 
-        yield return new object[] { false, false, CheckState.Checked, (int)ToggleState.On };
-        yield return new object[] { false, false, CheckState.Indeterminate, (int)ToggleState.Indeterminate };
-        yield return new object[] { false, false, CheckState.Unchecked, (int)ToggleState.Off };
+        yield return new object[] { false, false, CheckState.Checked, (int)ToggleState.ToggleState_On };
+        yield return new object[] { false, false, CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate };
+        yield return new object[] { false, false, CheckState.Unchecked, (int)ToggleState.ToggleState_Off };
     }
 
     [WinFormsTheory]

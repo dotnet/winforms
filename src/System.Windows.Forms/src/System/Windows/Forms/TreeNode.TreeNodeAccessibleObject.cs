@@ -255,8 +255,8 @@ public partial class TreeNode
 
         internal override void Toggle() => _owningTreeNode.Checked = !_owningTreeNode.Checked;
 
-        internal override UiaCore.ToggleState ToggleState
-            => _owningTreeNode.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+        internal override ToggleState ToggleState
+            => _owningTreeNode.Checked ? ToggleState.ToggleState_On : ToggleState.ToggleState_Off;
 
         #endregion
 
