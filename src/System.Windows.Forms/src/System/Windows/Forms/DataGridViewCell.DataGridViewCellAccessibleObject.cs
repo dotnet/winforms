@@ -670,16 +670,13 @@ public abstract partial class DataGridViewCell
 
         #region IRawElementProviderSimple Implementation
 
+        /// <inheritdoc/>
         internal override unsafe VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId,
                 UIA_PROPERTY_ID.UIA_GridItemContainingGridPropertyId
-                    => new()
-                    {
-                        vt = VARENUM.VT_UNKNOWN,
-                        data = new() { punkVal = ComHelpers.GetComPointer<IUnknown>(_owner?.DataGridView?.AccessibilityObject) }
-                    },
+                    => (VARIANT)ComHelpers.GetComPointer<IUnknown>(_owner?.DataGridView?.AccessibilityObject),
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focused), // Announce the cell when focusing.
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(_owner?.DataGridView?.Enabled ?? false),
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
