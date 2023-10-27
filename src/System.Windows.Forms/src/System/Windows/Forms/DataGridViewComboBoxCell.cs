@@ -1311,7 +1311,6 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
     public override void InitializeEditingControl(int rowIndex, object initialFormattedValue, DataGridViewCellStyle dataGridViewCellStyle)
     {
         Debug.Assert(DataGridView is not null &&
-                     DataGridView.EditingPanel is not null &&
                      DataGridView.EditingControl is not null);
         Debug.Assert(!ReadOnly);
         base.InitializeEditingControl(rowIndex, initialFormattedValue, dataGridViewCellStyle);

@@ -10863,8 +10863,9 @@ public partial class DataGridView
         _lastRowSplitBar = _currentRowSplitBar;
         _currentRowSplitBar = e.Y;
         Rectangle lastSplitBarRect = CalcRowResizeFeedbackRect(_lastRowSplitBar);
-        Debug.Assert(_editingPanel is not null);
+
         if (EditingControl is not null &&
+            _editingPanel is not null &&
             !_dataGridViewState1[State1_EditingControlHidden] &&
             _editingPanel.Bounds.IntersectsWith(lastSplitBarRect))
         {
@@ -10930,8 +10931,9 @@ public partial class DataGridView
         _lastColSplitBar = _currentColSplitBar;
         _currentColSplitBar = x;
         Rectangle lastSplitBarRect = CalcColResizeFeedbackRect(_lastColSplitBar);
-        Debug.Assert(_editingPanel is not null);
+
         if (EditingControl is not null &&
+            _editingPanel is not null &&
             !_dataGridViewState1[State1_EditingControlHidden] &&
             _editingPanel.Bounds.IntersectsWith(lastSplitBarRect))
         {
