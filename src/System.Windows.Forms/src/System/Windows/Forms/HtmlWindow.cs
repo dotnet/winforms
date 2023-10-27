@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.Web.MsHtml;
 
@@ -69,6 +70,11 @@ public sealed unsafe partial class HtmlWindow
             using var htmlWindow = NativeHtmlWindow.GetInterface();
             using ComScope<IHTMLDocument2> htmlDoc2 = new(null);
             htmlWindow.Value->get_document(htmlDoc2).ThrowOnFailure();
+            if (htmlDoc2.IsNull)
+            {
+                return null;
+            }
+
             using var htmlDoc = htmlDoc2.TryQuery<IHTMLDocument>(out HRESULT hr);
             return hr.Succeeded ? new HtmlDocument(ShimManager, htmlDoc) : null;
         }
@@ -134,10 +140,11 @@ public sealed unsafe partial class HtmlWindow
         get
         {
             using var htmlWindow = NativeHtmlWindow.GetInterface();
-            using VARIANT variantDispatch = default;
+            VARIANT variantDispatch = default;
             htmlWindow.Value->get_opener(&variantDispatch).ThrowOnFailure();
+            using ComScope<IDispatch> dispatch = new(variantDispatch.data.pdispVal);
             IHTMLWindow2* htmlWindow2;
-            return variantDispatch.data.pdispVal->QueryInterface(IID.Get<IHTMLWindow2>(), (void**)&htmlWindow2).Succeeded
+            return !dispatch.IsNull && dispatch.Value->QueryInterface(IID.Get<IHTMLWindow2>(), (void**)&htmlWindow2).Succeeded
                 ? new HtmlWindow(ShimManager, htmlWindow2)
                 : null;
         }
@@ -236,7 +243,7 @@ public sealed unsafe partial class HtmlWindow
             using ComScope<IHTMLFrameBase> htmlFrameBase = new(null);
             htmlWindow4.Value->get_frameElement(htmlFrameBase).ThrowOnFailure();
             IHTMLElement* htmlElement;
-            return htmlFrameBase.Value->QueryInterface(IID.Get<IHTMLElement>(), (void**)&htmlElement).Succeeded
+            return !htmlFrameBase.IsNull && htmlFrameBase.Value->QueryInterface(IID.Get<IHTMLElement>(), (void**)&htmlElement).Succeeded
                 ? new HtmlElement(ShimManager, htmlElement)
                 : null;
         }

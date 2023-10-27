@@ -477,6 +477,10 @@ public sealed unsafe partial class HtmlDocument
         using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
         using ComScope<IDispatch> dispatch = new(null);
         htmlDoc2.Value->open(url, name, VARIANT.Empty, VARIANT.Empty, dispatch).ThrowOnFailure();
+        if (dispatch.IsNull)
+        {
+            return null;
+        }
 
         using var htmlDoc = dispatch.TryQuery<IHTMLDocument>(out HRESULT hr);
         return hr.Succeeded ? new HtmlDocument(ShimManager, htmlDoc) : null;
@@ -498,7 +502,7 @@ public sealed unsafe partial class HtmlDocument
             using var htmlDoc2 = NativeHtmlDocument2.GetInterface();
             using ComScope<IDispatch> scriptDispatch = new(null);
             HRESULT hr = htmlDoc2.Value->get_Script(scriptDispatch);
-            if (hr.Failed)
+            if (hr.Failed || scriptDispatch.IsNull)
             {
                 return null;
             }
