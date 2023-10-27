@@ -134,7 +134,7 @@ public class CurrencyManager : BindingManagerBase
     /// </summary>
     public override object? Current => this[Position];
 
-    internal override Type? BindType => ListBindingHelper.GetListItemType(List);
+    internal override Type BindType => ListBindingHelper.GetListItemType(List);
 
     /// <summary>
     ///  Gets the data source of the list.

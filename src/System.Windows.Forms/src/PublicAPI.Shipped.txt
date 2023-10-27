@@ -3160,7 +3160,7 @@ static System.Windows.Forms.ListBindingHelper.GetList(object? list) -> object?
 static System.Windows.Forms.ListBindingHelper.GetListItemProperties(object? dataSource, string? dataMember, System.ComponentModel.PropertyDescriptor![]? listAccessors) -> System.ComponentModel.PropertyDescriptorCollection!
 static System.Windows.Forms.ListBindingHelper.GetListItemProperties(object? list) -> System.ComponentModel.PropertyDescriptorCollection!
 static System.Windows.Forms.ListBindingHelper.GetListItemProperties(object? list, System.ComponentModel.PropertyDescriptor![]? listAccessors) -> System.ComponentModel.PropertyDescriptorCollection!
-static System.Windows.Forms.ListBindingHelper.GetListItemType(object? dataSource, string? dataMember) -> System.Type?
+static System.Windows.Forms.ListBindingHelper.GetListItemType(object? dataSource, string? dataMember) -> System.Type!
 static System.Windows.Forms.ListBindingHelper.GetListItemType(object? list) -> System.Type?
 static System.Windows.Forms.ListBindingHelper.GetListName(object? list, System.ComponentModel.PropertyDescriptor![]? listAccessors) -> string!
 static System.Windows.Forms.MessageBox.Show(string? text) -> System.Windows.Forms.DialogResult
