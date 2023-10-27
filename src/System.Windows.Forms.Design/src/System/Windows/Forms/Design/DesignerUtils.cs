@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -37,7 +35,7 @@ internal static class DesignerUtils
         PInvoke.CreatePen(PEN_STYLE.PS_SOLID, cWidth: 1, (COLORREF)(uint)ColorTranslator.ToWin32(SystemColors.Window));
 
     //The box-like image used as the user is dragging comps from the toolbox
-    private static Bitmap s_boxImage;
+    private static Bitmap? s_boxImage;
     public static int BOXIMAGESIZE = ScaleLogicalToDeviceUnitsX(16);
 
     // selection border size
@@ -354,10 +352,10 @@ internal static class DesignerUtils
     public static bool UseSnapLines(IServiceProvider provider)
     {
         ArgumentNullException.ThrowIfNull(provider);
-        object optionValue = null;
-        if (provider.TryGetService(out DesignerOptionService options))
+        object? optionValue = null;
+        if (provider.TryGetService(out DesignerOptionService? options))
         {
-            PropertyDescriptor snaplinesProp = options.Options.Properties["UseSnapLines"];
+            PropertyDescriptor? snaplinesProp = options.Options.Properties["UseSnapLines"];
             if (snaplinesProp is not null)
             {
                 optionValue = snaplinesProp.GetValue(null);
@@ -372,15 +370,15 @@ internal static class DesignerUtils
         return useSnapLines;
     }
 
-    public static object GetOptionValue(IServiceProvider provider, string name)
+    public static object? GetOptionValue(IServiceProvider? provider, string name)
     {
-        if (provider.TryGetService(out DesignerOptionService designerOptionService))
+        if (provider.TryGetService(out DesignerOptionService? designerOptionService))
         {
-            PropertyDescriptor prop = designerOptionService.Options.Properties[name];
+            PropertyDescriptor? prop = designerOptionService.Options.Properties[name];
             return prop?.GetValue(null);
         }
 
-        if (provider.TryGetService(out IDesignerOptionService optionService))
+        if (provider.TryGetService(out IDesignerOptionService? optionService))
         {
             return optionService.GetOptionValue("WindowsFormsDesigner\\General", name);
         }
@@ -624,7 +622,7 @@ internal static class DesignerUtils
     ///  Return value should be passed into the Container.Add() method.
     ///  If null is returned, this just means "let container generate a default name based on component type".
     /// </summary>
-    public static string GetUniqueSiteName(IDesignerHost host, string name)
+    public static string? GetUniqueSiteName(IDesignerHost host, string? name)
     {
         // Item has no explicit name, so let host generate a type-based name instead
         if (string.IsNullOrEmpty(name))
@@ -634,13 +632,13 @@ internal static class DesignerUtils
 
         // Get the name creation service from the designer host
         ArgumentNullException.ThrowIfNull(host);
-        if (!host.TryGetService(out INameCreationService nameCreationService))
+        if (!host.TryGetService(out INameCreationService? nameCreationService))
         {
             return null;
         }
 
         // See if desired name is already in use
-        object existingComponent = host.Container.Components[name];
+        object? existingComponent = host.Container.Components[name];
         if (existingComponent is null)
         {
             // Name is not in use - but make sure that it contains valid characters before using it!
@@ -706,7 +704,8 @@ internal static class DesignerUtils
     /// <summary>
     ///  This method removes types that are generics from the input collection
     /// </summary>
-    public static ICollection FilterGenericTypes(ICollection types)
+    [return: NotNullIfNotNull(nameof(types))]
+    public static ICollection? FilterGenericTypes(ICollection? types)
     {
         if (types is null || types.Count == 0)
         {
@@ -731,11 +730,11 @@ internal static class DesignerUtils
     ///  Ensures that a SplitterPanel in a SplitContainer returns the same container as other form components,
     ///  since SplitContainer sites its two SplitterPanels inside a nested container.
     /// </summary>
-    public static IContainer CheckForNestedContainer(IContainer container)
+    public static IContainer? CheckForNestedContainer(IContainer? container)
     {
         if (container is NestedContainer nestedContainer)
         {
-            return nestedContainer.Owner.Site.Container;
+            return nestedContainer.Owner.Site?.Container;
         }
         else
         {
@@ -746,7 +745,7 @@ internal static class DesignerUtils
     /// <summary>
     ///  Used to create copies of the objects that we are dragging in a drag operation
     /// </summary>
-    public static List<IComponent> CopyDragObjects(ICollection objects, IServiceProvider svcProvider)
+    public static List<IComponent>? CopyDragObjects(ICollection objects, IServiceProvider svcProvider)
     {
         if (objects is null || svcProvider is null)
         {
@@ -754,12 +753,12 @@ internal static class DesignerUtils
             return null;
         }
 
-        Cursor oldCursor = Cursor.Current;
+        Cursor? oldCursor = Cursor.Current;
         try
         {
             Cursor.Current = Cursors.WaitCursor;
-            ComponentSerializationService css = svcProvider.GetService<ComponentSerializationService>();
-            IDesignerHost host = svcProvider.GetService<IDesignerHost>();
+            ComponentSerializationService? css = svcProvider.GetService<ComponentSerializationService>();
+            IDesignerHost? host = svcProvider.GetService<IDesignerHost>();
             Debug.Assert(css is not null, "No component serialization service -- we cannot copy the objects");
             Debug.Assert(host is not null, "No host -- we cannot copy the objects");
             if (css is not null && host is not null)
@@ -807,11 +806,6 @@ internal static class DesignerUtils
 
     private static List<IComponent> GetCopySelection(ICollection objects, IDesignerHost host)
     {
-        if (objects is null || host is null)
-        {
-            return null;
-        }
-
         List<IComponent> copySelection = new();
         foreach (IComponent comp in objects)
         {
@@ -822,7 +816,7 @@ internal static class DesignerUtils
         return copySelection;
     }
 
-    internal static void GetAssociatedComponents(IComponent component, IDesignerHost host, List<IComponent> list)
+    internal static void GetAssociatedComponents(IComponent component, IDesignerHost? host, List<IComponent> list)
     {
         if (host?.GetDesigner(component) is not ComponentDesigner designer)
         {
