@@ -400,7 +400,7 @@ public abstract class ListControl : Control
         {
             if (e.Index == -1)
             {
-                SetItemsCore(_dataManager.List!);
+                SetItemsCore(_dataManager.List);
                 if (AllowSelection)
                 {
                     SelectedIndex = _dataManager.Position;
