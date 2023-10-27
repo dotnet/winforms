@@ -166,20 +166,6 @@ public unsafe class VARIANTTests
         Assert.True(variant.Anonymous.Anonymous.Anonymous.pbstrVal is null);
     }
 
-    [StaFact]
-    public void VARIANT_FromObject_And_Cast_Nint_ReturnsExpected()
-    {
-        nint value = 0;
-        VARIANT expected = default;
-        Marshal.GetNativeVariantForObject(value, (nint)(void*)&expected);
-
-        VARIANT actual = VARIANT.FromObject(value);
-        VARIANT actualByCast = (VARIANT)value;
-
-        Assert.Equal(expected, actual);
-        Assert.Equal(actual, actualByCast);
-    }
-
     public static IEnumerable<object[]> ToObject_TestData()
     {
         if (nint.Size == 8)

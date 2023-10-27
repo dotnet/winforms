@@ -120,6 +120,7 @@ public partial class ComboBox
             return _owningComboBox.Items.Count;
         }
 
+        /// <inheritdoc/>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
@@ -131,7 +132,7 @@ public partial class ComboBox
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (VARIANT)false,
                 UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId => (VARIANT)true,
-                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => (VARIANT)(nint)_childListControlhandle,
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)(nint)_childListControlhandle } },
                 _ => base.GetPropertyValue(propertyID)
             };
 

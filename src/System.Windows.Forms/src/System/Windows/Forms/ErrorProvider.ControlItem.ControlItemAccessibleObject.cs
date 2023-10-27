@@ -93,16 +93,14 @@ public partial class ErrorProvider
                 return _window?.ControlItems[currentIndex - 1].AccessibilityObject;
             }
 
-            /// <summary>
-            ///  Gets the accessible property value.
-            /// </summary>
-            /// <param name="propertyID">The accessible property ID.</param>
-            /// <returns>The accessible property value.</returns>
+            /// <inheritdoc/>
             internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
                 propertyID switch
                 {
                     UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId,
-                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _window?.Handle is { } handle ? (VARIANT)handle : VARIANT.Empty,
+                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _window?.Handle is { } handle
+                        ? new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)handle } }
+                        : VARIANT.Empty,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

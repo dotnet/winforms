@@ -443,9 +443,9 @@ public class TrackBarAccessibleObjectTests
     {
         using TrackBar trackBar = new();
         trackBar.CreateControl(false);
-        var actual = (nint)trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId);
+        var actual = trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId).ToObject();
 
-        Assert.Equal((nint)trackBar.InternalHandle, actual);
+        Assert.Equal((int)(nint)trackBar.InternalHandle, actual);
     }
 
     [WinFormsTheory]

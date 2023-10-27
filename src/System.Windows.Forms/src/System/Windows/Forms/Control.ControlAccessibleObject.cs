@@ -483,6 +483,7 @@ public partial class Control
         internal override bool IsIAccessibleExSupported()
             => Owner is IAutomationLiveRegion ? true : base.IsIAccessibleExSupported();
 
+        /// <inheritdoc/>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
@@ -497,7 +498,7 @@ public partial class Control
                 UIA_PROPERTY_ID.UIA_LiveSettingPropertyId => Owner is IAutomationLiveRegion owner
                     ? (VARIANT)(int)owner.LiveSetting
                     : base.GetPropertyValue(propertyID),
-                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => (VARIANT)(nint)(Owner?.InternalHandle ?? HWND.Null),
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)(nint)(Owner?.InternalHandle ?? HWND.Null) } },
                 _ => base.GetPropertyValue(propertyID)
             };
 

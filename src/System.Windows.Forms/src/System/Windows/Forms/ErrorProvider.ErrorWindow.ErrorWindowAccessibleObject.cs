@@ -70,16 +70,12 @@ public partial class ErrorProvider
 
             public override int GetChildCount() => _owner.ControlItems.Count;
 
-            /// <summary>
-            ///  Gets the accessible property value.
-            /// </summary>
-            /// <param name="propertyID">The accessible property ID.</param>
-            /// <returns>The accessible property value.</returns>
+            /// <inheritdoc/>
             internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
                 propertyID switch
                 {
                     UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId,
-                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => (VARIANT)_owner.Handle,
+                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)_owner.Handle } },
                     _ => base.GetPropertyValue(propertyID)
                 };
 

@@ -181,6 +181,7 @@ public partial class ListViewGroup
             return _owningGroup.ID;
         }
 
+        /// <inheritdoc/>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
@@ -188,7 +189,7 @@ public partial class ListViewGroup
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(_owningListView.Focused && Focused),
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningListView.Enabled,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
-                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _owningListView.IsHandleCreated ? (VARIANT)_owningListView.Handle : (VARIANT)IntPtr.Zero,
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)(_owningListView.IsHandleCreated ? _owningListView.Handle : 0) } },
                 _ => base.GetPropertyValue(propertyID)
             };
 
