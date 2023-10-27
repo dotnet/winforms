@@ -11,7 +11,7 @@ override System.Windows.Forms.DataGridView.CreateControlsInstance() -> System.Wi
 override System.Windows.Forms.DataGridView.Font.get -> System.Drawing.Font!
 override System.Windows.Forms.DataGridView.Font.set -> void
 override System.Windows.Forms.DataGridView.GetAccessibilityObjectById(int objectId) -> System.Windows.Forms.AccessibleObject?
-~override System.Windows.Forms.DataGridView.OnBindingContextChanged(System.EventArgs e) -> void
+override System.Windows.Forms.DataGridView.OnBindingContextChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.DataGridView.OnCursorChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnDoubleClick(System.EventArgs e) -> void
 ~override System.Windows.Forms.DataGridView.OnEnabledChanged(System.EventArgs e) -> void
@@ -52,22 +52,22 @@ override System.Windows.Forms.DataGridViewButtonColumn.ToString() -> string!
 override System.Windows.Forms.DataGridViewCellCollection.List.get -> System.Collections.ArrayList!
 override System.Windows.Forms.DataGridViewCellStyle.Equals(object? o) -> bool
 override System.Windows.Forms.DataGridViewCellStyle.ToString() -> string!
-~override System.Windows.Forms.DataGridViewCheckBoxCell.Clone() -> object
-~override System.Windows.Forms.DataGridViewCheckBoxCell.ContentClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
-~override System.Windows.Forms.DataGridViewCheckBoxCell.ContentDoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
-~override System.Windows.Forms.DataGridViewCheckBoxCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewCheckBoxCell.EditType.get -> System.Type
-~override System.Windows.Forms.DataGridViewCheckBoxCell.FormattedValueType.get -> System.Type
-~override System.Windows.Forms.DataGridViewCheckBoxCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
-~override System.Windows.Forms.DataGridViewCheckBoxCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
-~override System.Windows.Forms.DataGridViewCheckBoxCell.GetFormattedValue(object value, int rowIndex, ref System.Windows.Forms.DataGridViewCellStyle cellStyle, System.ComponentModel.TypeConverter valueTypeConverter, System.ComponentModel.TypeConverter formattedValueTypeConverter, System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
-~override System.Windows.Forms.DataGridViewCheckBoxCell.GetPreferredSize(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
-~override System.Windows.Forms.DataGridViewCheckBoxCell.KeyDownUnsharesRow(System.Windows.Forms.KeyEventArgs e, int rowIndex) -> bool
-~override System.Windows.Forms.DataGridViewCheckBoxCell.KeyUpUnsharesRow(System.Windows.Forms.KeyEventArgs e, int rowIndex) -> bool
-~override System.Windows.Forms.DataGridViewCheckBoxCell.MouseDownUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> bool
-~override System.Windows.Forms.DataGridViewCheckBoxCell.MouseUpUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> bool
-~override System.Windows.Forms.DataGridViewCheckBoxCell.OnContentClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~override System.Windows.Forms.DataGridViewCheckBoxCell.OnContentDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
+override System.Windows.Forms.DataGridViewCheckBoxCell.Clone() -> object!
+override System.Windows.Forms.DataGridViewCheckBoxCell.ContentClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs! e) -> bool
+override System.Windows.Forms.DataGridViewCheckBoxCell.ContentDoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs! e) -> bool
+override System.Windows.Forms.DataGridViewCheckBoxCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridViewCheckBoxCell.EditType.get -> System.Type?
+override System.Windows.Forms.DataGridViewCheckBoxCell.FormattedValueType.get -> System.Type!
+override System.Windows.Forms.DataGridViewCheckBoxCell.GetContentBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewCheckBoxCell.GetErrorIconBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewCheckBoxCell.GetFormattedValue(object? value, int rowIndex, ref System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.ComponentModel.TypeConverter? valueTypeConverter, System.ComponentModel.TypeConverter? formattedValueTypeConverter, System.Windows.Forms.DataGridViewDataErrorContexts context) -> object?
+override System.Windows.Forms.DataGridViewCheckBoxCell.GetPreferredSize(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
+override System.Windows.Forms.DataGridViewCheckBoxCell.KeyDownUnsharesRow(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> bool
+override System.Windows.Forms.DataGridViewCheckBoxCell.KeyUpUnsharesRow(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> bool
+override System.Windows.Forms.DataGridViewCheckBoxCell.MouseDownUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
+override System.Windows.Forms.DataGridViewCheckBoxCell.MouseUpUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
+override System.Windows.Forms.DataGridViewCheckBoxCell.OnContentClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+override System.Windows.Forms.DataGridViewCheckBoxCell.OnContentDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.OnKeyDown(System.Windows.Forms.KeyEventArgs e, int rowIndex) -> void
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.OnKeyUp(System.Windows.Forms.KeyEventArgs e, int rowIndex) -> void
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.OnMouseDown(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
@@ -76,8 +76,8 @@ override System.Windows.Forms.DataGridViewCellStyle.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates elementState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ParseFormattedValue(object formattedValue, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.ComponentModel.TypeConverter formattedValueTypeConverter, System.ComponentModel.TypeConverter valueTypeConverter) -> object
 ~override System.Windows.Forms.DataGridViewCheckBoxCell.ToString() -> string
-~override System.Windows.Forms.DataGridViewCheckBoxCell.ValueType.get -> System.Type
-~override System.Windows.Forms.DataGridViewCheckBoxCell.ValueType.set -> void
+override System.Windows.Forms.DataGridViewCheckBoxCell.ValueType.get -> System.Type?
+override System.Windows.Forms.DataGridViewCheckBoxCell.ValueType.set -> void
 override System.Windows.Forms.DataGridViewCheckBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
 override System.Windows.Forms.DataGridViewCheckBoxColumn.CellTemplate.set -> void
 override System.Windows.Forms.DataGridViewCheckBoxColumn.DefaultCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
@@ -102,11 +102,11 @@ override System.Windows.Forms.DataGridViewColumnHeaderCell.GetValue(int rowIndex
 override System.Windows.Forms.DataGridViewColumnHeaderCell.Paint(System.Drawing.Graphics! graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates dataGridViewElementState, object! value, object? formattedValue, string? errorText, System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle! advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 override System.Windows.Forms.DataGridViewColumnHeaderCell.SetValue(int rowIndex, object? value) -> bool
 override System.Windows.Forms.DataGridViewColumnHeaderCell.ToString() -> string!
-~override System.Windows.Forms.DataGridViewComboBoxCell.Clone() -> object
-~override System.Windows.Forms.DataGridViewComboBoxCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DataGridViewComboBoxCell.EditType.get -> System.Type
-~override System.Windows.Forms.DataGridViewComboBoxCell.FormattedValueType.get -> System.Type
-~override System.Windows.Forms.DataGridViewComboBoxCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
+override System.Windows.Forms.DataGridViewComboBoxCell.Clone() -> object!
+override System.Windows.Forms.DataGridViewComboBoxCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DataGridViewComboBoxCell.EditType.get -> System.Type!
+override System.Windows.Forms.DataGridViewComboBoxCell.FormattedValueType.get -> System.Type!
+override System.Windows.Forms.DataGridViewComboBoxCell.GetContentBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewComboBoxCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
 ~override System.Windows.Forms.DataGridViewComboBoxCell.GetFormattedValue(object value, int rowIndex, ref System.Windows.Forms.DataGridViewCellStyle cellStyle, System.ComponentModel.TypeConverter valueTypeConverter, System.ComponentModel.TypeConverter formattedValueTypeConverter, System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
 ~override System.Windows.Forms.DataGridViewComboBoxCell.GetPreferredSize(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
@@ -117,7 +117,7 @@ override System.Windows.Forms.DataGridViewColumnHeaderCell.ToString() -> string!
 ~override System.Windows.Forms.DataGridViewComboBoxCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates elementState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
 ~override System.Windows.Forms.DataGridViewComboBoxCell.ParseFormattedValue(object formattedValue, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.ComponentModel.TypeConverter formattedValueTypeConverter, System.ComponentModel.TypeConverter valueTypeConverter) -> object
 ~override System.Windows.Forms.DataGridViewComboBoxCell.ToString() -> string
-~override System.Windows.Forms.DataGridViewComboBoxCell.ValueType.get -> System.Type
+override System.Windows.Forms.DataGridViewComboBoxCell.ValueType.get -> System.Type!
 override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
 override System.Windows.Forms.DataGridViewComboBoxColumn.CellTemplate.set -> void
 override System.Windows.Forms.DataGridViewComboBoxColumn.Clone() -> object!
@@ -414,12 +414,12 @@ System.Windows.Forms.DataGridViewCellStyle.NullValue.get -> object?
 System.Windows.Forms.DataGridViewCellStyle.NullValue.set -> void
 System.Windows.Forms.DataGridViewCellStyle.Tag.get -> object?
 System.Windows.Forms.DataGridViewCellStyle.Tag.set -> void
-~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.get -> object
-~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.set -> void
-~System.Windows.Forms.DataGridViewCheckBoxCell.IndeterminateValue.get -> object
-~System.Windows.Forms.DataGridViewCheckBoxCell.IndeterminateValue.set -> void
-~System.Windows.Forms.DataGridViewCheckBoxCell.TrueValue.get -> object
-~System.Windows.Forms.DataGridViewCheckBoxCell.TrueValue.set -> void
+System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.get -> object?
+System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.set -> void
+System.Windows.Forms.DataGridViewCheckBoxCell.IndeterminateValue.get -> object?
+System.Windows.Forms.DataGridViewCheckBoxCell.IndeterminateValue.set -> void
+System.Windows.Forms.DataGridViewCheckBoxCell.TrueValue.get -> object?
+System.Windows.Forms.DataGridViewCheckBoxCell.TrueValue.set -> void
 System.Windows.Forms.DataGridViewCheckBoxColumn.FalseValue.get -> object?
 System.Windows.Forms.DataGridViewCheckBoxColumn.FalseValue.set -> void
 System.Windows.Forms.DataGridViewCheckBoxColumn.IndeterminateValue.get -> object?
@@ -672,25 +672,25 @@ virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -
 virtual System.Windows.Forms.DataGridView.CreateColumnsInstance() -> System.Windows.Forms.DataGridViewColumnCollection!
 virtual System.Windows.Forms.DataGridView.CreateRowsInstance() -> System.Windows.Forms.DataGridViewRowCollection!
 virtual System.Windows.Forms.DataGridView.GetClipboardContent() -> System.Windows.Forms.DataObject?
-~virtual System.Windows.Forms.DataGridView.OnAllowUserToAddRowsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAllowUserToDeleteRowsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAllowUserToOrderColumnsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAllowUserToResizeColumnsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAllowUserToResizeRowsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAlternatingRowsDefaultCellStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAutoGenerateColumnsChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAutoSizeColumnModeChanged(System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAutoSizeColumnsModeChanged(System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnAutoSizeRowsModeChanged(System.Windows.Forms.DataGridViewAutoSizeModeEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnBackgroundColorChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnBorderStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCancelRowEdit(System.Windows.Forms.QuestionEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellBeginEdit(System.Windows.Forms.DataGridViewCellCancelEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellBorderStyleChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellContentClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellContentDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellContextMenuStripChanged(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
+virtual System.Windows.Forms.DataGridView.OnAllowUserToAddRowsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAllowUserToDeleteRowsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAllowUserToOrderColumnsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAllowUserToResizeColumnsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAllowUserToResizeRowsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAlternatingRowsDefaultCellStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAutoGenerateColumnsChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAutoSizeColumnModeChanged(System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAutoSizeColumnsModeChanged(System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnAutoSizeRowsModeChanged(System.Windows.Forms.DataGridViewAutoSizeModeEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnBackgroundColorChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnBorderStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCancelRowEdit(System.Windows.Forms.QuestionEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellBeginEdit(System.Windows.Forms.DataGridViewCellCancelEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellBorderStyleChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellContentClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellContentDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellContextMenuStripChanged(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnCellContextMenuStripNeeded(System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnCellDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnCellEndEdit(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
@@ -854,9 +854,9 @@ virtual System.Windows.Forms.DataGridViewCellCollection.Insert(int index, System
 virtual System.Windows.Forms.DataGridViewCellCollection.Remove(System.Windows.Forms.DataGridViewCell! cell) -> void
 virtual System.Windows.Forms.DataGridViewCellStyle.ApplyStyle(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
 virtual System.Windows.Forms.DataGridViewCellStyle.Clone() -> System.Windows.Forms.DataGridViewCellStyle!
-~virtual System.Windows.Forms.DataGridViewCheckBoxCell.EditingCellFormattedValue.get -> object
-~virtual System.Windows.Forms.DataGridViewCheckBoxCell.EditingCellFormattedValue.set -> void
-~virtual System.Windows.Forms.DataGridViewCheckBoxCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
+virtual System.Windows.Forms.DataGridViewCheckBoxCell.EditingCellFormattedValue.get -> object?
+virtual System.Windows.Forms.DataGridViewCheckBoxCell.EditingCellFormattedValue.set -> void
+virtual System.Windows.Forms.DataGridViewCheckBoxCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object?
 virtual System.Windows.Forms.DataGridViewColumn.CellTemplate.get -> System.Windows.Forms.DataGridViewCell?
 virtual System.Windows.Forms.DataGridViewColumn.CellTemplate.set -> void
 virtual System.Windows.Forms.DataGridViewColumnCollection.Add(string? columnName, string? headerText) -> int
@@ -868,15 +868,15 @@ virtual System.Windows.Forms.DataGridViewColumnCollection.Contains(System.Window
 ~virtual System.Windows.Forms.DataGridViewColumnCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewColumnCollection.Remove(string columnName) -> void
 ~virtual System.Windows.Forms.DataGridViewColumnCollection.Remove(System.Windows.Forms.DataGridViewColumn dataGridViewColumn) -> void
-~virtual System.Windows.Forms.DataGridViewComboBoxCell.DataSource.get -> object
-~virtual System.Windows.Forms.DataGridViewComboBoxCell.DataSource.set -> void
-~virtual System.Windows.Forms.DataGridViewComboBoxCell.DisplayMember.get -> string
-~virtual System.Windows.Forms.DataGridViewComboBoxCell.DisplayMember.set -> void
-~virtual System.Windows.Forms.DataGridViewComboBoxCell.Items.get -> System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection
+virtual System.Windows.Forms.DataGridViewComboBoxCell.DataSource.get -> object?
+virtual System.Windows.Forms.DataGridViewComboBoxCell.DataSource.set -> void
+virtual System.Windows.Forms.DataGridViewComboBoxCell.DisplayMember.get -> string!
+virtual System.Windows.Forms.DataGridViewComboBoxCell.DisplayMember.set -> void
+virtual System.Windows.Forms.DataGridViewComboBoxCell.Items.get -> System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection!
 virtual System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.this[int index].get -> object?
 virtual System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.this[int index].set -> void
-~virtual System.Windows.Forms.DataGridViewComboBoxCell.ValueMember.get -> string
-~virtual System.Windows.Forms.DataGridViewComboBoxCell.ValueMember.set -> void
+virtual System.Windows.Forms.DataGridViewComboBoxCell.ValueMember.get -> string!
+virtual System.Windows.Forms.DataGridViewComboBoxCell.ValueMember.set -> void
 virtual System.Windows.Forms.DataGridViewRow.AdjustRowHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStylePlaceholder, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedRow, bool isLastVisibleRow) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
 virtual System.Windows.Forms.DataGridViewRow.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 virtual System.Windows.Forms.DataGridViewRow.CreateCellsInstance() -> System.Windows.Forms.DataGridViewCellCollection!
@@ -5642,8 +5642,8 @@ System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCellsExceptHeader 
 System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill = 16 -> System.Windows.Forms.DataGridViewAutoSizeColumnsMode
 System.Windows.Forms.DataGridViewAutoSizeColumnsMode.None = 1 -> System.Windows.Forms.DataGridViewAutoSizeColumnsMode
 System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs
-System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.DataGridViewAutoSizeColumnsModeEventArgs(System.Windows.Forms.DataGridViewAutoSizeColumnMode[]? previousModes) -> void
-System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get -> System.Windows.Forms.DataGridViewAutoSizeColumnMode[]?
+System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.DataGridViewAutoSizeColumnsModeEventArgs(System.Windows.Forms.DataGridViewAutoSizeColumnMode[]! previousModes) -> void
+System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get -> System.Windows.Forms.DataGridViewAutoSizeColumnMode[]!
 System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventHandler
 System.Windows.Forms.DataGridViewAutoSizeModeEventArgs
 System.Windows.Forms.DataGridViewAutoSizeModeEventArgs.DataGridViewAutoSizeModeEventArgs(bool previousModeAutoSized) -> void
@@ -7216,11 +7216,11 @@ System.Windows.Forms.ICurrencyManagerProvider.GetRelatedCurrencyManager(string? 
 System.Windows.Forms.IDataGridColumnStyleEditingNotificationService
 System.Windows.Forms.IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(System.Windows.Forms.Control! editingControl) -> void
 System.Windows.Forms.IDataGridViewEditingCell
-System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.get -> object!
+System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.get -> object?
 System.Windows.Forms.IDataGridViewEditingCell.EditingCellFormattedValue.set -> void
 System.Windows.Forms.IDataGridViewEditingCell.EditingCellValueChanged.get -> bool
 System.Windows.Forms.IDataGridViewEditingCell.EditingCellValueChanged.set -> void
-System.Windows.Forms.IDataGridViewEditingCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object!
+System.Windows.Forms.IDataGridViewEditingCell.GetEditingCellFormattedValue(System.Windows.Forms.DataGridViewDataErrorContexts context) -> object?
 System.Windows.Forms.IDataGridViewEditingCell.PrepareEditingCellForEdit(bool selectAll) -> void
 System.Windows.Forms.IDataGridViewEditingControl
 System.Windows.Forms.IDataGridViewEditingControl.ApplyCellStyleToEditingControl(System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
