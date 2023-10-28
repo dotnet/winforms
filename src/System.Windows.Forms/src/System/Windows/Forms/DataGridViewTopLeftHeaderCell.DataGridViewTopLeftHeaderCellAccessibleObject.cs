@@ -211,11 +211,16 @@ public partial class DataGridViewTopLeftHeaderCell
                     // This means that there are visible rows and columns.
                     // Focus the first data cell.
                     DataGridViewRow row = Owner.DataGridView.Rows[Owner.DataGridView.Rows.GetFirstRow(DataGridViewElementStates.Visible)];
-                    DataGridViewColumn col = Owner.DataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                    DataGridViewColumn col = Owner.DataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible)!;
 
                     // DataGridView::set_CurrentCell clears the previous selection.
                     // So use SetCurrenCellAddressCore directly.
-                    Owner.DataGridView.SetCurrentCellAddressCoreInternal(col.Index, row.Index, false /*setAnchorCellAddress*/, true /*validateCurrentCell*/, false /*thoughMouseClick*/);
+                    Owner.DataGridView.SetCurrentCellAddressCoreInternal(
+                        col.Index,
+                        row.Index,
+                        setAnchorCellAddress: false,
+                        validateCurrentCell: true,
+                        throughMouseClick: false);
                 }
             }
 

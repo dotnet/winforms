@@ -1031,7 +1031,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             // Column header cell case
             Debug.Assert(rowIndex == -1);
             Debug.Assert(this is DataGridViewColumnHeaderCell, "if the row index == -1 and we have an owning column this should be a column header cell");
-            DataGridViewColumn dataGridViewColumn = DataGridView.Columns.GetLastColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+            DataGridViewColumn? dataGridViewColumn = DataGridView.Columns.GetLastColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.None);
             bool isLastVisibleColumn = (dataGridViewColumn is not null && dataGridViewColumn.Index == ColumnIndex);
             dgvabsEffective = DataGridView.AdjustColumnHeaderBorderStyle(DataGridView.AdvancedColumnHeadersBorderStyle,
                 dataGridViewAdvancedBorderStylePlaceholder,

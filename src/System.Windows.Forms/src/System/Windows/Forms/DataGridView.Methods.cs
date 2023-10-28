@@ -364,7 +364,7 @@ public partial class DataGridView
         Debug.Assert((autoSizeColumnCriteriaFilter & DataGridViewAutoSizeColumnCriteriaInternal.Fill) == 0);
 
         bool ret = false; // No column autosizes by default
-        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
         while (dataGridViewColumn is not null)
         {
             DataGridViewAutoSizeColumnCriteriaInternal inheritedAutoSizeColumnCriteria = (DataGridViewAutoSizeColumnCriteriaInternal)dataGridViewColumn.InheritedAutoSizeMode;
@@ -1441,7 +1441,7 @@ public partial class DataGridView
                         {
                             dataGridViewRow = Rows[rowIndex]; // unshares this row
 
-                            DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                            DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                             while (dataGridViewColumn is not null)
                             {
                                 if (!dataGridViewRow.Cells[dataGridViewColumn.Index].Selected)
@@ -1469,7 +1469,7 @@ public partial class DataGridView
                     }
                     else
                     {
-                        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                         while (dataGridViewColumn is not null)
                         {
                             if (!_selectedBandIndexes.Contains(dataGridViewColumn.Index))
@@ -1514,7 +1514,7 @@ public partial class DataGridView
                             if ((Rows.GetRowState(rowIndex) & DataGridViewElementStates.Selected) == 0)
                             {
                                 dataGridViewRow = Rows[rowIndex]; // unshares this row
-                                DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                                DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                                 while (dataGridViewColumn is not null)
                                 {
                                     if (!dataGridViewRow.Cells[dataGridViewColumn.Index].Selected)
@@ -1690,7 +1690,7 @@ public partial class DataGridView
         Debug.Assert((autoSizeColumnCriteriaFilter & DataGridViewAutoSizeColumnCriteriaInternal.Fill) == 0);
 
         bool ret = false; // No column autosizes by default
-        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
         while (dataGridViewColumn is not null)
         {
             DataGridViewAutoSizeColumnCriteriaInternal inheritedAutoSizeColumnCriteria = (DataGridViewAutoSizeColumnCriteriaInternal)dataGridViewColumn.InheritedAutoSizeMode;
@@ -1700,7 +1700,8 @@ public partial class DataGridView
                 ret |= AutoResizeColumnInternal(dataGridViewColumn.Index, inheritedAutoSizeColumnCriteria, fixedHeight);
             }
 
-            dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
+            dataGridViewColumn = Columns.GetNextColumn(
+                dataGridViewColumn,
                 DataGridViewElementStates.Visible,
                 DataGridViewElementStates.None);
         }
@@ -3743,7 +3744,7 @@ public partial class DataGridView
 
         if (dataGridViewColumn.Frozen)
         {
-            DataGridViewColumn firstVisibleFrozenColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+            DataGridViewColumn? firstVisibleFrozenColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
             Debug.Assert(firstVisibleFrozenColumn is not null);
             if (firstVisibleFrozenColumn.Index == dataGridViewColumn.Index)
             {
@@ -3798,7 +3799,7 @@ public partial class DataGridView
                 else
                 {
                     // Insert column on the left of hti.col
-                    DataGridViewColumn dataGridViewColumnPrev = Columns.GetPreviousColumn(
+                    DataGridViewColumn? dataGridViewColumnPrev = Columns.GetPreviousColumn(
                         Columns[hti._col],
                         DataGridViewElementStates.Visible,
                         DataGridViewElementStates.None);
@@ -4361,7 +4362,7 @@ public partial class DataGridView
             return -1;
         }
 
-        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen);
+        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen);
 
         if (_horizontalOffset == 0)
         {
@@ -5239,17 +5240,18 @@ public partial class DataGridView
     private void CorrectColumnFrozenStates(DataGridViewColumn dataGridViewColumn, bool frozenStateChanging)
     {
         Debug.Assert(dataGridViewColumn is not null);
-        DataGridViewColumn dataGridViewColumnTmp;
+        DataGridViewColumn? dataGridViewColumnTmp;
         if ((dataGridViewColumn.Frozen && !frozenStateChanging) ||
             (!dataGridViewColumn.Frozen && frozenStateChanging))
         {
             // make sure the previous visible columns are frozen as well
-            dataGridViewColumnTmp = Columns.GetPreviousColumn(dataGridViewColumn,
+            dataGridViewColumnTmp = Columns.GetPreviousColumn(
+                dataGridViewColumn,
                 DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen,
                 DataGridViewElementStates.None);
             if (dataGridViewColumnTmp is null)
             {
-                DataGridViewColumn dataGridViewColumnFirst = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                DataGridViewColumn? dataGridViewColumnFirst = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                 if (dataGridViewColumnFirst != dataGridViewColumn)
                 {
                     dataGridViewColumnTmp = dataGridViewColumnFirst;
@@ -5692,7 +5694,7 @@ public partial class DataGridView
     {
         int cxMax = _layout.Data.Width, cx = 0;
         int completeColumns = 0, partialColumns = 0;
-        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
         while (dataGridViewColumn is not null && cx < cxMax)
         {
             partialColumns++;
@@ -5803,7 +5805,7 @@ public partial class DataGridView
             if (_trackColumnEdge == -1)
             {
                 // Insert as first column
-                rectInsertionBar.X = GetColumnXFromIndex(Columns.GetFirstColumn(DataGridViewElementStates.Visible).Index);
+                rectInsertionBar.X = GetColumnXFromIndex(Columns.GetFirstColumn(DataGridViewElementStates.Visible)!.Index);
                 if (RightToLeftInternal)
                 {
                     rectInsertionBar.X -= InsertionBarWidth;
@@ -6830,7 +6832,7 @@ public partial class DataGridView
             else
             {
                 // Make sure all displayed scrolling columns have the Displayed state.
-                DataGridViewColumn dataGridViewColumnTmp;
+                DataGridViewColumn? dataGridViewColumnTmp;
                 int columnIndexTmp = DisplayedBandsInfo.FirstDisplayedScrollingCol;
                 if (columnIndexTmp != -1)
                 {
@@ -6849,7 +6851,7 @@ public partial class DataGridView
                         numDisplayedScrollingCols--;
                     }
 
-                    DataGridViewColumn dataGridViewColumnTmp2 = dataGridViewColumnTmp;
+                    DataGridViewColumn? dataGridViewColumnTmp2 = dataGridViewColumnTmp;
 
                     // Make sure all scrolling columns before FirstDisplayedScrollingCol have their Displayed state set to false
                     Debug.Assert(DisplayedBandsInfo.FirstDisplayedScrollingCol != -1);
@@ -7695,7 +7697,7 @@ public partial class DataGridView
                         if (RightToLeftInternal)
                         {
                             // Cycle through the visible & selected columns in their display order
-                            DataGridViewColumn lastDataGridViewColumn = Columns.GetLastColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, DataGridViewElementStates.None);
+                            DataGridViewColumn? lastDataGridViewColumn = Columns.GetLastColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, DataGridViewElementStates.None);
                             dataGridViewColumn = lastDataGridViewColumn;
                             Debug.Assert(dataGridViewColumn is not null);
                             if (dataGridViewColumn is not null)
@@ -7815,7 +7817,7 @@ public partial class DataGridView
                     {
                         if (RightToLeftInternal)
                         {
-                            DataGridViewColumn lastDataGridViewColumn = Columns.GetLastColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, DataGridViewElementStates.None);
+                            DataGridViewColumn? lastDataGridViewColumn = Columns.GetLastColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Selected, DataGridViewElementStates.None);
 
                             // Cycle through the visible & selected columns in their reverse display order
                             dataGridViewColumn = lastDataGridViewColumn;
@@ -8039,8 +8041,8 @@ public partial class DataGridView
                 DataGridViewColumn? uColumn = null;
                 if (SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
                 {
-                    DataGridViewColumn firstVisibleColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
-                    DataGridViewColumn lastVisibleColumn = Columns.GetLastColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+                    DataGridViewColumn? firstVisibleColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                    DataGridViewColumn? lastVisibleColumn = Columns.GetLastColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.None);
 
                     Debug.Assert(firstVisibleColumn is not null);
                     Debug.Assert(lastVisibleColumn is not null);
@@ -8437,7 +8439,7 @@ public partial class DataGridView
         Rectangle data = _layout.Data;
         int cx;
         bool columnFound = false;
-        DataGridViewColumn dataGridViewColumn;
+        DataGridViewColumn? dataGridViewColumn;
         if (RightToLeftInternal)
         {
             cx = data.Right;
@@ -8599,7 +8601,7 @@ public partial class DataGridView
         }
 
         // first try to match x against a frozen column
-        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
         while (dataGridViewColumn is not null &&
                ((!RightToLeftInternal && cx < data.Right) || (RightToLeftInternal && cx >= data.X)))
         {
@@ -8725,7 +8727,7 @@ public partial class DataGridView
             x = _layout.Data.X;
         }
 
-        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
         while (dataGridViewColumn is not null)
         {
             if (index == dataGridViewColumn.Index)
@@ -8767,7 +8769,7 @@ public partial class DataGridView
             dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen);
         }
 
-        Debug.Assert(dataGridViewColumn.Visible && !dataGridViewColumn.Frozen);
+        Debug.Assert(dataGridViewColumn!.Visible && !dataGridViewColumn.Frozen);
 
         while (dataGridViewColumn is not null)
         {
@@ -8823,7 +8825,7 @@ public partial class DataGridView
 
     private int GetNegOffsetFromHorizontalOffset(int horizontalOffset)
     {
-        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen);
+        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen);
         while (dataGridViewColumn is not null && dataGridViewColumn.Thickness <= horizontalOffset)
         {
             horizontalOffset -= dataGridViewColumn.Thickness;
@@ -8886,7 +8888,7 @@ public partial class DataGridView
                     }
                     else
                     {
-                        DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                        DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                         firstColumnIndex = (dataGridViewColumn is null) ? -1 : dataGridViewColumn.Index;
                     }
 
@@ -8984,7 +8986,7 @@ public partial class DataGridView
                 {
                     // Anchor cell is in frozen column and target cell is in unfrozen column. Make sure no column is scrolled off.
                     Debug.Assert(DisplayedBandsInfo.FirstDisplayedScrollingCol >= 0);
-                    int firstUnfrozenColumnIndex = Columns.GetFirstColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen).Index;
+                    int firstUnfrozenColumnIndex = Columns.GetFirstColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen)!.Index;
                     int firstRowIndex;
                     if (hti._row >= 0)
                     {
@@ -9051,18 +9053,21 @@ public partial class DataGridView
                         return true;
                     }
 
-                    DataGridViewColumn newFirstVisibleScrollingCol = Columns.GetNextColumn(Columns[DisplayedBandsInfo.FirstDisplayedScrollingCol],
-                                                                                                         DataGridViewElementStates.Visible,
-                                                                                                         DataGridViewElementStates.None);
-                    int newColOffset = 0;
-                    for (DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible,
-                                                                                                      DataGridViewElementStates.Frozen);
-                        dataGridViewColumn != newFirstVisibleScrollingCol;
-                        dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
+                    DataGridViewColumn? newFirstVisibleScrollingCol = Columns.GetNextColumn(
+                        Columns[DisplayedBandsInfo.FirstDisplayedScrollingCol],
                         DataGridViewElementStates.Visible,
-                        DataGridViewElementStates.None))
+                        DataGridViewElementStates.None);
+                    int newColOffset = 0;
+                    for (DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(
+                            DataGridViewElementStates.Visible,
+                            DataGridViewElementStates.Frozen);
+                        dataGridViewColumn != newFirstVisibleScrollingCol;
+                        dataGridViewColumn = Columns.GetNextColumn(
+                            dataGridViewColumn,
+                            DataGridViewElementStates.Visible,
+                            DataGridViewElementStates.None))
                     {
-                        newColOffset += dataGridViewColumn.Thickness;
+                        newColOffset += dataGridViewColumn!.Thickness;
                     }
 
                     if (HorizontalOffset != newColOffset)
@@ -9206,18 +9211,21 @@ public partial class DataGridView
                     (DisplayedBandsInfo.LastTotallyDisplayedScrollingCol == -1 ||
                      Columns.GetNextColumn(Columns[DisplayedBandsInfo.LastTotallyDisplayedScrollingCol], DataGridViewElementStates.Visible, DataGridViewElementStates.None) is not null))
                 {
-                    DataGridViewColumn newFirstVisibleScrollingCol = Columns.GetNextColumn(Columns[DisplayedBandsInfo.FirstDisplayedScrollingCol],
-                                                                                                        DataGridViewElementStates.Visible,
-                                                                                                        DataGridViewElementStates.None);
-                    int newColOffset = 0;
-                    for (DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible,
-                                                                                                      DataGridViewElementStates.Frozen);
-                        dataGridViewColumn != newFirstVisibleScrollingCol;
-                        dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
+                    DataGridViewColumn? newFirstVisibleScrollingCol = Columns.GetNextColumn(
+                        Columns[DisplayedBandsInfo.FirstDisplayedScrollingCol],
                         DataGridViewElementStates.Visible,
-                        DataGridViewElementStates.None))
+                        DataGridViewElementStates.None);
+                    int newColOffset = 0;
+                    for (DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(
+                            DataGridViewElementStates.Visible,
+                            DataGridViewElementStates.Frozen);
+                        dataGridViewColumn != newFirstVisibleScrollingCol;
+                        dataGridViewColumn = Columns.GetNextColumn(
+                            dataGridViewColumn,
+                            DataGridViewElementStates.Visible,
+                            DataGridViewElementStates.None))
                     {
-                        newColOffset += dataGridViewColumn.Thickness;
+                        newColOffset += dataGridViewColumn!.Thickness;
                     }
 
                     if (HorizontalOffset != newColOffset)
@@ -9714,7 +9722,7 @@ public partial class DataGridView
                      (RightToLeftInternal && xColumnLeftEdge - x < ColumnSizingHotZone))
             {
                 //hti.edge = DataGridViewHitTestTypeCloseEdge.Left;
-                DataGridViewColumn dataGridViewColumn = Columns.GetPreviousColumn(
+                DataGridViewColumn? dataGridViewColumn = Columns.GetPreviousColumn(
                     Columns[hti._col],
                     DataGridViewElementStates.Visible,
                     DataGridViewElementStates.None);
@@ -9943,7 +9951,7 @@ public partial class DataGridView
             else if ((!RightToLeftInternal && x - xColumnLeftEdge < ColumnSizingHotZone) ||
                      (RightToLeftInternal && xColumnLeftEdge - x < ColumnSizingHotZone))
             {
-                DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                 Debug.Assert(dataGridViewColumn is not null);
                 if (hti._col == dataGridViewColumn.Index &&
                     RowHeadersVisible &&
@@ -10863,8 +10871,9 @@ public partial class DataGridView
         _lastRowSplitBar = _currentRowSplitBar;
         _currentRowSplitBar = e.Y;
         Rectangle lastSplitBarRect = CalcRowResizeFeedbackRect(_lastRowSplitBar);
-        Debug.Assert(_editingPanel is not null);
+
         if (EditingControl is not null &&
+            _editingPanel is not null &&
             !_dataGridViewState1[State1_EditingControlHidden] &&
             _editingPanel.Bounds.IntersectsWith(lastSplitBarRect))
         {
@@ -10930,8 +10939,9 @@ public partial class DataGridView
         _lastColSplitBar = _currentColSplitBar;
         _currentColSplitBar = x;
         Rectangle lastSplitBarRect = CalcColResizeFeedbackRect(_lastColSplitBar);
-        Debug.Assert(_editingPanel is not null);
+
         if (EditingControl is not null &&
+            _editingPanel is not null &&
             !_dataGridViewState1[State1_EditingControlHidden] &&
             _editingPanel.Bounds.IntersectsWith(lastSplitBarRect))
         {
