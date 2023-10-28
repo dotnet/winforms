@@ -3,6 +3,7 @@
 
 using System.Collections;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.Web.MsHtml;
 
@@ -38,10 +39,11 @@ public unsafe class HtmlWindowCollection : ICollection
 
             var oIndex = (VARIANT)index;
             using var htmlFrames2 = NativeHTMLFramesCollection2.GetInterface();
-            using VARIANT variantDispatch = default;
+            VARIANT variantDispatch = default;
             htmlFrames2.Value->item(&oIndex, &variantDispatch).ThrowOnFailure();
+            using ComScope<IDispatch> dispatch = new(variantDispatch.data.pdispVal);
             IHTMLWindow2* htmlWindow2;
-            return variantDispatch.data.pdispVal->QueryInterface(IID.Get<IHTMLWindow2>(), (void**)&htmlWindow2).Succeeded
+            return !dispatch.IsNull && dispatch.Value->QueryInterface(IID.Get<IHTMLWindow2>(), (void**)&htmlWindow2).Succeeded
                 ? new HtmlWindow(_shimManager, htmlWindow2)
                 : null;
         }
@@ -56,10 +58,14 @@ public unsafe class HtmlWindowCollection : ICollection
             try
             {
                 using var htmlFrameCollection2 = _htmlFramesCollection2.GetInterface();
-                using VARIANT variantDispatch = default;
+                VARIANT variantDispatch = default;
                 htmlFrameCollection2.Value->item(&oWindowId, &variantDispatch).ThrowOnFailure();
-                HRESULT hr = variantDispatch.data.pdispVal->QueryInterface(IID.Get<IHTMLWindow2>(), (void**)&htmlWindow2);
-                hr.AssertSuccess();
+                using ComScope<IDispatch> dispatch = new(variantDispatch.data.pdispVal);
+                if (!dispatch.IsNull)
+                {
+                    HRESULT hr = dispatch.Value->QueryInterface(IID.Get<IHTMLWindow2>(), (void**)&htmlWindow2);
+                    hr.AssertSuccess();
+                }
             }
             catch (COMException)
             {

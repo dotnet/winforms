@@ -592,7 +592,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            container = DesignerUtils.CheckForNestedContainer(container); // ...necessary to support SplitterPanel components
+            container = DesignerUtils.CheckForNestedContainer(container)!; // ...necessary to support SplitterPanel components
 
             ComponentCollection components = container.Components;
 
@@ -1264,7 +1264,7 @@ namespace System.Windows.Forms.Design
             }
 
             // Make sure the name is unique.
-            string uniqueSiteName = DesignerUtils.GetUniqueSiteName(_designerHost, bindingSourceName);
+            string? uniqueSiteName = DesignerUtils.GetUniqueSiteName(_designerHost, bindingSourceName);
 
             DesignerTransaction? trans = _designerHost.CreateTransaction(string.Format(SR.DesignerBatchCreateTool, uniqueSiteName));
 

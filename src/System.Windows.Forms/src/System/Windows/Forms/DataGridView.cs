@@ -1681,7 +1681,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 if (!value)
                 {
                     // Make sure that there is no visible column that only counts on the column headers to autosize
-                    DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                    DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                     while (dataGridViewColumn is not null)
                     {
                         if (dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.ColumnHeader)
@@ -2406,7 +2406,7 @@ public partial class DataGridView : Control, ISupportInitialize
             }
 
             int firstDisplayedColumnIndex = -1;
-            DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+            DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
             if (dataGridViewColumn is not null)
             {
                 if (dataGridViewColumn.Frozen)
@@ -2419,11 +2419,11 @@ public partial class DataGridView : Control, ISupportInitialize
                 }
             }
 #if DEBUG
-            DataGridViewColumn dataGridViewColumnDbg1 = Columns.GetFirstColumn(DataGridViewElementStates.Displayed);
+            DataGridViewColumn? dataGridViewColumnDbg1 = Columns.GetFirstColumn(DataGridViewElementStates.Displayed);
             int firstDisplayedColumnIndexDbg1 = (dataGridViewColumnDbg1 is null) ? -1 : dataGridViewColumnDbg1.Index;
 
             int firstDisplayedColumnIndexDbg2 = -1;
-            DataGridViewColumn dataGridViewColumnDbg = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+            DataGridViewColumn? dataGridViewColumnDbg = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
             if (dataGridViewColumnDbg is not null)
             {
                 firstDisplayedColumnIndexDbg2 = dataGridViewColumnDbg.Index;
@@ -3668,7 +3668,7 @@ public partial class DataGridView : Control, ISupportInitialize
                 {
                     // Before changing the value of this.scrollBars, we scroll to the top-left cell to
                     // avoid inconsistent state of scrollbars.
-                    DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                    DataGridViewColumn? dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                     int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
 
                     if (dataGridViewColumn is not null && firstVisibleRowIndex != -1)

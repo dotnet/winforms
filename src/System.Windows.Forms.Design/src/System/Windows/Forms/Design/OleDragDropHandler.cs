@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -24,96 +22,65 @@ internal partial class OleDragDropHandler
     //
     protected const int AllowLocalMoveOnly = 0x04000000;
 
-    private readonly SelectionUIHandler selectionHandler;
-    private readonly IServiceProvider serviceProvider;
-    private readonly IOleDragClient client;
+    private readonly SelectionUIHandler? _selectionHandler;
+    private readonly IServiceProvider _serviceProvider;
 
-    private bool dragOk;
-    private bool forceDrawFrames;
-    private bool localDrag;
-    private bool localDragInside;
-    private Point localDragOffset = Point.Empty;
-    private DragDropEffects localDragEffect;
-    private object[] dragComps;
-    private Point dragBase = Point.Empty;
-    private static bool freezePainting;
-    private static Dictionary<IDataObject, IComponent> currentDrags;
+    private bool _dragOk;
+    private bool _forceDrawFrames;
+    private bool _localDragInside;
+    private Point _localDragOffset = Point.Empty;
+    private DragDropEffects _localDragEffect;
+    private object[]? _dragComps;
+    private Point _dragBase = Point.Empty;
+    private static Dictionary<IDataObject, IComponent>? s_currentDrags;
 
     public const string CF_CODE = "CF_XMLCODE";
     public const string CF_COMPONENTTYPES = "CF_COMPONENTTYPES";
     public const string CF_TOOLBOXITEM = "CF_NESTEDTOOLBOXITEM";
 
-    public OleDragDropHandler(SelectionUIHandler selectionHandler, IServiceProvider serviceProvider, IOleDragClient client)
+    public OleDragDropHandler(SelectionUIHandler? selectionHandler, IServiceProvider serviceProvider, IOleDragClient client)
     {
-        this.serviceProvider = serviceProvider;
-        this.selectionHandler = selectionHandler;
-        this.client = client;
+        _serviceProvider = serviceProvider;
+        _selectionHandler = selectionHandler;
+        Destination = client;
     }
 
-    public static string DataFormat
+    public static string DataFormat => CF_CODE;
+
+    public static string ExtraInfoFormat => CF_COMPONENTTYPES;
+
+    public static string NestedToolboxItemFormat => CF_TOOLBOXITEM;
+
+    private static IComponent? GetDragOwnerComponent(IDataObject data)
     {
-        get
-        {
-            return CF_CODE;
-        }
+        return s_currentDrags is null || !s_currentDrags.TryGetValue(data, out IComponent? value) ? null : value;
     }
 
-    public static string ExtraInfoFormat
-    {
-        get
-        {
-            return CF_COMPONENTTYPES;
-        }
-    }
-
-    public static string NestedToolboxItemFormat
-    {
-        get
-        {
-            return CF_TOOLBOXITEM;
-        }
-    }
-
-    private static IComponent GetDragOwnerComponent(IDataObject data)
-    {
-        return currentDrags is null || !currentDrags.TryGetValue(data, out IComponent value) ? null : value;
-    }
-
+    [MemberNotNull(nameof(s_currentDrags))]
     private static void AddCurrentDrag(IDataObject data, IComponent component)
     {
-        currentDrags ??= new();
-        currentDrags[data] = component;
+        s_currentDrags ??= new();
+        s_currentDrags[data] = component;
     }
 
-    private static void RemoveCurrentDrag(IDataObject data)
-    {
-        currentDrags.Remove(data);
-    }
+    internal IOleDragClient Destination { get; }
 
-    internal IOleDragClient Destination
-    {
-        get
-        {
-            return client;
-        }
-    }
-
-    protected virtual bool CanDropDataObject(IDataObject dataObj)
+    protected virtual bool CanDropDataObject(IDataObject? dataObj)
     {
         if (dataObj is not null)
         {
             if (dataObj is ComponentDataObjectWrapper)
             {
-                object[] dragObjs = GetDraggingObjects(dataObj, true);
-                if (dragObjs is null)
+                object[]? dragObjects = GetDraggingObjects(dataObj, true);
+                if (dragObjects is null)
                 {
                     return false;
                 }
 
                 bool dropOk = true;
-                for (int i = 0; dropOk && i < dragObjs.Length; i++)
+                for (int i = 0; dropOk && i < dragObjects.Length; i++)
                 {
-                    dropOk = dropOk && (dragObjs[i] is IComponent) && client.IsDropOk((IComponent)dragObjs[i]);
+                    dropOk = dropOk && (dragObjects[i] is IComponent component) && Destination.IsDropOk(component);
                 }
 
                 return dropOk;
@@ -121,15 +88,14 @@ internal partial class OleDragDropHandler
 
             try
             {
-                object serializationData = dataObj.GetData(DataFormat, false);
+                object? serializationData = dataObj.GetData(DataFormat, false);
 
                 if (serializationData is null)
                 {
                     return false;
                 }
 
-                IDesignerSerializationService ds = (IDesignerSerializationService)GetService(typeof(IDesignerSerializationService));
-                if (ds is null)
+                if (!TryGetService(out IDesignerSerializationService? ds))
                 {
                     return false;
                 }
@@ -137,21 +103,15 @@ internal partial class OleDragDropHandler
                 ICollection objects = ds.Deserialize(serializationData);
                 if (objects.Count > 0)
                 {
-                    bool dropOk = true;
-
                     foreach (object o in objects)
                     {
-                        if (!(o is IComponent))
+                        if (o is IComponent component && !Destination.IsDropOk(component))
                         {
-                            continue;
+                            return false;
                         }
-
-                        dropOk = dropOk && client.IsDropOk((IComponent)o);
-                        if (!dropOk)
-                            break;
                     }
 
-                    return dropOk;
+                    return true;
                 }
             }
             catch (Exception ex) when (!ex.IsCriticalException())
@@ -163,57 +123,40 @@ internal partial class OleDragDropHandler
         return false;
     }
 
-    public bool Dragging
-    {
-        get
-        {
-            return localDrag;
-        }
-    }
+    public bool Dragging { get; private set; }
 
-    public static bool FreezePainting
-    {
-        get
-        {
-            return freezePainting;
-        }
-    }
+    public static bool FreezePainting { get; private set; }
 
     /// <summary>
     ///  This is the worker method of all CreateTool methods.  It is the only one
     ///  that can be overridden.
     /// </summary>
-    public IComponent[] CreateTool(ToolboxItem tool, Control parent, int x, int y, int width, int height, bool hasLocation, bool hasSize)
+    public IComponent[] CreateTool(ToolboxItem tool, Control? parent, int x, int y, int width, int height, bool hasLocation, bool hasSize)
     {
         return CreateTool(tool, parent, x, y, width, height, hasLocation, hasSize, null);
     }
 
-    public IComponent[] CreateTool(ToolboxItem tool, Control parent, int x, int y, int width, int height, bool hasLocation, bool hasSize, ToolboxSnapDragDropEventArgs e)
+    public IComponent[] CreateTool(ToolboxItem tool, Control? parent, int x, int y, int width, int height, bool hasLocation, bool hasSize, ToolboxSnapDragDropEventArgs? e)
     {
         // Services we will need
         //
-        IToolboxService toolboxSvc = (IToolboxService)GetService(typeof(IToolboxService));
-        ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
-        IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-        IComponent[] comps = Array.Empty<IComponent>();
+        IToolboxService? toolboxSvc = GetService<IToolboxService>();
+        IDesignerHost? host = GetService<IDesignerHost>();
+        IComponent[]? comps = Array.Empty<IComponent>();
 
-        Cursor oldCursor = Cursor.Current;
+        Cursor? oldCursor = Cursor.Current;
         Cursor.Current = Cursors.WaitCursor;
-        DesignerTransaction trans = null;
+        DesignerTransaction? trans = null;
 
         try
         {
             try
             {
-                if (host is not null)
-                    trans = host.CreateTransaction(string.Format(SR.DesignerBatchCreateTool, tool));
+                trans = host?.CreateTransaction(string.Format(SR.DesignerBatchCreateTool, tool));
             }
-            catch (CheckoutException cxe)
+            catch (CheckoutException cxe) when (cxe == CheckoutException.Canceled)
             {
-                if (cxe == CheckoutException.Canceled)
-                    return comps;
-
-                throw;
+                return Array.Empty<IComponent>();
             }
 
             try
@@ -225,11 +168,10 @@ internal partial class OleDragDropHandler
                     // change from Everett - see VSWhidbey #292249.
                     if (host is not null && CurrentlyLocalizing(host.RootComponent))
                     {
-                        IUIService uiService = (IUIService)GetService(typeof(IUIService));
+                        IUIService? uiService = GetService<IUIService>();
                         uiService?.ShowMessage(SR.LocalizingCannotAdd);
 
-                        comps = Array.Empty<IComponent>();
-                        return comps;
+                        return Array.Empty<IComponent>();
                     }
 
                     // Create a dictionary of default values that the designer can
@@ -255,26 +197,17 @@ internal partial class OleDragDropHandler
 
                     comps = tool.CreateComponents(host, defaultValues);
                 }
-                catch (CheckoutException checkoutEx)
+                catch (CheckoutException checkoutEx) when (checkoutEx == CheckoutException.Canceled)
                 {
-                    if (checkoutEx == CheckoutException.Canceled)
-                    {
-                        comps = Array.Empty<IComponent>();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    comps = Array.Empty<IComponent>();
                 }
                 catch (ArgumentException argumentEx)
                 {
-                    IUIService uiService = (IUIService)GetService(typeof(IUIService));
+                    IUIService? uiService = GetService<IUIService>();
                     uiService?.ShowError(argumentEx);
                 }
                 catch (Exception ex)
                 {
-                    IUIService uiService = (IUIService)GetService(typeof(IUIService));
-
                     string exceptionMessage = string.Empty;
                     if (ex.InnerException is not null)
                     {
@@ -291,7 +224,7 @@ internal partial class OleDragDropHandler
                         exceptionMessage = ex.Message;
                     }
 
-                    if (uiService is not null)
+                    if (TryGetService(out IUIService? uiService))
                     {
                         uiService.ShowError(ex, string.Format(SR.FailedToCreateComponent, tool.DisplayName, exceptionMessage));
                     }
@@ -320,11 +253,11 @@ internal partial class OleDragDropHandler
 
         // Finally, select the newly created components.
         //
-        if (selSvc is not null && comps.Length > 0)
+        if (TryGetService(out ISelectionService? selSvc) && comps.Length > 0)
         {
             host?.Activate();
 
-            ArrayList selectComps = new ArrayList(comps);
+            List<IComponent> selectComps = new(comps);
 
             for (int i = 0; i < comps.Length; i++)
             {
@@ -343,15 +276,15 @@ internal partial class OleDragDropHandler
     /// <summary>
     ///  Determines whether we are currently in localization mode - i.e., language is not (Default).
     /// </summary>
-    private static bool CurrentlyLocalizing(IComponent rootComponent)
+    private static bool CurrentlyLocalizing(IComponent? rootComponent)
     {
         if (rootComponent is not null)
         {
-            PropertyDescriptor prop = TypeDescriptor.GetProperties(rootComponent)["Language"];
+            PropertyDescriptor? prop = TypeDescriptor.GetProperties(rootComponent)["Language"];
 
             if (prop is not null && prop.PropertyType == typeof(Globalization.CultureInfo))
             {
-                Globalization.CultureInfo ci = (Globalization.CultureInfo)prop.GetValue(rootComponent);
+                Globalization.CultureInfo ci = (Globalization.CultureInfo)prop.GetValue(rootComponent)!;
                 if (!ci.Equals(Globalization.CultureInfo.InvariantCulture))
                 {
                     return true;
@@ -362,7 +295,7 @@ internal partial class OleDragDropHandler
         return false;
     }
 
-    private static void DisableDragDropChildren(ICollection controls, ArrayList allowDropCache)
+    private static void DisableDragDropChildren(ICollection controls, List<Control> allowDropCache)
     {
         foreach (Control c in controls)
         {
@@ -382,15 +315,14 @@ internal partial class OleDragDropHandler
         }
     }
 
-    private Point DrawDragFrames(object[] comps,
+    private Point DrawDragFrames(object[]? comps,
                                  Point oldOffset, DragDropEffects oldEffect,
                                  Point newOffset, DragDropEffects newEffect,
                                  bool drawAtNewOffset)
     {
-        Control comp;
-        Control parentControl = client.GetDesignerControl();
+        Control parentControl = Destination.GetDesignerControl();
 
-        if (selectionHandler is null)
+        if (_selectionHandler is null)
         {
             Debug.Fail("selectionHandler should not be null");
             return Point.Empty;
@@ -403,7 +335,7 @@ internal partial class OleDragDropHandler
 
         for (int i = 0; i < comps.Length; i++)
         {
-            comp = client.GetControlForComponent(comps[i]);
+            Control comp = Destination.GetControlForComponent(comps[i])!;
 
             Color backColor = SystemColors.Control;
             try
@@ -418,7 +350,7 @@ internal partial class OleDragDropHandler
             // is not read only.  Otherwise, we can't move the thing.
             bool readOnlyLocation = true;
 
-            PropertyDescriptor loc = TypeDescriptor.GetProperties(comps[i])["Location"];
+            PropertyDescriptor? loc = TypeDescriptor.GetProperties(comps[i])["Location"];
             if (loc is not null)
             {
                 readOnlyLocation = loc.IsReadOnly;
@@ -443,7 +375,7 @@ internal partial class OleDragDropHandler
                         newRect.Offset(oldOffset.X, oldOffset.Y);
                     }
 
-                    newRect = selectionHandler.GetUpdatedRect(comp.Bounds, newRect, false);
+                    newRect = _selectionHandler.GetUpdatedRect(comp.Bounds, newRect, false);
                     DrawReversibleFrame((HWND)parentControl.Handle, newRect, backColor);
                 }
             }
@@ -464,7 +396,7 @@ internal partial class OleDragDropHandler
                         newRect.Offset(newOffset.X, newOffset.Y);
                     }
 
-                    newRect = selectionHandler.GetUpdatedRect(comp.Bounds, newRect, false);
+                    newRect = _selectionHandler.GetUpdatedRect(comp.Bounds, newRect, false);
                     DrawReversibleFrame((HWND)parentControl.Handle, newRect, backColor);
                 }
             }
@@ -521,14 +453,14 @@ internal partial class OleDragDropHandler
             return true;
         }
 
-        Control c = client.GetDesignerControl();
+        Control c = Destination.GetDesignerControl();
 
-        localDrag = true;
-        localDragInside = false;
+        Dragging = true;
+        _localDragInside = false;
 
-        dragComps = components;
-        dragBase = new Point(initialX, initialY);
-        localDragOffset = Point.Empty;
+        _dragComps = components;
+        _dragBase = new Point(initialX, initialY);
+        _localDragOffset = Point.Empty;
         c.PointToClient(new Point(initialX, initialY));
 
         DragDropEffects allowedEffects = DragDropEffects.Copy | DragDropEffects.None | DragDropEffects.Move;
@@ -540,7 +472,7 @@ internal partial class OleDragDropHandler
         //
         for (int i = 0; i < components.Length; i++)
         {
-            InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(components[i])[typeof(InheritanceAttribute)];
+            InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(components[i])[typeof(InheritanceAttribute)]!;
 
             if (!attr.Equals(InheritanceAttribute.NotInherited) && !attr.Equals(InheritanceAttribute.InheritedReadOnly))
             {
@@ -549,7 +481,7 @@ internal partial class OleDragDropHandler
             }
         }
 
-        DataObject data = new ComponentDataObjectWrapper(new ComponentDataObject(client, serviceProvider, components, initialX, initialY));
+        DataObject data = new ComponentDataObjectWrapper(new ComponentDataObject(_serviceProvider, components));
 
         // We make sure we're painted before we start the drag.  Then, we disable window painting to
         // ensure that the drag can proceed without leaving artifacts lying around.  We should be calling LockWindowUpdate,
@@ -562,33 +494,31 @@ internal partial class OleDragDropHandler
         }
 
         // don't do any new painting...
-        bool oldFreezePainting = freezePainting;
+        bool oldFreezePainting = FreezePainting;
 
         // ASURT 90345 -- this causes some subtle bugs, so i'm turning it off to see if we really need it, and if we do
         // if we can find a better way.
         //
         //freezePainting = true;
 
-        AddCurrentDrag(data, client.Component);
+        AddCurrentDrag(data, Destination.Component);
 
         // Walk through all the children recursively and disable drag-drop
         // for each of them. This way, we will not accidentally try to drop
         // ourselves into our own children.
         //
-        ArrayList allowDropChanged = new ArrayList();
+        List<Control> allowDropChanged = new();
         foreach (object comp in components)
         {
-            Control ctl = comp as Control;
-            if (ctl is not null && ctl.HasChildren)
+            if (comp is Control { HasChildren: true } ctl)
             {
                 DisableDragDropChildren(ctl.Controls, allowDropChanged);
             }
         }
 
         DragDropEffects effect = DragDropEffects.None;
-        IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-        DesignerTransaction trans = null;
-        if (host is not null)
+        DesignerTransaction? trans = null;
+        if (TryGetService(out IDesignerHost? host))
         {
             trans = host.CreateTransaction(string.Format(SR.DragDropDragComponents, components.Length));
         }
@@ -600,7 +530,7 @@ internal partial class OleDragDropHandler
         }
         finally
         {
-            RemoveCurrentDrag(data);
+            s_currentDrags.Remove(data);
 
             // Reset the AllowDrop for the components being dragged.
             //
@@ -609,20 +539,17 @@ internal partial class OleDragDropHandler
                 ctl.AllowDrop = true;
             }
 
-            freezePainting = oldFreezePainting;
+            FreezePainting = oldFreezePainting;
 
-            if (trans is not null)
-            {
-                ((IDisposable)trans).Dispose();
-            }
+            ((IDisposable?)trans)?.Dispose();
         }
 
         bool isMove = (effect & DragDropEffects.Move) != 0 || ((int)effect & AllowLocalMoveOnly) != 0;
 
         // since the EndDrag will clear this
-        bool isLocalMove = isMove && localDragInside;
+        bool isLocalMove = isMove && _localDragInside;
 
-        ISelectionUIService selectionUISvc = (ISelectionUIService)GetService(typeof(ISelectionUIService));
+        ISelectionUIService? selectionUISvc = GetService<ISelectionUIService>();
         Debug.Assert(selectionUISvc is not null, "Unable to get selection ui service when adding child control");
 
         if (selectionUISvc is not null)
@@ -637,16 +564,16 @@ internal partial class OleDragDropHandler
             }
         }
 
-        if (!localDragOffset.IsEmpty && effect != DragDropEffects.None)
+        if (!_localDragOffset.IsEmpty && effect != DragDropEffects.None)
         {
-            DrawDragFrames(dragComps, localDragOffset, localDragEffect,
+            DrawDragFrames(_dragComps, _localDragOffset, _localDragEffect,
                            Point.Empty, DragDropEffects.None, false);
         }
 
-        localDragOffset = Point.Empty;
-        dragComps = null;
-        localDrag = localDragInside = false;
-        dragBase = Point.Empty;
+        _localDragOffset = Point.Empty;
+        _dragComps = null;
+        Dragging = _localDragInside = false;
+        _dragBase = Point.Empty;
 
         /*if (!isLocalMove && isMove){
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -686,9 +613,9 @@ internal partial class OleDragDropHandler
 
     public void DoEndDrag(object[] components, bool cancel)
     {
-        dragComps = null;
-        localDrag = false;
-        localDragInside = false;
+        _dragComps = null;
+        Dragging = false;
+        _localDragInside = false;
     }
 
     public void DoOleDragDrop(DragEventArgs de)
@@ -698,9 +625,9 @@ internal partial class OleDragDropHandler
         // We have to stop freezePainting right here, so that controls can get a chance to validate
         // their new rects.
         //
-        freezePainting = false;
+        FreezePainting = false;
 
-        if (selectionHandler is null)
+        if (_selectionHandler is null)
         {
             Debug.Fail("selectionHandler should not be null");
             de.Effect = DragDropEffects.None;
@@ -708,15 +635,15 @@ internal partial class OleDragDropHandler
         }
 
         // make sure we've actually moved
-        if ((localDrag && de.X == dragBase.X && de.Y == dragBase.Y) ||
+        if ((Dragging && de.X == _dragBase.X && de.Y == _dragBase.Y) ||
             de.AllowedEffect == DragDropEffects.None ||
-            (!localDrag && !dragOk))
+            (!Dragging && !_dragOk))
         {
             de.Effect = DragDropEffects.None;
             return;
         }
 
-        bool localMoveOnly = ((int)de.AllowedEffect & AllowLocalMoveOnly) != 0 && localDragInside;
+        bool localMoveOnly = ((int)de.AllowedEffect & AllowLocalMoveOnly) != 0 && _localDragInside;
 
         // if we are dragging inside the local dropsource/target, and and AllowLocalMoveOnly flag is set,
         // we just consider this a normal move.
@@ -748,46 +675,45 @@ internal partial class OleDragDropHandler
             de.Effect = DragDropEffects.Copy;
         }
 
-        if (forceDrawFrames || localDragInside)
+        if (_forceDrawFrames || _localDragInside)
         {
             // undraw the drag rect
-            localDragOffset = DrawDragFrames(dragComps, localDragOffset, localDragEffect,
-                                             Point.Empty, DragDropEffects.None, forceDrawFrames);
-            forceDrawFrames = false;
+            _localDragOffset = DrawDragFrames(_dragComps, _localDragOffset, _localDragEffect,
+                                             Point.Empty, DragDropEffects.None, _forceDrawFrames);
+            _forceDrawFrames = false;
         }
 
-        Cursor oldCursor = Cursor.Current;
+        Cursor? oldCursor = Cursor.Current;
 
         try
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            if (dragOk || (localDragInside && de.Effect == DragDropEffects.Copy))
+            if (_dragOk || (_localDragInside && de.Effect == DragDropEffects.Copy))
             {
                 // add em to this parent.
-                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-                IContainer container = host.RootComponent.Site.Container;
+                IDesignerHost host = GetService<IDesignerHost>()!;
+                IContainer? container = host.RootComponent.Site!.Container;
 
                 object[] components;
-                IDataObject dataObj = de.Data;
+                IDataObject dataObj = de.Data!;
                 bool updateLocation = false;
 
-                if (dataObj is ComponentDataObjectWrapper)
+                if (dataObj is ComponentDataObjectWrapper wrapper)
                 {
-                    dataObj = ((ComponentDataObjectWrapper)dataObj).InnerData;
-                    ComponentDataObject cdo = (ComponentDataObject)dataObj;
+                    ComponentDataObject cdo = wrapper.InnerData;
 
                     // if we're moving ot a different container, do a full serialization
                     // to make sure we pick up design time props, etc.
                     //
-                    IComponent dragOwner = GetDragOwnerComponent(de.Data);
-                    bool newContainer = dragOwner is null || client.Component is null || dragOwner.Site.Container != client.Component.Site.Container;
+                    IComponent? dragOwner = GetDragOwnerComponent(wrapper);
+                    bool newContainer = dragOwner is null || Destination.Component is null || dragOwner.Site!.Container != Destination.Component.Site!.Container;
                     bool collapseChildren = false;
                     if (de.Effect == DragDropEffects.Copy || newContainer)
                     {
                         // this causes new elements to be created
                         //
-                        cdo.Deserialize(serviceProvider, (de.Effect & DragDropEffects.Copy) == 0);
+                        cdo.Deserialize(_serviceProvider, (de.Effect & DragDropEffects.Copy) == 0);
                     }
                     else
                     {
@@ -804,7 +730,7 @@ internal partial class OleDragDropHandler
                 }
                 else
                 {
-                    object serializationData = dataObj.GetData(DataFormat, true);
+                    object? serializationData = dataObj.GetData(DataFormat, true);
 
                     if (serializationData is null)
                     {
@@ -813,7 +739,7 @@ internal partial class OleDragDropHandler
                     }
                     else
                     {
-                        dataObj = new ComponentDataObject(client, serviceProvider, serializationData);
+                        dataObj = new ComponentDataObject(_serviceProvider, serializationData);
                         components = ((ComponentDataObject)dataObj).Components;
                         updateLocation = true;
                     }
@@ -825,28 +751,24 @@ internal partial class OleDragDropHandler
                 if (components is not null && components.Length > 0)
                 {
                     Debug.Assert(container is not null, "Didn't get a container from the site!");
-                    string name;
-                    IComponent comp = null;
+                    string? name;
 
-                    DesignerTransaction trans = null;
+                    DesignerTransaction? trans = null;
 
                     try
                     {
                         trans = host.CreateTransaction(SR.DragDropDropComponents);
-                        if (!localDrag)
+                        if (!Dragging)
                         {
                             host.Activate();
                         }
 
-                        ArrayList selectComps = new ArrayList();
+                        List<IComponent> selectComps = new();
 
                         for (int i = 0; i < components.Length; i++)
                         {
-                            comp = components[i] as IComponent;
-
-                            if (comp is null)
+                            if (components[i] is not IComponent comp)
                             {
-                                comp = null;
                                 continue;
                             }
 
@@ -854,30 +776,30 @@ internal partial class OleDragDropHandler
                             {
                                 name = comp.Site?.Name;
 
-                                Control oldDesignerControl = null;
+                                Control? oldDesignerControl = null;
                                 if (updateLocation)
                                 {
-                                    oldDesignerControl = client.GetDesignerControl();
+                                    oldDesignerControl = Destination.GetDesignerControl();
                                     PInvoke.SendMessage(oldDesignerControl, PInvoke.WM_SETREDRAW, (WPARAM)(BOOL)false);
                                 }
 
-                                Point dropPt = client.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
+                                Point dropPt = Destination.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
 
                                 // First check if the component we are dropping have a TrayLocation, and if so, use it
-                                PropertyDescriptor loc = TypeDescriptor.GetProperties(comp)["TrayLocation"];
+                                PropertyDescriptor? loc = TypeDescriptor.GetProperties(comp)["TrayLocation"];
                                 // it didn't, so let's check for the regular Location
                                 loc ??= TypeDescriptor.GetProperties(comp)["Location"];
 
                                 if (loc is not null && !loc.IsReadOnly)
                                 {
                                     Rectangle bounds = default;
-                                    Point pt = (Point)loc.GetValue(comp);
+                                    Point pt = (Point)loc.GetValue(comp)!;
                                     bounds.X = dropPt.X + pt.X;
                                     bounds.Y = dropPt.Y + pt.Y;
-                                    bounds = selectionHandler.GetUpdatedRect(Rectangle.Empty, bounds, false);
+                                    bounds = _selectionHandler.GetUpdatedRect(Rectangle.Empty, bounds, false);
                                 }
 
-                                if (!client.AddComponent(comp, name, false))
+                                if (!Destination.AddComponent(comp, name!, false))
                                 {
                                     // this means that we just moved the control
                                     // around in the same designer.
@@ -887,7 +809,7 @@ internal partial class OleDragDropHandler
                                 else
                                 {
                                     // make sure the component was added to this client
-                                    if (client.GetControlForComponent(comp) is null)
+                                    if (Destination.GetControlForComponent(comp) is null)
                                     {
                                         updateLocation = false;
                                     }
@@ -895,10 +817,9 @@ internal partial class OleDragDropHandler
 
                                 if (updateLocation)
                                 {
-                                    ParentControlDesigner parentDesigner = client as ParentControlDesigner;
-                                    if (parentDesigner is not null)
+                                    if (Destination is ParentControlDesigner parentDesigner)
                                     {
-                                        Control c = client.GetControlForComponent(comp);
+                                        Control c = Destination.GetControlForComponent(comp)!;
                                         dropPt = parentDesigner.GetSnappedPoint(c.Location);
                                         c.Location = dropPt;
                                     }
@@ -916,24 +837,19 @@ internal partial class OleDragDropHandler
                                     selectComps.Add(comp);
                                 }
                             }
-                            catch (CheckoutException ceex)
+                            catch (CheckoutException checkoutException) when (checkoutException == CheckoutException.Canceled)
                             {
-                                if (ceex == CheckoutException.Canceled)
-                                {
-                                    break;
-                                }
-
-                                throw;
+                                break;
                             }
                         }
 
-                        host?.Activate();
+                        host.Activate();
 
                         // select the newly added components
-                        ISelectionService selService = (ISelectionService)GetService(typeof(ISelectionService));
+                        ISelectionService selService = GetService<ISelectionService>()!;
 
-                        selService.SetSelectedComponents((object[])selectComps.ToArray(typeof(IComponent)), SelectionTypes.Replace);
-                        localDragInside = false;
+                        selService.SetSelectedComponents(selectComps.ToArray(), SelectionTypes.Replace);
+                        _localDragInside = false;
                     }
                     finally
                     {
@@ -942,9 +858,9 @@ internal partial class OleDragDropHandler
                 }
             }
 
-            if (localDragInside)
+            if (_localDragInside)
             {
-                ISelectionUIService selectionUISvc = (ISelectionUIService)GetService(typeof(ISelectionUIService));
+                ISelectionUIService? selectionUISvc = GetService<ISelectionUIService>();
                 Debug.Assert(selectionUISvc is not null, "Unable to get selection ui service when adding child control");
 
                 if (selectionUISvc is not null)
@@ -954,13 +870,13 @@ internal partial class OleDragDropHandler
                     //
                     if (selectionUISvc.Dragging && moveAllowed)
                     {
-                        Rectangle offset = new Rectangle(de.X - dragBase.X, de.Y - dragBase.Y, 0, 0);
+                        Rectangle offset = new Rectangle(de.X - _dragBase.X, de.Y - _dragBase.Y, 0, 0);
                         selectionUISvc.DragMoved(offset);
                     }
                 }
             }
 
-            dragOk = false;
+            _dragOk = false;
         }
         finally
         {
@@ -979,14 +895,14 @@ internal partial class OleDragDropHandler
             dragHost.Focus();
         }*/
 
-        if (!localDrag && CanDropDataObject(de.Data) && de.AllowedEffect != DragDropEffects.None)
+        if (!Dragging && CanDropDataObject(de.Data) && de.AllowedEffect != DragDropEffects.None)
         {
-            if (!client.CanModifyComponents)
+            if (!Destination.CanModifyComponents)
             {
                 return;
             }
 
-            dragOk = true;
+            _dragOk = true;
 
             // this means it's not us doing the drag
             if ((de.KeyState & (int)MODIFIERKEYS_FLAGS.MK_CONTROL) != 0 && (de.AllowedEffect & DragDropEffects.Copy) != 0)
@@ -1003,17 +919,17 @@ internal partial class OleDragDropHandler
                 return;
             }
         }
-        else if (localDrag && de.AllowedEffect != DragDropEffects.None)
+        else if (Dragging && de.AllowedEffect != DragDropEffects.None)
         {
-            localDragInside = true;
+            _localDragInside = true;
             if ((de.KeyState & (int)MODIFIERKEYS_FLAGS.MK_CONTROL) != 0
                 && (de.AllowedEffect & DragDropEffects.Copy) != 0
-                && client.CanModifyComponents)
+                && Destination.CanModifyComponents)
             {
                 de.Effect = DragDropEffects.Copy;
             }
 
-            bool localMoveOnly = ((int)de.AllowedEffect & AllowLocalMoveOnly) != 0 && localDragInside;
+            bool localMoveOnly = ((int)de.AllowedEffect & AllowLocalMoveOnly) != 0 && _localDragInside;
 
             if (localMoveOnly)
             {
@@ -1033,28 +949,28 @@ internal partial class OleDragDropHandler
 
     public void DoOleDragLeave()
     {
-        if (localDrag || forceDrawFrames)
+        if (Dragging || _forceDrawFrames)
         {
-            localDragInside = false;
-            localDragOffset = DrawDragFrames(dragComps, localDragOffset, localDragEffect,
-                                             Point.Empty, DragDropEffects.None, forceDrawFrames);
+            _localDragInside = false;
+            _localDragOffset = DrawDragFrames(_dragComps, _localDragOffset, _localDragEffect,
+                                             Point.Empty, DragDropEffects.None, _forceDrawFrames);
 
-            if (forceDrawFrames && dragOk)
+            if (_forceDrawFrames && _dragOk)
             {
-                dragBase = Point.Empty;
-                dragComps = null;
+                _dragBase = Point.Empty;
+                _dragComps = null;
             }
 
-            forceDrawFrames = false;
+            _forceDrawFrames = false;
         }
 
-        dragOk = false;
+        _dragOk = false;
     }
 
     public void DoOleDragOver(DragEventArgs de)
     {
         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tOleDragDropHandler.OnDragOver: {de}");
-        if (!localDrag && !dragOk)
+        if (!Dragging && !_dragOk)
         {
             de.Effect = DragDropEffects.None;
             return;
@@ -1062,44 +978,44 @@ internal partial class OleDragDropHandler
 
         bool copy = (de.KeyState & (int)MODIFIERKEYS_FLAGS.MK_CONTROL) != 0
             && (de.AllowedEffect & DragDropEffects.Copy) != 0
-            && client.CanModifyComponents;
+            && Destination.CanModifyComponents;
 
         // we pretend AllowLocalMoveOnly is a normal move when we are over the originating container.
         //
-        bool localMoveOnly = ((int)de.AllowedEffect & AllowLocalMoveOnly) != 0 && localDragInside;
+        bool localMoveOnly = ((int)de.AllowedEffect & AllowLocalMoveOnly) != 0 && _localDragInside;
         bool move = (de.AllowedEffect & DragDropEffects.Move) != 0 || localMoveOnly;
 
-        if ((copy || move) && (localDrag || forceDrawFrames))
+        if ((copy || move) && (Dragging || _forceDrawFrames))
         {
-            Point convertedPoint = client.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
+            Point convertedPoint = Destination.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
 
             // draw the shadow rects.
             Point newOffset;
-            if (forceDrawFrames)
+            if (_forceDrawFrames)
             {
                 newOffset = convertedPoint;
             }
             else
             {
-                newOffset = new Point(de.X - dragBase.X, de.Y - dragBase.Y);
+                newOffset = new Point(de.X - _dragBase.X, de.Y - _dragBase.Y);
             }
 
             // 96845 -- only allow drops on the client area
             //
-            if (!client.GetDesignerControl().ClientRectangle.Contains(convertedPoint))
+            if (!Destination.GetDesignerControl().ClientRectangle.Contains(convertedPoint))
             {
                 copy = false;
                 move = false;
-                newOffset = localDragOffset;
+                newOffset = _localDragOffset;
             }
 
-            if (newOffset != localDragOffset)
+            if (newOffset != _localDragOffset)
             {
                 Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, $"\tParentControlDesigner.OnDragOver: {de}");
-                DrawDragFrames(dragComps, localDragOffset, localDragEffect,
-                               newOffset, de.Effect, forceDrawFrames);
-                localDragOffset = newOffset;
-                localDragEffect = de.Effect;
+                DrawDragFrames(_dragComps, _localDragOffset, _localDragEffect,
+                               newOffset, de.Effect, _forceDrawFrames);
+                _localDragOffset = newOffset;
+                _localDragEffect = de.Effect;
             }
         }
 
@@ -1124,26 +1040,25 @@ internal partial class OleDragDropHandler
 
     public void DoOleGiveFeedback(GiveFeedbackEventArgs e)
     {
-        if (selectionHandler is null)
+        if (_selectionHandler is null)
         {
             Debug.Fail("selectionHandler should not be null");
         }
 
-        e.UseDefaultCursors = ((!localDragInside && !forceDrawFrames) || ((e.Effect & (DragDropEffects.Copy)) != 0)) || e.Effect == DragDropEffects.None;
-        if (!e.UseDefaultCursors && selectionHandler is not null)
+        e.UseDefaultCursors = ((!_localDragInside && !_forceDrawFrames) || ((e.Effect & (DragDropEffects.Copy)) != 0)) || e.Effect == DragDropEffects.None;
+        if (!e.UseDefaultCursors && _selectionHandler is not null)
         {
-            selectionHandler.SetCursor();
+            _selectionHandler.SetCursor();
         }
     }
 
-    private static object[] GetDraggingObjects(IDataObject dataObj, bool topLevelOnly)
+    private static object[]? GetDraggingObjects(IDataObject? dataObj, bool topLevelOnly)
     {
-        object[] components = null;
+        object[]? components = null;
 
-        if (dataObj is ComponentDataObjectWrapper)
+        if (dataObj is ComponentDataObjectWrapper wrapper)
         {
-            dataObj = ((ComponentDataObjectWrapper)dataObj).InnerData;
-            ComponentDataObject cdo = (ComponentDataObject)dataObj;
+            ComponentDataObject cdo = wrapper.InnerData;
 
             components = cdo.Components;
         }
@@ -1156,12 +1071,12 @@ internal partial class OleDragDropHandler
         return GetTopLevelComponents(components);
     }
 
-    public static object[] GetDraggingObjects(IDataObject dataObj)
+    public static object[]? GetDraggingObjects(IDataObject? dataObj)
     {
         return GetDraggingObjects(dataObj, false);
     }
 
-    public static object[] GetDraggingObjects(DragEventArgs de)
+    public static object[]? GetDraggingObjects(DragEventArgs de)
     {
         return GetDraggingObjects(de.Data);
     }
@@ -1170,16 +1085,16 @@ internal partial class OleDragDropHandler
     {
         // Filter the top-level components.
         //
-        if (!(comps is IList))
+        if (comps is not IList)
         {
             comps = new ArrayList(comps);
         }
 
         IList compList = (IList)comps;
-        ArrayList topLevel = new ArrayList();
+        List<object> topLevel = new();
         foreach (object comp in compList)
         {
-            Control c = comp as Control;
+            Control? c = comp as Control;
             if (c is null && comp is not null)
             {
                 topLevel.Add(comp);
@@ -1188,7 +1103,7 @@ internal partial class OleDragDropHandler
             {
                 if (c.Parent is null || !compList.Contains(c.Parent))
                 {
-                    topLevel.Add(comp);
+                    topLevel.Add(c);
                 }
             }
         }
@@ -1196,9 +1111,20 @@ internal partial class OleDragDropHandler
         return topLevel.ToArray();
     }
 
-    protected object GetService(Type t)
+    protected object? GetService(Type t)
     {
-        return serviceProvider.GetService(t);
+        return _serviceProvider.GetService(t);
+    }
+
+    protected T? GetService<T>() where T : class
+    {
+        return _serviceProvider.GetService(typeof(T)) as T;
+    }
+
+    protected bool TryGetService<T>([NotNullWhen(true)] out T? service) where T : class
+    {
+        service = _serviceProvider.GetService(typeof(T)) as T;
+        return service is not null;
     }
 
     protected virtual void OnInitializeComponent(IComponent comp, int x, int y, int width, int height, bool hasLocation, bool hasSize)

@@ -417,7 +417,7 @@ public partial class DataGridViewRow
                     }
                     else
                     {
-                        int firstVisibleCell = dataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible).Index;
+                        int firstVisibleCell = dataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible)!.Index;
                         if (firstVisibleCell > -1)
                         {
                             dataGridView.CurrentCell = _owningDataGridViewRow.Cells[firstVisibleCell]; // Do not change old selection

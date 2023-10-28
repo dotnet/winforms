@@ -330,7 +330,7 @@ System.Windows.Forms.ControlBindingsCollection.Control.get -> System.Windows.For
 System.Windows.Forms.ControlBindingsCollection.ControlBindingsCollection(System.Windows.Forms.IBindableComponent! control) -> void
 System.Windows.Forms.ControlBindingsCollection.Remove(System.Windows.Forms.Binding! binding) -> void
 System.Windows.Forms.ControlBindingsCollection.this[string! propertyName].get -> System.Windows.Forms.Binding?
-System.Windows.Forms.CurrencyManager.List.get -> System.Collections.IList?
+System.Windows.Forms.CurrencyManager.List.get -> System.Collections.IList!
 System.Windows.Forms.DataGridView.AdvancedCellBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
 System.Windows.Forms.DataGridView.AdvancedColumnHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
 System.Windows.Forms.DataGridView.AdvancedRowHeadersBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
@@ -445,12 +445,12 @@ System.Windows.Forms.DataGridViewColumn.ValueType.set -> void
 System.Windows.Forms.DataGridViewColumnCollection.CopyTo(System.Windows.Forms.DataGridViewColumn![]! array, int index) -> void
 System.Windows.Forms.DataGridViewColumnCollection.DataGridView.get -> System.Windows.Forms.DataGridView!
 System.Windows.Forms.DataGridViewColumnCollection.DataGridViewColumnCollection(System.Windows.Forms.DataGridView! dataGridView) -> void
-~System.Windows.Forms.DataGridViewColumnCollection.GetFirstColumn(System.Windows.Forms.DataGridViewElementStates includeFilter) -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewColumnCollection.GetFirstColumn(System.Windows.Forms.DataGridViewElementStates includeFilter, System.Windows.Forms.DataGridViewElementStates excludeFilter) -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewColumnCollection.GetLastColumn(System.Windows.Forms.DataGridViewElementStates includeFilter, System.Windows.Forms.DataGridViewElementStates excludeFilter) -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewColumnCollection.GetNextColumn(System.Windows.Forms.DataGridViewColumn dataGridViewColumnStart, System.Windows.Forms.DataGridViewElementStates includeFilter, System.Windows.Forms.DataGridViewElementStates excludeFilter) -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewColumnCollection.GetPreviousColumn(System.Windows.Forms.DataGridViewColumn dataGridViewColumnStart, System.Windows.Forms.DataGridViewElementStates includeFilter, System.Windows.Forms.DataGridViewElementStates excludeFilter) -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewColumnCollection.IndexOf(System.Windows.Forms.DataGridViewColumn dataGridViewColumn) -> int
+System.Windows.Forms.DataGridViewColumnCollection.GetFirstColumn(System.Windows.Forms.DataGridViewElementStates includeFilter) -> System.Windows.Forms.DataGridViewColumn?
+System.Windows.Forms.DataGridViewColumnCollection.GetFirstColumn(System.Windows.Forms.DataGridViewElementStates includeFilter, System.Windows.Forms.DataGridViewElementStates excludeFilter) -> System.Windows.Forms.DataGridViewColumn?
+System.Windows.Forms.DataGridViewColumnCollection.GetLastColumn(System.Windows.Forms.DataGridViewElementStates includeFilter, System.Windows.Forms.DataGridViewElementStates excludeFilter) -> System.Windows.Forms.DataGridViewColumn?
+System.Windows.Forms.DataGridViewColumnCollection.GetNextColumn(System.Windows.Forms.DataGridViewColumn! dataGridViewColumnStart, System.Windows.Forms.DataGridViewElementStates includeFilter, System.Windows.Forms.DataGridViewElementStates excludeFilter) -> System.Windows.Forms.DataGridViewColumn?
+System.Windows.Forms.DataGridViewColumnCollection.GetPreviousColumn(System.Windows.Forms.DataGridViewColumn! dataGridViewColumnStart, System.Windows.Forms.DataGridViewElementStates includeFilter, System.Windows.Forms.DataGridViewElementStates excludeFilter) -> System.Windows.Forms.DataGridViewColumn?
+System.Windows.Forms.DataGridViewColumnCollection.IndexOf(System.Windows.Forms.DataGridViewColumn! dataGridViewColumn) -> int
 System.Windows.Forms.DataGridViewColumnCollection.this[int index].get -> System.Windows.Forms.DataGridViewColumn!
 System.Windows.Forms.DataGridViewColumnCollection.this[string! columnName].get -> System.Windows.Forms.DataGridViewColumn?
 System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Add(object! item) -> int
@@ -864,10 +864,10 @@ virtual System.Windows.Forms.DataGridViewColumnCollection.Add(System.Windows.For
 virtual System.Windows.Forms.DataGridViewColumnCollection.AddRange(params System.Windows.Forms.DataGridViewColumn![]! dataGridViewColumns) -> void
 virtual System.Windows.Forms.DataGridViewColumnCollection.Contains(string! columnName) -> bool
 virtual System.Windows.Forms.DataGridViewColumnCollection.Contains(System.Windows.Forms.DataGridViewColumn! dataGridViewColumn) -> bool
-~virtual System.Windows.Forms.DataGridViewColumnCollection.Insert(int columnIndex, System.Windows.Forms.DataGridViewColumn dataGridViewColumn) -> void
-~virtual System.Windows.Forms.DataGridViewColumnCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridViewColumnCollection.Remove(string columnName) -> void
-~virtual System.Windows.Forms.DataGridViewColumnCollection.Remove(System.Windows.Forms.DataGridViewColumn dataGridViewColumn) -> void
+virtual System.Windows.Forms.DataGridViewColumnCollection.Insert(int columnIndex, System.Windows.Forms.DataGridViewColumn! dataGridViewColumn) -> void
+virtual System.Windows.Forms.DataGridViewColumnCollection.OnCollectionChanged(System.ComponentModel.CollectionChangeEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridViewColumnCollection.Remove(string! columnName) -> void
+virtual System.Windows.Forms.DataGridViewColumnCollection.Remove(System.Windows.Forms.DataGridViewColumn! dataGridViewColumn) -> void
 virtual System.Windows.Forms.DataGridViewComboBoxCell.DataSource.get -> object?
 virtual System.Windows.Forms.DataGridViewComboBoxCell.DataSource.set -> void
 virtual System.Windows.Forms.DataGridViewComboBoxCell.DisplayMember.get -> string!
@@ -5280,7 +5280,7 @@ System.Windows.Forms.CreateParams.Y.set -> void
 System.Windows.Forms.CurrencyManager
 System.Windows.Forms.CurrencyManager.ItemChanged -> System.Windows.Forms.ItemChangedEventHandler?
 System.Windows.Forms.CurrencyManager.ListChanged -> System.ComponentModel.ListChangedEventHandler?
-System.Windows.Forms.CurrencyManager.MetaDataChanged -> System.EventHandler
+System.Windows.Forms.CurrencyManager.MetaDataChanged -> System.EventHandler?
 System.Windows.Forms.CurrencyManager.Refresh() -> void
 System.Windows.Forms.Cursor
 System.Windows.Forms.Cursor.CopyHandle() -> nint
