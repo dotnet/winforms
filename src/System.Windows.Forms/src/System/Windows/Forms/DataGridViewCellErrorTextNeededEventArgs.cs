@@ -5,11 +5,11 @@ namespace System.Windows.Forms;
 
 public class DataGridViewCellErrorTextNeededEventArgs : DataGridViewCellEventArgs
 {
-    internal DataGridViewCellErrorTextNeededEventArgs(int columnIndex, int rowIndex, string? errorText)
+    internal DataGridViewCellErrorTextNeededEventArgs(int columnIndex, int rowIndex, string errorText)
         : base(columnIndex, rowIndex)
     {
         ErrorText = errorText;
     }
 
-    public string? ErrorText { get; set; }
+    public string ErrorText { get; set; }
 }
