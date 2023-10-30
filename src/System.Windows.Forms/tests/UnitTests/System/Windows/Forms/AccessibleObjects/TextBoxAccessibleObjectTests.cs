@@ -139,7 +139,7 @@ public class TextBoxAccessibleObjectTests
         using TextBox textBox = new TextBox();
         textBox.PasswordChar = passwordChar;
 
-        var actual = (bool)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
+        bool actual = (bool)textBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId);
         bool expected = passwordChar != '\0';
 
         Assert.Equal(expected, actual);

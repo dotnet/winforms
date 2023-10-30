@@ -94,14 +94,14 @@ public class ToolStripItemAccessibleObjectTests
 
         // By default Name has string.Empty value, because if AccessibleName is not defined
         // then control uses the value of "Text" property from owner Item (by default an empty string)
-        VARIANT result = toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        using VARIANT result = toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
         Assert.Equal(VARENUM.VT_BSTR, result.vt);
-        Assert.Equal(string.Empty, ((BSTR)result).ToStringAndFree());
+        Assert.Equal(string.Empty, ((BSTR)result).ToString());
 
         item.Name = "Name1";
         item.AccessibleName = "Test Name";
 
-        var accessibleName = toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        using VARIANT accessibleName = toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
         Assert.Equal(VARENUM.VT_BSTR, accessibleName.vt);
         Assert.Equal("Test Name", ((BSTR)accessibleName).ToString());

@@ -1067,7 +1067,8 @@ public class Control_ControlAccessibleObjectTests
             Assert.NotEqual(IntPtr.Zero, ownerControl.Handle);
         }
 
-        Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, (VARIANT)ownerControl.Name, (VARIANT)ownerControl.Name));
+        using var ownerControlName = (VARIANT)ownerControl.Name;
+        Assert.Equal(isHandleCreated, accessibleObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, ownerControlName, ownerControlName));
         Assert.Equal(isHandleCreated, ownerControl.IsHandleCreated);
     }
 

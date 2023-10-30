@@ -112,6 +112,10 @@ internal abstract unsafe class UiaTextProvider : ITextProvider.Interface, ITextP
         return result;
     }
 
+    /// <inheritdoc cref="BoundingRectangleAsArray(Rectangle)"/>
+    internal static VARIANT BoundingRectangleAsVariant(Rectangle bounds)
+        => (VARIANT)BoundingRectangleAsArray(bounds);
+
     public int SendInput(int inputs, ref INPUT input, int size)
     {
         Span<INPUT> currentInput = stackalloc INPUT[1];

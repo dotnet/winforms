@@ -426,7 +426,7 @@ public unsafe partial class AccessibleObject :
 
     /// <summary>
     ///  Returns the value of the specified <paramref name="propertyID"/> from the element in the form of a <see cref="VARIANT"/>.
-    ///  See <see href="https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-automation-element-propids"/> which outlines how the <see cref="VARIANT"/> should be defined for
+    ///  See <see href="https://learn.microsoft.com/windows/win32/winauto/uiauto-automation-element-propids"/> which outlines how the <see cref="VARIANT"/> should be defined for
     ///  each <see cref="UIA_PROPERTY_ID"/>
     /// </summary>
     /// <param name="propertyID">Identifier indicating the property to return.</param>
@@ -436,7 +436,7 @@ public unsafe partial class AccessibleObject :
         {
             UIA_PROPERTY_ID.UIA_AccessKeyPropertyId => (VARIANT)(KeyboardShortcut ?? string.Empty),
             UIA_PROPERTY_ID.UIA_AutomationIdPropertyId => AutomationId is null ? VARIANT.Empty : (VARIANT)AutomationId,
-            UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId => (VARIANT)UiaTextProvider.BoundingRectangleAsArray(Bounds),
+            UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId => UiaTextProvider.BoundingRectangleAsVariant(Bounds),
             UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId => (VARIANT)"WinForm",
             UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId => (VARIANT)IsPatternSupported(UIA_PATTERN_ID.UIA_ExpandCollapsePatternId),
             UIA_PROPERTY_ID.UIA_IsGridItemPatternAvailablePropertyId => (VARIANT)IsPatternSupported(UIA_PATTERN_ID.UIA_GridItemPatternId),
@@ -2205,7 +2205,7 @@ public unsafe partial class AccessibleObject :
                 this,
                 notificationKind,
                 notificationProcessing,
-                notificationText) == HRESULT.S_OK;
+                notificationText).Succeeded;
 
     /// <summary>
     ///  Raises the LiveRegionChanged UIA event.
@@ -2247,7 +2247,7 @@ public unsafe partial class AccessibleObject :
         string notificationText)
         => PInvoke.UiaClientsAreListening()
             ? RaiseAutomationNotification(notificationKind, notificationProcessing, notificationText)
-            : OsVersion.IsWindows10_1709OrGreater();
+            : false;
 
     internal bool RaiseStructureChangedEvent(StructureChangeType structureChangeType, int[] runtimeId)
     {

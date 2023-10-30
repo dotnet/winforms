@@ -443,7 +443,7 @@ public class TrackBarAccessibleObjectTests
     {
         using TrackBar trackBar = new();
         trackBar.CreateControl(false);
-        var actual = trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId).ToObject();
+        int actual = (int)trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId);
 
         Assert.Equal((int)(nint)trackBar.InternalHandle, actual);
     }

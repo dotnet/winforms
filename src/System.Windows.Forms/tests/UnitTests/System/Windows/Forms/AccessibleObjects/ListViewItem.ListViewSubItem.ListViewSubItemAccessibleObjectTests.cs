@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.Automation;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem.ListViewSubItem;
@@ -927,8 +925,9 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
         ListViewSubItemAccessibleObject listViewSubItemAccessibleObject = new(listViewSubItem, listViewItem);
         using VARIANT actual = listViewSubItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
-        using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray(listViewSubItem.AccessibilityObject.BoundingRectangle);
-        Assert.Equal(((VARIANT)rectArray).ToObject(), actual.ToObject());
+        double[] actualArray = (double[])actual.ToObject();
+        Rectangle actualRectangle = new((int)actualArray[0], (int)actualArray[1], (int)actualArray[2], (int)actualArray[3]);
+        Assert.Equal(listViewSubItem.AccessibilityObject.BoundingRectangle, actualRectangle);
         Assert.False(listView.IsHandleCreated);
     }
 

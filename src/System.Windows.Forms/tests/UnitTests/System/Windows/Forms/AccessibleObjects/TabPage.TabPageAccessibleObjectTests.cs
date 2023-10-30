@@ -433,7 +433,7 @@ public class TabPage_TabPageAccessibilityObjectTests
 
         TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(tabPage.AccessibilityObject);
 
-        Assert.Equal((int)tabPage.InternalHandle, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId).ToObject());
+        Assert.Equal((int)tabPage.InternalHandle, (int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId));
         Assert.Equal(createControl, tabPage.IsHandleCreated);
     }
 

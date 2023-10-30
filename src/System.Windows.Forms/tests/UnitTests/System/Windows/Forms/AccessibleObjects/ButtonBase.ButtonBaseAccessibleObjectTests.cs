@@ -238,9 +238,9 @@ public class ButtonBase_ButtonBaseAccessibleObjectTests
     {
         using SubButtonBase ownerControl = new() { Name = "test name" };
         string expected = ownerControl.Name;
-        VARIANT actual = ownerControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId);
+        using VARIANT actual = ownerControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId);
 
-        Assert.Equal(expected, ((BSTR)actual).ToStringAndFree());
+        Assert.Equal(expected, ((BSTR)actual).ToString());
         Assert.False(ownerControl.IsHandleCreated);
     }
 

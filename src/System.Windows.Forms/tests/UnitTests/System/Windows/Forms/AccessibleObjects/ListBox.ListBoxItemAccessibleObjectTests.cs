@@ -1,9 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Drawing;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.IntegrationTests.Common;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -96,8 +96,10 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
         using VARIANT actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
-        using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray(itemAccessibleObject.BoundingRectangle);
-        Assert.Equal(((VARIANT)rectArray).ToObject(), actual.ToObject());
+        using VARIANT rectArray = UiaTextProvider.BoundingRectangleAsVariant(itemAccessibleObject.BoundingRectangle);
+        double[] actualArray = (double[])actual.ToObject();
+        Rectangle actualRectangle = new((int)actualArray[0], (int)actualArray[1], (int)actualArray[2], (int)actualArray[3]);
+        Assert.Equal(itemAccessibleObject.BoundingRectangle, actualRectangle);
         Assert.False(listBox.IsHandleCreated);
     }
 
