@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.Automation;
 using System.Windows.Forms.IntegrationTests.Common;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
