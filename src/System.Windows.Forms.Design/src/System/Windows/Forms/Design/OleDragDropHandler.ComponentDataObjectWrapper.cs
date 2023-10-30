@@ -8,19 +8,11 @@ internal partial class OleDragDropHandler
     // just so we can recognize the ones we create
     protected class ComponentDataObjectWrapper : DataObject
     {
-        private readonly ComponentDataObject innerData;
-
         public ComponentDataObjectWrapper(ComponentDataObject dataObject) : base(dataObject)
         {
-            innerData = dataObject;
+            InnerData = dataObject;
         }
 
-        public ComponentDataObject InnerData
-        {
-            get
-            {
-                return innerData;
-            }
-        }
+        public ComponentDataObject InnerData { get; }
     }
 }

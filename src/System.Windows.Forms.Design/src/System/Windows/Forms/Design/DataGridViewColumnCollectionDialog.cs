@@ -96,7 +96,7 @@ internal class DataGridViewColumnCollectionDialog : Form
 
         if (e.Action == CollectionChangeAction.Add)
         {
-            _selectedColumns.SelectedIndex = _columnsPrivateCopy.IndexOf(e.Element as DataGridViewColumn);
+            _selectedColumns.SelectedIndex = _columnsPrivateCopy.IndexOf((DataGridViewColumn)e.Element!);
             ListBoxItem lbi = (ListBoxItem)_selectedColumns.SelectedItem!;
             _userAddedColumns.Add(lbi.DataGridViewColumn);
             _columnsNames[lbi.DataGridViewColumn] = lbi.DataGridViewColumn.Name;

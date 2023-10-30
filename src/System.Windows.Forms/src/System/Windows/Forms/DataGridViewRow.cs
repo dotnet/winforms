@@ -1523,7 +1523,7 @@ public partial class DataGridViewRow : DataGridViewBand
         DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder = new(), dgvabsEffective;
 
         // first paint the potential visible frozen cells
-        DataGridViewColumn dataGridViewColumn = dataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
+        DataGridViewColumn? dataGridViewColumn = dataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
         while (dataGridViewColumn is not null)
         {
             cell = Cells[dataGridViewColumn.Index];
