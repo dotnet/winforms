@@ -58,7 +58,7 @@ public partial class CheckBox
                     =>
                     // This is necessary for compatibility with MSAA proxy:
                     // IsKeyboardFocusable = true regardless the control is enabled/disabled.
-                    (VARIANT)true,
+                    VARIANT.True,
                 _ => base.GetPropertyValue(propertyID)
             };
 

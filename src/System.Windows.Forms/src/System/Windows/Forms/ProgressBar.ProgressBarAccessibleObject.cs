@@ -33,10 +33,10 @@ public partial class ProgressBar
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId =>
                     // This is necessary for compatibility with MSAA proxy:
                     // IsKeyboardFocusable = true regardless the control is enabled/disabled.
-                    (VARIANT)true,
-                UIA_PROPERTY_ID.UIA_IsRangeValuePatternAvailablePropertyId => (VARIANT)true,
-                UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId => (VARIANT)true,
-                UIA_PROPERTY_ID.UIA_RangeValueIsReadOnlyPropertyId => (VARIANT)true,
+                    VARIANT.True,
+                UIA_PROPERTY_ID.UIA_IsRangeValuePatternAvailablePropertyId => VARIANT.True,
+                UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId => VARIANT.True,
+                UIA_PROPERTY_ID.UIA_RangeValueIsReadOnlyPropertyId => VARIANT.True,
                 UIA_PROPERTY_ID.UIA_RangeValueLargeChangePropertyId => (VARIANT)double.NaN,
                 UIA_PROPERTY_ID.UIA_RangeValueSmallChangePropertyId => (VARIANT)double.NaN,
                 _ => base.GetPropertyValue(propertyID)

@@ -98,11 +98,6 @@ public abstract partial class ToolStripItem
                 _ownerItem.GetHashCode()
             };
 
-        /// <summary>
-        ///  Gets the accessible property value.
-        /// </summary>
-        /// <param name="propertyID">The accessible property ID.</param>
-        /// <returns>The accessible property value.</returns>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
@@ -113,8 +108,8 @@ public abstract partial class ToolStripItem
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_ownerItem.Enabled,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)_ownerItem.CanSelect,
                 UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (VARIANT)GetIsOffscreenPropertyValue(_ownerItem.Placement, Bounds),
-                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => (VARIANT)true,
-                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => VARIANT.True,
+                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => VARIANT.True,
                 _ => base.GetPropertyValue(propertyID)
             };
 

@@ -181,7 +181,6 @@ public partial class ListViewGroup
             return _owningGroup.ID;
         }
 
-        /// <inheritdoc/>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {

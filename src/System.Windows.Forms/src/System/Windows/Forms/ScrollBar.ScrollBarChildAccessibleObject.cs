@@ -75,9 +75,9 @@ public partial class ScrollBar
             => propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => VARIANT.False,
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)OwningScrollBar.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => VARIANT.False,
                 _ => base.GetPropertyValue(propertyID)
             };
 

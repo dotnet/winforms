@@ -62,8 +62,8 @@ public partial class ListViewItem
             => propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)false,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => VARIANT.False,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => VARIANT.False,
                 _ => base.GetPropertyValue(propertyID)
             };
 

@@ -70,7 +70,6 @@ public partial class ErrorProvider
 
             public override int GetChildCount() => _owner.ControlItems.Count;
 
-            /// <inheritdoc/>
             internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
                 propertyID switch
                 {

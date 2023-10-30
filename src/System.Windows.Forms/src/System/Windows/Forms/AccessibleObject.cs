@@ -445,7 +445,7 @@ public unsafe partial class AccessibleObject :
             UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId => (VARIANT)IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId),
             UIA_PROPERTY_ID.UIA_IsMultipleViewPatternAvailablePropertyId => (VARIANT)IsPatternSupported(UIA_PATTERN_ID.UIA_MultipleViewPatternId),
             UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (VARIANT)((State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen),
-            UIA_PROPERTY_ID.UIA_IsPasswordPropertyId => (VARIANT)false,
+            UIA_PROPERTY_ID.UIA_IsPasswordPropertyId => VARIANT.False,
             UIA_PROPERTY_ID.UIA_IsScrollItemPatternAvailablePropertyId => (VARIANT)IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollItemPatternId),
             UIA_PROPERTY_ID.UIA_IsScrollPatternAvailablePropertyId => (VARIANT)IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollPatternId),
             UIA_PROPERTY_ID.UIA_IsSelectionItemPatternAvailablePropertyId => (VARIANT)IsPatternSupported(UIA_PATTERN_ID.UIA_SelectionItemPatternId),

@@ -104,11 +104,6 @@ public partial class ComboBox
             }
         }
 
-        /// <summary>
-        ///  Gets the accessible property value.
-        /// </summary>
-        /// <param name="propertyID">The accessible property ID.</param>
-        /// <returns>The accessible property value.</returns>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
@@ -116,7 +111,7 @@ public partial class ComboBox
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)_owner.Focused,
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owner.Enabled,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
-                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => VARIANT.False,
                 _ => base.GetPropertyValue(propertyID)
             };
 

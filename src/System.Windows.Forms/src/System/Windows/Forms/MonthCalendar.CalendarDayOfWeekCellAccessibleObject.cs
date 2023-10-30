@@ -49,7 +49,7 @@ public partial class MonthCalendar
             => propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => VARIANT.False,
                 _ => base.GetPropertyValue(propertyID)
             };
 

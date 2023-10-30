@@ -22,7 +22,7 @@ public partial class PictureBox
                     // it will be retrieved from Windows.
                     // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
                     => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => VARIANT.True,
                 _ => base.GetPropertyValue(propertyID)
             };
     }

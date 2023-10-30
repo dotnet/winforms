@@ -33,7 +33,7 @@ public partial class Panel
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
            => propertyID switch
            {
-               UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)false,
+               UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => VARIANT.False,
                _ => base.GetPropertyValue(propertyID)
            };
     }

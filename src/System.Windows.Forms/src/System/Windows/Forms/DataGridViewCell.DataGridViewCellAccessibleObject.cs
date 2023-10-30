@@ -670,7 +670,6 @@ public abstract partial class DataGridViewCell
 
         #region IRawElementProviderSimple Implementation
 
-        /// <inheritdoc/>
         internal override unsafe VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {

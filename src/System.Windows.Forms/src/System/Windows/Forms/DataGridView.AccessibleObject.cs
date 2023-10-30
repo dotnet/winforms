@@ -254,7 +254,7 @@ public partial class DataGridView
                     // Else only inner cell should be announced as focused by Narrator but not entire DGV.
                     return (VARIANT)(this.TryGetOwnerAs(out owner) && (IsModal || RowCount == 0) && owner.Focused);
                 case UIA_PROPERTY_ID.UIA_IsControlElementPropertyId:
-                    return (VARIANT)true;
+                    return VARIANT.True;
                 case UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId:
                     return (VARIANT)(this.TryGetOwnerAs(out owner) && owner.CanFocus);
                 case UIA_PROPERTY_ID.UIA_ItemStatusPropertyId:

@@ -38,7 +38,7 @@ internal partial class ToolStripGrip
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => VARIANT.False,
                 _ => base.GetPropertyValue(propertyID)
             };
     }

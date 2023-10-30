@@ -79,10 +79,10 @@ public partial class DataGridView
                     : base.GetPropertyValue(propertyId),
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId
                     => (VARIANT)(_ownerDataGridView.TryGetTarget(out var owner) && owner.CurrentCell is not null),
-                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => (VARIANT)true,
-                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => VARIANT.True,
+                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => VARIANT.True,
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(_ownerDataGridView.TryGetTarget(out var owner) && owner.Enabled),
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => VARIANT.True,
                 UIA_PROPERTY_ID.UIA_ProviderDescriptionPropertyId => (VARIANT)SR.DataGridViewEditingPanelUiaProviderDescription,
                 _ => base.GetPropertyValue(propertyId)
             };

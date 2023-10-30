@@ -35,8 +35,8 @@ public partial class ToolStripOverflow
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => (VARIANT)true,
-                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => VARIANT.True,
+                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => VARIANT.False,
                 _ => base.GetPropertyValue(propertyID)
             };
     }

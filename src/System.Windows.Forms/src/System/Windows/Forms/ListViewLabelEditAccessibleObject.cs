@@ -47,11 +47,10 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
                 : OwningSubItemAccessibleObject
         : null;
 
-    /// <inheritdoc/>
     internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
         => propertyID switch
         {
-            UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(_owningListView.TryGetTarget(out ListView? target) ? target.Enabled : false),
+            UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListView.TryGetTarget(out ListView? target) ? (VARIANT)target.Enabled : VARIANT.False,
             _ => base.GetPropertyValue(propertyID),
         };
 

@@ -164,7 +164,6 @@ public partial class ListBox
             return CurrentIndex + 1;
         }
 
-        /// <inheritdoc/>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
              => propertyID switch
              {

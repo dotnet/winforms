@@ -120,18 +120,17 @@ public partial class ComboBox
             return _owningComboBox.Items.Count;
         }
 
-        /// <inheritdoc/>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId,
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId =>
                     // Narrator should keep the keyboard focus on th ComboBox itself but not on the DropDown.
-                    (VARIANT)false,
+                    VARIANT.False,
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningComboBox.Enabled,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
-                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (VARIANT)false,
-                UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => VARIANT.False,
+                UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId => VARIANT.True,
                 UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)(nint)_childListControlhandle } },
                 _ => base.GetPropertyValue(propertyID)
             };

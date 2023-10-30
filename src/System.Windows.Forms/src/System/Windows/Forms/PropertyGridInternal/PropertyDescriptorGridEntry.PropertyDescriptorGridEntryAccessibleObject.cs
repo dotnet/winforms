@@ -267,7 +267,7 @@ internal partial class PropertyDescriptorGridEntry
             {
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId
                     => (VARIANT)(this.TryGetOwnerAs(out PropertyDescriptorGridEntry? owner) && !owner.IsPropertyReadOnly),
-                UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId => VARIANT.True,
                 UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId => (VARIANT)string.Empty,
                 _ => base.GetPropertyValue(propertyID)
             };

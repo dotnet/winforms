@@ -301,8 +301,8 @@ public partial class DataGridViewTopLeftHeaderCell
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId,
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(Owner?.DataGridView?.Enabled ?? false),
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)false,
-                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => VARIANT.False,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => VARIANT.False,
                 _ => base.GetPropertyValue(propertyId)
             };
 

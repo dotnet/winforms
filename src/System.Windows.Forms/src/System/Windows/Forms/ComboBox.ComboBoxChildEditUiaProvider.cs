@@ -76,7 +76,6 @@ public partial class ComboBox
 
         public override string Name => base.Name ?? SR.ComboBoxEditDefaultAccessibleName;
 
-        /// <inheritdoc/>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
@@ -84,7 +83,7 @@ public partial class ComboBox
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)_owningComboBox.Focused,
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningComboBox.Enabled,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
-                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => VARIANT.False,
                 UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)(nint)_handle } },
                 _ => base.GetPropertyValue(propertyID)
             };

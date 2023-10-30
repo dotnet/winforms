@@ -105,14 +105,13 @@ public partial class ComboBox
         // Index is zero-based, Child ID is 1-based.
         internal override int GetChildId() => GetCurrentIndex() + 1;
 
-        /// <inheritdoc/>
         internal override unsafe VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId,
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(_owningComboBox.Focused && _owningComboBox.SelectedIndex == GetCurrentIndex()),
-                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => (VARIANT)true,
-                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => VARIANT.True,
+                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => VARIANT.True,
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningComboBox.Enabled,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 UIA_PROPERTY_ID.UIA_SelectionItemIsSelectedPropertyId => (VARIANT)State.HasFlag(AccessibleStates.Selected),

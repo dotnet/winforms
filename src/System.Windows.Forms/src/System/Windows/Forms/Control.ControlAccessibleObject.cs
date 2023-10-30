@@ -483,7 +483,6 @@ public partial class Control
         internal override bool IsIAccessibleExSupported()
             => Owner is IAutomationLiveRegion ? true : base.IsIAccessibleExSupported();
 
-        /// <inheritdoc/>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {

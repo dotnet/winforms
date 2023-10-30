@@ -271,10 +271,10 @@ public partial class DataGridViewColumnHeaderCell
             => propertyId switch
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => VARIANT.False,
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(Owner?.DataGridView?.Enabled ?? false),
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
-                UIA_PROPERTY_ID.UIA_IsPasswordPropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_IsPasswordPropertyId => VARIANT.False,
                 _ => base.GetPropertyValue(propertyId)
             };
 

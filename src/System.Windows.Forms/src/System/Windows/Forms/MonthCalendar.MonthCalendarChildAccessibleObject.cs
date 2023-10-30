@@ -26,7 +26,7 @@ public partial class MonthCalendar
             {
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)HasKeyboardFocus,
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)IsEnabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)false,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => VARIANT.False,
                 _ => base.GetPropertyValue(propertyID)
             };
 

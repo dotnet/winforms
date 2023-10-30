@@ -170,7 +170,6 @@ public partial class ListViewItem
 
         internal override int GetChildIndex(AccessibleObject? child) => InvalidIndex;
 
-        /// <inheritdoc/>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
         {
             switch (propertyID)
@@ -182,11 +181,11 @@ public partial class ListViewItem
                 case UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId:
                     if (OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed)
                     {
-                        return (VARIANT)true;
+                        return VARIANT.True;
                     }
 
                     VARIANT result = base.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
-                    return result.IsEmpty ? (VARIANT)false : result;
+                    return result.IsEmpty ? VARIANT.False : result;
                 case UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId:
                     return new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)(nint)_owningListView.InternalHandle } };
                 default: return base.GetPropertyValue(propertyID);

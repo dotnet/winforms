@@ -345,7 +345,7 @@ internal abstract partial class GridEntry
 
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(this.TryGetOwnerAs(out GridEntry? owner) && owner.HasFocus),
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)true,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => VARIANT.True,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 _ => base.GetPropertyValue(propertyID)
             };
