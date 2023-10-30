@@ -154,7 +154,7 @@ internal static class BinaryFormattedObjectExtensions
                     value = Unsafe.As<ulong, DateTime>(ref ulongValue);
                     return true;
                 case TypeInfo.DecimalType:
-                    Span<int> bits = stackalloc int[4]
+                    ReadOnlySpan<int> bits = stackalloc int[4]
                     {
                         (int)systemClass["lo"],
                         (int)systemClass["mid"],
