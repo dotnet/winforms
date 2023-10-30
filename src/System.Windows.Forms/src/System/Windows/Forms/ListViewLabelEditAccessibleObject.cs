@@ -41,7 +41,7 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
         => _owningListView.TryGetTarget(out ListView? target)
         ? target._listViewSubItem is null
             ? OwningListViewItemAccessibleObject
-            : target!.View == View.Tile
+            : target.View == View.Tile
                 ? OwningListViewItemAccessibleObject
                 : OwningSubItemAccessibleObject
         : null;
