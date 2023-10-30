@@ -96,7 +96,6 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
         using VARIANT actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
-        using VARIANT rectArray = UiaTextProvider.BoundingRectangleAsVariant(itemAccessibleObject.BoundingRectangle);
         double[] actualArray = (double[])actual.ToObject();
         Rectangle actualRectangle = new((int)actualArray[0], (int)actualArray[1], (int)actualArray[2], (int)actualArray[3]);
         Assert.Equal(itemAccessibleObject.BoundingRectangle, actualRectangle);
