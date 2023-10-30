@@ -37,14 +37,14 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
 
     private protected override string AutomationId => LIST_VIEW_LABEL_EDIT_AUTOMATION_ID;
 
-    // The ListView target was not null at accessible initialization object time,
-    // before the ListView control had been WM_DESTROY'd, the TryGetTarget() method will not return null.
     public override AccessibleObject? Parent
-        => _owningListView.TryGetTarget(out ListView? target) && target._listViewSubItem is null
-        ? OwningListViewItemAccessibleObject
-        : target!.View == View.Tile
+        => _owningListView.TryGetTarget(out ListView? target)
+        ? target._listViewSubItem is null
             ? OwningListViewItemAccessibleObject
-            : OwningSubItemAccessibleObject;
+            : target!.View == View.Tile
+                ? OwningListViewItemAccessibleObject
+                : OwningSubItemAccessibleObject
+        : null;
 
     internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
         => propertyID switch
