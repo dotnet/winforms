@@ -469,27 +469,27 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
         return Properties.GetObject(s_propCellValue);
     }
 
-    protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e)
-    {
-        return e.Button == MouseButtons.Left && DataGridView!.ApplyVisualStylesToHeaderCells;
-    }
+    protected override bool MouseDownUnsharesRow(DataGridViewCellMouseEventArgs e) =>
+        DataGridView is null
+            ? false
+            : e.Button == MouseButtons.Left && DataGridView.ApplyVisualStylesToHeaderCells;
 
-    protected override bool MouseEnterUnsharesRow(int rowIndex)
-    {
-        return ColumnIndex == DataGridView!.MouseDownCellAddress.X &&
+    protected override bool MouseEnterUnsharesRow(int rowIndex) =>
+        DataGridView is null
+            ? false
+            : ColumnIndex == DataGridView.MouseDownCellAddress.X &&
                rowIndex == DataGridView.MouseDownCellAddress.Y &&
                DataGridView.ApplyVisualStylesToHeaderCells;
-    }
 
-    protected override bool MouseLeaveUnsharesRow(int rowIndex)
-    {
-        return ButtonState != ButtonState.Normal && DataGridView!.ApplyVisualStylesToHeaderCells;
-    }
+    protected override bool MouseLeaveUnsharesRow(int rowIndex) =>
+        DataGridView is null
+            ? false
+            : ButtonState != ButtonState.Normal && DataGridView.ApplyVisualStylesToHeaderCells;
 
-    protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e)
-    {
-        return e.Button == MouseButtons.Left && DataGridView!.ApplyVisualStylesToHeaderCells;
-    }
+    protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e) =>
+        DataGridView is null
+            ? false
+            : e.Button == MouseButtons.Left && DataGridView.ApplyVisualStylesToHeaderCells;
 
     protected override void OnMouseDown(DataGridViewCellMouseEventArgs e)
     {
