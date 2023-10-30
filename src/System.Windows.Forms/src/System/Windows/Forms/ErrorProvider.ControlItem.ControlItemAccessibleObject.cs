@@ -98,7 +98,7 @@ public partial class ErrorProvider
                 {
                     UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId,
                     UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _window?.Handle is { } handle
-                        ? new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)handle } }
+                        ? UIAHelper.WindowHandleToVariant(handle)
                         : VARIANT.Empty,
                     _ => base.GetPropertyValue(propertyID)
                 };

@@ -74,7 +74,7 @@ public partial class ErrorProvider
                 propertyID switch
                 {
                     UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId,
-                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)_owner.Handle } },
+                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(_owner.Handle),
                     _ => base.GetPropertyValue(propertyID)
                 };
 

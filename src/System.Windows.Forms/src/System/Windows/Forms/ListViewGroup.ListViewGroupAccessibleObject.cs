@@ -188,7 +188,7 @@ public partial class ListViewGroup
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(_owningListView.Focused && Focused),
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningListView.Enabled,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
-                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)(_owningListView.IsHandleCreated ? _owningListView.Handle : 0) } },
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(_owningListView.IsHandleCreated ? _owningListView.Handle : 0),
                 _ => base.GetPropertyValue(propertyID)
             };
 

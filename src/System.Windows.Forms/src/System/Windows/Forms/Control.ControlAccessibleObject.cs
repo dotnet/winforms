@@ -497,7 +497,7 @@ public partial class Control
                 UIA_PROPERTY_ID.UIA_LiveSettingPropertyId => Owner is IAutomationLiveRegion owner
                     ? (VARIANT)(int)owner.LiveSetting
                     : base.GetPropertyValue(propertyID),
-                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)(nint)(Owner?.InternalHandle ?? HWND.Null) } },
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(Owner?.InternalHandle ?? HWND.Null),
                 _ => base.GetPropertyValue(propertyID)
             };
 

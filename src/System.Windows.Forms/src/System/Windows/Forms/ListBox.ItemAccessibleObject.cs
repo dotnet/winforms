@@ -171,7 +171,7 @@ public partial class ListBox
                  UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(_owningListBox.Focused && _owningListBox.FocusedIndex == CurrentIndex),
                  UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningListBox.Enabled,
                  UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
-                 UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => new() { vt = VARENUM.VT_I4, data = new() { intVal = (int)(_owningListBox.IsHandleCreated ? _owningListBox.Handle : 0) } },
+                 UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(_owningListBox.IsHandleCreated ? _owningListBox.Handle : 0),
                  _ => base.GetPropertyValue(propertyID)
              };
 
