@@ -15,9 +15,16 @@ internal unsafe partial struct VARIANT : IDisposable
 {
     public static VARIANT Empty { get; }
 
-    public static VARIANT True => new() { vt = VT_BOOL, data = new() { boolVal = VARIANT_BOOL.VARIANT_TRUE } };
+    public static VARIANT True { get; } = InitBoolVariant(value: true);
 
-    public static VARIANT False => new() { vt = VT_BOOL, data = new() { boolVal = VARIANT_BOOL.VARIANT_FALSE } };
+    public static VARIANT False { get; } = InitBoolVariant(value: false);
+
+    private static VARIANT InitBoolVariant(bool value)
+    {
+        VARIANT temp = new() { vt = VT_BOOL };
+        temp.data.boolVal = value ? VARIANT_BOOL.VARIANT_TRUE : VARIANT_BOOL.VARIANT_FALSE;
+        return temp;
+    }
 
     public bool IsEmpty => vt == VT_EMPTY && data.llVal == 0;
 
