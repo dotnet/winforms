@@ -78,24 +78,24 @@ public partial class TreeNode
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             => _owningTreeView.AccessibilityObject;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.Parent
+                NavigateDirection.NavigateDirection_Parent
                     => Parent ?? _owningTreeView.AccessibilityObject,
-                UiaCore.NavigateDirection.FirstChild
+                NavigateDirection.NavigateDirection_FirstChild
                      => _owningTreeNode.IsEditing
                         ? _owningTreeView._labelEdit?.AccessibilityObject
                         : _owningTreeNode.IsExpanded
                             ? _owningTreeNode.FirstNode?.AccessibilityObject
                             : null,
-                UiaCore.NavigateDirection.LastChild
+                NavigateDirection.NavigateDirection_LastChild
                     => _owningTreeNode.IsExpanded
                         ? _owningTreeNode.LastNode?.AccessibilityObject
                         : null,
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_NextSibling
                     => _owningTreeNode.NextNode?.AccessibilityObject,
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => _owningTreeNode.PrevNode?.AccessibilityObject,
                 _ => base.FragmentNavigate(direction),
             };
