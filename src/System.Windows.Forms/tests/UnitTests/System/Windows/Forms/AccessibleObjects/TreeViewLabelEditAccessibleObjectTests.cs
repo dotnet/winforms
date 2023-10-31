@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.Automation;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
@@ -19,11 +17,13 @@ public class TreeViewLabelEditAccessibleObjectTests
 
         TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         var accessibilityObject = (TreeViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
-
-        Assert.Equal(accessibilityObject.RuntimeId, accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId).ToObject());
+        using VARIANT runtimeId = accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
+        Assert.Equal(accessibilityObject.RuntimeId, runtimeId.ToObject());
         PInvoke.GetWindowRect(labelEdit, out RECT r);
-        using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray((Rectangle)r);
-        Assert.Equal(((VARIANT)rectArray).ToObject(), accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId));
+        using VARIANT rectArrayVariant = accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
+        double[] actualArray = (double[])rectArrayVariant.ToObject();
+        Rectangle actualRectangle = new((int)actualArray[0], (int)actualArray[1], (int)actualArray[2], (int)actualArray[3]);
+        Assert.Equal((Rectangle)r, actualRectangle);
         Assert.Equal(Environment.ProcessId, (int)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ProcessIdPropertyId));
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
         Assert.Equal(accessibilityObject.Name, ((BSTR)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree());
@@ -32,7 +32,7 @@ public class TreeViewLabelEditAccessibleObjectTests
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId));
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.Equal(treeView.Enabled, (bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
-        Assert.Equal(accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId), accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId));
+        Assert.Equal(((BSTR)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree(), ((BSTR)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree());
         Assert.Empty(((BSTR)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId)).ToStringAndFree());
         Assert.True((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsContentElementPropertyId));
         Assert.False((bool)accessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsPasswordPropertyId));
@@ -101,7 +101,7 @@ public class TreeViewLabelEditAccessibleObjectTests
 
         TreeViewLabelEditNativeWindow labelEdit = treeView.TestAccessor().Dynamic._labelEdit;
         var accessibilityObject = (TreeViewLabelEditAccessibleObject)labelEdit.AccessibilityObject;
-        using ComScope<IRawElementProviderSimple> provider = new(accessibilityObject.HostRawElementProvider); 
+        using ComScope<IRawElementProviderSimple> provider = new(accessibilityObject.HostRawElementProvider);
         Assert.False(provider.IsNull);
     }
 
