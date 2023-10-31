@@ -28,7 +28,7 @@ internal unsafe class TreeViewLabelEditAccessibleObject : LabelEditAccessibleObj
     internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
         => propertyID switch
         {
-            UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(_owningTreeView.TryGetTarget(out TreeView? target) ? target.Enabled : false),
+            UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningTreeView.TryGetTarget(out TreeView? target) ? (VARIANT)target.Enabled : VARIANT.False,
             _ => base.GetPropertyValue(propertyID),
         };
 }

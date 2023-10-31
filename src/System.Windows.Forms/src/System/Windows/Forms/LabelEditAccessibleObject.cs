@@ -36,10 +36,10 @@ internal unsafe class LabelEditAccessibleObject : AccessibleObject
             UIA_PROPERTY_ID.UIA_ProcessIdPropertyId => (VARIANT)Environment.ProcessId,
             UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_EditControlTypeId,
             UIA_PROPERTY_ID.UIA_AccessKeyPropertyId => (VARIANT)string.Empty,
-            UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)true,
+            UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => VARIANT.True,
             UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
-            UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => (VARIANT)true,
-            UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => new() { vt = VARENUM.VT_I4, data = new() { intVal = _labelEdit.TryGetTarget(out var target) ? (int)(nint)target.HWND : 0 } },
+            UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => VARIANT.True,
+            UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(_labelEdit.TryGetTarget(out var target) ? target.HWND : 0),
             _ => base.GetPropertyValue(propertyID),
         };
 
