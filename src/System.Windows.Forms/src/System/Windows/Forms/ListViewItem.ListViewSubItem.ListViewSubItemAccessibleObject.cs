@@ -130,7 +130,7 @@ public partial class ListViewItem
                     UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TextControlTypeId,
                     UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningListView.Focused && _owningListView.FocusedItem == _owningItem,
                     UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListView.Enabled,
-                    UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                    UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => State.HasFlag(AccessibleStates.Focusable),
                     UIA_PROPERTY_ID.UIA_ProcessIdPropertyId => Environment.ProcessId,
                     _ => base.GetPropertyValue(propertyID)
                 };

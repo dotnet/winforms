@@ -175,7 +175,7 @@ public partial class ListViewItem
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId,
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => OwningListItemFocused,
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListView.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => State.HasFlag(AccessibleStates.Focusable),
                 UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed ||
                                                      (bool)(base.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId) ?? false),
                 UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => (nint)_owningListView.InternalHandle,
