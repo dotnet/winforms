@@ -248,7 +248,7 @@ public partial class ListView
                     this.GetOwnerAccessibleRole() == AccessibleRole.Default
                     => UIA_CONTROLTYPE_ID.UIA_ListControlTypeId,
                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => false,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => State.HasFlag(AccessibleStates.Focusable),
                 UIA_PROPERTY_ID.UIA_ItemStatusPropertyId => GetItemStatus(),
                 _ => base.GetPropertyValue(propertyID)
             };

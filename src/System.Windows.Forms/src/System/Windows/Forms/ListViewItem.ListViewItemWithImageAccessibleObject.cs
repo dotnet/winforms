@@ -87,7 +87,7 @@ public partial class ListViewItem
                 _childCount++;
             }
 
-            if(_owningListView._labelEdit is not null && _owningListView._listViewSubItem is null)
+            if (_owningListView._labelEdit is not null && _owningListView._listViewSubItem is null)
             {
                 _childCount++;
             }
