@@ -208,6 +208,7 @@ public static class ListBindingHelper
         return GetListItemProperties(dataSource, listAccessors);
     }
 
+    [return: NotNullIfNotNull(nameof(list))]
     public static Type? GetListItemType(object? list)
     {
         if (list is null)
@@ -232,7 +233,7 @@ public static class ListBindingHelper
 
         if (typeof(Array).IsAssignableFrom(listType))
         {
-            return listType.GetElementType();
+            return listType.GetElementType()!;
         }
 
         PropertyInfo? indexer = GetTypedIndexer(listType);
@@ -280,7 +281,7 @@ public static class ListBindingHelper
         return instancedObject;
     }
 
-    public static Type? GetListItemType(object? dataSource, string? dataMember)
+    public static Type GetListItemType(object? dataSource, string? dataMember)
     {
         // No data source
         if (dataSource is null)
@@ -573,7 +574,7 @@ public static class ListBindingHelper
 
     private static PropertyDescriptorCollection GetListItemPropertiesByType(Type type)
     {
-        return TypeDescriptor.GetProperties(GetListItemType(type)!, BrowsableAttributeList);
+        return TypeDescriptor.GetProperties(GetListItemType(type), BrowsableAttributeList);
     }
 
     private static PropertyDescriptorCollection GetListItemPropertiesByEnumerable(IEnumerable enumerable)
