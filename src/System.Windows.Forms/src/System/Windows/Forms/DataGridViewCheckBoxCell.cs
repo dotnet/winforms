@@ -66,14 +66,14 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                 throw new ArgumentException(SR.DataGridViewCheckBoxCell_InvalidValueType);
             }
 
-            if (value is CheckState)
+            if (value is CheckState valueAsCheckState)
             {
-                if (((CheckState)value) == CheckState.Checked)
+                if (valueAsCheckState == CheckState.Checked)
                 {
                     _flags |= DataGridViewCheckBoxCellFlags.Checked;
                     _flags &= ~DataGridViewCheckBoxCellFlags.Indeterminate;
                 }
-                else if (((CheckState)value) == CheckState.Indeterminate)
+                else if (valueAsCheckState == CheckState.Indeterminate)
                 {
                     _flags |= DataGridViewCheckBoxCellFlags.Indeterminate;
                     _flags &= ~DataGridViewCheckBoxCellFlags.Checked;
@@ -136,7 +136,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                     return SR.DataGridViewCheckBoxCell_ClipboardChecked;
                 }
 
-                return System.Windows.Forms.CheckState.Checked;
+                return CheckState.Checked;
             }
             else if (_flags.HasFlag(DataGridViewCheckBoxCellFlags.Indeterminate))
             {
@@ -145,7 +145,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                     return SR.DataGridViewCheckBoxCell_ClipboardIndeterminate;
                 }
 
-                return System.Windows.Forms.CheckState.Indeterminate;
+                return CheckState.Indeterminate;
             }
             else
             {
@@ -154,7 +154,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
                     return SR.DataGridViewCheckBoxCell_ClipboardUnchecked;
                 }
 
-                return System.Windows.Forms.CheckState.Unchecked;
+                return CheckState.Unchecked;
             }
         }
         else if (FormattedValueType.IsAssignableFrom(s_defaultBooleanType))
@@ -850,7 +850,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     protected override void OnContentClick(DataGridViewCellEventArgs e) => OnCommonContentClick(e);
 
     protected override void OnContentDoubleClick(DataGridViewCellEventArgs e) => OnCommonContentClick(e);
-#nullable disable
+
     protected override void OnKeyDown(KeyEventArgs e, int rowIndex)
     {
         if (DataGridView is null)
@@ -1016,6 +1016,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     private void NotifyMSAAClient(int columnIndex, int rowIndex)
     {
+        Debug.Assert(DataGridView is not null);
         Debug.Assert((columnIndex >= 0) && (columnIndex < DataGridView.Columns.Count));
         Debug.Assert((rowIndex >= 0) && (rowIndex < DataGridView.Rows.Count));
 
@@ -1037,21 +1038,23 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         }
     }
 
-    protected override void Paint(Graphics graphics,
+    protected override void Paint(
+        Graphics graphics,
         Rectangle clipBounds,
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates elementState,
-        object value,
-        object formattedValue,
-        string errorText,
+        object? value,
+        object? formattedValue,
+        string? errorText,
         DataGridViewCellStyle cellStyle,
         DataGridViewAdvancedBorderStyle advancedBorderStyle,
         DataGridViewPaintParts paintParts)
     {
         ArgumentNullException.ThrowIfNull(cellStyle);
 
-        PaintPrivate(graphics,
+        PaintPrivate(
+            graphics,
             clipBounds,
             cellBounds,
             rowIndex,
@@ -1061,9 +1064,9 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             cellStyle,
             advancedBorderStyle,
             paintParts,
-            false /*computeContentBounds*/,
-            false /*computeErrorIconBounds*/,
-            true  /*paint*/);
+            computeContentBounds: false,
+            computeErrorIconBounds: false,
+            paint: true);
     }
 
     // PaintPrivate is used in three places that need to duplicate the paint code:
@@ -1074,13 +1077,14 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     // if computeContentBounds is true then PaintPrivate returns the contentBounds
     // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
     // else it returns Rectangle.Empty;
-    private Rectangle PaintPrivate(Graphics g,
+    private Rectangle PaintPrivate(
+        Graphics g,
         Rectangle clipBounds,
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates elementState,
-        object formattedValue,
-        string errorText,
+        object? formattedValue,
+        string? errorText,
         DataGridViewCellStyle cellStyle,
         DataGridViewAdvancedBorderStyle advancedBorderStyle,
         DataGridViewPaintParts paintParts,
@@ -1113,6 +1117,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         bool drawAsMixedCheckBox = false, drawErrorText = true;
         CheckState checkState;
         ButtonState bs;
+        Debug.Assert(DataGridView is not null);
         Point ptCurrentCell = DataGridView.CurrentCellAddress;
         if (ptCurrentCell.X == ColumnIndex &&
             ptCurrentCell.Y == rowIndex && DataGridView.IsCurrentCellInEditMode)
@@ -1126,9 +1131,9 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             bs = (checkState == CheckState.Unchecked) ? ButtonState.Normal : ButtonState.Checked;
             drawAsMixedCheckBox = (checkState == CheckState.Indeterminate);
         }
-        else if (formattedValue is not null && formattedValue is bool)
+        else if (formattedValue is bool formattedValueAsBool)
         {
-            if ((bool)formattedValue)
+            if (formattedValueAsBool)
             {
                 checkState = CheckState.Checked;
                 bs = ButtonState.Checked;
@@ -1602,10 +1607,10 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
     }
 
     public override object ParseFormattedValue(
-        object formattedValue,
+        object? formattedValue,
         DataGridViewCellStyle cellStyle,
-        TypeConverter formattedValueTypeConverter,
-        TypeConverter valueTypeConverter)
+        TypeConverter? formattedValueTypeConverter,
+        TypeConverter? valueTypeConverter)
     {
         Debug.Assert(formattedValue is null || FormattedValueType is null || FormattedValueType.IsAssignableFrom(formattedValue.GetType()));
 
@@ -1709,20 +1714,20 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
         {
             if (_flags.HasFlag(DataGridViewCheckBoxCellFlags.Checked))
             {
-                editingCell.EditingCellFormattedValue = System.Windows.Forms.CheckState.Indeterminate;
+                editingCell.EditingCellFormattedValue = CheckState.Indeterminate;
             }
             else if ((_flags.HasFlag(DataGridViewCheckBoxCellFlags.Indeterminate)))
             {
-                editingCell.EditingCellFormattedValue = System.Windows.Forms.CheckState.Unchecked;
+                editingCell.EditingCellFormattedValue = CheckState.Unchecked;
             }
             else
             {
-                editingCell.EditingCellFormattedValue = System.Windows.Forms.CheckState.Checked;
+                editingCell.EditingCellFormattedValue = CheckState.Checked;
             }
         }
         else if (FormattedValueType.IsAssignableFrom(s_defaultBooleanType))
         {
-            editingCell.EditingCellFormattedValue = !((bool)editingCell.GetEditingCellFormattedValue(DataGridViewDataErrorContexts.Formatting));
+            editingCell.EditingCellFormattedValue = !((bool)editingCell.GetEditingCellFormattedValue(DataGridViewDataErrorContexts.Formatting)!);
         }
 
         return true;
@@ -1736,6 +1741,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
 
     private void UpdateButtonState(ButtonState newButtonState, int rowIndex)
     {
+        Debug.Assert(DataGridView is not null);
         ButtonState = newButtonState;
         DataGridView.InvalidateCell(ColumnIndex, rowIndex);
     }
