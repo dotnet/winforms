@@ -121,8 +121,8 @@ public class ListViewLabelEditAccessibleObjectTests
     public void ListViewLabelEditAccessibleObject_Ctor_NullOwningListView_ThrowsArgumentNullException()
     {
         using ListView listView = CreateListViewAndStartEditing();
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
 
+        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
         Assert.Throws<ArgumentNullException>(() => new ListViewLabelEditAccessibleObject(null, labelEdit));
     }
 
@@ -136,18 +136,18 @@ public class ListViewLabelEditAccessibleObjectTests
     public void ListViewLabelEditUiaTextProvider_Ctor_NullOwningListView_ThrowsArgumentNullException()
     {
         using ListView listView = CreateListViewAndStartEditing();
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
 
-        Assert.Throws<ArgumentNullException>(() => new ListViewLabelEditUiaTextProvider(null, labelEdit, labelEdit.AccessibilityObject));
+        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        Assert.Throws<ArgumentNullException>(() => new LabelEditUiaTextProvider(null, labelEdit, labelEdit.AccessibilityObject));
     }
 
     [WinFormsFact]
     public void ListViewLabelEditUiaTextProvider_Ctor_NullChildEditAccessibilityObject_ThrowsArgumentNullException()
     {
         using ListView listView = CreateListViewAndStartEditing();
-        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
 
-        Assert.Throws<ArgumentNullException>(() => new ListViewLabelEditUiaTextProvider(listView, labelEdit, null));
+        ListViewLabelEditNativeWindow labelEdit = listView.TestAccessor().Dynamic._labelEdit;
+        Assert.Throws<ArgumentNullException>(() => new LabelEditUiaTextProvider(listView, labelEdit, null));
     }
 
     private ListView CreateListViewAndStartEditing()
@@ -161,7 +161,7 @@ public class ListViewLabelEditAccessibleObjectTests
 
         listView.Columns.Add(new ColumnHeader() { Text = "Column 1", Width = 100 });
 
-        ListViewItem item = new("Test",0);
+        ListViewItem item = new("Test", 0);
         ListViewSubItem subItem = new ListViewSubItem(item, "Test");
         item.SubItems.Add(subItem);
         listView.Items.Add(item);
