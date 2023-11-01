@@ -1567,10 +1567,10 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         Point ptCurrentCell = DataGridView.CurrentCellAddress;
         if (ColumnIndex == ptCurrentCell.X && rowIndex == ptCurrentCell.Y)
         {
-            IDataGridViewEditingControl? dgvectl = (IDataGridViewEditingControl?)DataGridView.EditingControl;
-            if (dgvectl is not null)
+            IDataGridViewEditingControl? dataGridViewEditingControl = (IDataGridViewEditingControl?)DataGridView.EditingControl;
+            if (dataGridViewEditingControl is not null)
             {
-                return dgvectl.GetEditingControlFormattedValue(context);
+                return dataGridViewEditingControl.GetEditingControlFormattedValue(context);
             }
 
             if (this is IDataGridViewEditingCell dgvecell && DataGridView.IsCurrentCellInEditMode)
