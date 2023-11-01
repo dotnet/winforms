@@ -86,7 +86,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         };
 
         AccessibleObject accessibleObject = comboBox.AccessibilityObject;
-        UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
 
         Assert.Null(firstChild);
         Assert.False(comboBox.IsHandleCreated);
@@ -155,7 +155,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         }
 
         comboBox.DroppedDown = droppedDown;
-        AccessibleObject firstChild = comboBox.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
+        AccessibleObject firstChild = comboBox.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild) as AccessibleObject;
 
         Assert.NotNull(firstChild);
         Assert.Equal(childListDisplayed, firstChild == comboBox.ChildListAccessibleObject);
@@ -191,7 +191,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         }
 
         comboBox.DroppedDown = droppedDown;
-        AccessibleObject lastChild = comboBox.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
+        AccessibleObject lastChild = comboBox.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild) as AccessibleObject;
         AccessibleObject expectedLastChild = comboBoxStyle == ComboBoxStyle.Simple
             ? comboBox.ChildEditAccessibleObject
             : GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider;
@@ -213,7 +213,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         };
 
         AccessibleObject accessibleObject = comboBox.AccessibilityObject;
-        UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+        UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
         Assert.Null(lastChild);
         Assert.False(comboBox.IsHandleCreated);

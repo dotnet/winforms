@@ -8,7 +8,6 @@ using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using InteropUiaIRawElementProviderSimple = Interop.UiaCore.IRawElementProviderSimple;
-using ProviderOptions = Interop.UiaCore.ProviderOptions;
 
 namespace System.Windows.Forms.Primitives.Tests.Automation;
 

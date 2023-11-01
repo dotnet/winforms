@@ -17,7 +17,7 @@ internal partial class ToolStripScrollButton
             _owner = owner;
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (_owner.OwnerScrollButton?.Parent is not ToolStripDropDownMenu toolStripDropDownMenu)
             {
@@ -26,12 +26,12 @@ internal partial class ToolStripScrollButton
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => toolStripDropDownMenu.AccessibilityObject,
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_Parent => toolStripDropDownMenu.AccessibilityObject,
+                NavigateDirection.NavigateDirection_NextSibling
                     => _owner.UpDirection && toolStripDropDownMenu.Items.Count > 0
                         ? toolStripDropDownMenu.Items[0].AccessibilityObject
                         : null,
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => !_owner.UpDirection && toolStripDropDownMenu.Items.Count > 0
                         ? toolStripDropDownMenu.Items[^1].AccessibilityObject
                         : null,

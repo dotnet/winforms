@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -25,18 +26,18 @@ public partial class ListViewItem
 
         protected override View View => View.List;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             AccessibleObject _parentInternal = _owningListView.AccessibilityObject;
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _parentInternal;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     int childIndex = _parentInternal.GetChildIndex(this);
                     return childIndex == InvalidIndex ? null : _parentInternal.GetChild(childIndex + 1);
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return _parentInternal.GetChild(_parentInternal.GetChildIndex(this) - 1);
             }
 

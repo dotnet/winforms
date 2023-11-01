@@ -67,21 +67,21 @@ public partial class ToolStripSplitButton
             }
         }
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
         {
             get
             {
-                return _owningToolStripSplitButton.DropDown.Visible ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+                return _owningToolStripSplitButton.DropDown.Visible ? ExpandCollapseState.ExpandCollapseState_Expanded : ExpandCollapseState.ExpandCollapseState_Collapsed;
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     return DropDownItemsCount > 0 ? _owningToolStripSplitButton.DropDown.Items[0].AccessibilityObject : null;
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     return DropDownItemsCount > 0 ? _owningToolStripSplitButton.DropDown.Items[_owningToolStripSplitButton.DropDown.Items.Count - 1].AccessibilityObject : null;
             }
 
@@ -95,7 +95,7 @@ public partial class ToolStripSplitButton
                 // Do not expose child items when the drop-down is collapsed to prevent Narrator from announcing
                 // invisible menu items when Narrator is in item's mode (CAPSLOCK + Arrow Left/Right) or
                 // in scan mode (CAPSLOCK + Space)
-                if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+                if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Collapsed)
                 {
                     return 0;
                 }

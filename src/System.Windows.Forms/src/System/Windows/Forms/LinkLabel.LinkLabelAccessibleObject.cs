@@ -22,14 +22,14 @@ public partial class LinkLabel
                 ? base.ElementProviderFromPoint(x, y)
                 : HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.FirstChild
+                NavigateDirection.NavigateDirection_FirstChild
                     => !this.TryGetOwnerAs(out LinkLabel? owner) ? null : owner.Links.Count != 0
                         ? owner.Links[0].AccessibleObject
                         : null,
-                UiaCore.NavigateDirection.LastChild
+                NavigateDirection.NavigateDirection_LastChild
                     => !this.TryGetOwnerAs(out LinkLabel? owner) ? null : owner.Links.Count != 0
                         ? owner.Links[^1].AccessibleObject
                         : null,

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -78,7 +79,7 @@ public class MonthCalendar_CalendarHeaderAccessibleObjectTests
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "");
         CalendarHeaderAccessibleObject header = new(calendar, controlAccessibleObject, 0);
 
-        Assert.Equal(calendar, header.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
+        Assert.Equal(calendar, header.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -90,8 +91,8 @@ public class MonthCalendar_CalendarHeaderAccessibleObjectTests
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "");
         CalendarHeaderAccessibleObject header = new(calendar, controlAccessibleObject, 0);
 
-        Assert.Equal(calendar.CalendarBodyAccessibleObject, header.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(header.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(calendar.CalendarBodyAccessibleObject, header.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(header.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -101,8 +102,8 @@ public class MonthCalendar_CalendarHeaderAccessibleObjectTests
         using MonthCalendar control = new();
         CalendarHeaderAccessibleObject header = CreateCalendarHeaderAccessibleObject(control, 0);
 
-        Assert.Null(header.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(header.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Null(header.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(header.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 

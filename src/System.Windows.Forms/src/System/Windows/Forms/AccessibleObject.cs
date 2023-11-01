@@ -425,7 +425,7 @@ public unsafe partial class AccessibleObject :
     }
 
     internal virtual int ProviderOptions
-        => (int)(UiaCore.ProviderOptions.ServerSideProvider | UiaCore.ProviderOptions.UseComThreading);
+        => (int)(UIA.ProviderOptions.ProviderOptions_ServerSideProvider | UIA.ProviderOptions.ProviderOptions_UseComThreading);
 
     internal virtual UiaCore.IRawElementProviderSimple? HostRawElementProvider => null;
 
@@ -538,7 +538,7 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     /// <param name="direction">Indicates the direction in which to navigate.</param>
     /// <returns>The element in the specified direction if it exists.</returns>
-    internal virtual UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction) => null;
+    internal virtual UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction) => null;
 
     internal virtual UiaCore.IRawElementProviderSimple[]? GetEmbeddedFragmentRoots() => null;
 
@@ -571,13 +571,13 @@ public unsafe partial class AccessibleObject :
     {
     }
 
-    internal virtual UiaCore.ExpandCollapseState ExpandCollapseState => UiaCore.ExpandCollapseState.Collapsed;
+    internal virtual UIA.ExpandCollapseState ExpandCollapseState => UIA.ExpandCollapseState.ExpandCollapseState_Collapsed;
 
     internal virtual void Toggle()
     {
     }
 
-    internal virtual UiaCore.ToggleState ToggleState => UiaCore.ToggleState.Indeterminate;
+    internal virtual ToggleState ToggleState => ToggleState.ToggleState_Indeterminate;
 
     private protected virtual UiaCore.IRawElementProviderFragmentRoot? ToolStripFragmentRoot => null;
 
@@ -585,7 +585,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual UiaCore.IRawElementProviderSimple[]? GetColumnHeaders() => null;
 
-    internal virtual UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
+    internal virtual RowOrColumnMajor RowOrColumnMajor => RowOrColumnMajor.RowOrColumnMajor_RowMajor;
 
     internal virtual UiaCore.IRawElementProviderSimple[]? GetRowHeaderItems() => null;
 
@@ -766,7 +766,7 @@ public unsafe partial class AccessibleObject :
         return HRESULT.E_NOTIMPL;
     }
 
-    UiaCore.ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions => (UiaCore.ProviderOptions)ProviderOptions;
+    ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions => (ProviderOptions)ProviderOptions;
 
     UiaCore.IRawElementProviderSimple? UiaCore.IRawElementProviderSimple.HostRawElementProvider => HostRawElementProvider;
 
@@ -801,7 +801,7 @@ public unsafe partial class AccessibleObject :
         return value;
     }
 
-    object? UiaCore.IRawElementProviderFragment.Navigate(UiaCore.NavigateDirection direction) => FragmentNavigate(direction);
+    object? UiaCore.IRawElementProviderFragment.Navigate(NavigateDirection direction) => FragmentNavigate(direction);
 
     int[]? UiaCore.IRawElementProviderFragment.GetRuntimeId() => RuntimeId;
 
@@ -887,7 +887,7 @@ public unsafe partial class AccessibleObject :
 
     void UiaCore.IExpandCollapseProvider.Collapse() => Collapse();
 
-    UiaCore.ExpandCollapseState UiaCore.IExpandCollapseProvider.ExpandCollapseState => ExpandCollapseState;
+    UIA.ExpandCollapseState UiaCore.IExpandCollapseProvider.ExpandCollapseState => ExpandCollapseState;
 
     void UiaCore.IInvokeProvider.Invoke() => Invoke();
 
@@ -932,13 +932,13 @@ public unsafe partial class AccessibleObject :
 
     void UiaCore.IToggleProvider.Toggle() => Toggle();
 
-    UiaCore.ToggleState UiaCore.IToggleProvider.ToggleState => ToggleState;
+    ToggleState UiaCore.IToggleProvider.ToggleState => ToggleState;
 
     object[]? UiaCore.ITableProvider.GetRowHeaders() => GetRowHeaders();
 
     object[]? UiaCore.ITableProvider.GetColumnHeaders() => GetColumnHeaders();
 
-    UiaCore.RowOrColumnMajor UiaCore.ITableProvider.RowOrColumnMajor => RowOrColumnMajor;
+    RowOrColumnMajor UiaCore.ITableProvider.RowOrColumnMajor => RowOrColumnMajor;
 
     object[]? UiaCore.ITableItemProvider.GetRowHeaderItems() => GetRowHeaderItems();
 
@@ -2230,7 +2230,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
     {
-        if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
         {
             HRESULT result = UiaCore.UiaRaiseAutomationEvent(this, eventId);
             return result == HRESULT.S_OK;
@@ -2241,7 +2241,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, object? oldValue, object? newValue)
     {
-        if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
         {
             HRESULT result = UiaCore.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
             return result == HRESULT.S_OK;
@@ -2255,7 +2255,7 @@ public unsafe partial class AccessibleObject :
         AutomationNotificationProcessing notificationProcessing,
         string notificationText)
     {
-        if (UiaCore.UiaClientsAreListening())
+        if (PInvoke.UiaClientsAreListening())
         {
             return RaiseAutomationNotification(notificationKind, notificationProcessing, notificationText);
         }
@@ -2263,9 +2263,9 @@ public unsafe partial class AccessibleObject :
         return s_notificationEventAvailable;
     }
 
-    internal bool RaiseStructureChangedEvent(UiaCore.StructureChangeType structureChangeType, int[] runtimeId)
+    internal bool RaiseStructureChangedEvent(StructureChangeType structureChangeType, int[] runtimeId)
     {
-        if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
         {
             HRESULT result = UiaCore.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId is null ? 0 : runtimeId.Length);
             return result == HRESULT.S_OK;

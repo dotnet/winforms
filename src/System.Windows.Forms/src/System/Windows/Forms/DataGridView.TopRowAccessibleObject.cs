@@ -210,13 +210,13 @@ public partial class DataGridView
         }
 
         [return: MarshalAs(UnmanagedType.IUnknown)]
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return Parent;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     if (Parent.GetChildCount() > 1)
                     {
                         if (_ownerDataGridView is null)
@@ -228,14 +228,14 @@ public partial class DataGridView
                     }
 
                     break;
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     if (GetChildCount() > 0)
                     {
                         return GetChild(0);
                     }
 
                     break;
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     if (GetChildCount() > 0)
                     {
                         return GetChild(GetChildCount() - 1);

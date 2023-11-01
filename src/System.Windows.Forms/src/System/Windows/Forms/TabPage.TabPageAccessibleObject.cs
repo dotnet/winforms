@@ -53,7 +53,7 @@ public partial class TabPage
         public override int GetChildCount()
             => this.IsOwnerHandleCreated(out TabPage? owningTabPage) ? owningTabPage.Controls.Count : -1;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out TabPage? _) || OwningTabControl is null)
             {
@@ -62,9 +62,9 @@ public partial class TabPage
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => OwningTabControl?.AccessibilityObject,
-                UiaCore.NavigateDirection.NextSibling => GetNextSibling(),
-                UiaCore.NavigateDirection.PreviousSibling => null,
+                NavigateDirection.NavigateDirection_Parent => OwningTabControl?.AccessibilityObject,
+                NavigateDirection.NavigateDirection_NextSibling => GetNextSibling(),
+                NavigateDirection.NavigateDirection_PreviousSibling => null,
                 _ => base.FragmentNavigate(direction)
             };
         }

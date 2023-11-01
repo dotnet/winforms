@@ -40,7 +40,7 @@ public partial class ComboBox
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owningComboBox.IsHandleCreated ||
                 // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
@@ -52,13 +52,13 @@ public partial class ComboBox
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _owningComboBox.AccessibilityObject;
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return _owningComboBox.DroppedDown
                         ? _owningComboBox.ChildListAccessibleObject
                         : null;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     return _owningComboBox.DropDownStyle != ComboBoxStyle.Simple
                         && _owningComboBox.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject
                             ? comboBoxAccessibleObject.DropDownButtonUiaProvider

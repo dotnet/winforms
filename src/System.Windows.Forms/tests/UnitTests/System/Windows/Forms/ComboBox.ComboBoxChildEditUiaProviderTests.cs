@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -49,7 +48,7 @@ public class ComboBox_ComboBoxChildEditUiaProviderTests
 
         comboBox.DroppedDown = droppedDown;
         AccessibleObject previousItem = comboBox.ChildEditAccessibleObject
-            .FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) as AccessibleObject;
+            .FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling) as AccessibleObject;
 
         Assert.Equal(!childListDisplayed, previousItem is null);
         Assert.Equal(childListDisplayed, previousItem == comboBox.ChildListAccessibleObject);
@@ -95,7 +94,7 @@ public class ComboBox_ComboBoxChildEditUiaProviderTests
 
         comboBox.DroppedDown = droppedDown;
         AccessibleObject nextItem = comboBox.ChildEditAccessibleObject
-            .FragmentNavigate(UiaCore.NavigateDirection.NextSibling) as AccessibleObject;
+            .FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling) as AccessibleObject;
 
         AccessibleObject expectedItem = comboBoxStyle != ComboBoxStyle.Simple
             ? ((ComboBox.ComboBoxAccessibleObject)comboBox.AccessibilityObject).DropDownButtonUiaProvider

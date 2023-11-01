@@ -53,10 +53,10 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
             _ => base.GetPropertyValue(propertyID)
         };
 
-    internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+    internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         => direction switch
         {
-            UiaCore.NavigateDirection.NextSibling
+            NavigateDirection.NavigateDirection_NextSibling
                 => _owningListView.TryGetTarget(out ListView? target) && target.View == View.Tile ? target._selectedItem?.SubItems[1].AccessibilityObject : null,
             _ => base.FragmentNavigate(direction)
         };

@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -323,7 +322,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "");
 
-        Assert.Equal(controlAccessibleObject, calendar.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(controlAccessibleObject, calendar.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -338,7 +337,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
         CalendarAccessibleObject calendar = controlAccessibleObject.CalendarsAccessibleObjects?.First?.Value;
 
         Assert.NotNull(calendar);
-        Assert.Equal(controlAccessibleObject.TodayLinkAccessibleObject, calendar.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(controlAccessibleObject.TodayLinkAccessibleObject, calendar.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
     }
 
     [WinFormsFact]
@@ -363,10 +362,10 @@ public class MonthCalendar_CalendarAccessibleObjectTests
         Assert.NotNull(calendar3);
         Assert.NotNull(calendar4);
 
-        Assert.Equal(calendar2, calendar1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(calendar3, calendar2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(calendar4, calendar3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(controlAccessibleObject.TodayLinkAccessibleObject, calendar4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(calendar2, calendar1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(calendar3, calendar2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(calendar4, calendar3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(controlAccessibleObject.TodayLinkAccessibleObject, calendar4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
     }
 
     [WinFormsFact]
@@ -380,7 +379,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
         CalendarAccessibleObject calendar = controlAccessibleObject.CalendarsAccessibleObjects?.First?.Value;
 
         Assert.NotNull(calendar);
-        Assert.Equal(controlAccessibleObject.NextButtonAccessibleObject, calendar.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(controlAccessibleObject.NextButtonAccessibleObject, calendar.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -405,10 +404,10 @@ public class MonthCalendar_CalendarAccessibleObjectTests
         Assert.NotNull(calendar3);
         Assert.NotNull(calendar4);
 
-        Assert.Equal(controlAccessibleObject.NextButtonAccessibleObject, calendar1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(calendar1, calendar2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(calendar2, calendar3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(calendar3, calendar4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(controlAccessibleObject.NextButtonAccessibleObject, calendar1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(calendar1, calendar2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(calendar2, calendar3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(calendar3, calendar4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -419,7 +418,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "");
 
-        Assert.Equal(calendar.CalendarHeaderAccessibleObject, calendar.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(calendar.CalendarHeaderAccessibleObject, calendar.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -431,7 +430,7 @@ public class MonthCalendar_CalendarAccessibleObjectTests
         var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "");
 
-        Assert.Equal(calendar.CalendarBodyAccessibleObject, calendar.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(calendar.CalendarBodyAccessibleObject, calendar.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 }

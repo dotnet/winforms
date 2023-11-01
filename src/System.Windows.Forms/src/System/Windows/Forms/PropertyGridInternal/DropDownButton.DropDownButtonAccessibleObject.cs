@@ -46,7 +46,7 @@ internal sealed partial class DropDownButton : Button
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owningDropDownButton.Visible
                 || _owningPropertyGrid?.SelectedGridEntry?.AccessibilityObject is not PropertyDescriptorGridEntryAccessibleObject parent)
@@ -56,9 +56,9 @@ internal sealed partial class DropDownButton : Button
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => parent,
-                UiaCore.NavigateDirection.NextSibling => parent.GetNextChild(this),
-                UiaCore.NavigateDirection.PreviousSibling => parent.GetPreviousChild(this),
+                NavigateDirection.NavigateDirection_Parent => parent,
+                NavigateDirection.NavigateDirection_NextSibling => parent.GetNextChild(this),
+                NavigateDirection.NavigateDirection_PreviousSibling => parent.GetPreviousChild(this),
                 _ => base.FragmentNavigate(direction),
             };
         }

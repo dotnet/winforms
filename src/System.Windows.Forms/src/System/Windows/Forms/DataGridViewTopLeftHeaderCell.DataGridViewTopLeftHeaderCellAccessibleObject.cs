@@ -259,7 +259,7 @@ public partial class DataGridViewTopLeftHeaderCell
         }
         #region IRawElementProviderFragment Implementation
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (Owner is null)
             {
@@ -275,11 +275,11 @@ public partial class DataGridViewTopLeftHeaderCell
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return dataGridView.AccessibilityObject.GetChild(0);
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return null;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     if (dataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0)
                     {
                         return null;

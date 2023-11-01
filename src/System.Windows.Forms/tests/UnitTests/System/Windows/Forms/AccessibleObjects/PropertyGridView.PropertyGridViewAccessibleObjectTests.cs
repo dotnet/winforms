@@ -7,7 +7,6 @@ using System.Windows.Forms.PropertyGridInternal;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Control;
 using static System.Windows.Forms.PropertyGridInternal.PropertyGridView;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -32,17 +31,17 @@ public class PropertyGridView_PropertyGridViewAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.NavigateDirection.Parent)]
-    [InlineData((int)UiaCore.NavigateDirection.NextSibling)]
-    [InlineData((int)UiaCore.NavigateDirection.PreviousSibling)]
-    [InlineData((int)UiaCore.NavigateDirection.FirstChild)]
-    [InlineData((int)UiaCore.NavigateDirection.LastChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_Parent)]
+    [InlineData((int)NavigateDirection.NavigateDirection_NextSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_PreviousSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_LastChild)]
     public void PropertyGridViewAccessibleObject_FragmentNavigate_DoesNotThrowExpection_WithoutOwnerGrid(int direction)
     {
         using PropertyGrid propertyGrid = new PropertyGrid();
         using PropertyGridView propertyGridView = new PropertyGridView(null, null);
         AccessibleObject accessibleObject = new PropertyGridViewAccessibleObject(propertyGridView, propertyGrid);
-        Assert.Null(accessibleObject.FragmentNavigate((UiaCore.NavigateDirection)direction));
+        Assert.Null(accessibleObject.FragmentNavigate((NavigateDirection)direction));
     }
 
     [WinFormsFact]

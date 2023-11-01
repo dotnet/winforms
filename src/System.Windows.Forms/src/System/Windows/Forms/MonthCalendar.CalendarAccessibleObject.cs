@@ -103,20 +103,20 @@ public partial class MonthCalendar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_NextSibling
                     => _monthCalendarAccessibleObject.CalendarsAccessibleObjects?.Find(this)?.Next?.Value
                     ?? (_monthCalendarAccessibleObject.ShowToday
                         ? (AccessibleObject)_monthCalendarAccessibleObject.TodayLinkAccessibleObject
                         : null),
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => _calendarIndex == 0
                         ? _monthCalendarAccessibleObject.NextButtonAccessibleObject
                         : _monthCalendarAccessibleObject.CalendarsAccessibleObjects?.Find(this)?.Previous?.Value,
-                UiaCore.NavigateDirection.FirstChild => CalendarHeaderAccessibleObject,
-                UiaCore.NavigateDirection.LastChild => CalendarBodyAccessibleObject,
+                NavigateDirection.NavigateDirection_FirstChild => CalendarHeaderAccessibleObject,
+                NavigateDirection.NavigateDirection_LastChild => CalendarBodyAccessibleObject,
                 _ => base.FragmentNavigate(direction),
             };
 

@@ -44,15 +44,15 @@ public partial class ErrorProvider
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UiaCore.NavigateDirection.Parent:
+                    case NavigateDirection.NavigateDirection_Parent:
                         return Parent;
-                    case UiaCore.NavigateDirection.NextSibling:
+                    case NavigateDirection.NavigateDirection_NextSibling:
                         return GetNextSibling();
-                    case UiaCore.NavigateDirection.PreviousSibling:
+                    case NavigateDirection.NavigateDirection_PreviousSibling:
                         return GetPreviousSibling();
                     default:
                         return base.FragmentNavigate(direction);

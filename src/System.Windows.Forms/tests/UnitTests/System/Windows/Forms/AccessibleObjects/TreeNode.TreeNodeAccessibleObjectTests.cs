@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TreeNode;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -128,7 +127,7 @@ public class TreeNodeAccessibleObjectTests
         using TreeView control = new();
         TreeNode node = new(control);
 
-        var actual = (AccessibleObject)node.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+        var actual = (AccessibleObject)node.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(control.AccessibilityObject, actual);
         Assert.False(control.IsHandleCreated);
@@ -141,7 +140,7 @@ public class TreeNodeAccessibleObjectTests
         TreeNode node = new();
         control.Nodes.Add(new TreeNode("Root node", new[] { node }));
 
-        var actual = (AccessibleObject)node.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+        var actual = (AccessibleObject)node.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(node.Parent.AccessibilityObject, actual);
         Assert.False(control.IsHandleCreated);
@@ -162,7 +161,7 @@ public class TreeNodeAccessibleObjectTests
         // If node is collapsed, child is not visible, so returns null instead of child ao.
         AccessibleObject expected = isExpanded ? node.FirstNode?.AccessibilityObject : null;
 
-        Assert.Equal(expected, node.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, node.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -181,7 +180,7 @@ public class TreeNodeAccessibleObjectTests
         // If node is collapsed, child is not visible, so returns null instead of child ao.
         AccessibleObject expected = isExpanded ? node.LastNode?.AccessibilityObject : null;
 
-        Assert.Equal(expected, node.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, node.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -195,9 +194,9 @@ public class TreeNodeAccessibleObjectTests
         AccessibleObject accessibleObject2 = control.Nodes[1].AccessibilityObject;
         AccessibleObject accessibleObject3 = control.Nodes[2].AccessibilityObject;
 
-        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -211,9 +210,9 @@ public class TreeNodeAccessibleObjectTests
         AccessibleObject accessibleObject2 = control.Nodes[1].AccessibilityObject;
         AccessibleObject accessibleObject3 = control.Nodes[2].AccessibilityObject;
 
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -400,7 +399,7 @@ public class TreeNodeAccessibleObjectTests
         using TreeView control = new();
         TreeNode node = new(control);
 
-        Assert.Equal(UiaCore.ExpandCollapseState.LeafNode, node.AccessibilityObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_LeafNode, node.AccessibilityObject.ExpandCollapseState);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -418,9 +417,9 @@ public class TreeNodeAccessibleObjectTests
             node.Expand();
         }
 
-        UiaCore.ExpandCollapseState expected = isExpanded
-                ? UiaCore.ExpandCollapseState.Expanded
-                : UiaCore.ExpandCollapseState.Collapsed;
+        ExpandCollapseState expected = isExpanded
+                ? ExpandCollapseState.ExpandCollapseState_Expanded
+                : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         Assert.Equal(expected, node.AccessibilityObject.ExpandCollapseState);
         Assert.False(control.IsHandleCreated);
@@ -458,7 +457,7 @@ public class TreeNodeAccessibleObjectTests
         using TreeView control = new() { CheckBoxes = true };
         TreeNode node = new(control) { Checked = isChecked };
 
-        UiaCore.ToggleState expected = isChecked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+        ToggleState expected = isChecked ? ToggleState.ToggleState_On : ToggleState.ToggleState_Off;
 
         Assert.Equal(expected, node.AccessibilityObject.ToggleState);
         Assert.False(control.IsHandleCreated);

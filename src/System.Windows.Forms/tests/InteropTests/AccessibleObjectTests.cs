@@ -7,7 +7,6 @@ using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using ProviderOptions = Interop.UiaCore.ProviderOptions;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.InteropTests;
@@ -67,7 +66,7 @@ public class AccessibleObjectTests : InteropTestBase
     public void AccessibleObject_IRawElementProviderSimpleProviderOptions_Get_ReturnsExpected()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderSimpleProviderOptions(o, ProviderOptions.ServerSideProvider | ProviderOptions.UseComThreading));
+        AssertSuccess(Test_IRawElementProviderSimpleProviderOptions(o, ProviderOptions.ProviderOptions_ServerSideProvider | ProviderOptions.ProviderOptions_UseComThreading));
     }
 
     public static TheoryData<int, bool> GetPatternProvider_TestData() => new()
@@ -190,13 +189,13 @@ public class AccessibleObjectTests : InteropTestBase
     }
 
     [WinFormsTheory]
-    [InlineData((int)NavigateDirection.Parent - 1)]
-    [InlineData((int)NavigateDirection.Parent)]
-    [InlineData((int)NavigateDirection.NextSibling)]
-    [InlineData((int)NavigateDirection.PreviousSibling)]
-    [InlineData((int)NavigateDirection.FirstChild)]
-    [InlineData((int)NavigateDirection.LastChild)]
-    [InlineData((int)NavigateDirection.LastChild + 1)]
+    [InlineData((int)NavigateDirection.NavigateDirection_Parent - 1)]
+    [InlineData((int)NavigateDirection.NavigateDirection_Parent)]
+    [InlineData((int)NavigateDirection.NavigateDirection_NextSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_PreviousSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_LastChild + 1)]
     public void AccessibleObject_IRawElementProviderFragmentNavigate_Invoke_ReturnsExpected(int direction)
     {
         var o = new AccessibleObject();
@@ -266,58 +265,58 @@ public class AccessibleObjectTests : InteropTestBase
     public void AccessibleObject_IValueProviderCollapse_Invoke_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IValueProviderCollapse_InvokeAfterExpand_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderExpand(o, ExpandCollapseState.Collapsed));
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderExpand(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IExpandCollapseProviderExpand_Invoke_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IExpandCollapseProviderExpand_InvokeAfterCollapse_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IExpandCollapseProviderExpandCollapseState_Get_ReturnsExpected()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderGetExpandCollapseState(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderGetExpandCollapseState(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IToggleProviderToggleState_Get_ReturnsExpected()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IToggleProviderGetToggleState(o, ToggleState.Indeterminate));
+        AssertSuccess(Test_IToggleProviderGetToggleState(o, ToggleState.ToggleState_Indeterminate));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IToggleProviderToggle_Invoke_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IToggleProviderToggle(o, ToggleState.Indeterminate));
+        AssertSuccess(Test_IToggleProviderToggle(o, ToggleState.ToggleState_Indeterminate));
     }
 
     [WinFormsFact]
     public void AccessibleObject_ITableProviderRowOrColumnMajor_Get_ReturnsExpected()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_ITableProviderGetRowOrColumnMajor(o, RowOrColumnMajor.RowMajor));
+        AssertSuccess(Test_ITableProviderGetRowOrColumnMajor(o, RowOrColumnMajor.RowOrColumnMajor_RowMajor));
     }
 
     [WinFormsFact]

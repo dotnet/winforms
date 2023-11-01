@@ -142,18 +142,18 @@ public partial class MonthCalendar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_NextSibling
                     => _calendarBodyAccessibleObject.RowsAccessibleObjects?.Find(this)?.Next?.Value,
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => _calendarBodyAccessibleObject.RowsAccessibleObjects?.Find(this)?.Previous?.Value,
-                UiaCore.NavigateDirection.FirstChild
+                NavigateDirection.NavigateDirection_FirstChild
                     => _monthCalendarAccessibleObject.ShowWeekNumbers && _rowIndex != -1
                         ? WeekNumberCellAccessibleObject
                         : CellsAccessibleObjects?.First?.Value,
-                UiaCore.NavigateDirection.LastChild => CellsAccessibleObjects?.Last?.Value,
+                NavigateDirection.NavigateDirection_LastChild => CellsAccessibleObjects?.Last?.Value,
                 _ => base.FragmentNavigate(direction)
             };
 

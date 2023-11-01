@@ -1426,7 +1426,7 @@ public class Control_ControlAccessibleObjectTests
         Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
 
         UiaCore.IRawElementProviderFragment parent
-            = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+            = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.True(parent is null);
         Assert.False(control.IsHandleCreated);
@@ -1442,9 +1442,9 @@ public class Control_ControlAccessibleObjectTests
         Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
 
         UiaCore.IRawElementProviderFragment nextSibling
-            = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
         UiaCore.IRawElementProviderFragment previousSibling
-            = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+            = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
         Assert.True(nextSibling is null);
         Assert.True(previousSibling is null);
@@ -1477,7 +1477,7 @@ public class Control_ControlAccessibleObjectTests
 
         Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
 
-        UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+        UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
         AccessibleObject expected = toolStrip.AccessibilityObject;
 
         Assert.Equal(expected, actual);
@@ -1515,7 +1515,7 @@ public class Control_ControlAccessibleObjectTests
 
         Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
 
-        UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
         AccessibleObject expected = button.AccessibilityObject;
 
         Assert.Equal(expected, actual);
@@ -1551,7 +1551,7 @@ public class Control_ControlAccessibleObjectTests
 
         Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
 
-        UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+        UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
         AccessibleObject expected = label.AccessibilityObject;
 
         Assert.Equal(expected, actual);

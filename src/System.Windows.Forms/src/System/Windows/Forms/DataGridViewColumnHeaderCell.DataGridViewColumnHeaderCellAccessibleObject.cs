@@ -242,7 +242,7 @@ public partial class DataGridViewColumnHeaderCell
 
         #region IRawElementProviderFragment Implementation
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (Owner is null)
             {
@@ -251,9 +251,9 @@ public partial class DataGridViewColumnHeaderCell
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => Parent,
-                UiaCore.NavigateDirection.NextSibling => NavigateForward(),
-                UiaCore.NavigateDirection.PreviousSibling => NavigateBackward(),
+                NavigateDirection.NavigateDirection_Parent => Parent,
+                NavigateDirection.NavigateDirection_NextSibling => NavigateForward(),
+                NavigateDirection.NavigateDirection_PreviousSibling => NavigateBackward(),
                 _ => null
             };
         }

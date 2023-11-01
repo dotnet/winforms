@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ScrollBar;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -56,7 +55,7 @@ public class ScrollBar_ScrollBarChildAccessibleObjectTests
         using SubScrollBar control = new();
         var accessibleObject = new ScrollBarChildAccessibleObject(control);
 
-        Assert.Equal(control.AccessibilityObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(control.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);
     }
 

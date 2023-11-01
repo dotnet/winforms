@@ -68,7 +68,7 @@ public partial class ComboBox
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owner.IsHandleCreated)
             {
@@ -77,13 +77,13 @@ public partial class ComboBox
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _owner.AccessibilityObject;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     return _owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject
                         ? comboBoxAccessibleObject.DropDownButtonUiaProvider
                         : null;
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return _owner.DroppedDown
                         ? _owner.ChildListAccessibleObject
                         : null;

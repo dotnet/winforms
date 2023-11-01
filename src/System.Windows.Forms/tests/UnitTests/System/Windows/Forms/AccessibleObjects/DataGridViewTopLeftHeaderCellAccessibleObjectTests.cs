@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -154,7 +153,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
         control.TopLeftHeaderCell = cell;
         AccessibleObject expected = control.AccessibilityObject.GetChild(0);
 
-        Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
         Assert.Equal(createControl, control.IsHandleCreated);
     }
@@ -169,7 +168,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
 
         control.TopLeftHeaderCell = cell;
 
-        Assert.Null(cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(cell.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         Assert.Equal(createControl, control.IsHandleCreated);
     }
@@ -185,7 +184,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
         control.TopLeftHeaderCell = cell;
         AccessibleObject expected = control.AccessibilityObject.GetChild(0)?.GetChild(1);
 
-        Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
         Assert.Equal(createControl, control.IsHandleCreated);
     }
@@ -200,7 +199,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
 
         control.TopLeftHeaderCell = cell;
 
-        Assert.Null(cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Null(cell.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
         Assert.Equal(createControl, control.IsHandleCreated);
     }
@@ -218,7 +217,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
 
         AccessibleObject expected = control.Columns[1].HeaderCell.AccessibilityObject;
 
-        Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
         Assert.Equal(createControl, control.IsHandleCreated);
     }
@@ -237,7 +236,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
 
         AccessibleObject expected = control.Columns[1].HeaderCell.AccessibilityObject;
 
-        Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
         Assert.Equal(createControl, control.IsHandleCreated);
     }
@@ -257,7 +256,7 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
 
         AccessibleObject expected = control.Columns[0].HeaderCell.AccessibilityObject;
 
-        Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(expected, cell.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
         Assert.Equal(createControl, control.IsHandleCreated);
     }
@@ -272,8 +271,8 @@ public class DataGridViewTopLeftHeaderCellAccessibleObjectTests : DataGridViewTo
         using DataGridViewTopLeftHeaderCell cell = new();
         control.TopLeftHeaderCell = cell;
 
-        Assert.Null(cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(cell.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(cell.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(cell.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         Assert.Equal(createControl, control.IsHandleCreated);
     }

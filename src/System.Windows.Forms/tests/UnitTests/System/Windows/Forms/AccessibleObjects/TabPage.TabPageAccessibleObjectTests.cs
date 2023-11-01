@@ -4,7 +4,6 @@
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TabControl;
 using static System.Windows.Forms.TabPage;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -191,11 +190,11 @@ public class TabPage_TabPageAccessibilityObjectTests
 
         TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(tabPage.AccessibilityObject);
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.True(tabPage.IsHandleCreated);
     }
 
@@ -208,11 +207,11 @@ public class TabPage_TabPageAccessibilityObjectTests
 
         TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(pages[0].AccessibilityObject);
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(pages[0].IsHandleCreated);
         Assert.False(tabControl.IsHandleCreated);
     }
@@ -227,11 +226,11 @@ public class TabPage_TabPageAccessibilityObjectTests
 
         TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(pages[0].AccessibilityObject);
 
-        Assert.Equal(tabControl.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.True(pages[0].IsHandleCreated);
         Assert.True(tabControl.IsHandleCreated);
     }
@@ -246,11 +245,11 @@ public class TabPage_TabPageAccessibilityObjectTests
 
         TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(pages[0].AccessibilityObject);
 
-        Assert.Equal(tabControl.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.True(pages[0].IsHandleCreated);
         Assert.False(pages[1].IsHandleCreated);
         Assert.False(pages[2].IsHandleCreated);
@@ -270,65 +269,65 @@ public class TabPage_TabPageAccessibilityObjectTests
         TabPageAccessibleObject accessibleObject3 = Assert.IsType<TabPageAccessibleObject>(pages[2].AccessibilityObject);
 
         // First tab is selected
-        Assert.Equal(tabControl.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(tabControl.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(tabControl.AccessibilityObject, accessibleObject3.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.AccessibilityObject, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         // Second tab is selected
         tabControl.SelectedIndex = 1;
 
-        Assert.Equal(tabControl.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(tabControl.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(tabControl.AccessibilityObject, accessibleObject3.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.AccessibilityObject, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         // Third tab is selected
         tabControl.SelectedIndex = 2;
 
-        Assert.Equal(tabControl.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(tabControl.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(tabControl.AccessibilityObject, accessibleObject3.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject3.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.AccessibilityObject, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         Assert.True(pages[0].IsHandleCreated);
         Assert.True(pages[1].IsHandleCreated);

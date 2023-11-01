@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripButton;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -156,9 +155,9 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(CheckState.Checked, (int)UiaCore.ToggleState.On)]
-    [InlineData(CheckState.Unchecked, (int)UiaCore.ToggleState.Off)]
-    [InlineData(CheckState.Indeterminate, (int)UiaCore.ToggleState.Indeterminate)]
+    [InlineData(CheckState.Checked, (int)ToggleState.ToggleState_On)]
+    [InlineData(CheckState.Unchecked, (int)ToggleState.ToggleState_Off)]
+    [InlineData(CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate)]
     public void ToolStripButtonAccessibleObject_ToggleState_ReturnsExpected(CheckState checkState, int expectedToggleState)
     {
         using ToolStripButton toolStripButton = new()
@@ -168,7 +167,7 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
 
         object actual = toolStripButton.AccessibilityObject.ToggleState;
 
-        Assert.Equal((UiaCore.ToggleState)expectedToggleState, actual);
+        Assert.Equal((ToggleState)expectedToggleState, actual);
     }
 
     [WinFormsFact]
@@ -183,15 +182,15 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
 
         toolStripButton.Click += (s, e) => { clickCounter++; };
 
-        Assert.Equal(UiaCore.ToggleState.Off, toolStripButton.AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, toolStripButton.AccessibilityObject.ToggleState);
 
         toolStripButton.AccessibilityObject.Toggle();
 
-        Assert.Equal(UiaCore.ToggleState.On, toolStripButton.AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_On, toolStripButton.AccessibilityObject.ToggleState);
 
         toolStripButton.AccessibilityObject.Toggle();
 
-        Assert.Equal(UiaCore.ToggleState.Off, toolStripButton.AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, toolStripButton.AccessibilityObject.ToggleState);
 
         Assert.Equal(0, clickCounter);
     }

@@ -64,8 +64,8 @@ public partial class ListView
         internal override int RowCount
             => this.TryGetOwnerAs(out ListView? owningListView) ? owningListView.Items.Count : base.RowCount;
 
-        internal override UiaCore.RowOrColumnMajor RowOrColumnMajor
-            => UiaCore.RowOrColumnMajor.RowMajor;
+        internal override RowOrColumnMajor RowOrColumnMajor
+            => RowOrColumnMajor.RowOrColumnMajor_RowMajor;
 
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
         {
@@ -74,7 +74,7 @@ public partial class ListView
             return element ?? base.ElementProviderFromPoint(x, y);
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out ListView? _))
             {
@@ -83,8 +83,8 @@ public partial class ListView
 
             return direction switch
             {
-                UiaCore.NavigateDirection.FirstChild => GetChild(0),
-                UiaCore.NavigateDirection.LastChild => GetLastChild(),
+                NavigateDirection.NavigateDirection_FirstChild => GetChild(0),
+                NavigateDirection.NavigateDirection_LastChild => GetLastChild(),
                 _ => base.FragmentNavigate(direction)
             };
         }

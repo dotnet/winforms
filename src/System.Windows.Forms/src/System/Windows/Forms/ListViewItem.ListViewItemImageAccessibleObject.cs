@@ -66,12 +66,12 @@ public partial class ListViewItem
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.Parent => Parent,
-                UiaCore.NavigateDirection.NextSibling => Parent.GetChild(1),
-                UiaCore.NavigateDirection.PreviousSibling => null,
+                NavigateDirection.NavigateDirection_Parent => Parent,
+                NavigateDirection.NavigateDirection_NextSibling => Parent.GetChild(1),
+                NavigateDirection.NavigateDirection_PreviousSibling => null,
                 _ => base.FragmentNavigate(direction)
             };
     }

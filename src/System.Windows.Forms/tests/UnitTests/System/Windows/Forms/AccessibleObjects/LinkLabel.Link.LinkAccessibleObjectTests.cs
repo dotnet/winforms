@@ -5,7 +5,6 @@ using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.LinkLabel;
 using static System.Windows.Forms.LinkLabel.Link;
 using static Interop;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -75,10 +74,10 @@ public class LinkLabel_Link_LinkAccessibleObjectTests
         AccessibleObject linkLabelAccessibleObject3 = linkLabel.Links[2].AccessibleObject;
         AccessibleObject linkLabelAccessibleObject4 = linkLabel.Links[3].AccessibleObject;
 
-        Assert.Equal(linkLabelAccessibleObject2, linkLabelAccessibleObject1.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Equal(linkLabelAccessibleObject3, linkLabelAccessibleObject2.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Equal(linkLabelAccessibleObject4, linkLabelAccessibleObject3.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(linkLabelAccessibleObject4.FragmentNavigate(NavigateDirection.NextSibling));
+        Assert.Equal(linkLabelAccessibleObject2, linkLabelAccessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(linkLabelAccessibleObject3, linkLabelAccessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(linkLabelAccessibleObject4, linkLabelAccessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(linkLabelAccessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.False(linkLabel.IsHandleCreated);
     }
 
@@ -97,10 +96,10 @@ public class LinkLabel_Link_LinkAccessibleObjectTests
         AccessibleObject linkLabelAccessibleObject3 = linkLabel.Links[2].AccessibleObject;
         AccessibleObject linkLabelAccessibleObject4 = linkLabel.Links[3].AccessibleObject;
 
-        Assert.Null(linkLabelAccessibleObject1.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(linkLabelAccessibleObject1, linkLabelAccessibleObject2.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(linkLabelAccessibleObject2, linkLabelAccessibleObject3.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(linkLabelAccessibleObject3, linkLabelAccessibleObject4.FragmentNavigate(NavigateDirection.PreviousSibling));
+        Assert.Null(linkLabelAccessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(linkLabelAccessibleObject1, linkLabelAccessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(linkLabelAccessibleObject2, linkLabelAccessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(linkLabelAccessibleObject3, linkLabelAccessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(linkLabel.IsHandleCreated);
     }
 
@@ -121,7 +120,7 @@ public class LinkLabel_Link_LinkAccessibleObjectTests
         }
 
         LinkAccessibleObject linkAccessibleObject = linkLabel.Links[linkIndex].AccessibleObject;
-        UiaCore.IRawElementProviderFragment actual = linkAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+        UiaCore.IRawElementProviderFragment actual = linkAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(expected, actual);
         Assert.False(linkLabel.IsHandleCreated);

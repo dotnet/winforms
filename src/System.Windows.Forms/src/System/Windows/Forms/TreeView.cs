@@ -2141,10 +2141,10 @@ public partial class TreeView : Control
         if (IsAccessibilityObjectCreated)
         {
             AccessibleObject nodeAccessibleObject = e.Node!.AccessibilityObject;
-            UiaCore.ToggleState newState = nodeAccessibleObject.ToggleState;
-            UiaCore.ToggleState oldState = newState == UiaCore.ToggleState.On
-                ? UiaCore.ToggleState.Off
-                : UiaCore.ToggleState.On;
+            ToggleState newState = nodeAccessibleObject.ToggleState;
+            ToggleState oldState = newState == ToggleState.ToggleState_On
+                ? ToggleState.ToggleState_Off
+                : ToggleState.ToggleState_On;
 
             nodeAccessibleObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId,
@@ -2173,8 +2173,8 @@ public partial class TreeView : Control
         {
             e.Node!.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: UiaCore.ExpandCollapseState.Expanded,
-                newValue: (VARIANT)(uint)UiaCore.ExpandCollapseState.Collapsed);
+                oldValue: ExpandCollapseState.ExpandCollapseState_Expanded,
+                newValue: (VARIANT)(uint)ExpandCollapseState.ExpandCollapseState_Collapsed);
         }
     }
 
@@ -2198,8 +2198,8 @@ public partial class TreeView : Control
         {
             e.Node!.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: UiaCore.ExpandCollapseState.Collapsed,
-                newValue: UiaCore.ExpandCollapseState.Expanded);
+                oldValue: ExpandCollapseState.ExpandCollapseState_Collapsed,
+                newValue: ExpandCollapseState.ExpandCollapseState_Expanded);
         }
     }
 

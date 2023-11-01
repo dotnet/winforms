@@ -30,11 +30,11 @@ public partial class DataGridViewTextBoxEditingControl
 
         public override string Name => this.GetOwnerAccessibleName(SR.DataGridView_AccEditingControlAccName);
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     if (this.TryGetOwnerAs(out Control? owner) && owner is IDataGridViewEditingControl editingControl
                         && editingControl.EditingControlDataGridView?.EditingControl == owner
                         && owner.ToolStripControlHost is null)

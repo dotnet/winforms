@@ -59,7 +59,7 @@ public partial class ComboBox
             return base.ElementProviderFromPoint(x, y);
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owningComboBox.IsHandleCreated ||
                 // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
@@ -71,11 +71,11 @@ public partial class ComboBox
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _owningComboBox.AccessibilityObject;
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     return GetChildFragment(0);
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     var childFragmentCount = GetChildFragmentCount();
                     if (childFragmentCount > 0)
                     {
@@ -83,11 +83,11 @@ public partial class ComboBox
                     }
 
                     return null;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     return _owningComboBox.DropDownStyle == ComboBoxStyle.DropDownList
                         ? _owningComboBox.ChildTextAccessibleObject
                         : _owningComboBox.ChildEditAccessibleObject;
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     // A workaround for an issue with an Inspect not responding. It also simulates native control behavior.
                     return _owningComboBox.DropDownStyle == ComboBoxStyle.Simple
                         ? _owningComboBox.ChildListAccessibleObject

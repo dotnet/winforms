@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripMenuItem;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -169,9 +168,9 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(CheckState.Checked, (int)UiaCore.ToggleState.On)]
-    [InlineData(CheckState.Unchecked, (int)UiaCore.ToggleState.Off)]
-    [InlineData(CheckState.Indeterminate, (int)UiaCore.ToggleState.Indeterminate)]
+    [InlineData(CheckState.Checked, (int)ToggleState.ToggleState_On)]
+    [InlineData(CheckState.Unchecked, (int)ToggleState.ToggleState_Off)]
+    [InlineData(CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate)]
     public void ToolStripMenuItemAccessibleObject_ToggleState_ReturnsExpected(CheckState checkState, int expectedToggleState)
     {
         using ToolStripMenuItem toolStripMenuItem = new()
@@ -181,7 +180,7 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
 
         object actual = toolStripMenuItem.AccessibilityObject.ToggleState;
 
-        Assert.Equal((UiaCore.ToggleState)expectedToggleState, actual);
+        Assert.Equal((ToggleState)expectedToggleState, actual);
     }
 
     [WinFormsFact]
@@ -196,15 +195,15 @@ public class ToolStripMenuItem_ToolStripMenuItemAccessibleObjectTests
 
         toolStripMenuItem.Click += (s, e) => { clickCounter++; };
 
-        Assert.Equal(UiaCore.ToggleState.Off, toolStripMenuItem.AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, toolStripMenuItem.AccessibilityObject.ToggleState);
 
         toolStripMenuItem.AccessibilityObject.Toggle();
 
-        Assert.Equal(UiaCore.ToggleState.On, toolStripMenuItem.AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_On, toolStripMenuItem.AccessibilityObject.ToggleState);
 
         toolStripMenuItem.AccessibilityObject.Toggle();
 
-        Assert.Equal(UiaCore.ToggleState.Off, toolStripMenuItem.AccessibilityObject.ToggleState);
+        Assert.Equal(ToggleState.ToggleState_Off, toolStripMenuItem.AccessibilityObject.ToggleState);
 
         Assert.Equal(0, clickCounter);
     }

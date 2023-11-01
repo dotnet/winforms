@@ -40,8 +40,8 @@ public partial class ToolStripSplitButton
         internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                NavigateDirection.FirstChild => base.FragmentNavigate(direction),
-                NavigateDirection.LastChild => base.FragmentNavigate(direction),
+                NavigateDirection.NavigateDirection_FirstChild => base.FragmentNavigate(direction),
+                NavigateDirection.NavigateDirection_LastChild => base.FragmentNavigate(direction),
                 _ => _accessibleObject.FragmentNavigate(direction)
             };
     }

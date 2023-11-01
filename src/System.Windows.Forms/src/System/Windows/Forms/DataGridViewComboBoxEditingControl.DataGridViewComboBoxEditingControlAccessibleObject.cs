@@ -27,11 +27,11 @@ public partial class DataGridViewComboBoxEditingControl
 
         public override AccessibleObject? Parent => _parentAccessibleObject;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     if (this.TryGetOwnerAs(out Control? owner) && owner is IDataGridViewEditingControl editingControl
                         && editingControl.EditingControlDataGridView?.EditingControl == owner
                         && owner.ToolStripControlHost is null)
@@ -57,10 +57,10 @@ public partial class DataGridViewComboBoxEditingControl
             _ => base.IsPatternSupported(patternId)
         };
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => this.TryGetOwnerAs(out DataGridViewComboBoxEditingControl? owner) && owner.DroppedDown
-                ? UiaCore.ExpandCollapseState.Expanded
-                : UiaCore.ExpandCollapseState.Collapsed;
+                ? ExpandCollapseState.ExpandCollapseState_Expanded
+                : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         /// <summary>
         ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.

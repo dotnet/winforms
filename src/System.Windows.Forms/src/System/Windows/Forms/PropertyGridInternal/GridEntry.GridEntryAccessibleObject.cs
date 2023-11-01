@@ -52,10 +52,10 @@ internal abstract partial class GridEntry
         public override string Description
             => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyDescription : string.Empty;
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
-            => !this.TryGetOwnerAs(out GridEntry? owner) ? UiaCore.ExpandCollapseState.Collapsed : owner.Expandable
-                ? owner.Expanded ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed
-                : UiaCore.ExpandCollapseState.LeafNode;
+        internal override ExpandCollapseState ExpandCollapseState
+            => !this.TryGetOwnerAs(out GridEntry? owner) ? ExpandCollapseState.ExpandCollapseState_Collapsed : owner.Expandable
+                ? owner.Expanded ? ExpandCollapseState.ExpandCollapseState_Expanded : ExpandCollapseState.ExpandCollapseState_Collapsed
+                : ExpandCollapseState.ExpandCollapseState_LeafNode;
 
         public override string Help => this.TryGetOwnerAs(out GridEntry? owner) ? owner.PropertyDescription : string.Empty;
 
@@ -311,11 +311,11 @@ internal abstract partial class GridEntry
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     if (this.TryGetOwnerAs(out GridEntry? owner) && owner.ParentGridEntry is { } parentGridEntry)
                     {
                         return parentGridEntry is SingleSelectRootGridEntry
@@ -324,9 +324,9 @@ internal abstract partial class GridEntry
                     }
 
                     return Parent;
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return Navigate(AccessibleNavigation.Previous);
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     return Navigate(AccessibleNavigation.Next);
             }
 

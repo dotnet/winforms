@@ -59,10 +59,10 @@ public partial class ComboBox
 
         internal override void Collapse() => ComboBoxDefaultAction(false);
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => this.IsOwnerHandleCreated(out ComboBox? owner) && owner.DroppedDown
-                ? UiaCore.ExpandCollapseState.Expanded
-                : UiaCore.ExpandCollapseState.Collapsed;
+                ? ExpandCollapseState.ExpandCollapseState_Expanded
+                : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         internal override string? get_accNameInternal(object childID)
         {
@@ -98,7 +98,7 @@ public partial class ComboBox
         public ComboBoxChildDropDownButtonUiaProvider? DropDownButtonUiaProvider
             => _dropDownButtonUiaProvider ??= this.TryGetOwnerAs(out ComboBox? owner) ? new ComboBoxChildDropDownButtonUiaProvider(owner) : null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out ComboBox? _))
             {
@@ -107,9 +107,9 @@ public partial class ComboBox
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     return GetFirstChild();
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     return GetLastChild();
                 default:
                     return base.FragmentNavigate(direction);

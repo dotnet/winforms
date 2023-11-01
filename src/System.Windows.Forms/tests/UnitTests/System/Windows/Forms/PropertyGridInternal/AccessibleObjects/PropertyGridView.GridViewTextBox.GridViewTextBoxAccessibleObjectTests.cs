@@ -36,7 +36,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor().Dynamic.EditTextBox.Handle);
 
         AccessibleObject selectedGridEntryAccessibleObject = gridEntry.AccessibilityObject;
-        UiaCore.IRawElementProviderFragment editFieldAccessibleObject = selectedGridEntryAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        UiaCore.IRawElementProviderFragment editFieldAccessibleObject = selectedGridEntryAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.NotNull(editFieldAccessibleObject);
 
         Assert.Equal("GridViewTextBoxAccessibleObject", editFieldAccessibleObject.GetType().Name);
@@ -63,7 +63,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         // In UI case an entry edit control is created when an PropertyGridView gets focus.
         Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor().Dynamic.EditTextBox.Handle);
 
-        UiaCore.IRawElementProviderFragment editFieldAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        UiaCore.IRawElementProviderFragment editFieldAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.Equal("GridViewTextBoxAccessibleObject", editFieldAccessibleObject.GetType().Name);
 
         // The case with drop down holder:
@@ -72,11 +72,11 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         propertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
 
         dropDownHolder.TestAccessor().Dynamic.SetState(0x00000002, true); // Control class States.Visible flag
-        UiaCore.IRawElementProviderFragment dropDownHolderAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        UiaCore.IRawElementProviderFragment dropDownHolderAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
 
         Assert.Equal("DropDownHolderAccessibleObject", dropDownHolderAccessibleObject.GetType().Name);
         Assert.True(propertyGridView.DropDownVisible);
-        object previousAccessibleObject = editFieldAccessibleObject.Navigate(UiaCore.NavigateDirection.PreviousSibling);
+        object previousAccessibleObject = editFieldAccessibleObject.Navigate(NavigateDirection.NavigateDirection_PreviousSibling);
         Assert.NotNull(previousAccessibleObject);
         Assert.Same(dropDownHolder.AccessibilityObject, previousAccessibleObject);
     }
@@ -198,7 +198,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         // In UI case an entry edit control is created when an PropertyGridView gets focus.
         Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor().Dynamic.EditTextBox.Handle);
 
-        AccessibleObject editFieldAccessibleObject = (AccessibleObject)gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        AccessibleObject editFieldAccessibleObject = (AccessibleObject)gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         propertyGridView.TestAccessor().Dynamic._selectedGridEntry = null;
 
         Assert.NotNull(editFieldAccessibleObject.RuntimeId);

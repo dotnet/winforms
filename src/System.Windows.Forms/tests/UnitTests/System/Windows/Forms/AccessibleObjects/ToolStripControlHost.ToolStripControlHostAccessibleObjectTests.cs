@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripControlHost;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -57,8 +58,8 @@ public class ToolStripControlHost_ToolStripControlHostAccessibleObjectTests
         using ToolStripControlHost toolStrip = new(control);
         var accessibleObject = (ToolStripControlHostAccessibleObject)toolStrip.AccessibilityObject;
 
-        Assert.Equal(control.AccessibilityObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(control.AccessibilityObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(control.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(control.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(toolStrip.Control.IsHandleCreated);
     }
 

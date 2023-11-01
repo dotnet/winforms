@@ -1020,11 +1020,11 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         if (createControl)
         {
-            Assert.Equal(row.AccessibilityObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+            Assert.Equal(row.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         }
         else
         {
-            Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         }
 
         Assert.Equal(createControl, dataGridView.IsHandleCreated);
@@ -1037,7 +1037,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         DataGridViewCellAccessibleObject accessibleObject = new(owner);
 
         Assert.Null(accessibleObject.Owner.OwningRow);
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
     }
 
     [WinFormsFact]
@@ -1050,13 +1050,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
 
-        Assert.Equal(cell2, cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell3, cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell2, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell3, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell2, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(cell1, cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(rowHeader, cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell2, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(cell1, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(rowHeader, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1068,11 +1068,11 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell1 = row.Cells[0].AccessibilityObject;
         AccessibleObject cell2 = row.Cells[1].AccessibilityObject;
 
-        Assert.Null(cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Null(cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Null(cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         Assert.False(dataGridView.IsHandleCreated);
     }
@@ -1087,13 +1087,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
 
-        Assert.Equal(cell2, cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell3, cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell2, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell3, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell2, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(cell1, cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell2, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(cell1, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1106,13 +1106,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
 
-        Assert.Equal(cell2, rowHeader.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell3, cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell2, rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell3, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell2, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(rowHeader, cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(rowHeader.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell2, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(rowHeader, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1125,13 +1125,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
 
-        Assert.Equal(cell1, rowHeader.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell3, cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell1, rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell3, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell1, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(rowHeader, cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(rowHeader.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell1, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(rowHeader, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1144,13 +1144,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
         AccessibleObject cell2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
 
-        Assert.Equal(cell1, rowHeader.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell2, cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell1, rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell2, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell1, cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(rowHeader, cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(rowHeader.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell1, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(rowHeader, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1164,13 +1164,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
         AccessibleObject cell4 = dataGridView.Rows[0].Cells[3].AccessibilityObject;
 
-        Assert.Equal(cell3, cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell4, cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell3, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell4, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell3, cell4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(cell2, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell3, cell4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(cell2, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1184,13 +1184,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
         AccessibleObject cell4 = dataGridView.Rows[0].Cells[3].AccessibilityObject;
 
-        Assert.Equal(cell3, cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell4, cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell3, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell4, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell3, cell4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(cell1, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell3, cell4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(cell1, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1204,13 +1204,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
 
-        Assert.Equal(cell2, cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell3, cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell2, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell3, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell2, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(cell1, cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell2, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(cell1, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1226,15 +1226,15 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Equal(cell1, rowHeader.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell2, cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell3, cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell1, rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell2, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell3, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell2, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(cell1, cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(rowHeader, cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(rowHeader.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell2, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(cell1, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(rowHeader, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1250,13 +1250,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
         AccessibleObject cell2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
 
-        Assert.Equal(cell1, rowHeader.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell2, cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell1, rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell2, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell1, cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(rowHeader, cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(rowHeader.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell1, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(rowHeader, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1272,13 +1272,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Equal(cell1, rowHeader.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell3, cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell1, rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell3, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell1, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(rowHeader, cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(rowHeader.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell1, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(rowHeader, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1294,13 +1294,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Equal(cell2, rowHeader.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell3, cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell2, rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell3, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell2, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(rowHeader, cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(rowHeader.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell2, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(rowHeader, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(rowHeader.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1316,13 +1316,13 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Equal(cell2, cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(cell3, cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell2, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(cell3, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell2, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(cell1, cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell2, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(cell1, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1338,11 +1338,11 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
         AccessibleObject cell2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
 
-        Assert.Equal(cell2, cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell2, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell1, cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell1, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1358,11 +1358,11 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Equal(cell3, cell1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell3, cell1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell1, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(cell1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell1, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(cell1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -1378,11 +1378,11 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
         AccessibleObject cell3 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Equal(cell3, cell2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(cell3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(cell3, cell2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(cell3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(cell2, cell3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(cell2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(cell2, cell3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(cell2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsTheory]
@@ -1395,11 +1395,11 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
         AccessibleObject cell1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
         AccessibleObject cell2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
 
-        Assert.Null(cell1.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(cell1.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(cell1.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(cell1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Null(cell2.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(cell2.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(cell2.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(cell2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         Assert.Equal(createControl, dataGridView.IsHandleCreated);
     }
@@ -1412,8 +1412,8 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
         AccessibleObject cell = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Null(cell.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(cell.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(cell.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(cell.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     private DataGridView CreateDataGridView(int columnCount, bool createControl = true)

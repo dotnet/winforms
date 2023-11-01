@@ -43,7 +43,7 @@ public partial class ComboBox
 
         public override unsafe string? DefaultAction => SystemIAccessible.TryGetDefaultAction(GetChildId());
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owner.IsHandleCreated)
             {
@@ -52,13 +52,13 @@ public partial class ComboBox
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => _owner.AccessibilityObject,
-                UiaCore.NavigateDirection.PreviousSibling =>
+                NavigateDirection.NavigateDirection_Parent => _owner.AccessibilityObject,
+                NavigateDirection.NavigateDirection_PreviousSibling =>
                     _owner.DropDownStyle == ComboBoxStyle.DropDownList
                         ? _owner.ChildTextAccessibleObject
                         : _owner.ChildEditAccessibleObject,
                 // We should return null for NextSibling because it is always the last item in the tree
-                UiaCore.NavigateDirection.NextSibling => null,
+                NavigateDirection.NavigateDirection_NextSibling => null,
                 _ => base.FragmentNavigate(direction)
             };
         }

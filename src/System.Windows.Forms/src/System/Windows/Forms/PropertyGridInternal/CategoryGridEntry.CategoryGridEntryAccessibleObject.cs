@@ -72,7 +72,7 @@ internal partial class CategoryGridEntry
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent
                 || !this.TryGetOwnerAs(out CategoryGridEntry? owner))
@@ -82,11 +82,11 @@ internal partial class CategoryGridEntry
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => Parent,
-                UiaCore.NavigateDirection.NextSibling => parent.GetNextCategory(owner),
-                UiaCore.NavigateDirection.PreviousSibling => parent.GetPreviousCategory(owner),
-                UiaCore.NavigateDirection.FirstChild => parent.GetFirstChildProperty(owner),
-                UiaCore.NavigateDirection.LastChild => parent.GetLastChildProperty(owner),
+                NavigateDirection.NavigateDirection_Parent => Parent,
+                NavigateDirection.NavigateDirection_NextSibling => parent.GetNextCategory(owner),
+                NavigateDirection.NavigateDirection_PreviousSibling => parent.GetPreviousCategory(owner),
+                NavigateDirection.NavigateDirection_FirstChild => parent.GetFirstChildProperty(owner),
+                NavigateDirection.NavigateDirection_LastChild => parent.GetLastChildProperty(owner),
                 _ => base.FragmentNavigate(direction),
             };
         }

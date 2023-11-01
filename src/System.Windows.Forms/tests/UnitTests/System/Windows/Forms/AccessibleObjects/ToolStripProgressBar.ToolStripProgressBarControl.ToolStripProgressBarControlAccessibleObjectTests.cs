@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripProgressBar;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -82,13 +81,13 @@ public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressB
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.NavigateDirection.FirstChild)]
-    [InlineData((int)UiaCore.NavigateDirection.LastChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_LastChild)]
     public void ToolStripProgressBarControlAccessibleObject_FragmentNavigate_ChildrenAreNull(int direction)
     {
         using ToolStripProgressBarControl control = new();
 
-        object actual = control.AccessibilityObject.FragmentNavigate((UiaCore.NavigateDirection)direction);
+        object actual = control.AccessibilityObject.FragmentNavigate((NavigateDirection)direction);
 
         Assert.Null(actual);
         Assert.False(control.IsHandleCreated);
@@ -104,7 +103,7 @@ public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressB
         control.Owner = item;
         item.Parent = toolStrip;
 
-        object actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+        object actual = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(toolStrip.AccessibilityObject, actual);
         Assert.False(control.IsHandleCreated);
@@ -128,8 +127,8 @@ public class ToolStripProgressBar_ToolStripProgressBarControl_ToolStripProgressB
         toolStrip.Items.Add(item);
         toolStrip.Items.Add(button);
 
-        object nextSibling = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        object previousSibling = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+        object nextSibling = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        object previousSibling = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
         Assert.Equal(button.AccessibilityObject, nextSibling);
         Assert.Equal(label.AccessibilityObject, previousSibling);

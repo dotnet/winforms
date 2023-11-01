@@ -25,11 +25,11 @@ public partial class ScrollBar
 
             return direction switch
             {
-                NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => ParentInternal.FirstPageButtonAccessibleObject?.IsDisplayed == true
                         ? ParentInternal.FirstPageButtonAccessibleObject
                         : ParentInternal.FirstLineButtonAccessibleObject,
-                NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_NextSibling
                     => ParentInternal.LastPageButtonAccessibleObject?.IsDisplayed == true
                         ? ParentInternal.LastPageButtonAccessibleObject
                         : ParentInternal.LastLineButtonAccessibleObject,

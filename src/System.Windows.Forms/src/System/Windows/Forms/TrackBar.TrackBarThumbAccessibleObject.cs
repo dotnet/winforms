@@ -15,7 +15,7 @@ public partial class TrackBar
 
         public override string? Name => SR.TrackBarPositionButtonName;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out TrackBar? _))
             {
@@ -24,11 +24,11 @@ public partial class TrackBar
 
             return direction switch
             {
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => ParentInternal?.FirstButtonAccessibleObject?.IsDisplayed ?? false
                         ? ParentInternal.FirstButtonAccessibleObject
                         : null,
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_NextSibling
                     => ParentInternal?.LastButtonAccessibleObject?.IsDisplayed ?? false
                         ? ParentInternal.LastButtonAccessibleObject
                         : null,

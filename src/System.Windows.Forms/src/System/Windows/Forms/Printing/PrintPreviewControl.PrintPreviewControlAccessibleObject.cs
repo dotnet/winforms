@@ -66,7 +66,7 @@ public partial class PrintPreviewControl
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             => this;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.TryGetOwnerAs(out PrintPreviewControl? owner))
             {
@@ -75,12 +75,12 @@ public partial class PrintPreviewControl
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     return owner._vScrollBar.Visible ? owner._vScrollBar.AccessibilityObject
                         : owner._hScrollBar.Visible ? owner._hScrollBar.AccessibilityObject
                         : null;
 
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     return owner._hScrollBar.Visible ? owner._hScrollBar.AccessibilityObject
                         : owner._vScrollBar.Visible ? owner._vScrollBar.AccessibilityObject
                         : null;

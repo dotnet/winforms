@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms;
@@ -22,8 +23,8 @@ public partial class ScrollBar
 
             return direction switch
             {
-                NavigateDirection.NextSibling => null,
-                NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_NextSibling => null,
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => ParentInternal.LastPageButtonAccessibleObject?.IsDisplayed == true
                         ? ParentInternal.LastPageButtonAccessibleObject
                         : ParentInternal.ThumbAccessibleObject,

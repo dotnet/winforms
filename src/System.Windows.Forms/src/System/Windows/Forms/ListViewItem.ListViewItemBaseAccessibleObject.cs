@@ -124,21 +124,21 @@ public partial class ListViewItem
             SetFocus();
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             AccessibleObject _parentInternal = OwningGroup?.AccessibilityObject ?? _owningListView.AccessibilityObject;
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _parentInternal;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     int childIndex = _parentInternal.GetChildIndex(this);
                     return childIndex == InvalidIndex ? null : _parentInternal.GetChild(childIndex + 1);
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return _parentInternal.GetChild(_parentInternal.GetChildIndex(this) - 1);
-                case UiaCore.NavigateDirection.FirstChild:
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     return null;
             }
 
@@ -209,10 +209,10 @@ public partial class ListViewItem
             }
         }
 
-        internal override UiaCore.ToggleState ToggleState
+        internal override ToggleState ToggleState
             => _owningItem.Checked
-                ? UiaCore.ToggleState.On
-                : UiaCore.ToggleState.Off;
+                ? ToggleState.ToggleState_On
+                : ToggleState.ToggleState_Off;
 
         /// <summary>
         ///  Indicates whether specified pattern is supported.

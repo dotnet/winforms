@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -93,8 +92,8 @@ public partial class DateTimePicker
         public override string DefaultAction
             => ExpandCollapseState switch
             {
-                UiaCore.ExpandCollapseState.Collapsed => SR.AccessibleActionExpand,
-                UiaCore.ExpandCollapseState.Expanded => SR.AccessibleActionCollapse,
+                ExpandCollapseState.ExpandCollapseState_Collapsed => SR.AccessibleActionExpand,
+                ExpandCollapseState.ExpandCollapseState_Expanded => SR.AccessibleActionCollapse,
                 _ => string.Empty
             };
 
@@ -102,17 +101,17 @@ public partial class DateTimePicker
         {
             switch (ExpandCollapseState)
             {
-                case UiaCore.ExpandCollapseState.Collapsed:
+                case ExpandCollapseState.ExpandCollapseState_Collapsed:
                     Expand();
                     break;
-                case UiaCore.ExpandCollapseState.Expanded:
+                case ExpandCollapseState.ExpandCollapseState_Expanded:
                     Collapse();
                     break;
             }
         }
 
-        internal override UiaCore.ToggleState ToggleState
-            => this.TryGetOwnerAs(out DateTimePicker? owner) && owner.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+        internal override ToggleState ToggleState
+            => this.TryGetOwnerAs(out DateTimePicker? owner) && owner.Checked ? ToggleState.ToggleState_On : ToggleState.ToggleState_Off;
 
         internal override void Toggle()
         {
@@ -125,7 +124,7 @@ public partial class DateTimePicker
         internal override void Expand()
         {
             if (this.IsOwnerHandleCreated(out DateTimePicker? owner)
-                && ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+                && ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Collapsed)
             {
                 PInvoke.SendMessage(owner, PInvoke.WM_SYSKEYDOWN, (WPARAM)(int)Keys.Down);
             }
@@ -134,15 +133,15 @@ public partial class DateTimePicker
         internal override void Collapse()
         {
             if (this.IsOwnerHandleCreated(out DateTimePicker? owner)
-                && ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
+                && ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Expanded)
             {
                 PInvoke.SendMessage(owner, PInvoke.DTM_CLOSEMONTHCAL);
             }
         }
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => this.TryGetOwnerAs(out DateTimePicker? owner)
                 ? owner._expandCollapseState
-                : UiaCore.ExpandCollapseState.Collapsed;
+                : ExpandCollapseState.ExpandCollapseState_Collapsed;
     }
 }
