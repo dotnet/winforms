@@ -809,7 +809,16 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        *pRetVal = GetPropertyValue(propertyId);
+        VARIANT result = GetPropertyValue(propertyId);
+
+#if DEBUG
+        if (propertyId == UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId)
+        {
+            Debug.Assert(result.IsEmpty || result.vt == VARENUM.VT_I4);
+        }
+#endif
+
+        *pRetVal = result;
         return HRESULT.S_OK;
     }
 
