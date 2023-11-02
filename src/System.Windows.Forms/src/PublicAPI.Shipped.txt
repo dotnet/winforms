@@ -691,23 +691,23 @@ virtual System.Windows.Forms.DataGridView.OnCellClick(System.Windows.Forms.DataG
 virtual System.Windows.Forms.DataGridView.OnCellContentClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
 virtual System.Windows.Forms.DataGridView.OnCellContentDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
 virtual System.Windows.Forms.DataGridView.OnCellContextMenuStripChanged(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellContextMenuStripNeeded(System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellEndEdit(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellEnter(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellErrorTextChanged(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellErrorTextNeeded(System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellFormatting(System.Windows.Forms.DataGridViewCellFormattingEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellLeave(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellMouseClick(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellMouseDoubleClick(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellMouseDown(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellMouseEnter(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellMouseLeave(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellMouseMove(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellMouseUp(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellPainting(System.Windows.Forms.DataGridViewCellPaintingEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridView.OnCellParsing(System.Windows.Forms.DataGridViewCellParsingEventArgs e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellContextMenuStripNeeded(System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellEndEdit(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellEnter(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellErrorTextChanged(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellErrorTextNeeded(System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellFormatting(System.Windows.Forms.DataGridViewCellFormattingEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellLeave(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellMouseClick(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellMouseDoubleClick(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellMouseDown(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellMouseEnter(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellMouseLeave(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellMouseMove(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellMouseUp(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellPainting(System.Windows.Forms.DataGridViewCellPaintingEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridView.OnCellParsing(System.Windows.Forms.DataGridViewCellParsingEventArgs! e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnCellStateChanged(System.Windows.Forms.DataGridViewCellStateChangedEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnCellStyleChanged(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridView.OnCellStyleContentChanged(System.Windows.Forms.DataGridViewCellStyleContentChangedEventArgs e) -> void
@@ -5731,7 +5731,7 @@ System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenu
 System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.DataGridViewCellContextMenuStripNeededEventArgs(int columnIndex, int rowIndex) -> void
 System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventHandler
 System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs
-System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.get -> string?
+System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.get -> string!
 System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.set -> void
 System.Windows.Forms.DataGridViewCellErrorTextNeededEventHandler
 System.Windows.Forms.DataGridViewCellEventArgs
