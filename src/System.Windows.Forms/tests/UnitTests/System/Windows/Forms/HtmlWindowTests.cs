@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Text;
+using Windows.Win32.Web.MsHtml;
 
 namespace System.Windows.Forms.Tests;
 
@@ -38,6 +39,27 @@ public class HtmlWindowTests
         HtmlWindow window = document.Window;
         Assert.NotSame(window, document.Window);
         Assert.Null(window.WindowFrameElement);
+    }
+
+    [WinFormsFact]
+    public async Task HtmlWindow_DomWindow_Get_ReturnsExpected()
+    {
+        using var parent = new Control();
+        using var control = new WebBrowser
+        {
+            Parent = parent
+        };
+
+        const string Html = "<html><body>test</body></html>";
+        HtmlDocument document = await GetDocument(control, Html);
+        HtmlWindow window = document.Window;
+        object domWindow = window.DomWindow;
+
+        Assert.Same(domWindow, window.DomWindow);
+        Assert.True(domWindow.GetType().IsCOMObject);
+        Assert.True(domWindow is IHTMLWindow2.Interface);
+        Assert.True(domWindow is IHTMLWindow3.Interface);
+        Assert.True(domWindow is IHTMLWindow4.Interface);
     }
 
     private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html)
