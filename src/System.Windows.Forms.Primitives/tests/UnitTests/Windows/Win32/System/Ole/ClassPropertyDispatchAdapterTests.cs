@@ -65,7 +65,7 @@ public unsafe class ClassPropertyDispatchAdapterTests
         adapter.TryGetDispID("CollidingDispId", out dispId).Should().BeTrue();
         dispId.Should().Be(0x1);
 
-        adapter = new(testClass2, typeof(TestClass), new(testClass, typeof(TestClass2)));
+        adapter = new(testClass2, typeof(TestClass2), new(testClass, typeof(TestClass)));
         adapter.TryGetDispID("Percent", out dispId).Should().BeTrue();
         dispId.Should().Be(0x1);
         adapter.TryGetDispID("CollidingDispId", out dispId).Should().BeTrue();
