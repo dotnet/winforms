@@ -236,7 +236,7 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
     /// </summary>
     protected void CategorizePropertyEntries()
     {
-        if (Children is null || Children.Count == 0 || (_propertySort & PropertySort.Categorized) == 0)
+        if (Children.Count == 0 || (_propertySort & PropertySort.Categorized) == 0)
         {
             return;
         }

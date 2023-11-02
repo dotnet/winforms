@@ -67,7 +67,7 @@ internal sealed partial class MultiSelectRootGridEntry : SingleSelectRootGridEnt
                 ChildCollection.AddRange(mergedProperties);
             }
 
-            bool expandable = Children!.Count > 0;
+            bool expandable = Children.Count > 0;
             if (!expandable)
             {
                 SetFlag(Flags.ExpandableFailed, true);

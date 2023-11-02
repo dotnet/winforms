@@ -135,7 +135,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
                 ChildCollection.AddRange(mergedProperties);
             }
 
-            bool expandable = Children!.Count > 0;
+            bool expandable = Children.Count > 0;
             if (!expandable)
             {
                 SetFlag(Flags.ExpandableFailed, true);

@@ -1836,6 +1836,7 @@ internal sealed partial class PropertyGridView :
     ///  Returns an array of entries specifying the current hierarchy of entries from the given
     ///  <paramref name="gridEntry"/> through its parents to the root.
     /// </summary>
+    [return: NotNullIfNotNull(nameof(gridEntry))]
     private static GridEntryCollection? GetGridEntryHierarchy(GridEntry? gridEntry)
     {
         if (gridEntry is null)
@@ -3652,7 +3653,7 @@ internal sealed partial class PropertyGridView :
             }
 
             // From that point, replace the children with the new children.
-            GridEntryCollection children = parent.Children!;
+            GridEntryCollection children = parent.Children;
             int childCount = children.Count;
 
             Debug.Assert(childCount == e.NewChildCount, $"parent reports {childCount} new children, event reports {e.NewChildCount}");
@@ -4051,13 +4052,10 @@ internal sealed partial class PropertyGridView :
 
         SetExpand(gridEntry, expand);
 
-        GridEntryCollection? children = gridEntry.Children;
-        if (children is not null)
+        GridEntryCollection children = gridEntry.Children;
+        for (int i = 0; i < children.Count; i++)
         {
-            for (int i = 0; i < children.Count; i++)
-            {
-                RecursivelyExpand(children[i], initialize: false, expand, maxExpands);
-            }
+            RecursivelyExpand(children[i], initialize: false, expand, maxExpands);
         }
 
         if (initialize)
@@ -4261,7 +4259,7 @@ internal sealed partial class PropertyGridView :
             if (entries[i].InternalExpanded)
             {
                 GridEntry entry = entries[i];
-                expandedItems.Add(GetGridEntryHierarchy(entry.Children![0])!);
+                expandedItems.Add(GetGridEntryHierarchy(entry.Children[0]));
                 SaveHierarchyState(entry.Children, expandedItems);
             }
         }

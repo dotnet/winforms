@@ -79,7 +79,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
             grid.SelectedEntry.Expanded = true;
 
             Assert.Equal(
-                grid.SelectedEntry.Children!.First().AccessibilityObject,
+                grid.SelectedEntry.Children.First().AccessibilityObject,
                 grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
             return Task.CompletedTask;

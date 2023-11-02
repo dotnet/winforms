@@ -190,9 +190,9 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
         }
     }
 
-    public int ChildCount => Children?.Count ?? 0;
+    public int ChildCount => Children.Count;
 
-    public virtual GridEntryCollection? Children
+    public virtual GridEntryCollection Children
     {
         get
         {
@@ -201,7 +201,7 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
                 CreateChildren();
             }
 
-            return _children;
+            return _children ??= new GridEntryCollection();
         }
     }
 
@@ -293,7 +293,6 @@ internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
 
     protected void SetForceReadOnlyFlag() => _flags |= Flags.ForceReadOnly;
 
-    [MemberNotNullWhen(true, nameof(Children))]
     internal virtual bool InternalExpanded
     {
         get
