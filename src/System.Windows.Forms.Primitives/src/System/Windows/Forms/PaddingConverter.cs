@@ -42,25 +42,18 @@ public class PaddingConverter : TypeConverter
     {
         if (value is string stringValue)
         {
-            stringValue = stringValue.Trim();
-            if (stringValue.Length == 0)
+            ReadOnlySpan<char> text = stringValue.AsSpan().Trim();
+
+            if (text.IsEmpty)
             {
                 return null;
             }
 
             // Parse 4 integer values.
             culture ??= CultureInfo.CurrentCulture;
+            Span<int> values = stackalloc int[4];
 
-            string[] tokens = stringValue.Split(new char[] { culture.TextInfo.ListSeparator[0] });
-            int[] values = new int[tokens.Length];
-            TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
-            for (int i = 0; i < values.Length; i++)
-            {
-                // Note: ConvertFromString will raise exception if value cannot be converted.
-                values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i])!;
-            }
-
-            if (values.Length != 4)
+            if (!TypeConverterHelper.TryParseAsSpan(context, culture, text, values))
             {
                 throw new ArgumentException(string.Format(SR.TextParseFailedFormat, stringValue, "left, top, right, bottom"), nameof(value));
             }
