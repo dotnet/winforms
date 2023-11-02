@@ -22,20 +22,7 @@ public partial class ListView
         ///  Given a Zero based index, returns the ColumnHeader object
         ///  for the column at that index
         /// </summary>
-        public virtual ColumnHeader this[int index]
-        {
-            get
-            {
-                ArgumentOutOfRangeException.ThrowIfNegative(index);
-
-                if (_owner._columnHeaders is null || index >= _owner._columnHeaders.Length)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                }
-
-                return _owner._columnHeaders[index];
-            }
-        }
+        public virtual ColumnHeader this[int index] => _owner.GetColumnHeader(index);
 
         object? IList.this[int index]
         {

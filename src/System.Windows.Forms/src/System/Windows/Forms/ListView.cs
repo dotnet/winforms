@@ -5320,18 +5320,22 @@ public partial class ListView : Control
         InvalidateColumnHeaders();
     }
 
+    [MemberNotNull(nameof(_columnHeaders))]
+    private ColumnHeader GetColumnHeader(int index)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _columnHeaders?.Length ?? 0);
+
+        return _columnHeaders![index];
+    }
+
     /// <summary>
     ///  Setting width is a special case 'cuz LVM_SETCOLUMNWIDTH accepts more values
     ///  for width than LVM_SETCOLUMN does.
     /// </summary>
     internal void SetColumnWidth(int columnIndex, ColumnHeaderAutoResizeStyle headerAutoResize)
     {
-        ArgumentOutOfRangeException.ThrowIfNegative(columnIndex);
-
-        if (_columnHeaders is null || columnIndex >= _columnHeaders.Length)
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex), columnIndex, string.Format(SR.InvalidArgument, nameof(columnIndex), columnIndex));
-        }
+        ColumnHeader columnHeader = GetColumnHeader(columnIndex);
 
         //valid values are 0x0 to 0x2
         SourceGenerated.EnumValidator.Validate(headerAutoResize, nameof(headerAutoResize));
@@ -5341,7 +5345,7 @@ public partial class ListView : Control
 
         if (headerAutoResize == ColumnHeaderAutoResizeStyle.None)
         {
-            width = _columnHeaders[columnIndex].WidthInternal;
+            width = columnHeader.WidthInternal;
 
             // If the width maps to a LVCSW_ const, then native control will autoresize.
             // We may need to compensate for that.
@@ -5377,7 +5381,7 @@ public partial class ListView : Control
         {
             if (compensate != 0)
             {
-                int newWidth = _columnHeaders[columnIndex].Width + compensate;
+                int newWidth = columnHeader.Width + compensate;
                 PInvoke.SendMessage(
                     this,
                     PInvoke.LVM_SETCOLUMNWIDTH,
