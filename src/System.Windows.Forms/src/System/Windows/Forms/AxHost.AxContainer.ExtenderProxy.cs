@@ -32,7 +32,7 @@ public abstract partial class AxHost
                 _control = new(control);
 
                 // We want the proxy to override anything we find in the control.
-                _dispatchAdapter = new(control, priorAdapter: new(this));
+                _dispatchAdapter = new(control, control.GetType(), priorAdapter: new(this, typeof(ExtenderProxy)));
                 _container = new(container);
             }
 

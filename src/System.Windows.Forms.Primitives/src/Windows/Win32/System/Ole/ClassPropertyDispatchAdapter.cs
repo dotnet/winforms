@@ -18,7 +18,6 @@ internal unsafe class ClassPropertyDispatchAdapter
 
     private readonly WeakReference<object> _instance;
 
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]
     private readonly Type _type;
 
     private readonly Dictionary<int, DispatchEntry> _members = new();
@@ -29,14 +28,17 @@ internal unsafe class ClassPropertyDispatchAdapter
     /// <param name="priorAdapter">
     ///  A prior adapter for chaining. This adapter will be consulted first for all results.
     /// </param>
-    public ClassPropertyDispatchAdapter(object instance, ClassPropertyDispatchAdapter? priorAdapter = null)
+    public ClassPropertyDispatchAdapter(
+        object instance,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] Type instanceType,
+        ClassPropertyDispatchAdapter? priorAdapter = null)
     {
         ArgumentNullException.ThrowIfNull(instance);
         _instance = new(instance);
-        _type = instance.GetType();
+        _type = instanceType;
         _priorAdapter = priorAdapter;
 
-        var properties = _type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+        var properties = instanceType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
         foreach (var property in properties)
         {
             var (name, dispId, flags) = GetPropertyInfo(property);
