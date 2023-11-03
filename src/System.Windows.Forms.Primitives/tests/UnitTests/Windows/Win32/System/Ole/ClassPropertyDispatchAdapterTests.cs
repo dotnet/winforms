@@ -13,7 +13,7 @@ public unsafe class ClassPropertyDispatchAdapterTests
     public void ClassPropertyDispatchAdapter_SingleClass()
     {
         TestClass testClass = new();
-        ClassPropertyDispatchAdapter adapter = new(testClass, typeof(TestClass));
+        ClassPropertyDispatchAdapter adapter = new(testClass);
 
         adapter.TryGetNextDispId(PInvoke.DISPID_STARTENUM, out int result).Should().BeTrue();
         result.Should().Be(0x10000);
@@ -59,13 +59,13 @@ public unsafe class ClassPropertyDispatchAdapterTests
         TestClass testClass = new();
         TestClass2 testClass2 = new();
 
-        ClassPropertyDispatchAdapter adapter = new(testClass, typeof(TestClass), new(testClass2, typeof(TestClass2)));
+        ClassPropertyDispatchAdapter adapter = new(testClass, new(testClass2));
         adapter.TryGetDispID("Percent", out int dispId).Should().BeTrue();
         dispId.Should().Be(0x10002);
         adapter.TryGetDispID("CollidingDispId", out dispId).Should().BeTrue();
         dispId.Should().Be(0x1);
 
-        adapter = new(testClass2, typeof(TestClass2), new(testClass, typeof(TestClass)));
+        adapter = new(testClass2, new(testClass));
         adapter.TryGetDispID("Percent", out dispId).Should().BeTrue();
         dispId.Should().Be(0x1);
         adapter.TryGetDispID("CollidingDispId", out dispId).Should().BeTrue();
