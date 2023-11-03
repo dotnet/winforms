@@ -4,7 +4,6 @@
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripComboBox;
 using static System.Windows.Forms.ToolStripComboBox.ToolStripComboBoxControl;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -31,7 +30,7 @@ public class ToolStripComboBox_ToolStripComboBoxControl_ToolStripComboBoxControl
         control.CreateControl();
 
         AccessibleObject accessibleObject = toolStripComboBox.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(AccessibleRole.ComboBox, accessibleObject.Role);
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId, actual);
@@ -63,7 +62,7 @@ public class ToolStripComboBox_ToolStripComboBoxControl_ToolStripComboBoxControl
         control.CreateControl();
 
         AccessibleObject accessibleObject = toolStripComboBox.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(role, accessibleObject.Role);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
@@ -76,8 +75,8 @@ public class ToolStripComboBox_ToolStripComboBoxControl_ToolStripComboBoxControl
         using ToolStripComboBoxControl control = new();
         control.CreateControl();
 
-        object firstChild = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-        object lastChild = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+        object firstChild = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        object lastChild = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
         Assert.Equal(control.ChildEditAccessibleObject, firstChild);
         Assert.Equal(((ToolStripComboBoxControlAccessibleObject)control.AccessibilityObject).DropDownButtonUiaProvider, lastChild);
@@ -94,7 +93,7 @@ public class ToolStripComboBox_ToolStripComboBoxControl_ToolStripComboBoxControl
         control.Owner = item;
         item.Parent = toolStrip;
 
-        object actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+        object actual = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(toolStrip.AccessibilityObject, actual);
         Assert.False(control.IsHandleCreated);

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -44,13 +45,13 @@ public partial class TreeNode
                         : SR.AccessibleActionCheck;
                 }
 
-                UiaCore.ExpandCollapseState expandCollapseState = ExpandCollapseState;
-                if (expandCollapseState == UiaCore.ExpandCollapseState.LeafNode)
+                ExpandCollapseState expandCollapseState = ExpandCollapseState;
+                if (expandCollapseState == ExpandCollapseState.ExpandCollapseState_LeafNode)
                 {
                     return string.Empty;
                 }
 
-                return expandCollapseState == UiaCore.ExpandCollapseState.Expanded
+                return expandCollapseState == ExpandCollapseState.ExpandCollapseState_Expanded
                     ? SR.AccessibleActionCollapse
                     : SR.AccessibleActionExpand;
             }
@@ -78,24 +79,24 @@ public partial class TreeNode
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             => _owningTreeView.AccessibilityObject;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.Parent
+                NavigateDirection.NavigateDirection_Parent
                     => Parent ?? _owningTreeView.AccessibilityObject,
-                UiaCore.NavigateDirection.FirstChild
+                NavigateDirection.NavigateDirection_FirstChild
                      => _owningTreeNode.IsEditing
                         ? _owningTreeView._labelEdit?.AccessibilityObject
                         : _owningTreeNode.IsExpanded
                             ? _owningTreeNode.FirstNode?.AccessibilityObject
                             : null,
-                UiaCore.NavigateDirection.LastChild
+                NavigateDirection.NavigateDirection_LastChild
                     => _owningTreeNode.IsExpanded
                         ? _owningTreeNode.LastNode?.AccessibilityObject
                         : null,
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_NextSibling
                     => _owningTreeNode.NextNode?.AccessibilityObject,
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => _owningTreeNode.PrevNode?.AccessibilityObject,
                 _ => base.FragmentNavigate(direction),
             };
@@ -105,13 +106,13 @@ public partial class TreeNode
             _owningTreeView.SelectedNode = _owningTreeNode;
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningTreeView.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focused),
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningTreeView.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -160,11 +161,11 @@ public partial class TreeNode
                     state |= AccessibleStates.Invisible | AccessibleStates.Offscreen;
                 }
 
-                if (ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
+                if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Expanded)
                 {
                     state |= AccessibleStates.Expanded;
                 }
-                else if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+                else if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Collapsed)
                 {
                     state |= AccessibleStates.Collapsed;
                 }
@@ -205,18 +206,18 @@ public partial class TreeNode
             _owningTreeNode.Collapse();
         }
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
         {
             get
             {
                 if (_owningTreeNode.Nodes.Count == 0)
                 {
-                    return UiaCore.ExpandCollapseState.LeafNode;
+                    return ExpandCollapseState.ExpandCollapseState_LeafNode;
                 }
 
                 return _owningTreeNode.IsExpanded
-                    ? UiaCore.ExpandCollapseState.Expanded
-                    : UiaCore.ExpandCollapseState.Collapsed;
+                    ? ExpandCollapseState.ExpandCollapseState_Expanded
+                    : ExpandCollapseState.ExpandCollapseState_Collapsed;
             }
         }
 
@@ -246,7 +247,7 @@ public partial class TreeNode
 
         internal override bool IsItemSelected => _owningTreeNode.IsSelected;
 
-        internal override UiaCore.IRawElementProviderSimple? ItemSelectionContainer
+        internal override IRawElementProviderSimple.Interface? ItemSelectionContainer
             => _owningTreeView.AccessibilityObject;
 
         #endregion
@@ -255,8 +256,8 @@ public partial class TreeNode
 
         internal override void Toggle() => _owningTreeNode.Checked = !_owningTreeNode.Checked;
 
-        internal override UiaCore.ToggleState ToggleState
-            => _owningTreeNode.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+        internal override ToggleState ToggleState
+            => _owningTreeNode.Checked ? ToggleState.ToggleState_On : ToggleState.ToggleState_Off;
 
         #endregion
 

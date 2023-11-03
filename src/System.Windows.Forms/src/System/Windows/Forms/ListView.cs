@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static System.Windows.Forms.ListViewGroup;
@@ -4847,9 +4848,9 @@ public partial class ListView : Control
         if (IsAccessibilityObjectCreated)
         {
             ListViewItem item = e.Item;
-            UiaCore.ToggleState oldValue = item.Checked ? UiaCore.ToggleState.Off : UiaCore.ToggleState.On;
-            UiaCore.ToggleState newValue = item.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
-            item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId, oldValue, newValue);
+            ToggleState oldValue = item.Checked ? ToggleState.ToggleState_Off : ToggleState.ToggleState_On;
+            ToggleState newValue = item.Checked ? ToggleState.ToggleState_On : ToggleState.ToggleState_Off;
+            item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId, (VARIANT)(int)oldValue, (VARIANT)(int)newValue);
         }
     }
 
@@ -6048,7 +6049,7 @@ public partial class ListView : Control
     {
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
-        if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && UiaCore.UiaClientsAreListening())
+        if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && PInvoke.UiaClientsAreListening())
         {
             // Checking that mouse buttons are not pressed is necessary to avoid
             // multiple annotation of the column header when resizing the column with the mouse
@@ -6780,20 +6781,20 @@ public partial class ListView : Control
                     {
                         AccessibleObject accessibleObject = SelectedItems[0].AccessibilityObject;
                         if (lvkd->wVKey == (short)Keys.Down
-                            && accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling) is null)
+                            && accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling) is null)
                         {
-                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
                             if (groupAccObj is not null)
                             {
-                                ListViewGroupAccessibleObject? nextGroupAccObj = (ListViewGroupAccessibleObject?)groupAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+                                ListViewGroupAccessibleObject? nextGroupAccObj = (ListViewGroupAccessibleObject?)groupAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
                                 nextGroupAccObj?.SetFocus();
                             }
                         }
 
                         if (lvkd->wVKey == (short)Keys.Up
-                        && accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) is null)
+                        && accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling) is null)
                         {
-                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
                             groupAccObj?.SetFocus();
                         }
                     }

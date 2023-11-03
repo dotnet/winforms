@@ -211,7 +211,7 @@ public class DataGridViewSelectedRowCellsAccessibleObjectTests
             .GetNestedType("DataGridViewSelectedRowCellsAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
         var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { row }, null);
 
-        Assert.Equal("Selected Row Cells", accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal("Selected Row Cells", ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree());
         Assert.False(control.IsHandleCreated);
     }
 }

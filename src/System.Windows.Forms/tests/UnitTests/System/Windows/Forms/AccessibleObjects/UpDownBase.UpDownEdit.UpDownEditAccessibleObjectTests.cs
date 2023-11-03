@@ -156,10 +156,10 @@ public class UpDownEditAccessibleObjectTests
         }
 
         AccessibleObject accessibleObject = upDownEdit.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedRole, accessibleObject.Role);
-        Assert.Equal(expectedType, (int)actual);
+        Assert.Equal(expectedType, actual);
         Assert.Equal(createControl, upDownEdit.IsHandleCreated);
     }
 
@@ -186,7 +186,7 @@ public class UpDownEditAccessibleObjectTests
         using UpDownBase.UpDownEdit upDownEdit = new UpDownBase.UpDownEdit(upDown);
         upDownEdit.AccessibleRole = role;
 
-        object actual = upDownEdit.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)upDownEdit.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

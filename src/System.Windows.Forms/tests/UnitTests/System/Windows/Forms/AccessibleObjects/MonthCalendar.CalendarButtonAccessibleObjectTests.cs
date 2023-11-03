@@ -38,7 +38,7 @@ public class MonthCalendar_CalendarButtonAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarButtonAccessibleObject buttonAccessibleObject = new SubCalendarButtonAccessibleObject(controlAccessibleObject);
 
-        Assert.Equal(SR.AccessibleActionClick, buttonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(SR.AccessibleActionClick, ((BSTR)buttonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
         Assert.False(control.IsHandleCreated);
     }
 
@@ -49,7 +49,7 @@ public class MonthCalendar_CalendarButtonAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
         CalendarButtonAccessibleObject buttonAccessibleObject = new SubCalendarButtonAccessibleObject(controlAccessibleObject);
 
-        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)buttonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)buttonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, actual);
         Assert.False(control.IsHandleCreated);

@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -40,7 +40,7 @@ public class ListViewItem_ListViewItemListAccessibleObjectTests
         control.Items.Add(new ListViewItem());
         AccessibleObject accessibleObject1 = control.Items[0].AccessibilityObject;
 
-        Assert.Equal(control.AccessibilityObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(control.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -56,9 +56,9 @@ public class ListViewItem_ListViewItemListAccessibleObjectTests
         AccessibleObject accessibleObject2 = control.Items[1].AccessibilityObject;
         AccessibleObject accessibleObject3 = control.Items[2].AccessibilityObject;
 
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         Assert.True(control.IsHandleCreated);
     }
@@ -75,9 +75,9 @@ public class ListViewItem_ListViewItemListAccessibleObjectTests
         AccessibleObject accessibleObject2 = control.Items[1].AccessibilityObject;
         AccessibleObject accessibleObject3 = control.Items[2].AccessibilityObject;
 
-        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
         Assert.True(control.IsHandleCreated);
     }

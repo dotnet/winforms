@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 using IScrollProvider = Windows.Win32.UI.Accessibility.IScrollProvider;
@@ -16,12 +17,12 @@ public partial class PrintPreviewControl
         {
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
-            => !this.TryGetOwnerAs(out PrintPreviewControl? owner) ? null : propertyID switch
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
+            => !this.TryGetOwnerAs(out PrintPreviewControl? owner) ? default : propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_AutomationIdPropertyId => owner.Name,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => owner.Focused,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_AutomationIdPropertyId => (VARIANT)owner.Name,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)owner.Focused,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -66,7 +67,7 @@ public partial class PrintPreviewControl
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             => this;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.TryGetOwnerAs(out PrintPreviewControl? owner))
             {
@@ -75,12 +76,12 @@ public partial class PrintPreviewControl
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     return owner._vScrollBar.Visible ? owner._vScrollBar.AccessibilityObject
                         : owner._hScrollBar.Visible ? owner._hScrollBar.AccessibilityObject
                         : null;
 
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     return owner._hScrollBar.Visible ? owner._hScrollBar.AccessibilityObject
                         : owner._vScrollBar.Visible ? owner._vScrollBar.AccessibilityObject
                         : null;

@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Drawing.Design;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -471,11 +470,8 @@ public partial class ColumnHeader : Component, ICloneable
 
     internal void ReleaseUiaProvider()
     {
-        if (OsVersion.IsWindows8OrGreater() && _accessibilityObject is not null)
-        {
-            UiaCore.UiaDisconnectProvider(_accessibilityObject);
-            _accessibilityObject = null;
-        }
+        PInvoke.UiaDisconnectProvider(_accessibilityObject);
+        _accessibilityObject = null;
     }
 
     private void ResetText()

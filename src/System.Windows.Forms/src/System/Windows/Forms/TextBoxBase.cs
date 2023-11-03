@@ -1573,7 +1573,7 @@ public abstract partial class TextBoxBase : Control
         CommonProperties.xClearPreferredSizeCache(this);
         base.OnTextChanged(e);
 
-        if (UiaCore.UiaClientsAreListening())
+        if (PInvoke.UiaClientsAreListening())
         {
             RaiseAccessibilityTextChangedEvent();
         }

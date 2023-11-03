@@ -177,6 +177,7 @@ EnumThreadWindows
 EnumWindows
 ES_*
 EVENTMSG
+ExpandCollapseState
 EXTLOGFONTW
 ExtTextOut
 FDAP
@@ -558,6 +559,7 @@ MoveToEx
 MSFTEDIT_CLASS
 MsgWaitForMultipleObjectsEx
 MultiByteToWideChar
+NavigateDirection
 NIN_*
 NFR_*
 NM_*
@@ -631,6 +633,7 @@ PRINTDLGEX_FLAGS
 PROGRESS_CLASS
 PROPERTYKEY
 PropVariantClear
+ProviderOptions
 ReadClassStg
 READYSTATE
 RealizePalette
@@ -649,6 +652,7 @@ RevokeDragDrop
 REGDB_E_CLASSNOTREG
 RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE
 RoundRect
+RowOrColumnMajor
 RPC_E_CHANGED_MODE
 SAFEARRAY
 SafeArrayGetRecordInfo
@@ -750,6 +754,7 @@ STGC
 STGTY
 STILL_ACTIVE
 StretchDIBits
+StructureChangeType
 SYSBUTTONSTATES
 SystemParametersInfo
 SystemParametersInfoForDpi
@@ -770,6 +775,7 @@ TCN_*
 TCS_*
 THEME_PROPERTY_SYMBOL_ID
 TILE_WINDOWS_HOW
+ToggleState
 TOOLTIP_FLAGS
 TOOLTIPS_CLASS
 TRACKBAR_CLASS
@@ -796,8 +802,16 @@ TYPEDESC
 TYPEKIND
 UIA_EVENT_ID
 UiaAppendRuntimeId
+UiaClientsAreListening
+UiaDisconnectProvider
 UiaGetReservedNotSupportedValue
+UiaHostProviderFromHwnd
 UiaRootObjectId
+UiaRaiseAutomationEvent
+UiaRaiseAutomationPropertyChangedEvent
+UiaRaiseNotificationEvent
+UiaRaiseStructureChangedEvent
+UiaReturnRawElementProvider
 UIS_*
 UISF_*
 UnhookWinEvent

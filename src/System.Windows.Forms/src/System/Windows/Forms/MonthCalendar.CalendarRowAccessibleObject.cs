@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Globalization;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -98,7 +99,7 @@ public partial class MonthCalendar
         {
             Debug.Assert(OsVersion.IsWindows8OrGreater());
 
-            UiaCore.UiaDisconnectProvider(_weekNumberCellAccessibleObject);
+            PInvoke.UiaDisconnectProvider(_weekNumberCellAccessibleObject, skipOSCheck: true);
             _weekNumberCellAccessibleObject = null;
 
             if (_cellsAccessibleObjects is null)
@@ -108,7 +109,7 @@ public partial class MonthCalendar
 
             foreach (CalendarCellAccessibleObject cell in _cellsAccessibleObjects)
             {
-                UiaCore.UiaDisconnectProvider(cell);
+                PInvoke.UiaDisconnectProvider(cell, skipOSCheck: true);
             }
 
             _cellsAccessibleObjects.Clear();
@@ -142,28 +143,28 @@ public partial class MonthCalendar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_NextSibling
                     => _calendarBodyAccessibleObject.RowsAccessibleObjects?.Find(this)?.Next?.Value,
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => _calendarBodyAccessibleObject.RowsAccessibleObjects?.Find(this)?.Previous?.Value,
-                UiaCore.NavigateDirection.FirstChild
+                NavigateDirection.NavigateDirection_FirstChild
                     => _monthCalendarAccessibleObject.ShowWeekNumbers && _rowIndex != -1
                         ? WeekNumberCellAccessibleObject
                         : CellsAccessibleObjects?.First?.Value,
-                UiaCore.NavigateDirection.LastChild => CellsAccessibleObjects?.Last?.Value,
+                NavigateDirection.NavigateDirection_LastChild => CellsAccessibleObjects?.Last?.Value,
                 _ => base.FragmentNavigate(direction)
             };
 
         internal override int GetChildId() => ChildIdIncrement + _rowIndex;
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => IsEnabled,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)IsEnabled,
                 _ => base.GetPropertyValue(propertyID)
             };
 

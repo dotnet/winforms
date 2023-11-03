@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -433,7 +432,7 @@ public partial class LinkLabel : Label, IButtonControl
             {
                 if (link.IsAccessibilityObjectCreated)
                 {
-                    UiaCore.UiaDisconnectProvider(link.AccessibleObject);
+                    PInvoke.UiaDisconnectProvider(link.AccessibleObject, skipOSCheck: true);
                 }
             }
         }

@@ -43,7 +43,7 @@ public class NumericUpDownAccessibleObjectTests
         using NumericUpDown numericUpDown = new NumericUpDown();
         // AccessibleRole is not set = Default
 
-        object actual = numericUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)numericUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_SpinnerControlTypeId, actual);
         Assert.False(numericUpDown.IsHandleCreated);
@@ -83,7 +83,7 @@ public class NumericUpDownAccessibleObjectTests
         using NumericUpDown numericUpDown = new NumericUpDown();
         numericUpDown.AccessibleRole = role;
 
-        object actual = numericUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)numericUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -91,13 +91,13 @@ public class NumericUpDownAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, AccessibleRole.SpinButton)]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, (int)AccessibleRole.SpinButton)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, (int)AccessibleStates.None)]
     public void NumericUpDownAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
         using NumericUpDown numericUpDown = new NumericUpDown();
         AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
+        var actual = (int)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
 
         Assert.Equal(expected, actual);
         Assert.False(numericUpDown.IsHandleCreated);

@@ -27,7 +27,7 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
         propertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
         gridEntry.TestAccessor().Dynamic._parent = new TestGridEntry(propertyGrid, null, propertyGridView);
 
-        UiaCore.IRawElementProviderFragment firstChild = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        UiaCore.IRawElementProviderFragment firstChild = gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.NotNull(firstChild);
         Assert.Equal(typeof(PropertyGridView.DropDownHolder.DropDownHolderAccessibleObject), firstChild.GetType());
     }
@@ -53,8 +53,8 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
         TestPropertyDescriptorGridEntry propertyDescriptorGridEntryTestEntity = new(propertyGrid, null, false);
         AccessibleObject propertyDescriptorGridEntryAccessibleObject = propertyDescriptorGridEntryTestEntity.AccessibilityObject;
 
-        UiaCore.ExpandCollapseState expandCollapseState = propertyDescriptorGridEntryAccessibleObject.ExpandCollapseState;
-        Assert.Equal(UiaCore.ExpandCollapseState.Collapsed, expandCollapseState);
+        ExpandCollapseState expandCollapseState = propertyDescriptorGridEntryAccessibleObject.ExpandCollapseState;
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Collapsed, expandCollapseState);
     }
 
     [WinFormsFact]
@@ -76,10 +76,10 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
         AccessibleObject selectedGridEntryAccessibleObject = gridEntry.AccessibilityObject;
 
         gridEntry.InternalExpanded = false;
-        Assert.Equal(UiaCore.ExpandCollapseState.Collapsed, selectedGridEntryAccessibleObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Collapsed, selectedGridEntryAccessibleObject.ExpandCollapseState);
 
         gridEntry.InternalExpanded = true;
-        Assert.Equal(UiaCore.ExpandCollapseState.Expanded, selectedGridEntryAccessibleObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Expanded, selectedGridEntryAccessibleObject.ExpandCollapseState);
     }
 
     [WinFormsFact]

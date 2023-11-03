@@ -27,7 +27,7 @@ public class CommandsPane_CommandsPaneAccessibleObjectTests
         using CommandsPane commandsPane = new CommandsPane(propertyGrid);
         // AccessibleRole is not set = Default
 
-        object actual = commandsPane.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)commandsPane.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId, actual);
         Assert.False(propertyGrid.IsHandleCreated);
         Assert.False(commandsPane.IsHandleCreated);

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -22,15 +23,15 @@ public partial class ListViewItem
                 ? null
                 : new(_owningListView, _owningListView._labelEdit);
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     return _owningListView._labelEdit is not null
                         ? LabelEditAccessibleObject
                         : GetChildInternal(1);
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     return GetChildInternal(GetLastChildIndex());
             }
 

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -1182,7 +1183,8 @@ public abstract partial class ButtonBase : Control, ICommandBindingTargetProvide
 
         if (IsAccessibilityObjectCreated)
         {
-            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, Text, Text);
+            using var textVariant = (VARIANT)Text;
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_NamePropertyId, textVariant, textVariant);
         }
     }
 

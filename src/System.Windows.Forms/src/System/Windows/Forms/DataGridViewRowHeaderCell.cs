@@ -596,7 +596,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates cellState,
-        object value,
+        object? value,
         object? formattedValue,
         string? errorText,
         DataGridViewCellStyle cellStyle,

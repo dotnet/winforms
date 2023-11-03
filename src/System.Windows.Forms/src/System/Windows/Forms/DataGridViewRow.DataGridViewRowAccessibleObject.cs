@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Globalization;
 using System.Text;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -441,7 +442,7 @@ public partial class DataGridViewRow
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             {
                 if (Owner is null)
@@ -451,15 +452,15 @@ public partial class DataGridViewRow
 
                 switch (direction)
                 {
-                    case UiaCore.NavigateDirection.Parent:
+                    case NavigateDirection.NavigateDirection_Parent:
                         return Parent;
-                    case UiaCore.NavigateDirection.NextSibling:
+                    case NavigateDirection.NavigateDirection_NextSibling:
                         return Navigate(AccessibleNavigation.Next);
-                    case UiaCore.NavigateDirection.PreviousSibling:
+                    case NavigateDirection.NavigateDirection_PreviousSibling:
                         return Navigate(AccessibleNavigation.Previous);
-                    case UiaCore.NavigateDirection.FirstChild:
+                    case NavigateDirection.NavigateDirection_FirstChild:
                         return Navigate(AccessibleNavigation.FirstChild);
-                    case UiaCore.NavigateDirection.LastChild:
+                    case NavigateDirection.NavigateDirection_LastChild:
                         return Navigate(AccessibleNavigation.LastChild);
                     default:
                         return null;
@@ -480,12 +481,12 @@ public partial class DataGridViewRow
 
         internal override bool IsReadOnly => _owningDataGridViewRow?.ReadOnly ?? false;
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyId) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyId) =>
             propertyId switch
             {
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => string.Empty,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => string.Empty,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)string.Empty,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(Owner?.DataGridView?.Enabled ?? false),
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)string.Empty,
                 _ => base.GetPropertyValue(propertyId)
             };
     }

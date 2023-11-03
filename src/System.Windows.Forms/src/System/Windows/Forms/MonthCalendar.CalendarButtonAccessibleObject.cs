@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 
@@ -27,10 +28,10 @@ public partial class MonthCalendar
 
         public override void DoDefaultAction() => Invoke();
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
                 _ => base.GetPropertyValue(propertyID)
             };
 

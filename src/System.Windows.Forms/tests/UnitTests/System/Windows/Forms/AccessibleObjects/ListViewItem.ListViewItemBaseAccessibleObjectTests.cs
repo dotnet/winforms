@@ -2,9 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -152,7 +152,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         control.Items.Add(item);
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
-        var actual = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+        var actual = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(control.AccessibilityObject, actual);
         Assert.False(control.IsHandleCreated);
@@ -167,10 +167,10 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         AccessibleObject accessibleObject1 = control.Items[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = control.Items[1].AccessibilityObject;
 
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -183,8 +183,8 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -244,7 +244,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         ListViewItem item = new();
         control.Items.Add(item);
 
-        var actual = item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId, actual);
         Assert.False(control.IsHandleCreated);
@@ -257,9 +257,9 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         ListViewItem item = new();
         control.Items.Add(item);
 
-        var actual = item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId);
+        using var actual = item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId);
 
-        Assert.Equal("WinForm", actual);
+        Assert.Equal("WinForm", ((BSTR)actual).ToString());
         Assert.False(control.IsHandleCreated);
     }
 
@@ -270,8 +270,8 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         ListViewItem item = new();
         control.Items.Add(item);
 
-        Assert.Equal(SR.AccessibleActionDoubleClick, item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
-        Assert.Null(item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal(SR.AccessibleActionDoubleClick, ((BSTR)item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
+        Assert.Equal(VARIANT.Empty, item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
         Assert.True((bool)item.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId));
         Assert.False(control.IsHandleCreated);
     }
@@ -353,21 +353,21 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, (int)UiaCore.ToggleState.On)]
-    [InlineData(false, (int)UiaCore.ToggleState.Off)]
+    [InlineData(true, (int)ToggleState.ToggleState_On)]
+    [InlineData(false, (int)ToggleState.ToggleState_Off)]
     public void ListViewItemBaseAccessibleObject_ToggleState_ReturnsExpected(bool isChecked, int expected)
     {
         using ListView control = new();
         ListViewItem item = new() { Checked = isChecked };
         control.Items.Add(item);
 
-        Assert.Equal((UiaCore.ToggleState)expected, item.AccessibilityObject.ToggleState);
+        Assert.Equal((ToggleState)expected, item.AccessibilityObject.ToggleState);
         Assert.False(control.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData(false, (int)UiaCore.ToggleState.Off, (int)UiaCore.ToggleState.On)]
-    [InlineData(true, (int)UiaCore.ToggleState.On, (int)UiaCore.ToggleState.Off)]
+    [InlineData(false, (int)ToggleState.ToggleState_Off, (int)ToggleState.ToggleState_On)]
+    [InlineData(true, (int)ToggleState.ToggleState_On, (int)ToggleState.ToggleState_Off)]
     public void ListViewItemBaseAccessibleObject_Toggle_WorksExpected(bool isChecked, int before, int expected)
     {
         using ListView control = new();
@@ -376,11 +376,11 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
 
         AccessibleObject accessibleObject = item.AccessibilityObject;
 
-        Assert.Equal((UiaCore.ToggleState)before, accessibleObject.ToggleState);
+        Assert.Equal((ToggleState)before, accessibleObject.ToggleState);
 
         accessibleObject.Toggle();
 
-        Assert.Equal((UiaCore.ToggleState)expected, accessibleObject.ToggleState);
+        Assert.Equal((ToggleState)expected, accessibleObject.ToggleState);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -393,7 +393,7 @@ public class ListViewItem_ListViewItemBaseAccessibleObjectTests
         var accessibleObject = (ListViewItemBaseAccessibleObject)item.AccessibilityObject;
 
         var expected = $"{nameof(ListViewItem)}-{accessibleObject.CurrentIndex}";
-        Assert.Equal(expected, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId));
+        Assert.Equal(expected, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree());
         Assert.False(listView.IsHandleCreated);
     }
 

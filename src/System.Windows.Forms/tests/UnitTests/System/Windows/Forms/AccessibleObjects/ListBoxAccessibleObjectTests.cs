@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListBox;
 
@@ -28,7 +29,7 @@ public class ListBoxAccessibleObjectTests
         using ListBox listBox = new ListBox();
         // AccessibleRole is not set = Default
 
-        object actual = listBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)listBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ListControlTypeId, actual);
         Assert.False(listBox.IsHandleCreated);
@@ -75,7 +76,7 @@ public class ListBoxAccessibleObjectTests
         using ListBox listBox = new ListBox();
         listBox.AccessibleRole = role;
 
-        object actual = listBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)listBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -88,7 +89,7 @@ public class ListBoxAccessibleObjectTests
         using ListBox listBox = new ListBox();
         AccessibleObject accessibleObject = listBox.AccessibilityObject;
 
-        Assert.Null(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal(VARIANT.Empty, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
         Assert.False(listBox.IsHandleCreated);
     }
 

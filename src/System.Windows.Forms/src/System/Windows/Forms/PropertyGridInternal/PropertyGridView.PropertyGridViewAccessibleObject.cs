@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -25,7 +26,7 @@ internal partial class PropertyGridView
         internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
             => this.IsOwnerHandleCreated(out Control? _) ? HitTest((int)x, (int)y) : null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!_parentPropertyGrid.TryGetTarget(out PropertyGrid? target))
             {
@@ -47,8 +48,8 @@ internal partial class PropertyGridView
 
             return direction switch
             {
-                UiaCore.NavigateDirection.FirstChild => IsSortedByCategories ? GetCategory(0) : GetChild(0),
-                UiaCore.NavigateDirection.LastChild => IsSortedByCategories ? GetLastCategory() : GetLastChild(),
+                NavigateDirection.NavigateDirection_FirstChild => IsSortedByCategories ? GetCategory(0) : GetChild(0),
+                NavigateDirection.NavigateDirection_LastChild => IsSortedByCategories ? GetLastCategory() : GetLastChild(),
                 _ => base.FragmentNavigate(direction)
             };
         }
@@ -58,10 +59,10 @@ internal partial class PropertyGridView
 
         internal override UiaCore.IRawElementProviderFragment? GetFocus() => GetFocused();
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TableControlTypeId,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TableControlTypeId,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -460,7 +461,7 @@ internal partial class PropertyGridView
             return null;
         }
 
-        internal override UiaCore.IRawElementProviderSimple? GetItem(int row, int column) => GetChild(row);
+        internal override IRawElementProviderSimple.Interface? GetItem(int row, int column) => GetChild(row);
 
         internal override int RowCount
         {

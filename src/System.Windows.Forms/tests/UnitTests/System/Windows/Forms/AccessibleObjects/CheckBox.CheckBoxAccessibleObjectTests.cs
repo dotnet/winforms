@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop.UiaCore;
 using CheckBoxAccessibleObject = System.Windows.Forms.CheckBox.CheckBoxAccessibleObject;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -94,12 +94,12 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, CheckState.Checked, (int)ToggleState.On)]
-    [InlineData(true, CheckState.Unchecked, (int)ToggleState.Off)]
-    [InlineData(true, CheckState.Indeterminate, (int)ToggleState.Indeterminate)]
-    [InlineData(false, CheckState.Checked, (int)ToggleState.On)]
-    [InlineData(false, CheckState.Unchecked, (int)ToggleState.Off)]
-    [InlineData(false, CheckState.Indeterminate, (int)ToggleState.Indeterminate)]
+    [InlineData(true, CheckState.Checked, (int)ToggleState.ToggleState_On)]
+    [InlineData(true, CheckState.Unchecked, (int)ToggleState.ToggleState_Off)]
+    [InlineData(true, CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate)]
+    [InlineData(false, CheckState.Checked, (int)ToggleState.ToggleState_On)]
+    [InlineData(false, CheckState.Unchecked, (int)ToggleState.ToggleState_Off)]
+    [InlineData(false, CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate)]
     public void CheckBoxAccessibleObject_ToggleState_ReturnsExpected(bool createControl, CheckState checkState, int toggleState)
     {
         using var checkBox = new CheckBox() { CheckState = checkState };
@@ -117,21 +117,21 @@ public class CheckBox_CheckBoxAccessibleObjectTests
 
     public static IEnumerable<object[]> CheckBoxAccessibleObject_DoDefaultAction_Success_Data()
     {
-        yield return new object[] { true, false, CheckState.Checked, (int)ToggleState.Off };
-        yield return new object[] { true, false, CheckState.Indeterminate, (int)ToggleState.Off };
-        yield return new object[] { true, false, CheckState.Unchecked, (int)ToggleState.On };
+        yield return new object[] { true, false, CheckState.Checked, (int)ToggleState.ToggleState_Off };
+        yield return new object[] { true, false, CheckState.Indeterminate, (int)ToggleState.ToggleState_Off };
+        yield return new object[] { true, false, CheckState.Unchecked, (int)ToggleState.ToggleState_On };
 
-        yield return new object[] { true, true, CheckState.Checked, (int)ToggleState.Indeterminate };
-        yield return new object[] { true, true, CheckState.Indeterminate, (int)ToggleState.Off };
-        yield return new object[] { true, true, CheckState.Unchecked, (int)ToggleState.On };
+        yield return new object[] { true, true, CheckState.Checked, (int)ToggleState.ToggleState_Indeterminate };
+        yield return new object[] { true, true, CheckState.Indeterminate, (int)ToggleState.ToggleState_Off };
+        yield return new object[] { true, true, CheckState.Unchecked, (int)ToggleState.ToggleState_On };
 
-        yield return new object[] { false, true, CheckState.Checked, (int)ToggleState.On };
-        yield return new object[] { false, true, CheckState.Indeterminate, (int)ToggleState.Indeterminate };
-        yield return new object[] { false, true, CheckState.Unchecked, (int)ToggleState.Off };
+        yield return new object[] { false, true, CheckState.Checked, (int)ToggleState.ToggleState_On };
+        yield return new object[] { false, true, CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate };
+        yield return new object[] { false, true, CheckState.Unchecked, (int)ToggleState.ToggleState_Off };
 
-        yield return new object[] { false, false, CheckState.Checked, (int)ToggleState.On };
-        yield return new object[] { false, false, CheckState.Indeterminate, (int)ToggleState.Indeterminate };
-        yield return new object[] { false, false, CheckState.Unchecked, (int)ToggleState.Off };
+        yield return new object[] { false, false, CheckState.Checked, (int)ToggleState.ToggleState_On };
+        yield return new object[] { false, false, CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate };
+        yield return new object[] { false, false, CheckState.Unchecked, (int)ToggleState.ToggleState_Off };
     }
 
     [WinFormsTheory]
@@ -189,7 +189,7 @@ public class CheckBox_CheckBoxAccessibleObjectTests
     [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
     [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId, "TestName")]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, UIA_CONTROLTYPE_ID.UIA_CheckBoxControlTypeId)] // If AccessibleRole is Default
+    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, (int)UIA_CONTROLTYPE_ID.UIA_CheckBoxControlTypeId)] // If AccessibleRole is Default
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId, true)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "CheckBox1")]
     public void CheckBoxAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
@@ -202,9 +202,9 @@ public class CheckBox_CheckBoxAccessibleObjectTests
 
         Assert.False(checkBox.IsHandleCreated);
         var checkBoxAccessibleObject = new CheckBoxAccessibleObject(checkBox);
-        object value = checkBoxAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        using VARIANT value = checkBoxAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
-        Assert.Equal(expected, value);
+        Assert.Equal(expected, value.ToObject());
         Assert.False(checkBox.IsHandleCreated);
     }
 
@@ -283,8 +283,8 @@ public class CheckBox_CheckBoxAccessibleObjectTests
         checkBox.AccessibleRole = role;
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
-        Assert.Equal(expected, checkBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
-        Assert.Equal(checkBox.AccessibilityObject.DefaultAction, checkBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(expected, (UIA_CONTROLTYPE_ID)(int)checkBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(checkBox.AccessibilityObject.DefaultAction, ((BSTR)checkBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
         Assert.False(checkBox.IsHandleCreated);
     }
 }

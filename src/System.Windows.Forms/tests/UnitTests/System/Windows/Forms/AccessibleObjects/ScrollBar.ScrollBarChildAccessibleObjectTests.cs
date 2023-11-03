@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ScrollBar;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -56,7 +55,7 @@ public class ScrollBar_ScrollBarChildAccessibleObjectTests
         using SubScrollBar control = new();
         var accessibleObject = new ScrollBarChildAccessibleObject(control);
 
-        Assert.Equal(control.AccessibilityObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(control.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -86,7 +85,7 @@ public class ScrollBar_ScrollBarChildAccessibleObjectTests
     public void ScrollBarChildAccessibleObject_GetPropertyValue_ControlType_ReturnsExpected()
     {
         var accessibleObject = new ScrollBarChildAccessibleObject(null);
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsTheory]
@@ -97,7 +96,7 @@ public class ScrollBar_ScrollBarChildAccessibleObjectTests
         control.Enabled = isEnabled;
         var accessibleObject = new ScrollBarChildAccessibleObject(control);
 
-        Assert.Equal(isEnabled, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
+        Assert.Equal(isEnabled, (bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 

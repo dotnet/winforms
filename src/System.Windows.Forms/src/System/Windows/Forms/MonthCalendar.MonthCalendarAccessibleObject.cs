@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -79,16 +80,16 @@ public partial class MonthCalendar
         {
             Debug.Assert(OsVersion.IsWindows8OrGreater());
 
-            UiaCore.UiaDisconnectProvider(_previousButtonAccessibleObject);
+            PInvoke.UiaDisconnectProvider(_previousButtonAccessibleObject, skipOSCheck: true);
             _previousButtonAccessibleObject = null;
 
-            UiaCore.UiaDisconnectProvider(_nextButtonAccessibleObject);
+            PInvoke.UiaDisconnectProvider(_nextButtonAccessibleObject, skipOSCheck: true);
             _nextButtonAccessibleObject = null;
 
-            UiaCore.UiaDisconnectProvider(_todayLinkAccessibleObject);
+            PInvoke.UiaDisconnectProvider(_todayLinkAccessibleObject, skipOSCheck: true);
             _todayLinkAccessibleObject = null;
 
-            UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
+            PInvoke.UiaDisconnectProvider(_focusedCellAccessibleObject, skipOSCheck: true);
             _focusedCellAccessibleObject = null;
 
             if (_calendarsAccessibleObjects is null)
@@ -99,7 +100,7 @@ public partial class MonthCalendar
             foreach (CalendarAccessibleObject calendarAccessibleObject in _calendarsAccessibleObjects)
             {
                 calendarAccessibleObject.DisconnectChildren();
-                UiaCore.UiaDisconnectProvider(calendarAccessibleObject);
+                PInvoke.UiaDisconnectProvider(calendarAccessibleObject, skipOSCheck: true);
             }
 
             _calendarsAccessibleObjects.Clear();
@@ -204,11 +205,11 @@ public partial class MonthCalendar
         internal CalendarCellAccessibleObject? FocusedCell
             => _focusedCellAccessibleObject ??= this.TryGetOwnerAs(out MonthCalendar? owner) ? GetCellByDate(owner._focusedDate) : null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.FirstChild => PreviousButtonAccessibleObject,
-                UiaCore.NavigateDirection.LastChild => ShowToday
+                NavigateDirection.NavigateDirection_FirstChild => PreviousButtonAccessibleObject,
+                NavigateDirection.NavigateDirection_LastChild => ShowToday
                     ? TodayLinkAccessibleObject
                     : CalendarsAccessibleObjects?.Last?.Value,
                 _ => base.FragmentNavigate(direction),
@@ -371,7 +372,7 @@ public partial class MonthCalendar
             return null;
         }
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaders() => null;
+        internal override IRawElementProviderSimple.Interface[]? GetColumnHeaders() => null;
 
         internal SelectionRange? GetDisplayRange(bool visible)
             => this.TryGetOwnerAs(out MonthCalendar? owner) && owner.IsHandleCreated
@@ -401,7 +402,7 @@ public partial class MonthCalendar
             return hitTestInfo;
         }
 
-        internal override UiaCore.IRawElementProviderSimple? GetItem(int row, int column)
+        internal override IRawElementProviderSimple.Interface? GetItem(int row, int column)
         {
             if (!this.IsOwnerHandleCreated(out MonthCalendar? _) || CalendarsAccessibleObjects is null)
             {
@@ -419,17 +420,17 @@ public partial class MonthCalendar
             return null;
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     this.TryGetOwnerAs(out MonthCalendar? owner) && owner.AccessibleRole == AccessibleRole.Default
-                    => UIA_CONTROLTYPE_ID.UIA_CalendarControlTypeId,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => IsEnabled,
+                    => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_CalendarControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)IsEnabled,
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaders() => null;
+        internal override IRawElementProviderSimple.Interface[]? GetRowHeaders() => null;
 
         public override string Help
         {
@@ -506,15 +507,18 @@ public partial class MonthCalendar
                 return;
             }
 
-            foreach (CalendarAccessibleObject calendar in _calendarsAccessibleObjects)
+            if (OsVersion.IsWindows8OrGreater())
             {
-                calendar.DisconnectChildren();
-                UiaCore.UiaDisconnectProvider(calendar);
+                foreach (CalendarAccessibleObject calendar in _calendarsAccessibleObjects)
+                {
+                    calendar.DisconnectChildren();
+                    PInvoke.UiaDisconnectProvider(calendar, skipOSCheck: true);
+                }
+
+                PInvoke.UiaDisconnectProvider(_focusedCellAccessibleObject, skipOSCheck: true);
             }
 
             _calendarsAccessibleObjects = null;
-
-            UiaCore.UiaDisconnectProvider(_focusedCellAccessibleObject);
             _focusedCellAccessibleObject = null;
 
             // Recreate the calendars child collection and check if it is correct
@@ -533,7 +537,7 @@ public partial class MonthCalendar
                 ? (int)Math.Ceiling((double)CalendarsAccessibleObjects.Count / ColumnCount)
                 : 0;
 
-        internal override UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
+        internal override RowOrColumnMajor RowOrColumnMajor => RowOrColumnMajor.RowOrColumnMajor_RowMajor;
 
         internal SelectionRange SelectionRange => this.TryGetOwnerAs(out MonthCalendar? owner) ? owner.SelectionRange : new SelectionRange();
 

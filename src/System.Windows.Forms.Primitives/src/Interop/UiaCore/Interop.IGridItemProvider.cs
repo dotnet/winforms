@@ -20,7 +20,7 @@ internal static partial class Interop
 
             int ColumnSpan { get; }
 
-            IRawElementProviderSimple? ContainingGrid { get; }
+            Windows.Win32.UI.Accessibility.IRawElementProviderSimple.Interface? ContainingGrid { get; }
         }
     }
 }

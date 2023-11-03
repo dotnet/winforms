@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -84,7 +85,7 @@ public class MonthCalendar_CalendarTodayLinkAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = new(control);
         CalendarTodayLinkAccessibleObject todayLink = new(controlAccessibleObject);
 
-        Assert.Equal(controlAccessibleObject, todayLink.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
+        Assert.Equal(controlAccessibleObject, todayLink.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -97,8 +98,8 @@ public class MonthCalendar_CalendarTodayLinkAccessibleObjectTests
 
         AccessibleObject lastCalendar = controlAccessibleObject.CalendarsAccessibleObjects?.Last?.Value;
 
-        Assert.Equal(lastCalendar, todayLink.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(todayLink.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(lastCalendar, todayLink.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(todayLink.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -109,8 +110,8 @@ public class MonthCalendar_CalendarTodayLinkAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = new(control);
         CalendarTodayLinkAccessibleObject todayLink = new(controlAccessibleObject);
 
-        Assert.Null(todayLink.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(todayLink.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Null(todayLink.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(todayLink.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 }

@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripSplitButton;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -22,7 +21,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonExAccessibleObjectTests
 
         ToolStripSplitButtonExAccessibleObject accessibleObject = new(toolStripSplitButton);
 
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]
@@ -42,7 +41,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonExAccessibleObjectTests
 
         ToolStripSplitButtonExAccessibleObject accessibleObject = new(toolStripSplitButton);
 
-        Assert.Equal(UiaCore.ExpandCollapseState.Collapsed, accessibleObject.ExpandCollapseState);
+        Assert.Equal(ExpandCollapseState.ExpandCollapseState_Collapsed, accessibleObject.ExpandCollapseState);
         Assert.Equal(0, accessibleObject.TestAccessor().Dynamic.DropDownItemsCount);
     }
 
@@ -59,7 +58,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonExAccessibleObjectTests
         ToolStripSplitButtonExAccessibleObject accessibleObject = new(toolStripSplitButton);
         AccessibleObject expected = toolStrip.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
     }
 
     [WinFormsFact]
@@ -72,7 +71,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonExAccessibleObjectTests
 
         ToolStripSplitButtonExAccessibleObject accessibleObject = new(toolStripSplitButton);
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(toolStrip.IsHandleCreated);
     }
 
@@ -88,8 +87,8 @@ public class ToolStripSplitButton_ToolStripSplitButtonExAccessibleObjectTests
 
         toolStripSplitButton.DropDown.Show();
 
-        Assert.Equal(item1.AccessibilityObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(item2.AccessibilityObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(item1.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(item2.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsFact]
@@ -101,8 +100,8 @@ public class ToolStripSplitButton_ToolStripSplitButtonExAccessibleObjectTests
 
         ToolStripSplitButtonExAccessibleObject accessibleObject = new(toolStripSplitButton);
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsFact]
@@ -112,8 +111,8 @@ public class ToolStripSplitButton_ToolStripSplitButtonExAccessibleObjectTests
 
         ToolStripSplitButtonExAccessibleObject accessibleObject = new(toolStripSplitButton);
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsFact]
@@ -130,7 +129,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonExAccessibleObjectTests
 
         toolStripSplitButton.DropDown.Show();
 
-        Assert.Equal(item1.AccessibilityObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(item2.AccessibilityObject, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(item1.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(item2.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 }

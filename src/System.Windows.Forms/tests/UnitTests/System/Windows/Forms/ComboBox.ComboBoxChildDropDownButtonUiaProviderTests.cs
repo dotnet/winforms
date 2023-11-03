@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests;
 
@@ -46,7 +46,7 @@ public class ComboBox_ComboBoxChildDropDownButtonUiaProviderTests
 
         comboBox.DroppedDown = droppedDown;
         AccessibleObject nextItem = GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider
-            .FragmentNavigate(UiaCore.NavigateDirection.NextSibling) as AccessibleObject;
+            .FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling) as AccessibleObject;
 
         Assert.Null(nextItem);
         Assert.True(comboBox.IsHandleCreated);
@@ -71,7 +71,7 @@ public class ComboBox_ComboBoxChildDropDownButtonUiaProviderTests
 
         comboBox.DroppedDown = droppedDown;
         AccessibleObject previousItem = GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider
-            .FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) as AccessibleObject;
+            .FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling) as AccessibleObject;
 
         AccessibleObject expectedItem = comboBoxStyle == ComboBoxStyle.DropDownList
             ? comboBox.ChildTextAccessibleObject
@@ -94,7 +94,7 @@ public class ComboBox_ComboBoxChildDropDownButtonUiaProviderTests
         };
 
         AccessibleObject previousItem = GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider
-            .FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) as AccessibleObject;
+            .FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling) as AccessibleObject;
 
         Assert.Null(previousItem);
         Assert.False(comboBox.IsHandleCreated);

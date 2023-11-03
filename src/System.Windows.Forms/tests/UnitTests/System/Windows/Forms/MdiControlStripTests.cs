@@ -3,7 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -215,13 +215,13 @@ public class MdiControlStripTests
         mdiParent.Show();
         mdiChild.Show();
         AccessibleObject accessibleObject = mdiParent.MainMenuStrip.AccessibilityObject;
-        ToolStripItem.ToolStripItemAccessibleObject systemItem = (ToolStripItem.ToolStripItemAccessibleObject)accessibleObject.TestAccessor().Dynamic.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-        ToolStripItem.ToolStripItemAccessibleObject test1Item = (ToolStripItem.ToolStripItemAccessibleObject)systemItem.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        ToolStripItem.ToolStripItemAccessibleObject test2Item = (ToolStripItem.ToolStripItemAccessibleObject)test1Item.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        ToolStripItem.ToolStripItemAccessibleObject minimizeItem = (ToolStripItem.ToolStripItemAccessibleObject)test2Item.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        ToolStripItem.ToolStripItemAccessibleObject restoreItem = (ToolStripItem.ToolStripItemAccessibleObject)minimizeItem.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        ToolStripItem.ToolStripItemAccessibleObject closeItem = (ToolStripItem.ToolStripItemAccessibleObject)restoreItem.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        ToolStripItem.ToolStripItemAccessibleObject nullItem = (ToolStripItem.ToolStripItemAccessibleObject)closeItem.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        ToolStripItem.ToolStripItemAccessibleObject systemItem = (ToolStripItem.ToolStripItemAccessibleObject)accessibleObject.TestAccessor().Dynamic.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        ToolStripItem.ToolStripItemAccessibleObject test1Item = (ToolStripItem.ToolStripItemAccessibleObject)systemItem.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        ToolStripItem.ToolStripItemAccessibleObject test2Item = (ToolStripItem.ToolStripItemAccessibleObject)test1Item.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        ToolStripItem.ToolStripItemAccessibleObject minimizeItem = (ToolStripItem.ToolStripItemAccessibleObject)test2Item.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        ToolStripItem.ToolStripItemAccessibleObject restoreItem = (ToolStripItem.ToolStripItemAccessibleObject)minimizeItem.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        ToolStripItem.ToolStripItemAccessibleObject closeItem = (ToolStripItem.ToolStripItemAccessibleObject)restoreItem.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        ToolStripItem.ToolStripItemAccessibleObject nullItem = (ToolStripItem.ToolStripItemAccessibleObject)closeItem.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
 
         Assert.Equal("System", systemItem.Name);
         Assert.Equal("Test1", test1Item.Name);
@@ -261,13 +261,13 @@ public class MdiControlStripTests
         mdiParent.Show();
         mdiChild.Show();
         AccessibleObject accessibleObject = mdiParent.MainMenuStrip.AccessibilityObject;
-        ToolStripItem.ToolStripItemAccessibleObject closeItem = (ToolStripItem.ToolStripItemAccessibleObject)accessibleObject.TestAccessor().Dynamic.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
-        ToolStripItem.ToolStripItemAccessibleObject restoreItem = (ToolStripItem.ToolStripItemAccessibleObject)closeItem.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        ToolStripItem.ToolStripItemAccessibleObject minimizeItem = (ToolStripItem.ToolStripItemAccessibleObject)restoreItem.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        ToolStripItem.ToolStripItemAccessibleObject test2Item = (ToolStripItem.ToolStripItemAccessibleObject)minimizeItem.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        ToolStripItem.ToolStripItemAccessibleObject test1Item = (ToolStripItem.ToolStripItemAccessibleObject)test2Item.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        ToolStripItem.ToolStripItemAccessibleObject systemItem = (ToolStripItem.ToolStripItemAccessibleObject)test1Item.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        ToolStripItem.ToolStripItemAccessibleObject nullItem = (ToolStripItem.ToolStripItemAccessibleObject)systemItem.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+        ToolStripItem.ToolStripItemAccessibleObject closeItem = (ToolStripItem.ToolStripItemAccessibleObject)accessibleObject.TestAccessor().Dynamic.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        ToolStripItem.ToolStripItemAccessibleObject restoreItem = (ToolStripItem.ToolStripItemAccessibleObject)closeItem.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        ToolStripItem.ToolStripItemAccessibleObject minimizeItem = (ToolStripItem.ToolStripItemAccessibleObject)restoreItem.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        ToolStripItem.ToolStripItemAccessibleObject test2Item = (ToolStripItem.ToolStripItemAccessibleObject)minimizeItem.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        ToolStripItem.ToolStripItemAccessibleObject test1Item = (ToolStripItem.ToolStripItemAccessibleObject)test2Item.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        ToolStripItem.ToolStripItemAccessibleObject systemItem = (ToolStripItem.ToolStripItemAccessibleObject)test1Item.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        ToolStripItem.ToolStripItemAccessibleObject nullItem = (ToolStripItem.ToolStripItemAccessibleObject)systemItem.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
         Assert.Equal("Close", closeItem.Name);
         Assert.Equal("Restore", restoreItem.Name);

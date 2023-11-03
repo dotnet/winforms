@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ToolStripDropDownButton;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -24,7 +23,7 @@ public class ToolStripDropDownButton_ToolStripDropDownButtonAccessibleObjectTest
         using ToolStripDropDownButton toolStripDropDownButton = new ToolStripDropDownButton();
         // AccessibleRole is not set = Default
 
-        object actual = toolStripDropDownButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripDropDownButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, actual);
     }
@@ -62,7 +61,7 @@ public class ToolStripDropDownButton_ToolStripDropDownButtonAccessibleObjectTest
         using ToolStripDropDownButton toolStripDropDownButton = new ToolStripDropDownButton();
         toolStripDropDownButton.AccessibleRole = role;
 
-        object actual = toolStripDropDownButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripDropDownButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -83,14 +82,14 @@ public class ToolStripDropDownButton_ToolStripDropDownButtonAccessibleObjectTest
 
         AccessibleObject accessibleObject = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         dropDownItem.DropDown.Show();
 
         AccessibleObject expected = dropDownItem.DropDown.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 }

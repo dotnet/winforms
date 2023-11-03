@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Windows.Forms.PropertyGridInternal;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -49,10 +48,10 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
             new PropertyGrid.PropertyGridAccessibleObject(propertyGrid);
 
         // First child should be PropertyGrid toolbox.
-        AccessibleObject firstChild = (AccessibleObject)propertyGridAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        AccessibleObject firstChild = (AccessibleObject)propertyGridAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
 
         // Second child entry should be PropertyGridView.
-        AccessibleObject gridViewChild = (AccessibleObject)firstChild.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        AccessibleObject gridViewChild = (AccessibleObject)firstChild.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
 
         Assert.True(gridViewChild.IsPatternSupported((UIA_PATTERN_ID)pattern));
     }
@@ -71,7 +70,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
         }
 
         AccessibleObject accessibleObject = propertyGrid.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedRole, accessibleObject.Role);
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId, actual);
@@ -100,7 +99,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
         using PropertyGrid propertyGrid = new PropertyGrid();
         propertyGrid.AccessibleRole = role;
 
-        object actual = propertyGrid.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)propertyGrid.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -113,7 +112,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
         using PropertyGrid propertyGrid = new();
         PropertyGrid.PropertyGridAccessibleObject accessibleObject = new(propertyGrid);
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
     }
 
     [WinFormsFact]
@@ -122,8 +121,8 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
         using PropertyGrid propertyGrid = new();
         PropertyGrid.PropertyGridAccessibleObject accessibleObject = new(propertyGrid);
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
     }
 
     [WinFormsFact]
@@ -134,7 +133,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
 
         AccessibleObject expected = propertyGrid.ToolbarAccessibleObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsFact]
@@ -145,7 +144,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
 
         AccessibleObject expected = propertyGrid.GridViewAccessibleObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsFact]
@@ -156,7 +155,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
 
         AccessibleObject expected = propertyGrid.HelpPaneAccessibleObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsFact]
@@ -173,7 +172,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
 
         AccessibleObject expected = propertyGrid.CommandsPaneAccessibleObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsFact]
@@ -184,7 +183,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
 
         AccessibleObject expected = propertyGrid.GridViewAccessibleObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     private class SiteWithMenuCommands : ISite

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -36,19 +37,19 @@ public partial class MonthCalendar
 
         public override string? Description => null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction) =>
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction) =>
             direction switch
             {
-                UiaCore.NavigateDirection.NextSibling => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Next?.Value,
-                UiaCore.NavigateDirection.PreviousSibling => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Previous?.Value,
+                NavigateDirection.NavigateDirection_NextSibling => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Next?.Value,
+                NavigateDirection.NavigateDirection_PreviousSibling => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Previous?.Value,
                 _ => base.FragmentNavigate(direction)
             };
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => false,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => VARIANT.False,
                 _ => base.GetPropertyValue(propertyID)
             };
 

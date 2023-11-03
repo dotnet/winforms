@@ -4,7 +4,6 @@
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.LinkLabel;
 using static System.Windows.Forms.LinkLabel.Link;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -26,7 +25,7 @@ public class LinkLabel_LinkLabelAccessibleObjectTests
         using LinkLabel linkLabel = new();
         // AccessibleRole is not set = Default
 
-        object actual = linkLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)linkLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TextControlTypeId, actual);
         Assert.False(linkLabel.IsHandleCreated);
@@ -54,7 +53,7 @@ public class LinkLabel_LinkLabelAccessibleObjectTests
         using LinkLabel linkLabel = new();
         linkLabel.AccessibleRole = role;
 
-        object actual = linkLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)linkLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -157,7 +156,7 @@ public class LinkLabel_LinkLabelAccessibleObjectTests
             linkLabel.Links.Add(new());
         }
 
-        Assert.Equal(linkLabel.Links[0].AccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(linkLabel.Links[0].AccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.False(linkLabel.IsHandleCreated);
     }
 
@@ -172,7 +171,7 @@ public class LinkLabel_LinkLabelAccessibleObjectTests
             linkLabel.Links.Add(new());
         }
 
-        Assert.Equal(linkLabel.Links[^1].AccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(linkLabel.Links[^1].AccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(linkLabel.IsHandleCreated);
     }
 

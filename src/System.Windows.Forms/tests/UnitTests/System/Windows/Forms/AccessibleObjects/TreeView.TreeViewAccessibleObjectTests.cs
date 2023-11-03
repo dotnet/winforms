@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TreeView;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -32,7 +31,7 @@ public class TreeViewAccessibleObjectTests
         using TreeView control = new();
 
         // AccessibleRole is not set = Default
-        object actual = control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TreeControlTypeId, actual);
         Assert.False(control.IsHandleCreated);
@@ -71,7 +70,7 @@ public class TreeViewAccessibleObjectTests
         AccessibleObject accessibleObject = control.AccessibilityObject;
         AccessibleObject expected = control.Nodes[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -84,7 +83,7 @@ public class TreeViewAccessibleObjectTests
         AccessibleObject accessibleObject = control.AccessibilityObject;
         AccessibleObject expected = control.Nodes[^1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -126,7 +125,7 @@ public class TreeViewAccessibleObjectTests
     {
         using TreeView control = new() { Enabled = isEnabled };
 
-        Assert.Equal(isEnabled, control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
+        Assert.Equal(isEnabled, (bool)control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -218,7 +217,7 @@ public class TreeViewAccessibleObjectTests
         control.Nodes.AddRange(new TreeNode[] { new("Node 1"), new("Node 2"), new("Node 3") });
         control.SelectedNode = control.Nodes[1];
 
-        UiaCore.IRawElementProviderSimple[] expected = new[] { control.Nodes[1].AccessibilityObject };
+        IRawElementProviderSimple.Interface[] expected = new[] { control.Nodes[1].AccessibilityObject };
 
         Assert.Equal(expected, control.AccessibilityObject.GetSelection());
         Assert.True(control.IsHandleCreated);

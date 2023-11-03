@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -25,10 +26,10 @@ public partial class ToolStripStatusLabel
             return RaiseAutomationEvent(UIA_EVENT_ID.UIA_LiveRegionChangedEventId);
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_LiveSettingPropertyId => _owningToolStripStatusLabel.LiveSetting,
+                UIA_PROPERTY_ID.UIA_LiveSettingPropertyId => (VARIANT)(int)_owningToolStripStatusLabel.LiveSetting,
                 _ => base.GetPropertyValue(propertyID)
             };
     }

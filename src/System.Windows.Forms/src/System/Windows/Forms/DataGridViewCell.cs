@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Text;
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -1131,7 +1131,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 dataGridView.EditingControlAccessibleObject!.SetParent(null);
                 AccessibilityObject.SetDetachableChild(null);
 
-                AccessibilityObject.RaiseStructureChangedEvent(UiaCore.StructureChangeType.ChildRemoved, dataGridView.EditingControlAccessibleObject.RuntimeId);
+                AccessibilityObject.RaiseStructureChangedEvent(StructureChangeType.StructureChangeType_ChildRemoved, dataGridView.EditingControlAccessibleObject.RuntimeId);
             }
         }
 
@@ -3926,11 +3926,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             return;
         }
 
-        if (OsVersion.IsWindows8OrGreater())
-        {
-            UiaCore.UiaDisconnectProvider(AccessibilityObject);
-        }
-
+        PInvoke.UiaDisconnectProvider(AccessibilityObject);
         Properties.SetObject(s_propCellAccessibilityObject, null);
     }
 

@@ -38,7 +38,7 @@ internal static partial class Interop
             string? KeyboardShortcut { get; }
 
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
-            IRawElementProviderSimple[] GetSelection();
+            Windows.Win32.UI.Accessibility.IRawElementProviderSimple.Interface[] GetSelection();
 
             string? DefaultAction { get; }
         }
