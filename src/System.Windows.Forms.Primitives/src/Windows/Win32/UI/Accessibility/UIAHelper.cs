@@ -20,7 +20,7 @@ internal static class UIAHelper
     ///   with the nint/IntPtr passed in returns a VARIANT with <see cref="VARENUM.VT_INT"/>,
     ///   <see cref="IRawElementProviderSimple.GetPropertyValue(IRawElementProviderSimple*, UIA_PROPERTY_ID, VARIANT*)"/>
     ///   with <see cref="UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId"/> is expecting a VARIANT with <see cref="VARENUM.VT_I4"/>.
-    ///   See <see href="https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-automation-element-propids"/>
+    ///   See <see href="https://learn.microsoft.com/windows/win32/winauto/uiauto-automation-element-propids"/>
     ///   for more details.
     ///  </para>
     /// </remarks>
