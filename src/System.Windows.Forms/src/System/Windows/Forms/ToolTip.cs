@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
 using static Interop;
 using static Interop.ComCtl32;
 
@@ -1402,11 +1401,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     public void Show(string? text, IWin32Window window, int duration)
     {
         ArgumentNullException.ThrowIfNull(window);
-
-        if (duration < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(duration), duration, string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(duration);
 
         if (IsWindowActive(window))
         {
@@ -1439,14 +1434,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     public void Show(string? text, IWin32Window window, Point point, int duration)
     {
         ArgumentNullException.ThrowIfNull(window);
-
-        if (duration < 0)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(duration),
-                duration,
-                string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(duration);
 
         if (IsWindowActive(window))
         {
@@ -1483,14 +1471,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     public void Show(string? text, IWin32Window window, int x, int y, int duration)
     {
         ArgumentNullException.ThrowIfNull(window);
-
-        if (duration < 0)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(duration),
-                duration,
-                string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(duration);
 
         if (IsWindowActive(window))
         {
@@ -1506,13 +1487,7 @@ public partial class ToolTip : Component, IExtenderProvider, IHandle<HWND>
     internal void ShowKeyboardToolTip(string? text, IKeyboardToolTip tool, int duration)
     {
         ArgumentNullException.ThrowIfNull(tool);
-
-        if (duration < 0)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(duration),
-                string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), (duration).ToString(CultureInfo.CurrentCulture), 0));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(duration);
 
         Rectangle toolRectangle = tool.GetNativeScreenRectangle();
 

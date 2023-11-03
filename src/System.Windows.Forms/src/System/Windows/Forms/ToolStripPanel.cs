@@ -4,7 +4,6 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms;
@@ -760,10 +759,7 @@ public partial class ToolStripPanel : ContainerControl, IArrangedElement
 
     public void Join(ToolStrip toolStripToDrag, int row)
     {
-        if (row < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(row), string.Format(SR.IndexOutOfRange, row.ToString(CultureInfo.CurrentCulture)));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(row);
 
         Rectangle dragRect;
         if (row >= RowsInternal.Count)

@@ -2101,13 +2101,8 @@ public partial class ComboBox : ListControl
             return ItemHeight;
         }
 
-        if (index < 0 || _itemsCollection is null || index >= _itemsCollection.Count)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(index),
-                index,
-                string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _itemsCollection?.Count ?? 0);
 
         if (IsHandleCreated)
         {
@@ -3384,10 +3379,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     public void Select(int start, int length)
     {
-        if (start < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidArgument, nameof(start), start));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(start);
 
         // the Length can be negative to support Selecting in the "reverse" direction..
         int end = start + length;
