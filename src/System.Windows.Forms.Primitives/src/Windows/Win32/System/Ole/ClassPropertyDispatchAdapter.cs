@@ -33,7 +33,9 @@ internal unsafe class ClassPropertyDispatchAdapter
     {
         ArgumentNullException.ThrowIfNull(instance);
         _instance = new(instance);
+#pragma warning disable IL2074 // value stored in field does not satisfy DynamicallyAccessedMemberTypes.PublicProperties requirements. https://github.com/dotnet/winforms/issues/10226
         _type = instance.GetType();
+#pragma warning restore IL2074
         _priorAdapter = priorAdapter;
 
         var properties = _type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
