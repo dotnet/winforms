@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Reflection;
 using Microsoft.DotNet.RemoteExecutor;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListView;
 using static System.Windows.Forms.ListViewGroup;
@@ -56,18 +57,18 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         AccessibleObject accessibleObject = listGroup.AccessibilityObject;
         Assert.False(list.IsHandleCreated);
 
-        object accessibleName = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        string accessibleName = ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree();
         Assert.Equal("Group1", accessibleName);
 
-        object automationId = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId);
+        string automationId = ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree();
         Assert.Equal("ListViewGroup-0", automationId);
 
-        object controlType = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var controlType = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId;
         Assert.Equal(expected, controlType);
 
         Assert.True((bool)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
-        Assert.Equal(AccessibleRole.Grouping, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId));
+        Assert.Equal(AccessibleRole.Grouping, (AccessibleRole)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId));
         Assert.False(list.IsHandleCreated);
     }
 
@@ -88,22 +89,22 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         AccessibleObject defaultGroupAccessibleObject = list.DefaultGroup.AccessibilityObject;
         AccessibleObject groupAccessibleObject = listGroup.AccessibilityObject;
 
-        Assert.Equal(list.DefaultGroup.Header, defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
-        Assert.Equal("Group1", groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
-        Assert.Equal("Group1", groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
+        Assert.Equal(list.DefaultGroup.Header, ((BSTR)defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree());
+        Assert.Equal("Group1", ((BSTR)groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree());
+        Assert.Equal("Group1", ((BSTR)groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId)).ToStringAndFree());
 
-        Assert.Equal("ListViewGroup-0", defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId));
-        Assert.Equal("ListViewGroup-1", groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId));
+        Assert.Equal("ListViewGroup-0", ((BSTR)defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree());
+        Assert.Equal("ListViewGroup-1", ((BSTR)groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree());
 
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId, groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId, defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId, (UIA_CONTROLTYPE_ID)(int)groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId, (UIA_CONTROLTYPE_ID)(int)defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
 
         Assert.True((bool)defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
         Assert.True((bool)groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId));
-        Assert.Equal(AccessibleRole.Grouping, defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId));
-        Assert.Equal(AccessibleRole.Grouping, groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId));
-        Assert.Null(groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
-        Assert.Equal("WinForm", groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId));
+        Assert.Equal(AccessibleRole.Grouping, (AccessibleRole)(int)defaultGroupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId));
+        Assert.Equal(AccessibleRole.Grouping, (AccessibleRole)(int)groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId));
+        Assert.Equal(VARIANT.Empty, groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal("WinForm", ((BSTR)groupAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId)).ToStringAndFree());
         Assert.False(list.IsHandleCreated);
     }
 
@@ -120,7 +121,7 @@ public class ListViewGroup_ListViewGroupAccessibleObjectTests
         AccessibleObject accessibleObject = listGroup.AccessibilityObject;
         Assert.False(list.IsHandleCreated);
 
-        object accessibleName = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        string accessibleName = ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree();
         Assert.Equal($"{name}. {subtitle}", accessibleName);
 
         Assert.False(list.IsHandleCreated);

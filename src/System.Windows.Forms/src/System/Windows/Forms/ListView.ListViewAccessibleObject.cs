@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -177,14 +178,14 @@ public partial class ListView
             };
         }
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaders()
+        internal override IRawElementProviderSimple.Interface[]? GetColumnHeaders()
         {
             if (!this.TryGetOwnerAs(out ListView? owningListView))
             {
                 return base.GetColumnHeaders();
             }
 
-            UiaCore.IRawElementProviderSimple[] columnHeaders = new UiaCore.IRawElementProviderSimple[owningListView.Columns.Count];
+            var columnHeaders = new IRawElementProviderSimple.Interface[owningListView.Columns.Count];
             for (int i = 0; i < columnHeaders.Length; i++)
             {
                 columnHeaders[i] = owningListView.Columns[i].AccessibilityObject;
@@ -238,7 +239,7 @@ public partial class ListView
             return owningListView.Items.Count == 0 ? null : owningListView.Items[owningListView.Items.Count - 1].AccessibilityObject;
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
                 // If we don't set a default role for the accessible object
@@ -246,24 +247,24 @@ public partial class ListView
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                    => UIA_CONTROLTYPE_ID.UIA_ListControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => false,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => State.HasFlag(AccessibleStates.Focusable),
-                UIA_PROPERTY_ID.UIA_ItemStatusPropertyId => GetItemStatus(),
+                    => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => VARIANT.False,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
+                UIA_PROPERTY_ID.UIA_ItemStatusPropertyId => (VARIANT)GetItemStatus(),
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaders()
+        internal override IRawElementProviderSimple.Interface[]? GetRowHeaders()
             => null;
 
-        internal override UiaCore.IRawElementProviderSimple[] GetSelection()
+        internal override IRawElementProviderSimple.Interface[] GetSelection()
         {
             if (!this.IsOwnerHandleCreated(out ListView? owningListView))
             {
-                return Array.Empty<UiaCore.IRawElementProviderSimple>();
+                return [];
             }
 
-            UiaCore.IRawElementProviderSimple[] selectedItemProviders = new UiaCore.IRawElementProviderSimple[owningListView.SelectedIndices.Count];
+            var selectedItemProviders = new IRawElementProviderSimple.Interface[owningListView.SelectedIndices.Count];
             for (int i = 0; i < selectedItemProviders.Length; i++)
             {
                 selectedItemProviders[i] = owningListView.Items[owningListView.SelectedIndices[i]].AccessibilityObject;

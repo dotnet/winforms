@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -813,8 +814,8 @@ internal sealed partial class PropertyGridView :
                     gridEntry.AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
                     gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                         UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                        ExpandCollapseState.ExpandCollapseState_Expanded,
-                        ExpandCollapseState.ExpandCollapseState_Collapsed);
+                        (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded,
+                        (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed);
                 }
             }
         }
@@ -4662,8 +4663,8 @@ internal sealed partial class PropertyGridView :
             var newExpandedState = value ? ExpandCollapseState.ExpandCollapseState_Expanded : ExpandCollapseState.ExpandCollapseState_Collapsed;
             _selectedGridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                oldExpandedState,
-                newExpandedState);
+                (VARIANT)(int)oldExpandedState,
+                (VARIANT)(int)newExpandedState);
         }
 
         RecalculateProperties();

@@ -26,9 +26,9 @@ public class ToolStripStatusLabel_ToolStripStatusLabelAccessibleObjectTests
         toolStripStatusLabel.IsLink = isLink;
         // AccessibleRole is not set = Default
 
-        object actual = toolStripStatusLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (int)toolStripStatusLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(expectedType, (int)actual);
+        Assert.Equal(expectedType, actual);
     }
 
     [WinFormsTheory]
@@ -67,7 +67,7 @@ public class ToolStripStatusLabel_ToolStripStatusLabelAccessibleObjectTests
         using ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
         toolStripStatusLabel.AccessibleRole = role;
 
-        object actual = toolStripStatusLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripStatusLabel.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

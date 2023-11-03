@@ -95,7 +95,7 @@ public class MonthCalendar_CalendarBodyAccessibleObjectTests
         using MonthCalendar control = new MonthCalendar();
         CalendarBodyAccessibleObject accessibleObject = CreateCalendarBodyAccessibleObject(control);
 
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TableControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TableControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
         Assert.False(control.IsHandleCreated);
     }
 

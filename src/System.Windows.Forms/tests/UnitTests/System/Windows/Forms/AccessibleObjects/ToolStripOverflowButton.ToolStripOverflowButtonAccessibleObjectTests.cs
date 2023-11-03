@@ -26,7 +26,7 @@ public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTest
         ToolStripOverflowButton toolStripOverflowButton = new ToolStripOverflowButton(toolStrip);
         // AccessibleRole is not set = Default
 
-        object actual = toolStripOverflowButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripOverflowButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_MenuItemControlTypeId, actual);
         Assert.False(toolStrip.IsHandleCreated);
@@ -68,7 +68,7 @@ public class ToolStripOverflowButton_ToolStripOverflowButtonAccessibleObjectTest
         ToolStripOverflowButton toolStripOverflowButton = new ToolStripOverflowButton(toolStrip);
         toolStripOverflowButton.AccessibleRole = role;
 
-        object actual = toolStripOverflowButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripOverflowButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

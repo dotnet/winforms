@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -70,16 +70,11 @@ public partial class ErrorProvider
 
             public override int GetChildCount() => _owner.ControlItems.Count;
 
-            /// <summary>
-            ///  Gets the accessible property value.
-            /// </summary>
-            /// <param name="propertyID">The accessible property ID.</param>
-            /// <returns>The accessible property value.</returns>
-            internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+            internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
                 propertyID switch
                 {
-                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId,
-                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _owner.Handle,
+                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId,
+                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(_owner.Handle),
                     _ => base.GetPropertyValue(propertyID)
                 };
 
@@ -96,11 +91,11 @@ public partial class ErrorProvider
                 return null;
             }
 
-            internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
+            internal override unsafe IRawElementProviderSimple* HostRawElementProvider
             {
                 get
                 {
-                    UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, _owner.Handle), out UiaCore.IRawElementProviderSimple provider);
+                    PInvoke.UiaHostProviderFromHwnd(new HandleRef<HWND>(this, _owner.HWND), out IRawElementProviderSimple* provider);
                     return provider;
                 }
             }

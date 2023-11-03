@@ -803,8 +803,15 @@ TYPEKIND
 UIA_EVENT_ID
 UiaAppendRuntimeId
 UiaClientsAreListening
+UiaDisconnectProvider
 UiaGetReservedNotSupportedValue
+UiaHostProviderFromHwnd
 UiaRootObjectId
+UiaRaiseAutomationEvent
+UiaRaiseAutomationPropertyChangedEvent
+UiaRaiseNotificationEvent
+UiaRaiseStructureChangedEvent
+UiaReturnRawElementProvider
 UIS_*
 UISF_*
 UnhookWinEvent

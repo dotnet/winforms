@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -40,17 +41,11 @@ public partial class DataGridView
                 return;
             }
 
-            if (_topRowAccessibilityObject is not null)
-            {
-                UiaCore.UiaDisconnectProvider(_topRowAccessibilityObject);
+            PInvoke.UiaDisconnectProvider(_topRowAccessibilityObject, skipOSCheck: true);
             _topRowAccessibilityObject = null;
-            }
 
-            if (_selectedCellsAccessibilityObject is not null)
-            {
-                UiaCore.UiaDisconnectProvider(_selectedCellsAccessibilityObject);
-                _selectedCellsAccessibilityObject = null;
-            }
+            PInvoke.UiaDisconnectProvider(_selectedCellsAccessibilityObject, skipOSCheck: true);
+            _selectedCellsAccessibilityObject = null;
         }
 
         public override AccessibleRole Role
@@ -244,7 +239,7 @@ public partial class DataGridView
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
         {
             DataGridView? owner;
 
@@ -252,16 +247,16 @@ public partial class DataGridView
             {
                 case UIA_PROPERTY_ID.UIA_ControlTypePropertyId:
                     return (this.TryGetOwnerAs(out owner) && owner.AccessibleRole == AccessibleRole.Default)
-                        ? UIA_CONTROLTYPE_ID.UIA_DataGridControlTypeId
+                        ? (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_DataGridControlTypeId
                         : base.GetPropertyValue(propertyID);
                 case UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId:
                     // If no inner cell entire DGV should be announced as focused by Narrator.
                     // Else only inner cell should be announced as focused by Narrator but not entire DGV.
-                    return this.TryGetOwnerAs(out owner) && (IsModal || RowCount == 0) && owner.Focused;
+                    return (VARIANT)(this.TryGetOwnerAs(out owner) && (IsModal || RowCount == 0) && owner.Focused);
                 case UIA_PROPERTY_ID.UIA_IsControlElementPropertyId:
-                    return true;
+                    return VARIANT.True;
                 case UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId:
-                    return this.TryGetOwnerAs(out owner) && owner.CanFocus;
+                    return (VARIANT)(this.TryGetOwnerAs(out owner) && owner.CanFocus);
                 case UIA_PROPERTY_ID.UIA_ItemStatusPropertyId:
                     var canSort = false;
                     if (!this.TryGetOwnerAs(out owner))
@@ -284,17 +279,17 @@ public partial class DataGridView
                         switch (owner.SortOrder)
                         {
                             case SortOrder.None:
-                                return SR.NotSortedAccessibleStatus;
+                                return (VARIANT)SR.NotSortedAccessibleStatus;
                             case SortOrder.Ascending:
-                                return string.Format(SR.DataGridViewSortedAscendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
+                                return (VARIANT)string.Format(SR.DataGridViewSortedAscendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
                             case SortOrder.Descending:
-                                return string.Format(SR.DataGridViewSortedDescendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
+                                return (VARIANT)string.Format(SR.DataGridViewSortedDescendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
                         }
                     }
 
                     if (ColumnCount > 0 && RowCount > 0)
                     {
-                        return SR.NotSortedAccessibleStatus;
+                        return (VARIANT)SR.NotSortedAccessibleStatus;
                     }
 
                     return base.GetPropertyValue(propertyID);
@@ -308,14 +303,14 @@ public partial class DataGridView
                 patternId == UIA_PATTERN_ID.UIA_GridPatternId ||
                 base.IsPatternSupported(patternId);
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaders()
+        internal override IRawElementProviderSimple.Interface[]? GetRowHeaders()
         {
             if (!this.TryGetOwnerAs(out DataGridView? owner) || !owner.RowHeadersVisible)
             {
                 return null;
             }
 
-            UiaCore.IRawElementProviderSimple[] result = new UiaCore.IRawElementProviderSimple[RowCount];
+            var result = new IRawElementProviderSimple.Interface[RowCount];
             for (int i = 0; i < RowCount; i++)
             {
                 int rowIndex = owner.Rows.DisplayIndexToRowIndex(i);
@@ -325,14 +320,14 @@ public partial class DataGridView
             return result;
         }
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaders()
+        internal override IRawElementProviderSimple.Interface[]? GetColumnHeaders()
         {
             if (!this.TryGetOwnerAs(out DataGridView? owner) || !owner.ColumnHeadersVisible)
             {
                 return null;
             }
 
-            UiaCore.IRawElementProviderSimple[] result = new UiaCore.IRawElementProviderSimple[ColumnCount];
+            var result = new IRawElementProviderSimple.Interface[ColumnCount];
             for (int i = 0; i < ColumnCount; i++)
             {
                 int columnIndex = owner.Columns.ActualDisplayIndexToColumnIndex(i, DataGridViewElementStates.Visible);
@@ -350,7 +345,7 @@ public partial class DataGridView
             }
         }
 
-        internal override UiaCore.IRawElementProviderSimple? GetItem(int row, int column)
+        internal override IRawElementProviderSimple.Interface? GetItem(int row, int column)
         {
             if (!this.TryGetOwnerAs(out DataGridView? owner))
             {

@@ -125,7 +125,7 @@ public class TextBoxBaseAccessibleObjectTests
         }
 
         AccessibleObject accessibleObject = textBoxBase.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedRole, accessibleObject.Role);
         Assert.Equal((UIA_CONTROLTYPE_ID)expectedType, actual);
@@ -154,7 +154,7 @@ public class TextBoxBaseAccessibleObjectTests
         using TextBoxBase textBoxBase = new SubTextBoxBase();
         textBoxBase.AccessibleRole = role;
 
-        object actual = textBoxBase.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)textBoxBase.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

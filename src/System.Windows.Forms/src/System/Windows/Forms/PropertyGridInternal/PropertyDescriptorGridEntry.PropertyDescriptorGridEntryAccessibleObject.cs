@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -261,13 +262,13 @@ internal partial class PropertyDescriptorGridEntry
             return index <= 0 ? null : GetChild(index - 1);
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId
-                    => this.TryGetOwnerAs(out PropertyDescriptorGridEntry? owner) && !owner.IsPropertyReadOnly,
-                UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId => true,
-                UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId => string.Empty,
+                    => (VARIANT)(this.TryGetOwnerAs(out PropertyDescriptorGridEntry? owner) && !owner.IsPropertyReadOnly),
+                UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId => VARIANT.True,
+                UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId => (VARIANT)string.Empty,
                 _ => base.GetPropertyValue(propertyID)
             };
 

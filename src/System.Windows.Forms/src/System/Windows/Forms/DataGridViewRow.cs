@@ -1752,10 +1752,7 @@ public partial class DataGridViewRow : DataGridViewBand
             return;
         }
 
-        if (OsVersion.IsWindows8OrGreater())
-        {
-            Interop.UiaCore.UiaDisconnectProvider(AccessibilityObject);
-        }
+        PInvoke.UiaDisconnectProvider(AccessibilityObject);
 
         Properties.SetObject(s_propRowAccessibilityObject, null);
     }

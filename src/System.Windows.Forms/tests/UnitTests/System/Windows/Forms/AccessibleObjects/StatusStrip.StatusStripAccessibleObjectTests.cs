@@ -21,7 +21,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         AccessibleObject statusStripAccessibleObject = statusStrip.AccessibilityObject;
         var accessibleName = statusStripAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
-        Assert.Equal("Test Name", accessibleName);
+        Assert.Equal("Test Name", ((BSTR)accessibleName).ToStringAndFree());
     }
 
     [WinFormsFact]
@@ -69,7 +69,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         using StatusStrip statusStrip = new StatusStrip();
         // AccessibleRole is not set = Default
 
-        object actual = statusStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)statusStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_StatusBarControlTypeId, actual);
         Assert.False(statusStrip.IsHandleCreated);
@@ -109,7 +109,7 @@ public class StatusStrip_StatusStripAccessibleObjectTests
         using StatusStrip statusStrip = new StatusStrip();
         statusStrip.AccessibleRole = role;
 
-        object actual = statusStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)statusStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

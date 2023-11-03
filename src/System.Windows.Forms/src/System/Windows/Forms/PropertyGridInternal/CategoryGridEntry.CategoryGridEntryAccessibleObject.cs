@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -91,12 +92,12 @@ internal partial class CategoryGridEntry
             };
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
         {
             // To announce expanded collapsed state control type should be appropriate:
             // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
-            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
-            UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId => SR.CategoryPropertyGridLocalizedControlType,
+            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
+            UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId => (VARIANT)SR.CategoryPropertyGridLocalizedControlType,
             _ => base.GetPropertyValue(propertyID),
         };
 

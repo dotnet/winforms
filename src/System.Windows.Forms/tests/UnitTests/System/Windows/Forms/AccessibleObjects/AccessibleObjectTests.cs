@@ -8,6 +8,7 @@ using Moq;
 using static Interop;
 using System.Reflection;
 using UIA_PROPERTY_ID = Windows.Win32.UI.Accessibility.UIA_PROPERTY_ID;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -2627,7 +2628,7 @@ public partial class AccessibleObjectTests
     {
         AccessibleObject accessibleObject = new AccessibleObject();
 
-        Assert.Null(accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId));
+        Assert.Equal(VARIANT.Empty, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId));
     }
 
     public static IEnumerable<object[]> AccessibleObject_RuntimeId_IsOverriden_TestData()

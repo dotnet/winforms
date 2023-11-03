@@ -23,7 +23,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonAccessibleObjectTests
         using ToolStripSplitButton toolStripSplitButton = new ToolStripSplitButton();
         // AccessibleRole is not set = Default
 
-        object actual = toolStripSplitButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripSplitButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, actual);
     }
@@ -61,7 +61,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonAccessibleObjectTests
         using ToolStripSplitButton toolStripSplitButton = new ToolStripSplitButton();
         toolStripSplitButton.AccessibleRole = role;
 
-        object actual = toolStripSplitButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripSplitButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

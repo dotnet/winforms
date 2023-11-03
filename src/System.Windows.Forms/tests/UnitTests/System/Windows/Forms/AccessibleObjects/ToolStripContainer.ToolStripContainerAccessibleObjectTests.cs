@@ -20,7 +20,7 @@ public class ToolStripContainer_ToolStripContainerAccessibleObjectTests
     [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "ToolStripContainer1")]
-    public void ToolStripContainerAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
+    public void ToolStripContainerAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, string expected)
     {
         using var control = new ToolStripContainer
         {
@@ -29,7 +29,7 @@ public class ToolStripContainer_ToolStripContainerAccessibleObjectTests
         };
 
         var accessibleObject = new ToolStripContainer.ToolStripContainerAccessibleObject(control);
-        object value = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        string value = ((BSTR)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID)).ToStringAndFree();
 
         Assert.Equal(expected, value);
         Assert.False(control.IsHandleCreated);

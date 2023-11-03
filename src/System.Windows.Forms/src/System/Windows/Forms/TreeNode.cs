@@ -9,7 +9,6 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
-using static Interop;
 using static Interop.ComCtl32;
 
 namespace System.Windows.Forms;
@@ -1912,11 +1911,7 @@ public partial class TreeNode : MarshalByRefObject, ICloneable, ISerializable
 
     internal virtual void ReleaseUiaProvider()
     {
-        if (OsVersion.IsWindows8OrGreater())
-        {
-            UiaCore.UiaDisconnectProvider(_accessibleObject);
-        }
-
+        PInvoke.UiaDisconnectProvider(_accessibleObject);
         _accessibleObject = null;
     }
 

@@ -22,7 +22,7 @@ internal static partial class Interop
             /// </summary>
             /// <param name="hwnd">The window handle of the component.</param>
             /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
-            IRawElementProviderSimple? GetOverrideProviderForHwnd(IntPtr hwnd);
+            Windows.Win32.UI.Accessibility.IRawElementProviderSimple.Interface? GetOverrideProviderForHwnd(IntPtr hwnd);
         }
     }
 }

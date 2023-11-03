@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.DateTimePicker;
 
@@ -25,9 +26,9 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         using DateTimePicker dateTimePicker = new();
         // AccessibleRole is not set = Default
 
-        object actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(dateTimePicker.IsHandleCreated);
     }
 
@@ -49,7 +50,7 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         using DateTimePicker dateTimePicker = new();
         // AccessibleRole is not set = Default
 
-        object actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId);
+        string actual = ((BSTR)dateTimePicker.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId)).ToStringAndFree();
         string expected = SR.DateTimePickerLocalizedControlType;
 
         Assert.Equal(expected, actual);
@@ -78,7 +79,7 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         using DateTimePicker dateTimePicker = new();
         dateTimePicker.AccessibleRole = role;
 
-        object actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)dateTimePicker.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -92,9 +93,9 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
         using DateTimePicker dateTimePicker = new();
         dateTimePicker.AccessibleRole = role;
 
-        object actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId);
+        VARIANT actual = dateTimePicker.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId);
 
-        Assert.Null(actual);
+        Assert.Equal(VARIANT.Empty, actual);
         Assert.False(dateTimePicker.IsHandleCreated);
     }
 
@@ -111,7 +112,7 @@ public class DateTimePicker_DateTimePickerAccessibleObjectTests
 
         dateTimePicker.CreateControl();
 
-        Assert.Equal(dt.ToLongDateString(), accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal(dt.ToLongDateString(), ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree());
     }
 
     [WinFormsTheory]

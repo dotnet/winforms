@@ -200,7 +200,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         checkedListBox.SetItemChecked(0, isChecked);
         checkedListBox.CreateControl();
 
-        Assert.Equal(expected, checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(expected, ((BSTR)checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
         Assert.True(checkedListBox.IsHandleCreated);
     }
 
@@ -263,7 +263,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         checkedListBox.SetItemCheckState(0, checkState);
 
         Assert.Equal((ToggleState)toggleState, checkedListBox.AccessibilityObject.GetChild(0).ToggleState);
-        Assert.Equal(checkValue.ToString(), checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal(checkValue.ToString(), ((BSTR)checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree());
         Assert.False(checkedListBox.IsHandleCreated);
     }
 
@@ -321,7 +321,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         checkedListBox.SetItemChecked(0, isChecked);
 
         AccessibleObject accessibleObject = checkedListBox.AccessibilityObject.GetChild(0);
-        Assert.Equal(isChecked, bool.Parse(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId).ToString()));
+        Assert.Equal(isChecked, bool.Parse(((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree()));
         Assert.False(checkedListBox.IsHandleCreated);
     }
 }

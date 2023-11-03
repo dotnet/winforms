@@ -96,15 +96,15 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
         list.Items.Add(listItem);
         AccessibleObject listItemAccessibleObject = listItem.AccessibilityObject;
 
-        object accessibleName = listItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        string accessibleName = ((BSTR)listItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree();
 
         Assert.Equal("ListItem", accessibleName);
 
-        object automationId = listItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId);
+        string automationId = ((BSTR)listItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree();
 
         Assert.Equal("ListViewItem-0", automationId);
 
-        object controlType = listItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var controlType = (UIA_CONTROLTYPE_ID)(int)listItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId;
 
         Assert.Equal(expected, controlType);

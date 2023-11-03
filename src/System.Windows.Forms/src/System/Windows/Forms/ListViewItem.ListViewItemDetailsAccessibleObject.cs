@@ -192,7 +192,7 @@ public partial class ListViewItem
 
             foreach (AccessibleObject accessibleObject in _listViewSubItemAccessibleObjects.Values)
             {
-                UiaCore.UiaDisconnectProvider(accessibleObject);
+                PInvoke.UiaDisconnectProvider(accessibleObject, skipOSCheck: true);
             }
 
             _listViewSubItemAccessibleObjects.Clear();

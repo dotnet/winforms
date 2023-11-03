@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -45,7 +46,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
 
     [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, UIA_CONTROLTYPE_ID.UIA_ScrollBarControlTypeId)] // If AccessibleRole is Default
+    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, (int)UIA_CONTROLTYPE_ID.UIA_ScrollBarControlTypeId)] // If AccessibleRole is Default
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId, true)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId, true)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "AutomId")]
@@ -65,9 +66,9 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
 
         Assert.False(scrollBar.IsHandleCreated);
         var scrollBarAccessibleObject = new ScrollBar.ScrollBarAccessibleObject(scrollBar);
-        object value = scrollBarAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        using VARIANT value = scrollBarAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
-        Assert.Equal(expected, value);
+        Assert.Equal(expected, value.ToObject());
         Assert.False(scrollBar.IsHandleCreated);
     }
 
@@ -93,7 +94,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
         using ScrollBar scrollBar = new SubScrollBar();
         scrollBar.AccessibleRole = role;
 
-        object actual = scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -105,9 +106,9 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
     {
         using SubScrollBar scrollBar = new();
 
-        object actual = scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
+        using VARIANT actual = scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
 
-        Assert.Equal(scrollBar.AccessibilityObject.RuntimeId, actual);
+        Assert.Equal(scrollBar.AccessibilityObject.RuntimeId, actual.ToObject());
         Assert.False(scrollBar.IsHandleCreated);
     }
 
@@ -121,7 +122,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
             Enabled = enabled
         };
 
-        object actual = scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId);
+        var actual = (bool)scrollBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId);
 
         Assert.Equal(scrollBar.Enabled, actual);
         Assert.False(scrollBar.IsHandleCreated);
@@ -148,8 +149,8 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
     {
         using SubScrollBar scrollBar = new() { Enabled = true };
         ScrollBar.ScrollBarAccessibleObject accessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
-
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(scrollBar.IsHandleCreated);
     }
 
@@ -165,7 +166,7 @@ public class ScrollBar_ScrollBarAccessibleObjectTests
         AccessibleObject accessibleObject = scrollBar.AccessibilityObject;
 
         accessibleObject.SetValue(newValue);
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RangeValueValuePropertyId);
+        var actual = (double)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RangeValueValuePropertyId);
 
         Assert.Equal(expected, actual);
         Assert.Equal(expected, (double)scrollBar.Value);

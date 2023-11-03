@@ -31,7 +31,7 @@ public class PrintPreviewControl_PrintPreviewControlAccessibleObjectTests
 
         Assert.False(control.IsHandleCreated);
         var accessibleObject = new PrintPreviewControl.PrintPreviewControlAccessibleObject(control);
-        object value = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        string value = ((BSTR)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID)).ToStringAndFree();
 
         Assert.Equal(expected, value);
         Assert.False(control.IsHandleCreated);

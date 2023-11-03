@@ -27,7 +27,7 @@ public class PropertyGridToolStrip_PropertyGridToolStripAccessibleObjectTests
         using PropertyGridToolStrip propertyGridToolStrip = new PropertyGridToolStrip(propertyGrid);
         // AccessibleRole is not set = Default
 
-        object actual = propertyGridToolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)propertyGridToolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ToolBarControlTypeId, actual);
         Assert.False(propertyGrid.IsHandleCreated);

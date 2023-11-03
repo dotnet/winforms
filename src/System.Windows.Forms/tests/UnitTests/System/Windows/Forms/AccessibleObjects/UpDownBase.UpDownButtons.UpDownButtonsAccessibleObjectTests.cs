@@ -1,8 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Windows.Forms.Automation;
-using Windows.Win32.System.Com;
+using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.UpDownBase;
@@ -31,7 +30,7 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
         // AccessibleRole is not set = Default
 
-        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_SpinnerControlTypeId, actual);
         Assert.False(upDownBase.IsHandleCreated);
@@ -73,7 +72,7 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
         upDownButtons.AccessibleRole = role;
 
-        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -88,7 +87,7 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
         upDownButtons.AccessibleName = name;
 
-        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        string actual = ((BSTR)upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree();
 
         Assert.Equal(name, actual);
         Assert.False(upDownBase.IsHandleCreated);
@@ -100,9 +99,9 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         using SubUpDownBase upDownBase = new();
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
 
-        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
+        using VARIANT actual = upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
 
-        Assert.Equal(upDownButtons.AccessibilityObject.RuntimeId, actual);
+        Assert.Equal(upDownButtons.AccessibilityObject.RuntimeId, actual.ToObject());
         Assert.False(upDownBase.IsHandleCreated);
     }
 
@@ -111,9 +110,10 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
     {
         using SubUpDownBase upDownBase = new();
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
-        object actual = upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
-        using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray(upDownButtons.AccessibilityObject.BoundingRectangle);
-        Assert.Equal(((VARIANT)rectArray).ToObject(), actual);
+        using VARIANT actual = upDownButtons.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
+        double[] actualArray = (double[])actual.ToObject();
+        Rectangle actualRectangle = new((int)actualArray[0], (int)actualArray[1], (int)actualArray[2], (int)actualArray[3]);
+        Assert.Equal(upDownButtons.AccessibilityObject.BoundingRectangle, actualRectangle);
         Assert.False(upDownBase.IsHandleCreated);
     }
 
@@ -139,14 +139,14 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         using SubUpDownBase upDownBase = new();
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
         UpDownButtonsAccessibleObject accessibleObject = (UpDownButtonsAccessibleObject)upDownButtons.AccessibilityObject;
-
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(upDownBase.IsHandleCreated);
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, AccessibleRole.SpinButton)]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, (int)AccessibleRole.SpinButton)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, (int)AccessibleStates.None)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_ValueValuePropertyId, null)]
     public void UpDownButtonsAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
@@ -154,9 +154,16 @@ public class UpDownBase_UpDownButtons_UpDownButtonsAccessibleObject
         using SubUpDownBase upDownBase = new();
         UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
         UpDownButtonsAccessibleObject accessibleObject = (UpDownButtonsAccessibleObject)upDownButtons.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
+        VARIANT actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
+        if (expected is null)
+        {
+            Assert.Equal(VARIANT.Empty, actual);
+        }
+        else
+        {
+            Assert.Equal(expected, (int)actual);
+        }
 
-        Assert.Equal(expected, actual);
         Assert.False(upDownBase.IsHandleCreated);
     }
 

@@ -88,7 +88,7 @@ public class AnchorEditorTests
         var item = (Control)anchorUI.GetType()
             .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(anchorUI);
 
-        object actual = item.AccessibilityObject.TestAccessor().Dynamic
+        var actual = (UIA_CONTROLTYPE_ID)(int)item.AccessibilityObject.TestAccessor().Dynamic
             .GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_CheckBoxControlTypeId, actual);

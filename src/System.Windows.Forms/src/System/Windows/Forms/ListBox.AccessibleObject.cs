@@ -120,27 +120,27 @@ public partial class ListBox
         /// </summary>
         /// <param name="propertyID">The accessible property ID.</param>
         /// <returns>The accessible property value.</returns>
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
         {
             switch (propertyID)
             {
                 case UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId:
-                    return ((VARIANT)UiaTextProvider.BoundingRectangleAsArray(BoundingRectangle)).ToObject();
+                    return UiaTextProvider.BoundingRectangleAsVariant(BoundingRectangle);
                 case UIA_PROPERTY_ID.UIA_ControlTypePropertyId:
                     // If we don't set a default role for the accessible object
                     // it will be retrieved from Windows.
                     // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
                     return this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                           ? UIA_CONTROLTYPE_ID.UIA_ListControlTypeId
+                           ? (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListControlTypeId
                            : base.GetPropertyValue(propertyID);
                 case UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId:
-                    return this.TryGetOwnerAs(out ListBox? owner) ? GetChildCount() == 0 && owner.Focused : base.GetPropertyValue(propertyID);
+                    return this.TryGetOwnerAs(out ListBox? owner) ? (VARIANT)(GetChildCount() == 0 && owner.Focused) : base.GetPropertyValue(propertyID);
                 default:
                     return base.GetPropertyValue(propertyID);
             }
         }
 
-        internal override UiaCore.IRawElementProviderSimple[] GetSelection()
+        internal override IRawElementProviderSimple.Interface[] GetSelection()
         {
             AccessibleObject? itemAccessibleObject = GetSelected();
             return itemAccessibleObject is not null
@@ -162,7 +162,7 @@ public partial class ListBox
             {
                 foreach (ListBoxItemAccessibleObject itemAccessibleObject in _itemAccessibleObjects.Values)
                 {
-                    UiaCore.UiaDisconnectProvider(itemAccessibleObject);
+                    PInvoke.UiaDisconnectProvider(itemAccessibleObject, skipOSCheck: true);
                 }
             }
 
@@ -189,10 +189,7 @@ public partial class ListBox
                 return;
             }
 
-            if (OsVersion.IsWindows8OrGreater())
-            {
-                UiaCore.UiaDisconnectProvider(value);
-            }
+            PInvoke.UiaDisconnectProvider(value);
 
             _itemAccessibleObjects.Remove(item);
         }

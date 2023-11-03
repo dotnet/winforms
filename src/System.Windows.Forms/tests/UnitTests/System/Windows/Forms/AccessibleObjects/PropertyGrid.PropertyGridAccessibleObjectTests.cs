@@ -70,7 +70,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
         }
 
         AccessibleObject accessibleObject = propertyGrid.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedRole, accessibleObject.Role);
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId, actual);
@@ -99,7 +99,7 @@ public class PropertyGrid_PropertyGridAccessibleObjectTests
         using PropertyGrid propertyGrid = new PropertyGrid();
         propertyGrid.AccessibleRole = role;
 
-        object actual = propertyGrid.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)propertyGrid.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

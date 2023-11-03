@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
@@ -520,7 +521,7 @@ public class CheckBoxTests
             return base.RaiseAutomationEvent(eventId);
         }
 
-        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, object oldValue, object newValue)
+        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
         {
             RaiseAutomationPropertyChangedEventCallsCount++;
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);

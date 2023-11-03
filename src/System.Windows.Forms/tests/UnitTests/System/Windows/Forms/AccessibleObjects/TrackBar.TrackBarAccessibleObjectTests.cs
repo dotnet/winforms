@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.TestUtilities;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -260,7 +261,7 @@ public class TrackBarAccessibleObjectTests
         using TrackBar trackBar = new();
 
         // AccessibleRole is not set = Default
-        object actual = trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_SliderControlTypeId, actual);
         Assert.False(trackBar.IsHandleCreated);
@@ -298,7 +299,7 @@ public class TrackBarAccessibleObjectTests
         using TrackBar trackBar = new();
         trackBar.AccessibleRole = role;
 
-        object actual = trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -324,8 +325,16 @@ public class TrackBarAccessibleObjectTests
     {
         using TrackBar trackBar = new();
         trackBar.AccessibleDefaultActionDescription = defaultAction;
+        VARIANT actual = trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId);
+        if (defaultAction is null)
+        {
+            Assert.Equal(VARIANT.Empty, actual);
+        }
+        else
+        {
+            Assert.Equal(defaultAction, ((BSTR)actual).ToStringAndFree());
+        }
 
-        Assert.Equal(defaultAction, trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
         Assert.False(trackBar.IsHandleCreated);
     }
 
@@ -397,7 +406,7 @@ public class TrackBarAccessibleObjectTests
             Enabled = enabled
         };
 
-        Assert.Equal(enabled, trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
+        Assert.Equal(enabled, (bool)trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId));
         Assert.False(trackBar.IsHandleCreated);
     }
 
@@ -405,16 +414,16 @@ public class TrackBarAccessibleObjectTests
     public void TrackBarAccessibilityObject_GetPropertyValue_RuntimeId_ReturnsExpected()
     {
         using TrackBar trackBar = new();
-        object actual = trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
+        using VARIANT actual = trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
 
-        Assert.Equal(trackBar.AccessibilityObject.RuntimeId, actual);
+        Assert.Equal(trackBar.AccessibilityObject.RuntimeId, actual.ToObject());
         Assert.False(trackBar.IsHandleCreated);
     }
 
     [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestAccessibleName")]
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "TestControlName")]
-    public void TrackBarAccessibilityObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
+    public void TrackBarAccessibilityObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, string expected)
     {
         using TrackBar trackBar = new()
         {
@@ -424,7 +433,7 @@ public class TrackBarAccessibleObjectTests
 
         TrackBar.TrackBarAccessibleObject accessibilityObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
 
-        object value = accessibilityObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        string value = ((BSTR)accessibilityObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID)).ToStringAndFree();
         Assert.Equal(expected, value);
         Assert.False(trackBar.IsHandleCreated);
     }
@@ -434,9 +443,9 @@ public class TrackBarAccessibleObjectTests
     {
         using TrackBar trackBar = new();
         trackBar.CreateControl(false);
-        object actual = trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId);
+        int actual = (int)trackBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId);
 
-        Assert.Equal((nint)trackBar.InternalHandle, actual);
+        Assert.Equal((int)(nint)trackBar.InternalHandle, actual);
     }
 
     [WinFormsTheory]
@@ -459,8 +468,8 @@ public class TrackBarAccessibleObjectTests
     {
         using TrackBar trackBar = new();
         TrackBar.TrackBarAccessibleObject accessibleObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
-
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(trackBar.IsHandleCreated);
     }
 

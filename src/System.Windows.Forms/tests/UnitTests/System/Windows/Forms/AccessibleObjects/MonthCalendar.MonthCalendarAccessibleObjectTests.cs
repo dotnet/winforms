@@ -27,9 +27,9 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
         };
         // AccessibleRole is not set = Default
 
-        object actual = monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (int)monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(expected, (int)actual);
+        Assert.Equal(expected, actual);
         Assert.False(monthCalendar.IsHandleCreated);
     }
 
@@ -67,7 +67,7 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
         using MonthCalendar monthCalendar = new MonthCalendar();
         monthCalendar.AccessibleRole = role;
 
-        object actual = monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -81,8 +81,8 @@ public class MonthCalendar_MonthCalendarAccessibleObjectTests
         DateTime dt = new DateTime(2000, 1, 1);
         monthCalendar.SetDate(dt);
 
-        Assert.Equal(dt.ToLongDateString(), monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
-        Assert.Equal(AccessibleStates.None, monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId));
+        Assert.Equal(dt.ToLongDateString(), ((BSTR)monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree());
+        Assert.Equal(AccessibleStates.None, (AccessibleStates)(int)monthCalendar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId));
         Assert.False(monthCalendar.IsHandleCreated);
     }
 

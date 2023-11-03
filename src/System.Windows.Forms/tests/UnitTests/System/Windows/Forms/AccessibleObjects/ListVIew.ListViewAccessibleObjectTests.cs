@@ -209,16 +209,16 @@ public class ListView_ListViewAccessibleObjectTests
         list.AccessibleName = "ListView";
         AccessibleObject listAccessibleObject = list.AccessibilityObject;
 
-        object accessibleName = listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        string accessibleName = ((BSTR)listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree();
         Assert.Equal("ListView", accessibleName);
 
-        object automationId = listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId);
+        string automationId = ((BSTR)listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree();
         Assert.Equal("List", automationId);
 
-        object accessibleControlType = listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var accessibleControlType = (UIA_CONTROLTYPE_ID)(int)listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ListControlTypeId, accessibleControlType); // If AccessibleRole is Default
 
-        object controlType = listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var controlType = (UIA_CONTROLTYPE_ID)(int)listAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_ListControlTypeId;
         Assert.Equal(expected, controlType);
 
@@ -1129,7 +1129,7 @@ public class ListView_ListViewAccessibleObjectTests
         using ListView listView = new ListView();
         listView.AccessibleRole = role;
 
-        object actual = listView.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)listView.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

@@ -2,12 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.Automation;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem.ListViewSubItem;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -80,16 +77,16 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         AccessibleObject accessibleObject = listViewItem1.AccessibilityObject.GetChild(childId);
 
-        object accessibleName = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        string accessibleName = ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree();
         Assert.Equal($"Test {childId + 1}", accessibleName);
 
-        object automationId = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId);
+        string automationId = ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree();
         Assert.Equal($"ListViewSubItem-{childId}", automationId);
 
-        object frameworkId = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId);
+        string frameworkId = ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId)).ToStringAndFree();
         Assert.Equal("WinForm", frameworkId);
 
-        object controlType = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var controlType = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TextControlTypeId, controlType);
         Assert.True(list.IsHandleCreated);
@@ -857,7 +854,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         listViewItem._listView = listView;
         ListViewItem.ListViewSubItem subItem = new(listViewItem, "Test subItem");
 
-        object actual = subItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ProcessIdPropertyId);
+        var actual = (int)subItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ProcessIdPropertyId);
 
         Assert.Equal(Environment.ProcessId, actual);
         Assert.False(listView.IsHandleCreated);
@@ -913,9 +910,9 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         ListViewItem listViewItem = new("Test item");
         listView.Items.Add(listViewItem);
         ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
-        object actual = listViewSubItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
+        using VARIANT actual = listViewSubItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
 
-        Assert.Equal(listViewSubItem.AccessibilityObject.RuntimeId, actual);
+        Assert.Equal(listViewSubItem.AccessibilityObject.RuntimeId, actual.ToObject());
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -927,9 +924,10 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         listView.Items.Add(listViewItem);
         ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
         ListViewSubItemAccessibleObject listViewSubItemAccessibleObject = new(listViewSubItem, listViewItem);
-        object actual = listViewSubItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
-        using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray(listViewSubItem.AccessibilityObject.BoundingRectangle);
-        Assert.Equal(((VARIANT)rectArray).ToObject(), actual);
+        using VARIANT actual = listViewSubItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
+        double[] actualArray = (double[])actual.ToObject();
+        Rectangle actualRectangle = new((int)actualArray[0], (int)actualArray[1], (int)actualArray[2], (int)actualArray[3]);
+        Assert.Equal(listViewSubItem.AccessibilityObject.BoundingRectangle, actualRectangle);
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -970,8 +968,8 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         listView.Items.Add(listViewItem);
         ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
         ListViewSubItemAccessibleObject accessibleObject = new(listViewSubItem, listViewItem);
-
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -1014,7 +1012,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         {
             var subItemAccessibleObject = (ListViewSubItemAccessibleObject)control.Items[0].SubItems[i].AccessibilityObject;
             AccessibleObject columnHeaderAccessibleObject = columns[i].AccessibilityObject;
-            UiaCore.IRawElementProviderSimple[] columnHeaderItems = subItemAccessibleObject.GetColumnHeaderItems();
+            IRawElementProviderSimple.Interface[] columnHeaderItems = subItemAccessibleObject.GetColumnHeaderItems();
 
             Assert.Equal(1, columnHeaderItems.Length);
             Assert.Same(columnHeaderAccessibleObject, columnHeaderItems[0]);

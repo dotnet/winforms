@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using RadioButtonAccessibleObject = System.Windows.Forms.RadioButton.RadioButtonAccessibleObject;
 
@@ -50,7 +51,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
 
         var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
 
-        Assert.Equal("TestActionDescription", radioButtonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal("TestActionDescription", ((BSTR)radioButtonAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
         Assert.False(radioButton.IsHandleCreated);
     }
 
@@ -154,7 +155,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
 
     [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, UIA_CONTROLTYPE_ID.UIA_RadioButtonControlTypeId)] // If AccessibleRole is Default
+    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, (int)UIA_CONTROLTYPE_ID.UIA_RadioButtonControlTypeId)] // If AccessibleRole is Default
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId, true)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "RadioButton1")]
     public void RadioButtonAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
@@ -167,9 +168,9 @@ public class RadioButton_RadioButtonAccessibleObjectTests
 
         Assert.False(radioButton.IsHandleCreated);
         var radioButtonAccessibleObject = new RadioButtonAccessibleObject(radioButton);
-        object value = radioButtonAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        using VARIANT value = radioButtonAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
-        Assert.Equal(expected, value);
+        Assert.Equal(expected, value.ToObject());
         Assert.False(radioButton.IsHandleCreated);
     }
 
@@ -212,7 +213,7 @@ public class RadioButton_RadioButtonAccessibleObjectTests
         using RadioButton radioButton = new RadioButton();
         radioButton.AccessibleRole = role;
 
-        object actual = radioButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)radioButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

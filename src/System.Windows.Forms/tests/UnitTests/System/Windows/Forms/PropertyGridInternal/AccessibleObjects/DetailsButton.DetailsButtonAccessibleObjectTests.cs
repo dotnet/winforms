@@ -29,7 +29,7 @@ public class DetailsButton_DetailsButtonAccessibleObjectTests
         using DetailsButton detailsButton = new DetailsButton(gridErrorDlg);
         // AccessibleRole is not set = Default
 
-        object actual = detailsButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)detailsButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, actual);
         Assert.False(propertyGrid.IsHandleCreated);

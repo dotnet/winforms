@@ -11,7 +11,7 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.InteropTests;
 
-public class AccessibleObjectTests : InteropTestBase
+public unsafe class AccessibleObjectTests : InteropTestBase
 {
     [WinFormsFact]
     public unsafe void AccessibleObject_IAccessibleExConvertReturnedElement_Invoke_ReturnsExpected()
@@ -58,31 +58,37 @@ public class AccessibleObjectTests : InteropTestBase
     [WinFormsFact]
     public void AccessibleObject_IRawElementProviderSimple_GetHostRawElementProvider_ReturnsExpected()
     {
-        var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderSimpleHostRawElementProvider(o, false));
+        using var elementProvider = ComHelpers.GetComScope<IRawElementProviderSimple>(new AccessibleObject());
+        using ComScope<IRawElementProviderSimple> actual = new(null);
+        Assert.True(elementProvider.Value->get_HostRawElementProvider(actual).Succeeded);
+        Assert.True(actual.IsNull);
     }
 
     [WinFormsFact]
     public void AccessibleObject_IRawElementProviderSimpleProviderOptions_Get_ReturnsExpected()
     {
-        var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderSimpleProviderOptions(o, ProviderOptions.ProviderOptions_ServerSideProvider | ProviderOptions.ProviderOptions_UseComThreading));
+        using var elementProvider = ComHelpers.GetComScope<IRawElementProviderSimple>(new AccessibleObject());
+        ProviderOptions actual = default;
+        Assert.True(elementProvider.Value->get_ProviderOptions(&actual).Succeeded);
+        Assert.Equal(ProviderOptions.ProviderOptions_ServerSideProvider | ProviderOptions.ProviderOptions_UseComThreading, actual);
     }
 
-    public static TheoryData<int, bool> GetPatternProvider_TestData() => new()
+    public static TheoryData<int> GetPatternProvider_TestData() => new()
     {
-        { (int)UIA_PATTERN_ID.UIA_InvokePatternId, false },
-        { (int)UIA_PATTERN_ID.UIA_SelectionPatternId, false },
-        { (int)UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId, false },
-        { (int)UIA_PATTERN_ID.UIA_InvokePatternId - 1, false }
+        { (int)UIA_PATTERN_ID.UIA_InvokePatternId },
+        { (int)UIA_PATTERN_ID.UIA_SelectionPatternId },
+        { (int)UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId },
+        { (int)UIA_PATTERN_ID.UIA_InvokePatternId - 1 }
     };
 
     [WinFormsTheory]
     [MemberData(nameof(GetPatternProvider_TestData))]
-    public void AccessibleObject_IRawElementProviderSimpleGetPatternProvider_Invoke_ReturnsExpected(int patternId, bool expected)
+    public void AccessibleObject_IRawElementProviderSimpleGetPatternProvider_Invoke_ReturnsExpected(int patternId)
     {
-        var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderSimpleGetPatternProvider(o, (UIA_PATTERN_ID)patternId, (BOOL)expected));
+        using var elementProvider = ComHelpers.GetComScope<IRawElementProviderSimple>(new AccessibleObject());
+        using ComScope<IUnknown> actual = new(null);
+        Assert.True(elementProvider.Value->GetPatternProvider((UIA_PATTERN_ID)patternId, actual).Succeeded);
+        Assert.True(actual.IsNull);
     }
 
     public static IEnumerable<object[]> GetPropertyValue_TestData()
@@ -97,9 +103,17 @@ public class AccessibleObjectTests : InteropTestBase
     [MemberData(nameof(GetPropertyValue_TestData))]
     public void AccessibleObject_IRawElementProviderSimpleGetPropertyValue_Invoke_ReturnsExpected(object propertyId, object expected)
     {
-        var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderSimpleGetPropertyValue(o, (UIA_PROPERTY_ID)propertyId, out VARIANT variant));
-        Assert.Equal(expected, variant.ToObject());
+        using var elementProvider = ComHelpers.GetComScope<IRawElementProviderSimple>(new AccessibleObject());
+        VARIANT variant = default;
+        Assert.True(elementProvider.Value->GetPropertyValue((UIA_PROPERTY_ID)propertyId, &variant).Succeeded);
+        if (expected is null)
+        {
+            Assert.Equal(VARIANT.Empty, variant);
+        }
+        else
+        {
+            Assert.Equal(expected, variant.ToObject());
+        }
     }
 
     [WinFormsFact]
@@ -791,28 +805,6 @@ public class AccessibleObjectTests : InteropTestBase
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
     private static extern string Test_IServiceProviderQueryService(
         [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern string Test_IRawElementProviderSimpleHostRawElementProvider(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-        BOOL expected);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern string Test_IRawElementProviderSimpleProviderOptions(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-        ProviderOptions expected);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern string Test_IRawElementProviderSimpleGetPatternProvider(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-        UIA_PATTERN_ID patternId,
-        BOOL expected);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern string Test_IRawElementProviderSimpleGetPropertyValue(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-        UIA_PROPERTY_ID propertyId,
-        out VARIANT expected);
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
     private static extern string Test_IRangeValueProviderGetIsReadOnly(

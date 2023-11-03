@@ -431,7 +431,7 @@ public partial class ErrorProvider
             {
                 // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                m.ResultInternal = (LRESULT)UiaCore.UiaReturnRawElementProvider(
+                m.ResultInternal = PInvoke.UiaReturnRawElementProvider(
                     this,
                     m.WParamInternal,
                     m.LParamInternal,

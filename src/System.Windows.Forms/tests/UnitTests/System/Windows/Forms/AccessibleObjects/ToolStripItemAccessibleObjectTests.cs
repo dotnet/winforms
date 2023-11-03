@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -93,14 +94,17 @@ public class ToolStripItemAccessibleObjectTests
 
         // By default Name has string.Empty value, because if AccessibleName is not defined
         // then control uses the value of "Text" property from owner Item (by default an empty string)
-        Assert.Equal(string.Empty, toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        using VARIANT result = toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        Assert.Equal(VARENUM.VT_BSTR, result.vt);
+        Assert.Equal(string.Empty, ((BSTR)result).ToString());
 
         item.Name = "Name1";
         item.AccessibleName = "Test Name";
 
-        var accessibleName = toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        using VARIANT accessibleName = toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
-        Assert.Equal("Test Name", accessibleName);
+        Assert.Equal(VARENUM.VT_BSTR, accessibleName.vt);
+        Assert.Equal("Test Name", ((BSTR)accessibleName).ToString());
     }
 
     [WinFormsTheory]
@@ -128,7 +132,7 @@ public class ToolStripItemAccessibleObjectTests
         using ToolStripItem toolStripItem = new SubToolStripItem();
         // AccessibleRole is not set = Default
 
-        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, actual);
     }
@@ -156,7 +160,7 @@ public class ToolStripItemAccessibleObjectTests
         using ToolStripItem toolStripItem = new SubToolStripItem();
         toolStripItem.AccessibleRole = role;
 
-        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -170,7 +174,7 @@ public class ToolStripItemAccessibleObjectTests
         using ToolStripItem toolStripItem = new SubToolStripItem();
 
         Assert.False((bool)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId));
-        Assert.Null(toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal(VARIANT.Empty, toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
     }
 
     [WinFormsFact]

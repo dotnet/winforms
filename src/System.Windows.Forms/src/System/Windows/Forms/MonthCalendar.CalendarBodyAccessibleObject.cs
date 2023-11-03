@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -60,7 +61,7 @@ public partial class MonthCalendar
             foreach (CalendarRowAccessibleObject row in _rowsAccessibleObjects)
             {
                 row.DisconnectChildren();
-                UiaCore.UiaDisconnectProvider(row);
+                PInvoke.UiaDisconnectProvider(row, skipOSCheck: true);
             }
 
             _rowsAccessibleObjects.Clear();
@@ -85,7 +86,7 @@ public partial class MonthCalendar
 
         internal override int GetChildId() => ChildId;
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaders()
+        internal override IRawElementProviderSimple.Interface[]? GetColumnHeaders()
         {
             // A calendar has column headers (days of week) only in the Month view
             if (_monthCalendarAccessibleObject.CalendarView != MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH)
@@ -96,7 +97,7 @@ public partial class MonthCalendar
             return RowsAccessibleObjects?.First?.Value.CellsAccessibleObjects?.ToArray();
         }
 
-        internal override UiaCore.IRawElementProviderSimple? GetItem(int rowIndex, int columnIndex)
+        internal override IRawElementProviderSimple.Interface? GetItem(int rowIndex, int columnIndex)
         {
             if (!_monthCalendarAccessibleObject.IsHandleCreated || RowsAccessibleObjects is null)
             {
@@ -140,11 +141,11 @@ public partial class MonthCalendar
             return null;
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TableControlTypeId,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => IsEnabled,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TableControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)IsEnabled,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -152,7 +153,7 @@ public partial class MonthCalendar
         ///  A calendar has row headers (week numbers) if <see cref="ShowWeekNumbers"/> is true
         ///  and the calendar in the Month view only.
         /// </remark>
-        internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaders()
+        internal override IRawElementProviderSimple.Interface[]? GetRowHeaders()
         {
             if (!_monthCalendarAccessibleObject.IsHandleCreated
                 || !_monthCalendarAccessibleObject.ShowWeekNumbers

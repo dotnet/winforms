@@ -24,7 +24,7 @@ public class SplitContainer_SplitContainerAccessibleObjectTests
         splitContainer.CreateControl();
         // AccessibleRole is not set = Default
 
-        object actual = splitContainer.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)splitContainer.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId, actual);
         Assert.True(splitContainer.IsHandleCreated);
@@ -65,7 +65,7 @@ public class SplitContainer_SplitContainerAccessibleObjectTests
         using SplitContainer splitContainer = new();
         splitContainer.AccessibleRole = role;
 
-        object actual = splitContainer.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)splitContainer.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -75,7 +75,7 @@ public class SplitContainer_SplitContainerAccessibleObjectTests
     [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "SplitContainer1")]
-    public void SplitContainerAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
+    public void SplitContainerAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, string expected)
     {
         using SplitContainer control = new()
         {
@@ -84,7 +84,7 @@ public class SplitContainer_SplitContainerAccessibleObjectTests
         };
 
         var accessibleObject = new SplitContainer.SplitContainerAccessibleObject(control);
-        object value = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        string value = ((BSTR)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID)).ToStringAndFree();
 
         Assert.Equal(expected, value);
         Assert.False(control.IsHandleCreated);

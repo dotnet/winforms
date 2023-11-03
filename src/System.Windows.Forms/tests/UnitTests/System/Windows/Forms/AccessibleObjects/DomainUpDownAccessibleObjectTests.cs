@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -22,7 +23,7 @@ public class DomainUpDownAccessibleObjectTests
         using DomainUpDown domainUpDown = new DomainUpDown();
         // AccessibleRole is not set = Default
 
-        object actual = domainUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)domainUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_SpinnerControlTypeId, actual);
         Assert.False(domainUpDown.IsHandleCreated);
@@ -84,7 +85,7 @@ public class DomainUpDownAccessibleObjectTests
         using DomainUpDown domainUpDown = new DomainUpDown();
         domainUpDown.AccessibleRole = role;
 
-        object actual = domainUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)domainUpDown.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -92,16 +93,23 @@ public class DomainUpDownAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, AccessibleRole.SpinButton)]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId, (int)AccessibleRole.SpinButton)]
+    [InlineData((int)UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId, (int)AccessibleStates.None)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_ValueValuePropertyId, null)]
     public void DomainUpDownAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
     {
         using DomainUpDown domainUpDown = new DomainUpDown();
         AccessibleObject accessibleObject = domainUpDown.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
+        VARIANT actual = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)property);
+        if (expected is null)
+        {
+            Assert.Equal(VARIANT.Empty, actual);
+        }
+        else
+        {
+            Assert.Equal(expected, (int)actual);
+        }
 
-        Assert.Equal(expected, actual);
         Assert.False(domainUpDown.IsHandleCreated);
     }
 }

@@ -894,7 +894,7 @@ public partial class PrintPreviewControl : Control
             IsAccessibilityObjectCreated &&
             AccessibilityObject is PrintPreviewControlAccessibleObject ao)
         {
-            ao.RaiseStructureChangedEvent(StructureChangeType.StructureChangeType_ChildrenInvalidated, Array.Empty<int>());
+            ao.RaiseStructureChangedEvent(StructureChangeType.StructureChangeType_ChildrenInvalidated, []);
         }
 
         (bool horizontal, bool vertical) IsScrollNeeded(Size displaySize)

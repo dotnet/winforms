@@ -3152,7 +3152,7 @@ public abstract partial class ToolStripItem : BindableComponent,
     {
         if (TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
         {
-            UiaCore.UiaDisconnectProvider(accessibleObject);
+            PInvoke.UiaDisconnectProvider(accessibleObject, skipOSCheck: true);
             Properties.SetObject(s_accessibilityProperty, null);
         }
 

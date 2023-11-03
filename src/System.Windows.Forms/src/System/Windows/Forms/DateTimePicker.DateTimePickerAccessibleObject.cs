@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -68,7 +69,7 @@ public partial class DateTimePicker
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId when this.GetOwnerAccessibleRole() == AccessibleRole.Default
@@ -76,7 +77,7 @@ public partial class DateTimePicker
                     // If DateTimePicker.AccessibleRole value is customized by a user
                     // then "LocalizedControlType" value will be based on "ControlType"
                     // which depends on DateTimePicker.AccessibleRole.
-                    => s_dateTimePickerLocalizedControlTypeString,
+                    => (VARIANT)s_dateTimePickerLocalizedControlTypeString,
                 _ => base.GetPropertyValue(propertyID)
             };
 

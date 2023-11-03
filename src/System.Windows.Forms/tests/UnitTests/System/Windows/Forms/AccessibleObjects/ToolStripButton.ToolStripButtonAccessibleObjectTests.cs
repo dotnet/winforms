@@ -23,7 +23,7 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
         using ToolStripButton toolStripButton = new();
         // AccessibleRole is not set = Default
 
-        object actual = toolStripButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, actual);
     }
@@ -87,7 +87,7 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
         using ToolStripButton toolStripButton = new();
         toolStripButton.AccessibleRole = role;
 
-        object actual = toolStripButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -101,7 +101,7 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
             CheckOnClick = true
         };
 
-        object actual = toolStripButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_CheckBoxControlTypeId;
 
         Assert.Equal(expected, actual);
@@ -115,7 +115,7 @@ public class ToolStripButton_ToolStripButtonAccessibleObjectTests
             Checked = true
         };
 
-        object actual = toolStripButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStripButton.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_CheckBoxControlTypeId;
 
         Assert.Equal(expected, actual);

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -132,7 +133,7 @@ public partial class ScrollBar
                 _ => base.FragmentNavigate(direction)
             };
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
                 // If we don't set a default role for the accessible object
@@ -140,15 +141,15 @@ public partial class ScrollBar
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                    => UIA_CONTROLTYPE_ID.UIA_ScrollBarControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Focused : false,
-                UIA_PROPERTY_ID.UIA_RangeValueValuePropertyId => RangeValue,
-                UIA_PROPERTY_ID.UIA_RangeValueIsReadOnlyPropertyId => IsReadOnly,
-                UIA_PROPERTY_ID.UIA_RangeValueLargeChangePropertyId => LargeChange,
-                UIA_PROPERTY_ID.UIA_RangeValueSmallChangePropertyId => SmallChange,
-                UIA_PROPERTY_ID.UIA_RangeValueMaximumPropertyId => Maximum,
-                UIA_PROPERTY_ID.UIA_RangeValueMinimumPropertyId => Minimum,
-                UIA_PROPERTY_ID.UIA_IsRangeValuePatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_RangeValuePatternId),
+                    => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ScrollBarControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Focused : false),
+                UIA_PROPERTY_ID.UIA_RangeValueValuePropertyId => (VARIANT)RangeValue,
+                UIA_PROPERTY_ID.UIA_RangeValueIsReadOnlyPropertyId => (VARIANT)IsReadOnly,
+                UIA_PROPERTY_ID.UIA_RangeValueLargeChangePropertyId => (VARIANT)LargeChange,
+                UIA_PROPERTY_ID.UIA_RangeValueSmallChangePropertyId => (VARIANT)SmallChange,
+                UIA_PROPERTY_ID.UIA_RangeValueMaximumPropertyId => (VARIANT)Maximum,
+                UIA_PROPERTY_ID.UIA_RangeValueMinimumPropertyId => (VARIANT)Minimum,
+                UIA_PROPERTY_ID.UIA_IsRangeValuePatternAvailablePropertyId => (VARIANT)IsPatternSupported(UIA_PATTERN_ID.UIA_RangeValuePatternId),
                 _ => base.GetPropertyValue(propertyID)
             };
 

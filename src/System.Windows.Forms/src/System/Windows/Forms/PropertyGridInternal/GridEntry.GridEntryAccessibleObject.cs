@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -142,7 +143,7 @@ internal abstract partial class GridEntry
 
         internal override int Column => 0;
 
-        internal override UiaCore.IRawElementProviderSimple? ContainingGrid => PropertyGridView?.AccessibilityObject;
+        internal override IRawElementProviderSimple.Interface? ContainingGrid => PropertyGridView?.AccessibilityObject;
 
         /// <summary>
         ///  Return the element that is the root node of this fragment of UI.
@@ -333,7 +334,7 @@ internal abstract partial class GridEntry
             return base.FragmentNavigate(direction);
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
         {
             return propertyID switch
             {
@@ -342,10 +343,10 @@ internal abstract partial class GridEntry
                 // button in the PropertyGridView to show dialog/drop-down. In Level < 3 action
                 // button is one of the first children of PropertyGridView.
 
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out GridEntry? owner) && owner.HasFocus,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => true,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(this.TryGetOwnerAs(out GridEntry? owner) && owner.HasFocus),
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => VARIANT.True,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 _ => base.GetPropertyValue(propertyID)
             };
         }

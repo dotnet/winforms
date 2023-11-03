@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -19,14 +19,14 @@ public partial class ComboBox
 
         private readonly ComboBox _owningComboBox;
         private readonly ComboBoxUiaTextProvider _textProvider;
-        private readonly IntPtr _handle;
+        private readonly HWND _handle;
 
         /// <summary>
         ///  Initializes new instance of ComboBoxChildEditUiaProvider.
         /// </summary>
         /// <param name="owner">The ComboBox owning control.</param>
         /// <param name="childEditControlhandle">The child edit native window handle.</param>
-        public ComboBoxChildEditUiaProvider(ComboBox owner, IntPtr childEditControlhandle) : base(owner, childEditControlhandle)
+        public ComboBoxChildEditUiaProvider(ComboBox owner, HWND childEditControlhandle) : base(owner, childEditControlhandle)
         {
             _owningComboBox = owner;
             _handle = childEditControlhandle;
@@ -76,28 +76,23 @@ public partial class ComboBox
 
         public override string Name => base.Name ?? SR.ComboBoxEditDefaultAccessibleName;
 
-        /// <summary>
-        ///  Gets the accessible property value.
-        /// </summary>
-        /// <param name="propertyID">The accessible property ID.</param>
-        /// <returns>The accessible property value.</returns>
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_EditControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningComboBox.Focused,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningComboBox.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => false,
-                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _handle,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_EditControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)_owningComboBox.Focused,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningComboBox.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => VARIANT.False,
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(_handle),
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
+        internal override IRawElementProviderSimple* HostRawElementProvider
         {
             get
             {
-                UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, _handle), out UiaCore.IRawElementProviderSimple provider);
+                PInvoke.UiaHostProviderFromHwnd(new HandleRef<HWND>(this, _handle), out IRawElementProviderSimple* provider);
                 return provider;
             }
         }

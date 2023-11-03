@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -31,7 +32,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject toolStripAccessibleObject = toolStrip.AccessibilityObject;
         var accessibleName = toolStripAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
-        Assert.Equal("Test Name", accessibleName);
+        Assert.Equal("Test Name", ((BSTR)accessibleName).ToStringAndFree());
     }
 
     [WinFormsFact]
@@ -79,7 +80,7 @@ public class ToolStripAccessibleObjectTests
         using ToolStrip toolStrip = new ToolStrip();
         // AccessibleRole is not set = Default
 
-        object actual = toolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ToolBarControlTypeId, actual);
         Assert.False(toolStrip.IsHandleCreated);
@@ -107,7 +108,7 @@ public class ToolStripAccessibleObjectTests
         using ToolStrip toolStrip = new ToolStrip();
         toolStrip.AccessibleRole = role;
 
-        object actual = toolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -165,7 +166,9 @@ public class ToolStripAccessibleObjectTests
 
         UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.NotNull(firstChild);
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ThumbControlTypeId, firstChild.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        using VARIANT actual = default;
+        Assert.True(firstChild.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId, &actual).Succeeded);
+        Assert.Equal((int)UIA_CONTROLTYPE_ID.UIA_ThumbControlTypeId, actual.ToObject());
     }
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_IfNoGripAndStackLayout_TestData()

@@ -21,7 +21,7 @@ public class ToolStripSplitButton_ToolStripSplitButtonExAccessibleObjectTests
 
         ToolStripSplitButtonExAccessibleObject accessibleObject = new(toolStripSplitButton);
 
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]
