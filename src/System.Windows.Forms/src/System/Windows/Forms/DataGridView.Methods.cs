@@ -13781,10 +13781,10 @@ public partial class DataGridView
 
     internal object? OnCellValueNeeded(int columnIndex, int rowIndex)
     {
-        DataGridViewCellValueEventArgs dgvcve = CellValueEventArgs;
-        dgvcve.SetProperties(columnIndex, rowIndex, value: null);
-        OnCellValueNeeded(dgvcve);
-        return dgvcve.Value;
+        DataGridViewCellValueEventArgs dataGridViewCellValueEventArgs = CellValueEventArgs;
+        dataGridViewCellValueEventArgs.SetProperties(columnIndex, rowIndex, value: null);
+        OnCellValueNeeded(dataGridViewCellValueEventArgs);
+        return dataGridViewCellValueEventArgs.Value;
     }
 
     protected virtual void OnCellValueNeeded(DataGridViewCellValueEventArgs e)
@@ -13802,9 +13802,9 @@ public partial class DataGridView
 
     internal void OnCellValuePushed(int columnIndex, int rowIndex, object value)
     {
-        DataGridViewCellValueEventArgs dgvcve = CellValueEventArgs;
-        dgvcve.SetProperties(columnIndex, rowIndex, value);
-        OnCellValuePushed(dgvcve);
+        DataGridViewCellValueEventArgs dataGridViewCellValueEventArgs = CellValueEventArgs;
+        dataGridViewCellValueEventArgs.SetProperties(columnIndex, rowIndex, value);
+        OnCellValuePushed(dataGridViewCellValueEventArgs);
     }
 
     protected virtual void OnCellValuePushed(DataGridViewCellValueEventArgs e)
