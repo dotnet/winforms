@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -52,7 +53,7 @@ public partial class TabPage
         public override int GetChildCount()
             => this.IsOwnerHandleCreated(out TabPage? owningTabPage) ? owningTabPage.Controls.Count : -1;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out TabPage? _) || OwningTabControl is null)
             {
@@ -61,30 +62,30 @@ public partial class TabPage
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => OwningTabControl?.AccessibilityObject,
-                UiaCore.NavigateDirection.NextSibling => GetNextSibling(),
-                UiaCore.NavigateDirection.PreviousSibling => null,
+                NavigateDirection.NavigateDirection_Parent => OwningTabControl?.AccessibilityObject,
+                NavigateDirection.NavigateDirection_NextSibling => GetNextSibling(),
+                NavigateDirection.NavigateDirection_PreviousSibling => null,
                 _ => base.FragmentNavigate(direction)
             };
         }
 
         internal override int GetChildId() => 0;
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out TabPage? owningTabPage) && owningTabPage.Focused,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out TabPage? owningTabPage) && owningTabPage.Focused,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId
                     // This is necessary for compatibility with MSAA proxy:
                     // IsKeyboardFocusable = true regardless the control is enabled/disabled.
                     => true,
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.ValuePatternId => false,
+                UIA_PATTERN_ID.UIA_ValuePatternId => false,
                 _ => base.IsPatternSupported(patternId)
             };
 

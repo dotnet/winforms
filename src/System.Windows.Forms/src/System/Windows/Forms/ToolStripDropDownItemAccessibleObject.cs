@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Windows.Forms.Layout;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -46,9 +47,9 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
         return true;
     }
 
-    internal override bool IsPatternSupported(UiaCore.UIA patternId)
+    internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
     {
-        if (patternId == UiaCore.UIA.ExpandCollapsePatternId && _owner.HasDropDownItems)
+        if (patternId == UIA_PATTERN_ID.UIA_ExpandCollapsePatternId && _owner.HasDropDownItems)
         {
             return true;
         }
@@ -58,10 +59,10 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
         }
     }
 
-    internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+    internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
         propertyID switch
         {
-            UiaCore.UIA.IsOffscreenPropertyId when
+            UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId when
                 _owner.Owner is ToolStripDropDown toolStripDropDown
                 => !toolStripDropDown.Visible,
             _ => base.GetPropertyValue(propertyID)
@@ -78,11 +79,11 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
         }
     }
 
-    internal override UiaCore.ExpandCollapseState ExpandCollapseState
+    internal override ExpandCollapseState ExpandCollapseState
     {
         get
         {
-            return _owner.DropDown.Visible ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+            return _owner.DropDown.Visible ? ExpandCollapseState.ExpandCollapseState_Expanded : ExpandCollapseState.ExpandCollapseState_Collapsed;
         }
     }
 
@@ -106,7 +107,7 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
         // Do not expose child items when the submenu is collapsed to prevent Narrator from announcing
         // invisible menu items when Narrator is in item's mode (CAPSLOCK + Arrow Left/Right) or
         // in scan mode (CAPSLOCK + Space)
-        if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+        if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Collapsed)
         {
             return 0;
         }
@@ -160,7 +161,7 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
         return count;
     }
 
-    internal AccessibleObject? GetChildFragment(int index, UiaCore.NavigateDirection direction)
+    internal AccessibleObject? GetChildFragment(int index, NavigateDirection direction)
     {
         if (_owner.DropDown.AccessibilityObject is ToolStrip.ToolStripAccessibleObject toolStripAccessibleObject)
         {
@@ -170,12 +171,12 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
         return null;
     }
 
-    internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+    internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
     {
         switch (direction)
         {
-            case UiaCore.NavigateDirection.NextSibling:
-            case UiaCore.NavigateDirection.PreviousSibling:
+            case NavigateDirection.NavigateDirection_NextSibling:
+            case NavigateDirection.NavigateDirection_PreviousSibling:
                 if (_owner.Owner is not ToolStripDropDown dropDown)
                 {
                     break;
@@ -189,7 +190,7 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
                     return null;
                 }
 
-                index += direction == UiaCore.NavigateDirection.NextSibling ? 1 : -1;
+                index += direction == NavigateDirection.NavigateDirection_NextSibling ? 1 : -1;
 
                 if (index >= 0 && index < dropDown.DisplayedItems.Count)
                 {
@@ -203,8 +204,8 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
                 }
 
                 return null;
-            case UiaCore.NavigateDirection.FirstChild:
-            case UiaCore.NavigateDirection.LastChild:
+            case NavigateDirection.NavigateDirection_FirstChild:
+            case NavigateDirection.NavigateDirection_LastChild:
                 // Don't add invisible items to the accessibility tree,
                 // they might not have been created yet.
                 return _owner.DropDown.Visible

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
@@ -24,7 +25,7 @@ internal partial class PropertyGridView
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.TryGetOwnerAs(out GridViewListBox? owner)
                 || !owner.OwningPropertyGridView.DropDownVisible
@@ -39,7 +40,7 @@ internal partial class PropertyGridView
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => owner.OwningPropertyGridView.DropDownControlHolder.AccessibilityObject,
+                NavigateDirection.NavigateDirection_Parent => owner.OwningPropertyGridView.DropDownControlHolder.AccessibilityObject,
                 _ => base.FragmentNavigate(direction)
             };
         }

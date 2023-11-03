@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -26,16 +26,16 @@ public partial class Form
                 ? Rectangle.Empty
                 : owner.Parent?.RectangleToScreen(owner.Bounds) ?? owner.Bounds;
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
                 // Unlike other controls, here the default "ControlType" doesn't correspond the value from the mapping
                 // depending on the default Role.
                 // In other cases "ControlType" will reflect changes to Form.AccessibleRole (i.e. if it is set to a custom role).
-                UiaCore.UIA.ControlTypePropertyId when
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     Role == AccessibleRole.Client
-                    => UiaCore.UIA.WindowControlTypeId,
-                UiaCore.UIA.IsDialogPropertyId => this.TryGetOwnerAs(out Form? owner) && owner.Modal,
+                    => UIA_CONTROLTYPE_ID.UIA_WindowControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsDialogPropertyId => this.TryGetOwnerAs(out Form? owner) && owner.Modal,
                 _ => base.GetPropertyValue(propertyID)
             };
 

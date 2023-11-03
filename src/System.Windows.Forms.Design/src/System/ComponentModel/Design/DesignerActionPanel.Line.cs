@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,44 +10,32 @@ internal sealed partial class DesignerActionPanel
 {
     private abstract class Line
     {
-        private readonly DesignerActionPanel _actionPanel;
-        private List<Control> _addedControls;
-        private readonly IServiceProvider _serviceProvider;
+        protected readonly List<Control> AddedControls = new();
 
-        public Line(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+        protected Line(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
         {
-            _serviceProvider = serviceProvider;
-            _actionPanel = actionPanel.OrThrowIfNull();
+            ServiceProvider = serviceProvider;
+            ActionPanel = actionPanel.OrThrowIfNull();
         }
 
-        protected DesignerActionPanel ActionPanel
-        {
-            get => _actionPanel;
-        }
+        protected DesignerActionPanel ActionPanel { get; }
 
         public abstract string FocusId
         {
             get;
         }
 
-        protected IServiceProvider ServiceProvider
-        {
-            get => _serviceProvider;
-        }
-
-        protected abstract void AddControls(List<Control> controls);
+        protected IServiceProvider ServiceProvider { get; }
 
         internal List<Control> GetControls()
         {
-            _addedControls = new List<Control>();
-            AddControls(_addedControls);
             // Tag all the controls with the Line so we know who owns it
-            foreach (Control c in _addedControls)
+            foreach (Control c in AddedControls)
             {
                 c.Tag = this;
             }
 
-            return _addedControls;
+            return AddedControls;
         }
 
         public abstract void Focus();
@@ -64,14 +50,13 @@ internal sealed partial class DesignerActionPanel
 
         internal void RemoveControls(ControlCollection controls)
         {
-            for (int i = 0; i < _addedControls.Count; i++)
+            foreach (Control c in AddedControls)
             {
-                Control c = _addedControls[i];
                 c.Tag = null;
                 controls.Remove(c);
             }
         }
 
-        internal abstract void UpdateActionItem(DesignerActionList actionList, DesignerActionItem actionItem, ToolTip toolTip, ref int currentTabIndex);
+        internal abstract void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex);
     }
 }

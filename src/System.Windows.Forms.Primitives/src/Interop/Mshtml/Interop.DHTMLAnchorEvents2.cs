@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 internal partial class Interop
 {
-    internal partial class Mshtml
+    internal static partial class Mshtml
     {
         [ComImport]
         [Guid("3050f610-98b5-11cf-bb82-00aa00bdce0b")]

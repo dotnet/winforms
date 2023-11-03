@@ -1,12 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
-using static Interop.Mshtml;
-
+using Windows.Win32.System.Com;
+using Windows.Win32.Web.MsHtml;
 namespace System.Windows.Forms;
 
-public sealed partial class HtmlDocument
+public sealed unsafe partial class HtmlDocument
 {
     /// <summary>
     ///  HtmlDocumentShim - this is the glue between the DOM eventing mechanisms
@@ -23,7 +22,7 @@ public sealed partial class HtmlDocument
     /// </summary>
     internal class HtmlDocumentShim : HtmlShim
     {
-        private readonly IHTMLWindow2? _associatedWindow;
+        private readonly AgileComPointer<IHTMLWindow2>? _associatedWindow;
         private AxHost.ConnectionPointCookie? _cookie;
         private HtmlDocument _htmlDocument;
 
@@ -39,9 +38,9 @@ public sealed partial class HtmlDocument
             }
         }
 
-        public override IHTMLWindow2? AssociatedWindow => _associatedWindow;
+        public override IHTMLWindow2.Interface? AssociatedWindow => (IHTMLWindow2.Interface?)_associatedWindow?.GetManagedObject();
 
-        public IHTMLDocument2 NativeHtmlDocument2 => _htmlDocument.NativeHtmlDocument2;
+        public IHTMLDocument2.Interface NativeHtmlDocument2 => (IHTMLDocument2.Interface)_htmlDocument.NativeHtmlDocument2.GetManagedObject();
 
         internal HtmlDocument Document => _htmlDocument;
 
@@ -53,7 +52,11 @@ public sealed partial class HtmlDocument
             // our EventHandler properly.
 
             HtmlToClrEventProxy proxy = AddEventProxy(eventName, eventHandler);
-            ((IHTMLDocument3)NativeHtmlDocument2).AttachEvent(eventName, proxy);
+            using var htmlDoc3 = _htmlDocument.GetHtmlDocument<IHTMLDocument3>();
+            using BSTR name = new(eventName);
+            using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
+            VARIANT_BOOL result = default;
+            htmlDoc3.Value->attachEvent(name, dispatch, &result).ThrowOnFailure();
         }
 
         //
@@ -66,7 +69,7 @@ public sealed partial class HtmlDocument
                 _cookie = new AxHost.ConnectionPointCookie(
                     NativeHtmlDocument2,
                     new HTMLDocumentEvents2(_htmlDocument),
-                    typeof(DHTMLDocumentEvents2),
+                    typeof(Interop.Mshtml.DHTMLDocumentEvents2),
                     throwException: false);
 
                 if (!_cookie.Connected)
@@ -82,7 +85,10 @@ public sealed partial class HtmlDocument
             HtmlToClrEventProxy? proxy = RemoveEventProxy(eventHandler);
             if (proxy is not null)
             {
-                ((IHTMLDocument3)NativeHtmlDocument2).DetachEvent(eventName, proxy);
+                using var htmlDoc3 = _htmlDocument.GetHtmlDocument<IHTMLDocument3>();
+                using BSTR name = new(eventName);
+                using var dispatch = ComHelpers.GetComScope<IDispatch>(proxy);
+                htmlDoc3.Value->detachEvent(name, dispatch).ThrowOnFailure();
             }
         }
 
@@ -103,11 +109,7 @@ public sealed partial class HtmlDocument
             base.Dispose(disposing);
             if (disposing)
             {
-                if (_htmlDocument is not null)
-                {
-                    Marshal.FinalReleaseComObject(_htmlDocument.NativeHtmlDocument2);
-                }
-
+                _htmlDocument?.NativeHtmlDocument2.Dispose();
                 _htmlDocument = null!;
             }
         }

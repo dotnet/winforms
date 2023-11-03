@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add...</source>
-        <target state="translated">Hin&amp;zufügen...</target>
+        <target state="translated">&amp;Hinzufügen...</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
@@ -19,7 +19,7 @@
       </trans-unit>
       <trans-unit id="deleteButton.Text">
         <source>&amp;Remove</source>
-        <target state="new">&amp;Remove</target>
+        <target state="translated">Entfe&amp;rnen</target>
         <note />
       </trans-unit>
       <trans-unit id="moveDown.AccessibleName">
@@ -39,7 +39,7 @@
       </trans-unit>
       <trans-unit id="propertyGridLabel.Text">
         <source>&amp;Properties</source>
-        <target state="new">&amp;Properties</target>
+        <target state="translated">&amp;Eigenschaften</target>
         <note />
       </trans-unit>
       <trans-unit id="selectedColumnsLabel.Text">

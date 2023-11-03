@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -19,10 +19,10 @@ public partial class ToolStripButton
             _ownerItem = ownerItem;
         }
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) =>
             patternId switch
             {
-                UiaCore.UIA.TogglePatternId => Role == AccessibleRole.CheckButton,
+                UIA_PATTERN_ID.UIA_TogglePatternId => Role == AccessibleRole.CheckButton,
                 _ => base.IsPatternSupported(patternId)
             };
 
@@ -69,29 +69,29 @@ public partial class ToolStripButton
 
         internal override void Toggle()
         {
-            if (IsPatternSupported(UiaCore.UIA.TogglePatternId))
+            if (IsPatternSupported(UIA_PATTERN_ID.UIA_TogglePatternId))
             {
                 _ownerItem.Checked = !_ownerItem.Checked;
             }
         }
 
-        internal override UiaCore.ToggleState ToggleState
+        internal override ToggleState ToggleState
             => CheckStateToToggleState(_ownerItem.CheckState);
 
         internal void OnCheckStateChanged(CheckState oldValue, CheckState newValue)
         {
             RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ToggleToggleStatePropertyId,
+                UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId,
                 CheckStateToToggleState(oldValue),
                 CheckStateToToggleState(newValue));
         }
 
-        private static UiaCore.ToggleState CheckStateToToggleState(CheckState checkState)
+        private static ToggleState CheckStateToToggleState(CheckState checkState)
             => checkState switch
             {
-                CheckState.Checked => UiaCore.ToggleState.On,
-                CheckState.Unchecked => UiaCore.ToggleState.Off,
-                _ => UiaCore.ToggleState.Indeterminate
+                CheckState.Checked => ToggleState.ToggleState_On,
+                CheckState.Unchecked => ToggleState.ToggleState_Off,
+                _ => ToggleState.ToggleState_Indeterminate
             };
 
         #endregion

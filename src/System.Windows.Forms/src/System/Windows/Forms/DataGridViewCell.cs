@@ -1,12 +1,11 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Text;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -46,7 +45,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     private static readonly int s_propCellToolTipText = PropertyStore.CreateKey();
     private static readonly int s_propCellAccessibilityObject = PropertyStore.CreateKey();
 
-    private static Bitmap s_errorBmp;
+    private static Bitmap? s_errorBmp;
 
     /// <summary>
     /// Contains non-empty neighboring cells around the current cell.
@@ -62,7 +61,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataGridViewCell"/> class.
     /// </summary>
-    protected DataGridViewCell() : base()
+    protected DataGridViewCell()
+        : base()
     {
         if (!s_isScalingInitialized)
         {
@@ -93,7 +93,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     {
         get
         {
-            AccessibleObject result = (AccessibleObject)Properties.GetObject(s_propCellAccessibilityObject);
+            AccessibleObject? result = (AccessibleObject?)Properties.GetObject(s_propCellAccessibilityObject);
             if (result is null)
             {
                 result = CreateAccessibilityInstance();
@@ -110,36 +110,21 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     public int ColumnIndex => OwningColumn?.Index ?? -1;
 
     [Browsable(false)]
-    public Rectangle ContentBounds
-    {
-        get
-        {
-            return GetContentBounds(RowIndex);
-        }
-    }
+    public Rectangle ContentBounds => GetContentBounds(RowIndex);
 
     [DefaultValue(null)]
-    public virtual ContextMenuStrip ContextMenuStrip
+    public virtual ContextMenuStrip? ContextMenuStrip
     {
-        get
-        {
-            return GetContextMenuStrip(RowIndex);
-        }
-        set
-        {
-            ContextMenuStripInternal = value;
-        }
+        get => GetContextMenuStrip(RowIndex);
+        set => ContextMenuStripInternal = value;
     }
 
-    private ContextMenuStrip ContextMenuStripInternal
+    private ContextMenuStrip? ContextMenuStripInternal
     {
-        get
-        {
-            return (ContextMenuStrip)Properties.GetObject(s_propCellContextMenuStrip);
-        }
+        get => (ContextMenuStrip?)Properties.GetObject(s_propCellContextMenuStrip);
         set
         {
-            ContextMenuStrip oldValue = (ContextMenuStrip)Properties.GetObject(s_propCellContextMenuStrip);
+            ContextMenuStrip? oldValue = (ContextMenuStrip?)Properties.GetObject(s_propCellContextMenuStrip);
             if (oldValue != value)
             {
                 EventHandler disposedHandler = new EventHandler(DetachContextMenuStrip);
@@ -161,10 +146,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     private byte CurrentMouseLocation
     {
-        get
-        {
-            return (byte)(_flags & (FlagDataArea | FlagErrorArea));
-        }
+        get => (byte)(_flags & (FlagDataArea | FlagErrorArea));
         set
         {
             _flags = (byte)(_flags & ~(FlagDataArea | FlagErrorArea));
@@ -173,13 +155,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     [Browsable(false)]
-    public virtual object DefaultNewRowValue
-    {
-        get
-        {
-            return null;
-        }
-    }
+    public virtual object? DefaultNewRowValue => null;
 
     [Browsable(false)]
     public virtual bool Displayed
@@ -195,7 +171,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             if (RowIndex >= 0 && ColumnIndex >= 0)
             {
                 Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                return OwningColumn.Displayed && OwningRow.Displayed;
+                return OwningColumn!.Displayed && OwningRow!.Displayed;
             }
 
             return false;
@@ -204,7 +180,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public object EditedFormattedValue
+    public object? EditedFormattedValue
     {
         get
         {
@@ -214,7 +190,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             }
 
             Debug.Assert(RowIndex >= -1);
-            DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(null, RowIndex, false);
+            DataGridViewCellStyle dataGridViewCellStyle = GetInheritedStyle(inheritedCellStyle: null, RowIndex, includeColors: false);
             return GetEditedFormattedValue(GetValue(RowIndex), RowIndex, ref dataGridViewCellStyle, DataGridViewDataErrorContexts.Formatting);
         }
     }
@@ -222,23 +198,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
-    public virtual Type EditType
-    {
-        get
-        {
-            return typeof(DataGridViewTextBoxEditingControl);
-        }
-    }
-
-    private static Bitmap ErrorBitmap
-    {
-        get
-        {
-            s_errorBmp ??= GetBitmap("DataGridViewRow.error");
-
-            return s_errorBmp;
-        }
-    }
+    public virtual Type? EditType => typeof(DataGridViewTextBoxEditingControl);
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -250,26 +210,18 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         }
     }
 
+    [AllowNull]
     [Browsable(false)]
     public string ErrorText
     {
-        get
-        {
-            return GetErrorText(RowIndex);
-        }
-        set
-        {
-            ErrorTextInternal = value;
-        }
+        get => GetErrorText(RowIndex);
+        set => ErrorTextInternal = value;
     }
 
+    [AllowNull]
     private string ErrorTextInternal
     {
-        get
-        {
-            object errorText = Properties.GetObject(s_propCellErrorText);
-            return (errorText is null) ? string.Empty : (string)errorText;
-        }
+        get => (string?)Properties.GetObject(s_propCellErrorText) ?? string.Empty;
         set
         {
             string errorText = ErrorTextInternal;
@@ -286,7 +238,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     [Browsable(false)]
-    public object FormattedValue
+    public object? FormattedValue
     {
         get
         {
@@ -302,19 +254,13 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     [Browsable(false)]
-    public virtual Type FormattedValueType
-    {
-        get
-        {
-            return ValueType;
-        }
-    }
+    public virtual Type? FormattedValueType => ValueType;
 
-    private TypeConverter FormattedValueTypeConverter
+    private TypeConverter? FormattedValueTypeConverter
     {
         get
         {
-            TypeConverter formattedValueTypeConverter = null;
+            TypeConverter? formattedValueTypeConverter = null;
             if (FormattedValueType is not null)
             {
                 if (DataGridView is not null)
@@ -339,7 +285,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             if (DataGridView is not null && RowIndex >= 0 && ColumnIndex >= 0)
             {
                 Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                return OwningColumn.Frozen && OwningRow.Frozen;
+                return OwningColumn!.Frozen && OwningRow!.Frozen;
             }
             else if (OwningRow is not null && (OwningRow.DataGridView is null || RowIndex >= 0))
             {
@@ -414,11 +360,11 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     bool IKeyboardToolTip.IsHoveredWithMouse() => false;
 
-    bool IKeyboardToolTip.HasRtlModeEnabled() => DataGridView.RightToLeft == RightToLeft.Yes;
+    bool IKeyboardToolTip.HasRtlModeEnabled() => DataGridView!.RightToLeft == RightToLeft.Yes;
 
     bool IKeyboardToolTip.AllowsToolTip() => true;
 
-    IWin32Window IKeyboardToolTip.GetOwnerWindow() => DataGridView;
+    IWin32Window? IKeyboardToolTip.GetOwnerWindow() => DataGridView;
 
     void IKeyboardToolTip.OnHooked(ToolTip toolTip) => OnKeyboardToolTipHook(toolTip);
 
@@ -430,7 +376,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
     {
-        if (DataGridView.ShowCellErrors && !string.IsNullOrEmpty(ErrorText))
+        if (DataGridView!.ShowCellErrors && !string.IsNullOrEmpty(ErrorText))
         {
             return ErrorText;
         }
@@ -448,13 +394,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     #endregion
 
     [Browsable(false)]
-    public DataGridViewElementStates InheritedState
-    {
-        get
-        {
-            return GetInheritedState(RowIndex);
-        }
-    }
+    public DataGridViewElementStates InheritedState => GetInheritedState(RowIndex);
 
     [Browsable(false)]
     public DataGridViewCellStyle InheritedStyle
@@ -500,20 +440,14 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public DataGridViewColumn OwningColumn { get; internal set; }
+    public DataGridViewColumn? OwningColumn { get; internal set; }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public DataGridViewRow OwningRow { get; internal set; }
+    public DataGridViewRow? OwningRow { get; internal set; }
 
     [Browsable(false)]
-    public Size PreferredSize
-    {
-        get
-        {
-            return GetPreferredSize(RowIndex);
-        }
-    }
+    public Size PreferredSize => GetPreferredSize(RowIndex);
 
     internal PropertyStore Properties { get; }
 
@@ -536,7 +470,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             if (DataGridView is not null && RowIndex >= 0 && ColumnIndex >= 0)
             {
                 Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                return OwningColumn.ReadOnly;
+                return OwningColumn!.ReadOnly;
             }
 
             return false;
@@ -606,7 +540,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             if (DataGridView is not null && RowIndex >= 0 && ColumnIndex >= 0)
             {
                 Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                return OwningColumn.Resizable == DataGridViewTriState.True;
+                return OwningColumn!.Resizable == DataGridViewTriState.True;
             }
 
             return false;
@@ -638,7 +572,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             if (DataGridView is not null && RowIndex >= 0 && ColumnIndex >= 0)
             {
                 Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                return OwningColumn.Selected;
+                return OwningColumn!.Selected;
             }
 
             return false;
@@ -682,13 +616,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     [Browsable(false)]
-    public Size Size
-    {
-        get
-        {
-            return GetSize(RowIndex);
-        }
-    }
+    public Size Size => GetSize(RowIndex);
 
     private protected Rectangle StdBorderWidths
     {
@@ -714,27 +642,28 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     [Browsable(true)]
+    [AllowNull]
     public DataGridViewCellStyle Style
     {
         get
         {
-            DataGridViewCellStyle dgvcs = (DataGridViewCellStyle)Properties.GetObject(s_propCellStyle);
-            if (dgvcs is null)
+            DataGridViewCellStyle? dataGridViewCellStyle = (DataGridViewCellStyle?)Properties.GetObject(s_propCellStyle);
+            if (dataGridViewCellStyle is null)
             {
-                dgvcs = new DataGridViewCellStyle();
-                dgvcs.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
-                Properties.SetObject(s_propCellStyle, dgvcs);
+                dataGridViewCellStyle = new DataGridViewCellStyle();
+                dataGridViewCellStyle.AddScope(DataGridView, DataGridViewCellStyleScopes.Cell);
+                Properties.SetObject(s_propCellStyle, dataGridViewCellStyle);
             }
 
-            return dgvcs;
+            return dataGridViewCellStyle;
         }
         set
         {
-            DataGridViewCellStyle dgvcs = null;
+            DataGridViewCellStyle? dataGridViewCellStyle = null;
             if (HasStyle)
             {
-                dgvcs = Style;
-                dgvcs.RemoveScope(DataGridViewCellStyleScopes.Cell);
+                dataGridViewCellStyle = Style;
+                dataGridViewCellStyle.RemoveScope(DataGridViewCellStyleScopes.Cell);
             }
 
             if (value is not null || Properties.ContainsObject(s_propCellStyle))
@@ -744,9 +673,9 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 Properties.SetObject(s_propCellStyle, value);
             }
 
-            if (((dgvcs is not null && value is null) ||
-                (dgvcs is null && value is not null) ||
-                (dgvcs is not null && value is not null && !dgvcs.Equals(Style))) && DataGridView is not null)
+            if (((dataGridViewCellStyle is not null && value is null) ||
+                (dataGridViewCellStyle is null && value is not null) ||
+                (dataGridViewCellStyle is not null && value is not null && !dataGridViewCellStyle.Equals(Style))) && DataGridView is not null)
             {
                 DataGridView.OnCellStyleChanged(this);
             }
@@ -759,12 +688,9 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     [SRDescription(nameof(SR.ControlTagDescr))]
     [DefaultValue(null)]
     [TypeConverter(typeof(StringConverter))]
-    public object Tag
+    public object? Tag
     {
-        get
-        {
-            return Properties.GetObject(s_propCellTag);
-        }
+        get => Properties.GetObject(s_propCellTag);
         set
         {
             if (value is not null || Properties.ContainsObject(s_propCellTag))
@@ -776,12 +702,10 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
     public string ToolTipText
     {
-        get
-        {
-            return GetToolTipText(RowIndex);
-        }
+        get => GetToolTipText(RowIndex);
         set
         {
             ToolTipTextInternal = value;
@@ -789,13 +713,10 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         }
     }
 
+    [AllowNull]
     private string ToolTipTextInternal
     {
-        get
-        {
-            object toolTipText = Properties.GetObject(s_propCellToolTipText);
-            return (toolTipText is null) ? string.Empty : (string)toolTipText;
-        }
+        get => (string?)Properties.GetObject(s_propCellToolTipText) ?? string.Empty;
         set
         {
             string toolTipText = ToolTipTextInternal;
@@ -812,7 +733,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     [Browsable(false)]
-    public object Value
+    public object? Value
     {
         get
         {
@@ -827,11 +748,11 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     [Browsable(false)]
-    public virtual Type ValueType
+    public virtual Type? ValueType
     {
         get
         {
-            Type cellValueType = (Type)Properties.GetObject(s_propCellValueType);
+            Type? cellValueType = (Type?)Properties.GetObject(s_propCellValueType);
             if (cellValueType is null && OwningColumn is not null)
             {
                 cellValueType = OwningColumn.ValueType;
@@ -848,11 +769,11 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         }
     }
 
-    private TypeConverter ValueTypeConverter
+    private TypeConverter? ValueTypeConverter
     {
         get
         {
-            TypeConverter valueTypeConverter = null;
+            TypeConverter? valueTypeConverter = null;
             if (OwningColumn is not null)
             {
                 valueTypeConverter = OwningColumn.BoundColumnConverter;
@@ -882,7 +803,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             if (DataGridView is not null && RowIndex >= 0 && ColumnIndex >= 0)
             {
                 Debug.Assert(DataGridView.Rows.GetRowState(RowIndex) == DataGridView.Rows.SharedRow(RowIndex).State);
-                return OwningColumn.Visible && OwningRow.Visible;
+                return OwningColumn!.Visible && OwningRow!.Visible;
             }
             else if (OwningRow is not null && (OwningRow.DataGridView is null || RowIndex >= 0))
             {
@@ -894,7 +815,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     }
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public virtual DataGridViewAdvancedBorderStyle AdjustCellBorderStyle(DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput,
+    public virtual DataGridViewAdvancedBorderStyle AdjustCellBorderStyle(
+        DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput,
         DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder,
         bool singleVerticalBorderAdded,
         bool singleHorizontalBorderAdded,
@@ -1021,21 +943,15 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         Debug.Assert(ColumnIndex >= 0);
         DataGridViewElementStates orFlags = DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Resizable | DataGridViewElementStates.Selected;
         DataGridViewElementStates andFlags = DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Visible;
-        DataGridViewElementStates cellState = (OwningColumn.State & orFlags);
+        DataGridViewElementStates cellState = (OwningColumn!.State & orFlags);
         cellState |= (rowState & orFlags);
         cellState |= ((OwningColumn.State & andFlags) & (rowState & andFlags));
         return cellState;
     }
 
-    protected virtual bool ClickUnsharesRow(DataGridViewCellEventArgs e)
-    {
-        return false;
-    }
+    protected virtual bool ClickUnsharesRow(DataGridViewCellEventArgs e) => false;
 
-    internal bool ClickUnsharesRowInternal(DataGridViewCellEventArgs e)
-    {
-        return ClickUnsharesRow(e);
-    }
+    internal bool ClickUnsharesRowInternal(DataGridViewCellEventArgs e) => ClickUnsharesRow(e);
 
     internal void CloneInternal(DataGridViewCell dataGridViewCell)
     {
@@ -1067,7 +983,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         dataGridViewCell.State = State & ~DataGridViewElementStates.Selected;
         dataGridViewCell.Tag = Tag;
 
-        if (DataGridView is not null)
+        if (DataGridView is not null && DataGridView.KeyboardToolTip is not null)
         {
             KeyboardToolTipStateMachine.Instance.Hook(dataGridViewCell, DataGridView.KeyboardToolTip);
         }
@@ -1075,7 +991,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     public virtual object Clone()
     {
-        DataGridViewCell dataGridViewCell = (DataGridViewCell)System.Activator.CreateInstance(GetType());
+        DataGridViewCell dataGridViewCell = (DataGridViewCell)Activator.CreateInstance(GetType())!;
         CloneInternal(dataGridViewCell);
         return dataGridViewCell;
     }
@@ -1116,7 +1032,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
             // Column header cell case
             Debug.Assert(rowIndex == -1);
             Debug.Assert(this is DataGridViewColumnHeaderCell, "if the row index == -1 and we have an owning column this should be a column header cell");
-            DataGridViewColumn dataGridViewColumn = DataGridView.Columns.GetLastColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.None);
+            DataGridViewColumn? dataGridViewColumn = DataGridView.Columns.GetLastColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.None);
             bool isLastVisibleColumn = (dataGridViewColumn is not null && dataGridViewColumn.Index == ColumnIndex);
             dgvabsEffective = DataGridView.AdjustColumnHeaderBorderStyle(DataGridView.AdvancedColumnHeadersBorderStyle,
                 dataGridViewAdvancedBorderStylePlaceholder,
@@ -1154,7 +1070,7 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         if (cellValueBounds.Width >= IconMarginWidth * 2 + s_iconsWidth &&
             cellValueBounds.Height >= IconMarginHeight * 2 + s_iconsHeight)
         {
-            Rectangle bmpRect = new Rectangle(DataGridView.RightToLeftInternal ?
+            Rectangle bmpRect = new Rectangle(DataGridView!.RightToLeftInternal ?
                                   cellValueBounds.Left + IconMarginWidth :
                                   cellValueBounds.Right - IconMarginWidth - s_iconsWidth,
                                   cellValueBounds.Y + (cellValueBounds.Height - s_iconsHeight) / 2,
@@ -1168,52 +1084,34 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         }
     }
 
-    protected virtual bool ContentClickUnsharesRow(DataGridViewCellEventArgs e)
-    {
-        return false;
-    }
+    protected virtual bool ContentClickUnsharesRow(DataGridViewCellEventArgs e) => false;
 
-    internal bool ContentClickUnsharesRowInternal(DataGridViewCellEventArgs e)
-    {
-        return ContentClickUnsharesRow(e);
-    }
+    internal bool ContentClickUnsharesRowInternal(DataGridViewCellEventArgs e) => ContentClickUnsharesRow(e);
 
-    protected virtual bool ContentDoubleClickUnsharesRow(DataGridViewCellEventArgs e)
-    {
-        return false;
-    }
+    protected virtual bool ContentDoubleClickUnsharesRow(DataGridViewCellEventArgs e) => false;
 
-    internal bool ContentDoubleClickUnsharesRowInternal(DataGridViewCellEventArgs e)
-    {
-        return ContentDoubleClickUnsharesRow(e);
-    }
+    internal bool ContentDoubleClickUnsharesRowInternal(DataGridViewCellEventArgs e) => ContentDoubleClickUnsharesRow(e);
 
-    protected virtual AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewCellAccessibleObject(this);
-    }
+    protected virtual AccessibleObject CreateAccessibilityInstance() => new DataGridViewCellAccessibleObject(this);
 
-    private void DetachContextMenuStrip(object sender, EventArgs e)
-    {
-        ContextMenuStripInternal = null;
-    }
+    private void DetachContextMenuStrip(object? sender, EventArgs e) => ContextMenuStripInternal = null;
 
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public virtual void DetachEditingControl()
     {
-        DataGridView dgv = DataGridView;
-        if (dgv is null || dgv.EditingControl is null)
+        DataGridView? dataGridView = DataGridView;
+        if (dataGridView?.EditingControl is null)
         {
             throw new InvalidOperationException();
         }
 
-        if (dgv.EditingControl.ParentInternal is not null)
+        if (dataGridView.EditingControl.ParentInternal is not null)
         {
-            if (dgv.EditingControl.ContainsFocus)
+            if (dataGridView.EditingControl.ContainsFocus)
             {
-                if (dgv.GetContainerControl() is ContainerControl cc && (dgv.EditingControl == cc.ActiveControl || dgv.EditingControl.Contains(cc.ActiveControl)))
+                if (dataGridView.GetContainerControl() is ContainerControl cc && (dataGridView.EditingControl == cc.ActiveControl || dataGridView.EditingControl.Contains(cc.ActiveControl)))
                 {
-                    dgv.Focus();
+                    dataGridView.Focus();
                 }
                 else
                 {
@@ -1224,38 +1122,38 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
                 }
             }
 
-            Debug.Assert(dgv.EditingControl.ParentInternal == dgv.EditingPanel);
-            Debug.Assert(dgv.EditingPanel.Controls.Contains(dgv.EditingControl));
-            dgv.EditingPanel.Controls.Remove(dgv.EditingControl);
-            Debug.Assert(dgv.EditingControl.ParentInternal is null);
+            Debug.Assert(dataGridView.EditingControl.ParentInternal == dataGridView.EditingPanel);
+            Debug.Assert(dataGridView.EditingPanel.Controls.Contains(dataGridView.EditingControl));
+            dataGridView.EditingPanel.Controls.Remove(dataGridView.EditingControl);
+            Debug.Assert(dataGridView.EditingControl.ParentInternal is null);
 
             if (AccessibleRestructuringNeeded)
             {
-                dgv.EditingControlAccessibleObject.SetParent(null);
+                dataGridView.EditingControlAccessibleObject!.SetParent(null);
                 AccessibilityObject.SetDetachableChild(null);
 
-                AccessibilityObject.RaiseStructureChangedEvent(UiaCore.StructureChangeType.ChildRemoved, dgv.EditingControlAccessibleObject.RuntimeId);
+                AccessibilityObject.RaiseStructureChangedEvent(StructureChangeType.StructureChangeType_ChildRemoved, dataGridView.EditingControlAccessibleObject.RuntimeId);
             }
         }
 
-        if (dgv.EditingPanel.ParentInternal is not null)
+        if (dataGridView.EditingPanel.ParentInternal is not null)
         {
-            Debug.Assert(dgv.EditingPanel.ParentInternal == dgv);
-            Debug.Assert(dgv.Controls.Contains(dgv.EditingPanel));
-            ((DataGridView.DataGridViewControlCollection)dgv.Controls).RemoveInternal(dgv.EditingPanel);
-            Debug.Assert(dgv.EditingPanel.ParentInternal is null);
+            Debug.Assert(dataGridView.EditingPanel.ParentInternal == dataGridView);
+            Debug.Assert(dataGridView.Controls.Contains(dataGridView.EditingPanel));
+            ((DataGridView.DataGridViewControlCollection)dataGridView.Controls).RemoveInternal(dataGridView.EditingPanel);
+            Debug.Assert(dataGridView.EditingPanel.ParentInternal is null);
         }
 
-        Debug.Assert(dgv.EditingControl.ParentInternal is null);
-        Debug.Assert(dgv.EditingPanel.ParentInternal is null);
-        Debug.Assert(dgv.EditingPanel.Controls.Count == 0);
+        Debug.Assert(dataGridView.EditingControl.ParentInternal is null);
+        Debug.Assert(dataGridView.EditingPanel.ParentInternal is null);
+        Debug.Assert(dataGridView.EditingPanel.Controls.Count == 0);
 
         // Since the tooltip is removed when the editing control is shown,
         // the CurrentMouseLocation is reset to DATAGRIDVIEWCELL_flagAreaNotSet
         // so that the tooltip appears again on mousemove after the editing.
         CurrentMouseLocation = FlagAreaNotSet;
     }
-
+#nullable disable
     /// <summary>
     /// Gets the value indicating whether DataGridView editing control should be processed in accessible
     /// hierarchy restructuring. This check is necessary to not restructure the accessible hierarchy for
@@ -1598,8 +1496,8 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
         int darkDistance = ColorDistance(baseline, SystemColors.ControlDark);
         int lightDistance = ColorDistance(baseline, SystemColors.ControlLightLight);
 
-        Color darkColor = default;
-        Color lightColor = default;
+        Color darkColor;
+        Color lightColor;
 
         if (SystemInformation.HighContrast)
         {
@@ -3737,13 +3635,11 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
     {
         ArgumentNullException.ThrowIfNull(graphics);
 
-        Bitmap bmp = ErrorBitmap;
-        if (bmp is not null)
+        s_errorBmp ??= GetBitmap("DataGridViewRow.error");
+
+        lock (s_errorBmp)
         {
-            lock (bmp)
-            {
-                graphics.DrawImage(bmp, iconBounds, 0, 0, s_iconsWidth, s_iconsHeight, GraphicsUnit.Pixel);
-            }
+            graphics.DrawImage(s_errorBmp, iconBounds, 0, 0, s_iconsWidth, s_iconsHeight, GraphicsUnit.Pixel);
         }
     }
 

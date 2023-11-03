@@ -203,7 +203,7 @@ partial class Password
         label8.Name = "label8";
         label8.Size = new Size(130, 20);
         label8.TabIndex = 10;
-        label8.Text = "PasswordChar = '*'";
+        label8.Text = "PasswordChar = '#'";
         // 
         // label9
         // 

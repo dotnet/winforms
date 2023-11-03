@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -14,6 +15,8 @@ public partial class ListViewItem
 
         private ListViewItemImageAccessibleObject? _imageAccessibleObject;
 
+        private ListViewLabelEditAccessibleObject? _labelEditAccessibleObject;
+
         public ListViewItemWithImageAccessibleObject(ListViewItem owningItem) : base(owningItem)
         {
         }
@@ -21,14 +24,19 @@ public partial class ListViewItem
         internal override int FirstSubItemIndex => HasImage ? 1 : 0;
 
         private ListViewItemImageAccessibleObject ImageAccessibleObject => _imageAccessibleObject ??= new(_owningItem);
+        private ListViewLabelEditAccessibleObject? LabelEditAccessibleObject
+            => _labelEditAccessibleObject ??= _owningListView._labelEdit is null
+                ? null
+                : new(_owningListView, _owningListView._labelEdit);
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.FirstChild:
-                case UiaCore.NavigateDirection.LastChild:
-                    return GetChild(ImageAccessibleObjectIndex);
+                case NavigateDirection.NavigateDirection_FirstChild:
+                    return GetChildCount() > 0 ? GetChild(0) : null;
+                case NavigateDirection.NavigateDirection_LastChild:
+                    return GetChildCount() > 0 ? GetChild(GetChildCount() - 1) : null;
             }
 
             return base.FragmentNavigate(direction);
@@ -48,9 +56,17 @@ public partial class ListViewItem
                 throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
             }
 
-            return index == ImageAccessibleObjectIndex && HasImage
-                ? ImageAccessibleObject
-                : (AccessibleObject?)null;
+            if (index == ImageAccessibleObjectIndex && HasImage)
+            {
+                return ImageAccessibleObject;
+            }
+
+            if (index >= ImageAccessibleObjectIndex || !HasImage)
+            {
+                return LabelEditAccessibleObject;
+            }
+
+            return null;
         }
 
         public override int GetChildCount()
@@ -60,9 +76,24 @@ public partial class ListViewItem
                 throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, View.ToString()));
             }
 
-            return !_owningListView.IsHandleCreated || !HasImage
-                ? InvalidIndex
-                : 1;
+            if (!_owningListView.IsHandleCreated)
+            {
+                return InvalidIndex;
+            }
+
+            int _childCount = 0;
+
+            if (HasImage)
+            {
+                _childCount++;
+            }
+
+            if (_owningListView._labelEdit is not null && _owningListView._listViewSubItem is null)
+            {
+                _childCount++;
+            }
+
+            return _childCount > 0 ? _childCount : InvalidIndex;
         }
 
         internal override int GetChildIndex(AccessibleObject? child)

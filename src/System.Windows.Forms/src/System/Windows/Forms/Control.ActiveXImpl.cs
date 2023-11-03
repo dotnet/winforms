@@ -152,9 +152,9 @@ public partial class Control
             _activeXState = default;
             _ambientProperties = new AmbientProperty[]
             {
-                new AmbientProperty("Font", PInvoke.DISPID_AMBIENT_FONT),
-                new AmbientProperty("BackColor", PInvoke.DISPID_AMBIENT_BACKCOLOR),
-                new AmbientProperty("ForeColor", PInvoke.DISPID_AMBIENT_FORECOLOR)
+                new("Font", PInvoke.DISPID_AMBIENT_FONT),
+                new("BackColor", PInvoke.DISPID_AMBIENT_BACKCOLOR),
+                new("ForeColor", PInvoke.DISPID_AMBIENT_FORECOLOR)
             };
         }
 
@@ -1481,7 +1481,7 @@ public partial class Control
                 if (controlType.GetCustomAttributes<ComSourceInterfacesAttribute>(inherit: false).FirstOrDefault()
                     is { } comSourceInterfaces)
                 {
-                    string eventName = comSourceInterfaces.Value.Split('\0')[0];
+                    string eventName = comSourceInterfaces.Value.AsSpan().SliceAtFirstNull().ToString();
                     eventInterface = controlType.Module.Assembly.GetType(eventName, throwOnError: false);
                     eventInterface ??= Type.GetType(eventName, throwOnError: false);
                 }

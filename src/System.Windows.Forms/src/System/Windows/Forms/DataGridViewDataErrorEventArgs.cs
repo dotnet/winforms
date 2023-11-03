@@ -7,7 +7,11 @@ public class DataGridViewDataErrorEventArgs : DataGridViewCellCancelEventArgs
 {
     private bool _throwException;
 
-    public DataGridViewDataErrorEventArgs(Exception? exception, int columnIndex, int rowIndex, DataGridViewDataErrorContexts context)
+    public DataGridViewDataErrorEventArgs(
+        Exception? exception,
+        int columnIndex,
+        int rowIndex,
+        DataGridViewDataErrorContexts context)
         : base(columnIndex, rowIndex)
     {
         Exception = exception;
@@ -18,6 +22,7 @@ public class DataGridViewDataErrorEventArgs : DataGridViewCellCancelEventArgs
 
     public Exception? Exception { get; }
 
+    [MemberNotNullWhen(true, nameof(Exception))]
     public bool ThrowException
     {
         get => _throwException;

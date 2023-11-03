@@ -301,7 +301,7 @@ public abstract partial class AxHost
 
             if (control is AxHost hostControl && flags.HasFlag(OLECONTF.OLECONTF_EMBEDDINGS))
             {
-                controls.Add(hostControl.GetOcx());
+                controls.Add(hostControl.GetOcx()!);
             }
             else if (flags.HasFlag(OLECONTF.OLECONTF_OTHERS))
             {
@@ -586,7 +586,7 @@ public abstract partial class AxHost
                 {
                     if (control is AxHost hostControl)
                     {
-                        oleControls.Add(hostControl.GetOcx());
+                        oleControls.Add(hostControl.GetOcx()!);
                     }
                 }
 
@@ -638,7 +638,7 @@ public abstract partial class AxHost
         {
             if (_siteUIActive is { } activeHost
                 && activeHost._iOleInPlaceActiveObjectExternal is { } existing
-                && !existing.MatchesOriginalPointer(pActiveObject))
+                && !existing.IsSameNativeObject(pActiveObject))
             {
                 // Release the field before disposing to avoid accessing it during disposal on callbacks.
                 activeHost._iOleInPlaceActiveObjectExternal = null;
@@ -673,7 +673,7 @@ public abstract partial class AxHost
             hr = oleObject.Value->GetClientSite(clientSite);
             Debug.Assert(hr.Succeeded);
 
-            if (ComHelpers.TryGetManagedInterface(clientSite.AsUnknown, takeOwnership: false, out OleInterfaces? interfaces))
+            if (ComHelpers.TryGetObjectForIUnknown(clientSite.AsUnknown, takeOwnership: false, out OleInterfaces? interfaces))
             {
                 host = interfaces.GetAxHost();
             }

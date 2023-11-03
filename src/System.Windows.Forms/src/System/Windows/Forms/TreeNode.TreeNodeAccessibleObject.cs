@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -43,13 +44,13 @@ public partial class TreeNode
                         : SR.AccessibleActionCheck;
                 }
 
-                UiaCore.ExpandCollapseState expandCollapseState = ExpandCollapseState;
-                if (expandCollapseState == UiaCore.ExpandCollapseState.LeafNode)
+                ExpandCollapseState expandCollapseState = ExpandCollapseState;
+                if (expandCollapseState == ExpandCollapseState.ExpandCollapseState_LeafNode)
                 {
                     return string.Empty;
                 }
 
-                return expandCollapseState == UiaCore.ExpandCollapseState.Expanded
+                return expandCollapseState == ExpandCollapseState.ExpandCollapseState_Expanded
                     ? SR.AccessibleActionCollapse
                     : SR.AccessibleActionExpand;
             }
@@ -77,33 +78,40 @@ public partial class TreeNode
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             => _owningTreeView.AccessibilityObject;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.Parent
+                NavigateDirection.NavigateDirection_Parent
                     => Parent ?? _owningTreeView.AccessibilityObject,
-                UiaCore.NavigateDirection.FirstChild
-                    => _owningTreeNode.IsExpanded
-                        ? _owningTreeNode.FirstNode?.AccessibilityObject
-                        : null,
-                UiaCore.NavigateDirection.LastChild
+                NavigateDirection.NavigateDirection_FirstChild
+                     => _owningTreeNode.IsEditing
+                        ? _owningTreeView._labelEdit?.AccessibilityObject
+                        : _owningTreeNode.IsExpanded
+                            ? _owningTreeNode.FirstNode?.AccessibilityObject
+                            : null,
+                NavigateDirection.NavigateDirection_LastChild
                     => _owningTreeNode.IsExpanded
                         ? _owningTreeNode.LastNode?.AccessibilityObject
                         : null,
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_NextSibling
                     => _owningTreeNode.NextNode?.AccessibilityObject,
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => _owningTreeNode.PrevNode?.AccessibilityObject,
                 _ => base.FragmentNavigate(direction),
             };
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override void SelectItem()
+        {
+            _owningTreeView.SelectedNode = _owningTreeNode;
+        }
+
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TreeItemControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
-                UiaCore.UIA.IsEnabledPropertyId => _owningTreeView.Enabled,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningTreeView.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -112,15 +120,15 @@ public partial class TreeNode
 
         internal int Index => _owningTreeView.Nodes.IndexOf(_owningTreeNode);
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.ExpandCollapsePatternId => _owningTreeNode.childNodes.Count > 0,
-                UiaCore.UIA.LegacyIAccessiblePatternId => true,
-                UiaCore.UIA.ScrollItemPatternId => true,
-                UiaCore.UIA.SelectionItemPatternId => true,
-                UiaCore.UIA.TogglePatternId when _owningTreeView.CheckBoxes => true,
-                UiaCore.UIA.ValuePatternId when _owningTreeView.LabelEdit => true,
+                UIA_PATTERN_ID.UIA_ExpandCollapsePatternId => _owningTreeNode._childNodes.Count > 0,
+                UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId => true,
+                UIA_PATTERN_ID.UIA_ScrollItemPatternId => true,
+                UIA_PATTERN_ID.UIA_SelectionItemPatternId => true,
+                UIA_PATTERN_ID.UIA_TogglePatternId when _owningTreeView.CheckBoxes => true,
+                UIA_PATTERN_ID.UIA_ValuePatternId when _owningTreeView.LabelEdit => true,
                 _ => base.IsPatternSupported(patternId),
             };
 
@@ -152,11 +160,11 @@ public partial class TreeNode
                     state |= AccessibleStates.Invisible | AccessibleStates.Offscreen;
                 }
 
-                if (ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
+                if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Expanded)
                 {
                     state |= AccessibleStates.Expanded;
                 }
-                else if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+                else if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Collapsed)
                 {
                     state |= AccessibleStates.Collapsed;
                 }
@@ -197,18 +205,18 @@ public partial class TreeNode
             _owningTreeNode.Collapse();
         }
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
         {
             get
             {
                 if (_owningTreeNode.Nodes.Count == 0)
                 {
-                    return UiaCore.ExpandCollapseState.LeafNode;
+                    return ExpandCollapseState.ExpandCollapseState_LeafNode;
                 }
 
                 return _owningTreeNode.IsExpanded
-                    ? UiaCore.ExpandCollapseState.Expanded
-                    : UiaCore.ExpandCollapseState.Collapsed;
+                    ? ExpandCollapseState.ExpandCollapseState_Expanded
+                    : ExpandCollapseState.ExpandCollapseState_Collapsed;
             }
         }
 
@@ -247,8 +255,8 @@ public partial class TreeNode
 
         internal override void Toggle() => _owningTreeNode.Checked = !_owningTreeNode.Checked;
 
-        internal override UiaCore.ToggleState ToggleState
-            => _owningTreeNode.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+        internal override ToggleState ToggleState
+            => _owningTreeNode.Checked ? ToggleState.ToggleState_On : ToggleState.ToggleState_Off;
 
         #endregion
 

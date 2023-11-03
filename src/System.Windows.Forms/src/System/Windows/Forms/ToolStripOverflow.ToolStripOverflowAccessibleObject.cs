@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms;
@@ -25,16 +26,16 @@ public partial class ToolStripOverflow
         internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                NavigateDirection.Parent when this.TryGetOwnerAs(out ToolStripOverflow? owner)
+                NavigateDirection.NavigateDirection_Parent when this.TryGetOwnerAs(out ToolStripOverflow? owner)
                     => owner.OwnerItem?.AccessibilityObject,
                 _ => base.FragmentNavigate(direction),
             };
 
-        internal override object? GetPropertyValue(UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA.IsControlElementPropertyId => true,
-                UIA.IsContentElementPropertyId => false,
+                UIA_PROPERTY_ID.UIA_IsControlElementPropertyId => true,
+                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => false,
                 _ => base.GetPropertyValue(propertyID)
             };
     }

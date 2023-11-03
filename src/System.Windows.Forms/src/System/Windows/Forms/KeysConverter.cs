@@ -150,11 +150,9 @@ public class KeysConverter : TypeConverter, IComparer
     /// </summary>
     public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
     {
-        if (value is string valueAsString)
+        if (value is string text)
         {
-            string text = valueAsString.Trim();
-
-            if (text.Length == 0)
+            if (string.IsNullOrWhiteSpace(text))
             {
                 return null;
             }
@@ -162,11 +160,7 @@ public class KeysConverter : TypeConverter, IComparer
             IDictionary<string, Keys> keyNames = GetKeyNames(culture);
 
             // Parse an array of key tokens.
-            string[] tokens = text.Split(new char[] { '+' });
-            for (int i = 0; i < tokens.Length; i++)
-            {
-                tokens[i] = tokens[i].Trim();
-            }
+            string[] tokens = text.Split('+', StringSplitOptions.TrimEntries);
 
             // Now lookup each key token in our key hashtable.
             Keys key = 0;
@@ -249,7 +243,7 @@ public class KeysConverter : TypeConverter, IComparer
             {
                 // First, iterate through and do the modifiers. These are
                 // additive, so we support things like Ctrl + Alt
-                foreach (var keyString in displayOrder)
+                foreach (string keyString in displayOrder)
                 {
                     Keys keyValue = keyNames[keyString];
                     if (keyValue != Keys.None && modifiers.HasFlag(keyValue))
@@ -264,7 +258,7 @@ public class KeysConverter : TypeConverter, IComparer
             Keys keyOnly = key & Keys.KeyCode;
             bool foundKey = false;
 
-            foreach (var keyString in displayOrder)
+            foreach (string keyString in displayOrder)
             {
                 Keys keyValue = keyNames[keyString];
                 if (keyValue.Equals(keyOnly))
@@ -278,7 +272,7 @@ public class KeysConverter : TypeConverter, IComparer
             // Finally, if the key wasn't in our list, add it to
             // the end anyway. Here we just pull the key value out
             // of the enum.
-            if (!foundKey && Enum.IsDefined(typeof(Keys), (int)keyOnly))
+            if (!foundKey && Enum.IsDefined(keyOnly))
             {
                 termKeys.Add(keyOnly);
             }
@@ -326,7 +320,7 @@ public class KeysConverter : TypeConverter, IComparer
             // Finally, if the key wasn't in our list, add it to
             // the end anyway. Here we just pull the key value out
             // of the enum.
-            if (!foundKey && Enum.IsDefined(typeof(Keys), (int)keyOnly))
+            if (!foundKey && Enum.IsDefined(keyOnly))
             {
                 termStrings.Append(Enum.GetName(keyOnly));
             }

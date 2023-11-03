@@ -78,35 +78,35 @@ internal class TabOrder : Control, IMouseHandler, IMenuStatusHandler
 
         _commands = new MenuCommand[]
         {
-            new MenuCommand(new EventHandler(OnKeyCancel),
-                            MenuCommands.KeyCancel),
+            new(new EventHandler(OnKeyCancel),
+                MenuCommands.KeyCancel),
 
-            new MenuCommand(new EventHandler(OnKeyDefault),
-                            MenuCommands.KeyDefaultAction),
+            new(new EventHandler(OnKeyDefault),
+                MenuCommands.KeyDefaultAction),
 
-            new MenuCommand(new EventHandler(OnKeyPrevious),
-                            MenuCommands.KeyMoveUp),
+            new(new EventHandler(OnKeyPrevious),
+                MenuCommands.KeyMoveUp),
 
-            new MenuCommand(new EventHandler(OnKeyNext),
-                            MenuCommands.KeyMoveDown),
+            new(new EventHandler(OnKeyNext),
+                MenuCommands.KeyMoveDown),
 
-            new MenuCommand(new EventHandler(OnKeyPrevious),
-                            MenuCommands.KeyMoveLeft),
+            new(new EventHandler(OnKeyPrevious),
+                MenuCommands.KeyMoveLeft),
 
-            new MenuCommand(new EventHandler(OnKeyNext),
-                            MenuCommands.KeyMoveRight),
+            new(new EventHandler(OnKeyNext),
+                MenuCommands.KeyMoveRight),
 
-            new MenuCommand(new EventHandler(OnKeyNext),
-                            MenuCommands.KeySelectNext),
+            new(new EventHandler(OnKeyNext),
+                MenuCommands.KeySelectNext),
 
-            new MenuCommand(new EventHandler(OnKeyPrevious),
-                            MenuCommands.KeySelectPrevious),
+            new(new EventHandler(OnKeyPrevious),
+                MenuCommands.KeySelectPrevious),
         };
 
         _newCommands = new MenuCommand[]
         {
-            new MenuCommand(new EventHandler(OnKeyDefault),
-                            MenuCommands.KeyTabOrderSelect),
+            new(new EventHandler(OnKeyDefault),
+                MenuCommands.KeyTabOrderSelect),
         };
 
         IMenuCommandService? mcs = (IMenuCommandService?)host.GetService(typeof(IMenuCommandService));

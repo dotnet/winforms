@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.Web.MsHtml;
+
 namespace System.Windows.Forms;
 
 /// <summary>
@@ -141,7 +143,7 @@ internal sealed class HtmlShimManager : IDisposable
         return null;
     }
 
-    private void OnShimAdded(HtmlShim addedShim)
+    private unsafe void OnShimAdded(HtmlShim addedShim)
     {
         Debug.Assert(addedShim is not null, "Why are we calling this with a null shim?");
         if (addedShim is not null and not HtmlWindow.HtmlWindowShim)
@@ -150,7 +152,7 @@ internal sealed class HtmlShimManager : IDisposable
             // so we can sync Window.Unload. The window shim itself will trap
             // the unload event and call back on us on OnWindowUnloaded.  When
             // that happens we know we can free all our ptrs to COM.
-            AddWindowShim(new HtmlWindow(this, addedShim.AssociatedWindow));
+            AddWindowShim(new HtmlWindow(this, ComHelpers.GetComPointer<IHTMLWindow2>(addedShim.AssociatedWindow)));
         }
     }
 

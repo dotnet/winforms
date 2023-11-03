@@ -7,6 +7,11 @@
         <target state="translated">VT no controlado: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogNoRootFolder">
+        <source>Unable to retrieve the root folder.</source>
+        <target state="translated">No se puede recuperar la carpeta raíz.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="General_MissingService">
         <source>The service '{0}' must be installed for this feature to work.  Ensure that this service is available.</source>
         <target state="translated">Debe instalar el servicio "{0}" para que esta funcionalidad funcione. Asegúrese de que este servicio está disponible.</target>

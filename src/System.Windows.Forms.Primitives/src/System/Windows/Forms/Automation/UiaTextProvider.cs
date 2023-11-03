@@ -2,27 +2,29 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Automation;
 
-internal abstract class UiaTextProvider : ITextProvider
+internal abstract unsafe class UiaTextProvider : ITextProvider.Interface, ITextProvider2.Interface, IManagedWrapper<ITextProvider2, ITextProvider>
 {
     /// <summary>
     ///  The value of a width of an end of a text line as 2 px to a ScreenReader can show it.
     /// </summary>
     public const int EndOfLineWidth = 2;
 
-    public abstract ITextRangeProvider[]? GetSelection();
+    public abstract HRESULT GetSelection(SAFEARRAY** pRetVal);
 
-    public abstract ITextRangeProvider[]? GetVisibleRanges();
+    public abstract HRESULT GetVisibleRanges(SAFEARRAY** pRetVal);
 
-    public abstract ITextRangeProvider? RangeFromChild(IRawElementProviderSimple childElement);
+    public abstract HRESULT RangeFromChild(IRawElementProviderSimple* childElement, ITextRangeProvider** pRetVal);
 
-    public abstract ITextRangeProvider? RangeFromPoint(Point screenLocation);
+    public abstract HRESULT RangeFromPoint(UiaPoint point, ITextRangeProvider** pRetVal);
 
-    public abstract ITextRangeProvider? DocumentRange { get; }
+    public abstract ITextRangeProvider* DocumentRange { get; }
 
     public abstract SupportedTextSelection SupportedTextSelection { get; }
 
@@ -74,25 +76,40 @@ internal abstract class UiaTextProvider : ITextProvider
 
     public static WINDOW_STYLE GetWindowStyle(IHandle<HWND> hWnd) => (WINDOW_STYLE)PInvoke.GetWindowLong(hWnd, WINDOW_LONG_PTR_INDEX.GWL_STYLE);
 
-    public static double[] RectListToDoubleArray(List<Rectangle> rectArray)
+    public static SafeArrayScope<double> RectListToDoubleArray(List<Rectangle> rectArray)
     {
         if (rectArray is null || rectArray.Count == 0)
         {
-            return Array.Empty<double>();
+            return new(SAFEARRAY.CreateEmpty(VARENUM.VT_R8));
         }
 
-        double[] doubles = new double[rectArray.Count * 4];
+        SafeArrayScope<double> result = new((uint)(rectArray.Count * 4));
         int scan = 0;
-
         for (int i = 0; i < rectArray.Count; i++)
         {
-            doubles[scan++] = rectArray[i].X;
-            doubles[scan++] = rectArray[i].Y;
-            doubles[scan++] = rectArray[i].Width;
-            doubles[scan++] = rectArray[i].Height;
+            result[scan++] = rectArray[i].X;
+            result[scan++] = rectArray[i].Y;
+            result[scan++] = rectArray[i].Width;
+            result[scan++] = rectArray[i].Height;
         }
 
-        return doubles;
+        return result;
+    }
+
+    /// <summary>
+    ///  Bounding rectangles are represented by a VT_ARRAY of doubles in a native VARIANT
+    ///  in accessibility interfaces. This method does the conversion. Accessibility will then convert it to an UiaRect.
+    ///  https://learn.microsoft.com/windows/win32/api/uiautomationcore/nf-uiautomationcore-irawelementproviderfragment-get_boundingrectangle
+    ///  https://learn.microsoft.com/windows/win32/api/uiautomationcore/ns-uiautomationcore-uiarect
+    /// </summary>
+    internal static SafeArrayScope<double> BoundingRectangleAsArray(Rectangle bounds)
+    {
+        SafeArrayScope<double> result = new(4);
+        result[0] = bounds.X;
+        result[1] = bounds.Y;
+        result[2] = bounds.Width;
+        result[3] = bounds.Height;
+        return result;
     }
 
     public int SendInput(int inputs, ref INPUT input, int size)
@@ -122,4 +139,8 @@ internal abstract class UiaTextProvider : ITextProvider
 
         return SendInput(1, ref keyboardInput, sizeof(INPUT));
     }
+
+    public abstract HRESULT RangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal);
+
+    public abstract HRESULT GetCaretRange(BOOL* isActive, ITextRangeProvider** pRetVal);
 }

@@ -22,7 +22,7 @@ public sealed partial class BehaviorService
         ///  Constructor that parents itself to the Designer Frame and hooks all
         ///  necessary events.
         /// </summary>
-        internal AdornerWindow(BehaviorService behaviorService, Control designerFrame)
+        internal AdornerWindow(BehaviorService behaviorService, DesignerFrame designerFrame)
         {
             _behaviorService = behaviorService;
             DesignerFrame = designerFrame;
@@ -89,13 +89,13 @@ public sealed partial class BehaviorService
             base.Dispose(disposing);
         }
 
-        internal Control DesignerFrame { get; private set; }
+        internal DesignerFrame DesignerFrame { get; private set; }
 
         /// <summary>
         ///  Returns the display rectangle for the adorner window
         /// </summary>
         internal Rectangle DesignerFrameDisplayRectangle
-            => DesignerFrameValid ? ((DesignerFrame)DesignerFrame).DisplayRectangle : Rectangle.Empty;
+            => DesignerFrameValid ? DesignerFrame.DisplayRectangle : Rectangle.Empty;
 
         /// <summary>
         ///  Returns true if the DesignerFrame is created and not being disposed.
@@ -130,7 +130,7 @@ public sealed partial class BehaviorService
             if (DesignerFrameValid)
             {
                 // Translate for non-zero scroll positions
-                Point scrollPosition = ((DesignerFrame)DesignerFrame).AutoScrollPosition;
+                Point scrollPosition = DesignerFrame.AutoScrollPosition;
                 region.Translate(scrollPosition.X, scrollPosition.Y);
 
                 DesignerFrame.Invalidate(region, true);
@@ -147,7 +147,7 @@ public sealed partial class BehaviorService
             if (DesignerFrameValid)
             {
                 // Translate for non-zero scroll positions
-                Point scrollPosition = ((DesignerFrame)DesignerFrame).AutoScrollPosition;
+                Point scrollPosition = DesignerFrame.AutoScrollPosition;
                 rectangle.Offset(scrollPosition.X, scrollPosition.Y);
 
                 DesignerFrame.Invalidate(rectangle, true);

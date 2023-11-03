@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -17,14 +15,15 @@ public partial class DataGridViewImageCell : DataGridViewCell
     private static readonly Type s_defaultTypeImage = typeof(Image);
     private static readonly Type s_defaultTypeIcon = typeof(Icon);
     private static readonly Type s_cellType = typeof(DataGridViewImageCell);
-    private static Bitmap s_errorBitmap;
-    private static Icon s_errorIcon;
+    private static Bitmap? s_errorBitmap;
+    private static Icon? s_errorIcon;
 
     private const byte CellValueIsIcon = 0x01;
 
     private byte _flags;  // see DATAGRIDVIEWIMAGECELL_ consts above
 
-    public DataGridViewImageCell() : this(false /*valueIsIcon*/)
+    public DataGridViewImageCell()
+        : this(valueIsIcon: false)
     {
     }
 
@@ -36,7 +35,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         }
     }
 
-    public override object DefaultNewRowValue
+    public override object? DefaultNewRowValue
     {
         get
         {
@@ -56,11 +55,12 @@ public partial class DataGridViewImageCell : DataGridViewCell
     }
 
     [DefaultValue("")]
+    [AllowNull]
     public string Description
     {
         get
         {
-            object description = Properties.GetObject(s_propImageCellDescription);
+            object? description = Properties.GetObject(s_propImageCellDescription);
             if (description is not null)
             {
                 return (string)description;
@@ -79,7 +79,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.Interfaces)]
-    public override Type EditType
+    public override Type? EditType
     {
         get
         {
@@ -88,25 +88,9 @@ public partial class DataGridViewImageCell : DataGridViewCell
         }
     }
 
-    internal static Bitmap ErrorBitmap
-    {
-        get
-        {
-            s_errorBitmap ??= DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
+    internal static Bitmap ErrorBitmap => s_errorBitmap ??= DpiHelper.GetBitmapFromIcon(typeof(DataGridView), "ImageInError");
 
-            return s_errorBitmap;
-        }
-    }
-
-    internal static Icon ErrorIcon
-    {
-        get
-        {
-            s_errorIcon ??= new Icon(typeof(DataGridView), "IconInError");
-
-            return s_errorIcon;
-        }
-    }
+    internal static Icon ErrorIcon => s_errorIcon ??= new Icon(typeof(DataGridView), "IconInError");
 
     public override Type FormattedValueType
     {
@@ -163,10 +147,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
     [DefaultValue(false)]
     public bool ValueIsIcon
     {
-        get
-        {
-            return ((_flags & CellValueIsIcon) != 0x00);
-        }
+        get => ((_flags & CellValueIsIcon) != 0x00);
         set
         {
             if (ValueIsIcon != value)
@@ -218,11 +199,11 @@ public partial class DataGridViewImageCell : DataGridViewCell
         }
     }
 
-    public override Type ValueType
+    public override Type? ValueType
     {
         get
         {
-            Type baseValueType = base.ValueType;
+            Type? baseValueType = base.ValueType;
 
             if (baseValueType is not null)
             {
@@ -256,9 +237,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         }
         else
         {
-            //
-
-            dataGridViewCell = (DataGridViewImageCell)System.Activator.CreateInstance(thisType);
+            dataGridViewCell = (DataGridViewImageCell)System.Activator.CreateInstance(thisType)!;
         }
 
         base.CloneInternal(dataGridViewCell);
@@ -268,10 +247,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         return dataGridViewCell;
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewImageCellAccessibleObject(this);
-    }
+    protected override AccessibleObject CreateAccessibilityInstance() => new DataGridViewImageCellAccessibleObject(this);
 
     protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
     {
@@ -282,27 +258,39 @@ public partial class DataGridViewImageCell : DataGridViewCell
             return Rectangle.Empty;
         }
 
-        object value = GetValue(rowIndex);
-        object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
+        object? value = GetValue(rowIndex);
+        object? formattedValue = GetFormattedValue(
+            value,
+            rowIndex,
+            ref cellStyle,
+            valueTypeConverter: null,
+            formattedValueTypeConverter: null,
+            DataGridViewDataErrorContexts.Formatting);
 
-        ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
+        ComputeBorderStyleCellStateAndCellBounds(
+            rowIndex,
+            out DataGridViewAdvancedBorderStyle dgvabsEffective,
+            out DataGridViewElementStates cellState,
+            out Rectangle cellBounds);
 
-        Rectangle imgBounds = PaintPrivate(graphics,
+        Rectangle imgBounds = PaintPrivate(
+            graphics,
             cellBounds,
             cellBounds,
             rowIndex,
             cellState,
             formattedValue,
-            null /*errorText*/,                 // imgBounds is independent of errorText
+            errorText: null,    // imgBounds is independent of errorText
             cellStyle,
             dgvabsEffective,
             DataGridViewPaintParts.ContentForeground,
-            true  /*computeContentBounds*/,
-            false /*computeErrorIconBounds*/,
-            false /*paint*/);
+            computeContentBounds: true,
+            computeErrorIconBounds: false,
+            paint: false);
 
 #if DEBUG
-        Rectangle imgBoundsDebug = PaintPrivate(graphics,
+        Rectangle imgBoundsDebug = PaintPrivate(
+            graphics,
             cellBounds,
             cellBounds,
             rowIndex,
@@ -312,19 +300,16 @@ public partial class DataGridViewImageCell : DataGridViewCell
             cellStyle,
             dgvabsEffective,
             DataGridViewPaintParts.ContentForeground,
-            true  /*computeContentBounds*/,
-            false /*computeErrorIconBounds*/,
-            false /*paint*/);
+            computeContentBounds: true,
+            computeErrorIconBounds: false,
+            paint: false);
         Debug.Assert(imgBoundsDebug.Equals(imgBounds));
 #endif
 
         return imgBounds;
     }
 
-    private protected override string GetDefaultToolTipText()
-    {
-        return SR.DefaultDataGridViewImageCellToolTipText;
-    }
+    private protected override string GetDefaultToolTipText() => SR.DefaultDataGridViewImageCellToolTipText;
 
     protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
     {
@@ -339,12 +324,23 @@ public partial class DataGridViewImageCell : DataGridViewCell
             return Rectangle.Empty;
         }
 
-        object value = GetValue(rowIndex);
-        object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
+        object? value = GetValue(rowIndex);
+        object? formattedValue = GetFormattedValue(
+            value,
+            rowIndex,
+            ref cellStyle,
+            valueTypeConverter: null,
+            formattedValueTypeConverter: null,
+            DataGridViewDataErrorContexts.Formatting);
 
-        ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
+        ComputeBorderStyleCellStateAndCellBounds(
+            rowIndex,
+            out DataGridViewAdvancedBorderStyle dgvabsEffective,
+            out DataGridViewElementStates cellState,
+            out Rectangle cellBounds);
 
-        Rectangle errBounds = PaintPrivate(graphics,
+        Rectangle errBounds = PaintPrivate(
+            graphics,
             cellBounds,
             cellBounds,
             rowIndex,
@@ -354,9 +350,9 @@ public partial class DataGridViewImageCell : DataGridViewCell
             cellStyle,
             dgvabsEffective,
             DataGridViewPaintParts.ContentForeground,
-            false /*computeContentBounds*/,
-            true  /*computeErrorIconBounds*/,
-            false /*paint*/);
+            computeContentBounds: false,
+            computeErrorIconBounds: true,
+            paint: false);
 
 #if DEBUG
         Rectangle errBoundsDebug = PaintPrivate(graphics,
@@ -378,19 +374,26 @@ public partial class DataGridViewImageCell : DataGridViewCell
         return errBounds;
     }
 
-    protected override object GetFormattedValue(object value,
-                                                int rowIndex,
-                                                ref DataGridViewCellStyle cellStyle,
-                                                TypeConverter valueTypeConverter,
-                                                TypeConverter formattedValueTypeConverter,
-                                                DataGridViewDataErrorContexts context)
+    protected override object? GetFormattedValue(
+        object? value,
+        int rowIndex,
+        ref DataGridViewCellStyle cellStyle,
+        TypeConverter? valueTypeConverter,
+        TypeConverter? formattedValueTypeConverter,
+        DataGridViewDataErrorContexts context)
     {
         if ((context & DataGridViewDataErrorContexts.ClipboardContent) != 0)
         {
             return Description;
         }
 
-        object formattedValue = base.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
+        object formattedValue = base.GetFormattedValue(
+            value,
+            rowIndex,
+            ref cellStyle,
+            valueTypeConverter,
+            formattedValueTypeConverter,
+            context);
         if (formattedValue is null && cellStyle.NullValue is null)
         {
             return null;
@@ -398,7 +401,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
 
         if (ValueIsIcon)
         {
-            if (!(formattedValue is Icon ico))
+            if (formattedValue is not Icon ico)
             {
                 ico = ErrorIcon;
             }
@@ -407,7 +410,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         }
         else
         {
-            if (!(formattedValue is Image img))
+            if (formattedValue is not Image img)
             {
                 img = ErrorBitmap;
             }
@@ -416,7 +419,11 @@ public partial class DataGridViewImageCell : DataGridViewCell
         }
     }
 
-    protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
+    protected override Size GetPreferredSize(
+        Graphics graphics,
+        DataGridViewCellStyle cellStyle,
+        int rowIndex,
+        Size constraintSize)
     {
         if (DataGridView is null)
         {
@@ -431,8 +438,8 @@ public partial class DataGridViewImageCell : DataGridViewCell
         int borderAndPaddingHeights = borderWidthsRect.Top + borderWidthsRect.Height + cellStyle.Padding.Vertical;
         DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
         object formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize);
-        Image img = formattedValue as Image;
-        Icon ico = null;
+        Image? img = formattedValue as Image;
+        Icon? ico = null;
         if (img is null)
         {
             ico = formattedValue as Icon;
@@ -458,7 +465,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
                 else
                 {
                     int icoWidthAllowed = constraintSize.Width - borderAndPaddingWidths;
-                    if (icoWidthAllowed <= 0 || ico.Width == 0)
+                    if (icoWidthAllowed <= 0 || ico!.Width == 0)
                     {
                         preferredSize = Size.Empty;
                     }
@@ -493,7 +500,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
                 else
                 {
                     int icoHeightAllowed = constraintSize.Height - borderAndPaddingHeights;
-                    if (icoHeightAllowed <= 0 || ico.Height == 0)
+                    if (icoHeightAllowed <= 0 || ico!.Height == 0)
                     {
                         preferredSize = Size.Empty;
                     }
@@ -556,16 +563,16 @@ public partial class DataGridViewImageCell : DataGridViewCell
         return preferredSize;
     }
 
-    protected override object GetValue(int rowIndex)
+    protected override object? GetValue(int rowIndex)
     {
-        object valueBase = base.GetValue(rowIndex);
+        object? valueBase = base.GetValue(rowIndex);
         if (valueBase is null)
         {
             if (OwningColumn is DataGridViewImageColumn owningImageColumn)
             {
                 if (s_defaultTypeImage.IsAssignableFrom(ValueType))
                 {
-                    Image image = owningImageColumn.Image;
+                    Image? image = owningImageColumn.Image;
                     if (image is not null)
                     {
                         return image;
@@ -573,7 +580,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
                 }
                 else if (s_defaultTypeIcon.IsAssignableFrom(ValueType))
                 {
-                    Icon icon = owningImageColumn.Icon;
+                    Icon? icon = owningImageColumn.Icon;
                     if (icon is not null)
                     {
                         return icon;
@@ -628,7 +635,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         }
 
         // Now use the alignment on the cellStyle to determine the final bounds
-        if (DataGridView.RightToLeftInternal)
+        if (DataGridView!.RightToLeftInternal)
         {
             imageBounds.X = cellStyle.Alignment switch
             {
@@ -694,21 +701,23 @@ public partial class DataGridViewImageCell : DataGridViewCell
         return imageBounds;
     }
 
-    protected override void Paint(Graphics graphics,
+    protected override void Paint(
+        Graphics graphics,
         Rectangle clipBounds,
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates elementState,
-        object value,
-        object formattedValue,
-        string errorText,
+        object? value,
+        object? formattedValue,
+        string? errorText,
         DataGridViewCellStyle cellStyle,
         DataGridViewAdvancedBorderStyle advancedBorderStyle,
         DataGridViewPaintParts paintParts)
     {
         ArgumentNullException.ThrowIfNull(cellStyle);
 
-        PaintPrivate(graphics,
+        PaintPrivate(
+            graphics,
             clipBounds,
             cellBounds,
             rowIndex,
@@ -731,13 +740,14 @@ public partial class DataGridViewImageCell : DataGridViewCell
     // if computeContentBounds is true then PaintPrivate returns the contentBounds
     // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
     // else it returns Rectangle.Empty;
-    private Rectangle PaintPrivate(Graphics g,
+    private Rectangle PaintPrivate(
+        Graphics g,
         Rectangle clipBounds,
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates elementState,
-        object formattedValue,
-        string errorText,
+        object? formattedValue,
+        string? errorText,
         DataGridViewCellStyle cellStyle,
         DataGridViewAdvancedBorderStyle advancedBorderStyle,
         DataGridViewPaintParts paintParts,
@@ -783,7 +793,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         if (cellStyle.Padding != Padding.Empty)
         {
             imageBounds.Offset(
-                DataGridView.RightToLeftInternal ? cellStyle.Padding.Right : cellStyle.Padding.Left,
+                DataGridView!.RightToLeftInternal ? cellStyle.Padding.Right : cellStyle.Padding.Left,
                 cellStyle.Padding.Top);
             imageBounds.Width -= cellStyle.Padding.Horizontal;
             imageBounds.Height -= cellStyle.Padding.Vertical;
@@ -796,14 +806,14 @@ public partial class DataGridViewImageCell : DataGridViewCell
 
         using var brush = paint ? brushColor.GetCachedSolidBrushScope() : default;
 
-        Image image = formattedValue as Image;
-        Icon icon = image is null ? formattedValue as Icon : null;
+        Image? image = formattedValue as Image;
+        Icon? icon = image is null ? formattedValue as Icon : null;
 
         if (imageBounds.Width <= 0 || imageBounds.Height <= 0 || (icon is null && image is null))
         {
             if (paint && !brushColor.HasTransparency() && PaintBackground(paintParts))
             {
-                g.FillRectangle(brush, valBounds);
+                g.FillRectangle(brush!, valBounds);
             }
 
             if (!paint)
@@ -837,7 +847,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
 
                 if (PaintBackground(paintParts))
                 {
-                    PaintPadding(g, valBounds, cellStyle, brush, DataGridView.RightToLeftInternal);
+                    PaintPadding(g, valBounds, cellStyle, brush!, DataGridView!.RightToLeftInternal);
                 }
 
                 if (PaintContentForeground(paintParts))
@@ -850,7 +860,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
                     }
                     else
                     {
-                        g.DrawIcon(icon, imageBounds);
+                        g.DrawIcon(icon!, imageBounds);
                     }
                 }
             }
@@ -858,8 +868,8 @@ public partial class DataGridViewImageCell : DataGridViewCell
             {
                 Rectangle imageBounds2 = ImageBounds(
                     imageBounds,
-                    (image is null) ? icon.Width : image.Width,
-                    (image is null) ? icon.Height : image.Height,
+                    image is null ? icon!.Width : image.Width,
+                    image is null ? icon!.Height : image.Height,
                     imageLayout,
                     cellStyle);
 
@@ -872,7 +882,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
 
                 if (PaintBackground(paintParts) && !brushColor.HasTransparency())
                 {
-                    g.FillRectangle(brush, valBounds);
+                    g.FillRectangle(brush!, valBounds);
                 }
 
                 if (PaintContentForeground(paintParts))
@@ -891,7 +901,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
                         }
                         else
                         {
-                            g.DrawIconUnstretched(icon, imageBounds2);
+                            g.DrawIconUnstretched(icon!, imageBounds2);
                         }
                     }
                     finally
@@ -902,7 +912,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
             }
         }
 
-        Point ptCurrentCell = DataGridView.CurrentCellAddress;
+        Point ptCurrentCell = DataGridView!.CurrentCellAddress;
         if (paint
             && PaintFocus(paintParts)
             && ptCurrentCell.X == ColumnIndex

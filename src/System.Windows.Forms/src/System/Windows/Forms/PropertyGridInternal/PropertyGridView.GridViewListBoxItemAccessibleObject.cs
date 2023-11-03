@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListBox;
 using static Interop;
 
@@ -24,8 +25,8 @@ internal partial class PropertyGridView
             => _owningGridViewListBox.AccessibilityObject;
 
         /// <inheritdoc />
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            => patternId == UiaCore.UIA.InvokePatternId || base.IsPatternSupported(patternId);
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
+            => patternId == UIA_PATTERN_ID.UIA_InvokePatternId || base.IsPatternSupported(patternId);
 
         /// <inheritdoc />
         public override string? Name

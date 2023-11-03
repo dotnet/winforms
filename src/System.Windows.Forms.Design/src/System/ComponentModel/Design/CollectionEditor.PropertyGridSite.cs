@@ -1,18 +1,16 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 namespace System.ComponentModel.Design;
 
 public partial class CollectionEditor
 {
     internal class PropertyGridSite : ISite
     {
-        private readonly IServiceProvider _sp;
+        private readonly IServiceProvider? _sp;
         private bool _inGetService;
 
-        public PropertyGridSite(IServiceProvider sp, IComponent comp)
+        public PropertyGridSite(IServiceProvider? sp, IComponent comp)
         {
             _sp = sp;
             Component = comp;
@@ -20,17 +18,17 @@ public partial class CollectionEditor
 
         public IComponent Component { get; }
 
-        public IContainer Container => null;
+        public IContainer? Container => null;
 
         public bool DesignMode => false;
 
-        public string Name
+        public string? Name
         {
             get => null;
             set { }
         }
 
-        public object GetService(Type t)
+        public object? GetService(Type t)
         {
             if (!_inGetService && _sp is not null)
             {

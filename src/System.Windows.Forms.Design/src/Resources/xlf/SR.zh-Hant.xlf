@@ -653,122 +653,122 @@
       </trans-unit>
       <trans-unit id="DataGridViewAddColumnTransactionString">
         <source>Add Column</source>
-        <target state="new">Add Column</target>
+        <target state="translated">加入資料行</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewAddColumnVerb">
         <source>&amp;Add Column...</source>
-        <target state="new">&amp;Add Column...</target>
+        <target state="translated">新增資料行(&amp;A)...</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewBoundColumnProperties">
         <source>Bound Column &amp;Properties</source>
-        <target state="new">Bound Column &amp;Properties</target>
+        <target state="translated">繫結的資料行屬性(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewChooseDataSource">
         <source>Choose Data Source:</source>
-        <target state="new">Choose Data Source:</target>
+        <target state="translated">選擇資料來源:</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewChooseDataSourceTransactionString">
         <source>{0} DataSource changed</source>
-        <target state="new">{0} DataSource changed</target>
+        <target state="translated">{0} DataSource 已變更</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewColumnTypePropertyDescription">
         <source>The DataGridViewColumn type.</source>
-        <target state="new">The DataGridViewColumn type.</target>
+        <target state="translated">DataGridViewColumn 類型。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDataSourceNoLongerValid">
         <source>Unable to create columns for the data source. The data source is no longer valid</source>
-        <target state="new">Unable to create columns for the data source. The data source is no longer valid</target>
+        <target state="translated">無法建立資料來源資料行。資料來源已無效</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableAddingTransactionString">
         <source>Disable Adding</source>
-        <target state="new">Disable Adding</target>
+        <target state="translated">停用加入</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableColumnReorderingTransactionString">
         <source>Disable Column Reordering</source>
-        <target state="new">Disable Column Reordering</target>
+        <target state="translated">停用資料行重新調整順序</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableDeletingTransactionString">
         <source>Disable Deleting</source>
-        <target state="new">Disable Deleting</target>
+        <target state="translated">停用刪除</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDisableEditingTransactionString">
         <source>Disable Editing</source>
-        <target state="new">Disable Editing</target>
+        <target state="translated">停用編輯</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewDuplicateColumnName">
         <source>The name {0} is already in use by another column.</source>
-        <target state="new">The name {0} is already in use by another column.</target>
+        <target state="translated">名稱 {0} 正被另一個資料行使用中。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditColumnsTransactionString">
         <source>Edit Columns</source>
-        <target state="new">Edit Columns</target>
+        <target state="translated">編輯資料行</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditColumnsVerb">
         <source>&amp;Edit Columns...</source>
-        <target state="new">&amp;Edit Columns...</target>
+        <target state="translated">編輯資料行(&amp;E)...</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableAdding">
         <source>Enable Adding</source>
-        <target state="new">Enable Adding</target>
+        <target state="translated">啟用加入</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableAddingTransactionString">
         <source>Enable Adding</source>
-        <target state="new">Enable Adding</target>
+        <target state="translated">啟用加入</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableColumnReordering">
         <source>Enable Column Reordering</source>
-        <target state="new">Enable Column Reordering</target>
+        <target state="translated">啟用資料行重新調整順序</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableColumnReorderingTransactionString">
         <source>Enable Column Reordering</source>
-        <target state="new">Enable Column Reordering</target>
+        <target state="translated">啟用資料行重新調整順序</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableDeleting">
         <source>Enable Deleting</source>
-        <target state="new">Enable Deleting</target>
+        <target state="translated">啟用刪除</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableDeletingTransactionString">
         <source>Enable Deleting</source>
-        <target state="new">Enable Deleting</target>
+        <target state="translated">啟用刪除</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableEditing">
         <source>Enable Editing</source>
-        <target state="new">Enable Editing</target>
+        <target state="translated">啟用編輯</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEnableEditingTransactionString">
         <source>Enable Editing</source>
-        <target state="new">Enable Editing</target>
+        <target state="translated">啟用編輯</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewProperties">
         <source>&amp;Properties</source>
-        <target state="new">&amp;Properties</target>
+        <target state="translated">屬性(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewUnboundColumnProperties">
         <source>Unbound Column &amp;Properties</source>
-        <target state="new">Unbound Column &amp;Properties</target>
+        <target state="translated">未繫結的資料行屬性(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_Cancel">
@@ -778,7 +778,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_Close">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">關閉</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_OK">
@@ -853,7 +853,7 @@
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeInstances">
         <source>{0} List Instances</source>
-        <target state="translated">{0} 清單執行個體</target>
+        <target state="translated">{0} List 執行個體</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignBindingPickerNodeNone">

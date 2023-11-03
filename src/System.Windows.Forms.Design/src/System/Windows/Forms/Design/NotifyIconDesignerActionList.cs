@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Design
 
         public void ChooseIcon()
         {
-            EditorServiceContext.EditValue(_designer, Component, "Icon");
+            EditorServiceContext.EditValue(_designer, Component!, "Icon");
         }
 
         public override DesignerActionItemCollection GetSortedActionItems()

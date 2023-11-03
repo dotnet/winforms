@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using Microsoft.DotNet.RemoteExecutor;
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 using static Interop.ComCtl32;
@@ -4964,16 +4965,16 @@ public class ListViewTests
         ListViewItem listViewItem8 = new ListViewItem("8");
         ListViewItem listViewItem9 = new ListViewItem("9");
 
-        using ColumnHeader columnHeader1 = new System.Windows.Forms.ColumnHeader();
-        using ColumnHeader columnHeader2 = new System.Windows.Forms.ColumnHeader();
+        using ColumnHeader columnHeader1 = new ColumnHeader();
+        using ColumnHeader columnHeader2 = new ColumnHeader();
 
-        listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+        listView.Columns.AddRange(new ColumnHeader[]
         {
         columnHeader1,
         columnHeader2
         });
         listView.HideSelection = false;
-        var listItems = new System.Windows.Forms.ListViewItem[]
+        var listItems = new ListViewItem[]
         {
         listViewItem1,
         listViewItem2,
@@ -4986,8 +4987,8 @@ public class ListViewTests
         listViewItem9
         };
         listView.Items.AddRange(listItems);
-        listView.View = System.Windows.Forms.View.SmallIcon;
-        listView.Size = new System.Drawing.Size(200, 200);
+        listView.View = View.SmallIcon;
+        listView.Size = new Size(200, 200);
 
         var listViewItemToTest = listItems[item];
         ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Left, leftitem);
@@ -5004,7 +5005,7 @@ public class ListViewTests
         imagecollection.Images.Add(Form.DefaultIcon);
         imagecollection.Images.Add(Form.DefaultIcon);
 
-        imagecollection.TransparentColor = System.Drawing.Color.Transparent;
+        imagecollection.TransparentColor = Color.Transparent;
         imagecollection.Images.SetKeyName(0, "SmallA.bmp");
         imagecollection.Images.SetKeyName(1, "SmallABlue.bmp");
 
@@ -5020,16 +5021,16 @@ public class ListViewTests
         ListViewItem listViewItem8 = new ListViewItem("Items 8");
         ListViewItem listViewItem9 = new ListViewItem("Items 9");
 
-        using ColumnHeader columnHeader1 = new System.Windows.Forms.ColumnHeader();
-        using ColumnHeader columnHeader2 = new System.Windows.Forms.ColumnHeader();
+        using ColumnHeader columnHeader1 = new ColumnHeader();
+        using ColumnHeader columnHeader2 = new ColumnHeader();
 
-        listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+        listView.Columns.AddRange(new ColumnHeader[]
         {
         columnHeader1,
         columnHeader2
         });
         listView.HideSelection = false;
-        var listItems = new System.Windows.Forms.ListViewItem[]
+        var listItems = new ListViewItem[]
         {
         listViewItem1,
         listViewItem2,
@@ -5042,8 +5043,8 @@ public class ListViewTests
         listViewItem9
         };
         listView.Items.AddRange(listItems);
-        listView.View = System.Windows.Forms.View.SmallIcon;
-        listView.Size = new System.Drawing.Size(200, 200);
+        listView.View = View.SmallIcon;
+        listView.Size = new Size(200, 200);
 
         var listViewItemToTest = listItems[item];
         ListView_FindNearestItem_Check_Result(listItems, listViewItemToTest, SearchDirectionHint.Left, leftitem);
@@ -5781,7 +5782,7 @@ public class ListViewTests
         {
         }
 
-        internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
+        internal override bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
         {
             RaiseAutomationEventCalls++;
             return base.RaiseAutomationEvent(eventId);

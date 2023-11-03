@@ -2,40 +2,46 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
-using static Interop.Mshtml;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
+using Windows.Win32.Web.MsHtml;
 
 namespace System.Windows.Forms;
 
-public sealed class HtmlElementCollection : ICollection
+public sealed unsafe class HtmlElementCollection : ICollection
 {
-    private readonly IHTMLElementCollection? htmlElementCollection;
-    private readonly HtmlElement[]? elementsArray;
-    private readonly HtmlShimManager shimManager;
+    private readonly AgileComPointer<IHTMLElementCollection>? _htmlElementCollection;
+    private readonly HtmlElement[]? _elementsArray;
+    private readonly HtmlShimManager _shimManager;
 
     internal HtmlElementCollection(HtmlShimManager shimManager)
     {
-        htmlElementCollection = null;
-        elementsArray = null;
+        _htmlElementCollection = null;
+        _elementsArray = null;
 
-        this.shimManager = shimManager;
+        _shimManager = shimManager;
     }
 
-    internal HtmlElementCollection(HtmlShimManager shimManager, IHTMLElementCollection elements)
+    internal HtmlElementCollection(HtmlShimManager shimManager, IHTMLElementCollection* elements)
     {
-        htmlElementCollection = elements;
-        elementsArray = null;
-        this.shimManager = shimManager;
+#if DEBUG
+        _htmlElementCollection = new(elements, takeOwnership: true, trackDisposal: false);
+#else
+        _htmlElementCollection = new(elements, takeOwnership: true);
+#endif
+        _elementsArray = null;
+        _shimManager = shimManager;
         Debug.Assert(NativeHtmlElementCollection is not null, "The element collection object should implement IHTMLElementCollection");
     }
 
     internal HtmlElementCollection(HtmlShimManager shimManager, HtmlElement[] array)
     {
-        htmlElementCollection = null;
-        elementsArray = array;
-        this.shimManager = shimManager;
+        _htmlElementCollection = null;
+        _elementsArray = array;
+        _shimManager = shimManager;
     }
 
-    private IHTMLElementCollection? NativeHtmlElementCollection => htmlElementCollection;
+    private AgileComPointer<IHTMLElementCollection>? NativeHtmlElementCollection => _htmlElementCollection;
 
     public HtmlElement? this[int index]
     {
@@ -49,16 +55,16 @@ public sealed class HtmlElementCollection : ICollection
 
             if (NativeHtmlElementCollection is not null)
             {
-                return (NativeHtmlElementCollection.Item((object)index, (object)0) is IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
+                using var htmlElementCollection = NativeHtmlElementCollection.GetInterface();
+                using ComScope<IDispatch> dispatch = new(null);
+                htmlElementCollection.Value->item((VARIANT)index, (VARIANT)0, dispatch).ThrowOnFailure();
+                IHTMLElement* htmlElement;
+                return !dispatch.IsNull && dispatch.Value->QueryInterface(IID.Get<IHTMLElement>(), (void**)&htmlElement).Succeeded
+                    ? new HtmlElement(_shimManager, htmlElement)
+                    : null;
             }
-            else if (elementsArray is not null)
-            {
-                return elementsArray[index];
-            }
-            else
-            {
-                return null;
-            }
+
+            return _elementsArray?[index];
         }
     }
 
@@ -68,14 +74,21 @@ public sealed class HtmlElementCollection : ICollection
         {
             if (NativeHtmlElementCollection is not null)
             {
-                return (NativeHtmlElementCollection.Item((object)elementId, (object)0) is IHTMLElement htmlElement) ? new HtmlElement(shimManager, htmlElement) : null;
+                using var nativeHtmlElementCollection = NativeHtmlElementCollection.GetInterface();
+                using var variantElementId = (VARIANT)elementId;
+                using ComScope<IDispatch> dispatch = new(null);
+                nativeHtmlElementCollection.Value->item(variantElementId, (VARIANT)0, dispatch).ThrowOnFailure();;
+                IHTMLElement* htmlElement;
+                return !dispatch.IsNull && dispatch.Value->QueryInterface(IID.Get<IHTMLElement>(), (void**)&htmlElement).Succeeded
+                    ? new(_shimManager, htmlElement)
+                    : null;
             }
-            else if (elementsArray is not null)
+            else if (_elementsArray is not null)
             {
-                int count = elementsArray.Length;
+                int count = _elementsArray.Length;
                 for (int i = 0; i < count; i++)
                 {
-                    HtmlElement element = elementsArray[i];
+                    HtmlElement element = _elementsArray[i];
                     if (element.Id == elementId)
                     {
                         return element;
@@ -109,7 +122,7 @@ public sealed class HtmlElementCollection : ICollection
 
         if (tempIndex == 0)
         {
-            return new HtmlElementCollection(shimManager);
+            return new HtmlElementCollection(_shimManager);
         }
         else
         {
@@ -119,7 +132,7 @@ public sealed class HtmlElementCollection : ICollection
                 elements[i] = temp[i];
             }
 
-            return new HtmlElementCollection(shimManager, elements);
+            return new HtmlElementCollection(_shimManager, elements);
         }
     }
 
@@ -132,16 +145,13 @@ public sealed class HtmlElementCollection : ICollection
         {
             if (NativeHtmlElementCollection is not null)
             {
-                return NativeHtmlElementCollection.GetLength();
+                using var nativeHtmlElementCollection = NativeHtmlElementCollection.GetInterface();
+                int length;
+                nativeHtmlElementCollection.Value->get_length(&length).ThrowOnFailure();
+                return length;
             }
-            else if (elementsArray is not null)
-            {
-                return elementsArray.Length;
-            }
-            else
-            {
-                return 0;
-            }
+
+            return _elementsArray is not null ? _elementsArray.Length : 0;
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -47,7 +48,7 @@ public partial class TrackBar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out TrackBar? _))
             {
@@ -56,8 +57,8 @@ public partial class TrackBar
 
             return direction switch
             {
-                UiaCore.NavigateDirection.PreviousSibling => IsDisplayed ? ParentInternal?.ThumbAccessibleObject : null,
-                UiaCore.NavigateDirection.NextSibling => null,
+                NavigateDirection.NavigateDirection_PreviousSibling => IsDisplayed ? ParentInternal?.ThumbAccessibleObject : null,
+                NavigateDirection.NavigateDirection_NextSibling => null,
                 _ => base.FragmentNavigate(direction)
             };
         }

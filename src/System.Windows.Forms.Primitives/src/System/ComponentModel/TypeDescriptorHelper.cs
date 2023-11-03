@@ -14,6 +14,26 @@ internal static class TypeDescriptorHelper
         return attribute is not null;
     }
 
+    public static bool TryGetAttribute
+        <[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | DynamicallyAccessedMemberTypes.PublicFields)] T>(
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type componentType,
+        [NotNullWhen(true)] out T? attribute) where T : Attribute
+    {
+        attribute = TypeDescriptor.GetAttributes(componentType)[typeof(T)] as T;
+        return attribute is not null;
+    }
+
+    public static T? GetEditor<T>([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] Type type)
+    {
+        return (T?)TypeDescriptor.GetEditor(type, typeof(T));
+    }
+
+    public static bool TryGetEditor<T>(object component, [NotNullWhen(true)] out T? editor) where T : class
+    {
+        editor = TypeDescriptor.GetEditor(component, typeof(T)) as T;
+        return editor is not null;
+    }
+
     public static bool TryGetPropertyValue<T>(
         object component,
         string name,

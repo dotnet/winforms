@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -20,15 +20,15 @@ public partial class ToolStripDropDownButton
             _owningToolStripDropDownButton = ownerItem;
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
                 // ToolStripDropDownItemAccessibleObject implements a default Role as MenuItem
                 // because of this, ToolStripItemAccessibleObject will return the unexpected result for this.
                 // Return Button as the expected value by default
-                UiaCore.UIA.ControlTypePropertyId when
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     _owningToolStripDropDownButton.AccessibleRole == AccessibleRole.Default
-                    => UiaCore.UIA.ButtonControlTypeId,
+                    => UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
                 _ => base.GetPropertyValue(propertyID)
             };
     }

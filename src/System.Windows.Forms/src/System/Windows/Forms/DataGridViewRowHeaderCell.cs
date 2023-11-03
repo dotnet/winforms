@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -16,16 +14,15 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
     private static readonly VisualStyleElement s_headerElement = VisualStyleElement.Header.Item.Normal;
 
     // ColorMap used to map the black color of the resource bitmaps to the fore color in use in the row header cell
-    private static readonly ColorMap[] s_colorMap = new ColorMap[] { new ColorMap() };
+    private static readonly ColorMap[] s_colorMap = [new()];
 
-    private static Bitmap s_rightArrowBmp;
-    private static Bitmap s_leftArrowBmp;
-    private static Bitmap s_rightArrowStarBmp;
-    private static Bitmap s_leftArrowStarBmp;
-    //private static Bitmap errorBmp = null;
-    private static Bitmap s_pencilLTRBmp;
-    private static Bitmap s_pencilRTLBmp;
-    private static Bitmap s_starBmp;
+    private static Bitmap? s_rightArrowBmp;
+    private static Bitmap? s_leftArrowBmp;
+    private static Bitmap? s_rightArrowStarBmp;
+    private static Bitmap? s_leftArrowStarBmp;
+    private static Bitmap? s_pencilLTRBmp;
+    private static Bitmap? s_pencilRTLBmp;
+    private static Bitmap? s_starBmp;
 
     private static readonly Type s_cellType = typeof(DataGridViewRowHeaderCell);
 
@@ -40,75 +37,19 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
     {
     }
 
-    private static Bitmap LeftArrowBitmap
-    {
-        get
-        {
-            s_leftArrowBmp ??= GetBitmapFromIcon("DataGridViewRow.left");
+    private static Bitmap LeftArrowBitmap => s_leftArrowBmp ??= GetBitmapFromIcon("DataGridViewRow.left");
 
-            return s_leftArrowBmp;
-        }
-    }
+    private static Bitmap LeftArrowStarBitmap => s_leftArrowStarBmp ??= GetBitmapFromIcon("DataGridViewRow.leftstar");
 
-    private static Bitmap LeftArrowStarBitmap
-    {
-        get
-        {
-            s_leftArrowStarBmp ??= GetBitmapFromIcon("DataGridViewRow.leftstar");
+    private static Bitmap PencilLTRBitmap => s_pencilLTRBmp ??= GetBitmapFromIcon("DataGridViewRow.pencil_ltr");
 
-            return s_leftArrowStarBmp;
-        }
-    }
+    private static Bitmap PencilRTLBitmap => s_pencilRTLBmp ??= GetBitmapFromIcon("DataGridViewRow.pencil_rtl");
 
-    private static Bitmap PencilLTRBitmap
-    {
-        get
-        {
-            s_pencilLTRBmp ??= GetBitmapFromIcon("DataGridViewRow.pencil_ltr");
+    private static Bitmap RightArrowBitmap => s_rightArrowBmp ??= GetBitmapFromIcon("DataGridViewRow.right");
 
-            return s_pencilLTRBmp;
-        }
-    }
+    private static Bitmap RightArrowStarBitmap => s_rightArrowStarBmp ??= GetBitmapFromIcon("DataGridViewRow.rightstar");
 
-    private static Bitmap PencilRTLBitmap
-    {
-        get
-        {
-            s_pencilRTLBmp ??= GetBitmapFromIcon("DataGridViewRow.pencil_rtl");
-
-            return s_pencilRTLBmp;
-        }
-    }
-
-    private static Bitmap RightArrowBitmap
-    {
-        get
-        {
-            s_rightArrowBmp ??= GetBitmapFromIcon("DataGridViewRow.right");
-
-            return s_rightArrowBmp;
-        }
-    }
-
-    private static Bitmap RightArrowStarBitmap
-    {
-        get
-        {
-            s_rightArrowStarBmp ??= GetBitmapFromIcon("DataGridViewRow.rightstar");
-
-            return s_rightArrowStarBmp;
-        }
-    }
-
-    private static Bitmap StarBitmap
-    {
-        get
-        {
-            s_starBmp ??= GetBitmapFromIcon("DataGridViewRow.star");
-
-            return s_starBmp;
-        }
-    }
+    private static Bitmap StarBitmap => s_starBmp ??= GetBitmapFromIcon("DataGridViewRow.star");
 
     public override object Clone()
     {
@@ -121,9 +62,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         }
         else
         {
-            //
-
-            dataGridViewCell = (DataGridViewRowHeaderCell)System.Activator.CreateInstance(thisType);
+            dataGridViewCell = (DataGridViewRowHeaderCell)Activator.CreateInstance(thisType)!;
         }
 
         base.CloneInternal(dataGridViewCell);
@@ -131,20 +70,18 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         return dataGridViewCell;
     }
 
-    protected override AccessibleObject CreateAccessibilityInstance()
-    {
-        return new DataGridViewRowHeaderCellAccessibleObject(this);
-    }
+    protected override AccessibleObject CreateAccessibilityInstance() =>
+        new DataGridViewRowHeaderCellAccessibleObject(this);
 
-    private static Bitmap GetArrowBitmap(bool rightToLeft)
-    {
-        return rightToLeft ? DataGridViewRowHeaderCell.LeftArrowBitmap : DataGridViewRowHeaderCell.RightArrowBitmap;
-    }
+    private static Bitmap GetArrowBitmap(bool rightToLeft) =>
+        rightToLeft
+            ? LeftArrowBitmap
+            : RightArrowBitmap;
 
-    private static Bitmap GetArrowStarBitmap(bool rightToLeft)
-    {
-        return rightToLeft ? DataGridViewRowHeaderCell.LeftArrowStarBitmap : DataGridViewRowHeaderCell.RightArrowStarBitmap;
-    }
+    private static Bitmap GetArrowStarBitmap(bool rightToLeft) =>
+        rightToLeft
+            ? LeftArrowStarBitmap
+            : RightArrowStarBitmap;
 
     private static Bitmap GetBitmapFromIcon(string iconName)
     {
@@ -166,12 +103,13 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         return b;
     }
 
-    protected override object GetClipboardContent(int rowIndex,
-                                                  bool firstCell,
-                                                  bool lastCell,
-                                                  bool inFirstRow,
-                                                  bool inLastRow,
-                                                  string format)
+    protected override object? GetClipboardContent(
+        int rowIndex,
+        bool firstCell,
+        bool lastCell,
+        bool inFirstRow,
+        bool inLastRow,
+        string format)
     {
         if (DataGridView is null)
         {
@@ -182,8 +120,8 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, DataGridView.Rows.Count);
 
         // Not using formatted values for header cells.
-        object val = GetValue(rowIndex);
-        StringBuilder sb = new StringBuilder(64);
+        object? val = GetValue(rowIndex);
+        StringBuilder stringBuilder = new(64);
 
         Debug.Assert((!DataGridView.RightToLeftInternal && firstCell) || (DataGridView.RightToLeftInternal && lastCell));
 
@@ -191,34 +129,34 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         {
             if (inFirstRow)
             {
-                sb.Append("<TABLE>");
+                stringBuilder.Append("<TABLE>");
             }
 
-            sb.Append("<TR>");
-            sb.Append("<TD ALIGN=\"center\">");
+            stringBuilder.Append("<TR>");
+            stringBuilder.Append("<TD ALIGN=\"center\">");
             if (val is not null)
             {
-                sb.Append("<B>");
-                using StringWriter sw = new(sb, CultureInfo.CurrentCulture);
+                stringBuilder.Append("<B>");
+                using StringWriter sw = new(stringBuilder, CultureInfo.CurrentCulture);
                 FormatPlainTextAsHtml(val.ToString(), sw);
-                sb.Append("</B>");
+                stringBuilder.Append("</B>");
             }
             else
             {
-                sb.Append("&nbsp;");
+                stringBuilder.Append("&nbsp;");
             }
 
-            sb.Append("</TD>");
+            stringBuilder.Append("</TD>");
             if (lastCell)
             {
-                sb.Append("</TR>");
+                stringBuilder.Append("</TR>");
                 if (inLastRow)
                 {
-                    sb.Append("</TABLE>");
+                    stringBuilder.Append("</TABLE>");
                 }
             }
 
-            return sb.ToString();
+            return stringBuilder.ToString();
         }
         else
         {
@@ -230,13 +168,13 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                 if (val is not null)
                 {
                     bool escapeApplied = false;
-                    int insertionPoint = sb.Length;
-                    using StringWriter sw = new(sb, CultureInfo.CurrentCulture);
+                    int insertionPoint = stringBuilder.Length;
+                    using StringWriter sw = new(stringBuilder, CultureInfo.CurrentCulture);
                     FormatPlainText(val.ToString(), csv, sw, ref escapeApplied);
                     if (escapeApplied)
                     {
                         Debug.Assert(csv);
-                        sb.Insert(insertionPoint, '"');
+                        stringBuilder.Insert(insertionPoint, '"');
                     }
                 }
 
@@ -244,16 +182,16 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                 {
                     if (!inLastRow)
                     {
-                        sb.Append((char)Keys.Return);
-                        sb.Append((char)Keys.LineFeed);
+                        stringBuilder.Append((char)Keys.Return);
+                        stringBuilder.Append((char)Keys.LineFeed);
                     }
                 }
                 else
                 {
-                    sb.Append(csv ? ',' : (char)Keys.Tab);
+                    stringBuilder.Append(csv ? ',' : (char)Keys.Tab);
                 }
 
-                return sb.ToString();
+                return stringBuilder.ToString();
             }
             else
             {
@@ -271,7 +209,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             return Rectangle.Empty;
         }
 
-        object value = GetValue(rowIndex);
+        object? value = GetValue(rowIndex);
 
         // Intentionally not using GetFormattedValue because header cells don't typically perform formatting.
         // the content bounds are computed on demand
@@ -279,24 +217,30 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
 
         // get the borders
 
-        ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
+        ComputeBorderStyleCellStateAndCellBounds(
+            rowIndex,
+            out DataGridViewAdvancedBorderStyle dgvabsEffective,
+            out DataGridViewElementStates cellState,
+            out Rectangle cellBounds);
 
-        Rectangle contentBounds = PaintPrivate(graphics,
+        Rectangle contentBounds = PaintPrivate(
+            graphics,
             cellBounds,
             cellBounds,
             rowIndex,
             cellState,
             value,
-            null /*errorText*/,                 // contentBounds is independent of errorText
+            errorText: null,    // contentBounds is independent of errorText
             cellStyle,
             dgvabsEffective,
             DataGridViewPaintParts.ContentForeground,
-            true /*computeContentBounds*/,
-            false /*computeErrorIconBounds*/,
-            false /*paint*/);
+            computeContentBounds: true,
+            computeErrorIconBounds: false,
+            paint: false);
 
 #if DEBUG
-        Rectangle contentBoundsDebug = PaintPrivate(graphics,
+        Rectangle contentBoundsDebug = PaintPrivate(
+            graphics,
             cellBounds,
             cellBounds,
             rowIndex,
@@ -306,9 +250,9 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             cellStyle,
             dgvabsEffective,
             DataGridViewPaintParts.ContentForeground,
-            true /*computeContentBounds*/,
-            false /*computeErrorIconBounds*/,
-            false /*paint*/);
+            computeContentBounds: true,
+            computeErrorIconBounds: false,
+            paint: false);
         Debug.Assert(contentBoundsDebug.Equals(contentBounds));
 #endif
 
@@ -327,41 +271,45 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             return Rectangle.Empty;
         }
 
-        ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
+        ComputeBorderStyleCellStateAndCellBounds(
+            rowIndex,
+            out DataGridViewAdvancedBorderStyle dgvabsEffective,
+            out DataGridViewElementStates cellState,
+            out Rectangle cellBounds);
 
-        object value = GetValue(rowIndex);
-        object formattedValue = GetFormattedValue(value, rowIndex, ref cellStyle, null, null, DataGridViewDataErrorContexts.Formatting);
+        object? value = GetValue(rowIndex);
+        object formattedValue = GetFormattedValue(
+            value,
+            rowIndex,
+            ref cellStyle,
+            null,
+            null,
+            DataGridViewDataErrorContexts.Formatting);
 
-        Rectangle errorBounds = PaintPrivate(graphics,
+        Rectangle errorBounds = PaintPrivate(
+            graphics,
             cellBounds,
             cellBounds,
             rowIndex,
             cellState,
-            formattedValue /*formattedValue*/,
+            formattedValue,
             GetErrorText(rowIndex),
             cellStyle,
             dgvabsEffective,
             DataGridViewPaintParts.ContentForeground,
-            false /*computeContentBounds*/,
-            true /*computeErrorIconBounds*/,
-            false /*paint*/);
+            computeContentBounds: false,
+            computeErrorIconBounds: true,
+            paint: false);
 
         return errorBounds;
     }
 
-    protected internal override string GetErrorText(int rowIndex)
-    {
-        if (OwningRow is null)
-        {
-            return base.GetErrorText(rowIndex);
-        }
-        else
-        {
-            return OwningRow.GetErrorText(rowIndex);
-        }
-    }
+    protected internal override string GetErrorText(int rowIndex) =>
+        OwningRow is null
+            ? base.GetErrorText(rowIndex)
+            : OwningRow.GetErrorText(rowIndex);
 
-    public override ContextMenuStrip GetInheritedContextMenuStrip(int rowIndex)
+    public override ContextMenuStrip? GetInheritedContextMenuStrip(int rowIndex)
     {
         if (DataGridView is not null)
         {
@@ -369,29 +317,18 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(rowIndex, DataGridView.Rows.Count);
         }
 
-        ContextMenuStrip contextMenuStrip = GetContextMenuStrip(rowIndex);
-        if (contextMenuStrip is not null)
-        {
-            return contextMenuStrip;
-        }
+        ContextMenuStrip? contextMenuStrip = GetContextMenuStrip(rowIndex);
 
-        if (DataGridView is not null)
-        {
-            return DataGridView.ContextMenuStrip;
-        }
-        else
-        {
-            return null;
-        }
+        return contextMenuStrip ?? DataGridView?.ContextMenuStrip;
     }
 
-    public override DataGridViewCellStyle GetInheritedStyle(DataGridViewCellStyle inheritedCellStyle, int rowIndex, bool includeColors)
+    public override DataGridViewCellStyle GetInheritedStyle(DataGridViewCellStyle? inheritedCellStyle, int rowIndex, bool includeColors)
     {
         Debug.Assert(DataGridView is not null);
 
         DataGridViewCellStyle inheritedCellStyleTmp = inheritedCellStyle ?? new DataGridViewCellStyle();
 
-        DataGridViewCellStyle cellStyle = null;
+        DataGridViewCellStyle? cellStyle = null;
         if (HasStyle)
         {
             cellStyle = Style;
@@ -581,12 +518,16 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         return inheritedCellStyleTmp;
     }
 
-    private static Bitmap GetPencilBitmap(bool rightToLeft)
-    {
-        return rightToLeft ? DataGridViewRowHeaderCell.PencilRTLBitmap : DataGridViewRowHeaderCell.PencilLTRBitmap;
-    }
+    private static Bitmap GetPencilBitmap(bool rightToLeft) =>
+        rightToLeft
+            ? PencilRTLBitmap
+            : PencilLTRBitmap;
 
-    protected override Size GetPreferredSize(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex, Size constraintSize)
+    protected override Size GetPreferredSize(
+        Graphics graphics,
+        DataGridViewCellStyle cellStyle,
+        int rowIndex,
+        Size constraintSize)
     {
         if (DataGridView is null)
         {
@@ -595,13 +536,16 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
 
         ArgumentNullException.ThrowIfNull(cellStyle);
 
-        DataGridViewAdvancedBorderStyle dgvabsPlaceholder = new(), dgvabsEffective;
-        dgvabsEffective = OwningRow.AdjustRowHeaderBorderStyle(DataGridView.AdvancedRowHeadersBorderStyle,
+        DataGridViewAdvancedBorderStyle dgvabsPlaceholder = new();
+
+        Debug.Assert(OwningRow is not null);
+        DataGridViewAdvancedBorderStyle dgvabsEffective = OwningRow.AdjustRowHeaderBorderStyle(
+            DataGridView.AdvancedRowHeadersBorderStyle,
             dgvabsPlaceholder,
-            false /*singleVerticalBorderAdded*/,
-            false /*singleHorizontalBorderAdded*/,
-            false /*isFirstDisplayedRow*/,
-            false /*isLastVisibleRow*/);
+            singleVerticalBorderAdded: false,
+            singleHorizontalBorderAdded: false,
+            isFirstDisplayedRow: false,
+            isLastVisibleRow: false);
         Rectangle borderWidthsRect = BorderWidths(dgvabsEffective);
         int borderAndPaddingWidths = borderWidthsRect.Left + borderWidthsRect.Width + cellStyle.Padding.Horizontal;
         int borderAndPaddingHeights = borderWidthsRect.Top + borderWidthsRect.Height + cellStyle.Padding.Vertical;
@@ -619,24 +563,21 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         }
 
         // Intentionally not using GetFormattedValue because header cells don't typically perform formatting.
-        object val = GetValue(rowIndex);
-        if (!(val is string))
-        {
-            val = null;
-        }
+        string? val = GetValue(rowIndex) as string;
 
-        return DataGridViewUtilities.GetPreferredRowHeaderSize(graphics,
-                                                               (string)val,
-                                                               cellStyle,
-                                                               borderAndPaddingWidths,
-                                                               borderAndPaddingHeights,
-                                                               DataGridView.ShowRowErrors,
-                                                               true /*showGlyph*/,
-                                                               constraintSize,
-                                                               flags);
+        return DataGridViewUtilities.GetPreferredRowHeaderSize(
+            graphics,
+            val,
+            cellStyle,
+            borderAndPaddingWidths,
+            borderAndPaddingHeights,
+            DataGridView.ShowRowErrors,
+            showGlyph: true,
+            constraintSize,
+            flags);
     }
 
-    protected override object GetValue(int rowIndex)
+    protected override object? GetValue(int rowIndex)
     {
         // We allow multiple rows to share the same row header value. The row header cell's cloning does this.
         // So here we need to allow rowIndex == -1.
@@ -649,21 +590,23 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         return Properties.GetObject(s_propCellValue);
     }
 
-    protected override void Paint(Graphics graphics,
+    protected override void Paint(
+        Graphics graphics,
         Rectangle clipBounds,
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates cellState,
         object value,
-        object formattedValue,
-        string errorText,
+        object? formattedValue,
+        string? errorText,
         DataGridViewCellStyle cellStyle,
         DataGridViewAdvancedBorderStyle advancedBorderStyle,
         DataGridViewPaintParts paintParts)
     {
         ArgumentNullException.ThrowIfNull(cellStyle);
 
-        PaintPrivate(graphics,
+        PaintPrivate(
+            graphics,
             clipBounds,
             cellBounds,
             rowIndex,
@@ -673,9 +616,9 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             cellStyle,
             advancedBorderStyle,
             paintParts,
-            false, /*computeContentBounds*/
-            false /*computeErrorIconBounds*/,
-            true /*paint*/);
+            computeContentBounds: false,
+            computeErrorIconBounds: false,
+            paint: true);
     }
 
     // PaintPrivate is used in three places that need to duplicate the paint code:
@@ -686,13 +629,14 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
     // if computeContentBounds is true then PaintPrivate returns the contentBounds
     // else if computeErrorIconBounds is true then PaintPrivate returns the errorIconBounds
     // else it returns Rectangle.Empty;
-    private Rectangle PaintPrivate(Graphics graphics,
+    private Rectangle PaintPrivate(
+        Graphics graphics,
         Rectangle clipBounds,
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates dataGridViewElementState,
-        object formattedValue,
-        string errorText,
+        object? formattedValue,
+        string? errorText,
         DataGridViewCellStyle cellStyle,
         DataGridViewAdvancedBorderStyle advancedBorderStyle,
         DataGridViewPaintParts paintParts,
@@ -728,6 +672,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
 
         bool cellSelected = (dataGridViewElementState & DataGridViewElementStates.Selected) != 0;
 
+        Debug.Assert(DataGridView is not null);
         if (DataGridView.ApplyVisualStylesToHeaderCells)
         {
             if (cellStyle.Padding != Padding.Empty)
@@ -778,10 +723,11 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                             DataGridViewRowHeaderCellRenderer.DrawHeader(gFlip, new Rectangle(0, 0, backgroundBounds.Height, backgroundBounds.Width), state);
                             bmFlipXPThemes.RotateFlip(DataGridView.RightToLeftInternal ? RotateFlipType.Rotate90FlipNone : RotateFlipType.Rotate270FlipY);
 
-                            graphics.DrawImage(bmFlipXPThemes,
-                                               backgroundBounds,
-                                               new Rectangle(0, 0, backgroundBounds.Width, backgroundBounds.Height),
-                                               GraphicsUnit.Pixel);
+                            graphics.DrawImage(
+                                bmFlipXPThemes,
+                                backgroundBounds,
+                                new Rectangle(0, 0, backgroundBounds.Width, backgroundBounds.Height),
+                                GraphicsUnit.Pixel);
                         }
                     }
                 }
@@ -834,12 +780,12 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             }
         }
 
-        Bitmap bmp = null;
+        Bitmap? bmp = null;
 
         if (valBounds.Width > 0 && valBounds.Height > 0)
         {
             Rectangle errorBounds = valBounds;
-            string formattedString = formattedValue as string;
+            string? formattedString = formattedValue as string;
             if (!string.IsNullOrEmpty(formattedString))
             {
                 // There is text to display
@@ -886,7 +832,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                         }
                         else if (DataGridView.NewRowIndex == rowIndex)
                         {
-                            bmp = DataGridViewRowHeaderCell.StarBitmap;
+                            bmp = StarBitmap;
                         }
 
                         if (bmp is not null)
@@ -930,11 +876,12 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                     {
                         // Check if the text fits if we remove the room required for the row error icon
                         Size maxBounds = new Size(valBounds.Width - s_iconsWidth - 2 * RowHeaderIconMarginWidth, valBounds.Height);
-                        if (DataGridViewCell.TextFitsInBounds(graphics,
-                                                              formattedString,
-                                                              cellStyle.Font,
-                                                              maxBounds,
-                                                              flags))
+                        if (DataGridViewCell.TextFitsInBounds(
+                            graphics,
+                            formattedString,
+                            cellStyle.Font,
+                            maxBounds,
+                            flags))
                         {
                             // There is enough room for both the text and the row error icon, so use it all.
                             if (DataGridView.RightToLeftInternal)
@@ -965,12 +912,13 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                                 flags |= TextFormatFlags.EndEllipsis;
                             }
 
-                            TextRenderer.DrawText(graphics,
-                                                  formattedString,
-                                                  cellStyle.Font,
-                                                  valBounds,
-                                                  textColor,
-                                                  flags);
+                            TextRenderer.DrawText(
+                                graphics,
+                                formattedString,
+                                cellStyle.Font,
+                                valBounds,
+                                textColor,
+                                flags);
                         }
                         else if (computeContentBounds)
                         {
@@ -1041,7 +989,7 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
                         }
                         else if (DataGridView.NewRowIndex == rowIndex)
                         {
-                            bmp = DataGridViewRowHeaderCell.StarBitmap;
+                            bmp = StarBitmap;
                         }
 
                         if (bmp is not null)
@@ -1088,8 +1036,14 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         return resultBounds;
     }
 
-    private void PaintIcon(Graphics g, Bitmap bmp, Rectangle bounds, Color foreColor, Color backColor)
+    private void PaintIcon(
+        Graphics g,
+        Bitmap bmp,
+        Rectangle bounds,
+        Color foreColor,
+        Color backColor)
     {
+        Debug.Assert(DataGridView is not null);
         int width = DataGridView.RightToLeftInternal
             ? bounds.Right - RowHeaderIconMarginWidth - s_iconsWidth
             : bounds.Left + RowHeaderIconMarginWidth;
@@ -1120,9 +1074,9 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
         attr.Dispose();
     }
 
-    protected override bool SetValue(int rowIndex, object value)
+    protected override bool SetValue(int rowIndex, object? value)
     {
-        object originalValue = GetValue(rowIndex);
+        object? originalValue = GetValue(rowIndex);
         if (value is not null || Properties.ContainsObject(s_propCellValue))
         {
             Properties.SetObject(s_propCellValue, value);
@@ -1138,8 +1092,6 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
 
     /// <summary>
     /// </summary>
-    public override string ToString()
-    {
-        return $"DataGridViewRowHeaderCell {{ RowIndex={RowIndex} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewRowHeaderCell {{ RowIndex={RowIndex} }}";
 }

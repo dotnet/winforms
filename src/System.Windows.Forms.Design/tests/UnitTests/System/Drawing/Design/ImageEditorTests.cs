@@ -180,7 +180,7 @@ public class ImageEditorTests
     public static IEnumerable<object[]> PaintValue_InvalidArgsValue_TestData()
     {
         yield return new object[] { null };
-        yield return new object[] { new object() };
+        yield return new object[] { new() };
     }
 
     [Theory]

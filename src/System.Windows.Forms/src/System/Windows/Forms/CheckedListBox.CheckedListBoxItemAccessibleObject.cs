@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -39,21 +39,21 @@ public partial class CheckedListBox
             _owningCheckedListBox.SetItemChecked(CurrentIndex, !IsItemChecked);
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.CheckBoxControlTypeId,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_CheckBoxControlTypeId,
                 _ => base.GetPropertyValue(propertyID)
             };
 
         private bool IsItemChecked => _owningCheckedListBox.GetItemChecked(CurrentIndex);
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.InvokePatternId => true,
-                UiaCore.UIA.TogglePatternId => true,
-                UiaCore.UIA.ValuePatternId => true,
+                UIA_PATTERN_ID.UIA_InvokePatternId => true,
+                UIA_PATTERN_ID.UIA_TogglePatternId => true,
+                UIA_PATTERN_ID.UIA_ValuePatternId => true,
                 _ => base.IsPatternSupported(patternId)
             };
 
@@ -106,18 +106,18 @@ public partial class CheckedListBox
 
         internal override void Toggle() => DoDefaultAction();
 
-        internal override UiaCore.ToggleState ToggleState
+        internal override ToggleState ToggleState
         {
             get
             {
-                UiaCore.ToggleState toggleState= UiaCore.ToggleState.Off;
+                ToggleState toggleState= ToggleState.ToggleState_Off;
                 switch (_owningCheckedListBox.GetItemCheckState(CurrentIndex))
                 {
                     case CheckState.Checked:
-                        toggleState = UiaCore.ToggleState.On;
+                        toggleState = ToggleState.ToggleState_On;
                         break;
                     case CheckState.Indeterminate:
-                        toggleState = UiaCore.ToggleState.Indeterminate;
+                        toggleState = ToggleState.ToggleState_Indeterminate;
                         break;
                 }
 

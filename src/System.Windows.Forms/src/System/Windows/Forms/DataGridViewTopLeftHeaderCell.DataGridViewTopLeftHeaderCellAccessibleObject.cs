@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -62,7 +63,7 @@ public partial class DataGridViewTopLeftHeaderCell
                     throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                 }
 
-                object value = Owner.Value;
+                object? value = Owner.Value;
                 if (value is not null && !(value is string))
                 {
                     // The user set the Value on the DataGridViewTopLeftHeaderCell and it did not set it to a string.
@@ -210,11 +211,16 @@ public partial class DataGridViewTopLeftHeaderCell
                     // This means that there are visible rows and columns.
                     // Focus the first data cell.
                     DataGridViewRow row = Owner.DataGridView.Rows[Owner.DataGridView.Rows.GetFirstRow(DataGridViewElementStates.Visible)];
-                    DataGridViewColumn col = Owner.DataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible);
+                    DataGridViewColumn col = Owner.DataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible)!;
 
                     // DataGridView::set_CurrentCell clears the previous selection.
                     // So use SetCurrenCellAddressCore directly.
-                    Owner.DataGridView.SetCurrentCellAddressCoreInternal(col.Index, row.Index, false /*setAnchorCellAddress*/, true /*validateCurrentCell*/, false /*thoughMouseClick*/);
+                    Owner.DataGridView.SetCurrentCellAddressCoreInternal(
+                        col.Index,
+                        row.Index,
+                        setAnchorCellAddress: false,
+                        validateCurrentCell: true,
+                        throughMouseClick: false);
                 }
             }
 
@@ -253,7 +259,7 @@ public partial class DataGridViewTopLeftHeaderCell
         }
         #region IRawElementProviderFragment Implementation
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (Owner is null)
             {
@@ -269,11 +275,11 @@ public partial class DataGridViewTopLeftHeaderCell
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return dataGridView.AccessibilityObject.GetChild(0);
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return null;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     if (dataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) == 0)
                     {
                         return null;
@@ -289,13 +295,13 @@ public partial class DataGridViewTopLeftHeaderCell
 
         #region IRawElementProviderSimple Implementation
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyId) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyId) =>
             propertyId switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.HeaderControlTypeId,
-                UiaCore.UIA.IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
-                UiaCore.UIA.IsOffscreenPropertyId => false,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => false,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => false,
                 _ => base.GetPropertyValue(propertyId)
             };
 

@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using Windows.Win32.System.Ole;
+using MsHtml = Windows.Win32.Web.MsHtml;
 using static Interop.Mshtml;
 using Ole = Windows.Win32.System.Ole;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -55,7 +56,7 @@ public partial class WebBrowser
             return HRESULT.S_OK;
         }
 
-        unsafe HRESULT IDocHostUIHandler.GetHostInfo(DOCHOSTUIINFO* pInfo)
+        unsafe HRESULT IDocHostUIHandler.GetHostInfo(MsHtml.DOCHOSTUIINFO* pInfo)
         {
             if (pInfo is null)
             {
@@ -64,26 +65,26 @@ public partial class WebBrowser
 
             WebBrowser wb = (WebBrowser)Host;
 
-            pInfo->dwDoubleClick = DOCHOSTUIDBLCLK.DEFAULT;
-            pInfo->dwFlags = DOCHOSTUIFLAG.NO3DOUTERBORDER |
-                           DOCHOSTUIFLAG.DISABLE_SCRIPT_INACTIVE;
+            pInfo->dwDoubleClick = MsHtml.DOCHOSTUIDBLCLK.DOCHOSTUIDBLCLK_DEFAULT;
+            pInfo->dwFlags = MsHtml.DOCHOSTUIFLAG.DOCHOSTUIFLAG_NO3DOUTERBORDER |
+                           MsHtml.DOCHOSTUIFLAG.DOCHOSTUIFLAG_DISABLE_SCRIPT_INACTIVE;
 
             if (wb.ScrollBarsEnabled)
             {
-                pInfo->dwFlags |= DOCHOSTUIFLAG.FLAT_SCROLLBAR;
+                pInfo->dwFlags |= MsHtml.DOCHOSTUIFLAG.DOCHOSTUIFLAG_FLAT_SCROLLBAR;
             }
             else
             {
-                pInfo->dwFlags |= DOCHOSTUIFLAG.SCROLL_NO;
+                pInfo->dwFlags |= MsHtml.DOCHOSTUIFLAG.DOCHOSTUIFLAG_SCROLL_NO;
             }
 
             if (Application.RenderWithVisualStyles)
             {
-                pInfo->dwFlags |= DOCHOSTUIFLAG.THEME;
+                pInfo->dwFlags |= MsHtml.DOCHOSTUIFLAG.DOCHOSTUIFLAG_THEME;
             }
             else
             {
-                pInfo->dwFlags |= DOCHOSTUIFLAG.NOTHEME;
+                pInfo->dwFlags |= MsHtml.DOCHOSTUIFLAG.DOCHOSTUIFLAG_NOTHEME;
             }
 
             return HRESULT.S_OK;
@@ -162,7 +163,7 @@ public partial class WebBrowser
             if (!wb.WebBrowserShortcutsEnabled)
             {
                 int keyCode = (int)(uint)lpMsg->wParam | (int)ModifierKeys;
-                if (lpMsg->message != (uint)PInvoke.WM_CHAR && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode))
+                if (lpMsg->message != (uint)PInvoke.WM_CHAR && Enum.IsDefined((Shortcut)keyCode))
                 {
                     return HRESULT.S_OK;
                 }

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -149,7 +148,7 @@ public partial class ComponentEditorForm
                     dc,
                     PADDING_HORZ,
                     rc.top + (((rc.bottom - rc.top) - SIZE_ICON_Y) >> 1),
-                    (IMAGE_LIST_DRAW_STYLE)ComCtl32.ILD.TRANSPARENT);
+                    IMAGE_LIST_DRAW_STYLE.ILD_TRANSPARENT);
             }
 
             // Draw the hot-tracking border if needed
@@ -208,7 +207,7 @@ public partial class ComponentEditorForm
                     break;
                 case NMCUSTOMDRAW_DRAW_STAGE.CDDS_ITEMPREPAINT:
                     {
-                        TreeNode itemNode = TreeNode.FromHandle(this, (nint)nmtvcd->nmcd.dwItemSpec);
+                        TreeNode? itemNode = TreeNode.FromHandle(this, (nint)nmtvcd->nmcd.dwItemSpec);
                         if (itemNode is not null)
                         {
                             int state = STATE_NORMAL;
@@ -278,7 +277,7 @@ public partial class ComponentEditorForm
             if (m.MsgInternal == MessageId.WM_REFLECT_NOTIFY)
             {
                 NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
-                if ((int)nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)
+                if (nmhdr->code == PInvoke.NM_CUSTOMDRAW)
                 {
                     OnCustomDraw(ref m);
                     return;

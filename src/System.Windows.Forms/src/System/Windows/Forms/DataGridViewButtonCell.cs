@@ -148,7 +148,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
     {
         get
         {
-            Type valueType = base.ValueType;
+            Type? valueType = base.ValueType;
             if (valueType is not null)
             {
                 return valueType;
@@ -471,7 +471,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
         ColumnIndex == DataGridView!.MouseDownCellAddress.X && rowIndex == DataGridView.MouseDownCellAddress.Y;
 
     protected override bool MouseLeaveUnsharesRow(int rowIndex) =>
-        (ButtonState & ButtonState.Pushed) != 0;
+        ButtonState.HasFlag(ButtonState.Pushed);
 
     protected override bool MouseUpUnsharesRow(DataGridViewCellMouseEventArgs e) =>
         e.Button == MouseButtons.Left;
@@ -561,7 +561,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             }
         }
 
-        if ((ButtonState & ButtonState.Pushed) != 0 &&
+        if (ButtonState.HasFlag(ButtonState.Pushed) &&
             ColumnIndex == DataGridView.MouseDownCellAddress.X &&
             rowIndex == DataGridView.MouseDownCellAddress.Y)
         {
@@ -589,13 +589,13 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                 e.RowIndex == DataGridView.MouseDownCellAddress.Y &&
                 Control.MouseButtons == MouseButtons.Left)
             {
-                if ((ButtonState & ButtonState.Pushed) == 0 &&
+                if (!ButtonState.HasFlag(ButtonState.Pushed) &&
                     s_mouseInContentBounds &&
                     DataGridView.CellMouseDownInContentBounds)
                 {
                     UpdateButtonState(ButtonState | ButtonState.Pushed, e.RowIndex);
                 }
-                else if ((ButtonState & ButtonState.Pushed) != 0 && !s_mouseInContentBounds)
+                else if (ButtonState.HasFlag(ButtonState.Pushed) && !s_mouseInContentBounds)
                 {
                     UpdateButtonState(ButtonState & ~ButtonState.Pushed, e.RowIndex);
                 }

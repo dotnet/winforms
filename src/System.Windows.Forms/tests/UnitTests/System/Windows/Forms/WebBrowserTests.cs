@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.TestUtilities;
 using static Interop;
-using static Interop.Mshtml;
 using Point = System.Drawing.Point;
 using Size = System.Drawing.Size;
 
@@ -287,7 +286,7 @@ public class WebBrowserTests
 
     [WinFormsTheory]
     [BoolData]
-    public void WebBrowser_AllowWebBrowserDrop_SetWithInstance_GetReturnsExpected(bool value)
+    public unsafe void WebBrowser_AllowWebBrowserDrop_SetWithInstance_GetReturnsExpected(bool value)
     {
         using var parent = new Control();
         using var control = new WebBrowser
@@ -298,21 +297,26 @@ public class WebBrowserTests
         control.AllowWebBrowserDrop = value;
         Assert.Equal(value, control.AllowWebBrowserDrop);
         Assert.NotNull(control.ActiveXInstance);
-        Assert.Equal(value, ((IWebBrowser2)control.ActiveXInstance).RegisterAsDropTarget);
+        VARIANT_BOOL register = default;
+        using var webBrowser = ComHelpers.GetComScope<IWebBrowser2>(control.ActiveXInstance);
+        Assert.True(webBrowser.Value->get_RegisterAsDropTarget(&register).Succeeded);
+        Assert.Equal(value, (bool)register);
         Assert.True(control.IsHandleCreated);
 
         // Set same.
         control.AllowWebBrowserDrop = value;
         Assert.Equal(value, control.AllowWebBrowserDrop);
         Assert.NotNull(control.ActiveXInstance);
-        Assert.Equal(value, ((IWebBrowser2)control.ActiveXInstance).RegisterAsDropTarget);
+        Assert.True(webBrowser.Value->get_RegisterAsDropTarget(&register).Succeeded);
+        Assert.Equal(value, (bool)register);
         Assert.True(control.IsHandleCreated);
 
         // Set different.
         control.AllowWebBrowserDrop = !value;
         Assert.Equal(!value, control.AllowWebBrowserDrop);
         Assert.NotNull(control.ActiveXInstance);
-        Assert.Equal(!value, ((IWebBrowser2)control.ActiveXInstance).RegisterAsDropTarget);
+        Assert.True(webBrowser.Value->get_RegisterAsDropTarget(&register).Succeeded);
+        Assert.Equal(!value, (bool)register);
         Assert.True(control.IsHandleCreated);
     }
 
@@ -1716,7 +1720,7 @@ public class WebBrowserTests
 
     [WinFormsTheory]
     [BoolData]
-    public void WebBrowser_ScriptErrorsSuppressed_SetWithInstance_GetReturnsExpected(bool value)
+    public unsafe void WebBrowser_ScriptErrorsSuppressed_SetWithInstance_GetReturnsExpected(bool value)
     {
         using var parent = new Control();
         using var control = new WebBrowser
@@ -1727,14 +1731,18 @@ public class WebBrowserTests
         control.ScriptErrorsSuppressed = value;
         Assert.Equal(value, control.ScriptErrorsSuppressed);
         Assert.NotNull(control.ActiveXInstance);
-        Assert.Equal(value, ((IWebBrowser2)control.ActiveXInstance).Silent);
+        using var webBrowser = ComHelpers.GetComScope<IWebBrowser2>(control.ActiveXInstance);
+        VARIANT_BOOL silent = default;
+        Assert.True(webBrowser.Value->get_Silent(&silent).Succeeded);
+        Assert.Equal(value, (bool)silent);
         Assert.True(control.IsHandleCreated);
 
         // Set same.
         control.ScriptErrorsSuppressed = value;
         Assert.Equal(value, control.ScriptErrorsSuppressed);
         Assert.NotNull(control.ActiveXInstance);
-        Assert.Equal(value, ((IWebBrowser2)control.ActiveXInstance).Silent);
+        Assert.True(webBrowser.Value->get_Silent(&silent).Succeeded);
+        Assert.Equal(value, (bool)silent);
         Assert.True(control.IsHandleCreated);
 
         // Set different.
@@ -3590,7 +3598,7 @@ public class WebBrowserTests
 
     [WinFormsTheory]
     [MemberData(nameof(OnDocumentCompleted_WithInstance_TestData))]
-    public void WebBrowser_OnDocumentCompleted_InvokeWithInstance_CallsDocumentCompleted(bool allowWebBrowserDrop, WebBrowserDocumentCompletedEventArgs eventArgs)
+    public unsafe void WebBrowser_OnDocumentCompleted_InvokeWithInstance_CallsDocumentCompleted(bool allowWebBrowserDrop, WebBrowserDocumentCompletedEventArgs eventArgs)
     {
         var parent = new Control();
         var control = new SubWebBrowser
@@ -3606,14 +3614,17 @@ public class WebBrowserTests
             Assert.Same(eventArgs, e);
             callCount++;
         };
-        ((IWebBrowser2)control.ActiveXInstance).RegisterAsDropTarget = !allowWebBrowserDrop;
+        using var webBrowser = ComHelpers.GetComScope<IWebBrowser2>(control.ActiveXInstance);
+        Assert.True(webBrowser.Value->put_RegisterAsDropTarget(!allowWebBrowserDrop).Succeeded);
 
         // Call with handler.
         control.DocumentCompleted += handler;
         control.OnDocumentCompleted(eventArgs);
         Assert.Equal(1, callCount);
         Assert.NotNull(control.ActiveXInstance);
-        Assert.Equal(!allowWebBrowserDrop, ((IWebBrowser2)control.ActiveXInstance).RegisterAsDropTarget);
+        VARIANT_BOOL register = default;
+        Assert.True(webBrowser.Value->get_RegisterAsDropTarget(&register).Succeeded);
+        Assert.Equal(!allowWebBrowserDrop, (bool)register);
         Assert.True(control.IsHandleCreated);
 
         // Remove handler.
@@ -3621,7 +3632,8 @@ public class WebBrowserTests
         control.OnDocumentCompleted(eventArgs);
         Assert.Equal(1, callCount);
         Assert.NotNull(control.ActiveXInstance);
-        Assert.Equal(!allowWebBrowserDrop, ((IWebBrowser2)control.ActiveXInstance).RegisterAsDropTarget);
+        Assert.True(webBrowser.Value->get_RegisterAsDropTarget(&register).Succeeded);
+        Assert.Equal(!allowWebBrowserDrop, (bool)register);
         Assert.True(control.IsHandleCreated);
     }
 

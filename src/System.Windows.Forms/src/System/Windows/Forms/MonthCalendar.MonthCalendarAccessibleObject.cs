@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms;
 
@@ -204,11 +204,11 @@ public partial class MonthCalendar
         internal CalendarCellAccessibleObject? FocusedCell
             => _focusedCellAccessibleObject ??= this.TryGetOwnerAs(out MonthCalendar? owner) ? GetCellByDate(owner._focusedDate) : null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.FirstChild => PreviousButtonAccessibleObject,
-                UiaCore.NavigateDirection.LastChild => ShowToday
+                NavigateDirection.NavigateDirection_FirstChild => PreviousButtonAccessibleObject,
+                NavigateDirection.NavigateDirection_LastChild => ShowToday
                     ? TodayLinkAccessibleObject
                     : CalendarsAccessibleObjects?.Last?.Value,
                 _ => base.FragmentNavigate(direction),
@@ -419,13 +419,13 @@ public partial class MonthCalendar
             return null;
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId when
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     this.TryGetOwnerAs(out MonthCalendar? owner) && owner.AccessibleRole == AccessibleRole.Default
-                    => UiaCore.UIA.CalendarControlTypeId,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => IsEnabled,
+                    => UIA_CONTROLTYPE_ID.UIA_CalendarControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => IsEnabled,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -454,12 +454,12 @@ public partial class MonthCalendar
 
         internal bool IsHandleCreated => this.IsOwnerHandleCreated(out MonthCalendar? _);
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.GridPatternId => true,
-                UiaCore.UIA.TablePatternId => true,
-                UiaCore.UIA.ValuePatternId => true,
+                UIA_PATTERN_ID.UIA_GridPatternId => true,
+                UIA_PATTERN_ID.UIA_TablePatternId => true,
+                UIA_PATTERN_ID.UIA_ValuePatternId => true,
                 _ => base.IsPatternSupported(patternId)
             };
 
@@ -472,13 +472,13 @@ public partial class MonthCalendar
         private void OnMonthCalendarStateChanged(object? sender, EventArgs e)
         {
             RebuildAccessibilityTree();
-            FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            FocusedCell?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
 
         internal CalendarPreviousButtonAccessibleObject PreviousButtonAccessibleObject
             => _previousButtonAccessibleObject ??= new CalendarPreviousButtonAccessibleObject(this);
 
-        internal void RaiseAutomationEventForChild(UiaCore.UIA automationEventId)
+        internal void RaiseAutomationEventForChild(UIA_EVENT_ID automationEventId)
         {
             if (!this.IsOwnerHandleCreated(out MonthCalendar? _))
             {
@@ -521,7 +521,7 @@ public partial class MonthCalendar
             if (CalendarsAccessibleObjects!.Count > 0)
             {
                 // Get the new focused cell accessible object and try to raise the focus event for it
-                FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                FocusedCell?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             }
         }
 
@@ -533,12 +533,12 @@ public partial class MonthCalendar
                 ? (int)Math.Ceiling((double)CalendarsAccessibleObjects.Count / ColumnCount)
                 : 0;
 
-        internal override UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
+        internal override RowOrColumnMajor RowOrColumnMajor => RowOrColumnMajor.RowOrColumnMajor_RowMajor;
 
         internal SelectionRange SelectionRange => this.TryGetOwnerAs(out MonthCalendar? owner) ? owner.SelectionRange : new SelectionRange();
 
         internal override void SetFocus()
-            => FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            => FocusedCell?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
 
         internal void SetSelectionRange(DateTime d1, DateTime d2)
         {

@@ -3,18 +3,20 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Automation;
 
-internal class UiaTextRange : ITextRangeProvider
+internal sealed unsafe class UiaTextRange : ITextRangeProvider.Interface, IManagedWrapper<ITextRangeProvider>
 {
     // Edit controls always use "\r\n" as the line separator, not "\n".
     // This string is a non-localizable string.
     private const string LineSeparator = "\r\n";
 
-    private readonly IRawElementProviderSimple _enclosingElement;
+    private readonly Interop.UiaCore.IRawElementProviderSimple _enclosingElement;
     private readonly UiaTextProvider _provider;
 
     private int _start;
@@ -26,12 +28,12 @@ internal class UiaTextRange : ITextRangeProvider
     /// <param name="end">
     ///  A caret position after the last character from a text range, not an index of an item.
     /// </param>
-    /// <remark>
-    ///  If there is a range "Test string", then start = 0, end = 11.
+    /// <remarks>
+    ///  <para>If there is a range "Test string", then start = 0, end = 11.
     ///  If start = 2 and end = 9, the range is "et stri".
-    ///  If start=end, that points a caret position only, there is no any text range.
-    /// </remark>
-    public UiaTextRange(IRawElementProviderSimple enclosingElement, UiaTextProvider provider, int start, int end)
+    ///  If start=end, that points a caret position only, there is no any text range.</para>
+    /// </remarks>
+    public UiaTextRange(Interop.UiaCore.IRawElementProviderSimple enclosingElement, UiaTextProvider provider, int start, int end)
     {
         _enclosingElement = enclosingElement.OrThrowIfNull();
         _provider = provider.OrThrowIfNull();
@@ -57,14 +59,7 @@ internal class UiaTextRange : ITextRangeProvider
         set
         {
             // Ensure that we never accidentally get a negative index.
-            if (value < 0)
-            {
-                _end = 0;
-            }
-            else
-            {
-                _end = value;
-            }
+            _end = value < 0 ? 0 : value;
 
             // Ensure that end never moves before start.
             if (_end < _start)
@@ -103,14 +98,7 @@ internal class UiaTextRange : ITextRangeProvider
             }
 
             // Ensure that we never accidentally get a negative index.
-            if (value < 0)
-            {
-                _start = 0;
-            }
-            else
-            {
-                _start = value;
-            }
+            _start = value < 0 ? 0 : value;
         }
     }
 
@@ -119,44 +107,77 @@ internal class UiaTextRange : ITextRangeProvider
     /// </remarks>
     private bool IsDegenerate => _start == _end;
 
-    ITextRangeProvider ITextRangeProvider.Clone() => new UiaTextRange(_enclosingElement, _provider, Start, End);
+    HRESULT ITextRangeProvider.Interface.Clone(ITextRangeProvider** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        // Ensure UiaTextRange is not disposable since _enclosingElement is being shared.
+        Debug.Assert(!typeof(UiaTextRange).IsAssignableTo(typeof(IDisposable)));
+        *pRetVal = ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(_enclosingElement, _provider, Start, End));
+        return HRESULT.S_OK;
+    }
 
     /// <remarks>
     ///  <para>Ranges come from the same element. Only need to compare endpoints.</para>
     /// </remarks>
-    BOOL ITextRangeProvider.Compare(ITextRangeProvider range)
-        => range is UiaTextRange editRange && editRange.Start == Start && editRange.End == End;
-
-    int ITextRangeProvider.CompareEndpoints(
-        TextPatternRangeEndpoint endpoint,
-        ITextRangeProvider targetRange,
-        TextPatternRangeEndpoint targetEndpoint)
+    HRESULT ITextRangeProvider.Interface.Compare(ITextRangeProvider* range, BOOL* pRetVal)
     {
-        if (targetRange is not UiaTextRange editRange)
+        if (pRetVal is null)
         {
-            return -1;
+            return HRESULT.E_POINTER;
         }
 
-        int e1 = (endpoint == (int)TextPatternRangeEndpoint.Start) ? Start : End;
-        int e2 = (targetEndpoint == (int)TextPatternRangeEndpoint.Start) ? editRange.Start : editRange.End;
+        if (range is null)
+        {
+            return HRESULT.E_INVALIDARG;
+        }
 
-        return e1 - e2;
+        *pRetVal = ComHelpers.TryGetObjectForIUnknown((IUnknown*)range, out UiaTextRange? editRange) && editRange.Start == Start && editRange.End == End;
+        return HRESULT.S_OK;
     }
 
-    void ITextRangeProvider.ExpandToEnclosingUnit(TextUnit unit)
+    HRESULT ITextRangeProvider.Interface.CompareEndpoints(TextPatternRangeEndpoint endpoint, ITextRangeProvider* targetRange, TextPatternRangeEndpoint targetEndpoint, int* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        if (targetRange is null)
+        {
+            return HRESULT.E_INVALIDARG;
+        }
+
+        if (!ComHelpers.TryGetObjectForIUnknown((IUnknown*)targetRange, out UiaTextRange? editRange))
+        {
+            *pRetVal = -1;
+            return HRESULT.E_INVALIDARG;
+        }
+
+        int e1 = (endpoint == (int)TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start) ? Start : End;
+        int e2 = (targetEndpoint == (int)TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start) ? editRange.Start : editRange.End;
+
+        *pRetVal = e1 - e2;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ITextRangeProvider.Interface.ExpandToEnclosingUnit(TextUnit unit)
     {
         switch (unit)
         {
-            case TextUnit.Character:
+            case TextUnit.TextUnit_Character:
                 // Leave it as it is except the case with 0-range.
                 if (IsDegenerate)
                 {
-                    End = MoveEndpointForward(End, TextUnit.Character, 1, out int moved);
+                    End = MoveEndpointForward(End, TextUnit.TextUnit_Character, 1, out _);
                 }
 
                 break;
 
-            case TextUnit.Word:
+            case TextUnit.TextUnit_Word:
                 {
                     // Get the word boundaries.
                     string text = _provider.Text;
@@ -179,7 +200,7 @@ internal class UiaTextRange : ITextRangeProvider
 
                 break;
 
-            case TextUnit.Line:
+            case TextUnit.TextUnit_Line:
                 {
                     if (_provider.LinesCount != 1)
                     {
@@ -208,7 +229,7 @@ internal class UiaTextRange : ITextRangeProvider
 
                 break;
 
-            case TextUnit.Paragraph:
+            case TextUnit.TextUnit_Paragraph:
                 {
                     // Get the paragraph boundaries.
                     string text = _provider.Text;
@@ -231,61 +252,103 @@ internal class UiaTextRange : ITextRangeProvider
 
                 break;
 
-            case TextUnit.Format:
-            case TextUnit.Page:
-            case TextUnit.Document:
+            case TextUnit.TextUnit_Format:
+            case TextUnit.TextUnit_Page:
+            case TextUnit.TextUnit_Document:
                 MoveTo(0, _provider.TextLength);
                 break;
 
             default:
-                throw new InvalidEnumArgumentException(nameof(unit), (int)unit, typeof(TextUnit));
+                return HRESULT.E_INVALIDARG;
         }
+
+        return HRESULT.S_OK;
     }
 
-    ITextRangeProvider? ITextRangeProvider.FindAttribute(int attributeId, object val, BOOL backwards) => null;
-
-    ITextRangeProvider? ITextRangeProvider.FindText(string text, BOOL backwards, BOOL ignoreCase)
+    HRESULT ITextRangeProvider.Interface.FindAttribute(UIA_TEXTATTRIBUTE_ID attributeId, VARIANT val, BOOL backward, ITextRangeProvider** pRetVal)
     {
-        if (text is null)
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = null;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ITextRangeProvider.Interface.FindText(BSTR text, BOOL backward, BOOL ignoreCase, ITextRangeProvider** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        if (text.IsNull)
         {
             Debug.Fail("Invalid text range argument. 'text' should not be null.");
-            return null;
+            *pRetVal = null;
+            return HRESULT.E_INVALIDARG;
         }
 
         if (text.Length == 0)
         {
             Debug.Fail("Invalid text range argument. 'text' length should be more than 0.");
-            return null;
+            *pRetVal = null;
+            return HRESULT.E_INVALIDARG;
         }
 
         ValidateEndpoints();
-        ReadOnlySpan<char> rangeText = new ReadOnlySpan<char>(_provider.Text.ToCharArray(), Start, Length);
+        ReadOnlySpan<char> rangeText = new(_provider.Text.ToCharArray(), Start, Length);
         StringComparison comparisonType = ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 
         // Do a case-sensitive search for the text inside the range.
-        int index = backwards ? rangeText.LastIndexOf(text, comparisonType) : rangeText.IndexOf(text, comparisonType);
+        int index = backward ? rangeText.LastIndexOf(text, comparisonType) : rangeText.IndexOf(text, comparisonType);
 
         // If the text was found then create a new range covering the found text.
-        return index >= 0 ? new UiaTextRange(_enclosingElement, _provider, Start + index, Start + index + text.Length) : null;
+        *pRetVal = index >= 0
+            ? ComHelpers.GetComPointer<ITextRangeProvider>(new UiaTextRange(_enclosingElement, _provider, Start + index, Start + index + text.Length))
+            : null;
+        return HRESULT.S_OK;
     }
 
-    object? ITextRangeProvider.GetAttributeValue(int attributeId) => GetAttributeValue((TextAttributeIdentifier)attributeId);
-
-    double[] ITextRangeProvider.GetBoundingRectangles()
+    HRESULT ITextRangeProvider.Interface.GetAttributeValue(UIA_TEXTATTRIBUTE_ID attributeId, VARIANT* pRetVal)
     {
-        if (_enclosingElement.GetPropertyValue(UIA.BoundingRectanglePropertyId) is not Rectangle ownerBounds)
+        if (pRetVal is null)
         {
-            return Array.Empty<double>();
+            return HRESULT.E_POINTER;
         }
 
+        *pRetVal = GetAttributeValue(attributeId);
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ITextRangeProvider.Interface.GetBoundingRectangles(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        VARIANT result = VARIANT.FromObject(_enclosingElement.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId));
+        if (!result.vt.HasFlag(VARENUM.VT_ARRAY & VARENUM.VT_R8)
+            || result.data.parray->VarType is not VARENUM.VT_R8
+            || result.data.parray->GetBounds().cElements != 4)
+        {
+            result.Dispose();
+            *pRetVal = SAFEARRAY.CreateEmpty(VARENUM.VT_R8);
+            return HRESULT.S_OK;
+        }
+
+        SafeArrayScope<double> ownerBounds = new(result.data.parray);
+
         // We accumulate rectangles onto a list.
-        List<Rectangle> rectangles = new List<Rectangle>();
+        List<Rectangle> rectangles = [];
         string text = _provider.Text;
 
         if (text.Length == 0)
         {
-            rectangles.Add(ownerBounds);
-            return UiaTextProvider.RectListToDoubleArray(rectangles);
+            *pRetVal = ownerBounds;
+            return HRESULT.S_OK;
         }
 
         // If this is an end of a line.
@@ -295,21 +358,26 @@ internal class UiaTextRange : ITextRangeProvider
         {
             PInvoke.GetCaretPos(out Point endlinePoint);
             endlinePoint = _provider.PointToScreen(endlinePoint);
-            Rectangle endlineRectangle = new Rectangle(endlinePoint.X, endlinePoint.Y + 2, UiaTextProvider.EndOfLineWidth, Math.Abs(_provider.Logfont.lfHeight) + 1);
-            return new double[] { endlineRectangle.X, endlineRectangle.Y, endlineRectangle.Width, endlineRectangle.Height };
+            Rectangle endlineRectangle = new(endlinePoint.X, endlinePoint.Y + 2, UiaTextProvider.EndOfLineWidth, Math.Abs(_provider.Logfont.lfHeight) + 1);
+            *pRetVal = UiaTextProvider.BoundingRectangleAsArray(endlineRectangle);
+            ownerBounds.Dispose();
+            return HRESULT.S_OK;
         }
 
         // Return zero rectangles for a degenerate-range. We don't return an empty,
         // but properly positioned, rectangle for degenerate ranges.
         if (IsDegenerate)
         {
-            return Array.Empty<double>();
+            *pRetVal = SAFEARRAY.CreateEmpty(VARENUM.VT_R8);
+            ownerBounds.Dispose();
+            return HRESULT.S_OK;
         }
 
         ValidateEndpoints();
 
         // Get the mapping from client coordinates to screen coordinates.
-        Point mapClientToScreen = new Point(ownerBounds.X, ownerBounds.Y);
+        Point mapClientToScreen = new((int)ownerBounds[0], (int)ownerBounds[1]);
+        ownerBounds.Dispose();
 
         // Clip the rectangles to the edit control's formatting rectangle.
         Rectangle clippingRectangle = _provider.BoundingRectangle;
@@ -317,7 +385,8 @@ internal class UiaTextRange : ITextRangeProvider
         if (_provider.IsMultiline)
         {
             rectangles = GetMultilineBoundingRectangles(clippingRectangle);
-            return UiaTextProvider.RectListToDoubleArray(rectangles);
+            *pRetVal = UiaTextProvider.RectListToDoubleArray(rectangles);
+            return HRESULT.S_OK;
         }
 
         // Figure out the rectangle for this one line.
@@ -325,7 +394,7 @@ internal class UiaTextRange : ITextRangeProvider
         Point endPoint = _provider.GetPositionFromCharForUpperRightCorner(End - 1, text);
 
         // Add 2 to Y to get a correct size of a rectangle around a range
-        Rectangle rectangle = new Rectangle(startPoint.X, startPoint.Y + 2, endPoint.X - startPoint.X, clippingRectangle.Height);
+        Rectangle rectangle = new(startPoint.X, startPoint.Y + 2, endPoint.X - startPoint.X, clippingRectangle.Height);
         rectangle.Intersect(clippingRectangle);
 
         if (rectangle.Width > 0 && rectangle.Height > 0)
@@ -334,13 +403,28 @@ internal class UiaTextRange : ITextRangeProvider
             rectangles.Add(rectangle);
         }
 
-        return UiaTextProvider.RectListToDoubleArray(rectangles);
+        *pRetVal = UiaTextProvider.RectListToDoubleArray(rectangles);
+        return HRESULT.S_OK;
     }
 
-    IRawElementProviderSimple ITextRangeProvider.GetEnclosingElement() => _enclosingElement;
-
-    string ITextRangeProvider.GetText(int maxLength)
+    HRESULT ITextRangeProvider.Interface.GetEnclosingElement(IRawElementProviderSimple** pRetVal)
     {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ComHelpers.GetComPointer<IRawElementProviderSimple>(_enclosingElement);
+        return HRESULT.S_OK;
+    }
+
+    HRESULT ITextRangeProvider.Interface.GetText(int maxLength, BSTR* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
         if (maxLength == -1)
         {
             maxLength = End + 1;
@@ -350,13 +434,19 @@ internal class UiaTextRange : ITextRangeProvider
         ValidateEndpoints();
         maxLength = maxLength >= 0 ? Math.Min(Length, maxLength) : Length;
 
-        return text.Length < maxLength - Start
-            ? text.Substring(Start)
-            : text.Substring(Start, maxLength);
+        *pRetVal = text.Length < maxLength - Start
+            ? new(text[Start..])
+            : new(text.Substring(Start, maxLength));
+        return HRESULT.S_OK;
     }
 
-    int ITextRangeProvider.Move(TextUnit unit, int count)
+    HRESULT ITextRangeProvider.Interface.Move(TextUnit unit, int count, int* pRetVal)
     {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
         // Positive count means move forward. Negative count means move backwards.
         int moved;
 
@@ -377,7 +467,8 @@ internal class UiaTextRange : ITextRangeProvider
             // If the start did not change then no move was done.
             if (start != Start)
             {
-                return moved;
+                *pRetVal = moved;
+                return HRESULT.S_OK;
             }
         }
 
@@ -397,20 +488,25 @@ internal class UiaTextRange : ITextRangeProvider
             // If the end did not change then no move was done.
             if (end != End)
             {
-                return moved;
+                *pRetVal = moved;
+                return HRESULT.S_OK;
             }
         }
 
         // Moving zero of any unit has no effect.
-        return 0;
+        *pRetVal = 0;
+        return HRESULT.S_OK;
     }
 
-    int ITextRangeProvider.MoveEndpointByUnit(
-        TextPatternRangeEndpoint endpoint,
-        TextUnit unit, int count)
+    HRESULT ITextRangeProvider.Interface.MoveEndpointByUnit(TextPatternRangeEndpoint endpoint, TextUnit unit, int count, int* pRetVal)
     {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
         // Positive count means move forward. Negative count means move backwards.
-        bool moveStart = endpoint == TextPatternRangeEndpoint.Start;
+        bool moveStart = endpoint == TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start;
         int moved;
         int start = Start;
         int end = End;
@@ -422,13 +518,15 @@ internal class UiaTextRange : ITextRangeProvider
                 Start = MoveEndpointForward(Start, unit, count, out moved);
 
                 // If the start did not change then no move was done.
-                return start == Start ? 0 : moved;
+                *pRetVal = start == Start ? 0 : moved;
+                return HRESULT.S_OK;
             }
 
             End = MoveEndpointForward(End, unit, count, out moved);
 
             // If the end did not change then no move was done.
-            return end == End ? 0 : moved;
+            *pRetVal = end == End ? 0 : moved;
+            return HRESULT.S_OK;
         }
 
         if (count < 0)
@@ -438,34 +536,34 @@ internal class UiaTextRange : ITextRangeProvider
                 Start = MoveEndpointBackward(Start, unit, count, out moved);
 
                 // If the start did not change then no move was done.
-                return start == Start ? 0 : moved;
+                *pRetVal = start == Start ? 0 : moved;
+                return HRESULT.S_OK;
             }
 
             End = MoveEndpointBackward(End, unit, count, out moved);
 
             // If the end did not change then no move was done.
-            return end == End ? 0 : moved;
+            *pRetVal = end == End ? 0 : moved;
+            return HRESULT.S_OK;
         }
 
         // Moving zero of any unit has no effect.
-        return 0;
+        *pRetVal = 0;
+        return HRESULT.S_OK;
     }
 
-    void ITextRangeProvider.MoveEndpointByRange(
-        TextPatternRangeEndpoint endpoint,
-        ITextRangeProvider targetRange,
-        TextPatternRangeEndpoint targetEndpoint)
+    HRESULT ITextRangeProvider.Interface.MoveEndpointByRange(TextPatternRangeEndpoint endpoint, ITextRangeProvider* targetRange, TextPatternRangeEndpoint targetEndpoint)
     {
-        if (!(targetRange is UiaTextRange textRange))
+        if (!ComHelpers.TryGetObjectForIUnknown((IUnknown*)targetRange, out UiaTextRange? textRange))
         {
-            return;
+            return HRESULT.E_INVALIDARG;
         }
 
-        int e = (targetEndpoint == TextPatternRangeEndpoint.Start)
+        int e = (targetEndpoint == TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start)
             ? textRange.Start
             : textRange.End;
 
-        if (endpoint == TextPatternRangeEndpoint.Start)
+        if (endpoint == TextPatternRangeEndpoint.TextPatternRangeEndpoint_Start)
         {
             Start = e;
         }
@@ -473,23 +571,21 @@ internal class UiaTextRange : ITextRangeProvider
         {
             End = e;
         }
+
+        return HRESULT.S_OK;
     }
 
-    void ITextRangeProvider.Select() => _provider.SetSelection(Start, End);
+    HRESULT ITextRangeProvider.Interface.Select()
+    {
+        _provider.SetSelection(Start, End);
+        return HRESULT.S_OK;
+    }
 
-    /// <remark>
-    ///  Do nothing. Do not throw exception.
-    /// </remark>
-    void ITextRangeProvider.AddToSelection()
-    { }
+    HRESULT ITextRangeProvider.Interface.AddToSelection() => HRESULT.S_OK;
 
-    /// <remark>
-    ///  Do nothing. Do not throw exception.
-    /// </remark>
-    void ITextRangeProvider.RemoveFromSelection()
-    { }
+    HRESULT ITextRangeProvider.Interface.RemoveFromSelection() => HRESULT.S_OK;
 
-    void ITextRangeProvider.ScrollIntoView(BOOL alignToTop)
+    HRESULT ITextRangeProvider.Interface.ScrollIntoView(BOOL alignToTop)
     {
         if (_provider.IsMultiline)
         {
@@ -499,7 +595,7 @@ internal class UiaTextRange : ITextRangeProvider
 
             _provider.LineScroll(Start, newFirstLine - _provider.FirstVisibleLine);
 
-            return;
+            return HRESULT.S_OK;
         }
 
         if (_provider.IsScrollable)
@@ -515,7 +611,7 @@ internal class UiaTextRange : ITextRangeProvider
                     _provider.GetVisibleRangePoints(out visibleStart, out visibleEnd);
                 }
 
-                return;
+                return HRESULT.S_OK;
             }
 
             if (Start < visibleStart || Start > visibleEnd)
@@ -524,12 +620,20 @@ internal class UiaTextRange : ITextRangeProvider
                 _provider.GetVisibleRangePoints(out visibleStart, out visibleEnd);
             }
         }
+
+        return HRESULT.S_OK;
     }
 
-    /// <remark>
-    ///  We don't have any children so return an empty array
-    /// </remark>
-    IRawElementProviderSimple[] ITextRangeProvider.GetChildren() => Array.Empty<IRawElementProviderSimple>();
+    HRESULT ITextRangeProvider.Interface.GetChildren(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = SAFEARRAY.CreateEmpty(VARENUM.VT_UNKNOWN);
+        return HRESULT.S_OK;
+    }
 
     /// <remark>
     ///  Returns true if index identifies a paragraph boundary within text.
@@ -569,23 +673,40 @@ internal class UiaTextRange : ITextRangeProvider
 
     private static bool IsApostrophe(char ch) => ch == '\'' || ch == (char)0x2019; // Unicode Right Single Quote Mark
 
-    private object? GetAttributeValue(TextAttributeIdentifier textAttributeIdentifier)
+    /// <devdoc>
+    ///  Attribute values and their types are defined here - https://learn.microsoft.com/windows/win32/winauto/uiauto-textattribute-ids
+    /// </devdoc>
+    private VARIANT GetAttributeValue(UIA_TEXTATTRIBUTE_ID textAttributeIdentifier)
     {
-        return textAttributeIdentifier switch
+        object? value = textAttributeIdentifier switch
         {
-            TextAttributeIdentifier.BackgroundColorAttributeId => GetBackgroundColor(),
-            TextAttributeIdentifier.CapStyleAttributeId => GetCapStyle(_provider.WindowStyle),
-            TextAttributeIdentifier.FontNameAttributeId => GetFontName(_provider.Logfont),
-            TextAttributeIdentifier.FontSizeAttributeId => GetFontSize(_provider.Logfont),
-            TextAttributeIdentifier.FontWeightAttributeId => GetFontWeight(_provider.Logfont),
-            TextAttributeIdentifier.ForegroundColorAttributeId => GetForegroundColor(),
-            TextAttributeIdentifier.HorizontalTextAlignmentAttributeId => GetHorizontalTextAlignment(_provider.WindowStyle),
-            TextAttributeIdentifier.IsItalicAttributeId => GetItalic(_provider.Logfont),
-            TextAttributeIdentifier.IsReadOnlyAttributeId => GetReadOnly(),
-            TextAttributeIdentifier.StrikethroughStyleAttributeId => GetStrikethroughStyle(_provider.Logfont),
-            TextAttributeIdentifier.UnderlineStyleAttributeId => GetUnderlineStyle(_provider.Logfont),
-            _ => UiaGetReservedNotSupportedValue()
+            UIA_TEXTATTRIBUTE_ID.UIA_BackgroundColorAttributeId => GetBackgroundColor(),
+            UIA_TEXTATTRIBUTE_ID.UIA_CapStyleAttributeId => GetCapStyle(_provider.WindowStyle),
+            UIA_TEXTATTRIBUTE_ID.UIA_FontNameAttributeId => GetFontName(_provider.Logfont),
+            UIA_TEXTATTRIBUTE_ID.UIA_FontSizeAttributeId => GetFontSize(_provider.Logfont),
+            UIA_TEXTATTRIBUTE_ID.UIA_FontWeightAttributeId => GetFontWeight(_provider.Logfont),
+            UIA_TEXTATTRIBUTE_ID.UIA_ForegroundColorAttributeId => GetForegroundColor(),
+            UIA_TEXTATTRIBUTE_ID.UIA_HorizontalTextAlignmentAttributeId => GetHorizontalTextAlignment(_provider.WindowStyle),
+            UIA_TEXTATTRIBUTE_ID.UIA_IsItalicAttributeId => GetItalic(_provider.Logfont),
+            UIA_TEXTATTRIBUTE_ID.UIA_IsReadOnlyAttributeId => GetReadOnly(),
+            UIA_TEXTATTRIBUTE_ID.UIA_StrikethroughStyleAttributeId => GetStrikethroughStyle(_provider.Logfont),
+            UIA_TEXTATTRIBUTE_ID.UIA_UnderlineStyleAttributeId => GetUnderlineStyle(_provider.Logfont),
+            _  => null
         };
+
+#if DEBUG
+        if (value?.GetType() is { } type && type.IsValueType && !type.IsPrimitive && !type.IsEnum)
+        {
+            // Check to make sure we can actually convert this to a VARIANT, throw otherwise.
+            using VARIANT variant = default;
+            unsafe
+            {
+                Runtime.InteropServices.Marshal.GetNativeVariantForObject(value, (nint)(void*)&variant);
+            }
+        }
+#endif
+
+        return value is null ? UiaGetReservedNotSupportedValue() : VARIANT.FromObject(value);
     }
 
     /// <summary>
@@ -621,7 +742,7 @@ internal class UiaTextRange : ITextRangeProvider
 
         string text = _provider.Text;
         // Adding a rectangle for each line.
-        List<Rectangle> rects = new List<Rectangle>();
+        List<Rectangle> rects = [];
 
         for (int lineIndex = startLine; lineIndex <= endLine; lineIndex++)
         {
@@ -748,27 +869,10 @@ internal class UiaTextRange : ITextRangeProvider
         }
     }
 
-    private static HorizontalTextAlignment GetHorizontalTextAlignment(WINDOW_STYLE windowStyle)
-    {
-        if (((int)windowStyle & PInvoke.ES_CENTER) != 0)
-        {
-            return HorizontalTextAlignment.Centered;
-        }
+    private static int GetBackgroundColor() => (int)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW);
 
-        if (((int)windowStyle & PInvoke.ES_RIGHT) != 0)
-        {
-            return HorizontalTextAlignment.Right;
-        }
-
-        return HorizontalTextAlignment.Left;
-    }
-
-    private static CapStyle GetCapStyle(WINDOW_STYLE windowStyle)
-        => ((int)windowStyle & PInvoke.ES_UPPERCASE) != 0 ? CapStyle.AllCap : CapStyle.None;
-
-    private bool GetReadOnly() => _provider.IsReadOnly;
-
-    private static COLORREF GetBackgroundColor() => (COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOW);
+    private static int GetCapStyle(WINDOW_STYLE windowStyle)
+        => (int)(((int)windowStyle & PInvoke.ES_UPPERCASE) != 0 ? CapStyle.AllCap : CapStyle.None);
 
     private static string GetFontName(LOGFONTW logfont) => logfont.FaceName.ToString();
 
@@ -781,17 +885,37 @@ internal class UiaTextRange : ITextRangeProvider
         return Math.Round((double)(-logfont.lfHeight) * 72 / lpy);
     }
 
-    private static FW GetFontWeight(LOGFONTW logfont) => (FW)logfont.lfWeight;
+    private static int GetFontWeight(LOGFONTW logfont) => logfont.lfWeight;
 
-    private static COLORREF GetForegroundColor() => (COLORREF)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOWTEXT);
+    private static int GetForegroundColor() => (int)PInvoke.GetSysColor(SYS_COLOR_INDEX.COLOR_WINDOWTEXT);
+
+    private static int GetHorizontalTextAlignment(WINDOW_STYLE windowStyle)
+        => (int)(((int)windowStyle & PInvoke.ES_CENTER) != 0
+            ? HorizontalTextAlignment.Centered
+            : ((int)windowStyle & PInvoke.ES_RIGHT) != 0
+                ? HorizontalTextAlignment.Right
+                : HorizontalTextAlignment.Left);
 
     private static bool GetItalic(LOGFONTW logfont) => logfont.lfItalic != 0;
 
-    private static TextDecorationLineStyle GetStrikethroughStyle(LOGFONTW logfont)
-        => logfont.lfStrikeOut != 0 ? TextDecorationLineStyle.Single : TextDecorationLineStyle.None;
+    private bool GetReadOnly() => _provider.IsReadOnly;
 
-    private static TextDecorationLineStyle GetUnderlineStyle(LOGFONTW logfont)
-        => logfont.lfUnderline != 0 ? TextDecorationLineStyle.Single : TextDecorationLineStyle.None;
+    private static int GetStrikethroughStyle(LOGFONTW logfont)
+        => (int)(logfont.lfStrikeOut != 0 ? TextDecorationLineStyle.Single : TextDecorationLineStyle.None);
+
+    private static int GetUnderlineStyle(LOGFONTW logfont)
+        => (int)(logfont.lfUnderline != 0 ? TextDecorationLineStyle.Single : TextDecorationLineStyle.None);
+
+    private static VARIANT UiaGetReservedNotSupportedValue()
+    {
+        IUnknown* unknown;
+        PInvoke.UiaGetReservedNotSupportedValue(&unknown).ThrowOnFailure();
+        return new VARIANT()
+        {
+            vt = VARENUM.VT_UNKNOWN,
+            data = new() { punkVal = unknown }
+        };
+    }
 
     /// <summary>
     ///  Moves an endpoint forward a certain number of units.
@@ -800,7 +924,7 @@ internal class UiaTextRange : ITextRangeProvider
     {
         switch (unit)
         {
-            case TextUnit.Character:
+            case TextUnit.TextUnit_Character:
                 {
                     int limit = _provider.TextLength;
                     ValidateEndpoints();
@@ -813,7 +937,7 @@ internal class UiaTextRange : ITextRangeProvider
 
                 break;
 
-            case TextUnit.Word:
+            case TextUnit.TextUnit_Word:
                 {
                     string text = _provider.Text;
                     ValidateEndpoints();
@@ -834,7 +958,7 @@ internal class UiaTextRange : ITextRangeProvider
 
                 break;
 
-            case TextUnit.Line:
+            case TextUnit.TextUnit_Line:
                 {
                     // Figure out what line we are on. If we are in the middle of a line and
                     // are moving left then we'll round up to the next line so that we move
@@ -861,7 +985,7 @@ internal class UiaTextRange : ITextRangeProvider
 
                 break;
 
-            case TextUnit.Paragraph:
+            case TextUnit.TextUnit_Paragraph:
                 {
                     // Just like moving words but we look for paragraph boundaries instead of
                     // word boundaries.
@@ -884,9 +1008,9 @@ internal class UiaTextRange : ITextRangeProvider
 
                 break;
 
-            case TextUnit.Format:
-            case TextUnit.Page:
-            case TextUnit.Document:
+            case TextUnit.TextUnit_Format:
+            case TextUnit.TextUnit_Page:
+            case TextUnit.TextUnit_Document:
                 {
                     // Since edit controls are plain text moving one uniform format unit will
                     // take us all the way to the end of the document, just like
@@ -916,7 +1040,7 @@ internal class UiaTextRange : ITextRangeProvider
     {
         switch (unit)
         {
-            case TextUnit.Character:
+            case TextUnit.TextUnit_Character:
                 {
                     ValidateEndpoints();
                     int oneBasedIndex = index + 1;
@@ -927,7 +1051,7 @@ internal class UiaTextRange : ITextRangeProvider
 
                 break;
 
-            case TextUnit.Word:
+            case TextUnit.TextUnit_Word:
                 {
                     string text = _provider.Text;
                     ValidateEndpoints();
@@ -945,7 +1069,7 @@ internal class UiaTextRange : ITextRangeProvider
 
                 break;
 
-            case TextUnit.Line:
+            case TextUnit.TextUnit_Line:
                 {
                     // Note count < 0.
 
@@ -996,7 +1120,7 @@ internal class UiaTextRange : ITextRangeProvider
 
                 break;
 
-            case TextUnit.Paragraph:
+            case TextUnit.TextUnit_Paragraph:
                 {
                     // Just like moving words but we look for paragraph boundaries instead of
                     // word boundaries.
@@ -1016,9 +1140,9 @@ internal class UiaTextRange : ITextRangeProvider
 
                 break;
 
-            case TextUnit.Format:
-            case TextUnit.Page:
-            case TextUnit.Document:
+            case TextUnit.TextUnit_Format:
+            case TextUnit.TextUnit_Page:
+            case TextUnit.TextUnit_Document:
                 {
                     // Since edit controls are plain text moving one uniform format unit will
                     // take us all the way to the beginning of the document, just like

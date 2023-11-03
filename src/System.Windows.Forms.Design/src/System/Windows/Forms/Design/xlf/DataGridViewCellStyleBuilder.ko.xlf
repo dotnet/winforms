@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ko" original="../DataGridViewCellStyleBuilder.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>CellStyle Builder</source>
+        <target state="translated">CellStyle 작성기</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="cancelButton.Text">
+        <source>Cancel</source>
+        <target state="translated">취소</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="label1.Text">
+        <source>This preview shows properties from inherited CellStyles (Table, Column, Row)</source>
+        <target state="translated">이 미리 보기에서는 상속된 CellStyles(테이블, 열, 행)의 속성이 표시됩니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="normalLabel.Text">
+        <source>Normal:</source>
+        <target state="translated">보통:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="okButton.Text">
+        <source>OK</source>
+        <target state="translated">확인</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="previewGroupBox.Text">
+        <source>Preview</source>
+        <target state="translated">미리 보기</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="selectedLabel.Text">
+        <source>Selected:</source>
+        <target state="translated">선택됨:</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

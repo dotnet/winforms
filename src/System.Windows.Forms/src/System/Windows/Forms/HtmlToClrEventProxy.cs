@@ -1,9 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Globalization;
-using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
 
 namespace System.Windows.Forms;
 
@@ -13,27 +14,27 @@ namespace System.Windows.Forms;
 ///  a public class.  In order to accomplish this we implement IReflect and handle InvokeMethod
 ///  to call back on a CLR event handler.
 /// </summary>
-internal class HtmlToClrEventProxy : IReflect
+internal class HtmlToClrEventProxy : StandardDispatch, IManagedWrapper<IDispatch, IDispatchEx>
 {
-    private readonly EventHandler eventHandler;
-    private readonly IReflect typeIReflectImplementation;
-    private readonly string eventName;
+    private const int EventNamePropertyDispId = 65536;
+    private const string EventNameProperty = "EventName";
+    private const int GetEventNameDispId = 65537;
+    private const string GetEventName = "get_EventName";
+    private const int OnHtmlEventDispId = 0;
+    private const string OnHtmlEventName = "OnHtmlEvent";
+
+    private readonly EventHandler _eventHandler;
+    private readonly string _eventName;
 
     public HtmlToClrEventProxy(object sender, string eventName, EventHandler eventHandler)
     {
-        this.eventHandler = eventHandler;
-        this.eventName = eventName;
-
-        Type htmlToClrEventProxyType = typeof(HtmlToClrEventProxy);
-        typeIReflectImplementation = htmlToClrEventProxyType as IReflect;
+        _eventHandler = eventHandler;
+        _eventName = eventName;
     }
 
-    public string EventName
-    {
-        get { return eventName; }
-    }
+    public string EventName => _eventName;
 
-    [DispId(0)]
+    [DispId(OnHtmlEventDispId)]
     public void OnHtmlEvent()
     {
         InvokeClrEvent();
@@ -41,108 +42,135 @@ internal class HtmlToClrEventProxy : IReflect
 
     private void InvokeClrEvent()
     {
-        eventHandler?.Invoke(null, EventArgs.Empty);
+        _eventHandler?.Invoke(null, EventArgs.Empty);
     }
 
-    #region IReflect
-
-    Type IReflect.UnderlyingSystemType
+    protected override unsafe HRESULT GetDispID(BSTR bstrName, uint grfdex, int* pid)
     {
-        get
+        if (pid is null)
         {
-            return typeIReflectImplementation.UnderlyingSystemType;
+            return HRESULT.E_POINTER;
+        }
+
+        switch (bstrName.ToString())
+        {
+            case EventNameProperty:
+                *pid = EventNamePropertyDispId;
+                return HRESULT.S_OK;
+            case GetEventName:
+                *pid = GetEventNameDispId;
+                return HRESULT.S_OK;
+            case OnHtmlEventName:
+                *pid = OnHtmlEventDispId;
+                return HRESULT.S_OK;
+            default:
+                *pid = PInvoke.DISPID_UNKNOWN;
+                return HRESULT.DISP_E_UNKNOWNNAME;
         }
     }
 
-    // Methods
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)]
-    FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr)
+    protected override unsafe HRESULT GetNextDispID(uint grfdex, int id, int* pid)
     {
-        return typeIReflectImplementation.GetField(name, bindingAttr);
-    }
-
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)]
-    FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
-    {
-        return typeIReflectImplementation.GetFields(bindingAttr);
-    }
-
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields |
-       DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods |
-       DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.NonPublicEvents |
-       DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties |
-       DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors |
-       DynamicallyAccessedMemberTypes.PublicNestedTypes | DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
-    MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
-    {
-        return typeIReflectImplementation.GetMember(name, bindingAttr);
-    }
-
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields |
-        DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods |
-        DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.NonPublicEvents |
-        DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties |
-        DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors |
-        DynamicallyAccessedMemberTypes.PublicNestedTypes | DynamicallyAccessedMemberTypes.NonPublicNestedTypes)]
-    MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
-    {
-        return typeIReflectImplementation.GetMembers(bindingAttr);
-    }
-
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
-    MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)
-    {
-        return typeIReflectImplementation.GetMethod(name, bindingAttr);
-    }
-
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
-    MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder? binder, Type[] types, ParameterModifier[]? modifiers)
-    {
-        return typeIReflectImplementation.GetMethod(name, bindingAttr, binder, types, modifiers);
-    }
-
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
-    MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
-    {
-        return typeIReflectImplementation.GetMethods(bindingAttr);
-    }
-
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
-    PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
-    {
-        return typeIReflectImplementation.GetProperties(bindingAttr);
-    }
-
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
-    PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr)
-    {
-        return typeIReflectImplementation.GetProperty(name, bindingAttr);
-    }
-
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
-    PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder? binder, Type? returnType, Type[] types, ParameterModifier[]? modifiers)
-    {
-        return typeIReflectImplementation.GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
-    }
-
-    // InvokeMember:
-    // If we get a call for DISPID=0, fire the CLR event.
-    //
-    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
-    object? IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder? binder, object? target, object?[]? args, ParameterModifier[]? modifiers, CultureInfo? culture, string[]? namedParameters)
-    {
-        if (name == "[DISPID=0]")
+        if (pid is null)
         {
-            // we know we're getting called back to fire the event - translate this now into a CLR event.
-            OnHtmlEvent();
-
-            // since there's no return value for void, return null.
-            return null;
+            return HRESULT.E_POINTER;
         }
-        else
+
+        switch (id)
         {
-            return typeIReflectImplementation.InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
+            case PInvoke.DISPID_UNKNOWN:
+                *pid = OnHtmlEventDispId;
+                return HRESULT.S_OK;
+            case OnHtmlEventDispId:
+                *pid = EventNamePropertyDispId;
+                return HRESULT.S_OK;
+            case EventNamePropertyDispId:
+                *pid = GetEventNameDispId;
+                return HRESULT.S_OK;
+            default:
+                *pid = PInvoke.DISPID_UNKNOWN;
+                return HRESULT.S_FALSE;
         }
     }
-    #endregion
+
+    protected override unsafe HRESULT GetMemberName(int id, BSTR* pbstrName)
+    {
+        if (pbstrName is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        switch (id)
+        {
+            case OnHtmlEventDispId:
+                *pbstrName = new(OnHtmlEventName);
+                return HRESULT.S_OK;
+            case EventNamePropertyDispId:
+                *pbstrName = new(EventNameProperty);
+                return HRESULT.S_OK;
+            case GetEventNameDispId:
+                *pbstrName = new(GetEventName);
+                return HRESULT.S_OK;
+            default:
+                *pbstrName = default;
+                return HRESULT.DISP_E_UNKNOWNNAME;
+        }
+    }
+
+    protected override HRESULT GetMemberProperties(int dispId, out FDEX_PROP_FLAGS properties)
+    {
+        switch (dispId)
+        {
+            case OnHtmlEventDispId:
+                properties = IDispatch.GetMethodFlags();
+                return HRESULT.S_OK;
+            case EventNamePropertyDispId:
+                properties = IDispatch.GetPropertyFlags(canRead: true, canWrite: false);
+                return HRESULT.S_OK;
+            case GetEventNameDispId:
+                properties = IDispatch.GetMethodFlags();
+                return HRESULT.S_OK;
+            default:
+                properties = default;
+                return HRESULT.DISP_E_UNKNOWNNAME;
+        }
+    }
+
+    protected override unsafe HRESULT Invoke(int dispId, uint lcid, DISPATCH_FLAGS flags, DISPPARAMS* parameters, VARIANT* result, EXCEPINFO* exceptionInfo, uint* argumentError)
+    {
+        switch (dispId)
+        {
+            case OnHtmlEventDispId:
+                OnHtmlEvent();
+                if (result is not null)
+                {
+                    *result = VARIANT.Empty;
+                }
+
+                return HRESULT.S_OK;
+            case EventNamePropertyDispId:
+                if (flags.HasFlag(DISPATCH_FLAGS.DISPATCH_PROPERTYGET))
+                {
+                    if (result is null)
+                    {
+                        return HRESULT.DISP_E_PARAMNOTOPTIONAL;
+                    }
+
+                    *result = (VARIANT)EventName;
+                    return HRESULT.S_OK;
+                }
+
+                return HRESULT.DISP_E_MEMBERNOTFOUND;
+            case GetEventNameDispId:
+                if (result is null)
+                {
+                    return HRESULT.DISP_E_PARAMNOTOPTIONAL;
+                }
+
+                *result = (VARIANT)EventName;
+                return HRESULT.S_OK;
+            default:
+                return HRESULT.DISP_E_MEMBERNOTFOUND;
+        }
+    }
 }

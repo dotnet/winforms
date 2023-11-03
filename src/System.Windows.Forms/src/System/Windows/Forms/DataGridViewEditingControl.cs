@@ -11,6 +11,7 @@ public interface IDataGridViewEditingControl
         set;
     }
 
+    [AllowNull]
     object EditingControlFormattedValue
     {
         get;

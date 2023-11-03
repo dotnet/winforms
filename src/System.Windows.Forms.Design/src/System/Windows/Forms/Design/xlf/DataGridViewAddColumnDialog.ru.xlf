@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add</source>
-        <target state="translated">&amp;Добавить</target>
+        <target state="translated">Д&amp;обавить</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
@@ -24,17 +24,17 @@
       </trans-unit>
       <trans-unit id="dataBoundColumnRadioButton.Text">
         <source>Data&amp;bound column</source>
-        <target state="translated">&amp;Столбец со связанными &amp;данными</target>
+        <target state="translated">Столб&amp;ец DataBound</target>
         <note />
       </trans-unit>
       <trans-unit id="frozenCheckBox.Text">
         <source>&amp;Frozen</source>
-        <target state="translated">&amp;Заблокирован</target>
+        <target state="translated">&amp;Зафиксирован</target>
         <note />
       </trans-unit>
       <trans-unit id="headerTextLabel.Text">
         <source>&amp;Header text:</source>
-        <target state="translated">Текст &amp;заголовка:</target>
+        <target state="translated">Те&amp;кст заголовка:</target>
         <note />
       </trans-unit>
       <trans-unit id="nameLabel.Text">
@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="readOnlyCheckBox.Text">
         <source>&amp;Read Only</source>
-        <target state="translated">&amp;Только для чтения</target>
+        <target state="translated">Т&amp;олько чтение</target>
         <note />
       </trans-unit>
       <trans-unit id="typeLabel.Text">

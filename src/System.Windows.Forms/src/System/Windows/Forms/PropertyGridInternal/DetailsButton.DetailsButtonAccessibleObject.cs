@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -22,18 +22,18 @@ internal partial class DetailsButton
             return true;
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            => propertyID == UiaCore.UIA.ControlTypePropertyId
-                ? UiaCore.UIA.ButtonControlTypeId
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+            => propertyID == UIA_PROPERTY_ID.UIA_ControlTypePropertyId
+                ? UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId
                 : base.GetPropertyValue(propertyID);
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            => patternId == UiaCore.UIA.ExpandCollapsePatternId || base.IsPatternSupported(patternId);
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
+            => patternId == UIA_PATTERN_ID.UIA_ExpandCollapsePatternId || base.IsPatternSupported(patternId);
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => _ownerItem.Expanded
-                ? UiaCore.ExpandCollapseState.Expanded
-                : UiaCore.ExpandCollapseState.Collapsed;
+                ? ExpandCollapseState.ExpandCollapseState_Expanded
+                : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         internal override void Expand()
         {

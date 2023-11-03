@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.PropertyGridInternal.PropertyDescriptorGridEntry;
 using static Interop;
 
@@ -45,7 +46,7 @@ internal sealed partial class DropDownButton : Button
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owningDropDownButton.Visible
                 || _owningPropertyGrid?.SelectedGridEntry?.AccessibilityObject is not PropertyDescriptorGridEntryAccessibleObject parent)
@@ -55,9 +56,9 @@ internal sealed partial class DropDownButton : Button
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => parent,
-                UiaCore.NavigateDirection.NextSibling => parent.GetNextChild(this),
-                UiaCore.NavigateDirection.PreviousSibling => parent.GetPreviousChild(this),
+                NavigateDirection.NavigateDirection_Parent => parent,
+                NavigateDirection.NavigateDirection_NextSibling => parent.GetNextChild(this),
+                NavigateDirection.NavigateDirection_PreviousSibling => parent.GetPreviousChild(this),
                 _ => base.FragmentNavigate(direction),
             };
         }
@@ -73,10 +74,10 @@ internal sealed partial class DropDownButton : Button
         /// </summary>
         /// <param name="propertyID">Identifier indicating the property to return</param>
         /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
                 _ => base.GetPropertyValue(propertyID),
             };
 
@@ -98,7 +99,7 @@ internal sealed partial class DropDownButton : Button
                 return;
             }
 
-            RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
 
             base.SetFocus();
         }

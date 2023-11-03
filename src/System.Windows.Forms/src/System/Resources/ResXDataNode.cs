@@ -38,7 +38,7 @@ public sealed class ResXDataNode : ISerializable
 
     // This is going to be used to check if a ResXDataNode is of type ResXFileRef
     private static readonly ITypeResolutionService s_internalTypeResolver
-        = new AssemblyNamesTypeResolutionService(new AssemblyName[] { new AssemblyName("System.Windows.Forms") });
+        = new AssemblyNamesTypeResolutionService(new AssemblyName[] { new("System.Windows.Forms") });
 
     // Callback function to get type name for multitargeting.
     // No public property to force using constructors for the following reasons:
@@ -671,12 +671,12 @@ public sealed class ResXDataNode : ISerializable
             resolvedType = typeResolver.GetType(typeName, false);
             if (resolvedType is null)
             {
-                string[] typeParts = typeName.Split(',');
+                string[] typeParts = typeName.Split(',', StringSplitOptions.TrimEntries);
 
                 // Break up the type name from the rest of the assembly strong name.
                 if (typeParts is not null && typeParts.Length >= 2)
                 {
-                    resolvedType = typeResolver.GetType($"{typeParts[0].Trim()}, {typeParts[1].Trim()}", false);
+                    resolvedType = typeResolver.GetType($"{typeParts[0]}, {typeParts[1]}", false);
                 }
             }
         }

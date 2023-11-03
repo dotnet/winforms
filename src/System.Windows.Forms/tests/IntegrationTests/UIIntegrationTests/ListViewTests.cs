@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
+using Windows.Win32.UI.Accessibility;
 using Xunit.Abstractions;
 using static Interop.UiaCore;
 
@@ -109,11 +110,11 @@ public class ListViewTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [InlineData(2, 2, 150, 150, 0, 1, (int)NavigateDirection.FirstChild)]
-    [InlineData(4, 3, 150, 150, 0, 3, (int)NavigateDirection.LastChild)]
-    [InlineData(4, 1, 150, 150, 0, 1, (int)NavigateDirection.LastChild)]
-    [InlineData(2, 5, 150, 150, 0, 1, (int)NavigateDirection.LastChild)]
-    [InlineData(10, 10, 100, 100, 0, 5, (int)NavigateDirection.LastChild)]
+    [InlineData(2, 2, 150, 150, 0, 1, (int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData(4, 3, 150, 150, 0, 3, (int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData(4, 1, 150, 150, 0, 1, (int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData(2, 5, 150, 150, 0, 1, (int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData(10, 10, 100, 100, 0, 5, (int)NavigateDirection.NavigateDirection_LastChild)]
     public async Task ListView_Tile_FragmentNavigate_WorksExpectedAsync(int columnCount, int subItemsCount, int width, int height, int itemIndex, int subItemIndex, int direction)
     {
         await RunTestAsync((form, listView) =>
@@ -132,12 +133,12 @@ public class ListViewTests : ControlTestBase
     }
 
     [WinFormsTheory]
-    [InlineData(1, 0, 150, 150, (int)NavigateDirection.FirstChild)]
-    [InlineData(1, 2, 150, 150, (int)NavigateDirection.FirstChild)]
-    [InlineData(2, 1, 10, 10, (int)NavigateDirection.FirstChild)]
-    [InlineData(4, 0, 150, 150, (int)NavigateDirection.LastChild)]
-    [InlineData(1, 2, 150, 150, (int)NavigateDirection.LastChild)]
-    [InlineData(2, 1, 10, 10, (int)NavigateDirection.LastChild)]
+    [InlineData(1, 0, 150, 150, (int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData(1, 2, 150, 150, (int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData(2, 1, 10, 10, (int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData(4, 0, 150, 150, (int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData(1, 2, 150, 150, (int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData(2, 1, 10, 10, (int)NavigateDirection.NavigateDirection_LastChild)]
     public async Task ListView_Tile_FragmentNavigate_ReturnsNullAsync(int columnCount, int subItemsCount, int width, int height, int direction)
     {
         await RunTestAsync((form, listView) =>
@@ -162,8 +163,8 @@ public class ListViewTests : ControlTestBase
             InitializeTileList(listView, columnCount, subItemsCount, tileSize: new Size(100, 100));
 
             AccessibleObject? accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
-            IRawElementProviderFragment? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NextSibling);
-            IRawElementProviderFragment? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.PreviousSibling);
+            IRawElementProviderFragment? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+            IRawElementProviderFragment? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
             Assert.Null(nextAccessibleObject);
             Assert.Null(previousAccessibleObject);
@@ -262,9 +263,9 @@ public class ListViewTests : ControlTestBase
 
             Application.DoEvents();
             AccessibleObject? accessibleObject1 = listView.Items[0].SubItems[1].AccessibilityObject;
-            AccessibleObject? accessibleObject2 = (AccessibleObject?)accessibleObject1?.FragmentNavigate(NavigateDirection.NextSibling);
-            AccessibleObject? accessibleObject3 = (AccessibleObject?)accessibleObject2?.FragmentNavigate(NavigateDirection.NextSibling);
-            AccessibleObject? accessibleObject4 = (AccessibleObject?)accessibleObject3?.FragmentNavigate(NavigateDirection.NextSibling);
+            AccessibleObject? accessibleObject2 = (AccessibleObject?)accessibleObject1?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+            AccessibleObject? accessibleObject3 = (AccessibleObject?)accessibleObject2?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+            AccessibleObject? accessibleObject4 = (AccessibleObject?)accessibleObject3?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
 
             Assert.Equal(listView.Items[0].SubItems[2].AccessibilityObject, accessibleObject2);
             Assert.Equal(listView.Items[0].SubItems[3].AccessibilityObject, accessibleObject3);
@@ -308,8 +309,8 @@ public class ListViewTests : ControlTestBase
             InitializeTileList(listView, columnCount: 5, subItemsCount: 5, tileSize: new Size(50, 40));
 
             AccessibleObject? accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
-            IRawElementProviderFragment? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NextSibling);
-            IRawElementProviderFragment? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.PreviousSibling);
+            IRawElementProviderFragment? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+            IRawElementProviderFragment? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
             Assert.Null(nextAccessibleObject);
             Assert.Null(previousAccessibleObject);
@@ -326,10 +327,10 @@ public class ListViewTests : ControlTestBase
             InitializeTileList(listView, columnCount: 5, subItemsCount: 5, tileSize: new Size(50, 40));
 
             Application.DoEvents();
-            AccessibleObject accessibleObject = (AccessibleObject)listView.Items[0].AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild)!;
+            AccessibleObject accessibleObject = (AccessibleObject)listView.Items[0].AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild)!;
 
-            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
             return Task.CompletedTask;
         });

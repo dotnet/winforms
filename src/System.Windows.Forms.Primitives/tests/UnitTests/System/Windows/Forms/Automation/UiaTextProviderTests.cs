@@ -4,11 +4,12 @@
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using Moq;
+using Windows.Win32.System.Com;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 
 namespace System.Windows.Forms.Primitives.Tests.Automation;
 
-public class UiaTextProviderTests
+public unsafe class UiaTextProviderTests
 {
     [StaFact]
     public void UiaTextProvider_GetEditStyle_ContainsMultilineStyle_ForMultilineTextBox()
@@ -68,10 +69,10 @@ public class UiaTextProviderTests
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
         double[] expected = { 0, 0, 10, 5, 10, 10, 20, 30 };
-        double[] actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>
+        using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>
         {
-            new Rectangle(0, 0, 10, 5),
-            new Rectangle(10, 10, 20, 30)
+            new(0, 0, 10, 5),
+            new(10, 10, 20, 30)
         });
 
         Assert.Equal(8, actual.Length);
@@ -88,8 +89,8 @@ public class UiaTextProviderTests
     {
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-        double[] actual = UiaTextProvider.RectListToDoubleArray(null);
-        Assert.Empty(actual);
+        using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(null);
+        Assert.True(actual.IsEmpty);
     }
 #pragma warning restore CS8625
 
@@ -98,8 +99,8 @@ public class UiaTextProviderTests
     {
         Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
 
-        double[] actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>());
-        Assert.Empty(actual);
+        using SafeArrayScope<double> actual = UiaTextProvider.RectListToDoubleArray(new List<Rectangle>());
+        Assert.True(actual.IsEmpty);
     }
 
     [StaFact]

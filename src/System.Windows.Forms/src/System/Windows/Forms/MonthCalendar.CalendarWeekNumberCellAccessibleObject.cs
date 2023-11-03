@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -40,21 +41,21 @@ public partial class MonthCalendar
 
         public override string? Description => null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling => _calendarRowAccessibleObject.CellsAccessibleObjects?.First?.Value,
-                UiaCore.NavigateDirection.PreviousSibling => null,
+                NavigateDirection.NavigateDirection_NextSibling => _calendarRowAccessibleObject.CellsAccessibleObjects?.First?.Value,
+                NavigateDirection.NavigateDirection_PreviousSibling => null,
                 _ => base.FragmentNavigate(direction)
             };
 
         internal override int GetChildId() => ChildId;
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.HeaderControlTypeId,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => false,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -63,14 +64,14 @@ public partial class MonthCalendar
         internal override void Invoke()
         { }
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
                 // Only date cells support Invoke, TableItem and GridItem patterns.
                 // Header cells of a table are not its items.
-                UiaCore.UIA.GridItemPatternId => false,
-                UiaCore.UIA.TableItemPatternId => false,
-                UiaCore.UIA.InvokePatternId => false,
+                UIA_PATTERN_ID.UIA_GridItemPatternId => false,
+                UIA_PATTERN_ID.UIA_TableItemPatternId => false,
+                UIA_PATTERN_ID.UIA_InvokePatternId => false,
                 _ => base.IsPatternSupported(patternId)
             };
 

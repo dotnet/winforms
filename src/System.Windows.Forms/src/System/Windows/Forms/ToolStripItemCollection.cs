@@ -379,8 +379,7 @@ public class ToolStripItemCollection : ArrangedElementCollection, IList
     {
         if (_itemsCollection)
         {
-            ToolStrip? parent = null;
-            parent = item.ParentInternal;
+            ToolStrip? parent = item.ParentInternal;
             item.SetOwner(null);
 
             if (_owner is not null)

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
@@ -14,12 +12,11 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class ImageIndexEditor : UITypeEditor
 {
-    protected ImageList _currentImageList;
-    protected WeakReference _currentImageListPropertyReference;
-    protected object _currentInstance;
-    protected UITypeEditor _imageEditor;
+    protected ImageList? _currentImageList;
+    protected WeakReference<PropertyDescriptor>? _currentImageListPropertyReference;
+    protected object? _currentInstance;
     protected string _parentImageListProperty = "Parent";
-    protected string _imageListPropertyName;
+    protected string? _imageListPropertyName;
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="ImageIndexEditor"/> class.
@@ -27,19 +24,19 @@ internal class ImageIndexEditor : UITypeEditor
     public ImageIndexEditor()
     {
         // Get the type editor for images. We use the properties on this to determine if we support value painting, etc.
-        _imageEditor = (UITypeEditor)TypeDescriptor.GetEditor(typeof(Image), typeof(UITypeEditor));
+        ImageEditor = TypeDescriptorHelper.GetEditor<UITypeEditor>(typeof(Image));
     }
 
-    internal UITypeEditor ImageEditor => _imageEditor;
+    internal UITypeEditor? ImageEditor { get; }
 
     internal string ParentImageListProperty => _parentImageListProperty;
 
     /// <summary>
     ///  Retrieves an image for the current context at current index.
     /// </summary>
-    protected virtual Image GetImage(ITypeDescriptorContext context, int index, string key, bool useIntIndex)
+    protected virtual Image? GetImage(ITypeDescriptorContext context, int index, string? key, bool useIntIndex)
     {
-        object instance = context.Instance;
+        object? instance = context.Instance;
 
         // We would not know what to do in this case anyway (i.e. multiple selection of objects)
         if (instance is object[] || (index < 0 && key is null))
@@ -49,16 +46,16 @@ internal class ImageIndexEditor : UITypeEditor
 
         // If the instances are different, then we need to re-acquire our image list.
 
-        PropertyDescriptor currentProperty = _currentImageListPropertyReference?.Target as PropertyDescriptor;
-
         if (_currentImageList is null
             || instance != _currentInstance
-            || (currentProperty is not null && (ImageList)currentProperty.GetValue(_currentInstance) != _currentImageList))
+            || (_currentImageListPropertyReference is not null &&
+                _currentImageListPropertyReference.TryGetTarget(out PropertyDescriptor? currentProperty) &&
+                (ImageList?)currentProperty.GetValue(_currentInstance) != _currentImageList))
         {
             _currentInstance = instance;
 
             // First look for an attribute.
-            PropertyDescriptor imageListProperty = GetImageListProperty(context.PropertyDescriptor, ref instance);
+            PropertyDescriptor? imageListProperty = GetImageListProperty(context.PropertyDescriptor!, ref instance);
 
             // Not found as an attribute, do the old behavior.
             while (instance is not null && imageListProperty is null)
@@ -84,8 +81,8 @@ internal class ImageIndexEditor : UITypeEditor
 
             if (imageListProperty is not null)
             {
-                _currentImageList = (ImageList)imageListProperty.GetValue(instance);
-                _currentImageListPropertyReference = new WeakReference(imageListProperty);
+                _currentImageList = (ImageList?)imageListProperty.GetValue(instance);
+                _currentImageListPropertyReference = new WeakReference<PropertyDescriptor>(imageListProperty);
                 _currentInstance = instance;
             }
         }
@@ -101,7 +98,7 @@ internal class ImageIndexEditor : UITypeEditor
             }
             else
             {
-                return _currentImageList.Images[key];
+                return _currentImageList.Images[key!];
             }
         }
 
@@ -109,8 +106,8 @@ internal class ImageIndexEditor : UITypeEditor
     }
 
     /// <inheritdoc />
-    public override bool GetPaintValueSupported(ITypeDescriptorContext context)
-        => _imageEditor?.GetPaintValueSupported(context) ?? false;
+    public override bool GetPaintValueSupported(ITypeDescriptorContext? context)
+        => ImageEditor?.GetPaintValueSupported(context) ?? false;
 
     /// <inheritdoc />
     public override void PaintValue(PaintValueEventArgs e)
@@ -120,15 +117,15 @@ internal class ImageIndexEditor : UITypeEditor
             return;
         }
 
-        Image image = null;
+        Image? image = null;
 
         if (e.Value is int integer)
         {
-            image = GetImage(e.Context, integer, null, true);
+            image = GetImage(e.Context!, integer, null, true);
         }
         else if (e.Value is string text)
         {
-            image = GetImage(e.Context, -1, text, false);
+            image = GetImage(e.Context!, -1, text, false);
         }
 
         if (image is not null)
@@ -137,16 +134,16 @@ internal class ImageIndexEditor : UITypeEditor
         }
     }
 
-    internal static PropertyDescriptor GetImageListProperty(PropertyDescriptor currentComponent, ref object instance)
+    internal static PropertyDescriptor? GetImageListProperty(PropertyDescriptor currentComponent, ref object? instance)
     {
         // Multiple selection is not supported by this class.
         if (instance is object[]
-            || currentComponent.Attributes[typeof(RelatedImageListAttribute)] is not RelatedImageListAttribute imageListAttribute)
+            || !currentComponent.TryGetAttribute(out RelatedImageListAttribute? imageListAttribute))
         {
             return null;
         }
 
-        object parentInstance = instance;
+        object? parentInstance = instance;
 
         if (imageListAttribute.RelatedImageList is null)
         {
@@ -162,7 +159,7 @@ internal class ImageIndexEditor : UITypeEditor
                 break;
             }
 
-            var property = TypeDescriptor.GetProperties(parentInstance)[pathInfo[i]];
+            PropertyDescriptor? property = TypeDescriptor.GetProperties(parentInstance)[pathInfo[i]];
             if (property is null)
             {
                 Debug.Fail("The path specified to the property is wrong.");

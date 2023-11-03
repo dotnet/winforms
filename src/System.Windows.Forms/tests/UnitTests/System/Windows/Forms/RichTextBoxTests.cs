@@ -563,7 +563,7 @@ public class RichTextBoxTests
         Assert.Equal(0, createdCallCount);
 
         // Call EM_SETOPTIONS.
-        PInvoke.SendMessage(control, PInvoke.EM_SETOPTIONS, (WPARAM)(int)ECOOP.OR, (LPARAM)(int)ECO.AUTOWORDSELECTION);
+        PInvoke.SendMessage(control, PInvoke.EM_SETOPTIONS, (WPARAM)(int)PInvoke.ECOOP_OR, (LPARAM)(int)PInvoke.ECO_AUTOWORDSELECTION);
         Assert.False(control.AutoWordSelection);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -1580,11 +1580,11 @@ public class RichTextBoxTests
     public static IEnumerable<object[]> Font_GetCharFormat_TestData()
     {
         yield return new object[] { "Arial", 8.25f, FontStyle.Regular, GraphicsUnit.Point, 1, 165, 0 };
-        yield return new object[] { "Arial", 8.25f, FontStyle.Bold, GraphicsUnit.Point, 1, 165, CFE.BOLD };
-        yield return new object[] { "Arial", 8.25f, FontStyle.Italic, GraphicsUnit.Point, 1, 165, CFE.ITALIC };
-        yield return new object[] { "Arial", 8.25f, FontStyle.Strikeout, GraphicsUnit.Point, 1, 165, CFE.STRIKEOUT };
-        yield return new object[] { "Arial", 8.25f, FontStyle.Underline, GraphicsUnit.Point, 1, 165, CFE.UNDERLINE };
-        yield return new object[] { "Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10, 165, CFE.BOLD | CFE.ITALIC | CFE.UNDERLINE | CFE.STRIKEOUT };
+        yield return new object[] { "Arial", 8.25f, FontStyle.Bold, GraphicsUnit.Point, 1, 165, CFE_EFFECTS.CFE_BOLD };
+        yield return new object[] { "Arial", 8.25f, FontStyle.Italic, GraphicsUnit.Point, 1, 165, CFE_EFFECTS.CFE_ITALIC };
+        yield return new object[] { "Arial", 8.25f, FontStyle.Strikeout, GraphicsUnit.Point, 1, 165, CFE_EFFECTS.CFE_STRIKEOUT };
+        yield return new object[] { "Arial", 8.25f, FontStyle.Underline, GraphicsUnit.Point, 1, 165, CFE_EFFECTS.CFE_UNDERLINE };
+        yield return new object[] { "Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10, 165, CFE_EFFECTS.CFE_BOLD | CFE_EFFECTS.CFE_ITALIC | CFE_EFFECTS.CFE_UNDERLINE | CFE_EFFECTS.CFE_STRIKEOUT };
     }
 
     [WinFormsTheory]
@@ -1597,7 +1597,7 @@ public class RichTextBoxTests
         var format = new CHARFORMAT2W
         {
             cbSize = (uint)sizeof(CHARFORMAT2W),
-            dwMask = (CFM)int.MaxValue
+            dwMask = (CFM_MASK)int.MaxValue
         };
 
         nint result;
@@ -1605,11 +1605,11 @@ public class RichTextBoxTests
         using (var font = new Font(familyName, emSize, style, unit, gdiCharSet))
         {
             control.Font = font;
-            result = PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format);
+            result = PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_ALL, ref format);
             Assert.NotEqual(0, result);
             Assert.Equal(familyName, format.FaceName.ToString());
             Assert.Equal(expectedYHeight, format.yHeight);
-            Assert.Equal(CFE.AUTOBACKCOLOR | CFE.AUTOCOLOR | (CFE)expectedEffects, format.dwEffects);
+            Assert.Equal(CFE_EFFECTS.CFE_AUTOBACKCOLOR | CFE_EFFECTS.CFE_AUTOCOLOR | (CFE_EFFECTS)expectedEffects, format.dwEffects);
             Assert.Equal(0, format.bPitchAndFamily);
 
             // Set null.
@@ -1619,15 +1619,15 @@ public class RichTextBoxTests
         var format1 = new CHARFORMAT2W
         {
             cbSize = (uint)sizeof(CHARFORMAT2W),
-            dwMask = (CFM)int.MaxValue
+            dwMask = (CFM_MASK)int.MaxValue
         };
 
-        result = PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format1);
+        result = PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_ALL, ref format1);
         Assert.NotEqual(0, result);
         Assert.Equal(Control.DefaultFont.Name, format1.FaceName.ToString());
         Assert.Equal((int)(Control.DefaultFont.SizeInPoints * 20), (int)format1.yHeight);
-        Assert.True(format1.dwEffects.HasFlag(CFE.AUTOBACKCOLOR));
-        Assert.True(format1.dwEffects.HasFlag(CFE.AUTOCOLOR));
+        Assert.True(format1.dwEffects.HasFlag(CFE_EFFECTS.CFE_AUTOBACKCOLOR));
+        Assert.True(format1.dwEffects.HasFlag(CFE_EFFECTS.CFE_AUTOCOLOR));
         Assert.Equal(0, format1.bPitchAndFamily);
     }
 
@@ -1748,7 +1748,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_ALL, ref format));
         Assert.Equal(0x785634, format.crTextColor);
     }
 
@@ -1763,7 +1763,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_ALL, ref format));
         Assert.Equal(0x785634, format.crTextColor);
 
         // Set different.
@@ -1772,7 +1772,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.ALL, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_ALL, ref format));
         Assert.Equal(0x907856, format.crTextColor);
     }
 
@@ -3779,7 +3779,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(PARAFORMAT)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(expected, (int)format.wAlignment);
     }
 
@@ -3837,13 +3837,13 @@ public class RichTextBoxTests
     public static IEnumerable<object[]> SelectionBackColor_CustomGetCharFormat_TestData()
     {
         yield return new object[] { 0, 0, 0x78563412, Color.Empty };
-        yield return new object[] { 0, CFE.AUTOBACKCOLOR, 0x78563412, Color.Red };
-        yield return new object[] { 0, CFE.AUTOBACKCOLOR | CFE.ALLCAPS, 0x78563412, Color.Red };
-        yield return new object[] { CFM.BACKCOLOR, 0, 0x78563412, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { CFM.BACKCOLOR, 0, 0x785634, Color.FromArgb(0xFF, 0x34, 0x56, 0x78) };
-        yield return new object[] { CFM.BACKCOLOR | CFM.ANIMATION, 0, 0x78563412, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { CFM.BACKCOLOR, CFE.AUTOBACKCOLOR, 0x78563412, Color.Red };
-        yield return new object[] { CFM.ALLCAPS, 0, 0x78563412, Color.Empty };
+        yield return new object[] { 0, CFE_EFFECTS.CFE_AUTOBACKCOLOR, 0x78563412, Color.Red };
+        yield return new object[] { 0, CFE_EFFECTS.CFE_AUTOBACKCOLOR | CFE_EFFECTS.CFE_ALLCAPS, 0x78563412, Color.Red };
+        yield return new object[] { CFM_MASK.CFM_BACKCOLOR, 0, 0x78563412, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { CFM_MASK.CFM_BACKCOLOR, 0, 0x785634, Color.FromArgb(0xFF, 0x34, 0x56, 0x78) };
+        yield return new object[] { CFM_MASK.CFM_BACKCOLOR | CFM_MASK.CFM_ANIMATION, 0, 0x78563412, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { CFM_MASK.CFM_BACKCOLOR, CFE_EFFECTS.CFE_AUTOBACKCOLOR, 0x78563412, Color.Red };
+        yield return new object[] { CFM_MASK.CFM_ALLCAPS, 0, 0x78563412, Color.Empty };
     }
 
     [WinFormsTheory]
@@ -3852,11 +3852,11 @@ public class RichTextBoxTests
     {
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = new CHARFORMAT2W
             {
-                dwMask = (CFM)mask,
-                dwEffects = (CFE)effects,
+                dwMask = (CFM_MASK)mask,
+                dwEffects = (CFE_EFFECTS)effects,
                 crBackColor = backColor
             },
             BackColor = Color.Red
@@ -3872,11 +3872,11 @@ public class RichTextBoxTests
     {
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = new CHARFORMAT2W
             {
-                dwMask = (CFM)mask,
-                dwEffects = (CFE)effects,
+                dwMask = (CFM_MASK)mask,
+                dwEffects = (CFE_EFFECTS)effects,
                 crBackColor = backColor
             },
             BackColor = Color.Red
@@ -3974,7 +3974,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(0x785634, format.crBackColor);
     }
 
@@ -4058,17 +4058,17 @@ public class RichTextBoxTests
     public static IEnumerable<object[]> SelectionBullet_CustomGetParamFormat_TestData()
     {
         yield return new object[] { 0, 0, false };
-        yield return new object[] { 0, PFN.BULLET, false };
-        yield return new object[] { PFM.NUMBERING, PFN.BULLET, true };
+        yield return new object[] { 0, PARAFORMAT_NUMBERING.PFN_BULLET, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_BULLET, true };
         yield return new object[] { PFM.NUMBERING, 0, false };
-        yield return new object[] { PFM.NUMBERING, PFN.ARABIC, false };
-        yield return new object[] { PFM.NUMBERING, PFN.LCLETTER, false };
-        yield return new object[] { PFM.NUMBERING, PFN.LCROMAN, false };
-        yield return new object[] { PFM.NUMBERING, PFN.UCLETTER, false };
-        yield return new object[] { PFM.NUMBERING, PFN.UCROMAN, false };
-        yield return new object[] { PFM.NUMBERING, PFN.UCROMAN + 1, false };
-        yield return new object[] { PFM.NUMBERING | PFM.ALIGNMENT, PFN.BULLET, true };
-        yield return new object[] { PFM.ALIGNMENT, PFN.BULLET, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_ARABIC, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_LCLETTER, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_LCROMAN, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_UCLETTER, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_UCROMAN, false };
+        yield return new object[] { PFM.NUMBERING, PARAFORMAT_NUMBERING.PFN_UCROMAN + 1, false };
+        yield return new object[] { PFM.NUMBERING | PFM.ALIGNMENT, PARAFORMAT_NUMBERING.PFN_BULLET, true };
+        yield return new object[] { PFM.ALIGNMENT, PARAFORMAT_NUMBERING.PFN_BULLET, false };
     }
 
     [WinFormsTheory]
@@ -4080,7 +4080,7 @@ public class RichTextBoxTests
             GetParaFormatResult = new PARAFORMAT
             {
                 dwMask = (PFM)mask,
-                wNumbering = (PFN)numbering
+                wNumbering = (PARAFORMAT_NUMBERING)numbering
             }
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -4236,7 +4236,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(PARAFORMAT)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(expectedOffset, (int)format.dxOffset);
         Assert.Equal(expected, (int)format.wNumbering);
     }
@@ -4316,18 +4316,18 @@ public class RichTextBoxTests
         yield return new object[] { 0, 60000, 4000 };
         yield return new object[] { 0, -900, -60 };
 
-        yield return new object[] { CFM.OFFSET, 0, 0 };
-        yield return new object[] { CFM.OFFSET, 900, 60 };
-        yield return new object[] { CFM.OFFSET, 30000, 2000 };
-        yield return new object[] { CFM.OFFSET, 60000, 4000 };
-        yield return new object[] { CFM.OFFSET, -900, -60 };
-        yield return new object[] { CFM.OFFSET | CFM.ALLCAPS, -900, -60 };
+        yield return new object[] { CFM_MASK.CFM_OFFSET, 0, 0 };
+        yield return new object[] { CFM_MASK.CFM_OFFSET, 900, 60 };
+        yield return new object[] { CFM_MASK.CFM_OFFSET, 30000, 2000 };
+        yield return new object[] { CFM_MASK.CFM_OFFSET, 60000, 4000 };
+        yield return new object[] { CFM_MASK.CFM_OFFSET, -900, -60 };
+        yield return new object[] { CFM_MASK.CFM_OFFSET | CFM_MASK.CFM_ALLCAPS, -900, -60 };
 
-        yield return new object[] { CFM.ALLCAPS, 0, 0 };
-        yield return new object[] { CFM.ALLCAPS, 900, 60 };
-        yield return new object[] { CFM.ALLCAPS, 30000, 2000 };
-        yield return new object[] { CFM.ALLCAPS, 60000, 4000 };
-        yield return new object[] { CFM.ALLCAPS, -900, -60 };
+        yield return new object[] { CFM_MASK.CFM_ALLCAPS, 0, 0 };
+        yield return new object[] { CFM_MASK.CFM_ALLCAPS, 900, 60 };
+        yield return new object[] { CFM_MASK.CFM_ALLCAPS, 30000, 2000 };
+        yield return new object[] { CFM_MASK.CFM_ALLCAPS, 60000, 4000 };
+        yield return new object[] { CFM_MASK.CFM_ALLCAPS, -900, -60 };
     }
 
     [WinFormsTheory]
@@ -4336,10 +4336,10 @@ public class RichTextBoxTests
     {
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = new CHARFORMAT2W
             {
-                dwMask = (CFM)mask,
+                dwMask = (CFM_MASK)mask,
                 yOffset = yOffset
             }
         };
@@ -4430,7 +4430,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(900, format.yOffset);
     }
 
@@ -4511,9 +4511,9 @@ public class RichTextBoxTests
 
     public static IEnumerable<object[]> SelectionColor_CustomGetCharFormat_TestData()
     {
-        yield return new object[] { CFM.COLOR, 0x785634, Color.FromArgb(0xFF, 0x34, 0x56, 0x78) };
-        yield return new object[] { CFM.COLOR, 0x78563412, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
-        yield return new object[] { CFM.COLOR, 0, Color.Black };
+        yield return new object[] { CFM_MASK.CFM_COLOR, 0x785634, Color.FromArgb(0xFF, 0x34, 0x56, 0x78) };
+        yield return new object[] { CFM_MASK.CFM_COLOR, 0x78563412, Color.FromArgb(0xFF, 0x12, 0x34, 0x56) };
+        yield return new object[] { CFM_MASK.CFM_COLOR, 0, Color.Black };
 
         yield return new object[] { 0, 0x785634, Color.Empty };
         yield return new object[] { 0, 0x78563412, Color.Empty };
@@ -4526,10 +4526,10 @@ public class RichTextBoxTests
     {
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = new CHARFORMAT2W
             {
-                dwMask = (CFM)mask,
+                dwMask = (CFM_MASK)mask,
                 crTextColor = textColor
             }
         };
@@ -4619,7 +4619,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(CHARFORMAT2W)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(0x785634, format.crTextColor);
     }
 
@@ -4708,24 +4708,24 @@ public class RichTextBoxTests
         yield return new object[] { 0, 0, 0, new char[] { 'N', 'r', 'i', 'a', 'l', '\0', 'm' }, "Nrial", 13, FontStyle.Regular };
 
         yield return new object[] { 0, 0, 200, arial, "Arial", 13, FontStyle.Regular };
-        yield return new object[] { CFM.SIZE, 0, 200, arial, "Arial", 10, FontStyle.Regular };
-        yield return new object[] { CFM.SIZE, 0, 250, arial, "Arial", 12.5f, FontStyle.Regular };
-        yield return new object[] { CFM.SIZE | CFM.ALLCAPS, 0, 250, arial, "Arial", 12.5f, FontStyle.Regular };
+        yield return new object[] { CFM_MASK.CFM_SIZE, 0, 200, arial, "Arial", 10, FontStyle.Regular };
+        yield return new object[] { CFM_MASK.CFM_SIZE, 0, 250, arial, "Arial", 12.5f, FontStyle.Regular };
+        yield return new object[] { CFM_MASK.CFM_SIZE | CFM_MASK.CFM_ALLCAPS, 0, 250, arial, "Arial", 12.5f, FontStyle.Regular };
 
-        yield return new object[] { CFM.BOLD, CFE.BOLD, 0, arial, "Arial", 13, FontStyle.Bold };
-        yield return new object[] { CFM.BOLD, CFE.BOLD | CFE.ALLCAPS, 0, arial, "Arial", 13, FontStyle.Bold };
+        yield return new object[] { CFM_MASK.CFM_BOLD, CFE_EFFECTS.CFE_BOLD, 0, arial, "Arial", 13, FontStyle.Bold };
+        yield return new object[] { CFM_MASK.CFM_BOLD, CFE_EFFECTS.CFE_BOLD | CFE_EFFECTS.CFE_ALLCAPS, 0, arial, "Arial", 13, FontStyle.Bold };
 
-        yield return new object[] { CFM.ITALIC, CFE.ITALIC, 0, arial, "Arial", 13, FontStyle.Italic };
-        yield return new object[] { CFM.ITALIC, CFE.ITALIC | CFE.ALLCAPS, 0, arial, "Arial", 13, FontStyle.Italic };
+        yield return new object[] { CFM_MASK.CFM_ITALIC, CFE_EFFECTS.CFE_ITALIC, 0, arial, "Arial", 13, FontStyle.Italic };
+        yield return new object[] { CFM_MASK.CFM_ITALIC, CFE_EFFECTS.CFE_ITALIC | CFE_EFFECTS.CFE_ALLCAPS, 0, arial, "Arial", 13, FontStyle.Italic };
 
-        yield return new object[] { CFM.STRIKEOUT, CFE.STRIKEOUT, 0, arial, "Arial", 13, FontStyle.Strikeout };
-        yield return new object[] { CFM.STRIKEOUT, CFE.STRIKEOUT | CFE.STRIKEOUT, 0, arial, "Arial", 13, FontStyle.Strikeout };
+        yield return new object[] { CFM_MASK.CFM_STRIKEOUT, CFE_EFFECTS.CFE_STRIKEOUT, 0, arial, "Arial", 13, FontStyle.Strikeout };
+        yield return new object[] { CFM_MASK.CFM_STRIKEOUT, CFE_EFFECTS.CFE_STRIKEOUT | CFE_EFFECTS.CFE_STRIKEOUT, 0, arial, "Arial", 13, FontStyle.Strikeout };
 
-        yield return new object[] { CFM.UNDERLINE, CFE.UNDERLINE, 0, arial, "Arial", 13, FontStyle.Underline };
-        yield return new object[] { CFM.UNDERLINE, CFE.UNDERLINE | CFE.UNDERLINE, 0, arial, "Arial", 13, FontStyle.Underline };
+        yield return new object[] { CFM_MASK.CFM_UNDERLINE, CFE_EFFECTS.CFE_UNDERLINE, 0, arial, "Arial", 13, FontStyle.Underline };
+        yield return new object[] { CFM_MASK.CFM_UNDERLINE, CFE_EFFECTS.CFE_UNDERLINE | CFE_EFFECTS.CFE_UNDERLINE, 0, arial, "Arial", 13, FontStyle.Underline };
 
-        yield return new object[] { CFM.ALLCAPS, CFE.BOLD, 0, arial, "Arial", 13, FontStyle.Regular };
-        yield return new object[] { CFM.ALLCAPS, CFE.BOLD | CFE.ALLCAPS, 0, arial, "Arial", 13, FontStyle.Regular };
+        yield return new object[] { CFM_MASK.CFM_ALLCAPS, CFE_EFFECTS.CFE_BOLD, 0, arial, "Arial", 13, FontStyle.Regular };
+        yield return new object[] { CFM_MASK.CFM_ALLCAPS, CFE_EFFECTS.CFE_BOLD | CFE_EFFECTS.CFE_ALLCAPS, 0, arial, "Arial", 13, FontStyle.Regular };
     }
 
     [WinFormsTheory]
@@ -4734,8 +4734,8 @@ public class RichTextBoxTests
     {
         var result = new CHARFORMAT2W
         {
-            dwMask = CFM.FACE | (CFM)mask,
-            dwEffects = (CFE)effects,
+            dwMask = CFM_MASK.CFM_FACE | (CFM_MASK)mask,
+            dwEffects = (CFE_EFFECTS)effects,
             yHeight = yHeight,
             bCharSet = 2
         };
@@ -4746,7 +4746,7 @@ public class RichTextBoxTests
 
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = result
         };
 
@@ -4765,9 +4765,9 @@ public class RichTextBoxTests
         char[] arial = new char[] { 'A', 'r', 'i', 'a', 'l' };
 
         yield return new object[] { 0, 0, arial };
-        yield return new object[] { CFM.ANIMATION, 0, arial };
-        yield return new object[] { CFM.SIZE, -200, arial };
-        yield return new object[] { CFM.SIZE, 0, arial };
+        yield return new object[] { CFM_MASK.CFM_ANIMATION, 0, arial };
+        yield return new object[] { CFM_MASK.CFM_SIZE, -200, arial };
+        yield return new object[] { CFM_MASK.CFM_SIZE, 0, arial };
     }
 
     [WinFormsTheory]
@@ -4776,7 +4776,7 @@ public class RichTextBoxTests
     {
         var result = new CHARFORMAT2W
         {
-            dwMask = (CFM)mask,
+            dwMask = (CFM_MASK)mask,
             yHeight = yHeight
         };
         for (int i = 0; i < faceName.Length; i++)
@@ -4786,7 +4786,7 @@ public class RichTextBoxTests
 
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = result
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -4914,11 +4914,11 @@ public class RichTextBoxTests
     public static IEnumerable<object[]> SelectionFont_GetCharFormat_TestData()
     {
         yield return new object[] { new Font("Arial", 8.25f), 165, 0 };
-        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold), 165, CFE.BOLD };
-        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Italic), 165, CFE.ITALIC };
-        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Strikeout), 165, CFE.STRIKEOUT };
-        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Underline), 165, CFE.UNDERLINE };
-        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10), 165, CFE.BOLD | CFE.ITALIC | CFE.UNDERLINE | CFE.STRIKEOUT };
+        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold), 165, CFE_EFFECTS.CFE_BOLD };
+        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Italic), 165, CFE_EFFECTS.CFE_ITALIC };
+        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Strikeout), 165, CFE_EFFECTS.CFE_STRIKEOUT };
+        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Underline), 165, CFE_EFFECTS.CFE_UNDERLINE };
+        yield return new object[] { new Font("Arial", 8.25f, FontStyle.Bold | FontStyle.Italic | FontStyle.Regular | FontStyle.Strikeout | FontStyle.Underline, GraphicsUnit.Point, 10), 165, CFE_EFFECTS.CFE_BOLD | CFE_EFFECTS.CFE_ITALIC | CFE_EFFECTS.CFE_UNDERLINE | CFE_EFFECTS.CFE_STRIKEOUT };
     }
 
     [WinFormsTheory]
@@ -4932,12 +4932,12 @@ public class RichTextBoxTests
         var format = new CHARFORMAT2W
         {
             cbSize = (uint)sizeof(CHARFORMAT2W),
-            dwMask = (CFM)int.MaxValue
+            dwMask = (CFM_MASK)int.MaxValue
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal("Arial", format.FaceName.ToString());
         Assert.Equal(expectedYHeight, (int)format.yHeight);
-        Assert.Equal(CFE.AUTOBACKCOLOR | CFE.AUTOCOLOR | (CFE)expectedEffects, format.dwEffects);
+        Assert.Equal(CFE_EFFECTS.CFE_AUTOBACKCOLOR | CFE_EFFECTS.CFE_AUTOCOLOR | (CFE_EFFECTS)expectedEffects, format.dwEffects);
         Assert.Equal(0, format.bPitchAndFamily);
     }
 
@@ -5154,7 +5154,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(PARAFORMAT)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(expected, format.dxOffset);
     }
 
@@ -5345,7 +5345,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(PARAFORMAT)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(expected, format.dxStartIndent);
     }
 
@@ -5628,13 +5628,13 @@ public class RichTextBoxTests
     public static IEnumerable<object[]> SelectionProtected_CustomGetCharFormat_TestData()
     {
         yield return new object[] { 0, 0, false };
-        yield return new object[] { 0, CFE.PROTECTED, false };
-        yield return new object[] { 0, CFE.PROTECTED | CFE.ALLCAPS, false };
-        yield return new object[] { CFM.PROTECTED, 0, false };
-        yield return new object[] { CFM.PROTECTED, CFE.PROTECTED, true };
-        yield return new object[] { CFM.PROTECTED, CFE.PROTECTED | CFE.ALLCAPS, true };
-        yield return new object[] { CFM.PROTECTED, CFE.ALLCAPS, false };
-        yield return new object[] { CFM.ALLCAPS, CFE.PROTECTED, false };
+        yield return new object[] { 0, CFE_EFFECTS.CFE_PROTECTED, false };
+        yield return new object[] { 0, CFE_EFFECTS.CFE_PROTECTED | CFE_EFFECTS.CFE_ALLCAPS, false };
+        yield return new object[] { CFM_MASK.CFM_PROTECTED, 0, false };
+        yield return new object[] { CFM_MASK.CFM_PROTECTED, CFE_EFFECTS.CFE_PROTECTED, true };
+        yield return new object[] { CFM_MASK.CFM_PROTECTED, CFE_EFFECTS.CFE_PROTECTED | CFE_EFFECTS.CFE_ALLCAPS, true };
+        yield return new object[] { CFM_MASK.CFM_PROTECTED, CFE_EFFECTS.CFE_ALLCAPS, false };
+        yield return new object[] { CFM_MASK.CFM_ALLCAPS, CFE_EFFECTS.CFE_PROTECTED, false };
     }
 
     [WinFormsTheory]
@@ -5643,11 +5643,11 @@ public class RichTextBoxTests
     {
         using var control = new CustomGetCharFormatRichTextBox
         {
-            ExpectedWParam = (IntPtr)SCF.SELECTION,
+            ExpectedWParam = (IntPtr)PInvoke.SCF_SELECTION,
             GetCharFormatResult = new CHARFORMAT2W
             {
-                dwMask = (CFM)mask,
-                dwEffects = (CFE)effects
+                dwMask = (CFM_MASK)mask,
+                dwEffects = (CFE_EFFECTS)effects
             }
         };
         Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -5741,10 +5741,10 @@ public class RichTextBoxTests
         var format = new CHARFORMAT2W
         {
             cbSize = (uint)sizeof(CHARFORMAT2W),
-            dwMask = CFM.PROTECTED
+            dwMask = CFM_MASK.CFM_PROTECTED
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
-        Assert.Equal(value, (format.dwEffects & CFE.PROTECTED) != 0);
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETCHARFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
+        Assert.Equal(value, (format.dwEffects & CFE_EFFECTS.CFE_PROTECTED) != 0);
     }
 
     [WinFormsTheory]
@@ -5929,7 +5929,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(PARAFORMAT)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(expected, format.dxRightIndent);
     }
 
@@ -6376,7 +6376,7 @@ public class RichTextBoxTests
         {
             cbSize = (uint)sizeof(PARAFORMAT)
         };
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(3, format.cTabCount);
         Assert.Equal(15, format.rgxTabs[0]);
         Assert.Equal(30, format.rgxTabs[1]);
@@ -6384,7 +6384,7 @@ public class RichTextBoxTests
 
         // Set null or empty.
         control.SelectionTabs = nullOrEmptyValue;
-        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)(uint)SCF.SELECTION, ref format));
+        Assert.NotEqual(0, (int)PInvoke.SendMessage(control, PInvoke.EM_GETPARAFORMAT, (WPARAM)PInvoke.SCF_SELECTION, ref format));
         Assert.Equal(0, format.cTabCount);
     }
 
@@ -6577,7 +6577,7 @@ public class RichTextBoxTests
         Assert.Equal(0, createdCallCount);
 
         // Call EM_SETOPTIONS.
-        PInvoke.SendMessage(control, PInvoke.EM_SETOPTIONS, (WPARAM)(int)ECOOP.OR, (LPARAM)(nint)ECO.SELECTIONBAR);
+        PInvoke.SendMessage(control, PInvoke.EM_SETOPTIONS, (WPARAM)(int)PInvoke.ECOOP_OR, (LPARAM)(nint)PInvoke.ECO_SELECTIONBAR);
         Assert.False(control.ShowSelectionMargin);
         Assert.True(control.IsHandleCreated);
         Assert.Equal(0, invalidatedCallCount);
@@ -6760,7 +6760,7 @@ public class RichTextBoxTests
             if (m.Msg == (int)PInvoke.EM_GETTEXTLENGTHEX)
             {
                 GETTEXTLENGTHEX* gtl = (GETTEXTLENGTHEX*)m.WParam;
-                Assert.Equal(GTL.NUMCHARS, gtl->flags);
+                Assert.Equal(GETTEXTLENGTHEX_FLAGS.GTL_NUMCHARS, gtl->flags);
                 Assert.Equal(1200u, gtl->codepage);
                 Assert.Equal(IntPtr.Zero, m.LParam);
                 m.Result = GetTextLengthExResult;
@@ -6900,7 +6900,7 @@ public class RichTextBoxTests
                     Assert.Equal(expectedText, control.Text);
 
                     // verify the old behaviour via StreamOut(SF.TEXT | SF.UNICODE)
-                    string textOldWay = control.TestAccessor().Dynamic.StreamOut(SF.TEXT | SF.UNICODE);
+                    string textOldWay = control.TestAccessor().Dynamic.StreamOut(PInvoke.SF_TEXT | PInvoke.SF_UNICODE);
                     Assert.Equal(oldWayExpectedText, textOldWay);
 
                     // verify against RichEdit20W
@@ -6985,7 +6985,7 @@ public class RichTextBoxTests
 
         control.Text = text;
 
-        string textOldWay = control.TestAccessor().Dynamic.GetTextEx(GT.USECRLF);
+        string textOldWay = control.TestAccessor().Dynamic.GetTextEx(GETTEXTEX_FLAGS.GT_USECRLF);
         Assert.Equal(expected, textOldWay);
     }
 
@@ -10084,11 +10084,11 @@ public class RichTextBoxTests
     {
         foreach (IntPtr hWnd in new IntPtr[] { IntPtr.Zero, (IntPtr)1 })
         {
-            yield return new object[] { hWnd, (int)Richedit.EN.LINK };
-            yield return new object[] { hWnd, (int)Richedit.EN.DROPFILES };
-            yield return new object[] { hWnd, (int)Richedit.EN.REQUESTRESIZE };
-            yield return new object[] { hWnd, (int)Richedit.EN.SELCHANGE };
-            yield return new object[] { hWnd, (int)Richedit.EN.PROTECTED };
+            yield return new object[] { hWnd, (int)PInvoke.EN_LINK };
+            yield return new object[] { hWnd, (int)PInvoke.EN_DROPFILES };
+            yield return new object[] { hWnd, (int)PInvoke.EN_REQUESTRESIZE };
+            yield return new object[] { hWnd, (int)PInvoke.EN_SELCHANGE };
+            yield return new object[] { hWnd, (int)PInvoke.EN_PROTECTED };
             yield return new object[] { hWnd, 0 };
         }
     }
@@ -10129,7 +10129,7 @@ public class RichTextBoxTests
         {
             nmhdr = new NMHDR
             {
-                code = (int)Richedit.EN.DROPFILES
+                code = (int)PInvoke.EN_DROPFILES
             }
         };
         var m = new Message
@@ -10154,9 +10154,9 @@ public class RichTextBoxTests
         yield return new object[] { -1, -2, -1, 1 };
         yield return new object[] { -1, 0, -1, 1 };
         yield return new object[] { -1, 1, -1, 1 };
-        yield return new object[] { -1, -1, (int)SEL.EMPTY, 1 };
-        yield return new object[] { -1, -1, (int)SEL.TEXT, 1 };
-        yield return new object[] { 0, 1, (int)SEL.TEXT, 1 };
+        yield return new object[] { -1, -1, (int)RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE.SEL_EMPTY, 1 };
+        yield return new object[] { -1, -1, (int)RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE.SEL_TEXT, 1 };
+        yield return new object[] { 0, 1, (int)RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE.SEL_TEXT, 1 };
     }
 
     [WinFormsTheory]
@@ -10176,14 +10176,14 @@ public class RichTextBoxTests
         {
             nmhdr = new NMHDR
             {
-                code = (int)Richedit.EN.SELCHANGE
+                code = (int)PInvoke.EN_SELCHANGE
             },
             chrg = new CHARRANGE
             {
                 cpMin = min,
                 cpMax = max
             },
-            seltyp = (SEL)selectionType
+            seltyp = (RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE)selectionType
         };
         var m = new Message
         {
@@ -10203,9 +10203,9 @@ public class RichTextBoxTests
     public static IEnumerable<object[]> WndProc_ReflectNotifyWithHWndProtected_TestData()
     {
         yield return new object[] { 0, (IntPtr)1, 1 };
-        yield return new object[] { CFM.ALLCAPS, (IntPtr)1, 1 };
-        yield return new object[] { CFM.PROTECTED, IntPtr.Zero, 0 };
-        yield return new object[] { CFM.PROTECTED | CFM.ALLCAPS, IntPtr.Zero, 0 };
+        yield return new object[] { CFM_MASK.CFM_ALLCAPS, (IntPtr)1, 1 };
+        yield return new object[] { CFM_MASK.CFM_PROTECTED, IntPtr.Zero, 0 };
+        yield return new object[] { CFM_MASK.CFM_PROTECTED | CFM_MASK.CFM_ALLCAPS, IntPtr.Zero, 0 };
     }
 
     [WinFormsTheory]
@@ -10223,12 +10223,12 @@ public class RichTextBoxTests
 
         var format = new CHARFORMAT2W
         {
-            dwMask = (CFM)mask
+            dwMask = (CFM_MASK)mask
         };
         IntPtr ptr = Marshal.AllocCoTaskMem(100);
         try
         {
-            Marshal.WriteInt32(ptr, IntPtr.Size * 2, (int)Richedit.EN.PROTECTED);
+            Marshal.WriteInt32(ptr, IntPtr.Size * 2, (int)PInvoke.EN_PROTECTED);
             Marshal.WriteInt32(ptr, IntPtr.Size * 2 + IntPtr.Size, (int)PInvoke.EM_SETCHARFORMAT);
             Marshal.WriteIntPtr(ptr, IntPtr.Size * 2 + IntPtr.Size + 4 + IntPtr.Size, (IntPtr)(&format));
             var m = new Message
@@ -10303,7 +10303,7 @@ public class RichTextBoxTests
         {
             nmhdr = new NMHDR
             {
-                code = (int)Richedit.EN.DROPFILES
+                code = (int)PInvoke.EN_DROPFILES
             }
         };
         var m = new Message
@@ -10364,7 +10364,7 @@ public class RichTextBoxTests
         {
             nmhdr = new NMHDR
             {
-                code = (int)Richedit.EN.REQUESTRESIZE
+                code = (int)PInvoke.EN_REQUESTRESIZE
             },
             rc = result
         };
@@ -10410,14 +10410,14 @@ public class RichTextBoxTests
         {
             nmhdr = new NMHDR
             {
-                code = (int)Richedit.EN.SELCHANGE
+                code = (int)PInvoke.EN_SELCHANGE
             },
             chrg = new CHARRANGE
             {
                 cpMin = min,
                 cpMax = max
             },
-            seltyp = (SEL)selectionType
+            seltyp = (RICH_EDIT_GET_CONTEXT_MENU_SEL_TYPE)selectionType
         };
         var m = new Message
         {
@@ -10459,12 +10459,12 @@ public class RichTextBoxTests
 
         var format = new CHARFORMAT2W
         {
-            dwMask = (CFM)mask
+            dwMask = (CFM_MASK)mask
         };
         IntPtr ptr = Marshal.AllocCoTaskMem(100);
         try
         {
-            Marshal.WriteInt32(ptr, IntPtr.Size * 2, (int)Richedit.EN.PROTECTED);
+            Marshal.WriteInt32(ptr, IntPtr.Size * 2, (int)PInvoke.EN_PROTECTED);
             Marshal.WriteInt32(ptr, IntPtr.Size * 2 + IntPtr.Size, (int)PInvoke.EM_SETCHARFORMAT);
             Marshal.WriteIntPtr(ptr, IntPtr.Size * 2 + IntPtr.Size + 4 + IntPtr.Size, (IntPtr)(&format));
             var m = new Message

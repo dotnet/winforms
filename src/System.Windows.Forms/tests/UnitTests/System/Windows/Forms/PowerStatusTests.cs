@@ -64,6 +64,6 @@ public class PowerStatusTests
     public void PowerStatus_PowerLineStatus_Get_ReturnsExpected()
     {
         PowerStatus status = SystemInformation.PowerStatus;
-        Assert.True(Enum.IsDefined(typeof(PowerLineStatus), status.PowerLineStatus));
+        Assert.True(Enum.IsDefined(status.PowerLineStatus));
     }
 }

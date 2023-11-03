@@ -6,11 +6,11 @@
   <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.props" />
 
   <PropertyGroup>
-    <TargetFrameworkName>net</TargetFrameworkName>
-    <TargetFrameworkMajorVersion>8</TargetFrameworkMajorVersion>
-    <TargetFrameworkMinorVersion>0</TargetFrameworkMinorVersion>
-    <TargetFrameworkVersion>$(TargetFrameworkMajorVersion).$(TargetFrameworkMinorVersion)</TargetFrameworkVersion>
-    <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
+    <!-- Remove hardcoded .NET versions when Arcade is upgraded to .NET 9.0. https://github.com/dotnet/winforms/issues/9851-->
+    <NetMinimum>net8.0</NetMinimum>
+    <NetCurrent>net9.0</NetCurrent>
+    <NetPrevious/>
+    <TargetFramework>$(NetCurrent)</TargetFramework>
     <Product>Microsoft&#xAE; .NET</Product>
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -23,9 +23,6 @@
     <IsAnalyzerProject Condition="!$(IsTestProject) and
                                   ($(MSBuildProjectName.EndsWith('.Analyzers')) or $(MSBuildProjectName.EndsWith('.Analyzers.CSharp')))"
                                   >true</IsAnalyzerProject>
-
-    <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
-    <EnableTrimAnalyzer Condition="$(IsTestProject) or $(IsAnalyzerProject) or $(MSBuildProjectDirectory.Contains('\tests\'))">false</EnableTrimAnalyzer>
   </PropertyGroup>
 
   <!-- Making all tests run sequentially until we regroup tests. Tracked under issue https://github.com/dotnet/winforms/issues/8810. -->

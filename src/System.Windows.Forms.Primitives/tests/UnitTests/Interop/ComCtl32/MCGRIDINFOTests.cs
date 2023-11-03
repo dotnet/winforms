@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using static Interop.ComCtl32;
+using Windows.Win32.UI.Controls;
 
 namespace System.Windows.Forms.Primitives.Tests.Interop.ComCtl32;
 

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
@@ -13,19 +11,10 @@ internal sealed partial class DesignerActionPanel
 {
     private sealed class MethodLine : Line
     {
-        private DesignerActionList _actionList;
-        private DesignerActionMethodItem _methodItem;
-        private MethodItemLinkLabel _linkLabel;
-        public MethodLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
-        {
-        }
-
-        public sealed override string FocusId
-        {
-            get => $"METHOD:{_actionList.GetType().FullName}.{_methodItem.MemberName}";
-        }
-
-        protected override void AddControls(List<Control> controls)
+        private DesignerActionList? _actionList;
+        private DesignerActionMethodItem? _methodItem;
+        private readonly MethodItemLinkLabel _linkLabel;
+        private MethodLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
         {
             _linkLabel = new MethodItemLinkLabel
             {
@@ -39,10 +28,13 @@ internal sealed partial class DesignerActionPanel
                 VisitedLinkColor = ActionPanel.LinkColor
             };
             _linkLabel.LinkClicked += new LinkLabelLinkClickedEventHandler(OnLinkLabelLinkClicked);
-            controls.Add(_linkLabel);
+            AddedControls.Add(_linkLabel);
         }
 
-        public sealed override void Focus()
+        // _methodItem and _actionList are set in UpdateActionItem, which is always called right after the MethodLine object creation
+        public override string FocusId => $"METHOD:{_actionList!.GetType().FullName}.{_methodItem!.MemberName}";
+
+        public override void Focus()
         {
             _linkLabel.Focus();
         }
@@ -59,19 +51,20 @@ internal sealed partial class DesignerActionPanel
             return linkLabelSize + new Size(LineLeftMargin + LineRightMargin, LineVerticalPadding);
         }
 
-        private void OnLinkLabelLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void OnLinkLabelLinkClicked(object? sender, LinkLabelLinkClickedEventArgs e)
         {
             Debug.Assert(!ActionPanel.InMethodInvoke, "Nested method invocation");
             ActionPanel.InMethodInvoke = true;
             try
             {
-                _methodItem.Invoke();
+                // _methodItem is set in UpdateActionItem, which is always called right after the MethodLine object creation
+                _methodItem!.Invoke();
             }
             catch (Exception ex)
             {
                 if (ex is TargetInvocationException)
                 {
-                    ex = ex.InnerException;
+                    ex = ex.InnerException!;
                 }
 
                 //NOTE: We had code to rethrow if this was one of [NullReferenceException, StackOverflowException, OutOfMemoryException,
@@ -79,7 +72,7 @@ internal sealed partial class DesignerActionPanel
                 //NullRef and OutOfMemory really shouldn't be caught.  Out of these, OOM is the most correct one to call, but OOM is
                 //thrown by GDI+ for pretty much any problem, so isn't reliable as an actual indicator that you're out of memory.  If
                 //you really are out of memory, it's very likely you'll get another OOM shortly.
-                ActionPanel.ShowError(string.Format(SR.DesignerActionPanel_ErrorInvokingAction, _methodItem.DisplayName, Environment.NewLine + ex.Message));
+                ActionPanel.ShowError(string.Format(SR.DesignerActionPanel_ErrorInvokingAction, _methodItem!.DisplayName, Environment.NewLine + ex.Message));
             }
             finally
             {
@@ -87,13 +80,14 @@ internal sealed partial class DesignerActionPanel
             }
         }
 
-        internal override void UpdateActionItem(DesignerActionList actionList, DesignerActionItem actionItem, ToolTip toolTip, ref int currentTabIndex)
+        internal override void UpdateActionItem(LineInfo lineInfo, ToolTip toolTip, ref int currentTabIndex)
         {
-            _actionList = actionList;
-            _methodItem = (DesignerActionMethodItem)actionItem;
+            Info info = (Info)lineInfo;
+            _actionList = info.List;
+            _methodItem = info.Item;
             toolTip.SetToolTip(_linkLabel, _methodItem.Description);
             _linkLabel.Text = StripAmpersands(_methodItem.DisplayName);
-            _linkLabel.AccessibleDescription = actionItem.Description;
+            _linkLabel.AccessibleDescription = _methodItem.Description;
             _linkLabel.TabIndex = currentTabIndex++;
         }
 
@@ -114,6 +108,18 @@ internal sealed partial class DesignerActionPanel
 
                 return base.ProcessDialogKey(keyData);
             }
+        }
+
+        public static StandardLineInfo CreateLineInfo(DesignerActionList list, DesignerActionMethodItem item) => new Info(list, item);
+        private sealed class Info(DesignerActionList list, DesignerActionMethodItem item) : StandardLineInfo(list)
+        {
+            public override DesignerActionMethodItem Item { get; } = item;
+            public override Line CreateLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
+            {
+                return new MethodLine(serviceProvider, actionPanel);
+            }
+
+            public override Type LineType => typeof(MethodLine);
         }
     }
 }

@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop.UiaCore;
+using IRawElementProviderSimple = Interop.UiaCore.IRawElementProviderSimple;
 
 namespace System.Windows.Forms;
 
@@ -114,19 +116,19 @@ public partial class TabControl
 
             return direction switch
             {
-                NavigateDirection.FirstChild => owner.SelectedTab?.AccessibilityObject,
-                NavigateDirection.LastChild => owner.TabPages.Count > 0
+                NavigateDirection.NavigateDirection_FirstChild => owner.SelectedTab?.AccessibilityObject,
+                NavigateDirection.NavigateDirection_LastChild => owner.TabPages.Count > 0
                     ? owner.TabPages[^1].TabAccessibilityObject
                     : null,
                 _ => base.FragmentNavigate(direction)
             };
         }
 
-        internal override object? GetPropertyValue(UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out TabControl? owner) && owner.Focused,
-                UIA.IsKeyboardFocusablePropertyId
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out TabControl? owner) && owner.Focused,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId
                     // This is necessary for compatibility with MSAA proxy:
                     // IsKeyboardFocusable = true regardless the control is enabled/disabled.
                     => true,
@@ -138,12 +140,12 @@ public partial class TabControl
                 ? Array.Empty<IRawElementProviderSimple>()
                 : new IRawElementProviderSimple[] { owner.SelectedTab.TabAccessibilityObject };
 
-        internal override bool IsPatternSupported(UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
                 // The "Enabled" property of the TabControl does not affect the behavior of that property,
                 // so it is always true
-                UIA.SelectionPatternId => true,
+                UIA_PATTERN_ID.UIA_SelectionPatternId => true,
                 _ => base.IsPatternSupported(patternId)
             };
     }

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Globalization;
 
 namespace System.Windows.Forms.Design;
@@ -16,7 +14,7 @@ internal partial class FormatControl : UserControl
     private const int ScientificIndex = 4;
     private const int CustomIndex = 5;
 
-    private TextBox customStringTextBox = new();
+    private TextBox _customStringTextBox = new();
 
     // static because we want this value to be the same across a
     // VS session
@@ -34,9 +32,7 @@ internal partial class FormatControl : UserControl
     {
         get
         {
-            FormatTypeClass formatType = formatTypeListBox.SelectedItem as FormatTypeClass;
-
-            if (formatType is not null)
+            if (formatTypeListBox.SelectedItem is FormatTypeClass formatType)
             {
                 return formatType.ToString();
             }
@@ -51,7 +47,7 @@ internal partial class FormatControl : UserControl
 
             for (int i = 0; i < formatTypeListBox.Items.Count; i++)
             {
-                FormatTypeClass formatType = formatTypeListBox.Items[i] as FormatTypeClass;
+                var formatType = (FormatTypeClass)formatTypeListBox.Items[i];
 
                 if (formatType.ToString().Equals(value))
                 {
@@ -61,15 +57,9 @@ internal partial class FormatControl : UserControl
         }
     }
 
-    public FormatTypeClass FormatTypeItem
-    {
-        get
-        {
-            return formatTypeListBox.SelectedItem as FormatTypeClass;
-        }
-    }
+    public FormatTypeClass? FormatTypeItem => formatTypeListBox.SelectedItem as FormatTypeClass;
 
-    public string NullValue
+    public string? NullValue
     {
         get
         {
@@ -77,9 +67,9 @@ internal partial class FormatControl : UserControl
             // Otherwise we end up pushing empty string as the NullValue for every binding, which breaks non-string
             // bindings. This does mean that setting the NullValue to empty string now becomes a code-only scenario
             // for users, but that is an acceptable trade-off.
-            string nullValue = nullValueTextBox.Text.Trim();
+            string nullValue = nullValueTextBox.Text;
 
-            return (nullValue.Length == 0) ? null : nullValue;
+            return string.IsNullOrWhiteSpace(nullValue) ? null : nullValue.Trim();
         }
         set
         {
@@ -97,39 +87,43 @@ internal partial class FormatControl : UserControl
         }
     }
 
-    private void customStringTextBox_TextChanged(object sender, EventArgs e)
+    private void customStringTextBox_TextChanged(object? sender, EventArgs e)
     {
-        CustomFormatType customFormatType = formatTypeListBox.SelectedItem as CustomFormatType;
+        var customFormatType = (CustomFormatType?)formatTypeListBox.SelectedItem;
+        Debug.Assert(customFormatType is not null);
         sampleLabel.Text = customFormatType.SampleString;
         Dirty = true;
     }
 
-    private void dateTimeFormatsListBox_SelectedIndexChanged(object sender, EventArgs e)
+    private void dateTimeFormatsListBox_SelectedIndexChanged(object? sender, EventArgs e)
     {
         // recompute the SampleLabel
-        FormatTypeClass item = formatTypeListBox.SelectedItem as FormatTypeClass;
+        var item = (FormatTypeClass?)formatTypeListBox.SelectedItem;
+        Debug.Assert(item is not null);
         sampleLabel.Text = item.SampleString;
         Dirty = true;
     }
 
-    private void decimalPlacesUpDown_ValueChanged(object sender, EventArgs e)
+    private void decimalPlacesUpDown_ValueChanged(object? sender, EventArgs e)
     {
         // update the sample label
-        FormatTypeClass item = formatTypeListBox.SelectedItem as FormatTypeClass;
+        var item = (FormatTypeClass?)formatTypeListBox.SelectedItem;
+        Debug.Assert(item is not null);
         sampleLabel.Text = item.SampleString;
         Dirty = true;
     }
 
-    private void formatGroupBox_Enter(object sender, EventArgs e)
+    private void formatGroupBox_Enter(object? sender, EventArgs e)
     {
     }
 
-    private void formatTypeListBox_SelectedIndexChanged(object sender, EventArgs e)
+    private void formatTypeListBox_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        FormatTypeClass formatType = formatTypeListBox.SelectedItem as FormatTypeClass;
-        UpdateControlVisibility(formatType);
-        sampleLabel.Text = formatType.SampleString;
-        explanationLabel.Text = formatType.TopLabelString;
+        var item = (FormatTypeClass?)formatTypeListBox.SelectedItem;
+        Debug.Assert(item is not null);
+        UpdateControlVisibility(item);
+        sampleLabel.Text = item.SampleString;
+        explanationLabel.Text = item.TopLabelString;
         Dirty = true;
     }
 
@@ -212,10 +206,10 @@ internal partial class FormatControl : UserControl
                 }
 
             case CustomIndex:
-                Debug.Assert(customStringTextBox.Visible);
+                Debug.Assert(_customStringTextBox.Visible);
                 if (IsMnemonic(charCode, secondRowLabel.Text))
                 {
-                    customStringTextBox.Focus();
+                    _customStringTextBox.Focus();
                     return true;
                 }
                 else
@@ -231,7 +225,7 @@ internal partial class FormatControl : UserControl
     public void ResetFormattingInfo()
     {
         decimalPlacesUpDown.ValueChanged -= new EventHandler(decimalPlacesUpDown_ValueChanged);
-        customStringTextBox.TextChanged -= new EventHandler(customStringTextBox_TextChanged);
+        _customStringTextBox.TextChanged -= new EventHandler(customStringTextBox_TextChanged);
         dateTimeFormatsListBox.SelectedIndexChanged -= new EventHandler(dateTimeFormatsListBox_SelectedIndexChanged);
         formatTypeListBox.SelectedIndexChanged -= new EventHandler(formatTypeListBox_SelectedIndexChanged);
 
@@ -239,30 +233,16 @@ internal partial class FormatControl : UserControl
         nullValueTextBox.Text = string.Empty;
         dateTimeFormatsListBox.SelectedIndex = -1;
         formatTypeListBox.SelectedIndex = -1;
-        customStringTextBox.Text = string.Empty;
+        _customStringTextBox.Text = string.Empty;
 
         decimalPlacesUpDown.ValueChanged += new EventHandler(decimalPlacesUpDown_ValueChanged);
-        customStringTextBox.TextChanged += new EventHandler(customStringTextBox_TextChanged);
+        _customStringTextBox.TextChanged += new EventHandler(customStringTextBox_TextChanged);
         dateTimeFormatsListBox.SelectedIndexChanged += new EventHandler(dateTimeFormatsListBox_SelectedIndexChanged);
         formatTypeListBox.SelectedIndexChanged += new EventHandler(formatTypeListBox_SelectedIndexChanged);
     }
 
     private void UpdateControlVisibility(FormatTypeClass formatType)
     {
-        if (formatType is null)
-        {
-            explanationLabel.Visible = false;
-            sampleLabel.Visible = false;
-            nullValueLabel.Visible = false;
-            secondRowLabel.Visible = false;
-            nullValueTextBox.Visible = false;
-            thirdRowLabel.Visible = false;
-            dateTimeFormatsListBox.Visible = false;
-            customStringTextBox.Visible = false;
-            decimalPlacesUpDown.Visible = false;
-            return;
-        }
-
         tableLayoutPanel1.SuspendLayout();
         secondRowLabel.Text = string.Empty;
 
@@ -284,28 +264,28 @@ internal partial class FormatControl : UserControl
             thirdRowLabel.Visible = true;
             tableLayoutPanel1.SetColumn(thirdRowLabel, 0);
             tableLayoutPanel1.SetColumnSpan(thirdRowLabel, 2);
-            customStringTextBox.Visible = true;
+            _customStringTextBox.Visible = true;
 
             if (tableLayoutPanel1.Controls.Contains(dateTimeFormatsListBox))
             {
                 tableLayoutPanel1.Controls.Remove(dateTimeFormatsListBox);
             }
 
-            tableLayoutPanel1.Controls.Add(customStringTextBox, 1, 1);
+            tableLayoutPanel1.Controls.Add(_customStringTextBox, 1, 1);
         }
         else
         {
             thirdRowLabel.Visible = false;
-            customStringTextBox.Visible = false;
+            _customStringTextBox.Visible = false;
         }
 
         if (formatType.ListBoxVisible)
         {
             secondRowLabel.Text = SR.BindingFormattingDialogType;
 
-            if (tableLayoutPanel1.Controls.Contains(customStringTextBox))
+            if (tableLayoutPanel1.Controls.Contains(_customStringTextBox))
             {
-                tableLayoutPanel1.Controls.Remove(customStringTextBox);
+                tableLayoutPanel1.Controls.Remove(_customStringTextBox);
             }
 
             dateTimeFormatsListBox.Visible = true;
@@ -320,17 +300,17 @@ internal partial class FormatControl : UserControl
 
         secondRowLabel.Visible = secondRowLabel.Text.Length > 0;
 
-        tableLayoutPanel1.ResumeLayout(true /*performLayout*/);
+        tableLayoutPanel1.ResumeLayout(performLayout: true);
     }
 
     private void UpdateCustomStringTextBox()
     {
-        customStringTextBox = new TextBox();
-        customStringTextBox.AccessibleDescription = SR.BindingFormattingDialogCustomFormatAccessibleDescription;
-        customStringTextBox.Margin = new Padding(0, 3, 0, 3);
-        customStringTextBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-        customStringTextBox.TabIndex = 3;
-        customStringTextBox.TextChanged += new EventHandler(customStringTextBox_TextChanged);
+        _customStringTextBox = new TextBox();
+        _customStringTextBox.AccessibleDescription = SR.BindingFormattingDialogCustomFormatAccessibleDescription;
+        _customStringTextBox.Margin = new Padding(0, 3, 0, 3);
+        _customStringTextBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+        _customStringTextBox.TabIndex = 3;
+        _customStringTextBox.TextChanged += new EventHandler(customStringTextBox_TextChanged);
     }
 
     private void UpdateFormatTypeListBoxHeight()
@@ -362,8 +342,8 @@ internal partial class FormatControl : UserControl
         tableLayoutPanel1.SuspendLayout();
 
         // set up the customStringTextBox
-        tableLayoutPanel1.Controls.Add(customStringTextBox, 1, 1);
-        customStringTextBox.Visible = false;
+        tableLayoutPanel1.Controls.Add(_customStringTextBox, 1, 1);
+        _customStringTextBox.Visible = false;
 
         // set the thirdRowLabel
         thirdRowLabel.MaximumSize = new Drawing.Size(tableLayoutPanel1.Width, 0);
@@ -371,13 +351,13 @@ internal partial class FormatControl : UserControl
         tableLayoutPanel1.SetColumn(thirdRowLabel, 0);
         tableLayoutPanel1.SetColumnSpan(thirdRowLabel, 2);
         thirdRowLabel.AutoSize = true;
-        tableLayoutPanel1.ResumeLayout(true /*performLayout*/);
+        tableLayoutPanel1.ResumeLayout(performLayout: true);
 
         // Now that PerformLayout set the bounds for the tableLayoutPanel we can use these bounds to specify the tableLayoutPanel minimumSize.
         tableLayoutPanel1.MinimumSize = new Drawing.Size(tableLayoutPanel1.Width, tableLayoutPanel1.Height);
     }
 
-    private void FormatControl_Load(object sender, EventArgs e)
+    private void FormatControl_Load(object? sender, EventArgs e)
     {
         if (_loaded)
         {
@@ -418,10 +398,13 @@ internal partial class FormatControl : UserControl
         UpdateFormatTypeListBoxHeight();
         UpdateFormatTypeListBoxItems();
 
-        UpdateControlVisibility(formatTypeListBox.SelectedItem as FormatTypeClass);
-        sampleLabel.Text = ((formatTypeListBox.SelectedItem) as FormatTypeClass).SampleString;
+        var item = (FormatTypeClass?)formatTypeListBox.SelectedItem;
+        Debug.Assert(item is not null);
+
+        UpdateControlVisibility(item);
+        sampleLabel.Text = item.SampleString;
         explanationLabel.Size = new Drawing.Size(formatGroupBox.Width - 10, 30);
-        explanationLabel.Text = ((formatTypeListBox.SelectedItem) as FormatTypeClass).TopLabelString;
+        explanationLabel.Text = item.TopLabelString;
 
         Dirty = false;
 
@@ -433,45 +416,31 @@ internal partial class FormatControl : UserControl
     // This method tells the FormatStringDialog that the FormatControl is loaded and resized.
     private void FormatControlFinishedLoading()
     {
-        FormatStringDialog fsd = null;
-        Control ctl = Parent;
-
-        while (ctl is not null)
+        for (Control? ctl = Parent; ctl is not null; ctl = ctl.Parent)
         {
-            fsd = ctl as FormatStringDialog;
-
-            if (fsd is not null)
+            if (ctl is FormatStringDialog fsd)
             {
+                fsd.FormatControlFinishedLoading();
                 break;
             }
-
-            ctl = ctl.Parent;
         }
-
-        fsd?.FormatControlFinishedLoading();
     }
 
     private class DateTimeFormatsListBoxItem
     {
-        private readonly DateTime value;
-        private readonly string formatString;
+        private readonly DateTime _value;
+
         public DateTimeFormatsListBoxItem(DateTime value, string formatString)
         {
-            this.value = value;
-            this.formatString = formatString;
+            _value = value;
+            FormatString = formatString;
         }
 
-        public string FormatString
-        {
-            get
-            {
-                return formatString;
-            }
-        }
+        public string FormatString { get; }
 
         public override string ToString()
         {
-            return value.ToString(formatString, CultureInfo.CurrentCulture);
+            return _value.ToString(FormatString, CultureInfo.CurrentCulture);
         }
     }
 
@@ -486,9 +455,11 @@ internal partial class FormatControl : UserControl
         public abstract string FormatString { get; }
         public abstract bool Parse(string formatString);
         public abstract void PushFormatStringIntoFormatType(string formatString);
+
+        public abstract override string ToString();
     }
 
-    private void nullValueTextBox_TextChanged(object sender, EventArgs e)
+    private void nullValueTextBox_TextChanged(object? sender, EventArgs e)
     {
         Dirty = true;
     }

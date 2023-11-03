@@ -28,7 +28,35 @@ internal unsafe class AgileComPointer<TInterface> :
     where TInterface : unmanaged, IComIID
 {
     private uint _cookie;
-    private readonly TInterface* _originalPointer;
+    private readonly IUnknown* _originalObject;
+
+#if DEBUG
+    public AgileComPointer(TInterface* @interface, bool takeOwnership, bool trackDisposal = true)
+        : base(trackDisposal)
+#else
+    public AgileComPointer(TInterface* @interface, bool takeOwnership)
+#endif
+    {
+        try
+        {
+            _cookie = GlobalInterfaceTable.RegisterInterface(@interface);
+            fixed (IUnknown** ppUnknown = &_originalObject)
+            {
+                ((IUnknown*)@interface)->QueryInterface(IID.Get<IUnknown>(), (void**)ppUnknown).ThrowOnFailure();
+            }
+
+            _originalObject->Release();
+        }
+        finally
+        {
+            if (takeOwnership)
+            {
+                // The GIT will add a ref to the given interface, release to effectively give ownership to the GIT.
+                uint count = ((IUnknown*)@interface)->Release();
+                Debug.Assert(count >= 0);
+            }
+        }
+    }
 
     /// <summary>
     ///  Returns <see langword="true"/> if the given <paramref name="interface"/> is the same pointer this
@@ -40,26 +68,19 @@ internal unsafe class AgileComPointer<TInterface> :
     ///   object.
     ///  </para>
     /// </remarks>
-    public bool MatchesOriginalPointer(TInterface* @interface)
-        => _cookie != 0 && @interface == _originalPointer;
-
-#if DEBUG
-    public AgileComPointer(TInterface* @interface, bool takeOwnership, bool trackDisposal = true)
-        : base(trackDisposal)
-#else
-    public AgileComPointer(TInterface* @interface, bool takeOwnership)
-#endif
+    public bool IsSameNativeObject(TInterface* @interface)
     {
-        _cookie = GlobalInterfaceTable.RegisterInterface(@interface);
-        _originalPointer = @interface;
-
-        if (takeOwnership)
-        {
-            // The GIT will add a ref to the given interface, release to effectively give ownership to the GIT.
-            uint count = ((IUnknown*)@interface)->Release();
-            Debug.Assert(count >= 0);
-        }
+        using ComScope<IUnknown> unknownScope = new(null);
+        ((IUnknown*)@interface)->QueryInterface(IID.Get<IUnknown>(), unknownScope);
+        return _cookie != 0 && unknownScope.Value == _originalObject;
     }
+
+    /// <summary>
+    ///  Returns <see langword="true"/> if <paramref name="other"/> has the same pointer this
+    ///  <see cref="AgileComPointer{TInterface}"/> was created from.
+    /// </summary>
+    public bool IsSameNativeObject(AgileComPointer<TInterface> other)
+        => _originalObject == other._originalObject;
 
     /// <summary>
     ///  Gets the default interface. Throws if failed.
@@ -97,6 +118,18 @@ internal unsafe class AgileComPointer<TInterface> :
         var scope = GlobalInterfaceTable.GetInterface<TAsInterface>(_cookie, out hr);
         return scope;
     }
+
+    /// <summary>
+    ///  Gets the managed object using the pointer
+    ///  this <see cref="AgileComPointer{TInterface}"/> was created from.
+    /// </summary>
+    public object GetManagedObject()
+    {
+        using var scope = GetInterface();
+        return ComHelpers.GetObjectForIUnknown(scope.AsUnknown);
+    }
+
+    public override int GetHashCode() => HashCode.Combine((nint)_originalObject);
 
     ~AgileComPointer()
     {

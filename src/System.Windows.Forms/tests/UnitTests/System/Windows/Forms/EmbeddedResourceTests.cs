@@ -257,6 +257,6 @@ public class EmbeddedResourceTests
         string[] expected = allNames.Split(Environment.NewLine);
         Array.Sort(expected, StringComparer.Ordinal);
 
-        AssertExtensions.Equal(expected, actual);
+        actual.Should().Equal(expected);
     }
 }

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 
@@ -19,39 +17,34 @@ internal class ToolStripMenuItemCodeDomSerializer : CodeDomSerializer
     /// <summary>
     /// We implement this for the abstract method on CodeDomSerializer.
     /// </summary>
-    public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
-    {
-        return GetBaseSerializer(manager).Deserialize(manager, codeObject);
-    }
+    public override object? Deserialize(IDesignerSerializationManager manager, object codeObject)
+        => GetBaseSerializer(manager).Deserialize(manager, codeObject);
 
     /// <summary>
     /// This is a small helper method that returns the serializer for base Class
     /// </summary>
     private static CodeDomSerializer GetBaseSerializer(IDesignerSerializationManager manager)
-    {
-        return (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));
-    }
+        => manager.GetSerializer<CodeDomSerializer>(typeof(Component))!;
 
     /// <summary>
     /// We implement this for the abstract method on CodeDomSerializer.  This method
     /// takes an object graph, and serializes the object into CodeDom elements.
     /// </summary>
-    public override object Serialize(IDesignerSerializationManager manager, object value)
+    public override object? Serialize(IDesignerSerializationManager manager, object value)
     {
-        ToolStripMenuItem item = value as ToolStripMenuItem;
-        ToolStrip parent = item.GetCurrentParent();
-
         // Don't Serialize if we are Dummy Item ...
-        if ((item is not null) && !(item.IsOnDropDown) && (parent is not null) && (parent.Site is null))
+        if (value is ToolStripMenuItem {IsOnDropDown: false} item)
         {
-            //don't serialize anything...
-            return null;
+            ToolStrip? parent = item.GetCurrentParent();
+            if (parent is not null && parent.Site is null)
+            {
+                //don't serialize anything...
+                return null;
+            }
         }
-        else
-        {
-            CodeDomSerializer baseSerializer = (CodeDomSerializer)manager.GetSerializer(typeof(ImageList).BaseType, typeof(CodeDomSerializer));
 
-            return baseSerializer.Serialize(manager, value);
-        }
+        CodeDomSerializer baseSerializer = manager.GetSerializer<CodeDomSerializer>(typeof(ImageList).BaseType)!;
+
+        return baseSerializer.Serialize(manager, value);
     }
 }

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -26,11 +27,11 @@ public partial class DataGridViewComboBoxEditingControl
 
         public override AccessibleObject? Parent => _parentAccessibleObject;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     if (this.TryGetOwnerAs(out Control? owner) && owner is IDataGridViewEditingControl editingControl
                         && editingControl.EditingControlDataGridView?.EditingControl == owner
                         && owner.ToolStripControlHost is null)
@@ -49,17 +50,17 @@ public partial class DataGridViewComboBoxEditingControl
                 ? owner.EditingControlDataGridView?.AccessibilityObject
                 : null;
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId switch
         {
-            UiaCore.UIA.ExpandCollapsePatternId when this.TryGetOwnerAs(out DataGridViewComboBoxEditingControl? owner)
+            UIA_PATTERN_ID.UIA_ExpandCollapsePatternId when this.TryGetOwnerAs(out DataGridViewComboBoxEditingControl? owner)
                 => owner.DropDownStyle != ComboBoxStyle.Simple,
             _ => base.IsPatternSupported(patternId)
         };
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => this.TryGetOwnerAs(out DataGridViewComboBoxEditingControl? owner) && owner.DroppedDown
-                ? UiaCore.ExpandCollapseState.Expanded
-                : UiaCore.ExpandCollapseState.Collapsed;
+                ? ExpandCollapseState.ExpandCollapseState_Expanded
+                : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         /// <summary>
         ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.

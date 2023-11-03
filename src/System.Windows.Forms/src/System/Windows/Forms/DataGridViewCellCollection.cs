@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -15,21 +13,21 @@ namespace System.Windows.Forms;
 [ListBindable(false)]
 public class DataGridViewCellCollection : BaseCollection, IList
 {
-    private CollectionChangeEventHandler _onCollectionChanged;
+    private CollectionChangeEventHandler? _onCollectionChanged;
     private readonly List<DataGridViewCell> _items = new();
     private readonly DataGridViewRow _owner;
 
-    int IList.Add(object value) => Add((DataGridViewCell)value);
+    int IList.Add(object? value) => Add((DataGridViewCell)value!);
 
     void IList.Clear() => Clear();
 
-    bool IList.Contains(object value) => ((IList)_items).Contains(value);
+    bool IList.Contains(object? value) => ((IList)_items).Contains(value);
 
-    int IList.IndexOf(object value) => ((IList)_items).IndexOf(value);
+    int IList.IndexOf(object? value) => ((IList)_items).IndexOf(value);
 
-    void IList.Insert(int index, object value) => Insert(index, (DataGridViewCell)value);
+    void IList.Insert(int index, object? value) => Insert(index, (DataGridViewCell)value!);
 
-    void IList.Remove(object value) => Remove((DataGridViewCell)value);
+    void IList.Remove(object? value) => Remove((DataGridViewCell)value!);
 
     void IList.RemoveAt(int index) => RemoveAt(index);
 
@@ -37,10 +35,10 @@ public class DataGridViewCellCollection : BaseCollection, IList
 
     bool IList.IsReadOnly => ((IList)_items).IsReadOnly;
 
-    object IList.this[int index]
+    object? IList.this[int index]
     {
         get { return this[index]; }
-        set { this[index] = (DataGridViewCell)value; }
+        set { this[index] = (DataGridViewCell)value!; }
     }
 
     void ICollection.CopyTo(Array array, int index) => ((ICollection)_items).CopyTo(array, index);
@@ -59,23 +57,14 @@ public class DataGridViewCellCollection : BaseCollection, IList
         _owner = dataGridViewRow;
     }
 
-    protected override ArrayList List
-    {
-        get
-        {
-            return ArrayList.Adapter(_items);
-        }
-    }
+    protected override ArrayList List => ArrayList.Adapter(_items);
 
     /// <summary>
     ///  Retrieves the DataGridViewCell with the specified index.
     /// </summary>
     public DataGridViewCell this[int index]
     {
-        get
-        {
-            return _items[index];
-        }
+        get => _items[index];
         set
         {
             DataGridViewCell dataGridViewCell = value.OrThrowIfNull();
@@ -125,7 +114,7 @@ public class DataGridViewCellCollection : BaseCollection, IList
     {
         get
         {
-            DataGridViewColumn dataGridViewColumn = null;
+            DataGridViewColumn? dataGridViewColumn = null;
             if (_owner.DataGridView is not null)
             {
                 dataGridViewColumn = _owner.DataGridView.Columns[columnName];
@@ -140,7 +129,7 @@ public class DataGridViewCellCollection : BaseCollection, IList
         }
         set
         {
-            DataGridViewColumn dataGridViewColumn = null;
+            DataGridViewColumn? dataGridViewColumn = null;
             if (_owner.DataGridView is not null)
             {
                 dataGridViewColumn = _owner.DataGridView.Columns[columnName];
@@ -155,7 +144,7 @@ public class DataGridViewCellCollection : BaseCollection, IList
         }
     }
 
-    public event CollectionChangeEventHandler CollectionChanged
+    public event CollectionChangeEventHandler? CollectionChanged
     {
         add => _onCollectionChanged += value;
         remove => _onCollectionChanged -= value;
@@ -185,7 +174,7 @@ public class DataGridViewCellCollection : BaseCollection, IList
 
         int index = ((IList)_items).Add(dataGridViewCell);
         dataGridViewCell.OwningRow = _owner;
-        DataGridView dataGridView = _owner.DataGridView;
+        DataGridView? dataGridView = _owner.DataGridView;
         if (dataGridView is not null && dataGridView.Columns.Count > index)
         {
             dataGridViewCell.OwningColumn = dataGridView.Columns[index];
@@ -271,10 +260,7 @@ public class DataGridViewCellCollection : BaseCollection, IList
         return index != -1;
     }
 
-    public int IndexOf(DataGridViewCell dataGridViewCell)
-    {
-        return _items.IndexOf(dataGridViewCell);
-    }
+    public int IndexOf(DataGridViewCell dataGridViewCell) => _items.IndexOf(dataGridViewCell);
 
     public virtual void Insert(int index, DataGridViewCell dataGridViewCell)
     {
@@ -300,7 +286,7 @@ public class DataGridViewCellCollection : BaseCollection, IList
         Debug.Assert(!dataGridViewCell.Selected);
         _items.Insert(index, dataGridViewCell);
         dataGridViewCell.OwningRow = _owner;
-        DataGridView dataGridView = _owner.DataGridView;
+        DataGridView? dataGridView = _owner.DataGridView;
         if (dataGridView is not null && dataGridView.Columns.Count > index)
         {
             dataGridViewCell.OwningColumn = dataGridView.Columns[index];

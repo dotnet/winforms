@@ -143,7 +143,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         {
             if (designerContextMenuStrip is null)
             {
-                designerContextMenuStrip = new BaseContextMenuStrip(Component.Site, Table);
+                designerContextMenuStrip = new BaseContextMenuStrip(Component.Site);
 
                 // Remove all the verbs -- except the Edit Rows and Columns
                 ContextMenuStripGroup group = designerContextMenuStrip.Groups[StandardGroups.Verbs];
@@ -576,9 +576,8 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             //Need to do this after the transaction has been created
             if (localCopy)
             {
-                ArrayList temp = new ArrayList();
-                temp.Add(control);
-                temp = DesignerUtils.CopyDragObjects(temp, Component.Site) as ArrayList;
+                List<IComponent> temp = new() { control };
+                temp = DesignerUtils.CopyDragObjects(temp, Component.Site);
                 control = temp[0] as Control;
             }
 
@@ -1924,7 +1923,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                         PropChanging(childProp);
                         foreach (object o in deleteList)
                         {
-                            ArrayList al = new ArrayList();
+                            List<IComponent> al = new();
                             DesignerUtils.GetAssociatedComponents((IComponent)o, host, al);
                             foreach (IComponent comp in al)
                             {

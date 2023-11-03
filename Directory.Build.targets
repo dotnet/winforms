@@ -26,7 +26,13 @@
 
   <!-- Turn on single-file publishing analysis for everything except the test projects -->
   <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
-    <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+    <EnableSingleFileAnalyzer Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</EnableSingleFileAnalyzer>
+  </PropertyGroup>
+
+  <!-- Turn OFF Trimming for non .NET projects.-->
+  <PropertyGroup>
+    <EnableTrimAnalyzer Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</EnableTrimAnalyzer>
+    <EnableTrimAnalyzer Condition="$(IsTestProject) or $(IsAnalyzerProject) or $(MSBuildProjectDirectory.Contains('\tests\'))">false</EnableTrimAnalyzer>
   </PropertyGroup>
 
   <!-- Mark all projects located under **\tests\* folders as non-shipping -->
@@ -34,7 +40,7 @@
     <_ProjectDirectoryRelativePath>$([MSBuild]::MakeRelative($(RepoRoot), $(MSBuildProjectDirectory)))</_ProjectDirectoryRelativePath>
     <_IsUnderTestsFolder>$(_ProjectDirectoryRelativePath.Contains("\tests\"))</_IsUnderTestsFolder>
     <IsShipping Condition="$(_IsUnderTestsFolder)">false</IsShipping>
-	<RedistTargetFrameworkName>$(TargetFrameworkName)$(TargetFrameworkMajorVersion).</RedistTargetFrameworkName>
+	<RedistTargetFrameworkName>$(NetCurrent)</RedistTargetFrameworkName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsTestProject)' == 'true' ">
@@ -74,14 +80,14 @@
   <ItemGroup>
     <!-- Set TargetingPackVersion -->
     <FrameworkReference Update="Microsoft.NETCore.App"
-      Condition=" '$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)'!='' And $(TargetFramework.StartsWith('$(RedistTargetFrameworkName)')) ">
-    <TargetingPackVersion>$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)</TargetingPackVersion>
+      Condition=" '$(MicrosoftNETCoreAppRefPackageVersion)'!='' And $(TargetFramework.StartsWith('$(RedistTargetFrameworkName)')) ">
+    <TargetingPackVersion>$(MicrosoftNETCoreAppRefPackageVersion)</TargetingPackVersion>
     </FrameworkReference>
   </ItemGroup>
 
   <PropertyGroup>
-    <!-- Set RuntimeFrameworkVersion to VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion from Core Setup to prevent large SDK cycle -->
-    <RuntimeFrameworkVersion Condition="'$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)'!='' And $(TargetFramework.StartsWith('$(RedistTargetFrameworkName)')) ">$(VSRedistCommonNetCoreSharedFrameworkx6480PackageVersion)</RuntimeFrameworkVersion>
+    <!-- Set RuntimeFrameworkVersion to MicrosoftNETCoreAppRuntimewinx64PackageVersion from Core Setup to prevent large SDK cycle -->
+    <RuntimeFrameworkVersion Condition="'$(MicrosoftNETCoreAppRuntimewinx64PackageVersion)'!='' And $(TargetFramework.StartsWith('$(RedistTargetFrameworkName)')) ">$(MicrosoftNETCoreAppRuntimewinx64PackageVersion)</RuntimeFrameworkVersion>
 
     <!-- If TargetFramework is not net8.x, then reset RuntimeFrameworkVersion -->
     <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('$(RedistTargetFrameworkName)'))" />

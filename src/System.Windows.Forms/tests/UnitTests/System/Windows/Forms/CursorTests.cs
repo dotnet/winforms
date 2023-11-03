@@ -162,7 +162,7 @@ public class CursorTests
     [Fact]
     public void Cursor_Ctor_NullType_ThrowsArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>("type", () => new Cursor(null, "resource"));
+        Assert.Throws<ArgumentNullException>("type", () => new Cursor((Type)null, "resource"));
     }
 
     [Theory]
@@ -502,9 +502,9 @@ public class CursorTests
     }
 
     [Fact]
-    public void Cursor_ToString_InvalidCursor_ThrowsFormatException()
+    public void Cursor_ToString_InvalidCursor_DoesNotThrowFormatException()
     {
         using var cursor = new Cursor(2);
-        Assert.Throws<FormatException>(() => cursor.ToString());
+        _ = cursor.ToString();
     }
 }

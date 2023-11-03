@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="es" original="../DataGridViewCellStyleBuilder.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>CellStyle Builder</source>
+        <target state="translated">Generador de CellStyle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="cancelButton.Text">
+        <source>Cancel</source>
+        <target state="translated">Cancelar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="label1.Text">
+        <source>This preview shows properties from inherited CellStyles (Table, Column, Row)</source>
+        <target state="translated">Esta vista previa muestra las propiedades de CellStyles heredados (Tabla, Columna, Fila)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="normalLabel.Text">
+        <source>Normal:</source>
+        <target state="translated">Normal:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="okButton.Text">
+        <source>OK</source>
+        <target state="translated">Aceptar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="previewGroupBox.Text">
+        <source>Preview</source>
+        <target state="translated">Vista previa</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="selectedLabel.Text">
+        <source>Selected:</source>
+        <target state="translated">Seleccionada:</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

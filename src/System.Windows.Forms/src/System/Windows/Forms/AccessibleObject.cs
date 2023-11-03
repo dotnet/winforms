@@ -7,13 +7,14 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
-using Accessibility;
-using Windows.Win32.System.Ole;
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
-using UIA = Windows.Win32.UI.Accessibility;
-using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
+using ComIServiceProvider = Windows.Win32.System.Com.IServiceProvider;
+using IAccessible = Accessibility.IAccessible;
+using UIA = Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -46,9 +47,22 @@ public unsafe partial class AccessibleObject :
     UiaCore.IRawElementProviderHwndOverride,
     UiaCore.IScrollItemProvider,
     UiaCore.IMultipleViewProvider,
-    UiaCore.ITextProvider,
-    UiaCore.ITextProvider2
+    ITextProvider.Interface,
+    ITextProvider2.Interface
 {
+    private static readonly string[] s_propertiesWithArguments =
+    {
+        "accChild",
+        "accName",
+        "accValue",
+        "accDescription",
+        "accRole",
+        "accState",
+        "accHelp",
+        "accKeyboardShortcut",
+        "accDefaultAction"
+    };
+
     /// <summary>
     ///  The <see cref="UIA.IAccessible"/> as passed in or generated from requesting the standard implementation
     ///  from Windows. Used for default <see cref="UIA.IAccessible"/> behavior.
@@ -389,10 +403,8 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     /// <param name="patternId">The pattern ID.</param>
     /// <returns><see langword="true"/> if <paramref name="patternId"/> is supported.</returns>
-    internal virtual bool IsPatternSupported(UiaCore.UIA patternId)
-    {
-        return patternId == UiaCore.UIA.InvokePatternId ? IsInvokePatternAvailable : false;
-    }
+    internal virtual bool IsPatternSupported(UIA_PATTERN_ID patternId)
+        => patternId == UIA_PATTERN_ID.UIA_InvokePatternId && IsInvokePatternAvailable;
 
     /// <summary>
     ///  Gets the runtime ID.
@@ -413,7 +425,7 @@ public unsafe partial class AccessibleObject :
     }
 
     internal virtual int ProviderOptions
-        => (int)(UiaCore.ProviderOptions.ServerSideProvider | UiaCore.ProviderOptions.UseComThreading);
+        => (int)(UIA.ProviderOptions.ProviderOptions_ServerSideProvider | UIA.ProviderOptions.ProviderOptions_UseComThreading);
 
     internal virtual UiaCore.IRawElementProviderSimple? HostRawElementProvider => null;
 
@@ -422,41 +434,41 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     /// <param name="propertyID">Identifier indicating the property to return.</param>
     /// <returns>The requested value if supported or <see langword="null"/> if it is not.</returns>
-    internal virtual object? GetPropertyValue(UiaCore.UIA propertyID) =>
+    internal virtual object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
         propertyID switch
         {
-            UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
-            UiaCore.UIA.AutomationIdPropertyId => AutomationId,
-            UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
-            UiaCore.UIA.FrameworkIdPropertyId => "WinForm",
-            UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId),
-            UiaCore.UIA.IsGridItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridItemPatternId),
-            UiaCore.UIA.IsGridPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridPatternId),
-            UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsInvokePatternAvailable,
-            UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId),
-            UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.MultipleViewPatternId),
-            UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
-            UiaCore.UIA.IsPasswordPropertyId => false,
-            UiaCore.UIA.IsScrollItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ScrollItemPatternId),
-            UiaCore.UIA.IsScrollPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ScrollPatternId),
-            UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.SelectionItemPatternId),
-            UiaCore.UIA.IsSelectionPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.SelectionPatternId),
-            UiaCore.UIA.IsTableItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TableItemPatternId),
-            UiaCore.UIA.IsTablePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TablePatternId),
-            UiaCore.UIA.IsTextPattern2AvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPattern2Id),
-            UiaCore.UIA.IsTextPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPatternId),
-            UiaCore.UIA.IsTogglePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TogglePatternId),
-            UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
-            UiaCore.UIA.HelpTextPropertyId => Help ?? string.Empty,
-            UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId => !string.IsNullOrEmpty(DefaultAction) ? DefaultAction : null,
-            UiaCore.UIA.LegacyIAccessibleNamePropertyId => !string.IsNullOrEmpty(Name) ? Name : null,
-            UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
-            UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
-            UiaCore.UIA.NamePropertyId => Name,
-            UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
-            UiaCore.UIA.SelectionCanSelectMultiplePropertyId => CanSelectMultiple,
-            UiaCore.UIA.SelectionIsSelectionRequiredPropertyId => IsSelectionRequired,
-            UiaCore.UIA.ValueValuePropertyId => !string.IsNullOrEmpty(Value) ? Value : null,
+            UIA_PROPERTY_ID.UIA_AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
+            UIA_PROPERTY_ID.UIA_AutomationIdPropertyId => AutomationId,
+            UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId => ((VARIANT)UiaTextProvider.BoundingRectangleAsArray(Bounds)).ToObject(),
+            UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId => "WinForm",
+            UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_ExpandCollapsePatternId),
+            UIA_PROPERTY_ID.UIA_IsGridItemPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_GridItemPatternId),
+            UIA_PROPERTY_ID.UIA_IsGridPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_GridPatternId),
+            UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId => IsInvokePatternAvailable,
+            UIA_PROPERTY_ID.UIA_IsLegacyIAccessiblePatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId),
+            UIA_PROPERTY_ID.UIA_IsMultipleViewPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_MultipleViewPatternId),
+            UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
+            UIA_PROPERTY_ID.UIA_IsPasswordPropertyId => false,
+            UIA_PROPERTY_ID.UIA_IsScrollItemPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollItemPatternId),
+            UIA_PROPERTY_ID.UIA_IsScrollPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_ScrollPatternId),
+            UIA_PROPERTY_ID.UIA_IsSelectionItemPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_SelectionItemPatternId),
+            UIA_PROPERTY_ID.UIA_IsSelectionPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_SelectionPatternId),
+            UIA_PROPERTY_ID.UIA_IsTableItemPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_TableItemPatternId),
+            UIA_PROPERTY_ID.UIA_IsTablePatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_TablePatternId),
+            UIA_PROPERTY_ID.UIA_IsTextPattern2AvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_TextPattern2Id),
+            UIA_PROPERTY_ID.UIA_IsTextPatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_TextPatternId),
+            UIA_PROPERTY_ID.UIA_IsTogglePatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_TogglePatternId),
+            UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_ValuePatternId),
+            UIA_PROPERTY_ID.UIA_HelpTextPropertyId => Help ?? string.Empty,
+            UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId => !string.IsNullOrEmpty(DefaultAction) ? DefaultAction : null,
+            UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId => !string.IsNullOrEmpty(Name) ? Name : null,
+            UIA_PROPERTY_ID.UIA_LegacyIAccessibleRolePropertyId => Role,
+            UIA_PROPERTY_ID.UIA_LegacyIAccessibleStatePropertyId => State,
+            UIA_PROPERTY_ID.UIA_NamePropertyId => Name,
+            UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId => RuntimeId,
+            UIA_PROPERTY_ID.UIA_SelectionCanSelectMultiplePropertyId => CanSelectMultiple,
+            UIA_PROPERTY_ID.UIA_SelectionIsSelectionRequiredPropertyId => IsSelectionRequired,
+            UIA_PROPERTY_ID.UIA_ValueValuePropertyId => !string.IsNullOrEmpty(Value) ? Value : null,
             _ => null
         };
 
@@ -526,7 +538,7 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     /// <param name="direction">Indicates the direction in which to navigate.</param>
     /// <returns>The element in the specified direction if it exists.</returns>
-    internal virtual UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction) => null;
+    internal virtual UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction) => null;
 
     internal virtual UiaCore.IRawElementProviderSimple[]? GetEmbeddedFragmentRoots() => null;
 
@@ -559,13 +571,13 @@ public unsafe partial class AccessibleObject :
     {
     }
 
-    internal virtual UiaCore.ExpandCollapseState ExpandCollapseState => UiaCore.ExpandCollapseState.Collapsed;
+    internal virtual UIA.ExpandCollapseState ExpandCollapseState => UIA.ExpandCollapseState.ExpandCollapseState_Collapsed;
 
     internal virtual void Toggle()
     {
     }
 
-    internal virtual UiaCore.ToggleState ToggleState => UiaCore.ToggleState.Indeterminate;
+    internal virtual ToggleState ToggleState => ToggleState.ToggleState_Indeterminate;
 
     private protected virtual UiaCore.IRawElementProviderFragmentRoot? ToolStripFragmentRoot => null;
 
@@ -573,7 +585,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual UiaCore.IRawElementProviderSimple[]? GetColumnHeaders() => null;
 
-    internal virtual UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
+    internal virtual RowOrColumnMajor RowOrColumnMajor => RowOrColumnMajor.RowOrColumnMajor_RowMajor;
 
     internal virtual UiaCore.IRawElementProviderSimple[]? GetRowHeaderItems() => null;
 
@@ -597,7 +609,7 @@ public unsafe partial class AccessibleObject :
 
     internal virtual void Invoke() => DoDefaultAction();
 
-    internal virtual UiaCore.ITextRangeProvider? DocumentRangeInternal
+    internal virtual ITextRangeProvider* DocumentRangeInternal
     {
         get
         {
@@ -606,51 +618,26 @@ public unsafe partial class AccessibleObject :
         }
     }
 
-    internal virtual UiaCore.ITextRangeProvider[]? GetTextSelection()
-    {
-        Debug.Fail("Not implemented. GetTextSelection method should be overridden.");
-        return null;
-    }
+    internal virtual HRESULT GetTextSelection(SAFEARRAY** pRetVal) => HRESULT.E_NOTIMPL;
 
-    internal virtual UiaCore.ITextRangeProvider[]? GetTextVisibleRanges()
-    {
-        Debug.Fail("Not implemented. GetTextVisibleRanges method should be overridden.");
-        return null;
-    }
+    internal virtual HRESULT GetTextVisibleRanges(SAFEARRAY** pRetVal) => HRESULT.E_NOTIMPL;
 
-    internal virtual UiaCore.ITextRangeProvider? GetTextRangeFromChild(UiaCore.IRawElementProviderSimple childElement)
-    {
-        Debug.Fail("Not implemented. GetTextRangeFromChild method should be overridden.");
-        return null;
-    }
+    internal virtual HRESULT GetTextRangeFromChild(IRawElementProviderSimple* childElement, ITextRangeProvider** pRetVal) => HRESULT.E_NOTIMPL;
 
-    internal virtual UiaCore.ITextRangeProvider? GetTextRangeFromPoint(Point screenLocation)
-    {
-        Debug.Fail("Not implemented. GetTextRangeFromPoint method should be overridden.");
-        return null;
-    }
+    internal virtual HRESULT GetTextRangeFromPoint(UiaPoint screenLocation, ITextRangeProvider** pRetVal) => HRESULT.E_NOTIMPL;
 
-    internal virtual UiaCore.SupportedTextSelection SupportedTextSelectionInternal
+    internal virtual SupportedTextSelection SupportedTextSelectionInternal
     {
         get
         {
             Debug.Fail("Not implemented. SupportedTextSelectionInternal property should be overridden.");
-            return UiaCore.SupportedTextSelection.None;
+            return SupportedTextSelection.SupportedTextSelection_None;
         }
     }
 
-    internal virtual UiaCore.ITextRangeProvider? GetTextCaretRange(out BOOL isActive)
-    {
-        isActive = false;
-        Debug.Fail("Not implemented. GetTextCaretRange method should be overridden.");
-        return null;
-    }
+    internal virtual HRESULT GetTextCaretRange(BOOL* isActive, ITextRangeProvider** pRetVal) => HRESULT.E_NOTIMPL;
 
-    internal virtual UiaCore.ITextRangeProvider? GetRangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
-    {
-        Debug.Fail("Not implemented. GetRangeFromAnnotation method should be overridden.");
-        return null;
-    }
+    internal virtual HRESULT GetRangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal) => HRESULT.E_NOTIMPL;
 
     internal virtual bool IsReadOnly => false;
 
@@ -779,11 +766,11 @@ public unsafe partial class AccessibleObject :
         return HRESULT.E_NOTIMPL;
     }
 
-    UiaCore.ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions => (UiaCore.ProviderOptions)ProviderOptions;
+    ProviderOptions UiaCore.IRawElementProviderSimple.ProviderOptions => (ProviderOptions)ProviderOptions;
 
     UiaCore.IRawElementProviderSimple? UiaCore.IRawElementProviderSimple.HostRawElementProvider => HostRawElementProvider;
 
-    object? UiaCore.IRawElementProviderSimple.GetPatternProvider(UiaCore.UIA patternId)
+    object? UiaCore.IRawElementProviderSimple.GetPatternProvider(UIA_PATTERN_ID patternId)
     {
         if (IsPatternSupported(patternId))
         {
@@ -793,7 +780,7 @@ public unsafe partial class AccessibleObject :
         return null;
     }
 
-    object? UiaCore.IRawElementProviderSimple.GetPropertyValue(UiaCore.UIA propertyID)
+    object? UiaCore.IRawElementProviderSimple.GetPropertyValue(UIA_PROPERTY_ID propertyID)
     {
         object? value = GetPropertyValue(propertyID);
 
@@ -814,7 +801,7 @@ public unsafe partial class AccessibleObject :
         return value;
     }
 
-    object? UiaCore.IRawElementProviderFragment.Navigate(UiaCore.NavigateDirection direction) => FragmentNavigate(direction);
+    object? UiaCore.IRawElementProviderFragment.Navigate(NavigateDirection direction) => FragmentNavigate(direction);
 
     int[]? UiaCore.IRawElementProviderFragment.GetRuntimeId() => RuntimeId;
 
@@ -900,40 +887,42 @@ public unsafe partial class AccessibleObject :
 
     void UiaCore.IExpandCollapseProvider.Collapse() => Collapse();
 
-    UiaCore.ExpandCollapseState UiaCore.IExpandCollapseProvider.ExpandCollapseState => ExpandCollapseState;
+    UIA.ExpandCollapseState UiaCore.IExpandCollapseProvider.ExpandCollapseState => ExpandCollapseState;
 
     void UiaCore.IInvokeProvider.Invoke() => Invoke();
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider.DocumentRange => DocumentRangeInternal;
+    ITextRangeProvider* ITextProvider.Interface.DocumentRange => DocumentRangeInternal;
 
-    UiaCore.ITextRangeProvider[]? UiaCore.ITextProvider.GetSelection() => GetTextSelection();
+    HRESULT ITextProvider.Interface.GetSelection(SAFEARRAY** pRetVal) => GetTextSelection(pRetVal);
 
-    UiaCore.ITextRangeProvider[]? UiaCore.ITextProvider.GetVisibleRanges() => GetTextVisibleRanges();
+    HRESULT ITextProvider.Interface.GetVisibleRanges(SAFEARRAY** pRetVal) => GetTextVisibleRanges(pRetVal);
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider.RangeFromChild(UiaCore.IRawElementProviderSimple childElement) =>
-        GetTextRangeFromChild(childElement);
+    HRESULT ITextProvider.Interface.RangeFromChild(IRawElementProviderSimple* childElement, ITextRangeProvider** pRetVal)
+        => GetTextRangeFromChild(childElement, pRetVal);
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider.RangeFromPoint(Point screenLocation) => GetTextRangeFromPoint(screenLocation);
+    HRESULT ITextProvider.Interface.RangeFromPoint(UiaPoint point, ITextRangeProvider** pRetVal)
+        => GetTextRangeFromPoint(point, pRetVal);
 
-    UiaCore.SupportedTextSelection UiaCore.ITextProvider.SupportedTextSelection => SupportedTextSelectionInternal;
+    SupportedTextSelection ITextProvider.Interface.SupportedTextSelection => SupportedTextSelectionInternal;
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.DocumentRange => DocumentRangeInternal;
+    ITextRangeProvider* ITextProvider2.Interface.DocumentRange => DocumentRangeInternal;
 
-    UiaCore.ITextRangeProvider[]? UiaCore.ITextProvider2.GetSelection() => GetTextSelection();
+    HRESULT ITextProvider2.Interface.GetSelection(SAFEARRAY** pRetVal) => GetTextSelection(pRetVal);
 
-    UiaCore.ITextRangeProvider[]? UiaCore.ITextProvider2.GetVisibleRanges() => GetTextVisibleRanges();
+    HRESULT ITextProvider2.Interface.GetVisibleRanges(SAFEARRAY** pRetVal) => GetTextVisibleRanges(pRetVal);
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.RangeFromChild(UiaCore.IRawElementProviderSimple childElement) =>
-        GetTextRangeFromChild(childElement);
+    HRESULT ITextProvider2.Interface.RangeFromChild(IRawElementProviderSimple* childElement, ITextRangeProvider** pRetVal)
+        => GetTextRangeFromChild(childElement, pRetVal);
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.RangeFromPoint(Point screenLocation) => GetTextRangeFromPoint(screenLocation);
+    HRESULT ITextProvider2.Interface.RangeFromPoint(UiaPoint point, ITextRangeProvider** pRetVal)
+        => GetTextRangeFromPoint(point, pRetVal);
 
-    UiaCore.SupportedTextSelection UiaCore.ITextProvider2.SupportedTextSelection => SupportedTextSelectionInternal;
+    SupportedTextSelection ITextProvider2.Interface.SupportedTextSelection => SupportedTextSelectionInternal;
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.GetCaretRange(out BOOL isActive) => GetTextCaretRange(out isActive);
+    HRESULT ITextProvider2.Interface.GetCaretRange(BOOL* isActive, ITextRangeProvider** pRetVal) => GetTextCaretRange(isActive, pRetVal);
 
-    UiaCore.ITextRangeProvider? UiaCore.ITextProvider2.RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement) =>
-        GetRangeFromAnnotation(annotationElement);
+    HRESULT ITextProvider2.Interface.RangeFromAnnotation(IRawElementProviderSimple* annotationElement, ITextRangeProvider** pRetVal)
+        => GetRangeFromAnnotation(annotationElement, pRetVal);
 
     BOOL UiaCore.IValueProvider.IsReadOnly => IsReadOnly ? true : false;
 
@@ -943,13 +932,13 @@ public unsafe partial class AccessibleObject :
 
     void UiaCore.IToggleProvider.Toggle() => Toggle();
 
-    UiaCore.ToggleState UiaCore.IToggleProvider.ToggleState => ToggleState;
+    ToggleState UiaCore.IToggleProvider.ToggleState => ToggleState;
 
     object[]? UiaCore.ITableProvider.GetRowHeaders() => GetRowHeaders();
 
     object[]? UiaCore.ITableProvider.GetColumnHeaders() => GetColumnHeaders();
 
-    UiaCore.RowOrColumnMajor UiaCore.ITableProvider.RowOrColumnMajor => RowOrColumnMajor;
+    RowOrColumnMajor UiaCore.ITableProvider.RowOrColumnMajor => RowOrColumnMajor;
 
     object[]? UiaCore.ITableItemProvider.GetRowHeaderItems() => GetRowHeaderItems();
 
@@ -971,9 +960,6 @@ public unsafe partial class AccessibleObject :
 
     UiaCore.IRawElementProviderSimple? UiaCore.IGridItemProvider.ContainingGrid => ContainingGrid;
 
-    /// <summary>
-    ///  Perform the default action
-    /// </summary>
     void IAccessible.accDoDefaultAction(object childID)
     {
         if (IsClientObject)
@@ -1035,9 +1021,6 @@ public unsafe partial class AccessibleObject :
         return default;
     }
 
-    /// <summary>
-    ///  Perform a hit test.
-    /// </summary>
     object? IAccessible.accHitTest(int xLeft, int yTop)
     {
         // When the AccessibleObjectFromPoint() is called it calls WindowFromPhysicalPoint() to find the window
@@ -1077,9 +1060,6 @@ public unsafe partial class AccessibleObject :
         return result.Failed ? null : child.ToObject();
     }
 
-    /// <summary>
-    ///  The location of the Accessible object
-    /// </summary>
     void IAccessible.accLocation(
         out int pxLeft,
         out int pyTop,
@@ -1135,9 +1115,6 @@ public unsafe partial class AccessibleObject :
         result = accessible.Value->accLocation(out pxLeft, out pyTop, out pcxWidth, out pcyHeight, ChildIdToVARIANT(childID));
     }
 
-    /// <summary>
-    ///  Navigate to another accessible object.
-    /// </summary>
     object? IAccessible.accNavigate(int navDir, object childID)
     {
         if (IsClientObject)
@@ -1234,9 +1211,6 @@ public unsafe partial class AccessibleObject :
         result = accessible.Value->accDoDefaultAction((VARIANT)(int)PInvoke.CHILDID_SELF);
     }
 
-    /// <summary>
-    ///  Returns a child Accessible object.
-    /// </summary>
     object? IAccessible.get_accChild(object childID)
     {
         if (IsClientObject)
@@ -1291,9 +1265,6 @@ public unsafe partial class AccessibleObject :
             }.ToObject();
     }
 
-    /// <summary>
-    ///  Return the number of children
-    /// </summary>
     int IAccessible.accChildCount
     {
         get
@@ -1326,9 +1297,6 @@ public unsafe partial class AccessibleObject :
         }
     }
 
-    /// <summary>
-    ///  Return the default action
-    /// </summary>
     string? IAccessible.get_accDefaultAction(object childID)
     {
         if (IsClientObject)
@@ -1352,9 +1320,6 @@ public unsafe partial class AccessibleObject :
         return SystemIAccessible.TryGetDefaultAction(ChildIdToVARIANT(childID));
     }
 
-    /// <summary>
-    ///  Return the object or child description
-    /// </summary>
     string? IAccessible.get_accDescription(object childID)
     {
         if (IsClientObject)
@@ -1396,9 +1361,6 @@ public unsafe partial class AccessibleObject :
         return null;
     }
 
-    /// <summary>
-    ///  Return the object or child focus
-    /// </summary>
     object? IAccessible.accFocus
     {
         get
@@ -1418,9 +1380,6 @@ public unsafe partial class AccessibleObject :
         }
     }
 
-    /// <summary>
-    ///  Return help for this accessible object.
-    /// </summary>
     string? IAccessible.get_accHelp(object childID)
     {
         if (IsClientObject)
@@ -1443,9 +1402,6 @@ public unsafe partial class AccessibleObject :
         return SystemIAccessible.TryGetHelp(ChildIdToVARIANT(childID));
     }
 
-    /// <summary>
-    ///  Return the object or child help topic
-    /// </summary>
     int IAccessible.get_accHelpTopic(out string? pszHelpFile, object childID)
     {
         if (IsClientObject)
@@ -1468,9 +1424,6 @@ public unsafe partial class AccessibleObject :
         return SystemIAccessible.TryGetHelpTopic(ChildIdToVARIANT(childID), out pszHelpFile);
     }
 
-    /// <summary>
-    ///  Return the object or child keyboard shortcut
-    /// </summary>
     string? IAccessible.get_accKeyboardShortcut(object childID) => get_accKeyboardShortcutInternal(childID);
 
     internal virtual string? get_accKeyboardShortcutInternal(object childID)
@@ -1495,9 +1448,6 @@ public unsafe partial class AccessibleObject :
         return SystemIAccessible.TryGetKeyboardShortcut(ChildIdToVARIANT(childID));
     }
 
-    /// <summary>
-    ///  Return the object or child name
-    /// </summary>
     string? IAccessible.get_accName(object childID) => get_accNameInternal(childID);
 
     internal virtual string? get_accNameInternal(object childID)
@@ -1538,9 +1488,6 @@ public unsafe partial class AccessibleObject :
         return retval;
     }
 
-    /// <summary>
-    ///  Return the parent object
-    /// </summary>
     object? IAccessible.accParent
     {
         get
@@ -1564,10 +1511,6 @@ public unsafe partial class AccessibleObject :
         }
     }
 
-    /// <summary>
-    ///  The role property describes an object's purpose in terms of its
-    ///  relationship with sibling or child objects.
-    /// </summary>
     object? IAccessible.get_accRole(object childID)
     {
         if (IsClientObject)
@@ -1594,9 +1537,6 @@ public unsafe partial class AccessibleObject :
         return count == 0 ? null : SystemIAccessible.TryGetRole(ChildIdToVARIANT(childID));
     }
 
-    /// <summary>
-    ///  Return the object or child selection
-    /// </summary>
     object? IAccessible.accSelection
     {
         get
@@ -1623,9 +1563,6 @@ public unsafe partial class AccessibleObject :
         }
     }
 
-    /// <summary>
-    ///  Return the object or child state
-    /// </summary>
     object? IAccessible.get_accState(object childID)
     {
         if (IsClientObject)
@@ -1654,9 +1591,6 @@ public unsafe partial class AccessibleObject :
         return SystemIAccessible?.TryGetState(ChildIdToVARIANT(childID));
     }
 
-    /// <summary>
-    ///  Return the object or child value
-    /// </summary>
     string? IAccessible.get_accValue(object childID)
     {
         if (IsClientObject)
@@ -1680,9 +1614,6 @@ public unsafe partial class AccessibleObject :
         return SystemIAccessible.TryGetValue(ChildIdToVARIANT(childID));
     }
 
-    /// <summary>
-    ///  Set the object or child name
-    /// </summary>
     void IAccessible.set_accName(object childID, string newName)
     {
         if (IsClientObject)
@@ -1709,9 +1640,6 @@ public unsafe partial class AccessibleObject :
         SystemIAccessible.TrySetName(ChildIdToVARIANT(childID), newName);
     }
 
-    /// <summary>
-    ///  Set the object or child value
-    /// </summary>
     void IAccessible.set_accValue(object childID, string newValue)
     {
         if (IsClientObject)
@@ -1738,21 +1666,26 @@ public unsafe partial class AccessibleObject :
         SystemIAccessible.TrySetValue(ChildIdToVARIANT(childID), newValue);
     }
 
-    /// <summary>
-    ///  Now that AccessibleObject is used to wrap all system-provided (OLEACC.DLL) accessible
-    ///  objects, it needs to implement IOleWindow and pass this down to the inner object. This is
-    ///  necessary because the OS function WindowFromAccessibleObject() walks up the parent chain
-    ///  looking for the first object that implements IOleWindow, and uses that to get the hwnd.
-    ///
-    ///  But this creates a new problem for AccessibleObjects that do NOT have windows, ie. which
-    ///  represent simple elements. To the OS, these simple elements will now appear to implement
-    ///  IOleWindow, so it will try to get hwnds from them - which they simply cannot provide.
-    ///
-    ///  To work around this problem, the AccessibleObject for a simple element will delegate all
-    ///  IOleWindow calls up the parent chain itself. This will stop at the first window-based
-    ///  accessible object, which will be able to return an hwnd back to the OS. So we are
-    ///  effectively 'preempting' what WindowFromAccessibleObject() would do.
-    /// </summary>
+    /// <inheritdoc cref="IOleWindow.GetWindow(HWND*)"/>
+    /// <devdoc>
+    ///  <para>
+    ///   Now that AccessibleObject is used to wrap all system-provided (OLEACC.DLL) accessible
+    ///   objects, it needs to implement IOleWindow and pass this down to the inner object. This is
+    ///   necessary because the OS function WindowFromAccessibleObject() walks up the parent chain
+    ///   looking for the first object that implements IOleWindow, and uses that to get the hwnd.
+    ///  </para>
+    ///  <para>
+    ///   But this creates a new problem for AccessibleObjects that do NOT have windows, ie. which
+    ///   represent simple elements. To the OS, these simple elements will now appear to implement
+    ///   IOleWindow, so it will try to get hwnds from them - which they simply cannot provide.
+    ///  </para>
+    ///  <para>
+    ///   To work around this problem, the AccessibleObject for a simple element will delegate all
+    ///   IOleWindow calls up the parent chain itself. This will stop at the first window-based
+    ///   accessible object, which will be able to return an hwnd back to the OS. So we are
+    ///   effectively 'preempting' what WindowFromAccessibleObject() would do.
+    ///  </para>
+    /// </devdoc>
     HRESULT IOleWindow.Interface.GetWindow(HWND* phwnd)
     {
         if (phwnd is null)
@@ -1779,9 +1712,10 @@ public unsafe partial class AccessibleObject :
         return HRESULT.E_FAIL;
     }
 
-    /// <summary>
-    ///  See GetWindow() above for details.
-    /// </summary>
+    /// <inheritdoc cref="IOleWindow.ContextSensitiveHelp(BOOL)"/>
+    /// <devdoc>
+    ///  See GetWindow() above for further details.
+    /// </devdoc>
     HRESULT IOleWindow.Interface.ContextSensitiveHelp(BOOL fEnterMode)
     {
         // See if we have an inner object that can provide help
@@ -1802,25 +1736,13 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    /// <summary>
-    ///  Clone this accessible object.
-    /// </summary>
     HRESULT IEnumVARIANT.Interface.Clone(IEnumVARIANT** ppEnum) => EnumVariant.Clone(ppEnum);
 
-    /// <summary>
-    ///  Obtain the next n children of this accessible object.
-    /// </summary>
     HRESULT IEnumVARIANT.Interface.Next(uint celt, VARIANT* rgVar, uint* pCeltFetched)
         => EnumVariant.Next(celt, rgVar, pCeltFetched);
 
-    /// <summary>
-    ///  Resets the child accessible object enumerator.
-    /// </summary>
     HRESULT IEnumVARIANT.Interface.Reset() => EnumVariant.Reset();
 
-    /// <summary>
-    ///  Skip the next n child accessible objects
-    /// </summary>
     HRESULT IEnumVARIANT.Interface.Skip(uint celt) => EnumVariant.Skip(celt);
 
     /// <summary>
@@ -2104,7 +2026,7 @@ public unsafe partial class AccessibleObject :
 
         // Check to see if this object already wraps the given pointer.
         if (SystemIAccessible is { } systemAccessible
-            && systemAccessible.MatchesOriginalPointer(accessible))
+            && systemAccessible.IsSameNativeObject(accessible))
         {
             accessible->Release();
             return this;
@@ -2120,20 +2042,10 @@ public unsafe partial class AccessibleObject :
             );
     }
 
-    /// <summary>
-    ///  Return the requested method if it is implemented by the Reflection object. The
-    ///  match is based upon the name and DescriptorInfo which describes the signature
-    ///  of the method.
-    /// </summary>
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
     MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr, Binder? binder, Type[] types, ParameterModifier[]? modifiers)
         => typeof(IAccessible).GetMethod(name, bindingAttr, binder, types, modifiers);
 
-    /// <summary>
-    ///  Return the requested method if it is implemented by the Reflection object. The
-    ///  match is based upon the name of the method. If the object implemented multiple methods
-    ///  with the same name an AmbiguousMatchException is thrown.
-    /// </summary>
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]
     MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)
         => typeof(IAccessible).GetMethod(name, bindingAttr);
@@ -2142,11 +2054,6 @@ public unsafe partial class AccessibleObject :
     MethodInfo[] IReflect.GetMethods(BindingFlags bindingAttr)
         => typeof(IAccessible).GetMethods(bindingAttr);
 
-    /// <summary>
-    ///  Return the requestion field if it is implemented by the Reflection
-    ///  object. The match is based upon a name. There cannot be more than
-    ///  a single field with a name.
-    /// </summary>
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields)]
     FieldInfo? IReflect.GetField(string name, BindingFlags bindingAttr)
         => typeof(IAccessible).GetField(name, bindingAttr);
@@ -2155,19 +2062,10 @@ public unsafe partial class AccessibleObject :
     FieldInfo[] IReflect.GetFields(BindingFlags bindingAttr)
         => typeof(IAccessible).GetFields(bindingAttr);
 
-    /// <summary>
-    ///  Return the property based upon name. If more than one property has
-    ///  the given name an AmbiguousMatchException will be thrown. Returns
-    ///  null if no property is found.
-    /// </summary>
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
     PropertyInfo? IReflect.GetProperty(string name, BindingFlags bindingAttr)
         => typeof(IAccessible).GetProperty(name, bindingAttr);
 
-    /// <summary>
-    ///  Return the property based upon the name and Descriptor info describing
-    ///  the property indexing. Return null if no property is found.
-    /// </summary>
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
     PropertyInfo? IReflect.GetProperty(
         string name,
@@ -2178,17 +2076,10 @@ public unsafe partial class AccessibleObject :
         ParameterModifier[]? modifiers)
         => typeof(IAccessible).GetProperty(name, bindingAttr, binder, returnType, types, modifiers);
 
-    /// <summary>
-    ///  Returns an array of PropertyInfos for all the properties defined on
-    ///  the Reflection object.
-    /// </summary>
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties)]
     PropertyInfo[] IReflect.GetProperties(BindingFlags bindingAttr)
         => typeof(IAccessible).GetProperties(bindingAttr);
 
-    /// <summary>
-    ///  Return an array of members which match the passed in name.
-    /// </summary>
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields |
         DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods |
         DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.NonPublicEvents |
@@ -2198,9 +2089,6 @@ public unsafe partial class AccessibleObject :
     MemberInfo[] IReflect.GetMember(string name, BindingFlags bindingAttr)
         => typeof(IAccessible).GetMember(name, bindingAttr);
 
-    /// <summary>
-    ///  Return an array of all of the members defined for this object.
-    /// </summary>
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields |
         DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods |
         DynamicallyAccessedMemberTypes.PublicEvents | DynamicallyAccessedMemberTypes.NonPublicEvents |
@@ -2210,38 +2098,6 @@ public unsafe partial class AccessibleObject :
     MemberInfo[] IReflect.GetMembers(BindingFlags bindingAttr)
         => typeof(IAccessible).GetMembers(bindingAttr);
 
-    /// <summary>
-    ///  Description of the Binding Process.
-    ///  We must invoke a method that is accessable and for which the provided
-    ///  parameters have the most specific match. A method may be called if
-    ///  1. The number of parameters in the method declaration equals the number of
-    ///  arguments provided to the invocation
-    ///  2. The type of each argument can be converted by the binder to the
-    ///  type of the type of the parameter.
-    ///
-    ///  The binder will find all of the matching methods. These method are found based
-    ///  upon the type of binding requested (MethodInvoke, Get/Set Properties). The set
-    ///  of methods is filtered by the name, number of arguments and a set of search modifiers
-    ///  defined in the Binder.
-    ///
-    ///  After the method is selected, it will be invoked. Accessability is checked
-    ///  at that point. The search may be control which set of methods are searched based
-    ///  upon the accessibility attribute associated with the method.
-    ///
-    ///  The BindToMethod method is responsible for selecting the method to be invoked.
-    ///  For the default binder, the most specific method will be selected.
-    ///
-    ///  This will invoke a specific member...
-    ///  @exception If <var>invokeAttr</var> is CreateInstance then all other
-    ///  Access types must be undefined. If not we throw an ArgumentException.
-    ///  @exception If the <var>invokeAttr</var> is not CreateInstance then an
-    ///  ArgumentException when <var>name</var> is null.
-    ///  @exception ArgumentException when <var>invokeAttr</var> does not specify the type
-    ///  @exception ArgumentException when <var>invokeAttr</var> specifies both get and set of
-    ///  a property or field.
-    ///  @exception ArgumentException when <var>invokeAttr</var> specifies property set and
-    ///  invoke method.
-    /// </summary>
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
     object? IReflect.InvokeMember(
         string name,
@@ -2253,31 +2109,31 @@ public unsafe partial class AccessibleObject :
         CultureInfo? culture,
         string[]? namedParameters)
     {
-        if (args?.Length == 0)
+        // In the interface definition there are parameters that take an argument such as `accChild`. In IL this is
+        // defined as follows:
+        //
+        //   .property object accChild(object)
+        //   {
+        //      .custom instance void [INTEROP_ASSEMBLY]DispIdAttribute::.ctor(int32) = (01 00 76 EC FF FF 00 00 )
+        //      .get instance object Accessibility.IAccessible::get_accChild(object)
+        //   }
+        //
+        // This isn't representable in C#. `object get_accChild(object)` is defined as well and will be returned when
+        // asking for the `.GetGetMethod` for the `accChild` property when reflecting through members.
+        //
+        // Here we try to assume that the caller intended to indicate CHILDID_SELF if they pass no parameters for these
+        // cases. Rather than walk through everything here as we've done historically, just hard-code the known cases.
+        //
+        // It was never documented when this would happen. While you can see that there is a property with the name
+        // `accChild` .NET Core only ever exposes the ITypeInfo for IUnknown.
+        if (args?.Length == 0 && s_propertiesWithArguments.Contains(name))
         {
-            MemberInfo[] member = typeof(IAccessible).GetMember(name);
-            if (member is not null && member.Length > 0 && member[0] is PropertyInfo info)
-            {
-                MethodInfo? getMethod = info.GetGetMethod();
-                if (getMethod is not null && getMethod.GetParameters().Length > 0)
-                {
-                    args = new object[getMethod.GetParameters().Length];
-                    for (int i = 0; i < args.Length; i++)
-                    {
-                        args[i] = (int)PInvoke.CHILDID_SELF;
-                    }
-                }
-            }
+            args = new object[] { (int)PInvoke.CHILDID_SELF };
         }
 
         return typeof(IAccessible).InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
     }
 
-    /// <summary>
-    ///  Return the underlying Type that represents the IReflect Object. For
-    ///  expando object, this is the (Object) IReflectInstance.GetType().
-    ///  For Type object it is this.
-    /// </summary>
     Type IReflect.UnderlyingSystemType => typeof(IAccessible);
 
     UiaCore.IRawElementProviderSimple? UiaCore.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
@@ -2372,9 +2228,9 @@ public unsafe partial class AccessibleObject :
         throw new NotSupportedException(SR.AccessibleObjectLiveRegionNotSupported);
     }
 
-    internal virtual bool RaiseAutomationEvent(UiaCore.UIA eventId)
+    internal virtual bool RaiseAutomationEvent(UIA_EVENT_ID eventId)
     {
-        if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
         {
             HRESULT result = UiaCore.UiaRaiseAutomationEvent(this, eventId);
             return result == HRESULT.S_OK;
@@ -2383,9 +2239,9 @@ public unsafe partial class AccessibleObject :
         return false;
     }
 
-    internal virtual bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object? oldValue, object? newValue)
+    internal virtual bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, object? oldValue, object? newValue)
     {
-        if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
         {
             HRESULT result = UiaCore.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
             return result == HRESULT.S_OK;
@@ -2399,7 +2255,7 @@ public unsafe partial class AccessibleObject :
         AutomationNotificationProcessing notificationProcessing,
         string notificationText)
     {
-        if (UiaCore.UiaClientsAreListening())
+        if (PInvoke.UiaClientsAreListening())
         {
             return RaiseAutomationNotification(notificationKind, notificationProcessing, notificationText);
         }
@@ -2407,9 +2263,9 @@ public unsafe partial class AccessibleObject :
         return s_notificationEventAvailable;
     }
 
-    internal bool RaiseStructureChangedEvent(UiaCore.StructureChangeType structureChangeType, int[] runtimeId)
+    internal bool RaiseStructureChangedEvent(StructureChangeType structureChangeType, int[] runtimeId)
     {
-        if (UiaCore.UiaClientsAreListening() && CanNotifyClients)
+        if (PInvoke.UiaClientsAreListening() && CanNotifyClients)
         {
             HRESULT result = UiaCore.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId is null ? 0 : runtimeId.Length);
             return result == HRESULT.S_OK;

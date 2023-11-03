@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
@@ -13,13 +14,13 @@ internal partial class PropertyDescriptorGridEntry
         {
         }
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => GetPropertyGridView() is { } propertyGridView
                 && this.TryGetOwnerAs(out PropertyDescriptorGridEntry? owner)
                 && owner == propertyGridView.SelectedGridEntry
                 && (owner.InternalExpanded || propertyGridView.DropDownVisible)
-                    ? UiaCore.ExpandCollapseState.Expanded
-                    : UiaCore.ExpandCollapseState.Collapsed;
+                    ? ExpandCollapseState.ExpandCollapseState_Expanded
+                    : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         public override AccessibleObject? GetChild(int index)
         {
@@ -133,7 +134,7 @@ internal partial class PropertyDescriptorGridEntry
 
         internal override void Collapse()
         {
-            if (ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
+            if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Expanded)
             {
                 ExpandOrCollapse();
             }
@@ -141,7 +142,7 @@ internal partial class PropertyDescriptorGridEntry
 
         internal override void Expand()
         {
-            if (ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+            if (ExpandCollapseState == ExpandCollapseState.ExpandCollapseState_Collapsed)
             {
                 ExpandOrCollapse();
             }
@@ -152,13 +153,13 @@ internal partial class PropertyDescriptorGridEntry
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling => GetNextSibling(),
-                UiaCore.NavigateDirection.PreviousSibling => GetPreviousSibling(),
-                UiaCore.NavigateDirection.FirstChild => GetFirstChild(),
-                UiaCore.NavigateDirection.LastChild => GetLastChild(),
+                NavigateDirection.NavigateDirection_NextSibling => GetNextSibling(),
+                NavigateDirection.NavigateDirection_PreviousSibling => GetPreviousSibling(),
+                NavigateDirection.NavigateDirection_FirstChild => GetFirstChild(),
+                NavigateDirection.NavigateDirection_LastChild => GetLastChild(),
                 _ => base.FragmentNavigate(direction),
             };
 
@@ -260,23 +261,23 @@ internal partial class PropertyDescriptorGridEntry
             return index <= 0 ? null : GetChild(index - 1);
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.IsEnabledPropertyId
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId
                     => this.TryGetOwnerAs(out PropertyDescriptorGridEntry? owner) && !owner.IsPropertyReadOnly,
-                UiaCore.UIA.IsValuePatternAvailablePropertyId => true,
-                UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId => string.Empty,
+                UIA_PROPERTY_ID.UIA_IsValuePatternAvailablePropertyId => true,
+                UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId => string.Empty,
                 _ => base.GetPropertyValue(propertyID)
             };
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.ValuePatternId => true,
-                UiaCore.UIA.ExpandCollapsePatternId when
+                UIA_PATTERN_ID.UIA_ValuePatternId => true,
+                UIA_PATTERN_ID.UIA_ExpandCollapsePatternId when
                     this.TryGetOwnerAs(out PropertyDescriptorGridEntry? owner)
                     && (owner.Enumerable || owner.NeedsDropDownButton) => true,
                 _ => base.IsPatternSupported(patternId)

@@ -83,7 +83,7 @@ public class ArrayTests
 
     public static TheoryData<Array> Array_UnsupportedTestData => new()
     {
-        new Point[] { new Point() },
-        new object[] { new object() },
+        new Point[] { new() },
+        new object[] { new() },
     };
 }

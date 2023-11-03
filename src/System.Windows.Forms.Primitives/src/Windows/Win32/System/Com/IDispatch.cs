@@ -1,7 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
+using static Windows.Win32.System.Ole.FDEX_PROP_FLAGS;
 
 namespace Windows.Win32.System.Com;
 
@@ -128,4 +130,47 @@ internal unsafe partial struct IDispatch
 
         return hr;
     }
+
+    /// <inheritdoc cref="GetIDsOfNames(Guid*, PWSTR*, uint, uint, int*)"/>
+    internal HRESULT GetIDOfName(string name, out int dispId)
+    {
+        int id = 0;
+
+        fixed (char* n = name)
+        {
+            HRESULT result = GetIDsOfNames(IID.NULL(), (PWSTR*)&n, 1u, PInvoke.GetThreadLocale(), &id);
+            dispId = id;
+            return result;
+        }
+    }
+
+    // Prop flags for fields, methods, and properties follow the same
+    // values as defined in https://github.com/dotnet/runtime/blob/main/src/coreclr/vm/stdinterfaces.cpp#L1780
+
+    // private static FDEX_PROP_FLAGS GetFieldFlags()
+    // {
+    //     return
+    //         fdexPropCanGet
+    //         | fdexPropCanPut
+    //         | fdexPropCannotPutRef
+    //         | fdexPropCannotCall
+    //         | fdexPropCannotConstruct
+    //         | fdexPropCannotSourceEvents;
+    // }
+
+    internal static FDEX_PROP_FLAGS GetMethodFlags()
+        => fdexPropCannotGet
+            | fdexPropCannotPut
+            | fdexPropCannotPutRef
+            | fdexPropCanCall
+            | fdexPropCannotConstruct
+            | fdexPropCannotSourceEvents;
+
+    internal static FDEX_PROP_FLAGS GetPropertyFlags(bool canRead, bool canWrite)
+        => (canRead ? fdexPropCanGet : fdexPropCannotGet)
+            | (canWrite ? fdexPropCanPut : fdexPropCannotPut)
+            | fdexPropCannotPutRef
+            | fdexPropCannotCall
+            | fdexPropCannotConstruct
+            | fdexPropCannotSourceEvents;
 }

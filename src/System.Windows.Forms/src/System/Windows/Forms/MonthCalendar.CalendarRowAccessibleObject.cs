@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Globalization;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -141,28 +142,28 @@ public partial class MonthCalendar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_NextSibling
                     => _calendarBodyAccessibleObject.RowsAccessibleObjects?.Find(this)?.Next?.Value,
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => _calendarBodyAccessibleObject.RowsAccessibleObjects?.Find(this)?.Previous?.Value,
-                UiaCore.NavigateDirection.FirstChild
+                NavigateDirection.NavigateDirection_FirstChild
                     => _monthCalendarAccessibleObject.ShowWeekNumbers && _rowIndex != -1
                         ? WeekNumberCellAccessibleObject
                         : CellsAccessibleObjects?.First?.Value,
-                UiaCore.NavigateDirection.LastChild => CellsAccessibleObjects?.Last?.Value,
+                NavigateDirection.NavigateDirection_LastChild => CellsAccessibleObjects?.Last?.Value,
                 _ => base.FragmentNavigate(direction)
             };
 
         internal override int GetChildId() => ChildIdIncrement + _rowIndex;
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.PaneControlTypeId,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => IsEnabled,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => IsEnabled,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -201,7 +202,7 @@ public partial class MonthCalendar
                 && focusedCell.CalendarIndex == _calendarIndex
                 && focusedCell.Row == _rowIndex)
             {
-                focusedCell.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                focusedCell.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             }
         }
 

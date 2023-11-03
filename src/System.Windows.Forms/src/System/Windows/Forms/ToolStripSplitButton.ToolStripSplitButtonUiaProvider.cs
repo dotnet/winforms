@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms;
@@ -19,12 +20,12 @@ public partial class ToolStripSplitButton
         public override void DoDefaultAction()
             => _accessibleObject.DoDefaultAction();
 
-        internal override object? GetPropertyValue(UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => _accessibleObject.GetPropertyValue(propertyID);
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override bool IsPatternSupported(UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => _accessibleObject.IsPatternSupported(patternId);
 
         internal override void Expand()
@@ -39,8 +40,8 @@ public partial class ToolStripSplitButton
         internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                NavigateDirection.FirstChild => base.FragmentNavigate(direction),
-                NavigateDirection.LastChild => base.FragmentNavigate(direction),
+                NavigateDirection.NavigateDirection_FirstChild => base.FragmentNavigate(direction),
+                NavigateDirection.NavigateDirection_LastChild => base.FragmentNavigate(direction),
                 _ => _accessibleObject.FragmentNavigate(direction)
             };
     }

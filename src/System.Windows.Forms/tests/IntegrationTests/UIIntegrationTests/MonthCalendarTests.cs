@@ -5,7 +5,6 @@ using System.Drawing;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Xunit.Abstractions;
 using static System.Windows.Forms.MonthCalendar;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.UITests;
 
@@ -68,7 +67,7 @@ public class MonthCalendarTests : ControlTestBase
             {
                 nmhdr = new NMHDR
                 {
-                    code = unchecked((uint)MCN.SELCHANGE),
+                    code = PInvoke.MCN_SELCHANGE,
                 },
                 stSelStart = date,
                 stSelEnd = date,

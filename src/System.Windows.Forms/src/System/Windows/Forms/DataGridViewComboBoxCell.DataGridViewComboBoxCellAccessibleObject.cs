@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -18,23 +18,23 @@ public partial class DataGridViewComboBoxCell
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => IsInComboBoxMode
-                    ? UiaCore.UIA.ComboBoxControlTypeId
-                    : UiaCore.UIA.DataItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => IsInComboBoxMode
+                    ? UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId
+                    : UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId,
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.ExpandCollapsePatternId => IsInComboBoxMode,
+                UIA_PATTERN_ID.UIA_ExpandCollapsePatternId => IsInComboBoxMode,
                 _ => base.IsPatternSupported(patternId)
             };
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
         {
             get
             {
@@ -45,10 +45,10 @@ public partial class DataGridViewComboBoxCell
 
                 if (Owner.Properties.GetObject(s_propComboBoxCellEditingComboBox) is DataGridViewComboBoxEditingControl comboBox && comboBox.IsHandleCreated)
                 {
-                    return comboBox.DroppedDown ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+                    return comboBox.DroppedDown ? ExpandCollapseState.ExpandCollapseState_Expanded : ExpandCollapseState.ExpandCollapseState_Collapsed;
                 }
 
-                return UiaCore.ExpandCollapseState.Collapsed;
+                return ExpandCollapseState.ExpandCollapseState_Collapsed;
             }
         }
 

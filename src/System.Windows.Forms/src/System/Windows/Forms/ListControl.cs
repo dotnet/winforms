@@ -102,6 +102,7 @@ public abstract class ListControl : Control
     [TypeConverter($"System.Windows.Forms.Design.DataMemberFieldConverter, {AssemblyRef.SystemDesign}")]
     [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.ListControlDisplayMemberDescr))]
+    [AllowNull]
     public string DisplayMember
     {
         get => _displayMember.BindingMember;
@@ -285,6 +286,7 @@ public abstract class ListControl : Control
     [DefaultValue("")]
     [Editor($"System.Windows.Forms.Design.DataMemberFieldEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [SRDescription(nameof(SR.ListControlValueMemberDescr))]
+    [AllowNull]
     public string ValueMember
     {
         get => _valueMember.BindingMember;
@@ -293,7 +295,6 @@ public abstract class ListControl : Control
             value ??= string.Empty;
 
             BindingMemberInfo newValueMember = new BindingMemberInfo(value);
-            BindingMemberInfo oldValueMember = _valueMember;
             if (!newValueMember.Equals(_valueMember))
             {
                 // If the displayMember is set to the EmptyString, then recreate the dataConnection
@@ -340,13 +341,14 @@ public abstract class ListControl : Control
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     [SRDescription(nameof(SR.ListControlSelectedValueDescr))]
     [Bindable(true)]
+    [DisallowNull]
     public object? SelectedValue
     {
         get
         {
             if (SelectedIndex != -1 && _dataManager is not null)
             {
-                object currentItem = _dataManager[SelectedIndex];
+                object? currentItem = _dataManager[SelectedIndex];
                 return FilterItemOnProperty(currentItem, _valueMember.BindingField);
             }
 
@@ -406,7 +408,7 @@ public abstract class ListControl : Control
             }
             else
             {
-                SetItemCore(e.Index, _dataManager[e.Index]);
+                SetItemCore(e.Index, _dataManager[e.Index]!);
             }
         }
     }

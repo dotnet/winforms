@@ -10,11 +10,14 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static System.Windows.Forms.ListViewGroup;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 using static Interop.ComCtl32;
+using NMHEADERW = Windows.Win32.UI.Controls.NMHEADERW;
+using NMLVLINK = Windows.Win32.UI.Controls.NMLVLINK;
 
 namespace System.Windows.Forms;
 
@@ -115,7 +118,7 @@ public partial class ListView : Control
     private MouseButtons _downButton;
     private int _itemCount;
     private int _columnIndex;
-    private ListViewItem? _selectedItem;
+    internal ListViewItem? _selectedItem;
     private int _topIndex;
     private bool _hoveredAlready;
 
@@ -2904,23 +2907,23 @@ public partial class ListView : Control
                             int mask = 0xFF0000;
                             do
                             {
-                                int C = nmcd->clrText & mask;
-                                if (C != 0 || (mask == 0x0000FF)) // The color is not 0
+                                int color = (int)(nmcd->clrText & mask);
+                                if (color != 0 || (mask == 0x0000FF)) // The color is not 0
                                 // or this is the last option
                                 {
                                     int n = 16 - totalshift;
                                     // Make sure the value doesn't overflow
-                                    if (C == mask)
+                                    if (color == mask)
                                     {
-                                        C = ((C >> n) - 1) << n;
+                                        color = ((color >> n) - 1) << n;
                                     }
                                     else
                                     {
-                                        C = ((C >> n) + 1) << n;
+                                        color = ((color >> n) + 1) << n;
                                     }
 
                                     // Copy the adjustment into nmcd->clrText
-                                    nmcd->clrText = (nmcd->clrText & (~mask)) | C;
+                                    nmcd->clrText = (COLORREF)((int)(nmcd->clrText & (~mask)) | color);
                                     clrAdjusted = true;
                                 }
                                 else
@@ -3885,6 +3888,19 @@ public partial class ListView : Control
         }
     }
 
+    internal void UpdateColumnHeaderCorrespondingListViewSubItemIndex()
+    {
+        if (_columnHeaders is null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < _columnHeaders.Length; i++)
+        {
+            _columnHeaders[i]._correspondingListViewSubItemIndex = i;
+        }
+    }
+
     /// <summary>
     ///  Inserts a new Column into the ListView
     /// </summary>
@@ -3983,6 +3999,8 @@ public partial class ListView : Control
             RealizeAllSubItems();
         }
 
+        UpdateColumnHeaderCorrespondingListViewSubItemIndex();
+
         return ch;
     }
 
@@ -4052,7 +4070,7 @@ public partial class ListView : Control
                 };
 
                 PInvoke.SendMessage(this, PInvoke.LVM_GETITEMW, (WPARAM)0, ref lvItem);
-                Debug.Assert(lvItem.iGroupId != -1, "there is a list view item which is not parented");
+                Debug.Assert((int)lvItem.iGroupId != -1, "there is a list view item which is not parented");
             }
         }
 #endif
@@ -4212,18 +4230,18 @@ public partial class ListView : Control
                     iImage = li.ImageIndexer.ActualIndex,
                     iIndent = li.IndentCount,
                     lParam = li.ID,
-                    cColumns = _columnHeaders is not null ? Math.Min(MAXTILECOLUMNS, _columnHeaders.Length) : 0,
+                    cColumns = (uint)(_columnHeaders is not null ? Math.Min(MAXTILECOLUMNS, _columnHeaders.Length) : 0),
                 };
 
                 if (GroupsEnabled)
                 {
                     lvItem.mask |= LIST_VIEW_ITEM_FLAGS.LVIF_GROUPID;
-                    lvItem.iGroupId = GetNativeGroupId(li);
+                    lvItem.iGroupId = (LVITEMA_GROUP_ID)GetNativeGroupId(li);
 
 #if DEBUG
                     IntPtr result = PInvoke.SendMessage(this, PInvoke.LVM_ISGROUPVIEWENABLED);
                     Debug.Assert(result != IntPtr.Zero, "Groups not enabled");
-                    result = PInvoke.SendMessage(this, PInvoke.LVM_HASGROUP, (WPARAM)lvItem.iGroupId);
+                    result = PInvoke.SendMessage(this, PInvoke.LVM_HASGROUP, (WPARAM)(int)lvItem.iGroupId);
                     Debug.Assert(result != IntPtr.Zero, $"Doesn't contain group id: {lvItem.iGroupId}");
 #endif
                 }
@@ -4236,19 +4254,19 @@ public partial class ListView : Control
                         Marshal.FreeHGlobal(hGlobalColumns);
                     }
 
-                    hGlobalColumns = Marshal.AllocHGlobal(lvItem.cColumns * sizeof(int));
-                    maxColumns = lvItem.cColumns;
+                    hGlobalColumns = Marshal.AllocHGlobal((int)(lvItem.cColumns * sizeof(int)));
+                    maxColumns = (int)lvItem.cColumns;
                 }
 
                 // now build and copy in the column indexes.
-                lvItem.puColumns = hGlobalColumns;
+                lvItem.puColumns = (uint*)hGlobalColumns;
                 int[] columns = new int[lvItem.cColumns];
                 for (int c = 0; c < lvItem.cColumns; c++)
                 {
                     columns[c] = c + 1;
                 }
 
-                Marshal.Copy(columns, 0, lvItem.puColumns, lvItem.cColumns);
+                Marshal.Copy(columns, 0, (nint)lvItem.puColumns, (int)lvItem.cColumns);
 
                 // Inserting an item into a ListView with checkboxes causes one or more
                 // item check events to be fired for the newly added item.
@@ -4789,7 +4807,7 @@ public partial class ListView : Control
             IsAccessibilityObjectCreated &&
             AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
         {
-            focusedAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            focusedAccessibleObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -4829,9 +4847,9 @@ public partial class ListView : Control
         if (IsAccessibilityObjectCreated)
         {
             ListViewItem item = e.Item;
-            UiaCore.ToggleState oldValue = item.Checked ? UiaCore.ToggleState.Off : UiaCore.ToggleState.On;
-            UiaCore.ToggleState newValue = item.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
-            item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, oldValue, newValue);
+            ToggleState oldValue = item.Checked ? ToggleState.ToggleState_Off : ToggleState.ToggleState_On;
+            ToggleState newValue = item.Checked ? ToggleState.ToggleState_On : ToggleState.ToggleState_Off;
+            item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId, oldValue, newValue);
         }
     }
 
@@ -4937,7 +4955,7 @@ public partial class ListView : Control
             _selectedItem = firstSelectedItem;
             if (IsAccessibilityObjectCreated)
             {
-                firstSelectedItem.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                firstSelectedItem.AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             }
         }
     }
@@ -6022,7 +6040,7 @@ public partial class ListView : Control
         {
             Point screenPoint = PointToScreen(point);
             AccessibleObject? accessibilityObject = AccessibilityObject.HitTest(screenPoint.X, screenPoint.Y);
-            accessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            accessibilityObject?.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -6030,7 +6048,7 @@ public partial class ListView : Control
     {
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
-        if ((int)nmhdr->code == (int)NM.CUSTOMDRAW && UiaCore.UiaClientsAreListening())
+        if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && PInvoke.UiaClientsAreListening())
         {
             // Checking that mouse buttons are not pressed is necessary to avoid
             // multiple annotation of the column header when resizing the column with the mouse
@@ -6041,7 +6059,7 @@ public partial class ListView : Control
         }
 
         // Column header custom draw message handling.
-        if ((int)nmhdr->code == (int)NM.CUSTOMDRAW && OwnerDraw)
+        if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && OwnerDraw)
         {
             try
             {
@@ -6094,13 +6112,13 @@ public partial class ListView : Control
             }
         }
 
-        if ((int)nmhdr->code == (int)NM.RELEASEDCAPTURE && _listViewState[LISTVIEWSTATE_columnClicked])
+        if (nmhdr->code == PInvoke.NM_RELEASEDCAPTURE && _listViewState[LISTVIEWSTATE_columnClicked])
         {
             _listViewState[LISTVIEWSTATE_columnClicked] = false;
             OnColumnClick(new ColumnClickEventArgs(_columnIndex));
         }
 
-        if ((int)nmhdr->code == (int)HDN.BEGINTRACKW)
+        if (nmhdr->code == PInvoke.HDN_BEGINTRACKW)
         {
             _listViewState[LISTVIEWSTATE_headerControlTracking] = true;
 
@@ -6122,7 +6140,7 @@ public partial class ListView : Control
             }
         }
 
-        if ((int)nmhdr->code == (int)HDN.ITEMCHANGINGW)
+        if (nmhdr->code == PInvoke.HDN_ITEMCHANGINGW)
         {
             NMHEADERW* nmheader = (NMHEADERW*)(nint)m.LParamInternal;
 
@@ -6157,7 +6175,7 @@ public partial class ListView : Control
             }
         }
 
-        if (((int)nmhdr->code == (int)HDN.ITEMCHANGEDW) &&
+        if ((nmhdr->code == PInvoke.HDN_ITEMCHANGEDW) &&
             !_listViewState[LISTVIEWSTATE_headerControlTracking])
         {
             NMHEADERW* nmheader = (NMHEADERW*)(nint)m.LParamInternal;
@@ -6213,7 +6231,7 @@ public partial class ListView : Control
             }
         }
 
-        if ((int)nmhdr->code == (int)HDN.ENDTRACKW)
+        if (nmhdr->code == PInvoke.HDN_ENDTRACKW)
         {
             Debug.Assert(_listViewState[LISTVIEWSTATE_headerControlTracking], "HDN_ENDTRACK and HDN_BEGINTRACK are out of sync.");
             _listViewState[LISTVIEWSTATE_headerControlTracking] = false;
@@ -6241,7 +6259,7 @@ public partial class ListView : Control
             }
         }
 
-        if ((int)nmhdr->code == (int)HDN.ENDDRAG)
+        if (nmhdr->code == PInvoke.HDN_ENDDRAG)
         {
             NMHEADERW* header = (NMHEADERW*)(nint)m.LParamInternal;
             if (header->pitem is not null)
@@ -6308,7 +6326,7 @@ public partial class ListView : Control
             }
         }
 
-        if ((int)nmhdr->code == (int)HDN.DIVIDERDBLCLICKW)
+        if (nmhdr->code == PInvoke.HDN_DIVIDERDBLCLICKW)
         {
             // We need to keep track that the user double clicked the column header divider
             // so we know that the column header width is changing.
@@ -6468,13 +6486,13 @@ public partial class ListView : Control
     {
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
-        switch ((int)nmhdr->code)
+        switch (nmhdr->code)
         {
-            case (int)NM.CUSTOMDRAW:
+            case PInvoke.NM_CUSTOMDRAW:
                 CustomDraw(ref m);
                 break;
 
-            case (int)LVN.BEGINLABELEDITW:
+            case PInvoke.LVN_BEGINLABELEDITW:
                 {
                     Debug.Assert(_labelEdit is null,
                         "A new label editing shouldn't start before the previous one ended");
@@ -6491,7 +6509,7 @@ public partial class ListView : Control
                     }
                     else
                     {
-                        NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)(nint)m.LParamInternal;
+                        NMLVDISPINFOW* dispInfo = (NMLVDISPINFOW*)(nint)m.LParamInternal;
                         LabelEditEventArgs e = new(dispInfo->item.iItem);
                         OnBeforeLabelEdit(e);
                         cancelEdit = e.CancelEdit;
@@ -6509,7 +6527,7 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.COLUMNCLICK:
+            case PInvoke.LVN_COLUMNCLICK:
                 {
                     NMLISTVIEW* nmlv = (NMLISTVIEW*)(nint)m.LParamInternal;
                     _listViewState[LISTVIEWSTATE_columnClicked] = true;
@@ -6517,7 +6535,7 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.LINKCLICK:
+            case PInvoke.LVN_LINKCLICK:
                 {
                     NMLVLINK* pLink = (NMLVLINK*)(nint)m.LParamInternal;
                     int groupID = pLink->iSubItem;
@@ -6533,7 +6551,7 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.ENDLABELEDITW:
+            case PInvoke.LVN_ENDLABELEDITW:
                 {
                     Debug.Assert(_labelEdit is not null, "There is no active label edit to end");
                     if (_labelEdit is null)
@@ -6545,15 +6563,15 @@ public partial class ListView : Control
                     _labelEdit = null;
 
                     _listViewState[LISTVIEWSTATE_inLabelEdit] = false;
-                    NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)(nint)m.LParamInternal;
-                    string? text = dispInfo->item.pszText is null ? null : new string(dispInfo->item.pszText);
+                    NMLVDISPINFOW* dispInfo = (NMLVDISPINFOW*)(nint)m.LParamInternal;
+                    string? text = dispInfo->item.pszText.ToString();
                     LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem, text);
                     OnAfterLabelEdit(e);
                     m.ResultInternal = (LRESULT)(nint)(BOOL)e.CancelEdit;
 
                     // from msdn:
                     //   "If the user cancels editing, the pszText member of the LVITEM structure is NULL"
-                    if (!e.CancelEdit && dispInfo->item.pszText is not null)
+                    if (!e.CancelEdit && !dispInfo->item.pszText.IsNull)
                     {
                         Items[dispInfo->item.iItem].Text = text;
                     }
@@ -6561,11 +6579,11 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.ITEMACTIVATE:
+            case PInvoke.LVN_ITEMACTIVATE:
                 OnItemActivate(EventArgs.Empty);
                 break;
 
-            case (int)LVN.BEGINDRAG:
+            case PInvoke.LVN_BEGINDRAG:
                 {
                     // The items collection was modified while dragging that means that
                     // we can't reliably give the user the item on which the dragging
@@ -6580,7 +6598,7 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.BEGINRDRAG:
+            case PInvoke.LVN_BEGINRDRAG:
                 {
                     // The items collection was modified while dragging. That means that
                     // we can't reliably give the user the item on which the dragging
@@ -6595,15 +6613,15 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.ITEMCHANGING:
+            case PInvoke.LVN_ITEMCHANGING:
                 {
                     NMLISTVIEW* nmlv = (NMLISTVIEW*)(nint)m.LParamInternal;
                     if ((nmlv->uChanged & LIST_VIEW_ITEM_FLAGS.LVIF_STATE) != 0)
                     {
                         // Because the state image mask is 1-based, a value of 1 means unchecked,
                         // anything else means checked.  We convert this to the more standard 0 or 1
-                        CheckState oldState = (CheckState)(((int)(nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
-                        CheckState newState = (CheckState)(((int)(nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                        CheckState oldState = (CheckState)(((int)((LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                        CheckState newState = (CheckState)(((int)((LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
 
                         if (oldState != newState)
                         {
@@ -6616,7 +6634,7 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)LVN.ITEMCHANGED:
+            case PInvoke.LVN_ITEMCHANGED:
                 {
                     NMLISTVIEW* nmlv = (NMLISTVIEW*)(nint)m.LParamInternal;
                     // Check for state changes to the selected state...
@@ -6624,8 +6642,8 @@ public partial class ListView : Control
                     {
                         // Because the state image mask is 1-based, a value of 1 means unchecked,
                         // anything else means checked.  We convert this to the more standard 0 or 1
-                        CheckState oldValue = (CheckState)(((int)(nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
-                        CheckState newValue = (CheckState)(((int)(nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                        CheckState oldValue = (CheckState)(((int)((LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                        CheckState newValue = (CheckState)(((int)((LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
 
                         if (newValue != oldValue)
                         {
@@ -6657,8 +6675,8 @@ public partial class ListView : Control
                             }
                         }
 
-                        LIST_VIEW_ITEM_STATE_FLAGS oldState = nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED;
-                        LIST_VIEW_ITEM_STATE_FLAGS newState = nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED;
+                        LIST_VIEW_ITEM_STATE_FLAGS oldState = (LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uOldState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED;
+                        LIST_VIEW_ITEM_STATE_FLAGS newState = (LIST_VIEW_ITEM_STATE_FLAGS)nmlv->uNewState & LIST_VIEW_ITEM_STATE_FLAGS.LVIS_SELECTED;
                         // Windows common control always fires
                         // this event twice, once with newState, oldState, and again with
                         // oldState, newState.
@@ -6708,15 +6726,15 @@ public partial class ListView : Control
                     break;
                 }
 
-            case (int)NM.CLICK:
+            case PInvoke.NM_CLICK:
                 WmNmClick();
                 // FALL THROUGH //
-                goto case (int)NM.RCLICK;
+                goto case PInvoke.NM_RCLICK;
 
-            case (int)NM.RCLICK:
+            case PInvoke.NM_RCLICK:
                 int displayIndex = GetIndexOfClickedItem();
 
-                MouseButtons button = (int)nmhdr->code == (int)NM.CLICK ? MouseButtons.Left : MouseButtons.Right;
+                MouseButtons button = nmhdr->code == PInvoke.NM_CLICK ? MouseButtons.Left : MouseButtons.Right;
                 Point pos = Cursor.Position;
                 pos = PointToClient(pos);
 
@@ -6734,12 +6752,12 @@ public partial class ListView : Control
 
                 break;
 
-            case (int)NM.DBLCLK:
+            case PInvoke.NM_DBLCLK:
                 WmNmDblClick();
                 // FALL THROUGH //
-                goto case (int)NM.RDBLCLK;
+                goto case PInvoke.NM_RDBLCLK;
 
-            case (int)NM.RDBLCLK:
+            case PInvoke.NM_RDBLCLK:
                 int index = GetIndexOfClickedItem();
                 if (index != -1)
                 {
@@ -6754,7 +6772,7 @@ public partial class ListView : Control
                 Capture = true;
                 break;
 
-            case (int)LVN.KEYDOWN:
+            case PInvoke.LVN_KEYDOWN:
                 if (GroupsEnabled)
                 {
                     NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)(nint)m.LParamInternal;
@@ -6762,20 +6780,20 @@ public partial class ListView : Control
                     {
                         AccessibleObject accessibleObject = SelectedItems[0].AccessibilityObject;
                         if (lvkd->wVKey == (short)Keys.Down
-                            && accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling) is null)
+                            && accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling) is null)
                         {
-                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
                             if (groupAccObj is not null)
                             {
-                                ListViewGroupAccessibleObject? nextGroupAccObj = (ListViewGroupAccessibleObject?)groupAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+                                ListViewGroupAccessibleObject? nextGroupAccObj = (ListViewGroupAccessibleObject?)groupAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
                                 nextGroupAccObj?.SetFocus();
                             }
                         }
 
                         if (lvkd->wVKey == (short)Keys.Up
-                        && accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) is null)
+                        && accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling) is null)
                         {
-                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
                             groupAccObj?.SetFocus();
                         }
                     }
@@ -6803,19 +6821,19 @@ public partial class ListView : Control
 
                 break;
 
-            case (int)LVN.ODCACHEHINT:
+            case PInvoke.LVN_ODCACHEHINT:
                 // tell the user to prepare the cache:
                 NMLVCACHEHINT* cacheHint = (NMLVCACHEHINT*)(nint)m.LParamInternal;
                 OnCacheVirtualItems(new CacheVirtualItemsEventArgs(cacheHint->iFrom, cacheHint->iTo));
                 break;
 
             default:
-                if ((int)nmhdr->code == (int)LVN.GETDISPINFOW)
+                if (nmhdr->code == PInvoke.LVN_GETDISPINFOW)
                 {
                     // we use the LVN_GETDISPINFO message only in virtual mode
                     if (VirtualMode && m.LParamInternal != 0)
                     {
-                        NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)(nint)m.LParamInternal;
+                        NMLVDISPINFOW* dispInfo = (NMLVDISPINFOW*)(nint)m.LParamInternal;
 
                         RetrieveVirtualItemEventArgs rVI = new RetrieveVirtualItemEventArgs(dispInfo->item.iItem);
                         OnRetrieveVirtualItem(rVI);
@@ -6860,7 +6878,7 @@ public partial class ListView : Control
                         }
                     }
                 }
-                else if ((int)nmhdr->code == (int)LVN.ODSTATECHANGED)
+                else if (nmhdr->code == PInvoke.LVN_ODSTATECHANGED)
                 {
                     if (VirtualMode && m.LParamInternal != 0)
                     {
@@ -6876,12 +6894,12 @@ public partial class ListView : Control
                         }
                     }
                 }
-                else if ((int)nmhdr->code == (int)LVN.GETINFOTIPW)
+                else if (nmhdr->code == PInvoke.LVN_GETINFOTIPW)
                 {
                     if (ShowItemToolTips && m.LParamInternal != 0)
                     {
                         NMLVGETINFOTIPW* infoTip = (NMLVGETINFOTIPW*)(nint)m.LParamInternal;
-                        ListViewItem lvi = Items[infoTip->item];
+                        ListViewItem lvi = Items[infoTip->iItem];
 
                         // This code is needed to hide the keyboard tooltip before showing the mouse tooltip
                         NotifyAboutLostFocus(FocusedItem);
@@ -6894,11 +6912,12 @@ public partial class ListView : Control
                             // UNICODE. Use char.
                             // we need to copy the null terminator character ourselves
                             char[] charBuf = (lvi.ToolTipText + "\0").ToCharArray();
-                            Marshal.Copy(charBuf, 0, infoTip->lpszText, Math.Min(charBuf.Length, infoTip->cchTextMax));
+                            nint destPtr = new(infoTip->pszText);
+                            Marshal.Copy(charBuf, 0, destPtr, Math.Min(charBuf.Length, infoTip->cchTextMax));
                         }
                     }
                 }
-                else if ((int)nmhdr->code == (int)LVN.ODFINDITEMW)
+                else if (nmhdr->code == PInvoke.LVN_ODFINDITEMW)
                 {
                     if (VirtualMode)
                     {
@@ -6916,9 +6935,9 @@ public partial class ListView : Control
                         bool isPrefixSearch = (nmlvif->lvfi.flags & LVFINDINFOW_FLAGS.LVFI_PARTIAL) != 0;
 
                         string text = string.Empty;
-                        if (isTextSearch && nmlvif->lvfi.psz is not null)
+                        if (isTextSearch && !nmlvif->lvfi.psz.IsNull)
                         {
-                            text = new string(nmlvif->lvfi.psz);
+                            text = nmlvif->lvfi.psz.ToString();
                         }
 
                         Point startingPoint = Point.Empty;

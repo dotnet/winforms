@@ -163,6 +163,21 @@
                                               "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\Resources\\xlf\\"
                                           },
                                           {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\DataGridViewAddColumnDialog.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\DataGridViewCellStyleBuilder.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
+                                          },
+                                          {
+                                              "SourceFile":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\DataGridViewColumnCollectionDialog.xlf",
+                                              "CopyOption":  "LangIDOnName",
+                                              "OutputPath":  ".\\src\\System.Windows.Forms.Design\\src\\System\\Windows\\Forms\\Design\\xlf\\"
+                                          },
+                                          {
                                               "SourceFile":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\SR.xlf",
                                               "CopyOption":  "LangIDOnName",
                                               "OutputPath":  ".\\src\\System.Windows.Forms.Primitives\\src\\Resources\\xlf\\"

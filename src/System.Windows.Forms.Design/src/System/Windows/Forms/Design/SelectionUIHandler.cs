@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -20,10 +18,10 @@ internal abstract class SelectionUIHandler
     // actually moving components around.  The selection UI service
     // dictates when this happens.
     //
-    private Rectangle dragOffset = Rectangle.Empty;         // this gets added to a component's x, y, width, height
-    private Control[] dragControls;                         // the set of controls we're dragging
-    private BoundsInfo[] originalCoords;                    // the saved coordinates of the components we're dragging.
-    private SelectionRules rules;                           // the rules of the current drag.
+    private Rectangle _dragOffset = Rectangle.Empty;        // this gets added to a component's x, y, width, height
+    private Control[]? _dragControls;                       // the set of controls we're dragging
+    private BoundsInfo[]? _originalCoordinates;             // the saved coordinates of the components we're dragging.
+    private SelectionRules _rules;                          // the rules of the current drag.
 
     private const int MinControlWidth = 3;
     private const int MinControlHeight = 3;
@@ -38,16 +36,16 @@ internal abstract class SelectionUIHandler
     /// </summary>
     public virtual bool BeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
     {
-        dragOffset = default;
-        originalCoords = null;
-        this.rules = rules;
+        _dragOffset = default;
+        _originalCoordinates = null;
+        _rules = rules;
 
-        dragControls = new Control[components.Length];
+        _dragControls = new Control[components.Length];
         for (int i = 0; i < components.Length; i++)
         {
             Debug.Assert(components[i] is IComponent, "Selection UI handler only deals with IComponents");
-            dragControls[i] = GetControl((IComponent)components[i]);
-            Debug.Assert(dragControls[i] is not null, "Everyone must have a control");
+            _dragControls[i] = GetControl((IComponent)components[i]);
+            Debug.Assert(_dragControls[i] is not null, "Everyone must have a control");
         }
 
         // allow the cliprect to go just beyond the window by one grid.  This helps with round off
@@ -72,8 +70,7 @@ internal abstract class SelectionUIHandler
             Size snapSize = GetCurrentSnapSize();
             Rectangle containerRect = containerControl.RectangleToScreen(containerControl.ClientRectangle);
             containerRect.Inflate(snapSize.Width, snapSize.Height);
-            ScrollableControl sc = GetControl() as ScrollableControl;
-            if (sc is not null && sc.AutoScroll)
+            if (GetControl() is ScrollableControl sc && sc.AutoScroll)
             {
                 Rectangle screen = SystemInformation.VirtualScreen;
                 containerRect.Width = screen.Width;
@@ -98,7 +95,7 @@ internal abstract class SelectionUIHandler
         //
         for (int i = 0; i < controls.Length; i++)
         {
-            Control parent = controls[i].Parent;
+            Control? parent = controls[i].Parent;
 
             // Suspend parent layout so that we don't continuously re-arrange components
             // while we move.
@@ -117,7 +114,7 @@ internal abstract class SelectionUIHandler
         //
         for (int i = 0; i < controls.Length; i++)
         {
-            Control parent = controls[i].Parent;
+            Control? parent = controls[i].Parent;
             parent?.ResumeLayout();
         }
     }
@@ -129,9 +126,9 @@ internal abstract class SelectionUIHandler
     /// </summary>
     public virtual void DragMoved(object[] components, Rectangle offset)
     {
-        dragOffset = offset;
+        _dragOffset = offset;
         MoveControls(components, false, false);
-        Debug.Assert(originalCoords is not null, "We are keying off of originalCoords, but MoveControls didn't set it");
+        Debug.Assert(_originalCoordinates is not null, "We are keying off of originalCoords, but MoveControls didn't set it");
     }
 
     /// <summary>
@@ -181,7 +178,15 @@ internal abstract class SelectionUIHandler
     /// <summary>
     ///  We use this to request often-used services.
     /// </summary>
-    protected abstract object GetService(Type serviceType);
+    protected abstract object? GetService(Type serviceType);
+
+    protected T? GetService<T>() where T : class => GetService(typeof(T)) as T;
+
+    protected bool TryGetService<T>([NotNullWhen(true)] out T? service) where T : class
+    {
+        service = GetService(typeof(T)) as T;
+        return service is not null;
+    }
 
     /// <summary>
     ///  Determines if the selection UI handler should attempt to snap
@@ -205,9 +210,9 @@ internal abstract class SelectionUIHandler
     /// </summary>
     private void MoveControls(object[] components, bool cancel, bool finalMove)
     {
-        Control[] controls = dragControls;
-        Rectangle offset = dragOffset;
-        BoundsInfo[] bounds = originalCoords;
+        Control[] controls = _dragControls!;
+        Rectangle offset = _dragOffset;
+        BoundsInfo[] bounds = _originalCoordinates!;
         Point adjustedLoc = default;
 
         // Erase the clipping and other state if this is the final move.
@@ -215,9 +220,9 @@ internal abstract class SelectionUIHandler
         if (finalMove)
         {
             Cursor.Clip = Rectangle.Empty;
-            dragOffset = Rectangle.Empty;
-            dragControls = null;
-            originalCoords = null;
+            _dragOffset = Rectangle.Empty;
+            _dragControls = null;
+            _originalCoordinates = null;
         }
 
         // If we haven't started to move yet, there's nothing to do.
@@ -231,7 +236,7 @@ internal abstract class SelectionUIHandler
         // This will prevent a change notification for just
         // selecting components.
         //
-        if (finalMove && offset.X == 0 && offset.Y == 0 && offset.Width == 0 && offset.Height == 0)
+        if (finalMove && offset is { X: 0, Y: 0, Width: 0, Height: 0 })
         {
             return;
         }
@@ -248,15 +253,15 @@ internal abstract class SelectionUIHandler
         // the user cancels out of moving them.  So, we create a "BoundsInfo" object for
         // each control that saves this state.
         //
-        if (originalCoords is null && !finalMove)
+        if (_originalCoordinates is null && !finalMove)
         {
-            originalCoords = new BoundsInfo[controls.Length];
+            _originalCoordinates = new BoundsInfo[controls.Length];
             for (int i = 0; i < controls.Length; i++)
             {
-                originalCoords[i] = new BoundsInfo(controls[i]);
+                _originalCoordinates[i] = new BoundsInfo(controls[i]);
             }
 
-            bounds = originalCoords;
+            bounds = _originalCoordinates;
         }
 
         // Two passes here.  First pass suspends all parent layout and updates the
@@ -266,7 +271,7 @@ internal abstract class SelectionUIHandler
         {
             Debug.Assert(controls[i] == GetControl((IComponent)components[i]), "Control->Component mapping is out of sync");
 
-            Control parent = controls[i].Parent;
+            Control? parent = controls[i].Parent;
 
             // Suspend parent layout so that we don't continuously re-arrange components
             // while we move.
@@ -297,7 +302,7 @@ internal abstract class SelectionUIHandler
 
             Rectangle oldBounds = controls[i].Bounds;
 
-            if ((rules & SelectionRules.Moveable) == 0)
+            if ((_rules & SelectionRules.Moveable) == 0)
             {
                 // We use the minimum size of either a grid snap or 1
                 //
@@ -328,7 +333,7 @@ internal abstract class SelectionUIHandler
             //Bug #72905  <subhag> Form X,Y defaulted to (0,0)
             //
 
-            IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+            IDesignerHost? host = GetService<IDesignerHost>();
             Debug.Assert(host is not null, "No designer host");
             if (controls[i] == host.RootComponent)
             {
@@ -344,31 +349,31 @@ internal abstract class SelectionUIHandler
             // Now apply the correct values to newBounds -- we only want to apply the new value if our
             // selection rules dictate so.
             //
-            if ((rules & SelectionRules.Moveable) != 0)
+            if ((_rules & SelectionRules.Moveable) != 0)
             {
                 newBounds.X = tempNewBounds.X;
                 newBounds.Y = tempNewBounds.Y;
             }
             else
             {
-                if ((rules & SelectionRules.TopSizeable) != 0)
+                if ((_rules & SelectionRules.TopSizeable) != 0)
                 {
                     newBounds.Y = tempNewBounds.Y;
                     newBounds.Height = tempNewBounds.Height;
                 }
 
-                if ((rules & SelectionRules.BottomSizeable) != 0)
+                if ((_rules & SelectionRules.BottomSizeable) != 0)
                 {
                     newBounds.Height = tempNewBounds.Height;
                 }
 
-                if ((rules & SelectionRules.LeftSizeable) != 0)
+                if ((_rules & SelectionRules.LeftSizeable) != 0)
                 {
                     newBounds.X = tempNewBounds.X;
                     newBounds.Width = tempNewBounds.Width;
                 }
 
-                if ((rules & SelectionRules.RightSizeable) != 0)
+                if ((_rules & SelectionRules.RightSizeable) != 0)
                 {
                     newBounds.Width = tempNewBounds.Width;
                 }
@@ -386,7 +391,7 @@ internal abstract class SelectionUIHandler
                 // the move.  For perf, just call directly on the control.  For the final
                 // move, however, we must go through the property descriptor.
                 //
-                PropertyDescriptor boundsProp = TypeDescriptor.GetProperties(components[i])["Bounds"];
+                PropertyDescriptor? boundsProp = TypeDescriptor.GetProperties(components[i])["Bounds"];
 
                 if (boundsProp is not null && !boundsProp.IsReadOnly)
                 {
@@ -416,7 +421,7 @@ internal abstract class SelectionUIHandler
                 adjustedLoc.X = newBounds.X;
                 adjustedLoc.Y = newBounds.Y;
 
-                PropertyDescriptor trayProp = TypeDescriptor.GetProperties(components[i])["TrayLocation"];
+                PropertyDescriptor? trayProp = TypeDescriptor.GetProperties(components[i])["TrayLocation"];
 
                 if (trayProp is not null && !trayProp.IsReadOnly)
                 {
@@ -428,8 +433,8 @@ internal abstract class SelectionUIHandler
                     // the move.  For perf, just call directly on the control.  For the final
                     // move, however, we must go through the property descriptor.
                     //
-                    PropertyDescriptor leftProp = TypeDescriptor.GetProperties(components[i])["Left"];
-                    PropertyDescriptor topProp = TypeDescriptor.GetProperties(components[i])["Top"];
+                    PropertyDescriptor? leftProp = TypeDescriptor.GetProperties(components[i])["Left"];
+                    PropertyDescriptor? topProp = TypeDescriptor.GetProperties(components[i])["Top"];
                     if (topProp is not null && !topProp.IsReadOnly)
                     {
                         if (finalMove)
@@ -458,7 +463,7 @@ internal abstract class SelectionUIHandler
 
                     if (leftProp is null || topProp is null)
                     {
-                        PropertyDescriptor locationProp = TypeDescriptor.GetProperties(components[i])["Location"];
+                        PropertyDescriptor? locationProp = TypeDescriptor.GetProperties(components[i])["Location"];
                         if (locationProp is not null && !locationProp.IsReadOnly)
                         {
                             locationProp.SetValue(components[i], adjustedLoc);
@@ -478,10 +483,10 @@ internal abstract class SelectionUIHandler
                 //
                 Size size = new Size(Math.Max(MinControlWidth, newBounds.Width), Math.Max(MinControlHeight, newBounds.Height));
 
-                PropertyDescriptor widthProp = TypeDescriptor.GetProperties(components[i])["Width"];
-                PropertyDescriptor heightProp = TypeDescriptor.GetProperties(components[i])["Height"];
+                PropertyDescriptor? widthProp = TypeDescriptor.GetProperties(components[i])["Width"];
+                PropertyDescriptor? heightProp = TypeDescriptor.GetProperties(components[i])["Height"];
 
-                if (widthProp is not null && !widthProp.IsReadOnly && size.Width != (int)widthProp.GetValue(components[i]))
+                if (widthProp is not null && !widthProp.IsReadOnly && size.Width != (int)widthProp.GetValue(components[i])!)
                 {
                     if (finalMove)
                     {
@@ -494,7 +499,7 @@ internal abstract class SelectionUIHandler
                     }
                 }
 
-                if (heightProp is not null && !heightProp.IsReadOnly && size.Height != (int)heightProp.GetValue(components[i]))
+                if (heightProp is not null && !heightProp.IsReadOnly && size.Height != (int)heightProp.GetValue(components[i])!)
                 {
                     if (finalMove)
                     {
@@ -513,7 +518,7 @@ internal abstract class SelectionUIHandler
         //
         for (int i = 0; i < controls.Length; i++)
         {
-            Control parent = controls[i].Parent;
+            Control? parent = controls[i].Parent;
 
             if (parent is not null)
             {
@@ -532,8 +537,7 @@ internal abstract class SelectionUIHandler
     /// </summary>
     public bool QueryBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
     {
-        IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-        if (cs is not null)
+        if (TryGetService(out IComponentChangeService? cs))
         {
             try
             {
@@ -542,7 +546,7 @@ internal abstract class SelectionUIHandler
                     foreach (object c in components)
                     {
                         cs.OnComponentChanging(c, TypeDescriptor.GetProperties(c)["Location"]);
-                        PropertyDescriptor sizeProp = TypeDescriptor.GetProperties(c)["Size"];
+                        PropertyDescriptor? sizeProp = TypeDescriptor.GetProperties(c)["Size"];
 
                         if (sizeProp is not null && sizeProp.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden))
                         {
@@ -557,15 +561,10 @@ internal abstract class SelectionUIHandler
                     cs.OnComponentChanging(GetComponent(), null);
                 }
             }
-            catch (CheckoutException coEx)
+            catch (CheckoutException coEx) when (coEx == CheckoutException.Canceled)
             {
-                if (coEx == CheckoutException.Canceled)
-                {
-                    // cancel the drag.
-                    return false;
-                }
-
-                throw;
+                // cancel the drag.
+                return false;
             }
             catch (InvalidOperationException)
             {
@@ -622,15 +621,15 @@ internal abstract class SelectionUIHandler
         {
             // get the size & loc from the props so the designers can adjust them.
             //
-            PropertyDescriptor sizeProp = TypeDescriptor.GetProperties(control)["Size"];
-            PropertyDescriptor locProp = TypeDescriptor.GetProperties(control)["Location"];
+            PropertyDescriptor? sizeProp = TypeDescriptor.GetProperties(control)["Size"];
+            PropertyDescriptor? locProp = TypeDescriptor.GetProperties(control)["Location"];
 
             Size sz;
             Point loc;
 
             if (sizeProp is not null)
             {
-                sz = (Size)sizeProp.GetValue(control);
+                sz = (Size)sizeProp.GetValue(control)!;
             }
             else
             {
@@ -639,7 +638,7 @@ internal abstract class SelectionUIHandler
 
             if (locProp is not null)
             {
-                loc = (Point)locProp.GetValue(control);
+                loc = (Point)locProp.GetValue(control)!;
             }
             else
             {

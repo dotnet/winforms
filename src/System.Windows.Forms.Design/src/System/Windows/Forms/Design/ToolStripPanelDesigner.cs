@@ -58,23 +58,28 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     }
 
     // Custom ContextMenu.
-    private ContextMenuStrip DesignerContextMenu
+    private ContextMenuStrip? DesignerContextMenu
     {
         get
         {
             if (_contextMenu is null)
             {
-                _contextMenu = new BaseContextMenuStrip(Component.Site, Component as Component);
-                // If multiple Items Selected don't show the custom properties...
-                _contextMenu.GroupOrdering.Clear();
-                _contextMenu.GroupOrdering.AddRange([StandardGroups.Code,
-                    StandardGroups.Verbs,
-                    StandardGroups.Custom,
-                    StandardGroups.Selection,
-                    StandardGroups.Edit,
-                    StandardGroups.Properties
-                ]);
-                _contextMenu.Text = "CustomContextMenu";
+                ISite? site = Component.Site;
+
+                if (site is not null )
+                {
+                    _contextMenu = new BaseContextMenuStrip(site);
+                    // If multiple Items Selected don't show the custom properties...
+                    _contextMenu.GroupOrdering.Clear();
+                    _contextMenu.GroupOrdering.AddRange([StandardGroups.Code,
+                        StandardGroups.Verbs,
+                        StandardGroups.Custom,
+                        StandardGroups.Selection,
+                        StandardGroups.Edit,
+                        StandardGroups.Properties
+                    ]);
+                    _contextMenu.Text = "CustomContextMenu";
+                }
             }
 
             return _contextMenu;
@@ -163,7 +168,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
             return null;
         }
 
-        Type toolType = tool.GetType(_designerHost);
+        Type? toolType = tool.GetType(_designerHost);
 
         if (!typeof(ToolStrip).IsAssignableFrom(toolType))
         {
@@ -420,7 +425,7 @@ internal class ToolStripPanelDesigner : ScrollableControlDesigner
     {
         if (_panel is not null && _panel.Parent is ToolStripContainer)
         {
-            DesignerContextMenu.Show(x, y);
+            DesignerContextMenu?.Show(x, y);
         }
         else
         {

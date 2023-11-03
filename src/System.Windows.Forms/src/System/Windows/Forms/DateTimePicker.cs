@@ -7,8 +7,7 @@ using System.Globalization;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using SourceGenerated;
-using static Interop;
-using static Interop.ComCtl32;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -52,7 +51,7 @@ public partial class DateTimePicker : Control
     private EventHandler? _onValueChanged;
     private EventHandler? _onRightToLeftLayoutChanged;
 
-    private UiaCore.ExpandCollapseState _expandCollapseState;
+    private ExpandCollapseState _expandCollapseState;
 
     // We need to restrict the available dates because of limitations in the comctl DateTime and MonthCalendar controls
 
@@ -1059,15 +1058,15 @@ public partial class DateTimePicker : Control
     protected virtual void OnCloseUp(EventArgs eventargs)
     {
         _onCloseUp?.Invoke(this, eventargs);
-        _expandCollapseState = UiaCore.ExpandCollapseState.Collapsed;
+        _expandCollapseState = ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         // Raise automation event to annouce new state.
         if (IsAccessibilityObjectCreated)
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: UiaCore.ExpandCollapseState.Expanded,
-                newValue: UiaCore.ExpandCollapseState.Collapsed);
+                UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                oldValue: ExpandCollapseState.ExpandCollapseState_Expanded,
+                newValue: ExpandCollapseState.ExpandCollapseState_Collapsed);
         }
     }
 
@@ -1077,15 +1076,15 @@ public partial class DateTimePicker : Control
     protected virtual void OnDropDown(EventArgs eventargs)
     {
         _onDropDown?.Invoke(this, eventargs);
-        _expandCollapseState = UiaCore.ExpandCollapseState.Expanded;
+        _expandCollapseState = ExpandCollapseState.ExpandCollapseState_Expanded;
 
-        // Raise automation event to annouce new state.
+        // Raise automation event to announce new state.
         if (IsAccessibilityObjectCreated)
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: UiaCore.ExpandCollapseState.Collapsed,
-                newValue: UiaCore.ExpandCollapseState.Expanded);
+                UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                oldValue: ExpandCollapseState.ExpandCollapseState_Collapsed,
+                newValue: ExpandCollapseState.ExpandCollapseState_Expanded);
         }
     }
 
@@ -1104,8 +1103,8 @@ public partial class DateTimePicker : Control
         // Raise automation event to annouce the control.
         if (IsAccessibilityObjectCreated)
         {
-            _expandCollapseState = UiaCore.ExpandCollapseState.Collapsed;
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            _expandCollapseState = ExpandCollapseState.ExpandCollapseState_Collapsed;
+            AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
 
@@ -1160,7 +1159,7 @@ public partial class DateTimePicker : Control
             // Anyway it doesn't matter because the Narrator pronounces actual AO state.
             string? value = AccessibilityObject.Value;
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ValueValuePropertyId,
+                UIA_PROPERTY_ID.UIA_ValueValuePropertyId,
                 oldValue: value,
                 newValue: value);
         }
@@ -1546,15 +1545,15 @@ public partial class DateTimePicker : Control
         if (m.HWnd == Handle)
         {
             NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
-            switch ((DTN)nmhdr->code)
+            switch (nmhdr->code)
             {
-                case DTN.CLOSEUP:
+                case PInvoke.DTN_CLOSEUP:
                     OnCloseUp(EventArgs.Empty);
                     break;
-                case DTN.DATETIMECHANGE:
+                case PInvoke.DTN_DATETIMECHANGE:
                     WmDateTimeChange(ref m);
                     break;
-                case DTN.DROPDOWN:
+                case PInvoke.DTN_DROPDOWN:
                     WmDropDown();
                     break;
             }

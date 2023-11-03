@@ -77,7 +77,7 @@ internal class ToolStripItemDesigner : ComponentDesigner
     {
         get
         {
-            BaseContextMenuStrip toolStripContextMenu = new BaseContextMenuStrip(Component.Site, ToolStripItem);
+            BaseContextMenuStrip toolStripContextMenu = new BaseContextMenuStrip(Component.Site);
             // If multiple Items Selected don't show the custom properties...
             if (_selectionService.SelectionCount > 1)
             {

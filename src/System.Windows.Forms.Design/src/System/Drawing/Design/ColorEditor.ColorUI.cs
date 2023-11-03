@@ -200,7 +200,7 @@ public partial class ColorEditor
             lbCommon.KeyDown += new KeyEventHandler(OnListKeyDown);
             lbCommon.Dock = DockStyle.Fill;
 
-            Array.Sort(ColorValues, new StandardColorComparer());
+            Array.Sort(ColorValues, StandardColorComparer.Instance);
             Array.Sort(SystemColorValues, comparer: new SystemColorComparer());
 
             lbCommon.Items.Clear();

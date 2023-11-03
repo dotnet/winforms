@@ -7,9 +7,10 @@ public partial class ButtonBase
 {
     public class ButtonBaseAccessibleObject : ControlAccessibleObject
     {
-        public ButtonBaseAccessibleObject(Control owner) : base((owner is ButtonBase owningButtonBase)
-            ? owner
-            : throw new ArgumentException(string.Format(SR.ConstructorArgumentInvalidValueType, nameof(owner), typeof(ButtonBase))))
+        public ButtonBaseAccessibleObject(Control owner)
+            : base(owner is ButtonBase
+                ? owner
+                : throw new ArgumentException(string.Format(SR.ConstructorArgumentInvalidValueType, nameof(owner), typeof(ButtonBase))))
         {
         }
 

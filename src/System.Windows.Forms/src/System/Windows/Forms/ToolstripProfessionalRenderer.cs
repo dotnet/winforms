@@ -664,6 +664,11 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
                     using var brush = item.BackColor.GetCachedSolidBrushScope();
                     g.FillRectangle(brush, fillRect);
                 }
+                else if (item is ToolStripMenuItem menuItem && menuItem.CheckState == CheckState.Checked)
+                {
+                    using var pen = ColorTable.MenuItemBorder.GetCachedPenScope();
+                    g.DrawRectangle(pen, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
+                }
             }
         }
     }
@@ -1659,27 +1664,27 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             case ArrowDirection.Up:
                 arrow = new Point[]
                 {
-                    new Point(middle.X - Offset2X, middle.Y + 1),
-                    new Point(middle.X + Offset2X + 1, middle.Y + 1),
-                    new Point(middle.X, middle.Y - Offset2Y)
+                    new(middle.X - Offset2X, middle.Y + 1),
+                    new(middle.X + Offset2X + 1, middle.Y + 1),
+                    new(middle.X, middle.Y - Offset2Y)
                 };
                 break;
 
             case ArrowDirection.Left:
                 arrow = new Point[]
                 {
-                    new Point(middle.X + Offset2X, middle.Y - Offset2Y - 1),
-                    new Point(middle.X + Offset2X, middle.Y + Offset2Y + 1),
-                    new Point(middle.X - 1, middle.Y)
+                    new(middle.X + Offset2X, middle.Y - Offset2Y - 1),
+                    new(middle.X + Offset2X, middle.Y + Offset2Y + 1),
+                    new(middle.X - 1, middle.Y)
                 };
                 break;
 
             case ArrowDirection.Right:
                 arrow = new Point[]
                 {
-                    new Point(middle.X - Offset2X, middle.Y - Offset2Y - 1),
-                    new Point(middle.X - Offset2X, middle.Y + Offset2Y + 1),
-                    new Point(middle.X + 1, middle.Y)
+                    new(middle.X - Offset2X, middle.Y - Offset2Y - 1),
+                    new(middle.X - Offset2X, middle.Y + Offset2Y + 1),
+                    new(middle.X + 1, middle.Y)
                 };
                 break;
 
@@ -1687,9 +1692,9 @@ public class ToolStripProfessionalRenderer : ToolStripRenderer
             default:
                 arrow = new Point[]
                 {
-                    new Point(middle.X - Offset2X, middle.Y - 1),
-                    new Point(middle.X + Offset2X + 1, middle.Y - 1),
-                    new Point(middle.X, middle.Y + Offset2Y)
+                    new(middle.X - Offset2X, middle.Y - 1),
+                    new(middle.X + Offset2X + 1, middle.Y - 1),
+                    new(middle.X, middle.Y + Offset2Y)
                 };
                 break;
         }

@@ -18,7 +18,7 @@ public class DataGridViewTextBoxColumn : DataGridViewColumn
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public override DataGridViewCell CellTemplate
+    public override DataGridViewCell? CellTemplate
     {
         get => base.CellTemplate;
         set
@@ -35,6 +35,7 @@ public class DataGridViewTextBoxColumn : DataGridViewColumn
     [DefaultValue(ColumnMaxInputLength)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_TextBoxColumnMaxInputLengthDescr))]
+    [MemberNotNull(nameof(TextBoxCellTemplate))]
     public int MaxInputLength
     {
         get
@@ -48,21 +49,25 @@ public class DataGridViewTextBoxColumn : DataGridViewColumn
         }
         set
         {
-            if (MaxInputLength != value)
+            if (MaxInputLength == value)
             {
-                TextBoxCellTemplate.MaxInputLength = value;
-                if (DataGridView is not null)
+                return;
+            }
+
+            TextBoxCellTemplate.MaxInputLength = value;
+            if (DataGridView is null)
+            {
+                return;
+            }
+
+            DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
+            int rowCount = dataGridViewRows.Count;
+            for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
+            {
+                DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
+                if (dataGridViewRow.Cells[Index] is DataGridViewTextBoxCell dataGridViewCell)
                 {
-                    DataGridViewRowCollection dataGridViewRows = DataGridView.Rows;
-                    int rowCount = dataGridViewRows.Count;
-                    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++)
-                    {
-                        DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
-                        if (dataGridViewRow.Cells[Index] is DataGridViewTextBoxCell dataGridViewCell)
-                        {
-                            dataGridViewCell.MaxInputLength = value;
-                        }
-                    }
+                    dataGridViewCell.MaxInputLength = value;
                 }
             }
         }
@@ -75,10 +80,8 @@ public class DataGridViewTextBoxColumn : DataGridViewColumn
         set => base.SortMode = value;
     }
 
-    private DataGridViewTextBoxCell TextBoxCellTemplate => (DataGridViewTextBoxCell)CellTemplate;
+    private DataGridViewTextBoxCell? TextBoxCellTemplate => (DataGridViewTextBoxCell?)CellTemplate;
 
-    public override string ToString()
-    {
-        return $"DataGridViewTextBoxColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewTextBoxColumn {{ Name={Name}, Index={Index} }}";
 }

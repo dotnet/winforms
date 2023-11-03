@@ -34,12 +34,12 @@ internal class MaskDesignerDialog : Form
     private MaskDescriptorTemplate _customMaskDescriptor;
     private SortOrder _listViewSortOrder = SortOrder.Ascending;
     private IContainer _components;
-    private readonly IHelpService _helpService;
+    private readonly IHelpService? _helpService;
 
     /// <summary>
     /// Constructor receiving a clone of the MaskedTextBox control under design.
     /// </summary>
-    public MaskDesignerDialog(MaskedTextBox instance, IHelpService helpService)
+    public MaskDesignerDialog(MaskedTextBox instance, IHelpService? helpService)
     {
         if (instance is null)
         {
@@ -363,7 +363,7 @@ internal class MaskDesignerDialog : Form
     /// Uses the specified ITypeDiscoveryService service provider to discover MaskDescriptor objects from
     /// the referenced assemblies.
     /// </summary>
-    public void DiscoverMaskDescriptors(ITypeDiscoveryService discoveryService)
+    public void DiscoverMaskDescriptors(ITypeDiscoveryService? discoveryService)
     {
         if (discoveryService is null)
         {

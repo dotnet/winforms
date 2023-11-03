@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms.VisualStyles;
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -653,7 +653,7 @@ public partial class TextBox : TextBoxBase
 
         if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode))
         {
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
         }
     }
 
@@ -667,7 +667,7 @@ public partial class TextBox : TextBoxBase
             // about text selection changed for TextBox assuming
             // that any mouse down on textbox leads to change of
             // the caret position and thereby change the selection.
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+            AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextSelectionChangedEventId);
         }
     }
 
@@ -689,7 +689,7 @@ public partial class TextBox : TextBoxBase
     protected override bool ProcessCmdKey(ref Message m, Keys keyData)
     {
         bool returnValue = base.ProcessCmdKey(ref m, keyData);
-        if (!returnValue && Multiline && ShortcutsEnabled && (keyData == (Keys.Control | Keys.A)))
+        if (!returnValue && ShortcutsEnabled && (keyData == (Keys.Control | Keys.A)))
         {
             SelectAll();
             return true;

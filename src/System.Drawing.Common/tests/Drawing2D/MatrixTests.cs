@@ -98,10 +98,10 @@ public partial class MatrixTests
 
     public static IEnumerable<object[]> Ctor_Rectangle_Points_TestData()
     {
-        yield return new object[] { new Rectangle(1, 4, 8, 16), new Point[] { new Point(32, 64), new Point(128, 256), new Point(512, 1024) }, new float[] { 12, 24, 30, 60, -100, -200 }, false, false };
-        yield return new object[] { new Rectangle(0, 0, 2, 4), new Point[] { new Point(8, 16), new Point(32, 64), new Point(128, 256) }, new float[] { 12, 24, 30, 60, 8, 16 }, false, false };
-        yield return new object[] { new Rectangle(0, 0, 1, 1), new Point[] { new Point(0, 0), new Point(0, 0), new Point(0, 0) }, new float[] { 0, 0, 0, 0, 0, 0 }, false, false };
-        yield return new object[] { new Rectangle(0, 0, 1, 1), new Point[] { new Point(0, 0), new Point(1, 0), new Point(0, 1) }, new float[] { 1, 0, 0, 1, 0, 0 }, true, true };
+        yield return new object[] { new Rectangle(1, 4, 8, 16), new Point[] { new(32, 64), new(128, 256), new(512, 1024) }, new float[] { 12, 24, 30, 60, -100, -200 }, false, false };
+        yield return new object[] { new Rectangle(0, 0, 2, 4), new Point[] { new(8, 16), new(32, 64), new(128, 256) }, new float[] { 12, 24, 30, 60, 8, 16 }, false, false };
+        yield return new object[] { new Rectangle(0, 0, 1, 1), new Point[] { new(0, 0), new(0, 0), new(0, 0) }, new float[] { 0, 0, 0, 0, 0, 0 }, false, false };
+        yield return new object[] { new Rectangle(0, 0, 1, 1), new Point[] { new(0, 0), new(1, 0), new(0, 1) }, new float[] { 1, 0, 0, 1, 0, 0 }, true, true };
     }
 
     [Theory]
@@ -202,7 +202,7 @@ public partial class MatrixTests
         yield return new object[] { matrix.Clone(), new Matrix(1, 2, 3, 4, 5, 7), false };
 
         yield return new object[] { new Matrix(), null, false };
-        yield return new object[] { new Matrix(), new object(), false };
+        yield return new object[] { new Matrix(), new(), false };
     }
 
     [Theory]
@@ -745,9 +745,9 @@ public partial class MatrixTests
 
     public static IEnumerable<object[]> TransformPoints_TestData()
     {
-        yield return new object[] { new Matrix(2, 4, 6, 8, 10, 12), new Point[] { new Point(2, 4), new Point(4, 8) }, new Point[] { new Point(38, 52), new Point(66, 92) } };
-        yield return new object[] { new Matrix(), new Point[] { new Point(2, 4), new Point(4, 8) }, new Point[] { new Point(2, 4), new Point(4, 8) } };
-        yield return new object[] { new Matrix(2, 4, 6, 8, 10, 12), new Point[1], new Point[] { new Point(10, 12) } };
+        yield return new object[] { new Matrix(2, 4, 6, 8, 10, 12), new Point[] { new(2, 4), new(4, 8) }, new Point[] { new(38, 52), new(66, 92) } };
+        yield return new object[] { new Matrix(), new Point[] { new(2, 4), new(4, 8) }, new Point[] { new(2, 4), new(4, 8) } };
+        yield return new object[] { new Matrix(2, 4, 6, 8, 10, 12), new Point[1], new Point[] { new(10, 12) } };
     }
 
     [Theory]
@@ -804,8 +804,8 @@ public partial class MatrixTests
 
     public static IEnumerable<object[]> TransformVectors_TestData()
     {
-        yield return new object[] { new Matrix(2, 4, 6, 8, 10, 12), new Point[] { new Point(2, 4), new Point(4, 8) }, new Point[] { new Point(28, 40), new Point(56, 80) } };
-        yield return new object[] { new Matrix(), new Point[] { new Point(2, 4), new Point(4, 8) }, new Point[] { new Point(2, 4), new Point(4, 8) } };
+        yield return new object[] { new Matrix(2, 4, 6, 8, 10, 12), new Point[] { new(2, 4), new(4, 8) }, new Point[] { new(28, 40), new(56, 80) } };
+        yield return new object[] { new Matrix(), new Point[] { new(2, 4), new(4, 8) }, new Point[] { new(2, 4), new(4, 8) } };
         yield return new object[] { new Matrix(2, 4, 6, 8, 10, 12), new Point[1], new Point[1] };
     }
 

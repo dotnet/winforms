@@ -81,7 +81,7 @@ public class GraphicsTest : IDisposable
     {
         int x, y;
         if (!IsEmptyBitmap(bitmap, out x, out y))
-            Assert.True(false, $"Position {x},{y}");
+            Assert.Fail($"Position {x},{y}");
     }
 
     private void CheckForNonEmptyBitmap(Bitmap bitmap)
@@ -766,10 +766,10 @@ public class GraphicsTest : IDisposable
         }
     }
 
-    static PointF[] SmallCurveF = new PointF[3] { new PointF(0, 0), new PointF(15, 5), new PointF(5, 15) };
+    static PointF[] SmallCurveF = [new(0, 0), new(15, 5), new(5, 15)];
 
-    static Point[] TooSmallCurve = new Point[2] { new Point(0, 0), new Point(15, 5) };
-    static PointF[] LargeCurveF = new PointF[4] { new PointF(0, 0), new PointF(15, 5), new PointF(5, 15), new PointF(0, 20) };
+    static Point[] TooSmallCurve = [new(0, 0), new(15, 5)];
+    static PointF[] LargeCurveF = [new(0, 0), new(15, 5), new(5, 15), new(0, 20)];
 
     [Fact]
     public void DrawCurve_NotEnoughPoints()
@@ -793,7 +793,7 @@ public class GraphicsTest : IDisposable
         using (Bitmap bitmap = new Bitmap(20, 20))
         using (Graphics g = Graphics.FromImage(bitmap))
         {
-            Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, new Point[1] { new Point(10, 10) }, 0.5f));
+            Assert.Throws<ArgumentException>(() => g.DrawCurve(Pens.Black, new Point[1] { new(10, 10) }, 0.5f));
             // a single point isn't enough
         }
     }
@@ -933,16 +933,14 @@ public class GraphicsTest : IDisposable
         using (Graphics g = Graphics.FromImage(bitmap))
         using (Pen pen = new Pen(Color.Red))
         {
-            Rectangle[] rects = new Rectangle[2]
-            {
-                new Rectangle (5, 5, -10, -10),
-                new Rectangle (0, 0, 5, -10)
-            };
-            RectangleF[] rectf = new RectangleF[2]
-            {
-                new RectangleF (0.0f, 5.0f, -10.0f, -10.0f),
-                new RectangleF (15.0f, 0.0f, -10.0f, 5.0f)
-            };
+            Rectangle[] rects = [
+                new(5, 5, -10, -10),
+                new(0, 0, 5, -10)
+            ];
+            RectangleF[] rectf = [
+                new(0.0f, 5.0f, -10.0f, -10.0f),
+                new(15.0f, 0.0f, -10.0f, 5.0f)
+            ];
             g.DrawRectangles(pen, rects);
             g.DrawRectangles(pen, rectf);
             CheckForEmptyBitmap(bitmap);
@@ -976,17 +974,15 @@ public class GraphicsTest : IDisposable
         using (Graphics g = Graphics.FromImage(bitmap))
         using (SolidBrush brush = new SolidBrush(Color.Red))
         {
-            Rectangle[] rects = new Rectangle[2]
-            {
-                new Rectangle (5, 5, -10, -10),
-                new Rectangle (0, 0, 5, -10)
-            };
+            Rectangle[] rects = [
+                new(5, 5, -10, -10),
+                new(0, 0, 5, -10)
+            ];
 
-            RectangleF[] rectf = new RectangleF[2]
-            {
-                new RectangleF (0.0f, 5.0f, -10.0f, -10.0f),
-                new RectangleF (15.0f, 0.0f, -10.0f, 5.0f)
-            };
+            RectangleF[] rectf = [
+                new(0.0f, 5.0f, -10.0f, -10.0f),
+                new(15.0f, 0.0f, -10.0f, 5.0f)
+            ];
 
             g.FillRectangles(brush, rects);
             g.FillRectangles(brush, rectf);
@@ -1656,7 +1652,7 @@ public class GraphicsTest : IDisposable
         using (Graphics g = Graphics.FromImage(bitmap))
         {
             g.Clear(Color.Red);
-            Point[] pts = new Point[3] { new Point(5, 5), new Point(15, 5), new Point(15, 15) };
+            Point[] pts = [new(5, 5), new(15, 5), new(15, 15)];
             if (width >= 0)
             {
                 using (Pen pen = new Pen(Color.Blue, width))
@@ -2180,11 +2176,11 @@ public class GraphicsTest : IDisposable
         }
     }
 
-    static CharacterRange[] ranges = new CharacterRange[] {
-                new CharacterRange (0, 1),
-                new CharacterRange (1, 1),
-                new CharacterRange (2, 1)
-            };
+    static CharacterRange[] ranges = [
+                new(0, 1),
+                new(1, 1),
+                new(2, 1)
+            ];
 
     Region[] Measure_Helper(Graphics gfx, RectangleF rect, bool useSpan)
     {
@@ -2705,7 +2701,7 @@ public class GraphicsTest : IDisposable
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImage(bmp, new PointF[] {
-                    new PointF (0, 0), new PointF (1, 1), new PointF (2, 2) });
+                    new(0, 0), new(1, 1), new(2, 2) });
         }
     }
 
@@ -2793,7 +2789,7 @@ public class GraphicsTest : IDisposable
         using (Graphics g = Graphics.FromImage(bmp))
         {
             g.DrawImage(bmp, new Point[] {
-                    new Point (0, 0), new Point (1, 1), new Point (2, 2) });
+                    new(0, 0), new(1, 1), new(2, 2) });
         }
     }
 
@@ -2900,7 +2896,7 @@ public class GraphicsTest : IDisposable
     public void DrawImage_NullPointRectangleGraphicsUnit()
     {
         Rectangle r = new Rectangle(1, 2, 3, 4);
-        Point[] pts = new Point[3] { new Point(1, 1), new Point(2, 2), new Point(3, 3) };
+        Point[] pts = [new(1, 1), new(2, 2), new(3, 3)];
         using (Bitmap bmp = new Bitmap(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
@@ -2962,7 +2958,7 @@ public class GraphicsTest : IDisposable
     public void DrawImage_NullPointFRectangleGraphicsUnit()
     {
         Rectangle r = new Rectangle(1, 2, 3, 4);
-        PointF[] pts = new PointF[3] { new PointF(1, 1), new PointF(2, 2), new PointF(3, 3) };
+        PointF[] pts = [new(1, 1), new(2, 2), new(3, 3)];
         using (Bitmap bmp = new Bitmap(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {

@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Globalization;
 using System.Text;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -308,7 +309,7 @@ public partial class DataGridViewRow
                 dataGridView.CurrentCell is not null &&
                 dataGridView.CurrentCell.RowIndex == _owningDataGridViewRow.Index)
             {
-                return _owningDataGridViewRow.DataGridView.CurrentCell.AccessibilityObject;
+                return dataGridView.CurrentCell.AccessibilityObject;
             }
             else
             {
@@ -416,7 +417,7 @@ public partial class DataGridViewRow
                     }
                     else
                     {
-                        int firstVisibleCell = dataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible).Index;
+                        int firstVisibleCell = dataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible)!.Index;
                         if (firstVisibleCell > -1)
                         {
                             dataGridView.CurrentCell = _owningDataGridViewRow.Cells[firstVisibleCell]; // Do not change old selection
@@ -440,7 +441,7 @@ public partial class DataGridViewRow
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             {
                 if (Owner is null)
@@ -450,15 +451,15 @@ public partial class DataGridViewRow
 
                 switch (direction)
                 {
-                    case UiaCore.NavigateDirection.Parent:
+                    case NavigateDirection.NavigateDirection_Parent:
                         return Parent;
-                    case UiaCore.NavigateDirection.NextSibling:
+                    case NavigateDirection.NavigateDirection_NextSibling:
                         return Navigate(AccessibleNavigation.Next);
-                    case UiaCore.NavigateDirection.PreviousSibling:
+                    case NavigateDirection.NavigateDirection_PreviousSibling:
                         return Navigate(AccessibleNavigation.Previous);
-                    case UiaCore.NavigateDirection.FirstChild:
+                    case NavigateDirection.NavigateDirection_FirstChild:
                         return Navigate(AccessibleNavigation.FirstChild);
-                    case UiaCore.NavigateDirection.LastChild:
+                    case NavigateDirection.NavigateDirection_LastChild:
                         return Navigate(AccessibleNavigation.LastChild);
                     default:
                         return null;
@@ -474,19 +475,17 @@ public partial class DataGridViewRow
             }
         }
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
-        {
-            return patternId.Equals(UiaCore.UIA.LegacyIAccessiblePatternId);
-        }
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
+            => patternId.Equals(UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId);
 
         internal override bool IsReadOnly => _owningDataGridViewRow?.ReadOnly ?? false;
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyId) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyId) =>
             propertyId switch
             {
-                UiaCore.UIA.HasKeyboardFocusPropertyId => string.Empty,
-                UiaCore.UIA.IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => string.Empty,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => string.Empty,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => string.Empty,
                 _ => base.GetPropertyValue(propertyId)
             };
     }

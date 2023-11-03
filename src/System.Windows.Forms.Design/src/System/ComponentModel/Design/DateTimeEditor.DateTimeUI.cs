@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
@@ -18,22 +16,32 @@ public partial class DateTimeEditor
         private readonly MonthCalendar _monthCalendar = new DateTimeMonthCalendar();
         private IWindowsFormsEditorService _editorService;
 
-        public DateTimeUI()
+        public DateTimeUI(IWindowsFormsEditorService editorService, object? value)
         {
             InitializeComponent();
             Size = _monthCalendar.SingleMonthSize;
             _monthCalendar.Resize += MonthCalResize;
+            _editorService = editorService;
+            Value = value;
+
+            if (value is not null)
+            {
+                DateTime dateTime = (DateTime)value;
+                _monthCalendar.SetDate(dateTime.Equals(DateTime.MinValue) ? DateTime.Today : dateTime);
+            }
         }
 
-        public object Value { get; private set; }
+        public object? Value { get; private set; }
 
-        public void End()
+        protected override void Dispose(bool disposing)
         {
-            _editorService = null;
+            _editorService = null!;
             Value = null;
+
+            base.Dispose(disposing);
         }
 
-        private void MonthCalKeyDown(object sender, KeyEventArgs e)
+        private void MonthCalKeyDown(object? sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -58,33 +66,21 @@ public partial class DateTimeEditor
             Controls.Add(_monthCalendar);
         }
 
-        private void MonthCalResize(object sender, EventArgs e)
+        private void MonthCalResize(object? sender, EventArgs e)
         {
             Size = _monthCalendar.Size;
         }
 
-        private void OnDateSelected(object sender, DateRangeEventArgs e)
+        private void OnDateSelected(object? sender, DateRangeEventArgs? e)
         {
             Value = _monthCalendar.SelectionStart;
-            _editorService.CloseDropDown();
+            _editorService!.CloseDropDown();
         }
 
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
             _monthCalendar.Focus();
-        }
-
-        public void Start(IWindowsFormsEditorService editorService, object value)
-        {
-            _editorService = editorService;
-            Value = value;
-
-            if (value is not null)
-            {
-                DateTime dateTime = (DateTime)value;
-                _monthCalendar.SetDate((dateTime.Equals(DateTime.MinValue)) ? DateTime.Today : dateTime);
-            }
         }
 
         private class DateTimeMonthCalendar : MonthCalendar

@@ -1,9 +1,12 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System.Reflection;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
+using Windows.Win32.UI.Accessibility;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.InteropTests;
@@ -63,15 +66,15 @@ public class AccessibleObjectTests : InteropTestBase
     public void AccessibleObject_IRawElementProviderSimpleProviderOptions_Get_ReturnsExpected()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderSimpleProviderOptions(o, ProviderOptions.ServerSideProvider | ProviderOptions.UseComThreading));
+        AssertSuccess(Test_IRawElementProviderSimpleProviderOptions(o, ProviderOptions.ProviderOptions_ServerSideProvider | ProviderOptions.ProviderOptions_UseComThreading));
     }
 
     public static TheoryData<int, bool> GetPatternProvider_TestData() => new()
     {
-        { (int)UIA.InvokePatternId, false },
-        { (int)UIA.SelectionPatternId, false },
-        { (int)UIA.IsInvokePatternAvailablePropertyId, false },
-        { (int)UIA.InvokePatternId - 1, false }
+        { (int)UIA_PATTERN_ID.UIA_InvokePatternId, false },
+        { (int)UIA_PATTERN_ID.UIA_SelectionPatternId, false },
+        { (int)UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId, false },
+        { (int)UIA_PATTERN_ID.UIA_InvokePatternId - 1, false }
     };
 
     [WinFormsTheory]
@@ -79,23 +82,23 @@ public class AccessibleObjectTests : InteropTestBase
     public void AccessibleObject_IRawElementProviderSimpleGetPatternProvider_Invoke_ReturnsExpected(int patternId, bool expected)
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderSimpleGetPatternProvider(o, (UIA)patternId, (BOOL)expected));
+        AssertSuccess(Test_IRawElementProviderSimpleGetPatternProvider(o, (UIA_PATTERN_ID)patternId, (BOOL)expected));
     }
 
     public static IEnumerable<object[]> GetPropertyValue_TestData()
     {
-        yield return new object[] { UIA.InvokePatternId, null };
-        yield return new object[] { UIA.SelectionPatternId, null };
-        yield return new object[] { UIA.IsInvokePatternAvailablePropertyId, false };
-        yield return new object[] { UIA.InvokePatternId - 1, null };
+        yield return new object[] { UIA_PATTERN_ID.UIA_InvokePatternId, null };
+        yield return new object[] { UIA_PATTERN_ID.UIA_SelectionPatternId, null };
+        yield return new object[] { UIA_PROPERTY_ID.UIA_IsInvokePatternAvailablePropertyId, false };
+        yield return new object[] { UIA_PATTERN_ID.UIA_InvokePatternId - 1, null };
     }
 
     [WinFormsTheory]
     [MemberData(nameof(GetPropertyValue_TestData))]
-    public void AccessibleObject_IRawElementProviderSimpleGetPropertyValue_Invoke_ReturnsExpected(object patternId, object expected)
+    public void AccessibleObject_IRawElementProviderSimpleGetPropertyValue_Invoke_ReturnsExpected(object propertyId, object expected)
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderSimpleGetPropertyValue(o, (UIA)patternId, out VARIANT variant));
+        AssertSuccess(Test_IRawElementProviderSimpleGetPropertyValue(o, (UIA_PROPERTY_ID)propertyId, out VARIANT variant));
         Assert.Equal(expected, variant.ToObject());
     }
 
@@ -186,13 +189,13 @@ public class AccessibleObjectTests : InteropTestBase
     }
 
     [WinFormsTheory]
-    [InlineData((int)NavigateDirection.Parent - 1)]
-    [InlineData((int)NavigateDirection.Parent)]
-    [InlineData((int)NavigateDirection.NextSibling)]
-    [InlineData((int)NavigateDirection.PreviousSibling)]
-    [InlineData((int)NavigateDirection.FirstChild)]
-    [InlineData((int)NavigateDirection.LastChild)]
-    [InlineData((int)NavigateDirection.LastChild + 1)]
+    [InlineData((int)NavigateDirection.NavigateDirection_Parent - 1)]
+    [InlineData((int)NavigateDirection.NavigateDirection_Parent)]
+    [InlineData((int)NavigateDirection.NavigateDirection_NextSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_PreviousSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_LastChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_LastChild + 1)]
     public void AccessibleObject_IRawElementProviderFragmentNavigate_Invoke_ReturnsExpected(int direction)
     {
         var o = new AccessibleObject();
@@ -262,58 +265,58 @@ public class AccessibleObjectTests : InteropTestBase
     public void AccessibleObject_IValueProviderCollapse_Invoke_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IValueProviderCollapse_InvokeAfterExpand_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderExpand(o, ExpandCollapseState.Collapsed));
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderExpand(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IExpandCollapseProviderExpand_Invoke_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IExpandCollapseProviderExpand_InvokeAfterCollapse_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
-        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IExpandCollapseProviderExpandCollapseState_Get_ReturnsExpected()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IExpandCollapseProviderGetExpandCollapseState(o, ExpandCollapseState.Collapsed));
+        AssertSuccess(Test_IExpandCollapseProviderGetExpandCollapseState(o, ExpandCollapseState.ExpandCollapseState_Collapsed));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IToggleProviderToggleState_Get_ReturnsExpected()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IToggleProviderGetToggleState(o, ToggleState.Indeterminate));
+        AssertSuccess(Test_IToggleProviderGetToggleState(o, ToggleState.ToggleState_Indeterminate));
     }
 
     [WinFormsFact]
     public void AccessibleObject_IToggleProviderToggle_Invoke_Success()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_IToggleProviderToggle(o, ToggleState.Indeterminate));
+        AssertSuccess(Test_IToggleProviderToggle(o, ToggleState.ToggleState_Indeterminate));
     }
 
     [WinFormsFact]
     public void AccessibleObject_ITableProviderRowOrColumnMajor_Get_ReturnsExpected()
     {
         var o = new AccessibleObject();
-        AssertSuccess(Test_ITableProviderGetRowOrColumnMajor(o, RowOrColumnMajor.RowMajor));
+        AssertSuccess(Test_ITableProviderGetRowOrColumnMajor(o, RowOrColumnMajor.RowOrColumnMajor_RowMajor));
     }
 
     [WinFormsFact]
@@ -701,6 +704,60 @@ public class AccessibleObjectTests : InteropTestBase
         }
     }
 
+    [Fact]
+    public void AccessibleObject_IAccessible_NoGettersWithParameters()
+    {
+        Type type = typeof(Accessibility.IAccessible);
+        var members = type.GetMembers();
+
+        List<string> memberNames = new();
+        List<string> getterNames = new();
+
+        foreach (var member in members)
+        {
+            memberNames.Add(member.Name);
+            if (member is PropertyInfo property && property.GetGetMethod() is MethodInfo getter && getter.GetParameters() is var parameters && parameters.Length > 0)
+            {
+                getterNames.Add(getter.Name);
+                Assert.Equal(getter.Name, $"get_{member.Name}");
+            }
+        }
+
+        Assert.Equal(35, memberNames.Count);
+        Assert.Equal(10, getterNames.Count);
+        Assert.Contains("get_accChild", getterNames);
+    }
+
+    [WinFormsFact]
+    public unsafe void AccessibleObject_IDispatch()
+    {
+        AccessibleObject accessible = new();
+        using var dispatch = ComHelpers.TryGetComScope<IDispatch>(accessible);
+        dispatch.Value->GetIDOfName("accChild", out int dispId).ThrowOnFailure();
+        Assert.Equal(0x00010002, dispId);
+
+        // We only ever get IUnknown type info in Core. This isn't necessary to replicate, it is meant
+        // to show the minbar.
+        using ComScope<ITypeInfo> typeInfo = new(null);
+        dispatch.Value->GetTypeInfo(0, PInvoke.GetThreadLocale(), typeInfo).ThrowOnFailure();
+        HRESULT hr = typeInfo.Value->GetIDOfName("accChild", out int memberId);
+        Assert.Equal(HRESULT.DISP_E_UNKNOWNNAME, hr);
+        hr = typeInfo.Value->GetIDOfName("get_accChild", out memberId);
+        Assert.Equal(HRESULT.DISP_E_UNKNOWNNAME, hr);
+
+        TYPEATTR* typeattr = default;
+        typeInfo.Value->GetTypeAttr(&typeattr).ThrowOnFailure();
+        try
+        {
+            Assert.Equal(3, typeattr->cFuncs);
+            Assert.Equal(IUnknown.IID_Guid, typeattr->guid);
+        }
+        finally
+        {
+            typeInfo.Value->ReleaseTypeAttr(typeattr);
+        }
+    }
+
     private class CustomParentAccessibleObject : AccessibleObject
     {
         public AccessibleObject ParentResult { get; set; }
@@ -748,13 +805,13 @@ public class AccessibleObjectTests : InteropTestBase
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
     private static extern string Test_IRawElementProviderSimpleGetPatternProvider(
         [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-        UIA patternId,
+        UIA_PATTERN_ID patternId,
         BOOL expected);
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
     private static extern string Test_IRawElementProviderSimpleGetPropertyValue(
         [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-        UIA patternId,
+        UIA_PROPERTY_ID propertyId,
         out VARIANT expected);
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]

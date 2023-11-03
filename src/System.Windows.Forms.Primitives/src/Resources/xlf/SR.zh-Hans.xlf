@@ -7,6 +7,11 @@
         <target state="translated">未处理的 VT: {0}。</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogNoRootFolder">
+        <source>Unable to retrieve the root folder.</source>
+        <target state="translated">无法检索根文件夹。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="General_MissingService">
         <source>The service '{0}' must be installed for this feature to work.  Ensure that this service is available.</source>
         <target state="translated">要使此功能工作，必须安装服务“{0}”。 请确保此服务可用。</target>

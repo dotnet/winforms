@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 
@@ -36,18 +34,20 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     private string _dataPropertyName = string.Empty;
 
     // needed for IComponent
-    private EventHandler _disposed;
+    private EventHandler? _disposed;
 
     private static readonly int s_propDataGridViewColumnValueType = PropertyStore.CreateKey();
 
     /// <summary>
     ///  Initializes a new instance of the <see cref="DataGridViewColumn"/> class.
     /// </summary>
-    public DataGridViewColumn() : this((DataGridViewCell)null)
+    public DataGridViewColumn()
+        : this(cellTemplate: null)
     {
     }
 
-    public DataGridViewColumn(DataGridViewCell cellTemplate) : base()
+    public DataGridViewColumn(DataGridViewCell? cellTemplate)
+        : base()
     {
         _fillWeight = DefaultFillWeight;
         _usedFillWeight = DefaultFillWeight;
@@ -64,10 +64,8 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     /// </summary>
     /// <param name="value"> initial value</param>
     /// <returns> scaled metric</returns>
-    private static int ScaleToCurrentDpi(int value)
-    {
-        return DpiHelper.IsScalingRequirementMet ? DpiHelper.LogicalToDeviceUnits(value) : value;
-    }
+    private static int ScaleToCurrentDpi(int value) =>
+        DpiHelper.IsScalingRequirementMet ? DpiHelper.LogicalToDeviceUnits(value) : value;
 
     [SRCategory(nameof(SR.CatLayout))]
     [DefaultValue(DataGridViewAutoSizeColumnMode.NotSet)]
@@ -75,10 +73,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [RefreshProperties(RefreshProperties.Repaint)]
     public DataGridViewAutoSizeColumnMode AutoSizeMode
     {
-        get
-        {
-            return _autoSizeMode;
-        }
+        get => _autoSizeMode;
         set
         {
             switch (value)
@@ -152,23 +147,23 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     // TypeConverter of the PropertyDescriptor attached to this column
     // in databound cases. Null otherwise.
-    internal TypeConverter BoundColumnConverter { get; set; }
+    internal TypeConverter? BoundColumnConverter { get; set; }
 
     internal int BoundColumnIndex { get; set; } = -1;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public virtual DataGridViewCell CellTemplate { get; set; }
+    public virtual DataGridViewCell? CellTemplate { get; set; }
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public Type CellType => CellTemplate?.GetType();
+    public Type? CellType => CellTemplate?.GetType();
 
     [DefaultValue(null)]
     [SRCategory(nameof(SR.CatBehavior))]
     [SRDescription(nameof(SR.DataGridView_ColumnContextMenuStripDescr))]
-    public override ContextMenuStrip ContextMenuStrip
+    public override ContextMenuStrip? ContextMenuStrip
     {
         get => base.ContextMenuStrip;
         set => base.ContextMenuStrip = value;
@@ -180,12 +175,10 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [Editor($"System.Windows.Forms.Design.DataGridViewColumnDataPropertyNameEditor, {AssemblyRef.SystemDesign}", typeof(Drawing.Design.UITypeEditor))]
     [SRDescription(nameof(SR.DataGridView_ColumnDataPropertyNameDescr))]
     [SRCategory(nameof(SR.CatData))]
+    [AllowNull]
     public string DataPropertyName
     {
-        get
-        {
-            return _dataPropertyName;
-        }
+        get => _dataPropertyName;
         set
         {
             value ??= string.Empty;
@@ -201,6 +194,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [Browsable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ColumnDefaultCellStyleDescr))]
+    [AllowNull]
     public override DataGridViewCellStyle DefaultCellStyle
     {
         get => base.DefaultCellStyle;
@@ -239,10 +233,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public int DisplayIndex
     {
-        get
-        {
-            return _displayIndex;
-        }
+        get => _displayIndex;
         set
         {
             if (_displayIndex != value)
@@ -294,10 +285,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     internal bool DisplayIndexHasChanged
     {
-        get
-        {
-            return (_flags & DisplayIndexHasChangedInternal) != 0;
-        }
+        get => (_flags & DisplayIndexHasChangedInternal) != 0;
         set
         {
             if (value)
@@ -324,7 +312,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
-    public event EventHandler Disposed
+    public event EventHandler? Disposed
     {
         add => _disposed += value;
         remove => _disposed -= value;
@@ -335,14 +323,8 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [SRDescription(nameof(SR.DataGridView_ColumnDividerWidthDescr))]
     public int DividerWidth
     {
-        get
-        {
-            return DividerThickness;
-        }
-        set
-        {
-            DividerThickness = value;
-        }
+        get => DividerThickness;
+        set => DividerThickness = value;
     }
 
     [SRCategory(nameof(SR.CatLayout))]
@@ -350,10 +332,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [SRDescription(nameof(SR.DataGridViewColumn_FillWeightDescr))]
     public float FillWeight
     {
-        get
-        {
-            return _fillWeight;
-        }
+        get => _fillWeight;
         set
         {
             if (value <= 0)
@@ -400,18 +379,17 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+    [AllowNull]
     public DataGridViewColumnHeaderCell HeaderCell
     {
-        get
-        {
-            return (DataGridViewColumnHeaderCell)base.HeaderCellCore;
-        }
+        get => (DataGridViewColumnHeaderCell)base.HeaderCellCore;
         set => base.HeaderCellCore = value;
     }
 
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ColumnHeaderTextDescr))]
     [Localizable(true)]
+    [AllowNull]
     public string HeaderText
     {
         get
@@ -443,28 +421,20 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         }
     }
 
-    private bool ShouldSerializeHeaderText()
-    {
-        return HasHeaderCell && ((DataGridViewColumnHeaderCell)HeaderCell).ContainsLocalValue;
-    }
+    private bool ShouldSerializeHeaderText() =>
+        HasHeaderCell && ((DataGridViewColumnHeaderCell)HeaderCell).ContainsLocalValue;
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public DataGridViewAutoSizeColumnMode InheritedAutoSizeMode
-    {
-        get
-        {
-            return GetInheritedAutoSizeMode(DataGridView);
-        }
-    }
+    public DataGridViewAutoSizeColumnMode InheritedAutoSizeMode => GetInheritedAutoSizeMode(DataGridView);
 
     [Browsable(false)]
-    public override DataGridViewCellStyle InheritedStyle
+    public override DataGridViewCellStyle? InheritedStyle
     {
         get
         {
-            DataGridViewCellStyle columnStyle = null;
+            DataGridViewCellStyle? columnStyle = null;
             if (HasDefaultCellStyle)
             {
                 columnStyle = DefaultCellStyle;
@@ -605,10 +575,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     internal bool IsBrowsableInternal
     {
-        get
-        {
-            return (_flags & ColumnIsBrowsableInternal) != 0;
-        }
+        get => (_flags & ColumnIsBrowsableInternal) != 0;
         set
         {
             if (value)
@@ -624,20 +591,11 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool IsDataBound
-    {
-        get
-        {
-            return IsDataBoundInternal;
-        }
-    }
+    public bool IsDataBound => IsDataBoundInternal;
 
     internal bool IsDataBoundInternal
     {
-        get
-        {
-            return (_flags & ColumnIsDataBound) != 0;
-        }
+        get => (_flags & ColumnIsDataBound) != 0;
         set
         {
             if (value)
@@ -658,17 +616,12 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [RefreshProperties(RefreshProperties.Repaint)]
     public int MinimumWidth
     {
-        get
-        {
-            return MinimumThickness;
-        }
-        set
-        {
-            MinimumThickness = value;
-        }
+        get => MinimumThickness;
+        set => MinimumThickness = value;
     }
 
     [Browsable(false)]
+    [AllowNull]
     public string Name
     {
         get
@@ -748,7 +701,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public ISite Site { get; set; }
+    public ISite? Site { get; set; }
 
     [DefaultValue(DataGridViewColumnSortMode.NotSortable)]
     [SRCategory(nameof(SR.CatBehavior))]
@@ -811,15 +764,13 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [Localizable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ColumnToolTipTextDescr))]
+    [AllowNull]
     public string ToolTipText
     {
-        get
-        {
-            return HeaderCell.ToolTipText;
-        }
+        get => HeaderCell.ToolTipText;
         set
         {
-            if (string.Compare(ToolTipText, value, false /*ignore case*/, CultureInfo.InvariantCulture) != 0)
+            if (string.Compare(ToolTipText, value, ignoreCase: false, CultureInfo.InvariantCulture) != 0)
             {
                 HeaderCell.ToolTipText = value;
 
@@ -830,10 +781,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
 
     internal float UsedFillWeight
     {
-        get
-        {
-            return _usedFillWeight;
-        }
+        get => _usedFillWeight;
         set
         {
             Debug.Assert(value > 0);
@@ -844,12 +792,9 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [Browsable(false)]
     [DefaultValue(null)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public Type ValueType
+    public Type? ValueType
     {
-        get
-        {
-            return (Type)Properties.GetObject(s_propDataGridViewColumnValueType);
-        }
+        get => (Type?)Properties.GetObject(s_propDataGridViewColumnValueType);
         set
         {
             // what should we do when we modify the ValueType in the dataGridView column???
@@ -873,25 +818,14 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [RefreshProperties(RefreshProperties.Repaint)]
     public int Width
     {
-        get
-        {
-            return Thickness;
-        }
-        set
-        {
-            Thickness = value;
-        }
+        get => Thickness;
+        set => Thickness = value;
     }
 
     public override object Clone()
     {
-        //
-
-        DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)System.Activator.CreateInstance(GetType());
-        if (dataGridViewColumn is not null)
-        {
-            CloneInternal(dataGridViewColumn);
-        }
+        DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)Activator.CreateInstance(GetType())!;
+        CloneInternal(dataGridViewColumn);
 
         return dataGridViewColumn;
     }
@@ -904,7 +838,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         dataGridViewColumn._displayIndex = -1;
         dataGridViewColumn.HeaderText = HeaderText;
         dataGridViewColumn.DataPropertyName = DataPropertyName;
-        dataGridViewColumn.CellTemplate = (DataGridViewCell)CellTemplate?.Clone();
+        dataGridViewColumn.CellTemplate = (DataGridViewCell?)CellTemplate?.Clone();
 
         if (HasHeaderCell)
         {
@@ -939,7 +873,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         }
     }
 
-    internal DataGridViewAutoSizeColumnMode GetInheritedAutoSizeMode(DataGridView dataGridView)
+    internal DataGridViewAutoSizeColumnMode GetInheritedAutoSizeMode(DataGridView? dataGridView)
     {
         if (dataGridView is not null && _autoSizeMode == DataGridViewAutoSizeColumnMode.NotSet)
         {
@@ -995,7 +929,7 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
                 throw new InvalidEnumArgumentException(nameof(autoSizeColumnMode), (int)autoSizeColumnMode, typeof(DataGridViewAutoSizeColumnMode));
         }
 
-        DataGridView dataGridView = DataGridView;
+        DataGridView? dataGridView = DataGridView;
 
         Debug.Assert(dataGridView is null || Index > -1);
 
@@ -1113,8 +1047,6 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
         return preferredColumnThickness;
     }
 
-    public override string ToString()
-    {
-        return $"DataGridViewColumn {{ Name={Name}, Index={Index} }}";
-    }
+    public override string ToString() =>
+        $"DataGridViewColumn {{ Name={Name}, Index={Index} }}";
 }

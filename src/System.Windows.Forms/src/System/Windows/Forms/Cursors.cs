@@ -37,63 +37,32 @@ public static class Cursors
     private static Cursor? s_panWest;
     private static Cursor? s_hand;
 
-    public static Cursor AppStarting => s_appStarting ??= new Cursor(PInvoke.IDC_APPSTARTING);
-
-    public static Cursor Arrow => s_arrow ??= new Cursor(PInvoke.IDC_ARROW);
-
-    public static Cursor Cross => s_cross ??= new Cursor(PInvoke.IDC_CROSS);
-
-    public static Cursor Default => s_defaultCursor ??= new Cursor(PInvoke.IDC_ARROW);
-
-    public static Cursor IBeam => s_iBeam ??= new Cursor(PInvoke.IDC_IBEAM);
-
-    public static Cursor No => s_no ??= new Cursor(PInvoke.IDC_NO);
-
-    public static Cursor SizeAll => s_sizeAll ??= new Cursor(PInvoke.IDC_SIZEALL);
-
-    public static Cursor SizeNESW => s_sizeNESW ??= new Cursor(PInvoke.IDC_SIZENESW);
-
-    public static Cursor SizeNS => s_sizeNS ??= new Cursor(PInvoke.IDC_SIZENS);
-
-    public static Cursor SizeNWSE => s_sizeNWSE ??= new Cursor(PInvoke.IDC_SIZENWSE);
-
-    public static Cursor SizeWE => s_sizeWE ??= new Cursor(PInvoke.IDC_SIZEWE);
-
-    public static Cursor UpArrow => s_upArrow ??= new Cursor(PInvoke.IDC_UPARROW);
-
-    public static Cursor WaitCursor => s_wait ??= new Cursor(PInvoke.IDC_WAIT);
-
-    public static Cursor Help => s_help ??= new Cursor(PInvoke.IDC_HELP);
-    public static Cursor Hand => s_hand ??= new Cursor(PInvoke.IDC_HAND);
-
-    public static Cursor HSplit => GetCursor(ref s_hSplit, "hsplit.cur");
-
-    public static Cursor VSplit => GetCursor(ref s_vSplit, "vsplit.cur");
-
-    public static Cursor NoMove2D => GetCursor(ref s_noMove2D, "nomove2d.cur");
-
-    public static Cursor NoMoveHoriz => GetCursor(ref s_noMoveHoriz, "nomoveh.cur");
-
-    public static Cursor NoMoveVert => GetCursor(ref s_noMoveVert, "nomovev.cur");
-
-    public static Cursor PanEast => GetCursor(ref s_panEast, "east.cur");
-
-    public static Cursor PanNE => GetCursor(ref s_panNE, "ne.cur");
-
-    public static Cursor PanNorth => GetCursor(ref s_panNorth, "north.cur");
-
-    public static Cursor PanNW => GetCursor(ref s_panNW, "nw.cur");
-
-    public static Cursor PanSE => GetCursor(ref s_panSE, "se.cur");
-
-    public static Cursor PanSouth => GetCursor(ref s_panSouth, "south.cur");
-
-    public static Cursor PanSW => GetCursor(ref s_panSW, "sw.cur");
-
-    public static Cursor PanWest => GetCursor(ref s_panWest, "west.cur");
-
-    private static Cursor GetCursor(ref Cursor? cursor, string resource)
-        => cursor is not null && cursor.IsValid()
-            ? cursor
-            : cursor = new Cursor(typeof(Cursor), resource);
+    public static Cursor AppStarting => s_appStarting ??= new(PInvoke.IDC_APPSTARTING, nameof(AppStarting));
+    public static Cursor Arrow => s_arrow ??= new(PInvoke.IDC_ARROW, nameof(Arrow));
+    public static Cursor Cross => s_cross ??= new(PInvoke.IDC_CROSS, nameof(Cross));
+    public static Cursor Default => s_defaultCursor ??= new(PInvoke.IDC_ARROW, nameof(Default));
+    public static Cursor IBeam => s_iBeam ??= new(PInvoke.IDC_IBEAM, nameof(IBeam));
+    public static Cursor No => s_no ??= new(PInvoke.IDC_NO, nameof(No));
+    public static Cursor SizeAll => s_sizeAll ??= new(PInvoke.IDC_SIZEALL, nameof(SizeAll));
+    public static Cursor SizeNESW => s_sizeNESW ??= new(PInvoke.IDC_SIZENESW, nameof(SizeNESW));
+    public static Cursor SizeNS => s_sizeNS ??= new(PInvoke.IDC_SIZENS, nameof(SizeNS));
+    public static Cursor SizeNWSE => s_sizeNWSE ??= new(PInvoke.IDC_SIZENWSE, nameof(SizeNWSE));
+    public static Cursor SizeWE => s_sizeWE ??= new(PInvoke.IDC_SIZEWE, nameof(SizeWE));
+    public static Cursor UpArrow => s_upArrow ??= new(PInvoke.IDC_UPARROW, nameof(UpArrow));
+    public static Cursor WaitCursor => s_wait ??= new(PInvoke.IDC_WAIT, nameof(WaitCursor));
+    public static Cursor Help => s_help ??= new(PInvoke.IDC_HELP, nameof(Help));
+    public static Cursor Hand => s_hand ??= new(PInvoke.IDC_HAND, nameof(Hand));
+    public static Cursor HSplit => s_hSplit ??= new("hsplit.cur", nameof(HSplit));
+    public static Cursor VSplit => s_vSplit ??= new("vsplit.cur", nameof(VSplit));
+    public static Cursor NoMove2D => s_noMove2D ??= new("nomove2d.cur", nameof(NoMove2D));
+    public static Cursor NoMoveHoriz => s_noMoveHoriz ??= new("nomoveh.cur", nameof(NoMoveHoriz));
+    public static Cursor NoMoveVert => s_noMoveVert ??= new("nomovev.cur", nameof(NoMoveVert));
+    public static Cursor PanEast => s_panEast ??= new("east.cur", nameof(PanEast));
+    public static Cursor PanNE => s_panNE ??= new("ne.cur", nameof(PanNE));
+    public static Cursor PanNorth => s_panNorth ??= new("north.cur", nameof(PanNorth));
+    public static Cursor PanNW => s_panNW ??= new("nw.cur", nameof(PanNW));
+    public static Cursor PanSE => s_panSE ??= new("se.cur", nameof(PanSE));
+    public static Cursor PanSouth => s_panSouth ??= new("south.cur", nameof(PanSouth));
+    public static Cursor PanSW => s_panSW ??= new("sw.cur", nameof(PanSW));
+    public static Cursor PanWest => s_panWest ??= new("west.cur", nameof(PanWest));
 }

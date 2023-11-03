@@ -1616,7 +1616,7 @@ public class DataObjectTests
         Assert.Null(data.GetData(DataFormats.EnhancedMetafile));
     }
 
-    private sealed class DataObjectIgnoringStorageMediumForEnhancedMetafile : System.Runtime.InteropServices.ComTypes.IDataObject
+    private sealed class DataObjectIgnoringStorageMediumForEnhancedMetafile : IComDataObject
     {
         public void GetData(ref FORMATETC format, out STGMEDIUM medium)
         {

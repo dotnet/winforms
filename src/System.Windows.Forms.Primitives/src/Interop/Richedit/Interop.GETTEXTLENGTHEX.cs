@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-
+using Windows.Win32.UI.Controls.RichEdit;
 internal partial class Interop
 {
     internal static partial class Richedit
@@ -10,7 +10,7 @@ internal partial class Interop
         [StructLayout(LayoutKind.Sequential, Pack = RichEditPack)]
         public struct GETTEXTLENGTHEX
         {
-            public GTL flags;
+            public GETTEXTLENGTHEX_FLAGS flags;
             public uint codepage;
         }
     }

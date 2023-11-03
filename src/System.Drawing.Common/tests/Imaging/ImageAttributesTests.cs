@@ -53,7 +53,7 @@ public class ImageAttributesTests
 
     private readonly ColorMap[] _yellowToRedColorMap = new ColorMap[]
     {
-        new ColorMap() { OldColor = Color.FromArgb(255, 255, 255, 0), NewColor = Color.FromArgb(255, 255, 0, 0) }
+        new() { OldColor = Color.FromArgb(255, 255, 255, 0), NewColor = Color.FromArgb(255, 255, 0, 0) }
     };
 
     [Fact]

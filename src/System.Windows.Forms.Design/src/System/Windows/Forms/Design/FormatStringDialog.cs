@@ -9,7 +9,7 @@ namespace System.Windows.Forms.Design;
 internal class FormatStringDialog : Form
 {
     // we need the context for the HELP service provider
-    private readonly ITypeDescriptorContext _context;
+    private readonly ITypeDescriptorContext? _context;
     private Button _cancelButton;
     private Button _okButton;
     private FormatControl _formatControl1;
@@ -17,7 +17,7 @@ internal class FormatStringDialog : Form
     private DataGridViewCellStyle? _dgvCellStyle;
     private ListControl? _listControl;
 
-    public FormatStringDialog(ITypeDescriptorContext context)
+    public FormatStringDialog(ITypeDescriptorContext? context)
     {
         _context = context;
         InitializeComponent();
@@ -77,7 +77,7 @@ internal class FormatStringDialog : Form
 
     private void FormatStringDialog_HelpRequestHandled()
     {
-        if (_context.GetService(typeof(IHelpService)) is IHelpService helpService)
+        if (_context.TryGetService(out IHelpService? helpService))
         {
             helpService.ShowHelpFromKeyword("vs.FormatStringDialog");
         }
@@ -134,7 +134,7 @@ internal class FormatStringDialog : Form
         _formatControl1.FormatType = formatType;
 
         // push the information from FormatString/FormatInfo/NullValue into the FormattingUserControl
-        FormatControl.FormatTypeClass formatTypeItem = _formatControl1.FormatTypeItem;
+        FormatControl.FormatTypeClass? formatTypeItem = _formatControl1.FormatTypeItem;
 
         if (formatTypeItem is not null)
         {
@@ -258,7 +258,7 @@ internal class FormatStringDialog : Form
 
     private void PushChanges()
     {
-        FormatControl.FormatTypeClass formatTypeItem = _formatControl1.FormatTypeItem;
+        FormatControl.FormatTypeClass? formatTypeItem = _formatControl1.FormatTypeItem;
 
         if (formatTypeItem is null)
         {

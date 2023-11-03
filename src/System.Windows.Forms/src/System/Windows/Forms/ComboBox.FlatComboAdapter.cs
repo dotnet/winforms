@@ -161,9 +161,9 @@ public partial class ComboBox
                 brush,
                 new Point[]
                 {
-                    new Point(middle.X - s_offsetPixels, middle.Y - 1),
-                    new Point(middle.X + s_offsetPixels + 1, middle.Y - 1),
-                    new Point(middle.X, middle.Y + s_offsetPixels)
+                    new(middle.X - s_offsetPixels, middle.Y - 1),
+                    new(middle.X + s_offsetPixels + 1, middle.Y - 1),
+                    new(middle.X, middle.Y + s_offsetPixels)
                 });
         }
 

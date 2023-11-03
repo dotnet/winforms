@@ -1914,48 +1914,48 @@ public partial class GraphicsTests
         {
             CoordinateSpace.Device,
             CoordinateSpace.Page,
-            new Point[] { new Point(1, 1), new Point(2, 2) },
-            new Point[] { new Point(1, 1), new Point(2, 2) }
+            new Point[] { new(1, 1), new(2, 2) },
+            new Point[] { new(1, 1), new(2, 2) }
         };
 
         yield return new object[]
         {
            CoordinateSpace.Device,
             CoordinateSpace.World,
-            new Point[] { new Point(1, 1), new Point(2, 2) },
-            new Point[] { new Point(9, 12), new Point(13, 18) }
+            new Point[] { new(1, 1), new(2, 2) },
+            new Point[] { new(9, 12), new(13, 18) }
         };
 
         yield return new object[]
         {
             CoordinateSpace.Page,
             CoordinateSpace.Device,
-            new Point[] { new Point(1, 1), new Point(2, 2) },
-            new Point[] { new Point(1, 1), new Point(2, 2) }
+            new Point[] { new(1, 1), new(2, 2) },
+            new Point[] { new(1, 1), new(2, 2) }
         };
 
         yield return new object[]
         {
             CoordinateSpace.Page,
             CoordinateSpace.World,
-            new Point[] { new Point(1, 1), new Point(2, 2) },
-            new Point[] { new Point(9, 12), new Point(13, 18) }
+            new Point[] { new(1, 1), new(2, 2) },
+            new Point[] { new(9, 12), new(13, 18) }
         };
 
         yield return new object[]
         {
             CoordinateSpace.World,
             CoordinateSpace.Device,
-            new Point[] { new Point(1, 1), new Point(2, 2) },
-            new Point[] { new Point(1, -1), new Point(0, -1) }
+            new Point[] { new(1, 1), new(2, 2) },
+            new Point[] { new(1, -1), new(0, -1) }
         };
 
         yield return new object[]
         {
             CoordinateSpace.World,
             CoordinateSpace.Page,
-            new Point[] { new Point(1, 1), new Point(2, 2) },
-            new Point[] { new Point(1, -1), new Point(0, -1) }
+            new Point[] { new(1, 1), new(2, 2) },
+            new Point[] { new(1, -1), new(0, -1) }
         };
     }
 
@@ -2014,7 +2014,7 @@ public partial class GraphicsTests
             CoordinateSpace.World,
             CoordinateSpace.Device,
             new PointF[] { new Point(1, 1), new Point(2, 2) },
-            new PointF[] { new PointF(0.5f, -1.5f), new Point(0, -1) }
+            new PointF[] { new(0.5f, -1.5f), new Point(0, -1) }
         };
 
         yield return new object[]
@@ -2022,7 +2022,7 @@ public partial class GraphicsTests
             CoordinateSpace.World,
             CoordinateSpace.Page,
             new PointF[] { new Point(1, 1), new Point(2, 2) },
-            new PointF[] { new PointF(0.5f, -1.5f), new Point(0, -1) }
+            new PointF[] { new(0.5f, -1.5f), new Point(0, -1) }
         };
     }
 
@@ -2054,9 +2054,9 @@ public partial class GraphicsTests
         {
             graphics.Transform = transform;
 
-            var points = new Point[] { new Point(1, 1) };
+            var points = new Point[] { new(1, 1) };
             graphics.TransformPoints(space, space, points);
-            Assert.Equal(new Point[] { new Point(1, 1) }, points);
+            Assert.Equal(new Point[] { new(1, 1) }, points);
         }
     }
 
@@ -2072,9 +2072,9 @@ public partial class GraphicsTests
         {
             graphics.Transform = transform;
 
-            var points = new PointF[] { new PointF(1, 1) };
+            var points = new PointF[] { new(1, 1) };
             graphics.TransformPoints(space, space, points);
-            Assert.Equal(new PointF[] { new PointF(1, 1) }, points);
+            Assert.Equal(new PointF[] { new(1, 1) }, points);
         }
     }
 
@@ -2086,8 +2086,8 @@ public partial class GraphicsTests
         using (var image = new Bitmap(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(destSpace, CoordinateSpace.World, new Point[] { new Point(1, 1) }));
-            AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(destSpace, CoordinateSpace.World, new PointF[] { new PointF(1, 1) }));
+            AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(destSpace, CoordinateSpace.World, new Point[] { new(1, 1) }));
+            AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(destSpace, CoordinateSpace.World, new PointF[] { new(1, 1) }));
         }
     }
 
@@ -2099,8 +2099,8 @@ public partial class GraphicsTests
         using (var image = new Bitmap(10, 10))
         using (Graphics graphics = Graphics.FromImage(image))
         {
-            AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.World, srcSpace, new Point[] { new Point(1, 1) }));
-            AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.World, srcSpace, new PointF[] { new PointF(1, 1) }));
+            AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.World, srcSpace, new Point[] { new(1, 1) }));
+            AssertExtensions.Throws<ArgumentException>(null, () => graphics.TransformPoints(CoordinateSpace.World, srcSpace, new PointF[] { new(1, 1) }));
         }
     }
 

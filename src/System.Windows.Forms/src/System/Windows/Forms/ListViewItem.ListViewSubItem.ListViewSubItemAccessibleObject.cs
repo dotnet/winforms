@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -67,17 +68,17 @@ public partial class ListViewItem
                 }
             }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
                 => direction switch
                 {
-                    UiaCore.NavigateDirection.Parent
+                    NavigateDirection.NavigateDirection_Parent
                         => ParentInternal,
-                    UiaCore.NavigateDirection.NextSibling
+                    NavigateDirection.NavigateDirection_NextSibling
                         => ParentInternal.GetChildInternal(ParentInternal.GetChildIndex(this) + 1),
-                    UiaCore.NavigateDirection.PreviousSibling
+                    NavigateDirection.NavigateDirection_PreviousSibling
                         => ParentInternal.GetChildInternal(ParentInternal.GetChildIndex(this) - 1),
-                    UiaCore.NavigateDirection.FirstChild => GetChild(),
-                    UiaCore.NavigateDirection.LastChild => GetChild(),
+                    NavigateDirection.NavigateDirection_FirstChild => GetChild(),
+                    NavigateDirection.NavigateDirection_LastChild => GetChild(),
                     _ => base.FragmentNavigate(direction)
                 };
 
@@ -119,18 +120,18 @@ public partial class ListViewItem
                 }
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
                 => propertyID switch
                 {
                     // All subitems are "text". Some of them can be editable, if ListView.LabelEdit is true.
                     // In this case, an edit field appears when editing. This field has own accessible object, that
                     // has the "edit" control type, and it supports the Text pattern. And its owning subitem accessible
                     // object has the "text" control type, because it is just a container for the edit field.
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TextControlTypeId,
-                    UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListView.Focused && _owningListView.FocusedItem == _owningItem,
-                    UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                    UiaCore.UIA.ProcessIdPropertyId => Environment.ProcessId,
+                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TextControlTypeId,
+                    UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningListView.Focused && _owningListView.FocusedItem == _owningItem,
+                    UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListView.Enabled,
+                    UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => State.HasFlag(AccessibleStates.Focusable),
+                    UIA_PROPERTY_ID.UIA_ProcessIdPropertyId => Environment.ProcessId,
                     _ => base.GetPropertyValue(propertyID)
                 };
 
@@ -146,14 +147,14 @@ public partial class ListViewItem
             internal override int Row => _owningItem.Index;
 
             internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
-                => _owningListView.View == View.Details
+                => _owningListView.View == View.Details && Column > -1
                     ? new UiaCore.IRawElementProviderSimple[] { _owningListView.Columns[Column].AccessibilityObject }
                     : null;
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             {
-                if (patternId == UiaCore.UIA.GridItemPatternId ||
-                    patternId == UiaCore.UIA.TableItemPatternId)
+                if (patternId == UIA_PATTERN_ID.UIA_GridItemPatternId ||
+                    patternId == UIA_PATTERN_ID.UIA_TableItemPatternId)
                 {
                     return _owningListView.View == View.Details;
                 }

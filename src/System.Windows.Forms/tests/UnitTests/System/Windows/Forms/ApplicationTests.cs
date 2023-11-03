@@ -109,7 +109,7 @@ public class ApplicationTests
     public void Application_VisualStyleState_Get_ReturnsExpected()
     {
         VisualStyleState state = Application.VisualStyleState;
-        Assert.True(Enum.IsDefined(typeof(VisualStyleState), state));
+        Assert.True(Enum.IsDefined(state));
         Assert.Equal(state, Application.VisualStyleState);
     }
 

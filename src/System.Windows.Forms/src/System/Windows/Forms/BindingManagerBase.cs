@@ -58,11 +58,11 @@ public abstract class BindingManagerBase
 
     public abstract object? Current { get; }
 
-    private protected abstract void SetDataSource(object dataSource);
+    private protected abstract void SetDataSource(object? dataSource);
 
     public BindingManagerBase() { }
 
-    internal BindingManagerBase(object dataSource)
+    internal BindingManagerBase(object? dataSource)
     {
         SetDataSource(dataSource);
     }
@@ -71,7 +71,7 @@ public abstract class BindingManagerBase
 
     internal abstract PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors);
 
-    public virtual PropertyDescriptorCollection GetItemProperties() => GetItemProperties(null);
+    public virtual PropertyDescriptorCollection GetItemProperties() => GetItemProperties(listAccessors: null);
 
     protected internal virtual PropertyDescriptorCollection? GetItemProperties(ArrayList dataSources, ArrayList listAccessors)
     {

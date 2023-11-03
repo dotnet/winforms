@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Imaging.Tests;
@@ -31,7 +31,7 @@ public class EncoderParametersTests
         get
         {
             yield return new object[] { new EncoderParameter[1] };
-            yield return new object[] { new EncoderParameter[1] { new EncoderParameter(Encoder.ChrominanceTable, 0) } };
+            yield return new object[] { new EncoderParameter[1] { new(Encoder.ChrominanceTable, 0) } };
             yield return new object[] { new EncoderParameter[1] { null } };
         }
     }

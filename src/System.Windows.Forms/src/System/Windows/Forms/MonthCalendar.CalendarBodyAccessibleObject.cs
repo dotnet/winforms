@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -71,13 +72,13 @@ public partial class MonthCalendar
         /// </remark>
         internal override int ColumnCount => _monthCalendarAccessibleObject.CalendarView == MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH ? 7 : 4;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling => null,
-                UiaCore.NavigateDirection.PreviousSibling => _calendarAccessibleObject.CalendarHeaderAccessibleObject,
-                UiaCore.NavigateDirection.FirstChild => RowsAccessibleObjects?.First?.Value,
-                UiaCore.NavigateDirection.LastChild => RowsAccessibleObjects?.Last?.Value,
+                NavigateDirection.NavigateDirection_NextSibling => null,
+                NavigateDirection.NavigateDirection_PreviousSibling => _calendarAccessibleObject.CalendarHeaderAccessibleObject,
+                NavigateDirection.NavigateDirection_FirstChild => RowsAccessibleObjects?.First?.Value,
+                NavigateDirection.NavigateDirection_LastChild => RowsAccessibleObjects?.Last?.Value,
                 _ => base.FragmentNavigate(direction),
 
             };
@@ -139,11 +140,11 @@ public partial class MonthCalendar
             return null;
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TableControlTypeId,
-                UiaCore.UIA.IsKeyboardFocusablePropertyId => IsEnabled,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TableControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => IsEnabled,
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -186,11 +187,11 @@ public partial class MonthCalendar
             => _monthCalendarAccessibleObject.Focused
                 && _monthCalendarAccessibleObject.FocusedCell?.CalendarIndex == _calendarIndex;
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.GridPatternId => true,
-                UiaCore.UIA.TablePatternId => true,
+                UIA_PATTERN_ID.UIA_GridPatternId => true,
+                UIA_PATTERN_ID.UIA_TablePatternId => true,
                 _ => base.IsPatternSupported(patternId)
             };
 
@@ -202,7 +203,7 @@ public partial class MonthCalendar
 
         internal override int RowCount => RowsAccessibleObjects?.Count ?? -1;
 
-        internal override UiaCore.RowOrColumnMajor RowOrColumnMajor => UiaCore.RowOrColumnMajor.RowMajor;
+        internal override RowOrColumnMajor RowOrColumnMajor => RowOrColumnMajor.RowOrColumnMajor_RowMajor;
 
         // Use a LinkedList instead a List for the following reasons:
         // 1. We don't require an access to items by indices.
@@ -250,7 +251,7 @@ public partial class MonthCalendar
             CalendarCellAccessibleObject? focusedCell = _monthCalendarAccessibleObject.FocusedCell;
             if (focusedCell?.CalendarIndex == _calendarIndex)
             {
-                focusedCell.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                focusedCell.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
             }
         }
 

@@ -47,8 +47,8 @@ public static class Helpers
     {
         // Print out the whole bitmap to provide a view of the whole image, rather than just the difference between
         // a single pixel.
-        var actualStringBuilder = new StringBuilder();
-        var expectedStringBuilder = new StringBuilder();
+        StringBuilder actualStringBuilder = new();
+        StringBuilder expectedStringBuilder = new();
 
         actualStringBuilder.AppendLine();
         expectedStringBuilder.AppendLine();
@@ -69,7 +69,10 @@ public static class Helpers
             expectedStringBuilder.AppendLine();
         }
 
-        return new AssertActualExpectedException(expectedStringBuilder.ToString(), actualStringBuilder.ToString(), $"Bitmaps were different at {firstFailureX}, {firstFailureY}.");
+        return EqualException.ForMismatchedValues(
+            expectedStringBuilder.ToString(),
+            actualStringBuilder.ToString(),
+            $"Bitmaps were different at {firstFailureX}, {firstFailureY}.");
     }
 
     private static void PrintColor(StringBuilder stringBuilder, Color color)

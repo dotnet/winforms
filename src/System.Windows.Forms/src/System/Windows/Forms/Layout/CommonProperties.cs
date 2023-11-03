@@ -485,12 +485,9 @@ internal partial class CommonProperties
         if (GetAutoSize(element))
         {
             // check for legacy layout engine
-            if (element.Container is Control)
+            if (element.Container is Control { LayoutEngine: DefaultLayout })
             {
-                if (((Control)element.Container).LayoutEngine is DefaultLayout)
-                {
-                    return GetSelfAutoSizeInDefaultLayout(element);
-                }
+                return GetSelfAutoSizeInDefaultLayout(element);
             }
 
             // else

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing.Design;
@@ -14,36 +12,36 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal partial class LinkAreaEditor : UITypeEditor
 {
-    private LinkAreaUI _linkAreaUI;
+    private LinkAreaUI? _linkAreaUI;
 
-    public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
+    public override object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value)
     {
-        if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
+        if (!provider.TryGetService(out IWindowsFormsEditorService? editorService))
         {
             return value;
         }
 
         if (_linkAreaUI is null)
         {
-            IHelpService helpService = (IHelpService)provider.GetService(typeof(IHelpService));
+            IHelpService? helpService = provider.GetService<IHelpService>();
 
             // Child modal dialog -launching in SystemAware mode.
             _linkAreaUI = DpiHelper.CreateInstanceInSystemAwareContext(() => new LinkAreaUI(helpService));
         }
 
-        string text = string.Empty;
-        PropertyDescriptor property = null;
+        string? text = string.Empty;
+        PropertyDescriptor? property = null;
 
         if (context?.Instance is not null)
         {
             property = TypeDescriptor.GetProperties(context.Instance)["Text"];
             if (property?.PropertyType == typeof(string))
             {
-                text = (string)property.GetValue(context.Instance);
+                text = (string?)property.GetValue(context.Instance);
             }
         }
 
-        string originalText = text;
+        string? originalText = text;
         _linkAreaUI.SampleText = text;
         _linkAreaUI.Start(value);
 
@@ -52,9 +50,9 @@ internal partial class LinkAreaEditor : UITypeEditor
             value = _linkAreaUI.Value;
 
             text = _linkAreaUI.SampleText;
-            if (!originalText.Equals(text) && property?.PropertyType == typeof(string))
+            if (!text.Equals(originalText) && property?.PropertyType == typeof(string))
             {
-                property.SetValue(context.Instance, text);
+                property.SetValue(context!.Instance, text);
             }
         }
 
@@ -64,6 +62,6 @@ internal partial class LinkAreaEditor : UITypeEditor
     }
 
     /// <inheritdoc />
-    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+    public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context)
         => UITypeEditorEditStyle.Modal;
 }

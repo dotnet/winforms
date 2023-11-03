@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -123,31 +124,31 @@ public partial class ScrollBar
             return element ?? base.ElementProviderFromPoint(x, y);
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.FirstChild => FirstLineButtonAccessibleObject,
-                UiaCore.NavigateDirection.LastChild => LastLineButtonAccessibleObject,
+                NavigateDirection.NavigateDirection_FirstChild => FirstLineButtonAccessibleObject,
+                NavigateDirection.NavigateDirection_LastChild => LastLineButtonAccessibleObject,
                 _ => base.FragmentNavigate(direction)
             };
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
                 // If we don't set a default role for the accessible object
                 // it will be retrieved from Windows.
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
-                UiaCore.UIA.ControlTypePropertyId when
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId when
                     this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                    => UiaCore.UIA.ScrollBarControlTypeId,
-                UiaCore.UIA.HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Focused : false,
-                UiaCore.UIA.RangeValueValuePropertyId => RangeValue,
-                UiaCore.UIA.RangeValueIsReadOnlyPropertyId => IsReadOnly,
-                UiaCore.UIA.RangeValueLargeChangePropertyId => LargeChange,
-                UiaCore.UIA.RangeValueSmallChangePropertyId => SmallChange,
-                UiaCore.UIA.RangeValueMaximumPropertyId => Maximum,
-                UiaCore.UIA.RangeValueMinimumPropertyId => Minimum,
-                UiaCore.UIA.IsRangeValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.RangeValuePatternId),
+                    => UIA_CONTROLTYPE_ID.UIA_ScrollBarControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out ScrollBar? owner) ? owner.Focused : false,
+                UIA_PROPERTY_ID.UIA_RangeValueValuePropertyId => RangeValue,
+                UIA_PROPERTY_ID.UIA_RangeValueIsReadOnlyPropertyId => IsReadOnly,
+                UIA_PROPERTY_ID.UIA_RangeValueLargeChangePropertyId => LargeChange,
+                UIA_PROPERTY_ID.UIA_RangeValueSmallChangePropertyId => SmallChange,
+                UIA_PROPERTY_ID.UIA_RangeValueMaximumPropertyId => Maximum,
+                UIA_PROPERTY_ID.UIA_RangeValueMinimumPropertyId => Minimum,
+                UIA_PROPERTY_ID.UIA_IsRangeValuePatternAvailablePropertyId => IsPatternSupported(UIA_PATTERN_ID.UIA_RangeValuePatternId),
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -175,11 +176,11 @@ public partial class ScrollBar
             owner.Value = (int)newValue;
         }
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId)
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
             => patternId switch
             {
-                UiaCore.UIA.ValuePatternId => true,
-                UiaCore.UIA.RangeValuePatternId => true,
+                UIA_PATTERN_ID.UIA_ValuePatternId => true,
+                UIA_PATTERN_ID.UIA_RangeValuePatternId => true,
                 _ => base.IsPatternSupported(patternId)
             };
     }

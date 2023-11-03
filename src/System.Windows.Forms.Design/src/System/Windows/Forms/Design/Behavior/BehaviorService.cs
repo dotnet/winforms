@@ -54,7 +54,7 @@ public sealed partial class BehaviorService : IDisposable
     private static MessageId WM_GETRECENTSNAPLINES;
     private const string ToolboxFormat = ".NET Toolbox Item"; // used to detect if a drag is coming from the toolbox.
 
-    internal BehaviorService(IServiceProvider serviceProvider, Control windowFrame)
+    internal BehaviorService(IServiceProvider serviceProvider, DesignerFrame windowFrame)
     {
         _serviceProvider = serviceProvider;
         _adornerWindow = new AdornerWindow(this, windowFrame);
@@ -84,8 +84,8 @@ public sealed partial class BehaviorService : IDisposable
         if (menuCommandService is not null && host is not null)
         {
             MenuCommandHandler menuCommandHandler = new(this, menuCommandService);
-            host.RemoveService(typeof(IMenuCommandService));
-            host.AddService(typeof(IMenuCommandService), menuCommandHandler);
+            host.RemoveService<IMenuCommandService>();
+            host.AddService<IMenuCommandService>(menuCommandHandler);
         }
 
         // Default layoutmode is SnapToGrid.
@@ -176,8 +176,8 @@ public sealed partial class BehaviorService : IDisposable
             _serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
         {
             IMenuCommandService oldMenuCommandService = menuCommandHandler.MenuService;
-            host.RemoveService(typeof(IMenuCommandService));
-            host.AddService(typeof(IMenuCommandService), oldMenuCommandService);
+            host.RemoveService<IMenuCommandService>();
+            host.AddService(oldMenuCommandService);
         }
 
         _adornerWindow.Dispose();

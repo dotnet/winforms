@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Windows.Forms;
 
 namespace System.ComponentModel.Design;
@@ -15,20 +13,20 @@ public partial class CollectionEditor
     internal class FilterListBox : ListBox
     {
         private const int VK_PROCESSKEY = 0xE5;
-        private PropertyGrid _grid;
+        private PropertyGrid? _grid;
         private Message _lastKeyDown;
 
-        private PropertyGrid PropertyGrid
+        private PropertyGrid? PropertyGrid
         {
             get
             {
-                if (_grid is null)
+                if (_grid is null && Parent is not null)
                 {
                     foreach (Control c in Parent.Controls)
                     {
-                        if (c is PropertyGrid)
+                        if (c is PropertyGrid grid)
                         {
-                            _grid = (PropertyGrid)c;
+                            _grid = grid;
                             break;
                         }
                     }

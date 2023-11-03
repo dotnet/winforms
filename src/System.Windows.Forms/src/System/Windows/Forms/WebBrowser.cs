@@ -7,8 +7,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
+using Windows.Win32.System.Variant;
+using Windows.Win32.Web.MsHtml;
 using static Interop;
-using static Interop.Mshtml;
 
 namespace System.Windows.Forms;
 
@@ -20,12 +21,12 @@ namespace System.Windows.Forms;
 [Docking(DockingBehavior.AutoDock)]
 [SRDescription(nameof(SR.DescriptionWebBrowser))]
 [Designer($"System.Windows.Forms.Design.WebBrowserDesigner, {AssemblyRef.SystemDesign}")]
-public partial class WebBrowser : WebBrowserBase
+public unsafe partial class WebBrowser : WebBrowserBase
 {
     // Reference to the native ActiveX control's IWebBrowser2
     // Do not reference this directly. Use the AxIWebBrowser2
     // property instead.
-    private Mshtml.IWebBrowser2? _axIWebBrowser2;
+    private AgileComPointer<IWebBrowser2>? _axIWebBrowser2;
 
     private AxHost.ConnectionPointCookie? _cookie;   // To hook up events from the native WebBrowser
     private Stream? _documentStreamToSetOnLoad;
@@ -95,14 +96,21 @@ public partial class WebBrowser : WebBrowserBase
     [DefaultValue(true)]
     public bool AllowWebBrowserDrop
     {
-        get => AxIWebBrowser2.RegisterAsDropTarget;
+        get
+        {
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            VARIANT_BOOL register = default;
+            webBrowser2.Value->get_RegisterAsDropTarget(&register).ThrowOnFailure();
+            return register;
+        }
         set
         {
             //Note: you lose this value when you load a new document: the value needs to be refreshed in
             //OnDocumentCompleted.
             if (value != AllowWebBrowserDrop)
             {
-                AxIWebBrowser2.RegisterAsDropTarget = value;
+                using var webBrowser2 = AxIWebBrowser2.GetInterface();
+                webBrowser2.Value->put_RegisterAsDropTarget(value).ThrowOnFailure();
                 Refresh();
             }
         }
@@ -117,12 +125,19 @@ public partial class WebBrowser : WebBrowserBase
     [DefaultValue(false)]
     public bool ScriptErrorsSuppressed
     {
-        get => AxIWebBrowser2.Silent;
+        get
+        {
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            VARIANT_BOOL silent = default;
+            webBrowser2.Value->get_Silent(&silent).ThrowOnFailure();
+            return silent;
+        }
         set
         {
             if (value != ScriptErrorsSuppressed)
             {
-                AxIWebBrowser2.Silent = value;
+                using var webBrowser2 = AxIWebBrowser2.GetInterface();
+                webBrowser2.Value->put_Silent(value).ThrowOnFailure();
             }
         }
     }
@@ -204,29 +219,28 @@ public partial class WebBrowser : WebBrowserBase
     {
         get
         {
-            object objDoc = AxIWebBrowser2.Document;
-            if (objDoc is not null)
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            using ComScope<IDispatch> dispatch = new(null);
+            webBrowser2.Value->get_Document(dispatch).ThrowOnFailure();
+            if (!dispatch.IsNull)
             {
+                using var iHTMLDocument2 = dispatch.TryQuery<IHTMLDocument2>(out HRESULT hr);
                 // Document is not necessarily an IHTMLDocument, it might be an office document as well.
-                IHTMLDocument2? iHTMLDocument2 = null;
-                try
+                if (hr.Succeeded)
                 {
-                    iHTMLDocument2 = objDoc as IHTMLDocument2;
-                }
-                catch (InvalidCastException)
-                {
-                }
-
-                if (iHTMLDocument2 is not null)
-                {
-                    IHTMLLocation iHTMLLocation = iHTMLDocument2.GetLocation();
-                    if (iHTMLLocation is not null)
+                    using ComScope<IHTMLLocation> htmlLocation = new(null);
+                    iHTMLDocument2.Value->get_location(htmlLocation).ThrowOnFailure();
+                    if (!htmlLocation.IsNull)
                     {
-                        string href = iHTMLLocation.GetHref();
-                        if (!string.IsNullOrEmpty(href))
+                        using BSTR href = default;
+                        htmlLocation.Value->get_href(&href).ThrowOnFailure();
+                        string hrefString = href.ToString();
+                        if (!string.IsNullOrEmpty(hrefString))
                         {
-                            Uri url = new Uri(href);
-                            return new HtmlDocument(ShimManager, (IHTMLDocument)iHTMLDocument2);
+                            Uri url = new(hrefString);
+                            using var htmlDoc = dispatch.TryQuery<IHTMLDocument>(out hr);
+                            hr.ThrowOnFailure();
+                            return new HtmlDocument(ShimManager, htmlDoc);
                         }
                     }
                 }
@@ -334,20 +348,18 @@ public partial class WebBrowser : WebBrowserBase
             HtmlDocument? htmlDocument = Document;
             if (htmlDocument is null)
             {
-                documentTitle = AxIWebBrowser2.LocationName;
+                using var webBrowser2 = AxIWebBrowser2.GetInterface();
+                using BSTR locationName = default;
+                webBrowser2.Value->get_LocationName(&locationName).ThrowOnFailure();
+                documentTitle = locationName.ToString();
             }
             else
             {
-                IHTMLDocument2? htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
-                Debug.Assert(htmlDocument2 is not null, "The HtmlDocument object must implement IHTMLDocument2.");
-                try
-                {
-                    documentTitle = htmlDocument2.GetTitle();
-                }
-                catch (COMException)
-                {
-                    documentTitle = string.Empty;
-                }
+                using var htmlDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(htmlDocument.DomDocument);
+                Debug.Assert(!htmlDocument2.IsNull, "The HtmlDocument object must implement IHTMLDocument2.");
+                using BSTR title = default;
+                htmlDocument2.Value->get_title(&title).AssertSuccess();
+                documentTitle = title.ToString();
             }
 
             return documentTitle;
@@ -368,16 +380,11 @@ public partial class WebBrowser : WebBrowserBase
             HtmlDocument? htmlDocument = Document;
             if (htmlDocument is not null)
             {
-                IHTMLDocument2? htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
-                Debug.Assert(htmlDocument2 is not null, "The HtmlDocument object must implement IHTMLDocument2.");
-                try
-                {
-                    docType = htmlDocument2.GetMimeType();
-                }
-                catch (COMException)
-                {
-                    docType = string.Empty;
-                }
+                using var htmlDocument2 = ComHelpers.GetComScope<IHTMLDocument2>(htmlDocument.DomDocument);
+                Debug.Assert(!htmlDocument2.IsNull, "The HtmlDocument object must implement IHTMLDocument2.");
+                using BSTR mimeType = default;
+                htmlDocument2.Value->get_mimeType(&mimeType).AssertSuccess();
+                docType = mimeType.ToString();
             }
 
             return docType;
@@ -408,7 +415,21 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool IsBusy => Document is null ? false : AxIWebBrowser2.Busy;
+    public bool IsBusy
+    {
+        get
+        {
+            if (Document is null)
+            {
+                return false;
+            }
+
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            VARIANT_BOOL busy = default;
+            webBrowser2.Value->get_Busy(&busy).ThrowOnFailure();
+            return busy;
+        }
+    }
 
     /// <summary>
     ///  Gets the offline state of the browser control. Maps to IWebBrowser2:Offline.
@@ -416,7 +437,16 @@ public partial class WebBrowser : WebBrowserBase
     [SRDescription(nameof(SR.WebBrowserIsOfflineDescr))]
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public bool IsOffline => AxIWebBrowser2.Offline;
+    public bool IsOffline
+    {
+        get
+        {
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            VARIANT_BOOL offline = default;
+            webBrowser2.Value->get_Offline(&offline).ThrowOnFailure();
+            return offline;
+        }
+    }
 
     /// <summary>
     ///  Indicates whether to use the WebBrowser context menu.
@@ -485,10 +515,21 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public WebBrowserReadyState ReadyState =>
-        Document is null
-        ? WebBrowserReadyState.Uninitialized
-        : (WebBrowserReadyState)AxIWebBrowser2.ReadyState;
+    public WebBrowserReadyState ReadyState
+    {
+        get
+        {
+            if (Document is null)
+            {
+                return WebBrowserReadyState.Uninitialized;
+            }
+
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            READYSTATE readyState = default;
+            webBrowser2.Value->get_ReadyState(&readyState).ThrowOnFailure();
+            return (WebBrowserReadyState)readyState;
+        }
+    }
 
     /// <summary>
     ///  The text that would be displayed in the IE status bar.
@@ -526,7 +567,10 @@ public partial class WebBrowser : WebBrowserBase
     {
         get
         {
-            string urlString = AxIWebBrowser2.LocationURL;
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            using BSTR url = default;
+            webBrowser2.Value->get_LocationURL(&url).ThrowOnFailure();
+            string urlString = url.ToString();
 
             if (string.IsNullOrEmpty(urlString))
             {
@@ -589,7 +633,8 @@ public partial class WebBrowser : WebBrowserBase
         bool retVal = true;
         try
         {
-            AxIWebBrowser2.GoBack();
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            webBrowser2.Value->GoBack().ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -610,7 +655,8 @@ public partial class WebBrowser : WebBrowserBase
         bool retVal = true;
         try
         {
-            AxIWebBrowser2.GoForward();
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            webBrowser2.Value->GoForward().ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -625,7 +671,8 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     public void GoHome()
     {
-        AxIWebBrowser2.GoHome();
+        using var webBrowser2 = AxIWebBrowser2.GetInterface();
+        webBrowser2.Value->GoHome().ThrowOnFailure();
     }
 
     /// <summary>
@@ -633,7 +680,8 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     public void GoSearch()
     {
-        AxIWebBrowser2.GoSearch();
+        using var webBrowser2 = AxIWebBrowser2.GetInterface();
+        webBrowser2.Value->GoSearch().ThrowOnFailure();
     }
 
     /// <summary>
@@ -765,7 +813,8 @@ public partial class WebBrowser : WebBrowserBase
     {
         try
         {
-            AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PRINT, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PRINT, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, (VARIANT*)default, (VARIANT*)default).ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -779,15 +828,16 @@ public partial class WebBrowser : WebBrowserBase
     {
         try
         {
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
             if (ShouldSerializeDocumentText())
             {
                 string text = DocumentText;
-                AxIWebBrowser2.Refresh();
+                webBrowser2.Value->Refresh().ThrowOnFailure();
                 DocumentText = text;
             }
             else
             {
-                AxIWebBrowser2.Refresh();
+                webBrowser2.Value->Refresh().ThrowOnFailure();
             }
         }
         catch (Exception ex) when (!ex.IsCriticalException())
@@ -802,18 +852,19 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     public void Refresh(WebBrowserRefreshOption opt)
     {
-        object level = (object)opt;
+        VARIANT level = (VARIANT)(uint)opt;
         try
         {
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
             if (ShouldSerializeDocumentText())
             {
                 string text = DocumentText;
-                AxIWebBrowser2.Refresh2(ref level);
+                webBrowser2.Value->Refresh2(&level).ThrowOnFailure();
                 DocumentText = text;
             }
             else
             {
-                AxIWebBrowser2.Refresh2(ref level);
+                webBrowser2.Value->Refresh2(&level).ThrowOnFailure();
             }
         }
         catch (Exception ex) when (!ex.IsCriticalException())
@@ -851,7 +902,8 @@ public partial class WebBrowser : WebBrowserBase
     {
         try
         {
-            AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PAGESETUP, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PAGESETUP, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, (VARIANT*)default, (VARIANT*)default).ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -866,7 +918,8 @@ public partial class WebBrowser : WebBrowserBase
     {
         try
         {
-            AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PRINT, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PRINT, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, (VARIANT*)default, (VARIANT*)default).ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -880,7 +933,8 @@ public partial class WebBrowser : WebBrowserBase
     {
         try
         {
-            AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PRINTPREVIEW, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PRINTPREVIEW, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, (VARIANT*)default, (VARIANT*)default).ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -895,7 +949,8 @@ public partial class WebBrowser : WebBrowserBase
     {
         try
         {
-            AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_PROPERTIES, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, IntPtr.Zero, IntPtr.Zero);
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_PROPERTIES, OLECMDEXECOPT.OLECMDEXECOPT_PROMPTUSER, (VARIANT*)default, (VARIANT*)default).ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -910,7 +965,8 @@ public partial class WebBrowser : WebBrowserBase
     {
         try
         {
-            AxIWebBrowser2.ExecWB(OLECMDID.OLECMDID_SAVEAS, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            webBrowser2.Value->ExecWB(OLECMDID.OLECMDID_SAVEAS, OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, (VARIANT*)default, (VARIANT*)default).ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -924,7 +980,8 @@ public partial class WebBrowser : WebBrowserBase
     {
         try
         {
-            AxIWebBrowser2.Stop();
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            webBrowser2.Value->Stop().ThrowOnFailure();
         }
         catch (Exception ex) when (!ex.IsCriticalException())
         {
@@ -1073,16 +1130,19 @@ public partial class WebBrowser : WebBrowserBase
     /// </summary>
     protected override void AttachInterfaces(object nativeActiveXObject)
     {
-        _axIWebBrowser2 = (Mshtml.IWebBrowser2)nativeActiveXObject;
+        if (nativeActiveXObject is null)
+        {
+            return;
+        }
+
+        DisposeHelper.NullAndDispose(ref _axIWebBrowser2);
+        _axIWebBrowser2 = new(ComHelpers.GetComPointer<IWebBrowser2>(nativeActiveXObject), takeOwnership: true);
     }
 
     /// <summary>
     ///  Discards the IWebBrowser2 reference. Overriding classes should call base.DetachInterfaces.
     /// </summary>
-    protected override void DetachInterfaces()
-    {
-        _axIWebBrowser2 = null;
-    }
+    protected override void DetachInterfaces() => DisposeHelper.NullAndDispose(ref _axIWebBrowser2);
 
     protected override AccessibleObject CreateAccessibilityInstance() => new WebBrowserAccessibleObject(this);
 
@@ -1140,7 +1200,8 @@ public partial class WebBrowser : WebBrowserBase
     //
     protected virtual void OnDocumentCompleted(WebBrowserDocumentCompletedEventArgs e)
     {
-        AxIWebBrowser2.RegisterAsDropTarget = AllowWebBrowserDrop;
+        using var webBrowser2 = AxIWebBrowser2.GetInterface();
+        webBrowser2.Value->put_RegisterAsDropTarget(AllowWebBrowserDrop).ThrowOnFailure();
         DocumentCompleted?.Invoke(this, e);
     }
 
@@ -1258,29 +1319,15 @@ public partial class WebBrowser : WebBrowserBase
         byte[]? postData,
         string? headers)
     {
-        object objUrlString = (object)urlString;
-        object objFlags = (object)(newWindow ? 1 : 0);
-        object? objTargetFrameName = targetFrameName;
-        object? objPostData = postData;
-        object? objHeaders = headers;
-        PerformNavigate2(
-            ref objUrlString,
-            ref objFlags,
-            ref objTargetFrameName,
-            ref objPostData,
-            ref objHeaders);
-    }
-
-    private void PerformNavigate2(
-        ref object URL,
-        ref object flags,
-        ref object? targetFrameName,
-        ref object? postData,
-        ref object? headers)
-    {
         try
         {
-            AxIWebBrowser2.Navigate2(ref URL, ref flags, ref targetFrameName, ref postData, ref headers);
+            using var variantUrlString = (VARIANT)urlString;
+            var variantFlags = (VARIANT)(newWindow ? 1 : 0);
+            using var variantTargetFrameName = VARIANT.FromObject(targetFrameName);
+            using var variantPostData = VARIANT.FromObject(postData);
+            using var variantHeaders = VARIANT.FromObject(headers);
+            using var webBrowser2 = AxIWebBrowser2.GetInterface();
+            webBrowser2.Value->Navigate2(&variantUrlString, &variantFlags, &variantTargetFrameName, &variantPostData, &variantHeaders).ThrowOnFailure();
         }
         catch (COMException ce)
         {
@@ -1356,7 +1403,7 @@ public partial class WebBrowser : WebBrowserBase
         }
     }
 
-    private Mshtml.IWebBrowser2 AxIWebBrowser2
+    private AgileComPointer<IWebBrowser2> AxIWebBrowser2
     {
         get
         {

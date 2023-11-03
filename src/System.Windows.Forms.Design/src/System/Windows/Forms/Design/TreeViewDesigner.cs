@@ -6,7 +6,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms.Design;
 
@@ -17,7 +16,7 @@ namespace System.Windows.Forms.Design;
 /// </summary>
 internal class TreeViewDesigner : ControlDesigner
 {
-    private ComCtl32.TVHITTESTINFO _tvhit;
+    private TVHITTESTINFO _tvhit;
     private DesignerActionListCollection _actionLists;
     private TreeView _treeView;
 
@@ -55,7 +54,7 @@ internal class TreeViewDesigner : ControlDesigner
         point = Control.PointToClient(point);
         _tvhit.pt = point;
         PInvoke.SendMessage(Control, PInvoke.TVM_HITTEST, 0, ref _tvhit);
-        return _tvhit.flags == ComCtl32.TVHT.ONITEMBUTTON;
+        return _tvhit.flags == TVHITTESTINFO_FLAGS.TVHT_ONITEMBUTTON;
     }
 
     public override void Initialize(IComponent component)

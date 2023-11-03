@@ -60,7 +60,7 @@ public class SerializableTypesTests
 
             using var streamOut = result.GetStream();
             Assert.False(streamOut.IsNull);
-            Assert.True(ComHelpers.TryGetManagedInterface(streamOut.AsUnknown, takeOwnership: false, out Ole32.GPStream managedStream));
+            Assert.True(ComHelpers.TryGetObjectForIUnknown(streamOut.AsUnknown, takeOwnership: false, out Ole32.GPStream managedStream));
             Stream bufferStream = managedStream.GetDataStream();
             byte[] buffer = new byte[3];
             bufferStream.Read(buffer, 0, buffer.Length);
@@ -372,7 +372,7 @@ public class SerializableTypesTests
             Assert.Equal("node1", result.Text);
             Assert.Equal(-1, result.ImageIndex); // No image list
             Assert.Equal("key", result.SelectedImageKey);
-            Assert.Equal(2, result.childNodes.Count);
+            Assert.Equal(2, result._childNodes.Count);
             Assert.Equal("node2", result.FirstNode.Text);
             Assert.Equal("node3", result.LastNode.Text);
             Assert.Equal("tool tip text", result.ToolTipText);

@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -45,17 +45,17 @@ public partial class ToolStripMenuItem
             }
         }
 
-        internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
+        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UiaCore.UIA.AcceleratorKeyPropertyId => _owningToolStripMenuItem.GetShortcutText(),
-                UiaCore.UIA.PositionInSetPropertyId => GetPositionInSet(),
-                UiaCore.UIA.SizeOfSetPropertyId => GetSizeOfSet(),
+                UIA_PROPERTY_ID.UIA_AcceleratorKeyPropertyId => _owningToolStripMenuItem.GetShortcutText(),
+                UIA_PROPERTY_ID.UIA_PositionInSetPropertyId => GetPositionInSet(),
+                UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId => GetSizeOfSet(),
                 _ => base.GetPropertyValue(propertyID)
             };
 
         /// <summary>
-        ///  Gets <see cref="UiaCore.UIA.PositionInSetPropertyId"/> property value.
+        ///  Gets <see cref="UIA_PROPERTY_ID.UIA_PositionInSetPropertyId"/> property value.
         /// </summary>
         private int? GetPositionInSet()
         {
@@ -90,7 +90,7 @@ public partial class ToolStripMenuItem
         }
 
         /// <summary>
-        ///  Gets <see cref="UiaCore.UIA.SizeOfSetPropertyId"/> property value.
+        ///  Gets <see cref="UIA_PROPERTY_ID.UIA_SizeOfSetPropertyId"/> property value.
         /// </summary>
         private int? GetSizeOfSet()
         {
@@ -123,10 +123,10 @@ public partial class ToolStripMenuItem
             }
         }
 
-        internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
+        internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) =>
             patternId switch
             {
-                UiaCore.UIA.TogglePatternId => _owningToolStripMenuItem.CheckOnClick || _owningToolStripMenuItem.Checked,
+                UIA_PATTERN_ID.UIA_TogglePatternId => _owningToolStripMenuItem.CheckOnClick || _owningToolStripMenuItem.Checked,
                 _ => base.IsPatternSupported(patternId)
             };
 
@@ -140,12 +140,12 @@ public partial class ToolStripMenuItem
             }
         }
 
-        internal override UiaCore.ToggleState ToggleState =>
+        internal override ToggleState ToggleState =>
             _owningToolStripMenuItem.CheckState switch
             {
-                CheckState.Checked => UiaCore.ToggleState.On,
-                CheckState.Unchecked => UiaCore.ToggleState.Off,
-                _ => UiaCore.ToggleState.Indeterminate
+                CheckState.Checked => ToggleState.ToggleState_On,
+                CheckState.Unchecked => ToggleState.ToggleState_Off,
+                _ => ToggleState.ToggleState_Indeterminate
             };
 
         #endregion

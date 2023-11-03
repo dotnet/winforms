@@ -207,7 +207,7 @@ internal class ToolStripDesigner : ControlDesigner
     {
         get
         {
-            _toolStripContextMenu ??= new BaseContextMenuStrip(ToolStrip.Site, ToolStrip)
+            _toolStripContextMenu ??= new BaseContextMenuStrip(ToolStrip.Site)
                 {
                     Text = "CustomContextMenu"
                 };
@@ -1810,7 +1810,7 @@ internal class ToolStripDesigner : ControlDesigner
         }
 
         string transDesc;
-        ArrayList components = data.DragComponents;
+        IList components = data.DragComponents;
         ToolStripItem primaryItem = data.PrimarySelection;
         int primaryIndex = -1;
         bool copy = (de.Effect == DragDropEffects.Copy);
@@ -1853,7 +1853,7 @@ internal class ToolStripDesigner : ControlDesigner
                     KeyboardHandlingService.CopyInProgress = true;
                 }
 
-                components = DesignerUtils.CopyDragObjects(components, Component.Site) as ArrayList;
+                components = DesignerUtils.CopyDragObjects(components, Component.Site);
                 if (KeyboardHandlingService is not null)
                 {
                     KeyboardHandlingService.CopyInProgress = false;

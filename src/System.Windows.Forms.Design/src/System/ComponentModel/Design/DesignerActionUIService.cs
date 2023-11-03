@@ -20,7 +20,7 @@ public sealed class DesignerActionUIService : IDisposable
         {
             _serviceProvider = serviceProvider;
             IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
-            host.AddService(typeof(DesignerActionUIService), this);
+            host.AddService(this);
             _designerActionService = serviceProvider.GetService(typeof(DesignerActionService)) as DesignerActionService;
             Debug.Assert(_designerActionService is not null, "we should have created and registered the DAService first");
         }
@@ -34,7 +34,7 @@ public sealed class DesignerActionUIService : IDisposable
         if (_serviceProvider is not null)
         {
             IDesignerHost host = (IDesignerHost)_serviceProvider.GetService(typeof(IDesignerHost));
-            host?.RemoveService(typeof(DesignerActionUIService));
+            host?.RemoveService<DesignerActionUIService>();
         }
     }
 

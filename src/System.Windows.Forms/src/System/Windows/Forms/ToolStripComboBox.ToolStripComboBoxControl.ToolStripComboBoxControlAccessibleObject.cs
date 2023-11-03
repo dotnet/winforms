@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -16,13 +17,13 @@ public partial class ToolStripComboBox
             {
             }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UiaCore.NavigateDirection.Parent:
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                    case UiaCore.NavigateDirection.NextSibling:
+                    case NavigateDirection.NavigateDirection_Parent:
+                    case NavigateDirection.NavigateDirection_PreviousSibling:
+                    case NavigateDirection.NavigateDirection_NextSibling:
                         if (this.TryGetOwnerAs(out ToolStripComboBoxControl? owner))
                         {
                             return owner.Owner?.AccessibilityObject.FragmentNavigate(direction);
@@ -39,9 +40,9 @@ public partial class ToolStripComboBox
                     ? owner.Owner?.Owner?.AccessibilityObject
                     : base.FragmentRoot;
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
+            internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId switch
             {
-                UiaCore.UIA.ExpandCollapsePatternId or UiaCore.UIA.ValuePatternId => true,
+                UIA_PATTERN_ID.UIA_ExpandCollapsePatternId or UIA_PATTERN_ID.UIA_ValuePatternId => true,
                 _ => base.IsPatternSupported(patternId)
             };
         }
