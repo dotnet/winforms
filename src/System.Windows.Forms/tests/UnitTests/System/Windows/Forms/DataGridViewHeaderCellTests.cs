@@ -3904,18 +3904,18 @@ public class DataGridViewHeaderCellTests
 
     [WinFormsTheory]
     [MemberData(nameof(MouseDownUnsharesRow_ButtonLeftNullDataGridView_TestData))]
-    public void DataGridViewHeaderCell_MouseDownUnsharesRow_ButtonLeftNullDataGridView_ThrowsNullReferenceException(DataGridViewCellMouseEventArgs e)
+    public void DataGridViewHeaderCell_MouseDownUnsharesRow_ButtonLeftNullDataGridView_ReturnsFalse(DataGridViewCellMouseEventArgs e)
     {
         using var cell = new SubDataGridViewHeaderCell();
-        Assert.Throws<NullReferenceException>(() => cell.MouseDownUnsharesRow(e));
+        Assert.False(cell.MouseDownUnsharesRow(e));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
 
     [WinFormsFact]
-    public void DataGridViewHeaderCell_MouseDownUnsharesRow_NullE_ThrowsNullReferenceException()
+    public void DataGridViewHeaderCell_MouseDownUnsharesRow_NullE_ReturnsFalse()
     {
         using var cell = new SubDataGridViewHeaderCell();
-        Assert.Throws<NullReferenceException>(() => cell.MouseDownUnsharesRow(null));
+        Assert.False(cell.MouseDownUnsharesRow(null));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
 
@@ -3924,10 +3924,10 @@ public class DataGridViewHeaderCellTests
     [InlineData(-1)]
     [InlineData(0)]
     [InlineData(1)]
-    public void DataGridViewHeaderCell_MouseEnterUnsharesRow_InvokeWithoutDataGridView_ThrowsNullReferenceException(int rowIndex)
+    public void DataGridViewHeaderCell_MouseEnterUnsharesRow_InvokeWithoutDataGridView_ReturnsFalse(int rowIndex)
     {
         using var cell = new SubDataGridViewHeaderCell();
-        Assert.Throws<NullReferenceException>(() => cell.MouseEnterUnsharesRow(rowIndex));
+        Assert.False(cell.MouseEnterUnsharesRow(rowIndex));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
 
@@ -4083,19 +4083,19 @@ public class DataGridViewHeaderCellTests
     }
 
     [WinFormsFact]
-    public void DataGridViewHeaderCell_MouseUpUnsharesRow_NullE_ThrowsNullReferenceException()
+    public void DataGridViewHeaderCell_MouseUpUnsharesRow_NullE_ReturnsFalse()
     {
         using var cell = new SubDataGridViewHeaderCell();
-        Assert.Throws<NullReferenceException>(() => cell.MouseUpUnsharesRow(null));
+        Assert.False(cell.MouseUpUnsharesRow(null));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
 
     [WinFormsTheory]
     [MemberData(nameof(MouseDownUnsharesRow_ButtonLeftNullDataGridView_TestData))]
-    public void DataGridViewHeaderCell_MouseUpUnsharesRow_ButtonLeftNullDataGridView_ThrowsNullReferenceException(DataGridViewCellMouseEventArgs e)
+    public void DataGridViewHeaderCell_MouseUpUnsharesRow_ButtonLeftNullDataGridView_ReturnsFalse(DataGridViewCellMouseEventArgs e)
     {
         using var cell = new SubDataGridViewHeaderCell();
-        Assert.Throws<NullReferenceException>(() => cell.MouseUpUnsharesRow(e));
+        Assert.False(cell.MouseUpUnsharesRow(e));
         Assert.Equal(ButtonState.Normal, cell.ButtonState);
     }
 
