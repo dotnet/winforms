@@ -21,8 +21,8 @@ public class HtmlWindowTests
         const string Html = "<html><body>test</body></html>";
         HtmlDocument document = await GetDocument(control, Html);
         HtmlWindow window = document.Window;
-        Assert.NotSame(window, document.Window);
-        Assert.Null(window.Opener);
+        window.Should().NotBeSameAs(document.Window);
+        window.Opener.Should().BeNull();
     }
 
     [WinFormsFact]
@@ -37,8 +37,8 @@ public class HtmlWindowTests
         const string Html = "<html><body>test</body></html>";
         HtmlDocument document = await GetDocument(control, Html);
         HtmlWindow window = document.Window;
-        Assert.NotSame(window, document.Window);
-        Assert.Null(window.WindowFrameElement);
+        window.Should().NotBeSameAs(document.Window);
+        window.WindowFrameElement.Should().BeNull();
     }
 
     [WinFormsFact]
@@ -55,11 +55,11 @@ public class HtmlWindowTests
         HtmlWindow window = document.Window;
         object domWindow = window.DomWindow;
 
-        Assert.Same(domWindow, window.DomWindow);
-        Assert.True(domWindow.GetType().IsCOMObject);
-        Assert.True(domWindow is IHTMLWindow2.Interface);
-        Assert.True(domWindow is IHTMLWindow3.Interface);
-        Assert.True(domWindow is IHTMLWindow4.Interface);
+        domWindow.Should().BeSameAs(window.DomWindow);
+        domWindow.GetType().IsCOMObject.Should().BeTrue();
+        domWindow.Should().BeAssignableTo<IHTMLWindow2.Interface>();
+        domWindow.Should().BeAssignableTo<IHTMLWindow3.Interface>();
+        domWindow.Should().BeAssignableTo<IHTMLWindow4.Interface>();
     }
 
     private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html)
