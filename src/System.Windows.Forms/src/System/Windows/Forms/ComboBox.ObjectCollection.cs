@@ -268,11 +268,7 @@ public partial class ComboBox
             int count = InnerList.Count;
 
             ArgumentOutOfRangeException.ThrowIfNegative(arrayIndex);
-
-            if (count + arrayIndex > destination.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(arrayIndex));
-            }
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(arrayIndex, destination.Length - count);
 
             for (int i = 0; i < count; i++)
             {
@@ -287,11 +283,7 @@ public partial class ComboBox
             int count = InnerList.Count;
 
             ArgumentOutOfRangeException.ThrowIfNegative(index);
-
-            if (count + index > destination.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(index, destination.Length - count);
 
             for (int i = 0; i < count; i++)
             {

@@ -497,12 +497,9 @@ public partial class ListView
         /// </summary>
         public virtual void RemoveAt(int index)
         {
-            if (_owner._columnHeaders is null || index < 0 || index >= _owner._columnHeaders.Length)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-            }
+            ColumnHeader columnHeader = _owner.GetColumnHeader(index);
 
-            int w = _owner._columnHeaders[index].Width; // Update width before detaching from ListView
+            int w = columnHeader.Width; // Update width before detaching from ListView
 
             // in Tile view our ListView uses the column header collection to update the Tile Information
             if (_owner.IsHandleCreated && _owner.View != View.Tile)
@@ -535,7 +532,7 @@ public partial class ListView
             removeHdr.DisplayIndexInternal = -1;
             removeHdr.ReleaseUiaProvider();
 
-            _owner._columnHeaders[index].OwnerListview = null;
+            columnHeader.OwnerListview = null;
             int columnCount = _owner._columnHeaders.Length;
             Debug.Assert(columnCount >= 1, "Column mismatch");
             if (columnCount == 1)
