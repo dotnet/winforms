@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -68,7 +69,7 @@ public partial class ComboBox
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owner.IsHandleCreated)
             {
@@ -77,13 +78,13 @@ public partial class ComboBox
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _owner.AccessibilityObject;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     return _owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject
                         ? comboBoxAccessibleObject.DropDownButtonUiaProvider
                         : null;
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return _owner.DroppedDown
                         ? _owner.ChildListAccessibleObject
                         : null;
@@ -103,19 +104,14 @@ public partial class ComboBox
             }
         }
 
-        /// <summary>
-        ///  Gets the accessible property value.
-        /// </summary>
-        /// <param name="propertyID">The accessible property ID.</param>
-        /// <returns>The accessible property value.</returns>
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TextControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owner.Focused,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owner.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => false,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TextControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)_owner.Focused,
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owner.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => VARIANT.False,
                 _ => base.GetPropertyValue(propertyID)
             };
 

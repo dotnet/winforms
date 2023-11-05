@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -69,7 +68,7 @@ public class MonthCalendar_CalendarWeekNumberCellAccessibleObjectTests
         using MonthCalendar control = new();
         CalendarWeekNumberCellAccessibleObject cellAccessibleObject = CreateCalendarWeekNumberCellAccessibleObject(control);
 
-        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)cellAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)cellAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_HeaderControlTypeId, actual);
         Assert.False(control.IsHandleCreated);
@@ -121,7 +120,7 @@ public class MonthCalendar_CalendarWeekNumberCellAccessibleObjectTests
         CalendarRowAccessibleObject row = new(body, controlAccessibleObject, 0, 0);
         CalendarWeekNumberCellAccessibleObject cell = new(row, body, controlAccessibleObject, 0, 0, 0, "");
 
-        Assert.Equal(row, cell.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Equal(row, cell.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -151,8 +150,8 @@ public class MonthCalendar_CalendarWeekNumberCellAccessibleObjectTests
         Assert.NotNull(weekNumber);
         Assert.NotNull(sunday);
 
-        Assert.Null(weekNumber.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(sunday, weekNumber.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Null(weekNumber.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(sunday, weekNumber.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
     }
 
     [WinFormsFact]
@@ -182,8 +181,8 @@ public class MonthCalendar_CalendarWeekNumberCellAccessibleObjectTests
         Assert.NotNull(sunday);
         Assert.NotNull(monday);
 
-        Assert.Null(sunday.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(monday, sunday.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Null(sunday.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(monday, sunday.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
     }
 
     [WinFormsFact]
@@ -192,8 +191,8 @@ public class MonthCalendar_CalendarWeekNumberCellAccessibleObjectTests
         using MonthCalendar control = new();
         CalendarWeekNumberCellAccessibleObject cell = CreateCalendarWeekNumberCellAccessibleObject(control, 0, 0, 0);
 
-        Assert.Null(cell.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(cell.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(cell.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(cell.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 

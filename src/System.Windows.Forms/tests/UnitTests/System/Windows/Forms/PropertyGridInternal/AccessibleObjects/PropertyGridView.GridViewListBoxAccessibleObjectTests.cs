@@ -32,7 +32,7 @@ public class PropertyGridView_GridViewListBoxAccessibleObjectTest
         AccessibleObject accessibleObject = propertyGridView.DropDownListBoxAccessibleObject;
         // AccessibleRole is not set = Default
 
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ListControlTypeId, actual);
         Assert.False(propertyGrid.IsHandleCreated);

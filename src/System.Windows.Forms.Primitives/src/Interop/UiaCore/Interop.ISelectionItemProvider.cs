@@ -43,7 +43,7 @@ internal static partial class Interop
             ///  The logical element that supports the SelectionPattern for this Item.
             /// </summary>
             /// <returns>Returns a IRawElementProviderSimple.</returns>
-            IRawElementProviderSimple? SelectionContainer { get; }
+            Windows.Win32.UI.Accessibility.IRawElementProviderSimple.Interface? SelectionContainer { get; }
         }
     }
 }

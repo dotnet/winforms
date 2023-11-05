@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Globalization;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -63,7 +64,7 @@ public partial class MonthCalendar
 
         internal override int Column => _columnIndex;
 
-        internal override UiaCore.IRawElementProviderSimple ContainingGrid => _calendarBodyAccessibleObject;
+        internal override IRawElementProviderSimple.Interface ContainingGrid => _calendarBodyAccessibleObject;
 
         internal virtual SelectionRange? DateRange
             => _dateRange ??= _monthCalendarAccessibleObject
@@ -93,12 +94,12 @@ public partial class MonthCalendar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_NextSibling
                     => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Next?.Value,
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => _columnIndex == 0
                         ? _calendarRowAccessibleObject.WeekNumberCellAccessibleObject
                         : _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Previous?.Value,
@@ -107,7 +108,7 @@ public partial class MonthCalendar
 
         internal override int GetChildId() => ChildIdIncrement + _columnIndex;
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
+        internal override IRawElementProviderSimple.Interface[]? GetColumnHeaderItems()
         {
             if (!_monthCalendarAccessibleObject.IsHandleCreated
                 || _monthCalendarAccessibleObject.CalendarView != MONTH_CALDENDAR_MESSAGES_VIEW.MCMV_MONTH)
@@ -134,17 +135,17 @@ public partial class MonthCalendar
             return null;
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => IsEnabled,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)IsEnabled,
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaderItems()
+        internal override IRawElementProviderSimple.Interface[]? GetRowHeaderItems()
             => _calendarRowAccessibleObject.WeekNumberCellAccessibleObject is AccessibleObject weekNumber
-                ? new UiaCore.IRawElementProviderSimple[1] { weekNumber }
+                ? new IRawElementProviderSimple.Interface[1] { weekNumber }
                 : null;
 
         private protected override bool HasKeyboardFocus

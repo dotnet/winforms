@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -49,7 +49,7 @@ public class CheckedListBoxAccessibleObjectTests
             checkedListBox.CreateControl();
         }
 
-        object actual = checkedListBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = checkedListBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(expectedType, (int)actual);
         Assert.Equal(createControl, checkedListBox.IsHandleCreated);
@@ -77,10 +77,10 @@ public class CheckedListBoxAccessibleObjectTests
         using CheckedListBox checkedListBox = new CheckedListBox();
         checkedListBox.AccessibleRole = role;
 
-        object actual = checkedListBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = checkedListBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
-        Assert.Equal(expected, actual);
+        Assert.Equal(expected, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(checkedListBox.IsHandleCreated);
     }
 
@@ -142,7 +142,7 @@ public class CheckedListBoxAccessibleObjectTests
 
         AccessibleObject expected = accessibleObject.GetChild(0);
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.False(checkedListBox.IsHandleCreated);
     }
 
@@ -158,7 +158,7 @@ public class CheckedListBoxAccessibleObjectTests
 
         AccessibleObject expected = accessibleObject.GetChild(2);
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(checkedListBox.IsHandleCreated);
     }
 }

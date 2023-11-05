@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.Serialization;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -247,11 +246,7 @@ public partial class ListViewItem
 
         internal void ReleaseUiaProvider()
         {
-            if (OsVersion.IsWindows8OrGreater())
-            {
-                UiaCore.UiaDisconnectProvider(_accessibilityObject);
-            }
-
+            PInvoke.UiaDisconnectProvider(_accessibilityObject);
             _accessibilityObject = null;
         }
 

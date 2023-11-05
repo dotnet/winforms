@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop.UiaCore;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -54,8 +54,8 @@ public class ToolStripDropDownItemAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(false, ((int)ExpandCollapseState.Collapsed))]
-    [InlineData(true, ((int)ExpandCollapseState.Expanded))]
+    [InlineData(false, ((int)ExpandCollapseState.ExpandCollapseState_Collapsed))]
+    [InlineData(true, ((int)ExpandCollapseState.ExpandCollapseState_Expanded))]
     public void ToolStripDropDownItemAccessibleObject_ExpandCollapseState_ReturnsExpected(bool visible, int expected)
     {
         using SubToolStripDropDownItem control = new();
@@ -141,9 +141,9 @@ public class ToolStripDropDownItemAccessibleObjectTests
         var accessibleObjectItem2 = (ToolStripDropDownItemAccessibleObject)item2.AccessibilityObject;
         var accessibleObjectNotItem = (ToolStripDropDownItemAccessibleObject)notItem.AccessibilityObject;
 
-        Assert.Equal(accessibleObjectItem2, accessibleObjectItem1.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObjectItem2.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObjectNotItem.FragmentNavigate(NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObjectItem2, accessibleObjectItem1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObjectItem2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObjectNotItem.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
     }
 
     [WinFormsFact]
@@ -160,9 +160,9 @@ public class ToolStripDropDownItemAccessibleObjectTests
         var accessibleObjectItem2 = (ToolStripDropDownItemAccessibleObject)item2.AccessibilityObject;
         var accessibleObjectNotItem = (ToolStripDropDownItemAccessibleObject)notItem.AccessibilityObject;
 
-        Assert.Null(accessibleObjectItem1.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObjectItem1, accessibleObjectItem2.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObjectNotItem.FragmentNavigate(NavigateDirection.PreviousSibling));
+        Assert.Null(accessibleObjectItem1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObjectItem1, accessibleObjectItem2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObjectNotItem.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]

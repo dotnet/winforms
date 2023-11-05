@@ -22,18 +22,7 @@ public partial class ListView
         ///  Given a Zero based index, returns the ColumnHeader object
         ///  for the column at that index
         /// </summary>
-        public virtual ColumnHeader this[int index]
-        {
-            get
-            {
-                if (_owner._columnHeaders is null || index < 0 || index >= _owner._columnHeaders.Length)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
-
-                return _owner._columnHeaders[index];
-            }
-        }
+        public virtual ColumnHeader this[int index] => _owner.GetColumnHeader(index);
 
         object? IList.this[int index]
         {
@@ -410,10 +399,8 @@ public partial class ListView
 
         public void Insert(int index, ColumnHeader value)
         {
-            if (index < 0 || index > Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(index, Count);
 
             _owner.InsertColumn(index, value);
         }

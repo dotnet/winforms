@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -71,24 +72,24 @@ public partial class LinkLabel
                 _owningLinkLabel.OnLinkClicked(new LinkLabelLinkClickedEventArgs(_owningLink));
             }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
                 => direction switch
                 {
-                    UiaCore.NavigateDirection.Parent => _linkLabelAccessibleObject,
-                    UiaCore.NavigateDirection.NextSibling => _linkLabelAccessibleObject.GetChild(CurrentIndex + 1),
-                    UiaCore.NavigateDirection.PreviousSibling => _linkLabelAccessibleObject.GetChild(CurrentIndex - 1),
+                    NavigateDirection.NavigateDirection_Parent => _linkLabelAccessibleObject,
+                    NavigateDirection.NavigateDirection_NextSibling => _linkLabelAccessibleObject.GetChild(CurrentIndex + 1),
+                    NavigateDirection.NavigateDirection_PreviousSibling => _linkLabelAccessibleObject.GetChild(CurrentIndex - 1),
                     _ => base.FragmentNavigate(direction),
                 };
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _linkLabelAccessibleObject;
 
-            internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+            internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
                 => propertyID switch
                 {
-                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_HyperlinkControlTypeId,
-                    UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningLinkLabel.FocusLink == _owningLink,
-                    UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningLinkLabel.Enabled,
-                    UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_HyperlinkControlTypeId,
+                    UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(_owningLinkLabel.FocusLink == _owningLink),
+                    UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningLinkLabel.Enabled,
+                    UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                     _ => base.GetPropertyValue(propertyID)
                 };
 

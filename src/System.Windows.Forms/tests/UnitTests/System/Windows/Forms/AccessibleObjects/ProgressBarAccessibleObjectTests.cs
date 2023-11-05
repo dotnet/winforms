@@ -113,7 +113,7 @@ public class ProgressBarAccessibleObject
         using ProgressBar progressBar = new ProgressBar();
         // AccessibleRole is not set = Default
 
-        object actual = progressBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)progressBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ProgressBarControlTypeId, actual);
         Assert.False(progressBar.IsHandleCreated);
@@ -141,7 +141,7 @@ public class ProgressBarAccessibleObject
         using ProgressBar progressBar = new ProgressBar();
         progressBar.AccessibleRole = role;
 
-        object actual = progressBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)progressBar.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

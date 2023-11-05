@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -124,21 +125,21 @@ public partial class ListViewItem
             SetFocus();
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             AccessibleObject _parentInternal = OwningGroup?.AccessibilityObject ?? _owningListView.AccessibilityObject;
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _parentInternal;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     int childIndex = _parentInternal.GetChildIndex(this);
                     return childIndex == InvalidIndex ? null : _parentInternal.GetChild(childIndex + 1);
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return _parentInternal.GetChild(_parentInternal.GetChildIndex(this) - 1);
-                case UiaCore.NavigateDirection.FirstChild:
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     return null;
             }
 
@@ -169,18 +170,27 @@ public partial class ListViewItem
 
         internal override int GetChildIndex(AccessibleObject? child) => InvalidIndex;
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
-            => propertyID switch
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        {
+            switch (propertyID)
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => OwningListItemFocused,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListView.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => State.HasFlag(AccessibleStates.Focusable),
-                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed ||
-                                                     (bool)(base.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId) ?? false),
-                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => (nint)_owningListView.InternalHandle,
-                _ => base.GetPropertyValue(propertyID)
-            };
+                case UIA_PROPERTY_ID.UIA_ControlTypePropertyId: return (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId;
+                case UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId: return (VARIANT)OwningListItemFocused;
+                case UIA_PROPERTY_ID.UIA_IsEnabledPropertyId: return (VARIANT)_owningListView.Enabled;
+                case UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId: return (VARIANT)State.HasFlag(AccessibleStates.Focusable);
+                case UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId:
+                    if (OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed)
+                    {
+                        return VARIANT.True;
+                    }
+
+                    VARIANT result = base.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
+                    return result.IsEmpty ? VARIANT.False : result;
+                case UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId:
+                    return UIAHelper.WindowHandleToVariant(_owningListView.InternalHandle);
+                default: return base.GetPropertyValue(propertyID);
+            }
+        }
 
         internal virtual Rectangle GetSubItemBounds(int index) => Rectangle.Empty;
 
@@ -209,10 +219,10 @@ public partial class ListViewItem
             }
         }
 
-        internal override UiaCore.ToggleState ToggleState
+        internal override ToggleState ToggleState
             => _owningItem.Checked
-                ? UiaCore.ToggleState.On
-                : UiaCore.ToggleState.Off;
+                ? ToggleState.ToggleState_On
+                : ToggleState.ToggleState_Off;
 
         /// <summary>
         ///  Indicates whether specified pattern is supported.
@@ -243,7 +253,7 @@ public partial class ListViewItem
             // Do nothing, C++ implementation returns UIA_E_INVALIDOPERATION 0x80131509
         }
 
-        internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer
+        internal override IRawElementProviderSimple.Interface ItemSelectionContainer
             => _owningListView.AccessibilityObject;
 
         internal override void ScrollIntoView() => _owningItem.EnsureVisible();

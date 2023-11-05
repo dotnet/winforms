@@ -126,20 +126,15 @@ public sealed partial class ImageList
         {
             get
             {
-                if (index < 0 || index >= Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 
                 return _owner.GetBitmap(index);
             }
             set
             {
-                if (index < 0 || index >= Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
-
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
                 ArgumentNullException.ThrowIfNull(value);
 
                 if (value is not Bitmap bitmap)
@@ -546,10 +541,8 @@ public sealed partial class ImageList
 
         public void RemoveAt(int index)
         {
-            if (index < 0 || index >= Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 
             AssertInvariant();
             if (!PInvoke.ImageList.Remove(_owner, index))

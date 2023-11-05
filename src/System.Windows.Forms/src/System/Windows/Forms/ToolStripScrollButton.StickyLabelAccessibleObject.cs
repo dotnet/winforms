@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -17,7 +18,7 @@ internal partial class ToolStripScrollButton
             _owner = owner;
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (_owner.OwnerScrollButton?.Parent is not ToolStripDropDownMenu toolStripDropDownMenu)
             {
@@ -26,12 +27,12 @@ internal partial class ToolStripScrollButton
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => toolStripDropDownMenu.AccessibilityObject,
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_Parent => toolStripDropDownMenu.AccessibilityObject,
+                NavigateDirection.NavigateDirection_NextSibling
                     => _owner.UpDirection && toolStripDropDownMenu.Items.Count > 0
                         ? toolStripDropDownMenu.Items[0].AccessibilityObject
                         : null,
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => !_owner.UpDirection && toolStripDropDownMenu.Items.Count > 0
                         ? toolStripDropDownMenu.Items[^1].AccessibilityObject
                         : null,
@@ -48,9 +49,9 @@ internal partial class ToolStripScrollButton
 
         public override string? DefaultAction => SR.AccessibleActionPress;
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
         {
-            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
+            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
             _ => base.GetPropertyValue(propertyID)
         };
     }

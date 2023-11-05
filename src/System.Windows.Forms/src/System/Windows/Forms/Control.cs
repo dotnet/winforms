@@ -13,6 +13,7 @@ using System.Windows.Forms.Layout;
 using System.Windows.Forms.Primitives;
 using Microsoft.Win32;
 using Windows.Win32.System.Ole;
+using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static Interop;
 using ComTypes = System.Runtime.InteropServices.ComTypes;
@@ -9949,12 +9950,12 @@ public unsafe partial class Control :
             // you should notify UI Automation by calling the UiaReturnRawElementProvider
             // as follows: UiaReturnRawElementProvider(hwnd, 0, 0, NULL). This call tells
             // UI Automation that it can safely remove all map entries that refer to the specified window.
-            UiaCore.UiaReturnRawElementProvider(handle, 0, 0, null);
+            PInvoke.UiaReturnRawElementProvider(handle, 0, 0, (IRawElementProviderSimple*)null);
         }
 
         if (OsVersion.IsWindows8OrGreater() && TryGetAccessibilityObject(out AccessibleObject? accessibleObject))
         {
-            UiaCore.UiaDisconnectProvider(accessibleObject);
+            PInvoke.UiaDisconnectProvider(accessibleObject, skipOSCheck: true);
         }
 
         Properties.SetObject(s_accessibilityProperty, null);
@@ -11974,7 +11975,7 @@ public unsafe partial class Control :
         {
             // If the requested object identifier is UiaRootObjectId,
             // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-            m.ResultInternal = (LRESULT)UiaCore.UiaReturnRawElementProvider(
+            m.ResultInternal = PInvoke.UiaReturnRawElementProvider(
                 this,
                 m.WParamInternal,
                 m.LParamInternal,

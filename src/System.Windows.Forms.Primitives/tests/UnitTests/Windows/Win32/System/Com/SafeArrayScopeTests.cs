@@ -6,6 +6,18 @@ namespace Windows.Win32.System.Com.Tests;
 public unsafe class SafeArrayScopeTests
 {
     [Fact]
+    public void SafeArrayScope_Construct_Array_Success()
+    {
+        var intArray = new int[] { 1, 2, 3 };
+        using SafeArrayScope<int> scope = new(intArray);
+        Assert.Equal(intArray.Length, scope.Length);
+        for (int i = 0; i < intArray.Length; i++)
+        {
+            Assert.Equal(intArray[i], scope[i]);
+        }
+    }
+
+    [Fact]
     public void SafeArrayScope_Construct_KnownType_Success()
     {
         using SafeArrayScope<string> scope = new(size: 1);

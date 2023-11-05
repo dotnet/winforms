@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Form;
 
@@ -26,10 +27,10 @@ public class Form_FormAccessibleObjectTests
         // AccessibleRole is not set = Default
 
         AccessibleObject accessibleObject = form.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(AccessibleRole.Client, accessibleObject.Role);
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_WindowControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_WindowControlTypeId, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(form.IsHandleCreated);
     }
 
@@ -91,10 +92,10 @@ public class Form_FormAccessibleObjectTests
         using Form form = new Form();
         form.AccessibleRole = role;
 
-        object actual = form.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = form.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
-        Assert.Equal(expected, actual);
+        Assert.Equal(expected, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(form.IsHandleCreated);
     }
 

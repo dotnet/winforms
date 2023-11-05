@@ -21,7 +21,7 @@ public class WebBrowser_WebBrowserAccessibleObjectTests
     [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "ToolStripContainer1")]
-    public void WebBrowserAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
+    public void WebBrowserAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, string expected)
     {
         using WebBrowser webBrowser = new WebBrowser
         {
@@ -30,7 +30,7 @@ public class WebBrowser_WebBrowserAccessibleObjectTests
         };
 
         WebBrowserAccessibleObject accessibleObject = (WebBrowserAccessibleObject)webBrowser.AccessibilityObject;
-        object value = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        string value = ((BSTR)accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID)).ToStringAndFree();
 
         Assert.Equal(expected, value);
         Assert.False(webBrowser.IsHandleCreated);

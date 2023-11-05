@@ -422,17 +422,8 @@ public partial class ResXResourceReader : IResourceReader
             Type readerType = typeof(ResXResourceReader);
             Type writerType = typeof(ResXResourceWriter);
 
-            string? readerTypeName = _resHeaderReaderType;
-            string? writerTypeName = _resHeaderWriterType;
-            if (readerTypeName is not null && readerTypeName.IndexOf(',') != -1)
-            {
-                readerTypeName = readerTypeName.Split(',')[0].Trim();
-            }
-
-            if (writerTypeName is not null && writerTypeName.IndexOf(',') != -1)
-            {
-                writerTypeName = writerTypeName.Split(',')[0].Trim();
-            }
+            string? readerTypeName = GetPrefix(_resHeaderReaderType);
+            string? writerTypeName = GetPrefix(_resHeaderWriterType);
 
             if (readerTypeName is not null &&
                 writerTypeName is not null &&
@@ -448,6 +439,22 @@ public partial class ResXResourceReader : IResourceReader
             _resData = null;
             _resMetadata = null;
             throw new ArgumentException(SR.InvalidResXFileReaderWriterTypes);
+        }
+
+        static string? GetPrefix(string? typeName)
+        {
+            if (typeName is null)
+            {
+                return null;
+            }
+
+            int index = typeName.IndexOf(',');
+            if (index != -1)
+            {
+                return typeName.AsSpan(0, index).Trim().ToString();
+            }
+
+            return typeName;
         }
     }
 

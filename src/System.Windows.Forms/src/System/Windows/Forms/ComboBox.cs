@@ -8,6 +8,7 @@ using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.Layout;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
@@ -303,7 +304,7 @@ public partial class ComboBox : ListControl
     {
         get
         {
-            _childEditAccessibleObject ??= new ComboBoxChildEditUiaProvider(this, _childEdit!.Handle);
+            _childEditAccessibleObject ??= new ComboBoxChildEditUiaProvider(this, _childEdit!.HWND);
 
             return _childEditAccessibleObject;
         }
@@ -314,7 +315,7 @@ public partial class ComboBox : ListControl
         get
         {
             _childListAccessibleObject ??=
-                    new ComboBoxChildListUiaProvider(this, DropDownStyle == ComboBoxStyle.Simple ? _childListBox!.Handle : _dropDownHandle);
+                    new ComboBoxChildListUiaProvider(this, DropDownStyle == ComboBoxStyle.Simple ? _childListBox!.HWND : _dropDownHandle);
 
             return _childListAccessibleObject;
         }
@@ -2100,13 +2101,8 @@ public partial class ComboBox : ListControl
             return ItemHeight;
         }
 
-        if (index < 0 || _itemsCollection is null || index >= _itemsCollection.Count)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(index),
-                index,
-                string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _itemsCollection?.Count ?? 0);
 
         if (IsHandleCreated)
         {
@@ -2566,8 +2562,8 @@ public partial class ComboBox : ListControl
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                UiaCore.ExpandCollapseState.Collapsed,
-                UiaCore.ExpandCollapseState.Expanded);
+                (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed,
+                (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded);
 
             if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
             {
@@ -3057,8 +3053,8 @@ public partial class ComboBox : ListControl
             // Notify Collapsed/expanded property change.
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                UiaCore.ExpandCollapseState.Expanded,
-                UiaCore.ExpandCollapseState.Collapsed);
+                (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded,
+                (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed);
         }
 
         // Collapsing the DropDown, so reset the flag.
@@ -3232,10 +3228,7 @@ public partial class ComboBox : ListControl
             return;
         }
 
-        if (OsVersion.IsWindows8OrGreater())
-        {
-            UiaCore.UiaDisconnectProvider(_childTextAccessibleObject);
-        }
+        PInvoke.UiaDisconnectProvider(_childTextAccessibleObject);
 
         _childTextAccessibleObject = null;
 
@@ -3386,10 +3379,7 @@ public partial class ComboBox : ListControl
     /// </summary>
     public void Select(int start, int length)
     {
-        if (start < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidArgument, nameof(start), start));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(start);
 
         // the Length can be negative to support Selecting in the "reverse" direction..
         int end = start + length;

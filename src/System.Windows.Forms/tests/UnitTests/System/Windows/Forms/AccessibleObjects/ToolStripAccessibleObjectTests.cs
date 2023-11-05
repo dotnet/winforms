@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -31,7 +32,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject toolStripAccessibleObject = toolStrip.AccessibilityObject;
         var accessibleName = toolStripAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
-        Assert.Equal("Test Name", accessibleName);
+        Assert.Equal("Test Name", ((BSTR)accessibleName).ToStringAndFree());
     }
 
     [WinFormsFact]
@@ -79,7 +80,7 @@ public class ToolStripAccessibleObjectTests
         using ToolStrip toolStrip = new ToolStrip();
         // AccessibleRole is not set = Default
 
-        object actual = toolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ToolBarControlTypeId, actual);
         Assert.False(toolStrip.IsHandleCreated);
@@ -107,7 +108,7 @@ public class ToolStripAccessibleObjectTests
         using ToolStrip toolStrip = new ToolStrip();
         toolStrip.AccessibleRole = role;
 
-        object actual = toolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)toolStrip.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -116,9 +117,9 @@ public class ToolStripAccessibleObjectTests
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_ReturnsNull_IfHandleNotCreated_TestData()
     {
-        Array directions = Enum.GetValues<UiaCore.NavigateDirection>();
+        Array directions = Enum.GetValues<NavigateDirection>();
 
-        foreach (UiaCore.NavigateDirection direction in directions)
+        foreach (NavigateDirection direction in directions)
         {
             yield return new object[] { direction };
         }
@@ -132,7 +133,7 @@ public class ToolStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate((UiaCore.NavigateDirection)navigateDirection));
+        Assert.Null(accessibleObject.FragmentNavigate((NavigateDirection)navigateDirection));
         Assert.False(toolStrip.IsHandleCreated);
     }
 
@@ -142,7 +143,7 @@ public class ToolStripAccessibleObjectTests
         using ToolStrip toolStrip = CreateToolStrip();
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
     }
 
     [WinFormsFact]
@@ -151,8 +152,8 @@ public class ToolStripAccessibleObjectTests
         using ToolStrip toolStrip = CreateToolStrip();
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
     }
 
     [WinFormsFact]
@@ -163,9 +164,11 @@ public class ToolStripAccessibleObjectTests
 
         var accessibleObject = toolStrip.AccessibilityObject;
 
-        UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.NotNull(firstChild);
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ThumbControlTypeId, firstChild.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        using VARIANT actual = default;
+        Assert.True(firstChild.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId, &actual).Succeeded);
+        Assert.Equal((int)UIA_CONTROLTYPE_ID.UIA_ThumbControlTypeId, actual.ToObject());
     }
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_IfNoGripAndStackLayout_TestData()
@@ -223,7 +226,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -234,7 +237,7 @@ public class ToolStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_IfGripVisible_TestData()
@@ -262,7 +265,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Grip.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -274,7 +277,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Grip.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_IfNoGripAndOverflow_TestData()
@@ -297,7 +300,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.OverflowButton.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_IfNoGripAndCannotOverflowAndStackLayout_TestData()
@@ -319,7 +322,7 @@ public class ToolStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_IfNoGripAndCannotOverflowAndNonStackLayout_TestData()
@@ -341,7 +344,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -357,7 +360,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -373,7 +376,7 @@ public class ToolStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -389,7 +392,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -405,7 +408,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -423,7 +426,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[2].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -441,7 +444,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -458,7 +461,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     [WinFormsTheory]
@@ -475,7 +478,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
     }
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_IfStackLayout_TestData()
@@ -532,7 +535,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -543,7 +546,7 @@ public class ToolStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -555,7 +558,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Grip.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -571,7 +574,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -587,7 +590,7 @@ public class ToolStripAccessibleObjectTests
 
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -604,7 +607,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Grip.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -620,7 +623,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -636,7 +639,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -658,7 +661,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -680,7 +683,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[2].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -697,7 +700,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsTheory]
@@ -714,7 +717,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_IfOverflow_TestData()
@@ -740,7 +743,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.OverflowButton.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_IfCannotOverflow_TestData()
@@ -779,7 +782,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_IfCannotOverflowAndItemSkipped_TestData()
@@ -822,7 +825,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_IfCannotOverflowAndItemAlignedAndStackLayout_TestData()
@@ -856,7 +859,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     public static IEnumerable<object[]> ToolStripAccessibleObject_FragmentNavigate_IfCannotOverflowAndItemAlignedAndNonStackLayout_TestData()
@@ -881,7 +884,7 @@ public class ToolStripAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.AccessibilityObject;
         AccessibleObject expected = toolStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     internal static ToolStripItem CreateSkippedItem()

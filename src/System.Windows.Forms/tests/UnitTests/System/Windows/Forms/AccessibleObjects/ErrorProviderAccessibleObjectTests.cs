@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -75,18 +75,16 @@ public class ErrorProviderAccessibleObjectTests : IDisposable
     public void ErrorProvider_ControlItemAccessibleObject_CorrectControlType()
     {
         AccessibleObject controlItemAccessibleObject = _controlItem1.AccessibilityObject;
-        object actual = controlItemAccessibleObject?.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
-        object expected = UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId;
-        Assert.Equal(expected, actual);
+        VARIANT actual = controlItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId, (UIA_CONTROLTYPE_ID)(int)actual);
     }
 
     [WinFormsFact]
     public void ErrorProvider_ErrorWindowAccessibleObject_CorrectControlType()
     {
         AccessibleObject errorWindowAccessibleObject = _errorWindow.AccessibilityObject;
-        object actual = errorWindowAccessibleObject?.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
-        object expected = UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId;
-        Assert.Equal(expected, actual);
+        VARIANT actual = errorWindowAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId, (UIA_CONTROLTYPE_ID)(int)actual);
     }
 
     [WinFormsFact]
@@ -132,16 +130,16 @@ public class ErrorProviderAccessibleObjectTests : IDisposable
         actualAccessibilityObject = controlItem2_AccessibilityObject.Parent;
         Assert.Equal(errorWindowAccessibilityObject, actualAccessibilityObject);
 
-        actualAccessibilityObject = (AccessibleObject)controlItem1_AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        actualAccessibilityObject = (AccessibleObject)controlItem1_AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
         Assert.Equal(controlItem2_AccessibilityObject, actualAccessibilityObject);
 
-        actualAccessibilityObject = (AccessibleObject)controlItem1_AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+        actualAccessibilityObject = (AccessibleObject)controlItem1_AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
         Assert.Null(actualAccessibilityObject);
 
-        actualAccessibilityObject = (AccessibleObject)controlItem2_AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+        actualAccessibilityObject = (AccessibleObject)controlItem2_AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
         Assert.Equal(controlItem1_AccessibilityObject, actualAccessibilityObject);
 
-        actualAccessibilityObject = (AccessibleObject)controlItem2_AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        actualAccessibilityObject = (AccessibleObject)controlItem2_AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
         Assert.Null(actualAccessibilityObject);
     }
 

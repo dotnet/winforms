@@ -1825,10 +1825,8 @@ public partial class RichTextBox : TextBoxBase
         ArgumentNullException.ThrowIfNull(str);
 
         int textLen = TextLength;
-        if (start < 0 || start > textLen)
-        {
-            throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidBoundArgument, nameof(start), start, 0, textLen));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(start);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(start, textLen);
 
         if (end < -1)
         {
@@ -1978,11 +1976,8 @@ public partial class RichTextBox : TextBoxBase
         int textLength = TextLength;
 
         ArgumentNullException.ThrowIfNull(characterSet);
-
-        if (start < 0 || start > textLength)
-        {
-            throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidBoundArgument, nameof(start), start, 0, textLength));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(start);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(start, textLength);
 
         if (end < start && end != -1)
         {

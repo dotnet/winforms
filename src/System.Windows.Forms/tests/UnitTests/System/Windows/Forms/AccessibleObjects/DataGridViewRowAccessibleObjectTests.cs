@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -414,17 +413,17 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
         AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
 
-        Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -443,15 +442,15 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
         AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
 
-        Assert.Equal(accessibleObject2, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject2, topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(topRowAccessibleObject, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(topRowAccessibleObject, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -470,15 +469,15 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
         AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
 
-        Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject3, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject1, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -497,15 +496,15 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
         AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
 
-        Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject4, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject4, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject2, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -522,13 +521,13 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
 
-        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -545,11 +544,11 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
 
-        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -566,11 +565,11 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
 
-        Assert.Equal(accessibleObject3, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject1, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -587,11 +586,11 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
 
-        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -609,15 +608,15 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
         AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
 
-        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -636,13 +635,13 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
         AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
 
-        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -661,13 +660,13 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
         AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
 
-        Assert.Equal(accessibleObject3, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject4, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject1, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject3, accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -686,13 +685,13 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
         AccessibleObject accessibleObject4 = dataGridView.Rows[3].AccessibilityObject;
 
-        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject4, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject4, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject2, accessibleObject4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -710,15 +709,15 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
 
-        Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -736,13 +735,13 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
 
-        Assert.Equal(accessibleObject2, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject2, topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(topRowAccessibleObject, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject2, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(topRowAccessibleObject, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -760,13 +759,13 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Rows[2].AccessibilityObject;
 
-        Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject3, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject3, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject1, accessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -784,13 +783,13 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject1 = dataGridView.Rows[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Rows[1].AccessibilityObject;
 
-        Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(accessibleObject1, topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(accessibleObject2, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(topRowAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(accessibleObject1, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(topRowAccessibleObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(topRowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1199,8 +1198,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
 
-        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1213,8 +1212,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
 
         AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
 
-        Assert.Null(rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Null(rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1231,8 +1230,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
 
-        Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject3, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject3, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1249,8 +1248,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
         AccessibleObject accessibleObject3 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
 
-        Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject3, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject3, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1267,8 +1266,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
 
-        Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1285,8 +1284,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
 
         AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
 
-        Assert.Null(rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Null(rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1303,8 +1302,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[2].AccessibilityObject;
 
-        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1321,8 +1320,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[2].AccessibilityObject;
 
-        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1339,8 +1338,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[1].AccessibilityObject;
 
-        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1358,8 +1357,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject rowAccessibleObject = dataGridView.Rows[0].AccessibilityObject;
         AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
 
-        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1378,8 +1377,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1399,8 +1398,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
 
-        Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1420,8 +1419,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[2].AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1441,8 +1440,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject accessibleObject1 = dataGridView.Rows[0].Cells[1].AccessibilityObject;
         AccessibleObject accessibleObject2 = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(accessibleObject1, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject2, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1461,8 +1460,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1482,8 +1481,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[1].AccessibilityObject;
 
-        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1503,8 +1502,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -1524,8 +1523,8 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         AccessibleObject topLeftAccessibilityObject = dataGridView.Rows[0].HeaderCell.AccessibilityObject;
         AccessibleObject accessibleObject = dataGridView.Rows[0].Cells[0].AccessibilityObject;
 
-        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(topLeftAccessibilityObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject, rowAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(dataGridView.IsHandleCreated);
     }
 
@@ -2376,7 +2375,7 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         dataGridView.Rows.Add(new DataGridViewRow());
         dataGridView.Rows[0].Cells[0].Value = "test1";
 
-        Assert.Equal("test1", dataGridView.Rows[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal("test1", ((BSTR)dataGridView.Rows[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree());
         Assert.False(dataGridView.IsHandleCreated);
     }
 

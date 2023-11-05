@@ -7,8 +7,8 @@ using System.Globalization;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using SourceGenerated;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -52,7 +52,7 @@ public partial class DateTimePicker : Control
     private EventHandler? _onValueChanged;
     private EventHandler? _onRightToLeftLayoutChanged;
 
-    private UiaCore.ExpandCollapseState _expandCollapseState;
+    private ExpandCollapseState _expandCollapseState;
 
     // We need to restrict the available dates because of limitations in the comctl DateTime and MonthCalendar controls
 
@@ -1059,15 +1059,15 @@ public partial class DateTimePicker : Control
     protected virtual void OnCloseUp(EventArgs eventargs)
     {
         _onCloseUp?.Invoke(this, eventargs);
-        _expandCollapseState = UiaCore.ExpandCollapseState.Collapsed;
+        _expandCollapseState = ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         // Raise automation event to annouce new state.
         if (IsAccessibilityObjectCreated)
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: UiaCore.ExpandCollapseState.Expanded,
-                newValue: UiaCore.ExpandCollapseState.Collapsed);
+                oldValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded,
+                newValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed);
         }
     }
 
@@ -1077,15 +1077,15 @@ public partial class DateTimePicker : Control
     protected virtual void OnDropDown(EventArgs eventargs)
     {
         _onDropDown?.Invoke(this, eventargs);
-        _expandCollapseState = UiaCore.ExpandCollapseState.Expanded;
+        _expandCollapseState = ExpandCollapseState.ExpandCollapseState_Expanded;
 
-        // Raise automation event to annouce new state.
+        // Raise automation event to announce new state.
         if (IsAccessibilityObjectCreated)
         {
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                oldValue: UiaCore.ExpandCollapseState.Collapsed,
-                newValue: UiaCore.ExpandCollapseState.Expanded);
+                oldValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Collapsed,
+                newValue: (VARIANT)(int)ExpandCollapseState.ExpandCollapseState_Expanded);
         }
     }
 
@@ -1104,7 +1104,7 @@ public partial class DateTimePicker : Control
         // Raise automation event to annouce the control.
         if (IsAccessibilityObjectCreated)
         {
-            _expandCollapseState = UiaCore.ExpandCollapseState.Collapsed;
+            _expandCollapseState = ExpandCollapseState.ExpandCollapseState_Collapsed;
             AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_AutomationFocusChangedEventId);
         }
     }
@@ -1159,10 +1159,11 @@ public partial class DateTimePicker : Control
             // so I have to use current value twice.
             // Anyway it doesn't matter because the Narrator pronounces actual AO state.
             string? value = AccessibilityObject.Value;
+            using VARIANT variantValue = value is null ? default : (VARIANT)value;
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(
                 UIA_PROPERTY_ID.UIA_ValueValuePropertyId,
-                oldValue: value,
-                newValue: value);
+                oldValue: variantValue,
+                newValue: variantValue);
         }
     }
 

@@ -717,7 +717,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
         Rectangle cellBounds,
         int rowIndex,
         DataGridViewElementStates dataGridViewElementState,
-        object value,
+        object? value,
         object? formattedValue,
         string? errorText,
         DataGridViewCellStyle cellStyle,
@@ -829,7 +829,7 @@ public partial class DataGridViewColumnHeaderCell : DataGridViewHeaderCell
                 if (DataGridView.RightToLeftInternal)
                 {
                     // Flip the column header background
-                    Bitmap bmFlipXPThemes = FlipXPThemesBitmap;
+                    Bitmap? bmFlipXPThemes = FlipXPThemesBitmap;
                     if (bmFlipXPThemes is null ||
                         bmFlipXPThemes.Width < backgroundBounds.Width || bmFlipXPThemes.Width > 2 * backgroundBounds.Width ||
                         bmFlipXPThemes.Height < backgroundBounds.Height || bmFlipXPThemes.Height > 2 * backgroundBounds.Height)

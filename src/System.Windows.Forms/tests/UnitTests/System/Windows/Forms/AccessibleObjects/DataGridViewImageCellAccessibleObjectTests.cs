@@ -46,7 +46,7 @@ public class DataGridViewImageCellAccessibleObjectTests : DataGridViewImageCell
         var accessibleObject = new DataGridViewImageCellAccessibleObject(null);
 
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId;
-        Assert.Equal(expected, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(expected, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]

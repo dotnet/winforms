@@ -51,29 +51,26 @@ public class SelectionRangeConverter : TypeConverter
     {
         if (value is string valueAsString)
         {
-            string text = valueAsString.Trim();
-            if (text.Length == 0)
+            ReadOnlySpan<char> text = valueAsString.AsSpan().Trim();
+            if (text.IsEmpty)
             {
                 return new SelectionRange(DateTime.Now.Date, DateTime.Now.Date);
             }
 
             // Separate the string into the two dates, and parse each one
             culture ??= CultureInfo.CurrentCulture;
+            Span<DateTime> values = stackalloc DateTime[2];
 
             char separator = culture.TextInfo.ListSeparator[0];
-            string[] tokens = text.Split(new char[] { separator });
 
-            if (tokens.Length == 2)
+            if (TypeConverterHelper.TryParseAsSpan(context, culture, text, values))
             {
-                TypeConverter dateTimeConverter = TypeDescriptor.GetConverter(typeof(DateTime));
-                DateTime start = (DateTime)dateTimeConverter.ConvertFromString(context, culture, tokens[0])!;
-                DateTime end = (DateTime)dateTimeConverter.ConvertFromString(context, culture, tokens[1])!;
-                return new SelectionRange(start, end);
+                return new SelectionRange(values[0], values[1]);
             }
             else
             {
                 throw new ArgumentException(string.Format(SR.TextParseFailedFormat,
-                                                          text,
+                                                          valueAsString,
                                                           $"Start{separator} End"));
             }
         }

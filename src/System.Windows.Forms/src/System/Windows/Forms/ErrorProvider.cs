@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -786,7 +785,7 @@ public partial class ErrorProvider : Component, IExtenderProvider, ISupportIniti
     {
         EnsureControlItem(control).Error = value;
 
-        if (UiaCore.UiaClientsAreListening())
+        if (PInvoke.UiaClientsAreListening())
         {
             control.AccessibilityObject.RaiseAutomationNotification(
                 Automation.AutomationNotificationKind.ActionAborted,

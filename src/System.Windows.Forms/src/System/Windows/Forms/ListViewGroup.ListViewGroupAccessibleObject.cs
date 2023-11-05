@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListView;
 using static Interop;
@@ -88,10 +89,10 @@ public partial class ListViewGroup
         public override string DefaultAction
             => SR.AccessibleActionDoubleClick;
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => _owningGroup.CollapsedState == ListViewGroupCollapsedState.Collapsed
-                ? UiaCore.ExpandCollapseState.Collapsed
-                : UiaCore.ExpandCollapseState.Expanded;
+                ? ExpandCollapseState.ExpandCollapseState_Collapsed
+                : ExpandCollapseState.ExpandCollapseState_Expanded;
 
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             => _owningListView.AccessibilityObject;
@@ -180,14 +181,14 @@ public partial class ListViewGroup
             return _owningGroup.ID;
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningListView.Focused && Focused,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListView.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => State.HasFlag(AccessibleStates.Focusable),
-                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _owningListView.IsHandleCreated ? _owningListView.Handle : IntPtr.Zero,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_GroupControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(_owningListView.Focused && Focused),
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningListView.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(_owningListView.IsHandleCreated ? _owningListView.Handle : 0),
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -218,7 +219,7 @@ public partial class ListViewGroup
             return visibleItems;
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed || IsEmpty)
             {
@@ -227,18 +228,18 @@ public partial class ListViewGroup
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _owningListViewAccessibilityObject;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     int childIndex = _owningListViewAccessibilityObject.GetChildIndex(this);
                     return childIndex == InvalidIndex
                         ? null
                         : _owningListViewAccessibilityObject.GetChild(childIndex + 1);
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return _owningListViewAccessibilityObject.GetChild(_owningListViewAccessibilityObject.GetChildIndex(this) - 1);
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     return GetChild(0);
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     IReadOnlyList<ListViewItem> visibleItems = GetVisibleItems();
                     return visibleItems.Count > 0 ? visibleItems[visibleItems.Count - 1].AccessibilityObject : null;
 

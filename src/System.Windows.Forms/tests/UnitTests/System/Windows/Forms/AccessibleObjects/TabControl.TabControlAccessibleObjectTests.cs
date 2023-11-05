@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TabControl;
-using static Interop.UiaCore;
-using IRawElementProviderSimple = Interop.UiaCore.IRawElementProviderSimple;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -28,7 +27,7 @@ public class TabControl_TabControlAccessibilityObjectTests
         tabControl.CreateControl();
         // AccessibleRole is not set = Default
 
-        object actual = tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TabControlTypeId, actual);
         Assert.True(tabControl.IsHandleCreated);
@@ -69,7 +68,7 @@ public class TabControl_TabControlAccessibilityObjectTests
         using TabControl tabControl = new();
         tabControl.AccessibleRole = role;
 
-        object actual = tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -345,8 +344,8 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(pages[0].IsHandleCreated);
         Assert.False(pages[1].IsHandleCreated);
         Assert.False(tabControl.IsHandleCreated);
@@ -360,8 +359,8 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.True(tabControl.IsHandleCreated);
     }
 
@@ -375,8 +374,8 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.Equal(tabControl.SelectedTab.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.SelectedTab.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.True(pages[0].IsHandleCreated);
         Assert.True(tabControl.IsHandleCreated);
     }
@@ -391,9 +390,9 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.Equal(tabControl.SelectedTab.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(pages[0].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(pages[2].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.SelectedTab.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(pages[0].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(pages[2].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.True(pages[0].IsHandleCreated);
         Assert.False(pages[1].IsHandleCreated);
         Assert.False(pages[2].IsHandleCreated);
@@ -411,9 +410,9 @@ public class TabControl_TabControlAccessibilityObjectTests
         tabControl.SelectedIndex = 1;
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.Equal(tabControl.SelectedTab.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(pages[1].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(pages[2].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(tabControl.SelectedTab.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(pages[1].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(pages[2].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.True(pages[0].IsHandleCreated);
         Assert.True(pages[1].IsHandleCreated);
         Assert.False(pages[2].IsHandleCreated);
@@ -430,15 +429,15 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.Equal(pages[0].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(pages[0].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
 
         tabControl.SelectedIndex = 1;
 
-        Assert.Equal(pages[1].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(pages[1].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
 
         tabControl.SelectedIndex = 2;
 
-        Assert.Equal(pages[2].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+        Assert.Equal(pages[2].AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
         Assert.True(pages[0].IsHandleCreated);
         Assert.True(pages[1].IsHandleCreated);
         Assert.True(pages[2].IsHandleCreated);
@@ -458,7 +457,7 @@ public class TabControl_TabControlAccessibilityObjectTests
         tabControl.SelectedIndex = selectedIndex;
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
-        IRawElementProviderSimple[] selectedAccessibleObjects = accessibleObject.GetSelection();
+        IRawElementProviderSimple.Interface[] selectedAccessibleObjects = accessibleObject.GetSelection();
 
         Assert.Equal(1, selectedAccessibleObjects.Length);
         Assert.Equal(pages[selectedIndex].TabAccessibilityObject, selectedAccessibleObjects[0]);
@@ -480,7 +479,7 @@ public class TabControl_TabControlAccessibilityObjectTests
         tabControl.SelectedIndex = selectedIndex;
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
-        IRawElementProviderSimple[] selectedAccessibleObjects = accessibleObject.GetSelection();
+        IRawElementProviderSimple.Interface[] selectedAccessibleObjects = accessibleObject.GetSelection();
 
         Assert.Equal(0, selectedAccessibleObjects.Length);
         Assert.False(pages[0].IsHandleCreated);
@@ -496,7 +495,7 @@ public class TabControl_TabControlAccessibilityObjectTests
         tabControl.CreateControl();
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
-        IRawElementProviderSimple[] selectedAccessibleObjects = accessibleObject.GetSelection();
+        IRawElementProviderSimple.Interface[] selectedAccessibleObjects = accessibleObject.GetSelection();
 
         Assert.Equal(0, selectedAccessibleObjects.Length);
         Assert.True(tabControl.IsHandleCreated);
@@ -600,9 +599,16 @@ public class TabControl_TabControlAccessibilityObjectTests
         using TabControl tabControl = new();
         tabControl.AccessibleDefaultActionDescription = accessibleDefaultActionDescription;
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
+        VARIANT actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId);
+        if (string.IsNullOrEmpty(accessibleDefaultActionDescription))
+        {
+            Assert.Equal(VARIANT.Empty, actual);
+        }
+        else
+        {
+            Assert.Equal(accessibleDefaultActionDescription, ((BSTR)actual).ToStringAndFree());
+        }
 
-        Assert.Equal(!string.IsNullOrEmpty(accessibleDefaultActionDescription) ? accessibleDefaultActionDescription : null,
-            accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
         Assert.False(tabControl.IsHandleCreated);
     }
 
@@ -672,7 +678,7 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.Equal((nint)tabControl.InternalHandle, (nint)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId));
+        Assert.Equal((int)(nint)tabControl.InternalHandle, (int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId));
         Assert.Equal(createControl, tabControl.IsHandleCreated);
     }
 
@@ -712,7 +718,7 @@ public class TabControl_TabControlAccessibilityObjectTests
 
         TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
-        Assert.Equal(expectedKeyboardShortcut, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AccessKeyPropertyId));
+        Assert.Equal(expectedKeyboardShortcut, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AccessKeyPropertyId)).ToStringAndFree());
         Assert.Equal(createControl, tabControl.IsHandleCreated);
     }
 
@@ -721,9 +727,9 @@ public class TabControl_TabControlAccessibilityObjectTests
     {
         using TabControl tabControl = new();
 
-        object actual = tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
+        using VARIANT actual = tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
 
-        Assert.Equal(tabControl.AccessibilityObject.RuntimeId, actual);
+        Assert.Equal(tabControl.AccessibilityObject.RuntimeId, actual.ToObject());
         Assert.False(tabControl.IsHandleCreated);
     }
 
@@ -737,7 +743,7 @@ public class TabControl_TabControlAccessibilityObjectTests
             Enabled = enabled
         };
 
-        object actual = tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId);
+        var actual = (bool)tabControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsEnabledPropertyId);
 
         Assert.Equal(tabControl.Enabled, actual);
         Assert.False(tabControl.IsHandleCreated);
@@ -746,7 +752,7 @@ public class TabControl_TabControlAccessibilityObjectTests
     [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "TabControl1")]
-    public void TabControlAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
+    public void TabControlAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, string expected)
     {
         using TabControl tabControl = new()
         {
@@ -754,7 +760,7 @@ public class TabControl_TabControlAccessibilityObjectTests
             AccessibleName = "TestName"
         };
 
-        object actual = tabControl.AccessibilityObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        string actual = ((BSTR)tabControl.AccessibilityObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID)).ToStringAndFree();
 
         Assert.Equal(expected, actual);
         Assert.False(tabControl.IsHandleCreated);
@@ -780,8 +786,8 @@ public class TabControl_TabControlAccessibilityObjectTests
     {
         using TabControl tabControl = new();
         TabControlAccessibleObject accessibleObject = (TabControlAccessibleObject)tabControl.AccessibilityObject;
-
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(tabControl.IsHandleCreated);
     }
 }

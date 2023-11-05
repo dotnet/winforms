@@ -48,10 +48,8 @@ public sealed unsafe class HtmlElementCollection : ICollection
         get
         {
             //do some bounds checking here...
-            if (index < 0 || index >= Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidBoundArgument, nameof(index), index, 0, Count - 1));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 
             if (NativeHtmlElementCollection is not null)
             {

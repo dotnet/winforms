@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using static System.Windows.Forms.PropertyGridInternal.PropertyDescriptorGridEntry;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
@@ -19,7 +20,7 @@ internal partial class PropertyGridView
                 _owningDropDownHolder = dropDownHolder;
             }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             {
                 if (!ExistsInAccessibleTree)
                 {
@@ -35,10 +36,10 @@ internal partial class PropertyGridView
 
                 return direction switch
                 {
-                    UiaCore.NavigateDirection.Parent => parent,
-                    UiaCore.NavigateDirection.NextSibling => parent.GetNextChild(this),
-                    UiaCore.NavigateDirection.PreviousSibling => parent.GetPreviousChild(this),
-                    UiaCore.NavigateDirection.FirstChild or UiaCore.NavigateDirection.LastChild
+                    NavigateDirection.NavigateDirection_Parent => parent,
+                    NavigateDirection.NavigateDirection_NextSibling => parent.GetNextChild(this),
+                    NavigateDirection.NavigateDirection_PreviousSibling => parent.GetPreviousChild(this),
+                    NavigateDirection.NavigateDirection_FirstChild or NavigateDirection.NavigateDirection_LastChild
                         when selectedEntry.Enumerable && _owningDropDownHolder.Component == gridView!.DropDownListBox
                         => gridView.DropDownListBoxAccessibleObject,
                     _ => base.FragmentNavigate(direction),

@@ -37,22 +37,8 @@ public static class Clipboard
         }
 
         ArgumentNullException.ThrowIfNull(data);
-
-        if (retryTimes < 0)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(retryTimes),
-                retryTimes,
-                string.Format(SR.InvalidLowBoundArgumentEx, nameof(retryTimes), retryTimes, 0));
-        }
-
-        if (retryDelay < 0)
-        {
-            throw new ArgumentOutOfRangeException(
-                nameof(retryDelay),
-                retryDelay,
-                string.Format(SR.InvalidLowBoundArgumentEx, nameof(retryDelay), retryDelay, 0));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(retryTimes);
+        ArgumentOutOfRangeException.ThrowIfNegative(retryDelay);
 
         IComDataObject dataObject = data as IComDataObject ?? new DataObject(data);
 

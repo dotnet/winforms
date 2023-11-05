@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.DataGridViewComboBoxEditingControl;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -46,7 +45,7 @@ public class DataGridViewComboBoxEditingControlAccessibleObjectTests
         using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
         // AccessibleRole is not set = Default
 
-        object actual = control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId, actual);
         Assert.False(control.IsHandleCreated);
@@ -74,7 +73,7 @@ public class DataGridViewComboBoxEditingControlAccessibleObjectTests
         using DataGridViewComboBoxEditingControl control = new DataGridViewComboBoxEditingControl();
         control.AccessibleRole = role;
 
-        object actual = control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -82,13 +81,13 @@ public class DataGridViewComboBoxEditingControlAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.NavigateDirection.NextSibling)]
-    [InlineData((int)UiaCore.NavigateDirection.PreviousSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_NextSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_PreviousSibling)]
     public void DataGridViewComboBoxEditingControlAccessibleObject_FragmentNavigate_SiblingsAreNull(int direction)
     {
         using DataGridViewComboBoxEditingControl control = new();
 
-        object actual = control.AccessibilityObject.FragmentNavigate((UiaCore.NavigateDirection)direction);
+        object actual = control.AccessibilityObject.FragmentNavigate((NavigateDirection)direction);
 
         Assert.Null(actual);
         Assert.False(control.IsHandleCreated);
@@ -100,8 +99,8 @@ public class DataGridViewComboBoxEditingControlAccessibleObjectTests
         using DataGridViewComboBoxEditingControl control = new();
         control.CreateControl();
 
-        object firstChild = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-        object lastChild = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+        object firstChild = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        object lastChild = control.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
         Assert.Equal(control.ChildEditAccessibleObject, firstChild);
         Assert.Equal(((DataGridViewComboBoxEditingControlAccessibleObject)control.AccessibilityObject).DropDownButtonUiaProvider, lastChild);
@@ -122,7 +121,7 @@ public class DataGridViewComboBoxEditingControlAccessibleObjectTests
         control.CurrentCell = control.Rows[0].Cells[0];
         control.BeginEdit(false);
 
-        object actual = control.EditingControlAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+        object actual = control.EditingControlAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         control.EndEdit();
 

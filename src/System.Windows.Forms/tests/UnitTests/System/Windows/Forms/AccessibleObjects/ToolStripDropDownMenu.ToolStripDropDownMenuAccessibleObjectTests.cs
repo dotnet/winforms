@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -36,14 +35,14 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
 
         AccessibleObject accessibleObject = item.DropDown.AccessibilityObject;
 
-        Assert.Equal(item.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(item.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Null(item.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(item.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Null(item.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(item.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         Assert.Equal(createControl, toolStrip.IsHandleCreated);
     }
@@ -64,14 +63,14 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
 
         AccessibleObject accessibleObject = item.DropDown.AccessibilityObject;
 
-        Assert.Equal(item.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(item.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Null(item.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(item.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Null(item.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(item.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.Equal(createControl, toolStrip.IsHandleCreated);
     }
 
@@ -123,44 +122,44 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
         ownerItem.DropDown.Show();
         AccessibleObject accessibleObject = ownerItem.DropDown.AccessibilityObject;
 
-        Assert.Equal(ownerItem.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(parentItem1.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(parentItem2.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(ownerItem.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(parentItem1.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(parentItem2.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(accessibleObject, ownerItem.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject, ownerItem.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
-        Assert.Equal(accessibleObject, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Equal(accessibleObject, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+        Assert.Equal(accessibleObject, ownerItem.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject, ownerItem.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Equal(accessibleObject, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(accessibleObject, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
         parentItem1.DropDown.Show();
         AccessibleObject accessibleObject1 = parentItem1.DropDown.AccessibilityObject;
 
-        Assert.Equal(parentItem1.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(childItem1.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(childItem2.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(parentItem1.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(childItem1.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(childItem2.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(accessibleObject1, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject1, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
-        Assert.Equal(accessibleObject1, childItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Equal(accessibleObject1, childItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+        Assert.Equal(accessibleObject1, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject1, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Equal(accessibleObject1, childItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(accessibleObject1, childItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
         parentItem2.DropDown.Show();
         AccessibleObject accessibleObject2 = parentItem2.DropDown.AccessibilityObject;
 
-        Assert.Equal(parentItem2.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(childItem3.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(childItem4.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(parentItem2.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(childItem3.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(childItem4.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(accessibleObject2, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject2, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
-        Assert.Equal(accessibleObject2, childItem3.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Equal(accessibleObject2, childItem4.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+        Assert.Equal(accessibleObject2, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject2, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Equal(accessibleObject2, childItem3.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(accessibleObject2, childItem4.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
         Assert.Equal(createControl, toolStrip.IsHandleCreated);
     }
@@ -212,44 +211,44 @@ public class ToolStripDropDownMenu_ToolStripDropDownMenuAccessibleObjectTests
         ownerItem.DropDown.Show();
         AccessibleObject accessibleObject = ownerItem.DropDown.AccessibilityObject;
 
-        Assert.Equal(ownerItem.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(parentItem1.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(parentItem2.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(ownerItem.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(parentItem1.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(parentItem2.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(accessibleObject, ownerItem.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject, ownerItem.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
-        Assert.Equal(accessibleObject, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Equal(accessibleObject, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+        Assert.Equal(accessibleObject, ownerItem.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject, ownerItem.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Equal(accessibleObject, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(accessibleObject, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
         parentItem1.DropDown.Show();
         AccessibleObject accessibleObject1 = parentItem1.DropDown.AccessibilityObject;
 
-        Assert.Equal(parentItem1.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(childItem1.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(childItem2.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(parentItem1.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(childItem1.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(childItem2.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(accessibleObject1, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject1, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
-        Assert.Equal(accessibleObject1, childItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Equal(accessibleObject1, childItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+        Assert.Equal(accessibleObject1, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject1, parentItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Equal(accessibleObject1, childItem1.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(accessibleObject1, childItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
         parentItem2.DropDown.Show();
         AccessibleObject accessibleObject2 = parentItem2.DropDown.AccessibilityObject;
 
-        Assert.Equal(parentItem2.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(childItem3.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(childItem4.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Equal(parentItem2.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(childItem3.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(childItem4.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
-        Assert.Equal(accessibleObject2, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Equal(accessibleObject2, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.LastChild));
-        Assert.Equal(accessibleObject2, childItem3.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
-        Assert.Equal(accessibleObject2, childItem4.AccessibilityObject.FragmentNavigate(NavigateDirection.Parent));
+        Assert.Equal(accessibleObject2, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(accessibleObject2, parentItem2.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Equal(accessibleObject2, childItem3.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(accessibleObject2, childItem4.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
         // Reset the parent to avoid errors when disposing.
         parentItem1.ParentInternal = null;

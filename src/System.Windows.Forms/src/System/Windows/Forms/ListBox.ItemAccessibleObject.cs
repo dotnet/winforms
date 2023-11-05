@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -31,7 +32,7 @@ public partial class ListBox
 
         internal override bool IsItemSelected => State.HasFlag(AccessibleStates.Selected);
 
-        internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer
+        internal override IRawElementProviderSimple.Interface ItemSelectionContainer
             => _owningAccessibleObject;
 
         public override AccessibleObject Parent => _owningAccessibleObject;
@@ -128,7 +129,7 @@ public partial class ListBox
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             int firstItemIndex = 0;
             int lastItemIndex = _owningListBox.Items.Count - 1;
@@ -136,16 +137,16 @@ public partial class ListBox
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _owningListBox.AccessibilityObject;
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     if (currentIndex > firstItemIndex && currentIndex <= lastItemIndex)
                     {
                         return _owningAccessibleObject.GetChild(currentIndex - 1);
                     }
 
                     return null;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     if (currentIndex >= firstItemIndex && currentIndex < lastItemIndex)
                     {
                         return _owningAccessibleObject.GetChild(currentIndex + 1);
@@ -163,14 +164,14 @@ public partial class ListBox
             return CurrentIndex + 1;
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
              => propertyID switch
              {
-                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId,
-                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => _owningListBox.Focused && _owningListBox.FocusedIndex == CurrentIndex,
-                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owningListBox.Enabled,
-                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
-                 UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _owningListBox.IsHandleCreated ? _owningListBox.Handle : IntPtr.Zero,
+                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ListItemControlTypeId,
+                 UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(_owningListBox.Focused && _owningListBox.FocusedIndex == CurrentIndex),
+                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)_owningListBox.Enabled,
+                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
+                 UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(_owningListBox.IsHandleCreated ? _owningListBox.Handle : 0),
                  _ => base.GetPropertyValue(propertyID)
              };
 

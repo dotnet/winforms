@@ -1,9 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Windows.Forms.Automation;
+using System.Drawing;
 using System.Windows.Forms.IntegrationTests.Common;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
@@ -56,9 +55,16 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
-        object actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        VARIANT actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        if (itemAccessibleObject.Name is null)
+        {
+            Assert.Equal(VARIANT.Empty, actual);
+        }
+        else
+        {
+            Assert.Equal(itemAccessibleObject.Name, ((BSTR)actual).ToStringAndFree());
+        }
 
-        Assert.Equal(itemAccessibleObject.Name, actual);
         Assert.False(listBox.IsHandleCreated);
     }
 
@@ -72,14 +78,14 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
-        object actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
+        using VARIANT actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
 
-        Assert.Equal(itemAccessibleObject.RuntimeId, actual);
+        Assert.Equal(itemAccessibleObject.RuntimeId, actual.ToObject());
         Assert.False(listBox.IsHandleCreated);
     }
 
     [WinFormsFact]
-    public void ListBoxItemAccessibleObject_GetPropertyValue_BoundingRectangle_ReturnsExpected()
+    public unsafe void ListBoxItemAccessibleObject_GetPropertyValue_BoundingRectangle_ReturnsExpected()
     {
         using ListBox listBox = new();
         listBox.Items.Add(item: "testItem");
@@ -88,9 +94,10 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
-        object actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
-        using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray(itemAccessibleObject.BoundingRectangle);
-        Assert.Equal(((VARIANT)rectArray).ToObject(), actual);
+        using VARIANT actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
+        double[] actualArray = (double[])actual.ToObject();
+        Rectangle actualRectangle = new((int)actualArray[0], (int)actualArray[1], (int)actualArray[2], (int)actualArray[3]);
+        Assert.Equal(itemAccessibleObject.BoundingRectangle, actualRectangle);
         Assert.False(listBox.IsHandleCreated);
     }
 
@@ -104,7 +111,7 @@ public class ListBox_ListBoxItemAccessibleObjectTests
 
         Assert.IsType<ListBox.ListBoxItemAccessibleObject>(itemAccessibleObject);
 
-        object actual = itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId);
+        string actual = ((BSTR)itemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_HelpTextPropertyId)).ToStringAndFree();
 
         Assert.Equal(itemAccessibleObject.Help ?? string.Empty, actual);
         Assert.False(listBox.IsHandleCreated);
@@ -148,8 +155,8 @@ public class ListBox_ListBoxItemAccessibleObjectTests
         listBox.Items.Add(item: "testItem");
         ListBox.ListBoxAccessibleObject listBoxAccessibleObject = new(listBox);
         ListBox.ListBoxItemAccessibleObject accessibleObject = (ListBox.ListBoxItemAccessibleObject)listBoxAccessibleObject.GetChild(0);
-
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
+        VARIANT result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(listBox.IsHandleCreated);
     }
 }

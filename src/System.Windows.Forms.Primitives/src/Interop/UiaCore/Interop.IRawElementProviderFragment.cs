@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Accessibility;
 
 internal static partial class Interop
 {
@@ -19,7 +20,7 @@ internal static partial class Interop
         [ComImport]
         [Guid("f7063da8-8359-439c-9297-bbc5299a7d87")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IRawElementProviderFragment : IRawElementProviderSimple
+        public interface IRawElementProviderFragment : IRawElementProviderSimple.Interface
         {
             /// <summary>
             ///  Returns the element in the specified <paramref name="direction"/>.

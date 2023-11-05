@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -41,11 +42,11 @@ public partial class MonthCalendar
         {
             Debug.Assert(OsVersion.IsWindows8OrGreater());
 
-            UiaCore.UiaDisconnectProvider(_calendarHeaderAccessibleObject);
+            PInvoke.UiaDisconnectProvider(_calendarHeaderAccessibleObject, skipOSCheck: true);
             _calendarHeaderAccessibleObject = null;
 
             _calendarBodyAccessibleObject?.DisconnectChildren();
-            UiaCore.UiaDisconnectProvider(_calendarBodyAccessibleObject);
+            PInvoke.UiaDisconnectProvider(_calendarBodyAccessibleObject, skipOSCheck: true);
 
             _calendarBodyAccessibleObject = null;
         }
@@ -64,7 +65,7 @@ public partial class MonthCalendar
                 ? _calendarIndex % _monthCalendarAccessibleObject.ColumnCount
                 : -1;
 
-        internal override UiaCore.IRawElementProviderSimple? ContainingGrid => _monthCalendarAccessibleObject;
+        internal override IRawElementProviderSimple.Interface? ContainingGrid => _monthCalendarAccessibleObject;
 
         internal SelectionRange? DateRange
         {
@@ -103,26 +104,26 @@ public partial class MonthCalendar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
-                UiaCore.NavigateDirection.NextSibling
+                NavigateDirection.NavigateDirection_NextSibling
                     => _monthCalendarAccessibleObject.CalendarsAccessibleObjects?.Find(this)?.Next?.Value
                     ?? (_monthCalendarAccessibleObject.ShowToday
                         ? (AccessibleObject)_monthCalendarAccessibleObject.TodayLinkAccessibleObject
                         : null),
-                UiaCore.NavigateDirection.PreviousSibling
+                NavigateDirection.NavigateDirection_PreviousSibling
                     => _calendarIndex == 0
                         ? _monthCalendarAccessibleObject.NextButtonAccessibleObject
                         : _monthCalendarAccessibleObject.CalendarsAccessibleObjects?.Find(this)?.Previous?.Value,
-                UiaCore.NavigateDirection.FirstChild => CalendarHeaderAccessibleObject,
-                UiaCore.NavigateDirection.LastChild => CalendarBodyAccessibleObject,
+                NavigateDirection.NavigateDirection_FirstChild => CalendarHeaderAccessibleObject,
+                NavigateDirection.NavigateDirection_LastChild => CalendarBodyAccessibleObject,
                 _ => base.FragmentNavigate(direction),
             };
 
         internal override int GetChildId() => ChildIdIncrement + _calendarIndex;
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems() => null;
+        internal override IRawElementProviderSimple.Interface[]? GetColumnHeaderItems() => null;
 
         internal MonthCalendarChildAccessibleObject GetChildFromPoint(MCHITTESTINFO hitTestInfo)
         {
@@ -177,15 +178,15 @@ public partial class MonthCalendar
             return cellAccessibleObject;
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => IsEnabled,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)IsEnabled,
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaderItems() => null;
+        internal override IRawElementProviderSimple.Interface[]? GetRowHeaderItems() => null;
 
         private protected override bool HasKeyboardFocus
             => _monthCalendarAccessibleObject.Focused

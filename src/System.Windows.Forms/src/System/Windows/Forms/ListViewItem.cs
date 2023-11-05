@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.Serialization;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -1031,7 +1030,7 @@ public partial class ListViewItem : ICloneable, ISerializable
                 itemAccessibleObject.ReleaseChildUiaProviders();
             }
 
-            UiaCore.UiaDisconnectProvider(_accessibilityObject);
+            PInvoke.UiaDisconnectProvider(_accessibilityObject, skipOSCheck: true);
         }
 
         _accessibilityObject = null;

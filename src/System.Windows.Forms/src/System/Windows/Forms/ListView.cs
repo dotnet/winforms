@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
 using static System.Windows.Forms.ListViewGroup;
@@ -3242,10 +3243,8 @@ public partial class ListView : Control
     /// </summary>
     public void EnsureVisible(int index)
     {
-        if (index < 0 || index >= Items.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Items.Count);
 
         if (IsHandleCreated)
         {
@@ -3271,10 +3270,8 @@ public partial class ListView : Control
 
     public ListViewItem? FindItemWithText(string text, bool includeSubItemsInSearch, int startIndex, bool isPrefixSearch)
     {
-        if (startIndex < 0 || startIndex >= Items.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(startIndex), startIndex, string.Format(SR.InvalidArgument, nameof(startIndex), startIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(startIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(startIndex, Items.Count);
 
         return FindItem(true, text, isPrefixSearch, new Point(0, 0), SearchDirectionHint.Down, startIndex, includeSubItemsInSearch);
     }
@@ -3634,10 +3631,8 @@ public partial class ListView : Control
 
     internal LIST_VIEW_ITEM_STATE_FLAGS GetItemState(int index, LIST_VIEW_ITEM_STATE_FLAGS mask)
     {
-        if (index < 0 || (VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= _itemCount))
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, VirtualMode ? VirtualListSize : _itemCount);
 
         Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
         return (LIST_VIEW_ITEM_STATE_FLAGS)(uint)PInvoke.SendMessage(this, PInvoke.LVM_GETITEMSTATE, (WPARAM)index, (LPARAM)(uint)mask);
@@ -3653,10 +3648,8 @@ public partial class ListView : Control
     /// </summary>
     public Rectangle GetItemRect(int index, ItemBoundsPortion portion)
     {
-        if (index < 0 || index >= Items.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Items.Count);
 
         // Valid values are 0x0 to 0x3
         SourceGenerated.EnumValidator.Validate(portion, nameof(portion));
@@ -3726,18 +3719,18 @@ public partial class ListView : Control
             return Rectangle.Empty;
         }
 
-        if (itemIndex < 0 || itemIndex >= Items.Count)
+        ArgumentOutOfRangeException.ThrowIfNegative(itemIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(itemIndex, Items.Count);
+        ArgumentOutOfRangeException.ThrowIfNegative(subItemIndex);
+
+        if (View == View.Tile)
         {
-            throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(subItemIndex, Items[itemIndex].SubItems.Count);
         }
 
-        int subItemCount = Items[itemIndex].SubItems.Count;
-
-        if (subItemIndex < 0
-            || (View == View.Tile && subItemIndex >= subItemCount)
-            || (View == View.Details && subItemIndex >= Columns.Count))
+        if (View == View.Details)
         {
-            throw new ArgumentOutOfRangeException(nameof(subItemIndex), subItemIndex, string.Format(SR.InvalidArgument, nameof(subItemIndex), subItemIndex));
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(subItemIndex, Columns.Count);
         }
 
         //valid values are 0x0 to 0x3
@@ -4847,9 +4840,9 @@ public partial class ListView : Control
         if (IsAccessibilityObjectCreated)
         {
             ListViewItem item = e.Item;
-            UiaCore.ToggleState oldValue = item.Checked ? UiaCore.ToggleState.Off : UiaCore.ToggleState.On;
-            UiaCore.ToggleState newValue = item.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
-            item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId, oldValue, newValue);
+            ToggleState oldValue = item.Checked ? ToggleState.ToggleState_Off : ToggleState.ToggleState_On;
+            ToggleState newValue = item.Checked ? ToggleState.ToggleState_On : ToggleState.ToggleState_Off;
+            item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId, (VARIANT)(int)oldValue, (VARIANT)(int)newValue);
         }
     }
 
@@ -5066,30 +5059,12 @@ public partial class ListView : Control
     [EditorBrowsable(EditorBrowsableState.Advanced)]
     public void RedrawItems(int startIndex, int endIndex, bool invalidateOnly)
     {
-        if (VirtualMode)
-        {
-            if (startIndex < 0 || startIndex >= VirtualListSize)
-            {
-                throw new ArgumentOutOfRangeException(nameof(startIndex), startIndex, string.Format(SR.InvalidArgument, nameof(startIndex), startIndex));
-            }
+        ArgumentOutOfRangeException.ThrowIfNegative(startIndex);
+        ArgumentOutOfRangeException.ThrowIfNegative(endIndex);
 
-            if (endIndex < 0 || endIndex >= VirtualListSize)
-            {
-                throw new ArgumentOutOfRangeException(nameof(endIndex), endIndex, string.Format(SR.InvalidArgument, nameof(endIndex), endIndex));
-            }
-        }
-        else
-        {
-            if (startIndex < 0 || startIndex >= Items.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(startIndex), startIndex, string.Format(SR.InvalidArgument, nameof(startIndex), startIndex));
-            }
-
-            if (endIndex < 0 || endIndex >= Items.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(endIndex), endIndex, string.Format(SR.InvalidArgument, nameof(endIndex), endIndex));
-            }
-        }
+        int maxSize = VirtualMode ? VirtualListSize : Items.Count;
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(startIndex, maxSize);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(endIndex, maxSize);
 
         if (startIndex > endIndex)
         {
@@ -5346,18 +5321,22 @@ public partial class ListView : Control
         InvalidateColumnHeaders();
     }
 
+    [MemberNotNull(nameof(_columnHeaders))]
+    private ColumnHeader GetColumnHeader(int index)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _columnHeaders?.Length ?? 0);
+
+        return _columnHeaders![index];
+    }
+
     /// <summary>
     ///  Setting width is a special case 'cuz LVM_SETCOLUMNWIDTH accepts more values
     ///  for width than LVM_SETCOLUMN does.
     /// </summary>
     internal void SetColumnWidth(int columnIndex, ColumnHeaderAutoResizeStyle headerAutoResize)
     {
-        if ((columnIndex < 0) ||
-            (columnIndex >= 0 && _columnHeaders is null) ||
-            (columnIndex >= _columnHeaders!.Length))
-        {
-            throw new ArgumentOutOfRangeException(nameof(columnIndex), columnIndex, string.Format(SR.InvalidArgument, nameof(columnIndex), columnIndex));
-        }
+        ColumnHeader columnHeader = GetColumnHeader(columnIndex);
 
         //valid values are 0x0 to 0x2
         SourceGenerated.EnumValidator.Validate(headerAutoResize, nameof(headerAutoResize));
@@ -5367,7 +5346,7 @@ public partial class ListView : Control
 
         if (headerAutoResize == ColumnHeaderAutoResizeStyle.None)
         {
-            width = _columnHeaders[columnIndex].WidthInternal;
+            width = columnHeader.WidthInternal;
 
             // If the width maps to a LVCSW_ const, then native control will autoresize.
             // We may need to compensate for that.
@@ -5403,7 +5382,7 @@ public partial class ListView : Control
         {
             if (compensate != 0)
             {
-                int newWidth = _columnHeaders[columnIndex].Width + compensate;
+                int newWidth = columnHeader.Width + compensate;
                 PInvoke.SendMessage(
                     this,
                     PInvoke.LVM_SETCOLUMNWIDTH,
@@ -5482,10 +5461,8 @@ public partial class ListView : Control
 
     internal void SetItemImage(int itemIndex, int imageIndex)
     {
-        if (itemIndex < 0 || (VirtualMode && itemIndex >= VirtualListSize) || (!VirtualMode && itemIndex >= _itemCount))
-        {
-            throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(itemIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(itemIndex, VirtualMode ? VirtualListSize : _itemCount);
 
         if (!IsHandleCreated)
         {
@@ -5504,10 +5481,8 @@ public partial class ListView : Control
 
     internal void SetItemIndentCount(int index, int indentCount)
     {
-        if (index < 0 || (VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= _itemCount))
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, VirtualMode ? VirtualListSize : _itemCount);
 
         if (!IsHandleCreated)
         {
@@ -5531,10 +5506,8 @@ public partial class ListView : Control
             return;
         }
 
-        if (index < 0 || index >= _itemCount)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, _itemCount);
 
         Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
@@ -5544,10 +5517,8 @@ public partial class ListView : Control
 
     internal void SetItemState(int index, LIST_VIEW_ITEM_STATE_FLAGS state, LIST_VIEW_ITEM_STATE_FLAGS mask)
     {
-        if (index < -1 || (VirtualMode && index >= VirtualListSize) || (!VirtualMode && index >= _itemCount))
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(index, -1);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, VirtualMode ? VirtualListSize : _itemCount);
 
         if (!IsHandleCreated)
         {
@@ -6048,7 +6019,7 @@ public partial class ListView : Control
     {
         NMHDR* nmhdr = (NMHDR*)(nint)m.LParamInternal;
 
-        if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && UiaCore.UiaClientsAreListening())
+        if (nmhdr->code == PInvoke.NM_CUSTOMDRAW && PInvoke.UiaClientsAreListening())
         {
             // Checking that mouse buttons are not pressed is necessary to avoid
             // multiple annotation of the column header when resizing the column with the mouse
@@ -6780,20 +6751,20 @@ public partial class ListView : Control
                     {
                         AccessibleObject accessibleObject = SelectedItems[0].AccessibilityObject;
                         if (lvkd->wVKey == (short)Keys.Down
-                            && accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling) is null)
+                            && accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling) is null)
                         {
-                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
                             if (groupAccObj is not null)
                             {
-                                ListViewGroupAccessibleObject? nextGroupAccObj = (ListViewGroupAccessibleObject?)groupAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+                                ListViewGroupAccessibleObject? nextGroupAccObj = (ListViewGroupAccessibleObject?)groupAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
                                 nextGroupAccObj?.SetFocus();
                             }
                         }
 
                         if (lvkd->wVKey == (short)Keys.Up
-                        && accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling) is null)
+                        && accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling) is null)
                         {
-                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+                            ListViewGroupAccessibleObject? groupAccObj = (ListViewGroupAccessibleObject?)accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
                             groupAccObj?.SetFocus();
                         }
                     }

@@ -536,10 +536,8 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
     /// </summary>
     public void Draw(Graphics g, int x, int y, int width, int height, int index)
     {
-        if (index < 0 || index >= Images.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Images.Count);
 
         HDC dc = (HDC)g.GetHdc();
         try
@@ -615,10 +613,8 @@ public sealed partial class ImageList : Component, IHandle<HIMAGELIST>
 
     private Bitmap GetBitmap(int index)
     {
-        if (index < 0 || index >= Images.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Images.Count);
 
         Bitmap? result = null;
 

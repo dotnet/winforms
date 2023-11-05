@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using UiaCore = Interop.UiaCore;
 
@@ -22,33 +23,33 @@ internal unsafe class LabelEditAccessibleObject : AccessibleObject
         _textProvider = new(owningControl, labelEdit, this);
     }
 
-    internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+    internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         => direction switch
         {
-            UiaCore.NavigateDirection.Parent => Parent,
+            NavigateDirection.NavigateDirection_Parent => Parent,
             _ => base.FragmentNavigate(direction)
         };
 
-    internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+    internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
         => propertyID switch
         {
-            UIA_PROPERTY_ID.UIA_ProcessIdPropertyId => Environment.ProcessId,
-            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_EditControlTypeId,
-            UIA_PROPERTY_ID.UIA_AccessKeyPropertyId => string.Empty,
-            UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => true,
-            UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => State.HasFlag(AccessibleStates.Focusable),
-            UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => true,
-            UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _labelEdit.TryGetTarget(out var target) ? (nint)target.HWND : 0,
+            UIA_PROPERTY_ID.UIA_ProcessIdPropertyId => (VARIANT)Environment.ProcessId,
+            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_EditControlTypeId,
+            UIA_PROPERTY_ID.UIA_AccessKeyPropertyId => (VARIANT)string.Empty,
+            UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => VARIANT.True,
+            UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
+            UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => VARIANT.True,
+            UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(_labelEdit.TryGetTarget(out var target) ? target.HWND : 0),
             _ => base.GetPropertyValue(propertyID),
         };
 
-    internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
+    internal override IRawElementProviderSimple* HostRawElementProvider
     {
         get
         {
             if (_labelEdit.TryGetTarget(out var target))
             {
-                UiaCore.UiaHostProviderFromHwnd(target.HWND, out UiaCore.IRawElementProviderSimple provider);
+                PInvoke.UiaHostProviderFromHwnd(target.HWND, out IRawElementProviderSimple* provider);
                 return provider;
             }
 

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -30,11 +31,11 @@ public partial class DataGridViewTextBoxEditingControl
 
         public override string Name => this.GetOwnerAccessibleName(SR.DataGridView_AccEditingControlAccName);
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     if (this.TryGetOwnerAs(out Control? owner) && owner is IDataGridViewEditingControl editingControl
                         && editingControl.EditingControlDataGridView?.EditingControl == owner
                         && owner.ToolStripControlHost is null)
@@ -53,13 +54,13 @@ public partial class DataGridViewTextBoxEditingControl
                 ? owner.EditingControlDataGridView?.AccessibilityObject
                 : null;
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
                 // If we don't set a default role for the accessible object it will be retrieved from Windows.
                 // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId when this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                    => UIA_CONTROLTYPE_ID.UIA_EditControlTypeId,
+                    => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_EditControlTypeId,
                 _ => base.GetPropertyValue(propertyID)
             };
 

@@ -129,10 +129,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         {
             get
             {
-                if (index < 0 || index >= InnerArray.Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, InnerArray.Count);
 
                 return InnerArray[index];
             }
@@ -140,10 +138,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             {
                 _owner.CheckNoDataSource();
 
-                if (index < 0 || index >= InnerArray.Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, InnerArray.Count);
 
                 InnerArray[index] = value.OrThrowIfNull();
                 _owner.OnItemsCollectionChanged();
@@ -200,11 +196,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
             _owner.CheckNoDataSource();
 
             ArgumentNullException.ThrowIfNull(item);
-
-            if (index < 0 || index > InnerArray.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), nameof(index)));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThan(index, InnerArray.Count);
 
             // If the combo box is sorted, then just treat this like an add
             // because we are going to twiddle the index anyway.
@@ -240,10 +233,8 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         {
             _owner.CheckNoDataSource();
 
-            if (index < 0 || index >= InnerArray.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, InnerArray.Count);
 
             InnerArray.RemoveAt(index);
             _owner.OnItemsCollectionChanged();

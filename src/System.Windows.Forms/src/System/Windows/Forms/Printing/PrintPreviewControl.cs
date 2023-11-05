@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -893,7 +894,7 @@ public partial class PrintPreviewControl : Control
             IsAccessibilityObjectCreated &&
             AccessibilityObject is PrintPreviewControlAccessibleObject ao)
         {
-            ao.RaiseStructureChangedEvent(Interop.UiaCore.StructureChangeType.ChildrenInvalidated, Array.Empty<int>());
+            ao.RaiseStructureChangedEvent(StructureChangeType.StructureChangeType_ChildrenInvalidated, []);
         }
 
         (bool horizontal, bool vertical) IsScrollNeeded(Size displaySize)

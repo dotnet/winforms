@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -89,7 +90,7 @@ public class Splitter_SplitterAccessibleObjectTests
 
     [WinFormsTheory]
     [InlineData((int)UIA_PROPERTY_ID.UIA_NamePropertyId, "TestName")]
-    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)] // If AccessibleRole is Default
+    [InlineData((int)UIA_PROPERTY_ID.UIA_ControlTypePropertyId, (int)UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId)] // If AccessibleRole is Default
     [InlineData((int)UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId, true)]
     [InlineData((int)UIA_PROPERTY_ID.UIA_AutomationIdPropertyId, "Splitter1")]
     public void SplitterAccessibleObject_GetPropertyValue_Invoke_ReturnsExpected(int propertyID, object expected)
@@ -102,9 +103,9 @@ public class Splitter_SplitterAccessibleObjectTests
 
         Assert.False(splitter.IsHandleCreated);
         var splitterAccessibleObject = new Splitter.SplitterAccessibleObject(splitter);
-        object value = splitterAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
+        using VARIANT value = splitterAccessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyID);
 
-        Assert.Equal(expected, value);
+        Assert.Equal(expected, value.ToObject());
         Assert.False(splitter.IsHandleCreated);
     }
 
@@ -144,7 +145,7 @@ public class Splitter_SplitterAccessibleObjectTests
         using Splitter splitter = new Splitter();
         splitter.AccessibleRole = role;
 
-        object actual = splitter.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)splitter.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);

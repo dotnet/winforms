@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -34,10 +34,10 @@ public abstract partial class UpDownBase
             }
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(
-                UiaCore.NavigateDirection direction) => direction switch
+                NavigateDirection direction) => direction switch
                 {
-                    UiaCore.NavigateDirection.FirstChild => GetChild(0),
-                    UiaCore.NavigateDirection.LastChild => GetChild(1),
+                    NavigateDirection.NavigateDirection_FirstChild => GetChild(0),
+                    NavigateDirection.NavigateDirection_LastChild => GetChild(1),
                     _ => base.FragmentNavigate(direction),
                 };
 
@@ -73,16 +73,16 @@ public abstract partial class UpDownBase
                 return null;
             }
 
-            internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
+            internal override unsafe IRawElementProviderSimple* HostRawElementProvider
             {
                 get
                 {
-                    if (HandleInternal == IntPtr.Zero)
+                    if (HandleInternal.IsNull)
                     {
                         return null;
                     }
 
-                    UiaCore.UiaHostProviderFromHwnd(new HandleRef(this, HandleInternal), out UiaCore.IRawElementProviderSimple provider);
+                    PInvoke.UiaHostProviderFromHwnd(new HandleRef<HWND>(this, HandleInternal), out IRawElementProviderSimple* provider);
                     return provider;
                 }
             }
@@ -103,10 +103,10 @@ public abstract partial class UpDownBase
 
             internal void ReleaseChildUiaProviders()
             {
-                UiaCore.UiaDisconnectProvider(_upButton);
+                PInvoke.UiaDisconnectProvider(_upButton, skipOSCheck: true);
                 _upButton = null;
 
-                UiaCore.UiaDisconnectProvider(_downButton);
+                PInvoke.UiaDisconnectProvider(_downButton, skipOSCheck: true);
                 _downButton = null;
             }
 

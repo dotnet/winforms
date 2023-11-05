@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Runtime.Serialization;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -422,7 +421,7 @@ public sealed partial class ListViewGroup : ISerializable
     {
         if (OsVersion.IsWindows8OrGreater() && _accessibilityObject is ListViewGroupAccessibleObject accessibleObject)
         {
-            UiaCore.UiaDisconnectProvider(accessibleObject);
+            PInvoke.UiaDisconnectProvider(accessibleObject, skipOSCheck: true);
         }
 
         _accessibilityObject = null;

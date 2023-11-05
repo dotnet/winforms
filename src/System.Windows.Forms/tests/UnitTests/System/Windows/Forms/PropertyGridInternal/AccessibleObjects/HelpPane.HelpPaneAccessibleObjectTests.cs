@@ -27,7 +27,7 @@ public class HelpPane_HelpPaneAccessibleObjectTests
         using HelpPane helpPane = new HelpPane(propertyGrid);
         // AccessibleRole is not set = Default
 
-        object actual = helpPane.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)helpPane.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_PaneControlTypeId, actual);
         Assert.False(propertyGrid.IsHandleCreated);
