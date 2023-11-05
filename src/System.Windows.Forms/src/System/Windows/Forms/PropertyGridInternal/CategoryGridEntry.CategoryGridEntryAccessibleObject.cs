@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -72,7 +73,7 @@ internal partial class CategoryGridEntry
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent
                 || !this.TryGetOwnerAs(out CategoryGridEntry? owner))
@@ -82,21 +83,21 @@ internal partial class CategoryGridEntry
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => Parent,
-                UiaCore.NavigateDirection.NextSibling => parent.GetNextCategory(owner),
-                UiaCore.NavigateDirection.PreviousSibling => parent.GetPreviousCategory(owner),
-                UiaCore.NavigateDirection.FirstChild => parent.GetFirstChildProperty(owner),
-                UiaCore.NavigateDirection.LastChild => parent.GetLastChildProperty(owner),
+                NavigateDirection.NavigateDirection_Parent => Parent,
+                NavigateDirection.NavigateDirection_NextSibling => parent.GetNextCategory(owner),
+                NavigateDirection.NavigateDirection_PreviousSibling => parent.GetPreviousCategory(owner),
+                NavigateDirection.NavigateDirection_FirstChild => parent.GetFirstChildProperty(owner),
+                NavigateDirection.NavigateDirection_LastChild => parent.GetLastChildProperty(owner),
                 _ => base.FragmentNavigate(direction),
             };
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
         {
             // To announce expanded collapsed state control type should be appropriate:
             // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
-            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
-            UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId => SR.CategoryPropertyGridLocalizedControlType,
+            UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TreeItemControlTypeId,
+            UIA_PROPERTY_ID.UIA_LocalizedControlTypePropertyId => (VARIANT)SR.CategoryPropertyGridLocalizedControlType,
             _ => base.GetPropertyValue(propertyID),
         };
 

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -44,15 +45,15 @@ public partial class ErrorProvider
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
             {
                 switch (direction)
                 {
-                    case UiaCore.NavigateDirection.Parent:
+                    case NavigateDirection.NavigateDirection_Parent:
                         return Parent;
-                    case UiaCore.NavigateDirection.NextSibling:
+                    case NavigateDirection.NavigateDirection_NextSibling:
                         return GetNextSibling();
-                    case UiaCore.NavigateDirection.PreviousSibling:
+                    case NavigateDirection.NavigateDirection_PreviousSibling:
                         return GetPreviousSibling();
                     default:
                         return base.FragmentNavigate(direction);
@@ -92,16 +93,13 @@ public partial class ErrorProvider
                 return _window?.ControlItems[currentIndex - 1].AccessibilityObject;
             }
 
-            /// <summary>
-            ///  Gets the accessible property value.
-            /// </summary>
-            /// <param name="propertyID">The accessible property ID.</param>
-            /// <returns>The accessible property value.</returns>
-            internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+            internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
                 propertyID switch
                 {
-                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId,
-                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _window?.Handle,
+                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId,
+                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _window?.Handle is { } handle
+                        ? UIAHelper.WindowHandleToVariant(handle)
+                        : VARIANT.Empty,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

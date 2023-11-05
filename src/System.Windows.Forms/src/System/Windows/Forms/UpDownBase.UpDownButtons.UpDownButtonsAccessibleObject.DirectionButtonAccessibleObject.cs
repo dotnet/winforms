@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -61,19 +62,19 @@ public abstract partial class UpDownBase
                 }
 
                 internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(
-                    UiaCore.NavigateDirection direction) => direction switch
+                    NavigateDirection direction) => direction switch
                     {
-                        UiaCore.NavigateDirection.Parent => Parent,
-                        UiaCore.NavigateDirection.NextSibling => _up ? Parent.GetChild(1) : null,
-                        UiaCore.NavigateDirection.PreviousSibling => _up ? null : Parent.GetChild(0),
+                        NavigateDirection.NavigateDirection_Parent => Parent,
+                        NavigateDirection.NavigateDirection_NextSibling => _up ? Parent.GetChild(1) : null,
+                        NavigateDirection.NavigateDirection_PreviousSibling => _up ? null : Parent.GetChild(0),
                         _ => base.FragmentNavigate(direction),
                     };
 
                 internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => Parent;
 
-                internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
+                internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) => propertyID switch
                 {
-                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
+                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

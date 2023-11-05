@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -126,7 +127,7 @@ public partial class TrackBar
             return element ?? base.ElementProviderFromPoint(x, y);
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out TrackBar? _))
             {
@@ -135,24 +136,24 @@ public partial class TrackBar
 
             return direction switch
             {
-                UiaCore.NavigateDirection.FirstChild => GetChild(0),
-                UiaCore.NavigateDirection.LastChild => (LastButtonAccessibleObject?.IsDisplayed ?? false)
+                NavigateDirection.NavigateDirection_FirstChild => GetChild(0),
+                NavigateDirection.NavigateDirection_LastChild => (LastButtonAccessibleObject?.IsDisplayed ?? false)
                     ? LastButtonAccessibleObject
                     : ThumbAccessibleObject,
                 _ => base.FragmentNavigate(direction)
             };
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId when this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                    => UIA_CONTROLTYPE_ID.UIA_SliderControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out TrackBar? owner) && owner.Focused,
+                    => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_SliderControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(this.TryGetOwnerAs(out TrackBar? owner) && owner.Focused),
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId
                     // This is necessary for compatibility with MSAA proxy:
                     // IsKeyboardFocusable = true regardless the control is enabled/disabled.
-                    => true,
+                    => VARIANT.True,
                 _ => base.GetPropertyValue(propertyID)
             };
 

@@ -84,25 +84,25 @@ public class PrintPreviewControl_PrintPreviewControlAccessibilityObjectTests
         AccessibleObject verticalScrollBarAO = control.VerticalScrollBar.AccessibilityObject;
         AccessibleObject horizontalScrollBarAO = control.HorizontalScrollBar.AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
 
         control.MakeOnlyVerticalScrollBarVisible();
-        Assert.Equal(verticalScrollBarAO, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(verticalScrollBarAO, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(verticalScrollBarAO, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(verticalScrollBarAO, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         control.MakeOnlyHorizontalScrollBarVisible();
-        Assert.Equal(horizontalScrollBarAO, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(horizontalScrollBarAO, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(horizontalScrollBarAO, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(horizontalScrollBarAO, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         control.MakeBothScrollBarsVisible();
-        Assert.Equal(verticalScrollBarAO, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Equal(horizontalScrollBarAO, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(verticalScrollBarAO, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Equal(horizontalScrollBarAO, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         control.MakeNoScrollBarsVisible();
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
     }
 
     [WinFormsFact]
@@ -114,31 +114,31 @@ public class PrintPreviewControl_PrintPreviewControlAccessibilityObjectTests
         AccessibleObject verticalScrollBarAO = control.VerticalScrollBar.AccessibilityObject;
         AccessibleObject horizontalScrollBarAO = control.HorizontalScrollBar.AccessibilityObject;
 
-        Assert.Null(verticalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(verticalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(horizontalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(horizontalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(verticalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(verticalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(horizontalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(horizontalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         control.MakeOnlyVerticalScrollBarVisible();
-        Assert.Null(verticalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(verticalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(horizontalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(horizontalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(verticalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(verticalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(horizontalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(horizontalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         control.MakeOnlyHorizontalScrollBarVisible();
-        Assert.Null(verticalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(verticalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(horizontalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(horizontalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(verticalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(verticalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(horizontalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(horizontalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         control.MakeBothScrollBarsVisible();
-        Assert.Equal(horizontalScrollBarAO, verticalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(verticalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(horizontalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(verticalScrollBarAO, horizontalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Equal(horizontalScrollBarAO, verticalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(verticalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(horizontalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(verticalScrollBarAO, horizontalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
-        Assert.Equal(accessibleObject, verticalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
-        Assert.Equal(accessibleObject, horizontalScrollBarAO.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
+        Assert.Equal(accessibleObject, verticalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(accessibleObject, horizontalScrollBarAO.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
     }
 
     [WinFormsFact]

@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -86,7 +87,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         };
 
         AccessibleObject accessibleObject = comboBox.AccessibilityObject;
-        UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+        UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
 
         Assert.Null(firstChild);
         Assert.False(comboBox.IsHandleCreated);
@@ -110,14 +111,14 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         const string name = "Test text";
         using ComboBox comboBox = new();
 
-        Assert.Null(comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
-        Assert.Null(comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
+        Assert.Equal(VARIANT.Empty, comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        Assert.Equal(VARIANT.Empty, comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
 
         comboBox.AccessibleName = name;
         comboBox.CreateControl(false);
 
-        Assert.Equal(name, comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
-        Assert.Equal(name, comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId));
+        Assert.Equal(name, ((BSTR)comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree());
+        Assert.Equal(name, ((BSTR)comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleNamePropertyId)).ToStringAndFree());
         Assert.True(comboBox.IsHandleCreated);
     }
 
@@ -155,7 +156,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         }
 
         comboBox.DroppedDown = droppedDown;
-        AccessibleObject firstChild = comboBox.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild) as AccessibleObject;
+        AccessibleObject firstChild = comboBox.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild) as AccessibleObject;
 
         Assert.NotNull(firstChild);
         Assert.Equal(childListDisplayed, firstChild == comboBox.ChildListAccessibleObject);
@@ -191,7 +192,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         }
 
         comboBox.DroppedDown = droppedDown;
-        AccessibleObject lastChild = comboBox.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild) as AccessibleObject;
+        AccessibleObject lastChild = comboBox.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild) as AccessibleObject;
         AccessibleObject expectedLastChild = comboBoxStyle == ComboBoxStyle.Simple
             ? comboBox.ChildEditAccessibleObject
             : GetComboBoxAccessibleObject(comboBox).DropDownButtonUiaProvider;
@@ -213,7 +214,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         };
 
         AccessibleObject accessibleObject = comboBox.AccessibilityObject;
-        UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+        UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
         Assert.Null(lastChild);
         Assert.False(comboBox.IsHandleCreated);
@@ -230,9 +231,9 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         using ComboBox control = new ComboBox();
         // AccessibleRole is not set = Default
 
-        object actual = control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = control.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId, actual);
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(control.IsHandleCreated);
     }
 
@@ -258,10 +259,10 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         using ComboBox comboBox = new ComboBox();
         comboBox.AccessibleRole = role;
 
-        object actual = comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        VARIANT actual = comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
-        Assert.Equal(expected, actual);
+        Assert.Equal(expected, (UIA_CONTROLTYPE_ID)(int)actual);
         Assert.False(comboBox.IsHandleCreated);
     }
 
@@ -270,10 +271,10 @@ public class ComboBox_ComboBoxAccessibleObjectTests
     {
         using ComboBox comboBox = new();
         comboBox.CreateControl(false);
-        object actual = comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId);
+        VARIANT actual = comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId);
 
         Assert.True(comboBox.IsHandleCreated);
-        Assert.Equal((nint)comboBox.InternalHandle, actual);
+        Assert.Equal((int)(nint)comboBox.InternalHandle, (int)actual);
     }
 
     [WinFormsTheory]
@@ -297,8 +298,9 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         using ComboBox comboBox = new();
         comboBox.CreateControl(false);
         ComboBox.ComboBoxAccessibleObject accessibleObject = (ComboBox.ComboBoxAccessibleObject)comboBox.AccessibilityObject;
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
+        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.True(comboBox.IsHandleCreated);
     }
 
@@ -358,7 +360,7 @@ public class ComboBox_ComboBoxAccessibleObjectTests
         comboBox.CreateControl();
         comboBox.DroppedDown = droppedDown;
 
-        Assert.Equal(expectedAction, comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(expectedAction, ((BSTR)comboBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
         Assert.True(comboBox.IsHandleCreated);
     }
 

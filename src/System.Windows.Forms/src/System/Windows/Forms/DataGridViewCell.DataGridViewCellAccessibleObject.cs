@@ -3,6 +3,8 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -623,7 +625,7 @@ public abstract partial class DataGridViewCell
         internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
             => _owner?.DataGridView?.AccessibilityObject;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (_owner is null)
             {
@@ -637,17 +639,17 @@ public abstract partial class DataGridViewCell
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return _owner.OwningRow.AccessibilityObject;
 
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     return NavigateForward(wrapAround: false);
 
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return NavigateBackward(wrapAround: false);
 
-                case UiaCore.NavigateDirection.FirstChild:
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     if (_owner.DataGridView.CurrentCell == _owner &&
                         _owner.DataGridView.IsCurrentCellInEditMode &&
                         _owner.DataGridView.EditingControl is not null)
@@ -668,22 +670,23 @@ public abstract partial class DataGridViewCell
 
         #region IRawElementProviderSimple Implementation
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override unsafe VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId,
-                UIA_PROPERTY_ID.UIA_GridItemContainingGridPropertyId => _owner?.DataGridView?.AccessibilityObject,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused, // Announce the cell when focusing.
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _owner?.DataGridView?.Enabled ?? false,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_DataItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_GridItemContainingGridPropertyId
+                    => (VARIANT)ComHelpers.GetComPointer<IUnknown>(_owner?.DataGridView?.AccessibilityObject),
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focused), // Announce the cell when focusing.
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(_owner?.DataGridView?.Enabled ?? false),
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focusable),
                 _ => base.GetPropertyValue(propertyID),
             };
 
         internal override bool IsPatternSupported(UIA_PATTERN_ID patternId)
         {
-            if (patternId == UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId ||
-                patternId == UIA_PATTERN_ID.UIA_InvokePatternId ||
-                patternId == UIA_PATTERN_ID.UIA_ValuePatternId)
+            if (patternId is UIA_PATTERN_ID.UIA_LegacyIAccessiblePatternId or
+                UIA_PATTERN_ID.UIA_InvokePatternId or
+                UIA_PATTERN_ID.UIA_ValuePatternId)
             {
                 return true;
             }
@@ -700,7 +703,7 @@ public abstract partial class DataGridViewCell
 
         #endregion
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaderItems()
+        internal override IRawElementProviderSimple.Interface[]? GetRowHeaderItems()
         {
             if (_owner is { OwningRow.HasHeaderCell: true, DataGridView: { IsHandleCreated: true, RowHeadersVisible: true } })
             {
@@ -710,7 +713,7 @@ public abstract partial class DataGridViewCell
             return null;
         }
 
-        internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
+        internal override IRawElementProviderSimple.Interface[]? GetColumnHeaderItems()
         {
             if (_owner is { OwningColumn.HasHeaderCell: true, DataGridView: { IsHandleCreated: true, ColumnHeadersVisible: true } })
             {
@@ -730,7 +733,7 @@ public abstract partial class DataGridViewCell
                 ? _owner.DataGridView.Columns.GetVisibleIndex(_owner.OwningColumn)
                 : -1;
 
-        internal override UiaCore.IRawElementProviderSimple? ContainingGrid => _owner?.DataGridView?.AccessibilityObject;
+        internal override IRawElementProviderSimple.Interface? ContainingGrid => _owner?.DataGridView?.AccessibilityObject;
 
         internal override bool IsReadOnly => _owner?.ReadOnly ?? false;
     }

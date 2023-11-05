@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -56,7 +57,7 @@ public partial class TabPage
 
         internal override bool IsItemSelected => OwningTabControl?.SelectedTab == _owningTabPage;
 
-        internal override UiaCore.IRawElementProviderSimple? ItemSelectionContainer => OwningTabControl?.AccessibilityObject;
+        internal override IRawElementProviderSimple.Interface? ItemSelectionContainer => OwningTabControl?.AccessibilityObject;
 
         internal override int[] RuntimeId
             => new int[]
@@ -83,7 +84,7 @@ public partial class TabPage
 
         internal override void AddToSelection() => DoDefaultAction();
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (OwningTabControl is null || !OwningTabControl.IsHandleCreated)
             {
@@ -92,9 +93,9 @@ public partial class TabPage
 
             return direction switch
             {
-                UiaCore.NavigateDirection.Parent => OwningTabControl.AccessibilityObject,
-                UiaCore.NavigateDirection.NextSibling => OwningTabControl.AccessibilityObject.GetChild(GetChildId() + 1),
-                UiaCore.NavigateDirection.PreviousSibling => OwningTabControl.AccessibilityObject.GetChild(GetChildId() - 1),
+                NavigateDirection.NavigateDirection_Parent => OwningTabControl.AccessibilityObject,
+                NavigateDirection.NavigateDirection_NextSibling => OwningTabControl.AccessibilityObject.GetChild(GetChildId() + 1),
+                NavigateDirection.NavigateDirection_PreviousSibling => OwningTabControl.AccessibilityObject.GetChild(GetChildId() - 1),
                 _ => null
             };
         }
@@ -106,16 +107,16 @@ public partial class TabPage
 
         public override string? KeyboardShortcut => SystemIAccessibleInternal.TryGetKeyboardShortcut(GetChildId());
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => UIA_CONTROLTYPE_ID.UIA_TabItemControlTypeId,
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => OwningTabControl?.Enabled ?? false,
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_TabItemControlTypeId,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)State.HasFlag(AccessibleStates.Focused),
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(OwningTabControl?.Enabled ?? false),
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId
                     // This is necessary for compatibility with MSAA proxy:
                     // IsKeyboardFocusable = true regardless the control is enabled/disabled.
-                    => true,
+                    => VARIANT.True,
                 _ => base.GetPropertyValue(propertyID)
             };
 

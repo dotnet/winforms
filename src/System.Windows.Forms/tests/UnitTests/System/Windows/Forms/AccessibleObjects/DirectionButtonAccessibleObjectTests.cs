@@ -1,6 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
+
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
 public class DirectionButtonAccessibleObjectTests
@@ -89,12 +91,12 @@ public class DirectionButtonAccessibleObjectTests
 
         if (expectedChildId is null)
         {
-            Assert.Null(directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(directionButton.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         }
         else
         {
             AccessibleObject expected = domainUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(expectedChildId.Value);
-            Assert.Equal(expected, directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(expected, directionButton.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         }
 
         Assert.False(domainUpDown.IsHandleCreated);
@@ -112,12 +114,12 @@ public class DirectionButtonAccessibleObjectTests
 
         if (expectedChildId is null)
         {
-            Assert.Null(directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(directionButton.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         }
         else
         {
             AccessibleObject expected = numericUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(expectedChildId.Value);
-            Assert.Equal(expected, directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+            Assert.Equal(expected, directionButton.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         }
 
         Assert.False(numericUpDown.IsHandleCreated);
@@ -135,12 +137,12 @@ public class DirectionButtonAccessibleObjectTests
 
         if (expectedChildId is null)
         {
-            Assert.Null(directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(directionButton.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         }
         else
         {
             AccessibleObject expected = domainUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(expectedChildId.Value);
-            Assert.Equal(expected, directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(expected, directionButton.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         }
 
         Assert.False(domainUpDown.IsHandleCreated);
@@ -158,12 +160,12 @@ public class DirectionButtonAccessibleObjectTests
 
         if (expectedChildId is null)
         {
-            Assert.Null(directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(directionButton.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         }
         else
         {
             AccessibleObject expected = numericUpDown.UpDownButtonsInternal.AccessibilityObject.GetChild(expectedChildId.Value);
-            Assert.Equal(expected, directionButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Equal(expected, directionButton.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         }
 
         Assert.False(numericUpDown.IsHandleCreated);

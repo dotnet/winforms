@@ -26,7 +26,7 @@ public class DataGridViewButtonCellAccessibleObjectTests : DataGridViewButtonCel
     public void DataGridViewButtonCellAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected()
     {
         var accessibleObject = new DataGridViewButtonCellAccessibleObject(null);
-        Assert.Equal(SR.DataGridView_AccButtonCellDefaultAction, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(SR.DataGridView_AccButtonCellDefaultAction, ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
     }
 
     [WinFormsFact]
@@ -47,7 +47,7 @@ public class DataGridViewButtonCellAccessibleObjectTests : DataGridViewButtonCel
     public void DataGridViewButtonCellAccessibleObject_ControlType_ReturnsExpected()
     {
         var accessibleObject = new DataGridViewButtonCellAccessibleObject(null);
-        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]

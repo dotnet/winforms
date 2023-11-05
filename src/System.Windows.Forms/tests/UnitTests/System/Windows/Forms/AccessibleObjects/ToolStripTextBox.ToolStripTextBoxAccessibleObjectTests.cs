@@ -19,7 +19,7 @@ public class ToolStripTextBox_ToolStripTextBoxAccessibleObjectTests
         AccessibleObject toolStripTextBoxAccessibleObject = toolStripTextBox.AccessibilityObject;
         var accessibleName = toolStripTextBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
-        Assert.Equal("Test Name", accessibleName);
+        Assert.Equal("Test Name", ((BSTR)accessibleName).ToStringAndFree());
     }
 
     [WinFormsFact]

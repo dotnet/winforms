@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.MonthCalendar;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -64,7 +65,7 @@ public class MonthCalendar_CalendarPreviousButtonAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = new(control);
         CalendarPreviousButtonAccessibleObject prevButton = new(controlAccessibleObject);
 
-        Assert.Equal(controlAccessibleObject, prevButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
+        Assert.Equal(controlAccessibleObject, prevButton.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -77,8 +78,8 @@ public class MonthCalendar_CalendarPreviousButtonAccessibleObjectTests
 
         AccessibleObject nextButton = controlAccessibleObject.NextButtonAccessibleObject;
 
-        Assert.Null(prevButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(nextButton, prevButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+        Assert.Null(prevButton.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(nextButton, prevButton.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.False(control.IsHandleCreated);
     }
 
@@ -89,8 +90,8 @@ public class MonthCalendar_CalendarPreviousButtonAccessibleObjectTests
         MonthCalendarAccessibleObject controlAccessibleObject = new(control);
         CalendarPreviousButtonAccessibleObject prevButton = new(controlAccessibleObject);
 
-        Assert.Null(prevButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(prevButton.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Null(prevButton.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(prevButton.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(control.IsHandleCreated);
     }
 }

@@ -2,8 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -94,14 +94,17 @@ public class ToolStripItemAccessibleObjectTests
 
         // By default Name has string.Empty value, because if AccessibleName is not defined
         // then control uses the value of "Text" property from owner Item (by default an empty string)
-        Assert.Equal(string.Empty, toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId));
+        using VARIANT result = toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        Assert.Equal(VARENUM.VT_BSTR, result.vt);
+        Assert.Equal(string.Empty, ((BSTR)result).ToString());
 
         item.Name = "Name1";
         item.AccessibleName = "Test Name";
 
-        var accessibleName = toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        using VARIANT accessibleName = toolStripItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
 
-        Assert.Equal("Test Name", accessibleName);
+        Assert.Equal(VARENUM.VT_BSTR, accessibleName.vt);
+        Assert.Equal("Test Name", ((BSTR)accessibleName).ToString());
     }
 
     [WinFormsTheory]
@@ -129,7 +132,7 @@ public class ToolStripItemAccessibleObjectTests
         using ToolStripItem toolStripItem = new SubToolStripItem();
         // AccessibleRole is not set = Default
 
-        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_ButtonControlTypeId, actual);
     }
@@ -157,7 +160,7 @@ public class ToolStripItemAccessibleObjectTests
         using ToolStripItem toolStripItem = new SubToolStripItem();
         toolStripItem.AccessibleRole = role;
 
-        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        UIA_CONTROLTYPE_ID actual = (UIA_CONTROLTYPE_ID)(int)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -171,7 +174,7 @@ public class ToolStripItemAccessibleObjectTests
         using ToolStripItem toolStripItem = new SubToolStripItem();
 
         Assert.False((bool)toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsExpandCollapsePatternAvailablePropertyId));
-        Assert.Null(toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal(VARIANT.Empty, toolStripItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
     }
 
     [WinFormsFact]
@@ -205,7 +208,7 @@ public class ToolStripItemAccessibleObjectTests
         AccessibleObject accessibleObject = toolStrip.Items[0].AccessibilityObject;
         AccessibleObject expected = toolStrip.AccessibilityObject;
 
-        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.Parent));
+        Assert.Equal(expected, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
     }
 
     [WinFormsFact]
@@ -216,7 +219,7 @@ public class ToolStripItemAccessibleObjectTests
 
         AccessibleObject accessibleObject = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
         Assert.False(toolStrip.IsHandleCreated);
     }
 
@@ -228,8 +231,8 @@ public class ToolStripItemAccessibleObjectTests
 
         AccessibleObject accessibleObject = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(toolStrip.IsHandleCreated);
     }
 
@@ -247,13 +250,13 @@ public class ToolStripItemAccessibleObjectTests
         AccessibleObject item1 = toolStrip.Items[0].AccessibilityObject;
         AccessibleObject item2 = toolStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(item1, grip.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Equal(item2, item1.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(item2.FragmentNavigate(NavigateDirection.NextSibling));
+        Assert.Equal(item1, grip.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(item2, item1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(item2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(item1, item2.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(grip, item1.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(grip.FragmentNavigate(NavigateDirection.PreviousSibling));
+        Assert.Equal(item1, item2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(grip, item1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(grip.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         Assert.False(toolStrip.IsHandleCreated);
     }
@@ -269,7 +272,7 @@ public class ToolStripItemAccessibleObjectTests
 
         AccessibleObject accessibleObject = toolStrip.Items[0].AccessibilityObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         Assert.False(toolStrip.IsHandleCreated);
     }
@@ -290,13 +293,13 @@ public class ToolStripItemAccessibleObjectTests
         AccessibleObject item1 = toolStrip.Items[0].AccessibilityObject;
         AccessibleObject item2 = toolStrip.Items[1].AccessibilityObject;
 
-        Assert.Equal(item2, grip.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Equal(item1, item2.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(item1.FragmentNavigate(NavigateDirection.NextSibling));
+        Assert.Equal(item2, grip.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(item1, item2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(item1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(item2, item1.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(grip, item2.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(grip.FragmentNavigate(NavigateDirection.PreviousSibling));
+        Assert.Equal(item2, item1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(grip, item2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(grip.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         Assert.False(toolStrip.IsHandleCreated);
     }
@@ -325,13 +328,13 @@ public class ToolStripItemAccessibleObjectTests
         AccessibleObject item2 = toolStrip.Items[1].AccessibilityObject;
         AccessibleObject item4 = toolStrip.Items[3].AccessibilityObject;
 
-        Assert.Equal(item2, grip.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Equal(item4, item2.FragmentNavigate(NavigateDirection.NextSibling));
-        Assert.Null(item4.FragmentNavigate(NavigateDirection.NextSibling));
+        Assert.Equal(item2, grip.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(item4, item2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(item4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Equal(item2, item4.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Equal(grip, item2.FragmentNavigate(NavigateDirection.PreviousSibling));
-        Assert.Null(grip.FragmentNavigate(NavigateDirection.PreviousSibling));
+        Assert.Equal(item2, item4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(grip, item2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(grip.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         Assert.False(toolStrip.IsHandleCreated);
     }

@@ -248,10 +248,7 @@ public partial class ListBox : ListControl
 
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(value), value, 0));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
 
             if (_columnWidth != value)
             {
@@ -1282,10 +1279,8 @@ public partial class ListBox : ListControl
 
     private void CheckIndex(int index)
     {
-        if (index < 0 || index >= Items.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.IndexOutOfRange, index.ToString(CultureInfo.CurrentCulture)));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Items.Count);
     }
 
     private void CheckNoDataSource()
@@ -1426,11 +1421,10 @@ public partial class ListBox : ListControl
     {
         int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
 
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+
         // Note: index == 0 is OK even if the ListBox currently has no items.
-        if (index < 0 || (index > 0 && index >= itemCount))
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Math.Max(1, itemCount));
 
         if (_drawMode != DrawMode.OwnerDrawVariable)
         {
@@ -2166,10 +2160,9 @@ public partial class ListBox : ListControl
     public void SetSelected(int index, bool value)
     {
         int itemCount = (_itemsCollection is null) ? 0 : _itemsCollection.Count;
-        if (index < 0 || index >= itemCount)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, itemCount);
 
         if (_selectionMode == SelectionMode.None)
         {

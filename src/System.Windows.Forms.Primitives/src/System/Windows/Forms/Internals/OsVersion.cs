@@ -30,6 +30,13 @@ internal static class OsVersion
     public static bool IsWindows10_1703OrGreater() => OperatingSystem.IsWindowsVersionAtLeast(major: 10, build: 15063);
 
     /// <summary>
+    ///  Is Windows 10 Creators Update or later. (Redstone 3, build 16299, version 1709)
+    /// </summary>
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    [SupportedOSPlatformGuard("windows10.0.16299")]
+    public static bool IsWindows10_1709OrGreater() => OperatingSystem.IsWindowsVersionAtLeast(major: 10, build: 16299);
+
+    /// <summary>
     ///  Is Windows 10 Creators Update or later. (Redstone 4, build 17134, version 1803)
     /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

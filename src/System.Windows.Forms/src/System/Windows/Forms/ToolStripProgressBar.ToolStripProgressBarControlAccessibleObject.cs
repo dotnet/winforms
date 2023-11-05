@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -25,23 +26,23 @@ public partial class ToolStripProgressBar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
-                case UiaCore.NavigateDirection.PreviousSibling:
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_Parent:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     return _ownerToolStripProgressBarControl.Owner?.AccessibilityObject.FragmentNavigate(direction);
             }
 
             return base.FragmentNavigate(direction);
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => GetIsOffscreenPropertyValue(_ownerToolStripProgressBarControl.Owner?.Placement, Bounds),
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => (VARIANT)GetIsOffscreenPropertyValue(_ownerToolStripProgressBarControl.Owner?.Placement, Bounds),
                 _ => base.GetPropertyValue(propertyID)
             };
     }

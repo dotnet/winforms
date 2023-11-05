@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -17,7 +18,7 @@ public partial class PrintPreviewControl
             => this.TryGetOwnerAs(out ScrollBar? scrollBar) && scrollBar.Parent is PrintPreviewControl printPreviewControl
                 ? printPreviewControl.AccessibilityObject : base.Parent;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.TryGetOwnerAs(out ScrollBar? scrollBar) || scrollBar.Parent is not PrintPreviewControl printPreviewControl)
             {
@@ -26,16 +27,16 @@ public partial class PrintPreviewControl
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return printPreviewControl.AccessibilityObject;
 
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     return printPreviewControl._vScrollBar.Visible &&
                         printPreviewControl._hScrollBar.Visible &&
                         scrollBar == printPreviewControl._vScrollBar
                         ? printPreviewControl._hScrollBar.AccessibilityObject : null;
 
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     return printPreviewControl._hScrollBar.Visible &&
                         printPreviewControl._vScrollBar.Visible &&
                         scrollBar == printPreviewControl._hScrollBar

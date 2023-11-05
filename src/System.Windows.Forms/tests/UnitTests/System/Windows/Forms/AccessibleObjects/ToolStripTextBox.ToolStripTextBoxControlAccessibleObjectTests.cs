@@ -80,9 +80,9 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
             toolStripTextBoxControl.CreateControl();
         }
 
-        object actual = toolStripTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (int)toolStripTextBox.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
-        Assert.Equal(expectedType, (int)actual);
+        Assert.Equal(expectedType, actual);
         Assert.Equal(createControl, toolStripTextBoxControl.IsHandleCreated);
     }
 
@@ -130,7 +130,7 @@ public class ToolStripTextBox_ToolStripTextBoxControlAccessibleObjectTests
 
         TextBox toolStripTextBoxControl = toolStripTextBox.TextBox;
         AccessibleObject accessibleObject = toolStripTextBox.AccessibilityObject;
-        object actual = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(role, accessibleObject.Role);

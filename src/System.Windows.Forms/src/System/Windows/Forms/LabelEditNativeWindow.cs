@@ -3,7 +3,6 @@
 
 using System.Runtime.InteropServices;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -37,7 +36,7 @@ internal class LabelEditNativeWindow : NativeWindow
 
     private unsafe void InstallWinEventHooks()
     {
-        if (!UiaCore.UiaClientsAreListening())
+        if (!PInvoke.UiaClientsAreListening())
         {
             return;
         }
@@ -107,13 +106,10 @@ internal class LabelEditNativeWindow : NativeWindow
             // you should notify UI Automation by calling the UiaReturnRawElementProvider
             // as follows: UiaReturnRawElementProvider(hwnd, 0, 0, NULL). This call tells
             // UI Automation that it can safely remove all map entries that refer to the specified window.
-            UiaCore.UiaReturnRawElementProvider(HWND, wParam: 0, lParam: 0, el: null);
+            PInvoke.UiaReturnRawElementProvider(HWND, wParam: 0, lParam: 0, (IRawElementProviderSimple*)null);
         }
 
-        if (OsVersion.IsWindows8OrGreater())
-        {
-            UiaCore.UiaDisconnectProvider(AccessibilityObject);
-        }
+        PInvoke.UiaDisconnectProvider(AccessibilityObject);
 
         AccessibilityObject = null;
         base.ReleaseHandle();
@@ -157,7 +153,7 @@ internal class LabelEditNativeWindow : NativeWindow
         {
             // If the requested object identifier is UiaRootObjectId,
             // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-            m.ResultInternal = (LRESULT)UiaCore.UiaReturnRawElementProvider(
+            m.ResultInternal = PInvoke.UiaReturnRawElementProvider(
                 this,
                 m.WParamInternal,
                 m.LParamInternal,

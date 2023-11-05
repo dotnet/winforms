@@ -3,8 +3,8 @@
 
 using System.Windows.Forms.PropertyGridInternal.TestUtilities;
 using System.Windows.Forms.UITests;
+using Windows.Win32.UI.Accessibility;
 using Xunit.Abstractions;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.PropertyGridInternal.UITests;
 
@@ -22,7 +22,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
             grid.SelectedEntry = grid[nameof(Button.Size)];
 
             Assert.Equal(grid.SelectedEntry.AccessibilityObject,
-                grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.Parent));
+                grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
 
             return Task.CompletedTask;
         });
@@ -35,7 +35,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         {
             grid.SelectedEntry = grid[nameof(Button.Size)];
 
-            Assert.Null(grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
+            Assert.Null(grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
             return Task.CompletedTask;
         });
@@ -51,7 +51,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
             grid.PopupEditorAndClose(onClosingAction: () =>
                 Assert.Equal(
                     grid.GridView.DropDownControlHolder!.AccessibilityObject,
-                    grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling)));
+                    grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling)));
 
             return Task.CompletedTask;
         });
@@ -64,7 +64,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         {
             grid.SelectedEntry = grid[nameof(Button.Size)];
 
-            Assert.Null(grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Null(grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
             return Task.CompletedTask;
         });
@@ -79,7 +79,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
             grid.SelectedEntry.Expanded = true;
 
             Assert.Equal(grid.SelectedEntry.Children.First().AccessibilityObject,
-                grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
+                grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
             return Task.CompletedTask;
         });
@@ -93,7 +93,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
             grid.SelectedEntry = grid[nameof(Button.FlatStyle)];
 
             Assert.Equal(grid.GridView.DropDownButton.AccessibilityObject,
-                grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
+                grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
             return Task.CompletedTask;
         });
@@ -107,7 +107,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
             grid.SelectedEntry = grid[nameof(Button.Font)];
 
             Assert.Equal(grid.GridView.DialogButton.AccessibilityObject,
-                grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
+                grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
             return Task.CompletedTask;
         });

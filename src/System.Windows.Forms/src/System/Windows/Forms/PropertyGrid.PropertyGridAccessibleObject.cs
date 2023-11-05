@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -54,13 +55,13 @@ public partial class PropertyGrid
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     return GetChildFragment(0);
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     var childFragmentCount = GetChildFragmentCount();
                     if (childFragmentCount > 0)
                     {
@@ -79,13 +80,13 @@ public partial class PropertyGrid
         /// <param name="childFragment">The child element regarding which the target element is searched.</param>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal UiaCore.IRawElementProviderFragment? ChildFragmentNavigate(AccessibleObject childFragment, UiaCore.NavigateDirection direction)
+        internal UiaCore.IRawElementProviderFragment? ChildFragmentNavigate(AccessibleObject childFragment, NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return this;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     int fragmentCount = GetChildFragmentCount();
                     int childFragmentIndex = GetChildFragmentIndex(childFragment);
                     int nextChildFragmentIndex = childFragmentIndex + 1;
@@ -95,7 +96,7 @@ public partial class PropertyGrid
                     }
 
                     return null;
-                case UiaCore.NavigateDirection.PreviousSibling:
+                case NavigateDirection.NavigateDirection_PreviousSibling:
                     fragmentCount = GetChildFragmentCount();
                     childFragmentIndex = GetChildFragmentIndex(childFragment);
                     if (childFragmentIndex > 0)

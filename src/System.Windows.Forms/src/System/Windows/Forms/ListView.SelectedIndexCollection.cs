@@ -94,10 +94,8 @@ public partial class ListView
         {
             get
             {
-                if (index < 0 || index >= Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(index);
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 
                 if (_owner.IsHandleCreated)
                 {
@@ -256,12 +254,10 @@ public partial class ListView
 
         public int Add(int itemIndex)
         {
+            ArgumentOutOfRangeException.ThrowIfNegative(itemIndex);
             if (_owner.VirtualMode)
             {
-                if (itemIndex < 0 || itemIndex >= _owner.VirtualListSize)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
-                }
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(itemIndex, _owner.VirtualListSize);
 
                 if (_owner.IsHandleCreated)
                 {
@@ -275,10 +271,7 @@ public partial class ListView
             }
             else
             {
-                if (itemIndex < 0 || itemIndex >= _owner.Items.Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
-                }
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(itemIndex, _owner.Items.Count);
 
                 _owner.Items[itemIndex].Selected = true;
                 return Count;
@@ -321,12 +314,10 @@ public partial class ListView
 
         public void Remove(int itemIndex)
         {
+            ArgumentOutOfRangeException.ThrowIfNegative(itemIndex);
             if (_owner.VirtualMode)
             {
-                if (itemIndex < 0 || itemIndex >= _owner.VirtualListSize)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
-                }
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(itemIndex, _owner.VirtualListSize);
 
                 if (_owner.IsHandleCreated)
                 {
@@ -335,10 +326,7 @@ public partial class ListView
             }
             else
             {
-                if (itemIndex < 0 || itemIndex >= _owner.Items.Count)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
-                }
+                ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(itemIndex, _owner.Items.Count);
 
                 _owner.Items[itemIndex].Selected = false;
             }

@@ -47,7 +47,7 @@ public class DataGridViewLinkCellAccessibleObjectTests : DataGridViewLinkCell
 
         UIA_CONTROLTYPE_ID expected = UIA_CONTROLTYPE_ID.UIA_HyperlinkControlTypeId;
 
-        Assert.Equal(expected, accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
+        Assert.Equal(expected, (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId));
     }
 
     [WinFormsFact]

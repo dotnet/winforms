@@ -671,12 +671,12 @@ public sealed class ResXDataNode : ISerializable
             resolvedType = typeResolver.GetType(typeName, false);
             if (resolvedType is null)
             {
-                string[] typeParts = typeName.Split(',');
+                string[] typeParts = typeName.Split(',', StringSplitOptions.TrimEntries);
 
                 // Break up the type name from the rest of the assembly strong name.
                 if (typeParts is not null && typeParts.Length >= 2)
                 {
-                    resolvedType = typeResolver.GetType($"{typeParts[0].Trim()}, {typeParts[1].Trim()}", false);
+                    resolvedType = typeResolver.GetType($"{typeParts[0]}, {typeParts[1]}", false);
                 }
             }
         }

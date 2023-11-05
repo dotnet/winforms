@@ -4,6 +4,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
@@ -373,10 +374,8 @@ public partial class CheckedListBox : ListBox
     /// </summary>
     public CheckState GetItemCheckState(int index)
     {
-        if (index < 0 || index >= Items.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Items.Count);
 
         return CheckedItems.GetCheckedState(index);
     }
@@ -808,7 +807,7 @@ public partial class CheckedListBox : ListBox
         {
             AccessibleObject? checkedItem = AccessibilityObject.GetChild(ice.Index);
 
-            checkedItem?.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId, ice.CurrentValue, ice.NewValue);
+            checkedItem?.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ToggleToggleStatePropertyId, (VARIANT)(int)ice.CurrentValue, (VARIANT)(int)ice.NewValue);
         }
     }
 
@@ -864,10 +863,8 @@ public partial class CheckedListBox : ListBox
     /// </summary>
     public void SetItemCheckState(int index, CheckState value)
     {
-        if (index < 0 || index >= Items.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Items.Count);
 
         // valid values are 0-2 inclusive.
         SourceGenerated.EnumValidator.Validate(value);

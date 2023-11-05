@@ -3,6 +3,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
 
@@ -210,13 +211,13 @@ public partial class DataGridView
         }
 
         [return: MarshalAs(UnmanagedType.IUnknown)]
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.Parent:
+                case NavigateDirection.NavigateDirection_Parent:
                     return Parent;
-                case UiaCore.NavigateDirection.NextSibling:
+                case NavigateDirection.NavigateDirection_NextSibling:
                     if (Parent.GetChildCount() > 1)
                     {
                         if (_ownerDataGridView is null)
@@ -228,14 +229,14 @@ public partial class DataGridView
                     }
 
                     break;
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     if (GetChildCount() > 0)
                     {
                         return GetChild(0);
                     }
 
                     break;
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     if (GetChildCount() > 0)
                     {
                         return GetChild(GetChildCount() - 1);
@@ -261,16 +262,16 @@ public partial class DataGridView
             return base.IsPatternSupported(patternId);
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyId) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyId) =>
             propertyId switch
             {
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => false,
-                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => true,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => VARIANT.False,
+                UIA_PROPERTY_ID.UIA_IsContentElementPropertyId => VARIANT.True,
                 UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => _ownerDataGridView is null
                     ? throw new InvalidOperationException(SR.DataGridViewTopRowAccessibleObject_OwnerNotSet)
-                    : _ownerDataGridView.Enabled,
-                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => false,
-                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => false,
+                    : (VARIANT)_ownerDataGridView.Enabled,
+                UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId => VARIANT.False,
+                UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId => VARIANT.False,
                 _ => base.GetPropertyValue(propertyId)
             };
 

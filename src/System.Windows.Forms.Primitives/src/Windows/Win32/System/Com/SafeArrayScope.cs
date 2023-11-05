@@ -117,6 +117,14 @@ internal readonly unsafe ref struct SafeArrayScope<T>
         }
     }
 
+    public SafeArrayScope(T[] array) : this((uint)array.Length)
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            this[i] = array[i];
+        }
+    }
+
     /// <remarks>
     ///  <para>
     ///   A copy will be made of anything that is put into the <see cref="SAFEARRAY"/>

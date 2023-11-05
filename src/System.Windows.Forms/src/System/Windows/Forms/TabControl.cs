@@ -1055,10 +1055,8 @@ public partial class TabControl : Control
 
     internal TabPage GetTabPage(int index)
     {
-        if (index < 0 || index >= TabCount)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, TabCount);
 
         return _tabPages[index];
     }
@@ -1104,9 +1102,11 @@ public partial class TabControl : Control
     /// </summary>
     public Rectangle GetTabRect(int index)
     {
-        if (index < 0 || (index >= TabCount && !GetState(State.GetTabRectfromItemSize)))
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+
+        if (!GetState(State.GetTabRectfromItemSize))
         {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, TabCount);
         }
 
         SetState(State.GetTabRectfromItemSize, false);
@@ -1160,11 +1160,8 @@ public partial class TabControl : Control
     /// </summary>
     private void InsertItem(int index, TabPage tabPage)
     {
-        if (index < 0 || index > TabCount)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
-
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(index, TabCount);
         ArgumentNullException.ThrowIfNull(tabPage);
 
         index = IsHandleCreated ? SendMessage(PInvoke.TCM_INSERTITEMW, index, tabPage) : index;
@@ -1590,10 +1587,8 @@ public partial class TabControl : Control
 
     private void RemoveTabPage(int index)
     {
-        if (index < 0 || index >= TabCount)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, TabCount);
 
         if (index < _tabPages.Count)
         {
@@ -1645,11 +1640,8 @@ public partial class TabControl : Control
 
     private void SetTabPage(int index, TabPage value)
     {
-        if (index < 0 || index >= TabCount)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
-        }
-
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, TabCount);
         ArgumentNullException.ThrowIfNull(value);
 
         if (IsHandleCreated)

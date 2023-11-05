@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -67,10 +68,10 @@ public partial class ToolStripControlHost
         /// </summary>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
-            if (direction == UiaCore.NavigateDirection.FirstChild ||
-                direction == UiaCore.NavigateDirection.LastChild)
+            if (direction == NavigateDirection.NavigateDirection_FirstChild ||
+                direction == NavigateDirection.NavigateDirection_LastChild)
             {
                 return _ownerItem.Control.AccessibilityObject;
             }

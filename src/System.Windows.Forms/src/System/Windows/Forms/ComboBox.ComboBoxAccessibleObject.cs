@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
@@ -59,10 +60,10 @@ public partial class ComboBox
 
         internal override void Collapse() => ComboBoxDefaultAction(false);
 
-        internal override UiaCore.ExpandCollapseState ExpandCollapseState
+        internal override ExpandCollapseState ExpandCollapseState
             => this.IsOwnerHandleCreated(out ComboBox? owner) && owner.DroppedDown
-                ? UiaCore.ExpandCollapseState.Expanded
-                : UiaCore.ExpandCollapseState.Collapsed;
+                ? ExpandCollapseState.ExpandCollapseState_Expanded
+                : ExpandCollapseState.ExpandCollapseState_Collapsed;
 
         internal override string? get_accNameInternal(object childID)
         {
@@ -98,7 +99,7 @@ public partial class ComboBox
         public ComboBoxChildDropDownButtonUiaProvider? DropDownButtonUiaProvider
             => _dropDownButtonUiaProvider ??= this.TryGetOwnerAs(out ComboBox? owner) ? new ComboBoxChildDropDownButtonUiaProvider(owner) : null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out ComboBox? _))
             {
@@ -107,9 +108,9 @@ public partial class ComboBox
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     return GetFirstChild();
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     return GetLastChild();
                 default:
                     return base.FragmentNavigate(direction);
@@ -142,7 +143,7 @@ public partial class ComboBox
             }
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
                 UIA_PROPERTY_ID.UIA_ControlTypePropertyId =>
@@ -150,9 +151,9 @@ public partial class ComboBox
                     // it will be retrieved from Windows.
                     // And we don't have a 100% guarantee it will be correct, hence set it ourselves.
                     this.GetOwnerAccessibleRole() == AccessibleRole.Default
-                        ? UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId
+                        ? (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ComboBoxControlTypeId
                         : base.GetPropertyValue(propertyID),
-                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => this.TryGetOwnerAs(out ComboBox? owner) && owner.Focused,
+                UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId => (VARIANT)(this.TryGetOwnerAs(out ComboBox? owner) && owner.Focused),
                 _ => base.GetPropertyValue(propertyID)
             };
 
@@ -172,21 +173,14 @@ public partial class ComboBox
                 return;
             }
 
-            if (OsVersion.IsWindows8OrGreater())
-            {
-                UiaCore.UiaDisconnectProvider(value);
-            }
+            PInvoke.UiaDisconnectProvider(value);
 
             ItemAccessibleObjects.Remove(item);
         }
 
         internal void ReleaseDropDownButtonUiaProvider()
         {
-            if (OsVersion.IsWindows8OrGreater())
-            {
-                UiaCore.UiaDisconnectProvider(_dropDownButtonUiaProvider);
-            }
-
+            PInvoke.UiaDisconnectProvider(_dropDownButtonUiaProvider);
             _dropDownButtonUiaProvider = null;
         }
 
@@ -196,7 +190,7 @@ public partial class ComboBox
             {
                 foreach (ComboBoxItemAccessibleObject itemAccessibleObject in ItemAccessibleObjects.Values)
                 {
-                    UiaCore.UiaDisconnectProvider(itemAccessibleObject);
+                    PInvoke.UiaDisconnectProvider(itemAccessibleObject, skipOSCheck: true);
                 }
             }
 

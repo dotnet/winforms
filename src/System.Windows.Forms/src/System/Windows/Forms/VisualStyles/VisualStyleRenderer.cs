@@ -316,8 +316,8 @@ public sealed class VisualStyleRenderer : IHandle<HTHEME>
         ArgumentNullException.ThrowIfNull(g);
         ArgumentNullException.ThrowIfNull(imageList);
 
-        if (imageIndex < 0 || imageIndex >= imageList.Images.Count)
-            throw new ArgumentOutOfRangeException(nameof(imageIndex), imageIndex, string.Format(SR.InvalidArgument, nameof(imageIndex), imageIndex));
+        ArgumentOutOfRangeException.ThrowIfNegative(imageIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(imageIndex, imageList.Images.Count);
 
         if (bounds.Width < 0 || bounds.Height < 0)
             return;

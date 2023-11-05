@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -23,12 +24,12 @@ public partial class ToolStripOverflowButton
             set => base.Name = value;
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
-                case UiaCore.NavigateDirection.FirstChild:
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     // Don't show the inner menu while it is invisible.
                     // Otherwise it will affect accessibility tree,
                     // especially for items-controls that have not been created yet.

@@ -94,11 +94,11 @@ public class TrackBar_TrackBarThumbAccessibleObjectTests
         var trackBarAccessibleObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
         TrackBar.TrackBarThumbAccessibleObject accessibleObject = trackBarAccessibleObject.ThumbAccessibleObject;
 
-        Assert.Equal(trackBarAccessibleObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
-        Assert.Equal(trackBarAccessibleObject.LastButtonAccessibleObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(trackBarAccessibleObject.FirstButtonAccessibleObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(trackBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(trackBarAccessibleObject.LastButtonAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(trackBarAccessibleObject.FirstButtonAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.True(trackBar.IsHandleCreated);
     }
 
@@ -110,11 +110,11 @@ public class TrackBar_TrackBarThumbAccessibleObjectTests
         var trackBarAccessibleObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
         TrackBar.TrackBarThumbAccessibleObject accessibleObject = trackBarAccessibleObject.ThumbAccessibleObject;
 
-        Assert.Equal(trackBarAccessibleObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
-        Assert.Equal(trackBarAccessibleObject.LastButtonAccessibleObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(trackBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Equal(trackBarAccessibleObject.LastButtonAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.True(trackBar.IsHandleCreated);
     }
 
@@ -126,11 +126,11 @@ public class TrackBar_TrackBarThumbAccessibleObjectTests
         var trackBarAccessibleObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
         TrackBar.TrackBarThumbAccessibleObject accessibleObject = trackBarAccessibleObject.ThumbAccessibleObject;
 
-        Assert.Equal(trackBarAccessibleObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(trackBarAccessibleObject.FirstButtonAccessibleObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Equal(trackBarAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(trackBarAccessibleObject.FirstButtonAccessibleObject, accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.True(trackBar.IsHandleCreated);
     }
 
@@ -142,11 +142,11 @@ public class TrackBar_TrackBarThumbAccessibleObjectTests
         var trackBarAccessibleObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
         TrackBar.TrackBarThumbAccessibleObject accessibleObject = trackBarAccessibleObject.ThumbAccessibleObject;
 
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
         Assert.False(trackBar.IsHandleCreated);
     }
 

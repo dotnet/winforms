@@ -1042,10 +1042,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(includeFilter)));
         }
 
-        if (indexStart < -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(indexStart), indexStart, string.Format(SR.InvalidLowBoundArgumentEx, nameof(indexStart), indexStart, -1));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(indexStart, -1);
 
         int index = indexStart + 1;
         while (index < _items.Count && !((GetRowState(index) & includeFilter) == includeFilter))
@@ -1077,10 +1074,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(excludeFilter)));
         }
 
-        if (indexStart < -1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(indexStart), indexStart, string.Format(SR.InvalidLowBoundArgumentEx, nameof(indexStart), indexStart, -1));
-        }
+        ArgumentOutOfRangeException.ThrowIfLessThan(indexStart, -1);
 
         int index = indexStart + 1;
         while (index < _items.Count && (!((GetRowState(index) & includeFilter) == includeFilter) || !((GetRowState(index) & excludeFilter) == 0)))
@@ -1099,10 +1093,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(includeFilter)));
         }
 
-        if (indexStart > _items.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(indexStart), indexStart, string.Format(SR.InvalidHighBoundArgumentEx, nameof(indexStart), indexStart, _items.Count));
-        }
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(indexStart, _items.Count);
 
         int index = indexStart - 1;
         while (index >= 0 && !((GetRowState(index) & includeFilter) == includeFilter))
@@ -1134,10 +1125,7 @@ public partial class DataGridViewRowCollection : ICollection, IList
             throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(excludeFilter)));
         }
 
-        if (indexStart > _items.Count)
-        {
-            throw new ArgumentOutOfRangeException(nameof(indexStart), indexStart, string.Format(SR.InvalidHighBoundArgumentEx, nameof(indexStart), indexStart, _items.Count));
-        }
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(indexStart, _items.Count);
 
         int index = indexStart - 1;
         while (index >= 0 && (!((GetRowState(index) & includeFilter) == includeFilter) || !((GetRowState(index) & excludeFilter) == 0)))

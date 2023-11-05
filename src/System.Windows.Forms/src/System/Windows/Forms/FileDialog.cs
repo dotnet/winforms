@@ -200,8 +200,8 @@ public abstract partial class FileDialog : CommonDialog
 
             if (!string.IsNullOrEmpty(value))
             {
-                string[] formats = value.Split('|');
-                if (formats is null || formats.Length % 2 != 0)
+                int pipeCount = value.AsSpan().Count('|');
+                if (pipeCount % 2 == 0)
                 {
                     throw new ArgumentException(SR.FileDialogInvalidFilter, nameof(value));
                 }

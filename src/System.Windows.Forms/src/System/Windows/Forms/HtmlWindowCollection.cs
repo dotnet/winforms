@@ -32,10 +32,8 @@ public unsafe class HtmlWindowCollection : ICollection
     {
         get
         {
-            if (index < 0 || index >= Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidBoundArgument, nameof(index), index, 0, Count - 1));
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(index);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 
             var oIndex = (VARIANT)index;
             using var htmlFrames2 = NativeHTMLFramesCollection2.GetInterface();

@@ -2,12 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Windows.Forms.Automation;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem.ListViewSubItem;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -80,16 +77,16 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         AccessibleObject accessibleObject = listViewItem1.AccessibilityObject.GetChild(childId);
 
-        object accessibleName = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId);
+        string accessibleName = ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_NamePropertyId)).ToStringAndFree();
         Assert.Equal($"Test {childId + 1}", accessibleName);
 
-        object automationId = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId);
+        string automationId = ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_AutomationIdPropertyId)).ToStringAndFree();
         Assert.Equal($"ListViewSubItem-{childId}", automationId);
 
-        object frameworkId = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId);
+        string frameworkId = ((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_FrameworkIdPropertyId)).ToStringAndFree();
         Assert.Equal("WinForm", frameworkId);
 
-        object controlType = accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var controlType = (UIA_CONTROLTYPE_ID)(int)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_TextControlTypeId, controlType);
         Assert.True(list.IsHandleCreated);
@@ -151,33 +148,33 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         AccessibleObject subItemAccObjInGroup2 = listViewItemInGroup.SubItems[1].AccessibilityObject;
         AccessibleObject subItemAccObjInGroup3 = listViewItemInGroup.SubItems[2].AccessibilityObject;
 
-        Assert.Null(subItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(subItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(subItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Null(subItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(subItemAccObj2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(subItemAccObj3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
-        Assert.Null(subItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(subItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(subItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(subItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(subItemAccObj2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(subItemAccObj3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
-        Assert.Null(subItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Null(subItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObj2.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObj3.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
 
-        Assert.Null(subItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(subItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObj2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObj3.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         Assert.Equal(createControl, listView.IsHandleCreated);
     }
@@ -299,19 +296,19 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         AccessibleObject subItemAccObjInGroup2 = listViewItemInGroup.SubItems[1].AccessibilityObject;
         AccessibleObject subItemAccObjInGroup3 = listViewItemInGroup.SubItems[2].AccessibilityObject;
 
-        Assert.Null(subItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Null(subItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObj2.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObj3.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
 
-        Assert.Null(subItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(subItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObj2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObj3.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         Assert.Equal(createControl, listView.IsHandleCreated);
     }
@@ -335,19 +332,19 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         AccessibleObject subItemAccObjInGroup2 = listViewItemInGroup.SubItems[1].AccessibilityObject;
         AccessibleObject subItemAccObjInGroup3 = listViewItemInGroup.SubItems[2].AccessibilityObject;
 
-        Assert.Null(subItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
-        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(UiaCore.NavigateDirection.FirstChild));
+        Assert.Null(subItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObj2.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObj3.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
+        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild));
 
-        Assert.Null(subItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
-        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(UiaCore.NavigateDirection.LastChild));
+        Assert.Null(subItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObj2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObj3.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObjInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObjInGroup2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
+        Assert.Null(subItemAccObjInGroup3.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild));
 
         Assert.Equal(createControl, listView.IsHandleCreated);
     }
@@ -363,11 +360,11 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         AccessibleObject subItemAccObj = listViewItem.SubItems[0].AccessibilityObject;
         AccessibleObject subItemAccInGroup = listViewItemInGroup.SubItems[0].AccessibilityObject;
 
-        AccessibleObject nextSubItemAccObj1 = (AccessibleObject)subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        AccessibleObject nextSubItemAccObj2 = (AccessibleObject)nextSubItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        AccessibleObject nextSubItemAccObj1 = (AccessibleObject)subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject nextSubItemAccObj2 = (AccessibleObject)nextSubItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
 
-        AccessibleObject nextSubItemAccInGroup1 = (AccessibleObject)subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        AccessibleObject nextSubItemAccInGroup2 = (AccessibleObject)nextSubItemAccInGroup1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        AccessibleObject nextSubItemAccInGroup1 = (AccessibleObject)subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject nextSubItemAccInGroup2 = (AccessibleObject)nextSubItemAccInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
 
         Assert.Same(listViewItem.SubItems[1].AccessibilityObject, nextSubItemAccObj1);
         Assert.Null(nextSubItemAccObj2);
@@ -389,11 +386,11 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         AccessibleObject subItemAccObj = listViewItem.SubItems[0].AccessibilityObject;
         AccessibleObject subItemAccInGroup = listViewItemInGroup.SubItems[0].AccessibilityObject;
 
-        AccessibleObject nextSubItemAccObj1 = (AccessibleObject)subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        AccessibleObject nextSubItemAccObj2 = (AccessibleObject)nextSubItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        AccessibleObject nextSubItemAccObj1 = (AccessibleObject)subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject nextSubItemAccObj2 = (AccessibleObject)nextSubItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
 
-        AccessibleObject nextSubItemAccInGroup1 = (AccessibleObject)subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        AccessibleObject nextSubItemAccInGroup2 = (AccessibleObject)nextSubItemAccInGroup1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        AccessibleObject nextSubItemAccInGroup1 = (AccessibleObject)subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject nextSubItemAccInGroup2 = (AccessibleObject)nextSubItemAccInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
 
         Assert.NotNull(nextSubItemAccObj1);
         Assert.NotNull(nextSubItemAccObj2);
@@ -414,8 +411,8 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
 
         AccessibleObject subItemAccObj = listViewItem.SubItems[0].AccessibilityObject;
         AccessibleObject subItemAccInGroup = listViewItemInGroup.SubItems[0].AccessibilityObject;
-        AccessibleObject previousSubItemAccObj = (AccessibleObject)subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccInGroup = (AccessibleObject)subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+        AccessibleObject previousSubItemAccObj = (AccessibleObject)subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccInGroup = (AccessibleObject)subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
         Assert.Null(previousSubItemAccObj);
         Assert.Null(previousSubItemAccInGroup);
@@ -434,15 +431,15 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         AccessibleObject subItemAccObj = listViewItem.SubItems[3].AccessibilityObject;
         AccessibleObject subItemAccInGroup = listViewItemInGroup.SubItems[3].AccessibilityObject;
 
-        AccessibleObject previousSubItemAccObj3 = (AccessibleObject)subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccObj2 = (AccessibleObject)previousSubItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccObj1 = (AccessibleObject)previousSubItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccObj0 = (AccessibleObject)previousSubItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+        AccessibleObject previousSubItemAccObj3 = (AccessibleObject)subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccObj2 = (AccessibleObject)previousSubItemAccObj3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccObj1 = (AccessibleObject)previousSubItemAccObj2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccObj0 = (AccessibleObject)previousSubItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
-        AccessibleObject previousSubItemAccInGroup3 = (AccessibleObject)subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccInGroup2 = (AccessibleObject)previousSubItemAccInGroup3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccInGroup1 = (AccessibleObject)previousSubItemAccInGroup2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccInGroup0 = (AccessibleObject)previousSubItemAccInGroup1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+        AccessibleObject previousSubItemAccInGroup3 = (AccessibleObject)subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccInGroup2 = (AccessibleObject)previousSubItemAccInGroup3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccInGroup1 = (AccessibleObject)previousSubItemAccInGroup2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccInGroup0 = (AccessibleObject)previousSubItemAccInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
         Assert.Same(listViewItem.SubItems[2].AccessibilityObject, previousSubItemAccObj3);
         Assert.Same(listViewItem.SubItems[1].AccessibilityObject, previousSubItemAccObj2);
@@ -468,14 +465,14 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         AccessibleObject subItemAccObj = listViewItem.SubItems[0].AccessibilityObject;
         AccessibleObject subItemAccInGroup = listViewItemInGroup.SubItems[0].AccessibilityObject;
 
-        Assert.NotNull(subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.NotNull(subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.NotNull(subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.NotNull(subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
         listViewItem.SubItems.Add("SubItem");
         listViewItemInGroup.SubItems.Add("SubItem");
 
-        Assert.Same(listViewItem.SubItems[1].AccessibilityObject, subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Same(listViewItemInGroup.SubItems[1].AccessibilityObject, subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Same(listViewItem.SubItems[1].AccessibilityObject, subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Same(listViewItemInGroup.SubItems[1].AccessibilityObject, subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
         Assert.Equal(createControl, listView.IsHandleCreated);
     }
@@ -488,17 +485,17 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         ListViewItem listViewItem = listView.Items[0];
         ListViewItem listViewItemInGroup = listView.Items[1];
 
-        AccessibleObject subItemAccObj = (AccessibleObject)listViewItem.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
-        AccessibleObject subItemAccInGroup = (AccessibleObject)listViewItemInGroup.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+        AccessibleObject subItemAccObj = (AccessibleObject)listViewItem.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        AccessibleObject subItemAccInGroup = (AccessibleObject)listViewItemInGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
-        Assert.NotNull(subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.NotNull(subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.NotNull(subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.NotNull(subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         listViewItem.SubItems.Add("SubItem");
         listViewItemInGroup.SubItems.Add("SubItem");
 
-        Assert.Same(listViewItem.SubItems[1].AccessibilityObject, subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Same(listViewItemInGroup.SubItems[1].AccessibilityObject, subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Same(listViewItem.SubItems[1].AccessibilityObject, subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Same(listViewItemInGroup.SubItems[1].AccessibilityObject, subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         Assert.Equal(createControl, listView.IsHandleCreated);
     }
@@ -514,14 +511,14 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         AccessibleObject subItemAccObj = listViewItem.SubItems[0].AccessibilityObject;
         AccessibleObject subItemAccInGroup = listViewItemInGroup.SubItems[0].AccessibilityObject;
 
-        Assert.Same(listViewItem.SubItems[1].AccessibilityObject, subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Same(listViewItemInGroup.SubItems[1].AccessibilityObject, subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Same(listViewItem.SubItems[1].AccessibilityObject, subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Same(listViewItemInGroup.SubItems[1].AccessibilityObject, subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
         listViewItem.SubItems.RemoveAt(1);
         listViewItemInGroup.SubItems.RemoveAt(1);
 
-        Assert.NotNull(subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.NotNull(subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.NotNull(subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.NotNull(subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
         Assert.Equal(createControl, listView.IsHandleCreated);
     }
@@ -534,17 +531,17 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         ListViewItem listViewItem = listView.Items[0];
         ListViewItem listViewItemInGroup = listView.Items[1];
 
-        AccessibleObject subItemAccObj = (AccessibleObject)listViewItem.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
-        AccessibleObject subItemAccInGroup = (AccessibleObject)listViewItemInGroup.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+        AccessibleObject subItemAccObj = (AccessibleObject)listViewItem.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        AccessibleObject subItemAccInGroup = (AccessibleObject)listViewItemInGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
-        Assert.Same(listViewItem.SubItems[1].AccessibilityObject, subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Same(listViewItemInGroup.SubItems[1].AccessibilityObject, subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Same(listViewItem.SubItems[1].AccessibilityObject, subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Same(listViewItemInGroup.SubItems[1].AccessibilityObject, subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         listViewItem.SubItems.Add("SubItem");
         listViewItemInGroup.SubItems.Add("SubItem");
 
-        Assert.NotNull(subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.NotNull(subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.NotNull(subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.NotNull(subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
 
         Assert.Equal(createControl, listView.IsHandleCreated);
     }
@@ -557,20 +554,20 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         ListViewItem listViewItem = listView.Items[0];
         ListViewItem listViewItemInGroup = listView.Items[1];
 
-        AccessibleObject subItemAccObj = (AccessibleObject)listViewItem.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
-        AccessibleObject subItemAccInGroup = (AccessibleObject)listViewItemInGroup.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+        AccessibleObject subItemAccObj = (AccessibleObject)listViewItem.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        AccessibleObject subItemAccInGroup = (AccessibleObject)listViewItemInGroup.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
-        AccessibleObject previousSubItemAccObj4 = (AccessibleObject)subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccObj3 = (AccessibleObject)previousSubItemAccObj4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccObj2 = (AccessibleObject)previousSubItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccObj1 = (AccessibleObject)previousSubItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccObj0 = (AccessibleObject)previousSubItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+        AccessibleObject previousSubItemAccObj4 = (AccessibleObject)subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccObj3 = (AccessibleObject)previousSubItemAccObj4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccObj2 = (AccessibleObject)previousSubItemAccObj3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccObj1 = (AccessibleObject)previousSubItemAccObj2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccObj0 = (AccessibleObject)previousSubItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
-        AccessibleObject previousSubItemAccInGroup4 = (AccessibleObject)subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccInGroup3 = (AccessibleObject)previousSubItemAccInGroup4.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccInGroup2 = (AccessibleObject)previousSubItemAccInGroup3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccInGroup1 = (AccessibleObject)previousSubItemAccInGroup2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
-        AccessibleObject previousSubItemAccInGroup0 = (AccessibleObject)previousSubItemAccInGroup1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+        AccessibleObject previousSubItemAccInGroup4 = (AccessibleObject)subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccInGroup3 = (AccessibleObject)previousSubItemAccInGroup4.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccInGroup2 = (AccessibleObject)previousSubItemAccInGroup3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccInGroup1 = (AccessibleObject)previousSubItemAccInGroup2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+        AccessibleObject previousSubItemAccInGroup0 = (AccessibleObject)previousSubItemAccInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
         Assert.NotNull(previousSubItemAccObj4);
         Assert.NotNull(previousSubItemAccObj3);
@@ -598,17 +595,17 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         AccessibleObject subItemAccObj = listView.Items[0].SubItems[0].AccessibilityObject;
         AccessibleObject subItemAccInGroup = listViewItemInGroup.SubItems[0].AccessibilityObject;
 
-        AccessibleObject previousSubItemAccObj1 = (AccessibleObject)subItemAccObj.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        AccessibleObject previousSubItemAccObj2 = (AccessibleObject)previousSubItemAccObj1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        AccessibleObject previousSubItemAccObj3 = (AccessibleObject)previousSubItemAccObj2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        AccessibleObject previousSubItemAccObj4 = (AccessibleObject)previousSubItemAccObj3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        AccessibleObject previousSubItemAccObj5 = (AccessibleObject)previousSubItemAccObj4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        AccessibleObject previousSubItemAccObj1 = (AccessibleObject)subItemAccObj.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject previousSubItemAccObj2 = (AccessibleObject)previousSubItemAccObj1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject previousSubItemAccObj3 = (AccessibleObject)previousSubItemAccObj2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject previousSubItemAccObj4 = (AccessibleObject)previousSubItemAccObj3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject previousSubItemAccObj5 = (AccessibleObject)previousSubItemAccObj4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
 
-        AccessibleObject previousSubItemAccInGroup1 = (AccessibleObject)subItemAccInGroup.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        AccessibleObject previousSubItemAccInGroup2 = (AccessibleObject)previousSubItemAccInGroup1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        AccessibleObject previousSubItemAccInGroup3 = (AccessibleObject)previousSubItemAccInGroup2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        AccessibleObject previousSubItemAccInGroup4 = (AccessibleObject)previousSubItemAccInGroup3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
-        AccessibleObject previousSubItemAccInGroup5 = (AccessibleObject)previousSubItemAccInGroup4.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+        AccessibleObject previousSubItemAccInGroup1 = (AccessibleObject)subItemAccInGroup.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject previousSubItemAccInGroup2 = (AccessibleObject)previousSubItemAccInGroup1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject previousSubItemAccInGroup3 = (AccessibleObject)previousSubItemAccInGroup2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject previousSubItemAccInGroup4 = (AccessibleObject)previousSubItemAccInGroup3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+        AccessibleObject previousSubItemAccInGroup5 = (AccessibleObject)previousSubItemAccInGroup4.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
 
         Assert.NotNull(previousSubItemAccObj1);
         Assert.NotNull(previousSubItemAccObj2);
@@ -857,7 +854,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         listViewItem._listView = listView;
         ListViewItem.ListViewSubItem subItem = new(listViewItem, "Test subItem");
 
-        object actual = subItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ProcessIdPropertyId);
+        var actual = (int)subItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ProcessIdPropertyId);
 
         Assert.Equal(Environment.ProcessId, actual);
         Assert.False(listView.IsHandleCreated);
@@ -913,9 +910,9 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         ListViewItem listViewItem = new("Test item");
         listView.Items.Add(listViewItem);
         ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
-        object actual = listViewSubItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
+        using VARIANT actual = listViewSubItem.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_RuntimeIdPropertyId);
 
-        Assert.Equal(listViewSubItem.AccessibilityObject.RuntimeId, actual);
+        Assert.Equal(listViewSubItem.AccessibilityObject.RuntimeId, actual.ToObject());
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -927,9 +924,10 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         listView.Items.Add(listViewItem);
         ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
         ListViewSubItemAccessibleObject listViewSubItemAccessibleObject = new(listViewSubItem, listViewItem);
-        object actual = listViewSubItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
-        using SafeArrayScope<double> rectArray = UiaTextProvider.BoundingRectangleAsArray(listViewSubItem.AccessibilityObject.BoundingRectangle);
-        Assert.Equal(((VARIANT)rectArray).ToObject(), actual);
+        using VARIANT actual = listViewSubItemAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_BoundingRectanglePropertyId);
+        double[] actualArray = (double[])actual.ToObject();
+        Rectangle actualRectangle = new((int)actualArray[0], (int)actualArray[1], (int)actualArray[2], (int)actualArray[3]);
+        Assert.Equal(listViewSubItem.AccessibilityObject.BoundingRectangle, actualRectangle);
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -970,8 +968,8 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         listView.Items.Add(listViewItem);
         ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
         ListViewSubItemAccessibleObject accessibleObject = new(listViewSubItem, listViewItem);
-
-        Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId) ?? false);
+        var result = accessibleObject.GetPropertyValue((UIA_PROPERTY_ID)propertyId);
+        Assert.Equal(expected, result.IsEmpty ? false : (bool)result);
         Assert.False(listView.IsHandleCreated);
     }
 
@@ -1014,7 +1012,7 @@ public class ListViewItem_ListViewSubItem_ListViewSubItemAccessibleObjectTests
         {
             var subItemAccessibleObject = (ListViewSubItemAccessibleObject)control.Items[0].SubItems[i].AccessibilityObject;
             AccessibleObject columnHeaderAccessibleObject = columns[i].AccessibilityObject;
-            UiaCore.IRawElementProviderSimple[] columnHeaderItems = subItemAccessibleObject.GetColumnHeaderItems();
+            IRawElementProviderSimple.Interface[] columnHeaderItems = subItemAccessibleObject.GetColumnHeaderItems();
 
             Assert.Equal(1, columnHeaderItems.Length);
             Assert.Same(columnHeaderAccessibleObject, columnHeaderItems[0]);

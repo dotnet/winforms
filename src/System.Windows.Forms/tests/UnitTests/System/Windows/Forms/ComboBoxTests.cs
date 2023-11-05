@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.TestUtilities;
 using Moq;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ComboBox;
 using Point = System.Drawing.Point;
@@ -1847,7 +1848,7 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
         comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
@@ -1867,7 +1868,7 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
         comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
@@ -1889,7 +1890,7 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
         comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
@@ -1909,7 +1910,7 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
         comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
@@ -1955,7 +1956,7 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
         comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
@@ -1972,7 +1973,7 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
         comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
@@ -1995,7 +1996,7 @@ public class ComboBoxTests
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
 
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
         comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
@@ -2012,7 +2013,7 @@ public class ComboBoxTests
     {
         using AutomationEventCountingComboBox comboBox = new();
         comboBox.CreateControl();
-        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+        AutomationEventCountingComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.HWND);
         comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
 
         comboBox.Items.Add("item1");
@@ -2330,7 +2331,7 @@ public class ComboBoxTests
 
         internal int RaiseAutomationCallCount;
 
-        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, object oldValue, object newValue)
+        internal override bool RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID propertyId, VARIANT oldValue, VARIANT newValue)
         {
             RaiseAutomationCallCount++;
             return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
@@ -2339,7 +2340,7 @@ public class ComboBoxTests
 
     private class AutomationEventCountingComboBoxChildEditUiaProvider : ComboBoxChildEditUiaProvider
     {
-        public AutomationEventCountingComboBoxChildEditUiaProvider(ComboBox owner, IntPtr childEditControlhandle) : base(owner, childEditControlhandle)
+        public AutomationEventCountingComboBoxChildEditUiaProvider(ComboBox owner, HWND childEditControlhandle) : base(owner, childEditControlhandle)
         {
             RaiseAutomationCallCount = 0;
         }

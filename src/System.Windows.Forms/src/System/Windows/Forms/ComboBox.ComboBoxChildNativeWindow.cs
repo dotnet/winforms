@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static Interop;
+using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms;
 
@@ -18,7 +18,7 @@ public partial class ComboBox
             _childWindowType = childWindowType;
         }
 
-        protected override void WndProc(ref Message m)
+        protected override unsafe void WndProc(ref Message m)
         {
             switch ((uint)m.MsgInternal)
             {
@@ -57,15 +57,12 @@ public partial class ComboBox
 
                     if (accessibilityObject is not null)
                     {
-                        if (Handle != IntPtr.Zero)
+                        if (!HWND.IsNull)
                         {
-                            UiaCore.UiaReturnRawElementProvider(HWND, wParam: 0, lParam: 0, el: null);
+                            PInvoke.UiaReturnRawElementProvider(HWND, wParam: 0, lParam: 0, (IRawElementProviderSimple*)null);
                         }
 
-                        if (OsVersion.IsWindows8OrGreater())
-                        {
-                            UiaCore.UiaDisconnectProvider(accessibilityObject);
-                        }
+                        PInvoke.UiaDisconnectProvider(accessibilityObject);
 
                         ClearChildAccessibleObject();
                     }
@@ -138,7 +135,7 @@ public partial class ComboBox
             {
                 // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                m.ResultInternal = (LRESULT)UiaCore.UiaReturnRawElementProvider(
+                m.ResultInternal = PInvoke.UiaReturnRawElementProvider(
                     this,
                     m.WParamInternal,
                     m.LParamInternal,

@@ -80,7 +80,7 @@ public sealed unsafe partial class HtmlWindow
         }
     }
 
-    public object DomWindow => NativeHtmlWindow;
+    public object DomWindow => NativeHtmlWindow.GetManagedObject();
 
     public HtmlWindowCollection? Frames
     {

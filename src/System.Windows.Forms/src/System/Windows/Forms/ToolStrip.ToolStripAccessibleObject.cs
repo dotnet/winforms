@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using Windows.Win32.UI.Accessibility;
 using static Interop;
 
 namespace System.Windows.Forms;
@@ -147,7 +148,7 @@ public partial class ToolStrip
             return count;
         }
 
-        internal AccessibleObject? GetChildFragment(int fragmentIndex, UiaCore.NavigateDirection direction, bool getOverflowItem = false)
+        internal AccessibleObject? GetChildFragment(int fragmentIndex, NavigateDirection direction, bool getOverflowItem = false)
         {
             if (!this.TryGetOwnerAs(out ToolStrip? owner) || fragmentIndex < 0)
             {
@@ -202,15 +203,15 @@ public partial class ToolStrip
             //  items that are native controls (their accessible objects are provided by Windows),
             //  from the accessibility tree. It's necessary, because hosted native controls internally add accessible objects
             //  to the accessibility tree, and thus create duplicated. To avoid duplicates, remove hosted items with native accessibility objects from the tree.
-            AccessibleObject? GetFollowingChildFragment(int index, ToolStripItemCollection items, UiaCore.NavigateDirection direction)
+            AccessibleObject? GetFollowingChildFragment(int index, ToolStripItemCollection items, NavigateDirection direction)
             {
                 switch (direction)
                 {
                     // "direction" is not used for navigation. This method is helper only.
                     // FirstChild, LastChild are used when searching non-native hosted child items of the ToolStrip.
                     // NextSibling, PreviousSibling are used when searching an item siblings.
-                    case UiaCore.NavigateDirection.FirstChild:
-                    case UiaCore.NavigateDirection.NextSibling:
+                    case NavigateDirection.NavigateDirection_FirstChild:
+                    case NavigateDirection.NavigateDirection_NextSibling:
                         for (int i = index + 1; i < items.Count; i++)
                         {
                             ToolStripItem item = items[i];
@@ -229,8 +230,8 @@ public partial class ToolStrip
 
                         break;
 
-                    case UiaCore.NavigateDirection.LastChild:
-                    case UiaCore.NavigateDirection.PreviousSibling:
+                    case NavigateDirection.NavigateDirection_LastChild:
+                    case NavigateDirection.NavigateDirection_PreviousSibling:
                         for (int i = index - 1; i >= 0; i--)
                         {
                             ToolStripItem item = items[i];
@@ -377,7 +378,7 @@ public partial class ToolStrip
 
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out ToolStrip? _))
             {
@@ -386,7 +387,7 @@ public partial class ToolStrip
 
             switch (direction)
             {
-                case UiaCore.NavigateDirection.FirstChild:
+                case NavigateDirection.NavigateDirection_FirstChild:
                     int childCount = GetChildFragmentCount();
                     if (childCount > 0)
                     {
@@ -394,7 +395,7 @@ public partial class ToolStrip
                     }
 
                     break;
-                case UiaCore.NavigateDirection.LastChild:
+                case NavigateDirection.NavigateDirection_LastChild:
                     childCount = GetChildFragmentCount();
                     if (childCount > 0)
                     {

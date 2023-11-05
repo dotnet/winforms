@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.System.Com;
+using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ButtonBase;
 
@@ -42,18 +43,18 @@ public abstract partial class TextBoxBase
             //        ClearOwnerControl();
         }
 
-        internal override object? GetPropertyValue(UIA_PROPERTY_ID propertyID)
+        internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
         {
             if (this.TryGetOwnerAs(out TextBoxBase? owner))
             {
                 if (propertyID == UIA_PROPERTY_ID.UIA_IsPasswordPropertyId)
                 {
-                    return owner.PasswordProtect;
+                    return (VARIANT)owner.PasswordProtect;
                 }
 
                 if (propertyID == UIA_PROPERTY_ID.UIA_HasKeyboardFocusPropertyId)
                 {
-                    return owner.Focused;
+                    return (VARIANT)owner.Focused;
                 }
             }
 

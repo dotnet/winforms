@@ -118,7 +118,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         checkedListBox.Items.Add(2);
 
         AccessibleObject itemAccessibleObject = checkedListBox.AccessibilityObject.GetChild(itemIndex);
-        UiaCore.IRawElementProviderFragment actual = itemAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+        UiaCore.IRawElementProviderFragment actual = itemAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(expected, actual);
         Assert.False(checkedListBox.IsHandleCreated);
@@ -137,9 +137,9 @@ public class CheckedListBoxItemAccessibleObjectTests
         AccessibleObject itemAccessibleObject2 = checkedListBox.AccessibilityObject.GetChild(1);
         AccessibleObject itemAccessibleObject3 = checkedListBox.AccessibilityObject.GetChild(2);
 
-        Assert.Equal(itemAccessibleObject2, itemAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Equal(itemAccessibleObject3, itemAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
-        Assert.Null(itemAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.NextSibling));
+        Assert.Equal(itemAccessibleObject2, itemAccessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Equal(itemAccessibleObject3, itemAccessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
+        Assert.Null(itemAccessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
         Assert.False(checkedListBox.IsHandleCreated);
     }
 
@@ -156,9 +156,9 @@ public class CheckedListBoxItemAccessibleObjectTests
         AccessibleObject itemAccessibleObject2 = checkedListBox.AccessibilityObject.GetChild(1);
         AccessibleObject itemAccessibleObject3 = checkedListBox.AccessibilityObject.GetChild(2);
 
-        Assert.Null(itemAccessibleObject1.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(itemAccessibleObject1, itemAccessibleObject2.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
-        Assert.Equal(itemAccessibleObject2, itemAccessibleObject3.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling));
+        Assert.Null(itemAccessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(itemAccessibleObject1, itemAccessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
+        Assert.Equal(itemAccessibleObject2, itemAccessibleObject3.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling));
         Assert.False(checkedListBox.IsHandleCreated);
     }
 
@@ -200,7 +200,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         checkedListBox.SetItemChecked(0, isChecked);
         checkedListBox.CreateControl();
 
-        Assert.Equal(expected, checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId));
+        Assert.Equal(expected, ((BSTR)checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UIA_PROPERTY_ID.UIA_LegacyIAccessibleDefaultActionPropertyId)).ToStringAndFree());
         Assert.True(checkedListBox.IsHandleCreated);
     }
 
@@ -253,17 +253,17 @@ public class CheckedListBoxItemAccessibleObjectTests
     }
 
     [WinFormsTheory]
-    [InlineData(true, CheckState.Checked, (int)UiaCore.ToggleState.On)]
-    [InlineData(false, CheckState.Unchecked, (int)UiaCore.ToggleState.Off)]
-    [InlineData(true, CheckState.Indeterminate, (int)UiaCore.ToggleState.Indeterminate)]
+    [InlineData(true, CheckState.Checked, (int)ToggleState.ToggleState_On)]
+    [InlineData(false, CheckState.Unchecked, (int)ToggleState.ToggleState_Off)]
+    [InlineData(true, CheckState.Indeterminate, (int)ToggleState.ToggleState_Indeterminate)]
     public void CheckedListBoxItemAccessibleObject_ToggleState_ReturnsExpected(bool checkValue, CheckState checkState, int toggleState)
     {
         using CheckedListBox checkedListBox = new();
         checkedListBox.Items.Add("A");
         checkedListBox.SetItemCheckState(0, checkState);
 
-        Assert.Equal((UiaCore.ToggleState)toggleState, checkedListBox.AccessibilityObject.GetChild(0).ToggleState);
-        Assert.Equal(checkValue.ToString(), checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId));
+        Assert.Equal((ToggleState)toggleState, checkedListBox.AccessibilityObject.GetChild(0).ToggleState);
+        Assert.Equal(checkValue.ToString(), ((BSTR)checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree());
         Assert.False(checkedListBox.IsHandleCreated);
     }
 
@@ -321,7 +321,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         checkedListBox.SetItemChecked(0, isChecked);
 
         AccessibleObject accessibleObject = checkedListBox.AccessibilityObject.GetChild(0);
-        Assert.Equal(isChecked, bool.Parse(accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId).ToString()));
+        Assert.Equal(isChecked, bool.Parse(((BSTR)accessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree()));
         Assert.False(checkedListBox.IsHandleCreated);
     }
 }

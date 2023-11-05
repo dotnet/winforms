@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.DataGridViewTextBoxEditingControl;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -63,7 +62,7 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
         using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
         // AccessibleRole is not set = Default
 
-        object actual = textCellControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)textCellControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
 
         Assert.Equal(UIA_CONTROLTYPE_ID.UIA_EditControlTypeId, actual);
         Assert.False(textCellControl.IsHandleCreated);
@@ -110,7 +109,7 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
         using DataGridViewTextBoxEditingControl textCellControl = new DataGridViewTextBoxEditingControl();
         textCellControl.AccessibleRole = role;
 
-        object actual = textCellControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
+        var actual = (UIA_CONTROLTYPE_ID)(int)textCellControl.AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId);
         UIA_CONTROLTYPE_ID expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
         Assert.Equal(expected, actual);
@@ -118,15 +117,15 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
     }
 
     [WinFormsTheory]
-    [InlineData((int)UiaCore.NavigateDirection.NextSibling)]
-    [InlineData((int)UiaCore.NavigateDirection.PreviousSibling)]
-    [InlineData((int)UiaCore.NavigateDirection.FirstChild)]
-    [InlineData((int)UiaCore.NavigateDirection.LastChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_NextSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_PreviousSibling)]
+    [InlineData((int)NavigateDirection.NavigateDirection_FirstChild)]
+    [InlineData((int)NavigateDirection.NavigateDirection_LastChild)]
     public void DataGridViewTextBoxEditingControlAccessibleObject_FragmentNavigate_SiblingsAndChildrenAreNull(int direction)
     {
         using DataGridViewTextBoxEditingControl control = new();
 
-        object actual = control.AccessibilityObject.FragmentNavigate((UiaCore.NavigateDirection)direction);
+        object actual = control.AccessibilityObject.FragmentNavigate((NavigateDirection)direction);
 
         Assert.Null(actual);
         Assert.False(control.IsHandleCreated);
@@ -146,7 +145,7 @@ public class DataGridViewTextBoxEditingControl_DataGridViewTextBoxEditingControl
         control.CurrentCell = control.Rows[0].Cells[0];
         control.BeginEdit(false);
 
-        object actual = control.EditingControlAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+        object actual = control.EditingControlAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         control.EndEdit();
 

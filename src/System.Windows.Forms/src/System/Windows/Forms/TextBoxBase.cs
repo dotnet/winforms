@@ -1573,7 +1573,7 @@ public abstract partial class TextBoxBase : Control
         CommonProperties.xClearPreferredSizeCache(this);
         base.OnTextChanged(e);
 
-        if (UiaCore.UiaClientsAreListening())
+        if (PInvoke.UiaClientsAreListening())
         {
             RaiseAccessibilityTextChangedEvent();
         }
@@ -1653,10 +1653,7 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     public int GetFirstCharIndexFromLine(int lineNumber)
     {
-        if (lineNumber < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(lineNumber), lineNumber, string.Format(SR.InvalidArgument, nameof(lineNumber), lineNumber));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(lineNumber);
 
         return (int)PInvoke.SendMessage(this, PInvoke.EM_LINEINDEX, (WPARAM)lineNumber);
     }
@@ -1768,10 +1765,7 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     public void Select(int start, int length)
     {
-        if (start < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidArgument, nameof(start), start));
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(start);
 
         int textLen = TextLength;
 
