@@ -14,13 +14,15 @@ internal class TypedControlCollection : ReadOnlyControlCollection
     private readonly Type _typeOfControl;
     private readonly Control _ownerControl;
 
-    public TypedControlCollection(Control owner, Type typeOfControl, bool isReadOnly) : base(owner, isReadOnly)
+    public TypedControlCollection(Control owner, Type typeOfControl, bool isReadOnly)
+        : base(owner, isReadOnly)
     {
         _typeOfControl = typeOfControl;
         _ownerControl = owner;
     }
 
-    public TypedControlCollection(Control owner, Type typeOfControl) : base(owner, /*isReadOnly*/false)
+    public TypedControlCollection(Control owner, Type typeOfControl)
+        : base(owner, isReadOnly: false)
     {
         _typeOfControl = typeOfControl;
         _ownerControl = owner;

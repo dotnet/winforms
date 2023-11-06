@@ -78,7 +78,8 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
             grid.SelectedEntry = grid[nameof(Button.Size)];
             grid.SelectedEntry.Expanded = true;
 
-            Assert.Equal(grid.SelectedEntry.Children.First().AccessibilityObject,
+            Assert.Equal(
+                grid.SelectedEntry.Children.First().AccessibilityObject,
                 grid.GridView.EditAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling));
 
             return Task.CompletedTask;
