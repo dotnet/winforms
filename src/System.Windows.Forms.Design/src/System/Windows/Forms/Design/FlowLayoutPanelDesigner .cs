@@ -898,6 +898,7 @@ internal partial class FlowLayoutPanelDesigner : FlowPanelDesigner
         {
             // Here, we're at the 'end' of the FlowLayoutPanel - not over
             // any controls and not in a row/column.
+            _insertionIndex = FlowLayoutPanel.Controls.Count;
             EraseIBar();
         }
     }
