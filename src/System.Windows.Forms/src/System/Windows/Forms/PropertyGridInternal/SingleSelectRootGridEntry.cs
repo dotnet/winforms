@@ -15,7 +15,7 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
 {
     private string? _valueClassName;
     private GridEntry? _defaultEntry;
-    private IDesignerHost _host;
+    private IDesignerHost? _host;
     private IServiceProvider _baseProvider;
     private PropertyTab _ownerTab;
     private PropertyGridView _ownerGridView;
@@ -53,6 +53,7 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
     /// </summary>
     protected object Target { get; private set; }
 
+    [AllowNull]
     public override AttributeCollection BrowsableAttributes
     {
         get => _browsableAttributes ??= new(BrowsableAttribute.Yes);
@@ -110,7 +111,7 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
         set => _defaultEntry = value;
     }
 
-    internal sealed override IDesignerHost DesignerHost
+    internal sealed override IDesignerHost? DesignerHost
     {
         get => _host;
         set => _host = value;
@@ -192,7 +193,7 @@ internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
 
     protected override void Dispose(bool disposing)
     {
-        _host = null!;
+        _host = null;
         _baseProvider = null!;
         _ownerTab = null!;
         _ownerGridView = null!;
