@@ -3,7 +3,7 @@
 
 namespace System.Windows.Forms;
 
-public class DataGridViewCellFormattingEventArgs : ConvertEventArgs
+public class DataGridViewCellFormattingEventArgs : ConvertEventArgs, IDataGridViewCellEventArgs
 {
     public DataGridViewCellFormattingEventArgs(
         int columnIndex,
