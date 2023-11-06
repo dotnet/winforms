@@ -14,8 +14,9 @@ public class ControlControlCollectionTests
     [WinFormsFact]
     public void ControlCollection_Ctor_Control()
     {
-        using var owner = new Control();
-        var collection = new Control.ControlCollection(owner);
+        using Control owner = new();
+        Control.ControlCollection collection = new(owner);
+
         Assert.Empty(collection);
         Assert.False(collection.IsReadOnly);
         Assert.Same(owner, collection.Owner);

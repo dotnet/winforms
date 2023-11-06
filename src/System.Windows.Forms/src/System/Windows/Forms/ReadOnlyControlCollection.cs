@@ -12,7 +12,8 @@ internal class ReadOnlyControlCollection : Control.ControlCollection
 {
     private readonly bool _isReadOnly;
 
-    public ReadOnlyControlCollection(Control owner, bool isReadOnly) : base(owner)
+    public ReadOnlyControlCollection(Control owner, bool isReadOnly)
+        : base(owner)
     {
         _isReadOnly = isReadOnly;
     }
