@@ -3,6 +3,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
@@ -58,7 +59,7 @@ public abstract partial class DataGridViewCell
 
                 int rowIndex = _owner.DataGridView is null
                     ? -1
-                    : _owner.DataGridView.Rows.GetVisibleIndex(_owner.OwningRow);
+                    : _owner.DataGridView.Rows.GetVisibleIndex(_owner.OwningRow) + RowColumnStartIndex;
 
                 string name = string.Format(SR.DataGridView_AccDataGridViewCellName, _owner.OwningColumn.HeaderText, rowIndex);
 
@@ -115,6 +116,19 @@ public abstract partial class DataGridViewCell
         }
 
         public override AccessibleRole Role => AccessibleRole.Cell;
+
+        public int RowColumnStartIndex
+        {
+            get
+            {
+                if (LocalAppContextSwitches.DataGridViewStartRowColumnIndex)
+                {
+                    return 1;
+                }
+
+                return 0;
+            }
+        }
 
         public override AccessibleStates State
         {
@@ -725,12 +739,12 @@ public abstract partial class DataGridViewCell
 
         internal override int Row
             => _owner?.OwningRow?.Visible is true && _owner.DataGridView is not null
-                ? _owner.DataGridView.Rows.GetVisibleIndex(_owner.OwningRow)
+                ? _owner.DataGridView.Rows.GetVisibleIndex(_owner.OwningRow) 
                 : -1;
 
         internal override int Column
             => _owner?.OwningColumn?.Visible is true && _owner.DataGridView is not null
-                ? _owner.DataGridView.Columns.GetVisibleIndex(_owner.OwningColumn)
+                ? _owner.DataGridView.Columns.GetVisibleIndex(_owner.OwningColumn) 
                 : -1;
 
         internal override IRawElementProviderSimple.Interface? ContainingGrid => _owner?.DataGridView?.AccessibilityObject;

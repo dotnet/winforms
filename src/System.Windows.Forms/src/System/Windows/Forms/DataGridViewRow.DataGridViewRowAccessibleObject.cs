@@ -4,6 +4,7 @@
 using System.Drawing;
 using System.Globalization;
 using System.Text;
+using System.Windows.Forms.Primitives;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
@@ -35,7 +36,7 @@ public partial class DataGridViewRow
                 ? dataGridView.ColumnHeadersVisible
                     ? dataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow) + 1
                     : dataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow)
-                : -1;
+            : -1;
 
         public override Rectangle Bounds
         {
@@ -96,7 +97,7 @@ public partial class DataGridViewRow
                 }
 
                 int index = _owningDataGridViewRow is { Visible: true, DataGridView: { } }
-                        ? _owningDataGridViewRow.DataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow)
+                        ? _owningDataGridViewRow.DataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow) + RowColumnStartIndex
                         : -1;
 
                 return string.Format(SR.DataGridView_AccRowName, index.ToString(CultureInfo.CurrentCulture));
@@ -133,6 +134,19 @@ public partial class DataGridViewRow
         }
 
         public override AccessibleRole Role => AccessibleRole.Row;
+
+        public int RowColumnStartIndex
+        {
+            get
+            {
+                if (LocalAppContextSwitches.DataGridViewStartRowColumnIndex)
+                {
+                    return 1;
+                }
+
+                return 0;
+            }
+        }
 
         internal override int[] RuntimeId
             => _runtimeId ??= new int[]
