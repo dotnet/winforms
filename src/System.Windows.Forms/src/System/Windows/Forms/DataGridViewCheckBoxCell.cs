@@ -1189,7 +1189,7 @@ public partial class DataGridViewCheckBoxCell : DataGridViewCell, IDataGridViewE
             ptCurrentCell.Y == rowIndex)
         {
             // Draw focus rectangle
-            ControlPaint.DrawFocusRectangle(g, valBounds, Color.Empty, brushColor);
+            ControlPaint.DrawFocusRectangle(g, valBounds, cellStyle.BackColor, cellStyle.ForeColor);
         }
 
         Rectangle errorBounds = valBounds;
