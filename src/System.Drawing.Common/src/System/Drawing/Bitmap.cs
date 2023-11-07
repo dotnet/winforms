@@ -27,6 +27,9 @@ public sealed class Bitmap : Image
 
     public Bitmap(string filename, bool useIcm)
     {
+        // Validate the filename.
+        ArgumentException.ThrowIfNullOrWhiteSpace(filename, nameof(filename));
+
         // GDI+ will read this file multiple times. Get the fully qualified path
         // so if the app's default directory changes we won't get an error.
         filename = Path.GetFullPath(filename);
