@@ -1,7 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Internal;
@@ -18,18 +18,13 @@ public class PreviewPrintController : PrintController
 {
     private Graphics? _graphics;
     private DeviceContext? _dc;
-    private readonly ArrayList _list = new();
+    private readonly List<PreviewPageInfo> _list = new();
 
     public override bool IsPreview => true;
 
     public virtual bool UseAntiAlias { get; set; }
 
-    public PreviewPageInfo[] GetPreviewPageInfo()
-    {
-        var temp = new PreviewPageInfo[_list.Count];
-        _list.CopyTo(temp, 0);
-        return temp;
-    }
+    public PreviewPageInfo[] GetPreviewPageInfo() => _list.ToArray();
 
     /// <summary>
     /// Implements StartPrint for generating print preview information.
