@@ -854,9 +854,9 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     ///  components.  It returns an object array so the output can be directly fed into
     ///  the selection service.
     /// </summary>
-    internal object[] GetComponentsInRect(Rectangle value, bool screenCoords, bool containRect)
+    internal Control[] GetComponentsInRect(Rectangle value, bool screenCoords, bool containRect)
     {
-        ArrayList list = new ArrayList();
+        List<Control> list = new();
         Rectangle rect = screenCoords ? Control.RectangleToClient(value) : value;
 
         IContainer container = Component.Site.Container;
@@ -1255,7 +1255,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 return;
             }
 
-            object[] comps = parentDesigner.GetComponentsInRect(bounds, true, true /* component should be fully contained*/);
+            Control[] comps = parentDesigner.GetComponentsInRect(bounds, true, true /* component should be fully contained*/);
 
             if (comps is null || comps.Length == 0)
             {
@@ -1263,7 +1263,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
                 return;
             }
 
-            ArrayList selectedControls = new ArrayList(comps);
+            List<Control> selectedControls = new(comps);
 
             //remove this
             if (selectedControls.Contains(Control))
@@ -1890,7 +1890,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
             var selSvc = (ISelectionService)GetService(typeof(ISelectionService));
             if (selSvc is not null)
             {
-                object[] selection = GetComponentsInRect(offset, true, false /*component does not need to be fully contained*/);
+                Control[] selection = GetComponentsInRect(offset, true, false /*component does not need to be fully contained*/);
                 if (selection.Length > 0)
                 {
                     selSvc.SetSelectedComponents(selection);
@@ -2136,7 +2136,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
     ///  Control in the toolbox then drags a rectangle around four Buttons on the Form's surface.  We'll attempt
     ///  to re-parent those four Buttons to the newly created Panel.
     /// </summary>
-    private void ReParentControls(Control newParent, ArrayList controls, string transactionName, IDesignerHost host)
+    private void ReParentControls(Control newParent, List<Control> controls, string transactionName, IDesignerHost host)
     {
         using DesignerTransaction dt = host.CreateTransaction(transactionName);
         var changeService = GetService<IComponentChangeService>();
@@ -2155,9 +2155,8 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         changeService?.OnComponentChanging(newParent, controlsProp);
 
         //enumerate the lasso'd controls relocate and re-parent...
-        foreach (object comp in controls)
+        foreach (Control control in controls)
         {
-            Control control = comp as Control;
             Control oldParent = control.Parent;
             Point controlLoc = Point.Empty;
 
