@@ -25,7 +25,7 @@ internal class TableLayoutPanelBehavior : Behavior
     private TableLayoutPanel table;
     private StyleHelper rightStyle;
     private StyleHelper leftStyle;
-    private ArrayList _styles; //List of the styles
+    private List<TableLayoutStyle> _styles; //List of the styles
     private bool currentColumnStyles; // is Styles for Columns or Rows
     private static readonly TraceSwitch tlpResizeSwitch = new("TLPRESIZE", "Behavior service drag & drop messages");
 
@@ -126,11 +126,11 @@ internal class TableLayoutPanelBehavior : Behavior
                         {
                             int moveIndex = _styles.IndexOf(tableGlyph.Style);
                             rightStyle.index = IndexOfNextStealableStyle(true /*forward*/, moveIndex, widths);
-                            rightStyle.style = (TableLayoutStyle)_styles[rightStyle.index];
+                            rightStyle.style = _styles[rightStyle.index];
                             rightStyle.styleProp = TypeDescriptor.GetProperties(rightStyle.style)[isColumn ? "Width" : "Height"];
 
                             leftStyle.index = IndexOfNextStealableStyle(false /*backwards*/, moveIndex, widths);
-                            leftStyle.style = (TableLayoutStyle)_styles[leftStyle.index];
+                            leftStyle.style = _styles[leftStyle.index];
                             leftStyle.styleProp = TypeDescriptor.GetProperties(leftStyle.style)[isColumn ? "Width" : "Height"];
 
                             Debug.Assert(leftStyle.styleProp is not null && rightStyle.styleProp is not null, "Couldn't find property descriptor for width or height");
@@ -169,7 +169,7 @@ internal class TableLayoutPanelBehavior : Behavior
     {
         if ((_styles is null || isColumn != currentColumnStyles) && table is not null)
         {
-            _styles = new ArrayList(changedProp.GetValue(table) as TableLayoutStyleCollection);
+            _styles = ((TableLayoutStyleCollection)changedProp.GetValue(table)).Cast<TableLayoutStyle>().ToList();
             currentColumnStyles = isColumn;
         }
     }
@@ -217,7 +217,7 @@ internal class TableLayoutPanelBehavior : Behavior
             {
                 for (int i = startIndex + 1; ((i < _styles.Count) && (i < widths.Length)); i++)
                 {
-                    if (((TableLayoutStyle)_styles[i]).SizeType != SizeType.AutoSize && widths[i] >= DesignerUtils.MINUMUMSTYLESIZEDRAG)
+                    if (_styles[i].SizeType != SizeType.AutoSize && widths[i] >= DesignerUtils.MINUMUMSTYLESIZEDRAG)
                     {
                         stealIndex = i;
                         break;
@@ -230,7 +230,7 @@ internal class TableLayoutPanelBehavior : Behavior
                 {
                     for (int i = startIndex; i >= 0; i--)
                     {
-                        if (((TableLayoutStyle)_styles[i]).SizeType != SizeType.AutoSize && widths[i] >= DesignerUtils.MINUMUMSTYLESIZEDRAG)
+                        if (_styles[i].SizeType != SizeType.AutoSize && widths[i] >= DesignerUtils.MINUMUMSTYLESIZEDRAG)
                         {
                             stealIndex = i;
                             break;
@@ -290,8 +290,8 @@ internal class TableLayoutPanelBehavior : Behavior
                 int totalPercent = 0;
 
                 //simplest case: two absolute columns just affect each other.
-                if (((TableLayoutStyle)_styles[rightIndex]).SizeType == SizeType.Absolute &&
-                    ((TableLayoutStyle)_styles[leftIndex]).SizeType == SizeType.Absolute)
+                if (_styles[rightIndex].SizeType == SizeType.Absolute &&
+                    _styles[leftIndex].SizeType == SizeType.Absolute)
                 {
                     // VSWhidbey 465751
                     // The dimensions reported by GetColumnsWidths() are different
@@ -317,12 +317,12 @@ internal class TableLayoutPanelBehavior : Behavior
                     rightStyle.styleProp.SetValue(rightStyle.style, newRightSize);
                     leftStyle.styleProp.SetValue(leftStyle.style, newLeftSize);
                 }
-                else if (((TableLayoutStyle)_styles[rightIndex]).SizeType == SizeType.Percent &&
-                    ((TableLayoutStyle)_styles[leftIndex]).SizeType == SizeType.Percent)
+                else if (_styles[rightIndex].SizeType == SizeType.Percent &&
+                    _styles[leftIndex].SizeType == SizeType.Percent)
                 {
                     for (int i = 0; i < _styles.Count; i++)
                     {
-                        if (((TableLayoutStyle)_styles[i]).SizeType == SizeType.Percent)
+                        if (_styles[i].SizeType == SizeType.Percent)
                         {
                             totalPercent += oldWidths[i];
                         }
@@ -352,7 +352,7 @@ internal class TableLayoutPanelBehavior : Behavior
 #endif
 
                     //mixed - just update absolute
-                    int absIndex = ((TableLayoutStyle)_styles[rightIndex]).SizeType == SizeType.Absolute ? rightIndex : leftIndex;
+                    int absIndex = _styles[rightIndex].SizeType == SizeType.Absolute ? rightIndex : leftIndex;
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(_styles[absIndex])[isColumn ? "Width" : "Height"];
                     if (prop is not null)
                     {
