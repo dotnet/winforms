@@ -127,13 +127,15 @@ namespace MyProject
                     Sources = { SourceCompilable },
                     AnalyzerConfigFiles =
                     {
-                        ("""/.globalconfig""", $@"is_global = true
+                        ("/.globalconfig",
+                        @$"""
+is_global = true
 
 build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
 build_property.{PropertyNameCSharp.EnableVisualStyles} =
 build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
 build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
-"),
+"""),
                     },
                     GeneratedSources =
                     {
@@ -187,13 +189,15 @@ ApplicationConfiguration.Initialize();
                     Sources = { source },
                     AnalyzerConfigFiles =
                     {
-                        ("""/.globalconfig""", $@"is_global = true
+                        ("/.globalconfig",
+                        @$"""
+is_global = true
 
 build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
 build_property.{PropertyNameCSharp.EnableVisualStyles} =
 build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
 build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
-"),
+"""),
                     },
                     GeneratedSources =
                     {
