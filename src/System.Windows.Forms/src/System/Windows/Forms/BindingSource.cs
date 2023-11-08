@@ -78,7 +78,8 @@ public class BindingSource : Component,
     {
     }
 
-    public BindingSource(object? dataSource, string dataMember) : base()
+    public BindingSource(object? dataSource, string dataMember)
+        : base()
     {
         // Set data source and data member
         _dataSource = dataSource;
@@ -563,28 +564,28 @@ public class BindingSource : Component,
         return instancedObject;
     }
 
-    private void CurrencyManager_PositionChanged(object sender, EventArgs e)
+    private void CurrencyManager_PositionChanged(object? sender, EventArgs e)
     {
         Debug.Assert(sender == _currencyManager, "only receive notifications from the currency manager");
         OnPositionChanged(e);
     }
 
-    private void CurrencyManager_CurrentChanged(object sender, EventArgs e)
+    private void CurrencyManager_CurrentChanged(object? sender, EventArgs e)
     {
         OnCurrentChanged(EventArgs.Empty);
     }
 
-    private void CurrencyManager_CurrentItemChanged(object sender, EventArgs e)
+    private void CurrencyManager_CurrentItemChanged(object? sender, EventArgs e)
     {
         OnCurrentItemChanged(EventArgs.Empty);
     }
 
-    private void CurrencyManager_BindingComplete(object sender, BindingCompleteEventArgs e)
+    private void CurrencyManager_BindingComplete(object? sender, BindingCompleteEventArgs e)
     {
         OnBindingComplete(e);
     }
 
-    private void CurrencyManager_DataError(object sender, BindingManagerDataErrorEventArgs e)
+    private void CurrencyManager_DataError(object? sender, BindingManagerDataErrorEventArgs e)
     {
         OnDataError(e);
     }
@@ -736,7 +737,7 @@ public class BindingSource : Component,
         return false;
     }
 
-    private void InnerList_ListChanged(object sender, ListChangedEventArgs e)
+    private void InnerList_ListChanged(object? sender, ListChangedEventArgs e)
     {
         // Set recursive flag
         // Basically, we can have computed columns that cause our parent
@@ -871,7 +872,7 @@ public class BindingSource : Component,
     ///  In either case, we only have to change lists, not metadata, since we can assume
     ///  that the new list has the same item properties as the old list.
     /// </summary>
-    private void ParentCurrencyManager_CurrentItemChanged(object sender, EventArgs e)
+    private void ParentCurrencyManager_CurrentItemChanged(object? sender, EventArgs e)
     {
         if (_initializing)
         {
@@ -897,7 +898,7 @@ public class BindingSource : Component,
             _parentsCurrentItemChanging = false;
         }
 
-        CurrencyManager cm = (CurrencyManager)sender;
+        CurrencyManager cm = (CurrencyManager)sender!;
 
         // track if the current list changed
         bool currentItemChanged = true;
@@ -966,7 +967,7 @@ public class BindingSource : Component,
     ///  under the data source's new metadata, we have no choice but to clear the data
     ///  member field and just bind directly to the data source itself.
     /// </summary>
-    private void ParentCurrencyManager_MetaDataChanged(object sender, EventArgs e)
+    private void ParentCurrencyManager_MetaDataChanged(object? sender, EventArgs e)
     {
         ClearInvalidDataMember();
         ResetList();
@@ -1066,7 +1067,7 @@ public class BindingSource : Component,
 
     public void ResumeBinding() => _currencyManager.ResumeBinding();
     public void SuspendBinding() => _currencyManager.SuspendBinding();
-#nullable disable
+
     /// <summary>
     ///  Binds the BindingSource to the list specified by its DataSource and DataMember
     ///  properties.
@@ -1092,12 +1093,12 @@ public class BindingSource : Component,
         //
         // Note: The method below will throw an exception if a data member is specified
         // but does not correspond to a valid property on the data source.
-        object dataSourceInstance = _dataSource is Type dataSourceType ? GetListFromType(dataSourceType) : _dataSource;
-        object list = ListBindingHelper.GetList(dataSourceInstance, _dataMember);
+        object? dataSourceInstance = _dataSource is Type dataSourceType ? GetListFromType(dataSourceType) : _dataSource;
+        object? list = ListBindingHelper.GetList(dataSourceInstance, _dataMember);
         _listExtractedFromEnumerable = false;
 
         // Convert the candidate list into an IList, if necessary...
-        IList bindingList = null;
+        IList? bindingList = null;
         if (list is IList iList)
         {
             // If its already an IList then we're done!
@@ -1180,9 +1181,9 @@ public class BindingSource : Component,
         // If it does, then the BindingSource won't need to hook the PropertyChanged events itself. If the list
         // implements IRaiseItemChangedEvents, we can ask it directly. Otherwise we will assume that any list
         // which implements IBindingList automatically supports this capability.
-        if (listInternal is IRaiseItemChangedEvents)
+        if (listInternal is IRaiseItemChangedEvents raiseItemChangedEvents)
         {
-            _listRaisesItemChangedEvents = (listInternal as IRaiseItemChangedEvents).RaisesItemChangedEvents;
+            _listRaisesItemChangedEvents = raiseItemChangedEvents.RaisesItemChangedEvents;
         }
         else
         {
@@ -1194,10 +1195,11 @@ public class BindingSource : Component,
         {
             _itemType = ListBindingHelper.GetListItemType(List);
             _itemShape = ListBindingHelper.GetListItemProperties(List);
-            _itemConstructor = _itemType.GetConstructor(BindingFlags.Public |
-                                                                BindingFlags.Instance |
-                                                                BindingFlags.CreateInstance,
-                                                                null, Array.Empty<Type>(), null);
+            _itemConstructor = _itemType.GetConstructor(
+                BindingFlags.Public | BindingFlags.Instance | BindingFlags.CreateInstance,
+                binder: null,
+                Array.Empty<Type>(),
+                modifiers: null);
         }
 
         // Wire stuff up to the new list
@@ -1295,7 +1297,7 @@ public class BindingSource : Component,
     {
         if (_dataSource is ICurrencyManagerProvider provider)
         {
-            CurrencyManager cm = provider.CurrencyManager;
+            CurrencyManager? cm = provider.CurrencyManager;
             if (cm is not null)
             {
                 cm.CurrentItemChanged += new EventHandler(ParentCurrencyManager_CurrentItemChanged);
@@ -1308,7 +1310,7 @@ public class BindingSource : Component,
     {
         if (_dataSource is ICurrencyManagerProvider provider)
         {
-            CurrencyManager cm = provider.CurrencyManager;
+            CurrencyManager? cm = provider.CurrencyManager;
             if (cm is not null)
             {
                 cm.CurrentItemChanged -= new EventHandler(ParentCurrencyManager_CurrentItemChanged);
@@ -1333,7 +1335,7 @@ public class BindingSource : Component,
         }
     }
 
-    private void WirePropertyChangedEvents(object item)
+    private void WirePropertyChangedEvents(object? item)
     {
         if (item is not null && _itemShape is not null)
         {
@@ -1344,7 +1346,7 @@ public class BindingSource : Component,
         }
     }
 
-    private void UnwirePropertyChangedEvents(object item)
+    private void UnwirePropertyChangedEvents(object? item)
     {
         if (item is not null && _itemShape is not null)
         {
@@ -1398,7 +1400,7 @@ public class BindingSource : Component,
     ///  EndInit() method comes after the call to the BindingSource's EndInit() method
     ///  (since code-generated ordering of these calls is non-deterministic).
     /// </summary>
-    private void DataSource_Initialized(object sender, EventArgs e)
+    private void DataSource_Initialized(object? sender, EventArgs e)
     {
         if (DataSource is ISupportInitializeNotification dsInit)
         {
@@ -1425,7 +1427,7 @@ public class BindingSource : Component,
 
     private void OnInitialized()
     {
-        EventHandler eh = (EventHandler)Events[s_eventInitialized];
+        EventHandler? eh = (EventHandler?)Events[s_eventInitialized];
         eh?.Invoke(this, EventArgs.Empty);
     }
 
@@ -1467,7 +1469,7 @@ public class BindingSource : Component,
     [Browsable(false)]
     public virtual object SyncRoot => List.SyncRoot;
 
-    public virtual int Add(object value)
+    public virtual int Add(object? value)
     {
         int ret = -1;
 
@@ -1479,12 +1481,12 @@ public class BindingSource : Component,
         }
 
         // Throw if user tries to add items to list that don't match the current item type
-        if (value is not null && !_itemType.IsAssignableFrom(value.GetType()))
+        if (value is not null && !_itemType!.IsAssignableFrom(value.GetType()))
         {
             throw new InvalidOperationException(SR.BindingSourceItemTypeMismatchOnAdd);
         }
 
-        if (value is null && _itemType.IsValueType)
+        if (value is null && _itemType!.IsValueType)
         {
             throw new InvalidOperationException(SR.BindingSourceItemTypeIsValueType);
         }
@@ -1501,17 +1503,17 @@ public class BindingSource : Component,
         OnSimpleListChanged(ListChangedType.Reset, -1);
     }
 
-    public virtual bool Contains(object value) => List.Contains(value);
+    public virtual bool Contains(object? value) => List.Contains(value);
 
-    public virtual int IndexOf(object value) => List.IndexOf(value);
+    public virtual int IndexOf(object? value) => List.IndexOf(value);
 
-    public virtual void Insert(int index, object value)
+    public virtual void Insert(int index, object? value)
     {
         List.Insert(index, value);
         OnSimpleListChanged(ListChangedType.ItemAdded, index);
     }
 
-    public virtual void Remove(object value)
+    public virtual void Remove(object? value)
     {
         int index = ((IList)this).IndexOf(value);
         List.Remove(value);
@@ -1523,13 +1525,13 @@ public class BindingSource : Component,
 
     public virtual void RemoveAt(int index)
     {
-        object value = ((IList)this)[index];
+        object? value = ((IList)this)[index];
         List.RemoveAt(index);
         OnSimpleListChanged(ListChangedType.ItemDeleted, index);
     }
 
     [Browsable(false)]
-    public virtual object this[int index]
+    public virtual object? this[int index]
     {
         get => List[index];
         set
@@ -1549,14 +1551,14 @@ public class BindingSource : Component,
     [Browsable(false)]
     public virtual bool IsReadOnly => List.IsReadOnly;
 
-    public virtual string GetListName(PropertyDescriptor[] listAccessors)
+    public virtual string GetListName(PropertyDescriptor[]? listAccessors)
     {
         return ListBindingHelper.GetListName(List, listAccessors);
     }
 
-    public virtual PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors)
+    public virtual PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors)
     {
-        object ds = ListBindingHelper.GetList(_dataSource);
+        object? ds = ListBindingHelper.GetList(_dataSource);
 
         if (ds is ITypedList && !string.IsNullOrEmpty(_dataMember))
         {
@@ -1568,7 +1570,7 @@ public class BindingSource : Component,
         }
     }
 
-    public virtual object AddNew()
+    public virtual object? AddNew()
     {
         // Throw if adding new items has been disabled
         if (!AllowNewInternal(checkConstructor: false))
@@ -1599,7 +1601,7 @@ public class BindingSource : Component,
         AddingNewEventArgs addingNew = new AddingNewEventArgs();
         int oldCount = List.Count;
         OnAddingNew(addingNew);
-        object addNewItem = addingNew.NewObject;
+        object? addNewItem = addingNew.NewObject;
 
         // If no item came back from AddingNew event, we must create the new item ourselves...
         if (addNewItem is null)
@@ -1609,7 +1611,7 @@ public class BindingSource : Component,
             // that the new item was added at the *bottom* of the list).
             if (_isBindingList)
             {
-                addNewItem = (List as IBindingList).AddNew();
+                addNewItem = ((IBindingList)List).AddNew();
                 Position = Count - 1;
                 return addNewItem;
             }
@@ -1707,7 +1709,7 @@ public class BindingSource : Component,
 
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public virtual PropertyDescriptor SortProperty
+    public virtual PropertyDescriptor? SortProperty
     {
         get => _isBindingList ? ((IBindingList)List).SortProperty : null;
     }
@@ -1773,7 +1775,7 @@ public class BindingSource : Component,
     [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual void ApplySort(ListSortDescriptionCollection sorts)
     {
-        if (!(List is IBindingListView iblv))
+        if (List is not IBindingListView iblv)
         {
             throw new NotSupportedException(SR.OperationRequiresIBindingListView);
         }
@@ -1785,13 +1787,13 @@ public class BindingSource : Component,
     [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual ListSortDescriptionCollection SortDescriptions
     {
-        get => List is IBindingListView iblv ? iblv.SortDescriptions : null;
+        get => List is IBindingListView iblv ? iblv.SortDescriptions : null!;
     }
 
     [SRCategory(nameof(SR.CatData))]
     [DefaultValue(null)]
     [SRDescription(nameof(SR.BindingSourceFilterDescr))]
-    public virtual string Filter
+    public virtual string? Filter
     {
         get => _filter;
 
