@@ -37,6 +37,7 @@ public class DesignSurface : IDisposable, IServiceProvider
         ServiceContainer.AddService<IExtenderProviderService>(callback);
         ServiceContainer.AddService<IExtenderListService>(callback);
         ServiceContainer.AddService<ITypeDescriptorFilterService>(callback);
+        ServiceContainer.AddService<ITypeDiscoveryService>(callback);
         ServiceContainer.AddService<IReferenceService>(callback);
 
         ServiceContainer.AddService(this);
@@ -396,6 +397,11 @@ public class DesignSurface : IDisposable, IServiceProvider
         if (serviceType == typeof(ITypeDescriptorFilterService))
         {
             return new TypeDescriptorFilterService();
+        }
+
+        if (serviceType == typeof(ITypeDiscoveryService))
+        {
+            return new TypeDiscoveryService();
         }
 
         Debug.Assert(serviceType == typeof(IReferenceService), $"Demand created service not supported: {serviceType.Name}");
