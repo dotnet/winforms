@@ -36,7 +36,6 @@ variables:
   # used for post-build phases, internal builds only
   - ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
     - group: DotNet-Winforms-SDLValidation-Params
-    - group: DotNet-Blob-Feed
     - group: DotNet-Symbol-Server-Pats
   - ${{ if ne(variables['System.TeamProject'], 'internal') }}:
     - name: _InternalRuntimeDownloadArgs
