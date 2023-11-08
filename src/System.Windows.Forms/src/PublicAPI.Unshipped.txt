@@ -15,6 +15,8 @@
 *REMOVED*virtual System.Windows.Forms.TreeNodeCollection.AddRange(System.Windows.Forms.TreeNode![]! nodes) -> void
 System.Windows.Forms.AutoCompleteStringCollection.AddRange(params string![]! value) -> void
 System.Windows.Forms.ComboBox.ObjectCollection.AddRange(params object![]! items) -> void
+System.Windows.Forms.DataGridViewCell.DataGridViewCellAccessibleObject.RowColumnStartIndex.get -> int
+System.Windows.Forms.DataGridViewRow.DataGridViewRowAccessibleObject.RowColumnStartIndex.get -> int
 System.Windows.Forms.ImageList.ImageCollection.AddRange(params System.Drawing.Image![]! images) -> void
 System.Windows.Forms.ListBox.IntegerCollection.AddRange(params int[]! items) -> void
 System.Windows.Forms.ListBox.ObjectCollection.AddRange(params object![]! items) -> void

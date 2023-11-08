@@ -739,12 +739,12 @@ public abstract partial class DataGridViewCell
 
         internal override int Row
             => _owner?.OwningRow?.Visible is true && _owner.DataGridView is not null
-                ? _owner.DataGridView.Rows.GetVisibleIndex(_owner.OwningRow) 
+                ? _owner.DataGridView.Rows.GetVisibleIndex(_owner.OwningRow)
                 : -1;
 
         internal override int Column
             => _owner?.OwningColumn?.Visible is true && _owner.DataGridView is not null
-                ? _owner.DataGridView.Columns.GetVisibleIndex(_owner.OwningColumn) 
+                ? _owner.DataGridView.Columns.GetVisibleIndex(_owner.OwningColumn)
                 : -1;
 
         internal override IRawElementProviderSimple.Interface? ContainingGrid => _owner?.DataGridView?.AccessibilityObject;
