@@ -2301,7 +2301,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                     focusBounds.Width++;
                     focusBounds.Y--;
                     focusBounds.Height += 2;
-                    ControlPaint.DrawFocusRectangle(g, focusBounds, Color.Empty, brushColor);
+                    ControlPaint.DrawFocusRectangle(g, focusBounds, Color.Empty, cellStyle.ForeColor);
                 }
                 else if (paintPostXPThemes)
                 {
@@ -2312,12 +2312,12 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                     focusBounds.Height -= 2;
                     if (focusBounds.Width > 0 && focusBounds.Height > 0)
                     {
-                        ControlPaint.DrawFocusRectangle(g, focusBounds, Color.Empty, brushColor);
+                        ControlPaint.DrawFocusRectangle(g, focusBounds, Color.Empty, cellStyle.ForeColor);
                     }
                 }
                 else
                 {
-                    ControlPaint.DrawFocusRectangle(g, textBounds, Color.Empty, brushColor);
+                    ControlPaint.DrawFocusRectangle(g, textBounds, Color.Empty, cellStyle.ForeColor);
                 }
             }
 
