@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Reflection;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 
@@ -11,95 +10,84 @@ namespace Windows.Win32.System.Com;
 ///  Base class for providing <see cref="IDispatch"/> services through a standard dispatch implementation
 ///  generated from a type library.
 /// </summary>
-internal abstract unsafe class StandardDispatch : IDispatch.Interface, IDispatchEx.Interface, IWrapperInitialize, IDisposable
+/// <remarks>
+///  <para>
+///   This is roughly analagous to Win32's CreateStdDispatch which creates a simple wrapper that passes
+///   through to <see cref="ITypeInfo"/> for basic <see cref="IDispatch"/> support.
+///  </para>
+/// </remarks>
+internal abstract unsafe class StandardDispatch<T> : IDispatch.Interface, IDispatchEx.Interface, IDisposable
+    where T : unmanaged, IComIID
 {
-    private readonly Guid _typeLibrary;
-    private readonly ushort _majorVersion;
-    private readonly ushort _minorVersion;
-    private readonly Guid _interfaceId;
-    private AgileComPointer<IDispatch>? _standardDispatch;
-
-    // StdOle32.tlb
-    private static readonly Guid s_stdole = new("00020430-0000-0000-C000-000000000046");
+    private ITypeInfo* _typeInfo;
 
     /// <summary>
-    ///  Construct an <see cref="IUnknown"/> instance. This is useful as a replacement for types exposed as
-    ///  <see cref="IDispatch"/> and <see cref="IDispatchEx"/> purely through <see cref="IReflect"/>.
+    ///  Construct a new instance with the specified backing <see cref="ITypeInfo"/>.
     /// </summary>
-    public StandardDispatch() : this(s_stdole, 2, 0, IUnknown.IID_Guid)
+    public StandardDispatch(ITypeInfo* typeInfo)
     {
-    }
-
-    /// <summary>
-    ///  Construct a new instance from a registered type library.
-    /// </summary>
-    /// <param name="typeLibrary"><see cref="Guid"/> for the registered type library.</param>
-    /// <param name="majorVersion">Type library major version.</param>
-    /// <param name="minorVersion">Type library minor version.</param>
-    /// <param name="interfaceId">The <see cref="Guid"/> for the interface the derived class presents.</param>
-    public StandardDispatch(
-        Guid typeLibrary,
-        ushort majorVersion,
-        ushort minorVersion,
-        Guid interfaceId)
-    {
-        _typeLibrary = typeLibrary;
-        _majorVersion = majorVersion;
-        _minorVersion = minorVersion;
-        _interfaceId = interfaceId;
-    }
-
-    void IWrapperInitialize.OnInitialized(IUnknown* unknown)
-    {
-        if (_standardDispatch is not null)
+        if (typeInfo is null)
         {
-            // Already configured.
-            return;
+            throw new ArgumentNullException(nameof(typeInfo));
         }
 
-        // Load the registered type library and get the relevant ITypeInfo for the specified interface.
-        using ComScope<ITypeLib> typelib = new(null);
-        PInvoke.LoadRegTypeLib(_typeLibrary, _majorVersion, _minorVersion, 0, typelib).ThrowOnFailure();
+#if DEBUG
+        typeInfo->GetTypeAttr(out TYPEATTR* typeAttributes).ThrowOnFailure();
+        try
+        {
+            if (typeAttributes->guid != T.Guid)
+            {
+                throw new ArgumentException("Interface guid doesn't match type info", nameof(typeInfo));
+            }
+        }
+        finally
+        {
+            typeInfo->ReleaseTypeAttr(typeAttributes);
+        }
+#endif
 
-        using ComScope<ITypeInfo> typeinfo = new(null);
-        typelib.Value->GetTypeInfoOfGuid(_interfaceId, typeinfo).ThrowOnFailure();
-
-        // The unknown we get is a wrapper unknown.
-        unknown->QueryInterface(_interfaceId, out void* instance).ThrowOnFailure();
-        IUnknown* standard = default;
-        PInvoke.CreateStdDispatch(
-            unknown,
-            instance,
-            typeinfo.Value,
-            &standard).ThrowOnFailure();
-
-        _standardDispatch = new AgileComPointer<IDispatch>((IDispatch*)standard, takeOwnership: true);
+        _typeInfo = typeInfo;
+        _typeInfo->AddRef();
     }
-
-    private ComScope<IDispatch> Dispatch =>
-        _standardDispatch is not { } standardDispatch
-            ? throw new InvalidOperationException()
-            : standardDispatch.GetInterface();
 
     HRESULT IDispatch.Interface.GetTypeInfoCount(uint* pctinfo)
     {
-        using var dispatch = Dispatch;
-        dispatch.Value->GetTypeInfoCount(pctinfo);
+        if (pctinfo is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pctinfo = 1;
         return HRESULT.S_OK;
     }
 
     HRESULT IDispatch.Interface.GetTypeInfo(uint iTInfo, uint lcid, ITypeInfo** ppTInfo)
     {
-        using var dispatch = Dispatch;
-        dispatch.Value->GetTypeInfo(iTInfo, lcid, ppTInfo);
+        if (ppTInfo is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        if (iTInfo != 0)
+        {
+            *ppTInfo = null;
+            return HRESULT.DISP_E_BADINDEX;
+        }
+
+        _typeInfo->AddRef();
+        *ppTInfo = _typeInfo;
         return HRESULT.S_OK;
     }
 
     HRESULT IDispatch.Interface.GetIDsOfNames(Guid* riid, PWSTR* rgszNames, uint cNames, uint lcid, int* rgDispId)
     {
-        using var dispatch = Dispatch;
-        dispatch.Value->GetIDsOfNames(riid, rgszNames, cNames, lcid, rgDispId);
-        return HRESULT.S_OK;
+        // This must bee IID_NULL
+        if (riid != IID.NULL())
+        {
+            return HRESULT.DISP_E_UNKNOWNINTERFACE;
+        }
+
+        return _typeInfo->GetIDsOfNames(rgszNames, cNames, rgDispId);
     }
 
     HRESULT IDispatch.Interface.Invoke(
@@ -131,14 +119,13 @@ internal abstract unsafe class StandardDispatch : IDispatch.Interface, IDispatch
             return hr;
         }
 
-        // The override couldn't find it, pass it along to the standard dispatch.
-        using var dispatch = Dispatch;
-        hr = dispatch.Value->Invoke(dispIdMember, riid, lcid, wFlags, pDispParams, pVarResult, pExcepInfo, pArgErr);
-        return hr;
+        // The override couldn't find it, pass it along via the ITypeInfo.
+        using ComScope<T> @interface = new(ComHelpers.GetComPointer<T>(this));
+        return _typeInfo->Invoke(@interface, dispIdMember, wFlags, pDispParams, pVarResult, pExcepInfo, pArgErr);
     }
 
     HRESULT IDispatchEx.Interface.GetDispID(BSTR bstrName, uint grfdex, int* pid)
-    => bstrName.IsNull || pid is null ? HRESULT.E_POINTER : GetDispID(bstrName, grfdex, pid);
+        => bstrName.IsNull || pid is null ? HRESULT.E_POINTER : GetDispID(bstrName, grfdex, pid);
 
     protected virtual HRESULT GetDispID(BSTR bstrName, uint grfdex, int* pid) => HRESULT.E_NOTIMPL;
 
@@ -189,10 +176,9 @@ internal abstract unsafe class StandardDispatch : IDispatch.Interface, IDispatch
             return hr;
         }
 
-        // The override couldn't find it, pass it along to the standard dispatch.
-        using var dispatch = Dispatch;
-        hr = dispatch.Value->Invoke(id, IID.NULL(), lcid, (DISPATCH_FLAGS)wFlags, pdp, pvarRes, pei, puArgErr: null);
-        return hr;
+        // The override couldn't find it, pass it along via the ITypeInfo.
+        using ComScope<T> @interface = new(ComHelpers.GetComPointer<T>(this));
+        return _typeInfo->Invoke(@interface, id, (DISPATCH_FLAGS)wFlags, pdp, pvarRes, pei, puArgErr: null);
     }
 
     protected virtual HRESULT Invoke(
@@ -257,9 +243,10 @@ internal abstract unsafe class StandardDispatch : IDispatch.Interface, IDispatch
 
     protected virtual void Dispose(bool disposing)
     {
-        if (disposing)
+        if (_typeInfo is not null)
         {
-            DisposeHelper.NullAndDispose(ref _standardDispatch);
+            _typeInfo->Release();
+            _typeInfo = null;
         }
     }
 

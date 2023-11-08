@@ -17,7 +17,7 @@ public abstract partial class AxHost
     ///  This private class encapsulates all of the ole interfaces so that users cannot access and call them directly.
     /// </summary>
     private sealed unsafe class OleInterfaces :
-        StandardDispatch,
+        UnknownDispatch,
         IOleControlSite.Interface,
         IOleClientSite.Interface,
         IOleInPlaceSite.Interface,

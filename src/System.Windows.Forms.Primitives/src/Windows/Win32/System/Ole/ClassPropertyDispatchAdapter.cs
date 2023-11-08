@@ -29,7 +29,9 @@ internal unsafe class ClassPropertyDispatchAdapter
     /// <param name="priorAdapter">
     ///  A prior adapter for chaining. This adapter will be consulted first for all results.
     /// </param>
-    public ClassPropertyDispatchAdapter(object instance, ClassPropertyDispatchAdapter? priorAdapter = null)
+    public ClassPropertyDispatchAdapter(
+        object instance,
+        ClassPropertyDispatchAdapter? priorAdapter = null)
     {
         ArgumentNullException.ThrowIfNull(instance);
         _instance = new(instance);
