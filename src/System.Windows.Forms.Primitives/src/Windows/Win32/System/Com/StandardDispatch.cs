@@ -81,7 +81,7 @@ internal abstract unsafe class StandardDispatch<T> : IDispatch.Interface, IDispa
 
     HRESULT IDispatch.Interface.GetIDsOfNames(Guid* riid, PWSTR* rgszNames, uint cNames, uint lcid, int* rgDispId)
     {
-        // This must bee IID_NULL
+        // This must be IID_NULL
         if (riid != IID.NULL())
         {
             return HRESULT.DISP_E_UNKNOWNINTERFACE;
