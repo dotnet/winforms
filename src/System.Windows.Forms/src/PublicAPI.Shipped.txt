@@ -314,7 +314,7 @@ System.Windows.Forms.BindingSource.DataMember.get -> string!
 System.Windows.Forms.BindingSource.DataMember.set -> void
 System.Windows.Forms.BindingSource.DataSource.get -> object?
 System.Windows.Forms.BindingSource.DataSource.set -> void
-~System.Windows.Forms.BindingSource.Find(string propertyName, object key) -> int
+System.Windows.Forms.BindingSource.Find(string! propertyName, object! key) -> int
 System.Windows.Forms.BindingSource.List.get -> System.Collections.IList!
 System.Windows.Forms.BindingSource.Sort.get -> string?
 System.Windows.Forms.BindingSource.Sort.set -> void
@@ -652,15 +652,15 @@ virtual System.Windows.Forms.BindingSource.CurrencyManager.get -> System.Windows
 virtual System.Windows.Forms.BindingSource.GetRelatedCurrencyManager(string? dataMember) -> System.Windows.Forms.CurrencyManager?
 ~virtual System.Windows.Forms.BindingSource.IndexOf(object value) -> int
 ~virtual System.Windows.Forms.BindingSource.Insert(int index, object value) -> void
-~virtual System.Windows.Forms.BindingSource.OnAddingNew(System.ComponentModel.AddingNewEventArgs e) -> void
-~virtual System.Windows.Forms.BindingSource.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs e) -> void
-~virtual System.Windows.Forms.BindingSource.OnCurrentChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.BindingSource.OnCurrentItemChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.BindingSource.OnDataError(System.Windows.Forms.BindingManagerDataErrorEventArgs e) -> void
-~virtual System.Windows.Forms.BindingSource.OnDataMemberChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.BindingSource.OnDataSourceChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.BindingSource.OnListChanged(System.ComponentModel.ListChangedEventArgs e) -> void
-~virtual System.Windows.Forms.BindingSource.OnPositionChanged(System.EventArgs e) -> void
+virtual System.Windows.Forms.BindingSource.OnAddingNew(System.ComponentModel.AddingNewEventArgs! e) -> void
+virtual System.Windows.Forms.BindingSource.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs! e) -> void
+virtual System.Windows.Forms.BindingSource.OnCurrentChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.BindingSource.OnCurrentItemChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.BindingSource.OnDataError(System.Windows.Forms.BindingManagerDataErrorEventArgs! e) -> void
+virtual System.Windows.Forms.BindingSource.OnDataMemberChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.BindingSource.OnDataSourceChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.BindingSource.OnListChanged(System.ComponentModel.ListChangedEventArgs! e) -> void
+virtual System.Windows.Forms.BindingSource.OnPositionChanged(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.BindingSource.Remove(object value) -> void
 ~virtual System.Windows.Forms.BindingSource.SortDescriptions.get -> System.ComponentModel.ListSortDescriptionCollection
 ~virtual System.Windows.Forms.BindingSource.SortProperty.get -> System.ComponentModel.PropertyDescriptor
