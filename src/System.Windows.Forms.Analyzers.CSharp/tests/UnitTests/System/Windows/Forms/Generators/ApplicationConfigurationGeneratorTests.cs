@@ -127,7 +127,7 @@ namespace MyProject
                     Sources = { SourceCompilable },
                     AnalyzerConfigFiles =
                     {
-                        ("/.globalconfig", $@"is_global = true
+                        ("""/.globalconfig""", $@"is_global = true
 
 build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
 build_property.{PropertyNameCSharp.EnableVisualStyles} =
@@ -187,7 +187,8 @@ ApplicationConfiguration.Initialize();
                     Sources = { source },
                     AnalyzerConfigFiles =
                     {
-                        ("/.globalconfig", $@"is_global = true
+                        ("""/.globalconfig""", $@"is_global = true
+
 build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
 build_property.{PropertyNameCSharp.EnableVisualStyles} =
 build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
