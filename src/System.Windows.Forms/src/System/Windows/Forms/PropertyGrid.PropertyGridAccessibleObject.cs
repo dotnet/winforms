@@ -21,18 +21,7 @@ public partial class PropertyGrid
         /// <param name="owningPropertyGrid">The PropertyGrid owning control.</param>
         public PropertyGridAccessibleObject(PropertyGrid owningPropertyGrid) : base(owningPropertyGrid) { }
 
-        /// <summary>
-        ///  Return the child element at the specified point, if one exists,
-        ///  otherwise return this element if the point is on this element,
-        ///  otherwise return null.
-        /// </summary>
-        /// <param name="x">x coordinate of point to check</param>
-        /// <param name="y">y coordinate of point to check</param>
-        /// <returns>Return the child element at the specified point, if one exists,
-        ///  otherwise return this element if the point is on this element,
-        ///  otherwise return null.
-        /// </returns>
-        internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
         {
             if (!this.IsOwnerHandleCreated(out PropertyGrid? owningPropertyGrid))
             {
@@ -50,12 +39,7 @@ public partial class PropertyGrid
             return base.ElementProviderFromPoint(x, y);
         }
 
-        /// <summary>
-        ///  Request to return the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
@@ -80,7 +64,7 @@ public partial class PropertyGrid
         /// <param name="childFragment">The child element regarding which the target element is searched.</param>
         /// <param name="direction">Indicates the direction in which to navigate.</param>
         /// <returns>Returns the element in the specified direction.</returns>
-        internal UiaCore.IRawElementProviderFragment? ChildFragmentNavigate(AccessibleObject childFragment, NavigateDirection direction)
+        internal IRawElementProviderFragment.Interface? ChildFragmentNavigate(AccessibleObject childFragment, NavigateDirection direction)
         {
             switch (direction)
             {
@@ -209,10 +193,7 @@ public partial class PropertyGrid
         /// </summary>
         /// <returns>Return the element in this fragment which has the keyboard focus,
         ///  if any; otherwise return null.</returns>
-        internal override UiaCore.IRawElementProviderFragment? GetFocus()
-        {
-            return GetFocused();
-        }
+        internal override IRawElementProviderFragment.Interface? GetFocus() => GetFocused();
 
         /// <summary>
         ///  Gets the child control index.

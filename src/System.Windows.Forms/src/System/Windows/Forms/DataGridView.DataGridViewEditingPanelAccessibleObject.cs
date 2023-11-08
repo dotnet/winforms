@@ -31,7 +31,7 @@ public partial class DataGridView
         internal override int[] RuntimeId
             => _runtimeId ??= this.TryGetOwnerAs(out Panel? owner) ? owner.AccessibilityObject.RuntimeId : base.RuntimeId;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!_ownerDataGridView.TryGetTarget(out var owner))
             {

@@ -25,7 +25,7 @@ internal partial class PropertyGridView
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.TryGetOwnerAs(out GridViewListBox? owner)
                 || !owner.OwningPropertyGridView.DropDownVisible

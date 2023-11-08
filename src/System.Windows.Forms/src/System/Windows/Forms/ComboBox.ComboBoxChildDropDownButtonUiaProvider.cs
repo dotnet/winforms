@@ -44,7 +44,7 @@ public partial class ComboBox
 
         public override unsafe string? DefaultAction => SystemIAccessible.TryGetDefaultAction(GetChildId());
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owner.IsHandleCreated)
             {

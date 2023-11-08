@@ -15,7 +15,7 @@ public partial class ToolStrip
         {
         }
 
-        internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
             => this.IsOwnerHandleCreated(out ToolStrip? _) ? HitTest((int)x, (int)y) : null;
 
         /// <summary>
@@ -378,7 +378,7 @@ public partial class ToolStrip
 
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out ToolStrip? _))
             {

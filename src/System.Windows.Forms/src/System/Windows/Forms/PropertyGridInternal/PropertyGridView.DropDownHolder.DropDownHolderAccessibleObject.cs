@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using static System.Windows.Forms.PropertyGridInternal.PropertyDescriptorGridEntry;
 using Windows.Win32.UI.Accessibility;
+using static System.Windows.Forms.PropertyGridInternal.PropertyDescriptorGridEntry;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
@@ -20,7 +20,7 @@ internal partial class PropertyGridView
                 _owningDropDownHolder = dropDownHolder;
             }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+            internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             {
                 if (!ExistsInAccessibleTree)
                 {

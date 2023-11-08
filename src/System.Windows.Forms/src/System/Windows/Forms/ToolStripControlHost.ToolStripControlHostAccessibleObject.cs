@@ -63,15 +63,10 @@ public partial class ToolStripControlHost
             }
         }
 
-        /// <summary>
-        ///  Request to return the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
-            if (direction == NavigateDirection.NavigateDirection_FirstChild ||
-                direction == NavigateDirection.NavigateDirection_LastChild)
+            if (direction is NavigateDirection.NavigateDirection_FirstChild
+                or NavigateDirection.NavigateDirection_LastChild)
             {
                 return _ownerItem.Control.AccessibilityObject;
             }

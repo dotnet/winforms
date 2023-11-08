@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -104,7 +103,7 @@ public partial class MonthCalendar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
                 NavigateDirection.NavigateDirection_NextSibling

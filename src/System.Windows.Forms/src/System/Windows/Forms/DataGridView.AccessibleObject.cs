@@ -389,7 +389,7 @@ public partial class DataGridView
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
@@ -427,10 +427,10 @@ public partial class DataGridView
 
         #region IRawElementProviderFragmentRoot Implementation
 
-        internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
             => this.IsOwnerHandleCreated(out DataGridView? _) ? HitTest((int)x, (int)y) : null;
 
-        internal override UiaCore.IRawElementProviderFragment? GetFocus() => GetFocused();
+        internal override IRawElementProviderFragment.Interface? GetFocus() => GetFocused();
 
         #endregion
     }

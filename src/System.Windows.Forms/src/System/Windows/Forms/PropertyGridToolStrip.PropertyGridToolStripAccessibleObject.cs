@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -26,18 +25,13 @@ internal partial class PropertyGridToolStrip
             _parentPropertyGrid = new(parentPropertyGrid);
         }
 
-        /// <summary>
-        ///  Request to return the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (_parentPropertyGrid.TryGetTarget(out PropertyGrid? target)
                 && target.IsHandleCreated
                 && target.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
             {
-                UiaCore.IRawElementProviderFragment? navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                IRawElementProviderFragment.Interface? navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                 if (navigationTarget is not null)
                 {
                     return navigationTarget;
@@ -47,11 +41,6 @@ internal partial class PropertyGridToolStrip
             return base.FragmentNavigate(direction);
         }
 
-        /// <summary>
-        ///  Request value of specified property from an element.
-        /// </summary>
-        /// <param name="propertyID">Identifier indicating the property to return</param>
-        /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
             {

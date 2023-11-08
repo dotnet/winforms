@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Windows.Win32.UI.Accessibility;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms;
 
@@ -35,7 +34,7 @@ public partial class ScrollBar
             }
         }
 
-        internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!OwningScrollBar.IsHandleCreated)
             {

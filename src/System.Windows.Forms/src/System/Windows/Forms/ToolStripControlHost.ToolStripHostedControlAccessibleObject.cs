@@ -45,7 +45,7 @@ public partial class ToolStripControlHost
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (_toolStripHostedControl is not null &&
                 _toolStripControlHost is not null)

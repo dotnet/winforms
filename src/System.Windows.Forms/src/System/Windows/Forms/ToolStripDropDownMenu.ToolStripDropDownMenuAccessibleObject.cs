@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -14,7 +13,7 @@ public partial class ToolStripDropDownMenu : ToolStripDropDown
         public ToolStripDropDownMenuAccessibleObject(ToolStripDropDownMenu owner) : base(owner)
         { }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
                 NavigateDirection.NavigateDirection_Parent when this.TryGetOwnerAs(out ToolStripDropDownMenu? owner)

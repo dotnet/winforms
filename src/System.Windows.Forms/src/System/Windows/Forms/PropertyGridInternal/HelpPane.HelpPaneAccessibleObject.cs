@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -26,12 +25,12 @@ internal partial class HelpPane
             _parentPropertyGrid = new(parentPropertyGrid);
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (_parentPropertyGrid.TryGetTarget(out PropertyGrid? target)
                 && target.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
             {
-                UiaCore.IRawElementProviderFragment? navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                IRawElementProviderFragment.Interface? navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                 if (navigationTarget is not null)
                 {
                     return navigationTarget;

@@ -26,18 +26,15 @@ public partial class ToolStripProgressBar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
-        {
-            switch (direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
+            => direction switch
             {
-                case NavigateDirection.NavigateDirection_Parent:
-                case NavigateDirection.NavigateDirection_PreviousSibling:
-                case NavigateDirection.NavigateDirection_NextSibling:
-                    return _ownerToolStripProgressBarControl.Owner?.AccessibilityObject.FragmentNavigate(direction);
-            }
-
-            return base.FragmentNavigate(direction);
-        }
+                NavigateDirection.NavigateDirection_Parent
+                or NavigateDirection.NavigateDirection_PreviousSibling
+                or NavigateDirection.NavigateDirection_NextSibling
+                    => _ownerToolStripProgressBarControl.Owner?.AccessibilityObject.FragmentNavigate(direction),
+                _ => base.FragmentNavigate(direction),
+            };
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch

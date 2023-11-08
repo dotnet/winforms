@@ -31,7 +31,7 @@ public partial class DataGridViewTextBoxEditingControl
 
         public override string Name => this.GetOwnerAccessibleName(SR.DataGridView_AccEditingControlAccName);
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {

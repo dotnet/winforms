@@ -23,10 +23,10 @@ internal partial class PropertyGridView
             _parentPropertyGrid = new(parentPropertyGrid);
         }
 
-        internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
             => this.IsOwnerHandleCreated(out Control? _) ? HitTest((int)x, (int)y) : null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!_parentPropertyGrid.TryGetTarget(out PropertyGrid? target))
             {
@@ -39,7 +39,7 @@ internal partial class PropertyGridView
                 && target.Created
                 && target.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
             {
-                UiaCore.IRawElementProviderFragment? navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                IRawElementProviderFragment.Interface? navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                 if (navigationTarget is not null)
                 {
                     return navigationTarget;
@@ -57,7 +57,7 @@ internal partial class PropertyGridView
         internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
             => this.TryGetOwnerAs(out PropertyGridView? owner) ? owner.OwnerGrid?.AccessibilityObject : null;
 
-        internal override UiaCore.IRawElementProviderFragment? GetFocus() => GetFocused();
+        internal override IRawElementProviderFragment.Interface? GetFocus() => GetFocused();
 
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
             => propertyID switch
