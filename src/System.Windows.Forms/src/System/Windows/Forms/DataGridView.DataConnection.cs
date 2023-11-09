@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -16,7 +14,7 @@ public partial class DataGridView
     internal class DataGridViewDataConnection
     {
         private readonly DataGridView _owner;
-        private PropertyDescriptorCollection _props;
+        private PropertyDescriptorCollection? _props;
         private int _lastListCount = -1;
 
         // Data connection state variables
@@ -84,105 +82,45 @@ public partial class DataGridView
         {
             get
             {
-                if (CurrencyManager is not null)
-                {
-                    // we only allow to add new rows on an IBindingList
-                    return (CurrencyManager.List is IBindingList) && CurrencyManager.AllowAdd && ((IBindingList)CurrencyManager.List).SupportsChangeNotification;
-                }
-                else
-                {
-                    return false;
-                }
+                // We only allow to add new rows on an IBindingList.
+                return CurrencyManager is { List: IBindingList { SupportsChangeNotification: true }, AllowAdd: true };
             }
         }
 
-        public bool AllowEdit
-        {
-            get
-            {
-                if (CurrencyManager is not null)
-                {
-                    return CurrencyManager.AllowEdit;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+        public bool AllowEdit => CurrencyManager is not null
+            ? CurrencyManager.AllowEdit
+            : false;
 
         public bool AllowRemove
         {
             get
             {
-                if (CurrencyManager is not null)
-                {
-                    // we only allow deletion on an IBindingList
-                    return (CurrencyManager.List is IBindingList) && CurrencyManager.AllowRemove && ((IBindingList)CurrencyManager.List).SupportsChangeNotification;
-                }
-                else
-                {
-                    return false;
-                }
+                // We only allow deletion on an IBindingList.
+                return CurrencyManager is { AllowRemove: true, List: IBindingList { SupportsChangeNotification: true } };
             }
         }
 
-        public bool CancellingRowEdit
-        {
-            get
-            {
-                return _dataConnectionState[DATACONNECTIONSTATE_cancellingRowEdit];
-            }
-        }
+        public bool CancellingRowEdit => _dataConnectionState[DATACONNECTIONSTATE_cancellingRowEdit];
 
-        public CurrencyManager CurrencyManager { get; private set; }
+        public CurrencyManager? CurrencyManager { get; private set; }
 
         public string DataMember { get; private set; } = string.Empty;
 
-        public object DataSource { get; private set; }
+        public object? DataSource { get; private set; }
 
         public bool DoNotChangePositionInTheCurrencyManager
         {
-            get
-            {
-                return _dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager];
-            }
-            set
-            {
-                _dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager] = value;
-            }
+            get => _dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager];
+            set => _dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager] = value;
         }
 
-        public bool InterestedInRowEvents
-        {
-            get
-            {
-                return _dataConnectionState[DATACONNECTIONSTATE_interestedInRowEvents];
-            }
-        }
+        public bool InterestedInRowEvents =>
+            _dataConnectionState[DATACONNECTIONSTATE_interestedInRowEvents];
 
-        public IList List
-        {
-            get
-            {
-                if (CurrencyManager is not null)
-                {
-                    return CurrencyManager.List;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
+        public IList? List => CurrencyManager?.List;
 
-        public bool ListWasReset
-        {
-            get
-            {
-                return _dataConnectionState[DATACONNECTIONSTATE_listWasReset];
-            }
-        }
+        public bool ListWasReset =>
+            _dataConnectionState[DATACONNECTIONSTATE_listWasReset];
 
         public bool PositionChangingOutsideDataGridView
         {
@@ -196,21 +134,11 @@ public partial class DataGridView
             }
         }
 
-        public bool ProcessingListChangedEvent
-        {
-            get
-            {
-                return _dataConnectionState[DATACONNECTIONSTATE_processingListChangedEvent];
-            }
-        }
+        public bool ProcessingListChangedEvent =>
+            _dataConnectionState[DATACONNECTIONSTATE_processingListChangedEvent];
 
-        public bool ProcessingMetaDataChanges
-        {
-            get
-            {
-                return _dataConnectionState[DATACONNECTIONSTATE_processingMetaDataChanges];
-            }
-        }
+        public bool ProcessingMetaDataChanges =>
+            _dataConnectionState[DATACONNECTIONSTATE_processingMetaDataChanges];
 
         public bool RestoreRow
         {
@@ -282,7 +210,7 @@ public partial class DataGridView
                 return;
             }
 
-            GetSortingInformationFromBackend(out PropertyDescriptor sortField, out SortOrder sortOrder);
+            GetSortingInformationFromBackend(out PropertyDescriptor? sortField, out SortOrder sortOrder);
 
             // If we are not bound to a sorted IBindingList then set the SortGlyphDirection to SortOrder.None
             // on each dataBound DataGridViewColumn.
@@ -358,7 +286,7 @@ public partial class DataGridView
 
             for (int i = 0; i < _props.Count; i++)
             {
-                if (string.Compare(_props[i].Name, dataPropertyName, true /*ignoreCase*/, CultureInfo.InvariantCulture) == 0)
+                if (string.Compare(_props[i].Name, dataPropertyName, ignoreCase: true, CultureInfo.InvariantCulture) == 0)
                 {
                     ret = i;
                     break;
@@ -370,15 +298,12 @@ public partial class DataGridView
 
         public SortOrder BoundColumnSortOrder(int boundColumnIndex)
         {
-            IBindingList ibl = CurrencyManager is not null ? CurrencyManager.List as IBindingList : null;
-            IBindingListView iblv = ibl is not null ? ibl as IBindingListView : null;
-
-            if (ibl is null || !ibl.SupportsSorting || !ibl.IsSorted)
+            if (CurrencyManager?.List is not IBindingList { SupportsSorting: true, IsSorted: true })
             {
                 return SortOrder.None;
             }
 
-            GetSortingInformationFromBackend(out PropertyDescriptor sortProperty, out SortOrder sortOrder);
+            GetSortingInformationFromBackend(out PropertyDescriptor? sortProperty, out SortOrder sortOrder);
 
             if (sortOrder == SortOrder.None)
             {
@@ -386,7 +311,7 @@ public partial class DataGridView
                 return SortOrder.None;
             }
 
-            if (string.Compare(_props[boundColumnIndex].Name, sortProperty.Name, true /*ignoreCase*/, CultureInfo.InvariantCulture) == 0)
+            if (string.Compare(_props![boundColumnIndex].Name, sortProperty!.Name, ignoreCase: true, CultureInfo.InvariantCulture) == 0)
             {
                 return sortOrder;
             }
@@ -412,12 +337,12 @@ public partial class DataGridView
 
             int dataGridViewRowsCount = _owner.Rows.Count;
 
-            Debug.Assert(DataBoundRowsCount() == CurrencyManager.List.Count || (_owner.Columns.Count == 0 && dataGridViewRowsCount == 0),
+            Debug.Assert(DataBoundRowsCount() == CurrencyManager!.List!.Count || (_owner.Columns.Count == 0 && dataGridViewRowsCount == 0),
                          "there should be the same number of rows in the dataGridView's Row Collection as in the back end list");
         }
 #endif // DEBUG
 
-        private void currencyManager_ListChanged(object sender, ListChangedEventArgs e)
+        private void currencyManager_ListChanged(object? sender, ListChangedEventArgs e)
         {
             Debug.Assert(sender == CurrencyManager, "did we forget to unregister our ListChanged event handler?");
 
@@ -433,7 +358,7 @@ public partial class DataGridView
 
             _owner.OnDataBindingComplete(e.ListChangedType);
 
-            _lastListCount = CurrencyManager.Count;
+            _lastListCount = CurrencyManager!.Count;
 
 #if DEBUG
             CheckRowCount(e);
@@ -442,9 +367,9 @@ public partial class DataGridView
 
         private void ProcessListChanged(ListChangedEventArgs e)
         {
-            if (e.ListChangedType == System.ComponentModel.ListChangedType.PropertyDescriptorAdded ||
-                e.ListChangedType == System.ComponentModel.ListChangedType.PropertyDescriptorDeleted ||
-                e.ListChangedType == System.ComponentModel.ListChangedType.PropertyDescriptorChanged)
+            if (e.ListChangedType == ListChangedType.PropertyDescriptorAdded ||
+                e.ListChangedType == ListChangedType.PropertyDescriptorDeleted ||
+                e.ListChangedType == ListChangedType.PropertyDescriptorChanged)
             {
                 _dataConnectionState[DATACONNECTIONSTATE_processingMetaDataChanges] = true;
                 try
@@ -469,7 +394,7 @@ public partial class DataGridView
                 _dataConnectionState[DATACONNECTIONSTATE_listWasReset] = true;
                 try
                 {
-                    _owner.RefreshRows(!_owner.InSortOperation /*scrollIntoView*/);
+                    _owner.RefreshRows(scrollIntoView: !_owner.InSortOperation);
                     _owner.PushAllowUserToAddRows();
                 }
                 finally
@@ -511,13 +436,13 @@ public partial class DataGridView
                         {
                             // the new row becomes a regular row and a "new" new row is appended
                             _owner.NewRowIndex = -1;
-                            _owner.AddNewRow(false /* createdByEditing */);
+                            _owner.AddNewRow(createdByEditing: false);
                         }
-                        while (DataBoundRowsCount() < CurrencyManager.Count);
+                        while (DataBoundRowsCount() < CurrencyManager!.Count);
                     }
 
                     _dataConnectionState[DATACONNECTIONSTATE_finishedAddNew] = true;
-                    MatchCurrencyManagerPosition(true /*scrollIntoView*/, true /*clearSelection*/);
+                    MatchCurrencyManagerPosition(scrollIntoView: true, clearSelection: true);
                     return;
                 }
                 else if (e.ListChangedType == ListChangedType.ItemDeleted)
@@ -535,7 +460,7 @@ public partial class DataGridView
                         _dataConnectionState[DATACONNECTIONSTATE_listWasReset] = true;
                         try
                         {
-                            _owner.RefreshRows(!_owner.InSortOperation /*scrollIntoView*/);
+                            _owner.RefreshRows(scrollIntoView: !_owner.InSortOperation);
                             _owner.PushAllowUserToAddRows();
                         }
                         finally
@@ -543,12 +468,16 @@ public partial class DataGridView
                             _dataConnectionState[DATACONNECTIONSTATE_listWasReset] = false;
                         }
                     }
-                    else if (_dataConnectionState[DATACONNECTIONSTATE_inDeleteOperation] && CurrencyManager.List.Count == 0)
+                    else
                     {
-                        // if System.Data.DataView was in AddNew transaction and we delete all the rows in the System.Data.DataView
-                        // then System.Data.DataView will close the AddNew transaction under us
-                        // start another AddNew transaction on the back end
-                        AddNew();
+                        Debug.Assert(CurrencyManager?.List is not null);
+                        if (_dataConnectionState[DATACONNECTIONSTATE_inDeleteOperation] && CurrencyManager.List.Count == 0)
+                        {
+                            // if System.Data.DataView was in AddNew transaction and we delete all the rows in the System.Data.DataView
+                            // then System.Data.DataView will close the AddNew transaction under us
+                            // start another AddNew transaction on the back end
+                            AddNew();
+                        }
                     }
                 }
 
@@ -559,6 +488,7 @@ public partial class DataGridView
 
             // we received an ListChangedType.ItemAdded and our list has exactly the same number of rows as the back-end.
             // return.
+            Debug.Assert(CurrencyManager?.List is not null);
             if (e.ListChangedType == ListChangedType.ItemAdded &&
                 CurrencyManager.List.Count == (_owner.AllowUserToAddRowsInternal ? _owner.Rows.Count - 1 : _owner.Rows.Count))
             {
@@ -595,7 +525,7 @@ public partial class DataGridView
                 {
                     // we removed the item that was added during the delete operation
                     _dataConnectionState[DATACONNECTIONSTATE_itemAddedInDeleteOperation] = false;
-                    Debug.Assert(CurrencyManager.List.Count == 0, "we deleted the row that the Child table forcefully added");
+                    Debug.Assert(CurrencyManager!.List!.Count == 0, "we deleted the row that the Child table forcefully added");
                 }
                 else if (!_dataConnectionState[DATACONNECTIONSTATE_finishedAddNew] &&
                          _dataConnectionState[DATACONNECTIONSTATE_inEndCurrentEdit])
@@ -605,7 +535,7 @@ public partial class DataGridView
                     _dataConnectionState[DATACONNECTIONSTATE_listWasReset] = true;
                     try
                     {
-                        _owner.RefreshRows(!_owner.InSortOperation /*scrollIntoView*/);
+                        _owner.RefreshRows(scrollIntoView: !_owner.InSortOperation);
                         _owner.PushAllowUserToAddRows();
                     }
                     finally
@@ -615,9 +545,13 @@ public partial class DataGridView
 
                     return;
                 }
-                else if (CurrencyManager.List.Count == DataBoundRowsCount())
+                else
                 {
-                    return;
+                    Debug.Assert(CurrencyManager?.List is not null);
+                    if (CurrencyManager.List.Count == DataBoundRowsCount())
+                    {
+                        return;
+                    }
                 }
             }
 
@@ -639,7 +573,7 @@ public partial class DataGridView
 
                         try
                         {
-                            _owner.RefreshRows(!_owner.InSortOperation /*scrollIntoView*/);
+                            _owner.RefreshRows(scrollIntoView: !_owner.InSortOperation);
                             _owner.PushAllowUserToAddRows();
 
                             // ListChangedType.Reset can signal that the list became sorted or that the list is not sorted anymore.
@@ -660,7 +594,7 @@ public partial class DataGridView
                     case ListChangedType.ItemAdded:
                         if (_owner.NewRowIndex == -1 || e.NewIndex != _owner.Rows.Count)
                         {
-                            _owner.Rows.InsertInternal(e.NewIndex, _owner.RowTemplateClone, true /*force*/);
+                            _owner.Rows.InsertInternal(e.NewIndex, _owner.RowTemplateClone, force: true);
                         }
                         else
                         {
@@ -672,7 +606,7 @@ public partial class DataGridView
 
                         break;
                     case ListChangedType.ItemDeleted:
-                        _owner.Rows.RemoveAtInternal(e.NewIndex, true /*force*/);
+                        _owner.Rows.RemoveAtInternal(e.NewIndex, force: true);
                         _dataConnectionState[DATACONNECTIONSTATE_didNotDeleteRowFromDataGridView] = false;
                         break;
                     case ListChangedType.ItemMoved:
@@ -686,7 +620,7 @@ public partial class DataGridView
                         break;
                     case ListChangedType.ItemChanged:
                         Debug.Assert(e.NewIndex != -1, "the item changed event does not cover changes to the entire list");
-                        string dataPropertyName = null;
+                        string? dataPropertyName = null;
                         if (e.PropertyDescriptor is not null)
                         {
                             dataPropertyName = ((MemberDescriptor)(e.PropertyDescriptor)).Name;
@@ -699,7 +633,7 @@ public partial class DataGridView
                             {
                                 if (!string.IsNullOrEmpty(dataPropertyName))
                                 {
-                                    if (string.Compare(dataGridViewColumn.DataPropertyName, dataPropertyName, true /*ignoreCase*/, CultureInfo.InvariantCulture) == 0)
+                                    if (string.Compare(dataGridViewColumn.DataPropertyName, dataPropertyName, ignoreCase: true, CultureInfo.InvariantCulture) == 0)
                                     {
                                         _owner.OnCellCommonChange(columnIndex, e.NewIndex);
                                     }
@@ -729,7 +663,7 @@ public partial class DataGridView
                     !_dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheDataGridViewControl] &&
                     !_owner.InSortOperation)
                 {
-                    MatchCurrencyManagerPosition(false /*scrollIntoView*/, e.ListChangedType == ListChangedType.Reset /*clearSelection*/);
+                    MatchCurrencyManagerPosition(scrollIntoView: false, clearSelection: e.ListChangedType == ListChangedType.Reset);
                 }
             }
             finally
@@ -738,7 +672,7 @@ public partial class DataGridView
             }
         }
 
-        private void currencyManager_PositionChanged(object sender, EventArgs e)
+        private void currencyManager_PositionChanged(object? sender, EventArgs e)
         {
             Debug.Assert(sender == CurrencyManager, "did we forget to unregister our events?");
             if (_owner.Columns.Count == 0)
@@ -780,7 +714,7 @@ public partial class DataGridView
             if (_owner.AllowUserToAddRowsInternal &&                                // condition 1.
                 _dataConnectionState[DATACONNECTIONSTATE_finishedAddNew] &&         // condition 2.
                 !_dataConnectionState[DATACONNECTIONSTATE_inAddNew] &&              // condition 2.
-                CurrencyManager.Position > -1 &&                                   // condition 3.
+                CurrencyManager!.Position > -1 &&                                   // condition 3.
                 CurrencyManager.Position == _owner.NewRowIndex &&              // condition 4.
                 _owner.CurrentCellAddress.Y != _owner.NewRowIndex &&            // condition 5.
                 CurrencyManager.Count == DataBoundRowsCount() + 1)                 // condition 6.
@@ -798,6 +732,7 @@ public partial class DataGridView
                     // row is being committed, don't scroll it into view.
                     if (_dataConnectionState[DATACONNECTIONSTATE_rowValidatingInAddNew])
                     {
+                        Debug.Assert(CurrencyManager?.List is not null);
                         if (CurrencyManager.List is IBindingList ibl && ibl.SupportsSorting && ibl.IsSorted)
                         {
                             scrollIntoView = false;
@@ -808,7 +743,7 @@ public partial class DataGridView
                     bool clearSelection = _dataConnectionState[DATACONNECTIONSTATE_cancellingRowEdit] && !_dataConnectionState[DATACONNECTIONSTATE_finishedAddNew];
                     // Otherwise we clear the selection if the last list count is still uninitialized
                     // or if it is the same as the current list count.
-                    clearSelection |= _lastListCount == -1 || _lastListCount == CurrencyManager.Count;
+                    clearSelection |= _lastListCount == -1 || _lastListCount == CurrencyManager!.Count;
                     MatchCurrencyManagerPosition(scrollIntoView, clearSelection);
                 }
             }
@@ -842,7 +777,7 @@ public partial class DataGridView
             return result;
         }
 
-        private void DataSource_Initialized(object sender, EventArgs e)
+        private void DataSource_Initialized(object? sender, EventArgs e)
         {
             Debug.Assert(sender == DataSource);
             Debug.Assert(DataSource is ISupportInitializeNotification);
@@ -889,6 +824,7 @@ public partial class DataGridView
                 {
                     Debug.Assert(_owner.AllowUserToAddRowsInternal, "how did we start an add new row transaction if the dataGridView control has AllowUserToAddRows == false?");
                     bool deleteAddNewRow = false;
+                    Debug.Assert(CurrencyManager?.List is not null);
                     if (_owner.NewRowIndex == CurrencyManager.List.Count)
                     {
                         // the user clicked on the 'add new row' and started typing
@@ -904,7 +840,7 @@ public partial class DataGridView
                     if (deleteAddNewRow)
                     {
                         // we finished the add new transaction
-                        CancelRowEdit(false /*restoreRow*/, true /*addNewFinished*/);
+                        CancelRowEdit(restoreRow: false, addNewFinished: true);
                     }
                     else
                     {
@@ -931,7 +867,7 @@ public partial class DataGridView
                     _dataConnectionState[DATACONNECTIONSTATE_didNotDeleteRowFromDataGridView] = true;
                     try
                     {
-                        CurrencyManager.RemoveAt(rowIndex);
+                        CurrencyManager!.RemoveAt(rowIndex);
                     }
                     finally
                     {
@@ -989,7 +925,7 @@ public partial class DataGridView
             return dataGridViewColumn;
         }
 
-        public List<DataGridViewColumn> GetCollectionOfBoundDataGridViewColumns()
+        public List<DataGridViewColumn>? GetCollectionOfBoundDataGridViewColumns()
         {
             if (_props is null)
             {
@@ -1002,8 +938,7 @@ public partial class DataGridView
             {
                 if (typeof(IList).IsAssignableFrom(_props[i].PropertyType))
                 {
-                    // we have an IList. It could be a byte[] in which case we want to generate an Image column
-                    //
+                    // We have an IList. It could be a byte[] in which case we want to generate an Image column.
                     TypeConverter imageTypeConverter = TypeDescriptor.GetConverter(typeof(Image));
                     if (!imageTypeConverter.CanConvertFrom(_props[i].PropertyType))
                     {
@@ -1033,12 +968,9 @@ public partial class DataGridView
             return cols;
         }
 
-        private void GetSortingInformationFromBackend(out PropertyDescriptor sortProperty, out SortOrder sortOrder)
+        private void GetSortingInformationFromBackend(out PropertyDescriptor? sortProperty, out SortOrder sortOrder)
         {
-            IBindingList ibl = CurrencyManager is not null ? CurrencyManager.List as IBindingList : null;
-            IBindingListView iblv = ibl is not null ? ibl as IBindingListView : null;
-
-            if (ibl is null || !ibl.SupportsSorting || !ibl.IsSorted)
+            if (CurrencyManager?.List is not IBindingList { SupportsSorting: true, IsSorted: true } ibl)
             {
                 sortOrder = SortOrder.None;
                 sortProperty = null;
@@ -1050,7 +982,7 @@ public partial class DataGridView
                 sortProperty = ibl.SortProperty;
                 sortOrder = ibl.SortDirection == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
             }
-            else if (iblv is not null)
+            else if (ibl is IBindingListView iblv)
             {
                 // Maybe the data view is sorted on multiple columns.
                 // Go thru the IBindingListView which offers the entire list of sorted columns
@@ -1058,10 +990,10 @@ public partial class DataGridView
                 ListSortDescriptionCollection sorts = iblv.SortDescriptions;
                 if (sorts is not null &&
                     sorts.Count > 0 &&
-                    sorts[0].PropertyDescriptor is not null)
+                    sorts[0]!.PropertyDescriptor is not null)
                 {
-                    sortProperty = sorts[0].PropertyDescriptor;
-                    sortOrder = sorts[0].SortDirection == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
+                    sortProperty = sorts[0]!.PropertyDescriptor;
+                    sortOrder = sorts[0]!.SortDirection == ListSortDirection.Ascending ? SortOrder.Ascending : SortOrder.Descending;
                 }
                 else
                 {
@@ -1078,10 +1010,8 @@ public partial class DataGridView
             }
         }
 
-        public void ResetCachedAllowUserToAddRowsInternal()
-        {
+        public void ResetCachedAllowUserToAddRowsInternal() =>
             _dataConnectionState[DATACONNECTIONSTATE_cachedAllowUserToAddRowsInternal] = _owner.AllowUserToAddRowsInternal;
-        }
 
         private void ResetDataConnectionState()
         {
@@ -1096,7 +1026,7 @@ public partial class DataGridView
             ResetCachedAllowUserToAddRowsInternal();
         }
 
-        public void SetDataConnection(object dataSource, string dataMember)
+        public void SetDataConnection(object? dataSource, string dataMember)
         {
             if (_dataConnectionState[DATACONNECTIONSTATE_dataConnection_inSetDataConnection])
             {
@@ -1107,7 +1037,7 @@ public partial class DataGridView
 
             dataMember ??= string.Empty;
 
-            if (this.DataSource is ISupportInitializeNotification dsInit && _dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp])
+            if (DataSource is ISupportInitializeNotification dsInit && _dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp])
             {
                 // If we previously hooked the data source's ISupportInitializeNotification
                 // Initialized event, then unhook it now (we don't always hook this event,
@@ -1116,8 +1046,8 @@ public partial class DataGridView
                 _dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp] = false;
             }
 
-            this.DataSource = dataSource;
-            this.DataMember = dataMember;
+            DataSource = dataSource;
+            DataMember = dataMember;
 
             if (_owner.BindingContext is null)
             {
@@ -1130,9 +1060,9 @@ public partial class DataGridView
                 // unwire the events
                 UnWireEvents();
 
-                if (this.DataSource is not null && _owner.BindingContext is not null && !(this.DataSource == Convert.DBNull))
+                if (DataSource is not null && _owner.BindingContext is not null && DataSource != Convert.DBNull)
                 {
-                    dsInit = this.DataSource as ISupportInitializeNotification;
+                    dsInit = (DataSource as ISupportInitializeNotification)!;
                     if (dsInit is not null && !dsInit.IsInitialized)
                     {
                         if (!_dataConnectionState[DATACONNECTIONSTATE_dataSourceInitializedHookedUp])
@@ -1145,7 +1075,7 @@ public partial class DataGridView
                     }
                     else
                     {
-                        CurrencyManager = _owner.BindingContext[this.DataSource, this.DataMember] as CurrencyManager;
+                        CurrencyManager = _owner.BindingContext[DataSource, DataMember] as CurrencyManager;
                     }
                 }
                 else
@@ -1183,10 +1113,10 @@ public partial class DataGridView
 
         public string GetError(int rowIndex)
         {
-            IDataErrorInfo errInfo = null;
+            IDataErrorInfo? errInfo = null;
             try
             {
-                errInfo = CurrencyManager[rowIndex] as IDataErrorInfo;
+                errInfo = CurrencyManager![rowIndex] as IDataErrorInfo;
             }
             catch (Exception exception) when (!exception.IsCriticalException() || exception is IndexOutOfRangeException)
             {
@@ -1209,10 +1139,10 @@ public partial class DataGridView
         {
             Debug.Assert(rowIndex >= 0);
 
-            IDataErrorInfo errInfo = null;
+            IDataErrorInfo? errInfo = null;
             try
             {
-                errInfo = CurrencyManager[rowIndex] as IDataErrorInfo;
+                errInfo = CurrencyManager![rowIndex] as IDataErrorInfo;
             }
             catch (Exception exception) when (!exception.IsCriticalException() || exception is IndexOutOfRangeException)
             {
@@ -1230,7 +1160,7 @@ public partial class DataGridView
 
             if (errInfo is not null)
             {
-                return errInfo[_props[boundColumnIndex].Name];
+                return errInfo[_props![boundColumnIndex].Name];
             }
             else
             {
@@ -1238,13 +1168,13 @@ public partial class DataGridView
             }
         }
 
-        public object GetValue(int boundColumnIndex, int columnIndex, int rowIndex)
+        public object? GetValue(int boundColumnIndex, int columnIndex, int rowIndex)
         {
             Debug.Assert(rowIndex >= 0);
-            object value = null;
+            object? value = null;
             try
             {
-                value = _props[boundColumnIndex].GetValue(CurrencyManager[rowIndex]);
+                value = _props![boundColumnIndex].GetValue(CurrencyManager![rowIndex]);
             }
             catch (Exception exception) when (!exception.IsCriticalException() || exception is IndexOutOfRangeException)
             {
@@ -1287,23 +1217,25 @@ public partial class DataGridView
             // Treat case where columnIndex == -1. We change the visibility of the first column.
             if (columnIndex == -1)
             {
-                DataGridViewColumn dataGridViewColumn = _owner.Columns.GetFirstColumn(DataGridViewElementStates.None);
+                DataGridViewColumn dataGridViewColumn = _owner.Columns.GetFirstColumn(DataGridViewElementStates.None)!;
                 Debug.Assert(dataGridViewColumn is not null);
                 dataGridViewColumn.Visible = true;
                 columnIndex = dataGridViewColumn.Index;
             }
 
-            int rowIndex = CurrencyManager.Position;
+            int rowIndex = CurrencyManager!.Position;
 
             Debug.Assert(rowIndex >= -1);
 
             if (rowIndex == -1)
             {
                 // Occurs when calling SuspendBinding() on the currency manager?
-                if (!_owner.SetCurrentCellAddressCore(-1, -1,
-                                                          false, /*setAnchorCellAddress*/
-                                                          false, /*validateCurrentCell*/
-                                                          false  /*throughMouseClick*/))
+                if (!_owner.SetCurrentCellAddressCore(
+                    columnIndex: -1,
+                    rowIndex: -1,
+                    setAnchorCellAddress: false,
+                    validateCurrentCell: false,
+                    throughMouseClick: false))
                 {
                     throw new InvalidOperationException(SR.DataGridView_CellChangeCannotBeCommittedOrAborted);
                 }
@@ -1333,12 +1265,14 @@ public partial class DataGridView
                 // Scroll target cell into view first.
                 if ((scrollIntoView && !_owner.ScrollIntoView(columnIndex, rowIndex, true)) ||
                     (columnIndex < _owner.Columns.Count && rowIndex < _owner.Rows.Count &&
-                     !_owner.SetAndSelectCurrentCellAddress(columnIndex, rowIndex,
-                                                               true,  /*setAnchorCellAddress*/
-                                                               false, /*validateCurrentCell*/
-                                                               false,  /*throughMouseClick*/
-                                                               clearSelection,
-                                                               false /*forceCurrentCellSelection*/)))
+                    !_owner.SetAndSelectCurrentCellAddress(
+                        columnIndex,
+                        rowIndex,
+                        setAnchorCellAddress: true,
+                        validateCurrentCell: false,
+                        throughMouseClick: false,
+                        clearSelection,
+                        forceCurrentCellSelection: false)))
                 {
                     throw new InvalidOperationException(SR.DataGridView_CellChangeCannotBeCommittedOrAborted);
                 }
@@ -1351,8 +1285,8 @@ public partial class DataGridView
             _dataConnectionState[DATACONNECTIONSTATE_restoreRow] = restoreRow;
             try
             {
-                object currentItem = null;
-                if (CurrencyManager.Position >= 0 && CurrencyManager.Position < CurrencyManager.List.Count)
+                object? currentItem = null;
+                if (CurrencyManager!.Position >= 0 && CurrencyManager.Position < CurrencyManager.List!.Count)
                 {
                     currentItem = CurrencyManager.Current;
                 }
@@ -1363,8 +1297,8 @@ public partial class DataGridView
                 // when we call CurrencyManager::CancelCurrentEdit.
                 // So, if the current item inside the currency manager did not change, we have to start a new transaction.
                 // (If the current item inside the currency manager changed, then the currency manager would have already started a new transaction).
-                IEditableObject editableObject = null;
-                if (CurrencyManager.Position >= 0 && CurrencyManager.Position < CurrencyManager.List.Count)
+                IEditableObject? editableObject = null;
+                if (CurrencyManager.Position >= 0 && CurrencyManager.Position < CurrencyManager.List!.Count)
                 {
                     editableObject = CurrencyManager.Current as IEditableObject;
                 }
@@ -1407,7 +1341,7 @@ public partial class DataGridView
             }
 
             // don't start a transaction on a suspended currency manager.
-            if (!CurrencyManager.ShouldBind)
+            if (!CurrencyManager!.ShouldBind)
             {
                 return;
             }
@@ -1444,7 +1378,7 @@ public partial class DataGridView
         internal void OnRowValidating(DataGridViewCellCancelEventArgs e)
         {
             // don't end the transaction on a suspended currency manager.
-            if (!CurrencyManager.ShouldBind)
+            if (!CurrencyManager!.ShouldBind)
             {
                 return;
             }
@@ -1453,14 +1387,14 @@ public partial class DataGridView
             {
                 if (!_dataConnectionState[DATACONNECTIONSTATE_cancellingRowEdit])
                 {
-                    Debug.Assert(DataBoundRowsCount() == CurrencyManager.List.Count, "if the back end was changed while in AddNew the DGV should have updated its rows collection");
+                    Debug.Assert(DataBoundRowsCount() == CurrencyManager.List!.Count, "if the back end was changed while in AddNew the DGV should have updated its rows collection");
                     // Cancel the current AddNew transaction
                     // doNotChangePositionInTheDataGridViewControl because we will change position
                     // when we get notification from the back end that the cancel operation was completed
                     _dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheDataGridViewControl] = true;
                     try
                     {
-                        CancelRowEdit(false /*restoreRow*/, false /*addNewFinished*/);
+                        CancelRowEdit(restoreRow: false, addNewFinished: false);
                     }
                     finally
                     {
@@ -1509,7 +1443,7 @@ public partial class DataGridView
                 e.Cancel = true;
                 if (beginEdit)
                 {
-                    if (CurrencyManager.Current is IEditableObject iEditObj)
+                    if (CurrencyManager!.Current is IEditableObject iEditObj)
                     {
                         iEditObj.BeginEdit();
                     }
@@ -1517,19 +1451,19 @@ public partial class DataGridView
             }
             else
             {
-                CancelRowEdit(false /*restoreRow*/, false /*finishedAddNew*/);
+                CancelRowEdit(restoreRow: false, addNewFinished: false);
                 // interrupt current operation
             }
         }
 
-        public bool PushValue(int boundColumnIndex, int columnIndex, int rowIndex, object value)
+        public bool PushValue(int boundColumnIndex, int columnIndex, int rowIndex, object? value)
         {
             try
             {
                 if (value is not null)
                 {
                     Type valueType = value.GetType();
-                    Type columnType = _owner.Columns[columnIndex].ValueType;
+                    Type columnType = _owner.Columns[columnIndex].ValueType!;
                     if (!columnType.IsAssignableFrom(valueType))
                     {
                         // value needs to be converted before being fed to the back-end.
@@ -1549,7 +1483,7 @@ public partial class DataGridView
                     }
                 }
 
-                _props[boundColumnIndex].SetValue(CurrencyManager[rowIndex], value);
+                _props![boundColumnIndex].SetValue(CurrencyManager![rowIndex], value);
             }
             catch (Exception exception) when (!exception.IsCriticalException())
             {
@@ -1561,7 +1495,7 @@ public partial class DataGridView
             return true;
         }
 
-        public bool ShouldChangeDataMember(object newDataSource)
+        public bool ShouldChangeDataMember(object? newDataSource)
         {
             if (!_owner.Created)
             {
@@ -1602,7 +1536,7 @@ public partial class DataGridView
         {
             Debug.Assert(dataGridViewColumn.IsDataBound && dataGridViewColumn.BoundColumnIndex != -1, "we need a bound column index to perform the sort");
             Debug.Assert(List is IBindingList, "you should have checked by now that we are bound to an IBindingList");
-            ((IBindingList)List).ApplySort(_props[dataGridViewColumn.BoundColumnIndex], direction);
+            ((IBindingList)List).ApplySort(_props![dataGridViewColumn.BoundColumnIndex], direction);
         }
 
         private void UnWireEvents()
