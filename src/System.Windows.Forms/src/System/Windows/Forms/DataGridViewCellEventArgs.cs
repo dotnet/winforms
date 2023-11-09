@@ -23,9 +23,3 @@ public class DataGridViewCellEventArgs : EventArgs, IDataGridViewCellEventArgs
 
     public int RowIndex { get; }
 }
-
-internal interface IDataGridViewCellEventArgs
-{
-    int ColumnIndex { get; }
-    int RowIndex { get; }
-}
