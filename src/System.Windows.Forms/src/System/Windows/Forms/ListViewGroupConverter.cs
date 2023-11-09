@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
@@ -117,13 +116,14 @@ internal class ListViewGroupConverter : TypeConverter
     {
         if (context is not null && context.Instance is ListViewItem item && item.ListView is not null)
         {
-            ArrayList list = new();
+            List<ListViewGroup?> list = new();
             foreach (ListViewGroup group in item.ListView.Groups)
             {
                 list.Add(group);
             }
 
             list.Add(null);
+
             return new StandardValuesCollection(list);
         }
 

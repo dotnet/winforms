@@ -233,7 +233,7 @@ public unsafe class ComNativeDescriptorTests
     ///  just forwards to the IDispatch ITypeInfo to exercise the IProvideMultipleClassInfo code path.
     /// </summary>
     private unsafe class StandardAccessibleObjectWithMultipleClassInfo :
-        StandardDispatch,
+        StandardDispatch<IAccessible>,
         IProvideMultipleClassInfo.Interface,
         IAccessible.Interface,
         IManagedWrapper<IAccessible, IDispatch, IProvideMultipleClassInfo>
@@ -242,7 +242,7 @@ public unsafe class ComNativeDescriptorTests
         private static readonly Guid s_accessibilityTypeLib = new("1ea4dbf0-3c3b-11cf-810c-00aa00389b71");
 
         public StandardAccessibleObjectWithMultipleClassInfo()
-            : base(s_accessibilityTypeLib, 1, 1, IAccessible.IID_Guid)
+            : base(ComHelpers.GetRegisteredTypeInfo(s_accessibilityTypeLib, 1, 1, IAccessible.IID_Guid))
         {
         }
 

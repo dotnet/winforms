@@ -72,7 +72,7 @@ public partial class DataGridViewRow : DataGridViewBand
                 Index > -1 &&
                 Index != DataGridView.NewRowIndex)
             {
-                return DataGridView.DataConnection.CurrencyManager[Index];
+                return DataGridView.DataConnection.CurrencyManager![Index];
             }
             else
             {

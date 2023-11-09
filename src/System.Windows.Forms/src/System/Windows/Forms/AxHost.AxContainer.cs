@@ -12,7 +12,7 @@ namespace System.Windows.Forms;
 public abstract partial class AxHost
 {
     internal unsafe partial class AxContainer :
-        StandardDispatch,
+        UnknownDispatch,
         IOleContainer.Interface,
         IOleInPlaceFrame.Interface,
         IOleInPlaceUIWindow.Interface,

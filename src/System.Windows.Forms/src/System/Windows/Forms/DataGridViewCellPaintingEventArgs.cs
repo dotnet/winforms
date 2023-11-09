@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms;
 
-public class DataGridViewCellPaintingEventArgs : HandledEventArgs
+public class DataGridViewCellPaintingEventArgs : HandledEventArgs, IDataGridViewCellEventArgs
 {
     private readonly DataGridView _dataGridView;
 

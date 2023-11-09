@@ -3,7 +3,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel.Design;
 using System.Drawing;
 
@@ -285,7 +284,7 @@ internal class ToolboxItemSnapLineBehavior : Behavior
             bodyAdorner = selMgr.BodyGlyphAdorner;
         }
 
-        ArrayList glyphsToRemove = new ArrayList();
+        List<ControlBodyGlyph> glyphsToRemove = [];
         foreach (ControlBodyGlyph body in bodyAdorner.Glyphs)
         {
             Control ctl = body.RelatedComponent as Control;

@@ -16,7 +16,7 @@ public abstract partial class AxHost
         ///  with added properties.
         /// </summary>
         internal unsafe class ExtenderProxy :
-            StandardDispatch,
+            UnknownDispatch,
             IExtender.Interface,
             IVBGetControl.Interface,
             IGetVBAObject.Interface,

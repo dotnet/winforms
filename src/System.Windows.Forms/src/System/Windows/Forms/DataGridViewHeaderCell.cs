@@ -253,7 +253,7 @@ public partial class DataGridViewHeaderCell : DataGridViewCell
 
     public override ContextMenuStrip? GetInheritedContextMenuStrip(int rowIndex)
     {
-        ContextMenuStrip contextMenuStrip = GetContextMenuStrip(rowIndex);
+        ContextMenuStrip? contextMenuStrip = GetContextMenuStrip(rowIndex);
         if (contextMenuStrip is not null)
         {
             return contextMenuStrip;

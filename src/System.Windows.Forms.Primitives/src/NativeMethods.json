@@ -342,6 +342,7 @@
       "ITypeInfo.GetTypeAttr",
       "ITypeInfo.GetTypeComp",
       "ITypeInfo.GetVarDesc",
+      "ITypeInfo.Invoke",
       "ITypeInfo.ReleaseFuncDesc",
       "ITypeInfo.ReleaseTypeAttr",
       "ITypeLib.GetLibAttr",

@@ -75,7 +75,6 @@ CreatePen
 CreateRectRgn
 CreateSolidBrush
 CreateStdAccessibleObject
-CreateStdDispatch
 CreateWindowEx
 CW_USEDEFAULT
 DATETIMEPICK_CLASS
