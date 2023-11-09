@@ -36,7 +36,7 @@ public partial class DataGridViewRow
                 ? dataGridView.ColumnHeadersVisible
                     ? dataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow) + 1
                     : dataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow)
-            : -1;
+                : -1;
 
         public override Rectangle Bounds
         {
@@ -135,18 +135,7 @@ public partial class DataGridViewRow
 
         public override AccessibleRole Role => AccessibleRole.Row;
 
-        public int RowColumnStartIndex
-        {
-            get
-            {
-                if (LocalAppContextSwitches.DataGridViewStartRowColumnIndex)
-                {
-                    return 1;
-                }
-
-                return 0;
-            }
-        }
+        public static int RowColumnStartIndex => LocalAppContextSwitches.DataGridViewRowStartsAtOne ? 1 : 0;
 
         internal override int[] RuntimeId
             => _runtimeId ??= new int[]
