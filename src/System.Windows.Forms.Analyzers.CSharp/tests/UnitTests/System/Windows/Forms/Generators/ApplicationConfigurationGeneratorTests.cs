@@ -121,17 +121,22 @@ namespace MyProject
 
             var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
             {
-                GlobalOptions =
-                {
-                    ($"build_property.{PropertyNameCSharp.DefaultFont}", "Microsoft Sans Serif, 8.25px"),
-                    ($"build_property.{PropertyNameCSharp.EnableVisualStyles}", ""),
-                    ($"build_property.{PropertyNameCSharp.HighDpiMode}", HighDpiMode.DpiUnawareGdiScaled.ToString()),
-                    ($"build_property.{PropertyNameCSharp.UseCompatibleTextRendering}", "true"),
-                },
                 TestState =
                 {
                     OutputKind = OutputKind.WindowsApplication,
                     Sources = { SourceCompilable },
+                    AnalyzerConfigFiles =
+                    {
+                        ("/.globalconfig",
+                        @$"""
+                        is_global = true
+
+                        build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
+                        build_property.{PropertyNameCSharp.EnableVisualStyles} =
+                        build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
+                        build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
+                        """),
+                    },
                     GeneratedSources =
                     {
                         (typeof(ApplicationConfigurationGenerator), "ApplicationConfiguration.g.cs", generatedCode),
@@ -178,17 +183,22 @@ ApplicationConfiguration.Initialize();
 
             var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
             {
-                GlobalOptions =
-                {
-                    ($"build_property.{PropertyNameCSharp.DefaultFont}", "Microsoft Sans Serif, 8.25px"),
-                    ($"build_property.{PropertyNameCSharp.EnableVisualStyles}", ""),
-                    ($"build_property.{PropertyNameCSharp.HighDpiMode}", HighDpiMode.DpiUnawareGdiScaled.ToString()),
-                    ($"build_property.{PropertyNameCSharp.UseCompatibleTextRendering}", "true"),
-                },
                 TestState =
                 {
                     OutputKind = OutputKind.WindowsApplication,
                     Sources = { source },
+                    AnalyzerConfigFiles =
+                    {
+                        ("/.globalconfig",
+                        @$"""
+                        is_global = true
+
+                        build_property.{PropertyNameCSharp.DefaultFont} = Microsoft Sans Serif, 8.25px
+                        build_property.{PropertyNameCSharp.EnableVisualStyles} =
+                        build_property.{PropertyNameCSharp.HighDpiMode} = {HighDpiMode.DpiUnawareGdiScaled}
+                        build_property.{PropertyNameCSharp.UseCompatibleTextRendering} = true
+                        """),
+                    },
                     GeneratedSources =
                     {
                         (typeof(ApplicationConfigurationGenerator), "ApplicationConfiguration.g.cs", generatedCode),
