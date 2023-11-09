@@ -832,7 +832,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
         }
 
         object value = GetValue(rowIndex);
-        object formattedValue = GetEditedFormattedValue(
+        object? formattedValue = GetEditedFormattedValue(
             value,
             rowIndex,
             ref cellStyle,
@@ -1016,7 +1016,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
 
             if (value is null)
             {
-                return base.GetFormattedValue(null, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
+                return base.GetFormattedValue(
+                    value: null,
+                    rowIndex,
+                    ref cellStyle,
+                    valueTypeConverter,
+                    formattedValueTypeConverter,
+                    context);
             }
 
             if (DataGridView is not null)
@@ -1033,7 +1039,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 }
             }
 
-            return base.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
+            return base.GetFormattedValue(
+                value,
+                rowIndex,
+                ref cellStyle,
+                valueTypeConverter,
+                formattedValueTypeConverter,
+                context);
         }
 
         string strValue = value as string;
@@ -1071,7 +1083,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 }
             }
 
-            return base.GetFormattedValue(displayValue, rowIndex, ref cellStyle, DisplayTypeConverter, formattedValueTypeConverter, context);
+            return base.GetFormattedValue(
+                displayValue,
+                rowIndex,
+                ref cellStyle,
+                DisplayTypeConverter,
+                formattedValueTypeConverter,
+                context);
         }
         else
         {
@@ -1103,7 +1121,13 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                 }
             }
 
-            return base.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
+            return base.GetFormattedValue(
+                value,
+                rowIndex,
+                ref cellStyle,
+                valueTypeConverter,
+                formattedValueTypeConverter,
+                context);
         }
     }
 
@@ -2301,7 +2325,7 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                     focusBounds.Width++;
                     focusBounds.Y--;
                     focusBounds.Height += 2;
-                    ControlPaint.DrawFocusRectangle(g, focusBounds, Color.Empty, brushColor);
+                    ControlPaint.DrawFocusRectangle(g, focusBounds, Color.Empty, cellStyle.ForeColor);
                 }
                 else if (paintPostXPThemes)
                 {
@@ -2312,12 +2336,12 @@ public partial class DataGridViewComboBoxCell : DataGridViewCell
                     focusBounds.Height -= 2;
                     if (focusBounds.Width > 0 && focusBounds.Height > 0)
                     {
-                        ControlPaint.DrawFocusRectangle(g, focusBounds, Color.Empty, brushColor);
+                        ControlPaint.DrawFocusRectangle(g, focusBounds, Color.Empty, cellStyle.ForeColor);
                     }
                 }
                 else
                 {
-                    ControlPaint.DrawFocusRectangle(g, textBounds, Color.Empty, brushColor);
+                    ControlPaint.DrawFocusRectangle(g, textBounds, Color.Empty, cellStyle.ForeColor);
                 }
             }
 

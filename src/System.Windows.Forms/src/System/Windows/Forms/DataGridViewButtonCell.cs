@@ -218,7 +218,13 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             cellBounds,
             rowIndex,
             cellState,
-            GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter: null, formattedValueTypeConverter: null, DataGridViewDataErrorContexts.Formatting),
+            GetFormattedValue(
+                value,
+                rowIndex,
+                ref cellStyle,
+                valueTypeConverter: null,
+                formattedValueTypeConverter: null,
+                DataGridViewDataErrorContexts.Formatting),
             GetErrorText(rowIndex),
             cellStyle,
             dgvabsEffective,
@@ -284,7 +290,13 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             cellBounds,
             rowIndex,
             cellState,
-            GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter: null, formattedValueTypeConverter: null, DataGridViewDataErrorContexts.Formatting),
+            GetFormattedValue(
+                value,
+                rowIndex,
+                ref cellStyle,
+                valueTypeConverter: null,
+                formattedValueTypeConverter: null,
+                DataGridViewDataErrorContexts.Formatting),
             GetErrorText(rowIndex),
             cellStyle,
             dgvabsEffective,
@@ -909,7 +921,7 @@ public partial class DataGridViewButtonCell : DataGridViewCell
             // Draw focus rectangle
             if (FlatStyle == FlatStyle.System || FlatStyle == FlatStyle.Standard)
             {
-                ControlPaint.DrawFocusRectangle(g, Rectangle.Inflate(valBounds, -1, -1), Color.Empty, SystemColors.Control);
+                ControlPaint.DrawFocusRectangle(g, Rectangle.Inflate(valBounds, -1, -1), Color.Empty, cellStyle.ForeColor);
             }
             else if (FlatStyle == FlatStyle.Flat)
             {
@@ -972,8 +984,8 @@ public partial class DataGridViewButtonCell : DataGridViewCell
                     ControlPaint.DrawFocusRectangle(
                         g,
                         layout.Focus,
-                        cellStyle.ForeColor,
-                        cellStyle.BackColor);
+                        Color.Empty,
+                        cellStyle.ForeColor);
                 }
             }
         }

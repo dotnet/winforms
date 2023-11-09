@@ -3,7 +3,7 @@
 
 namespace System.Windows.Forms;
 
-public class DataGridViewCellParsingEventArgs : ConvertEventArgs
+public class DataGridViewCellParsingEventArgs : ConvertEventArgs, IDataGridViewCellEventArgs
 {
     public DataGridViewCellParsingEventArgs(
         int rowIndex,

@@ -14,7 +14,7 @@ namespace System.Windows.Forms;
 ///  a public class.  In order to accomplish this we implement IReflect and handle InvokeMethod
 ///  to call back on a CLR event handler.
 /// </summary>
-internal class HtmlToClrEventProxy : StandardDispatch, IManagedWrapper<IDispatch, IDispatchEx>
+internal class HtmlToClrEventProxy : UnknownDispatch, IManagedWrapper<IDispatch, IDispatchEx>
 {
     private const int EventNamePropertyDispId = 65536;
     private const string EventNameProperty = "EventName";

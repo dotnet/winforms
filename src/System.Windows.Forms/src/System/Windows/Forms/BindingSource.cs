@@ -648,14 +648,14 @@ public class BindingSource : Component,
             ResetList();
         }
     }
-#nullable disable
+
     /// <summary>
     ///  Overload of IBindingList.Find that takes a string instead of a property
     ///  descriptor (for convenience).
     /// </summary>
     public int Find(string propertyName, object key)
     {
-        PropertyDescriptor pd = _itemShape?.Find(propertyName, true);
+        PropertyDescriptor? pd = _itemShape?.Find(propertyName, true);
         if (pd is null)
         {
             throw new ArgumentException(string.Format(SR.DataSourceDataMemberPropNotFound, propertyName));
@@ -674,11 +674,11 @@ public class BindingSource : Component,
     {
         if (typeof(ITypedList).IsAssignableFrom(type) && typeof(IList).IsAssignableFrom(type))
         {
-            return CreateInstanceOfType(type) as IList;
+            return (IList)CreateInstanceOfType(type)!;
         }
         else if (typeof(IListSource).IsAssignableFrom(type))
         {
-            return (CreateInstanceOfType(type) as IListSource).GetList();
+            return ((IListSource)CreateInstanceOfType(type)!).GetList();
         }
         else
         {
@@ -691,9 +691,9 @@ public class BindingSource : Component,
     ///  extract all its items, and stuff these items into a typed BindingList, using
     ///  the type of the first item to determine the type of the list.
     /// </summary>
-    private static IList GetListFromEnumerable(IEnumerable enumerable)
+    private static IList? GetListFromEnumerable(IEnumerable enumerable)
     {
-        IList list = null;
+        IList? list = null;
 
         foreach (object item in enumerable)
         {
@@ -727,7 +727,7 @@ public class BindingSource : Component,
 
         // See if data member corresponds to a valid property on the specified data source
         PropertyDescriptorCollection dsProps = ListBindingHelper.GetListItemProperties(_dataSource);
-        PropertyDescriptor dmProp = dsProps[_dataMember];
+        PropertyDescriptor? dmProp = dsProps[_dataMember];
         if (dmProp is not null)
         {
             return true;
@@ -758,7 +758,7 @@ public class BindingSource : Component,
         }
     }
 
-    private void ListItem_PropertyChanged(object sender, EventArgs e)
+    private void ListItem_PropertyChanged(object? sender, EventArgs e)
     {
         int index;
 
@@ -799,13 +799,13 @@ public class BindingSource : Component,
 
     protected virtual void OnAddingNew(AddingNewEventArgs e)
     {
-        AddingNewEventHandler eh = (AddingNewEventHandler)Events[s_eventAddingNew];
+        AddingNewEventHandler? eh = (AddingNewEventHandler?)Events[s_eventAddingNew];
         eh?.Invoke(this, e);
     }
 
     protected virtual void OnBindingComplete(BindingCompleteEventArgs e)
     {
-        BindingCompleteEventHandler eh = (BindingCompleteEventHandler)Events[s_eventBindingComplete];
+        BindingCompleteEventHandler? eh = (BindingCompleteEventHandler?)Events[s_eventBindingComplete];
         eh?.Invoke(this, e);
     }
 
@@ -818,31 +818,31 @@ public class BindingSource : Component,
         // Hook change events for new current item (as indicated now by Current)
         HookItemChangedEventsForNewCurrent();
 
-        EventHandler eh = (EventHandler)Events[s_eventCurrentChanged];
+        EventHandler? eh = (EventHandler?)Events[s_eventCurrentChanged];
         eh?.Invoke(this, e);
     }
 
     protected virtual void OnCurrentItemChanged(EventArgs e)
     {
-        EventHandler eh = (EventHandler)Events[s_eventCurrentItemChanged];
+        EventHandler? eh = (EventHandler?)Events[s_eventCurrentItemChanged];
         eh?.Invoke(this, e);
     }
 
     protected virtual void OnDataError(BindingManagerDataErrorEventArgs e)
     {
-        BindingManagerDataErrorEventHandler eh = Events[s_eventDataError] as BindingManagerDataErrorEventHandler;
+        BindingManagerDataErrorEventHandler? eh = Events[s_eventDataError] as BindingManagerDataErrorEventHandler;
         eh?.Invoke(this, e);
     }
 
     protected virtual void OnDataMemberChanged(EventArgs e)
     {
-        EventHandler eh = Events[s_eventDataMemberChanged] as EventHandler;
+        EventHandler? eh = Events[s_eventDataMemberChanged] as EventHandler;
         eh?.Invoke(this, e);
     }
 
     protected virtual void OnDataSourceChanged(EventArgs e)
     {
-        EventHandler eh = Events[s_eventDataSourceChanged] as EventHandler;
+        EventHandler? eh = Events[s_eventDataSourceChanged] as EventHandler;
         eh?.Invoke(this, e);
     }
 
@@ -854,13 +854,13 @@ public class BindingSource : Component,
             return;
         }
 
-        ListChangedEventHandler eh = (ListChangedEventHandler)Events[s_eventListChanged];
+        ListChangedEventHandler? eh = (ListChangedEventHandler?)Events[s_eventListChanged];
         eh?.Invoke(this, e);
     }
 
     protected virtual void OnPositionChanged(EventArgs e)
     {
-        EventHandler eh = (EventHandler)Events[s_eventPositionChanged];
+        EventHandler? eh = (EventHandler?)Events[s_eventPositionChanged];
         eh?.Invoke(this, e);
     }
 
@@ -904,14 +904,14 @@ public class BindingSource : Component,
 
         if (!string.IsNullOrEmpty(_dataMember))
         {
-            object currentValue = null;
-            IList currentList = null;
+            object? currentValue = null;
+            IList? currentList = null;
 
             if (cm.Count > 0)
             {
                 // If parent list has a current item, get the sub-list from the relevant property on that item
                 PropertyDescriptorCollection dsProps = cm.GetItemProperties();
-                PropertyDescriptor dmProp = dsProps[_dataMember];
+                PropertyDescriptor? dmProp = dsProps[_dataMember];
                 if (dmProp is not null)
                 {
                     currentValue = ListBindingHelper.GetList(dmProp.GetValue(cm.Current));
@@ -936,7 +936,7 @@ public class BindingSource : Component,
                 // Nothing to bind to (no current item, or item's property returned null).
                 // Create an empty list, using the previously determined item type.
                 // [NOTE: Specify applySortAndFilter=FALSE to stop BindingList<T> from throwing]
-                SetList(CreateBindingList(_itemType), false, false);
+                SetList(CreateBindingList(_itemType!), false, false);
             }
 
             // After a change of child lists caused by a change in the current parent item, we
@@ -972,7 +972,7 @@ public class BindingSource : Component,
         ResetList();
     }
 
-    private ListSortDescriptionCollection ParseSortString(string sortString)
+    private ListSortDescriptionCollection ParseSortString(string? sortString)
     {
         if (string.IsNullOrEmpty(sortString))
         {
@@ -1009,7 +1009,7 @@ public class BindingSource : Component,
             }
 
             // Find the property
-            PropertyDescriptor prop = props.Find(current, true);
+            PropertyDescriptor? prop = props.Find(current, true);
             if (prop is null)
             {
                 throw new ArgumentException(SR.BindingSourceSortStringPropertyNotInIBindingList);
@@ -1066,7 +1066,7 @@ public class BindingSource : Component,
 
     public void ResumeBinding() => _currencyManager.ResumeBinding();
     public void SuspendBinding() => _currencyManager.SuspendBinding();
-
+#nullable disable
     /// <summary>
     ///  Binds the BindingSource to the list specified by its DataSource and DataMember
     ///  properties.

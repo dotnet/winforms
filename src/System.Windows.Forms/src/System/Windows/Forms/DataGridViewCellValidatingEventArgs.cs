@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace System.Windows.Forms;
 
-public class DataGridViewCellValidatingEventArgs : CancelEventArgs
+public class DataGridViewCellValidatingEventArgs : CancelEventArgs, IDataGridViewCellEventArgs
 {
     internal DataGridViewCellValidatingEventArgs(int columnIndex, int rowIndex, object? formattedValue)
     {

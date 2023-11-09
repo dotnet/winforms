@@ -3,7 +3,7 @@
 
 namespace System.Windows.Forms;
 
-public class DataGridViewCellMouseEventArgs : MouseEventArgs
+public class DataGridViewCellMouseEventArgs : MouseEventArgs, IDataGridViewCellEventArgs
 {
     public DataGridViewCellMouseEventArgs(
         int columnIndex,
