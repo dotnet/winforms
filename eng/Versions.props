@@ -86,13 +86,13 @@
     <MicrosoftCodeAnalysisAnalyzersVersion>3.3.2</MicrosoftCodeAnalysisAnalyzersVersion>
     <MicrosoftCodeAnalysisCSharpWorkspacesVersion>4.0.0-2.final</MicrosoftCodeAnalysisCSharpWorkspacesVersion>
     <MicrosoftCodeAnalysisVisualBasicWorkspacesVersion>4.0.0-2.final</MicrosoftCodeAnalysisVisualBasicWorkspacesVersion>
-    <MicrosoftCodeAnalysisPackagesVersion>1.0.1-beta1.21265.1</MicrosoftCodeAnalysisPackagesVersion>
+    <MicrosoftCodeAnalysisPackagesVersion>1.1.2-beta1.23322.1</MicrosoftCodeAnalysisPackagesVersion>
     <MicrosoftCodeAnalysisPublicApiAnalyzers>3.3.0-beta1.final</MicrosoftCodeAnalysisPublicApiAnalyzers>
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
     <MicrosoftWindowsDesktopAppRefv30PackageVersion>3.0.0</MicrosoftWindowsDesktopAppRefv30PackageVersion>
-    <NewtonsoftJsonVersion>9.0.1</NewtonsoftJsonVersion>
+    <NewtonsoftJsonVersion>13.0.1</NewtonsoftJsonVersion>
   </PropertyGroup>
 </Project>
