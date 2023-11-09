@@ -278,12 +278,12 @@ public partial class DataGridViewRowHeaderCell : DataGridViewHeaderCell
             out Rectangle cellBounds);
 
         object? value = GetValue(rowIndex);
-        object formattedValue = GetFormattedValue(
+        object? formattedValue = GetFormattedValue(
             value,
             rowIndex,
             ref cellStyle,
-            null,
-            null,
+            valueTypeConverter: null,
+            formattedValueTypeConverter: null,
             DataGridViewDataErrorContexts.Formatting);
 
         Rectangle errorBounds = PaintPrivate(

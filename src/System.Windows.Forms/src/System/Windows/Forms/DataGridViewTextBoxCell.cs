@@ -281,7 +281,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
         }
 
         object value = GetValue(rowIndex);
-        object formattedValue = GetFormattedValue(
+        object? formattedValue = GetFormattedValue(
             value,
             rowIndex,
             ref cellStyle,
@@ -376,7 +376,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
 
 #if DEBUG
         object value = GetValue(rowIndex);
-        object formattedValue = GetFormattedValue(
+        object? formattedValue = GetFormattedValue(
             value,
             rowIndex,
             ref cellStyle,
@@ -421,7 +421,7 @@ public partial class DataGridViewTextBoxCell : DataGridViewCell
         int borderAndPaddingWidths = borderWidthsRect.Left + borderWidthsRect.Width + cellStyle.Padding.Horizontal;
         int borderAndPaddingHeights = borderWidthsRect.Top + borderWidthsRect.Height + cellStyle.Padding.Vertical;
         DataGridViewFreeDimension freeDimension = GetFreeDimensionFromConstraint(constraintSize);
-        object formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize);
+        object? formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize);
         string? formattedString = formattedValue as string;
         if (string.IsNullOrEmpty(formattedString))
         {

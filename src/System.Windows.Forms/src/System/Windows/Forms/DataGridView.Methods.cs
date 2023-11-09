@@ -10145,7 +10145,7 @@ public partial class DataGridView
         Debug.Assert(EditingControl is not null);
 
         DataGridViewDataErrorEventArgs? dgvdee = null;
-        object initialFormattedValue = dataGridViewCell.GetFormattedValue(_ptCurrentCell.Y, ref dataGridViewCellStyle, DataGridViewDataErrorContexts.Formatting);
+        object? initialFormattedValue = dataGridViewCell.GetFormattedValue(_ptCurrentCell.Y, ref dataGridViewCellStyle, DataGridViewDataErrorContexts.Formatting);
         _dataGridViewState1[State1_EditingControlChanging] = true;
         _dataGridViewState1[State1_IgnoringEditingChanges] = true;
         try
@@ -12236,7 +12236,7 @@ public partial class DataGridView
         }
     }
 
-    internal ContextMenuStrip? OnCellContextMenuStripNeeded(int columnIndex, int rowIndex, ContextMenuStrip contextMenuStrip)
+    internal ContextMenuStrip? OnCellContextMenuStripNeeded(int columnIndex, int rowIndex, ContextMenuStrip? contextMenuStrip)
     {
         DataGridViewCellContextMenuStripNeededEventArgs dgvccmsne = new DataGridViewCellContextMenuStripNeededEventArgs(columnIndex, rowIndex, contextMenuStrip);
         OnCellContextMenuStripNeeded(dgvccmsne);
@@ -12376,8 +12376,8 @@ public partial class DataGridView
     internal DataGridViewCellFormattingEventArgs OnCellFormatting(
         int columnIndex,
         int rowIndex,
-        object val,
-        Type formattedValueType,
+        object? val,
+        Type? formattedValueType,
         DataGridViewCellStyle cellStyle)
     {
         DataGridViewCellFormattingEventArgs dgvcfe = new DataGridViewCellFormattingEventArgs(

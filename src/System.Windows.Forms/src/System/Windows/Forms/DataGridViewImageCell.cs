@@ -387,7 +387,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
             return Description;
         }
 
-        object formattedValue = base.GetFormattedValue(
+        object? formattedValue = base.GetFormattedValue(
             value,
             rowIndex,
             ref cellStyle,
@@ -437,7 +437,7 @@ public partial class DataGridViewImageCell : DataGridViewCell
         int borderAndPaddingWidths = borderWidthsRect.Left + borderWidthsRect.Width + cellStyle.Padding.Horizontal;
         int borderAndPaddingHeights = borderWidthsRect.Top + borderWidthsRect.Height + cellStyle.Padding.Vertical;
         DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
-        object formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize);
+        object? formattedValue = GetFormattedValue(rowIndex, ref cellStyle, DataGridViewDataErrorContexts.Formatting | DataGridViewDataErrorContexts.PreferredSize);
         Image? img = formattedValue as Image;
         Icon? ico = null;
         if (img is null)

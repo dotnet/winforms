@@ -381,7 +381,7 @@ System.Windows.Forms.DataGridViewCell.EditedFormattedValue.get -> object?
 System.Windows.Forms.DataGridViewCell.ErrorText.get -> string!
 System.Windows.Forms.DataGridViewCell.ErrorText.set -> void
 System.Windows.Forms.DataGridViewCell.FormattedValue.get -> object?
-~System.Windows.Forms.DataGridViewCell.GetEditedFormattedValue(int rowIndex, System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
+System.Windows.Forms.DataGridViewCell.GetEditedFormattedValue(int rowIndex, System.Windows.Forms.DataGridViewDataErrorContexts context) -> object?
 System.Windows.Forms.DataGridViewCell.InheritedStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
 System.Windows.Forms.DataGridViewCell.OwningColumn.get -> System.Windows.Forms.DataGridViewColumn?
 System.Windows.Forms.DataGridViewCell.OwningRow.get -> System.Windows.Forms.DataGridViewRow?
@@ -804,15 +804,15 @@ virtual System.Windows.Forms.DataGridViewCell.ContextMenuStrip.get -> System.Win
 virtual System.Windows.Forms.DataGridViewCell.ContextMenuStrip.set -> void
 virtual System.Windows.Forms.DataGridViewCell.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 virtual System.Windows.Forms.DataGridViewCell.DefaultNewRowValue.get -> object?
-~virtual System.Windows.Forms.DataGridViewCell.DoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs e) -> bool
+virtual System.Windows.Forms.DataGridViewCell.DoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellEventArgs! e) -> bool
 virtual System.Windows.Forms.DataGridViewCell.EditType.get -> System.Type?
 virtual System.Windows.Forms.DataGridViewCell.FormattedValueType.get -> System.Type?
-~virtual System.Windows.Forms.DataGridViewCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string format) -> object
-~virtual System.Windows.Forms.DataGridViewCell.GetContentBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
-~virtual System.Windows.Forms.DataGridViewCell.GetErrorIconBounds(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex) -> System.Drawing.Rectangle
-~virtual System.Windows.Forms.DataGridViewCell.GetErrorText(int rowIndex) -> string
-~virtual System.Windows.Forms.DataGridViewCell.GetFormattedValue(object value, int rowIndex, ref System.Windows.Forms.DataGridViewCellStyle cellStyle, System.ComponentModel.TypeConverter valueTypeConverter, System.ComponentModel.TypeConverter formattedValueTypeConverter, System.Windows.Forms.DataGridViewDataErrorContexts context) -> object
-~virtual System.Windows.Forms.DataGridViewCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip
+virtual System.Windows.Forms.DataGridViewCell.GetClipboardContent(int rowIndex, bool firstCell, bool lastCell, bool inFirstRow, bool inLastRow, string! format) -> object?
+virtual System.Windows.Forms.DataGridViewCell.GetContentBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
+virtual System.Windows.Forms.DataGridViewCell.GetErrorIconBounds(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex) -> System.Drawing.Rectangle
+virtual System.Windows.Forms.DataGridViewCell.GetErrorText(int rowIndex) -> string!
+virtual System.Windows.Forms.DataGridViewCell.GetFormattedValue(object? value, int rowIndex, ref System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.ComponentModel.TypeConverter? valueTypeConverter, System.ComponentModel.TypeConverter? formattedValueTypeConverter, System.Windows.Forms.DataGridViewDataErrorContexts context) -> object?
+virtual System.Windows.Forms.DataGridViewCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip?
 ~virtual System.Windows.Forms.DataGridViewCell.GetInheritedStyle(System.Windows.Forms.DataGridViewCellStyle inheritedCellStyle, int rowIndex, bool includeColors) -> System.Windows.Forms.DataGridViewCellStyle
 ~virtual System.Windows.Forms.DataGridViewCell.GetPreferredSize(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
 ~virtual System.Windows.Forms.DataGridViewCell.GetValue(int rowIndex) -> object
@@ -5740,10 +5740,10 @@ System.Windows.Forms.DataGridViewCellEventArgs.DataGridViewCellEventArgs(int col
 System.Windows.Forms.DataGridViewCellEventArgs.RowIndex.get -> int
 System.Windows.Forms.DataGridViewCellEventHandler
 System.Windows.Forms.DataGridViewCellFormattingEventArgs
-System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle?
+System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
 System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.set -> void
 System.Windows.Forms.DataGridViewCellFormattingEventArgs.ColumnIndex.get -> int
-System.Windows.Forms.DataGridViewCellFormattingEventArgs.DataGridViewCellFormattingEventArgs(int columnIndex, int rowIndex, object? value, System.Type? desiredType, System.Windows.Forms.DataGridViewCellStyle? cellStyle) -> void
+System.Windows.Forms.DataGridViewCellFormattingEventArgs.DataGridViewCellFormattingEventArgs(int columnIndex, int rowIndex, object? value, System.Type? desiredType, System.Windows.Forms.DataGridViewCellStyle! cellStyle) -> void
 System.Windows.Forms.DataGridViewCellFormattingEventArgs.FormattingApplied.get -> bool
 System.Windows.Forms.DataGridViewCellFormattingEventArgs.FormattingApplied.set -> void
 System.Windows.Forms.DataGridViewCellFormattingEventArgs.RowIndex.get -> int
