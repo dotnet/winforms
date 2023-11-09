@@ -357,25 +357,17 @@ public class ITypeInfoTests
         EXCEPINFO excepInfo = default;
         uint argErr = 0;
 
-        try
-        {
-            typeInfo.Value->Invoke(
-                iPictureDisp,
-                (int)PInvoke.DISPID_PICT_WIDTH,
-                DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
-                &dispParams,
-                &varResult,
-                &excepInfo,
-                &argErr);
-        }
-        catch (COMException ex)
-        {
-            Assert.Equal((int)HRESULT.DISP_E_MEMBERNOTFOUND, ex.HResult);
-            Assert.Equal(default, varResult);
-            Assert.Equal(0u, argErr);
-            return;
-        }
+        HRESULT hr = typeInfo.Value->Invoke(
+            iPictureDisp,
+            (int)PInvoke.DISPID_PICT_WIDTH,
+            DISPATCH_FLAGS.DISPATCH_PROPERTYGET,
+            &dispParams,
+            &varResult,
+            &excepInfo,
+            &argErr);
 
-        Assert.Fail("Exception was not thrown");
+        hr.Should().Be(HRESULT.DISP_E_MEMBERNOTFOUND);
+        varResult.IsEmpty.Should().BeTrue();
+        argErr.Should().Be(0);
     }
 }
