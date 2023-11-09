@@ -4341,9 +4341,6 @@ Stack trace where the illegal operation occurred was:
   <data name="NumericUpDownIncrementDescr" xml:space="preserve">
     <value>Indicates the amount to increment or decrement on each button click.</value>
   </data>
-  <data name="NumericUpDownLessThanZeroError" xml:space="preserve">
-    <value>Parameter value must be greater than or equal to 0.</value>
-  </data>
   <data name="NumericUpDownMaximumDescr" xml:space="preserve">
     <value>Indicates the maximum value for the numeric up-down control.</value>
   </data>

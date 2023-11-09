@@ -15,15 +15,8 @@ public class NumericUpDownAcceleration
 
     public NumericUpDownAcceleration(int seconds, decimal increment)
     {
-        if (seconds < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(seconds), seconds, SR.NumericUpDownLessThanZeroError);
-        }
-
-        if (increment < decimal.Zero)
-        {
-            throw new ArgumentOutOfRangeException(nameof(increment), increment, SR.NumericUpDownLessThanZeroError);
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(seconds);
+        ArgumentOutOfRangeException.ThrowIfNegative(increment);
 
         _seconds = seconds;
         _increment = increment;
@@ -41,10 +34,7 @@ public class NumericUpDownAcceleration
         }
         set
         {
-            if (value < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(_seconds), value, SR.NumericUpDownLessThanZeroError);
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(_seconds));
 
             _seconds = value;
         }
@@ -62,10 +52,7 @@ public class NumericUpDownAcceleration
 
         set
         {
-            if (value < decimal.Zero)
-            {
-                throw new ArgumentOutOfRangeException(nameof(_increment), value, SR.NumericUpDownLessThanZeroError);
-            }
+            ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(_increment));
 
             _increment = value;
         }

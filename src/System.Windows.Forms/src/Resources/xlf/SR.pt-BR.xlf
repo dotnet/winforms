@@ -7404,11 +7404,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Indica o valor a incrementar ou diminuir a cada clique no botão.</target>
         <note />
       </trans-unit>
-      <trans-unit id="NumericUpDownLessThanZeroError">
-        <source>Parameter value must be greater than or equal to 0.</source>
-        <target state="translated">O valor do parâmetro deve ser maior que ou igual a 0.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="NumericUpDownMaximumDescr">
         <source>Indicates the maximum value for the numeric up-down control.</source>
         <target state="translated">Indica o valor máximo para o controle numérico acima-abaixo.</target>
