@@ -97,7 +97,7 @@ public partial class DataGridViewRow
                 }
 
                 int index = _owningDataGridViewRow is { Visible: true, DataGridView: { } }
-                        ? _owningDataGridViewRow.DataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow) + RowColumnStartIndex
+                        ? _owningDataGridViewRow.DataGridView.Rows.GetVisibleIndex(_owningDataGridViewRow) + RowStartIndex
                         : -1;
 
                 return string.Format(SR.DataGridView_AccRowName, index.ToString(CultureInfo.CurrentCulture));
@@ -135,7 +135,7 @@ public partial class DataGridViewRow
 
         public override AccessibleRole Role => AccessibleRole.Row;
 
-        private static int RowColumnStartIndex => LocalAppContextSwitches.DataGridViewRowStartsAtOne ? 1 : 0;
+        private static int RowStartIndex => LocalAppContextSwitches.DataGridViewRowStartsAtOne ? 1 : 0;
 
         internal override int[] RuntimeId
             => _runtimeId ??= new int[]

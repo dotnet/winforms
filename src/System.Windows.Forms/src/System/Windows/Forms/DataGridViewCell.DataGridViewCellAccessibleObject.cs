@@ -59,7 +59,7 @@ public abstract partial class DataGridViewCell
 
                 int rowIndex = _owner.DataGridView is null
                     ? -1
-                    : _owner.DataGridView.Rows.GetVisibleIndex(_owner.OwningRow) + RowColumnStartIndex;
+                    : _owner.DataGridView.Rows.GetVisibleIndex(_owner.OwningRow) + RowStartIndex;
 
                 string name = string.Format(SR.DataGridView_AccDataGridViewCellName, _owner.OwningColumn.HeaderText, rowIndex);
 
@@ -117,7 +117,7 @@ public abstract partial class DataGridViewCell
 
         public override AccessibleRole Role => AccessibleRole.Cell;
 
-        private static int RowColumnStartIndex => LocalAppContextSwitches.DataGridViewRowStartsAtOne ? 1 : 0;
+        private static int RowStartIndex => LocalAppContextSwitches.DataGridViewRowStartsAtOne ? 1 : 0;
 
         public override AccessibleStates State
         {
