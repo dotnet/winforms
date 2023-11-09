@@ -3,7 +3,7 @@
 
 namespace System.Windows.Forms;
 
-public class DataGridViewCellEventArgs : EventArgs
+public class DataGridViewCellEventArgs : EventArgs, IDataGridViewCellEventArgs
 {
     internal DataGridViewCellEventArgs(DataGridViewCell dataGridViewCell)
         : this(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex)

@@ -12017,7 +12017,7 @@ public partial class DataGridView
         }
     }
 
-    protected virtual void OnCellBeginEdit(DataGridViewCellCancelEventArgs e)
+    private void CheckEventArgsIndexesUpperBounds(IDataGridViewCellEventArgs e)
     {
         if (e.ColumnIndex >= Columns.Count)
         {
@@ -12028,6 +12028,24 @@ public partial class DataGridView
         {
             throw new ArgumentOutOfRangeException("e.RowIndex");
         }
+    }
+
+    private static void CheckEventArgsIndexesNotNegative(IDataGridViewCellEventArgs e)
+    {
+        if (e.ColumnIndex < 0)
+        {
+            throw new ArgumentOutOfRangeException("e.ColumnIndex");
+        }
+
+        if (e.RowIndex < 0)
+        {
+            throw new ArgumentOutOfRangeException("e.RowIndex");
+        }
+    }
+
+    protected virtual void OnCellBeginEdit(DataGridViewCellCancelEventArgs e)
+    {
+        CheckEventArgsIndexesUpperBounds(e);
 
         if (Events[s_cellBeginEditEvent] is DataGridViewCellCancelEventHandler eh &&
             !_dataGridViewOper[OperationInDispose] &&
@@ -12061,15 +12079,7 @@ public partial class DataGridView
 
     protected virtual void OnCellClick(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
         Debug.Assert(dataGridViewCell is not null);
@@ -12157,15 +12167,7 @@ public partial class DataGridView
 
     protected virtual void OnCellContentClick(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
         Debug.Assert(dataGridViewCell is not null);
@@ -12194,15 +12196,7 @@ public partial class DataGridView
 
     protected virtual void OnCellContentDoubleClick(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
         Debug.Assert(dataGridViewCell is not null);
@@ -12232,15 +12226,7 @@ public partial class DataGridView
 
     protected virtual void OnCellContextMenuStripChanged(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         if (Events[s_cellContextMenuStripChangedEvent] is DataGridViewCellEventHandler eh &&
             !_dataGridViewOper[OperationInDispose] &&
@@ -12259,15 +12245,7 @@ public partial class DataGridView
 
     protected virtual void OnCellContextMenuStripNeeded(DataGridViewCellContextMenuStripNeededEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         if (Events[s_cellContextMenuStripNeededEvent] is DataGridViewCellContextMenuStripNeededEventHandler eh &&
             !_dataGridViewOper[OperationInDispose] &&
@@ -12279,15 +12257,7 @@ public partial class DataGridView
 
     protected virtual void OnCellDoubleClick(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
         Debug.Assert(dataGridViewCell is not null);
@@ -12311,15 +12281,7 @@ public partial class DataGridView
 
     protected virtual void OnCellEndEdit(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         if (Events[s_cellEndEditEvent] is DataGridViewCellEventHandler eh &&
             !_dataGridViewOper[OperationInDispose] &&
@@ -12348,15 +12310,7 @@ public partial class DataGridView
 
     protected virtual void OnCellEnter(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         try
         {
@@ -12386,15 +12340,7 @@ public partial class DataGridView
 
     protected virtual void OnCellErrorTextChanged(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         UpdateCellErrorText(e.ColumnIndex, e.RowIndex);
 
@@ -12417,15 +12363,7 @@ public partial class DataGridView
 
     protected virtual void OnCellErrorTextNeeded(DataGridViewCellErrorTextNeededEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         if (Events[s_cellErrorTextNeededEvent] is DataGridViewCellErrorTextNeededEventHandler eh &&
             !_dataGridViewOper[OperationInDispose] &&
@@ -12454,15 +12392,7 @@ public partial class DataGridView
 
     protected virtual void OnCellFormatting(DataGridViewCellFormattingEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         if (Events[s_cellFormattingEvent] is DataGridViewCellFormattingEventHandler eh &&
             !_dataGridViewOper[OperationInDispose] &&
@@ -12491,15 +12421,7 @@ public partial class DataGridView
 
     protected virtual void OnCellLeave(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         try
         {
@@ -12521,15 +12443,7 @@ public partial class DataGridView
 
     protected virtual void OnCellMouseClick(DataGridViewCellMouseEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
         Debug.Assert(dataGridViewCell is not null);
@@ -12555,15 +12469,7 @@ public partial class DataGridView
 
     protected virtual void OnCellMouseDoubleClick(DataGridViewCellMouseEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
         Debug.Assert(dataGridViewCell is not null);
@@ -12589,15 +12495,7 @@ public partial class DataGridView
 
     protected virtual void OnCellMouseDown(DataGridViewCellMouseEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
         Debug.Assert(dataGridViewCell is not null);
@@ -13286,15 +13184,7 @@ public partial class DataGridView
 
     protected virtual void OnCellMouseEnter(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         _ptMouseEnteredCell.X = e.ColumnIndex;
         _ptMouseEnteredCell.Y = e.RowIndex;
@@ -13321,15 +13211,7 @@ public partial class DataGridView
 
     protected virtual void OnCellMouseLeave(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         _ptMouseEnteredCell.X = -2;
         _ptMouseEnteredCell.Y = -2;
@@ -13356,15 +13238,7 @@ public partial class DataGridView
 
     protected virtual void OnCellMouseMove(DataGridViewCellMouseEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
         Debug.Assert(dataGridViewCell is not null);
@@ -13426,15 +13300,7 @@ public partial class DataGridView
 
     protected virtual void OnCellMouseUp(DataGridViewCellMouseEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
         Debug.Assert(dataGridViewCell is not null);
@@ -13458,15 +13324,7 @@ public partial class DataGridView
 
     protected internal virtual void OnCellPainting(DataGridViewCellPaintingEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         if (Events[s_cellPaintingEvent] is DataGridViewCellPaintingEventHandler eh &&
             !_dataGridViewOper[OperationInDispose] &&
@@ -13495,15 +13353,7 @@ public partial class DataGridView
 
     protected virtual void OnCellParsing(DataGridViewCellParsingEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         if (Events[s_cellParsingEvent] is DataGridViewCellParsingEventHandler eh &&
             !_dataGridViewOper[OperationInDispose] &&
@@ -13596,15 +13446,7 @@ public partial class DataGridView
 
     protected virtual void OnCellStyleChanged(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         OnCellCommonChange(e.ColumnIndex, e.RowIndex);
 
@@ -13795,15 +13637,7 @@ public partial class DataGridView
 
     protected virtual void OnCellToolTipTextChanged(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         if (Events[s_cellTooltipTextChangedEvent] is DataGridViewCellEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
         {
@@ -13820,15 +13654,7 @@ public partial class DataGridView
 
     protected virtual void OnCellToolTipTextNeeded(DataGridViewCellToolTipTextNeededEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         if (Events[s_cellTooltipTextNeededEvent] is DataGridViewCellToolTipTextNeededEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
         {
@@ -13855,15 +13681,7 @@ public partial class DataGridView
 
     protected virtual void OnCellValidated(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         try
         {
@@ -13910,15 +13728,7 @@ public partial class DataGridView
 
     protected virtual void OnCellValidating(DataGridViewCellValidatingEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         try
         {
@@ -13947,15 +13757,7 @@ public partial class DataGridView
 
     protected virtual void OnCellValueChanged(DataGridViewCellEventArgs e)
     {
-        if (e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesUpperBounds(e);
 
         OnCellCommonChange(e.ColumnIndex, e.RowIndex);
 
@@ -13975,15 +13777,8 @@ public partial class DataGridView
 
     protected virtual void OnCellValueNeeded(DataGridViewCellValueEventArgs e)
     {
-        if (e.ColumnIndex < 0 || e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex < 0 || e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesNotNegative(e);
+        CheckEventArgsIndexesUpperBounds(e);
 
         if (Events[s_cellValueNeededEvent] is DataGridViewCellValueEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
         {
@@ -14000,15 +13795,8 @@ public partial class DataGridView
 
     protected virtual void OnCellValuePushed(DataGridViewCellValueEventArgs e)
     {
-        if (e.ColumnIndex < 0 || e.ColumnIndex >= Columns.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.ColumnIndex");
-        }
-
-        if (e.RowIndex < 0 || e.RowIndex >= Rows.Count)
-        {
-            throw new ArgumentOutOfRangeException("e.RowIndex");
-        }
+        CheckEventArgsIndexesNotNegative(e);
+        CheckEventArgsIndexesUpperBounds(e);
 
         if (Events[s_cellValuePushedEvent] is DataGridViewCellValueEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
         {
