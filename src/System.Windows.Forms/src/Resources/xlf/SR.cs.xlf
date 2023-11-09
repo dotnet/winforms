@@ -262,11 +262,6 @@
         <target state="translated">Pro požadovanou akci jsou podporována pouze jednorozměrná pole.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">Vyžaduje se nezáporné číslo.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">Typ cílového pole není kompatibilní s typem položek v kolekci.</target>

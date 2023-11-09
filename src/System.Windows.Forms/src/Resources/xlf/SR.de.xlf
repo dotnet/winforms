@@ -262,11 +262,6 @@
         <target state="translated">Nur eindimensionale Arrays werden für die angeforderte Aktion unterstützt.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">Nicht negative Zahl erforderlich.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">Der Typ des Zielarrays ist mit dem Typ der Elemente in der Sammlung nicht kompatibel.</target>

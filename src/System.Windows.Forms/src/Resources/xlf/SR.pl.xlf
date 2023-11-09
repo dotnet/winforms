@@ -262,11 +262,6 @@
         <target state="translated">Dla żądanej akcji są obsługiwane tylko tablice jednowymiarowe.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">Wymagana jest liczba nieujemna.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">Typ tablicy docelowej nie jest zgodny z typem elementów w kolekcji.</target>

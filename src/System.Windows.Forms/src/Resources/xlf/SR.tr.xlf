@@ -262,11 +262,6 @@
         <target state="translated">Yalnızca tek boyutlu diziler, istenen eylem için destekleniyor.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">Negatif olmayan sayı gerekiyor.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">Hedef dizi türü, koleksiyondaki öğelerin türüyle uyumlu değil.</target>

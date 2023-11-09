@@ -262,11 +262,6 @@
         <target state="translated">Для запрашиваемого действия поддерживаются только одномерные массивы.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">Требуется неотрицательное число.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">Тип целевого массива несовместим с типом элементов в коллекции.</target>

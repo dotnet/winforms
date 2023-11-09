@@ -262,11 +262,6 @@
         <target state="translated">Per l'azione richiesta sono supportate solo matrici unidimensionali.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">È richiesto un numero non negativo.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">Il tipo di matrice di destinazione non è compatibile con il tipo di elementi della raccolta.</target>

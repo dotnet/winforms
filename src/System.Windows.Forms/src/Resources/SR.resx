@@ -6955,9 +6955,6 @@ Stack trace where the illegal operation occurred was:
   <data name="AccessDenied" xml:space="preserve">
     <value>Access denied</value>
   </data>
-  <data name="ArgumentOutOfRange_NeedNonNegNum" xml:space="preserve">
-    <value>Non-negative number required.</value>
-  </data>
   <data name="Argument_IncompatibleArrayType" xml:space="preserve">
     <value>Target array type is not compatible with the type of items in the collection.</value>
   </data>

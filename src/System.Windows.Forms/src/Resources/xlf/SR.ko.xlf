@@ -262,11 +262,6 @@
         <target state="translated">요청한 동작에 대해 1차원 배열만 지원됩니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">음수가 아닌 수가 필요합니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">대상 배열 형식이 컬렉션의 항목 형식과 호환되지 않습니다.</target>

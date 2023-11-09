@@ -262,11 +262,6 @@
         <target state="translated">请求的操作仅支持一维数组。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">需要提供非负数。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">目标数组类型与集合中的项类型不兼容。</target>

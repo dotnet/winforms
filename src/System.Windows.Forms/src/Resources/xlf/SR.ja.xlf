@@ -262,11 +262,6 @@
         <target state="translated">要求されたアクションに対しては、1 次元配列のみがサポートされます。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">負でない数値が必要です。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">ターゲット配列の型と、コレクション内の項目の型とに互換性がありません。</target>

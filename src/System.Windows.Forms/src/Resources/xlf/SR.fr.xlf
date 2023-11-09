@@ -262,11 +262,6 @@
         <target state="translated">Seuls les tableaux unidimensionnels sont pris en charge pour l'action demandée.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">Nombre non négatif obligatoire.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">Le type de tableau cible n'est pas compatible avec le type des éléments de la collection.</target>
