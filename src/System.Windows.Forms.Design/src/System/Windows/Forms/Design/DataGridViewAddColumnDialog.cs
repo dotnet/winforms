@@ -6,6 +6,9 @@ using System.ComponentModel.Design.Serialization;
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Drawing;
+using System.Collections.Immutable;
+using System.Reflection;
+using System.Collections.Concurrent;
 
 namespace System.Windows.Forms.Design;
 
@@ -654,23 +657,48 @@ internal class DataGridViewAddColumnDialog : Form
         }
     }
 
+    private readonly ConcurrentDictionary<Type, ImmutableArray<Type>> _discoveredTypesCache = new();
+
+    private ICollection GetTypes(Type baseType)
+    {
+        return baseType is null
+            ? throw new ArgumentNullException(nameof(baseType))
+            : (ICollection)_discoveredTypesCache.GetOrAdd(baseType, type => FindTypes(type, AppDomain.CurrentDomain.GetAssemblies()));
+
+        static ImmutableArray<Type> FindTypes(Type baseType, Assembly[] assemblies)
+        {
+            var builder = ImmutableArray.CreateBuilder<Type>();
+
+            foreach (var assembly in assemblies)
+            {
+                Type[] types;
+                try
+                {
+                    types = assembly.GetTypes();
+                }
+                catch (ReflectionTypeLoadException exception)
+                {
+                    types = exception.Types!;
+                }
+
+                foreach (var type in types)
+                {
+                    if (baseType.IsAssignableFrom(type))
+                    {
+                        builder.Add(type);
+                    }
+                }
+            }
+
+            return builder.ToImmutable();
+        }
+    }
+
     private void PopulateColumnTypesCombo()
     {
         _columnTypesCombo.Items.Clear();
 
-        if (!_liveDataGridView.Site.TryGetService(out IDesignerHost? host))
-        {
-            return;
-        }
-
-        ITypeDiscoveryService? discoveryService = host.GetService<ITypeDiscoveryService>();
-
-        if (discoveryService is null)
-        {
-            return;
-        }
-
-        ICollection columnTypes = DesignerUtils.FilterGenericTypes(discoveryService.GetTypes(typeof(DataGridViewColumn), excludeGlobalTypes: false));
+        ICollection columnTypes = DesignerUtils.FilterGenericTypes(GetTypes(typeof(DataGridViewColumn)));
 
         foreach (Type type in columnTypes)
         {
