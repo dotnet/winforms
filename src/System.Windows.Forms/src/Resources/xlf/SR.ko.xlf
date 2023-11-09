@@ -8259,11 +8259,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">텍스트</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">탭 인덱스가 잘못되었습니다.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
         <source>Sets whether the commands window will be displayed for components with commands.</source>
         <target state="translated">구성 요소에서 명령과 함께 명령 창이 표시되는지 여부를 설정합니다.</target>

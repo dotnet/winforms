@@ -8259,11 +8259,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Texto</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Índice de tabulação inválido.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
         <source>Sets whether the commands window will be displayed for components with commands.</source>
         <target state="translated">Define se a janela de comandos será exibida para componentes com comandos.</target>

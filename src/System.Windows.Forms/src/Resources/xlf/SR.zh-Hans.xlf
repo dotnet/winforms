@@ -8259,11 +8259,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">文本</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">选项卡索引无效。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
         <source>Sets whether the commands window will be displayed for components with commands.</source>
         <target state="translated">设置是否为带命令的组件显示命令窗口。</target>

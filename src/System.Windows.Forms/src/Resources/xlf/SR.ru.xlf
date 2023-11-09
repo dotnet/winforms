@@ -8260,11 +8260,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Текст</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Индекс вкладки недействителен.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
         <source>Sets whether the commands window will be displayed for components with commands.</source>
         <target state="translated">Определяет, должно ли для компонентов, использующих команды, отображаться окно команд.</target>

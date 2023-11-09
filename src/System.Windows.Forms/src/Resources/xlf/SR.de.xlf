@@ -8259,11 +8259,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Text</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Ungültiger Registerkartenindex.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
         <source>Sets whether the commands window will be displayed for components with commands.</source>
         <target state="translated">Legt fest, ob das Befehlsfenster für Komponenten mit Befehlen angezeigt wird.</target>

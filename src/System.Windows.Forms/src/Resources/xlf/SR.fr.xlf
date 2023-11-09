@@ -8259,11 +8259,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Texte</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">L'index de tabulation n'est pas valide.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
         <source>Sets whether the commands window will be displayed for components with commands.</source>
         <target state="translated">Définit si la fenêtre de commandes est affichée pour les composants avec des commandes.</target>

@@ -8259,11 +8259,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Text</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Index karty je neplatný.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
         <source>Sets whether the commands window will be displayed for components with commands.</source>
         <target state="translated">Určuje, zda bude pro součásti s příkazy zobrazen příkazový řádek.</target>

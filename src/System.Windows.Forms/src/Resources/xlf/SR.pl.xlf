@@ -8259,11 +8259,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Tekst</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Nieprawidłowy indeks kolejności dostępu.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
         <source>Sets whether the commands window will be displayed for components with commands.</source>
         <target state="translated">Określa, czy dla składników z poleceniami będzie wyświetlane okno poleceń.</target>

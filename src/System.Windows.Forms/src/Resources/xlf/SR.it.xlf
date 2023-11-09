@@ -8259,11 +8259,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Testo</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Indice di tabulazione non valido.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
         <source>Sets whether the commands window will be displayed for components with commands.</source>
         <target state="translated">Specifica se visualizzare la finestra dei comandi per i componenti dotati di comandi.</target>

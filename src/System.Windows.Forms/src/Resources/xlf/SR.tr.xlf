@@ -8259,11 +8259,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Metin</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Sekme dizini geçerli değil.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
         <source>Sets whether the commands window will be displayed for components with commands.</source>
         <target state="translated">Komutları olan bileşenler için komut penceresinin görüntülenip görüntülenmeyeceğini ayarlar.</target>

@@ -8259,11 +8259,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Texto</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Índice de tabulación no válido.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
         <source>Sets whether the commands window will be displayed for components with commands.</source>
         <target state="translated">Establece si la ventana de comandos se mostrará para componentes con comandos.</target>
