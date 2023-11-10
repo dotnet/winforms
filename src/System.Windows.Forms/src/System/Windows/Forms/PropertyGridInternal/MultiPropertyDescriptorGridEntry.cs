@@ -95,7 +95,7 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
         }
     }
 
-    public override object PropertyValue
+    public override object? PropertyValue
     {
         set
         {
@@ -196,8 +196,9 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
     protected override void NotifyParentsOfChanges(GridEntry entry)
     {
         // Now see if we need to notify the parent(s) up the chain.
-        while (entry is PropertyDescriptorGridEntry propertyEntry
-            && propertyEntry.PropertyDescriptor.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
+        while (entry is PropertyDescriptorGridEntry propertyEntry &&
+            propertyEntry.PropertyDescriptor is not null &&
+            propertyEntry.PropertyDescriptor.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
         {
             // Find the next parent property with a different value owner.
             object owner = entry.GetValueOwner();

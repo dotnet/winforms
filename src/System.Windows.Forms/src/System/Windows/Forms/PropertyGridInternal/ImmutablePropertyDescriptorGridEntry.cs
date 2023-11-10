@@ -30,7 +30,7 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
 
     internal override bool IsPropertyReadOnly => ShouldRenderReadOnly;
 
-    public override object PropertyValue
+    public override object? PropertyValue
     {
         get => base.PropertyValue;
         set
@@ -47,7 +47,7 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
                 IDictionary values = new Hashtable(properties.Count);
                 for (int i = 0; i < properties.Count; i++)
                 {
-                    if (PropertyDescriptor.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
+                    if (PropertyDescriptor?.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
                     {
                         values[properties[i].Name] = value;
                     }
@@ -83,7 +83,7 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
         }
     }
 
-    protected override bool SendNotification(object owner, Notify notification)
+    protected override bool SendNotification(object? owner, Notify notification)
         => ParentGridEntry.SendNotificationToParent(notification);
 
     public override bool ShouldRenderReadOnly => InstanceParentGridEntry.ShouldRenderReadOnly;
