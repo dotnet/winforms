@@ -20,16 +20,23 @@ internal abstract unsafe class StandardDispatch<T> : IDispatch.Interface, IDispa
     where T : unmanaged, IComIID
 {
     private ITypeInfo* _typeInfo;
+    private readonly object _instance;
 
     /// <summary>
     ///  Construct a new instance with the specified backing <see cref="ITypeInfo"/>.
     /// </summary>
-    public StandardDispatch(ITypeInfo* typeInfo)
+    /// <param name="instance">
+    ///  Specifies the target that implements the <typeparamref name="T"/> interface. The normal behavior is to use
+    ///  <see langword="this"/> as the instance to dispatch on (when <see langword="null"/> is passed).
+    /// </param>
+    public StandardDispatch(ITypeInfo* typeInfo, object? instance = default)
     {
         if (typeInfo is null)
         {
             throw new ArgumentNullException(nameof(typeInfo));
         }
+
+        _instance = instance ?? this;
 
 #if DEBUG
         typeInfo->GetTypeAttr(out TYPEATTR* typeAttributes).ThrowOnFailure();
@@ -120,7 +127,7 @@ internal abstract unsafe class StandardDispatch<T> : IDispatch.Interface, IDispa
         }
 
         // The override couldn't find it, pass it along via the ITypeInfo.
-        using ComScope<T> @interface = new(ComHelpers.GetComPointer<T>(this));
+        using ComScope<T> @interface = new(ComHelpers.GetComPointer<T>(_instance));
         return _typeInfo->Invoke(@interface, dispIdMember, wFlags, pDispParams, pVarResult, pExcepInfo, pArgErr);
     }
 
@@ -177,7 +184,7 @@ internal abstract unsafe class StandardDispatch<T> : IDispatch.Interface, IDispa
         }
 
         // The override couldn't find it, pass it along via the ITypeInfo.
-        using ComScope<T> @interface = new(ComHelpers.GetComPointer<T>(this));
+        using ComScope<T> @interface = new(ComHelpers.GetComPointer<T>(_instance));
         return _typeInfo->Invoke(@interface, id, (DISPATCH_FLAGS)wFlags, pdp, pvarRes, pei, puArgErr: null);
     }
 
