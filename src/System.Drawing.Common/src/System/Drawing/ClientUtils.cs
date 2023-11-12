@@ -1,7 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Security;
 
 namespace System.Drawing;
@@ -12,21 +13,17 @@ internal static class ClientUtils
     // Pragma added to prevent converting the "type is obsolete" warning into build error.
 #pragma warning disable 618
     public static bool IsCriticalException(Exception ex)
-    {
-        return ex is NullReferenceException
-                || ex is StackOverflowException
-                || ex is OutOfMemoryException
-                || ex is System.Threading.ThreadAbortException
-                || ex is ExecutionEngineException
-                || ex is IndexOutOfRangeException
-                || ex is AccessViolationException;
-    }
+        => ex is NullReferenceException
+                or StackOverflowException
+                or OutOfMemoryException
+                or System.Threading.ThreadAbortException
+                or ExecutionEngineException
+                or IndexOutOfRangeException
+                or AccessViolationException;
 #pragma warning restore 618
 
     public static bool IsSecurityOrCriticalException(Exception ex)
-    {
-        return (ex is SecurityException) || IsCriticalException(ex);
-    }
+        => (ex is SecurityException) || IsCriticalException(ex);
 
     /// <summary>
     /// WeakRefCollection - a collection that holds onto weak references.
@@ -46,9 +43,9 @@ internal static class ClientUtils
     {
         internal WeakRefCollection() : this(4) { }
 
-        internal WeakRefCollection(int size) => InnerList = new ArrayList(size);
+        internal WeakRefCollection(int size) => InnerList = new(size);
 
-        internal ArrayList InnerList { get; }
+        internal List<WeakRefObject?> InnerList { get; }
 
         /// <summary>
         /// Indicates the value where the collection should check its items to remove dead weakref left over.
@@ -61,16 +58,8 @@ internal static class ClientUtils
 
         public object? this[int index]
         {
-            get
-            {
-                if (InnerList[index] is WeakRefObject weakRef && weakRef.IsAlive)
-                {
-                    return weakRef.Target;
-                }
-
-                return null;
-            }
-            set => InnerList[index] = CreateWeakRefObject(value);
+            get => InnerList[index] is WeakRefObject weakRef && weakRef.IsAlive ? weakRef.Target : null;
+            set => ((IList)InnerList)[index] = CreateWeakRefObject(value);
         }
 
         public void ScavengeReferences()
@@ -81,13 +70,13 @@ internal static class ClientUtils
             {
                 object? item = this[currentIndex];
 
-                if (item == null)
+                if (item is null)
                 {
                     InnerList.RemoveAt(currentIndex);
                 }
                 else
                 {
-                    // Only incriment if we have not removed the item.
+                    // Only increment if we have not removed the item.
                     currentIndex++;
                 }
             }
@@ -95,20 +84,20 @@ internal static class ClientUtils
 
         public override bool Equals(object? obj)
         {
-            if (!(obj is WeakRefCollection other))
+            if (obj is not WeakRefCollection other)
             {
                 return false;
             }
 
-            if (other == null || Count != other.Count)
+            if (other is null || Count != other.Count)
             {
                 return false;
             }
 
             for (int i = 0; i < Count; i++)
             {
-                object? thisObj = InnerList[i];
-                object? otherObj = other.InnerList[i];
+                WeakRefObject? thisObj = InnerList[i];
+                WeakRefObject? otherObj = other.InnerList[i];
                 if (thisObj != otherObj)
                 {
                     if (thisObj is null || !thisObj.Equals(otherObj))
@@ -125,14 +114,7 @@ internal static class ClientUtils
 
         [return: NotNullIfNotNull(nameof(value))]
         private static WeakRefObject? CreateWeakRefObject(object? value)
-        {
-            if (value == null)
-            {
-                return null;
-            }
-
-            return new WeakRefObject(value);
-        }
+            => value is null ? null : new WeakRefObject(value);
 
         private static void Copy(WeakRefCollection sourceList, int sourceIndex, WeakRefCollection destinationList, int destinationIndex, int length)
         {
@@ -165,7 +147,7 @@ internal static class ClientUtils
         /// </summary>
         public void RemoveByHashCode(object value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return;
             }
@@ -174,7 +156,7 @@ internal static class ClientUtils
 
             for (int idx = 0; idx < InnerList.Count; idx++)
             {
-                if (InnerList[idx] != null && InnerList[idx]!.GetHashCode() == hash)
+                if (InnerList[idx] is not null && InnerList[idx]!.GetHashCode() == hash)
                 {
                     RemoveAt(idx);
                     return;
@@ -184,17 +166,17 @@ internal static class ClientUtils
 
         public void Clear() => InnerList.Clear();
 
-        public bool IsFixedSize => InnerList.IsFixedSize;
+        public bool IsFixedSize => ((IList)InnerList).IsFixedSize;
 
-        public bool Contains(object? value) => InnerList.Contains(CreateWeakRefObject(value));
+        public bool Contains(object? value) => ((IList)InnerList).Contains(CreateWeakRefObject(value));
 
         public void RemoveAt(int index) => InnerList.RemoveAt(index);
 
-        public void Remove(object? value) => InnerList.Remove(CreateWeakRefObject(value));
+        public void Remove(object? value) => ((IList)InnerList).Remove(CreateWeakRefObject(value));
 
-        public int IndexOf(object? value) => InnerList.IndexOf(CreateWeakRefObject(value));
+        public int IndexOf(object? value) => ((IList)InnerList).IndexOf(CreateWeakRefObject(value));
 
-        public void Insert(int index, object? value) => InnerList.Insert(index, CreateWeakRefObject(value));
+        public void Insert(int index, object? value) => ((IList)InnerList).Insert(index, CreateWeakRefObject(value));
 
         public int Add(object? value)
         {
@@ -203,18 +185,18 @@ internal static class ClientUtils
                 ScavengeReferences();
             }
 
-            return InnerList.Add(CreateWeakRefObject(value));
+            return ((IList)InnerList).Add(CreateWeakRefObject(value));
         }
 
         public int Count => InnerList.Count;
 
-        object ICollection.SyncRoot => InnerList.SyncRoot;
+        object ICollection.SyncRoot => ((IList)InnerList).SyncRoot;
 
-        public bool IsReadOnly => InnerList.IsReadOnly;
+        public bool IsReadOnly => ((IList)InnerList).IsReadOnly;
 
-        public void CopyTo(Array array, int index) => InnerList.CopyTo(array, index);
+        public void CopyTo(Array array, int index) => ((IList)InnerList).CopyTo(array, index);
 
-        bool ICollection.IsSynchronized => InnerList.IsSynchronized;
+        bool ICollection.IsSynchronized => ((IList)InnerList).IsSynchronized;
 
         public IEnumerator GetEnumerator() => InnerList.GetEnumerator();
 
@@ -232,7 +214,7 @@ internal static class ClientUtils
 
             internal WeakRefObject(object obj)
             {
-                Debug.Assert(obj != null, "Unexpected null object!");
+                Debug.Assert(obj is not null, "Unexpected null object!");
                 _weakHolder = new WeakReference(obj);
                 _hash = obj.GetHashCode();
             }
@@ -252,14 +234,14 @@ internal static class ClientUtils
                     return true;
                 }
 
-                if (other == null)
+                if (other is null)
                 {
                     return false;
                 }
 
                 if (other.Target != Target)
                 {
-                    if (Target == null || !Target.Equals(other.Target))
+                    if (Target is null || !Target.Equals(other.Target))
                     {
                         return false;
                     }
