@@ -28,12 +28,10 @@ internal class TextBoxBaseDesigner : ControlDesigner
         {
             int baseline = DesignerUtils.GetTextBaseline(Control, Drawing.ContentAlignment.TopLeft);
 
-            BorderStyle borderStyle = BorderStyle.Fixed3D;
             PropertyDescriptor? prop = TypeDescriptor.GetProperties(Component)["BorderStyle"];
-            if (prop is not null)
-            {
-                borderStyle = (BorderStyle)prop.GetValue(Component)!;
-            }
+            BorderStyle borderStyle = prop is not null
+                ? (BorderStyle)prop.GetValue(Component)!
+                : BorderStyle.Fixed3D;
 
             if (borderStyle == BorderStyle.None)
             {
@@ -54,9 +52,7 @@ internal class TextBoxBaseDesigner : ControlDesigner
             }
 
             IList snapLines = base.SnapLines;
-
             snapLines.Add(new SnapLine(SnapLineType.Baseline, baseline, SnapLinePriority.Medium));
-
             return snapLines;
         }
     }

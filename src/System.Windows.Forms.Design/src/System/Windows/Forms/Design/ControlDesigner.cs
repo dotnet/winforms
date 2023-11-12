@@ -362,7 +362,7 @@ public partial class ControlDesigner : ComponentDesigner
 
     internal IList SnapLinesInternal(Padding margin)
     {
-        ArrayList snapLines = new(4);
+        ArrayList snapLines = new(8);
         int width = Control.Width;
         int height = Control.Height;
 
