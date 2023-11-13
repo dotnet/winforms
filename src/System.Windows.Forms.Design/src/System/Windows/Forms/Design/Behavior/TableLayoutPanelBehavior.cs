@@ -3,7 +3,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel.Design;
 using System.ComponentModel;
 using System.Drawing;
@@ -25,7 +24,7 @@ internal class TableLayoutPanelBehavior : Behavior
     private TableLayoutPanel table;
     private StyleHelper rightStyle;
     private StyleHelper leftStyle;
-    private List<TableLayoutStyle> _styles; //List of the styles
+    private List<TableLayoutStyle> _styles;
     private bool currentColumnStyles; // is Styles for Columns or Rows
     private static readonly TraceSwitch tlpResizeSwitch = new("TLPRESIZE", "Behavior service drag & drop messages");
 
@@ -190,19 +189,15 @@ internal class TableLayoutPanelBehavior : Behavior
 
     private bool CanResizeStyle(int[] widths)
     {
-        bool canStealFromRight = false;
-        bool canStealFromLeft = false;
-        int moveIndex = ((IList)_styles).IndexOf(tableGlyph.Style);
-        if (moveIndex > -1 && moveIndex != _styles.Count)
+        int moveIndex = _styles.IndexOf(tableGlyph.Style);
+        if (moveIndex <= -1 || moveIndex == _styles.Count)
         {
-            canStealFromRight = IndexOfNextStealableStyle(true, moveIndex, widths) != -1;
-            canStealFromLeft = IndexOfNextStealableStyle(false, moveIndex, widths) != -1;
-        }
-        else
-        {
-            Debug.Fail("Can't find style " + moveIndex);
+            Debug.Fail($"Can't find style {moveIndex}");
             return false;
         }
+
+        bool canStealFromRight = IndexOfNextStealableStyle(true, moveIndex, widths) != -1;
+        bool canStealFromLeft = IndexOfNextStealableStyle(false, moveIndex, widths) != -1;
 
         return canStealFromRight && canStealFromLeft;
     }
