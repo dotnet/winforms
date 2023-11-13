@@ -519,8 +519,7 @@ internal class TabControlDesigner : ParentControlDesigner
         if (data is not null)
         {
             ArrayList dragControls;
-            int primaryIndex = -1;
-            dragControls = new ArrayList(data.GetSortedDragControls(ref primaryIndex));
+            dragControls = new ArrayList(data.GetSortedDragControls(out _));
             if (dragControls is not null)
             {
                 for (int i = 0; i < dragControls.Count; i++)

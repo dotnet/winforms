@@ -1478,8 +1478,7 @@ public partial class ParentControlDesigner : ControlDesigner, IOleDragClient
         object[] dragComps;
         if (behDataObject is not null && behDataObject.DragComponents is not null)
         {
-            dragComps = new object[behDataObject.DragComponents.Count];
-            behDataObject.DragComponents.CopyTo(dragComps, 0);
+            dragComps = behDataObject.DragComponents.ToArray();
         }
         else
         {
