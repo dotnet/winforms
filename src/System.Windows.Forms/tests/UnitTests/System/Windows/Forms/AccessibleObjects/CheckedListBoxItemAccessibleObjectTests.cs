@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.CheckedListBox;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -118,7 +117,7 @@ public class CheckedListBoxItemAccessibleObjectTests
         checkedListBox.Items.Add(2);
 
         AccessibleObject itemAccessibleObject = checkedListBox.AccessibilityObject.GetChild(itemIndex);
-        UiaCore.IRawElementProviderFragment actual = itemAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
+        IRawElementProviderFragment.Interface actual = itemAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(expected, actual);
         Assert.False(checkedListBox.IsHandleCreated);

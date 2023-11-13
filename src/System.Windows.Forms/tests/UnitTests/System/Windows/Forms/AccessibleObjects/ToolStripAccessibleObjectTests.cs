@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -164,10 +163,10 @@ public class ToolStripAccessibleObjectTests
 
         var accessibleObject = toolStrip.AccessibilityObject;
 
-        UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        IRawElementProviderFragment.Interface firstChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.NotNull(firstChild);
         using VARIANT actual = default;
-        Assert.True(firstChild.GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId, &actual).Succeeded);
+        Assert.True(((IRawElementProviderSimple.Interface)firstChild).GetPropertyValue(UIA_PROPERTY_ID.UIA_ControlTypePropertyId, &actual).Succeeded);
         Assert.Equal((int)UIA_CONTROLTYPE_ID.UIA_ThumbControlTypeId, actual.ToObject());
     }
 
