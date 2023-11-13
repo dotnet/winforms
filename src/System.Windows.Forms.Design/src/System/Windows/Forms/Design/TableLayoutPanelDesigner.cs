@@ -2256,15 +2256,13 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     {
         protected override object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
         {
-            ArrayList subset = new ArrayList();
+            List<IComponent> subset = new();
 
             if (valuesToSerialize is not null && valuesToSerialize.Count > 0)
             {
                 foreach (object val in valuesToSerialize)
                 {
-                    IComponent comp = val as IComponent;
-
-                    if (comp is not null && comp.Site is not null && !(comp.Site is INestedSite))
+                    if (val is IComponent { Site: not null and not INestedSite } comp)
                     {
                         subset.Add(comp);
                     }
