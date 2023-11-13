@@ -25,7 +25,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     private UndoEngine undoEngine;
 
     private Control localDragControl;//only valid if we're currently dragging a child control of the table
-    private ArrayList _dragComponents;          //the components we are dragging
+    private List<IComponent> _dragComponents;          //the components we are dragging
     private DesignerVerbCollection verbs;//add col/row and remove col/row tab verbs
     private DesignerTableLayoutControlCollection controls;
     private DesignerVerb removeRowVerb;
@@ -966,10 +966,9 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
 
     private Control ExtractControlFromDragEvent(DragEventArgs de)
     {
-        DropSourceBehavior.BehaviorDataObject data = de.Data as DropSourceBehavior.BehaviorDataObject;
-        if (data is not null)
+        if (de.Data is DropSourceBehavior.BehaviorDataObject data)
         {
-            _dragComponents = new ArrayList(data.DragComponents);
+            _dragComponents = new List<IComponent>(data.DragComponents);
             return _dragComponents[0] as Control;
         }
 
