@@ -1808,7 +1808,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
     }
 
-    internal void FixUpControlsOnDelete(bool isRow, int index, ArrayList deleteList)
+    internal void FixUpControlsOnDelete(bool isRow, int index, List<Control> deleteList)
     {
         PropertyDescriptor childProp = TypeDescriptor.GetProperties(Table)["Controls"];
         PropChanging(childProp);
@@ -1906,7 +1906,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                 try
                 {
                     Table.SuspendLayout();
-                    ArrayList deleteList = new ArrayList();
+                    List<Control> deleteList = new();
 
                     //First fix up any controls in the row/col we are deleting
                     FixUpControlsOnDelete(isRow, index, deleteList);
@@ -1920,16 +1920,16 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
                     {
                         PropertyDescriptor childProp = TypeDescriptor.GetProperties(Table)["Controls"];
                         PropChanging(childProp);
-                        foreach (object o in deleteList)
+                        foreach (Control control in deleteList)
                         {
                             List<IComponent> al = new();
-                            DesignerUtils.GetAssociatedComponents((IComponent)o, host, al);
+                            DesignerUtils.GetAssociatedComponents(control, host, al);
                             foreach (IComponent comp in al)
                             {
                                 compSvc.OnComponentChanging(comp, null);
                             }
 
-                            host.DestroyComponent(o as Component);
+                            host.DestroyComponent(control);
                         }
 
                         PropChanged(childProp);
