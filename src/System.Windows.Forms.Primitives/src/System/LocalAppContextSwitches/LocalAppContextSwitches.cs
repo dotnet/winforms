@@ -27,7 +27,7 @@ internal static partial class LocalAppContextSwitches
     private static int s_servicePointManagerCheckCrl;
     private static int s_trackBarModernRendering;
     private static int s_doNotCatchUnhandledExceptions;
-    private static int s_DataGridViewRowStartsAtOne;
+    private static int s_dataGridViewRowStartsAtOne;
 
     private static FrameworkName? s_targetFrameworkName;
 
@@ -162,6 +162,8 @@ internal static partial class LocalAppContextSwitches
     public static bool DataGridViewRowStartsAtOne
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => GetCachedSwitchValue(DataGridViewRowStartsAtOneSwitchName, ref s_DataGridViewRowStartsAtOne);
+        get => GetCachedSwitchValue(DataGridViewRowStartsAtOneSwitchName, ref s_dataGridViewRowStartsAtOne);
     }
+
+    internal static void Test_SetDataGridViewRowStartsAtOne(bool value) => s_dataGridViewRowStartsAtOne = value ? 1 : 0;
 }

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
+using System.Windows.Forms.Primitives;
 using Windows.Win32.UI.Accessibility;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
@@ -2377,6 +2378,26 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
 
         Assert.Equal("test1", ((BSTR)dataGridView.Rows[0].AccessibilityObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_ValueValuePropertyId)).ToStringAndFree());
         Assert.False(dataGridView.IsHandleCreated);
+    }
+
+    [WinFormsFact]
+    public void DataGridView_SwitchConfigured_AdjustsRowAndColumnStartIndices()
+    {
+        var originalSwitchValue = LocalAppContextSwitches.DataGridViewRowStartsAtOne;
+        if (!originalSwitchValue)
+        { LocalAppContextSwitches.Test_SetDataGridViewRowStartsAtOne(true); }
+
+        using DataGridView dataGridView = new();
+        dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+        dataGridView.Rows.Add(new DataGridViewRow());
+
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), dataGridView.Rows[0].AccessibilityObject.Name);
+
+        LocalAppContextSwitches.Test_SetDataGridViewRowStartsAtOne(false);
+
+        Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), dataGridView.Rows[0].AccessibilityObject.Name);
+
+        LocalAppContextSwitches.Test_SetDataGridViewRowStartsAtOne(originalSwitchValue);
     }
 
     private class SubDataGridViewCell : DataGridViewCell
