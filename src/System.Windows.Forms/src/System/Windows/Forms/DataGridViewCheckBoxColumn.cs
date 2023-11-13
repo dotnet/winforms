@@ -293,14 +293,7 @@ public class DataGridViewCheckBoxColumn : DataGridViewColumn
             return true;
         }
 
-        if (templateCell.ThreeState)
-        {
-            defaultNullValue = CheckState.Indeterminate;
-        }
-        else
-        {
-            defaultNullValue = false;
-        }
+        defaultNullValue = templateCell.ThreeState ? CheckState.Indeterminate : false;
 
         if (!HasDefaultCellStyle)
         {
