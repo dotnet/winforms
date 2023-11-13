@@ -25,7 +25,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     private UndoEngine undoEngine;
 
     private Control localDragControl;//only valid if we're currently dragging a child control of the table
-    private ArrayList dragComps;          //the components we are dragging
+    private ArrayList _dragComponents;          //the components we are dragging
     private DesignerVerbCollection verbs;//add col/row and remove col/row tab verbs
     private DesignerTableLayoutControlCollection controls;
     private DesignerVerb removeRowVerb;
@@ -969,8 +969,8 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         DropSourceBehavior.BehaviorDataObject data = de.Data as DropSourceBehavior.BehaviorDataObject;
         if (data is not null)
         {
-            dragComps = new ArrayList(data.DragComponents);
-            return dragComps[0] as Control;
+            _dragComponents = new ArrayList(data.DragComponents);
+            return _dragComponents[0] as Control;
         }
 
         return null;
@@ -1307,7 +1307,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             //or if we are doing a multi-select local drag, then show the no-smoking cursor.
             //or if we are doig a local drag, and the cell is not empty, and we are doing a copy
             if ((existingControl is not null && localDragControl is null) ||
-                (localDragControl is not null && dragComps.Count > 1) ||
+                (localDragControl is not null && _dragComponents.Count > 1) ||
                 (localDragControl is not null && existingControl is not null && Control.ModifierKeys == Keys.Control))
             {
                 return false;
@@ -1349,7 +1349,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
     protected override void OnDragLeave(EventArgs e)
     {
         localDragControl = null; //VSWhidbey #275678
-        dragComps = null;
+        _dragComponents = null;
         base.OnDragLeave(e);
     }
 
@@ -1383,9 +1383,9 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
             // Unfortunally cancelling the transaction throws as well, so we need a way to undo the Add
             // or access internal properties of the control.
             // dragComps is null when dragging off the toolbox
-            if (dragComps is not null)
+            if (_dragComponents is not null)
             {
-                foreach (Control dragControl in dragComps)
+                foreach (Control dragControl in _dragComponents)
                 {
                     if (dragControl is not null)
                     {
@@ -1400,7 +1400,7 @@ internal class TableLayoutPanelDesigner : FlowPanelDesigner
         }
 
         droppedCellPosition = InvalidPoint;
-        dragComps = null;
+        _dragComponents = null;
     }
 
     protected override void OnDragOver(DragEventArgs de)
