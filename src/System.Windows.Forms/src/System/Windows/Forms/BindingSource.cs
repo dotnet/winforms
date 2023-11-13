@@ -1551,10 +1551,8 @@ public class BindingSource : Component,
     [Browsable(false)]
     public virtual bool IsReadOnly => List.IsReadOnly;
 
-    public virtual string GetListName(PropertyDescriptor[]? listAccessors)
-    {
-        return ListBindingHelper.GetListName(List, listAccessors);
-    }
+    public virtual string GetListName(PropertyDescriptor[]? listAccessors) =>
+        ListBindingHelper.GetListName(List, listAccessors);
 
     public virtual PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[]? listAccessors)
     {
