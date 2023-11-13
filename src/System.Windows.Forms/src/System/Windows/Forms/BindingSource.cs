@@ -1785,7 +1785,9 @@ public class BindingSource : Component,
     [EditorBrowsable(EditorBrowsableState.Never)]
     public virtual ListSortDescriptionCollection SortDescriptions
     {
-        get => List is IBindingListView iblv ? iblv.SortDescriptions : null!;
+        get => List is IBindingListView iblv
+            ? iblv.SortDescriptions
+            : new ListSortDescriptionCollection();
     }
 
     [SRCategory(nameof(SR.CatData))]
