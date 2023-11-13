@@ -486,18 +486,21 @@ public partial class Control
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
             propertyID switch
             {
-                UIA_PROPERTY_ID.UIA_ControlTypePropertyId =>
+                UIA_PROPERTY_ID.UIA_ControlTypePropertyId
                     // "ControlType" value depends on owner's AccessibleRole value.
                     // See: docs/accessibility/accessible-role-controltype.md
-                    (VARIANT)(int)AccessibleRoleControlTypeMap.GetControlType(Role),
-                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId => (VARIANT)(Owner?.Enabled ?? false),
+                    => (VARIANT)(int)AccessibleRoleControlTypeMap.GetControlType(Role),
+                UIA_PROPERTY_ID.UIA_IsEnabledPropertyId
+                    => Owner?.Enabled == true ? VARIANT.True : VARIANT.False,
                 UIA_PROPERTY_ID.UIA_IsKeyboardFocusablePropertyId when
                     Owner?.SupportsUiaProviders ?? false
                     => (VARIANT)Owner.CanSelect,
-                UIA_PROPERTY_ID.UIA_LiveSettingPropertyId => Owner is IAutomationLiveRegion owner
-                    ? (VARIANT)(int)owner.LiveSetting
-                    : base.GetPropertyValue(propertyID),
-                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => UIAHelper.WindowHandleToVariant(Owner?.InternalHandle ?? HWND.Null),
+                UIA_PROPERTY_ID.UIA_LiveSettingPropertyId
+                    => Owner is IAutomationLiveRegion owner
+                        ? (VARIANT)(int)owner.LiveSetting
+                        : base.GetPropertyValue(propertyID),
+                UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId
+                    => UIAHelper.WindowHandleToVariant(Owner?.InternalHandle ?? HWND.Null),
                 _ => base.GetPropertyValue(propertyID)
             };
 
