@@ -45,7 +45,7 @@ public class ImageConverter : TypeConverter
     {
         if (destinationType == typeof(string))
         {
-            if (value == null)
+            if (value is null)
             {
                 return SR.none;
             }
@@ -56,7 +56,7 @@ public class ImageConverter : TypeConverter
         }
         else if (destinationType == typeof(byte[]))
         {
-            if (value == null)
+            if (value is null)
             {
                 return Array.Empty<byte>();
             }

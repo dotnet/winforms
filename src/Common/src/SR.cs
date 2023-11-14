@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Resources;
@@ -41,7 +41,7 @@ internal static partial class SR
     {
         string resourceString = GetResourceString(resourceKey);
 
-        return resourceKey == resourceString || resourceString == null ? defaultString : resourceString;
+        return resourceKey == resourceString || resourceString is null ? defaultString : resourceString;
     }
 
     internal static string Format(string resourceFormat, object? p1)

@@ -361,7 +361,7 @@ public class FontConverter : TypeConverter
                 style |= FontStyle.Underline;
         }
 
-        if (name == null)
+        if (name is null)
         {
             fontFamily = new FontFamily("Tahoma");
         }
@@ -379,7 +379,7 @@ public class FontConverter : TypeConverter
             }
 
             // font family not found in installed fonts
-            if (fontFamily == null)
+            if (fontFamily is null)
             {
                 collection = new PrivateFontCollection();
                 FontFamily[] privateFontList = collection.Families;
@@ -474,7 +474,7 @@ public class FontConverter : TypeConverter
                 }
                 if (fontName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (bestMatch == null || fontName.Length <= bestMatch.Length)
+                    if (bestMatch is null || fontName.Length <= bestMatch.Length)
                     {
                         bestMatch = fontName;
                     }
@@ -493,7 +493,7 @@ public class FontConverter : TypeConverter
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
             // display graphic unit is not supported.
-            if (Values == null)
+            if (Values is null)
             {
                 base.GetStandardValues(context); // sets "values"
                 Debug.Assert(Values != null);

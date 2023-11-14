@@ -65,7 +65,7 @@ public sealed class PrivateFontCollection : FontCollection
 #pragma warning restore CA2208
         }
 
-        if (filename == null)
+        if (filename is null)
         {
             throw new ArgumentNullException(nameof(filename));
         }

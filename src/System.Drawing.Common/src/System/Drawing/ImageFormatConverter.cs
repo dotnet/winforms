@@ -31,7 +31,7 @@ public class ImageFormatConverter : TypeConverter
     {
         // we must be able to convert from short names and long names
         string? strFormat = value as string;
-        if (strFormat == null)
+        if (strFormat is null)
         {
             // case #1, this is not a string
             return base.ConvertFrom(context, culture, value);

@@ -86,7 +86,7 @@ public sealed class Bitmap : Image
         ArgumentNullException.ThrowIfNull(resource);
 
         Stream? stream = type.Module.Assembly.GetManifestResourceStream(type, resource);
-        if (stream == null)
+        if (stream is null)
         {
             throw new ArgumentException(SR.Format(SR.ResourceNotFound, type, resource));
         }

@@ -1046,7 +1046,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
 
                     try
                     {
-                        if (dataStream == null)
+                        if (dataStream is null)
                         {
                             created = dataStream = File.OpenRead(filename!);
                         }

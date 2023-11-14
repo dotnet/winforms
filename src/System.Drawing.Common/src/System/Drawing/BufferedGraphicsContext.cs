@@ -160,7 +160,7 @@ public sealed class BufferedGraphicsContext : IDisposable
         }
         finally
         {
-            if (tempContext != null && (tempBuffer == null || (tempBuffer != null && !tempBuffer.DisposeContext)))
+            if (tempContext != null && (tempBuffer is null || (tempBuffer != null && !tempBuffer.DisposeContext)))
             {
                 tempContext.Dispose();
             }

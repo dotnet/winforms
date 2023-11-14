@@ -515,7 +515,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
         _gdiCharSet = gdiCharSet;
         _gdiVerticalFont = gdiVerticalFont;
 
-        if (_fontFamily == null)
+        if (_fontFamily is null)
         {
             // GDI+ FontFamily is a singleton object.
             SetFontFamily(new FontFamily(family.NativeFamily));

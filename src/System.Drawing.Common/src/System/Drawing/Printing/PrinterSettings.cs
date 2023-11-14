@@ -223,7 +223,7 @@ public class PrinterSettings : ICloneable
     {
         get
         {
-            return (_printerName == null || _printerName == GetDefaultPrinterName());
+            return (_printerName is null || _printerName == GetDefaultPrinterName());
         }
     }
 
@@ -413,7 +413,7 @@ public class PrinterSettings : ICloneable
     {
         get
         {
-            if (_printerName == null)
+            if (_printerName is null)
                 return GetDefaultPrinterName();
             else
                 return _printerName;

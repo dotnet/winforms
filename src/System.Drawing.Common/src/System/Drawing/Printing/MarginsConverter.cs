@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -144,7 +144,7 @@ public class MarginsConverter : ExpandableObjectConverter
         object? top = propertyValues["Top"];
         object? bottom = propertyValues["Bottom"];
 
-        if (left == null || right == null || bottom == null || top == null ||
+        if (left is null || right is null || bottom is null || top is null ||
             !(left is int) || !(right is int) || !(bottom is int) || !(top is int))
         {
             throw new ArgumentException(SR.PropertyValueInvalidEntry);

@@ -50,7 +50,7 @@ public abstract class PrintController
 
         public static implicit operator IntPtr(SafeDeviceModeHandle handle)
         {
-            return (handle == null) ? IntPtr.Zero : handle.handle;
+            return (handle is null) ? IntPtr.Zero : handle.handle;
         }
 
         public static explicit operator SafeDeviceModeHandle(IntPtr handle)
@@ -202,7 +202,7 @@ public abstract class PrintController
             {
                 // QueryPageSettings event handler did not change the page settings,
                 // thus we use default page settings from the document object.
-                if (pageEvent == null)
+                if (pageEvent is null)
                 {
                     pageEvent = CreatePrintPageEvent(queryEvent.PageSettings);
                 }

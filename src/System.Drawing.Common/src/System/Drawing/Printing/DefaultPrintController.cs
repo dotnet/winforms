@@ -21,7 +21,7 @@ public class StandardPrintController : PrintController
     /// </summary>
     public override void OnStartPrint(PrintDocument document, PrintEventArgs e)
     {
-        Debug.Assert(_dc == null && _graphics == null, "PrintController methods called in the wrong order?");
+        Debug.Assert(_dc is null && _graphics is null, "PrintController methods called in the wrong order?");
 
         base.OnStartPrint(document, e);
         // the win32 methods below SuppressUnmanagedCodeAttributes so assertin on UnmanagedCodePermission is redundant
@@ -59,7 +59,7 @@ public class StandardPrintController : PrintController
     /// </summary>
     public override Graphics OnStartPage(PrintDocument document, PrintPageEventArgs e)
     {
-        Debug.Assert(_dc != null && _graphics == null, "PrintController methods called in the wrong order?");
+        Debug.Assert(_dc != null && _graphics is null, "PrintController methods called in the wrong order?");
         Debug.Assert(_modeHandle != null);
 
         base.OnStartPage(document, e);
@@ -126,7 +126,7 @@ public class StandardPrintController : PrintController
     /// </summary>
     public override void OnEndPrint(PrintDocument document, PrintEventArgs e)
     {
-        Debug.Assert(_dc != null && _graphics == null, "PrintController methods called in the wrong order?");
+        Debug.Assert(_dc != null && _graphics is null, "PrintController methods called in the wrong order?");
 
         if (_dc != null)
         {

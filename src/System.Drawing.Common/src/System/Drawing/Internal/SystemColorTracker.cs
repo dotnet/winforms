@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Microsoft.Win32;
@@ -46,13 +46,13 @@ internal static class SystemColorTracker
             count++;
 
             // COM+ takes forever to Finalize() weak references, so it pays to reuse them.
-            if (list[index] == null)
+            if (list[index] is null)
             {
                 list[index] = new WeakReference(obj);
             }
             else
             {
-                Debug.Assert(list[index].Target == null, $"Trying to reuse a weak reference that isn't broken yet: list[{index}], length = {list.Length}");
+                Debug.Assert(list[index].Target is null, $"Trying to reuse a weak reference that isn't broken yet: list[{index}], length = {list.Length}");
                 list[index].Target = obj;
             }
         }
@@ -76,7 +76,7 @@ internal static class SystemColorTracker
         {
             while (left < length && list[left].Target != null)
                 left++;
-            while (right >= 0 && list[right].Target == null)
+            while (right >= 0 && list[right].Target is null)
                 right--;
 
             if (left >= right)
@@ -108,7 +108,7 @@ internal static class SystemColorTracker
 
         for (int i = count; i < list.Length; i++)
         {
-            Debug.Assert(list[i].Target == null, "Partitioning didn't work");
+            Debug.Assert(list[i].Target is null, "Partitioning didn't work");
         }
 #endif
     }

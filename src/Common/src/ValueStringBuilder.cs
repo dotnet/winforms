@@ -145,7 +145,7 @@ internal ref partial struct ValueStringBuilder
 
     public void Insert(int index, string? s)
     {
-        if (s == null)
+        if (s is null)
         {
             return;
         }
@@ -185,7 +185,7 @@ internal ref partial struct ValueStringBuilder
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void Append(string? s)
     {
-        if (s == null)
+        if (s is null)
         {
             return;
         }

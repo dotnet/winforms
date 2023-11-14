@@ -84,13 +84,13 @@ public class ToolboxBitmapAttribute : Attribute
 
     public Image? GetImage(Type type, string? imgName, bool large)
     {
-        if ((large && _largeImage == null) || (!large && _smallImage == null))
+        if ((large && _largeImage is null) || (!large && _smallImage is null))
         {
             Image? img = large ? _largeImage : _smallImage;
             img ??= GetImageFromResource(type, imgName, large);
 
             // last resort for large images.
-            if (large && _largeImage == null && _smallImage != null)
+            if (large && _largeImage is null && _smallImage != null)
             {
                 img = new Bitmap((Bitmap)_smallImage, s_largeSize.Width, s_largeSize.Height);
             }
@@ -100,7 +100,7 @@ public class ToolboxBitmapAttribute : Attribute
                 MakeBackgroundAlphaZero(b);
             }
 
-            if (img == null)
+            if (img is null)
             {
                 img = s_defaultComponent.GetImage(type, large);
 
@@ -136,7 +136,7 @@ public class ToolboxBitmapAttribute : Attribute
     // Helper to get the right icon from the given stream that represents an icon.
     private static Bitmap? GetIconFromStream(Stream? stream, bool large, bool scaled)
     {
-        if (stream == null)
+        if (stream is null)
         {
             return null;
         }
@@ -186,7 +186,7 @@ public class ToolboxBitmapAttribute : Attribute
 
     private static Image? GetBitmapFromResource(Type t, string? bitmapname, bool large, bool scaled)
     {
-        if (bitmapname == null)
+        if (bitmapname is null)
         {
             return null;
         }
@@ -216,7 +216,7 @@ public class ToolboxBitmapAttribute : Attribute
 
     private static Bitmap? GetIconFromResource(Type t, string? bitmapname, bool large, bool scaled)
     {
-        if (bitmapname == null)
+        if (bitmapname is null)
         {
             return null;
         }
@@ -240,7 +240,7 @@ public class ToolboxBitmapAttribute : Attribute
             string? rawbmpname = null;
 
             // If we didn't get a name, use the class name
-            if (name == null)
+            if (name is null)
             {
                 name = t.FullName!;
                 int indexDot = name.LastIndexOf('.');
@@ -280,11 +280,11 @@ public class ToolboxBitmapAttribute : Attribute
             {
                 img = GetBitmapFromResource(t, rawbmpname, large, scaled);
             }
-            if (img == null && bmpname != null)
+            if (img is null && bmpname != null)
             {
                 img = GetBitmapFromResource(t, bmpname, large, scaled);
             }
-            if (img == null && iconname != null)
+            if (img is null && iconname != null)
             {
                 img = GetIconFromResource(t, iconname, large, scaled);
             }

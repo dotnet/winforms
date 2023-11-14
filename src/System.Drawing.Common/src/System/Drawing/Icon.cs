@@ -88,7 +88,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
 
         _iconData = original._iconData;
 
-        if (_iconData == null)
+        if (_iconData is null)
         {
             _iconSize = original.Size;
             _handle = User32.CopyImage(new HandleRef(original, original.Handle), SafeNativeMethods.IMAGE_ICON, _iconSize.Width, _iconSize.Height, 0);
@@ -104,7 +104,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         ArgumentNullException.ThrowIfNull(resource);
 
         Stream? stream = type.Module.Assembly.GetManifestResourceStream(type, resource);
-        if (stream == null)
+        if (stream is null)
         {
             throw new ArgumentException(SR.Format(SR.ResourceNotFound, type, resource));
         }
@@ -469,7 +469,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     // which may be necessary in some instances.
     private unsafe void Initialize(int width, int height)
     {
-        if (_iconData == null || _handle != IntPtr.Zero)
+        if (_iconData is null || _handle != IntPtr.Zero)
         {
             throw new InvalidOperationException(SR.Format(SR.IllegalState, GetType().Name));
         }
@@ -800,7 +800,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         }
 
 
-        if (bitmap == null)
+        if (bitmap is null)
         {
             // last chance... all the other cases (ie non 32 bpp icons coming from a handle or from the bitmapData)
 

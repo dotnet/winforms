@@ -28,8 +28,8 @@ public class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
     {
         IntPtr nativeLineCap;
         int status = Gdip.GdipCreateCustomLineCap(
-                            new HandleRef(fillPath, (fillPath == null) ? IntPtr.Zero : fillPath._nativePath),
-                            new HandleRef(strokePath, (strokePath == null) ? IntPtr.Zero : strokePath._nativePath),
+                            new HandleRef(fillPath, (fillPath is null) ? IntPtr.Zero : fillPath._nativePath),
+                            new HandleRef(strokePath, (strokePath is null) ? IntPtr.Zero : strokePath._nativePath),
                             baseCap, baseInset, out nativeLineCap);
 
         if (status != Gdip.Ok)

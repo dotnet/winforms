@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
@@ -60,7 +60,7 @@ public static class SystemBrushes
         }
 
         Brush[]? systemBrushes = (Brush[]?)Gdip.ThreadData[s_systemBrushesKey];
-        if (systemBrushes == null)
+        if (systemBrushes is null)
         {
             systemBrushes = new Brush[(int)KnownColor.WindowText + (int)KnownColor.MenuHighlight - (int)KnownColor.YellowGreen];
             Gdip.ThreadData[s_systemBrushesKey] = systemBrushes;

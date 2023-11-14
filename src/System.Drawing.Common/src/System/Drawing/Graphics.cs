@@ -2024,7 +2024,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         if (text.IsEmpty)
             return SizeF.Empty;
-        if (font == null)
+        if (font is null)
             throw new ArgumentNullException(nameof(font));
 
         RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
@@ -3057,7 +3057,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         get => _printingHelper;
         set
         {
-            Debug.Assert(_printingHelper == null, "WARNING: Overwritting the printing helper reference!");
+            Debug.Assert(_printingHelper is null, "WARNING: Overwritting the printing helper reference!");
             _printingHelper = value;
         }
     }
@@ -3596,7 +3596,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
             {
                 context = context.Previous;
 
-                if (context == null || !context.Next!.IsCumulative)
+                if (context is null || !context.Next!.IsCumulative)
                 {
                     break;
                 }

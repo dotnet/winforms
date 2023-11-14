@@ -91,7 +91,7 @@ public sealed class TextureBrush : Brush
 
         IntPtr brush;
         int status = Gdip.GdipCreateTextureIA(new HandleRef(image, image._nativeImage),
-                                                 new HandleRef(imageAttr, (imageAttr == null) ?
+                                                 new HandleRef(imageAttr, (imageAttr is null) ?
                                                    IntPtr.Zero : imageAttr.nativeImageAttributes),
                                                  dstRect.X,
                                                  dstRect.Y,
@@ -111,7 +111,7 @@ public sealed class TextureBrush : Brush
 
         IntPtr brush;
         int status = Gdip.GdipCreateTextureIAI(new HandleRef(image, image._nativeImage),
-                                                 new HandleRef(imageAttr, (imageAttr == null) ?
+                                                 new HandleRef(imageAttr, (imageAttr is null) ?
                                                    IntPtr.Zero : imageAttr.nativeImageAttributes),
                                                  dstRect.X,
                                                  dstRect.Y,
@@ -150,7 +150,7 @@ public sealed class TextureBrush : Brush
         }
         set
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }

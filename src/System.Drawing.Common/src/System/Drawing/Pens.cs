@@ -313,7 +313,7 @@ public static class Pens
     private static Pen GetPen(object key, Color color)
     {
         Pen? Pen = (Pen?)Gdip.ThreadData[key];
-        if (Pen == null)
+        if (Pen is null)
         {
             Pen = new Pen(color, true);
             Gdip.ThreadData[key] = Pen;

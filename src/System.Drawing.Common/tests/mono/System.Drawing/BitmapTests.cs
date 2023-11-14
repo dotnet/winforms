@@ -312,7 +312,7 @@ public class TestBitmap
     {
         string sSub, sRslt;
 
-        if (Environment.GetEnvironmentVariable("MSNet") == null)
+        if (Environment.GetEnvironmentVariable("MSNet") is null)
             sSub = "mono/";
         else
             sSub = "MSNet/";
@@ -475,7 +475,7 @@ public class TestBitmap
                 }
             }
 
-            if (pixel_data == null)
+            if (pixel_data is null)
                 return "--ERROR--";
 
             byte[] hash = MD5.Create().ComputeHash(pixel_data);

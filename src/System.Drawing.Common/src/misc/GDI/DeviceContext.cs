@@ -325,7 +325,7 @@ internal sealed partial class DeviceContext : MarshalByRefObject, IDisposable
             return true;
         }
 
-        if (other == null)
+        if (other is null)
         {
             return false;
         }

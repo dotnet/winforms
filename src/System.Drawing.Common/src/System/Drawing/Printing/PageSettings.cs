@@ -159,7 +159,7 @@ public partial class PageSettings : ICloneable
     {
         get
         {
-            if (_paperSource == null)
+            if (_paperSource is null)
             {
                 IntPtr modeHandle = printerSettings.GetHdevmode();
                 IntPtr modePointer = Kernel32.GlobalLock(new HandleRef(this, modeHandle));
@@ -228,7 +228,7 @@ public partial class PageSettings : ICloneable
     {
         get
         {
-            if (_printerResolution == null)
+            if (_printerResolution is null)
             {
                 IntPtr modeHandle = printerSettings.GetHdevmode();
                 IntPtr modePointer = Kernel32.GlobalLock(new HandleRef(this, modeHandle));
@@ -411,7 +411,7 @@ public partial class PageSettings : ICloneable
 
     private PaperSize GetPaperSize(IntPtr modeHandle)
     {
-        if (_paperSize == null)
+        if (_paperSize is null)
         {
             bool ownHandle = false;
             if (modeHandle == IntPtr.Zero)

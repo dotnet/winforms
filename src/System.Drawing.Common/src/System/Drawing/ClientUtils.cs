@@ -81,7 +81,7 @@ internal static class ClientUtils
             {
                 object? item = this[currentIndex];
 
-                if (item == null)
+                if (item is null)
                 {
                     InnerList.RemoveAt(currentIndex);
                 }
@@ -100,7 +100,7 @@ internal static class ClientUtils
                 return false;
             }
 
-            if (other == null || Count != other.Count)
+            if (other is null || Count != other.Count)
             {
                 return false;
             }
@@ -126,7 +126,7 @@ internal static class ClientUtils
         [return: NotNullIfNotNull(nameof(value))]
         private static WeakRefObject? CreateWeakRefObject(object? value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return null;
             }
@@ -165,7 +165,7 @@ internal static class ClientUtils
         /// </summary>
         public void RemoveByHashCode(object value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return;
             }
@@ -252,14 +252,14 @@ internal static class ClientUtils
                     return true;
                 }
 
-                if (other == null)
+                if (other is null)
                 {
                     return false;
                 }
 
                 if (other.Target != Target)
                 {
-                    if (Target == null || !Target.Equals(other.Target))
+                    if (Target is null || !Target.Equals(other.Target))
                     {
                         return false;
                     }
