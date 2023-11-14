@@ -6370,18 +6370,18 @@ public partial class TextBoxBaseTests
     }
 
     [WinFormsFact]
-    public void TextBoxBase_ScrollToCaret_InvokeWithHandleInvalidGetOleInterfaceTextBox_ThrowsArgumentNullException()
+    public void TextBoxBase_ScrollToCaret_InvokeWithHandleInvalidGetOleInterfaceTextBox_DoesNotThrow()
     {
         IntPtr pUnk = Marshal.GetIUnknownForObject(new object());
-        using var control = new CustomGetOleInterfaceTextBox
+        using CustomGetOleInterfaceTextBox control = new()
         {
-            GetOleInterfaceResult = (IntPtr)1,
+            GetOleInterfaceResult = 1,
             GetOleInterfaceLParam = pUnk,
             Text = "Text"
         };
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
 
-        Assert.Throws<ArgumentNullException>("unknown", () => control.ScrollToCaret());
+        Assert.NotEqual(IntPtr.Zero, control.Handle);
+        control.ScrollToCaret();
     }
 
     private class CustomGetOleInterfaceTextBox : TextBox
