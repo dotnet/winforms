@@ -568,7 +568,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                     int thisDelta = Math.Abs(entry.bWidth - width) + Math.Abs(entry.bHeight - height);
 
                     if ((thisDelta < bestDelta) ||
-                        (thisDelta == bestDelta && (iconBitDepth <= s_bitDepth && iconBitDepth > _bestBitDepth || _bestBitDepth > s_bitDepth && iconBitDepth < _bestBitDepth)))
+                        (thisDelta == bestDelta && ((iconBitDepth <= s_bitDepth && iconBitDepth > _bestBitDepth) || (_bestBitDepth > s_bitDepth && iconBitDepth < _bestBitDepth))))
                     {
                         fUpdateBestFit = true;
                     }
