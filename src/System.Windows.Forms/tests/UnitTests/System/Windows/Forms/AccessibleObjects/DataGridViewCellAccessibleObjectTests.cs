@@ -1445,7 +1445,7 @@ public class DataGridViewCellAccessibleObjectTests : DataGridViewCell
 
     // Unit test for https://github.com/dotnet/winforms/issues/7154
     [WinFormsFact]
-    public void DataGridView_SwitchConfigured_AdjustsRowAndColumnStartIndices()
+    public void DataGridView_SwitchConfigured_AdjustsCellRowStartIndices()
     {
         Assert.False(LocalAppContextSwitches.DataGridViewRowStartsAtOne);
 

@@ -2382,7 +2382,7 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
 
     // Unit test for https://github.com/dotnet/winforms/issues/7154
     [WinFormsFact]
-    public void DataGridView_SwitchConfigured_AdjustsRowAndColumnStartIndices()
+    public void DataGridView_SwitchConfigured_AdjustsRowStartIndices()
     {
         Assert.False(LocalAppContextSwitches.DataGridViewRowStartsAtOne);
 
