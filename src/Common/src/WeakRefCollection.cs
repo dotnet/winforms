@@ -82,15 +82,12 @@ internal sealed class WeakRefCollection<T>() where T : class
 
     public IEnumerator<T> GetEnumerator()
     {
-        foreach (WeakReference<T>? weakRef in _list)
+        foreach (WeakReference<T> weakRef in _list)
         {
-            if (weakRef is not null)
+            // Safely try to get the target. If it's still alive, yield return it.
+            if (weakRef.TryGetTarget(out T? target))
             {
-                // Safely try to get the target. If it's still alive, yield return it.
-                if (weakRef.TryGetTarget(out T? target) && target is not null)
-                {
-                    yield return target;
-                }
+                yield return target;
             }
         }
     }
