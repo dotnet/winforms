@@ -1585,7 +1585,7 @@ public abstract partial class TextBoxBase : Control
         if (IsAccessibilityObjectCreated)
         {
             AccessibilityObject.RaiseAutomationEvent(UIA_EVENT_ID.UIA_Text_TextChangedEventId);
-            using var textVariant = (VARIANT)Text;
+            using var textVariant = PasswordProtect ? (VARIANT)string.Empty : (VARIANT)Text;
             AccessibilityObject.RaiseAutomationPropertyChangedEvent(UIA_PROPERTY_ID.UIA_ValueValuePropertyId, textVariant, textVariant);
         }
     }
