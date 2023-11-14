@@ -27,7 +27,7 @@ internal sealed class WeakRefCollection<T>() where T : class
 
     public void ScavengeReferences()
     {
-        for (int i = Count; i >= 0; i--)
+        for (int i = Count - 1; i >= 0; i--)
         {
             if (!_list[i].TryGetTarget(out T? target))
             {
