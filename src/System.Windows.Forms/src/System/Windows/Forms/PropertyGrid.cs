@@ -3540,10 +3540,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     {
         Debug.Assert(_tabs.Count > 0, "Tab array destroyed!");
 
-        if (tabIndex >= _tabs.Count || tabIndex < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(tabIndex), SR.PropertyGridBadTabIndex);
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(tabIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(tabIndex, _tabs.Count);
 
         if (_tabs[tabIndex].Scope == PropertyTabScope.Static)
         {
