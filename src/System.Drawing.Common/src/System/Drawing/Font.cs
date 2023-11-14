@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
@@ -183,7 +182,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
 #endif
                 Gdip.GdipDeleteFont(new HandleRef(this, _nativeFont));
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))

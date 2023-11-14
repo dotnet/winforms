@@ -6,7 +6,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Internal;
 using System.Drawing.Text;
-using System.Globalization;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -272,7 +271,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 Gdip.GdipDeleteGraphics(new HandleRef(this, NativeGraphics));
 
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
             catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))

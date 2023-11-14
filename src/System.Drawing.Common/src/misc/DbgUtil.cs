@@ -6,7 +6,7 @@ using System.Globalization;
 
 namespace System.Drawing.Internal;
 
-internal sealed class DbgUtil
+internal static class DbgUtil
 {
     /// <summary>
     /// Call this method from your Dispose(bool) to assert that unmanaged resources has been explicitly disposed.

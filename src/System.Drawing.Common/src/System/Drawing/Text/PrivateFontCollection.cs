@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
-using System.Globalization;
 using System.IO;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 using static Interop;
@@ -37,7 +36,7 @@ public sealed class PrivateFontCollection : FontCollection
 #endif
                 Gdip.GdipDeletePrivateFontCollection(ref _nativeFontCollection);
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
             catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
