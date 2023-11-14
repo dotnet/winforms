@@ -91,7 +91,6 @@ public partial class PageSettings : ICloneable
         }
     }
 
-
     /// <summary>
     /// Returns the y dimension of the hard margin.
     /// </summary>
@@ -386,7 +385,6 @@ public partial class PageSettings : ICloneable
             return result;
         }
     }
-
 
     // This function shows up big on profiles, so we need to make it fast
     internal Rectangle GetBounds(IntPtr modeHandle)

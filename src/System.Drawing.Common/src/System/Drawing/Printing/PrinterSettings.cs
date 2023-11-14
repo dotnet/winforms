@@ -164,8 +164,6 @@ public class PrinterSettings : ICloneable
         }
     }
 
-
-
     /// <summary>
     /// Gets the names of all printers installed on the machine.
     /// </summary>
@@ -739,7 +737,6 @@ public class PrinterSettings : ICloneable
         }
     }
 
-
     // Called by get_OutputPort
     private static string GetOutputPort()
     {
@@ -882,7 +879,6 @@ public class PrinterSettings : ICloneable
             Kernel32.GlobalUnlock(handle);
             return IntPtr.Zero;
         }
-
 
         Kernel32.GlobalUnlock(handle);
         return handle;
@@ -1292,7 +1288,6 @@ public class PrinterSettings : ICloneable
             }
         }
 
-
         bool ICollection.IsSynchronized
         {
             get
@@ -1383,7 +1378,6 @@ public class PrinterSettings : ICloneable
                 return Count;
             }
         }
-
 
         bool ICollection.IsSynchronized
         {
@@ -1583,7 +1577,6 @@ public class PrinterSettings : ICloneable
         {
             Array.Copy(_array, index, array, 0, _array.Length);
         }
-
 
         public void CopyTo(string[] strings, int index)
         {

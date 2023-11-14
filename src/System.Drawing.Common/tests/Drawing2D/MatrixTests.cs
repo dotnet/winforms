@@ -661,7 +661,6 @@ public partial class MatrixTests
         }
     }
 
-
     [Theory]
     [InlineData(MatrixOrder.Prepend - 1)]
     [InlineData(MatrixOrder.Append + 1)]

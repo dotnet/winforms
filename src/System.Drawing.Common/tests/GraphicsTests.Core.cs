@@ -10,7 +10,6 @@ public partial class GraphicsTests
 {
     private static Matrix3x2 s_testMatrix = Matrix3x2.CreateRotation(45) * Matrix3x2.CreateScale(2) * Matrix3x2.CreateTranslation(new Vector2(10, 20));
 
-
     [Fact]
     public void TransformElements_SetNonInvertibleMatrix_ThrowsArgumentException()
     {

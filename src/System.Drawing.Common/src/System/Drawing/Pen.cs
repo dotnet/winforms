@@ -833,7 +833,6 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-
             if (value is null || value.Length == 0)
             {
                 throw new ArgumentException(SR.InvalidDashPattern);

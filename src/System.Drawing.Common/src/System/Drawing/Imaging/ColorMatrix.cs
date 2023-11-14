@@ -301,7 +301,6 @@ public sealed class ColorMatrix
         set { _matrix44 = value; }
     }
 
-
     /// <summary>
     /// Initializes a new instance of the <see cref='ColorMatrix'/> class with the elements in the specified matrix.
     /// </summary>

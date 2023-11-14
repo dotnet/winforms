@@ -1505,7 +1505,6 @@ public class GraphicsPathTests
         }
     }
 
-
     [Fact]
     public void SetMarkers_EmptyPath_Success()
     {

@@ -1119,7 +1119,6 @@ public class BitmapTests : FileCleanupTestBase
         yield return new object[] { new Bitmap(100, 100, PixelFormat.Format8bppIndexed), new Rectangle(0, 0, 100, 100), ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed, 100, 3 };
         yield return new object[] { new Bitmap(100, 100, PixelFormat.Format8bppIndexed), new Rectangle(0, 0, 100, 100), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed, 100, 2 };
 
-
         yield return new object[] { new Bitmap(184, 184, PixelFormat.Format1bppIndexed), new Rectangle(0, 0, 184, 184), ImageLockMode.ReadOnly, PixelFormat.Format1bppIndexed, 24, 1 };
         yield return new object[] { new Bitmap(184, 184, PixelFormat.Format1bppIndexed), new Rectangle(0, 0, 184, 184), ImageLockMode.ReadWrite, PixelFormat.Format1bppIndexed, 24, 3 };
         yield return new object[] { new Bitmap(184, 184, PixelFormat.Format1bppIndexed), new Rectangle(0, 0, 184, 184), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed, 24, 2 };

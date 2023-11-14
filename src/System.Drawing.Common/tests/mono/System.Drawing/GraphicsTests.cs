@@ -314,7 +314,6 @@ public class GraphicsTest : IDisposable
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;
 
-
             state_modified = g.Save(); // Modified
 
             g.CompositingMode = CompositingMode.SourceOver;
@@ -454,7 +453,6 @@ public class GraphicsTest : IDisposable
             Assert.Throws<ArgumentException>(() => g.Transform = matrix);
         }
     }
-
 
     [Fact]
     public void Multiply_NonInvertibleMatrix()

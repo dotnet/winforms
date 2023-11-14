@@ -799,7 +799,6 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
             }
         }
 
-
         if (bitmap is null)
         {
             // last chance... all the other cases (ie non 32 bpp icons coming from a handle or from the bitmapData)
@@ -828,7 +827,6 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                     Draw(graphics, new Rectangle(0, 0, size.Width, size.Height));
                 }
             }
-
 
             // GDI+ fills the surface with a sentinel color for GetDC, but does
             // not correctly clean it up again, so we have to do it.

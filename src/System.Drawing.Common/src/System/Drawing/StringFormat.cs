@@ -117,7 +117,6 @@ public sealed class StringFormat : MarshalByRefObject, ICloneable, IDisposable
         return newCloneStringFormat;
     }
 
-
     /// <summary>
     /// Gets or sets a <see cref='StringFormatFlags'/> that contains formatting information.
     /// </summary>
@@ -288,7 +287,6 @@ public sealed class StringFormat : MarshalByRefObject, ICloneable, IDisposable
 
         return tabStops;
     }
-
 
     // String trimming. How to handle more text than can be displayed
     // in the limits available.

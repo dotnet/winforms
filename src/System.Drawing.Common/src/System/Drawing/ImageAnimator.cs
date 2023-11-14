@@ -81,9 +81,6 @@ public sealed partial class ImageAnimator
     ///     thread calling into ImageAnimator is guarded against this problem.
     /// </summary>
 
-
-
-
     [ThreadStatic]
     private static int t_threadWriterLockWaitCount;
 

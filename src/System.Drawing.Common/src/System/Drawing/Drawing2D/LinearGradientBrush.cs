@@ -397,7 +397,6 @@ public sealed class LinearGradientBrush : Brush
                                             SR.InterpolationColorsInvalidEndPosition));
             }
 
-
             // Allocate a temporary native memory buffer and copy input blend factors into it.
             int count = value.Colors.Length;
             IntPtr colors = IntPtr.Zero;

@@ -15,7 +15,6 @@ using System.Runtime.InteropServices.Marshalling;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 using static Interop;
 
-
 namespace System.Drawing;
 
 /// <summary>
@@ -2200,7 +2199,6 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     }
 #endif
 
-
     /// <summary>
     /// Draws the specified image at the specified location.
     /// </summary>
@@ -2719,7 +2717,6 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 p, points.Length));
         }
     }
-
 
     /// <summary>
     /// Draws a line connecting the two specified points.

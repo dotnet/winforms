@@ -396,7 +396,6 @@ public class TestBitmap
         return sOutput.ToString();
     }
 
-
     public string RotateBmp(Bitmap src, RotateFlipType rotate)
     {
         int width = 150, height = 150, index = 0;
@@ -482,7 +481,6 @@ public class TestBitmap
             return ByteArrayToString(hash);
         }
     }
-
 
     // Rotate bitmap in diffent ways, and check the result
     // pixels using MD5

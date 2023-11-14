@@ -250,7 +250,6 @@ public abstract class PrintController
     {
         Debug.Assert((_modeHandle is not null), "modeHandle is null.  Someone must have forgot to call base.StartPrint");
 
-
         Rectangle pageBounds = pageSettings.GetBounds(_modeHandle);
         Rectangle marginBounds = new Rectangle(pageSettings.Margins.Left,
                                                pageSettings.Margins.Top,

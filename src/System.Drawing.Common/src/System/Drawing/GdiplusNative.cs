@@ -871,7 +871,6 @@ internal static partial class SafeNativeMethods
 #endif
         HandleRef brush, out int color);
 
-
         [LibraryImport(LibraryName)]
         internal static partial int GdipCreateTexture(
 #if NET7_0_OR_GREATER

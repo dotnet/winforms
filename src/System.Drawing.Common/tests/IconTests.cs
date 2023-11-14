@@ -439,7 +439,6 @@ public class IconTests
         AssertExtensions.Throws<ArgumentException>("filePath", null, () => Icon.ExtractAssociatedIcon(""));
     }
 
-
     [Fact]
     public void ExtractAssociatedIcon_NoSuchPath_ThrowsFileNotFoundException()
     {
