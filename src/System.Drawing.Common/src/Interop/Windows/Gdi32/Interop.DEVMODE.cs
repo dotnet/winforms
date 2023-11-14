@@ -7,8 +7,10 @@ internal static partial class Interop
 {
     internal static partial class Gdi32
     {
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public sealed class DEVMODE
+#pragma warning restore CA1812 // Avoid uninstantiated internal classes
         {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
             public string? dmDeviceName;
