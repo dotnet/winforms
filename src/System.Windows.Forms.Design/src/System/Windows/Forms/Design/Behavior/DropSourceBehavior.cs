@@ -1003,7 +1003,7 @@ internal sealed partial class DropSourceBehavior : Behavior, IComparer
         cleanedUpDrag = false;
     }
 
-    internal List<IComponent> GetSortedDragControls(ref int primaryControlIndex)
+    internal List<IComponent> GetSortedDragControls(out int primaryControlIndex)
     {
         //create our list of controls-to-drag
         List<IComponent> dragControls = new();
