@@ -36,7 +36,7 @@ public sealed class PrivateFontCollection : FontCollection
 #endif
                 Gdip.GdipDeletePrivateFontCollection(ref _nativeFontCollection);
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
             catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))

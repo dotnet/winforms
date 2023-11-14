@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
@@ -36,7 +36,7 @@ public sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
 #endif
                 Gdip.GdipDeletePathIter(new HandleRef(this, nativeIter));
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
             catch (Exception ex)
