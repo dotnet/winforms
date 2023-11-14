@@ -208,9 +208,9 @@ internal sealed partial class DeviceContext : MarshalByRefObject, IDisposable
         // Note: Winforms may call this method during app exit at which point the DC may have been finalized already causing this assert to popup.
         Debug.WriteLine( DbgUtil.StackTraceToStr( string.Format("ret[0]=DC.RestoreHdc(hDc=0x{1:x8}, state={2})", result, unchecked((int) _hDC), restoreState) ));
 #endif
-        Debug.Assert(_contextStack != null, "Someone is calling RestoreHdc() before SaveHdc()");
+        Debug.Assert(_contextStack is not null, "Someone is calling RestoreHdc() before SaveHdc()");
 
-        if (_contextStack != null)
+        if (_contextStack is not null)
         {
             GraphicsState g = (GraphicsState)_contextStack.Pop()!;
 

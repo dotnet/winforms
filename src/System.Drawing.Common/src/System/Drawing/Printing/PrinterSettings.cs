@@ -830,7 +830,7 @@ public class PrinterSettings : ICloneable
         IntPtr pointer = Kernel32.GlobalLock(handle);
 
         //Get the DevMode only if its not cached....
-        if (_cachedDevmode != null)
+        if (_cachedDevmode is not null)
         {
             Marshal.Copy(_cachedDevmode, 0, pointer, _devmodebytes);
         }
@@ -845,7 +845,7 @@ public class PrinterSettings : ICloneable
 
         Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(pointer)!;
 
-        if (_extrainfo != null)
+        if (_extrainfo is not null)
         {
             // guard against buffer overrun attacks (since design allows client to set a new printer name without updating the devmode)
             // by checking for a large enough buffer size before copying the extrainfo buffer

@@ -351,7 +351,7 @@ public sealed partial class ImageAnimator
 
                 if (image == imageInfo.Image)
                 {
-                    if ((onFrameChangedHandler == imageInfo.FrameChangedHandler) || (onFrameChangedHandler != null && onFrameChangedHandler.Equals(imageInfo.FrameChangedHandler)))
+                    if ((onFrameChangedHandler == imageInfo.FrameChangedHandler) || (onFrameChangedHandler is not null && onFrameChangedHandler.Equals(imageInfo.FrameChangedHandler)))
                     {
                         s_imageInfoList.Remove(imageInfo);
                     }
@@ -381,7 +381,7 @@ public sealed partial class ImageAnimator
     /// </summary>
     private static void AnimateImages()
     {
-        Debug.Assert(s_imageInfoList != null, "Null images list");
+        Debug.Assert(s_imageInfoList is not null, "Null images list");
 
         Stopwatch stopwatch = Stopwatch.StartNew();
 

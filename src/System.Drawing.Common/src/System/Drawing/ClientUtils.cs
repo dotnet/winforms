@@ -174,7 +174,7 @@ internal static class ClientUtils
 
             for (int idx = 0; idx < InnerList.Count; idx++)
             {
-                if (InnerList[idx] != null && InnerList[idx]!.GetHashCode() == hash)
+                if (InnerList[idx] is not null && InnerList[idx]!.GetHashCode() == hash)
                 {
                     RemoveAt(idx);
                     return;
@@ -232,7 +232,7 @@ internal static class ClientUtils
 
             internal WeakRefObject(object obj)
             {
-                Debug.Assert(obj != null, "Unexpected null object!");
+                Debug.Assert(obj is not null, "Unexpected null object!");
                 _weakHolder = new WeakReference(obj);
                 _hash = obj.GetHashCode();
             }

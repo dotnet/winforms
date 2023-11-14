@@ -331,7 +331,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
     private void CreateNativeFont()
     {
         Debug.Assert(_nativeFont == IntPtr.Zero, "nativeFont already initialized, this will generate a handle leak.");
-        Debug.Assert(_fontFamily != null, "fontFamily not initialized.");
+        Debug.Assert(_fontFamily is not null, "fontFamily not initialized.");
 
         // Note: GDI+ creates singleton font family objects (from the corresponding font file) and reference count them so
         // if creating the font object from an external FontFamily, this object's FontFamily will share the same native object.

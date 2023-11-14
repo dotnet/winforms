@@ -82,14 +82,14 @@ public class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
             return;
 
 #if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && nativeCap != null, $"""
+        Debug.WriteLineIf(!disposing && nativeCap is not null, $"""
             **********************
             Disposed through finalization:
             {allocationSite}
             """);
 #endif
         // propagate the explicit dispose call to the child
-        if (disposing && nativeCap != null)
+        if (disposing && nativeCap is not null)
         {
             nativeCap.Dispose();
         }

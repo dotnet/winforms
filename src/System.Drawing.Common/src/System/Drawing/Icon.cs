@@ -70,7 +70,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     {
         using (FileStream f = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
-            Debug.Assert(f != null, "File.OpenRead returned null instead of throwing an exception");
+            Debug.Assert(f is not null, "File.OpenRead returned null instead of throwing an exception");
             _iconData = new byte[(int)f.Length];
             f.Read(_iconData, 0, _iconData.Length);
         }
@@ -153,7 +153,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
 
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
     {
-        if (_iconData != null)
+        if (_iconData is not null)
         {
             si.AddValue("IconData", _iconData, typeof(byte[])); // Do not rename (binary serialization)
         }
@@ -699,7 +699,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     private unsafe Bitmap BmpFrame()
     {
         Bitmap? bitmap = null;
-        if (_iconData != null && _bestBitDepth == 32)
+        if (_iconData is not null && _bestBitDepth == 32)
         {
             // GDI+ doesnt handle 32 bpp icons with alpha properly
             // we load the icon ourself from the byte table
@@ -773,11 +773,11 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                         }
                         finally
                         {
-                            if (tmpBitmap != null && bmpData != null)
+                            if (tmpBitmap is not null && bmpData is not null)
                             {
                                 tmpBitmap.UnlockBits(bmpData);
                             }
-                            if (bitmap != null && targetData != null)
+                            if (bitmap is not null && targetData is not null)
                             {
                                 bitmap.UnlockBits(targetData);
                             }
@@ -836,13 +836,13 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
             bitmap.MakeTransparent(fakeTransparencyColor);
         }
 
-        Debug.Assert(bitmap != null, "Bitmap cannot be null");
+        Debug.Assert(bitmap is not null, "Bitmap cannot be null");
         return bitmap;
     }
 
     private Bitmap PngFrame()
     {
-        Debug.Assert(_iconData != null);
+        Debug.Assert(_iconData is not null);
         using var stream = new MemoryStream();
         stream.Write(_iconData, (int)_bestImageOffset, (int)_bestBytesInRes);
         return new Bitmap(stream);
@@ -852,7 +852,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     {
         if (!_isBestImagePng.HasValue)
         {
-            if (_iconData != null && _iconData.Length >= _bestImageOffset + 8)
+            if (_iconData is not null && _iconData.Length >= _bestImageOffset + 8)
             {
                 int iconSignature1 = BitConverter.ToInt32(_iconData, (int)_bestImageOffset);
                 int iconSignature2 = BitConverter.ToInt32(_iconData, (int)_bestImageOffset + 4);

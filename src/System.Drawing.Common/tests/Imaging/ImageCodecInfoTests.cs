@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 //
 // Authors:
@@ -75,11 +75,11 @@ public class ImageCodecInfoTests
         ImageCodecInfo encoder = GetEncoder(clsid);
         ImageCodecInfo decoder = GetDecoder(clsid);
 
-        if (encoder != null)
+        if (encoder is not null)
         {
             CheckImageCodecInfo(format, CodecName, DllName, FilenameExtension, Flags, FormatDescription, MimeType, signatureLength, mask, pattern, pattern2, encoder);
         }
-        if (decoder != null)
+        if (decoder is not null)
         {
             CheckImageCodecInfo(format, CodecName, DllName, FilenameExtension, Flags, FormatDescription, MimeType, signatureLength, mask, pattern, pattern2, decoder);
         }
@@ -107,7 +107,7 @@ public class ImageCodecInfoTests
 
         Assert.Equal(signatureLength, codecInfo.SignaturePatterns.Length);
         Assert.Equal(pattern, BitConverter.ToString(codecInfo.SignaturePatterns[0]));
-        if (pattern2 != null)
+        if (pattern2 is not null)
             Assert.Equal(pattern2, BitConverter.ToString(codecInfo.SignaturePatterns[1]));
     }
 

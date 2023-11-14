@@ -217,7 +217,7 @@ public static class SystemFonts
                 defaultFont = FontInPoints(defaultFont);
             }
 
-            Debug.Assert(defaultFont != null, "defaultFont wasn't set.");
+            Debug.Assert(defaultFont is not null, "defaultFont wasn't set.");
 
             defaultFont.SetSystemFontName(nameof(DefaultFont));
             return defaultFont;

@@ -37,7 +37,7 @@ public sealed class BufferedGraphics : IDisposable
 
     public void Dispose()
     {
-        if (_context != null)
+        if (_context is not null)
         {
             _context.ReleaseBuffer();
 
@@ -48,7 +48,7 @@ public sealed class BufferedGraphics : IDisposable
             }
         }
 
-        if (_bufferedGraphicsSurface != null)
+        if (_bufferedGraphicsSurface is not null)
         {
             _bufferedGraphicsSurface.Dispose();
             _bufferedGraphicsSurface = null!;
@@ -65,7 +65,7 @@ public sealed class BufferedGraphics : IDisposable
     /// </summary>
     public void Render(Graphics? target)
     {
-        if (target != null)
+        if (target is not null)
         {
             IntPtr targetDC = target.GetHdc();
 
@@ -116,7 +116,7 @@ public sealed class BufferedGraphics : IDisposable
     /// </summary>
     public void Render()
     {
-        if (_targetGraphics != null)
+        if (_targetGraphics is not null)
         {
             Render(_targetGraphics);
         }

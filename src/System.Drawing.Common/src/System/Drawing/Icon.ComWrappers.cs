@@ -13,7 +13,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
 {
     public unsafe void Save(Stream outputStream)
     {
-        if (_iconData != null)
+        if (_iconData is not null)
         {
             outputStream.Write(_iconData, 0, _iconData.Length);
         }

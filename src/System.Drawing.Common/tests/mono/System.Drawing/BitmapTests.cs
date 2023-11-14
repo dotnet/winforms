@@ -467,7 +467,7 @@ public class TestBitmap
             }
             finally
             {
-                if (test != null && data != null)
+                if (test is not null && data is not null)
                 {
                     try
                     { test.UnlockBits(data); }

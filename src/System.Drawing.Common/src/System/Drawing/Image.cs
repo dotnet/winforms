@@ -1038,7 +1038,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
                 {
                     Stream? created = null;
                     long lastPos = 0;
-                    if (dataStream != null)
+                    if (dataStream is not null)
                     {
                         lastPos = dataStream.Position;
                         dataStream.Position = 0;
@@ -1056,7 +1056,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
                     }
                     finally
                     {
-                        if (created != null)
+                        if (created is not null)
                         {
                             created.Close();
                         }

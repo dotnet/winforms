@@ -248,7 +248,7 @@ public abstract class PrintController
 
     private PrintPageEventArgs CreatePrintPageEvent(PageSettings pageSettings)
     {
-        Debug.Assert((_modeHandle != null), "modeHandle is null.  Someone must have forgot to call base.StartPrint");
+        Debug.Assert((_modeHandle is not null), "modeHandle is null.  Someone must have forgot to call base.StartPrint");
 
 
         Rectangle pageBounds = pageSettings.GetBounds(_modeHandle);

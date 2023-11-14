@@ -105,7 +105,7 @@ public class ImageFormatConverter : TypeConverter
                 else if (imgFormat.Guid.Equals(ImageFormat.Wmf.Guid))
                     strFormat = "Wmf";
 
-                if (strFormat != null)
+                if (strFormat is not null)
                 {
                     return new InstanceDescriptor(typeof(ImageFormat).GetProperty(strFormat), null);
                 }
