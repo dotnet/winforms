@@ -20,10 +20,7 @@ internal static class DeviceContexts
     /// </summary>
     internal static void AddDeviceContext(DeviceContext dc)
     {
-        WeakRefCollection<DeviceContext> wrc = t_activeDeviceContexts ??= new()
-        {
-            RefCheckThreshold = 20
-        };
+        WeakRefCollection<DeviceContext> wrc = t_activeDeviceContexts ??= new();
 
         if (!wrc.Contains(dc))
         {
@@ -42,7 +39,5 @@ internal static class DeviceContexts
     }
 
     internal static void RemoveDeviceContext(DeviceContext dc)
-    {
-        t_activeDeviceContexts?.RemoveByHashCode(dc);
-    }
+        => t_activeDeviceContexts?.Remove(dc);
 }
