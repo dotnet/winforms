@@ -3,7 +3,6 @@
 
 using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
-using System.Globalization;
 using System.IO;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 

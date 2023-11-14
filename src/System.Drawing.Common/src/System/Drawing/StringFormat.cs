@@ -3,7 +3,6 @@
 using System.ComponentModel;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
-using System.Globalization;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing;
