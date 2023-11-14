@@ -12,7 +12,7 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
     private Type[]? _containerConstructor;
     private static readonly Attribute[] _runTimeFilter = { DesignOnlyAttribute.No };
     private static readonly Attribute[] _designTimeFilter = { DesignOnlyAttribute.Yes };
-    private static WeakReference? s_defaultSerializerRef;
+    private static WeakReference<ComponentCodeDomSerializer>? s_defaultSerializerRef;
 
     private Type[] GetContainerConstructor(IDesignerSerializationManager manager)
     {
@@ -31,10 +31,10 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
     {
         get
         {
-            if (s_defaultSerializerRef?.Target is not ComponentCodeDomSerializer defaultSerializer)
+            if (s_defaultSerializerRef is null || !s_defaultSerializerRef.TryGetTarget(out ComponentCodeDomSerializer? defaultSerializer))
             {
                 defaultSerializer = new ComponentCodeDomSerializer();
-                s_defaultSerializerRef = new WeakReference(defaultSerializer);
+                s_defaultSerializerRef = new(defaultSerializer);
             }
 
             return defaultSerializer;

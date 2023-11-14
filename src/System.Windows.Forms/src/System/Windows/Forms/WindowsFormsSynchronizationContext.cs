@@ -11,7 +11,7 @@ namespace System.Windows.Forms;
 public sealed class WindowsFormsSynchronizationContext : SynchronizationContext, IDisposable
 {
     private Control? _controlToSendTo;
-    private WeakReference? _destinationThread;
+    private WeakReference<Thread>? _destinationThread;
 
     // ThreadStatics won't get initialized per thread: easiest to just invert the value.
     [ThreadStatic]
@@ -43,20 +43,12 @@ public sealed class WindowsFormsSynchronizationContext : SynchronizationContext,
     // Directly holding onto the Thread can prevent ThreadStatics from finalizing.
     private Thread? DestinationThread
     {
-        get
-        {
-            if ((_destinationThread is not null) && _destinationThread.IsAlive)
-            {
-                return _destinationThread.Target as Thread;
-            }
-
-            return null;
-        }
+        get => _destinationThread?.TryGetTarget(out Thread? target) == true ? target : null;
         set
         {
             if (value is not null)
             {
-                _destinationThread = new WeakReference(value);
+                _destinationThread = new(value);
             }
         }
     }

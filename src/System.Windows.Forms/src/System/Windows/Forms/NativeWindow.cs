@@ -56,7 +56,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     private bool _suppressedGC;
     private bool _ownHandle;
     private NativeWindow? _nextWindow;
-    private readonly WeakReference _weakThisPtr;
+    private readonly WeakReference<NativeWindow> _weakThisPtr;
 
     static NativeWindow()
     {
@@ -65,7 +65,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
     public NativeWindow()
     {
-        _weakThisPtr = new WeakReference(this);
+        _weakThisPtr = new(this);
     }
 
     /// <summary>
@@ -367,7 +367,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
         try
         {
-            if (_weakThisPtr.IsAlive && _weakThisPtr.Target is not null)
+            if (_weakThisPtr.TryGetTarget(out NativeWindow? target) && target is not null)
             {
                 WndProc(ref m);
             }
@@ -714,7 +714,7 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
 
             HWND = HWND.Null;
 
-            if (_weakThisPtr.IsAlive && _weakThisPtr.Target is not null)
+            if (_weakThisPtr.TryGetTarget(out NativeWindow? target) && target is not null)
             {
                 // We're not already finalizing.
                 OnHandleChange();
@@ -865,10 +865,9 @@ public unsafe partial class NativeWindow : MarshalByRefObject, IWin32Window, IHa
     /// </summary>
     private unsafe void UnSubclass()
     {
-        bool finalizing = !_weakThisPtr.IsAlive || _weakThisPtr.Target is null;
+        bool finalizing = _weakThisPtr.TryGetTarget(out NativeWindow? target) || target is null;
 
         // Don't touch if the current window proc is not ours.
-
         void* currentWindowProc = (void*)PInvoke.GetWindowLong(this, WINDOW_LONG_PTR_INDEX.GWL_WNDPROC);
         if (_windowProcHandle == currentWindowProc)
         {
