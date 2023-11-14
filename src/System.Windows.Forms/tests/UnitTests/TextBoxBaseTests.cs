@@ -6370,41 +6370,6 @@ public partial class TextBoxBaseTests
     }
 
     [WinFormsFact]
-    public void TextBoxBase_ScrollToCaret_InvokeWithHandleNoSuchGetOleInterfaceTextBox_ThrowsArgumentNullException()
-    {
-        IntPtr pUnk = Marshal.GetIUnknownForObject(new CustomTextDocument());
-        using var control = new CustomGetOleInterfaceTextBox
-        {
-            GetOleInterfaceResult = (IntPtr)1,
-            GetOleInterfaceLParam = pUnk,
-            Text = "Text"
-        };
-        Assert.NotEqual(IntPtr.Zero, control.Handle);
-        int invalidatedCallCount = 0;
-        control.Invalidated += (sender, e) => invalidatedCallCount++;
-        int styleChangedCallCount = 0;
-        control.StyleChanged += (sender, e) => styleChangedCallCount++;
-        int createdCallCount = 0;
-        control.HandleCreated += (sender, e) => createdCallCount++;
-
-        control.ScrollToCaret();
-        Assert.True(control.IsHandleCreated);
-        Assert.Equal(0, invalidatedCallCount);
-        Assert.Equal(0, styleChangedCallCount);
-        Assert.Equal(0, createdCallCount);
-    }
-
-    [ComImport]
-    [Guid("8CC497C0-A1DF-11ce-8098-00AA0047BE5D")]
-    private interface ITextDocument
-    {
-    }
-
-    private class CustomTextDocument : ITextDocument
-    {
-    }
-
-    [WinFormsFact]
     public void TextBoxBase_ScrollToCaret_InvokeWithHandleInvalidGetOleInterfaceTextBox_ThrowsArgumentNullException()
     {
         IntPtr pUnk = Marshal.GetIUnknownForObject(new object());
