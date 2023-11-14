@@ -187,7 +187,7 @@ public partial class ListViewItem
                     VARIANT result = base.GetPropertyValue(UIA_PROPERTY_ID.UIA_IsOffscreenPropertyId);
                     return result.IsEmpty ? VARIANT.False : result;
                 case UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId:
-                    return UIAHelper.WindowHandleToVariant(_owningListView.InternalHandle);
+                    return UIAHelper.WindowHandleToVariant(HWND.Null);
                 default: return base.GetPropertyValue(propertyID);
             }
         }
