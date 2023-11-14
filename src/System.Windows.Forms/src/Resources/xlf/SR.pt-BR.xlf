@@ -262,11 +262,6 @@
         <target state="translated">A ação solicitada oferece suporte somente a matrizes unidimensionais.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">É necessário um número não negativo.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">O tipo da matriz de destino não é compatível com o tipo dos itens na coleção.</target>
@@ -7409,11 +7404,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Indica o valor a incrementar ou diminuir a cada clique no botão.</target>
         <note />
       </trans-unit>
-      <trans-unit id="NumericUpDownLessThanZeroError">
-        <source>Parameter value must be greater than or equal to 0.</source>
-        <target state="translated">O valor do parâmetro deve ser maior que ou igual a 0.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="NumericUpDownMaximumDescr">
         <source>Indicates the maximum value for the numeric up-down control.</source>
         <target state="translated">Indica o valor máximo para o controle numérico acima-abaixo.</target>
@@ -8267,11 +8257,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="PropertyCategoryText">
         <source>Text</source>
         <target state="translated">Texto</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Índice de tabulação inválido.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">

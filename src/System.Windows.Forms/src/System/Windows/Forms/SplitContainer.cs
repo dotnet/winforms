@@ -641,10 +641,7 @@ public partial class SplitContainer : ContainerControl, ISupportInitialize
         {
             if (value != SplitterDistance)
             {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(SplitterDistance), string.Format(SR.InvalidLowBoundArgument, "SplitterDistance", value, 0));
-                }
+                ArgumentOutOfRangeException.ThrowIfNegative(value, nameof(SplitterDistance));
 
                 try
                 {

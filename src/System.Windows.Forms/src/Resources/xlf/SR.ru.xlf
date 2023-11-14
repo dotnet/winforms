@@ -262,11 +262,6 @@
         <target state="translated">Для запрашиваемого действия поддерживаются только одномерные массивы.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">Требуется неотрицательное число.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">Тип целевого массива несовместим с типом элементов в коллекции.</target>
@@ -7410,11 +7405,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Показывает величину уменьшения или увеличения при каждом щелчке мышью.</target>
         <note />
       </trans-unit>
-      <trans-unit id="NumericUpDownLessThanZeroError">
-        <source>Parameter value must be greater than or equal to 0.</source>
-        <target state="translated">Значение параметра должно быть больше или равно 0.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="NumericUpDownMaximumDescr">
         <source>Indicates the maximum value for the numeric up-down control.</source>
         <target state="translated">Указывает максимальное значение для числового поля со стрелками 'вверх/вниз'.</target>
@@ -8268,11 +8258,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PropertyCategoryText">
         <source>Text</source>
         <target state="translated">Текст</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Индекс вкладки недействителен.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">

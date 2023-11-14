@@ -262,11 +262,6 @@
         <target state="translated">Sólo se admiten matrices de una sola dimensión para la acción solicitada.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">Número no negativo requerido.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">El tipo de matriz de destino no es compatible con el tipo de elementos de la colección.</target>
@@ -7409,11 +7404,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Indica la cantidad que se va a aumentar o disminuir cada vez que hace clic en el botón.</target>
         <note />
       </trans-unit>
-      <trans-unit id="NumericUpDownLessThanZeroError">
-        <source>Parameter value must be greater than or equal to 0.</source>
-        <target state="translated">El valor del parámetro debe ser mayor o igual que 0.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="NumericUpDownMaximumDescr">
         <source>Indicates the maximum value for the numeric up-down control.</source>
         <target state="translated">Indica el valor máximo para el control numérico de flechas.</target>
@@ -8267,11 +8257,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="PropertyCategoryText">
         <source>Text</source>
         <target state="translated">Texto</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Índice de tabulación no válido.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">
