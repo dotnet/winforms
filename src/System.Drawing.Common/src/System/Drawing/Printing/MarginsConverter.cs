@@ -144,8 +144,7 @@ public class MarginsConverter : ExpandableObjectConverter
         object? top = propertyValues["Top"];
         object? bottom = propertyValues["Bottom"];
 
-        if (left is null || right is null || bottom is null || top is null ||
-            !(left is int) || !(right is int) || !(bottom is int) || !(top is int))
+        if (left is not int || right is not int || bottom is not int || top is not int)
         {
             throw new ArgumentException(SR.PropertyValueInvalidEntry);
         }

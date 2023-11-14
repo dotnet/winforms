@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
@@ -89,9 +89,9 @@ public class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
             """);
 #endif
         // propagate the explicit dispose call to the child
-        if (disposing && nativeCap is not null)
+        if (disposing)
         {
-            nativeCap.Dispose();
+            nativeCap?.Dispose();
         }
 
         _disposed = true;
