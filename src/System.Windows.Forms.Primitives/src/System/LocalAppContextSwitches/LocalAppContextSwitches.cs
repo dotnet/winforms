@@ -165,5 +165,5 @@ internal static partial class LocalAppContextSwitches
         get => GetCachedSwitchValue(DataGridViewRowStartsAtOneSwitchName, ref s_dataGridViewRowStartsAtOne);
     }
 
-    internal static void Test_SetDataGridViewRowStartsAtOne(bool value) => s_dataGridViewRowStartsAtOne = value ? 1 : 0;
+    internal static void SetDataGridViewRowStartsAtOne(bool value) => s_dataGridViewRowStartsAtOne = value ? 1 : 0;
 }

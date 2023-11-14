@@ -2380,12 +2380,13 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
         Assert.False(dataGridView.IsHandleCreated);
     }
 
+    // Unit test for https://github.com/dotnet/winforms/issues/7154
     [WinFormsFact]
     public void DataGridView_SwitchConfigured_AdjustsRowAndColumnStartIndices()
     {
-        var originalSwitchValue = LocalAppContextSwitches.DataGridViewRowStartsAtOne;
-        if (!originalSwitchValue)
-        { LocalAppContextSwitches.Test_SetDataGridViewRowStartsAtOne(true); }
+        Assert.False(LocalAppContextSwitches.DataGridViewRowStartsAtOne);
+
+        LocalAppContextSwitches.SetDataGridViewRowStartsAtOne(true); 
 
         using DataGridView dataGridView = new();
         dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
@@ -2393,11 +2394,9 @@ public class DataGridViewRowAccessibleObjectTests : DataGridViewRow
 
         Assert.Equal(string.Format(SR.DataGridView_AccRowName, 1), dataGridView.Rows[0].AccessibilityObject.Name);
 
-        LocalAppContextSwitches.Test_SetDataGridViewRowStartsAtOne(false);
+        LocalAppContextSwitches.SetDataGridViewRowStartsAtOne(false);
 
         Assert.Equal(string.Format(SR.DataGridView_AccRowName, 0), dataGridView.Rows[0].AccessibilityObject.Name);
-
-        LocalAppContextSwitches.Test_SetDataGridViewRowStartsAtOne(originalSwitchValue);
     }
 
     private class SubDataGridViewCell : DataGridViewCell
