@@ -61,7 +61,7 @@ public abstract partial class DataGridViewCell
                     ? -1
                     : _owner.DataGridView.Rows.GetVisibleIndex(_owner.OwningRow) + RowStartIndex;
 
-                string name = string.Format(SR.DataGridView_AccDataGridViewCellName, _owner.OwningColumn.HeaderText, rowIndex);
+                string name = string.Format(SR.DataGridView_AccDataGridViewCellName, _owner.OwningColumn.HeaderText, rowIndex).Trim();
 
                 if (_owner.OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
                 {
