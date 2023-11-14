@@ -125,7 +125,7 @@ public static partial class ToolStripManager
     internal static int CurrentDpi { get; set; } = ScaleHelper.InitialSystemDpi;
 
     internal static WeakRefCollection<ToolStrip> ToolStrips
-        => t_toolStripWeakArrayList ??= [];
+        => t_toolStripWeakArrayList ??= new();
 
     /// <summary>Static events only!!!</summary>
     private static void AddEventHandler(int key, Delegate? value)
@@ -616,7 +616,7 @@ public static partial class ToolStripManager
     }
 
     internal static WeakRefCollection<ToolStripPanel> ToolStripPanels
-        => t_toolStripPanelWeakArrayList ??= [];
+        => t_toolStripPanelWeakArrayList ??= new();
 
     internal static ToolStripPanel? ToolStripPanelFromPoint(Control draggedControl, Point screenLocation)
     {
