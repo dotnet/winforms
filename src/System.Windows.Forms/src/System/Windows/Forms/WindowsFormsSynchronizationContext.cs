@@ -48,7 +48,14 @@ public sealed class WindowsFormsSynchronizationContext : SynchronizationContext,
         {
             if (value is not null)
             {
-                _destinationThread = new(value);
+                if (_destinationThread is null)
+                {
+                    _destinationThread = new(value);
+                }
+                else
+                {
+                    _destinationThread.SetTarget(value);
+                }
             }
         }
     }
