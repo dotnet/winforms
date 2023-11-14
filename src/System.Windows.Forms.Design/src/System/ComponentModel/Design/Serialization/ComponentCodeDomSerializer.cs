@@ -34,7 +34,14 @@ internal class ComponentCodeDomSerializer : CodeDomSerializer
             if (s_defaultSerializerRef is null || !s_defaultSerializerRef.TryGetTarget(out ComponentCodeDomSerializer? defaultSerializer))
             {
                 defaultSerializer = new ComponentCodeDomSerializer();
-                s_defaultSerializerRef = new(defaultSerializer);
+                if (s_defaultSerializerRef is null)
+                {
+                    s_defaultSerializerRef = new(defaultSerializer);
+                }
+                else
+                {
+                    s_defaultSerializerRef.SetTarget(defaultSerializer);
+                }
             }
 
             return defaultSerializer;
