@@ -850,7 +850,8 @@ public class TestBitmap
         }
     }
 
-    static int[] palette1 = {
+    static int[] palette1 =
+    {
         -16777216,
         -1,
     };
@@ -870,7 +871,8 @@ public class TestBitmap
         }
     }
 
-    static int[] palette16 = {
+    static int[] palette16 =
+    {
         -16777216,
         -8388608,
         -16744448,
@@ -904,7 +906,8 @@ public class TestBitmap
         }
     }
 
-    static int[] palette256 = {
+    static int[] palette256 =
+    {
         -16777216,
         -8388608,
         -16744448,

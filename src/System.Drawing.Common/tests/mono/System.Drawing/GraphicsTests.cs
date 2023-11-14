@@ -2699,8 +2699,10 @@ public class GraphicsTest : IDisposable
         using (Bitmap bmp = new Bitmap(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
-            g.DrawImage(bmp, new PointF[] {
-                    new(0, 0), new(1, 1), new(2, 2) });
+            g.DrawImage(bmp, new PointF[]
+            {
+                    new(0, 0), new(1, 1), new(2, 2)
+            });
         }
     }
 
@@ -2787,8 +2789,10 @@ public class GraphicsTest : IDisposable
         using (Bitmap bmp = new Bitmap(40, 40))
         using (Graphics g = Graphics.FromImage(bmp))
         {
-            g.DrawImage(bmp, new Point[] {
-                    new(0, 0), new(1, 1), new(2, 2) });
+            g.DrawImage(bmp, new Point[]
+            {
+                    new(0, 0), new(1, 1), new(2, 2)
+            });
         }
     }
 

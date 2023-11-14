@@ -43,7 +43,8 @@ public class ImageAttributesTests
         new float[] {0, 0, 0, 0, 0},
     });
 
-    private readonly ColorMatrix _grayMatrix = new(new float[][] {
+    private readonly ColorMatrix _grayMatrix = new(new float[][]
+    {
         new float[] {1, 0, 0, 0, 0},
         new float[] {0, 2, 0, 0, 0},
         new float[] {0, 0, 3, 0, 0},

@@ -217,7 +217,4 @@ public partial class GraphicsTests
             // other FillPie overloads tested in FillPie_Disposed_ThrowsArgumentException()
         }
     }
-
-
-
 }

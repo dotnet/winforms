@@ -111,13 +111,17 @@ public class MarginsConverter : ExpandableObjectConverter
             }
             if (destinationType == typeof(InstanceDescriptor))
             {
-                ConstructorInfo? ctor = typeof(Margins).GetConstructor(new Type[] {
-                    typeof(int), typeof(int), typeof(int), typeof(int)});
+                ConstructorInfo? ctor = typeof(Margins).GetConstructor(new Type[]
+                {
+                    typeof(int), typeof(int), typeof(int), typeof(int)
+                });
 
                 if (ctor is not null)
                 {
-                    return new InstanceDescriptor(ctor, new object[] {
-                        margins.Left, margins.Right, margins.Top, margins.Bottom});
+                    return new InstanceDescriptor(ctor, new object[]
+                    {
+                        margins.Left, margins.Right, margins.Top, margins.Bottom
+                    });
                 }
             }
         }

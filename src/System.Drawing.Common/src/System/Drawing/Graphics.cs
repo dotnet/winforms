@@ -3600,7 +3600,8 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 {
                     break;
                 }
-            } while (context.IsCumulative);
+            }
+            while (context.IsCumulative);
         }
 
         if (!totalOffset.IsEmpty())

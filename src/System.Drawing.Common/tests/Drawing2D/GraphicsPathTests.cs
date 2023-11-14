@@ -1952,7 +1952,6 @@ public class GraphicsPathTests
             Assert.Equal(9, gp.PointCount);
             AssertWiden3(gp);
         }
-
     }
 
     public static IEnumerable<object[]> Widen_PenSmallWidth_TestData()
