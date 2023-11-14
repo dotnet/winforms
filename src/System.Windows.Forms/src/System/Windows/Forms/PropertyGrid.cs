@@ -2359,7 +2359,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         // we need to cause a refresh.
         bool fullRefresh = false;
         if (_gridView.SelectedGridEntry is PropertyDescriptorGridEntry selectedEntry
-            && selectedEntry.PropertyDescriptor?.Attributes is not null)
+            && selectedEntry.PropertyDescriptor.Attributes is not null)
         {
             // Fish out the DispIdAttribute which will tell us the DispId of the property that we're changing.
             if (selectedEntry.PropertyDescriptor.TryGetAttribute(out DispIdAttribute dispIdAttribute)
