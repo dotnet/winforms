@@ -47,7 +47,7 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
                 IDictionary values = new Hashtable(properties.Count);
                 for (int i = 0; i < properties.Count; i++)
                 {
-                    if (PropertyDescriptor?.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
+                    if (PropertyDescriptor.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
                     {
                         values[properties[i].Name] = value;
                     }

@@ -187,7 +187,7 @@ internal partial class PropertyGridView
             }
 
             // Check the property type itself. This is the default path.
-            var editor = entry.PropertyDescriptor?.GetEditor(typeof(InstanceCreationEditor)) as InstanceCreationEditor;
+            var editor = entry.PropertyDescriptor.GetEditor(typeof(InstanceCreationEditor)) as InstanceCreationEditor;
 
             // Now check if there is a dropdown UI type editor. If so, use that.
             if (editor is null)

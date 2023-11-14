@@ -17,11 +17,14 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
         object[] objectArray,
         PropertyDescriptor[] propertyDescriptors,
         bool hide)
-        : base(ownerGrid, parent, hide)
+        : base(
+            ownerGrid,
+            parent,
+            new MergePropertyDescriptor(propertyDescriptors),
+            hide)
     {
-        _mergedDescriptor = new MergePropertyDescriptor(propertyDescriptors);
         _objects = objectArray;
-        Initialize(_mergedDescriptor);
+        _mergedDescriptor = (MergePropertyDescriptor)PropertyDescriptor;
     }
 
     public override IContainer? Container
@@ -197,7 +200,6 @@ internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridE
     {
         // Now see if we need to notify the parent(s) up the chain.
         while (entry is PropertyDescriptorGridEntry propertyEntry &&
-            propertyEntry.PropertyDescriptor is not null &&
             propertyEntry.PropertyDescriptor.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
         {
             // Find the next parent property with a different value owner.
