@@ -182,6 +182,7 @@ public class TestBitmap
                 {
                     Assert.Equal(33, c.G);
                 }
+
                 Assert.Equal(16, c.B);
 
                 Assert.Equal(255, d.A);
@@ -194,6 +195,7 @@ public class TestBitmap
                 {
                     Assert.Equal(49, d.G);
                 }
+
                 Assert.Equal(24, d.B);
             }
             else if (alpha)
@@ -223,6 +225,7 @@ public class TestBitmap
                 Assert.Equal(Color.FromArgb(255, 64, 32, 16), c);
                 Assert.Equal(Color.FromArgb(255, 96, 48, 24), d);
             }
+
             BitmapData bd = bmp.LockBits(new Rectangle(0, 0, 2, 1), ImageLockMode.ReadOnly, format);
             try
             {
@@ -393,6 +396,7 @@ public class TestBitmap
         {
             sOutput.Append(arrInput[i].ToString("X2"));
         }
+
         return sOutput.ToString();
     }
 
@@ -422,6 +426,7 @@ public class TestBitmap
             return ByteArrayToString(hash);
         }
     }
+
     public string RotateIndexedBmp(Bitmap src, RotateFlipType type)
     {
         int pixels_per_byte;
@@ -513,6 +518,7 @@ public class TestBitmap
                 bmp.SetPixel(x, 78, c);
                 bmp.SetPixel(x, 79, c);
             }
+
             for (int y = 3; y < 78; y++)
             {
                 bmp.SetPixel(1, y, c);
@@ -521,6 +527,7 @@ public class TestBitmap
                 bmp.SetPixel(79, y, c);
             }
         }
+
         return bmp;
     }
 
@@ -540,6 +547,7 @@ public class TestBitmap
                 pixels[index++] = clr.B;
             }
         }
+
         return MD5.Create().ComputeHash(pixels);
     }
 
@@ -585,6 +593,7 @@ public class TestBitmap
         {
             bmp.UnlockBits(bd);
         }
+
         return MD5.Create().ComputeHash(pixels);
     }
 
@@ -807,6 +816,7 @@ public class TestBitmap
             }
         }
     }
+
     [Fact]
     public void DefaultFormat1()
     {
@@ -829,6 +839,7 @@ public class TestBitmap
         {
             Assert.Equal(ImageFormat.Png, other.RawFormat);
         }
+
         File.Delete(filename);
     }
 
@@ -865,6 +876,7 @@ public class TestBitmap
             {
                 Assert.Equal(palette1[i], pal.Entries[i].ToArgb());
             }
+
             Assert.Equal(2, pal.Flags);
         }
     }
@@ -900,6 +912,7 @@ public class TestBitmap
             {
                 Assert.Equal(palette16[i], pal.Entries[i].ToArgb());
             }
+
             Assert.Equal(0, pal.Flags);
         }
     }
@@ -1175,6 +1188,7 @@ public class TestBitmap
             {
                 Assert.Equal(palette256[i], pal.Entries[i].ToArgb());
             }
+
             Assert.Equal(4, pal.Flags);
         }
     }
@@ -1272,6 +1286,7 @@ public class BitmapFullTrustTest
                 hicon = bitmap.GetHicon();
             }
         }
+
         using (Bitmap bitmap2 = Bitmap.FromHicon(hicon))
         {
             // hicon survives bitmap and icon disposal
@@ -1293,6 +1308,7 @@ public class BitmapFullTrustTest
                 hicon = bitmap.GetHicon();
             }
         }
+
         using (Bitmap bitmap2 = Bitmap.FromHicon(hicon))
         {
             // hicon survives bitmap and icon disposal
@@ -1314,6 +1330,7 @@ public class BitmapFullTrustTest
                 hicon = bitmap.GetHicon();
             }
         }
+
         using (Bitmap bitmap2 = Bitmap.FromHicon(hicon))
         {
             // hicon survives bitmap and icon disposal
@@ -1335,6 +1352,7 @@ public class BitmapFullTrustTest
                 hicon = bitmap.GetHicon();
             }
         }
+
         using (Bitmap bitmap2 = Bitmap.FromHicon(hicon))
         {
             // hicon survives bitmap and icon disposal
@@ -1385,6 +1403,7 @@ public class BitmapFullTrustTest
             Assert.Equal(bitmap.RawFormat, ImageFormat.Bmp);
             hbitmap = bitmap.GetHbitmap();
         }
+
         // hbitmap survives original bitmap disposal
         using (Image image = Image.FromHbitmap(hbitmap))
         {
@@ -1395,6 +1414,7 @@ public class BitmapFullTrustTest
             Assert.Equal(335888, image.Flags);
             Assert.Equal(image.RawFormat, ImageFormat.MemoryBmp);
         }
+
         using (Image image2 = Image.FromHbitmap(hbitmap))
         {
             //Assert.Equal (PixelFormat.Format32bppRgb, image2.PixelFormat);

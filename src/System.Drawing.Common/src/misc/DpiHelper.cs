@@ -101,6 +101,7 @@ internal static class DpiHelper
                     s_interpolationMode = InterpolationMode.HighQualityBicubic;
                 }
             }
+
             return s_interpolationMode;
         }
     }

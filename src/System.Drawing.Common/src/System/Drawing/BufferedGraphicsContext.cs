@@ -244,6 +244,7 @@ public sealed class BufferedGraphicsContext : IDisposable
                         ref pbmi,
                         NativeMethods.DIB_RGB_COLORS);
                 }
+
                 bRet = true;
             }
         }
@@ -254,6 +255,7 @@ public sealed class BufferedGraphicsContext : IDisposable
                 Gdi32.DeleteObject(hbm);
             }
         }
+
         return bRet;
     }
 
@@ -408,6 +410,7 @@ public sealed class BufferedGraphicsContext : IDisposable
                     pbmi.bmiHeader_biSizeImage = 0;
                 }
             }
+
             pbmi.bmiHeader_biClrUsed = 0;
             pbmi.bmiHeader_biClrImportant = 0;
 

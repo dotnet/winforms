@@ -117,6 +117,7 @@ public class StandardPrintController : PrintController
             _graphics.Dispose(); // Dispose of GDI+ Graphics; keep the DC
             _graphics = null;
         }
+
         base.OnEndPage(document, e);
     }
 

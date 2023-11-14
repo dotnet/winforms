@@ -79,6 +79,7 @@ public class ImageCodecInfoTests
         {
             CheckImageCodecInfo(format, CodecName, DllName, FilenameExtension, Flags, FormatDescription, MimeType, signatureLength, mask, pattern, pattern2, encoder);
         }
+
         if (decoder is not null)
         {
             CheckImageCodecInfo(format, CodecName, DllName, FilenameExtension, Flags, FormatDescription, MimeType, signatureLength, mask, pattern, pattern2, decoder);

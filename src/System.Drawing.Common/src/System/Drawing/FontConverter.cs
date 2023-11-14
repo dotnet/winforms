@@ -447,6 +447,7 @@ public class FontConverter : TypeConverter
             {
                 values[i] = _fonts[i].Name;
             }
+
             Array.Sort(values, Comparer.Default);
 
             return new TypeConverter.StandardValuesCollection(values);
@@ -472,6 +473,7 @@ public class FontConverter : TypeConverter
                     // For an exact match, return immediately
                     return fontName;
                 }
+
                 if (fontName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase))
                 {
                     if (bestMatch is null || fontName.Length <= bestMatch.Length)
@@ -501,6 +503,7 @@ public class FontConverter : TypeConverter
                 filteredValues.Remove(GraphicsUnit.Display);
                 Values = new StandardValuesCollection(filteredValues);
             }
+
             return Values;
         }
     }

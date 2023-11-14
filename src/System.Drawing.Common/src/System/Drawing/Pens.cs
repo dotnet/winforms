@@ -318,6 +318,7 @@ public static class Pens
             Pen = new Pen(color, true);
             Gdip.ThreadData[key] = Pen;
         }
+
         return Pen;
     }
 }

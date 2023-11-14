@@ -1410,6 +1410,7 @@ public class BitmapTests : FileCleanupTestBase
                 {
                     Assert.Equal(33, c.G);
                 }
+
                 Assert.Equal(16, c.B);
 
                 Assert.Equal(255, d.A);
@@ -1422,6 +1423,7 @@ public class BitmapTests : FileCleanupTestBase
                 {
                     Assert.Equal(49, d.G);
                 }
+
                 Assert.Equal(24, d.B);
             }
             else if (alpha)
@@ -1449,6 +1451,7 @@ public class BitmapTests : FileCleanupTestBase
                 Assert.Equal(Color.FromArgb(255, 64, 32, 16), c);
                 Assert.Equal(Color.FromArgb(255, 96, 48, 24), d);
             }
+
             BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, 2, 1), ImageLockMode.ReadOnly, format);
             try
             {
@@ -1506,6 +1509,7 @@ public class BitmapTests : FileCleanupTestBase
                             Assert.Equal(c.A, data[n++]);
                         }
                     }
+
                     Assert.Equal(d.B, data[n++]);
                     Assert.Equal(d.G, data[n++]);
                     Assert.Equal(d.R, data[n++]);
@@ -1735,6 +1739,7 @@ public class BitmapTests : FileCleanupTestBase
             get => _stream.Position;
             set => _stream.Position = _canSeek ? value : throw new NotSupportedException();
         }
+
         public override void Flush() => _stream.Flush();
         public override int Read(byte[] buffer, int offset, int count) => _canRead ?  _stream.Read(buffer, offset, count) : throw new NotSupportedException();
         public override long Seek(long offset, SeekOrigin origin) => _stream.Seek(offset, origin);

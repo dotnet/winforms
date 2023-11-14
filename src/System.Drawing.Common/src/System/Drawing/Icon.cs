@@ -215,6 +215,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
             {
                 throw new ObjectDisposedException(GetType().Name);
             }
+
             return _handle;
         }
     }
@@ -619,6 +620,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                 {
                     _handle = User32.CreateIconFromResourceEx(pbAlignedBuffer, _bestBytesInRes, true, 0x00030000, 0, 0, 0);
                 }
+
                 ArrayPool<byte>.Shared.Return(alignedBuffer);
             }
             else
@@ -777,11 +779,13 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                             {
                                 tmpBitmap.UnlockBits(bmpData);
                             }
+
                             if (bitmap is not null && targetData is not null)
                             {
                                 bitmap.UnlockBits(targetData);
                             }
                         }
+
                         tmpBitmap.Dispose();
                     }
                 }
@@ -792,6 +796,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                 {
                     Gdi32.DeleteObject(info.hbmColor);
                 }
+
                 if (info.hbmMask != IntPtr.Zero)
                 {
                     Gdi32.DeleteObject(info.hbmMask);

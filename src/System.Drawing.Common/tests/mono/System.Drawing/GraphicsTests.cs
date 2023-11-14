@@ -383,6 +383,7 @@ public class GraphicsTest : IDisposable
             Graphics = Graphics.FromImage(_bitmap);
             Graphics.Clip = new Region(new Rectangle(0, 0, width, height));
         }
+
         public void Dispose() { Graphics.Dispose(); _bitmap.Dispose(); }
     }
 
@@ -1309,6 +1310,7 @@ public class GraphicsTest : IDisposable
                 g.Clip = new Region(rect);
                 g.FillRectangle(Brushes.Red, rect);
             }
+
             Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(5, 5).ToArgb());
             Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(14, 5).ToArgb());
             Assert.Equal(Color.Red.ToArgb(), bitmap.GetPixel(5, 14).ToArgb());
@@ -1340,6 +1342,7 @@ public class GraphicsTest : IDisposable
                 g.DrawRectangle(Pens.Blue, rect);
             }
         }
+
         return bitmap;
     }
 
@@ -1509,8 +1512,10 @@ public class GraphicsTest : IDisposable
             {
                 g.DrawRectangle(Pens.Blue, rect);
             }
+
             g.FillRectangle(Brushes.Green, rect);
         }
+
         return bitmap;
     }
 
@@ -1662,6 +1667,7 @@ public class GraphicsTest : IDisposable
                 g.DrawLines(Pens.Blue, pts);
             }
         }
+
         return bitmap;
     }
 
@@ -2352,6 +2358,7 @@ public class GraphicsTest : IDisposable
             Assert.Throws<ArgumentException>(() => g.ReleaseHdcInternal(hdc));
         }
     }
+
     [Fact]
     public void TestReleaseHdc()
     {
@@ -2387,6 +2394,7 @@ public class GraphicsTest : IDisposable
             Assert.Throws<ArgumentException>(() => g.ReleaseHdc());
         }
     }
+
     [ConditionalFact]
     public void VisibleClipBound()
     {
@@ -3289,6 +3297,7 @@ public class GraphicsTest : IDisposable
                 x = g.DpiX - 10;
                 y = g.DpiY + 10;
             }
+
             bmp.SetResolution(x, y);
             using (Graphics g = Graphics.FromImage(bmp))
             {

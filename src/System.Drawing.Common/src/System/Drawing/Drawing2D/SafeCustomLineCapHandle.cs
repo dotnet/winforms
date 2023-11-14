@@ -46,8 +46,10 @@ internal sealed class SafeCustomLineCapHandle : SafeHandle
             {
                 handle = IntPtr.Zero;
             }
+
             Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
         }
+
         return status == Gdip.Ok;
     }
 

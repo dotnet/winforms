@@ -7,6 +7,6 @@
     <EnableDefaultItems>false</EnableDefaultItems>
     <!-- Code warnings that weren't enabled in dotnet/runtime but are raised in winforms.
          TODO: Clean the code up and remove the NoWarns. -->
-    <NoWarn>$(NoWarn);SA1513;SA1129;SA1408</NoWarn>
+    <NoWarn>$(NoWarn);SA1129;SA1408</NoWarn>
   </PropertyGroup>
 </Project>

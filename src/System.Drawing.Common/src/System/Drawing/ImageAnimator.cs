@@ -352,6 +352,7 @@ public sealed partial class ImageAnimator
                     {
                         s_imageInfoList.Remove(imageInfo);
                     }
+
                     break;
                 }
             }

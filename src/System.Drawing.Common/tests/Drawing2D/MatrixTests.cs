@@ -338,6 +338,7 @@ public partial class MatrixTests
                     Assert.Equal(expected, clone1.Elements, new FloatingPointToleranceComparerer<float>(0.00001f));
                 }
             }
+
             matrix.Multiply(multiple, order);
             Assert.Equal(expected, matrix.Elements);
         }

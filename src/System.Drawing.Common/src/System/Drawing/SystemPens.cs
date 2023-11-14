@@ -72,6 +72,7 @@ public static class SystemPens
         {
             idx -= (int)KnownColor.YellowGreen - (int)KnownColor.WindowText;
         }
+
         idx--;
         Debug.Assert(idx >= 0 && idx < systemPens.Length, "System colors have been added but our system color array has not been expanded.");
 

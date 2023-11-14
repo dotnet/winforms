@@ -769,6 +769,7 @@ public sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
             {
                 Gdip.CheckStatus(Gdip.GdipGetPathPoints(new HandleRef(this, _nativePath), p, points.Length));
             }
+
             return points;
         }
     }

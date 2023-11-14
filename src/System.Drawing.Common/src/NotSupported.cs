@@ -43,16 +43,19 @@ namespace System.Drawing
         public void SetResolution(float xDpi, float yDpi) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void UnlockBits(System.Drawing.Imaging.BitmapData bitmapdata) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     [System.AttributeUsageAttribute(System.AttributeTargets.Assembly)]
     public partial class BitmapSuffixInSameAssemblyAttribute : System.Attribute
     {
         public BitmapSuffixInSameAssemblyAttribute() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     [System.AttributeUsageAttribute(System.AttributeTargets.Assembly)]
     public partial class BitmapSuffixInSatelliteAssemblyAttribute : System.Attribute
     {
         public BitmapSuffixInSatelliteAssemblyAttribute() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public abstract partial class Brush : System.MarshalByRefObject, System.ICloneable, System.IDisposable
     {
         protected Brush() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -62,6 +65,7 @@ namespace System.Drawing
         ~Brush() { }
         protected internal void SetNativeBrush(System.IntPtr brush) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public static partial class Brushes
     {
         public static System.Drawing.Brush AliceBlue { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
@@ -206,6 +210,7 @@ namespace System.Drawing
         public static System.Drawing.Brush Yellow { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public static System.Drawing.Brush YellowGreen { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public sealed partial class BufferedGraphics : System.IDisposable
     {
         internal BufferedGraphics() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -215,6 +220,7 @@ namespace System.Drawing
         public void Render(System.Drawing.Graphics? target) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void Render(System.IntPtr targetDC) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public sealed partial class BufferedGraphicsContext : System.IDisposable
     {
         public BufferedGraphicsContext() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -225,10 +231,12 @@ namespace System.Drawing
         ~BufferedGraphicsContext() { }
         public void Invalidate() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public static partial class BufferedGraphicsManager
     {
         public static System.Drawing.BufferedGraphicsContext Current { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public partial struct CharacterRange
     {
         private int _dummyPrimitive;
@@ -240,6 +248,7 @@ namespace System.Drawing
         public static bool operator ==(System.Drawing.CharacterRange cr1, System.Drawing.CharacterRange cr2) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public static bool operator !=(System.Drawing.CharacterRange cr1, System.Drawing.CharacterRange cr2) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public static partial class ColorTranslator
     {
         public static System.Drawing.Color FromHtml(string htmlColor) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -249,6 +258,7 @@ namespace System.Drawing
         public static int ToOle(System.Drawing.Color c) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public static int ToWin32(System.Drawing.Color c) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     [System.ComponentModel.EditorAttribute("System.Drawing.Design.ContentAlignmentEditor, System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     public enum ContentAlignment
     {
@@ -262,6 +272,7 @@ namespace System.Drawing
         BottomCenter = 512,
         BottomRight = 1024,
     }
+
     public enum CopyPixelOperation
     {
         NoMirrorBitmap = -2147483648,
@@ -282,6 +293,7 @@ namespace System.Drawing
         Whiteness = 16711778,
         CaptureBlt = 1073741824,
     }
+
     [System.ComponentModel.EditorAttribute("System.Drawing.Design.FontEditor, System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     [System.ComponentModel.TypeConverterAttribute(typeof(System.Drawing.FontConverter))]
     public sealed partial class Font : System.MarshalByRefObject, System.ICloneable, System.IDisposable, System.Runtime.Serialization.ISerializable
@@ -350,6 +362,7 @@ namespace System.Drawing
         public void ToLogFont(object logFont, System.Drawing.Graphics graphics) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override string ToString() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public partial class FontConverter : System.ComponentModel.TypeConverter
     {
         public FontConverter() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -372,12 +385,14 @@ namespace System.Drawing
             public override bool GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext? context) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
             void System.IDisposable.Dispose() { }
         }
+
         public partial class FontUnitConverter : System.ComponentModel.EnumConverter
         {
             public FontUnitConverter() : base (default(System.Type)) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
             public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(System.ComponentModel.ITypeDescriptorContext? context) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         }
     }
+
     public sealed partial class FontFamily : System.MarshalByRefObject, System.IDisposable
     {
         public FontFamily(System.Drawing.Text.GenericFontFamilies genericFamily) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -402,6 +417,7 @@ namespace System.Drawing
         public bool IsStyleAvailable(System.Drawing.FontStyle style) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override string ToString() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     [System.FlagsAttribute]
     public enum FontStyle
     {
@@ -411,6 +427,7 @@ namespace System.Drawing
         Underline = 4,
         Strikeout = 8,
     }
+
     public sealed partial class Graphics : System.MarshalByRefObject, System.Drawing.IDeviceContext, System.IDisposable
     {
         internal Graphics() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -663,6 +680,7 @@ namespace System.Drawing
         public delegate bool DrawImageAbort(System.IntPtr callbackdata);
         public delegate bool EnumerateMetafileProc(System.Drawing.Imaging.EmfPlusRecordType recordType, int flags, int dataSize, System.IntPtr data, System.Drawing.Imaging.PlayRecordCallback? callbackData);
     }
+
     public enum GraphicsUnit
     {
         World = 0,
@@ -673,6 +691,7 @@ namespace System.Drawing
         Document = 5,
         Millimeter = 6,
     }
+
     [System.ComponentModel.EditorAttribute("System.Drawing.Design.IconEditor, System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     [System.ComponentModel.TypeConverterAttribute(typeof(System.Drawing.IconConverter))]
     public sealed partial class Icon : System.MarshalByRefObject, System.ICloneable, System.IDisposable, System.Runtime.Serialization.ISerializable
@@ -703,6 +722,7 @@ namespace System.Drawing
         public System.Drawing.Bitmap ToBitmap() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override string ToString() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public partial class IconConverter : System.ComponentModel.ExpandableObjectConverter
     {
         public IconConverter() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -711,11 +731,13 @@ namespace System.Drawing
         public override object? ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object value) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override object? ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type destinationType) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public partial interface IDeviceContext : System.IDisposable
     {
         System.IntPtr GetHdc();
         void ReleaseHdc();
     }
+
     [System.ComponentModel.EditorAttribute("System.Drawing.Design.ImageEditor, System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     [System.ComponentModel.ImmutableObjectAttribute(true)]
     [System.ComponentModel.TypeConverterAttribute(typeof(System.Drawing.ImageConverter))]
@@ -783,6 +805,7 @@ namespace System.Drawing
         void System.Runtime.Serialization.ISerializable.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public delegate bool GetThumbnailImageAbort();
     }
+
     public sealed partial class ImageAnimator
     {
         internal ImageAnimator() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -792,6 +815,7 @@ namespace System.Drawing
         public static void UpdateFrames() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public static void UpdateFrames(System.Drawing.Image? image) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public partial class ImageConverter : System.ComponentModel.TypeConverter
     {
         public ImageConverter() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -803,6 +827,7 @@ namespace System.Drawing
         public override System.ComponentModel.PropertyDescriptorCollection GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object? value, System.Attribute[]? attributes) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override bool GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext? context) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public partial class ImageFormatConverter : System.ComponentModel.TypeConverter
     {
         public ImageFormatConverter() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -813,6 +838,7 @@ namespace System.Drawing
         public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(System.ComponentModel.ITypeDescriptorContext? context) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override bool GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext? context) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public sealed partial class Pen : System.MarshalByRefObject, System.ICloneable, System.IDisposable
     {
         public Pen(System.Drawing.Brush brush) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -850,6 +876,7 @@ namespace System.Drawing
         public void TranslateTransform(float dx, float dy) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void TranslateTransform(float dx, float dy, System.Drawing.Drawing2D.MatrixOrder order) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public static partial class Pens
     {
         public static System.Drawing.Pen AliceBlue { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
@@ -994,6 +1021,7 @@ namespace System.Drawing
         public static System.Drawing.Pen Yellow { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public static System.Drawing.Pen YellowGreen { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public sealed partial class Region : System.MarshalByRefObject, System.IDisposable
     {
         public Region() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1054,6 +1082,7 @@ namespace System.Drawing
         public void Xor(System.Drawing.RectangleF rect) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void Xor(System.Drawing.Region region) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum RotateFlipType
     {
         Rotate180FlipXY = 0,
@@ -1073,6 +1102,7 @@ namespace System.Drawing
         Rotate270FlipX = 7,
         Rotate90FlipY = 7,
     }
+
     public sealed partial class SolidBrush : System.Drawing.Brush
     {
         public SolidBrush(System.Drawing.Color color) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1080,12 +1110,14 @@ namespace System.Drawing
         public override object Clone() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         protected override void Dispose(bool disposing) { }
     }
+
     public enum StringAlignment
     {
         Near = 0,
         Center = 1,
         Far = 2,
     }
+
     public enum StringDigitSubstitute
     {
         User = 0,
@@ -1093,6 +1125,7 @@ namespace System.Drawing
         National = 2,
         Traditional = 3,
     }
+
     public sealed partial class StringFormat : System.MarshalByRefObject, System.ICloneable, System.IDisposable
     {
         public StringFormat() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1117,6 +1150,7 @@ namespace System.Drawing
         public void SetTabStops(float firstTabOffset, float[] tabStops) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override string ToString() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     [System.FlagsAttribute]
     public enum StringFormatFlags
     {
@@ -1130,6 +1164,7 @@ namespace System.Drawing
         LineLimit = 8192,
         NoClip = 16384,
     }
+
     public enum StringTrimming
     {
         None = 0,
@@ -1139,6 +1174,7 @@ namespace System.Drawing
         EllipsisWord = 4,
         EllipsisPath = 5,
     }
+
     public enum StringUnit
     {
         World = 0,
@@ -1150,6 +1186,7 @@ namespace System.Drawing
         Millimeter = 6,
         Em = 32,
     }
+
     public static partial class SystemBrushes
     {
         public static System.Drawing.Brush ActiveBorder { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
@@ -1187,6 +1224,7 @@ namespace System.Drawing
         public static System.Drawing.Brush WindowText { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public static System.Drawing.Brush FromSystemColor(System.Drawing.Color c) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public static partial class SystemColors
     {
         public static System.Drawing.Color ActiveBorder { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
@@ -1223,6 +1261,7 @@ namespace System.Drawing
         public static System.Drawing.Color WindowFrame { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public static System.Drawing.Color WindowText { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public static partial class SystemFonts
     {
         public static System.Drawing.Font? CaptionFont { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
@@ -1235,6 +1274,7 @@ namespace System.Drawing
         public static System.Drawing.Font? StatusFont { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public static System.Drawing.Font? GetFontByName(string systemFontName) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public static partial class SystemIcons
     {
         public static System.Drawing.Icon Application { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
@@ -1248,6 +1288,7 @@ namespace System.Drawing
         public static System.Drawing.Icon Warning { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public static System.Drawing.Icon WinLogo { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public static partial class SystemPens
     {
         public static System.Drawing.Pen ActiveBorder { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
@@ -1285,6 +1326,7 @@ namespace System.Drawing
         public static System.Drawing.Pen WindowText { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public static System.Drawing.Pen FromSystemColor(System.Drawing.Color c) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public sealed partial class TextureBrush : System.Drawing.Brush
     {
         public TextureBrush(System.Drawing.Image bitmap) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1309,6 +1351,7 @@ namespace System.Drawing
         public void TranslateTransform(float dx, float dy) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void TranslateTransform(float dx, float dy, System.Drawing.Drawing2D.MatrixOrder order) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     [System.AttributeUsageAttribute(System.AttributeTargets.Class)]
     public partial class ToolboxBitmapAttribute : System.Attribute
     {
@@ -1326,6 +1369,7 @@ namespace System.Drawing
         public static System.Drawing.Image? GetImageFromResource(System.Type t, string? imageName, bool large) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
 }
+
 namespace System.Drawing.Design
 {
     public sealed partial class CategoryNameCollection : System.Collections.ReadOnlyCollectionBase
@@ -1338,6 +1382,7 @@ namespace System.Drawing.Design
         public int IndexOf(string value) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
 }
+
 namespace System.Drawing.Drawing2D
 {
     public sealed partial class AdjustableArrowCap : System.Drawing.Drawing2D.CustomLineCap
@@ -1349,6 +1394,7 @@ namespace System.Drawing.Drawing2D
         public float MiddleInset { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public float Width { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public sealed partial class Blend
     {
         public Blend() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1356,6 +1402,7 @@ namespace System.Drawing.Drawing2D
         public float[] Factors { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public float[] Positions { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public sealed partial class ColorBlend
     {
         public ColorBlend() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1363,6 +1410,7 @@ namespace System.Drawing.Drawing2D
         public System.Drawing.Color[] Colors { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public float[] Positions { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public enum CombineMode
     {
         Replace = 0,
@@ -1372,11 +1420,13 @@ namespace System.Drawing.Drawing2D
         Exclude = 4,
         Complement = 5,
     }
+
     public enum CompositingMode
     {
         SourceOver = 0,
         SourceCopy = 1,
     }
+
     public enum CompositingQuality
     {
         Invalid = -1,
@@ -1386,12 +1436,14 @@ namespace System.Drawing.Drawing2D
         GammaCorrected = 3,
         AssumeLinear = 4,
     }
+
     public enum CoordinateSpace
     {
         World = 0,
         Page = 1,
         Device = 2,
     }
+
     public partial class CustomLineCap : System.MarshalByRefObject, System.ICloneable, System.IDisposable
     {
         public CustomLineCap(System.Drawing.Drawing2D.GraphicsPath? fillPath, System.Drawing.Drawing2D.GraphicsPath? strokePath) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1408,12 +1460,14 @@ namespace System.Drawing.Drawing2D
         public void GetStrokeCaps(out System.Drawing.Drawing2D.LineCap startCap, out System.Drawing.Drawing2D.LineCap endCap) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void SetStrokeCaps(System.Drawing.Drawing2D.LineCap startCap, System.Drawing.Drawing2D.LineCap endCap) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum DashCap
     {
         Flat = 0,
         Round = 2,
         Triangle = 3,
     }
+
     public enum DashStyle
     {
         Solid = 0,
@@ -1423,20 +1477,24 @@ namespace System.Drawing.Drawing2D
         DashDotDot = 4,
         Custom = 5,
     }
+
     public enum FillMode
     {
         Alternate = 0,
         Winding = 1,
     }
+
     public enum FlushIntention
     {
         Flush = 0,
         Sync = 1,
     }
+
     public sealed partial class GraphicsContainer : System.MarshalByRefObject
     {
         internal GraphicsContainer() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public sealed partial class GraphicsPath : System.MarshalByRefObject, System.ICloneable, System.IDisposable
     {
         public GraphicsPath() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1536,6 +1594,7 @@ namespace System.Drawing.Drawing2D
         public void Widen(System.Drawing.Pen pen, System.Drawing.Drawing2D.Matrix? matrix) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void Widen(System.Drawing.Pen pen, System.Drawing.Drawing2D.Matrix? matrix, float flatness) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public sealed partial class GraphicsPathIterator : System.MarshalByRefObject, System.IDisposable
     {
         public GraphicsPathIterator(System.Drawing.Drawing2D.GraphicsPath? path) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1553,10 +1612,12 @@ namespace System.Drawing.Drawing2D
         public int NextSubpath(out int startIndex, out int endIndex, out bool isClosed) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void Rewind() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public sealed partial class GraphicsState : System.MarshalByRefObject
     {
         internal GraphicsState() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public sealed partial class HatchBrush : System.Drawing.Brush
     {
         public HatchBrush(System.Drawing.Drawing2D.HatchStyle hatchstyle, System.Drawing.Color foreColor) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1566,6 +1627,7 @@ namespace System.Drawing.Drawing2D
         public System.Drawing.Drawing2D.HatchStyle HatchStyle { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public override object Clone() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum HatchStyle
     {
         Horizontal = 0,
@@ -1625,6 +1687,7 @@ namespace System.Drawing.Drawing2D
         OutlinedDiamond = 51,
         SolidDiamond = 52,
     }
+
     public enum InterpolationMode
     {
         Invalid = -1,
@@ -1637,6 +1700,7 @@ namespace System.Drawing.Drawing2D
         HighQualityBilinear = 6,
         HighQualityBicubic = 7,
     }
+
     public sealed partial class LinearGradientBrush : System.Drawing.Brush
     {
         public LinearGradientBrush(System.Drawing.Point point1, System.Drawing.Point point2, System.Drawing.Color color1, System.Drawing.Color color2) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1669,6 +1733,7 @@ namespace System.Drawing.Drawing2D
         public void TranslateTransform(float dx, float dy) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void TranslateTransform(float dx, float dy, System.Drawing.Drawing2D.MatrixOrder order) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum LinearGradientMode
     {
         Horizontal = 0,
@@ -1676,6 +1741,7 @@ namespace System.Drawing.Drawing2D
         ForwardDiagonal = 2,
         BackwardDiagonal = 3,
     }
+
     public enum LineCap
     {
         Flat = 0,
@@ -1690,6 +1756,7 @@ namespace System.Drawing.Drawing2D
         AnchorMask = 240,
         Custom = 255,
     }
+
     public enum LineJoin
     {
         Miter = 0,
@@ -1697,6 +1764,7 @@ namespace System.Drawing.Drawing2D
         Round = 2,
         MiterClipped = 3,
     }
+
     public sealed partial class Matrix : System.MarshalByRefObject, System.IDisposable
     {
         public Matrix() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1733,17 +1801,20 @@ namespace System.Drawing.Drawing2D
         public void Translate(float offsetX, float offsetY, System.Drawing.Drawing2D.MatrixOrder order) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void VectorTransformPoints(System.Drawing.Point[] pts) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum MatrixOrder
     {
         Prepend = 0,
         Append = 1,
     }
+
     public sealed partial class PathData
     {
         public PathData() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public System.Drawing.PointF[]? Points { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public byte[]? Types { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public sealed partial class PathGradientBrush : System.Drawing.Brush
     {
         public PathGradientBrush(System.Drawing.Drawing2D.GraphicsPath path) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1775,6 +1846,7 @@ namespace System.Drawing.Drawing2D
         public void TranslateTransform(float dx, float dy) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void TranslateTransform(float dx, float dy, System.Drawing.Drawing2D.MatrixOrder order) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum PathPointType
     {
         Start = 0,
@@ -1786,6 +1858,7 @@ namespace System.Drawing.Drawing2D
         PathMarker = 32,
         CloseSubpath = 128,
     }
+
     public enum PenAlignment
     {
         Center = 0,
@@ -1794,6 +1867,7 @@ namespace System.Drawing.Drawing2D
         Left = 3,
         Right = 4,
     }
+
     public enum PenType
     {
         SolidColor = 0,
@@ -1802,6 +1876,7 @@ namespace System.Drawing.Drawing2D
         PathGradient = 3,
         LinearGradient = 4,
     }
+
     public enum PixelOffsetMode
     {
         Invalid = -1,
@@ -1811,6 +1886,7 @@ namespace System.Drawing.Drawing2D
         None = 3,
         Half = 4,
     }
+
     public enum QualityMode
     {
         Invalid = -1,
@@ -1818,11 +1894,13 @@ namespace System.Drawing.Drawing2D
         Low = 1,
         High = 2,
     }
+
     public sealed partial class RegionData
     {
         internal RegionData() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public byte[] Data { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public enum SmoothingMode
     {
         Invalid = -1,
@@ -1832,11 +1910,13 @@ namespace System.Drawing.Drawing2D
         None = 3,
         AntiAlias = 4,
     }
+
     public enum WarpMode
     {
         Perspective = 0,
         Bilinear = 1,
     }
+
     public enum WrapMode
     {
         Tile = 0,
@@ -1846,6 +1926,7 @@ namespace System.Drawing.Drawing2D
         Clamp = 4,
     }
 }
+
 namespace System.Drawing.Imaging
 {
     public sealed partial class BitmapData
@@ -1858,6 +1939,7 @@ namespace System.Drawing.Imaging
         public int Stride { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public int Width { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public enum ColorAdjustType
     {
         Default = 0,
@@ -1868,6 +1950,7 @@ namespace System.Drawing.Imaging
         Count = 5,
         Any = 6,
     }
+
     public enum ColorChannelFlag
     {
         ColorChannelC = 0,
@@ -1876,17 +1959,20 @@ namespace System.Drawing.Imaging
         ColorChannelK = 3,
         ColorChannelLast = 4,
     }
+
     public sealed partial class ColorMap
     {
         public ColorMap() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public System.Drawing.Color NewColor { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public System.Drawing.Color OldColor { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public enum ColorMapType
     {
         Default = 0,
         Brush = 1,
     }
+
     public sealed partial class ColorMatrix
     {
         public ColorMatrix() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -1919,23 +2005,27 @@ namespace System.Drawing.Imaging
         public float Matrix43 { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public float Matrix44 { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public enum ColorMatrixFlag
     {
         Default = 0,
         SkipGrays = 1,
         AltGrays = 2,
     }
+
     public enum ColorMode
     {
         Argb32Mode = 0,
         Argb64Mode = 1,
     }
+
     public sealed partial class ColorPalette
     {
         internal ColorPalette() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public System.Drawing.Color[] Entries { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public int Flags { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public enum EmfPlusRecordType
     {
         EmfHeader = 1,
@@ -2192,12 +2282,14 @@ namespace System.Drawing.Imaging
         WmfSetDibToDev = 68915,
         WmfStretchDib = 69443,
     }
+
     public enum EmfType
     {
         EmfOnly = 3,
         EmfPlusOnly = 4,
         EmfPlusDual = 5,
     }
+
     public sealed partial class Encoder
     {
         public static readonly System.Drawing.Imaging.Encoder ChrominanceTable;
@@ -2216,6 +2308,7 @@ namespace System.Drawing.Imaging
         public Encoder(System.Guid guid) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public System.Guid Guid { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public sealed partial class EncoderParameter : System.IDisposable
     {
         public EncoderParameter(System.Drawing.Imaging.Encoder encoder, byte value) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2243,6 +2336,7 @@ namespace System.Drawing.Imaging
         public void Dispose() { }
         ~EncoderParameter() { }
     }
+
     public sealed partial class EncoderParameters : System.IDisposable
     {
         public EncoderParameters() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2250,6 +2344,7 @@ namespace System.Drawing.Imaging
         public System.Drawing.Imaging.EncoderParameter[] Param { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public void Dispose() { }
     }
+
     public enum EncoderParameterValueType
     {
         ValueTypeByte = 1,
@@ -2262,6 +2357,7 @@ namespace System.Drawing.Imaging
         ValueTypeRationalRange = 8,
         ValueTypePointer = 9,
     }
+
     public enum EncoderValue
     {
         ColorTypeCMYK = 0,
@@ -2289,6 +2385,7 @@ namespace System.Drawing.Imaging
         FrameDimensionResolution = 22,
         FrameDimensionPage = 23,
     }
+
     public sealed partial class FrameDimension
     {
         public FrameDimension(System.Guid guid) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2300,6 +2397,7 @@ namespace System.Drawing.Imaging
         public override int GetHashCode() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override string ToString() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public sealed partial class ImageAttributes : System.ICloneable, System.IDisposable
     {
         public ImageAttributes() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2349,6 +2447,7 @@ namespace System.Drawing.Imaging
         public void SetWrapMode(System.Drawing.Drawing2D.WrapMode mode, System.Drawing.Color color) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void SetWrapMode(System.Drawing.Drawing2D.WrapMode mode, System.Drawing.Color color, bool clamp) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     [System.FlagsAttribute]
     public enum ImageCodecFlags
     {
@@ -2362,6 +2461,7 @@ namespace System.Drawing.Imaging
         System = 131072,
         User = 262144,
     }
+
     public sealed partial class ImageCodecInfo
     {
         internal ImageCodecInfo() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2381,6 +2481,7 @@ namespace System.Drawing.Imaging
         public static System.Drawing.Imaging.ImageCodecInfo[] GetImageDecoders() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public static System.Drawing.Imaging.ImageCodecInfo[] GetImageEncoders() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     [System.FlagsAttribute]
     public enum ImageFlags
     {
@@ -2399,6 +2500,7 @@ namespace System.Drawing.Imaging
         ReadOnly = 65536,
         Caching = 131072,
     }
+
     [System.ComponentModel.TypeConverterAttribute(typeof(System.Drawing.ImageFormatConverter))]
     public sealed partial class ImageFormat
     {
@@ -2418,6 +2520,7 @@ namespace System.Drawing.Imaging
         public override int GetHashCode() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override string ToString() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum ImageLockMode
     {
         ReadOnly = 1,
@@ -2425,6 +2528,7 @@ namespace System.Drawing.Imaging
         ReadWrite = 3,
         UserInputBuffer = 4,
     }
+
     [System.ComponentModel.EditorAttribute("System.Drawing.Design.MetafileEditor, System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
     public sealed partial class Metafile : System.Drawing.Image
     {
@@ -2475,6 +2579,7 @@ namespace System.Drawing.Imaging
         public static System.Drawing.Imaging.MetafileHeader GetMetafileHeader(string fileName) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public void PlayRecord(System.Drawing.Imaging.EmfPlusRecordType recordType, int flags, int dataSize, byte[] data) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum MetafileFrameUnit
     {
         Pixel = 2,
@@ -2484,6 +2589,7 @@ namespace System.Drawing.Imaging
         Millimeter = 6,
         GdiCompatible = 7,
     }
+
     public sealed partial class MetafileHeader
     {
         internal MetafileHeader() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2506,6 +2612,7 @@ namespace System.Drawing.Imaging
         public bool IsWmf() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public bool IsWmfPlaceable() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum MetafileType
     {
         Invalid = 0,
@@ -2515,6 +2622,7 @@ namespace System.Drawing.Imaging
         EmfPlusOnly = 4,
         EmfPlusDual = 5,
     }
+
     public sealed partial class MetaHeader
     {
         public MetaHeader() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2526,6 +2634,7 @@ namespace System.Drawing.Imaging
         public short Type { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public short Version { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     [System.FlagsAttribute]
     public enum PaletteFlags
     {
@@ -2533,6 +2642,7 @@ namespace System.Drawing.Imaging
         GrayScale = 2,
         Halftone = 4,
     }
+
     public enum PixelFormat
     {
         DontCare = 0,
@@ -2559,6 +2669,7 @@ namespace System.Drawing.Imaging
         Format32bppArgb = 2498570,
         Format64bppArgb = 3424269,
     }
+
     public delegate void PlayRecordCallback(System.Drawing.Imaging.EmfPlusRecordType recordType, int flags, int dataSize, System.IntPtr recordData);
     public sealed partial class PropertyItem
     {
@@ -2568,6 +2679,7 @@ namespace System.Drawing.Imaging
         public short Type { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public byte[]? Value { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public sealed partial class WmfPlaceableFileHeader
     {
         public WmfPlaceableFileHeader() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2582,6 +2694,7 @@ namespace System.Drawing.Imaging
         public int Reserved { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
 }
+
 namespace System.Drawing.Printing
 {
     public enum Duplex
@@ -2591,12 +2704,14 @@ namespace System.Drawing.Printing
         Vertical = 2,
         Horizontal = 3,
     }
+
     public partial class InvalidPrinterException : System.SystemException
     {
         public InvalidPrinterException(System.Drawing.Printing.PrinterSettings settings) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         protected InvalidPrinterException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override void GetObjectData(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     [System.ComponentModel.TypeConverterAttribute(typeof(System.Drawing.Printing.MarginsConverter))]
     public partial class Margins : System.ICloneable
     {
@@ -2613,6 +2728,7 @@ namespace System.Drawing.Printing
         public static bool operator !=(System.Drawing.Printing.Margins? m1, System.Drawing.Printing.Margins? m2) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override string ToString() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public partial class MarginsConverter : System.ComponentModel.ExpandableObjectConverter
     {
         public MarginsConverter() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2623,6 +2739,7 @@ namespace System.Drawing.Printing
         public override object CreateInstance(System.ComponentModel.ITypeDescriptorContext? context, System.Collections.IDictionary propertyValues) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override bool GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext? context) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public partial class PageSettings : System.ICloneable
     {
         public PageSettings() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2643,6 +2760,7 @@ namespace System.Drawing.Printing
         public void SetHdevmode(System.IntPtr hdevmode) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override string ToString() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum PaperKind
     {
         Custom = 0,
@@ -2763,6 +2881,7 @@ namespace System.Drawing.Printing
         PrcEnvelopeNumber9Rotated = 117,
         PrcEnvelopeNumber10Rotated = 118,
     }
+
     public partial class PaperSize
     {
         public PaperSize() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2774,6 +2893,7 @@ namespace System.Drawing.Printing
         public int Width { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public override string ToString() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public partial class PaperSource
     {
         public PaperSource() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2782,6 +2902,7 @@ namespace System.Drawing.Printing
         public string SourceName { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public override string ToString() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum PaperSourceKind
     {
         Upper = 1,
@@ -2799,12 +2920,14 @@ namespace System.Drawing.Printing
         FormSource = 15,
         Custom = 257,
     }
+
     public sealed partial class PreviewPageInfo
     {
         public PreviewPageInfo(System.Drawing.Image image, System.Drawing.Size physicalSize) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public System.Drawing.Image Image { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public System.Drawing.Size PhysicalSize { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public partial class PreviewPrintController : System.Drawing.Printing.PrintController
     {
         public PreviewPrintController() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2816,12 +2939,14 @@ namespace System.Drawing.Printing
         public override System.Drawing.Graphics OnStartPage(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintPageEventArgs e) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override void OnStartPrint(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintEventArgs e) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum PrintAction
     {
         PrintToFile = 0,
         PrintToPreview = 1,
         PrintToPrinter = 2,
     }
+
     public abstract partial class PrintController
     {
         protected PrintController() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2831,6 +2956,7 @@ namespace System.Drawing.Printing
         public virtual System.Drawing.Graphics? OnStartPage(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintPageEventArgs e) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public virtual void OnStartPrint(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintEventArgs e) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     [System.ComponentModel.DefaultEventAttribute("PrintPage")]
     [System.ComponentModel.DefaultPropertyAttribute("DocumentName")]
     public partial class PrintDocument : System.ComponentModel.Component
@@ -2860,6 +2986,7 @@ namespace System.Drawing.Printing
         public void Print() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public override string ToString() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public partial class PrinterResolution
     {
         public PrinterResolution() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2868,6 +2995,7 @@ namespace System.Drawing.Printing
         public int Y { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public override string ToString() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public enum PrinterResolutionKind
     {
         High = -4,
@@ -2876,6 +3004,7 @@ namespace System.Drawing.Printing
         Draft = -1,
         Custom = 0,
     }
+
     public partial class PrinterSettings : System.ICloneable
     {
         public PrinterSettings() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2930,6 +3059,7 @@ namespace System.Drawing.Printing
             void System.Collections.ICollection.CopyTo(System.Array array, int index) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         }
+
         public partial class PaperSourceCollection : System.Collections.ICollection, System.Collections.IEnumerable
         {
             public PaperSourceCollection(System.Drawing.Printing.PaperSource[] array) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2945,6 +3075,7 @@ namespace System.Drawing.Printing
             void System.Collections.ICollection.CopyTo(System.Array array, int index) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         }
+
         public partial class PrinterResolutionCollection : System.Collections.ICollection, System.Collections.IEnumerable
         {
             public PrinterResolutionCollection(System.Drawing.Printing.PrinterResolution[] array) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2960,6 +3091,7 @@ namespace System.Drawing.Printing
             void System.Collections.ICollection.CopyTo(System.Array array, int index) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         }
+
         public partial class StringCollection : System.Collections.ICollection, System.Collections.IEnumerable
         {
             public StringCollection(string[] array) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2976,6 +3108,7 @@ namespace System.Drawing.Printing
             System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         }
     }
+
     public enum PrinterUnit
     {
         Display = 0,
@@ -2983,6 +3116,7 @@ namespace System.Drawing.Printing
         HundredthsOfAMillimeter = 2,
         TenthsOfAMillimeter = 3,
     }
+
     public sealed partial class PrinterUnitConvert
     {
         internal PrinterUnitConvert() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -2993,11 +3127,13 @@ namespace System.Drawing.Printing
         public static System.Drawing.Size Convert(System.Drawing.Size value, System.Drawing.Printing.PrinterUnit fromUnit, System.Drawing.Printing.PrinterUnit toUnit) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public static int Convert(int value, System.Drawing.Printing.PrinterUnit fromUnit, System.Drawing.Printing.PrinterUnit toUnit) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public partial class PrintEventArgs : System.ComponentModel.CancelEventArgs
     {
         public PrintEventArgs() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public System.Drawing.Printing.PrintAction PrintAction { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public delegate void PrintEventHandler(object sender, System.Drawing.Printing.PrintEventArgs e);
     public partial class PrintPageEventArgs : System.EventArgs
     {
@@ -3009,6 +3145,7 @@ namespace System.Drawing.Printing
         public System.Drawing.Rectangle PageBounds { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
         public System.Drawing.Printing.PageSettings PageSettings { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public delegate void PrintPageEventHandler(object sender, System.Drawing.Printing.PrintPageEventArgs e);
     public enum PrintRange
     {
@@ -3017,11 +3154,13 @@ namespace System.Drawing.Printing
         SomePages = 2,
         CurrentPage = 4194304,
     }
+
     public partial class QueryPageSettingsEventArgs : System.Drawing.Printing.PrintEventArgs
     {
         public QueryPageSettingsEventArgs(System.Drawing.Printing.PageSettings pageSettings) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         public System.Drawing.Printing.PageSettings PageSettings { get { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } set { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  } }
     }
+
     public delegate void QueryPageSettingsEventHandler(object sender, System.Drawing.Printing.QueryPageSettingsEventArgs e);
     public partial class StandardPrintController : System.Drawing.Printing.PrintController
     {
@@ -3032,6 +3171,7 @@ namespace System.Drawing.Printing
         public override void OnStartPrint(System.Drawing.Printing.PrintDocument document, System.Drawing.Printing.PrintEventArgs e) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
 }
+
 namespace System.Drawing.Text
 {
     public abstract partial class FontCollection : System.IDisposable
@@ -3042,22 +3182,26 @@ namespace System.Drawing.Text
         protected virtual void Dispose(bool disposing) { }
         ~FontCollection() { }
     }
+
     public enum GenericFontFamilies
     {
         Serif = 0,
         SansSerif = 1,
         Monospace = 2,
     }
+
     public enum HotkeyPrefix
     {
         None = 0,
         Show = 1,
         Hide = 2,
     }
+
     public sealed partial class InstalledFontCollection : System.Drawing.Text.FontCollection
     {
         public InstalledFontCollection() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
     }
+
     public sealed partial class PrivateFontCollection : System.Drawing.Text.FontCollection
     {
         public PrivateFontCollection() { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
@@ -3065,6 +3209,7 @@ namespace System.Drawing.Text
         public void AddMemoryFont(System.IntPtr memory, int length) { throw new System.PlatformNotSupportedException(System.SR.SystemDrawingCommon_PlatformNotSupported);  }
         protected override void Dispose(bool disposing) { }
     }
+
     public enum TextRenderingHint
     {
         SystemDefault = 0,

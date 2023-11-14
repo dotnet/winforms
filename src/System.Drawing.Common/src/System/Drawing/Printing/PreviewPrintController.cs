@@ -99,6 +99,7 @@ public class PreviewPrintController : PrintController
             _graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
             _graphics.SmoothingMode = SmoothingMode.AntiAlias;
         }
+
         return _graphics;
     }
 

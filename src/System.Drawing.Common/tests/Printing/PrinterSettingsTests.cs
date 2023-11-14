@@ -576,6 +576,7 @@ public class PrinterSettingsTests
             if (printerSettings.IsValid)
                 return candidate;
         }
+
         return null;
     }
 
