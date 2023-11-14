@@ -318,21 +318,7 @@ public static partial class ToolStripManager
     /// <summary>
     ///  Removes dead entries from the toolstrip weak reference collection.
     /// </summary>
-    internal static void PruneToolStripList()
-    {
-        if (t_toolStripWeakArrayList is null || t_toolStripWeakArrayList.Count == 0)
-        {
-            return;
-        }
-
-        for (int i = t_toolStripWeakArrayList.Count - 1; i >= 0; i--)
-        {
-            if (t_toolStripWeakArrayList[i] is null)
-            {
-                t_toolStripWeakArrayList.RemoveAt(i);
-            }
-        }
-    }
+    internal static void PruneToolStripList() => t_toolStripWeakArrayList?.ScavengeReferences();
 
     private static void RemoveEventHandler(int key, Delegate? value)
     {
