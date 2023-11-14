@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
@@ -10,7 +10,7 @@ internal static partial class Interop
     {
         [return: MarshalAs(UnmanagedType.Bool)]
 #if NET7_0_OR_GREATER
-        [LibraryImport(Libraries.Comdlg32, EntryPoint="PrintDlgW", SetLastError = true)]
+        [LibraryImport(Libraries.Comdlg32, EntryPoint = "PrintDlgW", SetLastError = true)]
         internal static partial bool PrintDlg(
 #else
         [DllImport(Libraries.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]
@@ -20,7 +20,7 @@ internal static partial class Interop
 
         [return: MarshalAs(UnmanagedType.Bool)]
 #if NET7_0_OR_GREATER
-        [LibraryImport(Libraries.Comdlg32, EntryPoint="PrintDlgW", SetLastError = true)]
+        [LibraryImport(Libraries.Comdlg32, EntryPoint = "PrintDlgW", SetLastError = true)]
         internal static partial bool PrintDlg(
 #else
         [DllImport(Libraries.Comdlg32, SetLastError = true, CharSet = CharSet.Auto)]

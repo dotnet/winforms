@@ -17,10 +17,10 @@ internal static partial class SafeNativeMethods
         public IntPtr DebugEventCallback;
 
         public BOOL SuppressBackgroundThread;     // FALSE unless you're prepared to call
-                                                          // the hook/unhook functions properly
+                                                  // the hook/unhook functions properly
 
         public BOOL SuppressExternalCodecs;       // FALSE unless you want GDI+ only to use
-                                                          // its internal image codecs.
+                                                  // its internal image codecs.
         public int StartupParameters;
 
         public static StartupInputEx GetDefault()

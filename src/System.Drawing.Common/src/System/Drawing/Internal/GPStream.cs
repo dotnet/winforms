@@ -87,6 +87,7 @@ internal sealed partial class GPStream : Ole32.IStream
                 {
                     _virtualPosition = dlibMove;
                 }
+
                 break;
             case SeekOrigin.End:
                 if (dlibMove <= 0)
@@ -98,6 +99,7 @@ internal sealed partial class GPStream : Ole32.IStream
                 {
                     _virtualPosition = length + dlibMove;
                 }
+
                 break;
             case SeekOrigin.Current:
                 if (dlibMove + position <= length)
@@ -109,6 +111,7 @@ internal sealed partial class GPStream : Ole32.IStream
                 {
                     _virtualPosition = dlibMove + position;
                 }
+
                 break;
         }
 

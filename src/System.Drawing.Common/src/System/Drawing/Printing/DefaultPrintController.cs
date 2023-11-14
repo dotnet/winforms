@@ -21,14 +21,14 @@ public class StandardPrintController : PrintController
     /// </summary>
     public override void OnStartPrint(PrintDocument document, PrintEventArgs e)
     {
-        Debug.Assert(_dc == null && _graphics == null, "PrintController methods called in the wrong order?");
+        Debug.Assert(_dc is null && _graphics is null, "PrintController methods called in the wrong order?");
 
         base.OnStartPrint(document, e);
         // the win32 methods below SuppressUnmanagedCodeAttributes so assertin on UnmanagedCodePermission is redundant
         if (!document.PrinterSettings.IsValid)
             throw new InvalidPrinterException(document.PrinterSettings);
 
-        Debug.Assert(_modeHandle != null, "_modeHandle should have been set by PrintController.OnStartPrint");
+        Debug.Assert(_modeHandle is not null, "_modeHandle should have been set by PrintController.OnStartPrint");
         _dc = document.PrinterSettings.CreateDeviceContext(_modeHandle);
         Gdi32.DOCINFO info = new Gdi32.DOCINFO();
         info.lpszDocName = document.DocumentName;
@@ -59,8 +59,8 @@ public class StandardPrintController : PrintController
     /// </summary>
     public override Graphics OnStartPage(PrintDocument document, PrintPageEventArgs e)
     {
-        Debug.Assert(_dc != null && _graphics == null, "PrintController methods called in the wrong order?");
-        Debug.Assert(_modeHandle != null);
+        Debug.Assert(_dc is not null && _graphics is null, "PrintController methods called in the wrong order?");
+        Debug.Assert(_modeHandle is not null);
 
         base.OnStartPage(document, e);
         e.PageSettings.CopyToHdevmode(_modeHandle);
@@ -105,7 +105,7 @@ public class StandardPrintController : PrintController
     /// </summary>
     public override void OnEndPage(PrintDocument document, PrintPageEventArgs e)
     {
-        Debug.Assert(_dc != null && _graphics != null, "PrintController methods called in the wrong order?");
+        Debug.Assert(_dc is not null && _graphics is not null, "PrintController methods called in the wrong order?");
 
         try
         {
@@ -118,6 +118,7 @@ public class StandardPrintController : PrintController
             _graphics.Dispose(); // Dispose of GDI+ Graphics; keep the DC
             _graphics = null;
         }
+
         base.OnEndPage(document, e);
     }
 
@@ -126,9 +127,9 @@ public class StandardPrintController : PrintController
     /// </summary>
     public override void OnEndPrint(PrintDocument document, PrintEventArgs e)
     {
-        Debug.Assert(_dc != null && _graphics == null, "PrintController methods called in the wrong order?");
+        Debug.Assert(_dc is not null && _graphics is null, "PrintController methods called in the wrong order?");
 
-        if (_dc != null)
+        if (_dc is not null)
         {
             try
             {

@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Drawing2D;
-using System.Globalization;
 using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 using static Interop;
+using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing;
 
@@ -76,6 +75,7 @@ public sealed class Region : MarshalByRefObject, IDisposable
         Gdip.CheckStatus(Gdip.GdipCloneRegion(new HandleRef(this, NativeRegion), out IntPtr region));
         return new Region(region);
     }
+
     public void ReleaseHrgn(IntPtr regionHandle)
     {
         if (regionHandle == IntPtr.Zero)

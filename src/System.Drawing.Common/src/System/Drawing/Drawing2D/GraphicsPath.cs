@@ -3,7 +3,6 @@
 
 using System.ComponentModel;
 using System.Drawing.Internal;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
@@ -770,6 +769,7 @@ public sealed class GraphicsPath : MarshalByRefObject, ICloneable, IDisposable
             {
                 Gdip.CheckStatus(Gdip.GdipGetPathPoints(new HandleRef(this, _nativePath), p, points.Length));
             }
+
             return points;
         }
     }

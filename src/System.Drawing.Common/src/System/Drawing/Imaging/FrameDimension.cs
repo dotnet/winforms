@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 namespace System.Drawing.Imaging;
@@ -51,6 +51,7 @@ public sealed class FrameDimension
     {
         get { return s_page; }
     }
+
     /// <summary>
     /// Returns a value indicating whether the specified object is an <see cref='FrameDimension'/> equivalent to
     /// this <see cref='FrameDimension'/>.
@@ -58,7 +59,7 @@ public sealed class FrameDimension
     public override bool Equals([NotNullWhen(true)] object? o)
     {
         FrameDimension? format = o as FrameDimension;
-        if (format == null)
+        if (format is null)
             return false;
         return _guid == format._guid;
     }
@@ -73,9 +74,21 @@ public sealed class FrameDimension
     /// </summary>
     public override string ToString()
     {
-        if (this == s_time) return "Time";
-        if (this == s_resolution) return "Resolution";
-        if (this == s_page) return "Page";
+        if (this == s_time)
+        {
+            return "Time";
+        }
+
+        if (this == s_resolution)
+        {
+            return "Resolution";
+        }
+
+        if (this == s_page)
+        {
+            return "Page";
+        }
+
         return $"[FrameDimension: {_guid}]";
     }
 }

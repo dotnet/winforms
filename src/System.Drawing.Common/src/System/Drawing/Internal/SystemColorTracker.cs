@@ -25,7 +25,7 @@ internal static class SystemColorTracker
     {
         lock (lockObject)
         {
-            Debug.Assert(list != null, "List is null");
+            Debug.Assert(list is not null, "List is null");
             Debug.Assert(list.Length > 0, "INITIAL_SIZE was initialized after list");
 
             if (list.Length == count)
@@ -46,13 +46,13 @@ internal static class SystemColorTracker
             count++;
 
             // COM+ takes forever to Finalize() weak references, so it pays to reuse them.
-            if (list[index] == null)
+            if (list[index] is null)
             {
                 list[index] = new WeakReference(obj);
             }
             else
             {
-                Debug.Assert(list[index].Target == null, $"Trying to reuse a weak reference that isn't broken yet: list[{index}], length = {list.Length}");
+                Debug.Assert(list[index].Target is null, $"Trying to reuse a weak reference that isn't broken yet: list[{index}], length = {list.Length}");
                 list[index].Target = obj;
             }
         }
@@ -74,9 +74,9 @@ internal static class SystemColorTracker
         // and anything to the right of "right" is broken.
         while (true)
         {
-            while (left < length && list[left].Target != null)
+            while (left < length && list[left].Target is not null)
                 left++;
-            while (right >= 0 && list[right].Target == null)
+            while (right >= 0 && list[right].Target is null)
                 right--;
 
             if (left >= right)
@@ -134,7 +134,7 @@ internal static class SystemColorTracker
         {
             for (int i = 0; i < count; i++)
             {
-                Debug.Assert(list[i] != null, "null value in active part of list");
+                Debug.Assert(list[i] is not null, "null value in active part of list");
                 ((ISystemColorTracker?)list[i].Target)?.OnSystemColorChanged();
             }
         }

@@ -1,10 +1,10 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing;
@@ -91,7 +91,7 @@ public sealed class TextureBrush : Brush
 
         IntPtr brush;
         int status = Gdip.GdipCreateTextureIA(new HandleRef(image, image._nativeImage),
-                                                 new HandleRef(imageAttr, (imageAttr == null) ?
+                                                 new HandleRef(imageAttr, (imageAttr is null) ?
                                                    IntPtr.Zero : imageAttr.nativeImageAttributes),
                                                  dstRect.X,
                                                  dstRect.Y,
@@ -111,7 +111,7 @@ public sealed class TextureBrush : Brush
 
         IntPtr brush;
         int status = Gdip.GdipCreateTextureIAI(new HandleRef(image, image._nativeImage),
-                                                 new HandleRef(imageAttr, (imageAttr == null) ?
+                                                 new HandleRef(imageAttr, (imageAttr is null) ?
                                                    IntPtr.Zero : imageAttr.nativeImageAttributes),
                                                  dstRect.X,
                                                  dstRect.Y,
@@ -150,7 +150,7 @@ public sealed class TextureBrush : Brush
         }
         set
         {
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }

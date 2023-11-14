@@ -1,11 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
-using System.Globalization;
 using System.IO;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
+using System.Runtime.InteropServices;
 using static Interop;
+using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing.Text;
 
@@ -66,7 +65,7 @@ public sealed class PrivateFontCollection : FontCollection
 #pragma warning restore CA2208
         }
 
-        if (filename == null)
+        if (filename is null)
         {
             throw new ArgumentNullException(nameof(filename));
         }

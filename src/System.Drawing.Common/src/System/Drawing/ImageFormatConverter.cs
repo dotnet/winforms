@@ -24,6 +24,7 @@ public class ImageFormatConverter : TypeConverter
         {
             return true;
         }
+
         return base.CanConvertTo(context, destinationType);
     }
 
@@ -31,7 +32,7 @@ public class ImageFormatConverter : TypeConverter
     {
         // we must be able to convert from short names and long names
         string? strFormat = value as string;
-        if (strFormat == null)
+        if (strFormat is null)
         {
             // case #1, this is not a string
             return base.ConvertFrom(context, culture, value);
@@ -105,7 +106,7 @@ public class ImageFormatConverter : TypeConverter
                 else if (imgFormat.Guid.Equals(ImageFormat.Wmf.Guid))
                     strFormat = "Wmf";
 
-                if (strFormat != null)
+                if (strFormat is not null)
                 {
                     return new InstanceDescriptor(typeof(ImageFormat).GetProperty(strFormat), null);
                 }

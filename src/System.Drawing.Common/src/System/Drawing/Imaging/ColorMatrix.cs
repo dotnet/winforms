@@ -85,6 +85,7 @@ public sealed class ColorMatrix
         get { return _matrix00; }
         set { _matrix00 = value; }
     }
+
     /// <summary>
     /// Represents the element at the 0th row and 1st column of this <see cref='ColorMatrix'/>.
     /// </summary>

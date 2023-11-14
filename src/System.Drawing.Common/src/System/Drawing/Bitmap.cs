@@ -6,8 +6,8 @@ using System.Drawing.Imaging;
 using System.Drawing.Internal;
 using System.IO;
 using System.Runtime.InteropServices;
-using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 using System.Runtime.Serialization;
+using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing;
 
@@ -42,6 +42,7 @@ public sealed class Bitmap : Image
         {
             status = Gdip.GdipCreateBitmapFromFile(filename, out bitmap);
         }
+
         Gdip.CheckStatus(status);
 
         ValidateImage(bitmap);
@@ -86,7 +87,7 @@ public sealed class Bitmap : Image
         ArgumentNullException.ThrowIfNull(resource);
 
         Stream? stream = type.Module.Assembly.GetManifestResourceStream(type, resource);
-        if (stream == null)
+        if (stream is null)
         {
             throw new ArgumentException(SR.Format(SR.ResourceNotFound, type, resource));
         }
@@ -227,6 +228,7 @@ public sealed class Bitmap : Image
         {
             transparent = GetPixel(0, Size.Height - 1);
         }
+
         if (transparent.A < 255)
         {
             // It's already transparent, and if we proceeded, we will do something
@@ -283,6 +285,7 @@ public sealed class Bitmap : Image
         {
             status = 8;
         }
+
         Gdip.CheckStatus(status);
 
         return bitmapData;
@@ -339,6 +342,7 @@ public sealed class Bitmap : Image
         int status = Gdip.GdipBitmapSetResolution(new HandleRef(this, _nativeImage), xDpi, yDpi);
         Gdip.CheckStatus(status);
     }
+
     public Bitmap Clone(Rectangle rect, PixelFormat format)
     {
         if (rect.Width == 0 || rect.Height == 0)

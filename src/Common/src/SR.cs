@@ -41,7 +41,7 @@ internal static partial class SR
     {
         string resourceString = GetResourceString(resourceKey);
 
-        return resourceKey == resourceString || resourceString == null ? defaultString : resourceString;
+        return resourceKey == resourceString || resourceString is null ? defaultString : resourceString;
     }
 
     internal static string Format(string resourceFormat, object? p1)
@@ -76,7 +76,7 @@ internal static partial class SR
 
     internal static string Format(string resourceFormat, params object?[]? args)
     {
-        if (args != null)
+        if (args is not null)
         {
             if (UsingResourceKeys())
             {
@@ -121,7 +121,7 @@ internal static partial class SR
 
     internal static string Format(IFormatProvider? provider, string resourceFormat, params object?[]? args)
     {
-        if (args != null)
+        if (args is not null)
         {
             if (UsingResourceKeys())
             {

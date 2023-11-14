@@ -1,8 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing.Drawing2D;
@@ -178,10 +178,10 @@ public sealed class PathGradientBrush : Brush
         set
         {
             // This is the behavior on Desktop
-            if (value == null || value.Factors == null)
+            if (value is null || value.Factors is null)
                 throw new NullReferenceException();
 
-            if (value.Positions == null)
+            if (value.Positions is null)
                 throw new ArgumentException(SR.Format(SR.InvalidArgumentValue, "value.Positions", value.Positions), nameof(value));
 
             int count = value.Factors.Length;
@@ -220,6 +220,7 @@ public sealed class PathGradientBrush : Brush
                 {
                     Marshal.FreeHGlobal(factors);
                 }
+
                 if (positions != IntPtr.Zero)
                 {
                     Marshal.FreeHGlobal(positions);
@@ -294,7 +295,7 @@ public sealed class PathGradientBrush : Brush
         {
             int count = value.Colors.Length;
 
-            if (value.Positions == null)
+            if (value.Positions is null)
                 throw new ArgumentException(SR.Format(SR.InvalidArgumentValue, "value.Positions", value.Positions), nameof(value));
             if (value.Colors.Length != value.Positions.Length)
                 throw new ArgumentOutOfRangeException(nameof(value));
@@ -321,7 +322,7 @@ public sealed class PathGradientBrush : Brush
         }
         set
         {
-            if (value == null)
+            if (value is null)
                 throw new ArgumentNullException(nameof(value));
 
             Gdip.CheckStatus(Gdip.GdipSetPathGradientTransform(new HandleRef(this, NativeBrush), new HandleRef(value, value.NativeMatrix)));

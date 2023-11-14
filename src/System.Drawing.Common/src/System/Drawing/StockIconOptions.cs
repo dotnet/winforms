@@ -14,26 +14,26 @@ public enum StockIconOptions
     ///  Use the defaults, which is to retrieve a large version of the icon (as defined by the current system
     ///  metrics).
     /// </summary>
-    Default         = 0x000000000,
+    Default = 0x000000000,
 
     /// <summary>
     ///  Retrieve the small version of the icon (as defined by the current system metrics).
     /// </summary>
-    SmallIcon       = 0x000000001,
+    SmallIcon = 0x000000001,
 
     /// <summary>
     ///  Retrieve the shell icon size of the icon.
     /// </summary>
-    ShellIconSize   = 0x000000004,
+    ShellIconSize = 0x000000004,
 
     /// <summary>
     ///  Adds a link overlay onto the icon.
     /// </summary>
-    LinkOverlay     = 0x000008000,
+    LinkOverlay = 0x000008000,
 
     /// <summary>
     ///  Blends the icon with the system highlight color.
     /// </summary>
-    Selected        = 0x000010000,
+    Selected = 0x000010000,
 }
 #endif

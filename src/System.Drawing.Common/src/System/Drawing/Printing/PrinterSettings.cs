@@ -223,7 +223,7 @@ public class PrinterSettings : ICloneable
     {
         get
         {
-            return (_printerName == null || _printerName == GetDefaultPrinterName());
+            return (_printerName is null || _printerName == GetDefaultPrinterName());
         }
     }
 
@@ -325,6 +325,7 @@ public class PrinterSettings : ICloneable
             {
                 throw new ArgumentNullException(value);
             }
+
             OutputPort = value;
         }
     }
@@ -413,7 +414,7 @@ public class PrinterSettings : ICloneable
     {
         get
         {
-            if (_printerName == null)
+            if (_printerName is null)
                 return GetDefaultPrinterName();
             else
                 return _printerName;
@@ -460,6 +461,7 @@ public class PrinterSettings : ICloneable
                 dc.Dispose();
             }
         }
+
         return isDirectPrintingSupported;
     }
 
@@ -506,6 +508,7 @@ public class PrinterSettings : ICloneable
                 stream.Close();
             }
         }
+
         return isDirectPrintingSupported;
     }
 
@@ -550,6 +553,7 @@ public class PrinterSettings : ICloneable
         clone._printDialogDisplayed = false;
         return clone;
     }
+
     // what is done in copytohdevmode cannot give unwanted access AllPrinting permission
     internal DeviceContext CreateDeviceContext(PageSettings pageSettings)
     {
@@ -566,13 +570,14 @@ public class PrinterSettings : ICloneable
         {
             Kernel32.GlobalFree(modeHandle);
         }
+
         return dc;
     }
 
     internal DeviceContext CreateDeviceContext(IntPtr hdevmode)
     {
         IntPtr modePointer = Kernel32.GlobalLock(hdevmode);
-        DeviceContext dc = DeviceContext.CreateDC(DriverName, PrinterNameInternal, fileName:null, modePointer);
+        DeviceContext dc = DeviceContext.CreateDC(DriverName, PrinterNameInternal, fileName: null, modePointer);
         Kernel32.GlobalUnlock(hdevmode);
         return dc;
     }
@@ -594,6 +599,7 @@ public class PrinterSettings : ICloneable
         {
             Kernel32.GlobalFree(modeHandle);
         }
+
         return dc;
     }
 
@@ -601,7 +607,7 @@ public class PrinterSettings : ICloneable
     internal DeviceContext CreateInformationContext(IntPtr hdevmode)
     {
         IntPtr modePointer = Kernel32.GlobalLock(hdevmode);
-        DeviceContext dc = DeviceContext.CreateIC(DriverName, PrinterNameInternal, fileName:null, modePointer);
+        DeviceContext dc = DeviceContext.CreateIC(DriverName, PrinterNameInternal, fileName: null, modePointer);
         Kernel32.GlobalUnlock(hdevmode);
         return dc;
     }
@@ -620,6 +626,7 @@ public class PrinterSettings : ICloneable
             g.TranslateTransform(-_defaultPageSettings.HardMarginX, -_defaultPageSettings.HardMarginY);
             g.TranslateTransform(_defaultPageSettings.Margins.Left, _defaultPageSettings.Margins.Top);
         }
+
         return g;
     }
 
@@ -641,6 +648,7 @@ public class PrinterSettings : ICloneable
             g.TranslateTransform(-pageSettings.HardMarginX, -pageSettings.HardMarginY);
             g.TranslateTransform(pageSettings.Margins.Left, pageSettings.Margins.Top);
         }
+
         return g;
     }
 
@@ -826,11 +834,12 @@ public class PrinterSettings : ICloneable
         {
             throw new InvalidPrinterException(this);
         }
+
         IntPtr handle = Kernel32.GlobalAlloc(SafeNativeMethods.GMEM_MOVEABLE, (uint)modeSize); // cannot be <0 anyway
         IntPtr pointer = Kernel32.GlobalLock(handle);
 
         //Get the DevMode only if its not cached....
-        if (_cachedDevmode != null)
+        if (_cachedDevmode is not null)
         {
             Marshal.Copy(_cachedDevmode, 0, pointer, _devmodebytes);
         }
@@ -845,7 +854,7 @@ public class PrinterSettings : ICloneable
 
         Gdi32.DEVMODE mode = Marshal.PtrToStructure<Gdi32.DEVMODE>(pointer)!;
 
-        if (_extrainfo != null)
+        if (_extrainfo is not null)
         {
             // guard against buffer overrun attacks (since design allows client to set a new printer name without updating the devmode)
             // by checking for a large enough buffer size before copying the extrainfo buffer
@@ -855,6 +864,7 @@ public class PrinterSettings : ICloneable
                 Marshal.Copy(_extrainfo, 0, pointeroffset, _extrabytes);
             }
         }
+
         if ((mode.dmFields & SafeNativeMethods.DM_COPIES) == SafeNativeMethods.DM_COPIES)
         {
             if (_copies != -1)
@@ -1007,6 +1017,7 @@ public class PrinterSettings : ICloneable
                     result = defaultValue;
                     break;
             }
+
             Kernel32.GlobalUnlock(new HandleRef(this, modeHandle));
         }
         finally
@@ -1016,6 +1027,7 @@ public class PrinterSettings : ICloneable
                 Kernel32.GlobalFree(new HandleRef(this, modeHandle));
             }
         }
+
         return result;
     }
 
@@ -1052,6 +1064,7 @@ public class PrinterSettings : ICloneable
             {
                 name = name.Substring(0, index);
             }
+
             short kind = pKindsBuffer[i];
             int width = pDimensionsBuffer[i * 2];
             int height = pDimensionsBuffer[i * 2 + 1];
