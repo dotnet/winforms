@@ -18,12 +18,13 @@ internal partial class StyleCollectionEditor
         private readonly StyleCollectionEditor _editor;
         private bool _isRowCollection;
         private readonly TableLayoutPanel _tableLayoutPanel;
-        private readonly TableLayoutPanelDesigner _tlpDesigner;
+        private readonly TableLayoutPanelDesigner _tableLayoutPanelDesigner;
         private readonly IComponentChangeService _componentChangeService;
         private readonly ArrayList _deleteList;
 
         private bool _isDialogDirty;
         private bool _haveInvoked;
+        private bool _performEnsure;
 
         //listView subitem indices
         private const int s_memberIndex = 0;
@@ -84,7 +85,7 @@ internal partial class StyleCollectionEditor
 
         internal StyleEditorForm(CollectionEditor editor, bool isRowCollection) : base(editor)
         {
-            editor = (StyleCollectionEditor)editor;
+            _editor = (StyleCollectionEditor)editor;
             _isRowCollection = isRowCollection;
             InitializeComponent();
             HookEvents();
@@ -96,49 +97,51 @@ internal partial class StyleCollectionEditor
             _tableLayoutPanel = Context.Instance as TableLayoutPanel;
             _tableLayoutPanel.SuspendLayout();
 
-            _deleteList = new ArrayList();
+            _deleteList = [];
 
             // Get the designer associated with the TLP
             IDesignerHost host = _tableLayoutPanel.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
             if (host is not null)
             {
-                _tlpDesigner = host.GetDesigner(_tableLayoutPanel) as TableLayoutPanelDesigner;
+                _tableLayoutPanelDesigner = host.GetDesigner(_tableLayoutPanel) as TableLayoutPanelDesigner;
                 _componentChangeService = host.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
             }
 
             _rowStyleProp = TypeDescriptor.GetProperties(_tableLayoutPanel)["RowStyles"];
             _colStyleProp = TypeDescriptor.GetProperties(_tableLayoutPanel)["ColumnStyles"];
 
-            _tlpDesigner.SuspendEnsureAvailableStyles();
+            _tableLayoutPanelDesigner.SuspendEnsureAvailableStyles();
         }
 
         private void HookEvents()
         {
-            HelpButtonClicked += new CancelEventHandler(OnHelpButtonClicked);
+            HelpButtonClicked += OnHelpButtonClicked;
 
-            _columnsAndRowsListView.SelectedIndexChanged += new EventHandler(OnListViewSelectedIndexChanged);
-            _columnsOrRowsComboBox.SelectionChangeCommitted += new EventHandler(OnComboBoxSelectionChangeCommitted);
+            _columnsAndRowsListView.SelectedIndexChanged += OnListViewSelectedIndexChanged;
+            _columnsOrRowsComboBox.SelectionChangeCommitted += OnComboBoxSelectionChangeCommitted;
 
-            _okButton.Click += new EventHandler(OnOkButtonClick);
-            _cancelButton.Click += new EventHandler(OnCancelButtonClick);
+            _okButton.Click += OnOkButtonClick;
+            _cancelButton.Click += OnCancelButtonClick;
 
-            _addButton.Click += new EventHandler(OnAddButtonClick);
-            _removeButton.Click += new EventHandler(OnRemoveButtonClick);
-            _insertButton.Click += new EventHandler(OnInsertButtonClick);
+            _addButton.Click += OnAddButtonClick;
+            _removeButton.Click += OnRemoveButtonClick;
+            _insertButton.Click += OnInsertButtonClick;
 
-            _absoluteRadioButton.Enter += new EventHandler(OnAbsoluteEnter);
-            _absoluteNumericUpDown.ValueChanged += new EventHandler(OnValueChanged);
+            _absoluteRadioButton.Enter += OnAbsoluteEnter;
+            _absoluteNumericUpDown.ValueChanged += OnValueChanged;
 
-            _percentRadioButton.Enter += new EventHandler(OnPercentEnter);
-            _percentNumericUpDown.ValueChanged += new EventHandler(OnValueChanged);
+            _percentRadioButton.Enter += OnPercentEnter;
+            _percentNumericUpDown.ValueChanged += OnValueChanged;
 
-            _autoSizedRadioButton.Enter += new EventHandler(OnAutoSizeEnter);
+            _autoSizedRadioButton.Enter += OnAutoSizeEnter;
 
-            Shown += new EventHandler(OnShown);
+            _helperLinkLabel1.LinkClicked += OnLink1Click;
+            _helperLinkLabel2.LinkClicked += OnLink2Click;
 
-            _helperLinkLabel1.LinkClicked += new LinkLabelLinkClickedEventHandler(OnLink1Click);
-            _helperLinkLabel2.LinkClicked += new LinkLabelLinkClickedEventHandler(OnLink2Click);
+            FormClosed += StyleEditorClosed;
         }
+
+        private void _closeButton_Click(object sender, EventArgs e) => throw new NotImplementedException();
 
         #region Windows Form Designer generated code
 
@@ -148,7 +151,7 @@ internal partial class StyleCollectionEditor
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StyleCollectionEditor));
+            ComponentResourceManager resources = new ComponentResourceManager(typeof(StyleCollectionEditor));
             _addRemoveInsertTableLayoutPanel = new TableLayoutPanel();
             _addButton = new Button();
             _removeButton = new Button();
@@ -190,6 +193,7 @@ internal partial class StyleCollectionEditor
             ((ISupportInitialize)_absoluteNumericUpDown).BeginInit();
             ((ISupportInitialize)_percentNumericUpDown).BeginInit();
             SuspendLayout();
+
             // addRemoveInsertTableLayoutPanel
             resources.ApplyResources(_addRemoveInsertTableLayoutPanel, "addRemoveInsertTableLayoutPanel");
             _addRemoveInsertTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33F));
@@ -201,6 +205,7 @@ internal partial class StyleCollectionEditor
             _addRemoveInsertTableLayoutPanel.Margin = new Padding(0, 3, 3, 3);
             _addRemoveInsertTableLayoutPanel.Name = "addRemoveInsertTableLayoutPanel";
             _addRemoveInsertTableLayoutPanel.RowStyles.Add(new RowStyle());
+
             // addButton
             resources.ApplyResources(_addButton, "addButton");
             _addButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
@@ -208,6 +213,7 @@ internal partial class StyleCollectionEditor
             _addButton.MinimumSize = new Size(75, 23);
             _addButton.Name = "addButton";
             _addButton.Padding = new Padding(10, 0, 10, 0);
+
             // removeButton
             resources.ApplyResources(_removeButton, "removeButton");
             _removeButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
@@ -215,6 +221,7 @@ internal partial class StyleCollectionEditor
             _removeButton.MinimumSize = new Size(75, 23);
             _removeButton.Name = "removeButton";
             _removeButton.Padding = new Padding(10, 0, 10, 0);
+
             // insertButton
             resources.ApplyResources(_insertButton, "insertButton");
             _insertButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
@@ -222,6 +229,7 @@ internal partial class StyleCollectionEditor
             _insertButton.MinimumSize = new Size(75, 23);
             _insertButton.Name = "insertButton";
             _insertButton.Padding = new Padding(10, 0, 10, 0);
+
             // okCancelTableLayoutPanel
             resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
             _overarchingTableLayoutPanel.SetColumnSpan(_okCancelTableLayoutPanel, 2);
@@ -232,6 +240,7 @@ internal partial class StyleCollectionEditor
             _okCancelTableLayoutPanel.Margin = new Padding(0, 6, 0, 0);
             _okCancelTableLayoutPanel.Name = "okCancelTableLayoutPanel";
             _okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
+
             // okButton
             resources.ApplyResources(_okButton, "okButton");
             _okButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
@@ -239,6 +248,7 @@ internal partial class StyleCollectionEditor
             _okButton.MinimumSize = new Size(75, 23);
             _okButton.Name = "okButton";
             _okButton.Padding = new Padding(10, 0, 10, 0);
+
             // cancelButton
             resources.ApplyResources(_cancelButton, "cancelButton");
             _cancelButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
@@ -247,6 +257,7 @@ internal partial class StyleCollectionEditor
             _cancelButton.MinimumSize = new Size(75, 23);
             _cancelButton.Name = "cancelButton";
             _cancelButton.Padding = new Padding(10, 0, 10, 0);
+
             // overarchingTableLayoutPanel
             resources.ApplyResources(_overarchingTableLayoutPanel, "overarchingTableLayoutPanel");
             _overarchingTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
@@ -263,6 +274,7 @@ internal partial class StyleCollectionEditor
             _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
             _overarchingTableLayoutPanel.RowStyles.Add(new RowStyle());
+
             // showTableLayoutPanel
             resources.ApplyResources(_showTableLayoutPanel, "showTableLayoutPanel");
             _showTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
@@ -272,10 +284,12 @@ internal partial class StyleCollectionEditor
             _showTableLayoutPanel.Margin = new Padding(0, 0, 3, 3);
             _showTableLayoutPanel.Name = "showTableLayoutPanel";
             _showTableLayoutPanel.RowStyles.Add(new RowStyle());
+
             // memberTypeLabel
             resources.ApplyResources(_memberTypeLabel, "memberTypeLabel");
             _memberTypeLabel.Margin = new Padding(0, 0, 3, 0);
             _memberTypeLabel.Name = "memberTypeLabel";
+
             // columnsOrRowsComboBox
             resources.ApplyResources(_columnsOrRowsComboBox, "columnsOrRowsComboBox");
             _columnsOrRowsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -287,6 +301,7 @@ internal partial class StyleCollectionEditor
             ]);
             _columnsOrRowsComboBox.Margin = new Padding(3, 0, 0, 0);
             _columnsOrRowsComboBox.Name = "columnsOrRowsComboBox";
+
             // columnsAndRowsListView
             resources.ApplyResources(_columnsAndRowsListView, "columnsAndRowsListView");
             _columnsAndRowsListView.Columns.AddRange(new ColumnHeader[]
@@ -302,12 +317,16 @@ internal partial class StyleCollectionEditor
             _columnsAndRowsListView.Name = "columnsAndRowsListView";
             _overarchingTableLayoutPanel.SetRowSpan(_columnsAndRowsListView, 2);
             _columnsAndRowsListView.View = View.Details;
+
             // membersColumnHeader
             resources.ApplyResources(_membersColumnHeader, "membersColumnHeader");
+
             // sizeTypeColumnHeader
             resources.ApplyResources(_sizeTypeColumnHeader, "sizeTypeColumnHeader");
+
             // valueColumnHeader
             resources.ApplyResources(_valueColumnHeader, "valueColumnHeader");
+
             // helperTextTableLayoutPanel
             resources.ApplyResources(_helperTextTableLayoutPanel, "helperTextTableLayoutPanel");
             _helperTextTableLayoutPanel.ColumnStyles.Add(new ColumnStyle());
@@ -320,10 +339,12 @@ internal partial class StyleCollectionEditor
             _helperTextTableLayoutPanel.Name = "helperTextTableLayoutPanel";
             _helperTextTableLayoutPanel.RowStyles.Add(new RowStyle());
             _helperTextTableLayoutPanel.RowStyles.Add(new RowStyle());
+
             // infoPictureBox2
             resources.ApplyResources(_infoPictureBox2, "infoPictureBox2");
             _infoPictureBox2.Name = "infoPictureBox2";
             _infoPictureBox2.TabStop = false;
+
             // infoPictureBox1
             resources.ApplyResources(_infoPictureBox1, "infoPictureBox1");
             _infoPictureBox1.Name = "infoPictureBox1";
@@ -348,12 +369,14 @@ internal partial class StyleCollectionEditor
             _helperLinkLabel1.Name = "helperLinkLabel1";
             _helperLinkLabel1.TabStop = true;
             _helperLinkLabel1.UseCompatibleTextRendering = true;
+
             // helperLinkLabel2
             resources.ApplyResources(_helperLinkLabel2, "helperLinkLabel2");
             _helperLinkLabel2.Margin = new Padding(3, 3, 0, 0);
             _helperLinkLabel2.Name = "helperLinkLabel2";
             _helperLinkLabel2.TabStop = true;
             _helperLinkLabel2.UseCompatibleTextRendering = true;
+
             // sizeTypeGroupBox
             resources.ApplyResources(_sizeTypeGroupBox, "sizeTypeGroupBox");
             _sizeTypeGroupBox.Controls.Add(_sizeTypeTableLayoutPanel);
@@ -362,6 +385,7 @@ internal partial class StyleCollectionEditor
             _sizeTypeGroupBox.Padding = new Padding(0);
             _overarchingTableLayoutPanel.SetRowSpan(_sizeTypeGroupBox, 2);
             _sizeTypeGroupBox.TabStop = false;
+
             // sizeTypeTableLayoutPanel
             resources.ApplyResources(_sizeTypeTableLayoutPanel, "sizeTypeTableLayoutPanel");
             _sizeTypeTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 33.3F));
@@ -378,6 +402,7 @@ internal partial class StyleCollectionEditor
             _sizeTypeTableLayoutPanel.Name = "sizeTypeTableLayoutPanel";
             _sizeTypeTableLayoutPanel.AutoSize = true;
             _sizeTypeTableLayoutPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+
             // absoluteNumericUpDown
             resources.ApplyResources(_absoluteNumericUpDown, "absoluteNumericUpDown");
             _absoluteNumericUpDown.Maximum = new decimal(new int[]
@@ -389,27 +414,33 @@ internal partial class StyleCollectionEditor
             });
             _absoluteNumericUpDown.Name = "absoluteNumericUpDown";
             _absoluteNumericUpDown.Margin = new Padding(_scaledUpDownLeftMargin, _scaledUpDownTopMargin, 0, 0);
-            _absoluteNumericUpDown.AutoScaleMode = Forms.AutoScaleMode.Font;
+            _absoluteNumericUpDown.AutoScaleMode = AutoScaleMode.Font;
+
             // absoluteRadioButton
             resources.ApplyResources(_absoluteRadioButton, "absoluteRadioButton");
             _absoluteRadioButton.Margin = new Padding(0, 3, 3, 0);
             _absoluteRadioButton.Name = "absoluteRadioButton";
+
             // pixelsLabel
             resources.ApplyResources(_pixelsLabel, "pixelsLabel");
             _pixelsLabel.Name = "pixelsLabel";
             _pixelsLabel.Margin = new Padding(0, 0, _scaledLabelRightMargin, 0);
+
             // percentLabel
             resources.ApplyResources(_percentLabel, "percentLabel");
             _percentLabel.Name = "percentLabel";
             _percentLabel.Margin = new Padding(0, 0, _scaledLabelRightMargin, 0);
+
             // percentRadioButton
             resources.ApplyResources(_percentRadioButton, "percentRadioButton");
             _percentRadioButton.Margin = new Padding(0, 3, 3, 0);
             _percentRadioButton.Name = "percentRadioButton";
+
             // autoSizedRadioButton
             resources.ApplyResources(_autoSizedRadioButton, "autoSizedRadioButton");
             _autoSizedRadioButton.Margin = new Padding(0, 3, 3, 0);
             _autoSizedRadioButton.Name = "autoSizedRadioButton";
+
             // percentNumericUpDown
             resources.ApplyResources(_percentNumericUpDown, "percentNumericUpDown");
             _percentNumericUpDown.DecimalPlaces = 2;
@@ -422,11 +453,11 @@ internal partial class StyleCollectionEditor
             });
             _percentNumericUpDown.Name = "percentNumericUpDown";
             _percentNumericUpDown.Margin = new Padding(_scaledUpDownLeftMargin, _scaledUpDownTopMargin, 0, 0);
-            _percentNumericUpDown.AutoScaleMode = Forms.AutoScaleMode.Font;
+            _percentNumericUpDown.AutoScaleMode = AutoScaleMode.Font;
+
             // StyleCollectionEditor
             AcceptButton = _okButton;
             resources.ApplyResources(this, "$this");
-            AutoScaleMode = AutoScaleMode.Font;
             CancelButton = _cancelButton;
             Controls.Add(_overarchingTableLayoutPanel);
             HelpButton = true;
@@ -447,36 +478,40 @@ internal partial class StyleCollectionEditor
             _helperTextTableLayoutPanel.PerformLayout();
             ((ISupportInitialize)_infoPictureBox2).EndInit();
             ((ISupportInitialize)_infoPictureBox1).EndInit();
-            _sizeTypeGroupBox.ResumeLayout(false);
+            _sizeTypeGroupBox.ResumeLayout();
             _sizeTypeTableLayoutPanel.ResumeLayout(false);
             _sizeTypeTableLayoutPanel.PerformLayout();
             ((ISupportInitialize)_absoluteNumericUpDown).EndInit();
             ((ISupportInitialize)_percentNumericUpDown).EndInit();
             ResumeLayout(false);
+
+            AutoScaleMode = AutoScaleMode.Font;
         }
 
         #endregion
 
-        private void OnShown(object sender, EventArgs e)
+        protected override void OnShown(EventArgs e)
         {
-            //We need to set the dirty flag here, since the initialization down above, might
-            //cause it to get set in one of the methods below.
+            base.OnShown(e);
+
+            // We need to set the dirty flag here, since the initialization down above, might
+            // cause it to get set in one of the methods below.
             _isDialogDirty = false;
             _columnsAndRowsListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
 
         private void OnLink1Click(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            CancelEventArgs c = new CancelEventArgs();
+            CancelEventArgs cancelEvent = new CancelEventArgs();
             _editor._helpTopic = "net.ComponentModel.StyleCollectionEditor.TLP.SpanRowsColumns";
-            OnHelpButtonClicked(sender, c);
+            OnHelpButtonClicked(sender, cancelEvent);
         }
 
         private void OnLink2Click(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            CancelEventArgs c = new CancelEventArgs();
+            CancelEventArgs cancelEvent = new CancelEventArgs();
             _editor._helpTopic = "net.ComponentModel.StyleCollectionEditor.TLP.AnchorDock";
-            OnHelpButtonClicked(sender, c);
+            OnHelpButtonClicked(sender, cancelEvent);
         }
 
         private void OnHelpButtonClicked(object sender, CancelEventArgs e)
@@ -507,34 +542,30 @@ internal partial class StyleCollectionEditor
 
             // We can't use ColumnCount/RowCount, since they are only guaranteed to reflect the true count
             // when GrowMode == Fixed
-            int[] cw = _tableLayoutPanel.GetColumnWidths();
-            int[] rh = _tableLayoutPanel.GetRowHeights();
-
-            // We should have at least as many <Col|Row>Styles as <Cols|Rows> -- the designer guarantees that
-            Debug.Assert(_tableLayoutPanel.ColumnStyles.Count >= cw.Length, "Why is ColumnStyle.Count not the same as ColumnCount?");
-            Debug.Assert(_tableLayoutPanel.RowStyles.Count >= rh.Length, "Why is RowStyle.Count not the same as RowCount?");
+            int[] columnWidths = _tableLayoutPanel.GetColumnWidths();
+            int[] rowHeights = _tableLayoutPanel.GetRowHeights();
 
             // If we have more, then let's remove the extra ones. This is because we don't want any new row/col that we might add
             // to inherit leftover styles. We want to make sure than any new rol/col is of type Absolute and of size 20.
-            if (_tableLayoutPanel.ColumnStyles.Count > cw.Length)
+            if (_tableLayoutPanel.ColumnStyles.Count > columnWidths.Length)
             {
-                int diff = _tableLayoutPanel.ColumnStyles.Count - cw.Length;
+                int diff = _tableLayoutPanel.ColumnStyles.Count - columnWidths.Length;
                 for (int i = 0; i < diff; ++i)
                 {
                     _tableLayoutPanel.ColumnStyles.RemoveAt(_tableLayoutPanel.ColumnStyles.Count - 1);
                 }
             }
 
-            if (_tableLayoutPanel.RowStyles.Count > rh.Length)
+            if (_tableLayoutPanel.RowStyles.Count > rowHeights.Length)
             {
-                int diff = _tableLayoutPanel.RowStyles.Count - rh.Length;
+                int diff = _tableLayoutPanel.RowStyles.Count - rowHeights.Length;
                 for (int i = 0; i < diff; ++i)
                 {
                     _tableLayoutPanel.RowStyles.RemoveAt(_tableLayoutPanel.RowStyles.Count - 1);
                 }
             }
 
-            //this will cause the listView to be initialized
+            // This will cause the listView to be initialized
             _columnsOrRowsComboBox.SelectedIndex = _isRowCollection ? 1 : 0;
             InitListView();
             return base.ShowEditorDialog(edSvc);
@@ -585,7 +616,7 @@ internal partial class StyleCollectionEditor
                     sizeValue = FormatValueString(colStyle.SizeType, colStyle.Width);
                 }
 
-                //We add 1, since we want the Member to read <Column|Row>1,2,3...
+                // We add 1, since we want the Member to read <Column|Row>1,2,3...
                 _columnsAndRowsListView.Items.Add(new ListViewItem(new string[] { baseName + (i + 1).ToString(CultureInfo.InvariantCulture), sizeType, sizeValue }));
             }
 
@@ -626,10 +657,10 @@ internal partial class StyleCollectionEditor
 
             if (coll.Count == 0)
             {
-                //When the selection changes from one item to another, we will get a temporary state
-                //where the selection collection is empty. We don't want to disable buttons in this case
-                //since that will cause flashing, so let's do a begininvoke here. In the delegate we check
-                //if the collection really is empty and then disable buttons and whatever else we have to do.
+                // When the selection changes from one item to another, we will get a temporary state
+                // where the selection collection is empty. We don't want to disable buttons in this case
+                // since that will cause flashing, so let's do a beginInvoke here. In the delegate we check
+                // if the collection really is empty and then disable buttons and whatever else we have to do.
                 if (!_haveInvoked)
                 {
                     BeginInvoke(new EventHandler(OnListSelectionComplete));
@@ -658,8 +689,8 @@ internal partial class StyleCollectionEditor
             }
             else
             {
-                //multi-selection
-                //Check if all the items in the selection are of the same type and value
+                // Multi-selection
+                // Check if all the items in the selection are of the same type and value
                 SizeType type;
                 float value = 0;
                 bool sameValues = true;
@@ -697,6 +728,7 @@ internal partial class StyleCollectionEditor
         private void OnListSelectionComplete(object sender, EventArgs e)
         {
             _haveInvoked = false;
+
             // Nothing is truly selected in the listView
             if (_columnsAndRowsListView.SelectedItems.Count == 0)
             {
@@ -720,10 +752,9 @@ internal partial class StyleCollectionEditor
 
         private void ResetAbsolute()
         {
-            //Unhook the event while we reset.
-            //If we didn't the setting the value would cause OnValueChanged below to get called.
-            //If we then go ahead and update the listView, which we don't want in the reset case.
-            //VSWhidbey # 384035.
+            // Unhook the event while we reset.
+            // If we didn't the setting the value would cause OnValueChanged below to get called.
+            // If we then go ahead and update the listView, which we don't want in the reset case.
             _absoluteNumericUpDown.ValueChanged -= new EventHandler(OnValueChanged);
             _absoluteNumericUpDown.Enabled = false;
             _absoluteNumericUpDown.Value = DesignerUtils.MINIMUMSTYLESIZE;
@@ -732,9 +763,9 @@ internal partial class StyleCollectionEditor
 
         private void ResetPercent()
         {
-            //Unhook the event while we reset.
-            //If we didn't the setting the value would cause OnValueChanged below to get called.
-            //If we then go ahead and update the listView, which we don't want in the reset case.
+            // Unhook the event while we reset.
+            // If we didn't the setting the value would cause OnValueChanged below to get called.
+            // If we then go ahead and update the listView, which we don't want in the reset case.
             _percentNumericUpDown.ValueChanged -= new EventHandler(OnValueChanged);
             _percentNumericUpDown.Enabled = false;
             _percentNumericUpDown.Value = DesignerUtils.MINIMUMSTYLEPERCENT;
@@ -803,12 +834,12 @@ internal partial class StyleCollectionEditor
         }
 
         /// <summary>
-        ///     Adds an item to the listView at the specified index
+        ///  Adds an item to the listView at the specified index
         /// </summary>
         private void AddItem(int index)
         {
             string member = null;
-            _tlpDesigner.InsertRowCol(_isRowCollection, index);
+            _tableLayoutPanelDesigner.InsertRowCol(_isRowCollection, index);
 
             member = _isRowCollection
                 ? "Row" + _tableLayoutPanel.RowStyles.Count.ToString(CultureInfo.InvariantCulture)
@@ -836,22 +867,23 @@ internal partial class StyleCollectionEditor
         private void OnInsertButtonClick(object sender, EventArgs e)
         {
             _isDialogDirty = true;
+
             // Insert an item before the 1st selected item
             AddItem(_columnsAndRowsListView.SelectedIndices[0]);
-            _tlpDesigner.FixUpControlsOnInsert(_isRowCollection, _columnsAndRowsListView.SelectedIndices[0]);
+            _tableLayoutPanelDesigner.FixUpControlsOnInsert(_isRowCollection, _columnsAndRowsListView.SelectedIndices[0]);
         }
 
         private void OnRemoveButtonClick(object sender, EventArgs e)
         {
             if ((_columnsAndRowsListView.Items.Count == 1) || (_columnsAndRowsListView.Items.Count == _columnsAndRowsListView.SelectedIndices.Count))
             {
-                Debug.Fail("We should never get here!");
-                return; // we can't remove anything when we have just 1 row/col or if all rows/cols are selected
+                // We can't remove anything when we have just 1 row/col or if all rows/cols are selected
+                return;
             }
 
             _isDialogDirty = true;
 
-            // store the new index
+            // Store the new index
             int newIndex = _columnsAndRowsListView.SelectedIndices[0];
 
             // Remove from the end of the selection -- that way we have less things to adjust
@@ -860,9 +892,10 @@ internal partial class StyleCollectionEditor
                 int index = _columnsAndRowsListView.SelectedIndices[i];
 
                 // First update any controls in any row/col that's AFTER the row/col we are deleting
-                _tlpDesigner.FixUpControlsOnDelete(_isRowCollection, index, _deleteList);
+                _tableLayoutPanelDesigner.FixUpControlsOnDelete(_isRowCollection, index, _deleteList);
+
                 // Then remove the row/col
-                _tlpDesigner.DeleteRowCol(_isRowCollection, index);
+                _tableLayoutPanelDesigner.DeleteRowCol(_isRowCollection, index);
 
                 // Then remove the listView item
                 if (_isRowCollection)
@@ -978,7 +1011,7 @@ internal partial class StyleCollectionEditor
                 return;
             }
 
-            // now loop through and set the normalized value
+            // Now loop through and set the normalized value
             for (int i = 0; i < count; i++)
             {
                 if (normalizeRow)
@@ -1003,7 +1036,7 @@ internal partial class StyleCollectionEditor
         }
 
         /// <summary>
-        /// Take all the styles of SizeType.Percent and normalize them to 100%
+        ///  Take all the styles of SizeType.Percent and normalize them to 100%
         /// </summary>
         private void NormalizePercentStyles()
         {
@@ -1013,86 +1046,94 @@ internal partial class StyleCollectionEditor
 
         private void OnOkButtonClick(object sender, EventArgs e)
         {
-            if (_isDialogDirty)
+            try
             {
-                if (_absoluteRadioButton.Checked)
+                if (_isDialogDirty)
                 {
-                    UpdateTypeAndValue(SizeType.Absolute, (float)_absoluteNumericUpDown.Value);
-                }
-                else if (_percentRadioButton.Checked)
-                {
-                    UpdateTypeAndValue(SizeType.Percent, (float)_percentNumericUpDown.Value);
-                }
-                else if (_autoSizedRadioButton.Checked)
-                {
-                    UpdateTypeAndValue(SizeType.AutoSize, 0);
-                }
-
-                // Now normalize all percentages.
-                NormalizePercentStyles();
-
-                // IF YOU CHANGE THIS, YOU SHOULD ALSO CHANGE THE CODE IN TableLayoutPanelDesigner.OnRemoveInternal
-                if (_deleteList.Count > 0)
-                {
-                    PropertyDescriptor childProp = TypeDescriptor.GetProperties(_tableLayoutPanel)["Controls"];
-                    if (_componentChangeService is not null && childProp is not null)
+                    if (_absoluteRadioButton.Checked)
                     {
-                        _componentChangeService.OnComponentChanging(_tableLayoutPanel, childProp);
+                        UpdateTypeAndValue(SizeType.Absolute, (float)_absoluteNumericUpDown.Value);
+                    }
+                    else if (_percentRadioButton.Checked)
+                    {
+                        UpdateTypeAndValue(SizeType.Percent, (float)_percentNumericUpDown.Value);
+                    }
+                    else if (_autoSizedRadioButton.Checked)
+                    {
+                        UpdateTypeAndValue(SizeType.AutoSize, 0);
                     }
 
-                    IDesignerHost host = _tableLayoutPanel.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                    // Now normalize all percentages.
+                    NormalizePercentStyles();
 
-                    if (host is not null)
+                    // If you change this,you should also change the code in TableLayoutPanelDesigner.OnRemoveInternal
+                    if (_deleteList.Count > 0)
                     {
-                        foreach (object o in _deleteList)
+                        PropertyDescriptor childProp = TypeDescriptor.GetProperties(_tableLayoutPanel)["Controls"];
+                        if (_componentChangeService is not null && childProp is not null)
                         {
-                            List<IComponent> al = new();
-                            //ArrayList al = new ArrayList();
-                            DesignerUtils.GetAssociatedComponents((IComponent)o, host, al);
-                            foreach (IComponent comp in al)
-                            {
-                                _componentChangeService.OnComponentChanging(comp, null);
-                            }
+                            _componentChangeService.OnComponentChanging(_tableLayoutPanel, childProp);
+                        }
 
-                            host.DestroyComponent(o as Component);
+                        IDesignerHost host = _tableLayoutPanel.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
+
+                        if (host is not null)
+                        {
+                            foreach (object o in _deleteList)
+                            {
+                                List<IComponent> al = new();
+                                DesignerUtils.GetAssociatedComponents((IComponent)o, host, al);
+                                foreach (IComponent comp in al)
+                                {
+                                    _componentChangeService.OnComponentChanging(comp, null);
+                                }
+
+                                host.DestroyComponent(o as Component);
+                            }
+                        }
+
+                        if (_componentChangeService is not null && childProp is not null)
+                        {
+                            _componentChangeService.OnComponentChanged(_tableLayoutPanel, childProp, null, null);
                         }
                     }
 
-                    if (_componentChangeService is not null && childProp is not null)
+                    if (_componentChangeService is not null)
                     {
-                        _componentChangeService.OnComponentChanged(_tableLayoutPanel, childProp, null, null);
-                    }
-                }
+                        if (_rowStyleProp is not null)
+                        {
+                            _componentChangeService.OnComponentChanged(_tableLayoutPanel, _rowStyleProp, null, null);
+                        }
 
-                if (_componentChangeService is not null)
+                        if (_colStyleProp is not null)
+                        {
+                            _componentChangeService.OnComponentChanged(_tableLayoutPanel, _colStyleProp, null, null);
+                        }
+                    }
+
+                    DialogResult = DialogResult.OK;
+                }
+                else
                 {
-                    if (_rowStyleProp is not null)
-                    {
-                        _componentChangeService.OnComponentChanged(_tableLayoutPanel, _rowStyleProp, null, null);
-                    }
-
-                    if (_colStyleProp is not null)
-                    {
-                        _componentChangeService.OnComponentChanged(_tableLayoutPanel, _colStyleProp, null, null);
-                    }
+                    DialogResult = DialogResult.Cancel;
                 }
-
-                DialogResult = DialogResult.OK;
             }
-            else
+            finally
             {
-                DialogResult = DialogResult.Cancel;
+                _performEnsure = true;
             }
-
-            _tlpDesigner.ResumeEnsureAvailableStyles(true);
-            _tableLayoutPanel.ResumeLayout();
         }
 
         private void OnCancelButtonClick(object sender, EventArgs e)
         {
-            _tlpDesigner.ResumeEnsureAvailableStyles(false);
-            _tableLayoutPanel.ResumeLayout();
+            _performEnsure = false;
             DialogResult = DialogResult.Cancel;
+        }
+
+        private void StyleEditorClosed(object sender, FormClosedEventArgs e)
+        {
+            _tableLayoutPanelDesigner.ResumeEnsureAvailableStyles(_performEnsure);
+            _tableLayoutPanel.ResumeLayout();
         }
     }
 }

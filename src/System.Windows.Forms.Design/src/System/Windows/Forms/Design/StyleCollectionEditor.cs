@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal partial class StyleCollectionEditor(Type type) : CollectionEditor(type)
     {
-        private bool isRowCollection = type.IsAssignableFrom(typeof(TableLayoutRowStyleCollection));
+        private readonly bool isRowCollection = type.IsAssignableFrom(typeof(TableLayoutRowStyleCollection));
         protected string? _helpTopic;
 
         /// <summary>
