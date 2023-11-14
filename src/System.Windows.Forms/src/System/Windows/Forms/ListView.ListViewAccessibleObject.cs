@@ -32,7 +32,8 @@ public partial class ListView
             }
         }
 
-        internal override bool CanSelectMultiple => this.IsOwnerHandleCreated(out ListView? _);
+        internal override bool CanSelectMultiple
+            => this.IsOwnerHandleCreated(out ListView? listView) && listView.MultiSelect;
 
         internal override int ColumnCount
             => this.TryGetOwnerAs(out ListView? owningListView) ? owningListView.Columns.Count : base.ColumnCount;
