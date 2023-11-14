@@ -112,13 +112,7 @@ public abstract partial class UpDownBase
 
             public override AccessibleRole Role => this.GetOwnerAccessibleRole(AccessibleRole.SpinButton);
 
-            internal override int[] RuntimeId
-                => _runtimeId ??= !this.TryGetOwnerAs(out UpDownButtons? owner) ? base.RuntimeId : new int[]
-                {
-                    RuntimeIDFirstItem,
-                    PARAM.ToInt(owner.InternalHandle),
-                    owner.GetHashCode()
-                };
+            internal override int[] RuntimeId => _runtimeId ??= base.RuntimeId;
         }
     }
 }

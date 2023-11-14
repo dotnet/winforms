@@ -69,23 +69,7 @@ public partial class TreeView
             return Bounds.Contains(x, y) ? this : null;
         }
 
-        internal override int[] RuntimeId
-        {
-            get
-            {
-                if (this.TryGetOwnerAs(out TreeView? owningTreeView))
-                {
-                    return new int[]
-                    {
-                        RuntimeIDFirstItem,
-                        PARAM.ToInt(owningTreeView.InternalHandle),
-                        owningTreeView.GetHashCode()
-                    };
-                }
-
-                return base.RuntimeId;
-            }
-        }
+        internal override int[] RuntimeId => base.RuntimeId;
 
         public override AccessibleStates State
         {
