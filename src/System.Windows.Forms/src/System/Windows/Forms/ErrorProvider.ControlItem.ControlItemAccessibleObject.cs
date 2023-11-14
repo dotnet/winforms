@@ -96,10 +96,10 @@ public partial class ErrorProvider
             internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
                 propertyID switch
                 {
-                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId,
-                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _window?.Handle is { } handle
-                        ? UIAHelper.WindowHandleToVariant(handle)
-                        : VARIANT.Empty,
+                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId
+                        => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId,
+                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId
+                        => UIAHelper.WindowHandleToVariant(_window?.Handle ?? HWND.Null),
                     _ => base.GetPropertyValue(propertyID)
                 };
 

@@ -32,7 +32,13 @@ public partial class ListBox
 
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
-        internal override bool IsSelectionRequired => true;
+        internal override bool IsSelectionRequired
+            => this.IsOwnerHandleCreated(out ListBox? owner) && owner.SelectionMode != SelectionMode.None;
+
+        internal override bool CanSelectMultiple
+            => this.IsOwnerHandleCreated(out ListBox? owner)
+                && owner.SelectionMode != SelectionMode.One
+                && owner.SelectionMode != SelectionMode.None;
 
         // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a (RuntimeIDFirstItem).
         // Second item can be anything, but it's good to supply HWND.
