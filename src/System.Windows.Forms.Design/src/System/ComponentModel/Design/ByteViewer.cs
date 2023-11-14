@@ -427,7 +427,7 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     private void InitUnicode()
     {
-        _edit.Text = string.Create(_dataBuf.Length / 2 + 1, _dataBuf, static (text, dataBuf) =>
+        _edit.Text = string.Create(_dataBuf.Length / sizeof(char) + 1, _dataBuf, static (text, dataBuf) =>
         {
             Encoding.Unicode.GetChars(dataBuf.AsSpan(), text);
             text.Replace('\0', '\v');
