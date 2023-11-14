@@ -12,10 +12,10 @@ public static partial class ToolStripManager
     // WARNING: ThreadStatic initialization happens only on the first thread at class CTOR time.
     // use InitializeThread mechanism to initialize ThreadStatic members
     [ThreadStatic]
-    private static WeakRefCollection? t_toolStripWeakArrayList;
+    private static WeakRefCollection<ToolStrip>? t_toolStripWeakArrayList;
 
     [ThreadStatic]
-    private static WeakRefCollection? t_toolStripPanelWeakArrayList;
+    private static WeakRefCollection<ToolStripPanel>? t_toolStripPanelWeakArrayList;
 
     [ThreadStatic]
     private static bool t_initialized;
@@ -124,8 +124,8 @@ public static partial class ToolStripManager
 
     internal static int CurrentDpi { get; set; } = ScaleHelper.InitialSystemDpi;
 
-    internal static WeakRefCollection ToolStrips
-        => t_toolStripWeakArrayList ??= new WeakRefCollection();
+    internal static WeakRefCollection<ToolStrip> ToolStrips
+        => t_toolStripWeakArrayList ??= [];
 
     /// <summary>Static events only!!!</summary>
     private static void AddEventHandler(int key, Delegate? value)
@@ -615,8 +615,8 @@ public static partial class ToolStripManager
         }
     }
 
-    internal static WeakRefCollection ToolStripPanels
-        => t_toolStripPanelWeakArrayList ??= new WeakRefCollection();
+    internal static WeakRefCollection<ToolStripPanel> ToolStripPanels
+        => t_toolStripPanelWeakArrayList ??= [];
 
     internal static ToolStripPanel? ToolStripPanelFromPoint(Control draggedControl, Point screenLocation)
     {

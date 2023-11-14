@@ -54,4 +54,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\Common\src\WeakRefCollection.cs" Link="System\Collections\Generic\WeakRefCollection.cs" />
+  </ItemGroup>
+
 </Project>

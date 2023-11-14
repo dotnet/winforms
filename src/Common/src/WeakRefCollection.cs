@@ -1,9 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
-
-namespace System.Windows.Forms;
+namespace System.Collections.Generic;
 
 /// <summary>
 ///  A collection that holds onto weak references.
@@ -20,7 +18,7 @@ namespace System.Windows.Forms;
 ///  to make sure dead refs are removed.
 ///  -----------------------------------------------------------------
 /// </summary>
-internal class WeakRefCollection : IList
+internal sealed class WeakRefCollection<T> : IList<T?> where T : class
 {
     public WeakRefCollection() : this(4)
     {
@@ -41,16 +39,17 @@ internal class WeakRefCollection : IList
     /// </summary>
     public int RefCheckThreshold { get; set; } = int.MaxValue; // this means this is disabled by default.
 
-    public object? this[int index]
+    public T? this[int index]
     {
         get
         {
-            if ((InnerList[index] is WeakRefObject weakRef) && (weakRef.IsAlive))
+            if (InnerList[index] is not WeakRefObject weakRef)
             {
-                return weakRef.Target;
+                return null;
             }
 
-            return null;
+            weakRef.TryGetTarget(out T? target);
+            return target;
         }
         set => InnerList[index] = CreateWeakRefObject(value);
     }
@@ -77,7 +76,7 @@ internal class WeakRefCollection : IList
 
     public override bool Equals(object? obj)
     {
-        WeakRefCollection? other = obj as WeakRefCollection;
+        WeakRefCollection<T>? other = obj as WeakRefCollection<T>;
         if (other == this)
         {
             return true;
@@ -114,31 +113,47 @@ internal class WeakRefCollection : IList
         return hash.ToHashCode();
     }
 
-    private static WeakRefObject? CreateWeakRefObject(object? value)
+    /// <summary>
+    /// Removes the value using its hash code as its identity.
+    /// This is needed because the underlying item in the collection may have already been collected changing
+    /// the identity of the WeakRefObject making it impossible for the collection to identify it.
+    /// See <see cref="WeakRefObject"/> for more info.
+    /// </summary>
+    public void RemoveByHashCode(T? value)
     {
         if (value is null)
         {
-            return null;
+            return;
         }
 
-        return new WeakRefObject(value);
+        int hash = value.GetHashCode();
+
+        for (int idx = 0; idx < InnerList.Count; idx++)
+        {
+            if (InnerList[idx] is not null && InnerList[idx]!.GetHashCode() == hash)
+            {
+                RemoveAt(idx);
+                return;
+            }
+        }
     }
+
+    private static WeakRefObject? CreateWeakRefObject(T? value)
+        => value is null ? (WeakRefCollection<T>.WeakRefObject?)null : new WeakRefObject(value);
 
     public void Clear() => InnerList.Clear();
 
-    public bool IsFixedSize => false;
-
-    public bool Contains(object? value) => InnerList.Contains(CreateWeakRefObject(value));
+    public bool Contains(T? value) => InnerList.Contains(CreateWeakRefObject(value));
 
     public void RemoveAt(int index) => InnerList.RemoveAt(index);
 
-    public void Remove(object? value) => InnerList.Remove(CreateWeakRefObject(value));
+    public bool Remove(T? value) => InnerList.Remove(CreateWeakRefObject(value));
 
-    public int IndexOf(object? value) => InnerList.IndexOf(CreateWeakRefObject(value));
+    public int IndexOf(T? value) => InnerList.IndexOf(CreateWeakRefObject(value));
 
-    public void Insert(int index, object? value) => InnerList.Insert(index, CreateWeakRefObject(value));
+    public void Insert(int index, T? value) => InnerList.Insert(index, CreateWeakRefObject(value));
 
-    public int Add(object? value)
+    public void Add(T? value)
     {
         if (Count > RefCheckThreshold)
         {
@@ -147,22 +162,34 @@ internal class WeakRefCollection : IList
 
         var weakRefObject = CreateWeakRefObject(value);
         InnerList.Add(weakRefObject);
-
-        int index = InnerList.LastIndexOf(weakRefObject);
-        return index;
     }
 
     public int Count => InnerList.Count;
 
-    object ICollection.SyncRoot => ((ICollection)InnerList).SyncRoot;
-
     public bool IsReadOnly => false;
 
+    public void CopyTo(T?[] array, int index) => throw new NotImplementedException();
     public void CopyTo(Array array, int index) => InnerList.CopyTo((WeakRefObject?[])array, index);
 
-    bool ICollection.IsSynchronized => ((ICollection)InnerList).IsSynchronized;
+    public IEnumerator<T> GetEnumerator()
+    {
+        foreach (WeakRefObject? weakRef in InnerList)
+        {
+            if (weakRef is not null)
+            {
+                // Safely try to get the target. If it's still alive, yield return it.
+                if (weakRef.TryGetTarget(out T? target) && target is not null)
+                {
+                    yield return target;
+                }
+            }
+        }
+    }
 
-    public IEnumerator GetEnumerator() => InnerList.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
     /// <summary>
     ///  Wraps a weak ref object. WARNING: Use this class carefully!
@@ -170,29 +197,32 @@ internal class WeakRefCollection : IList
     ///  has been added to a collection since Contains(WeakRef(item)) and Remove(WeakRef(item)) would
     ///  not be able to identify the item.
     /// </summary>
-    internal class WeakRefObject
+    internal sealed class WeakRefObject
     {
         private readonly int _hash;
-        private readonly WeakReference weakHolder;
+        private readonly WeakReference<T> _weakHolder;
 
-        internal WeakRefObject(object obj)
+        internal WeakRefObject(T obj)
         {
             Debug.Assert(obj is not null, "Unexpected null object!");
-            weakHolder = new WeakReference(obj);
+            _weakHolder = new(obj);
             _hash = obj.GetHashCode();
         }
 
-        internal bool IsAlive => weakHolder.IsAlive;
-
-        internal object? Target => weakHolder.Target;
+        internal bool TryGetTarget(out T? target) => _weakHolder.TryGetTarget(out target);
 
         public override int GetHashCode() => _hash;
 
         public override bool Equals(object? obj)
         {
-            WeakRefObject? other = obj as WeakRefObject;
+            // Cast obj to WeakRefObject; if it fails, return false.
+            if (obj is not WeakRefObject other)
+            {
+                return false;
+            }
 
-            if (other == this)
+            // Check for reference equality.
+            if (ReferenceEquals(this, other))
             {
                 return true;
             }
@@ -202,15 +232,19 @@ internal class WeakRefCollection : IList
                 return false;
             }
 
-            if (other.Target != Target)
+            // Try to get the targets of both weak references.
+            bool thisAlive = _weakHolder.TryGetTarget(out T? thisTarget);
+            bool otherAlive = other._weakHolder.TryGetTarget(out T? otherTarget);
+
+            // If both are alive, compare the targets.
+            if (thisAlive && otherAlive)
             {
-                if (Target is null || !Target.Equals(other.Target))
-                {
-                    return false;
-                }
+                return Equals(thisTarget, otherTarget);
             }
 
-            return true;
+            // If both are not alive, they are considered equal.
+            // (Both refer to collected objects.)
+            return !thisAlive && !otherAlive;
         }
     }
 }
