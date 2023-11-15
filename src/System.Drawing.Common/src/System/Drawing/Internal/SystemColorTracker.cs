@@ -101,7 +101,7 @@ internal static class SystemColorTracker
         // after we partitioned it.
         //
         // for (int i = 0; i < count; i++) {
-        //     Debug.Assert(list[i].Target != null, "Null found on the left side of the list");
+        //     Debug.Assert(list[i].Target is not null, "Null found on the left side of the list");
         // }
 
         for (int i = count; i < s_list.Length; i++)
