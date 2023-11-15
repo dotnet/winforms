@@ -4,7 +4,6 @@
 #nullable disable
 
 using System.ComponentModel;
-using System.Collections;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Globalization;
@@ -20,7 +19,7 @@ internal partial class StyleCollectionEditor
         private readonly TableLayoutPanel _tableLayoutPanel;
         private readonly TableLayoutPanelDesigner _tableLayoutPanelDesigner;
         private readonly IComponentChangeService _componentChangeService;
-        private readonly ArrayList _deleteList;
+        private readonly List<Control> _deleteList;
 
         private bool _isDialogDirty;
         private bool _haveInvoked;
