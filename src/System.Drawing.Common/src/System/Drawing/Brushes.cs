@@ -313,11 +313,12 @@ public static class Brushes
     private static Brush GetBrush(object key, Color color)
     {
         Brush? brush = (Brush?)Gdip.ThreadData[key];
-        if (brush == null)
+        if (brush is null)
         {
             brush = new SolidBrush(color);
             Gdip.ThreadData[key] = brush;
         }
+
         return brush;
     }
 }

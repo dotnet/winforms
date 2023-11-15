@@ -26,6 +26,7 @@ public sealed class ColorMap
         get { return _oldColor; }
         set { _oldColor = value; }
     }
+
     /// <summary>
     /// Specifies the new <see cref='Color'/> to which to convert.
     /// </summary>

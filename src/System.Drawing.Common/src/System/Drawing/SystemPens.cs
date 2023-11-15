@@ -61,7 +61,7 @@ public static class SystemPens
         }
 
         Pen[]? systemPens = (Pen[]?)Gdip.ThreadData[s_systemPensKey];
-        if (systemPens == null)
+        if (systemPens is null)
         {
             systemPens = new Pen[(int)KnownColor.WindowText + (int)KnownColor.MenuHighlight - (int)KnownColor.YellowGreen];
             Gdip.ThreadData[s_systemPensKey] = systemPens;
@@ -72,6 +72,7 @@ public static class SystemPens
         {
             idx -= (int)KnownColor.YellowGreen - (int)KnownColor.WindowText;
         }
+
         idx--;
         Debug.Assert(idx >= 0 && idx < systemPens.Length, "System colors have been added but our system color array has not been expanded.");
 

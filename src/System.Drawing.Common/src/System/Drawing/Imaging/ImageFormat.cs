@@ -156,7 +156,7 @@ public sealed class ImageFormat
     public override bool Equals([NotNullWhen(true)] object? o)
     {
         ImageFormat? format = o as ImageFormat;
-        if (format == null)
+        if (format is null)
             return false;
         return _guid == format._guid;
     }
@@ -178,6 +178,7 @@ public sealed class ImageFormat
             if (codec.FormatID.Equals(_guid))
                 return codec;
         }
+
         return null;
     }
 

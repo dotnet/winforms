@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -16,7 +16,7 @@ public class MarginsConverterTests
         MarginsConverter mc = new MarginsConverter();
 
         // try once with then once without context
-        for (var context = new MyTypeDescriptorContext(); context != null; context = null)
+        for (var context = new MyTypeDescriptorContext(); context is not null; context = null)
         {
             Assert.True(mc.CanConvertFrom(context, typeof(string)));
             Assert.False(mc.CanConvertFrom(context, typeof(Guid)));
@@ -31,7 +31,7 @@ public class MarginsConverterTests
         MarginsConverter mc = new MarginsConverter();
 
         // try once with then once without context
-        for (var context = new MyTypeDescriptorContext(); context != null; context = null)
+        for (var context = new MyTypeDescriptorContext(); context is not null; context = null)
         {
             Assert.True(mc.CanConvertTo(context, typeof(string)));
             Assert.False(mc.CanConvertTo(context, typeof(Guid)));
@@ -79,7 +79,7 @@ public class MarginsConverterTests
         CultureInfo culture = CultureInfo.InvariantCulture;
 
         // try once with then once without context
-        for (var context = new MyTypeDescriptorContext(); context != null; context = null)
+        for (var context = new MyTypeDescriptorContext(); context is not null; context = null)
         {
             object result;
             Assert.Equal(',', culture.TextInfo.ListSeparator[0]);
@@ -101,7 +101,7 @@ public class MarginsConverterTests
         CultureInfo culture = CultureInfo.InvariantCulture;
 
         // try once with then once without context
-        for (var context = new MyTypeDescriptorContext(); context != null; context = null)
+        for (var context = new MyTypeDescriptorContext(); context is not null; context = null)
         {
             Assert.Throws<NotSupportedException>(() => mc.ConvertFrom(context, null, null));
             Assert.Throws<NotSupportedException>(() => mc.ConvertFrom(context, culture, null));
@@ -120,7 +120,7 @@ public class MarginsConverterTests
         Margins margins = new Margins() { Left = 1, Right = 2, Top = 3, Bottom = 4 };
 
         // try once with then once without context
-        for (var context = new MyTypeDescriptorContext(); context != null; context = null)
+        for (var context = new MyTypeDescriptorContext(); context is not null; context = null)
         {
             Assert.Equal("1;2;3;4", mc.ConvertTo(context, culture, "1;2;3;4", typeof(string)));
 

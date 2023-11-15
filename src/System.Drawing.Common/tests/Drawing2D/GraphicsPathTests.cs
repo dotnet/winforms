@@ -1505,7 +1505,6 @@ public class GraphicsPathTests
         }
     }
 
-
     [Fact]
     public void SetMarkers_EmptyPath_Success()
     {
@@ -1952,7 +1951,6 @@ public class GraphicsPathTests
             Assert.Equal(9, gp.PointCount);
             AssertWiden3(gp);
         }
-
     }
 
     public static IEnumerable<object[]> Widen_PenSmallWidth_TestData()

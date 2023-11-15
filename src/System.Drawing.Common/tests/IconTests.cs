@@ -439,7 +439,6 @@ public class IconTests
         AssertExtensions.Throws<ArgumentException>("filePath", null, () => Icon.ExtractAssociatedIcon(""));
     }
 
-
     [Fact]
     public void ExtractAssociatedIcon_NoSuchPath_ThrowsFileNotFoundException()
     {
@@ -609,6 +608,7 @@ public class IconTests
                 {
                     Assert.NotSame(icon.ToBitmap(), bitmap);
                 }
+
                 Assert.Equal(PixelFormat.Format32bppArgb, bitmap.PixelFormat);
                 Assert.Empty(bitmap.Palette.Entries);
                 Assert.Equal(icon.Width, bitmap.Width);
@@ -707,6 +707,7 @@ public class IconTests
                 Assert.Equal(icon1.Size, icon2.Size);
                 SaveAndCompare(icon2, false);
             }
+
             using (Icon icon3 = Icon.FromHandle(icon1.Handle))
             {
                 Assert.Equal(icon1.Handle, icon3.Handle);
@@ -724,6 +725,7 @@ public class IconTests
         {
             handle = icon1.ToBitmap().GetHicon();
         }
+
         using (Icon icon2 = Icon.FromHandle(handle))
         {
             Assert.Equal(handle, icon2.Handle);
@@ -740,12 +742,14 @@ public class IconTests
         {
             handle = icon1.ToBitmap().GetHicon();
         }
+
         using (Icon icon2 = Icon.FromHandle(handle))
         {
             Assert.Equal(handle, icon2.Handle);
             Assert.Equal(new Size(16, 16), icon2.Size);
             SaveAndCompare(icon2, false);
         }
+
         using (Icon icon3 = Icon.FromHandle(handle))
         {
             Assert.Equal(handle, icon3.Handle);
@@ -799,6 +803,7 @@ public class IconTests
                             {
                                 Assert.Equal(e.A, a.A);
                             }
+
                             Assert.Equal(e.R, a.R);
                             Assert.Equal(e.G, a.G);
                             Assert.Equal(e.B, a.B);

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
@@ -28,8 +28,8 @@ public class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
     {
         IntPtr nativeLineCap;
         int status = Gdip.GdipCreateCustomLineCap(
-                            new HandleRef(fillPath, (fillPath == null) ? IntPtr.Zero : fillPath._nativePath),
-                            new HandleRef(strokePath, (strokePath == null) ? IntPtr.Zero : strokePath._nativePath),
+                            new HandleRef(fillPath, (fillPath is null) ? IntPtr.Zero : fillPath._nativePath),
+                            new HandleRef(strokePath, (strokePath is null) ? IntPtr.Zero : strokePath._nativePath),
                             baseCap, baseInset, out nativeLineCap);
 
         if (status != Gdip.Ok)
@@ -82,16 +82,16 @@ public class CustomLineCap : MarshalByRefObject, ICloneable, IDisposable
             return;
 
 #if FINALIZATION_WATCH
-        Debug.WriteLineIf(!disposing && nativeCap != null, $"""
+        Debug.WriteLineIf(!disposing && nativeCap is not null, $"""
             **********************
             Disposed through finalization:
             {allocationSite}
             """);
 #endif
         // propagate the explicit dispose call to the child
-        if (disposing && nativeCap != null)
+        if (disposing)
         {
-            nativeCap.Dispose();
+            nativeCap?.Dispose();
         }
 
         _disposed = true;

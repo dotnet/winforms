@@ -6,7 +6,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Internal;
 using System.Drawing.Text;
-using System.Globalization;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
@@ -15,7 +14,6 @@ using System.Runtime.InteropServices.Marshalling;
 #endif
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 using static Interop;
-
 
 namespace System.Drawing;
 
@@ -243,7 +241,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
             {allocationSite}
             """);
 #endif
-        while (_previousContext != null)
+        while (_previousContext is not null)
         {
             // Dispose entire stack.
             GraphicsContext? context = _previousContext.Previous;
@@ -272,7 +270,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 Gdip.GdipDeleteGraphics(new HandleRef(this, NativeGraphics));
 
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
             catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
@@ -2025,7 +2023,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         if (text.IsEmpty)
             return SizeF.Empty;
-        if (font == null)
+        if (font is null)
             throw new ArgumentNullException(nameof(font));
 
         RectangleF layout = new RectangleF(0, 0, layoutArea.Width, layoutArea.Height);
@@ -2200,7 +2198,6 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         return regions;
     }
 #endif
-
 
     /// <summary>
     /// Draws the specified image at the specified location.
@@ -2721,7 +2718,6 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         }
     }
 
-
     /// <summary>
     /// Draws a line connecting the two specified points.
     /// </summary>
@@ -3058,7 +3054,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         get => _printingHelper;
         set
         {
-            Debug.Assert(_printingHelper == null, "WARNING: Overwritting the printing helper reference!");
+            Debug.Assert(_printingHelper is null, "WARNING: Overwritting the printing helper reference!");
             _printingHelper = value;
         }
     }
@@ -3218,7 +3214,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         ArgumentNullException.ThrowIfNull(icon);
 
-        if (_backingImage != null)
+        if (_backingImage is not null)
         {
             // We don't call the icon directly because we want to stay in GDI+ all the time
             // to avoid alpha channel interop issues between gdi and gdi+
@@ -3241,7 +3237,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         ArgumentNullException.ThrowIfNull(icon);
 
-        if (_backingImage != null)
+        if (_backingImage is not null)
         {
             // We don't call the icon directly because we want to stay in GDI+ all the time
             // to avoid alpha channel interop issues between gdi and gdi+
@@ -3264,7 +3260,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     {
         ArgumentNullException.ThrowIfNull(icon);
 
-        if (_backingImage != null)
+        if (_backingImage is not null)
         {
             DrawImageUnscaled(icon.ToBitmap(), targetRect);
         }
@@ -3289,6 +3285,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
             callbackData,
             new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
     }
+
     public void EnumerateMetafile(
         Metafile metafile,
         Point destPoint,
@@ -3597,11 +3594,12 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
             {
                 context = context.Previous;
 
-                if (context == null || !context.Next!.IsCumulative)
+                if (context is null || !context.Next!.IsCumulative)
                 {
                     break;
                 }
-            } while (context.IsCumulative);
+            }
+            while (context.IsCumulative);
         }
 
         if (!totalOffset.IsEmpty())
@@ -3661,14 +3659,15 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     /// </summary>
     private void PushContext(GraphicsContext context)
     {
-        Debug.Assert(context != null && context.State != 0, "GraphicsContext object is null or not valid.");
+        Debug.Assert(context is not null && context.State != 0, "GraphicsContext object is null or not valid.");
 
-        if (_previousContext != null)
+        if (_previousContext is not null)
         {
             // Push context.
             context.Previous = _previousContext;
             _previousContext.Next = context;
         }
+
         _previousContext = context;
     }
 
@@ -3677,11 +3676,11 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     /// </summary>
     private void PopContext(int currentContextState)
     {
-        Debug.Assert(_previousContext != null, "Trying to restore a context when the stack is empty");
+        Debug.Assert(_previousContext is not null, "Trying to restore a context when the stack is empty");
         GraphicsContext? context = _previousContext;
 
         // Pop all contexts up the stack.
-        while (context != null)
+        while (context is not null)
         {
             if (context.State == currentContextState)
             {
@@ -3691,8 +3690,10 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 context.Dispose();
                 return;
             }
+
             context = context.Previous;
         }
+
         Debug.Fail("Warning: context state not found!");
     }
 
@@ -3805,6 +3806,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 }
             }
         }
+
         return s_halftonePalette;
     }
 

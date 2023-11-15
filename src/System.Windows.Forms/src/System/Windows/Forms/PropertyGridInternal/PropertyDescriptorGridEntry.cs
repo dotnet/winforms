@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
@@ -12,21 +10,19 @@ namespace System.Windows.Forms.PropertyGridInternal;
 
 internal partial class PropertyDescriptorGridEntry : GridEntry
 {
-    private PropertyDescriptor _propertyDescriptor;
-
-    private TypeConverter _exceptionConverter;
-    private UITypeEditor _exceptionEditor;
+    private TypeConverter? _exceptionConverter;
+    private UITypeEditor? _exceptionEditor;
     private bool _isSerializeContentsProperty;
     private bool? _parensAroundName;
-    private IPropertyValueUIService _propertyValueUIService;
-    protected IEventBindingService _eventBindings;
+    private IPropertyValueUIService? _propertyValueUIService;
+    protected IEventBindingService? _eventBindings;
     private bool _propertyValueUIServiceChecked;
-    private PropertyValueUIItem[] _propertyValueUIItems;
-    private Rectangle[] _uiItemRects;
+    private PropertyValueUIItem[]? _propertyValueUIItems;
+    private Rectangle[]? _uiItemRects;
     private bool _readOnlyVerified;
     private bool _forceRenderReadOnly;
-    private string _helpKeyword;
-    private string _toolTipText;
+    private string? _helpKeyword;
+    private string? _toolTipText;
     private readonly bool _hide;
     private static int s_scaledImageSizeX = ImageSize;
     private static int s_scaledImageSizeY = ImageSize;
@@ -34,15 +30,9 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
     private const int ImageSize = 8;
 
-    private static IEventBindingService s_targetBindingService;
-    private static IComponent s_targetComponent;
-    private static EventDescriptor s_targetEventdesc;
-
-    internal PropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry parent, bool hide)
-        : base(ownerGrid, parent)
-    {
-        _hide = hide;
-    }
+    private static IEventBindingService? s_targetBindingService;
+    private static IComponent? s_targetComponent;
+    private static EventDescriptor? s_targetEventdesc;
 
     internal PropertyDescriptorGridEntry(
         PropertyGrid ownerGrid,
@@ -52,15 +42,16 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         : base(ownerGrid, parent)
     {
         _hide = hide;
+        PropertyDescriptor = propertyDescriptor;
         Initialize(propertyDescriptor);
     }
 
     public override bool AllowMerge
-        => _propertyDescriptor.GetAttribute<MergablePropertyAttribute>()?.IsDefaultAttribute() ?? true;
+        => PropertyDescriptor.GetAttribute<MergablePropertyAttribute>()?.IsDefaultAttribute() ?? true;
 
-    protected override AttributeCollection Attributes => _propertyDescriptor.Attributes;
+    protected override AttributeCollection Attributes => PropertyDescriptor.Attributes;
 
-    public override string HelpKeyword
+    public override string? HelpKeyword
     {
         get
         {
@@ -75,7 +66,8 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                 return null;
             }
 
-            if (_propertyDescriptor.TryGetAttribute(out HelpKeywordAttribute helpAttribute) && !helpAttribute.IsDefaultAttribute())
+            if (PropertyDescriptor.TryGetAttribute(out HelpKeywordAttribute? helpAttribute) &&
+                !helpAttribute.IsDefaultAttribute())
             {
                 return helpAttribute.HelpKeyword;
             }
@@ -100,11 +92,11 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             }
             else
             {
-                string typeName;
+                string? typeName;
 
-                Type componentType = _propertyDescriptor.ComponentType;
+                Type? componentType = PropertyDescriptor.ComponentType;
 
-                if (componentType.IsCOMObject)
+                if (componentType is not null && componentType.IsCOMObject)
                 {
                     typeName = TypeDescriptor.GetClassName(owner);
                 }
@@ -113,18 +105,17 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                     // Make sure this property is declared on a class that is related to the component we're
                     // looking at. If it's not, it could be a shadow property so we need to try to find the
                     // real property.
-
                     Type ownerType = owner.GetType();
-                    if (!componentType.IsPublic || !componentType.IsAssignableFrom(ownerType))
+                    if (componentType is not null && (!componentType.IsPublic || !componentType.IsAssignableFrom(ownerType)))
                     {
-                        PropertyDescriptor componentProperty = TypeDescriptor.GetProperties(ownerType)[PropertyName];
+                        PropertyDescriptor? componentProperty = TypeDescriptor.GetProperties(ownerType)[PropertyName!];
                         componentType = componentProperty?.ComponentType;
                     }
 
                     typeName = componentType is null ? TypeDescriptor.GetClassName(owner) : componentType.FullName;
                 }
 
-                _helpKeyword = $"{typeName}.{_propertyDescriptor.Name}";
+                _helpKeyword = $"{typeName}.{PropertyDescriptor.Name}";
             }
 
             return _helpKeyword;
@@ -135,7 +126,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
     internal override bool Enumerable => base.Enumerable && !IsPropertyReadOnly;
 
-    internal virtual bool IsPropertyReadOnly => _propertyDescriptor.IsReadOnly;
+    internal virtual bool IsPropertyReadOnly => PropertyDescriptor.IsReadOnly;
 
     public override bool IsValueEditable => _exceptionConverter is null && !IsPropertyReadOnly && base.IsValueEditable;
 
@@ -147,7 +138,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         {
             if (!_parensAroundName.HasValue)
             {
-                _parensAroundName = _propertyDescriptor.GetAttribute<ParenthesizePropertyNameAttribute>()?.NeedParenthesis ?? false;
+                _parensAroundName = PropertyDescriptor.GetAttribute<ParenthesizePropertyNameAttribute>()?.NeedParenthesis ?? false;
             }
 
             return _parensAroundName.Value;
@@ -158,7 +149,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
     {
         get
         {
-            string category = _propertyDescriptor.Category;
+            string? category = PropertyDescriptor.Category;
             if (category is null || category.Length == 0)
             {
                 category = base.PropertyCategory;
@@ -168,15 +159,15 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         }
     }
 
-    public sealed override PropertyDescriptor PropertyDescriptor => _propertyDescriptor;
+    public sealed override PropertyDescriptor PropertyDescriptor { get; }
 
-    public override string PropertyDescription => _propertyDescriptor.Description;
+    public override string? PropertyDescription => PropertyDescriptor.Description;
 
-    public override string PropertyLabel
+    public override string? PropertyLabel
     {
         get
         {
-            string label = _propertyDescriptor.DisplayName;
+            string? label = PropertyDescriptor.DisplayName;
             if (ParensAroundName)
             {
                 label = $"({label})";
@@ -189,20 +180,20 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
     /// <summary>
     ///  Returns non-localized name of this property.
     /// </summary>
-    public override string PropertyName => _propertyDescriptor?.Name;
+    public override string? PropertyName => PropertyDescriptor.Name;
 
-    public override Type PropertyType => _propertyDescriptor.PropertyType;
+    public override Type? PropertyType => PropertyDescriptor.PropertyType;
 
     /// <summary>
     ///  Gets or sets the value for the property that is represented by this GridEntry.
     /// </summary>
-    public override object PropertyValue
+    public override object? PropertyValue
     {
         get
         {
             try
             {
-                object value = GetPropertyValue(GetValueOwner());
+                object? value = GetPropertyValue(GetValueOwner());
 
                 if (_exceptionConverter is not null)
                 {
@@ -233,7 +224,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         }
     }
 
-    private IPropertyValueUIService PropertyValueUIService
+    private IPropertyValueUIService? PropertyValueUIService
     {
         get
         {
@@ -257,9 +248,9 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             }
 
             // If read only editable is set, make sure it's valid.
-            if (_propertyDescriptor.IsReadOnly && !_readOnlyVerified && GetFlagSet(Flags.ReadOnlyEditable))
+            if (PropertyDescriptor.IsReadOnly && !_readOnlyVerified && GetFlagSet(Flags.ReadOnlyEditable))
             {
-                Type propertyType = PropertyType;
+                Type? propertyType = PropertyType;
 
                 if (propertyType is not null && (propertyType.IsArray || propertyType.IsValueType || propertyType.IsPrimitive))
                 {
@@ -284,7 +275,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                 return _exceptionConverter;
             }
 
-            _typeConverter ??= _propertyDescriptor?.Converter;
+            _typeConverter ??= PropertyDescriptor.Converter;
 
             return base.TypeConverter;
         }
@@ -299,7 +290,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                 return _exceptionEditor;
             }
 
-            Editor = (UITypeEditor)_propertyDescriptor.GetEditor(typeof(UITypeEditor));
+            Editor = (UITypeEditor?)PropertyDescriptor.GetEditor(typeof(UITypeEditor));
 
             return base.UITypeEditor;
         }
@@ -311,8 +302,8 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
         if (!IsValueEditable)
         {
-            if (_propertyDescriptor.TryGetAttribute(out RefreshPropertiesAttribute refreshAttribute)
-                && !refreshAttribute.RefreshProperties.Equals(RefreshProperties.None))
+            if (PropertyDescriptor.TryGetAttribute(out RefreshPropertiesAttribute? refreshAttribute) &&
+                !refreshAttribute.RefreshProperties.Equals(RefreshProperties.None))
             {
                 OwnerGridView.Refresh(fullRefresh: refreshAttribute.Equals(RefreshPropertiesAttribute.All));
             }
@@ -321,7 +312,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
     internal override Point GetLabelToolTipLocation(int mouseX, int mouseY)
     {
-        if (_propertyValueUIItems is not null)
+        if (_propertyValueUIItems is not null && _uiItemRects is not null)
         {
             for (int i = 0; i < _propertyValueUIItems.Length; i++)
             {
@@ -337,25 +328,19 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         return base.GetLabelToolTipLocation(mouseX, mouseY);
     }
 
-    private object GetPropertyValue(object owner)
+    private object? GetPropertyValue(object? owner)
     {
-        if (_propertyDescriptor is null)
-        {
-            return null;
-        }
-
         if (owner is ICustomTypeDescriptor descriptor)
         {
-            owner = descriptor.GetPropertyOwner(_propertyDescriptor);
+            owner = descriptor.GetPropertyOwner(PropertyDescriptor);
         }
 
-        return _propertyDescriptor.GetValue(owner);
+        return PropertyDescriptor.GetValue(owner);
     }
 
     protected void Initialize(PropertyDescriptor propertyDescriptor)
     {
-        _propertyDescriptor = propertyDescriptor;
-        _isSerializeContentsProperty = _propertyDescriptor.SerializationVisibility == DesignerSerializationVisibility.Content;
+        _isSerializeContentsProperty = PropertyDescriptor.SerializationVisibility == DesignerSerializationVisibility.Content;
 
         if (!_hide && IsPropertyReadOnly)
         {
@@ -371,8 +356,8 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
     protected virtual void NotifyParentsOfChanges(GridEntry entry)
     {
         // See if we need to notify the parent(s) up the chain.
-        while (entry is PropertyDescriptorGridEntry propertyEntry
-            && propertyEntry._propertyDescriptor.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
+        while (entry is PropertyDescriptorGridEntry propertyEntry &&
+            propertyEntry.PropertyDescriptor.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
         {
             // Find the next parent property with a different value owner.
             object owner = entry.GetValueOwner();
@@ -396,8 +381,8 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             {
                 owner = entry.GetValueOwner();
 
-                ComponentChangeService?.OnComponentChanging(owner, propertyEntry._propertyDescriptor);
-                ComponentChangeService?.OnComponentChanged(owner, propertyEntry._propertyDescriptor);
+                ComponentChangeService?.OnComponentChanging(owner, propertyEntry.PropertyDescriptor);
+                ComponentChangeService?.OnComponentChanged(owner, propertyEntry.PropertyDescriptor);
 
                 // Clear the value so it paints correctly next time.
                 entry.ClearCachedValues(clearChildren: false);
@@ -406,11 +391,11 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         }
     }
 
-    protected override bool SendNotification(object owner, Notify type)
+    protected override bool SendNotification(object? owner, Notify type)
     {
         if (owner is ICustomTypeDescriptor descriptor)
         {
-            owner = descriptor.GetPropertyOwner(_propertyDescriptor);
+            owner = descriptor.GetPropertyOwner(PropertyDescriptor);
         }
 
         switch (type)
@@ -431,7 +416,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             case Notify.CanReset:
                 try
                 {
-                    return _propertyDescriptor.CanResetValue(owner)
+                    return PropertyDescriptor.CanResetValue(owner!)
                         || (_propertyValueUIItems is not null && _propertyValueUIItems.Length > 0);
                 }
                 catch
@@ -449,7 +434,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             case Notify.ShouldPersist:
                 try
                 {
-                    return _propertyDescriptor.ShouldSerializeValue(owner);
+                    return PropertyDescriptor.ShouldSerializeValue(owner!);
                 }
                 catch
                 {
@@ -467,7 +452,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             case Notify.Return:
                 _eventBindings ??= this.GetService<IEventBindingService>();
 
-                if (_eventBindings?.GetEvent(_propertyDescriptor) is not null)
+                if (_eventBindings?.GetEvent(PropertyDescriptor) is not null)
                 {
                     return ViewEvent(owner, newHandler: null, eventDescriptor: null, alwaysNavigate: true);
                 }
@@ -486,7 +471,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         // We need to echo that change up the inheritance in case the owner object isn't a sited component.
         NotifyParentsOfChanges(this);
     }
-
+#nullable disable
     public override bool OnMouseClick(int x, int y, int count, MouseButtons button)
     {
         if (_propertyValueUIItems is not null && count == 2 && ((button & MouseButtons.Left) == MouseButtons.Left))
@@ -495,7 +480,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             {
                 if (_uiItemRects[i].Contains(x, OwnerGridView.GridEntryHeight / 2))
                 {
-                    _propertyValueUIItems[i].InvokeHandler(this, _propertyDescriptor, _propertyValueUIItems[i]);
+                    _propertyValueUIItems[i].InvokeHandler(this, PropertyDescriptor, _propertyValueUIItems[i]);
                     return true;
                 }
             }
@@ -515,7 +500,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             return;
         }
 
-        _propertyValueUIItems = uiService.GetPropertyUIValueItems(this, _propertyDescriptor);
+        _propertyValueUIItems = uiService.GetPropertyUIValueItems(this, PropertyDescriptor);
 
         if (_propertyValueUIItems is null)
         {
@@ -567,7 +552,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
             IDesignerHost host = DesignerHost;
 
-            transaction = host?.CreateTransaction(undoText ?? string.Format(SR.PropertyGridSetValue, _propertyDescriptor.Name));
+            transaction = host?.CreateTransaction(undoText ?? string.Format(SR.PropertyGridSetValue, PropertyDescriptor.Name));
 
             // Usually IComponent things are sited and this notification will be fired automatically by
             // the PropertyDescriptor.  However, for non-IComponent sub objects or sub objects that are
@@ -579,7 +564,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             {
                 try
                 {
-                    ComponentChangeService?.OnComponentChanging(owner, _propertyDescriptor);
+                    ComponentChangeService?.OnComponentChanging(owner, PropertyDescriptor);
                 }
                 catch (CheckoutException coEx)
                 {
@@ -600,7 +585,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             }
 
             // See if we need to refresh the property browser.
-            var refresh = _propertyDescriptor.GetAttribute<RefreshPropertiesAttribute>();
+            var refresh = PropertyDescriptor.GetAttribute<RefreshPropertiesAttribute>();
             bool needsRefresh = wasExpanded || (refresh is not null && !refresh.RefreshProperties.Equals(RefreshProperties.None));
 
             if (needsRefresh)
@@ -616,7 +601,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             if (owner is not null && value is string)
             {
                 _eventBindings ??= this.GetService<IEventBindingService>();
-                eventDescriptor = _eventBindings?.GetEvent(_propertyDescriptor);
+                eventDescriptor = _eventBindings?.GetEvent(PropertyDescriptor);
 
                 // For a merged set of properties, the event binding service won't
                 // find an event. So, we ask the type descriptor directly.
@@ -625,7 +610,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                     // If we have a merged property descriptor, pull out one of the elements.
                     object eventObj = owner;
 
-                    if (_propertyDescriptor is MergePropertyDescriptor && owner is Array)
+                    if (PropertyDescriptor is MergePropertyDescriptor && owner is Array)
                     {
                         var objArray = owner as Array;
                         if (objArray.Length > 0)
@@ -634,7 +619,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                         }
                     }
 
-                    eventDescriptor = TypeDescriptor.GetEvents(eventObj)[_propertyDescriptor.Name];
+                    eventDescriptor = TypeDescriptor.GetEvents(eventObj)[PropertyDescriptor.Name];
                 }
             }
 
@@ -643,7 +628,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             {
                 if (reset)
                 {
-                    _propertyDescriptor.ResetValue(owner);
+                    PropertyDescriptor.ResetValue(owner);
                 }
                 else if (eventDescriptor is not null)
                 {
@@ -660,7 +645,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
                 // Now notify the change service that the change was successful.
                 if (needChangeNotify)
                 {
-                    ComponentChangeService?.OnComponentChanged(owner, _propertyDescriptor, oldValue: null, value);
+                    ComponentChangeService?.OnComponentChanged(owner, PropertyDescriptor, oldValue: null, value);
                 }
 
                 NotifyParentsOfChanges(this);
@@ -706,11 +691,6 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
     protected void SetPropertyValueCore(object owner, object newValue)
     {
-        if (_propertyDescriptor is null)
-        {
-            return;
-        }
-
         // Store the current cursor and set it to the HourGlass.
         Cursor oldCursor = Cursor.Current;
         try
@@ -721,7 +701,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
             if (realOwner is ICustomTypeDescriptor descriptor)
             {
-                realOwner = descriptor.GetPropertyOwner(_propertyDescriptor);
+                realOwner = descriptor.GetPropertyOwner(PropertyDescriptor);
             }
 
             // Check the type of the object we are modifying.  If it's a value type or an array,
@@ -737,7 +717,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
             if (realOwner is not null)
             {
-                _propertyDescriptor.SetValue(realOwner, newValue);
+                PropertyDescriptor.SetValue(realOwner, newValue);
 
                 // Since the value that we modified may not be stored by the parent property, we need to push this
                 // value back into the parent. An example here is Size or Location, which return Point objects that
@@ -786,7 +766,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
         var component = owner as IComponent;
 
-        if (component is null && _propertyDescriptor is MergePropertyDescriptor)
+        if (component is null && PropertyDescriptor is MergePropertyDescriptor)
         {
             // It's possible that multiple objects are selected, and we're trying to create an event for each of them.
             if (owner is Array array && array.Length > 0)
@@ -800,7 +780,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
             return false;
         }
 
-        if (_propertyDescriptor.IsReadOnly)
+        if (PropertyDescriptor.IsReadOnly)
         {
             return false;
         }
@@ -808,7 +788,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
         if (eventDescriptor is null)
         {
             _eventBindings ??= this.GetService<IEventBindingService>();
-            eventDescriptor = _eventBindings?.GetEvent(_propertyDescriptor);
+            eventDescriptor = _eventBindings?.GetEvent(PropertyDescriptor);
         }
 
         IDesignerHost host = DesignerHost;
@@ -859,7 +839,7 @@ internal partial class PropertyDescriptorGridEntry : GridEntry
 
                 try
                 {
-                    _propertyDescriptor.SetValue(owner, newHandler);
+                    PropertyDescriptor.SetValue(owner, newHandler);
                 }
                 catch (InvalidOperationException ex)
                 {

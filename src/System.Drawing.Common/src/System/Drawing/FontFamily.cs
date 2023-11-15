@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing.Text;
@@ -67,7 +67,7 @@ public sealed class FontFamily : MarshalByRefObject, IDisposable
     private void CreateFontFamily(string name, FontCollection? fontCollection)
     {
         IntPtr fontfamily;
-        IntPtr nativeFontCollection = (fontCollection == null) ? IntPtr.Zero : fontCollection._nativeFontCollection;
+        IntPtr nativeFontCollection = (fontCollection is null) ? IntPtr.Zero : fontCollection._nativeFontCollection;
 
         int status = Gdip.GdipCreateFontFamilyFromName(name, new HandleRef(fontCollection, nativeFontCollection), out fontfamily);
 
@@ -119,6 +119,7 @@ public sealed class FontFamily : MarshalByRefObject, IDisposable
                 status = Gdip.GdipGetGenericFontFamilyMonospace(out nativeFamily);
                 break;
         }
+
         Gdip.CheckStatus(status);
 
         SetNativeFamily(nativeFamily);

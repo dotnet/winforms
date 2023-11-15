@@ -101,6 +101,7 @@ internal static class DpiHelper
                     s_interpolationMode = InterpolationMode.HighQualityBicubic;
                 }
             }
+
             return s_interpolationMode;
         }
     }
@@ -193,7 +194,7 @@ internal static class DpiHelper
     [return: NotNullIfNotNull(nameof(logicalImage))]
     public static Bitmap? CreateResizedBitmap(Bitmap? logicalImage, Size targetImageSize)
     {
-        if (logicalImage == null)
+        if (logicalImage is null)
         {
             return null;
         }
@@ -209,13 +210,13 @@ internal static class DpiHelper
     /// <param name="logicalBitmap">The image to scale from logical units to device units</param>
     public static void ScaleBitmapLogicalToDevice([NotNullIfNotNull(nameof(logicalBitmap))]ref Bitmap? logicalBitmap)
     {
-        if (logicalBitmap == null)
+        if (logicalBitmap is null)
         {
             return;
         }
 
         Bitmap deviceBitmap = CreateScaledBitmap(logicalBitmap);
-        if (deviceBitmap != null)
+        if (deviceBitmap is not null)
         {
             logicalBitmap.Dispose();
             logicalBitmap = deviceBitmap;

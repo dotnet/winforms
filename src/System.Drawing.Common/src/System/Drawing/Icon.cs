@@ -70,7 +70,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     {
         using (FileStream f = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
-            Debug.Assert(f != null, "File.OpenRead returned null instead of throwing an exception");
+            Debug.Assert(f is not null, "File.OpenRead returned null instead of throwing an exception");
             _iconData = new byte[(int)f.Length];
             f.Read(_iconData, 0, _iconData.Length);
         }
@@ -88,7 +88,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
 
         _iconData = original._iconData;
 
-        if (_iconData == null)
+        if (_iconData is null)
         {
             _iconSize = original.Size;
             _handle = User32.CopyImage(new HandleRef(original, original.Handle), SafeNativeMethods.IMAGE_ICON, _iconSize.Width, _iconSize.Height, 0);
@@ -104,7 +104,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
         ArgumentNullException.ThrowIfNull(resource);
 
         Stream? stream = type.Module.Assembly.GetManifestResourceStream(type, resource);
-        if (stream == null)
+        if (stream is null)
         {
             throw new ArgumentException(SR.Format(SR.ResourceNotFound, type, resource));
         }
@@ -153,7 +153,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
 
     void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context)
     {
-        if (_iconData != null)
+        if (_iconData is not null)
         {
             si.AddValue("IconData", _iconData, typeof(byte[])); // Do not rename (binary serialization)
         }
@@ -215,6 +215,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
             {
                 throw new ObjectDisposedException(GetType().Name);
             }
+
             return _handle;
         }
     }
@@ -469,7 +470,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     // which may be necessary in some instances.
     private unsafe void Initialize(int width, int height)
     {
-        if (_iconData == null || _handle != IntPtr.Zero)
+        if (_iconData is null || _handle != IntPtr.Zero)
         {
             throw new InvalidOperationException(SR.Format(SR.IllegalState, GetType().Name));
         }
@@ -567,7 +568,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                     int thisDelta = Math.Abs(entry.bWidth - width) + Math.Abs(entry.bHeight - height);
 
                     if ((thisDelta < bestDelta) ||
-                        (thisDelta == bestDelta && (iconBitDepth <= s_bitDepth && iconBitDepth > _bestBitDepth || _bestBitDepth > s_bitDepth && iconBitDepth < _bestBitDepth)))
+                        (thisDelta == bestDelta && ((iconBitDepth <= s_bitDepth && iconBitDepth > _bestBitDepth) || (_bestBitDepth > s_bitDepth && iconBitDepth < _bestBitDepth))))
                     {
                         fUpdateBestFit = true;
                     }
@@ -619,6 +620,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                 {
                     _handle = User32.CreateIconFromResourceEx(pbAlignedBuffer, _bestBytesInRes, true, 0x00030000, 0, 0, 0);
                 }
+
                 ArrayPool<byte>.Shared.Return(alignedBuffer);
             }
             else
@@ -699,7 +701,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     private unsafe Bitmap BmpFrame()
     {
         Bitmap? bitmap = null;
-        if (_iconData != null && _bestBitDepth == 32)
+        if (_iconData is not null && _bestBitDepth == 32)
         {
             // GDI+ doesnt handle 32 bpp icons with alpha properly
             // we load the icon ourself from the byte table
@@ -773,15 +775,17 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                         }
                         finally
                         {
-                            if (tmpBitmap != null && bmpData != null)
+                            if (tmpBitmap is not null && bmpData is not null)
                             {
                                 tmpBitmap.UnlockBits(bmpData);
                             }
-                            if (bitmap != null && targetData != null)
+
+                            if (bitmap is not null && targetData is not null)
                             {
                                 bitmap.UnlockBits(targetData);
                             }
                         }
+
                         tmpBitmap.Dispose();
                     }
                 }
@@ -792,6 +796,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                 {
                     Gdi32.DeleteObject(info.hbmColor);
                 }
+
                 if (info.hbmMask != IntPtr.Zero)
                 {
                     Gdi32.DeleteObject(info.hbmMask);
@@ -799,8 +804,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
             }
         }
 
-
-        if (bitmap == null)
+        if (bitmap is null)
         {
             // last chance... all the other cases (ie non 32 bpp icons coming from a handle or from the bitmapData)
 
@@ -829,20 +833,19 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                 }
             }
 
-
             // GDI+ fills the surface with a sentinel color for GetDC, but does
             // not correctly clean it up again, so we have to do it.
             Color fakeTransparencyColor = Color.FromArgb(0x0d, 0x0b, 0x0c);
             bitmap.MakeTransparent(fakeTransparencyColor);
         }
 
-        Debug.Assert(bitmap != null, "Bitmap cannot be null");
+        Debug.Assert(bitmap is not null, "Bitmap cannot be null");
         return bitmap;
     }
 
     private Bitmap PngFrame()
     {
-        Debug.Assert(_iconData != null);
+        Debug.Assert(_iconData is not null);
         using var stream = new MemoryStream();
         stream.Write(_iconData, (int)_bestImageOffset, (int)_bestBytesInRes);
         return new Bitmap(stream);
@@ -852,7 +855,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
     {
         if (!_isBestImagePng.HasValue)
         {
-            if (_iconData != null && _iconData.Length >= _bestImageOffset + 8)
+            if (_iconData is not null && _iconData.Length >= _bestImageOffset + 8)
             {
                 int iconSignature1 = BitConverter.ToInt32(_iconData, (int)_bestImageOffset);
                 int iconSignature2 = BitConverter.ToInt32(_iconData, (int)_bestImageOffset + 4);
