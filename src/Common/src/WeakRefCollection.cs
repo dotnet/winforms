@@ -1,12 +1,13 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+
 namespace System.Collections.Generic;
 
 /// <summary>
 ///  Weak reference collection of <typeparamref name="T"/>.
 /// </summary>
-internal sealed class WeakRefCollection<T>() where T : class
+internal sealed class WeakRefCollection<T>() : IEnumerable<T> where T : class
 {
     private readonly List<WeakReference<T>> _list = [];
     private bool _scavenge;
@@ -88,7 +89,12 @@ internal sealed class WeakRefCollection<T>() where T : class
             if (weakRef.TryGetTarget(out T? target))
             {
                 yield return target;
+                continue;
             }
+
+            _scavenge = true;
         }
     }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

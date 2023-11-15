@@ -142,17 +142,15 @@ public static partial class ToolStripManager
     /// </summary>
     public static ToolStrip? FindToolStrip(string toolStripName)
     {
-        ToolStrip? result = null;
-        for (int i = 0; i < ToolStrips.Count; i++)
+        foreach (ToolStrip toolStrip in ToolStrips)
         {
-            if (ToolStrips[i] is ToolStrip toolStrip && string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
+            if (string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
             {
-                result = toolStrip;
-                break;
+                return toolStrip;
             }
         }
 
-        return result;
+        return null;
     }
 
     /// <summary>
@@ -161,9 +159,9 @@ public static partial class ToolStripManager
     internal static ToolStrip? FindToolStrip(Form owningForm, string toolStripName)
     {
         ToolStrip? result = null;
-        for (int i = 0; i < ToolStrips.Count; i++)
+        foreach (ToolStrip toolStrip in ToolStrips)
         {
-            if (ToolStrips[i] is ToolStrip toolStrip && string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
+            if (string.Equals(toolStrip.Name, toolStripName, StringComparison.Ordinal))
             {
                 result = toolStrip;
                 if (result.FindForm() == owningForm)
@@ -287,17 +285,9 @@ public static partial class ToolStripManager
 
     internal static void NotifyMenuModeChange(bool invalidateText, bool activationChange)
     {
-        bool toolStripPruneNeeded = false;
-
         // If we've toggled the ShowUnderlines value, we'll need to invalidate
-        for (int i = 0; i < ToolStrips.Count; i++)
+        foreach (ToolStrip toolStrip in ToolStrips)
         {
-            if (ToolStrips[i] is not ToolStrip toolStrip)
-            {
-                toolStripPruneNeeded = true;
-                continue;
-            }
-
             if (invalidateText)
             {
                 toolStrip.InvalidateTextItems();
@@ -308,17 +298,7 @@ public static partial class ToolStripManager
                 toolStrip.KeyboardActive = false;
             }
         }
-
-        if (toolStripPruneNeeded)
-        {
-            PruneToolStripList();
-        }
     }
-
-    /// <summary>
-    ///  Removes dead entries from the toolstrip weak reference collection.
-    /// </summary>
-    internal static void PruneToolStripList() => t_toolStripWeakArrayList?.ScavengeReferences();
 
     private static void RemoveEventHandler(int key, Delegate? value)
     {
@@ -611,9 +591,9 @@ public static partial class ToolStripManager
             ISupportToolStripPanel draggedItem = (ISupportToolStripPanel)draggedControl;
             bool rootWindowCheck = draggedItem.IsCurrentlyDragging;
 
-            for (int i = 0; i < t_toolStripPanelWeakArrayList.Count; i++)
+            foreach (ToolStripPanel toolStripPanel in t_toolStripPanelWeakArrayList)
             {
-                if (t_toolStripPanelWeakArrayList[i] is ToolStripPanel toolStripPanel && toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
+                if (toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
                     toolStripPanel.DragBounds.Contains(toolStripPanel.PointToClient(screenLocation)))
                 {
                     // Ensure that we can't drag off one window to another.
@@ -748,9 +728,9 @@ public static partial class ToolStripManager
 
     public static bool IsShortcutDefined(Keys shortcut)
     {
-        for (int i = 0; i < ToolStrips.Count; i++)
+        foreach (ToolStrip toolStrip in ToolStrips)
         {
-            if (ToolStrips[i] is ToolStrip t && t.Shortcuts.ContainsKey(shortcut))
+            if (toolStrip.Shortcuts.ContainsKey(shortcut))
             {
                 return true;
             }
@@ -835,21 +815,14 @@ public static partial class ToolStripManager
             }
 
             bool retVal = false;
-            bool needsPrune = false;
 
             // Now search the toolstrips
-            for (int i = 0; i < ToolStrips.Count; i++)
+            foreach (ToolStrip toolStrip in ToolStrips)
             {
                 bool isAssociatedContextMenu = false;
                 bool isDoublyAssignedContextMenuStrip = false;
 
-                if (ToolStrips[i] is not ToolStrip toolStrip)
-                {
-                    // Consider prune tree.
-                    needsPrune = true;
-                    continue;
-                }
-                else if (activeControl is not null && toolStrip == activeControl.ContextMenuStrip)
+                if (activeControl is not null && toolStrip == activeControl.ContextMenuStrip)
                 {
                     continue;
                 }
@@ -929,11 +902,6 @@ public static partial class ToolStripManager
                         }
                     }
                 }
-            }
-
-            if (needsPrune)
-            {
-                PruneToolStripList();
             }
 
             return retVal;
@@ -1132,15 +1100,14 @@ public static partial class ToolStripManager
 
     internal static List<ToolStrip> FindMergeableToolStrips(ContainerControl? container)
     {
-        List<ToolStrip> result = new();
+        List<ToolStrip> result = [];
         if (container is not null)
         {
-            for (int i = 0; i < ToolStrips.Count; i++)
+            foreach (ToolStrip toolStrip in ToolStrips)
             {
-                ToolStrip? candidateTS = (ToolStrip?)ToolStrips[i];
-                if (candidateTS is not null && candidateTS.AllowMerge && container == candidateTS.FindForm())
+                if (toolStrip.AllowMerge && container == toolStrip.FindForm())
                 {
-                    result.Add(candidateTS);
+                    result.Add(toolStrip);
                 }
             }
         }
