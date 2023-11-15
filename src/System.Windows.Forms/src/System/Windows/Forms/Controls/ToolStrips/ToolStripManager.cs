@@ -555,30 +555,22 @@ public static partial class ToolStripManager
 
     internal static ToolStripRenderer CreateRenderer(ToolStripManagerRenderMode renderMode)
     {
-        switch (renderMode)
+        return renderMode switch
         {
-            case ToolStripManagerRenderMode.System:
-                return new ToolStripSystemRenderer(isDefault: true);
-            case ToolStripManagerRenderMode.Professional:
-                return new ToolStripProfessionalRenderer(isDefault: true);
-            case ToolStripManagerRenderMode.Custom:
-            default:
-                return new ToolStripSystemRenderer(isDefault: true);
-        }
+            ToolStripManagerRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
+            ToolStripManagerRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
+            _ => new ToolStripSystemRenderer(isDefault: true),
+        };
     }
 
     internal static ToolStripRenderer CreateRenderer(ToolStripRenderMode renderMode)
     {
-        switch (renderMode)
+        return renderMode switch
         {
-            case ToolStripRenderMode.System:
-                return new ToolStripSystemRenderer(isDefault: true);
-            case ToolStripRenderMode.Professional:
-                return new ToolStripProfessionalRenderer(isDefault: true);
-            case ToolStripRenderMode.Custom:
-            default:
-                return new ToolStripSystemRenderer(isDefault: true);
-        }
+            ToolStripRenderMode.System => new ToolStripSystemRenderer(isDefault: true),
+            ToolStripRenderMode.Professional => new ToolStripProfessionalRenderer(isDefault: true),
+            _ => new ToolStripSystemRenderer(isDefault: true),
+        };
     }
 
     internal static WeakRefCollection<ToolStripPanel> ToolStripPanels
@@ -661,17 +653,7 @@ public static partial class ToolStripManager
     }
 
     internal static bool ShowMenuFocusCues
-    {
-        get
-        {
-            if (!DisplayInformation.MenuAccessKeysUnderlined)
-            {
-                return ModalMenuFilter.Instance.ShowUnderlines;
-            }
-
-            return true;
-        }
-    }
+        => DisplayInformation.MenuAccessKeysUnderlined || ModalMenuFilter.Instance.ShowUnderlines;
 
     /// <summary>
     ///  Determines if the key combination is valid for a shortcut.
@@ -721,10 +703,7 @@ public static partial class ToolStripManager
     }
 
     internal static bool IsMenuKey(Keys keyData)
-    {
-        Keys keyCode = keyData & Keys.KeyCode;
-        return (keyCode == Keys.Menu || keyCode == Keys.F10);
-    }
+        => (keyData & Keys.KeyCode) is Keys.Menu or Keys.F10;
 
     public static bool IsShortcutDefined(Keys shortcut)
     {
@@ -1118,7 +1097,7 @@ public static partial class ToolStripManager
     }
 
     private static bool IsSpecialMDIStrip(ToolStrip toolStrip)
-        => toolStrip is MdiControlStrip || toolStrip is MdiWindowListStrip;
+        => toolStrip is MdiControlStrip or MdiWindowListStrip;
 
     /// <summary>
     ///  Merge two toolstrips
@@ -1302,14 +1281,7 @@ public static partial class ToolStripManager
         ArgumentNullException.ThrowIfNull(targetName);
 
         ToolStrip? target = FindToolStrip(targetName);
-        if (target is null)
-        {
-            return false;
-        }
-        else
-        {
-            return Merge(sourceToolStrip, target);
-        }
+        return target is not null && Merge(sourceToolStrip, target);
     }
 
     /// <remarks>
@@ -1434,11 +1406,6 @@ public static partial class ToolStripManager
     public static bool RevertMerge(string targetName)
     {
         ToolStrip? target = FindToolStrip(targetName);
-        if (target is null)
-        {
-            return false;
-        }
-
-        return RevertMerge(target);
+        return target is not null && RevertMerge(target);
     }
 }
