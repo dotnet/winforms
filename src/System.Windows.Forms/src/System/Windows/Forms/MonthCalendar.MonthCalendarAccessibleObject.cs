@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -152,7 +151,7 @@ public partial class MonthCalendar
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
         {
             int innerX = (int)x;
             int innerY = (int)y;
@@ -205,7 +204,7 @@ public partial class MonthCalendar
         internal CalendarCellAccessibleObject? FocusedCell
             => _focusedCellAccessibleObject ??= this.TryGetOwnerAs(out MonthCalendar? owner) ? GetCellByDate(owner._focusedDate) : null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
                 NavigateDirection.NavigateDirection_FirstChild => PreviousButtonAccessibleObject,
@@ -379,7 +378,7 @@ public partial class MonthCalendar
                 ? owner.GetDisplayRange(visible)
                 : null;
 
-        internal override UiaCore.IRawElementProviderFragment? GetFocus() => _focusedCellAccessibleObject;
+        internal override IRawElementProviderFragment.Interface? GetFocus() => _focusedCellAccessibleObject;
 
         public override AccessibleObject? GetFocused() => _focusedCellAccessibleObject;
 

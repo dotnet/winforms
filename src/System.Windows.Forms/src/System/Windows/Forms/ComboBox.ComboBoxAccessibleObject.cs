@@ -99,22 +99,19 @@ public partial class ComboBox
         public ComboBoxChildDropDownButtonUiaProvider? DropDownButtonUiaProvider
             => _dropDownButtonUiaProvider ??= this.TryGetOwnerAs(out ComboBox? owner) ? new ComboBoxChildDropDownButtonUiaProvider(owner) : null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out ComboBox? _))
             {
                 return null;
             }
 
-            switch (direction)
+            return direction switch
             {
-                case NavigateDirection.NavigateDirection_FirstChild:
-                    return GetFirstChild();
-                case NavigateDirection.NavigateDirection_LastChild:
-                    return GetLastChild();
-                default:
-                    return base.FragmentNavigate(direction);
-            }
+                NavigateDirection.NavigateDirection_FirstChild => GetFirstChild(),
+                NavigateDirection.NavigateDirection_LastChild => GetLastChild(),
+                _ => base.FragmentNavigate(direction),
+            };
         }
 
         internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => this;

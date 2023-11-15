@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Windows.Win32.UI.Accessibility;
+using Windows.Win32.UI.Input.KeyboardAndMouse;
 using Xunit.Abstractions;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.UITests;
 
@@ -123,7 +122,7 @@ public class ListViewTests : ControlTestBase
 
             Application.DoEvents();
             AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
-            IRawElementProviderFragment? actualAccessibleObject = accessibleObject.FragmentNavigate((NavigateDirection)direction);
+            IRawElementProviderFragment.Interface? actualAccessibleObject = accessibleObject.FragmentNavigate((NavigateDirection)direction);
             AccessibleObject? expectedAccessibleObject = listView.Items[itemIndex].SubItems[subItemIndex].AccessibilityObject;
 
             Assert.Equal(expectedAccessibleObject, actualAccessibleObject);
@@ -163,8 +162,8 @@ public class ListViewTests : ControlTestBase
             InitializeTileList(listView, columnCount, subItemsCount, tileSize: new Size(100, 100));
 
             AccessibleObject? accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
-            IRawElementProviderFragment? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
-            IRawElementProviderFragment? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+            IRawElementProviderFragment.Interface? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+            IRawElementProviderFragment.Interface? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
             Assert.Null(nextAccessibleObject);
             Assert.Null(previousAccessibleObject);
@@ -309,8 +308,8 @@ public class ListViewTests : ControlTestBase
             InitializeTileList(listView, columnCount: 5, subItemsCount: 5, tileSize: new Size(50, 40));
 
             AccessibleObject? accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
-            IRawElementProviderFragment? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
-            IRawElementProviderFragment? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
+            IRawElementProviderFragment.Interface? nextAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_NextSibling);
+            IRawElementProviderFragment.Interface? previousAccessibleObject = accessibleObject?.FragmentNavigate(NavigateDirection.NavigateDirection_PreviousSibling);
 
             Assert.Null(nextAccessibleObject);
             Assert.Null(previousAccessibleObject);

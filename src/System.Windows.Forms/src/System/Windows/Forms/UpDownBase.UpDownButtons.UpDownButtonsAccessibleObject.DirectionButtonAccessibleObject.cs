@@ -61,8 +61,8 @@ public abstract partial class UpDownBase
                     owner.OnUpDown(new UpDownEventArgs(buttonId));
                 }
 
-                internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(
-                    NavigateDirection direction) => direction switch
+                internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
+                    => direction switch
                     {
                         NavigateDirection.NavigateDirection_Parent => Parent,
                         NavigateDirection.NavigateDirection_NextSibling => _up ? Parent.GetChild(1) : null,

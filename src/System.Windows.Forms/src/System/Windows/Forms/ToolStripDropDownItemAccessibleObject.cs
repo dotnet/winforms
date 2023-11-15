@@ -4,7 +4,6 @@
 using System.Windows.Forms.Layout;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -172,7 +171,7 @@ public class ToolStripDropDownItemAccessibleObject : ToolStripItem.ToolStripItem
         return null;
     }
 
-    internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+    internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
     {
         switch (direction)
         {

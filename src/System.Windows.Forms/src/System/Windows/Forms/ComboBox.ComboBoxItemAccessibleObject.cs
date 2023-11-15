@@ -60,7 +60,7 @@ public partial class ComboBox
         public override string? DefaultAction
             => _owningComboBox.ChildListAccessibleObject.SystemIAccessible.TryGetDefaultAction(GetChildId());
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (direction == NavigateDirection.NavigateDirection_Parent)
             {

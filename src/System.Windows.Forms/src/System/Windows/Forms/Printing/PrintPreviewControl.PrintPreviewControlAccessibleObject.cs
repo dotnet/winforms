@@ -67,28 +67,29 @@ public partial class PrintPreviewControl
         internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
             => this;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.TryGetOwnerAs(out PrintPreviewControl? owner))
             {
                 return base.FragmentNavigate(direction);
             }
 
-            switch (direction)
+            return direction switch
             {
-                case NavigateDirection.NavigateDirection_FirstChild:
-                    return owner._vScrollBar.Visible ? owner._vScrollBar.AccessibilityObject
-                        : owner._hScrollBar.Visible ? owner._hScrollBar.AccessibilityObject
-                        : null;
-
-                case NavigateDirection.NavigateDirection_LastChild:
-                    return owner._hScrollBar.Visible ? owner._hScrollBar.AccessibilityObject
-                        : owner._vScrollBar.Visible ? owner._vScrollBar.AccessibilityObject
-                        : null;
-
-                default:
-                    return base.FragmentNavigate(direction);
-            }
+                NavigateDirection.NavigateDirection_FirstChild
+                    => owner._vScrollBar.Visible
+                        ? owner._vScrollBar.AccessibilityObject
+                        : owner._hScrollBar.Visible
+                            ? owner._hScrollBar.AccessibilityObject
+                            : null,
+                NavigateDirection.NavigateDirection_LastChild
+                    => owner._hScrollBar.Visible
+                        ? owner._hScrollBar.AccessibilityObject
+                        : owner._vScrollBar.Visible
+                            ? owner._vScrollBar.AccessibilityObject
+                            : null,
+                _ => base.FragmentNavigate(direction),
+            };
         }
 
         HRESULT IScrollProvider.Interface.Scroll(ScrollAmount horizontalAmount, ScrollAmount verticalAmount)

@@ -628,7 +628,7 @@ public abstract partial class DataGridViewCell
         internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
             => _owner?.DataGridView?.AccessibilityObject;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (_owner is null)
             {

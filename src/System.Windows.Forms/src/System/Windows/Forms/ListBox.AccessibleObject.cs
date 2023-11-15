@@ -74,13 +74,7 @@ public partial class ListBox
         private protected virtual ListBoxItemAccessibleObject CreateItemAccessibleObject(ListBox listBox, ItemArray.Entry item)
             => new(listBox, item, this);
 
-        /// <summary>
-        ///  Return the child object at the given screen coordinates.
-        /// </summary>
-        /// <param name="x">X coordinate.</param>
-        /// <param name="y">Y coordinate.</param>
-        /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
-        internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
         {
             if (!this.IsOwnerHandleCreated(out ListBox? _))
             {
@@ -97,12 +91,7 @@ public partial class ListBox
             return base.ElementProviderFromPoint(x, y);
         }
 
-        /// <summary>
-        ///  Returns the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             int childCount = this.TryGetOwnerAs(out ListBox? owner) ? owner.Items.Count : 0;
 
@@ -119,13 +108,8 @@ public partial class ListBox
             };
         }
 
-        internal override UiaCore.IRawElementProviderFragment? GetFocus() => this.IsOwnerHandleCreated(out ListBox? _) ? GetFocused() : null;
+        internal override IRawElementProviderFragment.Interface? GetFocus() => this.IsOwnerHandleCreated(out ListBox? _) ? GetFocused() : null;
 
-        /// <summary>
-        ///  Gets the accessible property value.
-        /// </summary>
-        /// <param name="propertyID">The accessible property ID.</param>
-        /// <returns>The accessible property value.</returns>
         internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
         {
             switch (propertyID)

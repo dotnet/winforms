@@ -219,7 +219,7 @@ public partial class ListViewGroup
             return visibleItems;
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owningListView.IsHandleCreated || !_owningListView.GroupsDisplayed || IsEmpty)
             {

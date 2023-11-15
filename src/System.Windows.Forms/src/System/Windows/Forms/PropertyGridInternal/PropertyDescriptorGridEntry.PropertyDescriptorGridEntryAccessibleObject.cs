@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -149,18 +148,13 @@ internal partial class PropertyDescriptorGridEntry
             }
         }
 
-        /// <summary>
-        ///  Returns the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
                 NavigateDirection.NavigateDirection_NextSibling => GetNextSibling(),
                 NavigateDirection.NavigateDirection_PreviousSibling => GetPreviousSibling(),
-                NavigateDirection.NavigateDirection_FirstChild => GetFirstChild(),
-                NavigateDirection.NavigateDirection_LastChild => GetLastChild(),
+                NavigateDirection.NavigateDirection_FirstChild => FirstChild,
+                NavigateDirection.NavigateDirection_LastChild => LastChild,
                 _ => base.FragmentNavigate(direction),
             };
 
@@ -301,13 +295,15 @@ internal partial class PropertyDescriptorGridEntry
             }
         }
 
-        private UiaCore.IRawElementProviderFragment? GetFirstChild() => GetChildCount() > 0 ? GetChild(0) : null;
+        private IRawElementProviderFragment.Interface? FirstChild
+            => GetChildCount() > 0 ? GetChild(0) : null;
 
-        private UiaCore.IRawElementProviderFragment? GetLastChild() => GetChildCount() is int count and > 0
-            ? GetChild(count - 1)
-            : null;
+        private IRawElementProviderFragment.Interface? LastChild
+            => GetChildCount() is int count and > 0
+                ? GetChild(count - 1)
+                : null;
 
-        private UiaCore.IRawElementProviderFragment? GetNextSibling()
+        private AccessibleObject? GetNextSibling()
         {
             if (!this.TryGetOwnerAs(out PropertyDescriptorGridEntry? owner))
             {
@@ -321,14 +317,14 @@ internal partial class PropertyDescriptorGridEntry
 
             return Parent is PropertyGridView.PropertyGridViewAccessibleObject propertyGridViewAccessibleObject
                 && propertyGridViewAccessibleObject.TryGetOwnerAs(out PropertyGridView? gridViewOwner)
-                    ? (UiaCore.IRawElementProviderFragment?)PropertyGridView.PropertyGridViewAccessibleObject.GetNextGridEntry(
+                    ? PropertyGridView.PropertyGridViewAccessibleObject.GetNextGridEntry(
                         owner,
                         gridViewOwner.TopLevelGridEntries,
                         out _)
                     : null;
         }
 
-        private UiaCore.IRawElementProviderFragment? GetPreviousSibling()
+        private AccessibleObject? GetPreviousSibling()
         {
             if (!this.TryGetOwnerAs(out PropertyDescriptorGridEntry? owner))
             {

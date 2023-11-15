@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -29,18 +28,13 @@ public partial class ListViewItem
                 ? null
                 : new(_owningListView, _owningListView._labelEdit);
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
-        {
-            switch (direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
+            => direction switch
             {
-                case NavigateDirection.NavigateDirection_FirstChild:
-                    return GetChildCount() > 0 ? GetChild(0) : null;
-                case NavigateDirection.NavigateDirection_LastChild:
-                    return GetChildCount() > 0 ? GetChild(GetChildCount() - 1) : null;
-            }
-
-            return base.FragmentNavigate(direction);
-        }
+                NavigateDirection.NavigateDirection_FirstChild => GetChildCount() > 0 ? GetChild(0) : null,
+                NavigateDirection.NavigateDirection_LastChild => GetChildCount() > 0 ? GetChild(GetChildCount() - 1) : null,
+                _ => base.FragmentNavigate(direction),
+            };
 
         internal AccessibleObject GetAccessibleObject(Point point)
         {

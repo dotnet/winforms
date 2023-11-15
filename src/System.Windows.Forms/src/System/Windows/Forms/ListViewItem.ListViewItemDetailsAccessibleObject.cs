@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -34,18 +33,13 @@ public partial class ListViewItem
             ? _owningListView.Columns[accessibleChildIndex - 1]._correspondingListViewSubItemIndex
             : _owningListView.Columns[accessibleChildIndex]._correspondingListViewSubItemIndex;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
-        {
-            switch (direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
+            => direction switch
             {
-                case NavigateDirection.NavigateDirection_FirstChild:
-                    return GetChild(0);
-                case NavigateDirection.NavigateDirection_LastChild:
-                    return GetChild(LastChildIndex);
-            }
-
-            return base.FragmentNavigate(direction);
-        }
+                NavigateDirection.NavigateDirection_FirstChild => GetChild(0),
+                NavigateDirection.NavigateDirection_LastChild => GetChild(LastChildIndex),
+                _ => base.FragmentNavigate(direction),
+            };
 
         public override AccessibleObject? GetChild(int accessibleChildIndex)
         {

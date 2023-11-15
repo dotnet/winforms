@@ -84,7 +84,7 @@ public partial class TabPage
 
         internal override void AddToSelection() => DoDefaultAction();
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (OwningTabControl is null || !OwningTabControl.IsHandleCreated)
             {

@@ -129,7 +129,7 @@ public partial class ListBox
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             int firstItemIndex = 0;
             int lastItemIndex = _owningListBox.Items.Count - 1;

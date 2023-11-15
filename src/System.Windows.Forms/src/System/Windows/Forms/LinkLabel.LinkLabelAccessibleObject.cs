@@ -18,12 +18,12 @@ public partial class LinkLabel
         {
         }
 
-        internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
             => !this.IsOwnerHandleCreated(out LinkLabel? owner)
                 ? base.ElementProviderFromPoint(x, y)
                 : HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
                 NavigateDirection.NavigateDirection_FirstChild

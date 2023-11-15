@@ -4,7 +4,6 @@
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using UiaCore = Interop.UiaCore;
 
 namespace System.Windows.Forms;
 
@@ -23,7 +22,7 @@ internal unsafe class LabelEditAccessibleObject : AccessibleObject
         _textProvider = new(owningControl, labelEdit, this);
     }
 
-    internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+    internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         => direction switch
         {
             NavigateDirection.NavigateDirection_Parent => Parent,
