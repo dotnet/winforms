@@ -389,7 +389,7 @@ System.Windows.Forms.DataGridViewCell.Style.get -> System.Windows.Forms.DataGrid
 System.Windows.Forms.DataGridViewCell.Style.set -> void
 System.Windows.Forms.DataGridViewCell.Tag.get -> object?
 System.Windows.Forms.DataGridViewCell.Tag.set -> void
-System.Windows.Forms.DataGridViewCell.ToolTipText.get -> string?
+System.Windows.Forms.DataGridViewCell.ToolTipText.get -> string!
 System.Windows.Forms.DataGridViewCell.ToolTipText.set -> void
 System.Windows.Forms.DataGridViewCell.Value.get -> object?
 System.Windows.Forms.DataGridViewCell.Value.set -> void
@@ -438,7 +438,7 @@ System.Windows.Forms.DataGridViewColumn.Name.get -> string!
 System.Windows.Forms.DataGridViewColumn.Name.set -> void
 System.Windows.Forms.DataGridViewColumn.Site.get -> System.ComponentModel.ISite?
 System.Windows.Forms.DataGridViewColumn.Site.set -> void
-System.Windows.Forms.DataGridViewColumn.ToolTipText.get -> string?
+System.Windows.Forms.DataGridViewColumn.ToolTipText.get -> string!
 System.Windows.Forms.DataGridViewColumn.ToolTipText.set -> void
 System.Windows.Forms.DataGridViewColumn.ValueType.get -> System.Type?
 System.Windows.Forms.DataGridViewColumn.ValueType.set -> void

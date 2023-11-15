@@ -25515,7 +25515,7 @@ public partial class DataGridView
         {
             DataGridViewCell dataGridViewCurrentCell = CurrentCellInternal;
             Debug.Assert(dataGridViewCurrentCell is not null);
-            object nullValue = dataGridViewCurrentCell.GetInheritedStyle(null, _ptCurrentCell.Y, false).NullValue;
+            object nullValue = dataGridViewCurrentCell.GetInheritedStyle(inheritedCellStyle: null, _ptCurrentCell.Y, includeColors: false).NullValue;
             if (nullValue is null
                 || (dataGridViewCurrentCell.FormattedValueType is not null && dataGridViewCurrentCell.FormattedValueType.IsAssignableFrom(nullValue.GetType())))
             {

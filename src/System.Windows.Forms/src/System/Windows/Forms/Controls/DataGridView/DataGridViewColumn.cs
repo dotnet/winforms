@@ -764,7 +764,8 @@ public class DataGridViewColumn : DataGridViewBand, IComponent
     [Localizable(true)]
     [SRCategory(nameof(SR.CatAppearance))]
     [SRDescription(nameof(SR.DataGridView_ColumnToolTipTextDescr))]
-    public string? ToolTipText
+    [AllowNull]
+    public string ToolTipText
     {
         get => HeaderCell.ToolTipText;
         set

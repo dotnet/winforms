@@ -695,9 +695,10 @@ public abstract partial class DataGridViewCell : DataGridViewElement, ICloneable
 
     [Browsable(false)]
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public string? ToolTipText
+    [AllowNull]
+    public string ToolTipText
     {
-        get => GetToolTipText(RowIndex);
+        get => GetToolTipText(RowIndex) ?? string.Empty;
         set
         {
             ToolTipTextInternal = value;
