@@ -1769,7 +1769,7 @@ public class ListView_ListViewAccessibleObjectTests
         var actual = listViewAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SelectionCanSelectMultiplePropertyId);
         Assert.True((bool)actual);
 
-        UiaCore.ISelectionProvider provider = listViewAccessibleObject;
+        Interop.UiaCore.ISelectionProvider provider = listViewAccessibleObject;
         Assert.True((bool)provider.CanSelectMultiple);
     }
 }
