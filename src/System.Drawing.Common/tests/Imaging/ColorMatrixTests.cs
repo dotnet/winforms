@@ -71,14 +71,19 @@ public class ColorMatrixTests
             yield return new object[] { null, typeof(NullReferenceException) };
             yield return new object[] { new float[][] { }, typeof(IndexOutOfRangeException) };
             yield return new object[] { new float[][] { new float[] { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f } }, typeof(IndexOutOfRangeException) };
-            yield return new object[] { new float[][] {
+            yield return new object[]
+            {
+                new float[][]
+            {
                 new float[] { 0.0f },
                 new float[] { 1.0f },
                 new float[] { 2.0f },
                 new float[] { 3.0f },
                 new float[] { 4.0f },
-                new float[] { 5.0f } }
-            , typeof(IndexOutOfRangeException) };
+                new float[] { 5.0f }
+            }
+            , typeof(IndexOutOfRangeException)
+            };
         }
     }
 
@@ -86,7 +91,8 @@ public class ColorMatrixTests
     {
         get
         {
-            return new float[][] {
+            return new float[][]
+            {
             new float[] { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f},
             new float[] { 1.0f, 1.1f, 1.2f, 1.3f, 1.4f},
             new float[] { 2.0f, 2.1f, 2.2f, 2.3f, 2.4f},
@@ -106,7 +112,8 @@ public class ColorMatrixTests
     [Fact]
     public void Ctor_TooBigArraySize_MapOnly4and4Elements()
     {
-        ColorMatrix cm = new ColorMatrix(new float[][] {
+        ColorMatrix cm = new ColorMatrix(new float[][]
+        {
             new float[] { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f },
             new float[] { 1.0f, 1.1f, 1.2f, 1.3f, 1.4f, 1.5f },
             new float[] { 2.0f, 2.1f, 2.2f, 2.3f, 2.4f, 2.5f },
@@ -145,7 +152,8 @@ public class ColorMatrixTests
     [Fact]
     public void AccessToNotExistingElement_ThrowsIndexOutOfRangeException()
     {
-        ColorMatrix cm = new ColorMatrix(new float[][] {
+        ColorMatrix cm = new ColorMatrix(new float[][]
+        {
             new float[] { 0.0f, 0.1f, 0.2f, 0.3f, 0.4f, 0.5f },
             new float[] { 1.0f, 1.1f, 1.2f, 1.3f, 1.4f, 1.5f },
             new float[] { 2.0f, 2.1f, 2.2f, 2.3f, 2.4f, 2.5f },

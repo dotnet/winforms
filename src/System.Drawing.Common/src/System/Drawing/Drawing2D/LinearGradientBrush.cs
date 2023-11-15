@@ -215,6 +215,7 @@ public sealed class LinearGradientBrush : Brush
                 {
                     Marshal.FreeHGlobal(factors);
                 }
+
                 if (positions != IntPtr.Zero)
                 {
                     Marshal.FreeHGlobal(positions);
@@ -269,6 +270,7 @@ public sealed class LinearGradientBrush : Brush
                 {
                     Marshal.FreeHGlobal(factors);
                 }
+
                 if (positions != IntPtr.Zero)
                 {
                     Marshal.FreeHGlobal(positions);
@@ -357,6 +359,7 @@ public sealed class LinearGradientBrush : Brush
                 {
                     Marshal.FreeHGlobal(colors);
                 }
+
                 if (positions != IntPtr.Zero)
                 {
                     Marshal.FreeHGlobal(positions);
@@ -397,7 +400,6 @@ public sealed class LinearGradientBrush : Brush
                                             SR.InterpolationColorsInvalidEndPosition));
             }
 
-
             // Allocate a temporary native memory buffer and copy input blend factors into it.
             int count = value.Colors.Length;
             IntPtr colors = IntPtr.Zero;
@@ -427,6 +429,7 @@ public sealed class LinearGradientBrush : Brush
                 {
                     Marshal.FreeHGlobal(colors);
                 }
+
                 if (positions != IntPtr.Zero)
                 {
                     Marshal.FreeHGlobal(positions);

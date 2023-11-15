@@ -318,6 +318,7 @@ public static class Brushes
             brush = new SolidBrush(color);
             Gdip.ThreadData[key] = brush;
         }
+
         return brush;
     }
 }

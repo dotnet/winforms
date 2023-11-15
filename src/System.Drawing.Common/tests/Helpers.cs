@@ -65,6 +65,7 @@ public static class Helpers
                     expectedStringBuilder.Append(", ");
                 }
             }
+
             actualStringBuilder.AppendLine();
             expectedStringBuilder.AppendLine();
         }

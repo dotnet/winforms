@@ -74,6 +74,7 @@ internal ref partial struct ValueStringBuilder
             EnsureCapacity(Length + 1);
             _chars[Length] = '\0';
         }
+
         return ref MemoryMarshal.GetReference(_chars);
     }
 
@@ -107,6 +108,7 @@ internal ref partial struct ValueStringBuilder
             EnsureCapacity(Length + 1);
             _chars[Length] = '\0';
         }
+
         return _chars.Slice(0, _pos);
     }
 
@@ -230,6 +232,7 @@ internal ref partial struct ValueStringBuilder
         {
             dst[i] = c;
         }
+
         _pos += count;
     }
 
@@ -246,6 +249,7 @@ internal ref partial struct ValueStringBuilder
         {
             dst[i] = *value++;
         }
+
         _pos += length;
     }
 

@@ -217,6 +217,7 @@ public partial class Margins : ICloneable
         {
             return m2 is null;
         }
+
         if (m2 is null)
         {
             return false;

@@ -75,6 +75,7 @@ public sealed class Region : MarshalByRefObject, IDisposable
         Gdip.CheckStatus(Gdip.GdipCloneRegion(new HandleRef(this, NativeRegion), out IntPtr region));
         return new Region(region);
     }
+
     public void ReleaseHrgn(IntPtr regionHandle)
     {
         if (regionHandle == IntPtr.Zero)

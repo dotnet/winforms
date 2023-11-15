@@ -140,6 +140,7 @@ public class ToolboxBitmapAttribute : Attribute
         {
             return null;
         }
+
         Icon ico = new Icon(stream);
         Icon sizedico = new Icon(ico, large ? s_largeSize : s_smallSize);
         Bitmap? b = sizedico.ToBitmap();
@@ -147,6 +148,7 @@ public class ToolboxBitmapAttribute : Attribute
         {
             DpiHelper.ScaleBitmapLogicalToDevice(ref b);
         }
+
         return b;
     }
 
@@ -204,6 +206,7 @@ public class ToolboxBitmapAttribute : Attribute
             {
                 img = new Bitmap(b, s_largeSize.Width, s_largeSize.Height);
             }
+
             if (DpiHelper.IsScalingRequired && scaled)
             {
                 b = (Bitmap)img;
@@ -211,6 +214,7 @@ public class ToolboxBitmapAttribute : Attribute
                 img = b;
             }
         }
+
         return img;
     }
 
@@ -276,14 +280,17 @@ public class ToolboxBitmapAttribute : Attribute
                     iconname = name + ".ico";
                 }
             }
+
             if (rawbmpname is not null)
             {
                 img = GetBitmapFromResource(t, rawbmpname, large, scaled);
             }
+
             if (img is null && bmpname is not null)
             {
                 img = GetBitmapFromResource(t, bmpname, large, scaled);
             }
+
             if (img is null && iconname is not null)
             {
                 img = GetIconFromResource(t, iconname, large, scaled);

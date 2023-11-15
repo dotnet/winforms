@@ -215,6 +215,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
             {
                 throw new ObjectDisposedException(GetType().Name);
             }
+
             return _handle;
         }
     }
@@ -567,7 +568,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                     int thisDelta = Math.Abs(entry.bWidth - width) + Math.Abs(entry.bHeight - height);
 
                     if ((thisDelta < bestDelta) ||
-                        (thisDelta == bestDelta && (iconBitDepth <= s_bitDepth && iconBitDepth > _bestBitDepth || _bestBitDepth > s_bitDepth && iconBitDepth < _bestBitDepth)))
+                        (thisDelta == bestDelta && ((iconBitDepth <= s_bitDepth && iconBitDepth > _bestBitDepth) || (_bestBitDepth > s_bitDepth && iconBitDepth < _bestBitDepth))))
                     {
                         fUpdateBestFit = true;
                     }
@@ -619,6 +620,7 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                 {
                     _handle = User32.CreateIconFromResourceEx(pbAlignedBuffer, _bestBytesInRes, true, 0x00030000, 0, 0, 0);
                 }
+
                 ArrayPool<byte>.Shared.Return(alignedBuffer);
             }
             else
@@ -777,11 +779,13 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                             {
                                 tmpBitmap.UnlockBits(bmpData);
                             }
+
                             if (bitmap is not null && targetData is not null)
                             {
                                 bitmap.UnlockBits(targetData);
                             }
                         }
+
                         tmpBitmap.Dispose();
                     }
                 }
@@ -792,13 +796,13 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                 {
                     Gdi32.DeleteObject(info.hbmColor);
                 }
+
                 if (info.hbmMask != IntPtr.Zero)
                 {
                     Gdi32.DeleteObject(info.hbmMask);
                 }
             }
         }
-
 
         if (bitmap is null)
         {
@@ -828,7 +832,6 @@ public sealed partial class Icon : MarshalByRefObject, ICloneable, IDisposable, 
                     Draw(graphics, new Rectangle(0, 0, size.Width, size.Height));
                 }
             }
-
 
             // GDI+ fills the surface with a sentinel color for GetDC, but does
             // not correctly clean it up again, so we have to do it.

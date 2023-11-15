@@ -220,6 +220,7 @@ public sealed class PathGradientBrush : Brush
                 {
                     Marshal.FreeHGlobal(factors);
                 }
+
                 if (positions != IntPtr.Zero)
                 {
                     Marshal.FreeHGlobal(positions);

@@ -1119,7 +1119,6 @@ public class BitmapTests : FileCleanupTestBase
         yield return new object[] { new Bitmap(100, 100, PixelFormat.Format8bppIndexed), new Rectangle(0, 0, 100, 100), ImageLockMode.ReadWrite, PixelFormat.Format8bppIndexed, 100, 3 };
         yield return new object[] { new Bitmap(100, 100, PixelFormat.Format8bppIndexed), new Rectangle(0, 0, 100, 100), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed, 100, 2 };
 
-
         yield return new object[] { new Bitmap(184, 184, PixelFormat.Format1bppIndexed), new Rectangle(0, 0, 184, 184), ImageLockMode.ReadOnly, PixelFormat.Format1bppIndexed, 24, 1 };
         yield return new object[] { new Bitmap(184, 184, PixelFormat.Format1bppIndexed), new Rectangle(0, 0, 184, 184), ImageLockMode.ReadWrite, PixelFormat.Format1bppIndexed, 24, 3 };
         yield return new object[] { new Bitmap(184, 184, PixelFormat.Format1bppIndexed), new Rectangle(0, 0, 184, 184), ImageLockMode.WriteOnly, PixelFormat.Format1bppIndexed, 24, 2 };
@@ -1411,6 +1410,7 @@ public class BitmapTests : FileCleanupTestBase
                 {
                     Assert.Equal(33, c.G);
                 }
+
                 Assert.Equal(16, c.B);
 
                 Assert.Equal(255, d.A);
@@ -1423,6 +1423,7 @@ public class BitmapTests : FileCleanupTestBase
                 {
                     Assert.Equal(49, d.G);
                 }
+
                 Assert.Equal(24, d.B);
             }
             else if (alpha)
@@ -1450,6 +1451,7 @@ public class BitmapTests : FileCleanupTestBase
                 Assert.Equal(Color.FromArgb(255, 64, 32, 16), c);
                 Assert.Equal(Color.FromArgb(255, 96, 48, 24), d);
             }
+
             BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, 2, 1), ImageLockMode.ReadOnly, format);
             try
             {
@@ -1507,6 +1509,7 @@ public class BitmapTests : FileCleanupTestBase
                             Assert.Equal(c.A, data[n++]);
                         }
                     }
+
                     Assert.Equal(d.B, data[n++]);
                     Assert.Equal(d.G, data[n++]);
                     Assert.Equal(d.R, data[n++]);
@@ -1736,6 +1739,7 @@ public class BitmapTests : FileCleanupTestBase
             get => _stream.Position;
             set => _stream.Position = _canSeek ? value : throw new NotSupportedException();
         }
+
         public override void Flush() => _stream.Flush();
         public override int Read(byte[] buffer, int offset, int count) => _canRead ?  _stream.Read(buffer, offset, count) : throw new NotSupportedException();
         public override long Seek(long offset, SeekOrigin origin) => _stream.Seek(offset, origin);

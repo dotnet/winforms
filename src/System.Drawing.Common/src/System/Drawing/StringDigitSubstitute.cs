@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 // font style constants (sdkinc\GDIplusEnums.h)
@@ -14,4 +14,4 @@ public enum StringDigitSubstitute
     None = 1,
     National = 2,
     Traditional = 3
-};
+}

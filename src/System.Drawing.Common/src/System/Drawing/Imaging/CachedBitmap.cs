@@ -5,7 +5,6 @@ using System.Threading;
 
 #if NET8_0_OR_GREATER
 
-
 using static System.Drawing.SafeNativeMethods;
 
 namespace System.Drawing.Imaging;

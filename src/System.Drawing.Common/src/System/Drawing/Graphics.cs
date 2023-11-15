@@ -15,7 +15,6 @@ using System.Runtime.InteropServices.Marshalling;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 using static Interop;
 
-
 namespace System.Drawing;
 
 /// <summary>
@@ -2200,7 +2199,6 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
     }
 #endif
 
-
     /// <summary>
     /// Draws the specified image at the specified location.
     /// </summary>
@@ -2719,7 +2717,6 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 p, points.Length));
         }
     }
-
 
     /// <summary>
     /// Draws a line connecting the two specified points.
@@ -3288,6 +3285,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
             callbackData,
             new HandleRef(imageAttr, imageAttr?.nativeImageAttributes ?? IntPtr.Zero)));
     }
+
     public void EnumerateMetafile(
         Metafile metafile,
         Point destPoint,
@@ -3600,7 +3598,8 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 {
                     break;
                 }
-            } while (context.IsCumulative);
+            }
+            while (context.IsCumulative);
         }
 
         if (!totalOffset.IsEmpty())
@@ -3668,6 +3667,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
             context.Previous = _previousContext;
             _previousContext.Next = context;
         }
+
         _previousContext = context;
     }
 
@@ -3690,8 +3690,10 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 context.Dispose();
                 return;
             }
+
             context = context.Previous;
         }
+
         Debug.Fail("Warning: context state not found!");
     }
 
@@ -3804,6 +3806,7 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
                 }
             }
         }
+
         return s_halftonePalette;
     }
 

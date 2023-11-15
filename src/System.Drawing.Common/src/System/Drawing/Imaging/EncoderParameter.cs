@@ -226,6 +226,7 @@ public sealed unsafe class EncoderParameter : IDisposable
                 dest[i] = unchecked((int)source[i]);
             }
         }
+
         GC.KeepAlive(this);
     }
 
@@ -245,6 +246,7 @@ public sealed unsafe class EncoderParameter : IDisposable
             ((int*)_parameterValue)[i * 2 + 0] = numerator[i];
             ((int*)_parameterValue)[i * 2 + 1] = denominator[i];
         }
+
         GC.KeepAlive(this);
     }
 
@@ -264,6 +266,7 @@ public sealed unsafe class EncoderParameter : IDisposable
             ((int*)_parameterValue)[i * 2 + 0] = unchecked((int)rangebegin[i]);
             ((int*)_parameterValue)[i * 2 + 1] = unchecked((int)rangeend[i]);
         }
+
         GC.KeepAlive(this);
     }
 
@@ -292,6 +295,7 @@ public sealed unsafe class EncoderParameter : IDisposable
             ((int*)_parameterValue)[i * 4 + 2] = numerator2[i];
             ((int*)_parameterValue)[i * 4 + 3] = denominator2[i];
         }
+
         GC.KeepAlive(this);
     }
 

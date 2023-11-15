@@ -240,6 +240,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
                 default:
                     throw new InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(LineCap));
             }
+
             if (_immutable)
             {
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
@@ -832,7 +833,6 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
             {
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
-
 
             if (value is null || value.Length == 0)
             {
