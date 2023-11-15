@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Collections;
@@ -114,7 +114,7 @@ public class MarginsConverter : ExpandableObjectConverter
                 ConstructorInfo? ctor = typeof(Margins).GetConstructor(new Type[] {
                     typeof(int), typeof(int), typeof(int), typeof(int)});
 
-                if (ctor != null)
+                if (ctor is not null)
                 {
                     return new InstanceDescriptor(ctor, new object[] {
                         margins.Left, margins.Right, margins.Top, margins.Bottom});
@@ -144,8 +144,7 @@ public class MarginsConverter : ExpandableObjectConverter
         object? top = propertyValues["Top"];
         object? bottom = propertyValues["Bottom"];
 
-        if (left == null || right == null || bottom == null || top == null ||
-            !(left is int) || !(right is int) || !(bottom is int) || !(top is int))
+        if (left is not int || right is not int || bottom is not int || top is not int)
         {
             throw new ArgumentException(SR.PropertyValueInvalidEntry);
         }

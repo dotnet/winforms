@@ -30,7 +30,7 @@ public class ImageConverter : TypeConverter
 
         if (value is byte[] bytes)
         {
-            Debug.Assert(value != null, "value is null.");
+            Debug.Assert(value is not null, "value is null.");
             // Try to get memory stream for images with ole header.
             MemoryStream memStream = GetBitmapStream(bytes) ?? new MemoryStream(bytes);
             return Image.FromStream(memStream);
@@ -45,7 +45,7 @@ public class ImageConverter : TypeConverter
     {
         if (destinationType == typeof(string))
         {
-            if (value == null)
+            if (value is null)
             {
                 return SR.none;
             }
@@ -56,7 +56,7 @@ public class ImageConverter : TypeConverter
         }
         else if (destinationType == typeof(byte[]))
         {
-            if (value == null)
+            if (value is null)
             {
                 return Array.Empty<byte>();
             }

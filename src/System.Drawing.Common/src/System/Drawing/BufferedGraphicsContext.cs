@@ -115,7 +115,7 @@ public sealed class BufferedGraphicsContext : IDisposable
 
         try
         {
-            if (targetGraphics != null)
+            if (targetGraphics is not null)
             {
                 IntPtr destDc = targetGraphics.GetHdc();
                 try
@@ -160,7 +160,7 @@ public sealed class BufferedGraphicsContext : IDisposable
         }
         finally
         {
-            if (tempContext != null && (tempBuffer == null || (tempBuffer != null && !tempBuffer.DisposeContext)))
+            if (tempContext is not null && tempBuffer is not { DisposeContext: true })
             {
                 tempContext.Dispose();
             }
@@ -420,7 +420,7 @@ public sealed class BufferedGraphicsContext : IDisposable
                 ex = new Win32Exception(Marshal.GetLastWin32Error());
             }
 
-            if (ex != null)
+            if (ex is not null)
             {
                 throw ex;
             }
@@ -475,7 +475,7 @@ public sealed class BufferedGraphicsContext : IDisposable
                 throw new InvalidOperationException(SR.GraphicsBufferCurrentlyBusy);
             }
 
-            if (_compatGraphics != null)
+            if (_compatGraphics is not null)
             {
                 _compatGraphics.Dispose();
                 _compatGraphics = null;
@@ -485,7 +485,7 @@ public sealed class BufferedGraphicsContext : IDisposable
         DisposeDC();
         DisposeBitmap();
 
-        if (_buffer != null)
+        if (_buffer is not null)
         {
             _buffer.Dispose();
             _buffer = null;

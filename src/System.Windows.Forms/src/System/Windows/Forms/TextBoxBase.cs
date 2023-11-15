@@ -11,7 +11,7 @@ using System.Windows.Forms.Layout;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
+using Windows.Win32.UI.Controls.RichEdit;
 
 namespace System.Windows.Forms;
 
@@ -1605,8 +1605,8 @@ public abstract partial class TextBoxBase : Control
     /// </summary>
     public virtual int GetCharIndexFromPosition(Point pt)
     {
-        int index = (int)PInvoke.SendMessage(this, PInvoke.EM_CHARFROMPOS, 0, PARAM.FromPoint(pt));
-        index = PARAM.LOWORD(index);
+        int index = (int)PInvoke.SendMessage(this, PInvoke.EM_CHARFROMPOS, 0, Interop.PARAM.FromPoint(pt));
+        index = Interop.PARAM.LOWORD(index);
 
         if (index < 0)
         {
@@ -1648,7 +1648,7 @@ public abstract partial class TextBoxBase : Control
         }
 
         int i = (int)PInvoke.SendMessage(this, PInvoke.EM_POSFROMCHAR, (WPARAM)index);
-        return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
+        return new Point(Interop.PARAM.SignedLOWORD(i), Interop.PARAM.SignedHIWORD(i));
     }
 
     /// <summary>
@@ -1684,75 +1684,55 @@ public abstract partial class TextBoxBase : Control
             return;
         }
 
-        bool scrolled = false;
-        IntPtr editOlePtr = IntPtr.Zero;
-        try
-        {
-            if (PInvoke.SendMessage(this, PInvoke.EM_GETOLEINTERFACE, 0, ref editOlePtr) != 0)
-            {
-                IntPtr iTextDocument = IntPtr.Zero;
-                Guid iiTextDocumentGuid = typeof(Richedit.ITextDocument).GUID;
+        using ComScope<IRichEditOle> richEdit = new(null);
 
-                try
-                {
-                    Marshal.QueryInterface(editOlePtr, in iiTextDocumentGuid, out iTextDocument);
-
-                    if (ComHelpers.GetObjectForIUnknown((IUnknown*)iTextDocument) is Richedit.ITextDocument textDocument)
-                    {
-                        // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as
-                        // much text as possible.
-                        // Here is how we do that:
-                        // 1. We scroll the RichTextBox all the way to the bottom so the last line of text is the last visible line.
-                        // 2. We get the first visible line.
-                        // 3. If the first visible line is smaller than the start of the selection, then we are done:
-                        //      The selection fits inside the RichTextBox display rectangle.
-                        // 4. Otherwise, scroll the selection to the top of the RichTextBox.
-                        GetSelectionStartAndLength(out int selStart, out int selLength);
-                        int selStartLine = GetLineFromCharIndex(selStart);
-
-                        // 1. Scroll the RichTextBox all the way to the bottom
-                        Richedit.ITextRange textRange = textDocument.Range(WindowText.Length - 1, WindowText.Length - 1);
-                        textRange.ScrollIntoView(0);   // 0 ==> tomEnd
-
-                        // 2. Get the first visible line.
-                        int firstVisibleLine = (int)PInvoke.SendMessage(this, PInvoke.EM_GETFIRSTVISIBLELINE);
-
-                        // 3. If the first visible line is smaller than the start of the selection, we are done;
-                        if (firstVisibleLine <= selStartLine)
-                        {
-                            // we are done
-                        }
-                        else
-                        {
-                            // 4. Scroll the selection to the top of the RichTextBox
-                            textRange = textDocument.Range(selStart, selStart + selLength);
-                            textRange.ScrollIntoView(32);   // 32 ==> tomStart
-                        }
-
-                        scrolled = true;
-                    }
-                }
-                finally
-                {
-                    if (iTextDocument != IntPtr.Zero)
-                    {
-                        Marshal.Release(iTextDocument);
-                    }
-                }
-            }
-        }
-        finally
-        {
-            if (editOlePtr != IntPtr.Zero)
-            {
-                Marshal.Release(editOlePtr);
-            }
-        }
-
-        if (!scrolled)
+        if (PInvoke.SendMessage(this, PInvoke.EM_GETOLEINTERFACE, 0, (void**)richEdit) == 0)
         {
             PInvoke.SendMessage(this, PInvoke.EM_SCROLLCARET);
+            return;
         }
+
+        using var textDocument = richEdit.TryQuery<ITextDocument>(out HRESULT hr);
+
+        if (hr.Succeeded)
+        {
+            // When the user calls RichTextBox::ScrollToCaret we want the RichTextBox to show as much text as
+            // possible. Here is how we do that:
+            //
+            //  1. We scroll the RichTextBox all the way to the bottom so the last line of text is the last visible line.
+            //  2. We get the first visible line.
+            //  3. If the first visible line is smaller than the start of the selection, then we are done:
+            //      The selection fits inside the RichTextBox display rectangle.
+            //  4. Otherwise, scroll the selection to the top of the RichTextBox.
+
+            GetSelectionStartAndLength(out int selStart, out int selLength);
+            int selStartLine = GetLineFromCharIndex(selStart);
+
+            using ComScope<ITextRange> windowTextRange = new(null);
+            textDocument.Value->Range(WindowText.Length - 1, WindowText.Length - 1, windowTextRange).ThrowOnFailure();
+
+            // 1. Scroll the RichTextBox all the way to the bottom
+            windowTextRange.Value->ScrollIntoView((int)tomConstants.tomEnd).ThrowOnFailure();
+
+            // 2. Get the first visible line.
+            int firstVisibleLine = (int)PInvoke.SendMessage(this, PInvoke.EM_GETFIRSTVISIBLELINE);
+
+            // 3. If the first visible line is smaller than the start of the selection, we are done.
+            if (firstVisibleLine <= selStartLine)
+            {
+                return;
+            }
+            else
+            {
+                // 4. Scroll the selection to the top of the RichTextBox.
+                using ComScope<ITextRange> selectionTextRange = new(null);
+                textDocument.Value->Range(selStart, selStart + selLength, selectionTextRange).ThrowOnFailure();
+                selectionTextRange.Value->ScrollIntoView((int)tomConstants.tomStart).ThrowOnFailure();
+                return;
+            }
+        }
+
+        PInvoke.SendMessage(this, PInvoke.EM_SCROLLCARET);
     }
 
     /// <summary>
@@ -2134,7 +2114,7 @@ public abstract partial class TextBoxBase : Control
         }
         else
         {
-            client = PointToClient(PARAM.ToPoint(m.LParamInternal));
+            client = PointToClient(Interop.PARAM.ToPoint(m.LParamInternal));
         }
 
         // Only show the context menu when clicked in the client area.

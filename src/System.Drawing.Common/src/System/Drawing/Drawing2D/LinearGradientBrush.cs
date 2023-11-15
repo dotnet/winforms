@@ -226,10 +226,10 @@ public sealed class LinearGradientBrush : Brush
             // Do explicit parameter validation here; libgdiplus does not correctly validate the arguments
 
             // This is the original behavior on Desktop .NET
-            if (value == null || value.Factors == null)
+            if (value is null || value.Factors is null)
                 throw new NullReferenceException();
 
-            if (value.Positions == null)
+            if (value.Positions is null)
                 throw new ArgumentException(SR.Format(SR.InvalidArgumentValue, "value.Positions", value.Positions), nameof(value));
 
             int count = value.Factors.Length;
@@ -367,7 +367,7 @@ public sealed class LinearGradientBrush : Brush
         {
             _interpolationColorsWasSet = true;
 
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentException(SR.Format(SR.InterpolationColorsCommon,
                                             SR.InterpolationColorsInvalidColorBlendObject, string.Empty));
@@ -461,7 +461,7 @@ public sealed class LinearGradientBrush : Brush
         }
         set
         {
-            if (value == null)
+            if (value is null)
                 throw new ArgumentNullException(nameof(value));
 
             Gdip.CheckStatus(Gdip.GdipSetLineTransform(new HandleRef(this, NativeBrush), new HandleRef(value, value.NativeMatrix)));

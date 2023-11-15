@@ -5,7 +5,6 @@ using System.Buffers;
 using System.ComponentModel;
 using System.Drawing.Imaging;
 using System.Drawing.Internal;
-using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -98,7 +97,9 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
 
     private protected Image() { }
 
+#pragma warning disable CA2229 // Implement serialization constructors
     private protected Image(SerializationInfo info, StreamingContext context)
+#pragma warning restore CA2229 // Implement serialization constructors
     {
         byte[] dat = (byte[])info.GetValue("Data", typeof(byte[]))!; // Do not rename (binary serialization)
 
@@ -269,7 +270,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
 #endif
             Gdip.GdipDisposeImage(new HandleRef(this, _nativeImage));
 #if DEBUG
-            Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+            Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
 #endif
         }
         catch (Exception ex)
@@ -1037,7 +1038,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
                 {
                     Stream? created = null;
                     long lastPos = 0;
-                    if (dataStream != null)
+                    if (dataStream is not null)
                     {
                         lastPos = dataStream.Position;
                         dataStream.Position = 0;
@@ -1045,7 +1046,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
 
                     try
                     {
-                        if (dataStream == null)
+                        if (dataStream is null)
                         {
                             created = dataStream = File.OpenRead(filename!);
                         }
@@ -1055,7 +1056,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
                     }
                     finally
                     {
-                        if (created != null)
+                        if (created is not null)
                         {
                             created.Close();
                         }

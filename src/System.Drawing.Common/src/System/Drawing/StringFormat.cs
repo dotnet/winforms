@@ -1,9 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 using System.ComponentModel;
 using System.Drawing.Text;
 using System.Runtime.InteropServices;
-using System.Globalization;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
 namespace System.Drawing;
@@ -82,7 +81,7 @@ public sealed class StringFormat : MarshalByRefObject, ICloneable, IDisposable
 #endif
                 Gdip.GdipDeleteStringFormat(new HandleRef(this, nativeFormat));
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
             catch (Exception ex)

@@ -30,7 +30,7 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
 
     internal override bool IsPropertyReadOnly => ShouldRenderReadOnly;
 
-    public override object PropertyValue
+    public override object? PropertyValue
     {
         get => base.PropertyValue;
         set
@@ -83,7 +83,7 @@ internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorG
         }
     }
 
-    protected override bool SendNotification(object owner, Notify notification)
+    protected override bool SendNotification(object? owner, Notify notification)
         => ParentGridEntry.SendNotificationToParent(notification);
 
     public override bool ShouldRenderReadOnly => InstanceParentGridEntry.ShouldRenderReadOnly;

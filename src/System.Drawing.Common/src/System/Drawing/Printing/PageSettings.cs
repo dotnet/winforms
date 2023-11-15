@@ -33,7 +33,7 @@ public partial class PageSettings : ICloneable
     /// </summary>
     public PageSettings(PrinterSettings printerSettings)
     {
-        Debug.Assert(printerSettings != null, "printerSettings == null");
+        Debug.Assert(printerSettings is not null, "printerSettings == null");
         this.printerSettings = printerSettings;
     }
 
@@ -159,7 +159,7 @@ public partial class PageSettings : ICloneable
     {
         get
         {
-            if (_paperSource == null)
+            if (_paperSource is null)
             {
                 IntPtr modeHandle = printerSettings.GetHdevmode();
                 IntPtr modePointer = Kernel32.GlobalLock(new HandleRef(this, modeHandle));
@@ -228,7 +228,7 @@ public partial class PageSettings : ICloneable
     {
         get
         {
-            if (_printerResolution == null)
+            if (_printerResolution is null)
             {
                 IntPtr modeHandle = printerSettings.GetHdevmode();
                 IntPtr modePointer = Kernel32.GlobalLock(new HandleRef(this, modeHandle));
@@ -282,7 +282,7 @@ public partial class PageSettings : ICloneable
         if (_landscape.IsNotDefault && ((mode.dmFields & SafeNativeMethods.DM_ORIENTATION) == SafeNativeMethods.DM_ORIENTATION))
             mode.dmOrientation = unchecked((short)(((bool)_landscape) ? SafeNativeMethods.DMORIENT_LANDSCAPE : SafeNativeMethods.DMORIENT_PORTRAIT));
 
-        if (_paperSize != null)
+        if (_paperSize is not null)
         {
             if ((mode.dmFields & SafeNativeMethods.DM_PAPERSIZE) == SafeNativeMethods.DM_PAPERSIZE)
             {
@@ -324,12 +324,12 @@ public partial class PageSettings : ICloneable
             }
         }
 
-        if (_paperSource != null && ((mode.dmFields & SafeNativeMethods.DM_DEFAULTSOURCE) == SafeNativeMethods.DM_DEFAULTSOURCE))
+        if (_paperSource is not null && ((mode.dmFields & SafeNativeMethods.DM_DEFAULTSOURCE) == SafeNativeMethods.DM_DEFAULTSOURCE))
         {
             mode.dmDefaultSource = unchecked((short)_paperSource.RawKind);
         }
 
-        if (_printerResolution != null)
+        if (_printerResolution is not null)
         {
             if (_printerResolution.Kind == PrinterResolutionKind.Custom)
             {
@@ -411,7 +411,7 @@ public partial class PageSettings : ICloneable
 
     private PaperSize GetPaperSize(IntPtr modeHandle)
     {
-        if (_paperSize == null)
+        if (_paperSize is null)
         {
             bool ownHandle = false;
             if (modeHandle == IntPtr.Zero)

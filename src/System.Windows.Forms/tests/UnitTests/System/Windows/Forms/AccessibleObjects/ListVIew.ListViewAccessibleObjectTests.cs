@@ -1758,5 +1758,20 @@ public class ListView_ListViewAccessibleObjectTests
 
         Assert.Equal(expectedWidth, actual.width);
     }
+
+    [WinFormsFact]
+    public void ListViewItemAccessibleObject_GetPropertyValue_CanSelectMultiple()
+    {
+        using ListView listView = new();
+        listView.MultiSelect = true;
+        listView.CreateControl();
+
+        var listViewAccessibleObject = listView.AccessibilityObject;
+        var actual = listViewAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SelectionCanSelectMultiplePropertyId);
+        Assert.True((bool)actual);
+
+        UiaCore.ISelectionProvider provider = listViewAccessibleObject;
+        Assert.True((bool)provider.CanSelectMultiple);
+    }
 }
 

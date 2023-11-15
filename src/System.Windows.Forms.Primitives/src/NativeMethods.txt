@@ -446,6 +446,7 @@ IPropertyNotifySink
 IProvideMultipleClassInfo
 IQuickActivate
 IRecordInfo
+IRichEditOle
 IRichEditOleCallback
 IsAccelerator
 IsAppThemed
@@ -467,6 +468,7 @@ IsWindowEnabled
 IsWindowUnicode
 IsWindowVisible
 IsZoomed
+ITextDocument
 ITextProvider
 ITextProvider2
 ITextRangeProvider
@@ -775,6 +777,7 @@ TCS_*
 THEME_PROPERTY_SYMBOL_ID
 TILE_WINDOWS_HOW
 ToggleState
+tomConstants
 TOOLTIP_FLAGS
 TOOLTIPS_CLASS
 TRACKBAR_CLASS

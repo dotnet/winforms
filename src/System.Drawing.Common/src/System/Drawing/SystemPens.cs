@@ -61,7 +61,7 @@ public static class SystemPens
         }
 
         Pen[]? systemPens = (Pen[]?)Gdip.ThreadData[s_systemPensKey];
-        if (systemPens == null)
+        if (systemPens is null)
         {
             systemPens = new Pen[(int)KnownColor.WindowText + (int)KnownColor.MenuHighlight - (int)KnownColor.YellowGreen];
             Gdip.ThreadData[s_systemPensKey] = systemPens;

@@ -1,7 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -108,7 +107,7 @@ public class PreviewPrintController : PrintController
     /// </summary>
     public override void OnEndPage(PrintDocument document, PrintPageEventArgs e)
     {
-        if (_graphics != null)
+        if (_graphics is not null)
         {
             _graphics.Dispose();
             _graphics = null;
@@ -122,7 +121,7 @@ public class PreviewPrintController : PrintController
     /// </summary>
     public override void OnEndPrint(PrintDocument document, PrintEventArgs e)
     {
-        if (_dc != null)
+        if (_dc is not null)
         {
             _dc.Dispose();
             _dc = null;
