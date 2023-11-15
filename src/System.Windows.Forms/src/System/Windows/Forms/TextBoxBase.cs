@@ -8,7 +8,6 @@ using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
-using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using Windows.Win32.UI.Controls.RichEdit;
