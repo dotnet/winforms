@@ -12,10 +12,10 @@ public static partial class ToolStripManager
     // WARNING: ThreadStatic initialization happens only on the first thread at class CTOR time.
     // use InitializeThread mechanism to initialize ThreadStatic members
     [ThreadStatic]
-    private static WeakRefCollection<ToolStrip>? t_toolStripWeakArrayList;
+    private static WeakRefCollection<ToolStrip>? t_activeToolStrips;
 
     [ThreadStatic]
-    private static WeakRefCollection<ToolStripPanel>? t_toolStripPanelWeakArrayList;
+    private static WeakRefCollection<ToolStripPanel>? t_activeToolStripPanels;
 
     [ThreadStatic]
     private static bool t_initialized;
@@ -125,7 +125,7 @@ public static partial class ToolStripManager
     internal static int CurrentDpi { get; set; } = ScaleHelper.InitialSystemDpi;
 
     internal static WeakRefCollection<ToolStrip> ToolStrips
-        => t_toolStripWeakArrayList ??= new();
+        => t_activeToolStrips ??= [];
 
     /// <summary>Static events only!!!</summary>
     private static void AddEventHandler(int key, Delegate? value)
@@ -256,7 +256,7 @@ public static partial class ToolStripManager
         => PInvoke.GetAncestor(control1, GET_ANCESTOR_FLAGS.GA_ROOT) == PInvoke.GetAncestor(control2, GET_ANCESTOR_FLAGS.GA_ROOT);
 
     internal static bool IsThreadUsingToolStrips()
-        => t_toolStripWeakArrayList is not null && t_toolStripWeakArrayList.Count > 0;
+        => t_activeToolStrips is not null && t_activeToolStrips.Count > 0;
 
     private static void OnUserPreferenceChanging(object sender, UserPreferenceChangingEventArgs e)
     {
@@ -582,16 +582,16 @@ public static partial class ToolStripManager
     }
 
     internal static WeakRefCollection<ToolStripPanel> ToolStripPanels
-        => t_toolStripPanelWeakArrayList ??= new();
+        => t_activeToolStripPanels ??= [];
 
     internal static ToolStripPanel? ToolStripPanelFromPoint(Control draggedControl, Point screenLocation)
     {
-        if (t_toolStripPanelWeakArrayList is not null)
+        if (t_activeToolStripPanels is not null)
         {
             ISupportToolStripPanel draggedItem = (ISupportToolStripPanel)draggedControl;
             bool rootWindowCheck = draggedItem.IsCurrentlyDragging;
 
-            foreach (ToolStripPanel toolStripPanel in t_toolStripPanelWeakArrayList)
+            foreach (ToolStripPanel toolStripPanel in t_activeToolStripPanels)
             {
                 if (toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
                     toolStripPanel.DragBounds.Contains(toolStripPanel.PointToClient(screenLocation)))
