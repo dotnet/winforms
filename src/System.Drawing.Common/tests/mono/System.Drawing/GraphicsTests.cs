@@ -55,8 +55,7 @@ public class GraphicsTest : IDisposable
 
     public void Dispose()
     {
-        if (font != null)
-            font.Dispose();
+        font?.Dispose();
     }
 
     private bool IsEmptyBitmap(Bitmap bitmap, out int x, out int y)

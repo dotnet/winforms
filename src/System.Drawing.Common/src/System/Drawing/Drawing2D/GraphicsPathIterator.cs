@@ -11,7 +11,7 @@ public sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
     public GraphicsPathIterator(GraphicsPath? path)
     {
         IntPtr nativeIter = IntPtr.Zero;
-        int status = Gdip.GdipCreatePathIter(out nativeIter, new HandleRef(path, (path == null) ? IntPtr.Zero : path._nativePath));
+        int status = Gdip.GdipCreatePathIter(out nativeIter, new HandleRef(path, (path is null) ? IntPtr.Zero : path._nativePath));
 
         if (status != Gdip.Ok)
             throw Gdip.StatusException(status);
@@ -76,7 +76,7 @@ public sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
     public int NextSubpath(GraphicsPath path, out bool isClosed)
     {
         int status = Gdip.GdipPathIterNextSubpathPath(new HandleRef(this, nativeIter), out int resultCount,
-                    new HandleRef(path, (path == null) ? IntPtr.Zero : path._nativePath), out isClosed);
+                    new HandleRef(path, (path is null) ? IntPtr.Zero : path._nativePath), out isClosed);
 
         if (status != Gdip.Ok)
             throw Gdip.StatusException(status);
@@ -109,7 +109,7 @@ public sealed class GraphicsPathIterator : MarshalByRefObject, IDisposable
     public int NextMarker(GraphicsPath path)
     {
         int status = Gdip.GdipPathIterNextMarkerPath(new HandleRef(this, nativeIter), out int resultCount,
-                    new HandleRef(path, (path == null) ? IntPtr.Zero : path._nativePath));
+                    new HandleRef(path, (path is null) ? IntPtr.Zero : path._nativePath));
 
         if (status != Gdip.Ok)
             throw Gdip.StatusException(status);

@@ -24,7 +24,7 @@ internal static class DbgUtil
         {
             BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.GetField | BindingFlags.Static | BindingFlags.Instance;
             FieldInfo allocSiteFld = obj.GetType().GetField("AllocationSite", bindingFlags);
-            string allocationSite = allocSiteFld != null ? allocSiteFld.GetValue( obj ).ToString() : "<Allocation site unavailable>";
+            string allocationSite = allocSiteFld is not null ? allocSiteFld.GetValue( obj ).ToString() : "<Allocation site unavailable>";
 
             // ignore ojects created by WindowsGraphicsCacheManager.
             if ( allocationSite.Contains("WindowsGraphicsCacheManager") )

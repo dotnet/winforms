@@ -29,7 +29,7 @@ public class IconConverter : ExpandableObjectConverter
     {
         if (destinationType == typeof(string))
         {
-            if (value == null)
+            if (value is null)
             {
                 return SR.none;
             }

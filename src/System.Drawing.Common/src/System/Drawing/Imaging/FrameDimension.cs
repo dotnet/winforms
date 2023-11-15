@@ -58,7 +58,7 @@ public sealed class FrameDimension
     public override bool Equals([NotNullWhen(true)] object? o)
     {
         FrameDimension? format = o as FrameDimension;
-        if (format == null)
+        if (format is null)
             return false;
         return _guid == format._guid;
     }

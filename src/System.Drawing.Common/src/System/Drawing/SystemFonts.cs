@@ -183,7 +183,7 @@ public static class SystemFonts
             }
 
             // First try DEFAULT_GUI.
-            if (defaultFont == null)
+            if (defaultFont is null)
             {
                 IntPtr handle = Gdi32.GetStockObject(Gdi32.StockObject.DEFAULT_GUI_FONT);
                 try
@@ -198,7 +198,7 @@ public static class SystemFonts
             }
 
             // If DEFAULT_GUI didn't work, try Tahoma.
-            if (defaultFont == null)
+            if (defaultFont is null)
             {
                 try
                 {
@@ -217,7 +217,7 @@ public static class SystemFonts
                 defaultFont = FontInPoints(defaultFont);
             }
 
-            Debug.Assert(defaultFont != null, "defaultFont wasn't set.");
+            Debug.Assert(defaultFont is not null, "defaultFont wasn't set.");
 
             defaultFont.SetSystemFontName(nameof(DefaultFont));
             return defaultFont;
@@ -248,7 +248,7 @@ public static class SystemFonts
                 }
             }
 
-            if (dialogFont == null)
+            if (dialogFont is null)
             {
                 dialogFont = DefaultFont;
             }
