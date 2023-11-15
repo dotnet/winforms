@@ -20,7 +20,6 @@ public class PrintPageEventArgs : EventArgs
     // Apply page settings to the printer.
     internal bool CopySettingsToDevMode = true;
 
-
     /// <summary>
     /// Initializes a new instance of the <see cref='PrintPageEventArgs'/> class.
     /// </summary>

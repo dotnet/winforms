@@ -51,6 +51,7 @@ internal sealed partial class WindowsRegion : MarshalByRefObject, ICloneable, ID
                 wr._ownHandle = true;
             }
         }
+
         return wr;
     }
 

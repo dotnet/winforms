@@ -133,12 +133,42 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
         internal override PropertyGridView OwnerGridView => _propertyGridView;
     }
 
+    private class CustomPropertyDescriptor : PropertyDescriptor
+    {
+        public CustomPropertyDescriptor(string name, Attribute[] attrs)
+            : base(name, attrs)
+        {
+        }
+
+        public override Type PropertyType => throw new NotImplementedException();
+
+        public override Type ComponentType => throw new NotImplementedException();
+
+        public override bool IsReadOnly => false;
+
+        public override bool CanResetValue(object component) => throw new NotImplementedException();
+
+        public override object GetValue(object component) => throw new NotImplementedException();
+
+        public override void ResetValue(object component) => throw new NotImplementedException();
+
+        public override void SetValue(object component, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool ShouldSerializeValue(object component)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     private class TestPropertyDescriptorGridEntry : PropertyDescriptorGridEntry
     {
         private GridEntryCollection _collection;
 
         public TestPropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry parent, bool hide)
-            : base(ownerGrid, parent, hide)
+            : base(ownerGrid, parent, new CustomPropertyDescriptor("Test", Array.Empty<Attribute>()), hide)
         {
         }
 

@@ -1,8 +1,6 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-#nullable disable
-
 using System.Drawing;
 using System.Globalization;
 using System.Text;
@@ -45,7 +43,7 @@ public class ByteViewer : TableLayoutPanel
     private TextBox _edit;
     private readonly int _columnCount = DEFAULT_COLUMN_COUNT;
     private int _rowCount = DEFAULT_ROW_COUNT;
-    private byte[] _dataBuf;
+    private byte[] _dataBuf = Array.Empty<byte>();
     private int _startLine;
     private int _displayLinesCount;
     private int _linesCount;
@@ -119,49 +117,18 @@ public class ByteViewer : TableLayoutPanel
     }
 
     /// <summary>
-    ///  Calculates an index for a cell in the HEX grid
-    /// </summary>
-    private int CellToIndex(int column, int row)
-    {
-        return row * _columnCount + column;
-    }
-
-    /// <summary>
-    ///  Copies the line from main data buffer to a line buffer
-    /// </summary>
-    private byte[] ComposeLineBuffer(int startLine, int line)
-    {
-        byte[] lineBuffer;
-
-        int offset = startLine * _columnCount;
-        if (offset + (line + 1) * _columnCount > _dataBuf.Length)
-        {
-            lineBuffer = new byte[_dataBuf.Length % _columnCount];
-        }
-        else
-        {
-            lineBuffer = new byte[_columnCount];
-        }
-
-        for (int i = 0; i < lineBuffer.Length; i++)
-        {
-            lineBuffer[i] = _dataBuf[offset + CellToIndex(i, line)];
-        }
-
-        return lineBuffer;
-    }
-
-    /// <summary>
     ///  Draws an address part in the HEXDUMP view
     /// </summary>
     private void DrawAddress(Graphics g, int startLine, int line)
     {
         Font font = ADDRESS_FONT;
 
-        string hexString = ((startLine + line) * _columnCount).ToString("X8", CultureInfo.InvariantCulture);
+        Span<char> hexChars = stackalloc char[8];
+        bool success = ((startLine + line) * _columnCount).TryFormat(hexChars, out int charCount, "X8", CultureInfo.InvariantCulture);
+        Debug.Assert(success && charCount == 8);
 
         using var foreground = new SolidBrush(ForeColor);
-        g.DrawString(hexString, font, foreground, ADDRESS_START_X, LINE_START_Y + line * CELL_HEIGHT);
+        g.DrawString(hexChars, font, foreground, ADDRESS_START_X, LINE_START_Y + line * CELL_HEIGHT);
     }
 
     /// <summary>
@@ -204,43 +171,48 @@ public class ByteViewer : TableLayoutPanel
     /// <summary>
     ///  Draws the "DUMP" part in the HEXDUMP view
     /// </summary>
-    private void DrawDump(Graphics g, byte[] lineBuffer, int line)
+    private void DrawDump(Graphics g, ReadOnlySpan<byte> lineBuffer, int line, Span<char> charsBuffer)
     {
-        string stringToDraw = string.Create(lineBuffer.Length, lineBuffer, static (span, lineBuffer) =>
+        Debug.Assert(charsBuffer.Length >= lineBuffer.Length);
+        Span<char> charsToDraw = charsBuffer[..lineBuffer.Length];
+        for (int i = 0; i < lineBuffer.Length; i++)
         {
-            for (int i = 0; i < lineBuffer.Length; i++)
-            {
-                char c = Convert.ToChar(lineBuffer[i]);
-                span[i] = CharIsPrintable(c) ? c : '.';
-            }
-        });
+            char c = Convert.ToChar(lineBuffer[i]);
+            charsToDraw[i] = CharIsPrintable(c) ? c : '.';
+        }
 
         Font font = HEXDUMP_FONT;
 
         using Brush foreground = new SolidBrush(ForeColor);
-        g.DrawString(stringToDraw, font, foreground, DUMP_START_X, LINE_START_Y + line * CELL_HEIGHT);
+        g.DrawString(charsToDraw, font, foreground, DUMP_START_X, LINE_START_Y + line * CELL_HEIGHT);
     }
 
     /// <summary>
     ///  Draws the "HEX" part in the HEXDUMP view
     /// </summary>
     /// <internalonly/>
-    private void DrawHex(Graphics g, byte[] lineBuffer, int line)
+    private void DrawHex(Graphics g, ReadOnlySpan<byte> lineBuffer, int line, Span<char> charsBuffer)
     {
         Font font = HEXDUMP_FONT;
 
-        StringBuilder result = new StringBuilder(lineBuffer.Length * 3 + 1);
+        Debug.Assert(charsBuffer.Length >= lineBuffer.Length * 3 + 1);
+        int charsWritten = 0;
         for (int i = 0; i < lineBuffer.Length; i++)
         {
-            result.Append($"{lineBuffer[i]:X2} ");
+            lineBuffer[i].TryFormat(charsBuffer.Slice(charsWritten, 2), out _, "X2");
+            charsWritten += 2;
+
             if (i == _columnCount / 2 - 1)
             {
-                result.Append(' ');  // Add one extra in the middle.
+                charsBuffer[charsWritten] = ' ';  // Add one extra in the middle.
+                charsWritten++;
             }
         }
 
+        ReadOnlySpan<char> result = charsBuffer[..charsWritten];
+
         using Brush foreground = new SolidBrush(ForeColor);
-        g.DrawString(result.ToString(), font, foreground, HEX_START_X + BORDER_GAP, LINE_START_Y + line * CELL_HEIGHT);
+        g.DrawString(result, font, foreground, HEX_START_X + BORDER_GAP, LINE_START_Y + line * CELL_HEIGHT);
 
         /* ISSUE a-gregka: If perf problem, could be done this way to eliminate drawing twice on repaint
            The current solution good enough for a dialog box
@@ -258,12 +230,27 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     private void DrawLines(Graphics g, int startLine, int linesCount)
     {
+        if (linesCount == 0)
+        {
+            return;
+        }
+
+        int maxLength = _columnCount * 3 + 1;
+        using BufferScope<char> charsBuffer = new(stackalloc char[256], maxLength);
         for (int i = 0; i < linesCount; i++)
         {
-            byte[] lineBuffer = ComposeLineBuffer(startLine, i);
+            ReadOnlySpan<byte> lineBuffer = GetLineBytes(startLine + i);
             DrawAddress(g, startLine, i);
-            DrawHex(g, lineBuffer, i);
-            DrawDump(g, lineBuffer, i);
+            DrawHex(g, lineBuffer, i, charsBuffer);
+            DrawDump(g, lineBuffer, i, charsBuffer);
+        }
+
+        ReadOnlySpan<byte> GetLineBytes(int line)
+        {
+            int offset = line * _columnCount;
+            int length = offset + _columnCount > _dataBuf.Length ? _dataBuf.Length % _columnCount : _columnCount;
+
+            return _dataBuf.AsSpan(offset, length);
         }
     }
 
@@ -284,7 +271,7 @@ public class ByteViewer : TableLayoutPanel
         int unicodeCount = 0;
         int size;
 
-        if ((_dataBuf is null) || (_dataBuf.Length >= 0 && (_dataBuf.Length < 8)))
+        if (_dataBuf.Length is >= 0 and < 8)
         {
             return DisplayMode.Hexdump;
         }
@@ -343,9 +330,9 @@ public class ByteViewer : TableLayoutPanel
 
                 for (int i = 0; i < size; i += 2)
                 {
-                    char[] unicodeChars = new char[1];
-                    Encoding.Unicode.GetChars(_dataBuf, i, 2, unicodeChars, 0);
-                    if (CharIsPrintable(unicodeChars[0]))
+                    char unicodeChar = default;
+                    Encoding.Unicode.GetChars(_dataBuf.AsSpan(i, 2), new Span<char>(ref unicodeChar));
+                    if (CharIsPrintable(unicodeChar))
                     {
                         unicodeCount++;
                     }
@@ -368,18 +355,12 @@ public class ByteViewer : TableLayoutPanel
     /// <summary>
     ///  Gets the bytes in the buffer.
     /// </summary>
-    public virtual byte[] GetBytes()
-    {
-        return _dataBuf;
-    }
+    public virtual byte[] GetBytes() => _dataBuf;
 
     /// <summary>
     ///  Gets the display mode for the control.
     /// </summary>
-    public virtual DisplayMode GetDisplayMode()
-    {
-        return _displayMode;
-    }
+    public virtual DisplayMode GetDisplayMode() => _displayMode;
 
     // Stole this code from  XmlScanner
     private static int GetEncodingIndex(int c1)
@@ -420,27 +401,23 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     private unsafe void InitAnsi()
     {
-        char[] text;
+        using BufferScope<char> charsBuffer = new(stackalloc char[256]);
         int size;
+        int bufferSize;
         fixed (byte* pDataBuff = _dataBuf)
         {
-            size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, _dataBuf.Length, null, 0);
-            text = new char[size + 1];
-            fixed (char* pText = text)
+            bufferSize = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, _dataBuf.Length, null, 0);
+            charsBuffer.EnsureCapacity(bufferSize + 1);
+            fixed (char* pText = charsBuffer)
             {
-                size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, size, pText, size);
+                size = PInvoke.MultiByteToWideChar(PInvoke.CP_ACP, 0, (PCSTR)pDataBuff, bufferSize, pText, bufferSize);
             }
         }
+
+        Span<char> text = charsBuffer.Slice(0, bufferSize + 1);
 
         text[size] = '\0';
-
-        for (int i = 0; i < size; i++)
-        {
-            if (text[i] == '\0')
-            {
-                text[i] = (char)0x0B;
-            }
-        }
+        text[..size].Replace('\0', '\v');
 
         _edit.Text = new string(text);
     }
@@ -450,19 +427,19 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     private void InitUnicode()
     {
-        char[] text = new char[_dataBuf.Length / 2 + 1];
-        Encoding.Unicode.GetChars(_dataBuf, 0, _dataBuf.Length, text, 0);
-        for (int i = 0; i < text.Length; i++)
-            if (text[i] == '\0')
-                text[i] = (char)0x0B;
-
-        text[text.Length - 1] = '\0';
-        _edit.Text = new string(text);
+        _edit.Text = string.Create(_dataBuf.Length / sizeof(char) + 1, _dataBuf, static (text, dataBuf) =>
+        {
+            Encoding.Unicode.GetChars(dataBuf.AsSpan(), text);
+            text.Replace('\0', '\v');
+            text[^1] = '\0';
+        });
     }
 
     /// <summary>
     ///  Initializes the UI components of a control
     /// </summary>
+    [MemberNotNull(nameof(_edit))]
+    [MemberNotNull(nameof(_scrollBar))]
     private void InitUI()
     {
         SCROLLBAR_HEIGHT = SystemInformation.HorizontalScrollBarHeight;
@@ -614,28 +591,14 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     public virtual void SaveToFile(string path)
     {
-        if (_dataBuf is null)
-        {
-            return;
-        }
-
-        FileStream currentFile = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
-        try
-        {
-            currentFile.Write(_dataBuf, 0, _dataBuf.Length);
-            currentFile.Close();
-        }
-        catch
-        {
-            currentFile.Close();
-            throw;
-        }
+        using FileStream currentFile = new(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+        currentFile.Write(_dataBuf.AsSpan());
     }
 
     /// <summary>
     ///  Scroll event handler.
     /// </summary>
-    protected virtual void ScrollChanged(object source, EventArgs e)
+    protected virtual void ScrollChanged(object? source, EventArgs e)
     {
         _startLine = _scrollBar.Value;
 
@@ -648,11 +611,6 @@ public class ByteViewer : TableLayoutPanel
     public virtual void SetBytes(byte[] bytes)
     {
         ArgumentNullException.ThrowIfNull(bytes);
-
-        if (_dataBuf is not null)
-        {
-            _dataBuf = null;
-        }
 
         _dataBuf = bytes;
         InitState();
@@ -692,19 +650,12 @@ public class ByteViewer : TableLayoutPanel
             case DisplayMode.Hexdump:
                 SuspendLayout();
                 _edit.Hide();
-                if (_linesCount > _rowCount)
+                if (_linesCount > _rowCount && !_scrollBar.Visible)
                 {
-                    if (!_scrollBar.Visible)
-                    {
-                        _scrollBar.Show();
-                        ResumeLayout();
-                        _scrollBar.Invalidate();
-                        _scrollBar.Select();
-                    }
-                    else
-                    {
-                        ResumeLayout();
-                    }
+                    _scrollBar.Show();
+                    ResumeLayout();
+                    _scrollBar.Invalidate();
+                    _scrollBar.Select();
                 }
                 else
                 {
@@ -720,20 +671,7 @@ public class ByteViewer : TableLayoutPanel
     /// </summary>
     public virtual void SetFile(string path)
     {
-        FileStream currentFile = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
-        try
-        {
-            int length = (int)currentFile.Length;
-            byte[] buf = new byte[length + 1];
-            currentFile.Read(buf, 0, length);
-            SetBytes(buf);
-            currentFile.Close();
-        }
-        catch
-        {
-            currentFile.Close();
-            throw;
-        }
+        SetBytes(File.ReadAllBytes(path));
     }
 
     /// <summary>

@@ -55,6 +55,7 @@ internal sealed partial class GPStream : Ole32.IStream
                 {
                     return hr;
                 }
+
                 totalWritten += written;
             }
         }

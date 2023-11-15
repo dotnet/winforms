@@ -1,10 +1,9 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing.Internal;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
 
@@ -151,7 +150,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
 #endif
                 Gdip.GdipDeletePen(new HandleRef(this, NativePen));
 #if DEBUG
-                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status.ToString(CultureInfo.InvariantCulture)}");
+                Debug.Assert(status == Gdip.Ok, $"GDI+ returned an error status: {status}");
 #endif
             }
             catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
@@ -241,6 +240,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
                 default:
                     throw new InvalidEnumArgumentException(nameof(value), unchecked((int)value), typeof(LineCap));
             }
+
             if (_immutable)
             {
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
@@ -315,7 +315,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
             }
 
             int status = Gdip.GdipSetPenCustomStartCap(new HandleRef(this, NativePen),
-                                                          new HandleRef(value, (value == null) ? IntPtr.Zero : value.nativeCap));
+                                                          new HandleRef(value, (value is null) ? IntPtr.Zero : value.nativeCap));
             Gdip.CheckStatus(status);
         }
     }
@@ -341,7 +341,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
 
             int status = Gdip.GdipSetPenCustomEndCap(
                 new HandleRef(this, NativePen),
-                new HandleRef(value, (value == null) ? IntPtr.Zero : value.nativeCap));
+                new HandleRef(value, (value is null) ? IntPtr.Zero : value.nativeCap));
             Gdip.CheckStatus(status);
         }
     }
@@ -482,7 +482,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -686,7 +686,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-            if (value == null)
+            if (value is null)
             {
                 throw new ArgumentNullException(nameof(value));
             }
@@ -834,8 +834,7 @@ public sealed class Pen : MarshalByRefObject, ICloneable, IDisposable, ISystemCo
                 throw new ArgumentException(SR.Format(SR.CantChangeImmutableObjects, nameof(Pen)));
             }
 
-
-            if (value == null || value.Length == 0)
+            if (value is null || value.Length == 0)
             {
                 throw new ArgumentException(SR.InvalidDashPattern);
             }

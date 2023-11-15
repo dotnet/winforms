@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Windows.Win32.UI.Controls.RichEdit;
 using Xunit.Abstractions;
 using static Interop;
@@ -11,8 +10,6 @@ namespace System.Windows.Forms.UITests;
 
 public class RichTextBoxTests : ControlTestBase
 {
-    private const int TomLink = unchecked((int)0x80000020);
-    private const int TomHidden = unchecked((int)0x80000100);
     public RichTextBoxTests(ITestOutputHelper testOutputHelper)
         : base(testOutputHelper)
     {
@@ -61,13 +58,16 @@ public class RichTextBoxTests : ControlTestBase
             // This assumes the input span is the hidden text of a "friendly name" URL,
             // which is what the native control will pass to the LinkClicked event instead
             // of the actual span of the clicked display text.
-            var displayText = GetTextFromRange(richTextBox, result.LinkStart, result.LinkLength, range =>
+            string? displayText = GetTextFromRange(richTextBox, result.LinkStart, result.LinkLength, range =>
             {
-                // Move the cursor to the end of the hidden area we are currently located in.
-                range.EndOf(TomHidden, 0);
+                unsafe
+                {
+                    // Move the cursor to the end of the hidden area we are currently located in.
+                    range.Value->EndOf((int)tomConstants.tomHidden, 0, out int _).ThrowOnFailure();
 
-                // Extend the cursor to the end of the display text of the link.
-                range.EndOf(TomLink, 1);
+                    // Extend the cursor to the end of the display text of the link.
+                    range.Value->EndOf((int)tomConstants.tomLink, 1, out int _).ThrowOnFailure();
+                }
             });
 
             Assert.Equal("Click link #2", displayText);
@@ -116,13 +116,16 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
             Assert.Equal(result.LinkText, richTextBox.Text.Substring(result.LinkStart, result.LinkLength));
 
             // This assumes the input span is a custom link preceeded by hidden text.
-            var hiddenText = GetTextFromRange(richTextBox, result.LinkStart, result.LinkLength, range =>
+            string? hiddenText = GetTextFromRange(richTextBox, result.LinkStart, result.LinkLength, range =>
             {
-                // Move the cursor to the start of the link we are currently located in.
-                range.StartOf(TomLink, 0);
+                unsafe
+                {
+                    // Move the cursor to the start of the link we are currently located in.
+                    range.Value->StartOf((int)tomConstants.tomLink, 0, out int _).ThrowOnFailure();
 
-                // Extend the cursor to the start of the hidden area preceeding the link.
-                range.StartOf(TomHidden, 1);
+                    // Extend the cursor to the start of the hidden area preceeding the link.
+                    range.Value->StartOf((int)tomConstants.tomHidden, 1, out int _).ThrowOnFailure();
+                }
             });
 
             Assert.Equal("#link2#", hiddenText);
@@ -173,13 +176,16 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
             Assert.Equal(result.LinkText, richTextBox.Text.Substring(result.LinkStart, result.LinkLength));
 
             // This assumes the input span is a custom link followed by hidden text.
-            var hiddenText = GetTextFromRange(richTextBox, result.LinkStart, result.LinkLength, range =>
+            string? hiddenText = GetTextFromRange(richTextBox, result.LinkStart, result.LinkLength, range =>
             {
-                // Move the cursor to the end of link we are currently located in.
-                range.EndOf(TomLink, 0);
+                unsafe
+                {
+                    // Move the cursor to the end of link we are currently located in.
+                    range.Value->EndOf((int)tomConstants.tomLink, 0, out int _).ThrowOnFailure();
 
-                // Extend the cursor to the end of the hidden area following the link.
-                range.EndOf(TomHidden, 1);
+                    // Extend the cursor to the end of the hidden area following the link.
+                    range.Value->EndOf((int)tomConstants.tomHidden, 1, out int _).ThrowOnFailure();
+                }
             });
 
             Assert.Equal("#link2#", hiddenText);
@@ -202,55 +208,26 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
         control.Select(0, 0);
     }
 
-    private unsafe string? GetTextFromRange(RichTextBox control, int start, int length, Action<Richedit.ITextRange> transform)
+    private unsafe string? GetTextFromRange(RichTextBox control, int start, int length, Action<Pointer<ITextRange>>? transform)
     {
-        IntPtr pOleInterface = IntPtr.Zero;
-        object? oleInterface = null;
+        using ComScope<IRichEditOle> richEdit = new(null);
 
-        try
+        if (PInvoke.SendMessage(control, PInvoke.EM_GETOLEINTERFACE, 0, (void**)richEdit) != 0)
         {
-            if (PInvoke.SendMessage(control, PInvoke.EM_GETOLEINTERFACE, 0, ref pOleInterface) != 0 && pOleInterface != IntPtr.Zero)
-            {
-                // This increments the RCW reference count, further casts do not increment it. It is important
-                // to capture the initial reference to the RCW so we can release it even if casts fail.
-                oleInterface = Marshal.GetObjectForIUnknown(pOleInterface);
+            using var textDocument = richEdit.TryQuery<ITextDocument>(out HRESULT hr);
 
-                if (oleInterface is Richedit.ITextDocument textDocument)
-                {
-                    // This method returns a COM object, thus increments the RCW reference count and we want to release it later.
-                    var range = textDocument.Range(start, start + length);
-                    if (range is not null)
-                    {
-                        try
-                        {
-                            transform?.Invoke(range);
-                            return range.GetText();
-                        }
-                        finally
-                        {
-                            // release RCW reference count
-                            Marshal.ReleaseComObject(range);
-                        }
-                    }
-                }
-            }
-
-            return null;
-        }
-        finally
-        {
-            // release RCW reference count
-            if (oleInterface is not null)
+            if (hr.Succeeded)
             {
-                Marshal.ReleaseComObject(oleInterface);
-            }
-
-            // release COM reference count
-            if (pOleInterface != IntPtr.Zero)
-            {
-                Marshal.Release(pOleInterface);
+                using ComScope<ITextRange> range = new(null);
+                textDocument.Value->Range(start, start + length, range).ThrowOnFailure();
+                transform?.Invoke((ITextRange*)range);
+                using BSTR text = new();
+                range.Value->GetText(&text).ThrowOnFailure();
+                return text.ToString();
             }
         }
+
+        return null;
     }
 
     private async Task RunTestAsync(Func<Form, RichTextBox, Task> runTest)

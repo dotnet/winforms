@@ -344,6 +344,7 @@ public class MetafileFulltrustTest
                     g.ReleaseHdc(hdc);
                 }
             }
+
             long size = 0;
             using (Graphics g = Graphics.FromImage(mf))
             {
@@ -359,6 +360,7 @@ public class MetafileFulltrustTest
                     g.DrawRectangle(Pens.Azure, 10, 10, 80, 80);
                 }
             }
+
             mf.Dispose();
             Assert.Equal(size, new FileInfo(filename).Length);
         }
@@ -383,6 +385,7 @@ public class MetafileFulltrustTest
                 g.ReleaseHdc(hdc);
             }
         }
+
         using (Graphics g = Graphics.FromImage(mf))
         {
             string text = "this\nis a test";
@@ -425,6 +428,7 @@ public class MetafileFulltrustTest
                     g.ReleaseHdc(hdc);
                 }
             }
+
             using (Graphics g = Graphics.FromImage(mf))
             {
                 Assert.True(g.Transform.IsIdentity);
@@ -455,6 +459,7 @@ public class MetafileFulltrustTest
                 g.ResetTransform();
                 Assert.True(g.Transform.IsIdentity);
             }
+
             mf.Dispose();
         }
     }
