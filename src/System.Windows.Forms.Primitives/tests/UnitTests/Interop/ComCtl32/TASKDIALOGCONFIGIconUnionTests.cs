@@ -26,11 +26,11 @@ public class TASKDIALOGCONFIGIconUnionTests
             return;
         }
 
-        TASKDIALOGCONFIG._Anonymous1_e__Union sut = new TASKDIALOGCONFIG._Anonymous1_e__Union();
-        byte* addr = (byte*)&sut;
+        TASKDIALOGCONFIG._Anonymous1_e__Union icon = new();
+        byte* addr = (byte*)&icon;
 
-        Assert.Equal(0, (byte*)&sut.hMainIcon - addr);  // 4, HICON
-        Assert.Equal(0, (byte*)&sut.pszMainIcon - addr);  // 4, PCWSTR
+        Assert.Equal(0, (byte*)&icon.hMainIcon - addr);  // 4, HICON
+        Assert.Equal(0, (byte*)&icon.pszMainIcon - addr);  // 4, PCWSTR
     }
 
     [ConditionalFact(typeof(ArchitectureDetection), nameof(ArchitectureDetection.Is64bit))]
@@ -52,10 +52,10 @@ public class TASKDIALOGCONFIGIconUnionTests
             return;
         }
 
-        TASKDIALOGCONFIG._Anonymous1_e__Union sut = new TASKDIALOGCONFIG._Anonymous1_e__Union();
-        byte* addr = (byte*)&sut;
+        TASKDIALOGCONFIG._Anonymous1_e__Union icon = new();
+        byte* addr = (byte*)&icon;
 
-        Assert.Equal(0, (byte*)&sut.hMainIcon - addr);  // 8, HICON
-        Assert.Equal(0, (byte*)&sut.pszMainIcon - addr);  // 8, PCWSTR
+        Assert.Equal(0, (byte*)&icon.hMainIcon - addr);  // 8, HICON
+        Assert.Equal(0, (byte*)&icon.pszMainIcon - addr);  // 8, PCWSTR
     }
 }
