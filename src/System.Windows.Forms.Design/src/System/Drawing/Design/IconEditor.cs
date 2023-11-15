@@ -119,12 +119,14 @@ public class IconEditor : UITypeEditor
         if (icon.Width < rectangle.Width)
         {
             rectangle.X = (rectangle.Width - icon.Width) / 2;
+            rectangle.X += (rectangle.Width - icon.Width) / 2;
             rectangle.Width = icon.Width;
         }
 
         if (icon.Height < rectangle.Height)
         {
             rectangle.X = (rectangle.Height - icon.Height) / 2;
+            rectangle.Y += (rectangle.Height - icon.Height) / 2;
             rectangle.Height = icon.Height;
         }
 
