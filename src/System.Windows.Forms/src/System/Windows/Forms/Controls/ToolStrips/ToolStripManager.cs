@@ -1394,18 +1394,11 @@ public static partial class ToolStripManager
     ///  Unmerge two toolstrips
     /// </summary>
     public static bool RevertMerge(ToolStrip targetToolStrip, ToolStrip sourceToolStrip)
-    {
-        ArgumentNullException.ThrowIfNull(sourceToolStrip);
-
-        return RevertMergeInternal(targetToolStrip, sourceToolStrip, revertMDIControls: false);
-    }
+        => RevertMergeInternal(targetToolStrip, sourceToolStrip.OrThrowIfNull(nameof(sourceToolStrip)), revertMDIControls: false);
 
     /// <summary>
     ///  Unmerge two toolstrips
     /// </summary>
     public static bool RevertMerge(string targetName)
-    {
-        ToolStrip? target = FindToolStrip(targetName);
-        return target is not null && RevertMerge(target);
-    }
+        => FindToolStrip(targetName) is ToolStrip target && RevertMerge(target);
 }
