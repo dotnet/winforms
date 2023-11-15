@@ -29,9 +29,10 @@ public partial class ToolStripOverflowButton
                 NavigateDirection.NavigateDirection_FirstChild or NavigateDirection.NavigateDirection_LastChild
                     => _owningToolStripOverflowButton.DropDown.Visible
                         ? _owningToolStripOverflowButton.DropDown.AccessibilityObject
-                        : null, // Don't show the inner menu while it is invisible.
-                                // Otherwise it will affect accessibility tree,
-                                // especially for items-controls that have not been created yet.
+                        : null,
+                        // Don't show the inner menu while it is invisible.
+                        // Otherwise it will affect accessibility tree,
+                        // especially for items-controls that have not been created yet.
                 _ => base.FragmentNavigate(direction),
             };
     }
