@@ -539,7 +539,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
         LOGFONT logFont = default;
         Gdi32.GetObject(new HandleRef(null, hfont), ref logFont);
 
-        using ScreenDC dc = ScreenDC.Create();
+        using var dc = GetDcScope.ScreenDC;
         return FromLogFont(in logFont, dc);
     }
 
@@ -550,7 +550,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, IDisposable, ISeriali
     /// <returns>The newly created <see cref="Font"/>.</returns>
     public static Font FromLogFont(object lf)
     {
-        using ScreenDC dc = ScreenDC.Create();
+        using var dc = GetDcScope.ScreenDC;
         return FromLogFont(lf, dc);
     }
 
@@ -561,7 +561,7 @@ internal
 #endif
     static Font FromLogFont(in LOGFONT logFont)
     {
-        using ScreenDC dc = ScreenDC.Create();
+        using var dc = GetDcScope.ScreenDC;
         return FromLogFont(logFont, dc);
     }
 
@@ -689,7 +689,7 @@ internal
 
     public void ToLogFont(object logFont)
     {
-        using ScreenDC dc = ScreenDC.Create();
+        using var dc = GetDcScope.ScreenDC;
         using Graphics graphics = Graphics.FromHdcInternal(dc);
         ToLogFont(logFont, graphics);
     }
@@ -697,7 +697,7 @@ internal
 #if NET8_0_OR_GREATER
     public void ToLogFont(out LOGFONT logFont)
     {
-        using ScreenDC dc = ScreenDC.Create();
+        using var dc = GetDcScope.ScreenDC;
         using Graphics graphics = Graphics.FromHdcInternal(dc);
         ToLogFont(out logFont, graphics);
     }
@@ -708,7 +708,7 @@ internal
     /// </summary>
     public IntPtr ToHfont()
     {
-        using ScreenDC dc = ScreenDC.Create();
+        using var dc = GetDcScope.ScreenDC;
         using Graphics graphics = Graphics.FromHdcInternal(dc);
         ToLogFont(out LOGFONT lf, graphics);
         nint handle = Gdi32.CreateFontIndirectW(ref lf);
@@ -717,7 +717,7 @@ internal
 
     public float GetHeight()
     {
-        using ScreenDC dc = ScreenDC.Create();
+        using var dc = GetDcScope.ScreenDC;
         using Graphics graphics = Graphics.FromHdcInternal(dc);
         return GetHeight(graphics);
     }
@@ -735,7 +735,7 @@ internal
                 return Size;
             }
 
-            using ScreenDC dc = ScreenDC.Create();
+            using var dc = GetDcScope.ScreenDC;
             using Graphics graphics = Graphics.FromHdcInternal(dc);
 
             float pixelsPerPoint = (float)(graphics.DpiY / 72.0);

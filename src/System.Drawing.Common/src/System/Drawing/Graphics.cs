@@ -3092,8 +3092,8 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         int destWidth = blockRegionSize.Width;
         int destHeight = blockRegionSize.Height;
 
-        nint screenDC = User32.GetDC(0);
-        if (screenDC == 0)
+        using var screenDC = GetDcScope.ScreenDC;
+        if (screenDC.IsNull)
         {
             // ERROR_INVALID_HANDLE - if you pass an empty handle to BitBlt you'll get this error.
             // Checking here to better describe test failures (and avoids taking the Graphics HDC lock).
@@ -3122,7 +3122,6 @@ public sealed class Graphics : MarshalByRefObject, IDisposable, IDeviceContext
         }
         finally
         {
-            User32.ReleaseDC(IntPtr.Zero, screenDC);
             if (targetDC != 0)
             {
                 ReleaseHdc();

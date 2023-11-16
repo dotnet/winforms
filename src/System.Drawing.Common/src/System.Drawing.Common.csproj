@@ -225,7 +225,6 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="System\Drawing\Printing\PrintPageEventArgs.cs" />
     <Compile Include="System\Drawing\Printing\PrintPreviewGraphics.cs" />
     <Compile Include="System\Drawing\Printing\TriState.cs" />
-    <Compile Include="System\Drawing\ScreenDC.cs" />
     <Compile Include="System\Drawing\StockIconId.cs" />
     <Compile Include="System\Drawing\StockIconOptions.cs" />
     <Compile Include="System\Drawing\SystemIcons.cs" />
@@ -239,8 +238,6 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="misc\GDI\DeviceContextType.cs" />
     <Compile Include="misc\GDI\WindowsGraphics.cs" />
     <Compile Include="misc\GDI\WindowsRegion.cs" />
-
-    <Compile Include="Interop\Windows\Interop.BOOL.cs" />
     <Compile Include="Interop\Windows\Interop.Libraries.cs" />
     <Compile Include="Interop\Windows\Comdlg32\Interop.PrintDlg.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.AbortDoc.cs" />
@@ -282,8 +279,6 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
     <Compile Include="Interop\Windows\Gdi32\Interop.RestoreDC.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.SaveDC.cs" />
     <Compile Include="Interop\Windows\Gdi32\Interop.SelectClipRgn.cs" />
-    <Compile Include="Interop\Windows\Kernel32\Interop.GetSystemDefaultLCID.cs" />
-    <Compile Include="Interop\Windows\Kernel32\Interop.GlobalAlloc.cs" />
     <Compile Include="Interop\Windows\Kernel32\Interop.GlobalFree.cs" />
     <Compile Include="Interop\Windows\Kernel32\Interop.GlobalLock.cs" />
     <Compile Include="Interop\Windows\Kernel32\Interop.SelectObject.cs" />
@@ -348,6 +343,15 @@ Since .NET 7, non-Windows platforms are not supported, even with the runtime con
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
     <PackageReference Include="Microsoft.Win32.SystemEvents" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
     <PackageReference Include="Microsoft.Windows.CsWin32" Version="$(MicrosoftWindowsCsWin32PackageVersion)" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETCoreApp'">
+    <Compile Include="..\..\System.Windows.Forms.Primitives\src\Windows\Win32\GetDcScope.cs" Link="Windows\Win32\GetDcScope.cs" />
+    <Compile Include="..\..\System.Windows.Forms.Primitives\src\Windows\Win32\Foundation\BOOL.cs" Link="Windows\Win32\Foundation\BOOL.cs" />
+    <Compile Include="..\..\System.Windows.Forms.Primitives\src\Windows\Win32\Graphics\Gdi\HDC.cs" Link="Windows\Win32\Graphics\Gdi\HDC.cs" />
+    <Compile Include="..\..\System.Windows.Forms.Primitives\src\Windows\Win32\Foundation\HWND.cs" Link="Windows\Win32\Foundation\HWND.cs" />
+    <Compile Include="..\..\System.Windows.Forms.Primitives\src\Interop\HandleRef.cs" Link="Interop\HandleRef.cs" />
+    <Compile Include="..\..\System.Windows.Forms.Primitives\src\Interop\IHandle.cs" Link="Interop\IHandle.cs" />
   </ItemGroup>
 
   <ItemGroup>

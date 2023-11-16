@@ -34,13 +34,11 @@ internal static class DpiHelper
             return;
         }
 
-        IntPtr hDC = Interop.User32.GetDC(IntPtr.Zero);
-        if (hDC != IntPtr.Zero)
+        using var dc = GetDcScope.ScreenDC;
+        if (!dc.IsNull)
         {
-            s_deviceDpiX = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
-            s_deviceDpiY = Interop.Gdi32.GetDeviceCaps(hDC, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
-
-            Interop.User32.ReleaseDC(IntPtr.Zero, hDC);
+            s_deviceDpiX = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSX);
+            s_deviceDpiY = Interop.Gdi32.GetDeviceCaps(dc, Interop.Gdi32.DeviceCapability.LOGPIXELSY);
         }
 
         s_isInitialized = true;

@@ -12,7 +12,6 @@ using System.Runtime.Serialization;
 using System.Runtime.InteropServices.Marshalling;
 #endif
 using Gdip = System.Drawing.SafeNativeMethods.Gdip;
-using static Interop;
 
 namespace System.Drawing;
 

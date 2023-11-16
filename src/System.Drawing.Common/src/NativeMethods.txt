@@ -1,2 +1,6 @@
+CreateDCW
+GetDC
+GetDCEx
 GetSystemDefaultLCID
 GlobalAlloc
+ReleaseDC

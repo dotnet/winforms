@@ -9,9 +9,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using static Interop;
-using Windows.Win32;
 using Windows.Win32.System.Memory;
-using Windows.Win32.Foundation;
 
 namespace System.Drawing.Printing;
 

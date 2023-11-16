@@ -5,7 +5,6 @@ using System.Drawing.Interop;
 using System.IO;
 using System.Runtime.InteropServices;
 using static Interop;
-using Windows.Win32;
 
 namespace System.Drawing;
 
