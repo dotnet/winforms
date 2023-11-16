@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static Interop;
@@ -210,8 +209,7 @@ public partial class DataGridView
             }
         }
 
-        [return: MarshalAs(UnmanagedType.IUnknown)]
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {

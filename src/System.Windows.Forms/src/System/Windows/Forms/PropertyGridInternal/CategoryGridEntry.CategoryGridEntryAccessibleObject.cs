@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -68,12 +67,7 @@ internal partial class CategoryGridEntry
             }
         }
 
-        /// <summary>
-        ///  Returns the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (Parent is not PropertyGridView.PropertyGridViewAccessibleObject parent
                 || !this.TryGetOwnerAs(out CategoryGridEntry? owner))

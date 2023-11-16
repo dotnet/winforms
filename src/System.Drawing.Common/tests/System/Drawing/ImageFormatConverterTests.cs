@@ -224,6 +224,7 @@ public class ImageFormatConverterTest
                     throw new InvalidOperationException($"Unknown GUID {iformat.Guid}.");
             }
         }
+
         Assert.True(memorybmp, "MemoryBMP");
         Assert.True(bmp, "Bmp");
         Assert.True(emf, "Emf");

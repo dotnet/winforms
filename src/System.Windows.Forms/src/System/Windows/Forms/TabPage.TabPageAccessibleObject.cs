@@ -54,7 +54,7 @@ public partial class TabPage
         public override int GetChildCount()
             => this.IsOwnerHandleCreated(out TabPage? owningTabPage) ? owningTabPage.Controls.Count : -1;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out TabPage? _) || OwningTabControl is null)
             {
@@ -90,7 +90,7 @@ public partial class TabPage
                 _ => base.IsPatternSupported(patternId)
             };
 
-        private UiaCore.IRawElementProviderFragment? GetNextSibling()
+        private IRawElementProviderFragment.Interface? GetNextSibling()
         {
             if (!this.TryGetOwnerAs(out TabPage? owningTabPage) || OwningTabControl is null || owningTabPage != OwningTabControl.SelectedTab)
             {

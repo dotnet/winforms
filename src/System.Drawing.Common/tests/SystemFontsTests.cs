@@ -72,6 +72,7 @@ public class SystemFontsTests
                         throw new InvalidOperationException("The primary language ID is Chinese, however it was not able to" +
                                                             $" determine the user locale from the LCID with value: {userLangId & 0xFFFF:X4}.");
                 }
+
                 break;
             case 0x1E: // th-TH
             case 0x54: // lo-LA

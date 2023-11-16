@@ -442,7 +442,7 @@ public partial class DataGridViewRow
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             {
                 if (Owner is null)
@@ -450,21 +450,15 @@ public partial class DataGridViewRow
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
 
-                switch (direction)
+                return direction switch
                 {
-                    case NavigateDirection.NavigateDirection_Parent:
-                        return Parent;
-                    case NavigateDirection.NavigateDirection_NextSibling:
-                        return Navigate(AccessibleNavigation.Next);
-                    case NavigateDirection.NavigateDirection_PreviousSibling:
-                        return Navigate(AccessibleNavigation.Previous);
-                    case NavigateDirection.NavigateDirection_FirstChild:
-                        return Navigate(AccessibleNavigation.FirstChild);
-                    case NavigateDirection.NavigateDirection_LastChild:
-                        return Navigate(AccessibleNavigation.LastChild);
-                    default:
-                        return null;
-                }
+                    NavigateDirection.NavigateDirection_Parent => Parent,
+                    NavigateDirection.NavigateDirection_NextSibling => Navigate(AccessibleNavigation.Next),
+                    NavigateDirection.NavigateDirection_PreviousSibling => Navigate(AccessibleNavigation.Previous),
+                    NavigateDirection.NavigateDirection_FirstChild => Navigate(AccessibleNavigation.FirstChild),
+                    NavigateDirection.NavigateDirection_LastChild => Navigate(AccessibleNavigation.LastChild),
+                    _ => null,
+                };
             }
         }
 

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Runtime.InteropServices;
+using Windows.Win32.UI.Accessibility;
 
 internal static partial class Interop
 {
@@ -15,7 +16,7 @@ internal static partial class Interop
         [ComImport]
         [Guid("620ce2a5-ab8f-40a9-86cb-de3c75599b58")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IRawElementProviderFragmentRoot : IRawElementProviderFragment
+        public interface IRawElementProviderFragmentRoot : IRawElementProviderFragment.Interface, IRawElementProviderSimple.Interface
         {
             /// <summary>
             ///  Return the child element at the specified point, if one exists,

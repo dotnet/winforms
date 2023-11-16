@@ -12,7 +12,7 @@ public class ListBoxAccessibleObjectTests
     [WinFormsFact]
     public void ListBoxAccessibleObjectTests_Ctor_Default()
     {
-        using ListBox listBox = CreateListBoxWithItems();
+        using ListBox listBox = InitializeListBoxWithItems();
 
         var childCount = listBox.AccessibilityObject.GetChildCount();
 
@@ -96,7 +96,7 @@ public class ListBoxAccessibleObjectTests
     [WinFormsFact]
     public void ListBox_ReleaseUiaProvider_ClearsItemsAccessibleObjects()
     {
-        using ListBox listBox = CreateListBoxWithItems();
+        using ListBox listBox = InitializeListBoxWithItems();
         ListBoxAccessibleObject accessibleObject = InitListBoxItemsAccessibleObjects(listBox);
 
         listBox.ReleaseUiaProvider(listBox.HWND);
@@ -107,7 +107,7 @@ public class ListBoxAccessibleObjectTests
     [WinFormsFact]
     public void ListBoxItems_Clear_ClearsItemsAccessibleObjects()
     {
-        using ListBox listBox = CreateListBoxWithItems();
+        using ListBox listBox = InitializeListBoxWithItems();
         ListBoxAccessibleObject accessibleObject = InitListBoxItemsAccessibleObjects(listBox);
 
         listBox.Items.Clear();
@@ -118,7 +118,7 @@ public class ListBoxAccessibleObjectTests
     [WinFormsFact]
     public void ListBoxItems_Remove_RemovesItemAccessibleObject()
     {
-        using ListBox listBox = CreateListBoxWithItems();
+        using ListBox listBox = InitializeListBoxWithItems();
         ListBoxAccessibleObject accessibleObject = InitListBoxItemsAccessibleObjects(listBox);
         ItemArray.Entry item = listBox.Items.InnerArray.Entries[0];
         Assert.True(accessibleObject.TestAccessor().Dynamic._itemAccessibleObjects.ContainsKey(item));
@@ -136,7 +136,7 @@ public class ListBoxAccessibleObjectTests
 
         form.Controls.Add(listBox);
 
-        ListBox.ListBoxAccessibleObject accessibleObject = new(listBox);
+        ListBoxAccessibleObject accessibleObject = new(listBox);
         form.Show();
 
         Assert.True(listBox.Focused);
@@ -155,7 +155,65 @@ public class ListBoxAccessibleObjectTests
         Assert.True(actual);
     }
 
-    private ListBox CreateListBoxWithItems()
+    [WinFormsTheory]
+    [InlineData(SelectionMode.One, true)]
+    [InlineData(SelectionMode.None, false)]
+    [InlineData(SelectionMode.MultiSimple, true)]
+    [InlineData(SelectionMode.MultiExtended, true)]
+    public void ListBoxItemAccessibleObject_GetPropertyValue_IsSelectionRequired(SelectionMode mode, bool expected)
+    {
+        using ListBox listBox = InitializeListBoxWithItems();
+        listBox.SelectionMode = mode;
+        listBox.CreateControl();
+
+        var listBoxAccessibleObject = listBox.AccessibilityObject;
+        var actual = listBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SelectionIsSelectionRequiredPropertyId);
+
+        Assert.Equal(expected, (bool)actual);
+
+        Interop.UiaCore.ISelectionProvider provider = listBoxAccessibleObject;
+        Assert.Equal(expected, (bool)provider.IsSelectionRequired);
+    }
+
+    [WinFormsTheory]
+    [InlineData(SelectionMode.One, false)]
+    [InlineData(SelectionMode.None, false)]
+    [InlineData(SelectionMode.MultiSimple, true)]
+    [InlineData(SelectionMode.MultiExtended, true)]
+    public void ListBoxItemAccessibleObject_GetPropertyValue_CanSelectMultiple(SelectionMode mode, bool expected)
+    {
+        using ListBox listBox = InitializeListBoxWithItems();
+        listBox.SelectionMode = mode;
+        listBox.CreateControl();
+
+        var listBoxAccessibleObject = listBox.AccessibilityObject;
+        var actual = listBoxAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SelectionCanSelectMultiplePropertyId);
+
+        Assert.Equal(expected, (bool)actual);
+
+        Interop.UiaCore.ISelectionProvider provider = listBoxAccessibleObject;
+        Assert.Equal(expected, (bool)provider.CanSelectMultiple);
+    }
+
+    [WinFormsFact]
+    public void ListBoxItemAccessibleObject_RemoveFromSelection()
+    {
+        using ListBox listBox = InitializeListBoxWithItems();
+        listBox.SelectionMode = SelectionMode.MultiSimple;
+        listBox.CreateControl();
+        listBox.SetSelected(0, value: true);
+        listBox.SetSelected(2, value: true);
+
+        var listBoxAccessibleObject = listBox.AccessibilityObject;
+        Interop.UiaCore.ISelectionItemProvider provider = listBoxAccessibleObject.GetChild(0);
+        provider.RemoveFromSelection();
+
+        var indices = listBox.SelectedIndices;
+        Assert.Equal(1, indices.Count);
+        Assert.True(indices.Contains(2));
+    }
+
+    private ListBox InitializeListBoxWithItems()
     {
         ListBox listBox = new();
         listBox.Items.AddRange(new object[]
@@ -176,7 +234,7 @@ public class ListBoxAccessibleObjectTests
     {
         ListBoxAccessibleObject accessibilityObject = (ListBoxAccessibleObject)listBox.AccessibilityObject;
         int childCount = accessibilityObject.GetChildCount();
-        // Force items accessiblity objects creation
+        // Force items accessibility objects creation
         for (int i = 0; i < childCount; i++)
         {
             accessibilityObject.GetChild(i);

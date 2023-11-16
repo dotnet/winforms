@@ -4,7 +4,7 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop.UiaCore;
+using IRawElementProviderFragmentRoot = Interop.UiaCore.IRawElementProviderFragmentRoot;
 
 namespace System.Windows.Forms;
 
@@ -104,10 +104,10 @@ public partial class TabControl
             return this;
         }
 
-        internal override IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
             => HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);
 
-        internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out TabControl? owner))
             {

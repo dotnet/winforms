@@ -4,9 +4,9 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
-using static Interop.UiaCore;
 using static System.Windows.Forms.TreeNode;
+using static Interop;
+using IRawElementProviderFragmentRoot = Interop.UiaCore.IRawElementProviderFragmentRoot;
 
 namespace System.Windows.Forms;
 
@@ -16,12 +16,12 @@ public partial class TreeView
     {
         public TreeViewAccessibleObject(TreeView owningTreeView) : base(owningTreeView) { }
 
-        internal override IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
             => HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);
 
         internal override IRawElementProviderFragmentRoot FragmentRoot => this;
 
-        internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
                 NavigateDirection.NavigateDirection_FirstChild => GetChild(0),

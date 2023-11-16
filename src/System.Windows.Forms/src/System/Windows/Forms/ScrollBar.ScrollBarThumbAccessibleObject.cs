@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms;
 
@@ -17,7 +16,7 @@ public partial class ScrollBar
 
         public override string? DefaultAction => string.Empty;
 
-        internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!OwningScrollBar.IsHandleCreated)
             {

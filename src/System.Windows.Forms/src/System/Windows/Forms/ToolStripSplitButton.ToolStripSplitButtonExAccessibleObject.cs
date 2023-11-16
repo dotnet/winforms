@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -76,18 +75,13 @@ public partial class ToolStripSplitButton
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
-        {
-            switch (direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
+            => direction switch
             {
-                case NavigateDirection.NavigateDirection_FirstChild:
-                    return DropDownItemsCount > 0 ? _owningToolStripSplitButton.DropDown.Items[0].AccessibilityObject : null;
-                case NavigateDirection.NavigateDirection_LastChild:
-                    return DropDownItemsCount > 0 ? _owningToolStripSplitButton.DropDown.Items[_owningToolStripSplitButton.DropDown.Items.Count - 1].AccessibilityObject : null;
-            }
-
-            return base.FragmentNavigate(direction);
-        }
+                NavigateDirection.NavigateDirection_FirstChild => DropDownItemsCount > 0 ? _owningToolStripSplitButton.DropDown.Items[0].AccessibilityObject : null,
+                NavigateDirection.NavigateDirection_LastChild => DropDownItemsCount > 0 ? _owningToolStripSplitButton.DropDown.Items[_owningToolStripSplitButton.DropDown.Items.Count - 1].AccessibilityObject : null,
+                _ => base.FragmentNavigate(direction),
+            };
 
         private int DropDownItemsCount
         {

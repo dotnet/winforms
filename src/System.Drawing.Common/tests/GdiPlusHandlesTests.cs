@@ -51,5 +51,4 @@ public static class GdiPlusHandlesTests
                 throw new XunitException($"GetGuiResources failed with win32 error: {error}");
         }
     }
-
 }

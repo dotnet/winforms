@@ -323,12 +323,7 @@ public abstract partial class ToolStripItem
         internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
             => _ownerItem.RootToolStrip?.AccessibilityObject;
 
-        /// <summary>
-        ///  Returns the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {

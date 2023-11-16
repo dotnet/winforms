@@ -125,19 +125,19 @@ public partial class ListViewItem
             SetFocus();
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
-            AccessibleObject _parentInternal = OwningGroup?.AccessibilityObject ?? _owningListView.AccessibilityObject;
+            AccessibleObject parentInternal = OwningGroup?.AccessibilityObject ?? _owningListView.AccessibilityObject;
 
             switch (direction)
             {
                 case NavigateDirection.NavigateDirection_Parent:
-                    return _parentInternal;
+                    return parentInternal;
                 case NavigateDirection.NavigateDirection_NextSibling:
-                    int childIndex = _parentInternal.GetChildIndex(this);
-                    return childIndex == InvalidIndex ? null : _parentInternal.GetChild(childIndex + 1);
+                    int childIndex = parentInternal.GetChildIndex(this);
+                    return childIndex == InvalidIndex ? null : parentInternal.GetChild(childIndex + 1);
                 case NavigateDirection.NavigateDirection_PreviousSibling:
-                    return _parentInternal.GetChild(_parentInternal.GetChildIndex(this) - 1);
+                    return parentInternal.GetChild(parentInternal.GetChildIndex(this) - 1);
                 case NavigateDirection.NavigateDirection_FirstChild:
                 case NavigateDirection.NavigateDirection_LastChild:
                     return null;

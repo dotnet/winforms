@@ -17,8 +17,8 @@ internal static class CollectionHelper
 
         if (target.Rank != 1)
             throw new ArgumentException(SR.Arg_RankMultiDimNotSupported, nameof(target));
-        if (index < 0 || (uint)index > (uint)target.Length)
-            throw new ArgumentOutOfRangeException(nameof(index), SR.ArgumentOutOfRange_NeedNonNegNum);
+        ArgumentOutOfRangeException.ThrowIfNegative(index);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan((uint)index, (uint)target.Length, nameof(index));
         if (target.GetLowerBound(0) != 0)
             throw new ArgumentException(SR.Arg_NonZeroLowerBound, nameof(target));
         if (target.Length - index < source.Count)

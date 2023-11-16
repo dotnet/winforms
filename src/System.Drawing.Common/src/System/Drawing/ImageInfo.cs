@@ -44,7 +44,7 @@ public sealed partial class ImageAnimator
                 PropertyItem? frameDelayItem = image.GetPropertyItem(PropertyTagFrameDelay);
 
                 // If the image does not have a frame delay, we just return 0.
-                if (frameDelayItem != null)
+                if (frameDelayItem is not null)
                 {
                     // Convert the frame delay from byte[] to int
                     byte[] values = frameDelayItem.Value!;
@@ -86,7 +86,7 @@ public sealed partial class ImageAnimator
 
                 PropertyItem? loopCountItem = image.GetPropertyItem(PropertyTagLoopCount);
 
-                if (loopCountItem != null)
+                if (loopCountItem is not null)
                 {
                     // The loop count is a short where 0 = infinite, and a positive value indicates the
                     // number of times to loop. The animation will be shown 1 time more than the loop count.

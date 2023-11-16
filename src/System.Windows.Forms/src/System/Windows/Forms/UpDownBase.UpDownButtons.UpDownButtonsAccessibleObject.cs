@@ -21,7 +21,7 @@ public abstract partial class UpDownBase
             {
             }
 
-            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+            internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
             {
                 AccessibleObject? element = HitTest((int)x, (int)y);
 
@@ -33,8 +33,8 @@ public abstract partial class UpDownBase
                 return base.ElementProviderFromPoint(x, y);
             }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(
-                NavigateDirection direction) => direction switch
+            internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
+                => direction switch
                 {
                     NavigateDirection.NavigateDirection_FirstChild => GetChild(0),
                     NavigateDirection.NavigateDirection_LastChild => GetChild(1),

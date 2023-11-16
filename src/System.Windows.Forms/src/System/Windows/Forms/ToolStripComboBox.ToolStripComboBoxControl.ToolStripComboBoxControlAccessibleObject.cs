@@ -17,7 +17,7 @@ public partial class ToolStripComboBox
             {
             }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+            internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             {
                 switch (direction)
                 {

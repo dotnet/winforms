@@ -244,7 +244,6 @@ public class BufferedGraphicsContextTests
     [MethodImpl(MethodImplOptions.NoInlining)]
     private static void AllocateBufferedGraphicsContext() => new BufferedGraphicsContext();
 
-
     [Fact]
     public void Finalize_Invoke_Success()
     {

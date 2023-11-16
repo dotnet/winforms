@@ -29,7 +29,7 @@ internal sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable,
 
     public WindowsGraphics(DeviceContext dc)
     {
-        Debug.Assert(dc != null, "null dc!");
+        Debug.Assert(dc is not null, "null dc!");
         _dc = dc;
         _dc.SaveHdc();
     }
@@ -48,7 +48,7 @@ internal sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable,
 
     public static WindowsGraphics FromGraphics(Graphics g, ApplyGraphicsProperties properties)
     {
-        Debug.Assert(g != null, "null Graphics object.");
+        Debug.Assert(g is not null, "null Graphics object.");
 
         WindowsRegion? wr = null;
 
@@ -75,8 +75,7 @@ internal sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable,
                 {
                     clip = data[0] as Region;
                 }
-                worldTransf = data[1] as Matrix;
-                if (worldTransf != null)
+                if (data[1] is Matrix worldTransf)
                 {
                     offset = worldTransf.Offset;
                 }
@@ -136,7 +135,7 @@ internal sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable,
 
     internal void Dispose(bool disposing)
     {
-        if (_dc != null)
+        if (_dc is not null)
         {
             DbgUtil.AssertFinalization(this, disposing);
 
@@ -150,7 +149,7 @@ internal sealed partial class WindowsGraphics : MarshalByRefObject, IDisposable,
                     _dc.Dispose(disposing);
                 }
 
-                if (_graphics != null)    // if created from a Graphics object...
+                if (_graphics is not null)    // if created from a Graphics object...
                 {
                     _graphics.ReleaseHdcInternal(_dc.Hdc);
                     _graphics = null;

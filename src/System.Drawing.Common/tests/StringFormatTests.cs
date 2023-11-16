@@ -426,7 +426,6 @@ public class StringFormatTests
         var format = new StringFormat();
         format.Dispose();
 
-
         AssertExtensions.Throws<ArgumentException>(null, () => format.Trimming);
         AssertExtensions.Throws<ArgumentException>(null, () => format.Trimming = StringTrimming.Word);
     }

@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms;
 
@@ -24,7 +23,7 @@ public partial class ToolStripOverflow
                 ? owner.DisplayedItems.Count
                 : 0;
 
-        internal override IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
             => direction switch
             {
                 NavigateDirection.NavigateDirection_Parent when this.TryGetOwnerAs(out ToolStripOverflow? owner)

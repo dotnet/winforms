@@ -262,11 +262,6 @@
         <target state="translated">Dla żądanej akcji są obsługiwane tylko tablice jednowymiarowe.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ArgumentOutOfRange_NeedNonNegNum">
-        <source>Non-negative number required.</source>
-        <target state="translated">Wymagana jest liczba nieujemna.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="Argument_IncompatibleArrayType">
         <source>Target array type is not compatible with the type of items in the collection.</source>
         <target state="translated">Typ tablicy docelowej nie jest zgodny z typem elementów w kolekcji.</target>
@@ -7409,11 +7404,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Wskazuje wartość, o jaką następuje zwiększenie lub zmniejszenie po każdym kliknięciu przycisku.</target>
         <note />
       </trans-unit>
-      <trans-unit id="NumericUpDownLessThanZeroError">
-        <source>Parameter value must be greater than or equal to 0.</source>
-        <target state="translated">Wartość parametru musi być większa niż lub równa 0.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="NumericUpDownMaximumDescr">
         <source>Indicates the maximum value for the numeric up-down control.</source>
         <target state="translated">Wskazuje wartość maksymalną dla numerycznego formantu góra-dół.</target>
@@ -8267,11 +8257,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="PropertyCategoryText">
         <source>Text</source>
         <target state="translated">Tekst</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridBadTabIndex">
-        <source>Tab index not valid.</source>
-        <target state="translated">Nieprawidłowy indeks kolejności dostępu.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridCanShowCommandsDesc">

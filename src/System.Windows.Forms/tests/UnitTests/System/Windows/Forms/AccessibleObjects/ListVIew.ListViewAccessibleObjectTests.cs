@@ -5,7 +5,6 @@ using System.Drawing;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewGroup;
 using static System.Windows.Forms.ListViewItem;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -1753,10 +1752,25 @@ public class ListView_ListViewAccessibleObjectTests
         listView.Items.AddRange(Enumerable.Range(0, 11).Select(i => new ListViewItem()).ToArray());
         listView.CreateControl();
 
-        UiaCore.IRawElementProviderFragment uiaProvider = listView.AccessibilityObject;
-        UiaCore.UiaRect actual = uiaProvider.BoundingRectangle;
+        IRawElementProviderFragment.Interface uiaProvider = listView.AccessibilityObject;
+        Assert.True(uiaProvider.get_BoundingRectangle(out UiaRect actual).Succeeded);
 
         Assert.Equal(expectedWidth, actual.width);
+    }
+
+    [WinFormsFact]
+    public void ListViewItemAccessibleObject_GetPropertyValue_CanSelectMultiple()
+    {
+        using ListView listView = new();
+        listView.MultiSelect = true;
+        listView.CreateControl();
+
+        var listViewAccessibleObject = listView.AccessibilityObject;
+        var actual = listViewAccessibleObject.GetPropertyValue(UIA_PROPERTY_ID.UIA_SelectionCanSelectMultiplePropertyId);
+        Assert.True((bool)actual);
+
+        Interop.UiaCore.ISelectionProvider provider = listViewAccessibleObject;
+        Assert.True((bool)provider.CanSelectMultiple);
     }
 }
 

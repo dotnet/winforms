@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -32,7 +31,8 @@ public partial class ListView
             }
         }
 
-        internal override bool CanSelectMultiple => this.IsOwnerHandleCreated(out ListView? _);
+        internal override bool CanSelectMultiple
+            => this.IsOwnerHandleCreated(out ListView? listView) && listView.MultiSelect;
 
         internal override int ColumnCount
             => this.TryGetOwnerAs(out ListView? owningListView) ? owningListView.Columns.Count : base.ColumnCount;
@@ -68,14 +68,14 @@ public partial class ListView
         internal override RowOrColumnMajor RowOrColumnMajor
             => RowOrColumnMajor.RowOrColumnMajor_RowMajor;
 
-        internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
         {
             AccessibleObject? element = HitTest((int)x, (int)y);
 
             return element ?? base.ElementProviderFromPoint(x, y);
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.IsOwnerHandleCreated(out ListView? _))
             {
@@ -194,15 +194,10 @@ public partial class ListView
             return columnHeaders;
         }
 
-        internal override UiaCore.IRawElementProviderFragment? GetFocus()
-        {
-            if (!this.IsOwnerHandleCreated(out ListView? owningListView))
-            {
-                return null;
-            }
-
-            return owningListView.FocusedItem?.AccessibilityObject ?? owningListView.FocusedGroup?.AccessibilityObject;
-        }
+        internal override IRawElementProviderFragment.Interface? GetFocus()
+            => !this.IsOwnerHandleCreated(out ListView? owningListView)
+                ? null
+                : (owningListView.FocusedItem?.AccessibilityObject ?? owningListView.FocusedGroup?.AccessibilityObject);
 
         internal override int GetMultiViewProviderCurrentView()
             => this.TryGetOwnerAs(out ListView? owningListView) ? (int)owningListView.View : base.GetMultiViewProviderCurrentView();

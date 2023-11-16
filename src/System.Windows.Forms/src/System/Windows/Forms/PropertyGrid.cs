@@ -2359,7 +2359,7 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
         // we need to cause a refresh.
         bool fullRefresh = false;
         if (_gridView.SelectedGridEntry is PropertyDescriptorGridEntry selectedEntry
-            && selectedEntry.PropertyDescriptor?.Attributes is not null)
+            && selectedEntry.PropertyDescriptor.Attributes is not null)
         {
             // Fish out the DispIdAttribute which will tell us the DispId of the property that we're changing.
             if (selectedEntry.PropertyDescriptor.TryGetAttribute(out DispIdAttribute dispIdAttribute)
@@ -3540,10 +3540,8 @@ public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, IProp
     {
         Debug.Assert(_tabs.Count > 0, "Tab array destroyed!");
 
-        if (tabIndex >= _tabs.Count || tabIndex < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(tabIndex), SR.PropertyGridBadTabIndex);
-        }
+        ArgumentOutOfRangeException.ThrowIfNegative(tabIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(tabIndex, _tabs.Count);
 
         if (_tabs[tabIndex].Scope == PropertyTabScope.Static)
         {

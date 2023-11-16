@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -23,20 +22,16 @@ public partial class ListViewItem
                 ? null
                 : new(_owningListView, _owningListView._labelEdit);
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
-        {
-            switch (direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
+            => direction switch
             {
-                case NavigateDirection.NavigateDirection_FirstChild:
-                    return _owningListView._labelEdit is not null
+                NavigateDirection.NavigateDirection_FirstChild
+                    => _owningListView._labelEdit is not null
                         ? LabelEditAccessibleObject
-                        : GetChildInternal(1);
-                case NavigateDirection.NavigateDirection_LastChild:
-                    return GetChildInternal(GetLastChildIndex());
-            }
-
-            return base.FragmentNavigate(direction);
-        }
+                        : GetChildInternal(1),
+                NavigateDirection.NavigateDirection_LastChild => GetChildInternal(GetLastChildIndex()),
+                _ => base.FragmentNavigate(direction),
+            };
 
         // Only additional ListViewSubItem are displayed in the accessibility tree if the ListView
         // in the "Tile" view (the first ListViewSubItem is responsible for the ListViewItem)

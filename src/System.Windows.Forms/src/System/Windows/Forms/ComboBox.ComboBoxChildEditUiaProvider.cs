@@ -35,12 +35,7 @@ public partial class ComboBox
 
         private protected override string AutomationId => COMBO_BOX_EDIT_AUTOMATION_ID;
 
-        /// <summary>
-        ///  Returns the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owningComboBox.IsHandleCreated ||
                 // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
@@ -50,22 +45,20 @@ public partial class ComboBox
                 return null;
             }
 
-            switch (direction)
+            return direction switch
             {
-                case NavigateDirection.NavigateDirection_Parent:
-                    return _owningComboBox.AccessibilityObject;
-                case NavigateDirection.NavigateDirection_PreviousSibling:
-                    return _owningComboBox.DroppedDown
+                NavigateDirection.NavigateDirection_Parent => _owningComboBox.AccessibilityObject,
+                NavigateDirection.NavigateDirection_PreviousSibling
+                    => _owningComboBox.DroppedDown
                         ? _owningComboBox.ChildListAccessibleObject
-                        : null;
-                case NavigateDirection.NavigateDirection_NextSibling:
-                    return _owningComboBox.DropDownStyle != ComboBoxStyle.Simple
+                        : null,
+                NavigateDirection.NavigateDirection_NextSibling
+                    => _owningComboBox.DropDownStyle != ComboBoxStyle.Simple
                         && _owningComboBox.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject
-                            ? comboBoxAccessibleObject.DropDownButtonUiaProvider
-                            : null;
-                default:
-                    return base.FragmentNavigate(direction);
-            }
+                        ? comboBoxAccessibleObject.DropDownButtonUiaProvider
+                        : null,
+                _ => base.FragmentNavigate(direction),
+            };
         }
 
         /// <summary>

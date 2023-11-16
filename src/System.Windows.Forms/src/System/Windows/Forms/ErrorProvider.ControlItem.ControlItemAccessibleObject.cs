@@ -40,25 +40,14 @@ public partial class ErrorProvider
 
             private int CurrentIndex => _window?.ControlItems.IndexOf(_controlItem) ?? -1;
 
-            /// <summary>
-            ///  Returns the element in the specified direction.
-            /// </summary>
-            /// <param name="direction">Indicates the direction in which to navigate.</param>
-            /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
-            {
-                switch (direction)
+            internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
+                => direction switch
                 {
-                    case NavigateDirection.NavigateDirection_Parent:
-                        return Parent;
-                    case NavigateDirection.NavigateDirection_NextSibling:
-                        return GetNextSibling();
-                    case NavigateDirection.NavigateDirection_PreviousSibling:
-                        return GetPreviousSibling();
-                    default:
-                        return base.FragmentNavigate(direction);
-                }
-            }
+                    NavigateDirection.NavigateDirection_Parent => Parent,
+                    NavigateDirection.NavigateDirection_NextSibling => GetNextSibling(),
+                    NavigateDirection.NavigateDirection_PreviousSibling => GetPreviousSibling(),
+                    _ => base.FragmentNavigate(direction),
+                };
 
             internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => Parent;
 
@@ -96,10 +85,10 @@ public partial class ErrorProvider
             internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID) =>
                 propertyID switch
                 {
-                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId,
-                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId => _window?.Handle is { } handle
-                        ? UIAHelper.WindowHandleToVariant(handle)
-                        : VARIANT.Empty,
+                    UIA_PROPERTY_ID.UIA_ControlTypePropertyId
+                        => (VARIANT)(int)UIA_CONTROLTYPE_ID.UIA_ImageControlTypeId,
+                    UIA_PROPERTY_ID.UIA_NativeWindowHandlePropertyId
+                        => UIAHelper.WindowHandleToVariant(_window?.Handle ?? HWND.Null),
                     _ => base.GetPropertyValue(propertyID)
                 };
 

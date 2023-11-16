@@ -129,7 +129,7 @@ public partial class ListBox
             }
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             int firstItemIndex = 0;
             int lastItemIndex = _owningListBox.Items.Count - 1;
@@ -190,7 +190,15 @@ public partial class ListBox
 
         internal override void RemoveFromSelection()
         {
-            // Do nothing, C++ implementation returns UIA_E_INVALIDOPERATION 0x80131509
+            if (!_owningListBox.IsHandleCreated
+                || _owningListBox.SelectionMode == SelectionMode.None
+                || _owningListBox.SelectionMode == SelectionMode.One
+                || !IsItemSelected)
+            {
+                return;
+            }
+
+            _owningListBox.SetSelected(CurrentIndex, value: false);
         }
 
         internal override void ScrollIntoView()

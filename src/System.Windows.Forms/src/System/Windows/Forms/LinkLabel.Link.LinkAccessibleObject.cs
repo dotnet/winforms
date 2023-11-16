@@ -72,7 +72,7 @@ public partial class LinkLabel
                 _owningLinkLabel.OnLinkClicked(new LinkLabelLinkClickedEventArgs(_owningLink));
             }
 
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+            internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
                 => direction switch
                 {
                     NavigateDirection.NavigateDirection_Parent => _linkLabelAccessibleObject,

@@ -20,13 +20,7 @@ public partial class ErrorProvider
                 _owner = owner;
             }
 
-            /// <summary>
-            ///  Return the child object at the given screen coordinates.
-            /// </summary>
-            /// <param name="x">X coordinate.</param>
-            /// <param name="y">Y coordinate.</param>
-            /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
-            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+            internal override IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
             {
                 AccessibleObject? element = HitTest((int)x, (int)y);
 
@@ -38,23 +32,13 @@ public partial class ErrorProvider
                 return base.ElementProviderFromPoint(x, y);
             }
 
-            /// <summary>
-            ///  Returns the element in the specified direction.
-            /// </summary>
-            /// <param name="direction">Indicates the direction in which to navigate.</param>
-            /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
-            {
-                switch (direction)
+            internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
+                => direction switch
                 {
-                    case NavigateDirection.NavigateDirection_FirstChild:
-                        return GetChild(0);
-                    case NavigateDirection.NavigateDirection_LastChild:
-                        return GetChild(GetChildCount() - 1);
-                }
-
-                return base.FragmentNavigate(direction);
-            }
+                    NavigateDirection.NavigateDirection_FirstChild => GetChild(0),
+                    NavigateDirection.NavigateDirection_LastChild => GetChild(GetChildCount() - 1),
+                    _ => base.FragmentNavigate(direction),
+                };
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 

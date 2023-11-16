@@ -38,7 +38,7 @@ public partial class ComboBox
             }
         }
 
-        internal override unsafe UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+        internal override unsafe IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y)
         {
             using var accessible = SystemIAccessible.TryGetIAccessible(out HRESULT result);
             if (result.Succeeded)
@@ -58,7 +58,7 @@ public partial class ComboBox
             return base.ElementProviderFromPoint(x, y);
         }
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owningComboBox.IsHandleCreated ||
                 // Created is set to false in WM_DESTROY, but the window Handle is released on NCDESTROY, which comes after DESTROY.
@@ -135,7 +135,7 @@ public partial class ComboBox
                 _ => base.GetPropertyValue(propertyID)
             };
 
-        internal override UiaCore.IRawElementProviderFragment? GetFocus() => GetFocused();
+        internal override IRawElementProviderFragment.Interface? GetFocus() => GetFocused();
 
         public override AccessibleObject? GetFocused()
         {

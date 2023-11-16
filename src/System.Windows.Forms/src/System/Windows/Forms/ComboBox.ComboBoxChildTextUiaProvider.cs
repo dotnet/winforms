@@ -64,33 +64,26 @@ public partial class ComboBox
             }
         }
 
-        /// <summary>
-        ///  Returns the element in the specified direction.
-        /// </summary>
-        /// <param name="direction">Indicates the direction in which to navigate.</param>
-        /// <returns>Returns the element in the specified direction.</returns>
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!_owner.IsHandleCreated)
             {
                 return null;
             }
 
-            switch (direction)
+            return direction switch
             {
-                case NavigateDirection.NavigateDirection_Parent:
-                    return _owner.AccessibilityObject;
-                case NavigateDirection.NavigateDirection_NextSibling:
-                    return _owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject
+                NavigateDirection.NavigateDirection_Parent => _owner.AccessibilityObject,
+                NavigateDirection.NavigateDirection_NextSibling
+                    => _owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject
                         ? comboBoxAccessibleObject.DropDownButtonUiaProvider
-                        : null;
-                case NavigateDirection.NavigateDirection_PreviousSibling:
-                    return _owner.DroppedDown
+                        : null,
+                NavigateDirection.NavigateDirection_PreviousSibling
+                    => _owner.DroppedDown
                         ? _owner.ChildListAccessibleObject
-                        : null;
-                default:
-                    return base.FragmentNavigate(direction);
-            }
+                        : null,
+                _ => base.FragmentNavigate(direction),
+            };
         }
 
         /// <summary>

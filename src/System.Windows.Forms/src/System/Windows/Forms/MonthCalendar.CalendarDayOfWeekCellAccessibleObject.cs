@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -37,8 +36,8 @@ public partial class MonthCalendar
 
         public override string? Description => null;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction) =>
-            direction switch
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
+            => direction switch
             {
                 NavigateDirection.NavigateDirection_NextSibling => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Next?.Value,
                 NavigateDirection.NavigateDirection_PreviousSibling => _calendarRowAccessibleObject.CellsAccessibleObjects?.Find(this)?.Previous?.Value,

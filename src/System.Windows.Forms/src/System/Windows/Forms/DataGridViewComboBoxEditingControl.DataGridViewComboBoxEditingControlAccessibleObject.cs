@@ -27,7 +27,7 @@ public partial class DataGridViewComboBoxEditingControl
 
         public override AccessibleObject? Parent => _parentAccessibleObject;
 
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             switch (direction)
             {
