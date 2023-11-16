@@ -29,22 +29,34 @@ public class AgileComPointerTests
     public async Task AgileComPointer_MultiThread_COMPointerValue_ForSameObject()
     {
         using AgileComPointer<IStream> agileStream = CreateMyStreamAgileComPointer(out var originalPtr);
-        using AgileComPointer<IStream> proxyAgileStream = await GetProxyAgileComPointer(agileStream);
-        Validate();
-
-        unsafe void Validate()
+        try
         {
-            using var proxyStreamPtr = proxyAgileStream.GetInterface();
-            Assert.NotEqual(originalPtr, (nint)proxyStreamPtr.Value);
+            using AgileComPointer<IStream> proxyAgileStream = await GetProxyAgileComPointer(agileStream);
+            Validate();
 
-            // Both COM pointers must be registered in the GIT to determine identity,
-            // even if IUnknown has been queried on the proxy.
-            using var proxyUnknownPtr = proxyAgileStream.GetInterface<IUnknown>();
-            Assert.NotEqual(originalPtr, proxyUnknownPtr);
+            unsafe void Validate()
+            {
+                using var proxyStreamPtr = proxyAgileStream.GetInterface();
+                Assert.NotEqual(originalPtr, (nint)proxyStreamPtr.Value);
 
-            // This will succeed at determining identity since both COM pointers have
-            // been registered in the GIT via AgileComPointer
-            Assert.True(agileStream.IsSameNativeObject(proxyAgileStream));
+                // Both COM pointers must be registered in the GIT to determine identity,
+                // even if IUnknown has been queried.
+                using var proxyUnknownPtr = proxyAgileStream.GetInterface<IUnknown>();
+                using ComScope<IUnknown> originalUnknownPtr = new(null);
+                ((IStream*)originalPtr)->QueryInterface(IID.Get<IUnknown>(), originalUnknownPtr);
+                Assert.NotEqual((nint)originalUnknownPtr.Value, proxyUnknownPtr);
+
+                // This will succeed at determining identity since both COM pointers have
+                // been registered in the GIT via AgileComPointer
+                Assert.True(agileStream.IsSameNativeObject(proxyAgileStream));
+            }
+        }
+        finally
+        {
+            unsafe
+            {
+                ((IStream*)originalPtr)->Release();
+            }
         }
 
         unsafe AgileComPointer<IStream> CreateMyStreamAgileComPointer(out nint originalPtr)
@@ -52,7 +64,7 @@ public class AgileComPointerTests
             GlobalInterfaceTableTests.MyStream myStream = new();
             IStream* streamPtr = ComHelpers.GetComPointer<IStream>(myStream);
             originalPtr = (nint)streamPtr;
-            AgileComPointer<IStream> agile = new(streamPtr, takeOwnership: true);
+            AgileComPointer<IStream> agile = new(streamPtr, takeOwnership: false);
 
             using ComScope<IStream> streamScope = agile.GetInterface();
             Assert.Equal(originalPtr, (nint)streamScope.Value);
