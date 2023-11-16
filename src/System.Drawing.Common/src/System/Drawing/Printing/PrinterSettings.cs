@@ -9,6 +9,9 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using static Interop;
+using Windows.Win32;
+using Windows.Win32.System.Memory;
+using Windows.Win32.Foundation;
 
 namespace System.Drawing.Printing;
 
@@ -832,7 +835,7 @@ public class PrinterSettings : ICloneable
             throw new InvalidPrinterException(this);
         }
 
-        IntPtr handle = Kernel32.GlobalAlloc(SafeNativeMethods.GMEM_MOVEABLE, (uint)modeSize); // cannot be <0 anyway
+        HGLOBAL handle = PInvoke.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE, (uint)modeSize); // cannot be <0 anyway
         IntPtr pointer = Kernel32.GlobalLock(handle);
 
         //Get the DevMode only if its not cached....
@@ -927,7 +930,7 @@ public class PrinterSettings : ICloneable
         // 8 = size of fixed portion of DEVNAMES
         short offset = (short)(8 / Marshal.SystemDefaultCharSize); // Offsets are in characters, not bytes
         uint namesSize = (uint)checked(Marshal.SystemDefaultCharSize * (offset + namesCharacters)); // always >0
-        IntPtr handle = Kernel32.GlobalAlloc(SafeNativeMethods.GMEM_MOVEABLE | SafeNativeMethods.GMEM_ZEROINIT, namesSize);
+        HGLOBAL handle = PInvoke.GlobalAlloc(GLOBAL_ALLOC_FLAGS.GMEM_MOVEABLE | GLOBAL_ALLOC_FLAGS.GMEM_ZEROINIT, namesSize);
         IntPtr namesPointer = Kernel32.GlobalLock(handle);
         byte* pNamesPointer = (byte*)namesPointer;
 
