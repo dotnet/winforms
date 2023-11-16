@@ -1,8 +1,8 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using Microsoft.VisualStudio.Shell;
 using Windows.Win32.System.Com;
 using Windows.Win32.System.Variant;
@@ -27,7 +27,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
     private static readonly Attribute[] s_staticAttributes = new Attribute[] { BrowsableAttribute.Yes, DesignTimeVisibleAttribute.No };
 
     // Our collection of Object managers (Com2Properties) for native properties
-    private readonly WeakHashtable _nativeProperties = new();
+    private readonly ConditionalWeakTable<object, Com2Properties> _nativeProperties = new();
 
     // Our collection of browsing handlers, which are stateless and shared across objects.
     //
@@ -183,10 +183,10 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         {
             _clearCount = 0;
 
-            List<object> disposeKeys = new();
+            List<object> disposeKeys = [];
 
             // First walk the list looking for items that need to be cleaned out.
-            foreach (DictionaryEntry entry in _nativeProperties)
+            foreach (KeyValuePair<object, Com2Properties> entry in _nativeProperties)
             {
                 if (entry.Value is Com2Properties { NeedsRefreshed: true })
                 {
@@ -198,7 +198,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
             // There's going to be a very small number of these.
             foreach (object key in disposeKeys)
             {
-                if (_nativeProperties[key] is Com2Properties properties)
+                if (_nativeProperties.TryGetValue(key, out Com2Properties? properties))
                 {
                     properties.Disposed -= OnPropsInfoDisposed;
                     properties.Dispose();
@@ -216,17 +216,14 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         // Check caches if necessary.
         CheckClear();
 
-        // Get the property info Object.
-        Com2Properties? properties = (Com2Properties?)_nativeProperties[component];
-
-        // If we don't have one, create one and set it up.
-        if (properties is null || properties.CheckAndGetTarget(checkVersions: false, callDispose: true) is null)
+        //  Get the property info object, If we don't have one, create one and set it up.
+        if (!_nativeProperties.TryGetValue(component, out Com2Properties? properties) || properties.CheckAndGetTarget(checkVersions: false, callDispose: true) is null)
         {
             properties = Com2TypeInfoProcessor.GetProperties(component);
             if (properties is not null)
             {
                 properties.Disposed += OnPropsInfoDisposed;
-                _nativeProperties.SetWeak(component, properties);
+                _nativeProperties.Add(component, properties);
                 properties.RegisterPropertyEvents(_extendedBrowsingHandlers);
             }
         }
@@ -294,27 +291,6 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
         {
             // Find the key.
             object? key = propsInfo.TargetObject;
-
-            if (key is null && _nativeProperties.ContainsValue(propsInfo))
-            {
-                // Need to find it - the target object has probably been cleaned out of the Com2Properties object
-                // already, so we run through the hashtable looking for the value, so we know what key to remove.
-                foreach (DictionaryEntry entry in _nativeProperties)
-                {
-                    if (entry.Value == propsInfo)
-                    {
-                        key = entry.Key;
-                        break;
-                    }
-                }
-
-                if (key is null)
-                {
-                    Debug.Fail("Failed to find Com2 properties key on dispose.");
-                    return;
-                }
-            }
-
             if (key is not null)
             {
                 _nativeProperties.Remove(key);
