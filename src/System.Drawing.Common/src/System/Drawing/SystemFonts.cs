@@ -5,6 +5,7 @@ using System.Drawing.Interop;
 using System.IO;
 using System.Runtime.InteropServices;
 using static Interop;
+using Windows.Win32;
 
 namespace System.Drawing;
 
@@ -173,7 +174,7 @@ public static class SystemFonts
             Font? defaultFont = null;
 
             // For Arabic systems, always return Tahoma 8.
-            if ((ushort)Kernel32.GetSystemDefaultLCID() == 0x0001)
+            if ((ushort)PInvoke.GetSystemDefaultLCID() == 0x0001)
             {
                 try
                 {
@@ -230,7 +231,7 @@ public static class SystemFonts
         {
             Font? dialogFont = null;
 
-            if ((ushort)Kernel32.GetSystemDefaultLCID() == 0x0011)
+            if ((ushort)PInvoke.GetSystemDefaultLCID() == 0x0011)
             {
                 // Always return DefaultFont for Japanese cultures.
                 dialogFont = DefaultFont;
