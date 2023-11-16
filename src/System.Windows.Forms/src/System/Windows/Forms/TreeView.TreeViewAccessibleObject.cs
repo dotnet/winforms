@@ -5,7 +5,6 @@ using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TreeNode;
-using static Interop;
 using IRawElementProviderFragmentRoot = Interop.UiaCore.IRawElementProviderFragmentRoot;
 
 namespace System.Windows.Forms;
