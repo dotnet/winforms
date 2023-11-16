@@ -446,6 +446,7 @@ IPropertyNotifySink
 IProvideMultipleClassInfo
 IQuickActivate
 IRawElementProviderFragment
+IRawElementProviderFragmentRoot
 IRecordInfo
 IRichEditOle
 IRichEditOleCallback

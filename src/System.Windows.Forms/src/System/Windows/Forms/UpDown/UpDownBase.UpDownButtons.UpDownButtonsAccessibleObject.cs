@@ -41,7 +41,7 @@ public abstract partial class UpDownBase
                     _ => base.FragmentNavigate(direction),
                 };
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
+            internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => this;
 
             private DirectionButtonAccessibleObject UpButton
                 => _upButton ??= new DirectionButtonAccessibleObject(this, true);

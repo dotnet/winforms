@@ -7,28 +7,27 @@ using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using IRawElementProviderFragmentRoot = Windows.Win32.UI.Accessibility.IRawElementProviderFragmentRoot;
 
 namespace System.Windows.Forms.InteropTests;
 
 public unsafe class AccessibleObjectTests : InteropTestBase
 {
     [WinFormsFact]
-    public unsafe void AccessibleObject_IAccessibleExConvertReturnedElement_Invoke_ReturnsExpected()
+    public void AccessibleObject_IAccessibleExConvertReturnedElement_Invoke_ReturnsExpected()
     {
         var o = new AccessibleObject();
         AssertSuccess(Test_IAccessibleExConvertReturnedElement(o));
     }
 
     [WinFormsFact]
-    public unsafe void AccessibleObject_IAccessibleExGetIAccessiblePair_Invoke_ReturnsExpected()
+    public void AccessibleObject_IAccessibleExGetIAccessiblePair_Invoke_ReturnsExpected()
     {
         var o = new AccessibleObject();
         AssertSuccess(Test_IAccessibleExGetIAccessiblePair(o));
     }
 
     [WinFormsFact]
-    public unsafe void AccessibleObject_IAccessibleExGetRuntimeId_Invoke_ReturnsExpected()
+    public void AccessibleObject_IAccessibleExGetRuntimeId_Invoke_ReturnsExpected()
     {
         using (new NoAssertContext())
         {
@@ -42,7 +41,7 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     [InlineData(0)]
     [InlineData(-1)]
     [InlineData(1)]
-    public unsafe void AccessibleObject_IAccessibleExGetObjectForChild_Invoke_ReturnsExpected(int idChild)
+    public void AccessibleObject_IAccessibleExGetObjectForChild_Invoke_ReturnsExpected(int idChild)
     {
         var o = new AccessibleObject();
         AssertSuccess(Test_IAccessibleExGetObjectForChild(o, idChild));
@@ -172,14 +171,14 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     }
 
     [WinFormsFact]
-    public unsafe void AccessibleObject_IRawElementProviderFragmentBoundingRectangle_Get_ReturnsExpected()
+    public void AccessibleObject_IRawElementProviderFragmentBoundingRectangle_Get_ReturnsExpected()
     {
         using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
         Assert.True(fragment.Value->get_BoundingRectangle(out _).Succeeded);
     }
 
     [WinFormsFact]
-    public unsafe void AccessibleObject_IRawElementProviderFragmentFragmentRoot_Get_ReturnsExpected()
+    public void AccessibleObject_IRawElementProviderFragmentFragmentRoot_Get_ReturnsExpected()
     {
         using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
         using ComScope<IRawElementProviderFragmentRoot> result = new(null);
@@ -187,7 +186,7 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     }
 
     [WinFormsFact]
-    public unsafe void AccessibleObject_IRawElementProviderFragmentGetEmbeddedFragmentRoots_Invoke_ReturnsExpected()
+    public void AccessibleObject_IRawElementProviderFragmentGetEmbeddedFragmentRoots_Invoke_ReturnsExpected()
     {
         using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
         using ComSafeArrayScope<IRawElementProviderFragment> result = new(null);
@@ -195,7 +194,7 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     }
 
     [WinFormsFact]
-    public unsafe void AccessibleObject_IRawElementProviderFragmentGetRuntimeId_Invoke_ReturnsExpected()
+    public void AccessibleObject_IRawElementProviderFragmentGetRuntimeId_Invoke_ReturnsExpected()
     {
         using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
         using SafeArrayScope<int> runtimeId = new((SAFEARRAY*)null);
@@ -210,7 +209,7 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     [InlineData((int)NavigateDirection.NavigateDirection_FirstChild)]
     [InlineData((int)NavigateDirection.NavigateDirection_LastChild)]
     [InlineData((int)NavigateDirection.NavigateDirection_LastChild + 1)]
-    public unsafe void AccessibleObject_IRawElementProviderFragmentNavigate_Invoke_ReturnsExpected(int direction)
+    public void AccessibleObject_IRawElementProviderFragmentNavigate_Invoke_ReturnsExpected(int direction)
     {
         using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
         using ComScope<IRawElementProviderFragment> result = new(null);
@@ -218,7 +217,7 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     }
 
     [WinFormsFact]
-    public unsafe void AccessibleObject_IRawElementProviderFragmentSetFocus_Invoke_ReturnsExpected()
+    public void AccessibleObject_IRawElementProviderFragmentSetFocus_Invoke_ReturnsExpected()
     {
         using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
         Assert.True(fragment.Value->SetFocus().Succeeded);
@@ -229,21 +228,23 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     [InlineData(0, 0)]
     [InlineData(-1, -2)]
     [InlineData(double.NaN, double.NaN)]
-    public unsafe void AccessibleObject_IRawElementProviderFragmentRootElementProviderFromPoint_Invoke_ReturnsExpected(double x, double y)
+    public void AccessibleObject_IRawElementProviderFragmentRootElementProviderFromPoint_Invoke_ReturnsExpected(double x, double y)
     {
-        var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderFragmentRootElementProviderFromPoint(o, x, y));
+        using var fragmentRoot = ComHelpers.GetComScope<IRawElementProviderFragmentRoot>(new AccessibleObject());
+        using ComScope<IRawElementProviderFragment> result = new(null);
+        Assert.True(fragmentRoot.Value->ElementProviderFromPoint(x, y, result).Succeeded);
     }
 
     [WinFormsFact]
-    public unsafe void AccessibleObject_IRawElementProviderFragmentRootGetFocus_Invoke_ReturnsExpected()
+    public void AccessibleObject_IRawElementProviderFragmentRootGetFocus_Invoke_ReturnsExpected()
     {
-        var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderFragmentRootGetFocus(o));
+        using var fragmentRoot = ComHelpers.GetComScope<IRawElementProviderFragmentRoot>(new AccessibleObject());
+        using ComScope<IRawElementProviderFragment> result = new(null);
+        Assert.True(fragmentRoot.Value->GetFocus(result).Succeeded);
     }
 
     [WinFormsFact]
-    public unsafe void AccessibleObject_IInvokeProviderInvoke_Invoke_ReturnsExpected()
+    public void AccessibleObject_IInvokeProviderInvoke_Invoke_ReturnsExpected()
     {
         var o = new AccessibleObject();
         AssertSuccess(Test_IInvokeProviderInvoke(o));
@@ -447,7 +448,7 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     }
 
     [WinFormsFact]
-    public unsafe void SystemAccessibleObject_Enumeration()
+    public void SystemAccessibleObject_Enumeration()
     {
         using ComboBox control = new ComboBox
         {
@@ -744,7 +745,7 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     }
 
     [WinFormsFact]
-    public unsafe void AccessibleObject_IDispatch()
+    public void AccessibleObject_IDispatch()
     {
         AccessibleObject accessible = new();
         using var dispatch = ComHelpers.TryGetComScope<IDispatch>(accessible);
@@ -841,16 +842,6 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     private static extern string Test_IRangeValueProviderSetValue(
         [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
         double value, double expected);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern unsafe string Test_IRawElementProviderFragmentRootElementProviderFromPoint(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-        double x,
-        double y);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern unsafe string Test_IRawElementProviderFragmentRootGetFocus(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
     private static extern unsafe string Test_IInvokeProviderInvoke(

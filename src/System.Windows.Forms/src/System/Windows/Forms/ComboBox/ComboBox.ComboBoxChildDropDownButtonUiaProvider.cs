@@ -64,7 +64,7 @@ public partial class ComboBox
             };
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owner.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => _owner.AccessibilityObject;
 
         internal override int GetChildId() => COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX;
 

@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using UiaCore = Interop.UiaCore;
 
 namespace System.Windows.Forms;
 
@@ -21,7 +20,7 @@ internal unsafe class TreeViewLabelEditAccessibleObject : LabelEditAccessibleObj
 
     private protected override string? AutomationId => _owningTreeView.TryGetTarget(out TreeView? target) ? target._editNode?.AccessibilityObject.Name : null;
 
-    internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => _owningTreeView.TryGetTarget(out TreeView? target) ? target.AccessibilityObject : null;
+    internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => _owningTreeView.TryGetTarget(out TreeView? target) ? target.AccessibilityObject : null;
 
     public override AccessibleObject? Parent => _owningTreeView.TryGetTarget(out TreeView? target) ? target._editNode?.AccessibilityObject : null;
 

@@ -321,6 +321,8 @@
       "IRawElementProviderFragment.GetRuntimeId",
       "IRawElementProviderFragment.Navigate",
       "IRawElementProviderFragment.SetFocus",
+      "IRawElementProviderFragmentRoot.ElementProviderFromPoint",
+      "IRawElementProviderFragmentRoot.GetFocus",
       "IRawElementProviderSimple.get_HostRawElementProvider",
       "IRawElementProviderSimple.get_ProviderOptions",
       "IRawElementProviderSimple.GetPatternProvider",

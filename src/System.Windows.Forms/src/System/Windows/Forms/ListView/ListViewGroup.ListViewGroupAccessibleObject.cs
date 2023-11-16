@@ -5,7 +5,6 @@ using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListView;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -94,7 +93,7 @@ public partial class ListViewGroup
                 ? ExpandCollapseState.ExpandCollapseState_Collapsed
                 : ExpandCollapseState.ExpandCollapseState_Expanded;
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot
             => _owningListView.AccessibilityObject;
 
         public override string Name

@@ -76,7 +76,7 @@ public partial class TreeNode
             return;
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot
             => _owningTreeView.AccessibilityObject;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)

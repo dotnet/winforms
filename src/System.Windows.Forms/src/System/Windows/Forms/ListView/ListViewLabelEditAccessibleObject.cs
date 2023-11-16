@@ -4,7 +4,6 @@
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem.ListViewSubItem;
-using UiaCore = Interop.UiaCore;
 
 namespace System.Windows.Forms;
 
@@ -62,5 +61,8 @@ internal unsafe class ListViewLabelEditAccessibleObject : LabelEditAccessibleObj
             _ => base.FragmentNavigate(direction)
         };
 
-    internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => _owningListView.TryGetTarget(out ListView? target) ? target.AccessibilityObject : null;
+    internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
+        => _owningListView.TryGetTarget(out ListView? target)
+            ? target.AccessibilityObject
+            : null;
 }

@@ -59,7 +59,7 @@ internal partial class PropertyGridView
                 };
             }
 
-            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+            internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
                 => this.TryGetOwnerAs(out GridViewTextBox? owner)
                     ? owner.PropertyGridView.OwnerGrid?.AccessibilityObject
                     : null;

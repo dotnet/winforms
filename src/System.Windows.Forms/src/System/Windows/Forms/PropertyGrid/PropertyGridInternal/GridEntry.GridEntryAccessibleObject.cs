@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -145,10 +144,7 @@ internal abstract partial class GridEntry
 
         internal override IRawElementProviderSimple.Interface? ContainingGrid => PropertyGridView?.AccessibilityObject;
 
-        /// <summary>
-        ///  Return the element that is the root node of this fragment of UI.
-        /// </summary>
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
             => Parent as PropertyGridView.PropertyGridViewAccessibleObject;
 
         internal override int Row

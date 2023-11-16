@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -41,7 +40,7 @@ public partial class TrackBar
         public override AccessibleStates State
             => ParentInternal?.SystemIAccessible.TryGetState(GetChildId()) ?? AccessibleStates.None;
 
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => ParentInternal;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => ParentInternal;
 
         internal virtual bool IsDisplayed => this.TryGetOwnerAs(out TrackBar? trackbar) && trackbar.Visible;
 

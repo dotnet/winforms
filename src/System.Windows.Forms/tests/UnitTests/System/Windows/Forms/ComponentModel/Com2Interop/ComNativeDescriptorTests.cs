@@ -347,3 +347,4 @@ public unsafe class ComNativeDescriptorTests
         }
     }
 }
+

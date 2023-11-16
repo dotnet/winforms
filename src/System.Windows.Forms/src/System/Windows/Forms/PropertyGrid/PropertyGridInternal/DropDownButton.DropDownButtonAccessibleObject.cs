@@ -4,7 +4,6 @@
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.PropertyGridInternal.PropertyDescriptorGridEntry;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -59,10 +58,7 @@ internal sealed partial class DropDownButton : Button
             };
         }
 
-        /// <summary>
-        ///  Returns the element that is the root node of this fragment of UI.
-        /// </summary>
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
             => _owningPropertyGrid?.AccessibilityObject;
 
         /// <summary>

@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -49,7 +48,7 @@ public partial class DataGridViewTextBoxEditingControl
             return base.FragmentNavigate(direction);
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
             => this.TryGetOwnerAs(out IDataGridViewEditingControl? owner)
                 ? owner.EditingControlDataGridView?.AccessibilityObject
                 : null;

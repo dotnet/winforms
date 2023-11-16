@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -31,7 +30,7 @@ public partial class TabPage
 
         public override AccessibleStates State => SystemIAccessible.TryGetState(GetChildId());
 
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => OwningTabControl?.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => OwningTabControl?.AccessibilityObject;
 
         private TabControl? OwningTabControl =>
             this.TryGetOwnerAs(out TabPage? owningTabPage) ? owningTabPage.ParentInternal as TabControl : null;

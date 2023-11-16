@@ -81,7 +81,7 @@ public partial class LinkLabel
                     _ => base.FragmentNavigate(direction),
                 };
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _linkLabelAccessibleObject;
+            internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => _linkLabelAccessibleObject;
 
             internal override VARIANT GetPropertyValue(UIA_PROPERTY_ID propertyID)
                 => propertyID switch

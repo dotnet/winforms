@@ -3,7 +3,6 @@
 
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.PropertyGridInternal.PropertyDescriptorGridEntry;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal;
 
@@ -46,7 +45,7 @@ internal partial class PropertyGridView
                 };
             }
 
-            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot =>
+            internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
                 _owningDropDownHolder._gridView?.AccessibilityObject;
 
             public override string? Name => SR.PropertyGridViewDropDownControlHolderAccessibleName;

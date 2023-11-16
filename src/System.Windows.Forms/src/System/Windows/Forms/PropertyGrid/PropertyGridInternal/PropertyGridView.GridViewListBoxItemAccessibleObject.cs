@@ -21,7 +21,7 @@ internal partial class PropertyGridView
             _owningItem = owningItem;
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot
             => _owningGridViewListBox.AccessibilityObject;
 
         /// <inheritdoc />

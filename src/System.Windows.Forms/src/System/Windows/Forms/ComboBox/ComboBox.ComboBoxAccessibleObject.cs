@@ -102,7 +102,7 @@ public partial class ComboBox
             };
         }
 
-        internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => this;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => this;
 
         public override string DefaultAction
         {

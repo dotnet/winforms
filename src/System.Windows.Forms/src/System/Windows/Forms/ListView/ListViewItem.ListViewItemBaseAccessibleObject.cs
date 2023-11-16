@@ -4,7 +4,6 @@
 using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms;
 
@@ -51,8 +50,7 @@ public partial class ListViewItem
 
         internal virtual int FirstSubItemIndex => 0;
 
-        internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            => _owningListView.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface FragmentRoot => _owningListView.AccessibilityObject;
 
         internal bool HasImage => _owningItem.ImageList is not null && _owningItem.ImageList.Images.Count > 0
             && _owningItem.ImageIndex != ImageList.Indexer.DefaultIndex;
