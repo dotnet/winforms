@@ -26,23 +26,46 @@ public class AgileComPointerTests
     }
 
     [StaFact]
-    public async Task AgileComPointer_IsSameNativeObject_True_ForMultiThread()
+    public async Task AgileComPointer_MultiThread_COMPointerValue_ForSameObject()
     {
-        using AgileComPointer<IStream> agileStream = CreateMyStreamAgileComPointer();
-        using AgileComPointer<IStream> agileStream2 = await CloneFromDifferentThread(agileStream);
-        Assert.True(agileStream.IsSameNativeObject(agileStream2));
+        using AgileComPointer<IStream> agileStream = CreateMyStreamAgileComPointer(out var originalPtr);
+        using AgileComPointer<IStream> proxyAgileStream = await GetProxyAgileComPointer(agileStream);
+        Validate();
 
-        unsafe AgileComPointer<IStream> CreateMyStreamAgileComPointer()
+        unsafe void Validate()
+        {
+            using var proxyStreamPtr = proxyAgileStream.GetInterface();
+            Assert.NotEqual(originalPtr, (nint)proxyStreamPtr.Value);
+
+            // Both COM pointers must be registered in the GIT to determine identity,
+            // even if IUnknown has been queried on the proxy.
+            using var proxyUnknownPtr = proxyAgileStream.GetInterface<IUnknown>();
+            Assert.NotEqual(originalPtr, proxyUnknownPtr);
+
+            // This will succeed at determining identity since both COM pointers have
+            // been registered in the GIT via AgileComPointer
+            Assert.True(agileStream.IsSameNativeObject(proxyAgileStream));
+        }
+
+        unsafe AgileComPointer<IStream> CreateMyStreamAgileComPointer(out nint originalPtr)
         {
             GlobalInterfaceTableTests.MyStream myStream = new();
-            AgileComPointer<IStream> agile = new(ComHelpers.GetComPointer<IStream>(myStream), takeOwnership: true);
+            IStream* streamPtr = ComHelpers.GetComPointer<IStream>(myStream);
+            originalPtr = (nint)streamPtr;
+            AgileComPointer<IStream> agile = new(streamPtr, takeOwnership: true);
+
+            using ComScope<IStream> streamScope = agile.GetInterface();
+            Assert.Equal(originalPtr, (nint)streamScope.Value);
+
             return agile;
         }
 
-        unsafe Task<AgileComPointer<IStream>> CloneFromDifferentThread(AgileComPointer<IStream> stream)
+        unsafe Task<AgileComPointer<IStream>> GetProxyAgileComPointer(AgileComPointer<IStream> stream)
         {
             return Task.Run(() =>
             {
+                // stream.GetInterface() returns a proxy because this is not the same thread the
+                // object was created on.
                 return new AgileComPointer<IStream>(stream.GetInterface(), takeOwnership: true);
             });
         }

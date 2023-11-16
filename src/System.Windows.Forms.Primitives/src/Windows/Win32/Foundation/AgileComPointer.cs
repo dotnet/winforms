@@ -57,8 +57,12 @@ internal unsafe class AgileComPointer<TInterface> :
     /// </summary>
     public bool IsSameNativeObject(AgileComPointer<TInterface> other)
     {
-        // There is a chance that we have a proxy. In order to determine
-        // identity we need to query for IUnknown and compare their values.
+        // There is a chance that this AgileComPointer or the other has a proxy registered to the GIT.
+        // A proxy's value can differ depending on the thread. In order to determine identity between two COM pointers,
+        // both must be registered in GIT (this is already done when initializing an AgileComPointer),
+        // queried for their IUnknowns on the same thread, and then have their values compared.
+        // If two proxies refer to the same native object, querying them for IUnknown
+        // on the same thread will always give the same value.
         using var currentUnknown = GetInterface<IUnknown>();
         using var otherUnknown = other.GetInterface<IUnknown>();
         return currentUnknown.Value == otherUnknown.Value;
