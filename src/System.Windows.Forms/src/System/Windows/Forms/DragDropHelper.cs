@@ -22,9 +22,16 @@ namespace System.Windows.Forms;
 internal static class DragDropHelper
 {
     private const int DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001;
+    internal const string CF_COMPUTEDIMAGE = "ComputedImage";
+    internal const string CF_DISABLEDRAGTEXT = "DisableDragText";
+    internal const string CF_DRAGCONTEXT = "DragContext";
     internal const string CF_DRAGIMAGEBITS = "DragImageBits";
+    internal const string CF_DRAGSOURCEHELPERFLAGS = "DragSourceHelperFlags";
+    internal const string CF_DRAGWINDOW = "DragWindow";
     internal const string CF_DROPDESCRIPTION = "DropDescription";
     internal const string CF_INSHELLDRAGLOOP = "InShellDragLoop";
+    internal const string CF_ISCOMPUTINGIMAGE = "IsComputingImage";
+    internal const string CF_ISSHOWINGLAYERED = "IsShowingLayered";
     internal const string CF_ISSHOWINGTEXT = "IsShowingText";
     internal const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
 
@@ -220,14 +227,18 @@ internal static class DragDropHelper
     }
 
     /// <summary>
-    /// Determines whether the specified format is InDragLoop.
+    /// Determines whether the specified format is a drag loop format.
     /// </summary>
     /// <returns>
-    /// <see langword="true"/> if <paramref name="format"/> is the InDragLoop format; otherwise <see langword="false"/>.
+    /// <see langword="true"/> if <paramref name="format"/> is a drag loop format; otherwise <see langword="false"/>.
     /// </returns>
     public static bool IsInDragLoopFormat(FORMATETC format)
     {
-        return DataFormats.GetFormat(format.cfFormat).Name.Equals(CF_INSHELLDRAGLOOP);
+        string formatName = DataFormats.GetFormat(format.cfFormat).Name;
+        return formatName.Equals(CF_COMPUTEDIMAGE) || formatName.Equals(CF_DISABLEDRAGTEXT) || formatName.Equals(CF_DRAGCONTEXT)
+            || formatName.Equals(CF_DRAGIMAGEBITS) || formatName.Equals(CF_DRAGSOURCEHELPERFLAGS) || formatName.Equals(CF_DRAGWINDOW)
+            || formatName.Equals(CF_DROPDESCRIPTION) || formatName.Equals(CF_INSHELLDRAGLOOP) || formatName.Equals(CF_ISCOMPUTINGIMAGE)
+            || formatName.Equals(CF_ISSHOWINGLAYERED) || formatName.Equals(CF_ISSHOWINGTEXT) || formatName.Equals(CF_USINGDEFAULTDRAGIMAGE);
     }
 
     /// <summary>
