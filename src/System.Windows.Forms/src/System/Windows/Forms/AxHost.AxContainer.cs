@@ -636,19 +636,14 @@ public abstract partial class AxHost
 
         HRESULT IOleInPlaceFrame.Interface.SetActiveObject(IOleInPlaceActiveObject* pActiveObject, PCWSTR pszObjName)
         {
-            if (_siteUIActive is { } activeHost
-                && activeHost._iOleInPlaceActiveObjectExternal is { } existing
-                && !existing.IsSameNativeObject(pActiveObject))
+            if (_siteUIActive is { } activeHost)
             {
-                // Release the field before disposing to avoid accessing it during disposal on callbacks.
-                activeHost._iOleInPlaceActiveObjectExternal = null;
-                existing.Dispose();
+                var existing = activeHost._iOleInPlaceActiveObjectExternal;
+                activeHost._iOleInPlaceActiveObjectExternal = pActiveObject is null
+                    ? null
+                    : new(pActiveObject, takeOwnership: false);
 
-                if (pActiveObject is not null)
-                {
-                    pActiveObject->AddRef();
-                    activeHost._iOleInPlaceActiveObjectExternal = new(pActiveObject, takeOwnership: true);
-                }
+                existing?.Dispose();
             }
 
             if (pActiveObject is null)

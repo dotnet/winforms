@@ -28,7 +28,6 @@ internal unsafe class AgileComPointer<TInterface> :
     where TInterface : unmanaged, IComIID
 {
     private uint _cookie;
-    private readonly IUnknown* _originalObject;
 
 #if DEBUG
     public AgileComPointer(TInterface* @interface, bool takeOwnership, bool trackDisposal = true)
@@ -40,12 +39,6 @@ internal unsafe class AgileComPointer<TInterface> :
         try
         {
             _cookie = GlobalInterfaceTable.RegisterInterface(@interface);
-            fixed (IUnknown** ppUnknown = &_originalObject)
-            {
-                ((IUnknown*)@interface)->QueryInterface(IID.Get<IUnknown>(), (void**)ppUnknown).ThrowOnFailure();
-            }
-
-            _originalObject->Release();
         }
         finally
         {
@@ -59,28 +52,17 @@ internal unsafe class AgileComPointer<TInterface> :
     }
 
     /// <summary>
-    ///  Returns <see langword="true"/> if the given <paramref name="interface"/> is the same pointer this
-    ///  <see cref="AgileComPointer{TInterface}"/> was created from.
-    /// </summary>
-    /// <remarks>
-    ///  <para>
-    ///   This is useful in avoiding recreating a new <see cref="AgileComPointer{TInterface}"/> for the same
-    ///   object.
-    ///  </para>
-    /// </remarks>
-    public bool IsSameNativeObject(TInterface* @interface)
-    {
-        using ComScope<IUnknown> unknownScope = new(null);
-        ((IUnknown*)@interface)->QueryInterface(IID.Get<IUnknown>(), unknownScope);
-        return _cookie != 0 && unknownScope.Value == _originalObject;
-    }
-
-    /// <summary>
     ///  Returns <see langword="true"/> if <paramref name="other"/> has the same pointer this
     ///  <see cref="AgileComPointer{TInterface}"/> was created from.
     /// </summary>
     public bool IsSameNativeObject(AgileComPointer<TInterface> other)
-        => _originalObject == other._originalObject;
+    {
+        // There is a chance that we have a proxy. In order to determine
+        // identity we need to query for IUnknown and compare their values.
+        using var currentUnknown = GetInterface<IUnknown>();
+        using var otherUnknown = other.GetInterface<IUnknown>();
+        return currentUnknown.Value == otherUnknown.Value;
+    }
 
     /// <summary>
     ///  Gets the default interface. Throws if failed.
@@ -128,8 +110,6 @@ internal unsafe class AgileComPointer<TInterface> :
         using var scope = GetInterface();
         return ComHelpers.GetObjectForIUnknown(scope.AsUnknown);
     }
-
-    public override int GetHashCode() => HashCode.Combine((nint)_originalObject);
 
     ~AgileComPointer()
     {
