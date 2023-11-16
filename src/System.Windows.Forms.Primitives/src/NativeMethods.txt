@@ -447,6 +447,7 @@ IProvideMultipleClassInfo
 IQuickActivate
 IRawElementProviderFragment
 IRawElementProviderFragmentRoot
+IRawElementProviderHwndOverride
 IRecordInfo
 IRichEditOle
 IRichEditOleCallback

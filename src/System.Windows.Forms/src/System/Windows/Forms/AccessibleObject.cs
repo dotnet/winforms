@@ -44,7 +44,7 @@ public unsafe partial class AccessibleObject :
     UiaCore.ILegacyIAccessibleProvider,
     UiaCore.ISelectionProvider,
     UiaCore.ISelectionItemProvider,
-    UiaCore.IRawElementProviderHwndOverride,
+    IRawElementProviderHwndOverride.Interface,
     UiaCore.IScrollItemProvider,
     UiaCore.IMultipleViewProvider,
     ITextProvider.Interface,
@@ -648,7 +648,7 @@ public unsafe partial class AccessibleObject :
         Value = newValue;
     }
 
-    internal virtual IRawElementProviderSimple.Interface? GetOverrideProviderForHwnd(IntPtr hwnd) => null;
+    internal virtual IRawElementProviderSimple.Interface? GetOverrideProviderForHwnd(HWND hwnd) => null;
 
     internal virtual int GetMultiViewProviderCurrentView() => 0;
 
@@ -2246,8 +2246,16 @@ public unsafe partial class AccessibleObject :
 
     Type IReflect.UnderlyingSystemType => typeof(IAccessible);
 
-    IRawElementProviderSimple.Interface? UiaCore.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd)
-        => GetOverrideProviderForHwnd(hwnd);
+    HRESULT IRawElementProviderHwndOverride.Interface.GetOverrideProviderForHwnd(HWND hwnd, IRawElementProviderSimple** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ComHelpers.TryGetComPointer<IRawElementProviderSimple>(GetOverrideProviderForHwnd(hwnd));
+        return HRESULT.S_OK;
+    }
 
     int UiaCore.IMultipleViewProvider.CurrentView => GetMultiViewProviderCurrentView();
 

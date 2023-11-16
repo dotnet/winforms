@@ -706,8 +706,9 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     [WinFormsFact]
     public void AccessibleObject_IRawElementProviderHwndOverrideGetOverrideProviderForHwnd_Invoke_ReturnsExpected()
     {
-        var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderHwndOverrideGetOverrideProviderForHwnd(o));
+        using var overrideProvider = ComHelpers.GetComScope<IRawElementProviderHwndOverride>(new AccessibleObject());
+        using ComScope<IRawElementProviderSimple> result = new(null);
+        Assert.True(overrideProvider.Value->GetOverrideProviderForHwnd(HWND.Null, result).Succeeded);
     }
 
     [WinFormsFact]
@@ -1075,10 +1076,6 @@ public unsafe class AccessibleObjectTests : InteropTestBase
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
     private static extern string Test_ISelectionItemProviderSelect(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern string Test_IRawElementProviderHwndOverrideGetOverrideProviderForHwnd(
         [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
