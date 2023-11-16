@@ -76,7 +76,7 @@ public class GiveFeedbackEventArgs : EventArgs
         return (GiveFeedbackEventArgs)MemberwiseClone();
     }
 
-    internal bool Equals(GiveFeedbackEventArgs? giveFeedbackEventArgs)
+    internal bool DragImageEquals(GiveFeedbackEventArgs? giveFeedbackEventArgs)
     {
         if (giveFeedbackEventArgs == this)
         {
@@ -84,7 +84,6 @@ public class GiveFeedbackEventArgs : EventArgs
         }
 
         return giveFeedbackEventArgs is not null
-            && giveFeedbackEventArgs.Effect == Effect
             && giveFeedbackEventArgs.UseDefaultCursors == UseDefaultCursors
             && ((giveFeedbackEventArgs.DragImage is null && DragImage is null)
                 || (giveFeedbackEventArgs.DragImage is not null && giveFeedbackEventArgs.DragImage.Equals(DragImage)))
