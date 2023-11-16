@@ -76,11 +76,18 @@ public class DragDropHelperTests
     }
 
     [Theory]
-    [InlineData(DragDropHelper.CF_DRAGIMAGEBITS, false)]
-    [InlineData(DragDropHelper.CF_DROPDESCRIPTION, false)]
+    [InlineData(DragDropHelper.CF_COMPUTEDIMAGE, true)]
+    [InlineData(DragDropHelper.CF_DISABLEDRAGTEXT, true)]
+    [InlineData(DragDropHelper.CF_DRAGCONTEXT, true)]
+    [InlineData(DragDropHelper.CF_DRAGIMAGEBITS, true)]
+    [InlineData(DragDropHelper.CF_DRAGSOURCEHELPERFLAGS, true)]
+    [InlineData(DragDropHelper.CF_DRAGWINDOW, true)]
+    [InlineData(DragDropHelper.CF_DROPDESCRIPTION, true)]
     [InlineData(DragDropHelper.CF_INSHELLDRAGLOOP, true)]
-    [InlineData(DragDropHelper.CF_ISSHOWINGTEXT, false)]
-    [InlineData(DragDropHelper.CF_USINGDEFAULTDRAGIMAGE, false)]
+    [InlineData(DragDropHelper.CF_ISCOMPUTINGIMAGE, true)]
+    [InlineData(DragDropHelper.CF_ISSHOWINGLAYERED, true)]
+    [InlineData(DragDropHelper.CF_ISSHOWINGTEXT, true)]
+    [InlineData(DragDropHelper.CF_USINGDEFAULTDRAGIMAGE, true)]
     public void IsInDragLoopFormat_ReturnsExpected(string format, bool expectedIsInDragLoopFormat)
     {
         FORMATETC formatEtc = new()
