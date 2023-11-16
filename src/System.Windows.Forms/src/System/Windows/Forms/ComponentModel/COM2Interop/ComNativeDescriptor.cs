@@ -223,7 +223,7 @@ internal sealed unsafe partial class ComNativeDescriptor : TypeDescriptionProvid
             if (properties is not null)
             {
                 properties.Disposed += OnPropsInfoDisposed;
-                _nativeProperties.Add(component, properties);
+                _nativeProperties.AddOrUpdate(component, properties);
                 properties.RegisterPropertyEvents(_extendedBrowsingHandlers);
             }
         }
