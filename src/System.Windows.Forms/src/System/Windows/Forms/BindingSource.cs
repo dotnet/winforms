@@ -1480,7 +1480,8 @@ public class BindingSource : Component,
             SetList(CreateBindingList((value is null) ? typeof(object) : value.GetType()), true, true);
         }
 
-        // Throw if user tries to add items to list that don't match the current item type
+        // Throw if user tries to add items to list that don't match the current item type.
+        // Either List or SetList has set _itemType, so we don't need to check if it is null.
         if (value is not null && !_itemType!.IsAssignableFrom(value.GetType()))
         {
             throw new InvalidOperationException(SR.BindingSourceItemTypeMismatchOnAdd);
