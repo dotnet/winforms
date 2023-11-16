@@ -25,6 +25,7 @@ public sealed unsafe partial class HtmlDocument
 
     private readonly AgileComPointer<IHTMLDocument2> _htmlDocument2;
     private readonly HtmlShimManager _shimManager;
+    private readonly int _hashCode;
 
     internal HtmlDocument(HtmlShimManager shimManager, IHTMLDocument* doc)
     {
@@ -36,6 +37,8 @@ public sealed unsafe partial class HtmlDocument
         _htmlDocument2 = new(htmlDoc2, takeOwnership: true);
 #endif
         Debug.Assert(NativeHtmlDocument2 is not null, "The document should implement IHtmlDocument2");
+        using var scope = _htmlDocument2.GetInterface<IUnknown>();
+        _hashCode = HashCode.Combine((nint)scope.Value);
 
         _shimManager = shimManager;
     }
@@ -690,7 +693,7 @@ public sealed unsafe partial class HtmlDocument
 
     public static bool operator !=(HtmlDocument? left, HtmlDocument? right) => !(left == right);
 
-    public override int GetHashCode() => _htmlDocument2.GetHashCode();
+    public override int GetHashCode() => _hashCode;
 
     public override bool Equals(object? obj) => this == (HtmlDocument?)obj;
 }
