@@ -59,7 +59,7 @@ public static class SystemBrushes
             throw new ArgumentException(SR.Format(SR.ColorNotSystemColor, c.ToString()));
         }
 
-        if (!Gdip.ThreadData.TryGetValue(s_systemBrushesKey, out var tempSystemBrushes) || tempSystemBrushes is not Brush[] systemBrushes)
+        if (!Gdip.ThreadData.TryGetValue(s_systemBrushesKey, out object? tempSystemBrushes) || tempSystemBrushes is not Brush[] systemBrushes)
         {
             systemBrushes = new Brush[(int)KnownColor.WindowText + (int)KnownColor.MenuHighlight - (int)KnownColor.YellowGreen];
             Gdip.ThreadData[s_systemBrushesKey] = systemBrushes;

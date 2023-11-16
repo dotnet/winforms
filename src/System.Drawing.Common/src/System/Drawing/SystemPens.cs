@@ -60,7 +60,7 @@ public static class SystemPens
             throw new ArgumentException(SR.Format(SR.ColorNotSystemColor, c.ToString()));
         }
 
-        if (!Gdip.ThreadData.TryGetValue(s_systemPensKey, out var tempSystemPens) || tempSystemPens is not Pen[] systemPens)
+        if (!Gdip.ThreadData.TryGetValue(s_systemPensKey, out object? tempSystemPens) || tempSystemPens is not Pen[] systemPens)
         {
             systemPens = new Pen[(int)KnownColor.WindowText + (int)KnownColor.MenuHighlight - (int)KnownColor.YellowGreen];
             Gdip.ThreadData[s_systemPensKey] = systemPens;
