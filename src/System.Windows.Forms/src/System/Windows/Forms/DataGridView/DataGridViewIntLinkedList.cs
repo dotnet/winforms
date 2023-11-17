@@ -182,6 +182,9 @@ internal class DataGridViewIntLinkedList : IEnumerable
 
     public void RemoveAt(int index)
     {
+        ArgumentOutOfRangeException.ThrowIfLessThan(index, 0);
+        ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
+
         DataGridViewIntLinkedListElement? removeTargetPrevious = null;
         DataGridViewIntLinkedListElement? tmp2 = _headElement;
         while (index > 0)
