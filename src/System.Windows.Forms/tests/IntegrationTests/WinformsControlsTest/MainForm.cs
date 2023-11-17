@@ -209,6 +209,10 @@ public partial class MainForm : Form
         {
             MainFormControlsTabOrder.PasswordButton,
             new InitInfo("Password", (obj, e) => new Password().Show(this))
+        },
+        {
+            MainFormControlsTabOrder.ChartControlButton,
+            new InitInfo("ChartControl", (obj, e) => new ChartControl().Show(this))
         }
     };
 
