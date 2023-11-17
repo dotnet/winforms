@@ -316,8 +316,8 @@ public abstract partial class ToolStripItem
             }
         }
 
-        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
-            => _ownerItem.RootToolStrip?.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
+            _ownerItem.RootToolStrip?.AccessibilityObject;
 
         internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {

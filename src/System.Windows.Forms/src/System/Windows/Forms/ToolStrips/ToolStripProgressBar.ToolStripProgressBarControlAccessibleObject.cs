@@ -17,11 +17,11 @@ public partial class ToolStripProgressBar
             _ownerToolStripProgressBarControl = toolStripProgressBarControl;
         }
 
-        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
-            => _ownerToolStripProgressBarControl.Owner?.Owner?.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
+            _ownerToolStripProgressBarControl.Owner?.Owner?.AccessibilityObject;
 
-        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
-            => direction switch
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction) =>
+            direction switch
             {
                 NavigateDirection.NavigateDirection_Parent
                 or NavigateDirection.NavigateDirection_PreviousSibling

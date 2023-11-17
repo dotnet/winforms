@@ -29,8 +29,7 @@ public partial class ListViewItem
 
         public override string DefaultAction => string.Empty;
 
-        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
-            => _owningItem.ListView?.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot => _owningItem.ListView?.AccessibilityObject;
 
         public override AccessibleObject Parent => _owningItem.AccessibilityObject;
 

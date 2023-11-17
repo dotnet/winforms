@@ -39,10 +39,11 @@ internal partial class ToolStripScrollButton
             };
         }
 
-        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
-            => _owner.OwnerScrollButton?.Owner?.AccessibilityObject;
+        internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
+            _owner.OwnerScrollButton?.Owner?.AccessibilityObject;
 
-        public override string? Name => _owner.UpDirection
+        public override string? Name =>
+            _owner.UpDirection
             ? SR.ToolStripScrollButtonUpAccessibleName
             : SR.ToolStripScrollButtonDownAccessibleName;
 

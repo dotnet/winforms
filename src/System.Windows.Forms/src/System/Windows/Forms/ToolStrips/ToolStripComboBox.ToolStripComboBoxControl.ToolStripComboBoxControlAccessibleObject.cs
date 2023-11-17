@@ -34,10 +34,10 @@ public partial class ToolStripComboBox
                 return base.FragmentNavigate(direction);
             }
 
-            internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot
-                => this.TryGetOwnerAs(out ToolStripComboBoxControl? owner)
-                    ? owner.Owner?.Owner?.AccessibilityObject
-                    : base.FragmentRoot;
+            internal override IRawElementProviderFragmentRoot.Interface? FragmentRoot =>
+                this.TryGetOwnerAs(out ToolStripComboBoxControl? owner)
+                ? owner.Owner?.Owner?.AccessibilityObject
+                : base.FragmentRoot;
 
             internal override bool IsPatternSupported(UIA_PATTERN_ID patternId) => patternId switch
             {
