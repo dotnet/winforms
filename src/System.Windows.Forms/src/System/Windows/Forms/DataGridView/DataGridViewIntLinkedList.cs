@@ -146,7 +146,7 @@ internal class DataGridViewIntLinkedList : IEnumerable
 
     public bool Remove(int integer)
     {
-        DataGridViewIntLinkedListElement? tmp1 = null;
+        DataGridViewIntLinkedListElement? removeTargetPrevious = null;
         DataGridViewIntLinkedListElement? tmp2 = _headElement;
         while (tmp2 is not null)
         {
@@ -155,20 +155,20 @@ internal class DataGridViewIntLinkedList : IEnumerable
                 break;
             }
 
-            tmp1 = tmp2;
+            removeTargetPrevious = tmp2;
             tmp2 = tmp2.Next;
         }
 
         if (tmp2 is not null && tmp2.Int == integer)
         {
             DataGridViewIntLinkedListElement? tmp3 = tmp2.Next;
-            if (tmp1 is null)
+            if (removeTargetPrevious is null)
             {
                 _headElement = tmp3;
             }
             else
             {
-                tmp1.Next = tmp3;
+                removeTargetPrevious.Next = tmp3;
             }
 
             Count--;
@@ -182,23 +182,23 @@ internal class DataGridViewIntLinkedList : IEnumerable
 
     public void RemoveAt(int index)
     {
-        DataGridViewIntLinkedListElement? tmp1 = null;
+        DataGridViewIntLinkedListElement? removeTargetPrevious = null;
         DataGridViewIntLinkedListElement? tmp2 = _headElement;
         while (index > 0)
         {
-            tmp1 = tmp2;
+            removeTargetPrevious = tmp2;
             tmp2 = tmp2!.Next;
             index--;
         }
 
         DataGridViewIntLinkedListElement? tmp3 = tmp2!.Next;
-        if (tmp1 is null)
+        if (removeTargetPrevious is null)
         {
             _headElement = tmp3;
         }
         else
         {
-            tmp1.Next = tmp3;
+            removeTargetPrevious.Next = tmp3;
         }
 
         Count--;
