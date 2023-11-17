@@ -161,14 +161,14 @@ internal class DataGridViewIntLinkedList : IEnumerable
 
         if (tmp2 is not null && tmp2.Int == integer)
         {
-            DataGridViewIntLinkedListElement? tmp3 = tmp2.Next;
+            DataGridViewIntLinkedListElement? removeTargetNext = tmp2.Next;
             if (removeTargetPrevious is null)
             {
-                _headElement = tmp3;
+                _headElement = removeTargetNext;
             }
             else
             {
-                removeTargetPrevious.Next = tmp3;
+                removeTargetPrevious.Next = removeTargetNext;
             }
 
             Count--;
@@ -191,14 +191,14 @@ internal class DataGridViewIntLinkedList : IEnumerable
             index--;
         }
 
-        DataGridViewIntLinkedListElement? tmp3 = tmp2!.Next;
+        DataGridViewIntLinkedListElement? removeTargetNext = tmp2!.Next;
         if (removeTargetPrevious is null)
         {
-            _headElement = tmp3;
+            _headElement = removeTargetNext;
         }
         else
         {
-            removeTargetPrevious.Next = tmp3;
+            removeTargetPrevious.Next = removeTargetNext;
         }
 
         Count--;

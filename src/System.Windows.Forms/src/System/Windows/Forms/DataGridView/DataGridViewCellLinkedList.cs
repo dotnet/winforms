@@ -132,14 +132,14 @@ internal class DataGridViewCellLinkedList : IEnumerable
 
         if (tmp2 is not null && tmp2.DataGridViewCell == dataGridViewCell)
         {
-            DataGridViewCellLinkedListElement? tmp3 = tmp2.Next;
+            DataGridViewCellLinkedListElement? removeTargetNext = tmp2.Next;
             if (removeTargetPrevious is null)
             {
-                _headElement = tmp3;
+                _headElement = removeTargetNext;
             }
             else
             {
-                removeTargetPrevious.Next = tmp3;
+                removeTargetPrevious.Next = removeTargetNext;
             }
 
             _count--;
@@ -161,17 +161,17 @@ internal class DataGridViewCellLinkedList : IEnumerable
             if ((column && tmp2.DataGridViewCell.ColumnIndex == bandIndex) ||
                 (!column && tmp2.DataGridViewCell.RowIndex == bandIndex))
             {
-                DataGridViewCellLinkedListElement? tmp3 = tmp2.Next;
+                DataGridViewCellLinkedListElement? removeTargetNext = tmp2.Next;
                 if (removeTargetPrevious is null)
                 {
-                    _headElement = tmp3;
+                    _headElement = removeTargetNext;
                 }
                 else
                 {
-                    removeTargetPrevious.Next = tmp3;
+                    removeTargetPrevious.Next = removeTargetNext;
                 }
 
-                tmp2 = tmp3;
+                tmp2 = removeTargetNext;
                 _count--;
                 _lastAccessedElement = null;
                 _lastAccessedIndex = -1;
