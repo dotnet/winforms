@@ -13796,7 +13796,9 @@ public partial class DataGridView
         }
 
         Debug.Assert(_dataGridViewOper[OperationInDisplayIndexAdjustments]);
+#if DEBUG
         Debug.Assert(Columns.VerifyColumnDisplayIndexes());
+#endif
 
         GetEvent<DataGridViewColumnEventHandler>(s_columnDisplayIndexChangedEvent)?.Invoke(this, e);
     }
