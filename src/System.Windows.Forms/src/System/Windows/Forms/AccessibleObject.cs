@@ -648,8 +648,6 @@ public unsafe partial class AccessibleObject :
         Value = newValue;
     }
 
-    internal virtual IRawElementProviderSimple.Interface? GetOverrideProviderForHwnd(HWND hwnd) => null;
-
     internal virtual int GetMultiViewProviderCurrentView() => 0;
 
     internal virtual int[]? GetMultiViewProviderSupportedViews() => Array.Empty<int>();
@@ -2253,7 +2251,7 @@ public unsafe partial class AccessibleObject :
             return HRESULT.E_POINTER;
         }
 
-        *pRetVal = ComHelpers.TryGetComPointer<IRawElementProviderSimple>(GetOverrideProviderForHwnd(hwnd));
+        *pRetVal = default;
         return HRESULT.S_OK;
     }
 
