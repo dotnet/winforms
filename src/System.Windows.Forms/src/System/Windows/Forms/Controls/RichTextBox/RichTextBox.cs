@@ -13,6 +13,7 @@ using static Interop;
 using static Interop.Richedit;
 using Windows.Win32.UI.Controls.RichEdit;
 using Windows.Win32.UI.Controls.Dialogs;
+using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms;
 
@@ -293,7 +294,7 @@ public partial class RichTextBox : TextBoxBase
                 Debug.Assert(versionInfo is not null && !string.IsNullOrEmpty(versionInfo.ProductVersion), "Couldn't get the version info for the richedit dll");
                 if (versionInfo is not null && !string.IsNullOrEmpty(versionInfo.ProductVersion))
                 {
-                    // Note: this only allows for one digit version
+                    //Note: this only allows for one digit version
                     if (int.TryParse(versionInfo.ProductVersion.AsSpan(0, 1), out int parsedValue))
                     {
                         s_richEditMajorVersion = parsedValue;
@@ -446,7 +447,7 @@ public partial class RichTextBox : TextBoxBase
     {
         Size scrollBarPadding = Size.Empty;
 
-        // If the RTB is multiline, we won't have a horizontal scrollbar.
+        //If the RTB is multiline, we won't have a horizontal scrollbar.
         if (!WordWrap && Multiline && (ScrollBars & RichTextBoxScrollBars.Horizontal) != 0)
         {
             scrollBarPadding.Height += SystemInformation.HorizontalScrollBarHeight;
@@ -532,7 +533,7 @@ public partial class RichTextBox : TextBoxBase
     ///  Redo's their last Undone operation. If no operation can be redone,
     ///  an empty string ("") is returned.
     /// </summary>
-    // NOTE: This is overridable, because we want people to be able to
+    //NOTE: This is overridable, because we want people to be able to
     //      mess with the names if necessary...?
     [SRCategory(nameof(SR.CatBehavior))]
     [Browsable(false)]
@@ -552,7 +553,7 @@ public partial class RichTextBox : TextBoxBase
         }
     }
 
-    // Description: Specifies whether rich text formatting keyboard shortcuts are enabled.
+    //Description: Specifies whether rich text formatting keyboard shortcuts are enabled.
     [DefaultValue(true)]
     [Browsable(false)]
     [EditorBrowsable(EditorBrowsableState.Never)]
@@ -718,7 +719,7 @@ public partial class RichTextBox : TextBoxBase
         }
         set
         {
-            // valid values are 0x0 to 0x2
+            //valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(value);
 
             ForceHandleCreate();
@@ -928,8 +929,8 @@ public partial class RichTextBox : TextBoxBase
         }
         set
         {
-            // Note: don't compare the value to the old value here: it's possible that
-            // you have a different range selected.
+            //Note: don't compare the value to the old value here: it's possible that
+            //you have a different range selected.
             _selectionBackColorToSetOnHandleCreated = value;
             if (IsHandleCreated)
             {
@@ -1430,7 +1431,7 @@ public partial class RichTextBox : TextBoxBase
     ///  Undo's their last operation. If no operation can be undone, it will
     ///  return an empty string ("").
     /// </summary>
-    // NOTE: This is overridable, because we want people to be able to
+    //NOTE: This is overridable, because we want people to be able to
     //      mess with the names if necessary...?
     [SRCategory(nameof(SR.CatBehavior))]
     [Browsable(false)]
@@ -1641,8 +1642,8 @@ public partial class RichTextBox : TextBoxBase
     public bool CanPaste(DataFormats.Format clipFormat)
         => PInvoke.SendMessage(this, PInvoke.EM_CANPASTE, (WPARAM)clipFormat.Id) != 0;
 
-    // DrawToBitmap doesn't work for this control, so we should hide it.  We'll
-    // still call base so that this has a chance to work if it can.
+    //DrawToBitmap doesn't work for this control, so we should hide it.  We'll
+    //still call base so that this has a chance to work if it can.
     [EditorBrowsable(EditorBrowsableState.Never)]
     public new void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
     {
@@ -1822,6 +1823,58 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     public unsafe int Find(string str, int start, int end, RichTextBoxFinds options)
     {
+        // Perform the find, will return ubyte position
+        int position = FindInternal(str, start, end, options);
+
+        // if we didn't find anything, or we don't have to select what was found,
+        // we're done
+        bool selectWord = (options & RichTextBoxFinds.NoHighlight) != RichTextBoxFinds.NoHighlight;
+        if (position != -1 && selectWord)
+        {
+            // Select the string found, this is done in ubyte units
+            CHARRANGE chrg = new()
+            {
+                cpMin = position
+            };
+
+            //Look for kashidas in the string.  A kashida is an arabic visual justification character
+            //that's not semantically meaningful.  Searching for ABC might find AB_C (where A,B, and C
+            //represent Arabic characters and _ represents a kashida).  We should highlight the text
+            //including the kashida.
+            char kashida = (char)0x640;
+            string kashidaString = kashida.ToString();
+            int startIndex = FindInternal(kashidaString, position, position + str.Length, options);
+            if (startIndex == -1)
+            {
+                //No kashida in the string
+                chrg.cpMax = position + str.Length;
+            }
+            else
+            {
+                //There's at least one kashida
+                int searchingCursor; //index into search string
+                int foundCursor; //index into Text
+                for (searchingCursor = startIndex, foundCursor = position + startIndex; searchingCursor < str.Length;
+                    searchingCursor++, foundCursor++)
+                {
+                    while (FindInternal(kashidaString, foundCursor, foundCursor + 1, options) != -1 && str[searchingCursor] != kashida)
+                    {
+                        foundCursor++;
+                    }
+                }
+
+                chrg.cpMax = foundCursor;
+            }
+
+            PInvoke.SendMessage(this, PInvoke.EM_EXSETSEL, 0, ref chrg);
+            PInvoke.SendMessage(this, PInvoke.EM_SCROLLCARET);
+        }
+
+        return position;
+    }
+
+    private unsafe int FindInternal(string str, int start, int end, RichTextBoxFinds options)
+    {
         ArgumentNullException.ThrowIfNull(str);
 
         int textLen = TextLength;
@@ -1896,51 +1949,6 @@ public partial class RichTextBox : TextBoxBase
         {
             ft.lpstrText = pText;
             position = (int)PInvoke.SendMessage(this, PInvoke.EM_FINDTEXT, (WPARAM)(uint)findOptions, ref ft);
-        }
-
-        // if we didn't find anything, or we don't have to select what was found,
-        // we're done
-        bool selectWord = (options & RichTextBoxFinds.NoHighlight) != RichTextBoxFinds.NoHighlight;
-        if (position != -1 && selectWord)
-        {
-            // Select the string found, this is done in ubyte units
-            CHARRANGE chrg = new()
-            {
-                cpMin = position
-            };
-
-            // Look for kashidas in the string.  A kashida is an arabic visual justification character
-            // that's not semantically meaningful.  Searching for ABC might find AB_C (where A,B, and C
-            // represent Arabic characters and _ represents a kashida).  We should highlight the text
-            // including the kashida.
-            char kashida = (char)0x640;
-            string text = Text;
-            string foundString = text.Substring(position, str.Length);
-            int startIndex = foundString.IndexOf(kashida);
-            if (startIndex == -1)
-            {
-                // No kashida in the string
-                chrg.cpMax = position + str.Length;
-            }
-            else
-            {
-                // There's at least one kashida
-                int searchingCursor; // index into search string
-                int foundCursor; // index into Text
-                for (searchingCursor = startIndex, foundCursor = position + startIndex; searchingCursor < str.Length;
-                    searchingCursor++, foundCursor++)
-                {
-                    while (text[foundCursor] == kashida && str[searchingCursor] != kashida)
-                    {
-                        foundCursor++;
-                    }
-                }
-
-                chrg.cpMax = foundCursor;
-            }
-
-            PInvoke.SendMessage(this, PInvoke.EM_EXSETSEL, 0, ref chrg);
-            PInvoke.SendMessage(this, PInvoke.EM_SCROLLCARET);
         }
 
         return position;
@@ -2324,7 +2332,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     public void LoadFile(string path, RichTextBoxStreamType fileType)
     {
-        // valid values are 0x0 to 0x4
+        //valid values are 0x0 to 0x4
         SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
         Stream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -2635,7 +2643,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     public void Redo() => PInvoke.SendMessage(this, PInvoke.EM_REDO);
 
-    // NOTE: Undo is implemented on TextBox
+    //NOTE: Undo is implemented on TextBox
 
     /// <summary>
     ///  Saves the contents of a RichTextBox control to a file.
@@ -2650,7 +2658,7 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     public void SaveFile(string path, RichTextBoxStreamType fileType)
     {
-        // valid values are 0x0 to 0x4
+        //valid values are 0x0 to 0x4
         SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
         Stream file = File.Create(path);
@@ -3148,8 +3156,8 @@ public partial class RichTextBox : TextBoxBase
         PInvoke.DragAcceptFiles(this, fAccept: false);
     }
 
-    // Note: RichTextBox doesn't work like other controls as far as setting ForeColor/
-    // BackColor -- you need to send messages to update the colors
+    //Note: RichTextBox doesn't work like other controls as far as setting ForeColor/
+    //BackColor -- you need to send messages to update the colors
     private void UserPreferenceChangedHandler(object o, UserPreferenceChangedEventArgs e)
     {
         if (IsHandleCreated)
@@ -3486,7 +3494,7 @@ public partial class RichTextBox : TextBoxBase
                 break;
 
             case PInvoke.WM_SETCURSOR:
-                // NOTE: RichTextBox uses the WM_SETCURSOR message over links to allow us to
+                //NOTE: RichTextBox uses the WM_SETCURSOR message over links to allow us to
                 //      change the cursor to a hand. It does this through a synchronous notification
                 //      message. So we have to pass the message to the DefWndProc first, and
                 //      then, if we receive a notification message in the meantime (indicated by
@@ -3536,10 +3544,10 @@ public partial class RichTextBox : TextBoxBase
                 break;
 
             case PInvoke.WM_RBUTTONUP:
-                // since RichEdit eats up the WM_CONTEXTMENU message, we need to force DefWndProc
-                // to spit out this message again on receiving WM_RBUTTONUP message. By setting UserMouse
-                // style to true, we effectively let the WmMouseUp method in Control.cs to generate
-                // the WM_CONTEXTMENU message for us.
+                //since RichEdit eats up the WM_CONTEXTMENU message, we need to force DefWndProc
+                //to spit out this message again on receiving WM_RBUTTONUP message. By setting UserMouse
+                //style to true, we effectively let the WmMouseUp method in Control.cs to generate
+                //the WM_CONTEXTMENU message for us.
                 bool oldStyle = GetStyle(ControlStyles.UserMouse);
                 SetStyle(ControlStyles.UserMouse, true);
                 base.WndProc(ref m);
