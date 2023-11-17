@@ -38,10 +38,11 @@ internal class DataGridViewIntLinkedList : IEnumerable
     {
         get
         {
-            Debug.Assert(index >= 0);
-            Debug.Assert(index < Count);
+            ArgumentOutOfRangeException.ThrowIfLessThan(index, 0);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
             if (_lastAccessedIndex == -1 || index < _lastAccessedIndex)
             {
+                // Since we have checked the index value, tmp should not be null here.
                 DataGridViewIntLinkedListElement tmp = _headElement!;
                 int tmpIndex = index;
                 while (tmpIndex > 0)
