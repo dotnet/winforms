@@ -42,18 +42,18 @@ internal class DataGridViewIntLinkedList : IEnumerable
             ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
             if (_lastAccessedIndex == -1 || index < _lastAccessedIndex)
             {
-                // Since we have checked the index value, tmp should not be null here.
-                DataGridViewIntLinkedListElement tmp = _headElement!;
+                // Since we have checked the index value, targetElement should not be null here.
+                DataGridViewIntLinkedListElement targetElement = _headElement!;
                 int tmpIndex = index;
                 while (tmpIndex > 0)
                 {
-                    tmp = tmp.Next!;
+                    targetElement = targetElement.Next!;
                     tmpIndex--;
                 }
 
-                _lastAccessedElement = tmp;
+                _lastAccessedElement = targetElement;
                 _lastAccessedIndex = index;
-                return tmp.Int;
+                return targetElement.Int;
             }
             else
             {
