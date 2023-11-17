@@ -636,22 +636,22 @@ System.Windows.Forms.TreeView.TreeViewNodeSorter.set -> void
 virtual System.Windows.Forms.Binding.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs! e) -> void
 virtual System.Windows.Forms.Binding.OnFormat(System.Windows.Forms.ConvertEventArgs! cevent) -> void
 virtual System.Windows.Forms.Binding.OnParse(System.Windows.Forms.ConvertEventArgs! cevent) -> void
-~virtual System.Windows.Forms.BindingSource.Add(object value) -> int
-~virtual System.Windows.Forms.BindingSource.AddNew() -> object
-~virtual System.Windows.Forms.BindingSource.ApplySort(System.ComponentModel.ListSortDescriptionCollection sorts) -> void
-~virtual System.Windows.Forms.BindingSource.ApplySort(System.ComponentModel.PropertyDescriptor property, System.ComponentModel.ListSortDirection sort) -> void
-~virtual System.Windows.Forms.BindingSource.Contains(object value) -> bool
-~virtual System.Windows.Forms.BindingSource.CopyTo(System.Array arr, int index) -> void
+virtual System.Windows.Forms.BindingSource.Add(object? value) -> int
+virtual System.Windows.Forms.BindingSource.AddNew() -> object?
+virtual System.Windows.Forms.BindingSource.ApplySort(System.ComponentModel.ListSortDescriptionCollection! sorts) -> void
+virtual System.Windows.Forms.BindingSource.ApplySort(System.ComponentModel.PropertyDescriptor! property, System.ComponentModel.ListSortDirection sort) -> void
+virtual System.Windows.Forms.BindingSource.Contains(object? value) -> bool
+virtual System.Windows.Forms.BindingSource.CopyTo(System.Array! arr, int index) -> void
 virtual System.Windows.Forms.BindingSource.CurrencyManager.get -> System.Windows.Forms.CurrencyManager?
-~virtual System.Windows.Forms.BindingSource.Filter.get -> string
-~virtual System.Windows.Forms.BindingSource.Filter.set -> void
-~virtual System.Windows.Forms.BindingSource.Find(System.ComponentModel.PropertyDescriptor prop, object key) -> int
-~virtual System.Windows.Forms.BindingSource.GetEnumerator() -> System.Collections.IEnumerator
-~virtual System.Windows.Forms.BindingSource.GetItemProperties(System.ComponentModel.PropertyDescriptor[] listAccessors) -> System.ComponentModel.PropertyDescriptorCollection
-~virtual System.Windows.Forms.BindingSource.GetListName(System.ComponentModel.PropertyDescriptor[] listAccessors) -> string
+virtual System.Windows.Forms.BindingSource.Filter.get -> string?
+virtual System.Windows.Forms.BindingSource.Filter.set -> void
+virtual System.Windows.Forms.BindingSource.Find(System.ComponentModel.PropertyDescriptor! prop, object! key) -> int
+virtual System.Windows.Forms.BindingSource.GetEnumerator() -> System.Collections.IEnumerator!
+virtual System.Windows.Forms.BindingSource.GetItemProperties(System.ComponentModel.PropertyDescriptor![]? listAccessors) -> System.ComponentModel.PropertyDescriptorCollection!
+virtual System.Windows.Forms.BindingSource.GetListName(System.ComponentModel.PropertyDescriptor![]? listAccessors) -> string!
 virtual System.Windows.Forms.BindingSource.GetRelatedCurrencyManager(string? dataMember) -> System.Windows.Forms.CurrencyManager?
-~virtual System.Windows.Forms.BindingSource.IndexOf(object value) -> int
-~virtual System.Windows.Forms.BindingSource.Insert(int index, object value) -> void
+virtual System.Windows.Forms.BindingSource.IndexOf(object? value) -> int
+virtual System.Windows.Forms.BindingSource.Insert(int index, object? value) -> void
 virtual System.Windows.Forms.BindingSource.OnAddingNew(System.ComponentModel.AddingNewEventArgs! e) -> void
 virtual System.Windows.Forms.BindingSource.OnBindingComplete(System.Windows.Forms.BindingCompleteEventArgs! e) -> void
 virtual System.Windows.Forms.BindingSource.OnCurrentChanged(System.EventArgs! e) -> void
@@ -661,12 +661,12 @@ virtual System.Windows.Forms.BindingSource.OnDataMemberChanged(System.EventArgs!
 virtual System.Windows.Forms.BindingSource.OnDataSourceChanged(System.EventArgs! e) -> void
 virtual System.Windows.Forms.BindingSource.OnListChanged(System.ComponentModel.ListChangedEventArgs! e) -> void
 virtual System.Windows.Forms.BindingSource.OnPositionChanged(System.EventArgs! e) -> void
-~virtual System.Windows.Forms.BindingSource.Remove(object value) -> void
-~virtual System.Windows.Forms.BindingSource.SortDescriptions.get -> System.ComponentModel.ListSortDescriptionCollection
-~virtual System.Windows.Forms.BindingSource.SortProperty.get -> System.ComponentModel.PropertyDescriptor
-~virtual System.Windows.Forms.BindingSource.SyncRoot.get -> object
-~virtual System.Windows.Forms.BindingSource.this[int index].get -> object
-~virtual System.Windows.Forms.BindingSource.this[int index].set -> void
+virtual System.Windows.Forms.BindingSource.Remove(object? value) -> void
+virtual System.Windows.Forms.BindingSource.SortDescriptions.get -> System.ComponentModel.ListSortDescriptionCollection!
+virtual System.Windows.Forms.BindingSource.SortProperty.get -> System.ComponentModel.PropertyDescriptor?
+virtual System.Windows.Forms.BindingSource.SyncRoot.get -> object!
+virtual System.Windows.Forms.BindingSource.this[int index].get -> object?
+virtual System.Windows.Forms.BindingSource.this[int index].set -> void
 virtual System.Windows.Forms.DataGridView.AdjustColumnHeaderBorderStyle(System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStyleInput, System.Windows.Forms.DataGridViewAdvancedBorderStyle! dataGridViewAdvancedBorderStylePlaceholder, bool isFirstDisplayedColumn, bool isLastVisibleColumn) -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
 virtual System.Windows.Forms.DataGridView.AdjustedTopLeftHeaderBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle!
 virtual System.Windows.Forms.DataGridView.CreateColumnsInstance() -> System.Windows.Forms.DataGridViewColumnCollection!
