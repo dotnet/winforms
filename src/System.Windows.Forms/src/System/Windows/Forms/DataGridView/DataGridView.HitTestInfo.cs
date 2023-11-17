@@ -91,17 +91,8 @@ public partial class DataGridView
         /// <summary>
         ///  Indicates whether two objects are identical.
         /// </summary>
-        public override bool Equals(object? value)
-        {
-            if (value is HitTestInfo hti)
-            {
-                return (_type == hti._type &&
-                        _row == hti._row &&
-                        _col == hti._col);
-            }
-
-            return false;
-        }
+        public override bool Equals(object? value) =>
+            value is HitTestInfo hti && _type == hti._type && _row == hti._row && _col == hti._col;
 
         /// <summary>
         ///  Gets the hash code for the <see cref="HitTestInfo"/> instance.
