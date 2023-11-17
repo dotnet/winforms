@@ -159,7 +159,7 @@ internal class DataGridViewIntLinkedList : IEnumerable
             tmp2 = tmp2.Next;
         }
 
-        if (tmp2!.Int == integer)
+        if (tmp2 is not null && tmp2.Int == integer)
         {
             DataGridViewIntLinkedListElement? tmp3 = tmp2.Next;
             if (tmp1 is null)

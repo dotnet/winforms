@@ -130,7 +130,7 @@ internal class DataGridViewCellLinkedList : IEnumerable
             tmp2 = tmp2.Next;
         }
 
-        if (tmp2!.DataGridViewCell == dataGridViewCell)
+        if (tmp2 is not null && tmp2.DataGridViewCell == dataGridViewCell)
         {
             DataGridViewCellLinkedListElement? tmp3 = tmp2.Next;
             if (tmp1 is null)
