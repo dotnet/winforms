@@ -8,12 +8,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
-using RichEdit = Windows.Win32.UI.Controls.RichEdit;
+using Windows.Win32.UI.Controls.Dialogs;
+using Windows.Win32.UI.Controls.RichEdit;
 using static Interop;
 using static Interop.Richedit;
-using Windows.Win32.UI.Controls.RichEdit;
-using Windows.Win32.UI.Controls.Dialogs;
-using System.Runtime.CompilerServices;
+using RichEdit = Windows.Win32.UI.Controls.RichEdit;
 
 namespace System.Windows.Forms;
 
