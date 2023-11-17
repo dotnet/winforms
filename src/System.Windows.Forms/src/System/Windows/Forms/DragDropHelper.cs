@@ -21,19 +21,41 @@ namespace System.Windows.Forms;
 /// </summary>
 internal static class DragDropHelper
 {
-    private const int DSH_ALLOWDROPDESCRIPTIONTEXT = 0x0001;
-    internal const string CF_COMPUTEDIMAGE = "ComputedImage";
-    internal const string CF_DISABLEDRAGTEXT = "DisableDragText";
-    internal const string CF_DRAGCONTEXT = "DragContext";
-    internal const string CF_DRAGIMAGEBITS = "DragImageBits";
-    internal const string CF_DRAGSOURCEHELPERFLAGS = "DragSourceHelperFlags";
-    internal const string CF_DRAGWINDOW = "DragWindow";
-    internal const string CF_DROPDESCRIPTION = "DropDescription";
-    internal const string CF_INSHELLDRAGLOOP = "InShellDragLoop";
-    internal const string CF_ISCOMPUTINGIMAGE = "IsComputingImage";
-    internal const string CF_ISSHOWINGLAYERED = "IsShowingLayered";
-    internal const string CF_ISSHOWINGTEXT = "IsShowingText";
-    internal const string CF_USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
+    /// <summary>
+    ///  A format used internally by the drag image manager.
+    /// </summary>
+    internal const string DRAGCONTEXT = "DragContext";
+
+    /// <summary>
+    ///  A format that contains the drag image bottom-up device-independent bitmap bits.
+    /// </summary>
+    internal const string DRAGIMAGEBITS = "DragImageBits";
+
+    /// <summary>
+    ///  A format that contains the value passed to <see cref="IDragSourceHelper2.SetFlags(int)"/> and controls whether to allow text specified in
+    ///  <see cref="DROPDESCRIPTION"/> to be displayed on the drag image.
+    /// </summary>
+    internal const string DRAGSOURCEHELPERFLAGS = "DragSourceHelperFlags";
+
+    /// <summary>
+    ///  A format used to identify an object's drag image window so that it's visual information can be updated dynamically.
+    /// </summary>
+    internal const string DRAGWINDOW = "DragWindow";
+
+    /// <summary>
+    ///  A format that is non-zero if the drop target supports drag images.
+    /// </summary>
+    internal const string ISSHOWINGLAYERED = "IsShowingLayered";
+
+    /// <summary>
+    ///  A format that is non-zero if the drop target supports drop description text.
+    /// </summary>
+    internal const string ISSHOWINGTEXT = "IsShowingText";
+
+    /// <summary>
+    ///  A format that is non-zero if the drag image is a layered window with a size of 96x96.
+    /// </summary>
+    internal const string USINGDEFAULTDRAGIMAGE = "UsingDefaultDragImage";
 
     /// <summary>
     /// Sets the drop object image and accompanying text back to the default.
@@ -196,8 +218,8 @@ internal static class DragDropHelper
     {
         ArgumentNullException.ThrowIfNull(dataObject);
 
-        if (dataObject.GetDataPresent(CF_INSHELLDRAGLOOP)
-            && dataObject.GetData(CF_INSHELLDRAGLOOP) is DragDropFormat dragDropFormat)
+        if (dataObject.GetDataPresent(PInvoke.CFSTR_INDRAGLOOP)
+            && dataObject.GetData(PInvoke.CFSTR_INDRAGLOOP) is DragDropFormat dragDropFormat)
         {
             try
             {
@@ -223,7 +245,7 @@ internal static class DragDropHelper
     /// </returns>
     public static bool IsInDragLoop(IComDataObject dataObject)
     {
-        return GetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP);
+        return GetBooleanFormat(dataObject, PInvoke.CFSTR_INDRAGLOOP);
     }
 
     /// <summary>
@@ -235,10 +257,9 @@ internal static class DragDropHelper
     public static bool IsInDragLoopFormat(FORMATETC format)
     {
         string formatName = DataFormats.GetFormat(format.cfFormat).Name;
-        return formatName.Equals(CF_COMPUTEDIMAGE) || formatName.Equals(CF_DISABLEDRAGTEXT) || formatName.Equals(CF_DRAGCONTEXT)
-            || formatName.Equals(CF_DRAGIMAGEBITS) || formatName.Equals(CF_DRAGSOURCEHELPERFLAGS) || formatName.Equals(CF_DRAGWINDOW)
-            || formatName.Equals(CF_DROPDESCRIPTION) || formatName.Equals(CF_INSHELLDRAGLOOP) || formatName.Equals(CF_ISCOMPUTINGIMAGE)
-            || formatName.Equals(CF_ISSHOWINGLAYERED) || formatName.Equals(CF_ISSHOWINGTEXT) || formatName.Equals(CF_USINGDEFAULTDRAGIMAGE);
+        return formatName.Equals(DRAGCONTEXT) || formatName.Equals(DRAGIMAGEBITS) || formatName.Equals(DRAGSOURCEHELPERFLAGS)
+            || formatName.Equals(DRAGWINDOW) || formatName.Equals(PInvoke.CFSTR_DROPDESCRIPTION) || formatName.Equals(PInvoke.CFSTR_INDRAGLOOP)
+            || formatName.Equals(ISSHOWINGLAYERED) || formatName.Equals(ISSHOWINGTEXT) || formatName.Equals(USINGDEFAULTDRAGIMAGE);
     }
 
     /// <summary>
@@ -364,7 +385,7 @@ internal static class DragDropHelper
 
             // Allow text specified in DROPDESCRIPTION to be displayed on the drag image. If you pass a drag image into an IDragSourceHelper
             // object, then by default, the extra text description of the drag-and-drop operation is not displayed.
-            dragSourceHelper.SetFlags(DSH_ALLOWDROPDESCRIPTIONTEXT).ThrowOnFailure();
+            dragSourceHelper.SetFlags((int)DSH_FLAGS.DSH_ALLOWDROPDESCRIPTIONTEXT).ThrowOnFailure();
             dragSourceHelper.InitializeFromBitmap(shDragImage, dataObject).ThrowOnFailure();
         }
         catch
@@ -428,7 +449,7 @@ internal static class DragDropHelper
 
         ComTypes.FORMATETC formatEtc = new()
         {
-            cfFormat = (short)PInvoke.RegisterClipboardFormat(CF_DROPDESCRIPTION),
+            cfFormat = (short)PInvoke.RegisterClipboardFormat(PInvoke.CFSTR_DROPDESCRIPTION),
             dwAspect = ComTypes.DVASPECT.DVASPECT_CONTENT,
             lindex = -1,
             ptd = IntPtr.Zero,
@@ -485,7 +506,7 @@ internal static class DragDropHelper
     /// </remarks>
     public static void SetInDragLoop(IComDataObject dataObject, bool inDragLoop)
     {
-        SetBooleanFormat(dataObject, CF_INSHELLDRAGLOOP, inDragLoop);
+        SetBooleanFormat(dataObject, PInvoke.CFSTR_INDRAGLOOP, inDragLoop);
 
         // If drag loop is over, release the drag and drop formats.
         if (!inDragLoop)
@@ -505,7 +526,7 @@ internal static class DragDropHelper
     /// </remarks>
     private static void SetIsShowingText(IComDataObject dataObject, bool isShowingText)
     {
-        SetBooleanFormat(dataObject, CF_ISSHOWINGTEXT, isShowingText);
+        SetBooleanFormat(dataObject, ISSHOWINGTEXT, isShowingText);
     }
 
     /// <summary>
@@ -518,7 +539,7 @@ internal static class DragDropHelper
     /// </remarks>
     private static void SetUsingDefaultDragImage(IComDataObject dataObject, bool usingDefaultDragImage)
     {
-        SetBooleanFormat(dataObject, CF_USINGDEFAULTDRAGIMAGE, usingDefaultDragImage);
+        SetBooleanFormat(dataObject, USINGDEFAULTDRAGIMAGE, usingDefaultDragImage);
     }
 
     /// <summary>

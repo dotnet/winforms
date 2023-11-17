@@ -14,6 +14,7 @@ internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, 
     private readonly ISupportOleDropSource _peer;
     private readonly IComDataObject _dataObject;
     private HWND _lastHwndTarget;
+    private uint _lastHwndTargetThreadId;
     private GiveFeedbackEventArgs? _lastGiveFeedbacEventArgs;
 
     public DropSource(ISupportOleDropSource peer, IComDataObject dataObject, Bitmap? dragImage, Point cursorOffset, bool useDefaultDragImage)
@@ -96,9 +97,10 @@ internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, 
         }
     }
 
-    public HRESULT DragEnterTarget(HWND hwndTarget)
+    public unsafe HRESULT DragEnterTarget(HWND hwndTarget)
     {
         _lastHwndTarget = hwndTarget;
+        _lastHwndTargetThreadId = PInvoke.GetWindowThreadProcessId(hwndTarget, null);
         return HRESULT.S_OK;
     }
 
@@ -110,9 +112,9 @@ internal class DropSource : IDropSource.Interface, IDropSourceNotify.Interface, 
         }
 
         _lastHwndTarget = default;
+        _lastHwndTargetThreadId = default;
         return HRESULT.S_OK;
     }
 
-    private bool IsDropTargetWindowInCurrentThread() => !_lastHwndTarget.IsNull
-        && PInvoke.GetWindowThreadProcessId(_lastHwndTarget, out _) == PInvoke.GetCurrentThreadId();
+    private bool IsDropTargetWindowInCurrentThread() => _lastHwndTargetThreadId == PInvoke.GetCurrentThreadId();
 }
