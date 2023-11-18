@@ -212,7 +212,7 @@ internal sealed partial class DeviceContext : MarshalByRefObject, IDisposable
 
         if (_contextStack is not null)
         {
-            GraphicsState g = _contextStack.Pop()!;
+            GraphicsState g = _contextStack.Pop();
 
             _hCurrentBmp = g.hBitmap;
             _hCurrentBrush = g.hBrush;
