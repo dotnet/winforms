@@ -60,21 +60,18 @@ public partial class Control
         // If the control is used as an item of a ToolStrip via ToolStripControlHost,
         // its accessible object should provide info about the owning ToolStrip and items-siblings
         // to build a correct ToolStrip accessibility tree.
-        internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction)
+        internal override IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction)
         {
             if (!this.TryGetOwnerAs(out Control? owner) || owner.ToolStripControlHost is not ToolStripControlHost host)
             {
                 return base.FragmentNavigate(direction);
             }
 
-            if (direction == NavigateDirection.NavigateDirection_Parent
-                || direction == NavigateDirection.NavigateDirection_PreviousSibling
-                || direction == NavigateDirection.NavigateDirection_NextSibling)
-            {
-                return host.AccessibilityObject.FragmentNavigate(direction);
-            }
-
-            return base.FragmentNavigate(direction);
+            return direction is NavigateDirection.NavigateDirection_Parent
+                or NavigateDirection.NavigateDirection_PreviousSibling
+                or NavigateDirection.NavigateDirection_NextSibling
+                ? host.AccessibilityObject.FragmentNavigate(direction)
+                : base.FragmentNavigate(direction);
         }
 
         /// <summary>

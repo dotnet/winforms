@@ -28,7 +28,7 @@ public unsafe partial class AccessibleObject :
     UiaCore.IAccessibleEx,
     ComIServiceProvider.Interface,
     IRawElementProviderSimple.Interface,
-    UiaCore.IRawElementProviderFragment,
+    IRawElementProviderFragment.Interface,
     UiaCore.IRawElementProviderFragmentRoot,
     UiaCore.IInvokeProvider,
     UiaCore.IValueProvider,
@@ -540,7 +540,7 @@ public unsafe partial class AccessibleObject :
     /// </summary>
     /// <param name="direction">Indicates the direction in which to navigate.</param>
     /// <returns>The element in the specified direction if it exists.</returns>
-    internal virtual UiaCore.IRawElementProviderFragment? FragmentNavigate(NavigateDirection direction) => null;
+    internal virtual IRawElementProviderFragment.Interface? FragmentNavigate(NavigateDirection direction) => null;
 
     internal virtual IRawElementProviderSimple.Interface[]? GetEmbeddedFragmentRoots() => null;
 
@@ -561,9 +561,9 @@ public unsafe partial class AccessibleObject :
     /// <param name="x">X coordinate.</param>
     /// <param name="y">Y coordinate.</param>
     /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
-    internal virtual UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y) => this;
+    internal virtual IRawElementProviderFragment.Interface? ElementProviderFromPoint(double x, double y) => this;
 
-    internal virtual UiaCore.IRawElementProviderFragment? GetFocus() => null;
+    internal virtual IRawElementProviderFragment.Interface? GetFocus() => null;
 
     internal virtual void Expand()
     {
@@ -827,23 +827,94 @@ public unsafe partial class AccessibleObject :
         return HRESULT.S_OK;
     }
 
-    object? UiaCore.IRawElementProviderFragment.Navigate(NavigateDirection direction) => FragmentNavigate(direction);
+    HRESULT IRawElementProviderFragment.Interface.Navigate(NavigateDirection direction, IRawElementProviderFragment** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    int[]? UiaCore.IRawElementProviderFragment.GetRuntimeId() => RuntimeId;
+        IRawElementProviderFragment.Interface? fragment = FragmentNavigate(direction);
+        *pRetVal = ComHelpers.TryGetComPointer<IRawElementProviderFragment>(fragment);
+        return HRESULT.S_OK;
+    }
 
-    object[]? UiaCore.IRawElementProviderFragment.GetEmbeddedFragmentRoots() => GetEmbeddedFragmentRoots();
+    HRESULT IRawElementProviderFragment.Interface.GetRuntimeId(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
 
-    void UiaCore.IRawElementProviderFragment.SetFocus() => SetFocus();
+        *pRetVal = new SafeArrayScope<int>(RuntimeId);
+        return HRESULT.S_OK;
+    }
 
-    UiaCore.UiaRect UiaCore.IRawElementProviderFragment.BoundingRectangle => new(BoundingRectangle);
+    HRESULT IRawElementProviderFragment.Interface.get_BoundingRectangle(UiaRect* pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = new()
+        {
+            left = BoundingRectangle.Left,
+            top = BoundingRectangle.Top,
+            height = BoundingRectangle.Height,
+            width = BoundingRectangle.Width
+        };
+
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IRawElementProviderFragment.Interface.GetEmbeddedFragmentRoots(SAFEARRAY** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        IRawElementProviderSimple.Interface[]? fragmentRoots = GetEmbeddedFragmentRoots();
+        if (fragmentRoots is null)
+        {
+            *pRetVal = default;
+            return HRESULT.S_OK;
+        }
+
+        ComSafeArrayScope<IRawElementProviderSimple> scope = new((uint)fragmentRoots.Length);
+        for (int i = 0; i < fragmentRoots.Length; i++)
+        {
+            scope[i] = ComHelpers.GetComPointer<IRawElementProviderSimple>(fragmentRoots[i]);
+        }
+
+        *pRetVal = scope;
+        return HRESULT.S_OK;
+    }
+
+    HRESULT IRawElementProviderFragment.Interface.SetFocus()
+    {
+        SetFocus();
+        return HRESULT.S_OK;
+    }
 
     // An accessible object should provide info about its correct root object,
     // even its owner is used like a ToolStrip item via ToolStripControlHost.
     // This change was made here to not to rework FragmentRoot implementations
     // for all accessible object. Moreover, this change will work for new accessible object
     // classes, where it is enough to implement FragmentRoot for a common case.
-    UiaCore.IRawElementProviderFragmentRoot? UiaCore.IRawElementProviderFragment.FragmentRoot
-        => ToolStripFragmentRoot ?? FragmentRoot;
+    HRESULT IRawElementProviderFragment.Interface.get_FragmentRoot(IRawElementProviderFragmentRoot** pRetVal)
+    {
+        if (pRetVal is null)
+        {
+            return HRESULT.E_POINTER;
+        }
+
+        *pRetVal = ToolStripFragmentRoot is not null
+                ? ComHelpers.GetComPointer<IRawElementProviderFragmentRoot>(ToolStripFragmentRoot)
+                : ComHelpers.TryGetComPointer<IRawElementProviderFragmentRoot>(FragmentRoot);
+        return HRESULT.S_OK;
+    }
 
     object? UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) => ElementProviderFromPoint(x, y);
 
@@ -2045,22 +2116,22 @@ public unsafe partial class AccessibleObject :
             return null;
         }
 
+        AgileComPointer<UIA.IAccessible> agileAccessible =
+#if DEBUG
+            // AccessibleObject is not disposable so we shouldn't be tracking it.
+            new(accessible, takeOwnership: true, trackDisposal: false);
+#else
+            new(accessible, takeOwnership: true);
+#endif
         // Check to see if this object already wraps the given pointer.
         if (SystemIAccessible is { } systemAccessible
-            && systemAccessible.IsSameNativeObject(accessible))
+            && systemAccessible.IsSameNativeObject(agileAccessible))
         {
-            accessible->Release();
+            agileAccessible.Dispose();
             return this;
         }
 
-        return new AccessibleObject(
-#if DEBUG
-            // AccessibleObject is not disposable so we shouldn't be tracking it.
-            new AgileComPointer<UIA.IAccessible>(accessible, takeOwnership: true, trackDisposal: false)
-#else
-            new AgileComPointer<UIA.IAccessible>(accessible, takeOwnership: true)
-#endif
-            );
+        return new AccessibleObject(agileAccessible);
     }
 
     [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)]

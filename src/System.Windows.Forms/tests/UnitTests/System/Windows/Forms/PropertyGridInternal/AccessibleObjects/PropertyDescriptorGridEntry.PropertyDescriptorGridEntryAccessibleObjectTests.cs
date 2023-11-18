@@ -4,7 +4,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests.AccessibleObjects;
 
@@ -27,7 +26,7 @@ public class PropertyDescriptorGridEntryAccessibleObjectTests
         propertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
         gridEntry.TestAccessor().Dynamic._parent = new TestGridEntry(propertyGrid, null, propertyGridView);
 
-        UiaCore.IRawElementProviderFragment firstChild = gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        IRawElementProviderFragment.Interface firstChild = gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.NotNull(firstChild);
         Assert.Equal(typeof(PropertyGridView.DropDownHolder.DropDownHolderAccessibleObject), firstChild.GetType());
     }

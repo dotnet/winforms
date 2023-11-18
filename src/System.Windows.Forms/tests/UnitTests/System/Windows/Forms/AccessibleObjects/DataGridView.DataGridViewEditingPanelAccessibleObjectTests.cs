@@ -3,7 +3,6 @@
 
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -17,11 +16,11 @@ public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
         AccessibleObject accessibleObject = dataGridView.EditingPanelAccessibleObject;
 
         // Exception does not appear when trying to get first Child
-        UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        IRawElementProviderFragment.Interface firstChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.Null(firstChild);
 
         // Exception does not appear when trying to get last Child
-        UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        IRawElementProviderFragment.Interface lastChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
         Assert.Null(lastChild);
     }
 
@@ -36,10 +35,10 @@ public class DataGridView_DataGridViewEditingPanelAccessibleObjectTests
 
         AccessibleObject accessibleObject = dataGridView.EditingPanelAccessibleObject;
 
-        UiaCore.IRawElementProviderFragment firstChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        IRawElementProviderFragment.Interface firstChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.NotNull(firstChild);
 
-        UiaCore.IRawElementProviderFragment lastChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        IRawElementProviderFragment.Interface lastChild = accessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
         Assert.NotNull(lastChild);
     }
 
