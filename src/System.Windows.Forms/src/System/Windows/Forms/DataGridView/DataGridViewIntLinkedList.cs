@@ -147,21 +147,21 @@ internal class DataGridViewIntLinkedList : IEnumerable
     public bool Remove(int integer)
     {
         DataGridViewIntLinkedListElement? removeTargetPrevious = null;
-        DataGridViewIntLinkedListElement? tmp2 = _headElement;
-        while (tmp2 is not null)
+        DataGridViewIntLinkedListElement? removeTarget = _headElement;
+        while (removeTarget is not null)
         {
-            if (tmp2.Int == integer)
+            if (removeTarget.Int == integer)
             {
                 break;
             }
 
-            removeTargetPrevious = tmp2;
-            tmp2 = tmp2.Next;
+            removeTargetPrevious = removeTarget;
+            removeTarget = removeTarget.Next;
         }
 
-        if (tmp2 is not null && tmp2.Int == integer)
+        if (removeTarget is not null && removeTarget.Int == integer)
         {
-            DataGridViewIntLinkedListElement? removeTargetNext = tmp2.Next;
+            DataGridViewIntLinkedListElement? removeTargetNext = removeTarget.Next;
             if (removeTargetPrevious is null)
             {
                 _headElement = removeTargetNext;
@@ -186,15 +186,17 @@ internal class DataGridViewIntLinkedList : IEnumerable
         ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(index, Count);
 
         DataGridViewIntLinkedListElement? removeTargetPrevious = null;
-        DataGridViewIntLinkedListElement? tmp2 = _headElement;
+
+        // Since we have checked the index value, removeTarget should not be null here.
+        DataGridViewIntLinkedListElement removeTarget = _headElement!;
         while (index > 0)
         {
-            removeTargetPrevious = tmp2;
-            tmp2 = tmp2!.Next;
+            removeTargetPrevious = removeTarget;
+            removeTarget = removeTarget.Next!;
             index--;
         }
 
-        DataGridViewIntLinkedListElement? removeTargetNext = tmp2!.Next;
+        DataGridViewIntLinkedListElement? removeTargetNext = removeTarget!.Next;
         if (removeTargetPrevious is null)
         {
             _headElement = removeTargetNext;

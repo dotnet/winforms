@@ -118,21 +118,21 @@ internal class DataGridViewCellLinkedList : IEnumerable
     {
         Debug.Assert(dataGridViewCell is not null);
         DataGridViewCellLinkedListElement? removeTargetPrevious = null;
-        DataGridViewCellLinkedListElement? tmp2 = _headElement;
-        while (tmp2 is not null)
+        DataGridViewCellLinkedListElement? removeTarget = _headElement;
+        while (removeTarget is not null)
         {
-            if (tmp2.DataGridViewCell == dataGridViewCell)
+            if (removeTarget.DataGridViewCell == dataGridViewCell)
             {
                 break;
             }
 
-            removeTargetPrevious = tmp2;
-            tmp2 = tmp2.Next;
+            removeTargetPrevious = removeTarget;
+            removeTarget = removeTarget.Next;
         }
 
-        if (tmp2 is not null && tmp2.DataGridViewCell == dataGridViewCell)
+        if (removeTarget is not null && removeTarget.DataGridViewCell == dataGridViewCell)
         {
-            DataGridViewCellLinkedListElement? removeTargetNext = tmp2.Next;
+            DataGridViewCellLinkedListElement? removeTargetNext = removeTarget.Next;
             if (removeTargetPrevious is null)
             {
                 _headElement = removeTargetNext;
@@ -155,13 +155,13 @@ internal class DataGridViewCellLinkedList : IEnumerable
     {
         int removedCount = 0;
         DataGridViewCellLinkedListElement? removeTargetPrevious = null;
-        DataGridViewCellLinkedListElement? tmp2 = _headElement;
-        while (tmp2 is not null)
+        DataGridViewCellLinkedListElement? removeTarget = _headElement;
+        while (removeTarget is not null)
         {
-            if ((column && tmp2.DataGridViewCell.ColumnIndex == bandIndex) ||
-                (!column && tmp2.DataGridViewCell.RowIndex == bandIndex))
+            if ((column && removeTarget.DataGridViewCell.ColumnIndex == bandIndex) ||
+                (!column && removeTarget.DataGridViewCell.RowIndex == bandIndex))
             {
-                DataGridViewCellLinkedListElement? removeTargetNext = tmp2.Next;
+                DataGridViewCellLinkedListElement? removeTargetNext = removeTarget.Next;
                 if (removeTargetPrevious is null)
                 {
                     _headElement = removeTargetNext;
@@ -171,7 +171,7 @@ internal class DataGridViewCellLinkedList : IEnumerable
                     removeTargetPrevious.Next = removeTargetNext;
                 }
 
-                tmp2 = removeTargetNext;
+                removeTarget = removeTargetNext;
                 _count--;
                 _lastAccessedElement = null;
                 _lastAccessedIndex = -1;
@@ -179,8 +179,8 @@ internal class DataGridViewCellLinkedList : IEnumerable
             }
             else
             {
-                removeTargetPrevious = tmp2;
-                tmp2 = tmp2.Next;
+                removeTargetPrevious = removeTarget;
+                removeTarget = removeTarget.Next;
             }
         }
 
