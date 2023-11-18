@@ -17,12 +17,63 @@ internal static partial class Interop
 
             object? IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) => default;
             object? IRawElementProviderFragmentRoot.GetFocus() => default;
-            object? IRawElementProviderFragment.Navigate(NavigateDirection direction) => default;
-            int[]? IRawElementProviderFragment.GetRuntimeId() => default;
-            UiaRect IRawElementProviderFragment.BoundingRectangle => default;
-            object[]? IRawElementProviderFragment.GetEmbeddedFragmentRoots() => default;
-            void IRawElementProviderFragment.SetFocus() { }
-            IRawElementProviderFragmentRoot? IRawElementProviderFragment.FragmentRoot => default;
+
+            HRESULT IRawElementProviderFragment.Interface.Navigate(NavigateDirection direction, IRawElementProviderFragment** pRetVal)
+            {
+                if (pRetVal is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pRetVal = default;
+                return HRESULT.S_OK;
+            }
+
+            HRESULT IRawElementProviderFragment.Interface.GetRuntimeId(SAFEARRAY** pRetVal)
+            {
+                if (pRetVal is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pRetVal = default;
+                return HRESULT.S_OK;
+            }
+
+            HRESULT IRawElementProviderFragment.Interface.get_BoundingRectangle(UiaRect* pRetVal)
+            {
+                if (pRetVal is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pRetVal = default;
+                return HRESULT.S_OK;
+            }
+
+            HRESULT IRawElementProviderFragment.Interface.GetEmbeddedFragmentRoots(SAFEARRAY** pRetVal)
+            {
+                if (pRetVal is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pRetVal = default;
+                return HRESULT.S_OK;
+            }
+
+            HRESULT IRawElementProviderFragment.Interface.SetFocus() => HRESULT.S_OK;
+
+            HRESULT IRawElementProviderFragment.Interface.get_FragmentRoot(Windows.Win32.UI.Accessibility.IRawElementProviderFragmentRoot** pRetVal)
+            {
+                if (pRetVal is null)
+                {
+                    return HRESULT.E_POINTER;
+                }
+
+                *pRetVal = default;
+                return HRESULT.S_OK;
+            }
 
             HRESULT IRawElementProviderSimple.Interface.get_ProviderOptions(ProviderOptions* pRetVal)
             {

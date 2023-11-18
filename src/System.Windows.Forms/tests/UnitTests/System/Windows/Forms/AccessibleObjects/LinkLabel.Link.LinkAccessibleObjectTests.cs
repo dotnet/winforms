@@ -5,7 +5,6 @@ using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.LinkLabel;
 using static System.Windows.Forms.LinkLabel.Link;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -121,7 +120,7 @@ public class LinkLabel_Link_LinkAccessibleObjectTests
         }
 
         LinkAccessibleObject linkAccessibleObject = linkLabel.Links[linkIndex].AccessibleObject;
-        UiaCore.IRawElementProviderFragment actual = linkAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
+        IRawElementProviderFragment.Interface actual = linkAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_Parent);
 
         Assert.Equal(expected, actual);
         Assert.False(linkLabel.IsHandleCreated);

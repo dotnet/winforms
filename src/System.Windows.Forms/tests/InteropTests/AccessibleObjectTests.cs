@@ -7,7 +7,7 @@ using Windows.Win32.System.Com;
 using Windows.Win32.System.Ole;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
-using static Interop.UiaCore;
+using IRawElementProviderFragmentRoot = Windows.Win32.UI.Accessibility.IRawElementProviderFragmentRoot;
 
 namespace System.Windows.Forms.InteropTests;
 
@@ -174,32 +174,32 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     [WinFormsFact]
     public unsafe void AccessibleObject_IRawElementProviderFragmentBoundingRectangle_Get_ReturnsExpected()
     {
-        var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderFragmentGetBoundingRectangle(o, new UiaRect()));
+        using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
+        Assert.True(fragment.Value->get_BoundingRectangle(out _).Succeeded);
     }
 
     [WinFormsFact]
     public unsafe void AccessibleObject_IRawElementProviderFragmentFragmentRoot_Get_ReturnsExpected()
     {
-        var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderFragmentGetFragmentRoot(o));
+        using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
+        using ComScope<IRawElementProviderFragmentRoot> result = new(null);
+        Assert.True(fragment.Value->get_FragmentRoot(result).Succeeded);
     }
 
     [WinFormsFact]
     public unsafe void AccessibleObject_IRawElementProviderFragmentGetEmbeddedFragmentRoots_Invoke_ReturnsExpected()
     {
-        var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderFragmentGetEmbeddedFragmentRoots(o));
+        using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
+        using ComSafeArrayScope<IRawElementProviderFragment> result = new(null);
+        Assert.True(fragment.Value->GetEmbeddedFragmentRoots(result).Succeeded);
     }
 
     [WinFormsFact]
     public unsafe void AccessibleObject_IRawElementProviderFragmentGetRuntimeId_Invoke_ReturnsExpected()
     {
-        using (new NoAssertContext())
-        {
-            var o = new AccessibleObject();
-            AssertSuccess(Test_IRawElementProviderFragmentGetRuntimeId(o, null));
-        }
+        using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
+        using SafeArrayScope<int> runtimeId = new((SAFEARRAY*)null);
+        Assert.True(fragment.Value->GetRuntimeId(runtimeId).Succeeded);
     }
 
     [WinFormsTheory]
@@ -210,17 +210,18 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     [InlineData((int)NavigateDirection.NavigateDirection_FirstChild)]
     [InlineData((int)NavigateDirection.NavigateDirection_LastChild)]
     [InlineData((int)NavigateDirection.NavigateDirection_LastChild + 1)]
-    public void AccessibleObject_IRawElementProviderFragmentNavigate_Invoke_ReturnsExpected(int direction)
+    public unsafe void AccessibleObject_IRawElementProviderFragmentNavigate_Invoke_ReturnsExpected(int direction)
     {
-        var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderFragmentNavigate(o, (NavigateDirection)direction));
+        using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
+        using ComScope<IRawElementProviderFragment> result = new(null);
+        Assert.True(fragment.Value->Navigate((NavigateDirection)direction, result).Succeeded);
     }
 
     [WinFormsFact]
     public unsafe void AccessibleObject_IRawElementProviderFragmentSetFocus_Invoke_ReturnsExpected()
     {
-        var o = new AccessibleObject();
-        AssertSuccess(Test_IRawElementProviderFragmentSetFocus(o));
+        using var fragment = ComHelpers.GetComScope<IRawElementProviderFragment>(new AccessibleObject());
+        Assert.True(fragment.Value->SetFocus().Succeeded);
     }
 
     [WinFormsTheory]
@@ -840,33 +841,6 @@ public unsafe class AccessibleObjectTests : InteropTestBase
     private static extern string Test_IRangeValueProviderSetValue(
         [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
         double value, double expected);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern unsafe string Test_IRawElementProviderFragmentGetBoundingRectangle(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-        UiaRect expected);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern unsafe string Test_IRawElementProviderFragmentGetFragmentRoot(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern unsafe string Test_IRawElementProviderFragmentGetEmbeddedFragmentRoots(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern unsafe string Test_IRawElementProviderFragmentGetRuntimeId(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-        int* expected);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern string Test_IRawElementProviderFragmentNavigate(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-        NavigateDirection expected);
-
-    [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
-    private static extern unsafe string Test_IRawElementProviderFragmentSetFocus(
-        [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
     [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
     private static extern unsafe string Test_IRawElementProviderFragmentRootElementProviderFromPoint(

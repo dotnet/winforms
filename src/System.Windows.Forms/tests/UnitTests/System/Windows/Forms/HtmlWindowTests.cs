@@ -62,6 +62,33 @@ public class HtmlWindowTests
         domWindow.Should().BeAssignableTo<IHTMLWindow4.Interface>();
     }
 
+    [WinFormsFact]
+    public async Task HtmlWindow_NavigateAround_MaintainsEquality()
+    {
+        using var parent = new Control();
+        using var control = new WebBrowser
+        {
+            Parent = parent,
+        };
+
+        string Html =
+            $"""
+            <html>
+                <frameset rows="1,1,1" cols="1">
+                    <frame id="1" name="1">
+                    <frame id="2" name="2">
+                </frameset>
+            </html>
+            """;
+
+        HtmlDocument document = await GetDocument(control, Html);
+        HtmlWindow window = document.Window;
+        window.Should().Be(document.Window);
+        window.Should().Be(document.GetElementById("1").Parent.Document.Window);
+        window.Should().Be(window.Frames[0].Parent.Document.Window);
+        window.Should().Be(window.Frames[1].Parent.Document.Window);
+    }
+
     private static async Task<HtmlDocument> GetDocument(WebBrowser control, string html)
     {
         var source = new TaskCompletionSource<bool>();

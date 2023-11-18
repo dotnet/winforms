@@ -445,6 +445,7 @@ IPictureDisp
 IPropertyNotifySink
 IProvideMultipleClassInfo
 IQuickActivate
+IRawElementProviderFragment
 IRecordInfo
 IRichEditOle
 IRichEditOleCallback
