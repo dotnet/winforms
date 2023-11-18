@@ -98,7 +98,7 @@ public sealed class MetafileHeader
 
         return (wmf is not null)
             && ((wmf.type == MetafileType.Wmf)
-            || (wmf.type == MetafileType.WmfPlaceable));
+                || (wmf.type == MetafileType.WmfPlaceable));
     }
 
     /// <summary>

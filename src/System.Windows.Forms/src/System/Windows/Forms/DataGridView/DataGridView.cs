@@ -3513,7 +3513,7 @@ public partial class DataGridView : Control, ISupportInitialize
     }
 
     private bool ShouldSerializeRowHeadersWidth() =>
-        (_rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing || _rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.DisableResizing)
+        _rowHeadersWidthSizeMode is DataGridViewRowHeadersWidthSizeMode.EnableResizing or DataGridViewRowHeadersWidthSizeMode.DisableResizing
         && RowHeadersWidth != DefaultRowHeadersWidth;
 
     /// <summary>

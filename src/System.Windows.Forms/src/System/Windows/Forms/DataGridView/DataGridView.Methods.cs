@@ -5378,7 +5378,7 @@ public partial class DataGridView
 
         if (previousRowIndex != -1
             && (Rows.GetRowState(previousRowIndex) & DataGridViewElementStates.Frozen) == 0
-                && (rowState & DataGridViewElementStates.Frozen) != 0)
+            && (rowState & DataGridViewElementStates.Frozen) != 0)
         {
             throw new InvalidOperationException(SR.DataGridView_CannotAddFrozenRow);
         }
@@ -5391,7 +5391,7 @@ public partial class DataGridView
 
             if (nextRowIndex != -1
                 && (Rows.GetRowState(nextRowIndex) & DataGridViewElementStates.Frozen) != 0
-                    && (rowState & DataGridViewElementStates.Frozen) == 0)
+                && (rowState & DataGridViewElementStates.Frozen) == 0)
             {
                 throw new InvalidOperationException(SR.DataGridView_CannotAddNonFrozenRow);
             }
@@ -8503,7 +8503,7 @@ public partial class DataGridView
 
             if (cutOverflow
                 && ((!RightToLeftInternal && cx + viewedColumnWidth > data.Right)
-                || (RightToLeftInternal && cx - viewedColumnWidth < data.X)))
+                    || (RightToLeftInternal && cx - viewedColumnWidth < data.X)))
             {
                 if (RightToLeftInternal)
                 {
@@ -16919,6 +16919,7 @@ public partial class DataGridView
                                 <= _vertScrollBar.Maximum - ComputeHeightOfFittingTrailingScrollingRows(totalVisibleFrozenHeight))
                         {
                             ScrollRowsByCount(1, ScrollEventType.SmallIncrement);
+
                             // Assuming totalVisibleFrozenHeight is unchanged by scrolling operation
                             Debug.Assert(totalVisibleFrozenHeight == Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen));
                             Debug.Assert(DisplayedBandsInfo.FirstDisplayedScrollingRow >= 0);
