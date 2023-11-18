@@ -124,7 +124,8 @@ internal partial class ResourceCodeDomSerializer
         {
             if (manager.TryGetContext(out ComponentCache.Entry? entry))
             {
-                ComponentCache.ResourceEntry re = new ComponentCache.ResourceEntry(name,
+                ComponentCache.ResourceEntry re = new ComponentCache.ResourceEntry(
+                    name,
                     value,
                     forceInvariant,
                     shouldSerializeValue,
@@ -506,14 +507,14 @@ internal partial class ResourceCodeDomSerializer
                 IResourceWriter? invariantWriter = service?.GetResourceWriter(CultureInfo.InvariantCulture);
 
                 Dictionary<string, object?>? invariant = GetResourceSet(CultureInfo.InvariantCulture);
-                Dictionary<string, object?>? t;
+                Dictionary<string, object?>? metadata;
                 if (invariantWriter is null or ResXResourceWriter)
                 {
-                    t = GetMetadata();
-                    if (t is null)
+                    metadata = GetMetadata();
+                    if (metadata is null)
                     {
                         _metadata = new();
-                        t = _metadata;
+                        metadata = _metadata;
                     }
 
                     // Note that when we read metadata, for backwards compatibility, we also merge in regular data from the invariant resource. We need to clear that data here, since we are going to write out metadata separately.
@@ -522,20 +523,20 @@ internal partial class ResourceCodeDomSerializer
                 }
                 else
                 {
-                    t = invariant;
+                    metadata = invariant;
                     _invariantCultureResourcesDirty = true;
                 }
 
-                Debug.Assert(t is not null, "Don't know where to push metadata.");
-                if (t is not null)
+                Debug.Assert(metadata is not null, "Don't know where to push metadata.");
+                if (metadata is not null)
                 {
                     if (shouldSerializeValue)
                     {
-                        t[resourceName] = value;
+                        metadata[resourceName] = value;
                     }
                     else
                     {
-                        t.Remove(resourceName);
+                        metadata.Remove(resourceName);
                     }
                 }
 
