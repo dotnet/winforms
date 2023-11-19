@@ -274,8 +274,7 @@ public partial class RichTextBox : TextBoxBase
             // Check for library
             if (s_moduleHandle == IntPtr.Zero)
             {
-                string richEditControlDllVersion = Libraries.RichEdit41;
-                s_moduleHandle = PInvoke.LoadLibraryFromSystemPathIfAvailable(richEditControlDllVersion);
+                s_moduleHandle = PInvoke.LoadLibraryFromSystemPathIfAvailable(Libraries.RichEdit41);
 
                 int lastWin32Error = Marshal.GetLastWin32Error();
 
@@ -284,7 +283,7 @@ public partial class RichTextBox : TextBoxBase
                 // This fails on 3-GB mode, (once the dll is loaded above 3GB memory space)
                 if ((ulong)s_moduleHandle < (ulong)32)
                 {
-                    throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, richEditControlDllVersion));
+                    throw new Win32Exception(lastWin32Error, string.Format(SR.LoadDLLError, Libraries.RichEdit41));
                 }
 
                 string path = PInvoke.GetModuleFileNameLongPath(new HINSTANCE(s_moduleHandle));
@@ -1840,7 +1839,7 @@ public partial class RichTextBox : TextBoxBase
             //that's not semantically meaningful.  Searching for ABC might find AB_C (where A,B, and C
             //represent Arabic characters and _ represents a kashida).  We should highlight the text
             //including the kashida.
-            char kashida = (char)0x640;
+            const char kashida = (char)0x640;
             ReadOnlySpan<char> kashidaString = [kashida];
             int startIndex = FindInternal(kashidaString, position, position + str.Length, options);
             if (startIndex == -1)
