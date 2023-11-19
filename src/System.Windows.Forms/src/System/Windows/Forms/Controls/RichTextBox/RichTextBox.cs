@@ -1841,7 +1841,7 @@ public partial class RichTextBox : TextBoxBase
             //represent Arabic characters and _ represents a kashida).  We should highlight the text
             //including the kashida.
             char kashida = (char)0x640;
-            string kashidaString = kashida.ToString();
+            ReadOnlySpan<char> kashidaString = [kashida];
             int startIndex = FindInternal(kashidaString, position, position + str.Length, options);
             if (startIndex == -1)
             {
@@ -1872,10 +1872,8 @@ public partial class RichTextBox : TextBoxBase
         return position;
     }
 
-    private unsafe int FindInternal(string str, int start, int end, RichTextBoxFinds options)
+    private unsafe int FindInternal(ReadOnlySpan<char> str, int start, int end, RichTextBoxFinds options)
     {
-        ArgumentNullException.ThrowIfNull(str);
-
         int textLen = TextLength;
         ArgumentOutOfRangeException.ThrowIfNegative(start);
         ArgumentOutOfRangeException.ThrowIfGreaterThan(start, textLen);
