@@ -1821,6 +1821,8 @@ public partial class RichTextBox : TextBoxBase
     /// </summary>
     public unsafe int Find(string str, int start, int end, RichTextBoxFinds options)
     {
+        ArgumentNullException.ThrowIfNull(str);
+
         // Perform the find, will return ubyte position
         int position = FindInternal(str, start, end, options);
 
