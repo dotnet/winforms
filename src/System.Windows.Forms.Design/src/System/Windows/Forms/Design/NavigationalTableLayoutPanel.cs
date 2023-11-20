@@ -11,7 +11,7 @@ internal partial class StyleCollectionEditor
         {
             get
             {
-                List<RadioButton> radioButtons = new List<RadioButton>();
+                List<RadioButton> radioButtons = new();
                 foreach (Control control in Controls)
                 {
                     RadioButton radioButton = (RadioButton)control;

@@ -25,7 +25,7 @@ internal partial class StyleCollectionEditor
         private bool _haveInvoked;
         private bool _performEnsure;
 
-        //listView subitem indices
+        // ListView subitem indices.
         private const int s_memberIndex = 0;
         private const int s_typeIndex = 1;
         private const int s_valueIndex = 2;
@@ -99,11 +99,11 @@ internal partial class StyleCollectionEditor
             _deleteList = [];
 
             // Get the designer associated with the TLP
-            IDesignerHost host = _tableLayoutPanel.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
+            var host = _tableLayoutPanel.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
             if (host is not null)
             {
                 _tableLayoutPanelDesigner = host.GetDesigner(_tableLayoutPanel) as TableLayoutPanelDesigner;
-                _componentChangeService = host.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                _componentChangeService = host.GetService<IComponentChangeService>();
             }
 
             _rowStyleProp = TypeDescriptor.GetProperties(_tableLayoutPanel)["RowStyles"];
@@ -501,14 +501,14 @@ internal partial class StyleCollectionEditor
 
         private void OnLink1Click(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            CancelEventArgs cancelEvent = new CancelEventArgs();
+            CancelEventArgs cancelEvent = new();
             _editor._helpTopic = "net.ComponentModel.StyleCollectionEditor.TLP.SpanRowsColumns";
             OnHelpButtonClicked(sender, cancelEvent);
         }
 
         private void OnLink2Click(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            CancelEventArgs cancelEvent = new CancelEventArgs();
+            CancelEventArgs cancelEvent = new();
             _editor._helpTopic = "net.ComponentModel.StyleCollectionEditor.TLP.AnchorDock";
             OnHelpButtonClicked(sender, cancelEvent);
         }
@@ -675,7 +675,7 @@ internal partial class StyleCollectionEditor
 
             if (coll.Count == 1)
             {
-                //Get the index
+                // Get the index
                 int index = _columnsAndRowsListView.Items.IndexOf(coll[0]);
                 if (_isRowCollection)
                 {
@@ -846,8 +846,13 @@ internal partial class StyleCollectionEditor
 
             if (member is not null)
             {
-                _columnsAndRowsListView.Items.Insert(index,
-                                                    new ListViewItem(new string[] { member, SizeType.Absolute.ToString(), DesignerUtils.MINIMUMSTYLESIZE.ToString(CultureInfo.InvariantCulture) }));
+                _columnsAndRowsListView.Items.Insert(
+                    index,
+                    new ListViewItem(new string[]
+                    {
+                        member, SizeType.Absolute.ToString(),
+                        DesignerUtils.MINIMUMSTYLESIZE.ToString(CultureInfo.InvariantCulture)
+                     }));
 
                 // If we inserted at the beginning, then we have to change the Member of string of all the existing listView items,
                 // so we might as well just update the entire listView.
@@ -874,7 +879,8 @@ internal partial class StyleCollectionEditor
 
         private void OnRemoveButtonClick(object sender, EventArgs e)
         {
-            if ((_columnsAndRowsListView.Items.Count == 1) || (_columnsAndRowsListView.Items.Count == _columnsAndRowsListView.SelectedIndices.Count))
+            if ((_columnsAndRowsListView.Items.Count == 1)
+                || (_columnsAndRowsListView.Items.Count == _columnsAndRowsListView.SelectedIndices.Count))
             {
                 // We can't remove anything when we have just 1 row/col or if all rows/cols are selected
                 return;
@@ -1005,7 +1011,7 @@ internal partial class StyleCollectionEditor
                 }
             }
 
-            if ((total == 100) || (total == 0))
+            if (total == 100 || total == 0)
             {
                 return;
             }
@@ -1068,32 +1074,32 @@ internal partial class StyleCollectionEditor
                     // If you change this,you should also change the code in TableLayoutPanelDesigner.OnRemoveInternal
                     if (_deleteList.Count > 0)
                     {
-                        PropertyDescriptor childProp = TypeDescriptor.GetProperties(_tableLayoutPanel)["Controls"];
-                        if (_componentChangeService is not null && childProp is not null)
+                        PropertyDescriptor childProperty = TypeDescriptor.GetProperties(_tableLayoutPanel)[nameof(TableLayoutPanel.Controls)];
+                        if (_componentChangeService is not null && childProperty is not null)
                         {
-                            _componentChangeService.OnComponentChanging(_tableLayoutPanel, childProp);
+                            _componentChangeService.OnComponentChanging(_tableLayoutPanel, childProperty);
                         }
 
-                        IDesignerHost host = _tableLayoutPanel.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
+                        var host = _tableLayoutPanel.Site.GetService<IDesignerHost>();
 
                         if (host is not null)
                         {
-                            foreach (object o in _deleteList)
+                            foreach (object obj in _deleteList)
                             {
-                                List<IComponent> al = new();
-                                DesignerUtils.GetAssociatedComponents((IComponent)o, host, al);
-                                foreach (IComponent comp in al)
+                                List<IComponent> componentList = new();
+                                DesignerUtils.GetAssociatedComponents((IComponent)obj, host, componentList);
+                                foreach (IComponent component in componentList)
                                 {
-                                    _componentChangeService.OnComponentChanging(comp, null);
+                                    _componentChangeService.OnComponentChanging(component, null);
                                 }
 
-                                host.DestroyComponent(o as Component);
+                                host.DestroyComponent(obj as Component);
                             }
                         }
 
-                        if (_componentChangeService is not null && childProp is not null)
+                        if (_componentChangeService is not null && childProperty is not null)
                         {
-                            _componentChangeService.OnComponentChanged(_tableLayoutPanel, childProp, null, null);
+                            _componentChangeService.OnComponentChanged(_tableLayoutPanel, childProperty, null, null);
                         }
                     }
 

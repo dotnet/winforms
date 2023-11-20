@@ -5,16 +5,20 @@ using System.ComponentModel.Design;
 
 namespace System.Windows.Forms.Design
 {
-    /// <summary>
-    ///  This collection editor is used to add value to the TableLayoutPanel's
-    ///  'Style' collections: RowStyle and ColumnStyle.  Here, we override the
-    ///  CreateInstance method and set the width or height of the new style
-    ///  to a default minimum size.
-    /// </summary>
-    internal partial class StyleCollectionEditor(Type type) : CollectionEditor(type)
+    internal partial class StyleCollectionEditor : CollectionEditor
     {
-        private readonly bool isRowCollection = type.IsAssignableFrom(typeof(TableLayoutRowStyleCollection));
+        private bool _isRowCollection;
         protected string? _helpTopic;
+
+        /// <summary>
+        ///  This collection editor is used to add value to the TableLayoutPanel's
+        ///  'Style' collections: RowStyle and ColumnStyle.
+        /// </summary>
+        /// <param name="type">A specified collection type.</param>
+        public StyleCollectionEditor(Type type) : base(type)
+        {
+            _isRowCollection = type.IsAssignableFrom(typeof(TableLayoutRowStyleCollection));
+        }
 
         /// <summary>
         ///  Overridden to create our editor form instead of the standard collection editor form.
@@ -22,7 +26,7 @@ namespace System.Windows.Forms.Design
         /// <returns>An instance of a StyleEditorForm</returns>
         protected override CollectionForm CreateCollectionForm()
         {
-            return new StyleEditorForm(this, isRowCollection);
+            return new StyleEditorForm(this, _isRowCollection);
         }
 
         /// <summary>
