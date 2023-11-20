@@ -178,6 +178,7 @@ public sealed class ImageFormat
             if (codec.FormatID.Equals(_guid))
                 return codec;
         }
+
         return null;
     }
 

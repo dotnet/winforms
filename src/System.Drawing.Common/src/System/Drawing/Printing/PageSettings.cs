@@ -87,10 +87,10 @@ public partial class PageSettings : ICloneable
             {
                 dc.Dispose();
             }
+
             return hardMarginX;
         }
     }
-
 
     /// <summary>
     /// Returns the y dimension of the hard margin.
@@ -112,6 +112,7 @@ public partial class PageSettings : ICloneable
             {
                 dc.Dispose();
             }
+
             return hardMarginY;
         }
     }
@@ -300,6 +301,7 @@ public partial class PageSettings : ICloneable
                 mode.dmPaperLength = unchecked((short)length);
                 setLength = true;
             }
+
             if ((mode.dmFields & SafeNativeMethods.DM_PAPERWIDTH) == SafeNativeMethods.DM_PAPERWIDTH)
             {
                 int width = PrinterUnitConvert.Convert(_paperSize.Width, PrinterUnit.Display, PrinterUnit.TenthsOfAMillimeter);
@@ -315,6 +317,7 @@ public partial class PageSettings : ICloneable
                     int length = PrinterUnitConvert.Convert(_paperSize.Height, PrinterUnit.Display, PrinterUnit.TenthsOfAMillimeter);
                     mode.dmPaperLength = unchecked((short)length);
                 }
+
                 if (!setWidth)
                 {
                     mode.dmFields |= SafeNativeMethods.DM_PAPERWIDTH;
@@ -337,6 +340,7 @@ public partial class PageSettings : ICloneable
                 {
                     mode.dmPrintQuality = unchecked((short)_printerResolution.X);
                 }
+
                 if ((mode.dmFields & SafeNativeMethods.DM_YRESOLUTION) == SafeNativeMethods.DM_YRESOLUTION)
                 {
                     mode.dmYResolution = unchecked((short)_printerResolution.Y);
@@ -386,7 +390,6 @@ public partial class PageSettings : ICloneable
             return result;
         }
     }
-
 
     // This function shows up big on profiles, so we need to make it fast
     internal Rectangle GetBounds(IntPtr modeHandle)
@@ -449,6 +452,7 @@ public partial class PageSettings : ICloneable
                     return sizes[i];
             }
         }
+
         return new PaperSize(PaperKind.Custom, "custom",
                                  //mode.dmPaperWidth, mode.dmPaperLength);
                                  PrinterUnitConvert.Convert(mode.dmPaperWidth, PrinterUnit.TenthsOfAMillimeter, PrinterUnit.Display),
@@ -470,6 +474,7 @@ public partial class PageSettings : ICloneable
                 }
             }
         }
+
         return new PaperSource((PaperSourceKind)mode.dmDefaultSource, "unknown");
     }
 
@@ -494,6 +499,7 @@ public partial class PageSettings : ICloneable
                 }
             }
         }
+
         return new PrinterResolution(PrinterResolutionKind.Custom,
                                      mode.dmPrintQuality, mode.dmYResolution);
     }

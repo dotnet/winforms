@@ -24,6 +24,7 @@ public class ImageFormatConverter : TypeConverter
         {
             return true;
         }
+
         return base.CanConvertTo(context, destinationType);
     }
 

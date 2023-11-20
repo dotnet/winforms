@@ -184,5 +184,4 @@ public class Graphics_DrawLineTests : DrawingTest
             AssertExtensions.Throws<ArgumentException>(null, () => graphics.DrawLines(pen, new PointF[2]));
         }
     }
-
 }

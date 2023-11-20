@@ -219,6 +219,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
         {
             Gdip.CheckStatus(Gdip.GdipLoadImageFromStream(streamWrapper.Ptr, &image));
         }
+
         return image;
     }
 
@@ -1066,6 +1067,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
                         }
                     }
                 }
+
                 // possible exceptions for reading the filename
                 catch (UnauthorizedAccessException)
                 {
@@ -1076,6 +1078,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
                 catch (IOException)
                 {
                 }
+
                 // possible exceptions for setting/getting the position inside dataStream
                 catch (NotSupportedException)
                 {
@@ -1083,6 +1086,7 @@ public abstract class Image : MarshalByRefObject, IDisposable, ICloneable, ISeri
                 catch (ObjectDisposedException)
                 {
                 }
+
                 // possible exception when reading stuff into dataStream
                 catch (ArgumentException)
                 {

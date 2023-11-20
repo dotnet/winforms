@@ -3,7 +3,6 @@
 
 using System.Drawing;
 using Windows.Win32.UI.Accessibility;
-using static Interop;
 
 namespace System.Windows.Forms.Tests;
 
@@ -114,8 +113,8 @@ public class ComboBox_ComboBoxChildListUiaProviderTests
             comboBox.DroppedDown = true;
         }
 
-        UiaCore.IRawElementProviderFragment childListUiaProvider = comboBox.ChildListAccessibleObject;
-        UiaCore.UiaRect actual = childListUiaProvider.BoundingRectangle;
+        IRawElementProviderFragment.Interface childListUiaProvider = comboBox.ChildListAccessibleObject;
+        Assert.True(childListUiaProvider.get_BoundingRectangle(out UiaRect actual).Succeeded);
 
         Assert.Equal(expectedWidth, actual.width);
     }

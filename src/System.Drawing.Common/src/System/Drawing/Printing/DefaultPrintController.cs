@@ -93,7 +93,6 @@ public class StandardPrintController : PrintController
             _graphics.TranslateTransform(document.DefaultPageSettings.Margins.Left, document.DefaultPageSettings.Margins.Top);
         }
 
-
         int result2 = Gdi32.StartPage(new HandleRef(_dc, _dc.Hdc));
         if (result2 <= 0)
             throw new Win32Exception();
@@ -118,6 +117,7 @@ public class StandardPrintController : PrintController
             _graphics.Dispose(); // Dispose of GDI+ Graphics; keep the DC
             _graphics = null;
         }
+
         base.OnEndPage(document, e);
     }
 

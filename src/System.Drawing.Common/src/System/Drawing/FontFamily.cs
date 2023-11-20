@@ -119,6 +119,7 @@ public sealed class FontFamily : MarshalByRefObject, IDisposable
                 status = Gdip.GdipGetGenericFontFamilyMonospace(out nativeFamily);
                 break;
         }
+
         Gdip.CheckStatus(status);
 
         SetNativeFamily(nativeFamily);

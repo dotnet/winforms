@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Reflection;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.ListViewItem;
-using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects;
 
@@ -448,8 +447,8 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
 
         AccessibleObject accessibleObject1 = listView.Items[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = listView.Items[1].AccessibilityObject;
-        IRawElementProviderFragment lastChild1 = accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
-        IRawElementProviderFragment lastChild2 = accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        IRawElementProviderFragment.Interface lastChild1 = accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        IRawElementProviderFragment.Interface lastChild2 = accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
         Assert.NotNull(lastChild1);
         Assert.NotNull(lastChild2);
@@ -466,8 +465,8 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
 
         AccessibleObject accessibleObject1 = listView.Items[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = listView.Items[1].AccessibilityObject;
-        IRawElementProviderFragment lastChild1 = accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
-        IRawElementProviderFragment lastChild2 = accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        IRawElementProviderFragment.Interface lastChild1 = accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        IRawElementProviderFragment.Interface lastChild2 = accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
         Assert.Equal(listView.Items[0].SubItems[0].AccessibilityObject, lastChild1);
         Assert.Equal(listView.Items[1].SubItems[0].AccessibilityObject, lastChild2);
@@ -482,8 +481,8 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
 
         AccessibleObject accessibleObject1 = listView.Items[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = listView.Items[1].AccessibilityObject;
-        IRawElementProviderFragment lastChild1 = accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
-        IRawElementProviderFragment lastChild2 = accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        IRawElementProviderFragment.Interface lastChild1 = accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        IRawElementProviderFragment.Interface lastChild2 = accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
         Assert.NotNull(lastChild1);
         Assert.NotNull(lastChild2);
@@ -511,8 +510,8 @@ public class ListViewItem_ListViewItemAccessibleObjectTests
 
         AccessibleObject accessibleObject1 = listView.Items[0].AccessibilityObject;
         AccessibleObject accessibleObject2 = listView.Items[1].AccessibilityObject;
-        IRawElementProviderFragment lastChild1 = accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
-        IRawElementProviderFragment lastChild2 = accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        IRawElementProviderFragment.Interface lastChild1 = accessibleObject1.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
+        IRawElementProviderFragment.Interface lastChild2 = accessibleObject2.FragmentNavigate(NavigateDirection.NavigateDirection_LastChild);
 
         Assert.Equal(listView.Items[0].SubItems[1].AccessibilityObject, lastChild1);
         Assert.Equal(listView.Items[1].SubItems[1].AccessibilityObject, lastChild2);

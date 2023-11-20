@@ -244,7 +244,6 @@ public class ImageConverterTest
         propsColl = _imgConv.GetProperties(_image);
         Assert.Equal(browsablePropertiesCount, propsColl.Count);
 
-
         // Returns all properties of Image class.
         propsColl = TypeDescriptor.GetProperties(typeof(Image));
         Assert.Equal(allPropertiesCount, propsColl.Count);

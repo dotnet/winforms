@@ -91,6 +91,7 @@ public class ImageConverter : TypeConverter
             if (codec.FormatID.Equals(imageformat.Guid))
                 return codec;
         }
+
         return null;
     }
 

@@ -24,6 +24,7 @@ public class MarginsConverter : ExpandableObjectConverter
         {
             return true;
         }
+
         return base.CanConvertFrom(context, sourceType);
     }
 
@@ -37,6 +38,7 @@ public class MarginsConverter : ExpandableObjectConverter
         {
             return true;
         }
+
         return base.CanConvertTo(context, destinationType);
     }
 
@@ -66,13 +68,16 @@ public class MarginsConverter : ExpandableObjectConverter
                     // Note: ConvertFromString will raise exception if value cannot be converted.
                     values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i])!;
                 }
+
                 if (values.Length != 4)
                 {
                     throw new ArgumentException(SR.Format(SR.TextParseFailedFormat, text, "left, right, top, bottom"));
                 }
+
                 return new Margins(values[0], values[1], values[2], values[3]);
             }
         }
+
         return base.ConvertFrom(context, culture, value);
     }
 
@@ -109,18 +114,24 @@ public class MarginsConverter : ExpandableObjectConverter
 
                 return string.Join(sep, args);
             }
+
             if (destinationType == typeof(InstanceDescriptor))
             {
-                ConstructorInfo? ctor = typeof(Margins).GetConstructor(new Type[] {
-                    typeof(int), typeof(int), typeof(int), typeof(int)});
+                ConstructorInfo? ctor = typeof(Margins).GetConstructor(new Type[]
+                {
+                    typeof(int), typeof(int), typeof(int), typeof(int)
+                });
 
                 if (ctor is not null)
                 {
-                    return new InstanceDescriptor(ctor, new object[] {
-                        margins.Left, margins.Right, margins.Top, margins.Bottom});
+                    return new InstanceDescriptor(ctor, new object[]
+                    {
+                        margins.Left, margins.Right, margins.Top, margins.Bottom
+                    });
                 }
             }
         }
+
         return base.ConvertTo(context, culture, value, destinationType);
     }
 

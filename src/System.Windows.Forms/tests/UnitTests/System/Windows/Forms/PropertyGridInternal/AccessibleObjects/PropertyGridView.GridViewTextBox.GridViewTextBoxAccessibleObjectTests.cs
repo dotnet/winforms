@@ -6,7 +6,6 @@ using System.Reflection;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.Control;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests.AccessibleObjects;
 
@@ -37,14 +36,14 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor().Dynamic.EditTextBox.Handle);
 
         AccessibleObject selectedGridEntryAccessibleObject = gridEntry.AccessibilityObject;
-        UiaCore.IRawElementProviderFragment editFieldAccessibleObject = selectedGridEntryAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        IRawElementProviderFragment.Interface editFieldAccessibleObject = selectedGridEntryAccessibleObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.NotNull(editFieldAccessibleObject);
 
         Assert.Equal("GridViewTextBoxAccessibleObject", editFieldAccessibleObject.GetType().Name);
     }
 
     [WinFormsFact]
-    public void GridViewTextBoxAccessibleObject_FragmentNavigate_navigates_correctly()
+    public unsafe void GridViewTextBoxAccessibleObject_FragmentNavigate_navigates_correctly()
     {
         using PropertyGrid propertyGrid = new()
         {
@@ -64,7 +63,7 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         // In UI case an entry edit control is created when an PropertyGridView gets focus.
         Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor().Dynamic.EditTextBox.Handle);
 
-        UiaCore.IRawElementProviderFragment editFieldAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        IRawElementProviderFragment.Interface editFieldAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
         Assert.Equal("GridViewTextBoxAccessibleObject", editFieldAccessibleObject.GetType().Name);
 
         // The case with drop down holder:
@@ -73,13 +72,14 @@ public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTes
         propertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
 
         dropDownHolder.TestAccessor().Dynamic.SetState(0x00000002, true); // Control class States.Visible flag
-        UiaCore.IRawElementProviderFragment dropDownHolderAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
+        IRawElementProviderFragment.Interface dropDownHolderAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(NavigateDirection.NavigateDirection_FirstChild);
 
         Assert.Equal("DropDownHolderAccessibleObject", dropDownHolderAccessibleObject.GetType().Name);
         Assert.True(propertyGridView.DropDownVisible);
-        object previousAccessibleObject = editFieldAccessibleObject.Navigate(NavigateDirection.NavigateDirection_PreviousSibling);
-        Assert.NotNull(previousAccessibleObject);
-        Assert.Same(dropDownHolder.AccessibilityObject, previousAccessibleObject);
+        using ComScope<IRawElementProviderFragment> previousAccessibleObject = new(null);
+        Assert.True(editFieldAccessibleObject.Navigate(NavigateDirection.NavigateDirection_PreviousSibling, previousAccessibleObject).Succeeded);
+        Assert.False(previousAccessibleObject.IsNull);
+        Assert.Same(dropDownHolder.AccessibilityObject, ComHelpers.GetObjectForIUnknown(previousAccessibleObject.AsUnknown));
     }
 
     public class TestEntityWithTextField

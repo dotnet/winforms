@@ -177,6 +177,7 @@ public class LinearGradientBrushTests
             yield return new object[] { testData[0], testData[1], testData[2], testData[3], false };
         }
     }
+
     [Theory]
     [MemberData(nameof(Ctor_Rectangle_Angle_IsAngleScalable_TestData))]
     public void Ctor_Rectangle_Color_Color_Angle_IsAngleScalable(Rectangle rectangle, Color color1, Color color2, float angle, bool isAngleScalable)

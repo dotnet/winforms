@@ -164,8 +164,6 @@ public class PrinterSettings : ICloneable
         }
     }
 
-
-
     /// <summary>
     /// Gets the names of all printers installed on the machine.
     /// </summary>
@@ -325,6 +323,7 @@ public class PrinterSettings : ICloneable
             {
                 throw new ArgumentNullException(value);
             }
+
             OutputPort = value;
         }
     }
@@ -460,6 +459,7 @@ public class PrinterSettings : ICloneable
                 dc.Dispose();
             }
         }
+
         return isDirectPrintingSupported;
     }
 
@@ -506,6 +506,7 @@ public class PrinterSettings : ICloneable
                 stream.Close();
             }
         }
+
         return isDirectPrintingSupported;
     }
 
@@ -550,6 +551,7 @@ public class PrinterSettings : ICloneable
         clone._printDialogDisplayed = false;
         return clone;
     }
+
     // what is done in copytohdevmode cannot give unwanted access AllPrinting permission
     internal DeviceContext CreateDeviceContext(PageSettings pageSettings)
     {
@@ -566,6 +568,7 @@ public class PrinterSettings : ICloneable
         {
             Kernel32.GlobalFree(modeHandle);
         }
+
         return dc;
     }
 
@@ -594,6 +597,7 @@ public class PrinterSettings : ICloneable
         {
             Kernel32.GlobalFree(modeHandle);
         }
+
         return dc;
     }
 
@@ -620,6 +624,7 @@ public class PrinterSettings : ICloneable
             g.TranslateTransform(-_defaultPageSettings.HardMarginX, -_defaultPageSettings.HardMarginY);
             g.TranslateTransform(_defaultPageSettings.Margins.Left, _defaultPageSettings.Margins.Top);
         }
+
         return g;
     }
 
@@ -641,6 +646,7 @@ public class PrinterSettings : ICloneable
             g.TranslateTransform(-pageSettings.HardMarginX, -pageSettings.HardMarginY);
             g.TranslateTransform(pageSettings.Margins.Left, pageSettings.Margins.Top);
         }
+
         return g;
     }
 
@@ -739,7 +745,6 @@ public class PrinterSettings : ICloneable
         }
     }
 
-
     // Called by get_OutputPort
     private static string GetOutputPort()
     {
@@ -826,6 +831,7 @@ public class PrinterSettings : ICloneable
         {
             throw new InvalidPrinterException(this);
         }
+
         IntPtr handle = Kernel32.GlobalAlloc(SafeNativeMethods.GMEM_MOVEABLE, (uint)modeSize); // cannot be <0 anyway
         IntPtr pointer = Kernel32.GlobalLock(handle);
 
@@ -855,6 +861,7 @@ public class PrinterSettings : ICloneable
                 Marshal.Copy(_extrainfo, 0, pointeroffset, _extrabytes);
             }
         }
+
         if ((mode.dmFields & SafeNativeMethods.DM_COPIES) == SafeNativeMethods.DM_COPIES)
         {
             if (_copies != -1)
@@ -882,7 +889,6 @@ public class PrinterSettings : ICloneable
             Kernel32.GlobalUnlock(handle);
             return IntPtr.Zero;
         }
-
 
         Kernel32.GlobalUnlock(handle);
         return handle;
@@ -1007,6 +1013,7 @@ public class PrinterSettings : ICloneable
                     result = defaultValue;
                     break;
             }
+
             Kernel32.GlobalUnlock(new HandleRef(this, modeHandle));
         }
         finally
@@ -1016,6 +1023,7 @@ public class PrinterSettings : ICloneable
                 Kernel32.GlobalFree(new HandleRef(this, modeHandle));
             }
         }
+
         return result;
     }
 
@@ -1052,6 +1060,7 @@ public class PrinterSettings : ICloneable
             {
                 name = name.Substring(0, index);
             }
+
             short kind = pKindsBuffer[i];
             int width = pDimensionsBuffer[i * 2];
             int height = pDimensionsBuffer[i * 2 + 1];
@@ -1292,7 +1301,6 @@ public class PrinterSettings : ICloneable
             }
         }
 
-
         bool ICollection.IsSynchronized
         {
             get
@@ -1383,7 +1391,6 @@ public class PrinterSettings : ICloneable
                 return Count;
             }
         }
-
 
         bool ICollection.IsSynchronized
         {
@@ -1583,7 +1590,6 @@ public class PrinterSettings : ICloneable
         {
             Array.Copy(_array, index, array, 0, _array.Length);
         }
-
 
         public void CopyTo(string[] strings, int index)
         {

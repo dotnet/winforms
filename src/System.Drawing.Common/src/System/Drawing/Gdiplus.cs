@@ -1,7 +1,7 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -16,7 +16,7 @@ internal static partial class SafeNativeMethods
         private static readonly IntPtr s_initToken;
 
         [ThreadStatic]
-        private static IDictionary? t_threadData;
+        private static IDictionary<object, object>? t_threadData;
 
         static Gdip()
         {
@@ -40,11 +40,11 @@ internal static partial class SafeNativeMethods
         internal static bool Initialized => s_initToken != IntPtr.Zero;
 
         /// <summary>
-        /// This property will give us back a hashtable we can use to store all of our static brushes and pens on
+        /// This property will give us back a dictionary we can use to store all of our static brushes and pens on
         /// a per-thread basis. This way we can avoid 'object in use' crashes when different threads are
         /// referencing the same drawing object.
         /// </summary>
-        internal static IDictionary ThreadData => t_threadData ??= new Hashtable();
+        internal static IDictionary<object, object> ThreadData => t_threadData ??= new Dictionary<object, object>();
 
         // Used to ensure static constructor has run.
         internal static void DummyFunction()
