@@ -9,7 +9,8 @@ using System.Reflection;
 namespace System.ComponentModel.Design;
 
 /// <summary>
-///  This service is requested by TypeDescriptor when asking for type information for a component.
+///  This service is requested by <see cref="TypeDescriptor" /> when asking for type information for a component.
+///  This is a sample implementation suitable for this sample application.
 /// </summary>
 internal class TypeDiscoveryService : ITypeDiscoveryService
 {
