@@ -220,8 +220,8 @@ public unsafe class SAFEARRAYTests
 
         try
         {
-            Span<int> indices1 = stackalloc int[] { 0 };
-            Span<int> indices2 = stackalloc int[] { 1 };
+            Span<int> indices1 = [0];
+            Span<int> indices2 = [1];
 
             fixed (int* pIndices1 = indices1)
             fixed (int* pIndices2 = indices2)
@@ -266,8 +266,8 @@ public unsafe class SAFEARRAYTests
 
         try
         {
-            Span<int> indices1 = stackalloc int[] { -5 };
-            Span<int> indices2 = stackalloc int[] { -4 };
+            Span<int> indices1 = [-5];
+            Span<int> indices2 = [-4];
 
             fixed (int* pIndices1 = indices1)
             fixed (int* pIndices2 = indices2)
@@ -318,8 +318,8 @@ public unsafe class SAFEARRAYTests
 
         try
         {
-            Span<int> indices1 = stackalloc int[] { 0, 0 };
-            Span<int> indices2 = stackalloc int[] { 1, 2 };
+            Span<int> indices1 = [0, 0];
+            Span<int> indices2 = [1, 2];
 
             fixed (int* pIndices1 = indices1)
             fixed (int* pIndices2 = indices2)
@@ -370,8 +370,8 @@ public unsafe class SAFEARRAYTests
 
         try
         {
-            Span<int> indices1 = stackalloc int[] { -5, -4 };
-            Span<int> indices2 = stackalloc int[] { -4, -3 };
+            Span<int> indices1 = [-5, -4];
+            Span<int> indices2 = [-4, -3];
 
             fixed (int* pIndices1 = indices1)
             fixed (int* pIndices2 = indices2)

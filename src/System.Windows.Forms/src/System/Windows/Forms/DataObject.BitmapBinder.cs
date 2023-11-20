@@ -27,7 +27,7 @@ public partial class DataObject
         private const string AllowedAssemblyName = "System.Drawing";
 
         // .NET Framework PublicKeyToken=b03f5f7f11d50a3a
-        private static ReadOnlySpan<byte> AllowedToken => new byte[] { 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A };
+        private static ReadOnlySpan<byte> AllowedToken => [ 0xB0, 0x3F, 0x5F, 0x7F, 0x11, 0xD5, 0x0A, 0x3A ];
 
         public override Type? BindToType(string assemblyName, string typeName)
         {

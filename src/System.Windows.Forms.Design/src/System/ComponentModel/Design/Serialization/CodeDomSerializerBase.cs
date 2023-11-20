@@ -1425,8 +1425,8 @@ public abstract partial class CodeDomSerializerBase
         TypeCode rightType = right.GetTypeCode();
 
         // The compatible types are listed in order from lowest bitness to highest.  We must operate on the highest bitness to keep fidelity.
-        ReadOnlySpan<TypeCode> compatibleTypes = new TypeCode[]
-        {
+        ReadOnlySpan<TypeCode> compatibleTypes =
+        [
             TypeCode.Byte,
             TypeCode.Char,
             TypeCode.Int16,
@@ -1435,7 +1435,7 @@ public abstract partial class CodeDomSerializerBase
             TypeCode.UInt32,
             TypeCode.Int64,
             TypeCode.UInt64
-        };
+        ];
 
         int leftTypeIndex = -1;
         int rightTypeIndex = -1;
