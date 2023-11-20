@@ -5,7 +5,6 @@ using System.Drawing;
 using Windows.Win32.System.Variant;
 using Windows.Win32.UI.Accessibility;
 using static System.Windows.Forms.TreeNode;
-using static Interop;
 using IRawElementProviderFragmentRoot = Interop.UiaCore.IRawElementProviderFragmentRoot;
 
 namespace System.Windows.Forms;
@@ -67,24 +66,6 @@ public partial class TreeView
             }
 
             return Bounds.Contains(x, y) ? this : null;
-        }
-
-        internal override int[] RuntimeId
-        {
-            get
-            {
-                if (this.TryGetOwnerAs(out TreeView? owningTreeView))
-                {
-                    return new int[]
-                    {
-                        RuntimeIDFirstItem,
-                        PARAM.ToInt(owningTreeView.InternalHandle),
-                        owningTreeView.GetHashCode()
-                    };
-                }
-
-                return base.RuntimeId;
-            }
         }
 
         public override AccessibleStates State
