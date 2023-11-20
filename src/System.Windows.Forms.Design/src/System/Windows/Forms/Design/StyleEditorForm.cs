@@ -99,7 +99,7 @@ internal partial class StyleCollectionEditor
             _deleteList = [];
 
             // Get the designer associated with the TLP
-            var host = _tableLayoutPanel.Site.GetService(typeof(IDesignerHost)) as IDesignerHost;
+            var host = _tableLayoutPanel.Site.GetService<IDesignerHost>();
             if (host is not null)
             {
                 _tableLayoutPanelDesigner = host.GetDesigner(_tableLayoutPanel) as TableLayoutPanelDesigner;
