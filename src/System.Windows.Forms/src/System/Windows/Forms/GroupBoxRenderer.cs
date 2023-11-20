@@ -316,26 +316,26 @@ public static class GroupBoxRenderer
 
         using DeviceContextHdcScope hdc = new(deviceContext);
 
-        ReadOnlySpan<int> darkLines = stackalloc int[]
-        {
+        ReadOnlySpan<int> darkLines =
+        [
             bounds.Left, boxTop - 1, bounds.Left, bounds.Height - 2,                            // Left
             bounds.Left, bounds.Height - 2, bounds.Width - 1, bounds.Height - 2,                // Right
             bounds.Left, boxTop - 1, textBounds.X - 3, boxTop - 1,                              // Top-left
             textBounds.X + textBounds.Width + 2, boxTop - 1, bounds.Width - 2, boxTop - 1,      // Top-right
             bounds.Width - 2, boxTop - 1, bounds.Width - 2, bounds.Height - 2                   // Right
-        };
+        ];
 
         using PInvoke.CreatePenScope hpenDark = new(SystemColors.ControlDark);
         hdc.DrawLines(hpenDark, darkLines);
 
-        ReadOnlySpan<int> lightLines = stackalloc int[]
-        {
+        ReadOnlySpan<int> lightLines =
+        [
             bounds.Left + 1, boxTop, bounds.Left + 1, bounds.Height - 1,                        // Left
             bounds.Left, bounds.Height - 1, bounds.Width, bounds.Height - 1,                    // Right
             bounds.Left + 1, boxTop, textBounds.X - 2, boxTop,                                  // Top-left
             textBounds.X + textBounds.Width + 1, boxTop, bounds.Width - 1, boxTop,              // Top-right
             bounds.Width - 1, boxTop, bounds.Width - 1, bounds.Height - 1                       // Right
-        };
+        ];
 
         using PInvoke.CreatePenScope hpenLight = new(SystemColors.ControlLight);
         hdc.DrawLines(hpenLight, lightLines);

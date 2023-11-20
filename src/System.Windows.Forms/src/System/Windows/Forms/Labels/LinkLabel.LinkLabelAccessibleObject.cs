@@ -79,12 +79,6 @@ public partial class LinkLabel
 
         internal override bool IsIAccessibleExSupported() => true;
 
-        internal override int[] RuntimeId
-            => _runtimeId ??= !this.TryGetOwnerAs(out LinkLabel? owner) ? base.RuntimeId : new int[]
-            {
-                RuntimeIDFirstItem,
-                PARAM.ToInt(owner.InternalHandle),
-                owner.GetHashCode()
-            };
+        internal override int[] RuntimeId => _runtimeId ??= base.RuntimeId;
     }
 }

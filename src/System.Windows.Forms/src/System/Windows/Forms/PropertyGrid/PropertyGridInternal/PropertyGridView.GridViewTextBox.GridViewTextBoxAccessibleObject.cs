@@ -100,13 +100,7 @@ internal partial class PropertyGridView
                 }
             }
 
-            internal override int[] RuntimeId
-                => _runtimeId ??= !this.TryGetOwnerAs(out Control? owner) ? base.RuntimeId : new int[]
-                {
-                    RuntimeIDFirstItem,
-                    PARAM.ToInt(owner.InternalHandle),
-                    GetHashCode()
-                };
+            internal override int[] RuntimeId => _runtimeId ??= base.RuntimeId;
 
             internal override bool IsReadOnly
                 => !this.TryGetOwnerAs(out GridViewTextBox? owner)

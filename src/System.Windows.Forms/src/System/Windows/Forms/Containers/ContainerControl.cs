@@ -523,9 +523,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
                 cc = parent.GetContainerControl() as ContainerControl;
             }
 
-            if (cc is not null &&
-                cc._unvalidatedControl is not null &&
-                (cc._unvalidatedControl == control || control.Contains(cc._unvalidatedControl)))
+            if (cc is not null
+                && cc._unvalidatedControl is not null
+                && (cc._unvalidatedControl == control || control.Contains(cc._unvalidatedControl)))
             {
                 cc._unvalidatedControl = oldParent;
             }
@@ -1718,9 +1718,7 @@ public class ContainerControl : ScrollableControl, IContainerControl
                         }
                     }
                 }
-                while (pathControl is not null &&
-                       pathControl != stopControl &&
-                       !pathControl.IsDescendant(_activeControl));
+                while (pathControl is not null && pathControl != stopControl && !pathControl.IsDescendant(_activeControl));
             }
         }
 
@@ -1989,8 +1987,9 @@ public class ContainerControl : ScrollableControl, IContainerControl
 
             if (cancel && preventFocusChangeOnError)
             {
-                if (_unvalidatedControl is null && currentValidatingControl is not null &&
-                    ancestorControl.IsDescendant(currentValidatingControl))
+                if (_unvalidatedControl is null
+                    && currentValidatingControl is not null
+                    && ancestorControl.IsDescendant(currentValidatingControl))
                 {
                     _unvalidatedControl = currentValidatingControl;
                 }

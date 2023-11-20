@@ -80,10 +80,10 @@ internal class MouseSimulator
 
     private MouseSimulator ButtonDown(MouseButtons button)
     {
-        Span<INPUT> inputs = stackalloc INPUT[]
-        {
+        Span<INPUT> inputs =
+        [
             InputBuilder.MouseButtonDown(button),
-        };
+        ];
 
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;
@@ -91,10 +91,10 @@ internal class MouseSimulator
 
     private MouseSimulator ButtonUp(MouseButtons button)
     {
-        Span<INPUT> inputs = stackalloc INPUT[]
-        {
+        Span<INPUT> inputs =
+        [
             InputBuilder.MouseButtonUp(button),
-        };
+        ];
 
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;
@@ -102,11 +102,11 @@ internal class MouseSimulator
 
     private MouseSimulator ButtonClick(MouseButtons button)
     {
-        Span<INPUT> inputs = stackalloc INPUT[]
-        {
+        Span<INPUT> inputs =
+        [
             InputBuilder.MouseButtonDown(button),
             InputBuilder.MouseButtonUp(button),
-        };
+        ];
 
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;
@@ -114,13 +114,13 @@ internal class MouseSimulator
 
     private MouseSimulator ButtonDoubleClick(MouseButtons button)
     {
-        Span<INPUT> inputs = stackalloc INPUT[]
-        {
+        Span<INPUT> inputs =
+        [
             InputBuilder.MouseButtonDown(button),
             InputBuilder.MouseButtonUp(button),
             InputBuilder.MouseButtonDown(button),
             InputBuilder.MouseButtonUp(button),
-        };
+        ];
 
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;
@@ -137,10 +137,10 @@ internal class MouseSimulator
             return MoveMouseTo(virtualPoint.X, virtualPoint.Y);
         }
 
-        Span<INPUT> inputs = stackalloc INPUT[]
-        {
+        Span<INPUT> inputs =
+        [
             InputBuilder.RelativeMouseMovement(x, y),
-        };
+        ];
 
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;
@@ -148,10 +148,10 @@ internal class MouseSimulator
 
     internal MouseSimulator MoveMouseTo(double absoluteX, double absoluteY)
     {
-        Span<INPUT> inputs = stackalloc INPUT[]
-        {
+        Span<INPUT> inputs =
+        [
             InputBuilder.AbsoluteMouseMovement((int)absoluteX, (int)absoluteY),
-        };
+        ];
 
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;
@@ -159,10 +159,10 @@ internal class MouseSimulator
 
     internal MouseSimulator MoveMouseToPositionOnVirtualDesktop(double absoluteX, double absoluteY)
     {
-        Span<INPUT> inputs = stackalloc INPUT[]
-        {
+        Span<INPUT> inputs =
+        [
             InputBuilder.AbsoluteMouseMovementOnVirtualDesktop((int)absoluteX, (int)absoluteY),
-        };
+        ];
 
         PInvoke.SendInput(inputs, Marshal.SizeOf<INPUT>());
         return this;

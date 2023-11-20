@@ -44,18 +44,6 @@ public partial class ComboBox
                 ? owner.DropDownStyle != ComboBoxStyle.Simple
                 : patternId == UIA_PATTERN_ID.UIA_ValuePatternId ? true : base.IsPatternSupported(patternId);
 
-        internal override int[] RuntimeId
-            => this.TryGetOwnerAs(out ComboBox? owner)
-                ? new int[]
-                {
-                   // We need to provide a unique ID. Others are implementing this in the same manner. First item is
-                   // static - 0x2a (RuntimeIDFirstItem). Second item can be anything, but it's good to supply HWND.
-                   RuntimeIDFirstItem,
-                   PARAM.ToInt(owner.InternalHandle),
-                   owner.GetHashCode()
-                }
-                : base.RuntimeId;
-
         internal override void Expand() => ComboBoxDefaultAction(true);
 
         internal override void Collapse() => ComboBoxDefaultAction(false);

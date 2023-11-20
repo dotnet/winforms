@@ -42,20 +42,6 @@ public partial class ListBox
 
         // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a (RuntimeIDFirstItem).
         // Second item can be anything, but it's good to supply HWND.
-        internal override int[] RuntimeId
-        {
-            get
-            {
-                return !this.TryGetOwnerAs(out ListBox? owner)
-                    ? base.RuntimeId
-                    : (new int[]
-                {
-                    RuntimeIDFirstItem,
-                    PARAM.ToInt(owner.InternalHandle),
-                    owner.GetHashCode()
-                });
-            }
-        }
 
         public override AccessibleStates State
         {
