@@ -273,11 +273,11 @@ static System.Windows.Forms.AxHost.GetPictureFromIPicture(object? picture) -> Sy
 static System.Windows.Forms.AxHost.GetPictureFromIPictureDisp(object? picture) -> System.Drawing.Image?
 ~static System.Windows.Forms.Control.FromChildHandle(nint handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.FromHandle(nint handle) -> System.Windows.Forms.Control
-~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
-~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags, out bool widthTruncated) -> int
-~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
-~static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
-~static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
+static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics! graphics, string? text, System.Drawing.Font! font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int
+static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics! graphics, string? text, System.Drawing.Font! font, int maxWidth, System.Windows.Forms.TextFormatFlags flags, out bool widthTruncated) -> int
+static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics! graphics, string? text, System.Drawing.Font! font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
+static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics! graphics, string? text, System.Drawing.Font! font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
+static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics! graphics, string? text, System.Drawing.Font! font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
 static System.Windows.Forms.HtmlElement.operator !=(System.Windows.Forms.HtmlElement? left, System.Windows.Forms.HtmlElement? right) -> bool
 static System.Windows.Forms.HtmlElement.operator ==(System.Windows.Forms.HtmlElement? left, System.Windows.Forms.HtmlElement? right) -> bool
 static System.Windows.Forms.HtmlWindow.operator !=(System.Windows.Forms.HtmlWindow? left, System.Windows.Forms.HtmlWindow? right) -> bool
@@ -389,7 +389,7 @@ System.Windows.Forms.DataGridViewCell.Style.get -> System.Windows.Forms.DataGrid
 System.Windows.Forms.DataGridViewCell.Style.set -> void
 System.Windows.Forms.DataGridViewCell.Tag.get -> object?
 System.Windows.Forms.DataGridViewCell.Tag.set -> void
-System.Windows.Forms.DataGridViewCell.ToolTipText.get -> string!
+System.Windows.Forms.DataGridViewCell.ToolTipText.get -> string?
 System.Windows.Forms.DataGridViewCell.ToolTipText.set -> void
 System.Windows.Forms.DataGridViewCell.Value.get -> object?
 System.Windows.Forms.DataGridViewCell.Value.set -> void
@@ -438,7 +438,7 @@ System.Windows.Forms.DataGridViewColumn.Name.get -> string!
 System.Windows.Forms.DataGridViewColumn.Name.set -> void
 System.Windows.Forms.DataGridViewColumn.Site.get -> System.ComponentModel.ISite?
 System.Windows.Forms.DataGridViewColumn.Site.set -> void
-System.Windows.Forms.DataGridViewColumn.ToolTipText.get -> string!
+System.Windows.Forms.DataGridViewColumn.ToolTipText.get -> string?
 System.Windows.Forms.DataGridViewColumn.ToolTipText.set -> void
 System.Windows.Forms.DataGridViewColumn.ValueType.get -> System.Type?
 System.Windows.Forms.DataGridViewColumn.ValueType.set -> void
@@ -813,29 +813,29 @@ virtual System.Windows.Forms.DataGridViewCell.GetErrorIconBounds(System.Drawing.
 virtual System.Windows.Forms.DataGridViewCell.GetErrorText(int rowIndex) -> string!
 virtual System.Windows.Forms.DataGridViewCell.GetFormattedValue(object? value, int rowIndex, ref System.Windows.Forms.DataGridViewCellStyle! cellStyle, System.ComponentModel.TypeConverter? valueTypeConverter, System.ComponentModel.TypeConverter? formattedValueTypeConverter, System.Windows.Forms.DataGridViewDataErrorContexts context) -> object?
 virtual System.Windows.Forms.DataGridViewCell.GetInheritedContextMenuStrip(int rowIndex) -> System.Windows.Forms.ContextMenuStrip?
-~virtual System.Windows.Forms.DataGridViewCell.GetInheritedStyle(System.Windows.Forms.DataGridViewCellStyle inheritedCellStyle, int rowIndex, bool includeColors) -> System.Windows.Forms.DataGridViewCellStyle
-~virtual System.Windows.Forms.DataGridViewCell.GetPreferredSize(System.Drawing.Graphics graphics, System.Windows.Forms.DataGridViewCellStyle cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
-~virtual System.Windows.Forms.DataGridViewCell.GetValue(int rowIndex) -> object
-~virtual System.Windows.Forms.DataGridViewCell.InitializeEditingControl(int rowIndex, object initialFormattedValue, System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle) -> void
-~virtual System.Windows.Forms.DataGridViewCell.KeyDownUnsharesRow(System.Windows.Forms.KeyEventArgs e, int rowIndex) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.KeyEntersEditMode(System.Windows.Forms.KeyEventArgs e) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.KeyPressUnsharesRow(System.Windows.Forms.KeyPressEventArgs e, int rowIndex) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.KeyUpUnsharesRow(System.Windows.Forms.KeyEventArgs e, int rowIndex) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.MouseClickUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.MouseDoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.MouseDownUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.MouseMoveUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.MouseUpUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> bool
-~virtual System.Windows.Forms.DataGridViewCell.OnClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridViewCell.OnContentClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridViewCell.OnContentDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridViewCell.OnDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridViewCell.OnKeyDown(System.Windows.Forms.KeyEventArgs e, int rowIndex) -> void
-~virtual System.Windows.Forms.DataGridViewCell.OnKeyPress(System.Windows.Forms.KeyPressEventArgs e, int rowIndex) -> void
-~virtual System.Windows.Forms.DataGridViewCell.OnKeyUp(System.Windows.Forms.KeyEventArgs e, int rowIndex) -> void
-~virtual System.Windows.Forms.DataGridViewCell.OnMouseClick(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridViewCell.OnMouseDoubleClick(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
-~virtual System.Windows.Forms.DataGridViewCell.OnMouseDown(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
+virtual System.Windows.Forms.DataGridViewCell.GetInheritedStyle(System.Windows.Forms.DataGridViewCellStyle? inheritedCellStyle, int rowIndex, bool includeColors) -> System.Windows.Forms.DataGridViewCellStyle!
+virtual System.Windows.Forms.DataGridViewCell.GetPreferredSize(System.Drawing.Graphics! graphics, System.Windows.Forms.DataGridViewCellStyle! cellStyle, int rowIndex, System.Drawing.Size constraintSize) -> System.Drawing.Size
+virtual System.Windows.Forms.DataGridViewCell.GetValue(int rowIndex) -> object?
+virtual System.Windows.Forms.DataGridViewCell.InitializeEditingControl(int rowIndex, object? initialFormattedValue, System.Windows.Forms.DataGridViewCellStyle! dataGridViewCellStyle) -> void
+virtual System.Windows.Forms.DataGridViewCell.KeyDownUnsharesRow(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> bool
+virtual System.Windows.Forms.DataGridViewCell.KeyEntersEditMode(System.Windows.Forms.KeyEventArgs! e) -> bool
+virtual System.Windows.Forms.DataGridViewCell.KeyPressUnsharesRow(System.Windows.Forms.KeyPressEventArgs! e, int rowIndex) -> bool
+virtual System.Windows.Forms.DataGridViewCell.KeyUpUnsharesRow(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> bool
+virtual System.Windows.Forms.DataGridViewCell.MouseClickUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
+virtual System.Windows.Forms.DataGridViewCell.MouseDoubleClickUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
+virtual System.Windows.Forms.DataGridViewCell.MouseDownUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
+virtual System.Windows.Forms.DataGridViewCell.MouseMoveUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
+virtual System.Windows.Forms.DataGridViewCell.MouseUpUnsharesRow(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> bool
+virtual System.Windows.Forms.DataGridViewCell.OnClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridViewCell.OnContentClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridViewCell.OnContentDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridViewCell.OnDoubleClick(System.Windows.Forms.DataGridViewCellEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridViewCell.OnKeyDown(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> void
+virtual System.Windows.Forms.DataGridViewCell.OnKeyPress(System.Windows.Forms.KeyPressEventArgs! e, int rowIndex) -> void
+virtual System.Windows.Forms.DataGridViewCell.OnKeyUp(System.Windows.Forms.KeyEventArgs! e, int rowIndex) -> void
+virtual System.Windows.Forms.DataGridViewCell.OnMouseClick(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridViewCell.OnMouseDoubleClick(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
+virtual System.Windows.Forms.DataGridViewCell.OnMouseDown(System.Windows.Forms.DataGridViewCellMouseEventArgs! e) -> void
 ~virtual System.Windows.Forms.DataGridViewCell.OnMouseMove(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewCell.OnMouseUp(System.Windows.Forms.DataGridViewCellMouseEventArgs e) -> void
 ~virtual System.Windows.Forms.DataGridViewCell.Paint(System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void

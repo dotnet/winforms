@@ -2401,8 +2401,8 @@ public partial class DataGridViewRowCollection : ICollection, IList
             {
                 DataGridViewCell dataGridViewCell1 = dataGridViewRow1.Cells[columnIndex];
                 DataGridViewCell dataGridViewCell2 = dataGridViewRow2.Cells[columnIndex];
-                object value1 = dataGridViewCell1.GetValueInternal(rowIndex1);
-                object value2 = dataGridViewCell2.GetValueInternal(rowIndex2);
+                object? value1 = dataGridViewCell1.GetValueInternal(rowIndex1);
+                object? value2 = dataGridViewCell2.GetValueInternal(rowIndex2);
                 dataGridViewCell1.SetValueInternal(rowIndex1, value2);
                 dataGridViewCell2.SetValueInternal(rowIndex2, value1);
             }

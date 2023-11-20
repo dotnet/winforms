@@ -1555,7 +1555,7 @@ public partial class DataGridViewRow : DataGridViewBand
                     cellState |= cell.State;
                 }
 
-                cell.GetInheritedStyle(inheritedCellStyle, rowIndex, true);
+                cell.GetInheritedStyle(inheritedCellStyle, rowIndex, includeColors: true);
 
                 dgvabsEffective = cell.AdjustCellBorderStyle(dataGridView.AdvancedCellBorderStyle, dataGridViewAdvancedBorderStylePlaceholder,
                     dataGridView.SingleVerticalBorderAdded,
@@ -1645,7 +1645,7 @@ public partial class DataGridViewRow : DataGridViewBand
                             cellState |= cell.State;
                         }
 
-                        cell.GetInheritedStyle(inheritedCellStyle, rowIndex, true);
+                        cell.GetInheritedStyle(inheritedCellStyle, rowIndex, includeColors: true);
 
                         dgvabsEffective = cell.AdjustCellBorderStyle(dataGridView.AdvancedCellBorderStyle, dataGridViewAdvancedBorderStylePlaceholder,
                             dataGridView.SingleVerticalBorderAdded,

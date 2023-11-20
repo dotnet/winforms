@@ -44,7 +44,7 @@ public partial class DataGridViewRowCollection
                 }
 
                 int k = (left + right) >> 1;
-                object x = Pivot(left, k, right);
+                object? x = Pivot(left, k, right);
                 int i = left + 1;
                 int j = right - 1;
                 do
@@ -105,7 +105,7 @@ public partial class DataGridViewRowCollection
             while (left < right);
         }
 
-        private object Pivot(int left, int center, int right)
+        private object? Pivot(int left, int center, int right)
         {
             // find median-of-3 (left, center and right) and sort these 3 elements
             if (_rowComparer!.CompareObjects(_rowComparer.GetComparedObject(left), _rowComparer.GetComparedObject(center), left, center) > 0)

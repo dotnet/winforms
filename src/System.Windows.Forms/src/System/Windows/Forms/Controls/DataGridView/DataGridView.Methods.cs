@@ -3358,7 +3358,7 @@ public partial class DataGridView
                     DataGridViewCell dataGridViewCell = CurrentCellInternal;
                     if (IsCurrentCellInEditMode)
                     {
-                        DataGridViewCellStyle dataGridViewCellStyle = dataGridViewCell.GetInheritedStyle(null, _ptCurrentCell.Y, true);
+                        DataGridViewCellStyle dataGridViewCellStyle = dataGridViewCell.GetInheritedStyle(inheritedCellStyle: null, _ptCurrentCell.Y, includeColors: true);
                         if (EditingControl is not null)
                         {
                             InitializeEditingControlValue(ref dataGridViewCellStyle, dataGridViewCell);
@@ -13461,8 +13461,8 @@ public partial class DataGridView
         DataGridViewDataErrorContexts context)
     {
         DataGridViewCell currentCell = dataGridViewCell ?? CurrentCellInternal;
-        DataGridViewCellStyle dataGridViewCellStyle = currentCell.GetInheritedStyle(null, rowIndex, false);
-        object val = currentCell.GetValueInternal(rowIndex);
+        DataGridViewCellStyle dataGridViewCellStyle = currentCell.GetInheritedStyle(inheritedCellStyle: null, rowIndex, includeColors: false);
+        object? val = currentCell.GetValueInternal(rowIndex);
         object? editedFormattedValue = currentCell.GetEditedFormattedValue(val, rowIndex, ref dataGridViewCellStyle, context);
         DataGridViewCellValidatingEventArgs dgvcfvce = new DataGridViewCellValidatingEventArgs(columnIndex, rowIndex, editedFormattedValue);
         OnCellValidating(dgvcfvce);
@@ -25690,7 +25690,7 @@ public partial class DataGridView
         {
             Debug.Assert(_ptCurrentCell.Y != -1);
             DataGridViewCell dataGridViewCurrentCell = CurrentCellInternal;
-            DataGridViewCellStyle dataGridViewCellStyle = dataGridViewCurrentCell.GetInheritedStyle(null, _ptCurrentCell.Y, true);
+            DataGridViewCellStyle dataGridViewCellStyle = dataGridViewCurrentCell.GetInheritedStyle(inheritedCellStyle: null, _ptCurrentCell.Y, includeColors: true);
             if (EditingControl is not null)
             {
                 if (InitializeEditingControlValue(ref dataGridViewCellStyle, dataGridViewCurrentCell))
